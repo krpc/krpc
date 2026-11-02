@@ -32,7 +32,7 @@ UI
 
       .. note::
 
-         If you want to add UI elements to KSPs stock UI canvas, use :meth:`getStockCanvas()`.
+         If you want to add UI elements to KSPs stock UI canvas, use :meth:`UI.getStockCanvas()`.
 
    .. method:: void message(String content, float duration, MessagePosition position, StdLib.ColorRGBA color, float size)
 

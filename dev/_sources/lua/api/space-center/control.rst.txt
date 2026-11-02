@@ -40,21 +40,18 @@ Control
       The source of the vessels control, for example by a kerbal or a probe core.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.ControlSource`
 
    .. attribute:: state: SpaceCenter.ControlState
 
       The control state of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.ControlState`
 
    .. attribute:: sas: boolean
 
       The state of SAS.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
       .. note::
 
@@ -69,7 +66,6 @@ Control
       the left of the navball that appear when SAS is enabled.
 
       :Attribute: Can be read or written
-      :rtype: :class:`SpaceCenter.SASMode`
 
       .. note::
 
@@ -81,7 +77,6 @@ Control
       This is the mode displayed next to the speed at the top of the navball.
 
       :Attribute: Can be read or written
-      :rtype: :class:`SpaceCenter.SpeedMode`
 
    .. attribute:: engine_gimbals: boolean
 
@@ -90,7 +85,6 @@ Control
       See :attr:`SpaceCenter.Engine.gimbal_locked`.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. attribute:: thrust_reversers: boolean
 
@@ -100,7 +94,6 @@ Control
       See :attr:`SpaceCenter.Engine.thrust_reversed`.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. attribute:: aero_surfaces: boolean
 
@@ -111,14 +104,12 @@ Control
       :attr:`SpaceCenter.ControlSurface.roll_enabled`.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. attribute:: rcs: boolean
 
       The state of RCS.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
       .. note::
 
@@ -133,14 +124,12 @@ Control
       See :attr:`SpaceCenter.ReactionWheel.active`.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. attribute:: gear: boolean
 
       The state of the landing gear/legs.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. attribute:: legs: boolean
 
@@ -150,7 +139,6 @@ Control
       See :attr:`SpaceCenter.Leg.deployed`.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. attribute:: wheels: boolean
 
@@ -160,14 +148,12 @@ Control
       See :attr:`SpaceCenter.Wheel.deployed`.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. attribute:: lights: boolean
 
       The state of the lights.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
       .. note::
 
@@ -179,7 +165,6 @@ Control
       The state of the wheel brakes.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. attribute:: antennas: boolean
 
@@ -188,7 +173,6 @@ Control
       See :attr:`SpaceCenter.Antenna.deployed`.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. attribute:: cargo_bays: boolean
 
@@ -197,7 +181,6 @@ Control
       See :attr:`SpaceCenter.CargoBay.open`.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. attribute:: intakes: boolean
 
@@ -206,7 +189,6 @@ Control
       See :attr:`SpaceCenter.Intake.open`.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. attribute:: parachutes: boolean
 
@@ -216,7 +198,6 @@ Control
       See :attr:`SpaceCenter.Parachute.deployed`.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. attribute:: radiators: boolean
 
@@ -225,7 +206,6 @@ Control
       See :attr:`SpaceCenter.Radiator.deployed`.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. attribute:: resource_harvesters: boolean
 
@@ -234,7 +214,6 @@ Control
       See :attr:`SpaceCenter.ResourceHarvester.deployed`.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. attribute:: resource_harvesters_active: boolean
 
@@ -243,7 +222,6 @@ Control
       See :attr:`SpaceCenter.ResourceHarvester.active`.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. attribute:: solar_panels: boolean
 
@@ -252,14 +230,12 @@ Control
       See :attr:`SpaceCenter.SolarPanel.deployed`.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. attribute:: abort: boolean
 
       The state of the abort action group.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. attribute:: throttle: number
 
@@ -268,7 +244,6 @@ Control
       clients that set it disconnect.
 
       :Attribute: Can be read or written
-      :rtype: number
 
       .. note::
 
@@ -287,7 +262,6 @@ Control
       they are set.
 
       :Attribute: Can be read or written
-      :rtype: :class:`SpaceCenter.ControlInputMode`
 
    .. attribute:: pitch: number
 
@@ -296,7 +270,6 @@ Control
       Equivalent to the w and s keys.
 
       :Attribute: Can be read or written
-      :rtype: number
 
       .. note::
 
@@ -312,7 +285,6 @@ Control
       Equivalent to the a and d keys.
 
       :Attribute: Can be read or written
-      :rtype: number
 
       .. note::
 
@@ -328,7 +300,6 @@ Control
       Equivalent to the q and e keys.
 
       :Attribute: Can be read or written
-      :rtype: number
 
       .. note::
 
@@ -348,7 +319,6 @@ Control
       when clients disconnect.
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: yaw_trim: number
 
@@ -361,7 +331,6 @@ Control
       when clients disconnect.
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: roll_trim: number
 
@@ -374,7 +343,6 @@ Control
       when clients disconnect.
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: precision_mode: boolean
 
@@ -386,7 +354,6 @@ Control
       when clients disconnect.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
       .. note::
 
@@ -400,7 +367,6 @@ Control
       Equivalent to the h and n keys.
 
       :Attribute: Can be read or written
-      :rtype: number
 
       .. note::
 
@@ -416,7 +382,6 @@ Control
       Equivalent to the i and k keys.
 
       :Attribute: Can be read or written
-      :rtype: number
 
       .. note::
 
@@ -432,7 +397,6 @@ Control
       Equivalent to the j and l keys.
 
       :Attribute: Can be read or written
-      :rtype: number
 
       .. note::
 
@@ -449,7 +413,6 @@ Control
       the wheels backwards.
 
       :Attribute: Can be read or written
-      :rtype: number
 
       .. note::
 
@@ -465,7 +428,6 @@ Control
       A value of 1 steers to the left, and a value of -1 steers to the right.
 
       :Attribute: Can be read or written
-      :rtype: number
 
       .. note::
 
@@ -480,7 +442,6 @@ Control
       A value between -1 and 1.
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: custom_axis02: number
 
@@ -488,7 +449,6 @@ Control
       A value between -1 and 1.
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: custom_axis03: number
 
@@ -496,7 +456,6 @@ Control
       A value between -1 and 1.
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: custom_axis04: number
 
@@ -504,7 +463,6 @@ Control
       A value between -1 and 1.
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: current_stage: number
 
@@ -512,20 +470,18 @@ Control
       the in-game UI.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
-   .. method:: activate_next_stage()
+   .. method:: activate_next_stage(): List
 
       Activates the next stage. Equivalent to pressing the space bar in-game.
 
       :returns: A list of vessel objects that are jettisoned from the active vessel.
-      :rtype: List
 
       .. note::
 
          When called, the active vessel may change. It is therefore possible that,
          after calling this function, the object(s) returned by previous call(s) to
-         :attr:`SpaceCenter.active_vessel <SpaceCenter.SpaceCenter.active_vessel>` no longer refer to the active vessel.
+         :attr:`SpaceCenter.active_vessel` no longer refer to the active vessel.
          Throws an exception if staging is locked.
 
    .. attribute:: stage_lock: boolean
@@ -533,40 +489,36 @@ Control
       Whether staging is locked on the vessel.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
       .. note::
 
          This is equivalent to locking the staging using Alt+L
 
-   .. method:: get_action_group(group)
+   .. method:: get_action_group(group: number): boolean
 
       Returns ``True`` if the given action group is enabled.
 
-      :param number group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
-      :rtype: boolean
+      :param group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
 
-   .. method:: set_action_group(group, state)
+   .. method:: set_action_group(group: number, state: boolean)
 
       Sets the state of the given action group.
 
-      :param number group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
-      :param boolean state:
+      :param group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
 
-   .. method:: toggle_action_group(group)
+   .. method:: toggle_action_group(group: number)
 
       Toggles the state of the given action group.
 
-      :param number group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+      :param group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
 
-   .. method:: get_action_group_actions(group)
+   .. method:: get_action_group_actions(group: number): List
 
       Returns a list of all the part actions that are assigned to the given action group.
       Each entry identifies the part, the part module, and the action's name and identifier.
       Returns an empty list if no actions are assigned to the group.
 
-      :param number group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
-      :rtype: List
+      :param group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
 
       .. note::
 
@@ -574,38 +526,35 @@ Control
          When the Extended Action Groups mod is installed, the assignments are queried from
          the mod instead, so that actions assigned to its additional groups are included.
 
-   .. method:: add_node(ut, [prograde = 0.0], [normal = 0.0], [radial = 0.0])
+   .. method:: add_node(ut: number, prograde?: number, normal?: number, radial?: number): SpaceCenter.Node
 
       Creates a maneuver node at the given universal time, and returns a
       :class:`SpaceCenter.Node` object that can be used to modify it.
       Optionally sets the magnitude of the delta-v for the maneuver node
       in the prograde, normal and radial directions.
 
-      :param number ut: Universal time of the maneuver node.
-      :param number prograde: Delta-v in the prograde direction.
-      :param number normal: Delta-v in the normal direction.
-      :param number radial: Delta-v in the radial direction.
-      :rtype: :class:`SpaceCenter.Node`
+      :param ut: Universal time of the maneuver node.
+      :param prograde: Delta-v in the prograde direction. Defaults to ``0.0``.
+      :param normal: Delta-v in the normal direction. Defaults to ``0.0``.
+      :param radial: Delta-v in the radial direction. Defaults to ``0.0``.
 
    .. attribute:: nodes: List
 
       Returns a list of all existing maneuver nodes, ordered by time from first to last.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
    .. method:: remove_nodes()
 
       Remove all maneuver nodes.
 
-   .. attribute:: airlock: SpaceCenter.Part
+   .. attribute:: airlock: SpaceCenter.Part | Types.none
 
       The part whose hatch the kerbal is standing at, and so the one
       :meth:`SpaceCenter.Control.board` would put it in. ``nil`` if it is not at a hatch or the
       vessel is not a kerbal on EVA.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Part` or ``Types.none``
 
    .. method:: board()
 
@@ -623,13 +572,12 @@ Control
          carrying science data that the part cannot store, as the game asks what to do
          with it in that case.
 
-   .. attribute:: ladder: SpaceCenter.Part
+   .. attribute:: ladder: SpaceCenter.Part | Types.none
 
       The ladder the kerbal is holding on to, or ``nil`` if it is not holding one
       or the vessel is not a kerbal on EVA.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Part` or ``Types.none``
 
    .. method:: grab_ladder()
 
@@ -666,28 +614,24 @@ Control
 
       The part that the action acts on.
 
-      :rtype: :class:`SpaceCenter.Part`
 
-   .. attribute:: module: SpaceCenter.Module
+   .. attribute:: module: SpaceCenter.Module | Types.none
 
       The part module that the action belongs to. Returns ``nil`` for a
       part-level action that is not associated with a module. This only occurs when
       the Extended Action Groups mod is installed, as it can assign actions defined
       directly on a part, rather than on one of its modules, to an action group.
 
-      :rtype: :class:`SpaceCenter.Module` or ``Types.none``
 
    .. attribute:: name: string
 
       The human-readable name of the action, as shown in the action group editor.
 
-      :rtype: string
 
    .. attribute:: id: string
 
       The non-localized identifier for the action.
 
-      :rtype: string
 
 
 .. class:: ControlState

@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=eadf7411" />
   
@@ -1105,16 +1106,16 @@
 <dl class="java type">
 <dt class="sig sig-object java" id="krpc.client.services.UI.Canvas">
 <span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">Canvas</span></span><a class="headerlink" href="#krpc.client.services.UI.Canvas" title="Link to this definition">#</a></dt>
-<dd><p>A canvas for user interface elements. See <a class="reference internal" href="ui.html#krpc.client.services.UI.UI.getStockCanvas()" title="krpc.client.services.UI.UI.getStockCanvas()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">getStockCanvas()</span></code></a> and <a class="reference internal" href="ui.html#krpc.client.services.UI.UI.addCanvas()" title="krpc.client.services.UI.UI.addCanvas()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">addCanvas()</span></code></a>.</p>
+<dd><p>A canvas for user interface elements. See <a class="reference internal" href="ui.html#krpc.client.services.UI.UI.getStockCanvas()" title="krpc.client.services.UI.UI.getStockCanvas()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">UI.getStockCanvas()</span></code></a> and <a class="reference internal" href="ui.html#krpc.client.services.UI.UI.addCanvas()" title="krpc.client.services.UI.UI.addCanvas()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">UI.addCanvas()</span></code></a>.</p>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.UI.Canvas.getRectTransform()">
- <a class="reference internal" href="rect-transform.html#krpc.client.services.UI.RectTransform" title="krpc.client.services.UI.RectTransform"><span class="pre">RectTransform</span></a> <span class="sig-name descname"><span class="pre">getRectTransform</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Canvas.getRectTransform()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="rect-transform.html#krpc.client.services.UI.RectTransform" title="krpc.client.services.UI.RectTransform"><span class="pre">RectTransform</span></a> <span class="sig-name descname"><span class="pre">getRectTransform</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Canvas.getRectTransform()" title="Link to this definition">#</a></dt>
 <dd><p>The rect transform for the UI object.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.UI.Canvas.getLayoutElement()">
- <a class="reference internal" href="layout-element.html#krpc.client.services.UI.LayoutElement" title="krpc.client.services.UI.LayoutElement"><span class="pre">LayoutElement</span></a> <span class="sig-name descname"><span class="pre">getLayoutElement</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Canvas.getLayoutElement()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="layout-element.html#krpc.client.services.UI.LayoutElement" title="krpc.client.services.UI.LayoutElement"><span class="pre">LayoutElement</span></a> <span class="sig-name descname"><span class="pre">getLayoutElement</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Canvas.getLayoutElement()" title="Link to this definition">#</a></dt>
 <dd><p>How much space the UI object asks a layout for.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -1125,12 +1126,12 @@ not inside a layout and does not have one.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.UI.Canvas.getVisible()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getVisible</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Canvas.getVisible()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getVisible</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Canvas.getVisible()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.UI.Canvas.setVisible(boolean)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setVisible</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Canvas.setVisible(boolean)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setVisible</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Canvas.setVisible(boolean)" title="Link to this definition">#</a></dt>
 <dd><p>Whether the UI object is visible.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -1143,7 +1144,7 @@ once by making that panel visible.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.UI.Canvas.addPanel(boolean)">
- <a class="reference internal" href="panel.html#krpc.client.services.UI.Panel" title="krpc.client.services.UI.Panel"><span class="pre">Panel</span></a> <span class="sig-name descname"><span class="pre">addPanel</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Canvas.addPanel(boolean)" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="panel.html#krpc.client.services.UI.Panel" title="krpc.client.services.UI.Panel"><span class="pre">Panel</span></a> <span class="sig-name descname"><span class="pre">addPanel</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Canvas.addPanel(boolean)" title="Link to this definition">#</a></dt>
 <dd><p>Create a panel within this object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1156,7 +1157,7 @@ once by making that panel visible.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.UI.Canvas.addText(String, boolean)">
- <a class="reference internal" href="text.html#krpc.client.services.UI.Text" title="krpc.client.services.UI.Text"><span class="pre">Text</span></a> <span class="sig-name descname"><span class="pre">addText</span></span><span class="sig-paren">(</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">content</span></em>, <span class="pre">boolean</span><em> <span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Canvas.addText(String, boolean)" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="text.html#krpc.client.services.UI.Text" title="krpc.client.services.UI.Text"><span class="pre">Text</span></a> <span class="sig-name descname"><span class="pre">addText</span></span><span class="sig-paren">(</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">content</span></em>, <span class="pre">boolean</span><em> <span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Canvas.addText(String, boolean)" title="Link to this definition">#</a></dt>
 <dd><p>Add text to this object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1170,7 +1171,7 @@ once by making that panel visible.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.UI.Canvas.addInputField(boolean)">
- <a class="reference internal" href="input-field.html#krpc.client.services.UI.InputField" title="krpc.client.services.UI.InputField"><span class="pre">InputField</span></a> <span class="sig-name descname"><span class="pre">addInputField</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Canvas.addInputField(boolean)" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="input-field.html#krpc.client.services.UI.InputField" title="krpc.client.services.UI.InputField"><span class="pre">InputField</span></a> <span class="sig-name descname"><span class="pre">addInputField</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Canvas.addInputField(boolean)" title="Link to this definition">#</a></dt>
 <dd><p>Add an input field to this object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1183,7 +1184,7 @@ once by making that panel visible.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.UI.Canvas.addButton(String, boolean)">
- <a class="reference internal" href="button.html#krpc.client.services.UI.Button" title="krpc.client.services.UI.Button"><span class="pre">Button</span></a> <span class="sig-name descname"><span class="pre">addButton</span></span><span class="sig-paren">(</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">content</span></em>, <span class="pre">boolean</span><em> <span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Canvas.addButton(String, boolean)" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="button.html#krpc.client.services.UI.Button" title="krpc.client.services.UI.Button"><span class="pre">Button</span></a> <span class="sig-name descname"><span class="pre">addButton</span></span><span class="sig-paren">(</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">content</span></em>, <span class="pre">boolean</span><em> <span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Canvas.addButton(String, boolean)" title="Link to this definition">#</a></dt>
 <dd><p>Add a button to this object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1197,7 +1198,7 @@ once by making that panel visible.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.UI.Canvas.addToggle(String, boolean)">
- <a class="reference internal" href="toggle.html#krpc.client.services.UI.Toggle" title="krpc.client.services.UI.Toggle"><span class="pre">Toggle</span></a> <span class="sig-name descname"><span class="pre">addToggle</span></span><span class="sig-paren">(</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">content</span></em>, <span class="pre">boolean</span><em> <span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Canvas.addToggle(String, boolean)" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="toggle.html#krpc.client.services.UI.Toggle" title="krpc.client.services.UI.Toggle"><span class="pre">Toggle</span></a> <span class="sig-name descname"><span class="pre">addToggle</span></span><span class="sig-paren">(</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">content</span></em>, <span class="pre">boolean</span><em> <span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Canvas.addToggle(String, boolean)" title="Link to this definition">#</a></dt>
 <dd><p>Add a toggle to this object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1211,7 +1212,7 @@ once by making that panel visible.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.UI.Canvas.addToggleGroup()">
- <a class="reference internal" href="toggle-group.html#krpc.client.services.UI.ToggleGroup" title="krpc.client.services.UI.ToggleGroup"><span class="pre">ToggleGroup</span></a> <span class="sig-name descname"><span class="pre">addToggleGroup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Canvas.addToggleGroup()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="toggle-group.html#krpc.client.services.UI.ToggleGroup" title="krpc.client.services.UI.ToggleGroup"><span class="pre">ToggleGroup</span></a> <span class="sig-name descname"><span class="pre">addToggleGroup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Canvas.addToggleGroup()" title="Link to this definition">#</a></dt>
 <dd><p>Add a toggle group to this object, to make a set of toggles into radio buttons.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -1222,7 +1223,7 @@ to it can be added anywhere.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.UI.Canvas.addSlider(boolean, boolean)">
- <a class="reference internal" href="slider.html#krpc.client.services.UI.Slider" title="krpc.client.services.UI.Slider"><span class="pre">Slider</span></a> <span class="sig-name descname"><span class="pre">addSlider</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">vertical</span></em>, <span class="pre">boolean</span><em> <span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Canvas.addSlider(boolean, boolean)" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="slider.html#krpc.client.services.UI.Slider" title="krpc.client.services.UI.Slider"><span class="pre">Slider</span></a> <span class="sig-name descname"><span class="pre">addSlider</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">vertical</span></em>, <span class="pre">boolean</span><em> <span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Canvas.addSlider(boolean, boolean)" title="Link to this definition">#</a></dt>
 <dd><p>Add a slider to this object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1236,7 +1237,7 @@ to it can be added anywhere.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.UI.Canvas.addDropdown(boolean)">
- <a class="reference internal" href="dropdown.html#krpc.client.services.UI.Dropdown" title="krpc.client.services.UI.Dropdown"><span class="pre">Dropdown</span></a> <span class="sig-name descname"><span class="pre">addDropdown</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Canvas.addDropdown(boolean)" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="dropdown.html#krpc.client.services.UI.Dropdown" title="krpc.client.services.UI.Dropdown"><span class="pre">Dropdown</span></a> <span class="sig-name descname"><span class="pre">addDropdown</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Canvas.addDropdown(boolean)" title="Link to this definition">#</a></dt>
 <dd><p>Add a dropdown to this object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1249,7 +1250,7 @@ to it can be added anywhere.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.UI.Canvas.addImage(boolean)">
- <a class="reference internal" href="image.html#krpc.client.services.UI.Image" title="krpc.client.services.UI.Image"><span class="pre">Image</span></a> <span class="sig-name descname"><span class="pre">addImage</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Canvas.addImage(boolean)" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="image.html#krpc.client.services.UI.Image" title="krpc.client.services.UI.Image"><span class="pre">Image</span></a> <span class="sig-name descname"><span class="pre">addImage</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Canvas.addImage(boolean)" title="Link to this definition">#</a></dt>
 <dd><p>Add an image to this object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1262,7 +1263,7 @@ to it can be added anywhere.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.UI.Canvas.addScrollView(boolean)">
- <a class="reference internal" href="scroll-view.html#krpc.client.services.UI.ScrollView" title="krpc.client.services.UI.ScrollView"><span class="pre">ScrollView</span></a> <span class="sig-name descname"><span class="pre">addScrollView</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Canvas.addScrollView(boolean)" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="scroll-view.html#krpc.client.services.UI.ScrollView" title="krpc.client.services.UI.ScrollView"><span class="pre">ScrollView</span></a> <span class="sig-name descname"><span class="pre">addScrollView</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Canvas.addScrollView(boolean)" title="Link to this definition">#</a></dt>
 <dd><p>Add a scroll view to this object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1275,7 +1276,7 @@ to it can be added anywhere.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.UI.Canvas.remove()">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Canvas.remove()" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Canvas.remove()" title="Link to this definition">#</a></dt>
 <dd><p>Remove the UI object.</p>
 </dd></dl>
 

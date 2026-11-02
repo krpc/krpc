@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=eadf7411" />
   
@@ -1108,38 +1109,38 @@
 <span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">Vessel</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel" title="Link to this definition">#</a></dt>
 <dd><p>These objects are used to interact with vessels in KSP. This includes getting
 orbital and flight data, manipulating control inputs and managing resources.
-Created using <a class="reference internal" href="space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.getActiveVessel()" title="krpc.client.services.SpaceCenter.SpaceCenter.getActiveVessel()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">getActiveVessel()</span></code></a> or <a class="reference internal" href="space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.getVessels()" title="krpc.client.services.SpaceCenter.SpaceCenter.getVessels()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">getVessels()</span></code></a>.</p>
+Created using <a class="reference internal" href="space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.getActiveVessel()" title="krpc.client.services.SpaceCenter.SpaceCenter.getActiveVessel()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">SpaceCenter.getActiveVessel()</span></code></a> or <a class="reference internal" href="space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.getVessels()" title="krpc.client.services.SpaceCenter.SpaceCenter.getVessels()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">SpaceCenter.getVessels()</span></code></a>.</p>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getName()">
- <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getName</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getName()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getName</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getName()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.setName(String)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setName</span></span><span class="sig-paren">(</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.setName(String)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setName</span></span><span class="sig-paren">(</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.setName(String)" title="Link to this definition">#</a></dt>
 <dd><p>The name of the vessel.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getType()">
- <a class="reference internal" href="#krpc.client.services.SpaceCenter.VesselType" title="krpc.client.services.SpaceCenter.VesselType"><span class="pre">VesselType</span></a> <span class="sig-name descname"><span class="pre">getType</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getType()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.VesselType" title="krpc.client.services.SpaceCenter.VesselType"><span class="pre">VesselType</span></a> <span class="sig-name descname"><span class="pre">getType</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getType()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.setType(VesselType)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setType</span></span><span class="sig-paren">(</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.VesselType" title="krpc.client.services.SpaceCenter.VesselType"><span class="pre">VesselType</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.setType(VesselType)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setType</span></span><span class="sig-paren">(</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.VesselType" title="krpc.client.services.SpaceCenter.VesselType"><span class="pre">VesselType</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.setType(VesselType)" title="Link to this definition">#</a></dt>
 <dd><p>The type of the vessel.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getSituation()">
- <a class="reference internal" href="#krpc.client.services.SpaceCenter.VesselSituation" title="krpc.client.services.SpaceCenter.VesselSituation"><span class="pre">VesselSituation</span></a> <span class="sig-name descname"><span class="pre">getSituation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getSituation()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.VesselSituation" title="krpc.client.services.SpaceCenter.VesselSituation"><span class="pre">VesselSituation</span></a> <span class="sig-name descname"><span class="pre">getSituation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getSituation()" title="Link to this definition">#</a></dt>
 <dd><p>The situation the vessel is in.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getLoaded()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getLoaded</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getLoaded()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getLoaded</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getLoaded()" title="Link to this definition">#</a></dt>
 <dd><p>Whether the vessel is loaded, i.e. its parts are instantiated in the scene
 because it is within loading range of the active vessel. A vessel that is not
 loaded exists only as orbital data and is always on-rails (see <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getPacked()" title="krpc.client.services.SpaceCenter.Vessel.getPacked()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getPacked()</span></code></a>).</p>
@@ -1147,7 +1148,7 @@ loaded exists only as orbital data and is always on-rails (see <a class="referen
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getPacked()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getPacked</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getPacked()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getPacked</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getPacked()" title="Link to this definition">#</a></dt>
 <dd><p>Whether the vessel is packed (on-rails). A packed vessel has its physics
 simulation suspended and follows its orbit analytically. A vessel that is not
 loaded (see <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getLoaded()" title="krpc.client.services.SpaceCenter.Vessel.getLoaded()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getLoaded()</span></code></a>) is always packed.</p>
@@ -1155,12 +1156,12 @@ loaded (see <a class="reference internal" href="#krpc.client.services.SpaceCente
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getPhysicsRange()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getPhysicsRange</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getPhysicsRange()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getPhysicsRange</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getPhysicsRange()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.setPhysicsRange(float)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setPhysicsRange</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.setPhysicsRange(float)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setPhysicsRange</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.setPhysicsRange(float)" title="Link to this definition">#</a></dt>
 <dd><p>The distance from the active vessel, in meters, out to which this vessel keeps running
 its physics simulation, and so stays controllable, able to burn its engines and
 respond to its autopilot. Setting this raises the vessel out of the stock physics
@@ -1197,13 +1198,13 @@ need it, by as little as they need.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getRecoverable()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getRecoverable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getRecoverable()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getRecoverable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getRecoverable()" title="Link to this definition">#</a></dt>
 <dd><p>Whether the vessel is recoverable.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.recover()">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">recover</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.recover()" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">recover</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.recover()" title="Link to this definition">#</a></dt>
 <dd><p>Recover the vessel. The crew return to the astronaut complex, and the funds and
 science the vessel is worth are awarded.</p>
 <div class="admonition note">
@@ -1218,7 +1219,7 @@ several vessels keeps control of the rest of them.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.terminate()">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">terminate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.terminate()" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">terminate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.terminate()" title="Link to this definition">#</a></dt>
 <dd><p>Terminate the vessel. The vessel and its parts are removed from the game, and its
 crew are lost, as when the vessel is terminated from the tracking station. Nothing
 is recovered: no funds, no science and no crew.</p>
@@ -1236,20 +1237,20 @@ use <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getMET()">
- <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getMET</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getMET()" title="Link to this definition">#</a></dt>
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getMET</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getMET()" title="Link to this definition">#</a></dt>
 <dd><p>The mission elapsed time in seconds.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getBiome()">
- <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getBiome</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getBiome()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getBiome</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getBiome()" title="Link to this definition">#</a></dt>
 <dd><p>The name of the biome the vessel is currently in.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.flight(ReferenceFrame)">
- <a class="reference internal" href="flight.html#krpc.client.services.SpaceCenter.Flight" title="krpc.client.services.SpaceCenter.Flight"><span class="pre">Flight</span></a> <span class="sig-name descname"><span class="pre">flight</span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.flight(ReferenceFrame)" title="Link to this definition">#</a></dt>
-<dd><p>Returns a <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.flight(ReferenceFrame)" title="krpc.client.services.SpaceCenter.Vessel.flight(ReferenceFrame)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.flight(ReferenceFrame)</span></code></a> object that can be used to get flight
+<a class="reference internal" href="flight.html#krpc.client.services.SpaceCenter.Flight" title="krpc.client.services.SpaceCenter.Flight"><span class="pre">Flight</span></a> <span class="sig-name descname"><span class="pre">flight</span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.flight(ReferenceFrame)" title="Link to this definition">#</a></dt>
+<dd><p>Returns a <a class="reference internal" href="flight.html#krpc.client.services.SpaceCenter.Flight" title="krpc.client.services.SpaceCenter.Flight"><code class="xref java java-type docutils literal notranslate"><span class="pre">Flight</span></code></a> object that can be used to get flight
 telemetry for the vessel, in the specified reference frame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1274,13 +1275,13 @@ vessel</span></a>.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getOrbit()">
- <a class="reference internal" href="orbit.html#krpc.client.services.SpaceCenter.Orbit" title="krpc.client.services.SpaceCenter.Orbit"><span class="pre">Orbit</span></a> <span class="sig-name descname"><span class="pre">getOrbit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getOrbit()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="orbit.html#krpc.client.services.SpaceCenter.Orbit" title="krpc.client.services.SpaceCenter.Orbit"><span class="pre">Orbit</span></a> <span class="sig-name descname"><span class="pre">getOrbit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getOrbit()" title="Link to this definition">#</a></dt>
 <dd><p>The current orbit of the vessel.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getControl()">
- <a class="reference internal" href="control.html#krpc.client.services.SpaceCenter.Control" title="krpc.client.services.SpaceCenter.Control"><span class="pre">Control</span></a> <span class="sig-name descname"><span class="pre">getControl</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getControl()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="control.html#krpc.client.services.SpaceCenter.Control" title="krpc.client.services.SpaceCenter.Control"><span class="pre">Control</span></a> <span class="sig-name descname"><span class="pre">getControl</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getControl()" title="Link to this definition">#</a></dt>
 <dd><p>Returns a <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getControl()" title="krpc.client.services.SpaceCenter.Vessel.getControl()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getControl()</span></code></a> object that can be used to manipulate
 the vessel’s control inputs. For example, its pitch/yaw/roll controls,
 RCS and thrust.</p>
@@ -1293,7 +1294,7 @@ RCS and thrust.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getComms()">
- <a class="reference internal" href="comms.html#krpc.client.services.SpaceCenter.Comms" title="krpc.client.services.SpaceCenter.Comms"><span class="pre">Comms</span></a> <span class="sig-name descname"><span class="pre">getComms</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getComms()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="comms.html#krpc.client.services.SpaceCenter.Comms" title="krpc.client.services.SpaceCenter.Comms"><span class="pre">Comms</span></a> <span class="sig-name descname"><span class="pre">getComms</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getComms()" title="Link to this definition">#</a></dt>
 <dd><p>Returns a <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getComms()" title="krpc.client.services.SpaceCenter.Vessel.getComms()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getComms()</span></code></a> object that can be used to interact
 with CommNet for this vessel.</p>
 <dl class="field-list simple">
@@ -1305,7 +1306,7 @@ with CommNet for this vessel.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getAutoPilot()">
- <a class="reference internal" href="auto-pilot.html#krpc.client.services.SpaceCenter.AutoPilot" title="krpc.client.services.SpaceCenter.AutoPilot"><span class="pre">AutoPilot</span></a> <span class="sig-name descname"><span class="pre">getAutoPilot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getAutoPilot()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="auto-pilot.html#krpc.client.services.SpaceCenter.AutoPilot" title="krpc.client.services.SpaceCenter.AutoPilot"><span class="pre">AutoPilot</span></a> <span class="sig-name descname"><span class="pre">getAutoPilot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getAutoPilot()" title="Link to this definition">#</a></dt>
 <dd><p>An <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getAutoPilot()" title="krpc.client.services.SpaceCenter.Vessel.getAutoPilot()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getAutoPilot()</span></code></a> object, that can be used to perform
 simple auto-piloting of the vessel.</p>
 <dl class="field-list simple">
@@ -1317,25 +1318,25 @@ simple auto-piloting of the vessel.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getCrewCapacity()">
- <span class="pre">int</span> <span class="sig-name descname"><span class="pre">getCrewCapacity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getCrewCapacity()" title="Link to this definition">#</a></dt>
+<span class="pre">int</span> <span class="sig-name descname"><span class="pre">getCrewCapacity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getCrewCapacity()" title="Link to this definition">#</a></dt>
 <dd><p>The number of crew that can occupy the vessel.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getCrewCount()">
- <span class="pre">int</span> <span class="sig-name descname"><span class="pre">getCrewCount</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getCrewCount()" title="Link to this definition">#</a></dt>
+<span class="pre">int</span> <span class="sig-name descname"><span class="pre">getCrewCount</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getCrewCount()" title="Link to this definition">#</a></dt>
 <dd><p>The number of crew that are occupying the vessel.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getCrew()">
- <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.CrewMember" title="krpc.client.services.SpaceCenter.CrewMember"><span class="pre">CrewMember</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getCrew</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getCrew()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.CrewMember" title="krpc.client.services.SpaceCenter.CrewMember"><span class="pre">CrewMember</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getCrew</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getCrew()" title="Link to this definition">#</a></dt>
 <dd><p>The crew in the vessel.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getResources()">
- <a class="reference internal" href="resources.html#krpc.client.services.SpaceCenter.Resources" title="krpc.client.services.SpaceCenter.Resources"><span class="pre">Resources</span></a> <span class="sig-name descname"><span class="pre">getResources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getResources()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="resources.html#krpc.client.services.SpaceCenter.Resources" title="krpc.client.services.SpaceCenter.Resources"><span class="pre">Resources</span></a> <span class="sig-name descname"><span class="pre">getResources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getResources()" title="Link to this definition">#</a></dt>
 <dd><p>A <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getResources()" title="krpc.client.services.SpaceCenter.Vessel.getResources()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getResources()</span></code></a> object, that can used to get information
 about resources stored in the vessel.</p>
 <dl class="field-list simple">
@@ -1347,7 +1348,7 @@ about resources stored in the vessel.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getStages()">
- <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="stage.html#krpc.client.services.SpaceCenter.Stage" title="krpc.client.services.SpaceCenter.Stage"><span class="pre">Stage</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getStages</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getStages()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="stage.html#krpc.client.services.SpaceCenter.Stage" title="krpc.client.services.SpaceCenter.Stage"><span class="pre">Stage</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getStages</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getStages()" title="Link to this definition">#</a></dt>
 <dd><p>Activation (burn) stages for this vessel, in ascending stage order. This does
 not include the -1 stage (parts with no staging icon), as it carries no
 delta-v; use <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.stageAt(int)" title="krpc.client.services.SpaceCenter.Vessel.stageAt(int)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.stageAt(int)</span></code></a> with -1 to get those parts.</p>
@@ -1365,7 +1366,7 @@ delta-v; use <a class="reference internal" href="#krpc.client.services.SpaceCent
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.stageAt(int)">
- <a class="reference internal" href="stage.html#krpc.client.services.SpaceCenter.Stage" title="krpc.client.services.SpaceCenter.Stage"><span class="pre">Stage</span></a> <span class="sig-name descname"><span class="pre">stageAt</span></span><span class="sig-paren">(</span><span class="pre">int</span><em> <span class="pre">stage</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.stageAt(int)" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="stage.html#krpc.client.services.SpaceCenter.Stage" title="krpc.client.services.SpaceCenter.Stage"><span class="pre">Stage</span></a> <span class="sig-name descname"><span class="pre">stageAt</span></span><span class="sig-paren">(</span><span class="pre">int</span><em> <span class="pre">stage</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.stageAt(int)" title="Link to this definition">#</a></dt>
 <dd><p>The activation stage with the given number. Pass -1 to get the parts that are
 never activated (those with no staging icon).</p>
 <dl class="field-list simple">
@@ -1382,7 +1383,7 @@ never activated (those with no staging icon).</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getDecoupleStages()">
- <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="stage.html#krpc.client.services.SpaceCenter.Stage" title="krpc.client.services.SpaceCenter.Stage"><span class="pre">Stage</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getDecoupleStages</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getDecoupleStages()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="stage.html#krpc.client.services.SpaceCenter.Stage" title="krpc.client.services.SpaceCenter.Stage"><span class="pre">Stage</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getDecoupleStages</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getDecoupleStages()" title="Link to this definition">#</a></dt>
 <dd><p>Decouple stages for this vessel, in ascending stage order. The -1 stage,
 containing the parts that are never decoupled and remain on the vessel, is
 included first when any such parts exist.</p>
@@ -1399,7 +1400,7 @@ included first when any such parts exist.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.decoupleStageAt(int)">
- <a class="reference internal" href="stage.html#krpc.client.services.SpaceCenter.Stage" title="krpc.client.services.SpaceCenter.Stage"><span class="pre">Stage</span></a> <span class="sig-name descname"><span class="pre">decoupleStageAt</span></span><span class="sig-paren">(</span><span class="pre">int</span><em> <span class="pre">stage</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.decoupleStageAt(int)" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="stage.html#krpc.client.services.SpaceCenter.Stage" title="krpc.client.services.SpaceCenter.Stage"><span class="pre">Stage</span></a> <span class="sig-name descname"><span class="pre">decoupleStageAt</span></span><span class="sig-paren">(</span><span class="pre">int</span><em> <span class="pre">stage</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.decoupleStageAt(int)" title="Link to this definition">#</a></dt>
 <dd><p>The decouple stage with the given number. Pass -1 to get the parts that are
 never decoupled and remain on the vessel after all stages have fired.</p>
 <dl class="field-list simple">
@@ -1416,7 +1417,7 @@ never decoupled and remain on the vessel after all stages have fired.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getDeltaVReady()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getDeltaVReady</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getDeltaVReady()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getDeltaVReady</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getDeltaVReady()" title="Link to this definition">#</a></dt>
 <dd><p>Whether the vessel’s delta-v figures are current.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1433,7 +1434,7 @@ calculation, and waits only when the game has calculated none.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.recalculateDeltaV()">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">recalculateDeltaV</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.recalculateDeltaV()" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">recalculateDeltaV</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.recalculateDeltaV()" title="Link to this definition">#</a></dt>
 <dd><p>Recalculates the vessel’s delta-v figures, and waits until they are current.
 Throws an exception if the vessel is not the active vessel.</p>
 <dl class="field-list simple">
@@ -1445,7 +1446,7 @@ Throws an exception if the vessel is not the active vessel.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getDeltaV()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getDeltaV</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getDeltaV()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getDeltaV</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getDeltaV()" title="Link to this definition">#</a></dt>
 <dd><p>Total delta-v for the vessel in the current situation, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1460,7 +1461,7 @@ Throws an exception if the vessel is not the active vessel.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getVacuumDeltaV()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getVacuumDeltaV</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getVacuumDeltaV()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getVacuumDeltaV</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getVacuumDeltaV()" title="Link to this definition">#</a></dt>
 <dd><p>Total vacuum delta-v for the vessel, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1471,7 +1472,7 @@ Throws an exception if the vessel is not the active vessel.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getSeaLevelDeltaV()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getSeaLevelDeltaV</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getSeaLevelDeltaV()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getSeaLevelDeltaV</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getSeaLevelDeltaV()" title="Link to this definition">#</a></dt>
 <dd><p>Total sea-level delta-v for the vessel, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1482,7 +1483,7 @@ Throws an exception if the vessel is not the active vessel.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getBurnTime()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getBurnTime</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getBurnTime()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getBurnTime</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getBurnTime()" title="Link to this definition">#</a></dt>
 <dd><p>Total burn time for the vessel, in seconds.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1493,7 +1494,7 @@ Throws an exception if the vessel is not the active vessel.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getParts()">
- <a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.Parts" title="krpc.client.services.SpaceCenter.Parts"><span class="pre">Parts</span></a> <span class="sig-name descname"><span class="pre">getParts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getParts()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.Parts" title="krpc.client.services.SpaceCenter.Parts"><span class="pre">Parts</span></a> <span class="sig-name descname"><span class="pre">getParts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getParts()" title="Link to this definition">#</a></dt>
 <dd><p>A <a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.Parts" title="krpc.client.services.SpaceCenter.Parts"><code class="xref java java-type docutils literal notranslate"><span class="pre">Parts</span></code></a> object, that can used to interact with the parts that make up this vessel.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1504,7 +1505,7 @@ Throws an exception if the vessel is not the active vessel.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getMass()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getMass()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getMass()" title="Link to this definition">#</a></dt>
 <dd><p>The total mass of the vessel, including resources, in <span class="math notranslate nohighlight">\(\mathrm{kg}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1515,7 +1516,7 @@ Throws an exception if the vessel is not the active vessel.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getDryMass()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getDryMass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getDryMass()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getDryMass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getDryMass()" title="Link to this definition">#</a></dt>
 <dd><p>The total mass of the vessel, excluding resources, in <span class="math notranslate nohighlight">\(\mathrm{kg}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1526,7 +1527,7 @@ Throws an exception if the vessel is not the active vessel.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getThrust()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getThrust</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getThrust()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getThrust</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getThrust()" title="Link to this definition">#</a></dt>
 <dd><p>The total thrust currently being produced by the vessel’s engines, in
 Newtons. This is computed by summing <a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.Engine.getThrust()" title="krpc.client.services.SpaceCenter.Engine.getThrust()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Engine.getThrust()</span></code></a> for
 every engine in the vessel.</p>
@@ -1539,7 +1540,7 @@ every engine in the vessel.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getAvailableThrust()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getAvailableThrust</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getAvailableThrust()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getAvailableThrust</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getAvailableThrust()" title="Link to this definition">#</a></dt>
 <dd><p>Gets the total available thrust that can be produced by the vessel’s
 active engines, in Newtons. This is computed by summing
 <a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.Engine.getAvailableThrust()" title="krpc.client.services.SpaceCenter.Engine.getAvailableThrust()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Engine.getAvailableThrust()</span></code></a> for every active engine in the vessel.</p>
@@ -1552,7 +1553,7 @@ active engines, in Newtons. This is computed by summing
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.availableThrustAt(double)">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">availableThrustAt</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">pressure</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.availableThrustAt(double)" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">availableThrustAt</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">pressure</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.availableThrustAt(double)" title="Link to this definition">#</a></dt>
 <dd><p>Gets the total available thrust that can be produced by the vessel’s
 active engines, in Newtons. This is computed by summing
 <a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.Engine.availableThrustAt(double)" title="krpc.client.services.SpaceCenter.Engine.availableThrustAt(double)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Engine.availableThrustAt(double)</span></code></a> for every active engine in the vessel.
@@ -1571,7 +1572,7 @@ Takes the given pressure into account.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getMaxThrust()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMaxThrust</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getMaxThrust()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMaxThrust</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getMaxThrust()" title="Link to this definition">#</a></dt>
 <dd><p>The total maximum thrust that can be produced by the vessel’s active
 engines, in Newtons. This is computed by summing
 <a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.Engine.getMaxThrust()" title="krpc.client.services.SpaceCenter.Engine.getMaxThrust()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Engine.getMaxThrust()</span></code></a> for every active engine.</p>
@@ -1584,7 +1585,7 @@ engines, in Newtons. This is computed by summing
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.maxThrustAt(double)">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">maxThrustAt</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">pressure</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.maxThrustAt(double)" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">maxThrustAt</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">pressure</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.maxThrustAt(double)" title="Link to this definition">#</a></dt>
 <dd><p>The total maximum thrust that can be produced by the vessel’s active
 engines, in Newtons. This is computed by summing
 <a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.Engine.maxThrustAt(double)" title="krpc.client.services.SpaceCenter.Engine.maxThrustAt(double)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Engine.maxThrustAt(double)</span></code></a> for every active engine.
@@ -1603,7 +1604,7 @@ Takes the given pressure into account.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getMaxVacuumThrust()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMaxVacuumThrust</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getMaxVacuumThrust()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMaxVacuumThrust</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getMaxVacuumThrust()" title="Link to this definition">#</a></dt>
 <dd><p>The total maximum thrust that can be produced by the vessel’s active
 engines when the vessel is in a vacuum, in Newtons. This is computed by
 summing <a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.Engine.getMaxVacuumThrust()" title="krpc.client.services.SpaceCenter.Engine.getMaxVacuumThrust()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Engine.getMaxVacuumThrust()</span></code></a> for every active engine.</p>
@@ -1616,7 +1617,7 @@ summing <a class="reference internal" href="parts.html#krpc.client.services.Spac
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getAcceleration()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getAcceleration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getAcceleration()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getAcceleration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getAcceleration()" title="Link to this definition">#</a></dt>
 <dd><p>The acceleration currently produced by the vessel’s engines, in
 <span class="math notranslate nohighlight">\(\mathrm{m/s^{2}}\)</span>. This is <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getThrust()" title="krpc.client.services.SpaceCenter.Vessel.getThrust()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getThrust()</span></code></a> divided by the
 vessel’s <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getMass()" title="krpc.client.services.SpaceCenter.Vessel.getMass()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getMass()</span></code></a>.</p>
@@ -1629,7 +1630,7 @@ vessel’s <a class="reference internal" href="#krpc.client.services.SpaceCenter
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getAvailableAcceleration()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getAvailableAcceleration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getAvailableAcceleration()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getAvailableAcceleration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getAvailableAcceleration()" title="Link to this definition">#</a></dt>
 <dd><p>The total available acceleration that can be produced by the vessel’s
 active engines, in <span class="math notranslate nohighlight">\(\mathrm{m/s^{2}}\)</span>. This is <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getAvailableThrust()" title="krpc.client.services.SpaceCenter.Vessel.getAvailableThrust()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getAvailableThrust()</span></code></a>
 divided by the vessel’s <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getMass()" title="krpc.client.services.SpaceCenter.Vessel.getMass()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getMass()</span></code></a>.</p>
@@ -1642,7 +1643,7 @@ divided by the vessel’s <a class="reference internal" href="#krpc.client.servi
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.availableAccelerationAt(double)">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">availableAccelerationAt</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">pressure</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.availableAccelerationAt(double)" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">availableAccelerationAt</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">pressure</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.availableAccelerationAt(double)" title="Link to this definition">#</a></dt>
 <dd><p>The total available acceleration that can be produced by the vessel’s
 active engines, in <span class="math notranslate nohighlight">\(\mathrm{m/s^{2}}\)</span>. This is <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.availableThrustAt(double)" title="krpc.client.services.SpaceCenter.Vessel.availableThrustAt(double)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.availableThrustAt(double)</span></code></a>
 divided by the vessel’s <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getMass()" title="krpc.client.services.SpaceCenter.Vessel.getMass()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getMass()</span></code></a>. Takes the given pressure into account.</p>
@@ -1660,7 +1661,7 @@ divided by the vessel’s <a class="reference internal" href="#krpc.client.servi
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getMaxAcceleration()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMaxAcceleration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getMaxAcceleration()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMaxAcceleration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getMaxAcceleration()" title="Link to this definition">#</a></dt>
 <dd><p>The total maximum acceleration that can be produced by the vessel’s active
 engines, in <span class="math notranslate nohighlight">\(\mathrm{m/s^{2}}\)</span>. This is <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getMaxThrust()" title="krpc.client.services.SpaceCenter.Vessel.getMaxThrust()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getMaxThrust()</span></code></a> divided by
 the vessel’s <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getMass()" title="krpc.client.services.SpaceCenter.Vessel.getMass()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getMass()</span></code></a>.</p>
@@ -1673,7 +1674,7 @@ the vessel’s <a class="reference internal" href="#krpc.client.services.SpaceCe
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.maxAccelerationAt(double)">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">maxAccelerationAt</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">pressure</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.maxAccelerationAt(double)" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">maxAccelerationAt</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">pressure</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.maxAccelerationAt(double)" title="Link to this definition">#</a></dt>
 <dd><p>The total maximum acceleration that can be produced by the vessel’s active
 engines, in <span class="math notranslate nohighlight">\(\mathrm{m/s^{2}}\)</span>. This is <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.maxThrustAt(double)" title="krpc.client.services.SpaceCenter.Vessel.maxThrustAt(double)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.maxThrustAt(double)</span></code></a> divided by
 the vessel’s <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getMass()" title="krpc.client.services.SpaceCenter.Vessel.getMass()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getMass()</span></code></a>. Takes the given pressure into account.</p>
@@ -1691,7 +1692,7 @@ the vessel’s <a class="reference internal" href="#krpc.client.services.SpaceCe
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getMaxVacuumAcceleration()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMaxVacuumAcceleration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getMaxVacuumAcceleration()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMaxVacuumAcceleration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getMaxVacuumAcceleration()" title="Link to this definition">#</a></dt>
 <dd><p>The total maximum acceleration that can be produced by the vessel’s active
 engines when the vessel is in a vacuum, in <span class="math notranslate nohighlight">\(\mathrm{m/s^{2}}\)</span>. This is
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getMaxVacuumThrust()" title="krpc.client.services.SpaceCenter.Vessel.getMaxVacuumThrust()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getMaxVacuumThrust()</span></code></a> divided by the vessel’s <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getMass()" title="krpc.client.services.SpaceCenter.Vessel.getMass()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getMass()</span></code></a>.</p>
@@ -1704,7 +1705,7 @@ engines when the vessel is in a vacuum, in <span class="math notranslate nohighl
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getSpecificImpulse()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getSpecificImpulse</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getSpecificImpulse()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getSpecificImpulse</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getSpecificImpulse()" title="Link to this definition">#</a></dt>
 <dd><p>The combined specific impulse of all active engines, in seconds. This is computed using the formula
 <a class="reference external" href="https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines">described here</a>.</p>
 <dl class="field-list simple">
@@ -1716,7 +1717,7 @@ engines when the vessel is in a vacuum, in <span class="math notranslate nohighl
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.specificImpulseAt(double)">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">specificImpulseAt</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">pressure</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.specificImpulseAt(double)" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">specificImpulseAt</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">pressure</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.specificImpulseAt(double)" title="Link to this definition">#</a></dt>
 <dd><p>The combined specific impulse of all active engines, in seconds. This is computed using the formula
 <a class="reference external" href="https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines">described here</a>.
 Takes the given pressure into account.</p>
@@ -1734,7 +1735,7 @@ Takes the given pressure into account.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getVacuumSpecificImpulse()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getVacuumSpecificImpulse</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getVacuumSpecificImpulse()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getVacuumSpecificImpulse</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getVacuumSpecificImpulse()" title="Link to this definition">#</a></dt>
 <dd><p>The combined vacuum specific impulse of all active engines, in seconds. This is computed using the formula
 <a class="reference external" href="https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines">described here</a>.</p>
 <dl class="field-list simple">
@@ -1746,7 +1747,7 @@ Takes the given pressure into account.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getKerbinSeaLevelSpecificImpulse()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getKerbinSeaLevelSpecificImpulse</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getKerbinSeaLevelSpecificImpulse()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getKerbinSeaLevelSpecificImpulse</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getKerbinSeaLevelSpecificImpulse()" title="Link to this definition">#</a></dt>
 <dd><p>The combined specific impulse of all active engines at sea level on Kerbin, in seconds.
 This is computed using the formula
 <a class="reference external" href="https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines">described here</a>.</p>
@@ -1759,7 +1760,7 @@ This is computed using the formula
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getMomentOfInertia()">
- <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getMomentOfInertia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getMomentOfInertia()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/package-summary.html" title="org.javatuples"><span class="pre">org.javatuples</span></a><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getMomentOfInertia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getMomentOfInertia()" title="Link to this definition">#</a></dt>
 <dd><p>The moment of inertia of the vessel around its center of mass in <span class="math notranslate nohighlight">\(\mathrm{kg \cdot m^{2}}\)</span>.
 The inertia values in the returned 3-tuple are around the
 pitch, roll and yaw directions respectively.
@@ -1773,7 +1774,7 @@ This corresponds to the vessels reference frame (<a class="reference internal" h
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getInertiaTensor()">
- <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getInertiaTensor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getInertiaTensor()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getInertiaTensor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getInertiaTensor()" title="Link to this definition">#</a></dt>
 <dd><p>The inertia tensor of the vessel around its center of mass,
 in the vessels reference frame (<a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getReferenceFrame()" title="krpc.client.services.SpaceCenter.Vessel.getReferenceFrame()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getReferenceFrame()</span></code></a>).
 Returns the 3x3 matrix as a list of elements, in row-major order.</p>
@@ -1786,7 +1787,7 @@ Returns the 3x3 matrix as a list of elements, in row-major order.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getAvailableTorque()">
- <a class="reference internal" href="#krpc.client.services.SpaceCenter.AxisRange" title="krpc.client.services.SpaceCenter.AxisRange"><span class="pre">AxisRange</span></a> <span class="sig-name descname"><span class="pre">getAvailableTorque</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getAvailableTorque()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.AxisRange" title="krpc.client.services.SpaceCenter.AxisRange"><span class="pre">AxisRange</span></a> <span class="sig-name descname"><span class="pre">getAvailableTorque</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getAvailableTorque()" title="Link to this definition">#</a></dt>
 <dd><p>The maximum torque that the vessel generates. Includes contributions from
 reaction wheels, RCS, gimballed engines and aerodynamic control surfaces.
 Returns the torques in <span class="math notranslate nohighlight">\(\mathrm{N \cdot m}\)</span> around each of the coordinate axes of the
@@ -1801,7 +1802,7 @@ These axes are equivalent to the pitch, roll and yaw axes of the vessel.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getAvailableReactionWheelTorque()">
- <a class="reference internal" href="#krpc.client.services.SpaceCenter.AxisRange" title="krpc.client.services.SpaceCenter.AxisRange"><span class="pre">AxisRange</span></a> <span class="sig-name descname"><span class="pre">getAvailableReactionWheelTorque</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getAvailableReactionWheelTorque()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.AxisRange" title="krpc.client.services.SpaceCenter.AxisRange"><span class="pre">AxisRange</span></a> <span class="sig-name descname"><span class="pre">getAvailableReactionWheelTorque</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getAvailableReactionWheelTorque()" title="Link to this definition">#</a></dt>
 <dd><p>The maximum torque that the currently active and powered reaction wheels can generate.
 Returns the torques in <span class="math notranslate nohighlight">\(\mathrm{N \cdot m}\)</span> around each of the coordinate axes of the
 vessels reference frame (<a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getReferenceFrame()" title="krpc.client.services.SpaceCenter.Vessel.getReferenceFrame()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getReferenceFrame()</span></code></a>).
@@ -1815,7 +1816,7 @@ These axes are equivalent to the pitch, roll and yaw axes of the vessel.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getAvailableRCSTorque()">
- <a class="reference internal" href="#krpc.client.services.SpaceCenter.AxisRange" title="krpc.client.services.SpaceCenter.AxisRange"><span class="pre">AxisRange</span></a> <span class="sig-name descname"><span class="pre">getAvailableRCSTorque</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getAvailableRCSTorque()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.AxisRange" title="krpc.client.services.SpaceCenter.AxisRange"><span class="pre">AxisRange</span></a> <span class="sig-name descname"><span class="pre">getAvailableRCSTorque</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getAvailableRCSTorque()" title="Link to this definition">#</a></dt>
 <dd><p>The maximum torque that the currently active RCS thrusters can generate.
 Returns the torques in <span class="math notranslate nohighlight">\(\mathrm{N \cdot m}\)</span> around each of the coordinate axes of the
 vessels reference frame (<a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getReferenceFrame()" title="krpc.client.services.SpaceCenter.Vessel.getReferenceFrame()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getReferenceFrame()</span></code></a>).
@@ -1829,7 +1830,7 @@ These axes are equivalent to the pitch, roll and yaw axes of the vessel.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getAvailableRCSForce()">
- <a class="reference internal" href="#krpc.client.services.SpaceCenter.AxisRange" title="krpc.client.services.SpaceCenter.AxisRange"><span class="pre">AxisRange</span></a> <span class="sig-name descname"><span class="pre">getAvailableRCSForce</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getAvailableRCSForce()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.AxisRange" title="krpc.client.services.SpaceCenter.AxisRange"><span class="pre">AxisRange</span></a> <span class="sig-name descname"><span class="pre">getAvailableRCSForce</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getAvailableRCSForce()" title="Link to this definition">#</a></dt>
 <dd><p>The maximum force that the currently active RCS thrusters can generate.
 Returns the forces in <span class="math notranslate nohighlight">\(\mathrm{N}\)</span> along each of the coordinate axes of the
 vessels reference frame (<a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getReferenceFrame()" title="krpc.client.services.SpaceCenter.Vessel.getReferenceFrame()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getReferenceFrame()</span></code></a>).
@@ -1843,7 +1844,7 @@ These axes are equivalent to the right, forward and bottom directions of the ves
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getAvailableRCSAcceleration()">
- <a class="reference internal" href="#krpc.client.services.SpaceCenter.AxisRange" title="krpc.client.services.SpaceCenter.AxisRange"><span class="pre">AxisRange</span></a> <span class="sig-name descname"><span class="pre">getAvailableRCSAcceleration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getAvailableRCSAcceleration()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.AxisRange" title="krpc.client.services.SpaceCenter.AxisRange"><span class="pre">AxisRange</span></a> <span class="sig-name descname"><span class="pre">getAvailableRCSAcceleration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getAvailableRCSAcceleration()" title="Link to this definition">#</a></dt>
 <dd><p>The maximum acceleration that the currently active RCS thrusters can generate.
 This is <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getAvailableRCSForce()" title="krpc.client.services.SpaceCenter.Vessel.getAvailableRCSForce()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getAvailableRCSForce()</span></code></a> divided by the vessel’s <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getMass()" title="krpc.client.services.SpaceCenter.Vessel.getMass()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getMass()</span></code></a>.
 Returns the accelerations in <span class="math notranslate nohighlight">\(\mathrm{m/s^{2}}\)</span> along each of the coordinate axes of the
@@ -1858,7 +1859,7 @@ These axes are equivalent to the right, forward and bottom directions of the ves
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getAvailableEngineTorque()">
- <a class="reference internal" href="#krpc.client.services.SpaceCenter.AxisRange" title="krpc.client.services.SpaceCenter.AxisRange"><span class="pre">AxisRange</span></a> <span class="sig-name descname"><span class="pre">getAvailableEngineTorque</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getAvailableEngineTorque()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.AxisRange" title="krpc.client.services.SpaceCenter.AxisRange"><span class="pre">AxisRange</span></a> <span class="sig-name descname"><span class="pre">getAvailableEngineTorque</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getAvailableEngineTorque()" title="Link to this definition">#</a></dt>
 <dd><p>The maximum torque that the currently active and gimballed engines can generate.
 Returns the torques in <span class="math notranslate nohighlight">\(\mathrm{N \cdot m}\)</span> around each of the coordinate axes of the
 vessels reference frame (<a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getReferenceFrame()" title="krpc.client.services.SpaceCenter.Vessel.getReferenceFrame()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getReferenceFrame()</span></code></a>).
@@ -1872,7 +1873,7 @@ These axes are equivalent to the pitch, roll and yaw axes of the vessel.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getAvailableControlSurfaceTorque()">
- <a class="reference internal" href="#krpc.client.services.SpaceCenter.AxisRange" title="krpc.client.services.SpaceCenter.AxisRange"><span class="pre">AxisRange</span></a> <span class="sig-name descname"><span class="pre">getAvailableControlSurfaceTorque</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getAvailableControlSurfaceTorque()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.AxisRange" title="krpc.client.services.SpaceCenter.AxisRange"><span class="pre">AxisRange</span></a> <span class="sig-name descname"><span class="pre">getAvailableControlSurfaceTorque</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getAvailableControlSurfaceTorque()" title="Link to this definition">#</a></dt>
 <dd><p>The maximum torque that the aerodynamic control surfaces can generate.
 Returns the torques in <span class="math notranslate nohighlight">\(\mathrm{N \cdot m}\)</span> around each of the coordinate axes of the
 vessels reference frame (<a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getReferenceFrame()" title="krpc.client.services.SpaceCenter.Vessel.getReferenceFrame()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getReferenceFrame()</span></code></a>).
@@ -1886,7 +1887,7 @@ These axes are equivalent to the pitch, roll and yaw axes of the vessel.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getAvailableOtherTorque()">
- <a class="reference internal" href="#krpc.client.services.SpaceCenter.AxisRange" title="krpc.client.services.SpaceCenter.AxisRange"><span class="pre">AxisRange</span></a> <span class="sig-name descname"><span class="pre">getAvailableOtherTorque</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getAvailableOtherTorque()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.AxisRange" title="krpc.client.services.SpaceCenter.AxisRange"><span class="pre">AxisRange</span></a> <span class="sig-name descname"><span class="pre">getAvailableOtherTorque</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getAvailableOtherTorque()" title="Link to this definition">#</a></dt>
 <dd><p>The maximum torque that parts (excluding reaction wheels, gimballed engines,
 RCS and control surfaces) can generate.
 Returns the torques in <span class="math notranslate nohighlight">\(\mathrm{N \cdot m}\)</span> around each of the coordinate axes of the
@@ -1901,7 +1902,7 @@ These axes are equivalent to the pitch, roll and yaw axes of the vessel.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getAvailableAngularAcceleration()">
- <a class="reference internal" href="#krpc.client.services.SpaceCenter.AxisRange" title="krpc.client.services.SpaceCenter.AxisRange"><span class="pre">AxisRange</span></a> <span class="sig-name descname"><span class="pre">getAvailableAngularAcceleration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getAvailableAngularAcceleration()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.AxisRange" title="krpc.client.services.SpaceCenter.AxisRange"><span class="pre">AxisRange</span></a> <span class="sig-name descname"><span class="pre">getAvailableAngularAcceleration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getAvailableAngularAcceleration()" title="Link to this definition">#</a></dt>
 <dd><p>The maximum angular acceleration that the vessel can generate. Includes contributions
 from reaction wheels, RCS, gimballed engines and aerodynamic control surfaces.
 This is <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getAvailableTorque()" title="krpc.client.services.SpaceCenter.Vessel.getAvailableTorque()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getAvailableTorque()</span></code></a> divided by the vessel’s <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getMomentOfInertia()" title="krpc.client.services.SpaceCenter.Vessel.getMomentOfInertia()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getMomentOfInertia()</span></code></a>.
@@ -1917,7 +1918,7 @@ These axes are equivalent to the pitch, roll and yaw axes of the vessel.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getAvailableReactionWheelAngularAcceleration()">
- <a class="reference internal" href="#krpc.client.services.SpaceCenter.AxisRange" title="krpc.client.services.SpaceCenter.AxisRange"><span class="pre">AxisRange</span></a> <span class="sig-name descname"><span class="pre">getAvailableReactionWheelAngularAcceleration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getAvailableReactionWheelAngularAcceleration()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.AxisRange" title="krpc.client.services.SpaceCenter.AxisRange"><span class="pre">AxisRange</span></a> <span class="sig-name descname"><span class="pre">getAvailableReactionWheelAngularAcceleration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getAvailableReactionWheelAngularAcceleration()" title="Link to this definition">#</a></dt>
 <dd><p>The maximum angular acceleration that the currently active and powered reaction wheels
 can generate. This is <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getAvailableReactionWheelTorque()" title="krpc.client.services.SpaceCenter.Vessel.getAvailableReactionWheelTorque()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getAvailableReactionWheelTorque()</span></code></a> divided by the vessel’s
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getMomentOfInertia()" title="krpc.client.services.SpaceCenter.Vessel.getMomentOfInertia()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getMomentOfInertia()</span></code></a>.
@@ -1933,7 +1934,7 @@ These axes are equivalent to the pitch, roll and yaw axes of the vessel.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getAvailableRCSAngularAcceleration()">
- <a class="reference internal" href="#krpc.client.services.SpaceCenter.AxisRange" title="krpc.client.services.SpaceCenter.AxisRange"><span class="pre">AxisRange</span></a> <span class="sig-name descname"><span class="pre">getAvailableRCSAngularAcceleration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getAvailableRCSAngularAcceleration()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.AxisRange" title="krpc.client.services.SpaceCenter.AxisRange"><span class="pre">AxisRange</span></a> <span class="sig-name descname"><span class="pre">getAvailableRCSAngularAcceleration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getAvailableRCSAngularAcceleration()" title="Link to this definition">#</a></dt>
 <dd><p>The maximum angular acceleration that the currently active RCS thrusters can generate.
 This is <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getAvailableRCSTorque()" title="krpc.client.services.SpaceCenter.Vessel.getAvailableRCSTorque()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getAvailableRCSTorque()</span></code></a> divided by the vessel’s <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getMomentOfInertia()" title="krpc.client.services.SpaceCenter.Vessel.getMomentOfInertia()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getMomentOfInertia()</span></code></a>.
 Returns the angular accelerations in <span class="math notranslate nohighlight">\(\mathrm{rad/s^{2}}\)</span> around each of the coordinate
@@ -1948,7 +1949,7 @@ These axes are equivalent to the pitch, roll and yaw axes of the vessel.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getAvailableEngineAngularAcceleration()">
- <a class="reference internal" href="#krpc.client.services.SpaceCenter.AxisRange" title="krpc.client.services.SpaceCenter.AxisRange"><span class="pre">AxisRange</span></a> <span class="sig-name descname"><span class="pre">getAvailableEngineAngularAcceleration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getAvailableEngineAngularAcceleration()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.AxisRange" title="krpc.client.services.SpaceCenter.AxisRange"><span class="pre">AxisRange</span></a> <span class="sig-name descname"><span class="pre">getAvailableEngineAngularAcceleration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getAvailableEngineAngularAcceleration()" title="Link to this definition">#</a></dt>
 <dd><p>The maximum angular acceleration that the currently active and gimballed engines can
 generate. This is <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getAvailableEngineTorque()" title="krpc.client.services.SpaceCenter.Vessel.getAvailableEngineTorque()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getAvailableEngineTorque()</span></code></a> divided by the vessel’s
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getMomentOfInertia()" title="krpc.client.services.SpaceCenter.Vessel.getMomentOfInertia()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getMomentOfInertia()</span></code></a>.
@@ -1964,7 +1965,7 @@ These axes are equivalent to the pitch, roll and yaw axes of the vessel.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getAvailableControlSurfaceAngularAcceleration()">
- <a class="reference internal" href="#krpc.client.services.SpaceCenter.AxisRange" title="krpc.client.services.SpaceCenter.AxisRange"><span class="pre">AxisRange</span></a> <span class="sig-name descname"><span class="pre">getAvailableControlSurfaceAngularAcceleration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getAvailableControlSurfaceAngularAcceleration()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.AxisRange" title="krpc.client.services.SpaceCenter.AxisRange"><span class="pre">AxisRange</span></a> <span class="sig-name descname"><span class="pre">getAvailableControlSurfaceAngularAcceleration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getAvailableControlSurfaceAngularAcceleration()" title="Link to this definition">#</a></dt>
 <dd><p>The maximum angular acceleration that the aerodynamic control surfaces can generate.
 This is <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getAvailableControlSurfaceTorque()" title="krpc.client.services.SpaceCenter.Vessel.getAvailableControlSurfaceTorque()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getAvailableControlSurfaceTorque()</span></code></a> divided by the vessel’s
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getMomentOfInertia()" title="krpc.client.services.SpaceCenter.Vessel.getMomentOfInertia()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getMomentOfInertia()</span></code></a>.
@@ -1980,7 +1981,7 @@ These axes are equivalent to the pitch, roll and yaw axes of the vessel.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getAvailableOtherAngularAcceleration()">
- <a class="reference internal" href="#krpc.client.services.SpaceCenter.AxisRange" title="krpc.client.services.SpaceCenter.AxisRange"><span class="pre">AxisRange</span></a> <span class="sig-name descname"><span class="pre">getAvailableOtherAngularAcceleration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getAvailableOtherAngularAcceleration()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.AxisRange" title="krpc.client.services.SpaceCenter.AxisRange"><span class="pre">AxisRange</span></a> <span class="sig-name descname"><span class="pre">getAvailableOtherAngularAcceleration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getAvailableOtherAngularAcceleration()" title="Link to this definition">#</a></dt>
 <dd><p>The maximum angular acceleration that parts (excluding reaction wheels, gimballed engines,
 RCS and control surfaces) can generate. This is <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getAvailableOtherTorque()" title="krpc.client.services.SpaceCenter.Vessel.getAvailableOtherTorque()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getAvailableOtherTorque()</span></code></a> divided
 by the vessel’s <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getMomentOfInertia()" title="krpc.client.services.SpaceCenter.Vessel.getMomentOfInertia()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getMomentOfInertia()</span></code></a>.
@@ -1996,7 +1997,7 @@ These axes are equivalent to the pitch, roll and yaw axes of the vessel.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getReferenceFrame()">
- <a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a> <span class="sig-name descname"><span class="pre">getReferenceFrame</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getReferenceFrame()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a> <span class="sig-name descname"><span class="pre">getReferenceFrame</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getReferenceFrame()" title="Link to this definition">#</a></dt>
 <dd><p>The reference frame that is fixed relative to the vessel,
 and orientated with the vessel.</p>
 <ul class="simple">
@@ -2027,7 +2028,7 @@ and orientated with the vessel.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getOrbitalReferenceFrame()">
- <a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a> <span class="sig-name descname"><span class="pre">getOrbitalReferenceFrame</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getOrbitalReferenceFrame()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a> <span class="sig-name descname"><span class="pre">getOrbitalReferenceFrame</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getOrbitalReferenceFrame()" title="Link to this definition">#</a></dt>
 <dd><p>The reference frame that is fixed relative to the vessel,
 and orientated with the vessels orbital prograde/normal/radial directions.</p>
 <ul class="simple">
@@ -2056,7 +2057,7 @@ and orientated with the vessels orbital prograde/normal/radial directions.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getSurfaceReferenceFrame()">
- <a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a> <span class="sig-name descname"><span class="pre">getSurfaceReferenceFrame</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getSurfaceReferenceFrame()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a> <span class="sig-name descname"><span class="pre">getSurfaceReferenceFrame</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getSurfaceReferenceFrame()" title="Link to this definition">#</a></dt>
 <dd><p>The reference frame that is fixed relative to the vessel,
 and orientated with the surface of the body being orbited.</p>
 <ul class="simple">
@@ -2091,7 +2092,7 @@ surface of the body – east on a compass when on the surface).</p></li>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getSurfaceVelocityReferenceFrame()">
- <a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a> <span class="sig-name descname"><span class="pre">getSurfaceVelocityReferenceFrame</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getSurfaceVelocityReferenceFrame()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a> <span class="sig-name descname"><span class="pre">getSurfaceVelocityReferenceFrame</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getSurfaceVelocityReferenceFrame()" title="Link to this definition">#</a></dt>
 <dd><p>The reference frame that is fixed relative to the vessel,
 and orientated with the velocity vector of the vessel relative
 to the surface of the body being orbited.</p>
@@ -2119,7 +2120,7 @@ relative to the surface of the body being orbited.</p></li>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getOrbitSpeedReferenceFrame()">
- <a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a> <span class="sig-name descname"><span class="pre">getOrbitSpeedReferenceFrame</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getOrbitSpeedReferenceFrame()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a> <span class="sig-name descname"><span class="pre">getOrbitSpeedReferenceFrame</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getOrbitSpeedReferenceFrame()" title="Link to this definition">#</a></dt>
 <dd><p>The reference frame that the navball measures speed against in ‘orbit’ mode.</p>
 <ul class="simple">
 <li><p>The origin is at the center of mass of the vessel.</p></li>
@@ -2145,7 +2146,7 @@ points along the y-axis, towards its prograde marker.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getSurfaceSpeedReferenceFrame()">
- <a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a> <span class="sig-name descname"><span class="pre">getSurfaceSpeedReferenceFrame</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getSurfaceSpeedReferenceFrame()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a> <span class="sig-name descname"><span class="pre">getSurfaceSpeedReferenceFrame</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getSurfaceSpeedReferenceFrame()" title="Link to this definition">#</a></dt>
 <dd><p>The reference frame that the navball measures speed against in ‘surface’ mode.</p>
 <ul class="simple">
 <li><p>The origin is at the center of mass of the vessel.</p></li>
@@ -2175,7 +2176,7 @@ singular and raises an error when the vessel is stationary relative to the surfa
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getTargetSpeedReferenceFrame()">
- <a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a> <span class="sig-name descname"><span class="pre">getTargetSpeedReferenceFrame</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getTargetSpeedReferenceFrame()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a> <span class="sig-name descname"><span class="pre">getTargetSpeedReferenceFrame</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getTargetSpeedReferenceFrame()" title="Link to this definition">#</a></dt>
 <dd><p>The reference frame that the navball measures speed against in ‘target’ mode.</p>
 <ul class="simple">
 <li><p>The origin is at the center of mass of the vessel.</p></li>
@@ -2198,7 +2199,7 @@ two.</p></li>
 <a class="reference internal" href="flight.html#krpc.client.services.SpaceCenter.Flight.getSpeed()" title="krpc.client.services.SpaceCenter.Flight.getSpeed()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Flight.getSpeed()</span></code></a> is the speed it displays, and <a class="reference internal" href="flight.html#krpc.client.services.SpaceCenter.Flight.getVelocity()" title="krpc.client.services.SpaceCenter.Flight.getVelocity()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Flight.getVelocity()</span></code></a>
 points along the y-axis, towards its prograde marker.
 The target is the one set for the active vessel, via for example
-<a class="reference internal" href="../remote-tech/antenna.html#krpc.client.services.RemoteTech.Antenna.getTargetVessel()" title="krpc.client.services.RemoteTech.Antenna.getTargetVessel()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">getTargetVessel()</span></code></a> or <a class="reference internal" href="../remote-tech/antenna.html#krpc.client.services.RemoteTech.Antenna.getTargetBody()" title="krpc.client.services.RemoteTech.Antenna.getTargetBody()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">getTargetBody()</span></code></a>.
+<a class="reference internal" href="space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.getTargetVessel()" title="krpc.client.services.SpaceCenter.SpaceCenter.getTargetVessel()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">SpaceCenter.getTargetVessel()</span></code></a> or <a class="reference internal" href="space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.getTargetBody()" title="krpc.client.services.SpaceCenter.SpaceCenter.getTargetBody()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">SpaceCenter.getTargetBody()</span></code></a>.
 This is undefined when no target is set. The velocity gives the frame its orientation,
 so it is also singular, and raises an error, when the vessel matches the velocity of
 its target.</p>
@@ -2207,7 +2208,7 @@ its target.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.position(ReferenceFrame)">
- <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">position</span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.position(ReferenceFrame)" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/package-summary.html" title="org.javatuples"><span class="pre">org.javatuples</span></a><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">position</span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.position(ReferenceFrame)" title="Link to this definition">#</a></dt>
 <dd><p>The position of the center of mass of the vessel, in the given reference frame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -2226,7 +2227,7 @@ its target.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.boundingBox(ReferenceFrame)">
- <a class="reference internal" href="#krpc.client.services.SpaceCenter.BoundingBox" title="krpc.client.services.SpaceCenter.BoundingBox"><span class="pre">BoundingBox</span></a> <span class="sig-name descname"><span class="pre">boundingBox</span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.boundingBox(ReferenceFrame)" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.BoundingBox" title="krpc.client.services.SpaceCenter.BoundingBox"><span class="pre">BoundingBox</span></a> <span class="sig-name descname"><span class="pre">boundingBox</span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.boundingBox(ReferenceFrame)" title="Link to this definition">#</a></dt>
 <dd><p>The axis-aligned bounding box of the vessel in the given reference frame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -2245,7 +2246,7 @@ its target.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.velocity(ReferenceFrame)">
- <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">velocity</span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.velocity(ReferenceFrame)" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/package-summary.html" title="org.javatuples"><span class="pre">org.javatuples</span></a><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">velocity</span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.velocity(ReferenceFrame)" title="Link to this definition">#</a></dt>
 <dd><p>The velocity of the center of mass of the vessel, in the given reference frame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -2264,7 +2265,7 @@ its target.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.rotation(ReferenceFrame)">
- <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Quartet.html" title="org.javatuples.Quartet"><span class="pre">Quartet</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">rotation</span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.rotation(ReferenceFrame)" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/package-summary.html" title="org.javatuples"><span class="pre">org.javatuples</span></a><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Quartet.html" title="org.javatuples.Quartet"><span class="pre">Quartet</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">rotation</span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.rotation(ReferenceFrame)" title="Link to this definition">#</a></dt>
 <dd><p>The rotation of the vessel, in the given reference frame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -2283,7 +2284,7 @@ its target.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.direction(ReferenceFrame)">
- <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">direction</span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.direction(ReferenceFrame)" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/package-summary.html" title="org.javatuples"><span class="pre">org.javatuples</span></a><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">direction</span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.direction(ReferenceFrame)" title="Link to this definition">#</a></dt>
 <dd><p>The direction in which the vessel is pointing, in the given reference frame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -2302,7 +2303,7 @@ its target.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.angularVelocity(ReferenceFrame)">
- <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">angularVelocity</span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.angularVelocity(ReferenceFrame)" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/package-summary.html" title="org.javatuples"><span class="pre">org.javatuples</span></a><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">angularVelocity</span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.angularVelocity(ReferenceFrame)" title="Link to this definition">#</a></dt>
 <dd><p>The angular velocity of the vessel, in the given reference frame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -2328,19 +2329,19 @@ its target.</p>
 negative direction of each of three axes.</p>
 <dl class="java constructor">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AxisRange.AxisRange(org.javatuples.Triplet, org.javatuples.Triplet)">
-<span class="pre">public</span> <span class="sig-name descname"><span class="pre">AxisRange</span></span><span class="sig-paren">(</span><span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">positive</span></em>, <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">negative</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AxisRange.AxisRange(org.javatuples.Triplet, org.javatuples.Triplet)" title="Link to this definition">#</a></dt>
+<span class="pre">public</span> <span class="sig-name descname"><span class="pre">AxisRange</span></span><span class="sig-paren">(</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/package-summary.html" title="org.javatuples"><span class="pre">org.javatuples</span></a><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">positive</span></em>, <a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/package-summary.html" title="org.javatuples"><span class="pre">org.javatuples</span></a><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">negative</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AxisRange.AxisRange(org.javatuples.Triplet, org.javatuples.Triplet)" title="Link to this definition">#</a></dt>
 <dd><p>Construct a AxisRange from the values of its fields.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AxisRange.getPositive()">
- <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getPositive</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AxisRange.getPositive()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/package-summary.html" title="org.javatuples"><span class="pre">org.javatuples</span></a><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getPositive</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AxisRange.getPositive()" title="Link to this definition">#</a></dt>
 <dd><p>The value in the positive direction of each axis.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AxisRange.getNegative()">
- <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getNegative</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AxisRange.getNegative()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/package-summary.html" title="org.javatuples"><span class="pre">org.javatuples</span></a><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getNegative</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AxisRange.getNegative()" title="Link to this definition">#</a></dt>
 <dd><p>The value in the negative direction of each axis, which is zero or less.</p>
 </dd></dl>
 
@@ -2352,19 +2353,19 @@ negative direction of each of three axes.</p>
 <dd><p>An axis-aligned bounding box, as the positions of its minimum and maximum vertices.</p>
 <dl class="java constructor">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.BoundingBox.BoundingBox(org.javatuples.Triplet, org.javatuples.Triplet)">
-<span class="pre">public</span> <span class="sig-name descname"><span class="pre">BoundingBox</span></span><span class="sig-paren">(</span><span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">min</span></em>, <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">max</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.BoundingBox.BoundingBox(org.javatuples.Triplet, org.javatuples.Triplet)" title="Link to this definition">#</a></dt>
+<span class="pre">public</span> <span class="sig-name descname"><span class="pre">BoundingBox</span></span><span class="sig-paren">(</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/package-summary.html" title="org.javatuples"><span class="pre">org.javatuples</span></a><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">min</span></em>, <a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/package-summary.html" title="org.javatuples"><span class="pre">org.javatuples</span></a><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">max</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.BoundingBox.BoundingBox(org.javatuples.Triplet, org.javatuples.Triplet)" title="Link to this definition">#</a></dt>
 <dd><p>Construct a BoundingBox from the values of its fields.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.BoundingBox.getMin()">
- <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getMin</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.BoundingBox.getMin()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/package-summary.html" title="org.javatuples"><span class="pre">org.javatuples</span></a><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getMin</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.BoundingBox.getMin()" title="Link to this definition">#</a></dt>
 <dd><p>The position of the minimum vertex of the box.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.BoundingBox.getMax()">
- <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getMax</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.BoundingBox.getMax()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/package-summary.html" title="org.javatuples"><span class="pre">org.javatuples</span></a><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getMax</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.BoundingBox.getMax()" title="Link to this definition">#</a></dt>
 <dd><p>The position of the maximum vertex of the box.</p>
 </dd></dl>
 
@@ -2540,103 +2541,103 @@ See <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel
 <dd><p>Represents crew in a vessel. Can be obtained using <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getCrew()" title="krpc.client.services.SpaceCenter.Vessel.getCrew()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getCrew()</span></code></a>.</p>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CrewMember.getName()">
- <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getName</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.getName()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getName</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.getName()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CrewMember.setName(String)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setName</span></span><span class="sig-paren">(</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.setName(String)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setName</span></span><span class="sig-paren">(</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.setName(String)" title="Link to this definition">#</a></dt>
 <dd><p>The crew members name.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CrewMember.getType()">
- <a class="reference internal" href="#krpc.client.services.SpaceCenter.CrewMemberType" title="krpc.client.services.SpaceCenter.CrewMemberType"><span class="pre">CrewMemberType</span></a> <span class="sig-name descname"><span class="pre">getType</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.getType()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.CrewMemberType" title="krpc.client.services.SpaceCenter.CrewMemberType"><span class="pre">CrewMemberType</span></a> <span class="sig-name descname"><span class="pre">getType</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.getType()" title="Link to this definition">#</a></dt>
 <dd><p>The type of crew member.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CrewMember.getOnMission()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getOnMission</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.getOnMission()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getOnMission</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.getOnMission()" title="Link to this definition">#</a></dt>
 <dd><p>Whether the crew member is on a mission.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CrewMember.getCourage()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getCourage</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.getCourage()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getCourage</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.getCourage()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CrewMember.setCourage(float)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setCourage</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.setCourage(float)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setCourage</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.setCourage(float)" title="Link to this definition">#</a></dt>
 <dd><p>The crew members courage.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CrewMember.getStupidity()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getStupidity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.getStupidity()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getStupidity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.getStupidity()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CrewMember.setStupidity(float)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setStupidity</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.setStupidity(float)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setStupidity</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.setStupidity(float)" title="Link to this definition">#</a></dt>
 <dd><p>The crew members stupidity.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CrewMember.getExperience()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getExperience</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.getExperience()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getExperience</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.getExperience()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CrewMember.setExperience(float)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setExperience</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.setExperience(float)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setExperience</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.setExperience(float)" title="Link to this definition">#</a></dt>
 <dd><p>The crew members experience.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CrewMember.getBadass()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getBadass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.getBadass()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getBadass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.getBadass()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CrewMember.setBadass(boolean)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setBadass</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.setBadass(boolean)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setBadass</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.setBadass(boolean)" title="Link to this definition">#</a></dt>
 <dd><p>Whether the crew member is a badass.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CrewMember.getVeteran()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getVeteran</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.getVeteran()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getVeteran</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.getVeteran()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CrewMember.setVeteran(boolean)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setVeteran</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.setVeteran(boolean)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setVeteran</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.setVeteran(boolean)" title="Link to this definition">#</a></dt>
 <dd><p>Whether the crew member is a veteran.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CrewMember.getTrait()">
- <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getTrait</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.getTrait()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getTrait</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.getTrait()" title="Link to this definition">#</a></dt>
 <dd><p>The crew member’s job.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CrewMember.getGender()">
- <a class="reference internal" href="#krpc.client.services.SpaceCenter.CrewMemberGender" title="krpc.client.services.SpaceCenter.CrewMemberGender"><span class="pre">CrewMemberGender</span></a> <span class="sig-name descname"><span class="pre">getGender</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.getGender()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.CrewMemberGender" title="krpc.client.services.SpaceCenter.CrewMemberGender"><span class="pre">CrewMemberGender</span></a> <span class="sig-name descname"><span class="pre">getGender</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.getGender()" title="Link to this definition">#</a></dt>
 <dd><p>The crew member’s gender.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CrewMember.getRosterStatus()">
- <a class="reference internal" href="#krpc.client.services.SpaceCenter.RosterStatus" title="krpc.client.services.SpaceCenter.RosterStatus"><span class="pre">RosterStatus</span></a> <span class="sig-name descname"><span class="pre">getRosterStatus</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.getRosterStatus()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.RosterStatus" title="krpc.client.services.SpaceCenter.RosterStatus"><span class="pre">RosterStatus</span></a> <span class="sig-name descname"><span class="pre">getRosterStatus</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.getRosterStatus()" title="Link to this definition">#</a></dt>
 <dd><p>The crew member’s current roster status.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CrewMember.getPart()">
- <a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.Part" title="krpc.client.services.SpaceCenter.Part"><span class="pre">Part</span></a> <span class="sig-name descname"><span class="pre">getPart</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.getPart()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.Part" title="krpc.client.services.SpaceCenter.Part"><span class="pre">Part</span></a> <span class="sig-name descname"><span class="pre">getPart</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.getPart()" title="Link to this definition">#</a></dt>
 <dd><p>The part containing the crew member. Returns <code class="docutils literal notranslate"><span class="pre">null</span></code> if the crew member is not
 occupying a part, or the vessel containing the part is not loaded.</p>
 <dl class="field-list simple">
@@ -2648,7 +2649,7 @@ occupying a part, or the vessel containing the part is not loaded.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CrewMember.eVA()">
- <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel" title="krpc.client.services.SpaceCenter.Vessel"><span class="pre">Vessel</span></a> <span class="sig-name descname"><span class="pre">eVA</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.eVA()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel" title="krpc.client.services.SpaceCenter.Vessel"><span class="pre">Vessel</span></a> <span class="sig-name descname"><span class="pre">eVA</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.eVA()" title="Link to this definition">#</a></dt>
 <dd><p>Send the crew member outside on EVA, through the hatch of the part it is in, and
 return the vessel it becomes. The game switches to that vessel, which can then be
 walked around and flown using its <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getControl()" title="krpc.client.services.SpaceCenter.Vessel.getControl()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getControl()</span></code></a>, and brought back
@@ -2669,18 +2670,18 @@ in is obstructed.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CrewMember.getSuitType()">
- <a class="reference internal" href="#krpc.client.services.SpaceCenter.SuitType" title="krpc.client.services.SpaceCenter.SuitType"><span class="pre">SuitType</span></a> <span class="sig-name descname"><span class="pre">getSuitType</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.getSuitType()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.SuitType" title="krpc.client.services.SpaceCenter.SuitType"><span class="pre">SuitType</span></a> <span class="sig-name descname"><span class="pre">getSuitType</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.getSuitType()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CrewMember.setSuitType(SuitType)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setSuitType</span></span><span class="sig-paren">(</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.SuitType" title="krpc.client.services.SpaceCenter.SuitType"><span class="pre">SuitType</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.setSuitType(SuitType)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setSuitType</span></span><span class="sig-paren">(</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.SuitType" title="krpc.client.services.SpaceCenter.SuitType"><span class="pre">SuitType</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.setSuitType(SuitType)" title="Link to this definition">#</a></dt>
 <dd><p>The crew member’s suit type.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CrewMember.getCareerLog()">
- <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.FlightLogEntry" title="krpc.client.services.SpaceCenter.FlightLogEntry"><span class="pre">FlightLogEntry</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getCareerLog</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.getCareerLog()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.FlightLogEntry" title="krpc.client.services.SpaceCenter.FlightLogEntry"><span class="pre">FlightLogEntry</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getCareerLog</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.getCareerLog()" title="Link to this definition">#</a></dt>
 <dd><p>The entries in the crew member’s career flight log.</p>
 </dd></dl>
 
@@ -2702,19 +2703,19 @@ in is obstructed.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.FlightLogEntry.getFlight()">
- <span class="pre">int</span> <span class="sig-name descname"><span class="pre">getFlight</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.FlightLogEntry.getFlight()" title="Link to this definition">#</a></dt>
+<span class="pre">int</span> <span class="sig-name descname"><span class="pre">getFlight</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.FlightLogEntry.getFlight()" title="Link to this definition">#</a></dt>
 <dd><p>The flight identifier of the entry.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.FlightLogEntry.getType()">
- <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getType</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.FlightLogEntry.getType()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getType</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.FlightLogEntry.getType()" title="Link to this definition">#</a></dt>
 <dd><p>The type of the entry, e.g. <code class="docutils literal notranslate"><span class="pre">Orbit</span></code> or <code class="docutils literal notranslate"><span class="pre">Land</span></code>.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.FlightLogEntry.getTarget()">
- <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getTarget</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.FlightLogEntry.getTarget()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getTarget</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.FlightLogEntry.getTarget()" title="Link to this definition">#</a></dt>
 <dd><p>The name of the body the entry is for.</p>
 </dd></dl>
 

@@ -16,14 +16,12 @@ Text
       The rect transform for the UI object.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`UI.RectTransform`
 
    .. attribute:: layout_element: UI.LayoutElement
 
       How much space the UI object asks a layout for.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`UI.LayoutElement`
 
       .. note::
 
@@ -35,7 +33,6 @@ Text
       Whether the UI object is visible.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
       .. note::
 
@@ -49,7 +46,6 @@ Text
       The text string
 
       :Attribute: Can be read or written
-      :rtype: string
 
    .. attribute:: word_wrap: boolean
 
@@ -58,14 +54,12 @@ Text
       is that of a single line, so a changing value leaves a layout in place.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. attribute:: font: string
 
       Name of the font
 
       :Attribute: Can be read or written
-      :rtype: string
 
       .. note::
 
@@ -77,42 +71,36 @@ Text
       A list of all available fonts.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
    .. attribute:: size: number
 
       Font size.
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: style: UI.FontStyle
 
       Font style.
 
       :Attribute: Can be read or written
-      :rtype: :class:`UI.FontStyle`
 
    .. attribute:: color: StdLib.ColorRGBA
 
       The color the text is drawn in.
 
       :Attribute: Can be read or written
-      :rtype: :class:`StdLib.ColorRGBA`
 
    .. attribute:: alignment: UI.TextAnchor
 
       Alignment.
 
       :Attribute: Can be read or written
-      :rtype: :class:`UI.TextAnchor`
 
    .. attribute:: line_spacing: number
 
       Line spacing.
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. method:: remove()
 

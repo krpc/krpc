@@ -16,50 +16,43 @@ MapMarker
       Position of the marker.
 
       :Attribute: Can be read or written
-      :rtype: Tuple
 
    .. attribute:: reference_frame: SpaceCenter.ReferenceFrame
 
       Reference frame that the position of the marker is in.
 
       :Attribute: Can be read or written
-      :rtype: :class:`SpaceCenter.ReferenceFrame`
 
    .. attribute:: visible: boolean
 
       Whether the marker is visible.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. attribute:: icon: Drawing.MapMarkerIcon
 
       The icon that the marker is drawn with.
 
       :Attribute: Can be read or written
-      :rtype: :class:`Drawing.MapMarkerIcon`
 
-   .. attribute:: image: Drawing.Image
+   .. attribute:: image: Drawing.Image | Types.none
 
       The image that the marker is drawn with in place of its icon, or null to draw the
       icon.
 
       :Attribute: Can be read or written
-      :rtype: :class:`Drawing.Image` or ``Types.none``
 
    .. attribute:: caption: string
 
       The caption shown when the mouse is over the marker.
 
       :Attribute: Can be read or written
-      :rtype: string
 
    .. attribute:: color: StdLib.ColorRGB
 
       The color of the marker.
 
       :Attribute: Can be read or written
-      :rtype: :class:`StdLib.ColorRGB`
 
    .. method:: remove()
 

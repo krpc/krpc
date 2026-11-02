@@ -4965,41 +4965,25 @@ Vessels in KSP are comprised of a number of parts, connected to one another in a
 tree of parts in Figure 2. The craft file for this example can also be
 :download:`downloaded here </crafts/PartsTree.craft>`.
 
-.. only:: html
+.. container:: clearer
 
-   .. container:: clearer
+   ..
 
-      ..
+.. figure:: /images/api/parts.png
+   :align: left
+   :figwidth: 275
 
-   .. figure:: /images/api/parts.png
-      :align: left
-      :figwidth: 275
+   **Figure 1** -- Example parts making up a vessel.
 
-      **Figure 1** -- Example parts making up a vessel.
+.. figure:: /images/api/parts-tree.png
+   :align: right
+   :figwidth: 275
 
-   .. figure:: /images/api/parts-tree.png
-      :align: right
-      :figwidth: 275
+   **Figure 2** -- Tree of parts for the vessel in Figure 1. Arrows point from the parent part to the child part.
 
-      **Figure 2** -- Tree of parts for the vessel in Figure 1. Arrows point from the parent part to the child part.
+.. container:: clearer
 
-   .. container:: clearer
-
-      ..
-
-.. only:: latex
-
-   .. figure:: /images/api/parts.png
-      :align: center
-      :width: 55%
-
-      **Figure 1** -- Example parts making up a vessel.
-
-   .. figure:: /images/api/parts-tree.png
-      :align: center
-      :width: 55%
-
-      **Figure 2** -- Tree of parts for the vessel in Figure 1. Arrows point from the parent part to the child part.
+   ..
 
 
 Traversing the Tree
@@ -5100,38 +5084,18 @@ above, the following is printed out::
 Fuel Lines
 ----------
 
-.. only:: html
+.. figure:: /images/api/parts-fuel-lines.png
+   :align: right
+   :figwidth: 200
 
-   .. figure:: /images/api/parts-fuel-lines.png
-      :align: right
-      :figwidth: 200
-
-      **Figure 5** -- Fuel lines from the example in Figure 1. Fuel flows from the parts highlighted in green, into the part highlighted in blue.
-
-.. only:: latex
-
-   .. figure:: /images/api/parts-fuel-lines.png
-      :align: center
-      :width: 55%
-
-      **Figure 5** -- Fuel lines from the example in Figure 1. Fuel flows from the parts highlighted in green, into the part highlighted in blue.
+   **Figure 5** -- Fuel lines from the example in Figure 1. Fuel flows from the parts highlighted in green, into the part highlighted in blue.
 
 
-.. only:: html
+.. figure:: /images/api/parts-fuel-lines-tree.png
+   :align: right
+   :figwidth: 200
 
-   .. figure:: /images/api/parts-fuel-lines-tree.png
-      :align: right
-      :figwidth: 200
-
-      **Figure 4** -- A subset of the parts tree from Figure 2 above.
-
-.. only:: latex
-
-   .. figure:: /images/api/parts-fuel-lines-tree.png
-      :align: center
-      :width: 55%
-
-      **Figure 4** -- A subset of the parts tree from Figure 2 above.
+   **Figure 4** -- A subset of the parts tree from Figure 2 above.
 
 
 Fuel lines are considered parts, and are included in the parts tree (for
@@ -5164,21 +5128,11 @@ stage), use the :rst:ref:`cpp-api-stage` class via
 :func:`Vessel::stages` and
 :func:`Vessel::decouple_stages`.
 
-.. only:: html
+.. figure:: /images/api/parts-staging.png
+   :align: right
+   :figwidth: 340
 
-   .. figure:: /images/api/parts-staging.png
-      :align: right
-      :figwidth: 340
-
-      **Figure 6** -- Example vessel from Figure 1 with a staging sequence.
-
-.. only:: latex
-
-   .. figure:: /images/api/parts-staging.png
-      :align: center
-      :width: 55%
-
-      **Figure 6** -- Example vessel from Figure 1 with a staging sequence.
+   **Figure 6** -- Example vessel from Figure 1 with a staging sequence.
 
 
 Each part has two staging numbers associated with it: the stage in which the
@@ -5193,38 +5147,22 @@ Figure 6 shows an example staging sequence for a vessel. Figure 7 shows the
 stages in which each part of the vessel will be *activated*. Figure 8 shows the
 stages in which each part of the vessel will be *decoupled*.
 
-.. only:: html
+.. container:: clearer
 
-   .. container:: clearer
+   ..
 
-      ..
+.. figure:: /images/api/parts-staging-activate.png
+   :align: left
+   :figwidth: 250
 
-   .. figure:: /images/api/parts-staging-activate.png
-      :align: left
-      :figwidth: 250
+   **Figure 7** -- The stage in which each part is *activated*.
 
-      **Figure 7** -- The stage in which each part is *activated*.
+.. figure:: /images/api/parts-staging-decouple.png
+   :align: right
+   :figwidth: 250
 
-   .. figure:: /images/api/parts-staging-decouple.png
-      :align: right
-      :figwidth: 250
+   **Figure 8** -- The stage in which each part is *decoupled*.
 
-      **Figure 8** -- The stage in which each part is *decoupled*.
+.. container:: clearer
 
-   .. container:: clearer
-
-      ..
-
-.. only:: latex
-
-   .. figure:: /images/api/parts-staging-activate.png
-      :align: center
-      :width: 55%
-
-      **Figure 7** -- The stage in which each part is *activated*.
-
-   .. figure:: /images/api/parts-staging-decouple.png
-      :align: center
-      :width: 55%
-
-      **Figure 8** -- The stage in which each part is *decoupled*.
+   ..

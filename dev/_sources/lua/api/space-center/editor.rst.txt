@@ -11,34 +11,32 @@ Editor
 .. class:: Editor
 
    Provides access to the vehicle assembly building and space plane hangar.
-   Obtained by calling :attr:`SpaceCenter.editor <SpaceCenter.SpaceCenter.editor>`.
+   Obtained by calling :attr:`SpaceCenter.editor`.
 
    .. attribute:: facility: SpaceCenter.EditorFacility
 
       The editor that is currently open.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.EditorFacility`
 
    .. attribute:: vessel: SpaceCenter.EditorVessel
 
       The vessel that is being constructed.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.EditorVessel`
 
       .. note::
 
          An editor that has not had a vessel loaded into it holds an empty vessel, with
          no parts, rather than nothing at all.
 
-   .. method:: load_vessel(craft_directory, name)
+   .. method:: load_vessel(craft_directory: string, name: string)
 
       Load a vessel from a craft file into the editor, replacing the vessel that
       is currently being constructed.
 
-      :param string craft_directory: Name of the directory in the current saves "Ships" directory, that contains the craft file. For example ``"VAB"`` or ``"SPH"``.
-      :param string name: Name of the vessel to load. This is the name of the ".craft" file in the save directory, without the ".craft" file extension.
+      :param craft_directory: Name of the directory in the current saves "Ships" directory, that contains the craft file. For example ``"VAB"`` or ``"SPH"``.
+      :param name: Name of the vessel to load. This is the name of the ".craft" file in the save directory, without the ".craft" file extension.
 
       .. note::
 
@@ -46,15 +44,14 @@ Editor
          directory it came from. Its delta-v figures are recalculated in the
          background afterwards; see :attr:`SpaceCenter.EditorVessel.delta_v_ready`.
 
-   .. method:: launch_vessel(launch_site, [crew = Types.none], [recover = true], [flag_url = ''])
+   .. method:: launch_vessel(launch_site: string, crew?: List | Types.none, recover?: boolean, flag_url?: string)
 
       Launch the vessel that is being constructed, from the given launch site.
 
-      :param string launch_site: Name of the launch site. For example ``"LaunchPad"`` or ``"Runway"``.
+      :param launch_site: Name of the launch site. For example ``"LaunchPad"`` or ``"Runway"``.
       :param crew: The Kerbals to place in the vessel, by name. Controls how the vessel is crewed, as described in the remarks.
-      :type crew: List or ``Types.none``
-      :param boolean recover: If true and there is a vessel on the launch site, recover it before launching.
-      :param string flag_url: If not ``nil``, the asset URL of the mission flag to use for the launch.
+      :param recover: If true and there is a vessel on the launch site, recover it before launching. Defaults to ``true``.
+      :param flag_url: If not ``nil``, the asset URL of the mission flag to use for the launch. Defaults to ``''``.
 
       .. note::
 
@@ -72,7 +69,6 @@ Editor
       specific impulse figures assume.
 
       :Attribute: Can be read or written
-      :rtype: :class:`SpaceCenter.CelestialBody`
 
       .. note::
 
@@ -99,14 +95,12 @@ Editor
       true again.
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: delta_v_situation: SpaceCenter.DeltaVSituation
 
       Which situation the game's own delta-v readout shows figures for.
 
       :Attribute: Can be read or written
-      :rtype: :class:`SpaceCenter.DeltaVSituation`
 
       .. note::
 
@@ -152,21 +146,18 @@ Editor
       The name of the vessel.
 
       :Attribute: Can be read or written
-      :rtype: string
 
    .. attribute:: description: string
 
       The description of the vessel.
 
       :Attribute: Can be read or written
-      :rtype: string
 
    .. attribute:: facility: SpaceCenter.EditorFacility
 
       The editor the vessel is in.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.EditorFacility`
 
       .. note::
 
@@ -179,14 +170,12 @@ Editor
       The total mass of the vessel, including resources and crew, in :math:`\mathrm{kg}`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: dry_mass: number
 
       The total mass of the vessel, excluding resources, in :math:`\mathrm{kg}`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: moment_of_inertia: Tuple
 
@@ -196,7 +185,6 @@ Editor
       This corresponds to the vessels reference frame (:attr:`SpaceCenter.EditorVessel.reference_frame`).
 
       :Attribute: Read-only, cannot be set
-      :rtype: Tuple
 
    .. attribute:: inertia_tensor: List
 
@@ -205,7 +193,6 @@ Editor
       Returns the 3x3 matrix as a list of elements, in row-major order.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
    .. attribute:: reference_frame: SpaceCenter.ReferenceFrame
 
@@ -219,7 +206,6 @@ Editor
       * The z-axis points out of the bottom off the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.ReferenceFrame`
 
       .. note::
 
@@ -238,71 +224,62 @@ Editor
       * The y-axis and z-axis are horizontal.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.ReferenceFrame`
 
       .. note::
 
          This is the vessel as it stands in the editor, and as it stands at launch. The
          editor has no north or east, so the horizontal axes are fixed in the editor.
 
-   .. method:: flight([reference_frame = Types.none])
+   .. method:: flight(reference_frame?: SpaceCenter.ReferenceFrame | Types.none): SpaceCenter.SimulatedFlight
 
       Returns a :class:`SpaceCenter.SimulatedFlight` object that can be used to simulate the
       vessel in flight, in the specified reference frame.
 
       :param reference_frame: Reference frame. Defaults to the simulated surface reference frame (:attr:`SpaceCenter.SimulatedFlight.surface_reference_frame`), and follows it when it is set.
-      :type reference_frame: :class:`SpaceCenter.ReferenceFrame` or ``Types.none``
-      :rtype: :class:`SpaceCenter.SimulatedFlight`
 
       .. note::
 
          Each call returns a new object, which is kept until the game leaves the editor.
 
-   .. method:: position(reference_frame)
+   .. method:: position(reference_frame: SpaceCenter.ReferenceFrame): Tuple
 
       The position of the center of mass of the vessel, in the given reference frame.
 
-      :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned position vector is in.
+      :param reference_frame: The reference frame that the returned position vector is in.
       :returns: The position as a vector.
-      :rtype: Tuple
 
-   .. method:: bounding_box(reference_frame)
+   .. method:: bounding_box(reference_frame: SpaceCenter.ReferenceFrame): SpaceCenter.BoundingBox
 
       The axis-aligned bounding box of the vessel in the given reference frame.
 
-      :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned position vectors are in.
+      :param reference_frame: The reference frame that the returned position vectors are in.
       :returns: The positions of the minimum and maximum vertices of the box.
-      :rtype: :class:`SpaceCenter.BoundingBox`
 
-   .. method:: rotation(reference_frame)
+   .. method:: rotation(reference_frame: SpaceCenter.ReferenceFrame): Tuple
 
       The rotation of the vessel, in the given reference frame.
 
-      :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned rotation is in.
+      :param reference_frame: The reference frame that the returned rotation is in.
       :returns: The rotation as a quaternion of the form ``(x, y, z, w)``.
-      :rtype: Tuple
 
-   .. method:: direction(reference_frame)
+   .. method:: direction(reference_frame: SpaceCenter.ReferenceFrame): Tuple
 
       The direction in which the vessel is pointing, in the given reference frame.
 
-      :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned direction is in.
+      :param reference_frame: The reference frame that the returned direction is in.
       :returns: The direction as a unit vector.
-      :rtype: Tuple
 
    .. attribute:: cost: number
 
       The total cost of the vessel, including resources, in funds.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: crew_capacity: number
 
       The total number of crew that the vessel can hold.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: parts: SpaceCenter.Parts
 
@@ -310,7 +287,6 @@ Editor
       that make up the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Parts`
 
       .. note:: Only the parts of :class:`SpaceCenter.Part` that describe the design are
                 available in the editor. Those that need a vessel in flight or running physics,
@@ -326,7 +302,6 @@ Editor
       A :attr:`SpaceCenter.EditorVessel.resources` object for the resources the vessel can hold.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Resources`
 
       .. note:: This is a view of what the vessel can hold as designed. The flow-state
                 members work, as they are part of the design, but nothing here reports how
@@ -339,15 +314,13 @@ Editor
       delta-v; use :meth:`SpaceCenter.EditorVessel.stage_at` with -1 to get those parts.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
-   .. method:: stage_at(stage)
+   .. method:: stage_at(stage: number): SpaceCenter.Stage
 
       The activation stage with the given number. Pass -1 to get the parts that are
       never activated (those with no staging icon).
 
-      :param number stage: Get activation stage at this index.
-      :rtype: :class:`SpaceCenter.Stage`
+      :param stage: Get activation stage at this index.
 
    .. attribute:: decouple_stages: List
 
@@ -356,22 +329,19 @@ Editor
       included first when any such parts exist.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
-   .. method:: decouple_stage_at(stage)
+   .. method:: decouple_stage_at(stage: number): SpaceCenter.Stage
 
       The decouple stage with the given number. Pass -1 to get the parts that are
       never decoupled and remain on the vessel after all stages have fired.
 
-      :param number stage: Get decouple stage at this index.
-      :rtype: :class:`SpaceCenter.Stage`
+      :param stage: Get decouple stage at this index.
 
    .. attribute:: delta_v_ready: boolean
 
       Whether the stock delta-v figures for the vessel have been calculated.
 
       :Attribute: Read-only, cannot be set
-      :rtype: boolean
 
       .. note::
 
@@ -388,28 +358,24 @@ Editor
       assumes, in :math:`\mathrm{m/s}`. See :attr:`SpaceCenter.Editor.delta_v_body`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: vacuum_delta_v: number
 
       Total vacuum delta-v for the vessel, in :math:`\mathrm{m/s}`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: sea_level_delta_v: number
 
       Total sea-level delta-v for the vessel, in :math:`\mathrm{m/s}`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: burn_time: number
 
       Total burn time for the vessel, in seconds.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
 
 
@@ -434,7 +400,6 @@ Editor
       :attr:`SpaceCenter.EditorVessel.surface_reference_frame`.
 
       :Attribute: Can be read or written
-      :rtype: :class:`SpaceCenter.ReferenceFrame`
 
       .. note::
 
@@ -447,16 +412,16 @@ Editor
       in the reference frame :class:`SpaceCenter.ReferenceFrame`
 
       :Attribute: Read-only, cannot be set
+
       :returns: The position as a vector.
-      :rtype: Tuple
 
    .. attribute:: rotation: Tuple
 
       The rotation of the vessel, in the reference frame :class:`SpaceCenter.ReferenceFrame`
 
       :Attribute: Read-only, cannot be set
+
       :returns: The rotation as a quaternion of the form ``(x, y, z, w)``.
-      :rtype: Tuple
 
    .. attribute:: direction: Tuple
 
@@ -464,8 +429,8 @@ Editor
       in the reference frame :class:`SpaceCenter.ReferenceFrame`.
 
       :Attribute: Read-only, cannot be set
+
       :returns: The direction as a unit vector.
-      :rtype: Tuple
 
    .. attribute:: pitch: number
 
@@ -473,7 +438,6 @@ Editor
       A value between -90° and +90°.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
       .. note::
 
@@ -487,7 +451,6 @@ Editor
       A value between -180° and +180°.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
       .. note::
 
@@ -500,40 +463,37 @@ Editor
       :math:`\mathrm{m^{3}}`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
-   .. attribute:: fully_submerged_center_of_buoyancy: Tuple
+   .. attribute:: fully_submerged_center_of_buoyancy: Tuple | Types.none
 
       The point the buoyant force acts through with the vessel fully submerged, in
       reference frame :class:`SpaceCenter.ReferenceFrame`. Returns ``nil`` if no part of
       the vessel displaces any water.
 
       :Attribute: Read-only, cannot be set
+
       :returns: The position as a vector.
-      :rtype: Tuple or ``Types.none``
 
       .. note::
 
          A hull at rest carries this on the same vertical line as
          :attr:`SpaceCenter.SimulatedFlight.center_of_mass`.
 
-   .. method:: buoyant_force_at(density, gravity)
+   .. method:: buoyant_force_at(density: number, gravity: number): number
 
       The buoyant force on the vessel when fully submerged in a fluid of the given
       density, in Newtons.
 
-      :param number density: The density of the fluid, in :math:`\mathrm{kg/m^{3}}`.
-      :param number gravity: The acceleration due to gravity, in :math:`\mathrm{m/s^{2}}`.
-      :rtype: number
+      :param density: The density of the fluid, in :math:`\mathrm{kg/m^{3}}`.
+      :param gravity: The acceleration due to gravity, in :math:`\mathrm{m/s^{2}}`.
 
-   .. method:: buoyant_torque_at(density, gravity)
+   .. method:: buoyant_torque_at(density: number, gravity: number): Tuple
 
       The torque the buoyant force exerts about the vessel's center of mass when fully
       submerged in a fluid of the given density, in reference frame
       :class:`SpaceCenter.ReferenceFrame`. Gravity acts along the negative x-axis of
       :attr:`SpaceCenter.SimulatedFlight.surface_reference_frame`.
 
-      :param number density: The density of the fluid, in :math:`\mathrm{kg/m^{3}}`.
-      :param number gravity: The acceleration due to gravity, in :math:`\mathrm{m/s^{2}}`.
+      :param density: The density of the fluid, in :math:`\mathrm{kg/m^{3}}`.
+      :param gravity: The acceleration due to gravity, in :math:`\mathrm{m/s^{2}}`.
       :returns: A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in :math:`\mathrm{N \cdot m}`.
-      :rtype: Tuple

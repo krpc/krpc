@@ -9,14 +9,13 @@ Camera
 .. class:: Camera
 
    Controls the game's camera.
-   Obtained by calling :attr:`SpaceCenter.camera <SpaceCenter.SpaceCenter.camera>`.
+   Obtained by calling :attr:`SpaceCenter.camera`.
 
    .. attribute:: mode: SpaceCenter.CameraMode
 
       The current mode of the camera.
 
       :Attribute: Can be read or written
-      :rtype: :class:`SpaceCenter.CameraMode`
 
    .. method:: next_camera()
 
@@ -36,14 +35,12 @@ Camera
       A value between :attr:`SpaceCenter.Camera.min_pitch` and :attr:`SpaceCenter.Camera.max_pitch`
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: heading: number
 
       The heading of the camera, in degrees.
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: distance: number
 
@@ -51,7 +48,6 @@ Camera
       A value between :attr:`SpaceCenter.Camera.min_distance` and :attr:`SpaceCenter.Camera.max_distance`.
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: fo_v: number
 
@@ -59,92 +55,80 @@ Camera
       A value between :attr:`SpaceCenter.Camera.min_fo_v` and :attr:`SpaceCenter.Camera.max_fo_v`.
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: min_pitch: number
 
       The minimum pitch of the camera.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: max_pitch: number
 
       The maximum pitch of the camera.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: min_distance: number
 
       Minimum distance from the camera to the subject, in meters.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: max_distance: number
 
       Maximum distance from the camera to the subject, in meters.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: min_fo_v: number
 
       The minimum field of view the camera in degrees.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: max_fo_v: number
 
       The maximum field of view the camera in degrees.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: default_distance: number
 
       Default distance from the camera to the subject, in meters.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: default_fo_v: number
 
       The default field of view the camera in degrees.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
-   .. attribute:: focussed_body: SpaceCenter.CelestialBody
+   .. attribute:: focussed_body: SpaceCenter.CelestialBody | Types.none
 
       In map mode, the celestial body that the camera is focussed on.
       Returns ``nil`` if the camera is not focussed on a celestial body.
       Throws :class:`KRPC.InvalidOperationException` if the camera is not in map mode.
 
       :Attribute: Can be read or written
-      :rtype: :class:`SpaceCenter.CelestialBody` or ``Types.none``
 
-   .. attribute:: focussed_vessel: SpaceCenter.Vessel
+   .. attribute:: focussed_vessel: SpaceCenter.Vessel | Types.none
 
       In map mode, the vessel that the camera is focussed on.
       Returns ``nil`` if the camera is not focussed on a vessel.
       Throws :class:`KRPC.InvalidOperationException` if the camera is not in map mode.
 
       :Attribute: Can be read or written
-      :rtype: :class:`SpaceCenter.Vessel` or ``Types.none``
 
-   .. attribute:: focussed_node: SpaceCenter.Node
+   .. attribute:: focussed_node: SpaceCenter.Node | Types.none
 
       In map mode, the maneuver node that the camera is focussed on.
       Returns ``nil`` if the camera is not focussed on a maneuver node.
       Throws :class:`KRPC.InvalidOperationException` if the camera is not in map mode.
 
       :Attribute: Can be read or written
-      :rtype: :class:`SpaceCenter.Node` or ``Types.none``
 
-   .. attribute:: focussed_crew_member: SpaceCenter.CrewMember
+   .. attribute:: focussed_crew_member: SpaceCenter.CrewMember | Types.none
 
       In IVA mode, the crew member whose view the camera is showing.
       Returns ``nil`` if no crew member is in view.
@@ -154,7 +138,6 @@ Camera
       and in a part whose interior the game has placed them in.
 
       :Attribute: Can be read or written
-      :rtype: :class:`SpaceCenter.CrewMember` or ``Types.none``
 
 
 

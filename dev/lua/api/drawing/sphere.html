@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=eadf7411" />
   
@@ -1103,102 +1104,84 @@
   <section id="sphere">
 <h1>Sphere<a class="headerlink" href="#sphere" title="Link to this heading">#</a></h1>
 <dl class="lua class">
-<dt class="sig sig-object lua" id="Drawing.Sphere">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">Drawing.</span></span><span class="sig-name descname"><span class="pre">Sphere</span></span><a class="headerlink" href="#Drawing.Sphere" title="Link to this definition">#</a></dt>
-<dd><p>A solid sphere. Created using <a class="reference internal" href="drawing.html#Drawing.add_sphere" title="Drawing.add_sphere"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">Drawing.add_sphere()</span></code></a>.</p>
+<dt class="sig sig-object lua" id="lua-Drawing.Sphere">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">Drawing.</span></span><span class="sig-name descname"><span class="pre">Sphere</span></span><a class="headerlink" href="#lua-Drawing.Sphere" title="Link to this definition">#</a></dt>
+<dd><p>A solid sphere. Created using <a class="reference internal" href="drawing.html#lua-Drawing.add_sphere" title="Drawing.add_sphere"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">Drawing.add_sphere()</span></code></a>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The sphere is drawn with an additive material, so a darker color draws it more
 transparent.</p>
 </div>
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.Sphere.center">
-<span class="sig-name descname"><span class="pre">center</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#Drawing.Drawing.Sphere.center" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Sphere.center">
+<span class="sig-name descname"><span class="pre">center</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-Drawing.Sphere.center" title="Link to this definition">#</a></dt>
 <dd><p>Position of the center of the sphere.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.Sphere.radius">
-<span class="sig-name descname"><span class="pre">radius</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#Drawing.Drawing.Sphere.radius" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Sphere.radius">
+<span class="sig-name descname"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-Drawing.Sphere.radius" title="Link to this definition">#</a></dt>
 <dd><p>Radius of the sphere, in meters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.Sphere.reference_frame">
-<span class="sig-name descname"><span class="pre">reference_frame</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.ReferenceFrame</span><a class="headerlink" href="#Drawing.Drawing.Sphere.reference_frame" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Sphere.reference_frame">
+<span class="sig-name descname"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../space-center/reference-frame.html#lua-SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a><a class="headerlink" href="#lua-Drawing.Sphere.reference_frame" title="Link to this definition">#</a></dt>
 <dd><p>Reference frame for the positions of the object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.Sphere.visible">
-<span class="sig-name descname"><span class="pre">visible</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#Drawing.Drawing.Sphere.visible" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Sphere.visible">
+<span class="sig-name descname"><span class="pre">visible</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-Drawing.Sphere.visible" title="Link to this definition">#</a></dt>
 <dd><p>Whether the object is visible.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.Sphere.color">
-<span class="sig-name descname"><span class="pre">color</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">StdLib.ColorRGB</span><a class="headerlink" href="#Drawing.Drawing.Sphere.color" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Sphere.color">
+<span class="sig-name descname"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../stdlib.html#lua-StdLib.ColorRGB" title="StdLib.ColorRGB"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">StdLib.ColorRGB</span></code></a><a class="headerlink" href="#lua-Drawing.Sphere.color" title="Link to this definition">#</a></dt>
 <dd><p>The color of the object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="../stdlib.html#StdLib.ColorRGB" title="StdLib.ColorRGB"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">StdLib.ColorRGB</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.Sphere.material">
-<span class="sig-name descname"><span class="pre">material</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">string</span><a class="headerlink" href="#Drawing.Drawing.Sphere.material" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Sphere.material">
+<span class="sig-name descname"><span class="pre">material</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><a class="headerlink" href="#lua-Drawing.Sphere.material" title="Link to this definition">#</a></dt>
 <dd><p>Material used to render the object.
 Creates the material from a shader with the given name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="Drawing.Sphere.remove">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.Sphere.remove" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Sphere.remove">
+<span class="sig-name descname"><span class="pre">remove</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-Drawing.Sphere.remove" title="Link to this definition">#</a></dt>
 <dd><p>Remove the object.</p>
 </dd></dl>
 

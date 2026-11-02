@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=eadf7411" />
   
@@ -1103,233 +1104,183 @@
   <section id="text">
 <h1>Text<a class="headerlink" href="#text" title="Link to this heading">#</a></h1>
 <dl class="lua class">
-<dt class="sig sig-object lua" id="Drawing.Text">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">Drawing.</span></span><span class="sig-name descname"><span class="pre">Text</span></span><a class="headerlink" href="#Drawing.Text" title="Link to this definition">#</a></dt>
-<dd><p>Text. Created using <a class="reference internal" href="drawing.html#Drawing.add_text" title="Drawing.add_text"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">Drawing.add_text()</span></code></a>.</p>
+<dt class="sig sig-object lua" id="lua-Drawing.Text">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">Drawing.</span></span><span class="sig-name descname"><span class="pre">Text</span></span><a class="headerlink" href="#lua-Drawing.Text" title="Link to this definition">#</a></dt>
+<dd><p>Text. Created using <a class="reference internal" href="drawing.html#lua-Drawing.add_text" title="Drawing.add_text"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">Drawing.add_text()</span></code></a>.</p>
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.Text.position">
-<span class="sig-name descname"><span class="pre">position</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#Drawing.Drawing.Text.position" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Text.position">
+<span class="sig-name descname"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-Drawing.Text.position" title="Link to this definition">#</a></dt>
 <dd><p>Position of the text.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.Text.rotation">
-<span class="sig-name descname"><span class="pre">rotation</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#Drawing.Drawing.Text.rotation" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Text.rotation">
+<span class="sig-name descname"><span class="pre">rotation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-Drawing.Text.rotation" title="Link to this definition">#</a></dt>
 <dd><p>Rotation of the text as a quaternion.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.Text.face_camera">
-<span class="sig-name descname"><span class="pre">face_camera</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#Drawing.Drawing.Text.face_camera" title="Link to this definition">#</a></dt>
-<dd><p>Whether the text turns to face the camera, in place of its <a class="reference internal" href="#Drawing.Drawing.Text.rotation" title="Drawing.Drawing.Text.rotation"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">Drawing.Text.rotation</span></code></a>.</p>
+<dt class="sig sig-object lua" id="lua-Drawing.Text.face_camera">
+<span class="sig-name descname"><span class="pre">face_camera</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-Drawing.Text.face_camera" title="Link to this definition">#</a></dt>
+<dd><p>Whether the text turns to face the camera, in place of its <a class="reference internal" href="#lua-Drawing.Text.rotation" title="Drawing.Text.rotation"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">Drawing.Text.rotation</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.Text.reference_frame">
-<span class="sig-name descname"><span class="pre">reference_frame</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.ReferenceFrame</span><a class="headerlink" href="#Drawing.Drawing.Text.reference_frame" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Text.reference_frame">
+<span class="sig-name descname"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../space-center/reference-frame.html#lua-SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a><a class="headerlink" href="#lua-Drawing.Text.reference_frame" title="Link to this definition">#</a></dt>
 <dd><p>Reference frame for the positions of the object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.Text.visible">
-<span class="sig-name descname"><span class="pre">visible</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#Drawing.Drawing.Text.visible" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Text.visible">
+<span class="sig-name descname"><span class="pre">visible</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-Drawing.Text.visible" title="Link to this definition">#</a></dt>
 <dd><p>Whether the object is visible.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="Drawing.Text.remove">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.Text.remove" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Text.remove">
+<span class="sig-name descname"><span class="pre">remove</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-Drawing.Text.remove" title="Link to this definition">#</a></dt>
 <dd><p>Remove the object.</p>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.Text.content">
-<span class="sig-name descname"><span class="pre">content</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">string</span><a class="headerlink" href="#Drawing.Drawing.Text.content" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Text.content">
+<span class="sig-name descname"><span class="pre">content</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><a class="headerlink" href="#lua-Drawing.Text.content" title="Link to this definition">#</a></dt>
 <dd><p>The text string</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.Text.font">
-<span class="sig-name descname"><span class="pre">font</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">string</span><a class="headerlink" href="#Drawing.Drawing.Text.font" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Text.font">
+<span class="sig-name descname"><span class="pre">font</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><a class="headerlink" href="#lua-Drawing.Text.font" title="Link to this definition">#</a></dt>
 <dd><p>Name of the font</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="Drawing.Text.available_fonts">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">available_fonts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.Text.available_fonts" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Text.available_fonts">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">available_fonts</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">List</span></code><a class="headerlink" href="#lua-Drawing.Text.available_fonts" title="Link to this definition">#</a></dt>
 <dd><p>A list of all available fonts.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">List</span></code></span></p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.Text.size">
-<span class="sig-name descname"><span class="pre">size</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#Drawing.Drawing.Text.size" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Text.size">
+<span class="sig-name descname"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-Drawing.Text.size" title="Link to this definition">#</a></dt>
 <dd><p>Font size.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.Text.character_size">
-<span class="sig-name descname"><span class="pre">character_size</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#Drawing.Drawing.Text.character_size" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Text.character_size">
+<span class="sig-name descname"><span class="pre">character_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-Drawing.Text.character_size" title="Link to this definition">#</a></dt>
 <dd><p>Character size.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.Text.style">
-<span class="sig-name descname"><span class="pre">style</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">UI.FontStyle</span><a class="headerlink" href="#Drawing.Drawing.Text.style" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Text.style">
+<span class="sig-name descname"><span class="pre">style</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../ui/text.html#lua-UI.FontStyle" title="UI.FontStyle"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">UI.FontStyle</span></code></a><a class="headerlink" href="#lua-Drawing.Text.style" title="Link to this definition">#</a></dt>
 <dd><p>Font style.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="../ui/text.html#UI.FontStyle" title="UI.FontStyle"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.FontStyle</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.Text.color">
-<span class="sig-name descname"><span class="pre">color</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">StdLib.ColorRGB</span><a class="headerlink" href="#Drawing.Drawing.Text.color" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Text.color">
+<span class="sig-name descname"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../stdlib.html#lua-StdLib.ColorRGB" title="StdLib.ColorRGB"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">StdLib.ColorRGB</span></code></a><a class="headerlink" href="#lua-Drawing.Text.color" title="Link to this definition">#</a></dt>
 <dd><p>Set the color</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="../stdlib.html#StdLib.ColorRGB" title="StdLib.ColorRGB"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">StdLib.ColorRGB</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.Text.material">
-<span class="sig-name descname"><span class="pre">material</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">string</span><a class="headerlink" href="#Drawing.Drawing.Text.material" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Text.material">
+<span class="sig-name descname"><span class="pre">material</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><a class="headerlink" href="#lua-Drawing.Text.material" title="Link to this definition">#</a></dt>
 <dd><p>Material used to render the object.
 Creates the material from a shader with the given name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.Text.alignment">
-<span class="sig-name descname"><span class="pre">alignment</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">UI.TextAlignment</span><a class="headerlink" href="#Drawing.Drawing.Text.alignment" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Text.alignment">
+<span class="sig-name descname"><span class="pre">alignment</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../ui/text.html#lua-UI.TextAlignment" title="UI.TextAlignment"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">UI.TextAlignment</span></code></a><a class="headerlink" href="#lua-Drawing.Text.alignment" title="Link to this definition">#</a></dt>
 <dd><p>Alignment.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="../ui/text.html#UI.TextAlignment" title="UI.TextAlignment"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.TextAlignment</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.Text.line_spacing">
-<span class="sig-name descname"><span class="pre">line_spacing</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#Drawing.Drawing.Text.line_spacing" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Text.line_spacing">
+<span class="sig-name descname"><span class="pre">line_spacing</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-Drawing.Text.line_spacing" title="Link to this definition">#</a></dt>
 <dd><p>Line spacing.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.Text.anchor">
-<span class="sig-name descname"><span class="pre">anchor</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">UI.TextAnchor</span><a class="headerlink" href="#Drawing.Drawing.Text.anchor" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Text.anchor">
+<span class="sig-name descname"><span class="pre">anchor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../ui/text.html#lua-UI.TextAnchor" title="UI.TextAnchor"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">UI.TextAnchor</span></code></a><a class="headerlink" href="#lua-Drawing.Text.anchor" title="Link to this definition">#</a></dt>
 <dd><p>Anchor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="../ui/text.html#UI.TextAnchor" title="UI.TextAnchor"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.TextAnchor</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>

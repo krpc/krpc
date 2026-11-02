@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/lua.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=eadf7411" />
   
@@ -1100,7 +1101,7 @@
                   
   <section id="standard-library">
 <h1>Standard Library<a class="headerlink" href="#standard-library" title="Link to this heading">#</a></h1>
-<p id="module-StdLib">A standard library of mathematics and printing for server side functions, and of the
+<p id="lua-StdLib">A standard library of mathematics and printing for server side functions, and of the
 colors other services use.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -1109,149 +1110,119 @@ in the order x, y, z, w the SpaceCenter service uses. Angles are in radians unle
 stated otherwise.</p>
 </div>
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="StdLib.StdLib.pi">
-<span class="sig-name descname"><span class="pre">pi</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#StdLib.StdLib.pi" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.pi">
+<span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">pi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-StdLib.pi" title="Link to this definition">#</a></dt>
 <dd><p>The constant pi.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="StdLib.StdLib.e">
-<span class="sig-name descname"><span class="pre">e</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#StdLib.StdLib.e" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.e">
+<span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">e</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-StdLib.e" title="Link to this definition">#</a></dt>
 <dd><p>The constant e, the base of the natural logarithm.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.abs">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">abs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">x</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.abs" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.abs">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">abs</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-StdLib.abs" title="Link to this definition">#</a></dt>
 <dd><p>The absolute value of a number.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>x</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The number.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+<dd class="field-odd"><p><strong>x</strong> – The number.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.sign">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">sign</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">x</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.sign" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.sign">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">sign</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-StdLib.sign" title="Link to this definition">#</a></dt>
 <dd><p>The sign of a number: -1 if it is negative, 1 if it is positive,
 and 0 if it is zero or not a number.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>x</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The number.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+<dd class="field-odd"><p><strong>x</strong> – The number.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.copy_sign">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">copy_sign</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">x</span></em>, <em class="sig-param"><span class="pre">y</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.copy_sign" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.copy_sign">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">copy_sign</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-StdLib.copy_sign" title="Link to this definition">#</a></dt>
 <dd><p>The magnitude of the first number with the sign of the second.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The number giving the magnitude.</p></li>
-<li><p><strong>y</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The number giving the sign.</p></li>
+<li><p><strong>x</strong> – The number giving the magnitude.</p></li>
+<li><p><strong>y</strong> – The number giving the sign.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.is_nan">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">is_nan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">x</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.is_nan" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.is_nan">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">is_nan</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-StdLib.is_nan" title="Link to this definition">#</a></dt>
 <dd><p>Whether a number is not a number.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>x</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The number.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
+<dd class="field-odd"><p><strong>x</strong> – The number.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.is_finite">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">is_finite</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">x</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.is_finite" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.is_finite">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">is_finite</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-StdLib.is_finite" title="Link to this definition">#</a></dt>
 <dd><p>Whether a number is neither infinite nor not a number.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>x</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The number.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
+<dd class="field-odd"><p><strong>x</strong> – The number.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.floor">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">floor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">x</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.floor" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.floor">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">floor</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-StdLib.floor" title="Link to this definition">#</a></dt>
 <dd><p>The largest whole number less than or equal to the given number.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>x</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The number.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+<dd class="field-odd"><p><strong>x</strong> – The number.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.ceiling">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">ceiling</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">x</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.ceiling" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.ceiling">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">ceiling</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-StdLib.ceiling" title="Link to this definition">#</a></dt>
 <dd><p>The smallest whole number greater than or equal to the given number.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>x</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The number.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+<dd class="field-odd"><p><strong>x</strong> – The number.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.round">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">round</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">x</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">digits</span> <span class="pre">=</span> <span class="pre">0</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.round" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.round">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">round</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">digits</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-StdLib.round" title="Link to this definition">#</a></dt>
 <dd><p>The given number rounded to the given number of decimal places,
 with a halfway value rounded to the nearer even number.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The number.</p></li>
-<li><p><strong>digits</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The number of decimal places to round to. Negative to round to tens, hundreds and beyond.</p></li>
+<li><p><strong>x</strong> – The number.</p></li>
+<li><p><strong>digits</strong> – The number of decimal places to round to. Negative to round to tens, hundreds and beyond. Defaults to <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1261,19 +1232,16 @@ with a halfway value rounded to the nearer even number.</p>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.round_half_away_from_zero">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">round_half_away_from_zero</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">x</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">digits</span> <span class="pre">=</span> <span class="pre">0</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.round_half_away_from_zero" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.round_half_away_from_zero">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">round_half_away_from_zero</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">digits</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-StdLib.round_half_away_from_zero" title="Link to this definition">#</a></dt>
 <dd><p>The given number rounded to the given number of decimal places,
 with a halfway value rounded away from zero.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The number.</p></li>
-<li><p><strong>digits</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The number of decimal places to round to. Negative to round to tens, hundreds and beyond.</p></li>
+<li><p><strong>x</strong> – The number.</p></li>
+<li><p><strong>digits</strong> – The number of decimal places to round to. Negative to round to tens, hundreds and beyond. Defaults to <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1283,19 +1251,16 @@ with a halfway value rounded away from zero.</p>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.round_half_up">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">round_half_up</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">x</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">digits</span> <span class="pre">=</span> <span class="pre">0</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.round_half_up" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.round_half_up">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">round_half_up</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">digits</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-StdLib.round_half_up" title="Link to this definition">#</a></dt>
 <dd><p>The given number rounded to the given number of decimal places,
 with a halfway value rounded toward positive infinity.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The number.</p></li>
-<li><p><strong>digits</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The number of decimal places to round to. Negative to round to tens, hundreds and beyond.</p></li>
+<li><p><strong>x</strong> – The number.</p></li>
+<li><p><strong>digits</strong> – The number of decimal places to round to. Negative to round to tens, hundreds and beyond. Defaults to <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1305,230 +1270,185 @@ with a halfway value rounded toward positive infinity.</p>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.sqrt">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">sqrt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">x</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.sqrt" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.sqrt">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">sqrt</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-StdLib.sqrt" title="Link to this definition">#</a></dt>
 <dd><p>The square root of a number.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>x</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The number.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+<dd class="field-odd"><p><strong>x</strong> – The number.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.hypot">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">hypot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">x</span></em>, <em class="sig-param"><span class="pre">y</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.hypot" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.hypot">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">hypot</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-StdLib.hypot" title="Link to this definition">#</a></dt>
 <dd><p>The length of the hypotenuse of a right triangle with the given sides.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The first side.</p></li>
-<li><p><strong>y</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The second side.</p></li>
+<li><p><strong>x</strong> – The first side.</p></li>
+<li><p><strong>y</strong> – The second side.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.sin">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">sin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">x</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.sin" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.sin">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">sin</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-StdLib.sin" title="Link to this definition">#</a></dt>
 <dd><p>The sine of an angle, in radians.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>x</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The angle.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+<dd class="field-odd"><p><strong>x</strong> – The angle.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.cos">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">cos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">x</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.cos" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.cos">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">cos</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-StdLib.cos" title="Link to this definition">#</a></dt>
 <dd><p>The cosine of an angle, in radians.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>x</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The angle.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+<dd class="field-odd"><p><strong>x</strong> – The angle.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.tan">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">tan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">x</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.tan" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.tan">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">tan</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-StdLib.tan" title="Link to this definition">#</a></dt>
 <dd><p>The tangent of an angle, in radians.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>x</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The angle.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+<dd class="field-odd"><p><strong>x</strong> – The angle.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.asin">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">asin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">x</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.asin" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.asin">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">asin</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-StdLib.asin" title="Link to this definition">#</a></dt>
 <dd><p>The angle, in radians, whose sine is the given number.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>x</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The number.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+<dd class="field-odd"><p><strong>x</strong> – The number.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.acos">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">acos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">x</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.acos" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.acos">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">acos</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-StdLib.acos" title="Link to this definition">#</a></dt>
 <dd><p>The angle, in radians, whose cosine is the given number.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>x</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The number.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+<dd class="field-odd"><p><strong>x</strong> – The number.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.atan">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">atan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">x</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.atan" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.atan">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">atan</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-StdLib.atan" title="Link to this definition">#</a></dt>
 <dd><p>The angle, in radians, whose tangent is the given number.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>x</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The number.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+<dd class="field-odd"><p><strong>x</strong> – The number.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.atan2">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">atan2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">y</span></em>, <em class="sig-param"><span class="pre">x</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.atan2" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.atan2">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">atan2</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-StdLib.atan2" title="Link to this definition">#</a></dt>
 <dd><p>The angle, in radians, between the positive x axis and the point <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y)</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>y</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The y coordinate.</p></li>
-<li><p><strong>x</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The x coordinate.</p></li>
+<li><p><strong>y</strong> – The y coordinate.</p></li>
+<li><p><strong>x</strong> – The x coordinate.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.log">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">x</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">new_base</span> <span class="pre">=</span> <span class="pre">2.718281828459045</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.log" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.log">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">log</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">new_base</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-StdLib.log" title="Link to this definition">#</a></dt>
 <dd><p>The logarithm of a number, natural unless another base is given.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The number.</p></li>
-<li><p><strong>new_base</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The base of the logarithm.</p></li>
+<li><p><strong>x</strong> – The number.</p></li>
+<li><p><strong>new_base</strong> – The base of the logarithm. Defaults to <code class="docutils literal notranslate"><span class="pre">2.718281828459045</span></code>.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.log10">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">log10</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">x</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.log10" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.log10">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">log10</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-StdLib.log10" title="Link to this definition">#</a></dt>
 <dd><p>The base 10 logarithm of a number.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>x</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The number.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+<dd class="field-odd"><p><strong>x</strong> – The number.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.exp">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">exp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">x</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.exp" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.exp">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">exp</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-StdLib.exp" title="Link to this definition">#</a></dt>
 <dd><p>The number e raised to the given power.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>x</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The power.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+<dd class="field-odd"><p><strong>x</strong> – The power.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.min">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">min</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">x</span></em>, <em class="sig-param"><span class="pre">y</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.min" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.min">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">min</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-StdLib.min" title="Link to this definition">#</a></dt>
 <dd><p>The smaller of two numbers.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The first number.</p></li>
-<li><p><strong>y</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The second number.</p></li>
+<li><p><strong>x</strong> – The first number.</p></li>
+<li><p><strong>y</strong> – The second number.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.max">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">max</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">x</span></em>, <em class="sig-param"><span class="pre">y</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.max" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.max">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">max</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-StdLib.max" title="Link to this definition">#</a></dt>
 <dd><p>The larger of two numbers.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The first number.</p></li>
-<li><p><strong>y</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The second number.</p></li>
+<li><p><strong>x</strong> – The first number.</p></li>
+<li><p><strong>y</strong> – The second number.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.clamp">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">clamp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">x</span></em>, <em class="sig-param"><span class="pre">min</span></em>, <em class="sig-param"><span class="pre">max</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.clamp" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.clamp">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">clamp</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">min</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">max</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-StdLib.clamp" title="Link to this definition">#</a></dt>
 <dd><p>The given number limited to the given range.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The number.</p></li>
-<li><p><strong>min</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The minimum of the range.</p></li>
-<li><p><strong>max</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The maximum of the range.</p></li>
+<li><p><strong>x</strong> – The number.</p></li>
+<li><p><strong>min</strong> – The minimum of the range.</p></li>
+<li><p><strong>max</strong> – The maximum of the range.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1538,19 +1458,16 @@ with a halfway value rounded toward positive infinity.</p>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.lerp">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">lerp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">a</span></em>, <em class="sig-param"><span class="pre">b</span></em>, <em class="sig-param"><span class="pre">t</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.lerp" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.lerp">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">lerp</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">t</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-StdLib.lerp" title="Link to this definition">#</a></dt>
 <dd><p>Linear interpolation between two numbers.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The number when t is 0.</p></li>
-<li><p><strong>b</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The number when t is 1.</p></li>
-<li><p><strong>t</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The interpolation parameter.</p></li>
+<li><p><strong>a</strong> – The number when t is 0.</p></li>
+<li><p><strong>b</strong> – The number when t is 1.</p></li>
+<li><p><strong>t</strong> – The interpolation parameter.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1561,20 +1478,17 @@ extrapolates.</p>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.inverse_lerp">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">inverse_lerp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">a</span></em>, <em class="sig-param"><span class="pre">b</span></em>, <em class="sig-param"><span class="pre">x</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.inverse_lerp" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.inverse_lerp">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">inverse_lerp</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-StdLib.inverse_lerp" title="Link to this definition">#</a></dt>
 <dd><p>The interpolation parameter of a number between two others,
 limited to the range 0 to 1.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The number at 0.</p></li>
-<li><p><strong>b</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The number at 1.</p></li>
-<li><p><strong>x</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The number.</p></li>
+<li><p><strong>a</strong> – The number at 0.</p></li>
+<li><p><strong>b</strong> – The number at 1.</p></li>
+<li><p><strong>x</strong> – The number.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1584,142 +1498,115 @@ limited to the range 0 to 1.</p>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.degrees_to_radians">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">degrees_to_radians</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">x</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.degrees_to_radians" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.degrees_to_radians">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">degrees_to_radians</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-StdLib.degrees_to_radians" title="Link to this definition">#</a></dt>
 <dd><p>The angle in radians of an angle in degrees.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>x</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The angle in degrees.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+<dd class="field-odd"><p><strong>x</strong> – The angle in degrees.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.radians_to_degrees">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">radians_to_degrees</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">x</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.radians_to_degrees" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.radians_to_degrees">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">radians_to_degrees</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-StdLib.radians_to_degrees" title="Link to this definition">#</a></dt>
 <dd><p>The angle in degrees of an angle in radians.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>x</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The angle in radians.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+<dd class="field-odd"><p><strong>x</strong> – The angle in radians.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.vector_add">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">vector_add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">u</span></em>, <em class="sig-param"><span class="pre">v</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.vector_add" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.vector_add">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">vector_add</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">u</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">v</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-StdLib.vector_add" title="Link to this definition">#</a></dt>
 <dd><p>The sum of two vectors.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>u</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The first vector.</p></li>
-<li><p><strong>v</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The second vector.</p></li>
+<li><p><strong>u</strong> – The first vector.</p></li>
+<li><p><strong>v</strong> – The second vector.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.vector_subtract">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">vector_subtract</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">u</span></em>, <em class="sig-param"><span class="pre">v</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.vector_subtract" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.vector_subtract">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">vector_subtract</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">u</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">v</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-StdLib.vector_subtract" title="Link to this definition">#</a></dt>
 <dd><p>The difference of two vectors.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>u</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The first vector.</p></li>
-<li><p><strong>v</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The second vector.</p></li>
+<li><p><strong>u</strong> – The first vector.</p></li>
+<li><p><strong>v</strong> – The second vector.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.vector_scale">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">vector_scale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">v</span></em>, <em class="sig-param"><span class="pre">scale</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.vector_scale" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.vector_scale">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">vector_scale</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">v</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">scale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-StdLib.vector_scale" title="Link to this definition">#</a></dt>
 <dd><p>A vector scaled by a number.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>v</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The vector.</p></li>
-<li><p><strong>scale</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The scaling factor.</p></li>
+<li><p><strong>v</strong> – The vector.</p></li>
+<li><p><strong>scale</strong> – The scaling factor.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.vector_dot">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">vector_dot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">u</span></em>, <em class="sig-param"><span class="pre">v</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.vector_dot" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.vector_dot">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">vector_dot</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">u</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">v</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-StdLib.vector_dot" title="Link to this definition">#</a></dt>
 <dd><p>The dot product of two vectors.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>u</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The first vector.</p></li>
-<li><p><strong>v</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The second vector.</p></li>
+<li><p><strong>u</strong> – The first vector.</p></li>
+<li><p><strong>v</strong> – The second vector.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.vector_cross">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">vector_cross</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">u</span></em>, <em class="sig-param"><span class="pre">v</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.vector_cross" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.vector_cross">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">vector_cross</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">u</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">v</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-StdLib.vector_cross" title="Link to this definition">#</a></dt>
 <dd><p>The cross product of two vectors.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>u</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The first vector.</p></li>
-<li><p><strong>v</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The second vector.</p></li>
+<li><p><strong>u</strong> – The first vector.</p></li>
+<li><p><strong>v</strong> – The second vector.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.vector_magnitude">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">vector_magnitude</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">v</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.vector_magnitude" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.vector_magnitude">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">vector_magnitude</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">v</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-StdLib.vector_magnitude" title="Link to this definition">#</a></dt>
 <dd><p>The magnitude (length) of a vector.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>v</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The vector.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+<dd class="field-odd"><p><strong>v</strong> – The vector.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.vector_normalize">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">vector_normalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">v</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.vector_normalize" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.vector_normalize">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">vector_normalize</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">v</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-StdLib.vector_normalize" title="Link to this definition">#</a></dt>
 <dd><p>A vector scaled to a magnitude of 1.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>v</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The vector.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
+<dd class="field-odd"><p><strong>v</strong> – The vector.</p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1729,35 +1616,29 @@ limited to the range 0 to 1.</p>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.vector_distance">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">vector_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">u</span></em>, <em class="sig-param"><span class="pre">v</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.vector_distance" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.vector_distance">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">vector_distance</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">u</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">v</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-StdLib.vector_distance" title="Link to this definition">#</a></dt>
 <dd><p>The distance between two positions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>u</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The first position.</p></li>
-<li><p><strong>v</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The second position.</p></li>
+<li><p><strong>u</strong> – The first position.</p></li>
+<li><p><strong>v</strong> – The second position.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.vector_angle">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">vector_angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">u</span></em>, <em class="sig-param"><span class="pre">v</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.vector_angle" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.vector_angle">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">vector_angle</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">u</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">v</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-StdLib.vector_angle" title="Link to this definition">#</a></dt>
 <dd><p>The angle between two vectors, in radians, between 0 and <span class="math notranslate nohighlight">\(\pi\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>u</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The first vector.</p></li>
-<li><p><strong>v</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The second vector.</p></li>
+<li><p><strong>u</strong> – The first vector.</p></li>
+<li><p><strong>v</strong> – The second vector.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1767,19 +1648,16 @@ limited to the range 0 to 1.</p>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.vector_lerp">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">vector_lerp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">u</span></em>, <em class="sig-param"><span class="pre">v</span></em>, <em class="sig-param"><span class="pre">t</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.vector_lerp" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.vector_lerp">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">vector_lerp</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">u</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">v</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">t</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-StdLib.vector_lerp" title="Link to this definition">#</a></dt>
 <dd><p>Linear interpolation between two vectors.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>u</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The vector when t is 0.</p></li>
-<li><p><strong>v</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The vector when t is 1.</p></li>
-<li><p><strong>t</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The interpolation parameter.</p></li>
+<li><p><strong>u</strong> – The vector when t is 0.</p></li>
+<li><p><strong>v</strong> – The vector when t is 1.</p></li>
+<li><p><strong>t</strong> – The interpolation parameter.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1790,19 +1668,16 @@ extrapolates.</p>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.quaternion_multiply">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">quaternion_multiply</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">q</span></em>, <em class="sig-param"><span class="pre">r</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.quaternion_multiply" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.quaternion_multiply">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">quaternion_multiply</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">r</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-StdLib.quaternion_multiply" title="Link to this definition">#</a></dt>
 <dd><p>The composition of two rotations: the rotation r followed by the
 rotation q.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>q</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The second rotation.</p></li>
-<li><p><strong>r</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The first rotation.</p></li>
+<li><p><strong>q</strong> – The second rotation.</p></li>
+<li><p><strong>r</strong> – The first rotation.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1812,15 +1687,12 @@ rotation q.</p>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.quaternion_inverse">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">quaternion_inverse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">q</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.quaternion_inverse" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.quaternion_inverse">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">quaternion_inverse</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-StdLib.quaternion_inverse" title="Link to this definition">#</a></dt>
 <dd><p>The inverse of a rotation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>q</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The rotation.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
+<dd class="field-odd"><p><strong>q</strong> – The rotation.</p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1830,18 +1702,15 @@ rotation q.</p>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.quaternion_rotate_vector">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">quaternion_rotate_vector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">q</span></em>, <em class="sig-param"><span class="pre">v</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.quaternion_rotate_vector" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.quaternion_rotate_vector">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">quaternion_rotate_vector</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">v</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-StdLib.quaternion_rotate_vector" title="Link to this definition">#</a></dt>
 <dd><p>A vector rotated by a rotation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>q</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The rotation.</p></li>
-<li><p><strong>v</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The vector.</p></li>
+<li><p><strong>q</strong> – The rotation.</p></li>
+<li><p><strong>v</strong> – The vector.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1851,18 +1720,15 @@ rotation q.</p>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.quaternion_from_axis_angle">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">quaternion_from_axis_angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">axis</span></em>, <em class="sig-param"><span class="pre">angle</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.quaternion_from_axis_angle" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.quaternion_from_axis_angle">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">quaternion_from_axis_angle</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">axis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">angle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-StdLib.quaternion_from_axis_angle" title="Link to this definition">#</a></dt>
 <dd><p>The rotation about an axis by an angle.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>axis</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The axis of rotation.</p></li>
-<li><p><strong>angle</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The angle of rotation, in radians.</p></li>
+<li><p><strong>axis</strong> – The axis of rotation.</p></li>
+<li><p><strong>angle</strong> – The angle of rotation, in radians.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1872,15 +1738,12 @@ rotation q.</p>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.quaternion_to_axis_angle">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">quaternion_to_axis_angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">q</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.quaternion_to_axis_angle" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.quaternion_to_axis_angle">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">quaternion_to_axis_angle</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-StdLib.AxisAngle" title="StdLib.AxisAngle"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">StdLib.AxisAngle</span></code></a><a class="headerlink" href="#lua-StdLib.quaternion_to_axis_angle" title="Link to this definition">#</a></dt>
 <dd><p>The axis and angle of a rotation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>q</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The rotation.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#StdLib.AxisAngle" title="StdLib.AxisAngle"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">StdLib.AxisAngle</span></code></a></p>
+<dd class="field-odd"><p><strong>q</strong> – The rotation.</p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1890,18 +1753,15 @@ rotation q.</p>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.quaternion_from_to_rotation">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">quaternion_from_to_rotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">u</span></em>, <em class="sig-param"><span class="pre">v</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.quaternion_from_to_rotation" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.quaternion_from_to_rotation">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">quaternion_from_to_rotation</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">u</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">v</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-StdLib.quaternion_from_to_rotation" title="Link to this definition">#</a></dt>
 <dd><p>The shortest rotation that takes one direction onto another.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>u</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The direction to rotate from.</p></li>
-<li><p><strong>v</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The direction to rotate to.</p></li>
+<li><p><strong>u</strong> – The direction to rotate from.</p></li>
+<li><p><strong>v</strong> – The direction to rotate to.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1912,19 +1772,16 @@ Throws an exception if either vector is zero.</p>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.quaternion_look_rotation">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">quaternion_look_rotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">forward</span></em>, <em class="sig-param"><span class="pre">up</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.quaternion_look_rotation" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.quaternion_look_rotation">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">quaternion_look_rotation</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">forward</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">up</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-StdLib.quaternion_look_rotation" title="Link to this definition">#</a></dt>
 <dd><p>The rotation that takes the z axis onto a forward direction, and the y axis
 toward an up direction.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>forward</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The direction of the z axis.</p></li>
-<li><p><strong>up</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The direction the y axis points toward.</p></li>
+<li><p><strong>forward</strong> – The direction of the z axis.</p></li>
+<li><p><strong>up</strong> – The direction the y axis points toward.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1935,19 +1792,16 @@ exception if either vector is zero, or if they are parallel.</p>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.quaternion_angle">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">quaternion_angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">q</span></em>, <em class="sig-param"><span class="pre">r</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.quaternion_angle" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.quaternion_angle">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">quaternion_angle</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">r</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-StdLib.quaternion_angle" title="Link to this definition">#</a></dt>
 <dd><p>The angle of the rotation that takes one rotation to another,
 in radians, between 0 and <span class="math notranslate nohighlight">\(\pi\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>q</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The first rotation.</p></li>
-<li><p><strong>r</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The second rotation.</p></li>
+<li><p><strong>q</strong> – The first rotation.</p></li>
+<li><p><strong>r</strong> – The second rotation.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1957,19 +1811,16 @@ in radians, between 0 and <span class="math notranslate nohighlight">\(\pi\)</sp
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.quaternion_slerp">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">quaternion_slerp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">q</span></em>, <em class="sig-param"><span class="pre">r</span></em>, <em class="sig-param"><span class="pre">t</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.quaternion_slerp" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.quaternion_slerp">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">quaternion_slerp</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">r</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">t</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-StdLib.quaternion_slerp" title="Link to this definition">#</a></dt>
 <dd><p>Spherical linear interpolation between two rotations.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>q</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The rotation when t is 0.</p></li>
-<li><p><strong>r</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The rotation when t is 1.</p></li>
-<li><p><strong>t</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The interpolation parameter.</p></li>
+<li><p><strong>q</strong> – The rotation when t is 0.</p></li>
+<li><p><strong>r</strong> – The rotation when t is 1.</p></li>
+<li><p><strong>t</strong> – The interpolation parameter.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1980,12 +1831,12 @@ extrapolates. Throws an exception if either quaternion is zero.</p>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="StdLib.print">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">message</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.print" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.print">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">print</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-StdLib.print" title="Link to this definition">#</a></dt>
 <dd><p>Writes a message to the game’s log, for debugging.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>message</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – The message.</p>
+<dd class="field-odd"><p><strong>message</strong> – The message.</p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1996,126 +1847,81 @@ written at the Info level, so a server log level of Warning or Error hides it.</
 </dd></dl>
 
 <dl class="lua class">
-<dt class="sig sig-object lua" id="StdLib.AxisAngle">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">AxisAngle</span></span><a class="headerlink" href="#StdLib.AxisAngle" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.AxisAngle">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">AxisAngle</span></span><a class="headerlink" href="#lua-StdLib.AxisAngle" title="Link to this definition">#</a></dt>
 <dd><p>A rotation as an axis and an angle.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>See <a class="reference internal" href="#StdLib.quaternion_to_axis_angle" title="StdLib.quaternion_to_axis_angle"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">StdLib.quaternion_to_axis_angle()</span></code></a>.</p>
+<p>See <a class="reference internal" href="#lua-StdLib.quaternion_to_axis_angle" title="StdLib.quaternion_to_axis_angle"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">StdLib.quaternion_to_axis_angle()</span></code></a>.</p>
 </div>
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="StdLib.StdLib.AxisAngle.axis">
-<span class="sig-name descname"><span class="pre">axis</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#StdLib.StdLib.AxisAngle.axis" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.AxisAngle.axis">
+<span class="sig-name descname"><span class="pre">axis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-StdLib.AxisAngle.axis" title="Link to this definition">#</a></dt>
 <dd><p>The axis of the rotation, as a unit vector, or zero for no rotation.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="StdLib.StdLib.AxisAngle.angle">
-<span class="sig-name descname"><span class="pre">angle</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#StdLib.StdLib.AxisAngle.angle" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.AxisAngle.angle">
+<span class="sig-name descname"><span class="pre">angle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-StdLib.AxisAngle.angle" title="Link to this definition">#</a></dt>
 <dd><p>The angle of the rotation, in radians between 0 and <span class="math notranslate nohighlight">\(\pi\)</span>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
-</dl>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="lua class">
-<dt class="sig sig-object lua" id="StdLib.ColorRGB">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">ColorRGB</span></span><a class="headerlink" href="#StdLib.ColorRGB" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.ColorRGB">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">ColorRGB</span></span><a class="headerlink" href="#lua-StdLib.ColorRGB" title="Link to this definition">#</a></dt>
 <dd><p>A color, as red, green and blue components between 0 and 1.</p>
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="StdLib.StdLib.ColorRGB.r">
-<span class="sig-name descname"><span class="pre">r</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#StdLib.StdLib.ColorRGB.r" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.ColorRGB.r">
+<span class="sig-name descname"><span class="pre">r</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-StdLib.ColorRGB.r" title="Link to this definition">#</a></dt>
 <dd><p>The red component.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="StdLib.StdLib.ColorRGB.g">
-<span class="sig-name descname"><span class="pre">g</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#StdLib.StdLib.ColorRGB.g" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.ColorRGB.g">
+<span class="sig-name descname"><span class="pre">g</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-StdLib.ColorRGB.g" title="Link to this definition">#</a></dt>
 <dd><p>The green component.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="StdLib.StdLib.ColorRGB.b">
-<span class="sig-name descname"><span class="pre">b</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#StdLib.StdLib.ColorRGB.b" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.ColorRGB.b">
+<span class="sig-name descname"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-StdLib.ColorRGB.b" title="Link to this definition">#</a></dt>
 <dd><p>The blue component.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
-</dl>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="lua class">
-<dt class="sig sig-object lua" id="StdLib.ColorRGBA">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">ColorRGBA</span></span><a class="headerlink" href="#StdLib.ColorRGBA" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.ColorRGBA">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">ColorRGBA</span></span><a class="headerlink" href="#lua-StdLib.ColorRGBA" title="Link to this definition">#</a></dt>
 <dd><p>A color, as red, green, blue and alpha components between 0 and 1.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>An alpha of 0 is fully transparent and 1 is fully opaque.</p>
 </div>
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="StdLib.StdLib.ColorRGBA.r">
-<span class="sig-name descname"><span class="pre">r</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#StdLib.StdLib.ColorRGBA.r" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.ColorRGBA.r">
+<span class="sig-name descname"><span class="pre">r</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-StdLib.ColorRGBA.r" title="Link to this definition">#</a></dt>
 <dd><p>The red component.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="StdLib.StdLib.ColorRGBA.g">
-<span class="sig-name descname"><span class="pre">g</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#StdLib.StdLib.ColorRGBA.g" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.ColorRGBA.g">
+<span class="sig-name descname"><span class="pre">g</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-StdLib.ColorRGBA.g" title="Link to this definition">#</a></dt>
 <dd><p>The green component.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="StdLib.StdLib.ColorRGBA.b">
-<span class="sig-name descname"><span class="pre">b</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#StdLib.StdLib.ColorRGBA.b" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.ColorRGBA.b">
+<span class="sig-name descname"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-StdLib.ColorRGBA.b" title="Link to this definition">#</a></dt>
 <dd><p>The blue component.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="StdLib.StdLib.ColorRGBA.a">
-<span class="sig-name descname"><span class="pre">a</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#StdLib.StdLib.ColorRGBA.a" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-StdLib.ColorRGBA.a">
+<span class="sig-name descname"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-StdLib.ColorRGBA.a" title="Link to this definition">#</a></dt>
 <dd><p>The alpha component.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
-</dl>
 </dd></dl>
 
 </dd></dl>

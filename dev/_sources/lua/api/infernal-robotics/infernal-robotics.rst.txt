@@ -17,7 +17,6 @@ This service provides functionality to interact with
    Whether Infernal Robotics is installed.
 
    :Attribute: Read-only, cannot be set
-   :rtype: boolean
 
 
 
@@ -27,17 +26,14 @@ This service provides functionality to interact with
    Whether Infernal Robotics API is ready.
 
    :Attribute: Read-only, cannot be set
-   :rtype: boolean
 
 
 
 
-.. staticmethod:: servo_groups(vessel)
+.. staticmethod:: servo_groups(vessel: SpaceCenter.Vessel): List
 
    A list of all the servo groups in the given *vessel*.
 
-   :param SpaceCenter.Vessel vessel:
-   :rtype: List
 
    .. note::
 
@@ -48,23 +44,21 @@ This service provides functionality to interact with
 
 
 
-.. staticmethod:: servo_group_with_name(vessel, name)
+.. staticmethod:: servo_group_with_name(vessel: SpaceCenter.Vessel, name: string): InfernalRobotics.ServoGroup | Types.none
 
    Returns the servo group in the given *vessel* with the given *name*,
    or ``nil`` if none exists. If multiple servo groups have the same name, only one of them is returned.
 
-   :param SpaceCenter.Vessel vessel: Vessel to check.
-   :param string name: Name of servo group to find.
-   :rtype: :class:`InfernalRobotics.ServoGroup` or ``Types.none``
+   :param vessel: Vessel to check.
+   :param name: Name of servo group to find.
 
 
 
 
-.. staticmethod:: servo_with_name(vessel, name)
+.. staticmethod:: servo_with_name(vessel: SpaceCenter.Vessel, name: string): InfernalRobotics.Servo | Types.none
 
    Returns the servo in the given *vessel* with the given *name* or
    ``nil`` if none exists. If multiple servos have the same name, only one of them is returned.
 
-   :param SpaceCenter.Vessel vessel: Vessel to check.
-   :param string name: Name of the servo to find.
-   :rtype: :class:`InfernalRobotics.Servo` or ``Types.none``
+   :param vessel: Vessel to check.
+   :param name: Name of the servo to find.

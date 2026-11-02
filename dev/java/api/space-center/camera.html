@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=eadf7411" />
   
@@ -1106,15 +1107,15 @@
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Camera">
 <span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">Camera</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera" title="Link to this definition">#</a></dt>
 <dd><p>Controls the game’s camera.
-Obtained by calling <a class="reference internal" href="space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.getCamera()" title="krpc.client.services.SpaceCenter.SpaceCenter.getCamera()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">getCamera()</span></code></a>.</p>
+Obtained by calling <a class="reference internal" href="space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.getCamera()" title="krpc.client.services.SpaceCenter.SpaceCenter.getCamera()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">SpaceCenter.getCamera()</span></code></a>.</p>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Camera.getMode()">
- <a class="reference internal" href="#krpc.client.services.SpaceCenter.CameraMode" title="krpc.client.services.SpaceCenter.CameraMode"><span class="pre">CameraMode</span></a> <span class="sig-name descname"><span class="pre">getMode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.getMode()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.CameraMode" title="krpc.client.services.SpaceCenter.CameraMode"><span class="pre">CameraMode</span></a> <span class="sig-name descname"><span class="pre">getMode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.getMode()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Camera.setMode(CameraMode)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setMode</span></span><span class="sig-paren">(</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.CameraMode" title="krpc.client.services.SpaceCenter.CameraMode"><span class="pre">CameraMode</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.setMode(CameraMode)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setMode</span></span><span class="sig-paren">(</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.CameraMode" title="krpc.client.services.SpaceCenter.CameraMode"><span class="pre">CameraMode</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.setMode(CameraMode)" title="Link to this definition">#</a></dt>
 <dd><p>The current mode of the camera.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1125,7 +1126,7 @@ Obtained by calling <a class="reference internal" href="space-center.html#krpc.c
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Camera.nextCamera()">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">nextCamera</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.nextCamera()" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">nextCamera</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.nextCamera()" title="Link to this definition">#</a></dt>
 <dd><p>Switch to the next available camera.
 In flight, this moves to the next flight camera mode. In IVA, it moves the
 view to the next crew member in the active vessel.</p>
@@ -1138,7 +1139,7 @@ view to the next crew member in the active vessel.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Camera.previousCamera()">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">previousCamera</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.previousCamera()" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">previousCamera</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.previousCamera()" title="Link to this definition">#</a></dt>
 <dd><p>Switch to the previous available camera.
 In flight, this moves to the previous flight camera mode. In IVA, it moves
 the view to the previous crew member in the active vessel.</p>
@@ -1151,12 +1152,12 @@ the view to the previous crew member in the active vessel.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Camera.getPitch()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getPitch</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.getPitch()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getPitch</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.getPitch()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Camera.setPitch(float)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setPitch</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.setPitch(float)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setPitch</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.setPitch(float)" title="Link to this definition">#</a></dt>
 <dd><p>The pitch of the camera, in degrees.
 A value between <a class="reference internal" href="#krpc.client.services.SpaceCenter.Camera.getMinPitch()" title="krpc.client.services.SpaceCenter.Camera.getMinPitch()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Camera.getMinPitch()</span></code></a> and <a class="reference internal" href="#krpc.client.services.SpaceCenter.Camera.getMaxPitch()" title="krpc.client.services.SpaceCenter.Camera.getMaxPitch()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Camera.getMaxPitch()</span></code></a></p>
 <dl class="field-list simple">
@@ -1168,12 +1169,12 @@ A value between <a class="reference internal" href="#krpc.client.services.SpaceC
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Camera.getHeading()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getHeading</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.getHeading()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getHeading</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.getHeading()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Camera.setHeading(float)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setHeading</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.setHeading(float)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setHeading</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.setHeading(float)" title="Link to this definition">#</a></dt>
 <dd><p>The heading of the camera, in degrees.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1184,12 +1185,12 @@ A value between <a class="reference internal" href="#krpc.client.services.SpaceC
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Camera.getDistance()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getDistance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.getDistance()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getDistance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.getDistance()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Camera.setDistance(float)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setDistance</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.setDistance(float)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setDistance</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.setDistance(float)" title="Link to this definition">#</a></dt>
 <dd><p>The distance from the camera to the subject, in meters.
 A value between <a class="reference internal" href="#krpc.client.services.SpaceCenter.Camera.getMinDistance()" title="krpc.client.services.SpaceCenter.Camera.getMinDistance()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Camera.getMinDistance()</span></code></a> and <a class="reference internal" href="#krpc.client.services.SpaceCenter.Camera.getMaxDistance()" title="krpc.client.services.SpaceCenter.Camera.getMaxDistance()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Camera.getMaxDistance()</span></code></a>.</p>
 <dl class="field-list simple">
@@ -1201,12 +1202,12 @@ A value between <a class="reference internal" href="#krpc.client.services.SpaceC
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Camera.getFoV()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getFoV</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.getFoV()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getFoV</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.getFoV()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Camera.setFoV(float)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setFoV</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.setFoV(float)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setFoV</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.setFoV(float)" title="Link to this definition">#</a></dt>
 <dd><p>The Field of View of the camera, in degrees.
 A value between <a class="reference internal" href="#krpc.client.services.SpaceCenter.Camera.getMinFoV()" title="krpc.client.services.SpaceCenter.Camera.getMinFoV()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Camera.getMinFoV()</span></code></a> and <a class="reference internal" href="#krpc.client.services.SpaceCenter.Camera.getMaxFoV()" title="krpc.client.services.SpaceCenter.Camera.getMaxFoV()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Camera.getMaxFoV()</span></code></a>.</p>
 <dl class="field-list simple">
@@ -1218,7 +1219,7 @@ A value between <a class="reference internal" href="#krpc.client.services.SpaceC
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Camera.getMinPitch()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMinPitch</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.getMinPitch()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMinPitch</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.getMinPitch()" title="Link to this definition">#</a></dt>
 <dd><p>The minimum pitch of the camera.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1229,7 +1230,7 @@ A value between <a class="reference internal" href="#krpc.client.services.SpaceC
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Camera.getMaxPitch()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMaxPitch</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.getMaxPitch()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMaxPitch</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.getMaxPitch()" title="Link to this definition">#</a></dt>
 <dd><p>The maximum pitch of the camera.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1240,7 +1241,7 @@ A value between <a class="reference internal" href="#krpc.client.services.SpaceC
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Camera.getMinDistance()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMinDistance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.getMinDistance()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMinDistance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.getMinDistance()" title="Link to this definition">#</a></dt>
 <dd><p>Minimum distance from the camera to the subject, in meters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1251,7 +1252,7 @@ A value between <a class="reference internal" href="#krpc.client.services.SpaceC
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Camera.getMaxDistance()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMaxDistance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.getMaxDistance()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMaxDistance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.getMaxDistance()" title="Link to this definition">#</a></dt>
 <dd><p>Maximum distance from the camera to the subject, in meters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1262,7 +1263,7 @@ A value between <a class="reference internal" href="#krpc.client.services.SpaceC
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Camera.getMinFoV()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMinFoV</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.getMinFoV()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMinFoV</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.getMinFoV()" title="Link to this definition">#</a></dt>
 <dd><p>The minimum field of view the camera in degrees.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1273,7 +1274,7 @@ A value between <a class="reference internal" href="#krpc.client.services.SpaceC
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Camera.getMaxFoV()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMaxFoV</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.getMaxFoV()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMaxFoV</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.getMaxFoV()" title="Link to this definition">#</a></dt>
 <dd><p>The maximum field of view the camera in degrees.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1284,7 +1285,7 @@ A value between <a class="reference internal" href="#krpc.client.services.SpaceC
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Camera.getDefaultDistance()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getDefaultDistance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.getDefaultDistance()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getDefaultDistance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.getDefaultDistance()" title="Link to this definition">#</a></dt>
 <dd><p>Default distance from the camera to the subject, in meters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1295,7 +1296,7 @@ A value between <a class="reference internal" href="#krpc.client.services.SpaceC
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Camera.getDefaultFoV()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getDefaultFoV</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.getDefaultFoV()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getDefaultFoV</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.getDefaultFoV()" title="Link to this definition">#</a></dt>
 <dd><p>The default field of view the camera in degrees.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1306,12 +1307,12 @@ A value between <a class="reference internal" href="#krpc.client.services.SpaceC
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Camera.getFocussedBody()">
- <a class="reference internal" href="celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody" title="krpc.client.services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a> <span class="sig-name descname"><span class="pre">getFocussedBody</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.getFocussedBody()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody" title="krpc.client.services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a> <span class="sig-name descname"><span class="pre">getFocussedBody</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.getFocussedBody()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Camera.setFocussedBody(CelestialBody)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setFocussedBody</span></span><span class="sig-paren">(</span><a class="reference internal" href="celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody" title="krpc.client.services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.setFocussedBody(CelestialBody)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setFocussedBody</span></span><span class="sig-paren">(</span><a class="reference internal" href="celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody" title="krpc.client.services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.setFocussedBody(CelestialBody)" title="Link to this definition">#</a></dt>
 <dd><p>In map mode, the celestial body that the camera is focussed on.
 Returns <code class="docutils literal notranslate"><span class="pre">null</span></code> if the camera is not focussed on a celestial body.
 Throws <a class="reference internal" href="../krpc/krpc.html#krpc.client.services.KRPC.InvalidOperationException" title="krpc.client.services.KRPC.InvalidOperationException"><code class="xref java java-type docutils literal notranslate"><span class="pre">KRPC.InvalidOperationException</span></code></a> if the camera is not in map mode.</p>
@@ -1324,12 +1325,12 @@ Throws <a class="reference internal" href="../krpc/krpc.html#krpc.client.service
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Camera.getFocussedVessel()">
- <a class="reference internal" href="vessel.html#krpc.client.services.SpaceCenter.Vessel" title="krpc.client.services.SpaceCenter.Vessel"><span class="pre">Vessel</span></a> <span class="sig-name descname"><span class="pre">getFocussedVessel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.getFocussedVessel()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="vessel.html#krpc.client.services.SpaceCenter.Vessel" title="krpc.client.services.SpaceCenter.Vessel"><span class="pre">Vessel</span></a> <span class="sig-name descname"><span class="pre">getFocussedVessel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.getFocussedVessel()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Camera.setFocussedVessel(Vessel)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setFocussedVessel</span></span><span class="sig-paren">(</span><a class="reference internal" href="vessel.html#krpc.client.services.SpaceCenter.Vessel" title="krpc.client.services.SpaceCenter.Vessel"><span class="pre">Vessel</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.setFocussedVessel(Vessel)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setFocussedVessel</span></span><span class="sig-paren">(</span><a class="reference internal" href="vessel.html#krpc.client.services.SpaceCenter.Vessel" title="krpc.client.services.SpaceCenter.Vessel"><span class="pre">Vessel</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.setFocussedVessel(Vessel)" title="Link to this definition">#</a></dt>
 <dd><p>In map mode, the vessel that the camera is focussed on.
 Returns <code class="docutils literal notranslate"><span class="pre">null</span></code> if the camera is not focussed on a vessel.
 Throws <a class="reference internal" href="../krpc/krpc.html#krpc.client.services.KRPC.InvalidOperationException" title="krpc.client.services.KRPC.InvalidOperationException"><code class="xref java java-type docutils literal notranslate"><span class="pre">KRPC.InvalidOperationException</span></code></a> if the camera is not in map mode.</p>
@@ -1342,12 +1343,12 @@ Throws <a class="reference internal" href="../krpc/krpc.html#krpc.client.service
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Camera.getFocussedNode()">
- <a class="reference internal" href="node.html#krpc.client.services.SpaceCenter.Node" title="krpc.client.services.SpaceCenter.Node"><span class="pre">Node</span></a> <span class="sig-name descname"><span class="pre">getFocussedNode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.getFocussedNode()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="node.html#krpc.client.services.SpaceCenter.Node" title="krpc.client.services.SpaceCenter.Node"><span class="pre">Node</span></a> <span class="sig-name descname"><span class="pre">getFocussedNode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.getFocussedNode()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Camera.setFocussedNode(Node)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setFocussedNode</span></span><span class="sig-paren">(</span><a class="reference internal" href="node.html#krpc.client.services.SpaceCenter.Node" title="krpc.client.services.SpaceCenter.Node"><span class="pre">Node</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.setFocussedNode(Node)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setFocussedNode</span></span><span class="sig-paren">(</span><a class="reference internal" href="node.html#krpc.client.services.SpaceCenter.Node" title="krpc.client.services.SpaceCenter.Node"><span class="pre">Node</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.setFocussedNode(Node)" title="Link to this definition">#</a></dt>
 <dd><p>In map mode, the maneuver node that the camera is focussed on.
 Returns <code class="docutils literal notranslate"><span class="pre">null</span></code> if the camera is not focussed on a maneuver node.
 Throws <a class="reference internal" href="../krpc/krpc.html#krpc.client.services.KRPC.InvalidOperationException" title="krpc.client.services.KRPC.InvalidOperationException"><code class="xref java java-type docutils literal notranslate"><span class="pre">KRPC.InvalidOperationException</span></code></a> if the camera is not in map mode.</p>
@@ -1360,12 +1361,12 @@ Throws <a class="reference internal" href="../krpc/krpc.html#krpc.client.service
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Camera.getFocussedCrewMember()">
- <a class="reference internal" href="vessel.html#krpc.client.services.SpaceCenter.CrewMember" title="krpc.client.services.SpaceCenter.CrewMember"><span class="pre">CrewMember</span></a> <span class="sig-name descname"><span class="pre">getFocussedCrewMember</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.getFocussedCrewMember()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="vessel.html#krpc.client.services.SpaceCenter.CrewMember" title="krpc.client.services.SpaceCenter.CrewMember"><span class="pre">CrewMember</span></a> <span class="sig-name descname"><span class="pre">getFocussedCrewMember</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.getFocussedCrewMember()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Camera.setFocussedCrewMember(CrewMember)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setFocussedCrewMember</span></span><span class="sig-paren">(</span><a class="reference internal" href="vessel.html#krpc.client.services.SpaceCenter.CrewMember" title="krpc.client.services.SpaceCenter.CrewMember"><span class="pre">CrewMember</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.setFocussedCrewMember(CrewMember)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setFocussedCrewMember</span></span><span class="sig-paren">(</span><a class="reference internal" href="vessel.html#krpc.client.services.SpaceCenter.CrewMember" title="krpc.client.services.SpaceCenter.CrewMember"><span class="pre">CrewMember</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Camera.setFocussedCrewMember(CrewMember)" title="Link to this definition">#</a></dt>
 <dd><p>In IVA mode, the crew member whose view the camera is showing.
 Returns <code class="docutils literal notranslate"><span class="pre">null</span></code> if no crew member is in view.
 Throws <a class="reference internal" href="../krpc/krpc.html#krpc.client.services.KRPC.InvalidOperationException" title="krpc.client.services.KRPC.InvalidOperationException"><code class="xref java java-type docutils literal notranslate"><span class="pre">KRPC.InvalidOperationException</span></code></a> if the camera is not in IVA mode.

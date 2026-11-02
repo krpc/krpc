@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=eadf7411" />
   
@@ -1106,40 +1107,40 @@
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ContractManager">
 <span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">ContractManager</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ContractManager" title="Link to this definition">#</a></dt>
 <dd><p>Contracts manager.
-Obtained by calling <a class="reference internal" href="space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.getContractManager()" title="krpc.client.services.SpaceCenter.SpaceCenter.getContractManager()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">getContractManager()</span></code></a>.</p>
+Obtained by calling <a class="reference internal" href="space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.getContractManager()" title="krpc.client.services.SpaceCenter.SpaceCenter.getContractManager()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">SpaceCenter.getContractManager()</span></code></a>.</p>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ContractManager.getTypes()">
- <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="java.util.Set"><span class="pre">Set</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getTypes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ContractManager.getTypes()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="java.util.Set"><span class="pre">Set</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getTypes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ContractManager.getTypes()" title="Link to this definition">#</a></dt>
 <dd><p>A list of all contract types.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ContractManager.getAllContracts()">
- <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.Contract" title="krpc.client.services.SpaceCenter.Contract"><span class="pre">Contract</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getAllContracts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ContractManager.getAllContracts()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.Contract" title="krpc.client.services.SpaceCenter.Contract"><span class="pre">Contract</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getAllContracts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ContractManager.getAllContracts()" title="Link to this definition">#</a></dt>
 <dd><p>A list of all contracts.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ContractManager.getActiveContracts()">
- <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.Contract" title="krpc.client.services.SpaceCenter.Contract"><span class="pre">Contract</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getActiveContracts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ContractManager.getActiveContracts()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.Contract" title="krpc.client.services.SpaceCenter.Contract"><span class="pre">Contract</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getActiveContracts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ContractManager.getActiveContracts()" title="Link to this definition">#</a></dt>
 <dd><p>A list of all active contracts.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ContractManager.getOfferedContracts()">
- <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.Contract" title="krpc.client.services.SpaceCenter.Contract"><span class="pre">Contract</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getOfferedContracts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ContractManager.getOfferedContracts()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.Contract" title="krpc.client.services.SpaceCenter.Contract"><span class="pre">Contract</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getOfferedContracts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ContractManager.getOfferedContracts()" title="Link to this definition">#</a></dt>
 <dd><p>A list of all offered, but unaccepted, contracts.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ContractManager.getCompletedContracts()">
- <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.Contract" title="krpc.client.services.SpaceCenter.Contract"><span class="pre">Contract</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getCompletedContracts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ContractManager.getCompletedContracts()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.Contract" title="krpc.client.services.SpaceCenter.Contract"><span class="pre">Contract</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getCompletedContracts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ContractManager.getCompletedContracts()" title="Link to this definition">#</a></dt>
 <dd><p>A list of all completed contracts.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ContractManager.getFailedContracts()">
- <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.Contract" title="krpc.client.services.SpaceCenter.Contract"><span class="pre">Contract</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getFailedContracts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ContractManager.getFailedContracts()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.Contract" title="krpc.client.services.SpaceCenter.Contract"><span class="pre">Contract</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getFailedContracts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ContractManager.getFailedContracts()" title="Link to this definition">#</a></dt>
 <dd><p>A list of all failed contracts.</p>
 </dd></dl>
 
@@ -1148,175 +1149,175 @@ Obtained by calling <a class="reference internal" href="space-center.html#krpc.c
 <dl class="java type">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Contract">
 <span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">Contract</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract" title="Link to this definition">#</a></dt>
-<dd><p>A contract. Can be accessed using <a class="reference internal" href="space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.getContractManager()" title="krpc.client.services.SpaceCenter.SpaceCenter.getContractManager()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">getContractManager()</span></code></a>.</p>
+<dd><p>A contract. Can be accessed using <a class="reference internal" href="space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.getContractManager()" title="krpc.client.services.SpaceCenter.SpaceCenter.getContractManager()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">SpaceCenter.getContractManager()</span></code></a>.</p>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Contract.getType()">
- <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getType</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getType()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getType</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getType()" title="Link to this definition">#</a></dt>
 <dd><p>Type of the contract.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Contract.getTitle()">
- <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getTitle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getTitle()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getTitle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getTitle()" title="Link to this definition">#</a></dt>
 <dd><p>Title of the contract.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Contract.getDescription()">
- <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getDescription</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getDescription()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getDescription</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getDescription()" title="Link to this definition">#</a></dt>
 <dd><p>Description of the contract.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Contract.getNotes()">
- <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getNotes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getNotes()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getNotes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getNotes()" title="Link to this definition">#</a></dt>
 <dd><p>Notes for the contract.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Contract.getSynopsis()">
- <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getSynopsis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getSynopsis()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getSynopsis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getSynopsis()" title="Link to this definition">#</a></dt>
 <dd><p>Synopsis for the contract.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Contract.getKeywords()">
- <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getKeywords</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getKeywords()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getKeywords</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getKeywords()" title="Link to this definition">#</a></dt>
 <dd><p>Keywords for the contract.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Contract.getState()">
- <a class="reference internal" href="#krpc.client.services.SpaceCenter.ContractState" title="krpc.client.services.SpaceCenter.ContractState"><span class="pre">ContractState</span></a> <span class="sig-name descname"><span class="pre">getState</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getState()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.ContractState" title="krpc.client.services.SpaceCenter.ContractState"><span class="pre">ContractState</span></a> <span class="sig-name descname"><span class="pre">getState</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getState()" title="Link to this definition">#</a></dt>
 <dd><p>State of the contract.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Contract.getSeen()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getSeen</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getSeen()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getSeen</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getSeen()" title="Link to this definition">#</a></dt>
 <dd><p>Whether the contract has been seen.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Contract.getRead()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getRead</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getRead()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getRead</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getRead()" title="Link to this definition">#</a></dt>
 <dd><p>Whether the contract has been read.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Contract.getActive()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getActive</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getActive()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getActive</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getActive()" title="Link to this definition">#</a></dt>
 <dd><p>Whether the contract is active.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Contract.getFailed()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getFailed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getFailed()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getFailed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getFailed()" title="Link to this definition">#</a></dt>
 <dd><p>Whether the contract has been failed.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Contract.getCanBeCanceled()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getCanBeCanceled</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getCanBeCanceled()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getCanBeCanceled</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getCanBeCanceled()" title="Link to this definition">#</a></dt>
 <dd><p>Whether the contract can be canceled.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Contract.getCanBeDeclined()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getCanBeDeclined</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getCanBeDeclined()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getCanBeDeclined</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getCanBeDeclined()" title="Link to this definition">#</a></dt>
 <dd><p>Whether the contract can be declined.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Contract.getCanBeFailed()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getCanBeFailed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getCanBeFailed()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getCanBeFailed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getCanBeFailed()" title="Link to this definition">#</a></dt>
 <dd><p>Whether the contract can be failed.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Contract.accept()">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">accept</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.accept()" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">accept</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.accept()" title="Link to this definition">#</a></dt>
 <dd><p>Accept an offered contract.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Contract.cancel()">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">cancel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.cancel()" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">cancel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.cancel()" title="Link to this definition">#</a></dt>
 <dd><p>Cancel an active contract.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Contract.decline()">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">decline</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.decline()" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">decline</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.decline()" title="Link to this definition">#</a></dt>
 <dd><p>Decline an offered contract.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Contract.getFundsAdvance()">
- <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getFundsAdvance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getFundsAdvance()" title="Link to this definition">#</a></dt>
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getFundsAdvance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getFundsAdvance()" title="Link to this definition">#</a></dt>
 <dd><p>Funds received when accepting the contract.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Contract.getFundsCompletion()">
- <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getFundsCompletion</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getFundsCompletion()" title="Link to this definition">#</a></dt>
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getFundsCompletion</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getFundsCompletion()" title="Link to this definition">#</a></dt>
 <dd><p>Funds received on completion of the contract.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Contract.getFundsFailure()">
- <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getFundsFailure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getFundsFailure()" title="Link to this definition">#</a></dt>
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getFundsFailure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getFundsFailure()" title="Link to this definition">#</a></dt>
 <dd><p>Funds lost if the contract is failed.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Contract.getReputationCompletion()">
- <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getReputationCompletion</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getReputationCompletion()" title="Link to this definition">#</a></dt>
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getReputationCompletion</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getReputationCompletion()" title="Link to this definition">#</a></dt>
 <dd><p>Reputation gained on completion of the contract.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Contract.getReputationFailure()">
- <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getReputationFailure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getReputationFailure()" title="Link to this definition">#</a></dt>
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getReputationFailure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getReputationFailure()" title="Link to this definition">#</a></dt>
 <dd><p>Reputation lost if the contract is failed.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Contract.getScienceCompletion()">
- <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getScienceCompletion</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getScienceCompletion()" title="Link to this definition">#</a></dt>
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getScienceCompletion</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getScienceCompletion()" title="Link to this definition">#</a></dt>
 <dd><p>Science gained on completion of the contract.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Contract.getParameters()">
- <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.ContractParameter" title="krpc.client.services.SpaceCenter.ContractParameter"><span class="pre">ContractParameter</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getParameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getParameters()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.ContractParameter" title="krpc.client.services.SpaceCenter.ContractParameter"><span class="pre">ContractParameter</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getParameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getParameters()" title="Link to this definition">#</a></dt>
 <dd><p>Parameters for the contract.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Contract.getDateAccepted()">
- <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getDateAccepted</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getDateAccepted()" title="Link to this definition">#</a></dt>
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getDateAccepted</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getDateAccepted()" title="Link to this definition">#</a></dt>
 <dd><p>Universal time at which the contract was accepted, in seconds.
 Zero if the contract has not been accepted.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Contract.getDateDeadline()">
- <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getDateDeadline</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getDateDeadline()" title="Link to this definition">#</a></dt>
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getDateDeadline</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getDateDeadline()" title="Link to this definition">#</a></dt>
 <dd><p>Universal time by which the contract must be completed, in seconds.
 Zero if the contract has no deadline.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Contract.getDateExpire()">
- <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getDateExpire</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getDateExpire()" title="Link to this definition">#</a></dt>
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getDateExpire</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getDateExpire()" title="Link to this definition">#</a></dt>
 <dd><p>Universal time at which the contract offer expires, in seconds.
 Zero if the contract has no expiry date.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Contract.getDateFinished()">
- <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getDateFinished</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getDateFinished()" title="Link to this definition">#</a></dt>
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getDateFinished</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getDateFinished()" title="Link to this definition">#</a></dt>
 <dd><p>Universal time at which the contract was completed or failed, in seconds.
 Zero if the contract has not finished or KSP did not record a finish time.</p>
 </dd></dl>
@@ -1395,67 +1396,67 @@ Zero if the contract has not finished or KSP did not record a finish time.</p>
 <dd><p>A contract parameter. See <a class="reference internal" href="#krpc.client.services.SpaceCenter.Contract.getParameters()" title="krpc.client.services.SpaceCenter.Contract.getParameters()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Contract.getParameters()</span></code></a>.</p>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ContractParameter.getTitle()">
- <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getTitle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ContractParameter.getTitle()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getTitle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ContractParameter.getTitle()" title="Link to this definition">#</a></dt>
 <dd><p>Title of the parameter.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ContractParameter.getNotes()">
- <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getNotes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ContractParameter.getNotes()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getNotes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ContractParameter.getNotes()" title="Link to this definition">#</a></dt>
 <dd><p>Notes for the parameter.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ContractParameter.getChildren()">
- <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.ContractParameter" title="krpc.client.services.SpaceCenter.ContractParameter"><span class="pre">ContractParameter</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getChildren</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ContractParameter.getChildren()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.ContractParameter" title="krpc.client.services.SpaceCenter.ContractParameter"><span class="pre">ContractParameter</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getChildren</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ContractParameter.getChildren()" title="Link to this definition">#</a></dt>
 <dd><p>Child contract parameters.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ContractParameter.getCompleted()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getCompleted</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ContractParameter.getCompleted()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getCompleted</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ContractParameter.getCompleted()" title="Link to this definition">#</a></dt>
 <dd><p>Whether the parameter has been completed.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ContractParameter.getFailed()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getFailed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ContractParameter.getFailed()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getFailed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ContractParameter.getFailed()" title="Link to this definition">#</a></dt>
 <dd><p>Whether the parameter has been failed.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ContractParameter.getOptional()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getOptional</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ContractParameter.getOptional()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getOptional</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ContractParameter.getOptional()" title="Link to this definition">#</a></dt>
 <dd><p>Whether the contract parameter is optional.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ContractParameter.getFundsCompletion()">
- <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getFundsCompletion</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ContractParameter.getFundsCompletion()" title="Link to this definition">#</a></dt>
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getFundsCompletion</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ContractParameter.getFundsCompletion()" title="Link to this definition">#</a></dt>
 <dd><p>Funds received on completion of the contract parameter.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ContractParameter.getFundsFailure()">
- <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getFundsFailure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ContractParameter.getFundsFailure()" title="Link to this definition">#</a></dt>
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getFundsFailure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ContractParameter.getFundsFailure()" title="Link to this definition">#</a></dt>
 <dd><p>Funds lost if the contract parameter is failed.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ContractParameter.getReputationCompletion()">
- <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getReputationCompletion</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ContractParameter.getReputationCompletion()" title="Link to this definition">#</a></dt>
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getReputationCompletion</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ContractParameter.getReputationCompletion()" title="Link to this definition">#</a></dt>
 <dd><p>Reputation gained on completion of the contract parameter.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ContractParameter.getReputationFailure()">
- <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getReputationFailure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ContractParameter.getReputationFailure()" title="Link to this definition">#</a></dt>
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getReputationFailure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ContractParameter.getReputationFailure()" title="Link to this definition">#</a></dt>
 <dd><p>Reputation lost if the contract parameter is failed.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ContractParameter.getScienceCompletion()">
- <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getScienceCompletion</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ContractParameter.getScienceCompletion()" title="Link to this definition">#</a></dt>
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getScienceCompletion</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ContractParameter.getScienceCompletion()" title="Link to this definition">#</a></dt>
 <dd><p>Science gained on completion of the contract parameter.</p>
 </dd></dl>
 

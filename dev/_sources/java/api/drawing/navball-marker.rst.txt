@@ -8,7 +8,7 @@ NavballMarker
 
 .. type:: public class NavballMarker
 
-   A marker drawn on the navball. Created using :meth:`addNavballMarker(org.javatuples.Triplet<Double,Double,Double>, SpaceCenter.ReferenceFrame, boolean)`.
+   A marker drawn on the navball. Created using :meth:`Drawing.addNavballMarker(org.javatuples.Triplet<Double,Double,Double>, SpaceCenter.ReferenceFrame, boolean)`.
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> getDirection()
 

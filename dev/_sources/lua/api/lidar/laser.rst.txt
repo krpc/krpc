@@ -15,7 +15,6 @@ Laser
       Get the part containing this LiDAR.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Part`
 
    .. attribute:: cloud: List
 
@@ -23,4 +22,3 @@ Laser
       Returns an empty list on failure.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List

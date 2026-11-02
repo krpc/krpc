@@ -8,7 +8,7 @@ Image
 
 .. type:: public class Image
 
-   An image that markers can be drawn with. Created using :meth:`addImage(byte[])`.
+   An image that markers can be drawn with. Created using :meth:`Drawing.addImage(byte[])`.
 
    .. note::
 

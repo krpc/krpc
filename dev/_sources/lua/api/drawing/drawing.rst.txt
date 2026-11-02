@@ -18,92 +18,85 @@ and the tracking station.
 
 
 
-.. staticmethod:: add_line(start, end, reference_frame, [visible = true])
+.. staticmethod:: add_line(start: Tuple, end: Tuple, reference_frame: SpaceCenter.ReferenceFrame, visible?: boolean): Drawing.Line
 
    Draw a line in the scene.
 
-   :param Tuple start: Position of the start of the line.
-   :param Tuple end: Position of the end of the line.
-   :param SpaceCenter.ReferenceFrame reference_frame: Reference frame that the positions are in.
-   :param boolean visible: Whether the line is visible.
-   :rtype: :class:`Drawing.Line`
+   :param start: Position of the start of the line.
+   :param end: Position of the end of the line.
+   :param reference_frame: Reference frame that the positions are in.
+   :param visible: Whether the line is visible. Defaults to ``true``.
 
 
 
 
-.. staticmethod:: add_direction(direction, reference_frame, [length = 1e+01], [visible = true])
+.. staticmethod:: add_direction(direction: Tuple, reference_frame: SpaceCenter.ReferenceFrame, length?: number, visible?: boolean): Drawing.Line
 
    Draw a direction vector in the scene, starting from the origin of the given reference frame.
 
-   :param Tuple direction: Direction to draw the line in.
-   :param SpaceCenter.ReferenceFrame reference_frame: Reference frame that the direction is in and defines the start position.
-   :param number length: The length of the line.
-   :param boolean visible: Whether the line is visible.
-   :rtype: :class:`Drawing.Line`
+   :param direction: Direction to draw the line in.
+   :param reference_frame: Reference frame that the direction is in and defines the start position.
+   :param length: The length of the line. Defaults to ``1e+01``.
+   :param visible: Whether the line is visible. Defaults to ``true``.
 
 
 
 
-.. staticmethod:: add_direction_from_com(direction, reference_frame, [length = 1e+01], [visible = true])
+.. staticmethod:: add_direction_from_com(direction: Tuple, reference_frame: SpaceCenter.ReferenceFrame, length?: number, visible?: boolean): Drawing.Line
 
    Draw a direction vector in the scene, from the center of mass of the active vessel.
 
-   :param Tuple direction: Direction to draw the line in.
-   :param SpaceCenter.ReferenceFrame reference_frame: Reference frame that the direction is in.
-   :param number length: The length of the line.
-   :param boolean visible: Whether the line is visible.
-   :rtype: :class:`Drawing.Line`
+   :param direction: Direction to draw the line in.
+   :param reference_frame: Reference frame that the direction is in.
+   :param length: The length of the line. Defaults to ``1e+01``.
+   :param visible: Whether the line is visible. Defaults to ``true``.
 
 
 
 
-.. staticmethod:: add_axes(reference_frame, [length = 1e+01], [visible = true])
+.. staticmethod:: add_axes(reference_frame: SpaceCenter.ReferenceFrame, length?: number, visible?: boolean): List
 
    Draw the axes of a reference frame in the scene, as arrows from its origin.
 
-   :param SpaceCenter.ReferenceFrame reference_frame: The reference frame.
-   :param number length: The length of each axis.
-   :param boolean visible: Whether the axes are visible.
+   :param reference_frame: The reference frame.
+   :param length: The length of each axis. Defaults to ``1e+01``.
+   :param visible: Whether the axes are visible. Defaults to ``true``.
    :returns: The lines for the x, y and z axes, colored red, green and blue.
-   :rtype: List
 
 
 
 
-.. staticmethod:: add_polygon(vertices, reference_frame, [visible = true])
+.. staticmethod:: add_polygon(vertices: List, reference_frame: SpaceCenter.ReferenceFrame, visible?: boolean): Drawing.Polygon
 
    Draw a polygon in the scene, defined by a list of vertices.
 
-   :param List vertices: Vertices of the polygon.
-   :param SpaceCenter.ReferenceFrame reference_frame: Reference frame that the vertices are in.
-   :param boolean visible: Whether the polygon is visible.
-   :rtype: :class:`Drawing.Polygon`
+   :param vertices: Vertices of the polygon.
+   :param reference_frame: Reference frame that the vertices are in.
+   :param visible: Whether the polygon is visible. Defaults to ``true``.
 
 
 
 
-.. staticmethod:: add_polyline(vertices, reference_frame, [visible = true])
+.. staticmethod:: add_polyline(vertices: List, reference_frame: SpaceCenter.ReferenceFrame, visible?: boolean): Drawing.Polyline
 
    Draw an open line through a list of vertices in the scene.
 
-   :param List vertices: Vertices of the line.
-   :param SpaceCenter.ReferenceFrame reference_frame: Reference frame that the vertices are in.
-   :param boolean visible: Whether the line is visible.
-   :rtype: :class:`Drawing.Polyline`
+   :param vertices: Vertices of the line.
+   :param reference_frame: Reference frame that the vertices are in.
+   :param visible: Whether the line is visible. Defaults to ``true``.
 
 
 
 
-.. staticmethod:: add_circle(center, normal, radius, reference_frame, [visible = true])
+.. staticmethod:: add_circle(center: Tuple, normal: Tuple, radius: number, reference_frame: SpaceCenter.ReferenceFrame, visible?: boolean): Drawing.Circle
 
    Draw a circle in the scene.
 
-   :param Tuple center: Position of the center of the circle.
-   :param Tuple normal: Normal of the plane of the circle.
-   :param number radius: Radius of the circle, in meters.
-   :param SpaceCenter.ReferenceFrame reference_frame: Reference frame that the position and normal are in.
-   :param boolean visible: Whether the circle is visible.
-   :rtype: :class:`Drawing.Circle`
+   :param center: Position of the center of the circle.
+   :param normal: Normal of the plane of the circle.
+   :param radius: Radius of the circle, in meters.
+   :param reference_frame: Reference frame that the position and normal are in.
+   :param visible: Whether the circle is visible. Defaults to ``true``.
 
    .. note::
 
@@ -112,18 +105,17 @@ and the tracking station.
 
 
 
-.. staticmethod:: add_arc(center, normal, start_direction, angle, radius, reference_frame, [visible = true])
+.. staticmethod:: add_arc(center: Tuple, normal: Tuple, start_direction: Tuple, angle: number, radius: number, reference_frame: SpaceCenter.ReferenceFrame, visible?: boolean): Drawing.Arc
 
    Draw an arc of a circle in the scene.
 
-   :param Tuple center: Position of the center of the arc.
-   :param Tuple normal: Normal of the plane of the arc.
-   :param Tuple start_direction: Direction from the center to the start of the arc.
-   :param number angle: Angle of the arc, in radians.
-   :param number radius: Radius of the arc, in meters.
-   :param SpaceCenter.ReferenceFrame reference_frame: Reference frame that the position and directions are in.
-   :param boolean visible: Whether the arc is visible.
-   :rtype: :class:`Drawing.Arc`
+   :param center: Position of the center of the arc.
+   :param normal: Normal of the plane of the arc.
+   :param start_direction: Direction from the center to the start of the arc.
+   :param angle: Angle of the arc, in radians.
+   :param radius: Radius of the arc, in meters.
+   :param reference_frame: Reference frame that the position and directions are in.
+   :param visible: Whether the arc is visible. Defaults to ``true``.
 
    .. note::
 
@@ -133,13 +125,12 @@ and the tracking station.
 
 
 
-.. staticmethod:: add_orbit(orbit, [visible = true])
+.. staticmethod:: add_orbit(orbit: SpaceCenter.Orbit, visible?: boolean): Drawing.OrbitPath
 
    Draw the path of an orbit in the scene.
 
-   :param SpaceCenter.Orbit orbit: The orbit.
-   :param boolean visible: Whether the path is visible.
-   :rtype: :class:`Drawing.OrbitPath`
+   :param orbit: The orbit.
+   :param visible: Whether the path is visible. Defaults to ``true``.
 
    .. note::
 
@@ -149,92 +140,85 @@ and the tracking station.
 
 
 
-.. staticmethod:: add_point(position, reference_frame, [visible = true])
+.. staticmethod:: add_point(position: Tuple, reference_frame: SpaceCenter.ReferenceFrame, visible?: boolean): Drawing.Point
 
    Draw a point in the scene, as a dot that keeps its size on screen.
 
-   :param Tuple position: Position of the point.
-   :param SpaceCenter.ReferenceFrame reference_frame: Reference frame that the position is in.
-   :param boolean visible: Whether the point is visible.
-   :rtype: :class:`Drawing.Point`
+   :param position: Position of the point.
+   :param reference_frame: Reference frame that the position is in.
+   :param visible: Whether the point is visible. Defaults to ``true``.
 
 
 
 
-.. staticmethod:: add_box(center, size, reference_frame, [rotation = {0.0, 0.0, 0.0, 1.0}], [visible = true])
+.. staticmethod:: add_box(center: Tuple, size: Tuple, reference_frame: SpaceCenter.ReferenceFrame, rotation?: Tuple, visible?: boolean): Drawing.Box
 
    Draw the edges of a box in the scene.
 
-   :param Tuple center: Position of the center of the box.
-   :param Tuple size: Lengths of the sides of the box along its x, y and z axes, in meters.
-   :param SpaceCenter.ReferenceFrame reference_frame: Reference frame that the position and rotation are in.
-   :param Tuple rotation: Rotation of the box, as a quaternion.
-   :param boolean visible: Whether the box is visible.
-   :rtype: :class:`Drawing.Box`
+   :param center: Position of the center of the box.
+   :param size: Lengths of the sides of the box along its x, y and z axes, in meters.
+   :param reference_frame: Reference frame that the position and rotation are in.
+   :param rotation: Rotation of the box, as a quaternion. Defaults to ``{0.0, 0.0, 0.0, 1.0}``.
+   :param visible: Whether the box is visible. Defaults to ``true``.
 
 
 
 
-.. staticmethod:: add_sphere(center, radius, reference_frame, [visible = true])
+.. staticmethod:: add_sphere(center: Tuple, radius: number, reference_frame: SpaceCenter.ReferenceFrame, visible?: boolean): Drawing.Sphere
 
    Draw a solid sphere in the scene.
 
-   :param Tuple center: Position of the center of the sphere.
-   :param number radius: Radius of the sphere, in meters.
-   :param SpaceCenter.ReferenceFrame reference_frame: Reference frame that the position is in.
-   :param boolean visible: Whether the sphere is visible.
-   :rtype: :class:`Drawing.Sphere`
+   :param center: Position of the center of the sphere.
+   :param radius: Radius of the sphere, in meters.
+   :param reference_frame: Reference frame that the position is in.
+   :param visible: Whether the sphere is visible. Defaults to ``true``.
 
 
 
 
-.. staticmethod:: add_text(text, reference_frame, position, rotation, [visible = true])
+.. staticmethod:: add_text(text: string, reference_frame: SpaceCenter.ReferenceFrame, position: Tuple, rotation: Tuple, visible?: boolean): Drawing.Text
 
    Draw text in the scene.
 
-   :param string text: The string to draw.
-   :param SpaceCenter.ReferenceFrame reference_frame: Reference frame that the text position is in.
-   :param Tuple position: Position of the text.
-   :param Tuple rotation: Rotation of the text, as a quaternion.
-   :param boolean visible: Whether the text is visible.
-   :rtype: :class:`Drawing.Text`
+   :param text: The string to draw.
+   :param reference_frame: Reference frame that the text position is in.
+   :param position: Position of the text.
+   :param rotation: Rotation of the text, as a quaternion.
+   :param visible: Whether the text is visible. Defaults to ``true``.
 
 
 
 
-.. staticmethod:: add_navball_marker(direction, reference_frame, [visible = true])
+.. staticmethod:: add_navball_marker(direction: Tuple, reference_frame: SpaceCenter.ReferenceFrame, visible?: boolean): Drawing.NavballMarker
 
    Draw a marker on the navball, pointing in the given direction.
 
-   :param Tuple direction: Direction that the marker points in.
-   :param SpaceCenter.ReferenceFrame reference_frame: Reference frame that the direction is in.
-   :param boolean visible: Whether the marker is visible.
-   :rtype: :class:`Drawing.NavballMarker`
+   :param direction: Direction that the marker points in.
+   :param reference_frame: Reference frame that the direction is in.
+   :param visible: Whether the marker is visible. Defaults to ``true``.
 
 
 
 
-.. staticmethod:: add_map_marker(position, reference_frame, [icon = Drawing.MapMarkerIcon.generic], [caption = ''], [visible = true])
+.. staticmethod:: add_map_marker(position: Tuple, reference_frame: SpaceCenter.ReferenceFrame, icon?: Drawing.MapMarkerIcon, caption?: string, visible?: boolean): Drawing.MapMarker
 
    Draw a marker in the map view, with one of the game's own map icons.
 
-   :param Tuple position: Position of the marker.
-   :param SpaceCenter.ReferenceFrame reference_frame: Reference frame that the position is in.
-   :param Drawing.MapMarkerIcon icon: The icon that the marker is drawn with.
-   :param string caption: The caption shown when the mouse is over the marker.
-   :param boolean visible: Whether the marker is visible.
-   :rtype: :class:`Drawing.MapMarker`
+   :param position: Position of the marker.
+   :param reference_frame: Reference frame that the position is in.
+   :param icon: The icon that the marker is drawn with. Defaults to ``Drawing.MapMarkerIcon.generic``.
+   :param caption: The caption shown when the mouse is over the marker. Defaults to ``''``.
+   :param visible: Whether the marker is visible. Defaults to ``true``.
 
 
 
 
-.. staticmethod:: add_image(data)
+.. staticmethod:: add_image(data: string): Drawing.Image
 
    Load an image that markers can be drawn with, from the contents of a PNG or JPEG
    file. The transparency of a PNG image is kept.
 
-   :param string data: The contents of the image file.
-   :rtype: :class:`Drawing.Image`
+   :param data: The contents of the image file.
 
    .. note::
 
@@ -243,8 +227,8 @@ and the tracking station.
 
 
 
-.. staticmethod:: clear([client_only = false])
+.. staticmethod:: clear(client_only?: boolean)
 
    Remove all objects being drawn.
 
-   :param boolean client_only: If true, only remove objects created by the calling client.
+   :param client_only: If true, only remove objects created by the calling client. Defaults to ``false``.

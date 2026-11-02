@@ -10,7 +10,7 @@ Vessel
 
    These objects are used to interact with vessels in KSP. This includes getting
    orbital and flight data, manipulating control inputs and managing resources.
-   Created using :meth:`getActiveVessel()` or :meth:`getVessels()`.
+   Created using :meth:`SpaceCenter.getActiveVessel()` or :meth:`SpaceCenter.getVessels()`.
 
    .. method:: String getName()
 
@@ -151,7 +151,7 @@ Vessel
 
    .. method:: Flight flight(ReferenceFrame referenceFrame)
 
-      Returns a :meth:`Vessel.flight(ReferenceFrame)` object that can be used to get flight
+      Returns a :type:`Flight` object that can be used to get flight
       telemetry for the vessel, in the specified reference frame.
 
       :param ReferenceFrame referenceFrame: Reference frame. Defaults to the vessel's surface reference frame (:meth:`Vessel.getSurfaceReferenceFrame()`).
@@ -830,7 +830,7 @@ Vessel
          :meth:`Flight.getSpeed()` is the speed it displays, and :meth:`Flight.getVelocity()`
          points along the y-axis, towards its prograde marker.
          The target is the one set for the active vessel, via for example
-         :meth:`getTargetVessel()` or :meth:`getTargetBody()`.
+         :meth:`SpaceCenter.getTargetVessel()` or :meth:`SpaceCenter.getTargetBody()`.
          This is undefined when no target is set. The velocity gives the frame its orientation,
          so it is also singular, and raises an error, when the vessel matches the velocity of
          its target.

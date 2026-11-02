@@ -16,14 +16,10 @@ LaserDist service.
    Check if the LaserDist API is available.
 
    :Attribute: Read-only, cannot be set
-   :rtype: boolean
 
 
 
 
-.. staticmethod:: laser(part)
+.. staticmethod:: laser(part: SpaceCenter.Part): LIDAR.Laser
 
    Get a LaserDist part.
-
-   :param SpaceCenter.Part part:
-   :rtype: :class:`LIDAR.Laser`

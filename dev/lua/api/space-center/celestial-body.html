@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=eadf7411" />
   
@@ -1104,69 +1105,57 @@
   <section id="celestialbody">
 <h1>CelestialBody<a class="headerlink" href="#celestialbody" title="Link to this heading">#</a></h1>
 <dl class="lua class">
-<dt class="sig sig-object lua" id="SpaceCenter.CelestialBody">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">SpaceCenter.</span></span><span class="sig-name descname"><span class="pre">CelestialBody</span></span><a class="headerlink" href="#SpaceCenter.CelestialBody" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">SpaceCenter.</span></span><span class="sig-name descname"><span class="pre">CelestialBody</span></span><a class="headerlink" href="#lua-SpaceCenter.CelestialBody" title="Link to this definition">#</a></dt>
 <dd><p>Represents a celestial body (such as a planet or moon).
-See <a class="reference internal" href="space-center.html#SpaceCenter.SpaceCenter.bodies" title="SpaceCenter.SpaceCenter.bodies"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.bodies</span></code></a>.</p>
+See <a class="reference internal" href="space-center.html#lua-SpaceCenter.bodies" title="SpaceCenter.bodies"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.bodies</span></code></a>.</p>
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.CelestialBody.name">
-<span class="sig-name descname"><span class="pre">name</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">string</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.CelestialBody.name" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.name">
+<span class="sig-name descname"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.name" title="Link to this definition">#</a></dt>
 <dd><p>The name of the body.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.CelestialBody.satellites">
-<span class="sig-name descname"><span class="pre">satellites</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">List</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.CelestialBody.satellites" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.satellites">
+<span class="sig-name descname"><span class="pre">satellites</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">List</span></code><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.satellites" title="Link to this definition">#</a></dt>
 <dd><p>A list of celestial bodies that are in orbit around this celestial body.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">List</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.CelestialBody.orbit">
-<span class="sig-name descname"><span class="pre">orbit</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.Orbit</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.CelestialBody.orbit" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.orbit">
+<span class="sig-name descname"><span class="pre">orbit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="orbit.html#lua-SpaceCenter.Orbit" title="SpaceCenter.Orbit"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.Orbit</span></code></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../../lua.html#lua-krpc.Types.none" title="krpc.Types.none"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Types.none</span></code></a><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.orbit" title="Link to this definition">#</a></dt>
 <dd><p>The orbit of the body.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="orbit.html#SpaceCenter.Orbit" title="SpaceCenter.Orbit"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.Orbit</span></code></a> or <code class="docutils literal notranslate"><span class="pre">Types.none</span></code></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.CelestialBody.mass">
-<span class="sig-name descname"><span class="pre">mass</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.CelestialBody.mass" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.mass">
+<span class="sig-name descname"><span class="pre">mass</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.mass" title="Link to this definition">#</a></dt>
 <dd><p>The mass of the body, in kilograms.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.CelestialBody.gravitational_parameter">
-<span class="sig-name descname"><span class="pre">gravitational_parameter</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.CelestialBody.gravitational_parameter" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.gravitational_parameter">
+<span class="sig-name descname"><span class="pre">gravitational_parameter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.gravitational_parameter" title="Link to this definition">#</a></dt>
 <dd><p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Standard_gravitational_parameter">standard gravitational parameter</a> of the body in <span class="math notranslate nohighlight">\(\mathrm{m^{3} \cdot s^{-2}}\)</span>.
 This is <span class="math notranslate nohighlight">\(GM\)</span>, where <span class="math notranslate nohighlight">\(G\)</span> is the gravitational constant and
 <span class="math notranslate nohighlight">\(M\)</span> the mass of the body.</p>
@@ -1174,227 +1163,188 @@ This is <span class="math notranslate nohighlight">\(GM\)</span>, where <span cl
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.CelestialBody.surface_gravity">
-<span class="sig-name descname"><span class="pre">surface_gravity</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.CelestialBody.surface_gravity" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.surface_gravity">
+<span class="sig-name descname"><span class="pre">surface_gravity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.surface_gravity" title="Link to this definition">#</a></dt>
 <dd><p>The acceleration due to gravity at sea level (mean altitude) on the body,
 in <span class="math notranslate nohighlight">\(\mathrm{m/s^{2}}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.CelestialBody.rotational_period">
-<span class="sig-name descname"><span class="pre">rotational_period</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.CelestialBody.rotational_period" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.rotational_period">
+<span class="sig-name descname"><span class="pre">rotational_period</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.rotational_period" title="Link to this definition">#</a></dt>
 <dd><p>The sidereal rotational period of the body, in seconds.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.CelestialBody.rotational_speed">
-<span class="sig-name descname"><span class="pre">rotational_speed</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.CelestialBody.rotational_speed" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.rotational_speed">
+<span class="sig-name descname"><span class="pre">rotational_speed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.rotational_speed" title="Link to this definition">#</a></dt>
 <dd><p>The rotational speed of the body, in <span class="math notranslate nohighlight">\(\mathrm{rad/s}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.CelestialBody.rotation_angle">
-<span class="sig-name descname"><span class="pre">rotation_angle</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.CelestialBody.rotation_angle" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.rotation_angle">
+<span class="sig-name descname"><span class="pre">rotation_angle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.rotation_angle" title="Link to this definition">#</a></dt>
 <dd><p>The current rotation angle of the body, in radians.
 A value between 0 and <span class="math notranslate nohighlight">\(2\pi\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.CelestialBody.initial_rotation">
-<span class="sig-name descname"><span class="pre">initial_rotation</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.CelestialBody.initial_rotation" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.initial_rotation">
+<span class="sig-name descname"><span class="pre">initial_rotation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.initial_rotation" title="Link to this definition">#</a></dt>
 <dd><p>The initial rotation angle of the body (at UT 0), in radians.
 A value between 0 and <span class="math notranslate nohighlight">\(2\pi\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.CelestialBody.equatorial_radius">
-<span class="sig-name descname"><span class="pre">equatorial_radius</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.CelestialBody.equatorial_radius" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.equatorial_radius">
+<span class="sig-name descname"><span class="pre">equatorial_radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.equatorial_radius" title="Link to this definition">#</a></dt>
 <dd><p>The equatorial radius of the body, in meters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.CelestialBody.surface_height">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">surface_height</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">latitude</span></em>, <em class="sig-param"><span class="pre">longitude</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.CelestialBody.surface_height" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.surface_height">
+<span class="sig-name descname"><span class="pre">surface_height</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">latitude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">longitude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.surface_height" title="Link to this definition">#</a></dt>
 <dd><p>The height of the surface relative to mean sea level, in meters,
 at the given position. When over water this is equal to 0.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>latitude</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Latitude in degrees.</p></li>
-<li><p><strong>longitude</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Longitude in degrees.</p></li>
+<li><p><strong>latitude</strong> – Latitude in degrees.</p></li>
+<li><p><strong>longitude</strong> – Longitude in degrees.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.CelestialBody.bedrock_height">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">bedrock_height</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">latitude</span></em>, <em class="sig-param"><span class="pre">longitude</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.CelestialBody.bedrock_height" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.bedrock_height">
+<span class="sig-name descname"><span class="pre">bedrock_height</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">latitude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">longitude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.bedrock_height" title="Link to this definition">#</a></dt>
 <dd><p>The height of the surface relative to mean sea level, in meters,
 at the given position. When over water, this is the height
 of the sea-bed and is therefore  negative value.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>latitude</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Latitude in degrees.</p></li>
-<li><p><strong>longitude</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Longitude in degrees.</p></li>
+<li><p><strong>latitude</strong> – Latitude in degrees.</p></li>
+<li><p><strong>longitude</strong> – Longitude in degrees.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.CelestialBody.msl_position">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">msl_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">latitude</span></em>, <em class="sig-param"><span class="pre">longitude</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.CelestialBody.msl_position" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.msl_position">
+<span class="sig-name descname"><span class="pre">msl_position</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">latitude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">longitude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.msl_position" title="Link to this definition">#</a><br /></dt>
 <dd><p>The position at mean sea level at the given latitude and longitude,
 in the given reference frame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>latitude</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Latitude in degrees.</p></li>
-<li><p><strong>longitude</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Longitude in degrees.</p></li>
-<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – Reference frame for the returned position vector.</p></li>
+<li><p><strong>latitude</strong> – Latitude in degrees.</p></li>
+<li><p><strong>longitude</strong> – Longitude in degrees.</p></li>
+<li><p><strong>reference_frame</strong> – Reference frame for the returned position vector.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Position as a vector.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.CelestialBody.surface_position">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">surface_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">latitude</span></em>, <em class="sig-param"><span class="pre">longitude</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.CelestialBody.surface_position" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.surface_position">
+<span class="sig-name descname"><span class="pre">surface_position</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">latitude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">longitude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.surface_position" title="Link to this definition">#</a><br /></dt>
 <dd><p>The position of the surface at the given latitude and longitude, in the given
 reference frame. When over water, this is the position of the surface of the water.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>latitude</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Latitude in degrees.</p></li>
-<li><p><strong>longitude</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Longitude in degrees.</p></li>
-<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – Reference frame for the returned position vector.</p></li>
+<li><p><strong>latitude</strong> – Latitude in degrees.</p></li>
+<li><p><strong>longitude</strong> – Longitude in degrees.</p></li>
+<li><p><strong>reference_frame</strong> – Reference frame for the returned position vector.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Position as a vector.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.CelestialBody.bedrock_position">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">bedrock_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">latitude</span></em>, <em class="sig-param"><span class="pre">longitude</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.CelestialBody.bedrock_position" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.bedrock_position">
+<span class="sig-name descname"><span class="pre">bedrock_position</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">latitude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">longitude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.bedrock_position" title="Link to this definition">#</a><br /></dt>
 <dd><p>The position of the surface at the given latitude and longitude, in the given
 reference frame. When over water, this is the position at the bottom of the sea-bed.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>latitude</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Latitude in degrees.</p></li>
-<li><p><strong>longitude</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Longitude in degrees.</p></li>
-<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – Reference frame for the returned position vector.</p></li>
+<li><p><strong>latitude</strong> – Latitude in degrees.</p></li>
+<li><p><strong>longitude</strong> – Longitude in degrees.</p></li>
+<li><p><strong>reference_frame</strong> – Reference frame for the returned position vector.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Position as a vector.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.CelestialBody.position_at_altitude">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">position_at_altitude</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">latitude</span></em>, <em class="sig-param"><span class="pre">longitude</span></em>, <em class="sig-param"><span class="pre">altitude</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.CelestialBody.position_at_altitude" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.position_at_altitude">
+<span class="sig-name descname"><span class="pre">position_at_altitude</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">latitude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">longitude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">altitude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.position_at_altitude" title="Link to this definition">#</a><br /></dt>
 <dd><p>The position at the given latitude, longitude and altitude, in the given reference frame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>latitude</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Latitude in degrees.</p></li>
-<li><p><strong>longitude</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Longitude in degrees.</p></li>
-<li><p><strong>altitude</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Altitude in meters above sea level.</p></li>
-<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – Reference frame for the returned position vector.</p></li>
+<li><p><strong>latitude</strong> – Latitude in degrees.</p></li>
+<li><p><strong>longitude</strong> – Longitude in degrees.</p></li>
+<li><p><strong>altitude</strong> – Altitude in meters above sea level.</p></li>
+<li><p><strong>reference_frame</strong> – Reference frame for the returned position vector.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Position as a vector.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.CelestialBody.surface_reference_frame">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">surface_reference_frame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">latitude</span></em>, <em class="sig-param"><span class="pre">longitude</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">altitude</span> <span class="pre">=</span> <span class="pre">0.0</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.CelestialBody.surface_reference_frame" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.surface_reference_frame">
+<span class="sig-name descname"><span class="pre">surface_reference_frame</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">latitude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">longitude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">altitude</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.surface_reference_frame" title="Link to this definition">#</a><br /></dt>
 <dd><p>Create a reference frame fixed to the surface at the given latitude and longitude.</p>
 <ul class="simple">
 <li><p>The origin is the given altitude above the surface, at the
@@ -1407,285 +1357,234 @@ given latitude and longitude.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>latitude</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Latitude in degrees.</p></li>
-<li><p><strong>longitude</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Longitude in degrees.</p></li>
-<li><p><strong>altitude</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Altitude of the origin above the surface, in meters.</p></li>
+<li><p><strong>latitude</strong> – Latitude in degrees.</p></li>
+<li><p><strong>longitude</strong> – Longitude in degrees.</p></li>
+<li><p><strong>altitude</strong> – Altitude of the origin above the surface, in meters. Defaults to <code class="docutils literal notranslate"><span class="pre">0.0</span></code>.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></p>
 </dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Each call returns a new frame, as for <a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame.create_relative" title="SpaceCenter.ReferenceFrame.create_relative"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame.create_relative()</span></code></a>.</p>
+<p>Each call returns a new frame, as for <a class="reference internal" href="reference-frame.html#lua-SpaceCenter.ReferenceFrame.create_relative" title="SpaceCenter.ReferenceFrame.create_relative"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame.create_relative()</span></code></a>.</p>
 </div>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.CelestialBody.msl_normal">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">msl_normal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">latitude</span></em>, <em class="sig-param"><span class="pre">longitude</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.CelestialBody.msl_normal" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.msl_normal">
+<span class="sig-name descname"><span class="pre">msl_normal</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">latitude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">longitude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.msl_normal" title="Link to this definition">#</a><br /></dt>
 <dd><p>The normal to the sphere at mean sea level, at the given latitude and longitude,
 in the given reference frame. This points straight up, away from the center of
 the body, and takes no account of the shape of the terrain.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>latitude</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Latitude in degrees.</p></li>
-<li><p><strong>longitude</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Longitude in degrees.</p></li>
-<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – Reference frame for the returned normal vector.</p></li>
+<li><p><strong>latitude</strong> – Latitude in degrees.</p></li>
+<li><p><strong>longitude</strong> – Longitude in degrees.</p></li>
+<li><p><strong>reference_frame</strong> – Reference frame for the returned normal vector.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The normal as a unit vector.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.CelestialBody.surface_normal">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">surface_normal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">latitude</span></em>, <em class="sig-param"><span class="pre">longitude</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.CelestialBody.surface_normal" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.surface_normal">
+<span class="sig-name descname"><span class="pre">surface_normal</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">latitude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">longitude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.surface_normal" title="Link to this definition">#</a><br /></dt>
 <dd><p>The normal to the surface at the given latitude and longitude, in the given reference
 frame. This describes the slope of the terrain, and is the normal of the surface of
 the water when over water.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>latitude</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Latitude in degrees.</p></li>
-<li><p><strong>longitude</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Longitude in degrees.</p></li>
-<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – Reference frame for the returned normal vector.</p></li>
+<li><p><strong>latitude</strong> – Latitude in degrees.</p></li>
+<li><p><strong>longitude</strong> – Longitude in degrees.</p></li>
+<li><p><strong>reference_frame</strong> – Reference frame for the returned normal vector.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The normal as a unit vector.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.CelestialBody.bedrock_normal">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">bedrock_normal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">latitude</span></em>, <em class="sig-param"><span class="pre">longitude</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.CelestialBody.bedrock_normal" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.bedrock_normal">
+<span class="sig-name descname"><span class="pre">bedrock_normal</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">latitude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">longitude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.bedrock_normal" title="Link to this definition">#</a><br /></dt>
 <dd><p>The normal to the surface at the given latitude and longitude, in the given reference
 frame. This describes the slope of the terrain, and is the normal of the sea-bed
 when over water.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>latitude</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Latitude in degrees.</p></li>
-<li><p><strong>longitude</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Longitude in degrees.</p></li>
-<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – Reference frame for the returned normal vector.</p></li>
+<li><p><strong>latitude</strong> – Latitude in degrees.</p></li>
+<li><p><strong>longitude</strong> – Longitude in degrees.</p></li>
+<li><p><strong>reference_frame</strong> – Reference frame for the returned normal vector.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The normal as a unit vector.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.CelestialBody.altitude_at_position">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">altitude_at_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">position</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.CelestialBody.altitude_at_position" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.altitude_at_position">
+<span class="sig-name descname"><span class="pre">altitude_at_position</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.altitude_at_position" title="Link to this definition">#</a><br /></dt>
 <dd><p>The altitude, in meters, of the given position in the given reference frame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>position</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – Position as a vector.</p></li>
-<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – Reference frame for the position vector.</p></li>
+<li><p><strong>position</strong> – Position as a vector.</p></li>
+<li><p><strong>reference_frame</strong> – Reference frame for the position vector.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.CelestialBody.latitude_at_position">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">latitude_at_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">position</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.CelestialBody.latitude_at_position" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.latitude_at_position">
+<span class="sig-name descname"><span class="pre">latitude_at_position</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.latitude_at_position" title="Link to this definition">#</a><br /></dt>
 <dd><p>The latitude of the given position, in the given reference frame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>position</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – Position as a vector.</p></li>
-<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – Reference frame for the position vector.</p></li>
+<li><p><strong>position</strong> – Position as a vector.</p></li>
+<li><p><strong>reference_frame</strong> – Reference frame for the position vector.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.CelestialBody.longitude_at_position">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">longitude_at_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">position</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.CelestialBody.longitude_at_position" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.longitude_at_position">
+<span class="sig-name descname"><span class="pre">longitude_at_position</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.longitude_at_position" title="Link to this definition">#</a><br /></dt>
 <dd><p>The longitude of the given position, in the given reference frame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>position</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – Position as a vector.</p></li>
-<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – Reference frame for the position vector.</p></li>
+<li><p><strong>position</strong> – Position as a vector.</p></li>
+<li><p><strong>reference_frame</strong> – Reference frame for the position vector.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.CelestialBody.sphere_of_influence">
-<span class="sig-name descname"><span class="pre">sphere_of_influence</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.CelestialBody.sphere_of_influence" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.sphere_of_influence">
+<span class="sig-name descname"><span class="pre">sphere_of_influence</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.sphere_of_influence" title="Link to this definition">#</a></dt>
 <dd><p>The radius of the sphere of influence of the body, in meters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.CelestialBody.is_star">
-<span class="sig-name descname"><span class="pre">is_star</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.CelestialBody.is_star" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.is_star">
+<span class="sig-name descname"><span class="pre">is_star</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.is_star" title="Link to this definition">#</a></dt>
 <dd><p>Whether or not the body is a star.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.CelestialBody.has_solid_surface">
-<span class="sig-name descname"><span class="pre">has_solid_surface</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.CelestialBody.has_solid_surface" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.has_solid_surface">
+<span class="sig-name descname"><span class="pre">has_solid_surface</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.has_solid_surface" title="Link to this definition">#</a></dt>
 <dd><p>Whether or not the body has a solid surface.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.CelestialBody.has_atmosphere">
-<span class="sig-name descname"><span class="pre">has_atmosphere</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.CelestialBody.has_atmosphere" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.has_atmosphere">
+<span class="sig-name descname"><span class="pre">has_atmosphere</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.has_atmosphere" title="Link to this definition">#</a></dt>
 <dd><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the body has an atmosphere.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.CelestialBody.atmosphere_depth">
-<span class="sig-name descname"><span class="pre">atmosphere_depth</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.CelestialBody.atmosphere_depth" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.atmosphere_depth">
+<span class="sig-name descname"><span class="pre">atmosphere_depth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.atmosphere_depth" title="Link to this definition">#</a></dt>
 <dd><p>The depth of the atmosphere, in meters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.CelestialBody.has_ocean">
-<span class="sig-name descname"><span class="pre">has_ocean</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.CelestialBody.has_ocean" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.has_ocean">
+<span class="sig-name descname"><span class="pre">has_ocean</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.has_ocean" title="Link to this definition">#</a></dt>
 <dd><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the body has an ocean.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.CelestialBody.ocean_density">
-<span class="sig-name descname"><span class="pre">ocean_density</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.CelestialBody.ocean_density" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.ocean_density">
+<span class="sig-name descname"><span class="pre">ocean_density</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.ocean_density" title="Link to this definition">#</a></dt>
 <dd><p>The density of the body’s ocean, in <span class="math notranslate nohighlight">\(\mathrm{kg/m^{3}}\)</span>.
 Returns zero if the body has no ocean.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.CelestialBody.atmospheric_density_at_position">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">atmospheric_density_at_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">position</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.CelestialBody.atmospheric_density_at_position" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.atmospheric_density_at_position">
+<span class="sig-name descname"><span class="pre">atmospheric_density_at_position</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.atmospheric_density_at_position" title="Link to this definition">#</a><br /></dt>
 <dd><p>The atmospheric density at the given position, in <span class="math notranslate nohighlight">\(\mathrm{kg/m^{3}}\)</span>,
 in the given reference frame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>position</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The position vector at which to measure the density.</p></li>
-<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – Reference frame that the position vector is in.</p></li>
+<li><p><strong>position</strong> – The position vector at which to measure the density.</p></li>
+<li><p><strong>reference_frame</strong> – Reference frame that the position vector is in.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.CelestialBody.has_atmospheric_oxygen">
-<span class="sig-name descname"><span class="pre">has_atmospheric_oxygen</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.CelestialBody.has_atmospheric_oxygen" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.has_atmospheric_oxygen">
+<span class="sig-name descname"><span class="pre">has_atmospheric_oxygen</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.has_atmospheric_oxygen" title="Link to this definition">#</a></dt>
 <dd><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if there is oxygen in the atmosphere, required for air-breathing engines.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.CelestialBody.temperature_at">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">temperature_at</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">position</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.CelestialBody.temperature_at" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.temperature_at">
+<span class="sig-name descname"><span class="pre">temperature_at</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.temperature_at" title="Link to this definition">#</a><br /></dt>
 <dd><p>The temperature on the body at the given position, in the given reference frame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>position</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – Position as a vector.</p></li>
-<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – The reference frame that the position is in.</p></li>
+<li><p><strong>position</strong> – Position as a vector.</p></li>
+<li><p><strong>reference_frame</strong> – The reference frame that the position is in.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1695,18 +1594,10 @@ in the given reference frame.</p>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.CelestialBody.density_at">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">density_at</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">altitude</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.CelestialBody.density_at" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.density_at">
+<span class="sig-name descname"><span class="pre">density_at</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">altitude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.density_at" title="Link to this definition">#</a></dt>
 <dd><p>Gets the air density, in <span class="math notranslate nohighlight">\(\mathrm{kg/m^{3}}\)</span>, for the specified
 altitude above sea level, in meters.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>altitude</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>)</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
-</dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This is an approximation, because actual calculations, taking sun exposure into account
@@ -1718,18 +1609,10 @@ for trajectory prediction.</p>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.CelestialBody.pressure_at">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">pressure_at</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">altitude</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.CelestialBody.pressure_at" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.pressure_at">
+<span class="sig-name descname"><span class="pre">pressure_at</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">altitude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.pressure_at" title="Link to this definition">#</a></dt>
 <dd><p>Gets the static pressure, in Pascals, for the specified
 altitude above sea level, in meters.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>altitude</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>)</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
-</dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Below sea level on a body with an ocean, this includes the pressure of the water.</p>
@@ -1737,69 +1620,49 @@ altitude above sea level, in meters.</p>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.CelestialBody.biomes">
-<span class="sig-name descname"><span class="pre">biomes</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Set</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.CelestialBody.biomes" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.biomes">
+<span class="sig-name descname"><span class="pre">biomes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Set</span></code><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.biomes" title="Link to this definition">#</a></dt>
 <dd><p>The biomes present on this body.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Set</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.CelestialBody.biome_at">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">biome_at</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">latitude</span></em>, <em class="sig-param"><span class="pre">longitude</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.CelestialBody.biome_at" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.biome_at">
+<span class="sig-name descname"><span class="pre">biome_at</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">latitude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">longitude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.biome_at" title="Link to this definition">#</a></dt>
 <dd><p>The biome at the given latitude and longitude, in degrees.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>latitude</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>)</p></li>
-<li><p><strong>longitude</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span></p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.CelestialBody.flying_high_altitude_threshold">
-<span class="sig-name descname"><span class="pre">flying_high_altitude_threshold</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.CelestialBody.flying_high_altitude_threshold" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.flying_high_altitude_threshold">
+<span class="sig-name descname"><span class="pre">flying_high_altitude_threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.flying_high_altitude_threshold" title="Link to this definition">#</a></dt>
 <dd><p>The altitude, in meters, above which a vessel is considered to be
 flying “high” when doing science.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.CelestialBody.space_high_altitude_threshold">
-<span class="sig-name descname"><span class="pre">space_high_altitude_threshold</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.CelestialBody.space_high_altitude_threshold" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.space_high_altitude_threshold">
+<span class="sig-name descname"><span class="pre">space_high_altitude_threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.space_high_altitude_threshold" title="Link to this definition">#</a></dt>
 <dd><p>The altitude, in meters, above which a vessel is considered to be
 in “high” space when doing science.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.CelestialBody.reference_frame">
-<span class="sig-name descname"><span class="pre">reference_frame</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.ReferenceFrame</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.CelestialBody.reference_frame" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.reference_frame">
+<span class="sig-name descname"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.reference_frame" title="Link to this definition">#</a></dt>
 <dd><p>The reference frame that is fixed relative to the celestial body.</p>
 <ul class="simple">
 <li><p>The origin is at the center of the body.</p></li>
@@ -1816,9 +1679,6 @@ towards the equator at 90°E longitude.</p></li>
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></p>
-</dd>
 </dl>
 <figure class="align-center" id="id1">
 <img alt="../../../_images/celestial-body.png" src="../../../_images/celestial-body.png" />
@@ -1830,8 +1690,8 @@ blue, and the prime meridian in red.</span><a class="headerlink" href="#id1" tit
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.CelestialBody.non_rotating_reference_frame">
-<span class="sig-name descname"><span class="pre">non_rotating_reference_frame</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.ReferenceFrame</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.CelestialBody.non_rotating_reference_frame" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.non_rotating_reference_frame">
+<span class="sig-name descname"><span class="pre">non_rotating_reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.non_rotating_reference_frame" title="Link to this definition">#</a></dt>
 <dd><p>The reference frame that is fixed relative to this celestial body, and
 orientated in a fixed direction (it does not rotate with the body).</p>
 <ul class="simple">
@@ -1848,15 +1708,12 @@ equator.</p></li>
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.CelestialBody.orbital_reference_frame">
-<span class="sig-name descname"><span class="pre">orbital_reference_frame</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.ReferenceFrame</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.CelestialBody.orbital_reference_frame" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.orbital_reference_frame">
+<span class="sig-name descname"><span class="pre">orbital_reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.orbital_reference_frame" title="Link to this definition">#</a></dt>
 <dd><p>The reference frame that is fixed relative to this celestial body, but
 orientated with the body’s orbital prograde/normal/radial directions.</p>
 <ul class="simple">
@@ -1871,94 +1728,76 @@ directions.</p></li>
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.CelestialBody.position">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">reference_frame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.CelestialBody.position" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.position">
+<span class="sig-name descname"><span class="pre">position</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.position" title="Link to this definition">#</a></dt>
 <dd><p>The position of the center of the body, in the specified reference frame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>reference_frame</strong> (<span><a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – The reference frame that the returned position vector is in.</p>
+<dd class="field-odd"><p><strong>reference_frame</strong> – The reference frame that the returned position vector is in.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The position as a vector.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.CelestialBody.velocity">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">velocity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">reference_frame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.CelestialBody.velocity" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.velocity">
+<span class="sig-name descname"><span class="pre">velocity</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.velocity" title="Link to this definition">#</a></dt>
 <dd><p>The linear velocity of the body, in the specified reference frame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>reference_frame</strong> (<span><a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – The reference frame that the returned velocity vector is in.</p>
+<dd class="field-odd"><p><strong>reference_frame</strong> – The reference frame that the returned velocity vector is in.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.CelestialBody.rotation">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">rotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">reference_frame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.CelestialBody.rotation" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.rotation">
+<span class="sig-name descname"><span class="pre">rotation</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.rotation" title="Link to this definition">#</a></dt>
 <dd><p>The rotation of the body, in the specified reference frame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>reference_frame</strong> (<span><a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – The reference frame that the returned rotation is in.</p>
+<dd class="field-odd"><p><strong>reference_frame</strong> – The reference frame that the returned rotation is in.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The rotation as a quaternion of the form <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y,</span> <span class="pre">z,</span> <span class="pre">w)</span></code>.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.CelestialBody.direction">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">direction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">reference_frame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.CelestialBody.direction" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.direction">
+<span class="sig-name descname"><span class="pre">direction</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.direction" title="Link to this definition">#</a></dt>
 <dd><p>The direction in which the north pole of the celestial body is pointing,
 in the specified reference frame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>reference_frame</strong> (<span><a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – The reference frame that the returned direction is in.</p>
+<dd class="field-odd"><p><strong>reference_frame</strong> – The reference frame that the returned direction is in.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The direction as a unit vector.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.CelestialBody.angular_velocity">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">angular_velocity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">reference_frame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.CelestialBody.angular_velocity" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CelestialBody.angular_velocity">
+<span class="sig-name descname"><span class="pre">angular_velocity</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-SpaceCenter.CelestialBody.angular_velocity" title="Link to this definition">#</a></dt>
 <dd><p>The angular velocity of the body in the specified reference frame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>reference_frame</strong> (<span><a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – The reference frame the returned angular velocity is in.</p>
+<dd class="field-odd"><p><strong>reference_frame</strong> – The reference frame the returned angular velocity is in.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The angular velocity as a vector. The magnitude of the vector is the rotational speed of the body, in <span class="math notranslate nohighlight">\(\mathrm{rad/s}\)</span>. The direction of the vector indicates the axis of rotation, using the right-hand rule.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>

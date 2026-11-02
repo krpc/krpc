@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=eadf7411" />
   
@@ -1104,82 +1105,70 @@
   <section id="autopilot">
 <h1>AutoPilot<a class="headerlink" href="#autopilot" title="Link to this heading">#</a></h1>
 <dl class="lua class">
-<dt class="sig sig-object lua" id="SpaceCenter.AutoPilot">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">SpaceCenter.</span></span><span class="sig-name descname"><span class="pre">AutoPilot</span></span><a class="headerlink" href="#SpaceCenter.AutoPilot" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">SpaceCenter.</span></span><span class="sig-name descname"><span class="pre">AutoPilot</span></span><a class="headerlink" href="#lua-SpaceCenter.AutoPilot" title="Link to this definition">#</a></dt>
 <dd><p>Provides basic auto-piloting utilities for a vessel.
-Created by calling <a class="reference internal" href="vessel.html#SpaceCenter.SpaceCenter.Vessel.auto_pilot" title="SpaceCenter.SpaceCenter.Vessel.auto_pilot"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Vessel.auto_pilot</span></code></a>.</p>
+Created by calling <a class="reference internal" href="vessel.html#lua-SpaceCenter.Vessel.auto_pilot" title="SpaceCenter.Vessel.auto_pilot"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Vessel.auto_pilot</span></code></a>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>If a client engages the auto-pilot and then closes its connection to the server,
 the auto-pilot will be disengaged. Its configuration and target are left unchanged.</p>
 </div>
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.sas">
-<span class="sig-name descname"><span class="pre">sas</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.sas" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.sas">
+<span class="sig-name descname"><span class="pre">sas</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.sas" title="Link to this definition">#</a></dt>
 <dd><p>The state of SAS.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Equivalent to <a class="reference internal" href="control.html#SpaceCenter.SpaceCenter.Control.sas" title="SpaceCenter.SpaceCenter.Control.sas"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Control.sas</span></code></a>.
+<p>Equivalent to <a class="reference internal" href="control.html#lua-SpaceCenter.Control.sas" title="SpaceCenter.Control.sas"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Control.sas</span></code></a>.
 Throws an exception if set to <code class="docutils literal notranslate"><span class="pre">True</span></code> while the auto-pilot is engaged, as the
 auto-pilot holds SAS off for as long as it is flying the vessel.</p>
 </div>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.sas_mode">
-<span class="sig-name descname"><span class="pre">sas_mode</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.SASMode</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.sas_mode" title="Link to this definition">#</a></dt>
-<dd><p>The current <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.sas_mode" title="SpaceCenter.SpaceCenter.AutoPilot.sas_mode"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.sas_mode</span></code></a>.
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.sas_mode">
+<span class="sig-name descname"><span class="pre">sas_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="control.html#lua-SpaceCenter.SASMode" title="SpaceCenter.SASMode"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.SASMode</span></code></a><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.sas_mode" title="Link to this definition">#</a></dt>
+<dd><p>The current <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.sas_mode" title="SpaceCenter.AutoPilot.sas_mode"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.sas_mode</span></code></a>.
 These modes are equivalent to the mode buttons to the left of the navball that appear
 when SAS is enabled.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="control.html#SpaceCenter.SASMode" title="SpaceCenter.SASMode"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.SASMode</span></code></a></p>
-</dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Equivalent to <a class="reference internal" href="control.html#SpaceCenter.SpaceCenter.Control.sas_mode" title="SpaceCenter.SpaceCenter.Control.sas_mode"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Control.sas_mode</span></code></a></p>
+<p>Equivalent to <a class="reference internal" href="control.html#lua-SpaceCenter.Control.sas_mode" title="SpaceCenter.Control.sas_mode"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Control.sas_mode</span></code></a></p>
 </div>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.engaged">
-<span class="sig-name descname"><span class="pre">engaged</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.engaged" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.engaged">
+<span class="sig-name descname"><span class="pre">engaged</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.engaged" title="Link to this definition">#</a></dt>
 <dd><p>Whether the auto-pilot is engaged.
 Setting to <code class="docutils literal notranslate"><span class="pre">True</span></code> engages the auto-pilot; setting to <code class="docutils literal notranslate"><span class="pre">False</span></code> disengages it.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.update_mode">
-<span class="sig-name descname"><span class="pre">update_mode</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.AutoPilotUpdateMode</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.update_mode" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.update_mode">
+<span class="sig-name descname"><span class="pre">update_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-SpaceCenter.AutoPilotUpdateMode" title="SpaceCenter.AutoPilotUpdateMode"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilotUpdateMode</span></code></a><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.update_mode" title="Link to this definition">#</a></dt>
 <dd><p>When the auto-pilot’s control loop runs within a server update, relative to the
 calls the update executes. Defaults to
-<a class="reference internal" href="#SpaceCenter.AutoPilotUpdateMode.after_calls" title="SpaceCenter.AutoPilotUpdateMode.after_calls"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilotUpdateMode.after_calls</span></code></a>.</p>
+<a class="reference internal" href="#lua-SpaceCenter.AutoPilotUpdateMode.after_calls" title="SpaceCenter.AutoPilotUpdateMode.after_calls"><code class="xref lua lua-data docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilotUpdateMode.after_calls</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#SpaceCenter.AutoPilotUpdateMode" title="SpaceCenter.AutoPilotUpdateMode"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilotUpdateMode</span></code></a></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1193,13 +1182,13 @@ without control input.</p>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.AutoPilot.update">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.AutoPilot.update" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.update" title="Link to this definition">#</a></dt>
 <dd><p>Run one tick of the auto-pilot’s control loop now. Does nothing if it has already run
 on this physics tick. Throws an exception if the auto-pilot is not engaged.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>For <a class="reference internal" href="#SpaceCenter.AutoPilotUpdateMode.manual" title="SpaceCenter.AutoPilotUpdateMode.manual"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilotUpdateMode.manual</span></code></a>, where the loop runs only when this is
+<p>For <a class="reference internal" href="#lua-SpaceCenter.AutoPilotUpdateMode.manual" title="SpaceCenter.AutoPilotUpdateMode.manual"><code class="xref lua lua-data docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilotUpdateMode.manual</span></code></a>, where the loop runs only when this is
 called. In the other modes this runs it early; either way it runs once per tick. On a
 tick it is not called for, the vessel keeps the control output of the last tick it did
 run on, and after a tenth of a second of that the auto-pilot stops contributing any
@@ -1208,8 +1197,8 @@ control input at all.</p>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.show_info_ui">
-<span class="sig-name descname"><span class="pre">show_info_ui</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.show_info_ui" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.show_info_ui">
+<span class="sig-name descname"><span class="pre">show_info_ui</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.show_info_ui" title="Link to this definition">#</a></dt>
 <dd><p>Whether an in-game window showing the auto-pilot’s state (engagement, attitude error,
 target, angular rate, inner-loop PID gains and oscillation suppression) is displayed for
 this vessel. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>. This is a debugging aid; the window is reset to
@@ -1218,15 +1207,12 @@ hidden when the game is restarted.</p>
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.AutoPilot.reset">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.AutoPilot.reset" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.reset" title="Link to this definition">#</a></dt>
 <dd><p>Disengages the auto-pilot and resets all configuration parameters to their defaults.
 Also resets the target pitch, heading and roll, and clears all internal controller
 state, including the oscillation detector’s structural level, which otherwise
@@ -1234,15 +1220,12 @@ persists across engagements so that a craft known to be flexible re-latches quic
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.reference_frame">
-<span class="sig-name descname"><span class="pre">reference_frame</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.ReferenceFrame</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.reference_frame" title="Link to this definition">#</a></dt>
-<dd><p>The reference frame for the target direction (<a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.target_direction" title="SpaceCenter.SpaceCenter.AutoPilot.target_direction"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_direction</span></code></a>).</p>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.reference_frame">
+<span class="sig-name descname"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.reference_frame" title="Link to this definition">#</a></dt>
+<dd><p>The reference frame for the target direction (<a class="reference internal" href="#lua-SpaceCenter.AutoPilot.target_direction" title="SpaceCenter.AutoPilot.target_direction"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_direction</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1250,67 +1233,58 @@ persists across engagements so that a craft known to be flexible re-latches quic
 <p>An error will be thrown if this property is set to a reference frame that rotates with
 the vessel being controlled, as it is impossible to rotate the vessel in such a
 reference frame.</p>
-<p>The target and the <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.up_reference" title="SpaceCenter.SpaceCenter.AutoPilot.up_reference"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.up_reference</span></code></a> are held as vectors in this frame, so
+<p>The target and the <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.up_reference" title="SpaceCenter.AutoPilot.up_reference"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.up_reference</span></code></a> are held as vectors in this frame, so
 changing it re-interprets them in the new frame rather than converting them: the
-orientation the vessel is held in, and what a given <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.target_roll" title="SpaceCenter.SpaceCenter.AutoPilot.target_roll"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_roll</span></code></a> means,
+orientation the vessel is held in, and what a given <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.target_roll" title="SpaceCenter.AutoPilot.target_roll"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_roll</span></code></a> means,
 both change. Set the frame first, then the target.</p>
 </div>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.target_pitch">
-<span class="sig-name descname"><span class="pre">target_pitch</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.target_pitch" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.target_pitch">
+<span class="sig-name descname"><span class="pre">target_pitch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.target_pitch" title="Link to this definition">#</a></dt>
 <dd><p>The target pitch, in degrees, between -90° and +90°.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>A convenience for aiming the nose by angle. Heading (and hence roll) is ill-defined when
 the nose is near vertical (a pitch near -90° or +90°). Near the vertical prefer
-<a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.target_direction" title="SpaceCenter.SpaceCenter.AutoPilot.target_direction"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_direction</span></code></a> or <a class="reference internal" href="#SpaceCenter.AutoPilot.set_direction_and_up" title="SpaceCenter.AutoPilot.set_direction_and_up"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.set_direction_and_up()</span></code></a>. The setter preserves the
-current roll relative to <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.up_reference" title="SpaceCenter.SpaceCenter.AutoPilot.up_reference"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.up_reference</span></code></a>.</p>
+<a class="reference internal" href="#lua-SpaceCenter.AutoPilot.target_direction" title="SpaceCenter.AutoPilot.target_direction"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_direction</span></code></a> or <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.set_direction_and_up" title="SpaceCenter.AutoPilot.set_direction_and_up"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot:set_direction_and_up()</span></code></a>. The setter preserves the
+current roll relative to <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.up_reference" title="SpaceCenter.AutoPilot.up_reference"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.up_reference</span></code></a>.</p>
 </div>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.target_heading">
-<span class="sig-name descname"><span class="pre">target_heading</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.target_heading" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.target_heading">
+<span class="sig-name descname"><span class="pre">target_heading</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.target_heading" title="Link to this definition">#</a></dt>
 <dd><p>The target heading, in degrees, between 0° and 360°.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>A convenience for aiming the nose by angle, ill-defined when the nose is near vertical
-(a pitch near -90° or +90°). See <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.target_pitch" title="SpaceCenter.SpaceCenter.AutoPilot.target_pitch"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_pitch</span></code></a>. The setter preserves the
+(a pitch near -90° or +90°). See <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.target_pitch" title="SpaceCenter.AutoPilot.target_pitch"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_pitch</span></code></a>. The setter preserves the
 current roll
-relative to <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.up_reference" title="SpaceCenter.SpaceCenter.AutoPilot.up_reference"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.up_reference</span></code></a>.</p>
+relative to <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.up_reference" title="SpaceCenter.AutoPilot.up_reference"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.up_reference</span></code></a>.</p>
 </div>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.target_roll">
-<span class="sig-name descname"><span class="pre">target_roll</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.target_roll" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.target_roll">
+<span class="sig-name descname"><span class="pre">target_roll</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.target_roll" title="Link to this definition">#</a></dt>
 <dd><p>The target roll, in degrees, measured about the vessel’s nose relative to the
-<a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.up_reference" title="SpaceCenter.SpaceCenter.AutoPilot.up_reference"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.up_reference</span></code></a> (roll 0 aligns the vessel’s dorsal/roof axis with the reference;
+<a class="reference internal" href="#lua-SpaceCenter.AutoPilot.up_reference" title="SpaceCenter.AutoPilot.up_reference"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.up_reference</span></code></a> (roll 0 aligns the vessel’s dorsal/roof axis with the reference;
 positive roll banks right). <code class="docutils literal notranslate"><span class="pre">NaN</span></code> if no target roll is set.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1322,49 +1296,46 @@ With the default reference (the frame’s up) this is the roll away from the ver
 is ill-defined only when the nose points along the reference (near straight up or down).
 To hold a well-defined roll through the vertical, such as through a gravity turn, set
 the up reference off the flight path (see
-<a class="reference internal" href="#SpaceCenter.AutoPilot.set_direction_and_up" title="SpaceCenter.AutoPilot.set_direction_and_up"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.set_direction_and_up()</span></code></a> / <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.up_reference" title="SpaceCenter.SpaceCenter.AutoPilot.up_reference"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.up_reference</span></code></a>).</p>
+<a class="reference internal" href="#lua-SpaceCenter.AutoPilot.set_direction_and_up" title="SpaceCenter.AutoPilot.set_direction_and_up"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot:set_direction_and_up()</span></code></a> / <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.up_reference" title="SpaceCenter.AutoPilot.up_reference"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.up_reference</span></code></a>).</p>
 </div>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.up_reference">
-<span class="sig-name descname"><span class="pre">up_reference</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.up_reference" title="Link to this definition">#</a></dt>
-<dd><p>The reference direction, in the reference frame specified by <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.reference_frame" title="SpaceCenter.SpaceCenter.AutoPilot.reference_frame"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.reference_frame</span></code></a>,
-that <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.target_roll" title="SpaceCenter.SpaceCenter.AutoPilot.target_roll"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_roll</span></code></a> is measured against: at roll 0 the vessel’s dorsal (roof)
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.up_reference">
+<span class="sig-name descname"><span class="pre">up_reference</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.up_reference" title="Link to this definition">#</a></dt>
+<dd><p>The reference direction, in the reference frame specified by <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.reference_frame" title="SpaceCenter.AutoPilot.reference_frame"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.reference_frame</span></code></a>,
+that <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.target_roll" title="SpaceCenter.AutoPilot.target_roll"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_roll</span></code></a> is measured against: at roll 0 the vessel’s dorsal (roof)
 axis is aligned with this vector’s component perpendicular to the nose. Defaults to the
 frame’s up (the zenith / radial-out direction).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Setting this re-anchors how roll is measured without moving the current target, so
 the reference can be set once and then rolls commanded against it with
-<a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.target_roll" title="SpaceCenter.SpaceCenter.AutoPilot.target_roll"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_roll</span></code></a> while the nose direction changes freely. It is also set as a side
-effect of <a class="reference internal" href="#SpaceCenter.AutoPilot.set_direction_and_up" title="SpaceCenter.AutoPilot.set_direction_and_up"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.set_direction_and_up()</span></code></a>. Setting the target rotation, target direction,
+<a class="reference internal" href="#lua-SpaceCenter.AutoPilot.target_roll" title="SpaceCenter.AutoPilot.target_roll"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_roll</span></code></a> while the nose direction changes freely. It is also set as a side
+effect of <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.set_direction_and_up" title="SpaceCenter.AutoPilot.set_direction_and_up"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot:set_direction_and_up()</span></code></a>. Setting the target rotation, target direction,
 or the scalar pitch/heading leaves it unchanged. Choosing a reference off the flight path
 keeps roll well-defined through the vertical.</p>
 <p>Because roll is measured against this reference, changing it changes the angle that
-<a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.target_roll" title="SpaceCenter.SpaceCenter.AutoPilot.target_roll"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_roll</span></code></a> and <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.current_target_roll" title="SpaceCenter.SpaceCenter.AutoPilot.current_target_roll"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.current_target_roll</span></code></a> report, even though the
+<a class="reference internal" href="#lua-SpaceCenter.AutoPilot.target_roll" title="SpaceCenter.AutoPilot.target_roll"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_roll</span></code></a> and <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.current_target_roll" title="SpaceCenter.AutoPilot.current_target_roll"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.current_target_roll</span></code></a> report, even though the
 vessel is still being held in exactly the same orientation. Set the reference first and
-the roll afterwards, or set both at once with <a class="reference internal" href="#SpaceCenter.AutoPilot.set_direction_and_up" title="SpaceCenter.AutoPilot.set_direction_and_up"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.set_direction_and_up()</span></code></a>.</p>
+the roll afterwards, or set both at once with <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.set_direction_and_up" title="SpaceCenter.AutoPilot.set_direction_and_up"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot:set_direction_and_up()</span></code></a>.</p>
 </div>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.AutoPilot.target_pitch_and_heading">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">target_pitch_and_heading</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">pitch</span></em>, <em class="sig-param"><span class="pre">heading</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.AutoPilot.target_pitch_and_heading" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.target_pitch_and_heading">
+<span class="sig-name descname"><span class="pre">target_pitch_and_heading</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">pitch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">heading</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.target_pitch_and_heading" title="Link to this definition">#</a></dt>
 <dd><p>Set target pitch and heading angles.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>pitch</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Target pitch angle, in degrees between -90° and +90°.</p></li>
-<li><p><strong>heading</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Target heading angle, in degrees between 0° and 360°.</p></li>
+<li><p><strong>pitch</strong> – Target pitch angle, in degrees between -90° and +90°.</p></li>
+<li><p><strong>heading</strong> – Target heading angle, in degrees between 0° and 360°.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1372,63 +1343,57 @@ the roll afterwards, or set both at once with <a class="reference internal" href
 <p class="admonition-title">Note</p>
 <p>A convenience for aiming the nose by angle; heading is ill-defined when the nose is near
 vertical (a pitch near -90° or +90°), so near the vertical prefer
-<a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.target_direction" title="SpaceCenter.SpaceCenter.AutoPilot.target_direction"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_direction</span></code></a> or
-<a class="reference internal" href="#SpaceCenter.AutoPilot.set_direction_and_up" title="SpaceCenter.AutoPilot.set_direction_and_up"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.set_direction_and_up()</span></code></a>. Preserves the current roll relative to
-<a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.up_reference" title="SpaceCenter.SpaceCenter.AutoPilot.up_reference"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.up_reference</span></code></a>.</p>
+<a class="reference internal" href="#lua-SpaceCenter.AutoPilot.target_direction" title="SpaceCenter.AutoPilot.target_direction"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_direction</span></code></a> or
+<a class="reference internal" href="#lua-SpaceCenter.AutoPilot.set_direction_and_up" title="SpaceCenter.AutoPilot.set_direction_and_up"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot:set_direction_and_up()</span></code></a>. Preserves the current roll relative to
+<a class="reference internal" href="#lua-SpaceCenter.AutoPilot.up_reference" title="SpaceCenter.AutoPilot.up_reference"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.up_reference</span></code></a>.</p>
 </div>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.target_direction">
-<span class="sig-name descname"><span class="pre">target_direction</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.target_direction" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.target_direction">
+<span class="sig-name descname"><span class="pre">target_direction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.target_direction" title="Link to this definition">#</a></dt>
 <dd><p>Direction vector corresponding to the target pitch and heading.
-This is in the reference frame specified by <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.reference_frame" title="SpaceCenter.SpaceCenter.AutoPilot.reference_frame"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.reference_frame</span></code></a>.</p>
+This is in the reference frame specified by <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.reference_frame" title="SpaceCenter.AutoPilot.reference_frame"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.reference_frame</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
 </dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The setter re-aims the nose and nothing else: it preserves the current
-<a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.target_roll" title="SpaceCenter.SpaceCenter.AutoPilot.target_roll"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_roll</span></code></a> relative to <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.up_reference" title="SpaceCenter.SpaceCenter.AutoPilot.up_reference"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.up_reference</span></code></a>, and leaves roll
+<a class="reference internal" href="#lua-SpaceCenter.AutoPilot.target_roll" title="SpaceCenter.AutoPilot.target_roll"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_roll</span></code></a> relative to <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.up_reference" title="SpaceCenter.AutoPilot.up_reference"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.up_reference</span></code></a>, and leaves roll
 suppressed if no target roll is set. Point the nose repeatedly and a commanded roll is
 held throughout.</p>
 </div>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.target_rotation">
-<span class="sig-name descname"><span class="pre">target_rotation</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.target_rotation" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.target_rotation">
+<span class="sig-name descname"><span class="pre">target_rotation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.target_rotation" title="Link to this definition">#</a></dt>
 <dd><p>The target rotation quaternion. Setting this also sets the target roll.
-This is in the reference frame specified by <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.reference_frame" title="SpaceCenter.SpaceCenter.AutoPilot.reference_frame"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.reference_frame</span></code></a>.</p>
+This is in the reference frame specified by <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.reference_frame" title="SpaceCenter.AutoPilot.reference_frame"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.reference_frame</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.AutoPilot.set_direction_and_up">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">set_direction_and_up</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">direction</span></em>, <em class="sig-param"><span class="pre">up</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">roll</span> <span class="pre">=</span> <span class="pre">0.0</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.AutoPilot.set_direction_and_up" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.set_direction_and_up">
+<span class="sig-name descname"><span class="pre">set_direction_and_up</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">direction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">up</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">roll</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.set_direction_and_up" title="Link to this definition">#</a></dt>
 <dd><p>Set the target attitude from a nose direction and an up vector: point the nose along
 <em>direction</em> and roll so the vessel’s dorsal (roof) axis aligns with
 <em>up</em> (its component perpendicular to the nose), then apply an optional
 <em>roll</em> offset about the nose. Both vectors are in the reference frame
-specified by <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.reference_frame" title="SpaceCenter.SpaceCenter.AutoPilot.reference_frame"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.reference_frame</span></code></a>.</p>
+specified by <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.reference_frame" title="SpaceCenter.AutoPilot.reference_frame"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.reference_frame</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>direction</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The direction to point the nose in.</p></li>
-<li><p><strong>up</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The reference direction the roof is rolled towards. Need not be normalized or perpendicular to <em>direction</em>, as its component perpendicular to the nose is used. Stored as the <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.up_reference" title="SpaceCenter.SpaceCenter.AutoPilot.up_reference"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.up_reference</span></code></a>.</p></li>
-<li><p><strong>roll</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – An additional roll about the nose, in degrees (positive banks right). Defaults to 0.</p></li>
+<li><p><strong>direction</strong> – The direction to point the nose in.</p></li>
+<li><p><strong>up</strong> – The reference direction the roof is rolled towards. Need not be normalized or perpendicular to <em>direction</em>, as its component perpendicular to the nose is used. Stored as the <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.up_reference" title="SpaceCenter.AutoPilot.up_reference"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.up_reference</span></code></a>.</p></li>
+<li><p><strong>roll</strong> – An additional roll about the nose, in degrees (positive banks right). Defaults to 0. Defaults to <code class="docutils literal notranslate"><span class="pre">0.0</span></code>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1439,142 +1404,121 @@ gravity turn: pass a fixed <em>up</em> (say north) and the roll stays defined th
 whole way, with no singularity at the vertical. It is well-defined for every nose direction
 except <em>up</em> parallel to <em>direction</em> (asking the roof to
 point where the nose already points), where it falls back to pointing the nose only.
-Equivalent to setting <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.up_reference" title="SpaceCenter.SpaceCenter.AutoPilot.up_reference"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.up_reference</span></code></a> to <em>up</em>, aiming at
-<em>direction</em> and setting <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.target_roll" title="SpaceCenter.SpaceCenter.AutoPilot.target_roll"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_roll</span></code></a> to
+Equivalent to setting <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.up_reference" title="SpaceCenter.AutoPilot.up_reference"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.up_reference</span></code></a> to <em>up</em>, aiming at
+<em>direction</em> and setting <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.target_roll" title="SpaceCenter.AutoPilot.target_roll"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_roll</span></code></a> to
 <em>roll</em>.</p>
 </div>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.current_target_pitch">
-<span class="sig-name descname"><span class="pre">current_target_pitch</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.current_target_pitch" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.current_target_pitch">
+<span class="sig-name descname"><span class="pre">current_target_pitch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.current_target_pitch" title="Link to this definition">#</a></dt>
 <dd><p>The current target pitch the auto-pilot is tracking, in degrees. When
-<a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.target_smoothing_time" title="SpaceCenter.SpaceCenter.AutoPilot.target_smoothing_time"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_smoothing_time</span></code></a> is non-zero this lags the commanded
-<a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.target_pitch" title="SpaceCenter.SpaceCenter.AutoPilot.target_pitch"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_pitch</span></code></a> while a change is slewed in; otherwise the two are equal.
-A convenience scalar, ill-defined near the vertical. See <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.target_pitch" title="SpaceCenter.SpaceCenter.AutoPilot.target_pitch"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_pitch</span></code></a>.</p>
+<a class="reference internal" href="#lua-SpaceCenter.AutoPilot.target_smoothing_time" title="SpaceCenter.AutoPilot.target_smoothing_time"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_smoothing_time</span></code></a> is non-zero this lags the commanded
+<a class="reference internal" href="#lua-SpaceCenter.AutoPilot.target_pitch" title="SpaceCenter.AutoPilot.target_pitch"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_pitch</span></code></a> while a change is slewed in; otherwise the two are equal.
+A convenience scalar, ill-defined near the vertical. See <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.target_pitch" title="SpaceCenter.AutoPilot.target_pitch"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_pitch</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.current_target_heading">
-<span class="sig-name descname"><span class="pre">current_target_heading</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.current_target_heading" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.current_target_heading">
+<span class="sig-name descname"><span class="pre">current_target_heading</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.current_target_heading" title="Link to this definition">#</a></dt>
 <dd><p>The current target heading the auto-pilot is tracking, in degrees. When
-<a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.target_smoothing_time" title="SpaceCenter.SpaceCenter.AutoPilot.target_smoothing_time"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_smoothing_time</span></code></a> is non-zero this lags the commanded
-<a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.target_heading" title="SpaceCenter.SpaceCenter.AutoPilot.target_heading"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_heading</span></code></a> while a change is slewed in; otherwise the two are equal.
-A convenience scalar, ill-defined near the vertical. See <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.target_heading" title="SpaceCenter.SpaceCenter.AutoPilot.target_heading"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_heading</span></code></a>.</p>
+<a class="reference internal" href="#lua-SpaceCenter.AutoPilot.target_smoothing_time" title="SpaceCenter.AutoPilot.target_smoothing_time"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_smoothing_time</span></code></a> is non-zero this lags the commanded
+<a class="reference internal" href="#lua-SpaceCenter.AutoPilot.target_heading" title="SpaceCenter.AutoPilot.target_heading"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_heading</span></code></a> while a change is slewed in; otherwise the two are equal.
+A convenience scalar, ill-defined near the vertical. See <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.target_heading" title="SpaceCenter.AutoPilot.target_heading"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_heading</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.current_target_roll">
-<span class="sig-name descname"><span class="pre">current_target_roll</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.current_target_roll" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.current_target_roll">
+<span class="sig-name descname"><span class="pre">current_target_roll</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.current_target_roll" title="Link to this definition">#</a></dt>
 <dd><p>The current target roll the auto-pilot is tracking, in degrees. When
-<a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.target_smoothing_time" title="SpaceCenter.SpaceCenter.AutoPilot.target_smoothing_time"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_smoothing_time</span></code></a> is non-zero this lags the commanded
-<a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.target_roll" title="SpaceCenter.SpaceCenter.AutoPilot.target_roll"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_roll</span></code></a> while a change is slewed in; otherwise the two are equal.
+<a class="reference internal" href="#lua-SpaceCenter.AutoPilot.target_smoothing_time" title="SpaceCenter.AutoPilot.target_smoothing_time"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_smoothing_time</span></code></a> is non-zero this lags the commanded
+<a class="reference internal" href="#lua-SpaceCenter.AutoPilot.target_roll" title="SpaceCenter.AutoPilot.target_roll"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_roll</span></code></a> while a change is slewed in; otherwise the two are equal.
 <code class="docutils literal notranslate"><span class="pre">NaN</span></code> if no target roll is set.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.current_target_direction">
-<span class="sig-name descname"><span class="pre">current_target_direction</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.current_target_direction" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.current_target_direction">
+<span class="sig-name descname"><span class="pre">current_target_direction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.current_target_direction" title="Link to this definition">#</a></dt>
 <dd><p>Direction vector corresponding to the current target pitch and heading
-(see <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.current_target_pitch" title="SpaceCenter.SpaceCenter.AutoPilot.current_target_pitch"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.current_target_pitch</span></code></a>), in the reference frame specified by
-<a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.reference_frame" title="SpaceCenter.SpaceCenter.AutoPilot.reference_frame"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.reference_frame</span></code></a>. Lags <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.target_direction" title="SpaceCenter.SpaceCenter.AutoPilot.target_direction"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_direction</span></code></a> while a change is
-slewed in when <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.target_smoothing_time" title="SpaceCenter.SpaceCenter.AutoPilot.target_smoothing_time"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_smoothing_time</span></code></a> is non-zero.</p>
+(see <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.current_target_pitch" title="SpaceCenter.AutoPilot.current_target_pitch"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.current_target_pitch</span></code></a>), in the reference frame specified by
+<a class="reference internal" href="#lua-SpaceCenter.AutoPilot.reference_frame" title="SpaceCenter.AutoPilot.reference_frame"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.reference_frame</span></code></a>. Lags <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.target_direction" title="SpaceCenter.AutoPilot.target_direction"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_direction</span></code></a> while a change is
+slewed in when <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.target_smoothing_time" title="SpaceCenter.AutoPilot.target_smoothing_time"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_smoothing_time</span></code></a> is non-zero.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.current_target_rotation">
-<span class="sig-name descname"><span class="pre">current_target_rotation</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.current_target_rotation" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.current_target_rotation">
+<span class="sig-name descname"><span class="pre">current_target_rotation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.current_target_rotation" title="Link to this definition">#</a></dt>
 <dd><p>The current target rotation quaternion the auto-pilot is tracking, in the reference frame
-specified by <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.reference_frame" title="SpaceCenter.SpaceCenter.AutoPilot.reference_frame"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.reference_frame</span></code></a>. Lags <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.target_rotation" title="SpaceCenter.SpaceCenter.AutoPilot.target_rotation"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_rotation</span></code></a> while a
-change is slewed in when <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.target_smoothing_time" title="SpaceCenter.SpaceCenter.AutoPilot.target_smoothing_time"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_smoothing_time</span></code></a> is non-zero.</p>
+specified by <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.reference_frame" title="SpaceCenter.AutoPilot.reference_frame"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.reference_frame</span></code></a>. Lags <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.target_rotation" title="SpaceCenter.AutoPilot.target_rotation"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_rotation</span></code></a> while a
+change is slewed in when <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.target_smoothing_time" title="SpaceCenter.AutoPilot.target_smoothing_time"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_smoothing_time</span></code></a> is non-zero.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.AutoPilot.wait">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">wait</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="pre">timeout</span> <span class="pre">=</span> <span class="pre">-1.0</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.AutoPilot.wait" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.wait">
+<span class="sig-name descname"><span class="pre">wait</span></span><span class="p"><span class="pre">(</span></span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">timeout</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.wait" title="Link to this definition">#</a></dt>
 <dd><p>Blocks until the vessel is pointing in the target direction and has
 the target roll (if set). Throws an exception if the auto-pilot has not been engaged.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>timeout</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Maximum time to wait in seconds. If not specified, waits indefinitely.</p>
+<dd class="field-odd"><p><strong>timeout</strong> – Maximum time to wait in seconds. If not specified, waits indefinitely. Defaults to <code class="docutils literal notranslate"><span class="pre">-1.0</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.stopping_angle_threshold">
-<span class="sig-name descname"><span class="pre">stopping_angle_threshold</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.stopping_angle_threshold" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.stopping_angle_threshold">
+<span class="sig-name descname"><span class="pre">stopping_angle_threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.stopping_angle_threshold" title="Link to this definition">#</a></dt>
 <dd><p>The threshold, in degrees, below which the pointing error must fall for
-<a class="reference internal" href="#SpaceCenter.AutoPilot.wait" title="SpaceCenter.AutoPilot.wait"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.wait()</span></code></a> to return. Defaults to 1 degree.</p>
+<a class="reference internal" href="#lua-SpaceCenter.AutoPilot.wait" title="SpaceCenter.AutoPilot.wait"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot:wait()</span></code></a> to return. Defaults to 1 degree.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.stopping_velocity_threshold">
-<span class="sig-name descname"><span class="pre">stopping_velocity_threshold</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.stopping_velocity_threshold" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.stopping_velocity_threshold">
+<span class="sig-name descname"><span class="pre">stopping_velocity_threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.stopping_velocity_threshold" title="Link to this definition">#</a></dt>
 <dd><p>The threshold angular velocity, in <span class="math notranslate nohighlight">\(\mathrm{rad/s}\)</span>, below which the vessel’s angular
-velocity magnitude must fall for <a class="reference internal" href="#SpaceCenter.AutoPilot.wait" title="SpaceCenter.AutoPilot.wait"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.wait()</span></code></a> to return.
+velocity magnitude must fall for <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.wait" title="SpaceCenter.AutoPilot.wait"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot:wait()</span></code></a> to return.
 Defaults to 0.05 <span class="math notranslate nohighlight">\(\mathrm{rad/s}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.error">
-<span class="sig-name descname"><span class="pre">error</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.error" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.error">
+<span class="sig-name descname"><span class="pre">error</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.error" title="Link to this definition">#</a></dt>
 <dd><p>The error, in degrees, between the direction the ship has been asked
 to point in and the direction it is pointing in. Throws an exception if the auto-pilot
 has not been engaged and SAS is not enabled or is in stability assist mode.</p>
@@ -1582,90 +1526,75 @@ has not been engaged and SAS is not enabled or is in stability assist mode.</p>
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This is the error relative to the commanded target. While a change is being slewed in
-(see <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.target_smoothing_time" title="SpaceCenter.SpaceCenter.AutoPilot.target_smoothing_time"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_smoothing_time</span></code></a>) it differs from <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.current_error" title="SpaceCenter.SpaceCenter.AutoPilot.current_error"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.current_error</span></code></a>, the
+(see <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.target_smoothing_time" title="SpaceCenter.AutoPilot.target_smoothing_time"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_smoothing_time</span></code></a>) it differs from <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.current_error" title="SpaceCenter.AutoPilot.current_error"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.current_error</span></code></a>, the
 error relative to the target the auto-pilot is currently tracking.</p>
 </div>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.attitude_error">
-<span class="sig-name descname"><span class="pre">attitude_error</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.attitude_error" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.attitude_error">
+<span class="sig-name descname"><span class="pre">attitude_error</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.attitude_error" title="Link to this definition">#</a></dt>
 <dd><p>The per-axis attitude error <code class="docutils literal notranslate"><span class="pre">(pitch,</span> <span class="pre">yaw,</span> <span class="pre">roll)</span></code>, in degrees, between the vessel’s current
 attitude and the commanded target. All three components come from one singularity-free
 residual decomposition, so they stay well-defined near the vertical (unlike a subtraction
-of pitch/heading/roll angles). The scalar <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.pitch_error" title="SpaceCenter.SpaceCenter.AutoPilot.pitch_error"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.pitch_error</span></code></a>,
-<a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.heading_error" title="SpaceCenter.SpaceCenter.AutoPilot.heading_error"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.heading_error</span></code></a> and <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.roll_error" title="SpaceCenter.SpaceCenter.AutoPilot.roll_error"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.roll_error</span></code></a> are the magnitudes of the pitch, yaw
+of pitch/heading/roll angles). The scalar <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.pitch_error" title="SpaceCenter.AutoPilot.pitch_error"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.pitch_error</span></code></a>,
+<a class="reference internal" href="#lua-SpaceCenter.AutoPilot.heading_error" title="SpaceCenter.AutoPilot.heading_error"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.heading_error</span></code></a> and <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.roll_error" title="SpaceCenter.AutoPilot.roll_error"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.roll_error</span></code></a> are the magnitudes of the pitch, yaw
 and roll components respectively. Throws an exception if the auto-pilot has not been
 engaged.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.pitch_error">
-<span class="sig-name descname"><span class="pre">pitch_error</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.pitch_error" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.pitch_error">
+<span class="sig-name descname"><span class="pre">pitch_error</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.pitch_error" title="Link to this definition">#</a></dt>
 <dd><p>The error, in degrees, between the vessels current and target pitch.
 Throws an exception if the auto-pilot has not been engaged.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The pitch component of <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.attitude_error" title="SpaceCenter.SpaceCenter.AutoPilot.attitude_error"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.attitude_error</span></code></a>, the pitch part of the direction
+<p>The pitch component of <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.attitude_error" title="SpaceCenter.AutoPilot.attitude_error"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.attitude_error</span></code></a>, the pitch part of the direction
 error resolved in the roll-invariant frame, well-defined near the vertical.</p>
 </div>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.heading_error">
-<span class="sig-name descname"><span class="pre">heading_error</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.heading_error" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.heading_error">
+<span class="sig-name descname"><span class="pre">heading_error</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.heading_error" title="Link to this definition">#</a></dt>
 <dd><p>The error, in degrees, between the vessels current and target heading.
 Throws an exception if the auto-pilot has not been engaged.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The yaw component of <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.attitude_error" title="SpaceCenter.SpaceCenter.AutoPilot.attitude_error"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.attitude_error</span></code></a>, the yaw part of the direction error
+<p>The yaw component of <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.attitude_error" title="SpaceCenter.AutoPilot.attitude_error"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.attitude_error</span></code></a>, the yaw part of the direction error
 resolved in the roll-invariant frame, well-defined near the vertical, where the absolute
 heading is undefined at the pole.</p>
 </div>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.roll_error">
-<span class="sig-name descname"><span class="pre">roll_error</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.roll_error" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.roll_error">
+<span class="sig-name descname"><span class="pre">roll_error</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.roll_error" title="Link to this definition">#</a></dt>
 <dd><p>The error, in degrees, between the vessels current and target roll.
 Throws an exception if the auto-pilot has not been engaged or no target roll is set.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1677,138 +1606,117 @@ ill-conditioned when the vessel points close to straight up or down.</p>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.current_error">
-<span class="sig-name descname"><span class="pre">current_error</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.current_error" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.current_error">
+<span class="sig-name descname"><span class="pre">current_error</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.current_error" title="Link to this definition">#</a></dt>
 <dd><p>The error, in degrees, between the direction the auto-pilot is currently tracking and the
-direction the ship is pointing in. Unlike <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.error" title="SpaceCenter.SpaceCenter.AutoPilot.error"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.error</span></code></a> (which is relative to the
+direction the ship is pointing in. Unlike <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.error" title="SpaceCenter.AutoPilot.error"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.error</span></code></a> (which is relative to the
 commanded target), this is relative to the slewed target the auto-pilot is currently
-holding, so it stays small while a smoothed change (see <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.target_smoothing_time" title="SpaceCenter.SpaceCenter.AutoPilot.target_smoothing_time"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_smoothing_time</span></code></a>)
-is fed in. Equal to <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.error" title="SpaceCenter.SpaceCenter.AutoPilot.error"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.error</span></code></a> when smoothing is off. Throws an exception if the
+holding, so it stays small while a smoothed change (see <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.target_smoothing_time" title="SpaceCenter.AutoPilot.target_smoothing_time"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_smoothing_time</span></code></a>)
+is fed in. Equal to <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.error" title="SpaceCenter.AutoPilot.error"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.error</span></code></a> when smoothing is off. Throws an exception if the
 auto-pilot has not been engaged.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.current_attitude_error">
-<span class="sig-name descname"><span class="pre">current_attitude_error</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.current_attitude_error" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.current_attitude_error">
+<span class="sig-name descname"><span class="pre">current_attitude_error</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.current_attitude_error" title="Link to this definition">#</a></dt>
 <dd><p>The per-axis attitude error <code class="docutils literal notranslate"><span class="pre">(pitch,</span> <span class="pre">yaw,</span> <span class="pre">roll)</span></code>, in degrees, between the vessel’s current
 attitude and the target the auto-pilot is currently tracking (the slewed target, see
-<a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.current_target_rotation" title="SpaceCenter.SpaceCenter.AutoPilot.current_target_rotation"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.current_target_rotation</span></code></a>). Like <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.attitude_error" title="SpaceCenter.SpaceCenter.AutoPilot.attitude_error"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.attitude_error</span></code></a> but relative to the
+<a class="reference internal" href="#lua-SpaceCenter.AutoPilot.current_target_rotation" title="SpaceCenter.AutoPilot.current_target_rotation"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.current_target_rotation</span></code></a>). Like <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.attitude_error" title="SpaceCenter.AutoPilot.attitude_error"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.attitude_error</span></code></a> but relative to the
 current target, so it stays small while a smoothed change (see
-<a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.target_smoothing_time" title="SpaceCenter.SpaceCenter.AutoPilot.target_smoothing_time"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_smoothing_time</span></code></a>) is fed in; equal to <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.attitude_error" title="SpaceCenter.SpaceCenter.AutoPilot.attitude_error"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.attitude_error</span></code></a> when
+<a class="reference internal" href="#lua-SpaceCenter.AutoPilot.target_smoothing_time" title="SpaceCenter.AutoPilot.target_smoothing_time"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.target_smoothing_time</span></code></a>) is fed in; equal to <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.attitude_error" title="SpaceCenter.AutoPilot.attitude_error"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.attitude_error</span></code></a> when
 smoothing is off. Throws an exception if the auto-pilot has not been engaged.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.current_pitch_error">
-<span class="sig-name descname"><span class="pre">current_pitch_error</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.current_pitch_error" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.current_pitch_error">
+<span class="sig-name descname"><span class="pre">current_pitch_error</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.current_pitch_error" title="Link to this definition">#</a></dt>
 <dd><p>The error, in degrees, between the vessels current pitch and the pitch the auto-pilot is
-currently tracking (see <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.current_target_pitch" title="SpaceCenter.SpaceCenter.AutoPilot.current_target_pitch"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.current_target_pitch</span></code></a>). Throws an exception if the
+currently tracking (see <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.current_target_pitch" title="SpaceCenter.AutoPilot.current_target_pitch"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.current_target_pitch</span></code></a>). Throws an exception if the
 auto-pilot has not been engaged.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The pitch component of <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.current_attitude_error" title="SpaceCenter.SpaceCenter.AutoPilot.current_attitude_error"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.current_attitude_error</span></code></a>, well-defined near the vertical.</p>
+<p>The pitch component of <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.current_attitude_error" title="SpaceCenter.AutoPilot.current_attitude_error"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.current_attitude_error</span></code></a>, well-defined near the vertical.</p>
 </div>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.current_heading_error">
-<span class="sig-name descname"><span class="pre">current_heading_error</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.current_heading_error" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.current_heading_error">
+<span class="sig-name descname"><span class="pre">current_heading_error</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.current_heading_error" title="Link to this definition">#</a></dt>
 <dd><p>The error, in degrees, between the vessels current heading and the heading the auto-pilot
-is currently tracking (see <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.current_target_heading" title="SpaceCenter.SpaceCenter.AutoPilot.current_target_heading"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.current_target_heading</span></code></a>). Throws an exception if the
+is currently tracking (see <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.current_target_heading" title="SpaceCenter.AutoPilot.current_target_heading"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.current_target_heading</span></code></a>). Throws an exception if the
 auto-pilot has not been engaged.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The yaw component of <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.current_attitude_error" title="SpaceCenter.SpaceCenter.AutoPilot.current_attitude_error"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.current_attitude_error</span></code></a>, well-defined near the vertical.</p>
+<p>The yaw component of <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.current_attitude_error" title="SpaceCenter.AutoPilot.current_attitude_error"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.current_attitude_error</span></code></a>, well-defined near the vertical.</p>
 </div>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.current_roll_error">
-<span class="sig-name descname"><span class="pre">current_roll_error</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.current_roll_error" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.current_roll_error">
+<span class="sig-name descname"><span class="pre">current_roll_error</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.current_roll_error" title="Link to this definition">#</a></dt>
 <dd><p>The error, in degrees, between the vessels current roll and the roll the auto-pilot is
-currently tracking (see <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.current_target_roll" title="SpaceCenter.SpaceCenter.AutoPilot.current_target_roll"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.current_target_roll</span></code></a>). Throws an exception if the
+currently tracking (see <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.current_target_roll" title="SpaceCenter.AutoPilot.current_target_roll"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.current_target_roll</span></code></a>). Throws an exception if the
 auto-pilot has not been engaged or no target roll is set.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Measured about the vessel’s nose axis, so it stays well-defined near the vertical
-singularity. See <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.roll_error" title="SpaceCenter.SpaceCenter.AutoPilot.roll_error"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.roll_error</span></code></a>.</p>
+singularity. See <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.roll_error" title="SpaceCenter.AutoPilot.roll_error"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.roll_error</span></code></a>.</p>
 </div>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.roll_start_angle">
-<span class="sig-name descname"><span class="pre">roll_start_angle</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.roll_start_angle" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.roll_start_angle">
+<span class="sig-name descname"><span class="pre">roll_start_angle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.roll_start_angle" title="Link to this definition">#</a></dt>
 <dd><p>The direction error, in degrees, above which roll blending is fully suppressed.
 Defaults to 20 degrees.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.roll_engage_angle">
-<span class="sig-name descname"><span class="pre">roll_engage_angle</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.roll_engage_angle" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.roll_engage_angle">
+<span class="sig-name descname"><span class="pre">roll_engage_angle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.roll_engage_angle" title="Link to this definition">#</a></dt>
 <dd><p>The direction error, in degrees, below which roll is fully engaged.
-Roll blends linearly between <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.roll_start_angle" title="SpaceCenter.SpaceCenter.AutoPilot.roll_start_angle"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.roll_start_angle</span></code></a> and this value.
+Roll blends linearly between <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.roll_start_angle" title="SpaceCenter.AutoPilot.roll_start_angle"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.roll_start_angle</span></code></a> and this value.
 Defaults to 15 degrees.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.max_angular_velocity">
-<span class="sig-name descname"><span class="pre">max_angular_velocity</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.max_angular_velocity" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.max_angular_velocity">
+<span class="sig-name descname"><span class="pre">max_angular_velocity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.max_angular_velocity" title="Link to this definition">#</a></dt>
 <dd><p>The maximum angular velocity of the vessel, in <span class="math notranslate nohighlight">\(\mathrm{rad/s}\)</span>, for each of the
 pitch, roll and yaw axes. Limits the target angular velocity computed by the bang-bang
 profile so that vessels with very high torque availability do not spin faster than
@@ -1817,35 +1725,29 @@ desired. Defaults to 1 <span class="math notranslate nohighlight">\(\mathrm{rad/
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.limit_angular_velocity">
-<span class="sig-name descname"><span class="pre">limit_angular_velocity</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.limit_angular_velocity" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.limit_angular_velocity">
+<span class="sig-name descname"><span class="pre">limit_angular_velocity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.limit_angular_velocity" title="Link to this definition">#</a></dt>
 <dd><p>Whether to also limit the angular velocity to what the control surfaces hold against
 the aerodynamic forces. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>When disabled, only <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.max_angular_velocity" title="SpaceCenter.SpaceCenter.AutoPilot.max_angular_velocity"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.max_angular_velocity</span></code></a> limits the angular velocity. Not
+<p>When disabled, only <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.max_angular_velocity" title="SpaceCenter.AutoPilot.max_angular_velocity"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.max_angular_velocity</span></code></a> limits the angular velocity. Not
 applied when the Ferram Aerospace Research mod is installed.</p>
 </div>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.pitch_yaw_attenuation_angle">
-<span class="sig-name descname"><span class="pre">pitch_yaw_attenuation_angle</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.pitch_yaw_attenuation_angle" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.pitch_yaw_attenuation_angle">
+<span class="sig-name descname"><span class="pre">pitch_yaw_attenuation_angle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.pitch_yaw_attenuation_angle" title="Link to this definition">#</a></dt>
 <dd><p>The angle, in degrees, at which the autopilot considers the vessel to be pointing close
 to the target direction. This sets the high angle of the pitch/yaw pointing deadband: at
 or above this error the target velocity is at full, and below it the target velocity
@@ -1856,15 +1758,12 @@ use shrinks in proportion to the share of the torque that comes from control sur
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.roll_attenuation_angle">
-<span class="sig-name descname"><span class="pre">roll_attenuation_angle</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.roll_attenuation_angle" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.roll_attenuation_angle">
+<span class="sig-name descname"><span class="pre">roll_attenuation_angle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.roll_attenuation_angle" title="Link to this definition">#</a></dt>
 <dd><p>The angle, in degrees, at which the autopilot considers the vessel to be pointing close
 to the target roll. This sets the high angle of the roll-axis pointing deadband: at or
 above this error the target velocity is at full, and below it the target velocity ramps
@@ -1875,31 +1774,25 @@ surfaces.</p>
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.auto_tune">
-<span class="sig-name descname"><span class="pre">auto_tune</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.auto_tune" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.auto_tune">
+<span class="sig-name descname"><span class="pre">auto_tune</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.auto_tune" title="Link to this definition">#</a></dt>
 <dd><p>Whether the rotation rate controllers PID parameters should be automatically tuned
 using the vessels moment of inertia and available torque. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.
-See <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.time_to_peak" title="SpaceCenter.SpaceCenter.AutoPilot.time_to_peak"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.time_to_peak</span></code></a> and <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.overshoot" title="SpaceCenter.SpaceCenter.AutoPilot.overshoot"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.overshoot</span></code></a>.</p>
+See <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.time_to_peak" title="SpaceCenter.AutoPilot.time_to_peak"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.time_to_peak</span></code></a> and <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.overshoot" title="SpaceCenter.AutoPilot.overshoot"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.overshoot</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.time_to_peak">
-<span class="sig-name descname"><span class="pre">time_to_peak</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.time_to_peak" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.time_to_peak">
+<span class="sig-name descname"><span class="pre">time_to_peak</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.time_to_peak" title="Link to this definition">#</a></dt>
 <dd><p>The target time to peak used to autotune the PID controllers.
 A vector of three times, in seconds, for each of the pitch, roll and yaw axes.
 Defaults to 1 second for each axis.</p>
@@ -1907,15 +1800,12 @@ Defaults to 1 second for each axis.</p>
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.soft_start_time">
-<span class="sig-name descname"><span class="pre">soft_start_time</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.soft_start_time" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.soft_start_time">
+<span class="sig-name descname"><span class="pre">soft_start_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.soft_start_time" title="Link to this definition">#</a></dt>
 <dd><p>The duration, in seconds, over which the control output is faded in when the
 autopilot is engaged. This soft-start spreads the engagement transient over many
 physics ticks so engaging (on the pad or mid-flight) does not command a near-maximum
@@ -1925,15 +1815,12 @@ Set to 0 to disable the fade-in.</p>
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.target_smoothing_time">
-<span class="sig-name descname"><span class="pre">target_smoothing_time</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.target_smoothing_time" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.target_smoothing_time">
+<span class="sig-name descname"><span class="pre">target_smoothing_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.target_smoothing_time" title="Link to this definition">#</a></dt>
 <dd><p>The duration, in seconds, over which a change to the target attitude is applied to the
 control target. When set above zero, changing the target pitch, heading, roll, direction
 or rotation makes the effective control target ramp smoothly (a constant-rate rotation)
@@ -1945,15 +1832,12 @@ turn) without inducing oscillation from stepwise target changes. Defaults to 0
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.overshoot">
-<span class="sig-name descname"><span class="pre">overshoot</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.overshoot" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.overshoot">
+<span class="sig-name descname"><span class="pre">overshoot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.overshoot" title="Link to this definition">#</a></dt>
 <dd><p>The target overshoot percentage used to autotune the PID controllers.
 A vector of three values, between 0 and 1, for each of the pitch, roll and yaw axes.
 Defaults to 0.01 for each axis.</p>
@@ -1961,144 +1845,120 @@ Defaults to 0.01 for each axis.</p>
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.pitch_pid_gains">
-<span class="sig-name descname"><span class="pre">pitch_pid_gains</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.pitch_pid_gains" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.pitch_pid_gains">
+<span class="sig-name descname"><span class="pre">pitch_pid_gains</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.pitch_pid_gains" title="Link to this definition">#</a></dt>
 <dd><p>Gains for the pitch PID controller.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>When <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.auto_tune" title="SpaceCenter.SpaceCenter.AutoPilot.auto_tune"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.auto_tune</span></code></a> is true, these values are updated automatically,
+<p>When <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.auto_tune" title="SpaceCenter.AutoPilot.auto_tune"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.auto_tune</span></code></a> is true, these values are updated automatically,
 which will overwrite any manual changes.</p>
 </div>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.roll_pid_gains">
-<span class="sig-name descname"><span class="pre">roll_pid_gains</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.roll_pid_gains" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.roll_pid_gains">
+<span class="sig-name descname"><span class="pre">roll_pid_gains</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.roll_pid_gains" title="Link to this definition">#</a></dt>
 <dd><p>Gains for the roll PID controller.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>When <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.auto_tune" title="SpaceCenter.SpaceCenter.AutoPilot.auto_tune"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.auto_tune</span></code></a> is true, these values are updated automatically,
+<p>When <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.auto_tune" title="SpaceCenter.AutoPilot.auto_tune"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.auto_tune</span></code></a> is true, these values are updated automatically,
 which will overwrite any manual changes.</p>
 </div>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.yaw_pid_gains">
-<span class="sig-name descname"><span class="pre">yaw_pid_gains</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.yaw_pid_gains" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.yaw_pid_gains">
+<span class="sig-name descname"><span class="pre">yaw_pid_gains</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.yaw_pid_gains" title="Link to this definition">#</a></dt>
 <dd><p>Gains for the yaw PID controller.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>When <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.auto_tune" title="SpaceCenter.SpaceCenter.AutoPilot.auto_tune"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.auto_tune</span></code></a> is true, these values are updated automatically,
+<p>When <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.auto_tune" title="SpaceCenter.AutoPilot.auto_tune"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.auto_tune</span></code></a> is true, these values are updated automatically,
 which will overwrite any manual changes.</p>
 </div>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.pitch_yaw_rate_filter_mode">
-<span class="sig-name descname"><span class="pre">pitch_yaw_rate_filter_mode</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.RateFilterMode</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.pitch_yaw_rate_filter_mode" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.pitch_yaw_rate_filter_mode">
+<span class="sig-name descname"><span class="pre">pitch_yaw_rate_filter_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-SpaceCenter.RateFilterMode" title="SpaceCenter.RateFilterMode"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.RateFilterMode</span></code></a><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.pitch_yaw_rate_filter_mode" title="Link to this definition">#</a></dt>
 <dd><p>Controls the rate-feedback filtering (the wobble-suppression filter on the measured
 angular velocity) for the pitch and yaw axes of a structurally flexible vessel. When
-<a class="reference internal" href="#SpaceCenter.RateFilterMode.automatic" title="SpaceCenter.RateFilterMode.automatic"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.RateFilterMode.automatic</span></code></a> (the default) the auto-pilot detects the
+<a class="reference internal" href="#lua-SpaceCenter.RateFilterMode.automatic" title="SpaceCenter.RateFilterMode.automatic"><code class="xref lua lua-data docutils literal notranslate"><span class="pre">SpaceCenter.RateFilterMode.automatic</span></code></a> (the default) the auto-pilot detects the
 oscillation at runtime, estimates its frequency and routes it to the appropriate tool
 (a notch filter for a low-frequency mode near the control band, a low-pass for a
-high-frequency mode). <a class="reference internal" href="#SpaceCenter.RateFilterMode.off" title="SpaceCenter.RateFilterMode.off"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.RateFilterMode.off</span></code></a> disables rate filtering only,
-leaving the other oscillation mitigations unaffected. <a class="reference internal" href="#SpaceCenter.RateFilterMode.notch" title="SpaceCenter.RateFilterMode.notch"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.RateFilterMode.notch</span></code></a>
-and <a class="reference internal" href="#SpaceCenter.RateFilterMode.low_pass" title="SpaceCenter.RateFilterMode.low_pass"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.RateFilterMode.low_pass</span></code></a> force the respective tool unconditionally at
-<a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.pitch_yaw_oscillation_frequency" title="SpaceCenter.SpaceCenter.AutoPilot.pitch_yaw_oscillation_frequency"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.pitch_yaw_oscillation_frequency</span></code></a>, for a vessel known in advance to be
+high-frequency mode). <a class="reference internal" href="#lua-SpaceCenter.RateFilterMode.off" title="SpaceCenter.RateFilterMode.off"><code class="xref lua lua-data docutils literal notranslate"><span class="pre">SpaceCenter.RateFilterMode.off</span></code></a> disables rate filtering only,
+leaving the other oscillation mitigations unaffected. <a class="reference internal" href="#lua-SpaceCenter.RateFilterMode.notch" title="SpaceCenter.RateFilterMode.notch"><code class="xref lua lua-data docutils literal notranslate"><span class="pre">SpaceCenter.RateFilterMode.notch</span></code></a>
+and <a class="reference internal" href="#lua-SpaceCenter.RateFilterMode.low_pass" title="SpaceCenter.RateFilterMode.low_pass"><code class="xref lua lua-data docutils literal notranslate"><span class="pre">SpaceCenter.RateFilterMode.low_pass</span></code></a> force the respective tool unconditionally at
+<a class="reference internal" href="#lua-SpaceCenter.AutoPilot.pitch_yaw_oscillation_frequency" title="SpaceCenter.AutoPilot.pitch_yaw_oscillation_frequency"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.pitch_yaw_oscillation_frequency</span></code></a>, for a vessel known in advance to be
 flexible.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#SpaceCenter.RateFilterMode" title="SpaceCenter.RateFilterMode"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.RateFilterMode</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.roll_rate_filter_mode">
-<span class="sig-name descname"><span class="pre">roll_rate_filter_mode</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.RateFilterMode</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.roll_rate_filter_mode" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.roll_rate_filter_mode">
+<span class="sig-name descname"><span class="pre">roll_rate_filter_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-SpaceCenter.RateFilterMode" title="SpaceCenter.RateFilterMode"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.RateFilterMode</span></code></a><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.roll_rate_filter_mode" title="Link to this definition">#</a></dt>
 <dd><p>Controls the rate-feedback filtering for the roll axis. Behaves as
-<a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.pitch_yaw_rate_filter_mode" title="SpaceCenter.SpaceCenter.AutoPilot.pitch_yaw_rate_filter_mode"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.pitch_yaw_rate_filter_mode</span></code></a> but for roll, using
-<a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.roll_oscillation_frequency" title="SpaceCenter.SpaceCenter.AutoPilot.roll_oscillation_frequency"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.roll_oscillation_frequency</span></code></a>. Defaults to
-<a class="reference internal" href="#SpaceCenter.RateFilterMode.automatic" title="SpaceCenter.RateFilterMode.automatic"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.RateFilterMode.automatic</span></code></a>.</p>
+<a class="reference internal" href="#lua-SpaceCenter.AutoPilot.pitch_yaw_rate_filter_mode" title="SpaceCenter.AutoPilot.pitch_yaw_rate_filter_mode"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.pitch_yaw_rate_filter_mode</span></code></a> but for roll, using
+<a class="reference internal" href="#lua-SpaceCenter.AutoPilot.roll_oscillation_frequency" title="SpaceCenter.AutoPilot.roll_oscillation_frequency"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.roll_oscillation_frequency</span></code></a>. Defaults to
+<a class="reference internal" href="#lua-SpaceCenter.RateFilterMode.automatic" title="SpaceCenter.RateFilterMode.automatic"><code class="xref lua lua-data docutils literal notranslate"><span class="pre">SpaceCenter.RateFilterMode.automatic</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#SpaceCenter.RateFilterMode" title="SpaceCenter.RateFilterMode"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.RateFilterMode</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.pitch_yaw_oscillation_frequency">
-<span class="sig-name descname"><span class="pre">pitch_yaw_oscillation_frequency</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.pitch_yaw_oscillation_frequency" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.pitch_yaw_oscillation_frequency">
+<span class="sig-name descname"><span class="pre">pitch_yaw_oscillation_frequency</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.pitch_yaw_oscillation_frequency" title="Link to this definition">#</a></dt>
 <dd><p>The structural mode frequency, in Hz, for the pitch/yaw axis group. Used directly as the
-filter frequency in <a class="reference internal" href="#SpaceCenter.RateFilterMode.notch" title="SpaceCenter.RateFilterMode.notch"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.RateFilterMode.notch</span></code></a> / <a class="reference internal" href="#SpaceCenter.RateFilterMode.low_pass" title="SpaceCenter.RateFilterMode.low_pass"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.RateFilterMode.low_pass</span></code></a>
+filter frequency in <a class="reference internal" href="#lua-SpaceCenter.RateFilterMode.notch" title="SpaceCenter.RateFilterMode.notch"><code class="xref lua lua-data docutils literal notranslate"><span class="pre">SpaceCenter.RateFilterMode.notch</span></code></a> / <a class="reference internal" href="#lua-SpaceCenter.RateFilterMode.low_pass" title="SpaceCenter.RateFilterMode.low_pass"><code class="xref lua lua-data docutils literal notranslate"><span class="pre">SpaceCenter.RateFilterMode.low_pass</span></code></a>
 mode, and as the seed for the automatic frequency estimator before it acquires. Defaults
 to 1.5 Hz.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.roll_oscillation_frequency">
-<span class="sig-name descname"><span class="pre">roll_oscillation_frequency</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.roll_oscillation_frequency" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.roll_oscillation_frequency">
+<span class="sig-name descname"><span class="pre">roll_oscillation_frequency</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.roll_oscillation_frequency" title="Link to this definition">#</a></dt>
 <dd><p>The structural mode frequency, in Hz, for the roll axis. Behaves as
-<a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.pitch_yaw_oscillation_frequency" title="SpaceCenter.SpaceCenter.AutoPilot.pitch_yaw_oscillation_frequency"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.pitch_yaw_oscillation_frequency</span></code></a> but for roll. Defaults to 1.5 Hz.</p>
+<a class="reference internal" href="#lua-SpaceCenter.AutoPilot.pitch_yaw_oscillation_frequency" title="SpaceCenter.AutoPilot.pitch_yaw_oscillation_frequency"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.pitch_yaw_oscillation_frequency</span></code></a> but for roll. Defaults to 1.5 Hz.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.oscillation_notch_q">
-<span class="sig-name descname"><span class="pre">oscillation_notch_q</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.oscillation_notch_q" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.oscillation_notch_q">
+<span class="sig-name descname"><span class="pre">oscillation_notch_q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.oscillation_notch_q" title="Link to this definition">#</a></dt>
 <dd><p>The quality factor of the notch filter used to suppress a low-frequency structural mode.
 A higher value gives a narrower notch (less in-band control lag but less tolerance to the
 mode frequency drifting); a lower value gives a wider notch. Defaults to 2.5. This is an
@@ -2107,34 +1967,28 @@ advanced tuning parameter.</p>
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.oscillation_bandwidth_floor_mode">
-<span class="sig-name descname"><span class="pre">oscillation_bandwidth_floor_mode</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.MitigationMode</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.oscillation_bandwidth_floor_mode" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.oscillation_bandwidth_floor_mode">
+<span class="sig-name descname"><span class="pre">oscillation_bandwidth_floor_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-SpaceCenter.MitigationMode" title="SpaceCenter.MitigationMode"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.MitigationMode</span></code></a><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.oscillation_bandwidth_floor_mode" title="Link to this definition">#</a></dt>
 <dd><p>Controls the bandwidth-floor mitigation: the reduction of the inner control loop
 bandwidth on a structurally flexible axis, the primary oscillation stabilizer. When
-<a class="reference internal" href="#SpaceCenter.MitigationMode.automatic" title="SpaceCenter.MitigationMode.automatic"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.MitigationMode.automatic</span></code></a> (the default) it engages on a latched axis
-while holding (and during a detected limit cycle). <a class="reference internal" href="#SpaceCenter.MitigationMode.off" title="SpaceCenter.MitigationMode.off"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.MitigationMode.off</span></code></a>
-never reduces the bandwidth; <a class="reference internal" href="#SpaceCenter.MitigationMode.forced" title="SpaceCenter.MitigationMode.forced"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.MitigationMode.forced</span></code></a> keeps it fully
+<a class="reference internal" href="#lua-SpaceCenter.MitigationMode.automatic" title="SpaceCenter.MitigationMode.automatic"><code class="xref lua lua-data docutils literal notranslate"><span class="pre">SpaceCenter.MitigationMode.automatic</span></code></a> (the default) it engages on a latched axis
+while holding (and during a detected limit cycle). <a class="reference internal" href="#lua-SpaceCenter.MitigationMode.off" title="SpaceCenter.MitigationMode.off"><code class="xref lua lua-data docutils literal notranslate"><span class="pre">SpaceCenter.MitigationMode.off</span></code></a>
+never reduces the bandwidth; <a class="reference internal" href="#lua-SpaceCenter.MitigationMode.forced" title="SpaceCenter.MitigationMode.forced"><code class="xref lua lua-data docutils literal notranslate"><span class="pre">SpaceCenter.MitigationMode.forced</span></code></a> keeps it fully
 reduced at all times.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#SpaceCenter.MitigationMode" title="SpaceCenter.MitigationMode"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.MitigationMode</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.oscillation_bandwidth_floor">
-<span class="sig-name descname"><span class="pre">oscillation_bandwidth_floor</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.oscillation_bandwidth_floor" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.oscillation_bandwidth_floor">
+<span class="sig-name descname"><span class="pre">oscillation_bandwidth_floor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.oscillation_bandwidth_floor" title="Link to this definition">#</a></dt>
 <dd><p>The inner control loop bandwidth, in <span class="math notranslate nohighlight">\(\mathrm{rad/s}\)</span>, that an axis is reduced
 towards while the bandwidth-floor mitigation is engaged on it. Lowering it suppresses
 oscillation more strongly; raising it keeps more control authority at the cost of
@@ -2144,52 +1998,43 @@ parameter.</p>
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.oscillation_feedforward_mode">
-<span class="sig-name descname"><span class="pre">oscillation_feedforward_mode</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.MitigationMode</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.oscillation_feedforward_mode" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.oscillation_feedforward_mode">
+<span class="sig-name descname"><span class="pre">oscillation_feedforward_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-SpaceCenter.MitigationMode" title="SpaceCenter.MitigationMode"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.MitigationMode</span></code></a><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.oscillation_feedforward_mode" title="Link to this definition">#</a></dt>
 <dd><p>Controls the feedforward-cut mitigation: removal of the acceleration feedforward on a
 structurally flexible axis while holding, so it cannot re-excite a residual mode at
-the reduced bandwidth. When <a class="reference internal" href="#SpaceCenter.MitigationMode.automatic" title="SpaceCenter.MitigationMode.automatic"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.MitigationMode.automatic</span></code></a> (the default) it
-follows the hold gate on a latched axis. <a class="reference internal" href="#SpaceCenter.MitigationMode.off" title="SpaceCenter.MitigationMode.off"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.MitigationMode.off</span></code></a> never cuts
-the feedforward; <a class="reference internal" href="#SpaceCenter.MitigationMode.forced" title="SpaceCenter.MitigationMode.forced"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.MitigationMode.forced</span></code></a> always cuts it fully.</p>
+the reduced bandwidth. When <a class="reference internal" href="#lua-SpaceCenter.MitigationMode.automatic" title="SpaceCenter.MitigationMode.automatic"><code class="xref lua lua-data docutils literal notranslate"><span class="pre">SpaceCenter.MitigationMode.automatic</span></code></a> (the default) it
+follows the hold gate on a latched axis. <a class="reference internal" href="#lua-SpaceCenter.MitigationMode.off" title="SpaceCenter.MitigationMode.off"><code class="xref lua lua-data docutils literal notranslate"><span class="pre">SpaceCenter.MitigationMode.off</span></code></a> never cuts
+the feedforward; <a class="reference internal" href="#lua-SpaceCenter.MitigationMode.forced" title="SpaceCenter.MitigationMode.forced"><code class="xref lua lua-data docutils literal notranslate"><span class="pre">SpaceCenter.MitigationMode.forced</span></code></a> always cuts it fully.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#SpaceCenter.MitigationMode" title="SpaceCenter.MitigationMode"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.MitigationMode</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.oscillation_output_filter_mode">
-<span class="sig-name descname"><span class="pre">oscillation_output_filter_mode</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.MitigationMode</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.oscillation_output_filter_mode" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.oscillation_output_filter_mode">
+<span class="sig-name descname"><span class="pre">oscillation_output_filter_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-SpaceCenter.MitigationMode" title="SpaceCenter.MitigationMode"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.MitigationMode</span></code></a><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.oscillation_output_filter_mode" title="Link to this definition">#</a></dt>
 <dd><p>Controls the output-smoothing mitigation: a low-pass on the delivered actuator
 command that caps residual control chatter. When
-<a class="reference internal" href="#SpaceCenter.MitigationMode.automatic" title="SpaceCenter.MitigationMode.automatic"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.MitigationMode.automatic</span></code></a> (the default) it engages on a latched axis
+<a class="reference internal" href="#lua-SpaceCenter.MitigationMode.automatic" title="SpaceCenter.MitigationMode.automatic"><code class="xref lua lua-data docutils literal notranslate"><span class="pre">SpaceCenter.MitigationMode.automatic</span></code></a> (the default) it engages on a latched axis
 (and, lightly, while the oscillation detector is firing on an unlatched one).
-<a class="reference internal" href="#SpaceCenter.MitigationMode.off" title="SpaceCenter.MitigationMode.off"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.MitigationMode.off</span></code></a> never smooths; <a class="reference internal" href="#SpaceCenter.MitigationMode.forced" title="SpaceCenter.MitigationMode.forced"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.MitigationMode.forced</span></code></a>
+<a class="reference internal" href="#lua-SpaceCenter.MitigationMode.off" title="SpaceCenter.MitigationMode.off"><code class="xref lua lua-data docutils literal notranslate"><span class="pre">SpaceCenter.MitigationMode.off</span></code></a> never smooths; <a class="reference internal" href="#lua-SpaceCenter.MitigationMode.forced" title="SpaceCenter.MitigationMode.forced"><code class="xref lua lua-data docutils literal notranslate"><span class="pre">SpaceCenter.MitigationMode.forced</span></code></a>
 smooths fully at all times.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#SpaceCenter.MitigationMode" title="SpaceCenter.MitigationMode"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.MitigationMode</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.pitch_yaw_control_oscillation">
-<span class="sig-name descname"><span class="pre">pitch_yaw_control_oscillation</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.pitch_yaw_control_oscillation" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.pitch_yaw_control_oscillation">
+<span class="sig-name descname"><span class="pre">pitch_yaw_control_oscillation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.pitch_yaw_control_oscillation" title="Link to this definition">#</a></dt>
 <dd><p>The current amplitude of control-output oscillation on the pitch/yaw axis group, measured as
 the deviation of the delivered control about its slowly-varying trim. A settled hold sits
 near zero; a sustained limit cycle drives it toward 1. Read-only.</p>
@@ -2197,31 +2042,25 @@ near zero; a sustained limit cycle drives it toward 1. Read-only.</p>
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.roll_control_oscillation">
-<span class="sig-name descname"><span class="pre">roll_control_oscillation</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.roll_control_oscillation" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.roll_control_oscillation">
+<span class="sig-name descname"><span class="pre">roll_control_oscillation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.roll_control_oscillation" title="Link to this definition">#</a></dt>
 <dd><p>The current amplitude of control-output oscillation on the roll axis, measured as the
 deviation of the delivered control about its slowly-varying trim. Read-only. See
-<a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.pitch_yaw_control_oscillation" title="SpaceCenter.SpaceCenter.AutoPilot.pitch_yaw_control_oscillation"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.pitch_yaw_control_oscillation</span></code></a>.</p>
+<a class="reference internal" href="#lua-SpaceCenter.AutoPilot.pitch_yaw_control_oscillation" title="SpaceCenter.AutoPilot.pitch_yaw_control_oscillation"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.pitch_yaw_control_oscillation</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.oscillation_level">
-<span class="sig-name descname"><span class="pre">oscillation_level</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.oscillation_level" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.oscillation_level">
+<span class="sig-name descname"><span class="pre">oscillation_level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.oscillation_level" title="Link to this definition">#</a></dt>
 <dd><p>A measure, between 0 and 1 for each of the pitch, roll and yaw axes, of how strongly the
 auto-pilot currently detects structural oscillation (wobble) on that axis. 0 means none
 detected; values approaching 1 mean a sustained structural oscillation. Read-only.</p>
@@ -2229,46 +2068,37 @@ detected; values approaching 1 mean a sustained structural oscillation. Read-onl
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.pitch_yaw_oscillation_latched">
-<span class="sig-name descname"><span class="pre">pitch_yaw_oscillation_latched</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.pitch_yaw_oscillation_latched" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.pitch_yaw_oscillation_latched">
+<span class="sig-name descname"><span class="pre">pitch_yaw_oscillation_latched</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.pitch_yaw_oscillation_latched" title="Link to this definition">#</a></dt>
 <dd><p>Whether the auto-pilot has confirmed the pitch/yaw axes to be structurally flexible and
 latched oscillation suppression on for them. Read-only. See
-<a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.pitch_yaw_rate_filter_mode" title="SpaceCenter.SpaceCenter.AutoPilot.pitch_yaw_rate_filter_mode"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.pitch_yaw_rate_filter_mode</span></code></a>.</p>
+<a class="reference internal" href="#lua-SpaceCenter.AutoPilot.pitch_yaw_rate_filter_mode" title="SpaceCenter.AutoPilot.pitch_yaw_rate_filter_mode"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.pitch_yaw_rate_filter_mode</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.roll_oscillation_latched">
-<span class="sig-name descname"><span class="pre">roll_oscillation_latched</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.roll_oscillation_latched" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.roll_oscillation_latched">
+<span class="sig-name descname"><span class="pre">roll_oscillation_latched</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.roll_oscillation_latched" title="Link to this definition">#</a></dt>
 <dd><p>Whether the auto-pilot has confirmed the roll axis to be structurally flexible and latched
-oscillation suppression on for it. Read-only. See <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.roll_rate_filter_mode" title="SpaceCenter.SpaceCenter.AutoPilot.roll_rate_filter_mode"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.roll_rate_filter_mode</span></code></a>.</p>
+oscillation suppression on for it. Read-only. See <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.roll_rate_filter_mode" title="SpaceCenter.AutoPilot.roll_rate_filter_mode"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.roll_rate_filter_mode</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.pitch_yaw_oscillation_detected_frequency">
-<span class="sig-name descname"><span class="pre">pitch_yaw_oscillation_detected_frequency</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.pitch_yaw_oscillation_detected_frequency" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.pitch_yaw_oscillation_detected_frequency">
+<span class="sig-name descname"><span class="pre">pitch_yaw_oscillation_detected_frequency</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.pitch_yaw_oscillation_detected_frequency" title="Link to this definition">#</a></dt>
 <dd><p>The structural oscillation frequency, in Hz, estimated by the automatic detector for the
 pitch/yaw axis group, or <code class="docutils literal notranslate"><span class="pre">NaN</span></code> until the estimator acquires. The estimator runs in
 all modes, so this is observable even when suppression is off or forced. Read-only.</p>
@@ -2276,33 +2106,27 @@ all modes, so this is observable even when suppression is off or forced. Read-on
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.roll_oscillation_detected_frequency">
-<span class="sig-name descname"><span class="pre">roll_oscillation_detected_frequency</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.roll_oscillation_detected_frequency" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.roll_oscillation_detected_frequency">
+<span class="sig-name descname"><span class="pre">roll_oscillation_detected_frequency</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.roll_oscillation_detected_frequency" title="Link to this definition">#</a></dt>
 <dd><p>The structural oscillation frequency, in Hz, estimated by the automatic detector for the
 roll axis, or <code class="docutils literal notranslate"><span class="pre">NaN</span></code> until the estimator acquires. Read-only. See
-<a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.pitch_yaw_oscillation_detected_frequency" title="SpaceCenter.SpaceCenter.AutoPilot.pitch_yaw_oscillation_detected_frequency"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.pitch_yaw_oscillation_detected_frequency</span></code></a>.</p>
+<a class="reference internal" href="#lua-SpaceCenter.AutoPilot.pitch_yaw_oscillation_detected_frequency" title="SpaceCenter.AutoPilot.pitch_yaw_oscillation_detected_frequency"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.pitch_yaw_oscillation_detected_frequency</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.diagnostic_logging">
-<span class="sig-name descname"><span class="pre">diagnostic_logging</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.diagnostic_logging" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.diagnostic_logging">
+<span class="sig-name descname"><span class="pre">diagnostic_logging</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.diagnostic_logging" title="Link to this definition">#</a></dt>
 <dd><p>When <code class="docutils literal notranslate"><span class="pre">True</span></code>, records one row of diagnostic data per physics tick to an
-in-memory buffer (see <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.diagnostic_log" title="SpaceCenter.SpaceCenter.AutoPilot.diagnostic_log"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.diagnostic_log</span></code></a>), and echoes each row to
+in-memory buffer (see <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.diagnostic_log" title="SpaceCenter.AutoPilot.diagnostic_log"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.diagnostic_log</span></code></a>), and echoes each row to
 Player.log prefixed with <code class="docutils literal notranslate"><span class="pre">[KRPC.AP]</span></code>. The data is CSV: the first row is a
 header naming every column, and each subsequent row records the auto-pilot’s full
 control-loop state for one tick (setpoints, errors, measured rates, gains,
@@ -2315,16 +2139,13 @@ at the 50 Hz physics rate); when full, this property switches itself back to
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.diagnostic_log">
-<span class="sig-name descname"><span class="pre">diagnostic_log</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">string</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.diagnostic_log" title="Link to this definition">#</a></dt>
-<dd><p>The diagnostic log collected since <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.diagnostic_logging" title="SpaceCenter.SpaceCenter.AutoPilot.diagnostic_logging"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.diagnostic_logging</span></code></a> was last set to
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.diagnostic_log">
+<span class="sig-name descname"><span class="pre">diagnostic_log</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.diagnostic_log" title="Link to this definition">#</a></dt>
+<dd><p>The diagnostic log collected since <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.diagnostic_logging" title="SpaceCenter.AutoPilot.diagnostic_logging"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.diagnostic_logging</span></code></a> was last set to
 <code class="docutils literal notranslate"><span class="pre">True</span></code>: CSV text whose first line is the column header and each subsequent
 line records one physics tick. Vector-valued channels use one column per component
 (suffixed <code class="docutils literal notranslate"><span class="pre">.p/.r/.y</span></code> for pitch, roll, yaw); pitch-yaw-group/roll channel pairs
@@ -2334,52 +2155,49 @@ not been enabled or no ticks have occurred.</p>
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="lua class">
-<dt class="sig sig-object lua" id="SpaceCenter.AutoPilotUpdateMode">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">SpaceCenter.</span></span><span class="sig-name descname"><span class="pre">AutoPilotUpdateMode</span></span><a class="headerlink" href="#SpaceCenter.AutoPilotUpdateMode" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilotUpdateMode">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">SpaceCenter.</span></span><span class="sig-name descname"><span class="pre">AutoPilotUpdateMode</span></span><a class="headerlink" href="#lua-SpaceCenter.AutoPilotUpdateMode" title="Link to this definition">#</a></dt>
 <dd><p>When the auto-pilot’s control loop runs within a server update, relative to the calls
-the update executes. See <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.update_mode" title="SpaceCenter.SpaceCenter.AutoPilot.update_mode"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.update_mode</span></code></a>.</p>
+the update executes. See <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.update_mode" title="SpaceCenter.AutoPilot.update_mode"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.update_mode</span></code></a>.</p>
 <dl class="lua data">
-<dt class="sig sig-object lua" id="SpaceCenter.AutoPilotUpdateMode.after_calls">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">after_calls</span></span><a class="headerlink" href="#SpaceCenter.AutoPilotUpdateMode.after_calls" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilotUpdateMode.after_calls">
+<span class="sig-name descname"><span class="pre">after_calls</span></span><a class="headerlink" href="#lua-SpaceCenter.AutoPilotUpdateMode.after_calls" title="Link to this definition">#</a></dt>
 <dd><p>The default. The control loop runs once the update has executed the calls it
 received, so a target set during a tick is flown on that tick.</p>
 </dd></dl>
 
 <dl class="lua data">
-<dt class="sig sig-object lua" id="SpaceCenter.AutoPilotUpdateMode.before_calls">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">before_calls</span></span><a class="headerlink" href="#SpaceCenter.AutoPilotUpdateMode.before_calls" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilotUpdateMode.before_calls">
+<span class="sig-name descname"><span class="pre">before_calls</span></span><a class="headerlink" href="#lua-SpaceCenter.AutoPilotUpdateMode.before_calls" title="Link to this definition">#</a></dt>
 <dd><p>The control loop runs before the update executes any calls, so calls made during a
 tick see the attitude error and control output it computed for that tick.</p>
 </dd></dl>
 
 <dl class="lua data">
-<dt class="sig sig-object lua" id="SpaceCenter.AutoPilotUpdateMode.manual">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">manual</span></span><a class="headerlink" href="#SpaceCenter.AutoPilotUpdateMode.manual" title="Link to this definition">#</a></dt>
-<dd><p>The control loop runs only when <a class="reference internal" href="#SpaceCenter.AutoPilot.update" title="SpaceCenter.AutoPilot.update"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.update()</span></code></a> is called, so a
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilotUpdateMode.manual">
+<span class="sig-name descname"><span class="pre">manual</span></span><a class="headerlink" href="#lua-SpaceCenter.AutoPilotUpdateMode.manual" title="Link to this definition">#</a></dt>
+<dd><p>The control loop runs only when <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.update" title="SpaceCenter.AutoPilot.update"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot:update()</span></code></a> is called, so a
 program chooses where among its own calls it runs.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="lua class">
-<dt class="sig sig-object lua" id="SpaceCenter.RateFilterMode">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">SpaceCenter.</span></span><span class="sig-name descname"><span class="pre">RateFilterMode</span></span><a class="headerlink" href="#SpaceCenter.RateFilterMode" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.RateFilterMode">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">SpaceCenter.</span></span><span class="sig-name descname"><span class="pre">RateFilterMode</span></span><a class="headerlink" href="#lua-SpaceCenter.RateFilterMode" title="Link to this definition">#</a></dt>
 <dd><p>Controls the auto-pilot’s rate-feedback filtering for an axis group, the mitigation that
 removes a structural oscillation (wobble) from the measured angular velocity before the
 control loops consume it.
-See <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.pitch_yaw_rate_filter_mode" title="SpaceCenter.SpaceCenter.AutoPilot.pitch_yaw_rate_filter_mode"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.pitch_yaw_rate_filter_mode</span></code></a> and <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.roll_rate_filter_mode" title="SpaceCenter.SpaceCenter.AutoPilot.roll_rate_filter_mode"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.roll_rate_filter_mode</span></code></a>.</p>
+See <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.pitch_yaw_rate_filter_mode" title="SpaceCenter.AutoPilot.pitch_yaw_rate_filter_mode"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.pitch_yaw_rate_filter_mode</span></code></a> and <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.roll_rate_filter_mode" title="SpaceCenter.AutoPilot.roll_rate_filter_mode"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.roll_rate_filter_mode</span></code></a>.</p>
 <dl class="lua data">
-<dt class="sig sig-object lua" id="SpaceCenter.RateFilterMode.automatic">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">automatic</span></span><a class="headerlink" href="#SpaceCenter.RateFilterMode.automatic" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.RateFilterMode.automatic">
+<span class="sig-name descname"><span class="pre">automatic</span></span><a class="headerlink" href="#lua-SpaceCenter.RateFilterMode.automatic" title="Link to this definition">#</a></dt>
 <dd><p>The default. The auto-pilot detects structural oscillation at runtime, estimates its
 frequency and routes it to the appropriate filter: a notch for a low-frequency mode
 near the control band, a low-pass for a high-frequency mode, or a broadband low-pass
@@ -2387,51 +2205,51 @@ while the frequency is not yet known. Rigid vessels are left untouched.</p>
 </dd></dl>
 
 <dl class="lua data">
-<dt class="sig sig-object lua" id="SpaceCenter.RateFilterMode.off">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">off</span></span><a class="headerlink" href="#SpaceCenter.RateFilterMode.off" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.RateFilterMode.off">
+<span class="sig-name descname"><span class="pre">off</span></span><a class="headerlink" href="#lua-SpaceCenter.RateFilterMode.off" title="Link to this definition">#</a></dt>
 <dd><p>No rate filtering. The other oscillation mitigations are unaffected.</p>
 </dd></dl>
 
 <dl class="lua data">
-<dt class="sig sig-object lua" id="SpaceCenter.RateFilterMode.notch">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">notch</span></span><a class="headerlink" href="#SpaceCenter.RateFilterMode.notch" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.RateFilterMode.notch">
+<span class="sig-name descname"><span class="pre">notch</span></span><a class="headerlink" href="#lua-SpaceCenter.RateFilterMode.notch" title="Link to this definition">#</a></dt>
 <dd><p>Force a notch filter at the manually set frequency
-(<a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.pitch_yaw_oscillation_frequency" title="SpaceCenter.SpaceCenter.AutoPilot.pitch_yaw_oscillation_frequency"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.pitch_yaw_oscillation_frequency</span></code></a> /
-<a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.roll_oscillation_frequency" title="SpaceCenter.SpaceCenter.AutoPilot.roll_oscillation_frequency"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.roll_oscillation_frequency</span></code></a>), for a vessel whose structural mode
+(<a class="reference internal" href="#lua-SpaceCenter.AutoPilot.pitch_yaw_oscillation_frequency" title="SpaceCenter.AutoPilot.pitch_yaw_oscillation_frequency"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.pitch_yaw_oscillation_frequency</span></code></a> /
+<a class="reference internal" href="#lua-SpaceCenter.AutoPilot.roll_oscillation_frequency" title="SpaceCenter.AutoPilot.roll_oscillation_frequency"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.roll_oscillation_frequency</span></code></a>), for a vessel whose structural mode
 is known in advance.</p>
 </dd></dl>
 
 <dl class="lua data">
-<dt class="sig sig-object lua" id="SpaceCenter.RateFilterMode.low_pass">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">low_pass</span></span><a class="headerlink" href="#SpaceCenter.RateFilterMode.low_pass" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.RateFilterMode.low_pass">
+<span class="sig-name descname"><span class="pre">low_pass</span></span><a class="headerlink" href="#lua-SpaceCenter.RateFilterMode.low_pass" title="Link to this definition">#</a></dt>
 <dd><p>Force a low-pass filter derived from the manually set frequency.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="lua class">
-<dt class="sig sig-object lua" id="SpaceCenter.MitigationMode">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">SpaceCenter.</span></span><span class="sig-name descname"><span class="pre">MitigationMode</span></span><a class="headerlink" href="#SpaceCenter.MitigationMode" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.MitigationMode">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">SpaceCenter.</span></span><span class="sig-name descname"><span class="pre">MitigationMode</span></span><a class="headerlink" href="#lua-SpaceCenter.MitigationMode" title="Link to this definition">#</a></dt>
 <dd><p>Controls one of the auto-pilot’s individually-toggleable oscillation mitigations
-(<a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.oscillation_bandwidth_floor_mode" title="SpaceCenter.SpaceCenter.AutoPilot.oscillation_bandwidth_floor_mode"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.oscillation_bandwidth_floor_mode</span></code></a>,
-<a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.oscillation_feedforward_mode" title="SpaceCenter.SpaceCenter.AutoPilot.oscillation_feedforward_mode"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.oscillation_feedforward_mode</span></code></a>,
-<a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.oscillation_output_filter_mode" title="SpaceCenter.SpaceCenter.AutoPilot.oscillation_output_filter_mode"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.oscillation_output_filter_mode</span></code></a>).</p>
+(<a class="reference internal" href="#lua-SpaceCenter.AutoPilot.oscillation_bandwidth_floor_mode" title="SpaceCenter.AutoPilot.oscillation_bandwidth_floor_mode"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.oscillation_bandwidth_floor_mode</span></code></a>,
+<a class="reference internal" href="#lua-SpaceCenter.AutoPilot.oscillation_feedforward_mode" title="SpaceCenter.AutoPilot.oscillation_feedforward_mode"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.oscillation_feedforward_mode</span></code></a>,
+<a class="reference internal" href="#lua-SpaceCenter.AutoPilot.oscillation_output_filter_mode" title="SpaceCenter.AutoPilot.oscillation_output_filter_mode"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.oscillation_output_filter_mode</span></code></a>).</p>
 <dl class="lua data">
-<dt class="sig sig-object lua" id="SpaceCenter.MitigationMode.automatic">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">automatic</span></span><a class="headerlink" href="#SpaceCenter.MitigationMode.automatic" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.MitigationMode.automatic">
+<span class="sig-name descname"><span class="pre">automatic</span></span><a class="headerlink" href="#lua-SpaceCenter.MitigationMode.automatic" title="Link to this definition">#</a></dt>
 <dd><p>The default: the mitigation engages automatically, driven by the runtime oscillation
 detector and the hold gate. Rigid vessels are left untouched.</p>
 </dd></dl>
 
 <dl class="lua data">
-<dt class="sig sig-object lua" id="SpaceCenter.MitigationMode.off">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">off</span></span><a class="headerlink" href="#SpaceCenter.MitigationMode.off" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.MitigationMode.off">
+<span class="sig-name descname"><span class="pre">off</span></span><a class="headerlink" href="#lua-SpaceCenter.MitigationMode.off" title="Link to this definition">#</a></dt>
 <dd><p>The mitigation never engages. The other mitigations are unaffected.</p>
 </dd></dl>
 
 <dl class="lua data">
-<dt class="sig sig-object lua" id="SpaceCenter.MitigationMode.forced">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">forced</span></span><a class="headerlink" href="#SpaceCenter.MitigationMode.forced" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.MitigationMode.forced">
+<span class="sig-name descname"><span class="pre">forced</span></span><a class="headerlink" href="#lua-SpaceCenter.MitigationMode.forced" title="Link to this definition">#</a></dt>
 <dd><p>The mitigation is fully engaged at all times, regardless of what the oscillation
 detector reports.</p>
 </dd></dl>

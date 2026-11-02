@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=eadf7411" />
   
@@ -1104,134 +1105,102 @@
   <section id="resources">
 <h1>Resources<a class="headerlink" href="#resources" title="Link to this heading">#</a></h1>
 <dl class="lua class">
-<dt class="sig sig-object lua" id="SpaceCenter.Resources">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">SpaceCenter.</span></span><span class="sig-name descname"><span class="pre">Resources</span></span><a class="headerlink" href="#SpaceCenter.Resources" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Resources">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">SpaceCenter.</span></span><span class="sig-name descname"><span class="pre">Resources</span></span><a class="headerlink" href="#lua-SpaceCenter.Resources" title="Link to this definition">#</a></dt>
 <dd><p>Represents the collection of resources stored in a vessel, stage or part.
-Created by calling <a class="reference internal" href="vessel.html#SpaceCenter.SpaceCenter.Vessel.resources" title="SpaceCenter.SpaceCenter.Vessel.resources"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Vessel.resources</span></code></a>,
-<a class="reference internal" href="stage.html#SpaceCenter.Stage.resources" title="SpaceCenter.Stage.resources"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Stage.resources()</span></code></a>, <a class="reference internal" href="editor.html#SpaceCenter.SpaceCenter.EditorVessel.resources" title="SpaceCenter.SpaceCenter.EditorVessel.resources"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.EditorVessel.resources</span></code></a>
-or <a class="reference internal" href="parts.html#SpaceCenter.SpaceCenter.Part.resources" title="SpaceCenter.SpaceCenter.Part.resources"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Part.resources</span></code></a>.</p>
+Created by calling <a class="reference internal" href="vessel.html#lua-SpaceCenter.Vessel.resources" title="SpaceCenter.Vessel.resources"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Vessel.resources</span></code></a>,
+<a class="reference internal" href="stage.html#lua-SpaceCenter.Stage.resources" title="SpaceCenter.Stage.resources"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Stage:resources()</span></code></a>, <a class="reference internal" href="editor.html#lua-SpaceCenter.EditorVessel.resources" title="SpaceCenter.EditorVessel.resources"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.EditorVessel.resources</span></code></a>
+or <a class="reference internal" href="parts.html#lua-SpaceCenter.Part.resources" title="SpaceCenter.Part.resources"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Part.resources</span></code></a>.</p>
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Resources.all">
-<span class="sig-name descname"><span class="pre">all</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">List</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Resources.all" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Resources.all">
+<span class="sig-name descname"><span class="pre">all</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">List</span></code><a class="headerlink" href="#lua-SpaceCenter.Resources.all" title="Link to this definition">#</a></dt>
 <dd><p>All the individual resources that can be stored.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">List</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.Resources.with_resource">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">with_resource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Resources.with_resource" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Resources.with_resource">
+<span class="sig-name descname"><span class="pre">with_resource</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">List</span></code><a class="headerlink" href="#lua-SpaceCenter.Resources.with_resource" title="Link to this definition">#</a></dt>
 <dd><p>All the individual resources with the given name that can be stored.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>name</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>)</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">List</span></code></span></p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Resources.names">
-<span class="sig-name descname"><span class="pre">names</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">List</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Resources.names" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Resources.names">
+<span class="sig-name descname"><span class="pre">names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">List</span></code><a class="headerlink" href="#lua-SpaceCenter.Resources.names" title="Link to this definition">#</a></dt>
 <dd><p>A list of resource names that can be stored.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">List</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.Resources.has_resource">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">has_resource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Resources.has_resource" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Resources.has_resource">
+<span class="sig-name descname"><span class="pre">has_resource</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.Resources.has_resource" title="Link to this definition">#</a></dt>
 <dd><p>Check whether the named resource can be stored.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>name</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – The name of the resource.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
+<dd class="field-odd"><p><strong>name</strong> – The name of the resource.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.Resources.amount">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">amount</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Resources.amount" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Resources.amount">
+<span class="sig-name descname"><span class="pre">amount</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Resources.amount" title="Link to this definition">#</a></dt>
 <dd><p>Returns the amount of a resource that is currently stored.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>name</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – The name of the resource.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+<dd class="field-odd"><p><strong>name</strong> – The name of the resource.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.Resources.max">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">max</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Resources.max" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Resources.max">
+<span class="sig-name descname"><span class="pre">max</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Resources.max" title="Link to this definition">#</a></dt>
 <dd><p>Returns the amount of a resource that can be stored.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>name</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – The name of the resource.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+<dd class="field-odd"><p><strong>name</strong> – The name of the resource.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="SpaceCenter.Resources.density">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">density</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Resources.density" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Resources.density">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">density</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Resources.density" title="Link to this definition">#</a></dt>
 <dd><p>Returns the density of a resource, in <span class="math notranslate nohighlight">\(\mathrm{kg/l}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>name</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – The name of the resource.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+<dd class="field-odd"><p><strong>name</strong> – The name of the resource.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="SpaceCenter.Resources.flow_mode">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">flow_mode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Resources.flow_mode" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Resources.flow_mode">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">flow_mode</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-SpaceCenter.ResourceFlowMode" title="SpaceCenter.ResourceFlowMode"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ResourceFlowMode</span></code></a><a class="headerlink" href="#lua-SpaceCenter.Resources.flow_mode" title="Link to this definition">#</a></dt>
 <dd><p>Returns the flow mode of a resource.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>name</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – The name of the resource.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#SpaceCenter.ResourceFlowMode" title="SpaceCenter.ResourceFlowMode"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ResourceFlowMode</span></code></a></p>
+<dd class="field-odd"><p><strong>name</strong> – The name of the resource.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Resources.enabled">
-<span class="sig-name descname"><span class="pre">enabled</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Resources.enabled" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Resources.enabled">
+<span class="sig-name descname"><span class="pre">enabled</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.Resources.enabled" title="Link to this definition">#</a></dt>
 <dd><p>Whether use of all the resources are enabled.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1244,104 +1213,83 @@ If any of the resources are not enabled, this is <code class="docutils literal n
 </dd></dl>
 
 <dl class="lua class">
-<dt class="sig sig-object lua" id="SpaceCenter.Resource">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">SpaceCenter.</span></span><span class="sig-name descname"><span class="pre">Resource</span></span><a class="headerlink" href="#SpaceCenter.Resource" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Resource">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">SpaceCenter.</span></span><span class="sig-name descname"><span class="pre">Resource</span></span><a class="headerlink" href="#lua-SpaceCenter.Resource" title="Link to this definition">#</a></dt>
 <dd><p>An individual resource stored within a part.
-Created using methods in the <a class="reference internal" href="#SpaceCenter.Resources" title="SpaceCenter.Resources"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.Resources</span></code></a> class.</p>
+Created using methods in the <a class="reference internal" href="#lua-SpaceCenter.Resources" title="SpaceCenter.Resources"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.Resources</span></code></a> class.</p>
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Resource.name">
-<span class="sig-name descname"><span class="pre">name</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">string</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Resource.name" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Resource.name">
+<span class="sig-name descname"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><a class="headerlink" href="#lua-SpaceCenter.Resource.name" title="Link to this definition">#</a></dt>
 <dd><p>The name of the resource.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Resource.part">
-<span class="sig-name descname"><span class="pre">part</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.Part</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Resource.part" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Resource.part">
+<span class="sig-name descname"><span class="pre">part</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="parts.html#lua-SpaceCenter.Part" title="SpaceCenter.Part"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.Part</span></code></a><a class="headerlink" href="#lua-SpaceCenter.Resource.part" title="Link to this definition">#</a></dt>
 <dd><p>The part containing the resource.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="parts.html#SpaceCenter.Part" title="SpaceCenter.Part"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.Part</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Resource.amount">
-<span class="sig-name descname"><span class="pre">amount</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Resource.amount" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Resource.amount">
+<span class="sig-name descname"><span class="pre">amount</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Resource.amount" title="Link to this definition">#</a></dt>
 <dd><p>The amount of the resource that is currently stored in the part.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Resource.max">
-<span class="sig-name descname"><span class="pre">max</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Resource.max" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Resource.max">
+<span class="sig-name descname"><span class="pre">max</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Resource.max" title="Link to this definition">#</a></dt>
 <dd><p>The total amount of the resource that can be stored in the part.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Resource.density">
-<span class="sig-name descname"><span class="pre">density</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Resource.density" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Resource.density">
+<span class="sig-name descname"><span class="pre">density</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Resource.density" title="Link to this definition">#</a></dt>
 <dd><p>The density of the resource, in <span class="math notranslate nohighlight">\(\mathrm{kg/l}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Resource.flow_mode">
-<span class="sig-name descname"><span class="pre">flow_mode</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.ResourceFlowMode</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Resource.flow_mode" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Resource.flow_mode">
+<span class="sig-name descname"><span class="pre">flow_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-SpaceCenter.ResourceFlowMode" title="SpaceCenter.ResourceFlowMode"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ResourceFlowMode</span></code></a><a class="headerlink" href="#lua-SpaceCenter.Resource.flow_mode" title="Link to this definition">#</a></dt>
 <dd><p>The flow mode of the resource.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#SpaceCenter.ResourceFlowMode" title="SpaceCenter.ResourceFlowMode"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ResourceFlowMode</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Resource.enabled">
-<span class="sig-name descname"><span class="pre">enabled</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Resource.enabled" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Resource.enabled">
+<span class="sig-name descname"><span class="pre">enabled</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.Resource.enabled" title="Link to this definition">#</a></dt>
 <dd><p>Whether use of this resource is enabled.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1349,35 +1297,32 @@ Created using methods in the <a class="reference internal" href="#SpaceCenter.Re
 </dd></dl>
 
 <dl class="lua class">
-<dt class="sig sig-object lua" id="SpaceCenter.ResourceTransfer">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">SpaceCenter.</span></span><span class="sig-name descname"><span class="pre">ResourceTransfer</span></span><a class="headerlink" href="#SpaceCenter.ResourceTransfer" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.ResourceTransfer">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">SpaceCenter.</span></span><span class="sig-name descname"><span class="pre">ResourceTransfer</span></span><a class="headerlink" href="#lua-SpaceCenter.ResourceTransfer" title="Link to this definition">#</a></dt>
 <dd><p>Transfer resources between parts.</p>
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="SpaceCenter.ResourceTransfer.start">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">from_part</span></em>, <em class="sig-param"><span class="pre">to_part</span></em>, <em class="sig-param"><span class="pre">resource</span></em>, <em class="sig-param"><span class="pre">max_amount</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.ResourceTransfer.start" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.ResourceTransfer.start">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">start</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">from_part</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="parts.html#lua-SpaceCenter.Part" title="SpaceCenter.Part"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.Part</span></code></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">to_part</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="parts.html#lua-SpaceCenter.Part" title="SpaceCenter.Part"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.Part</span></code></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">resource</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">max_amount</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-SpaceCenter.ResourceTransfer" title="SpaceCenter.ResourceTransfer"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ResourceTransfer</span></code></a><a class="headerlink" href="#lua-SpaceCenter.ResourceTransfer.start" title="Link to this definition">#</a><br /></dt>
 <dd><p>Start transferring a resource transfer between a pair of parts. The transfer will move
 at most <em>max_amount</em> units of the resource, depending on how much of
 the resource is available in the source part and how much storage is available in the
 destination part.
-Use <a class="reference internal" href="#SpaceCenter.SpaceCenter.ResourceTransfer.complete" title="SpaceCenter.SpaceCenter.ResourceTransfer.complete"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.ResourceTransfer.complete</span></code></a> to check if the transfer is complete.
-Use <a class="reference internal" href="#SpaceCenter.SpaceCenter.ResourceTransfer.amount" title="SpaceCenter.SpaceCenter.ResourceTransfer.amount"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.ResourceTransfer.amount</span></code></a> to see how much of the resource has been transferred.</p>
+Use <a class="reference internal" href="#lua-SpaceCenter.ResourceTransfer.complete" title="SpaceCenter.ResourceTransfer.complete"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.ResourceTransfer.complete</span></code></a> to check if the transfer is complete.
+Use <a class="reference internal" href="#lua-SpaceCenter.ResourceTransfer.amount" title="SpaceCenter.ResourceTransfer.amount"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.ResourceTransfer.amount</span></code></a> to see how much of the resource has been transferred.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>from_part</strong> (<span><a class="reference internal" href="parts.html#SpaceCenter.Part" title="SpaceCenter.Part"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.Part</span></code></a></span>) – The part to transfer to.</p></li>
-<li><p><strong>to_part</strong> (<span><a class="reference internal" href="parts.html#SpaceCenter.Part" title="SpaceCenter.Part"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.Part</span></code></a></span>) – The part to transfer from.</p></li>
-<li><p><strong>resource</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – The name of the resource to transfer.</p></li>
-<li><p><strong>max_amount</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The maximum amount of resource to transfer.</p></li>
+<li><p><strong>from_part</strong> – The part to transfer to.</p></li>
+<li><p><strong>to_part</strong> – The part to transfer from.</p></li>
+<li><p><strong>resource</strong> – The name of the resource to transfer.</p></li>
+<li><p><strong>max_amount</strong> – The maximum amount of resource to transfer.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#SpaceCenter.ResourceTransfer" title="SpaceCenter.ResourceTransfer"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ResourceTransfer</span></code></a></p>
 </dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Use <a class="reference internal" href="#SpaceCenter.ResourceTransfer.cancel" title="SpaceCenter.ResourceTransfer.cancel"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.ResourceTransfer.cancel()</span></code></a> to stop the transfer before it finishes; a canceled
-transfer is marked as complete. Use <a class="reference internal" href="#SpaceCenter.ResourceTransfer.remove" title="SpaceCenter.ResourceTransfer.remove"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.ResourceTransfer.remove()</span></code></a> to release the memory
+<p>Use <a class="reference internal" href="#lua-SpaceCenter.ResourceTransfer.cancel" title="SpaceCenter.ResourceTransfer.cancel"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.ResourceTransfer:cancel()</span></code></a> to stop the transfer before it finishes; a canceled
+transfer is marked as complete. Use <a class="reference internal" href="#lua-SpaceCenter.ResourceTransfer.remove" title="SpaceCenter.ResourceTransfer.remove"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.ResourceTransfer:remove()</span></code></a> to release the memory
 the server holds for a transfer that is done with. A transfer is stopped and
 removed if the client that started it disconnects, or if the flight it runs in
 is left.</p>
@@ -1385,15 +1330,15 @@ is left.</p>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.ResourceTransfer.cancel">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">cancel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.ResourceTransfer.cancel" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.ResourceTransfer.cancel">
+<span class="sig-name descname"><span class="pre">cancel</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-SpaceCenter.ResourceTransfer.cancel" title="Link to this definition">#</a></dt>
 <dd><p>Cancel the transfer. No more of the resource is moved and
-<a class="reference internal" href="#SpaceCenter.SpaceCenter.ResourceTransfer.complete" title="SpaceCenter.SpaceCenter.ResourceTransfer.complete"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.ResourceTransfer.complete</span></code></a> becomes true.</p>
+<a class="reference internal" href="#lua-SpaceCenter.ResourceTransfer.complete" title="SpaceCenter.ResourceTransfer.complete"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.ResourceTransfer.complete</span></code></a> becomes true.</p>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.ResourceTransfer.remove">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.ResourceTransfer.remove" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.ResourceTransfer.remove">
+<span class="sig-name descname"><span class="pre">remove</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-SpaceCenter.ResourceTransfer.remove" title="Link to this definition">#</a></dt>
 <dd><p>Remove the transfer, releasing the memory the server holds for it. The
 transfer is canceled if it has not finished.</p>
 <div class="admonition note">
@@ -1406,30 +1351,24 @@ those may be the rest of the flight away.</p>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.ResourceTransfer.amount">
-<span class="sig-name descname"><span class="pre">amount</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.ResourceTransfer.amount" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.ResourceTransfer.amount">
+<span class="sig-name descname"><span class="pre">amount</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.ResourceTransfer.amount" title="Link to this definition">#</a></dt>
 <dd><p>The amount of the resource that has been transferred.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.ResourceTransfer.complete">
-<span class="sig-name descname"><span class="pre">complete</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.ResourceTransfer.complete" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.ResourceTransfer.complete">
+<span class="sig-name descname"><span class="pre">complete</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.ResourceTransfer.complete" title="Link to this definition">#</a></dt>
 <dd><p>Whether the transfer has completed. Also becomes true if the transfer is
-canceled by calling <a class="reference internal" href="#SpaceCenter.ResourceTransfer.cancel" title="SpaceCenter.ResourceTransfer.cancel"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.ResourceTransfer.cancel()</span></code></a>.</p>
+canceled by calling <a class="reference internal" href="#lua-SpaceCenter.ResourceTransfer.cancel" title="SpaceCenter.ResourceTransfer.cancel"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.ResourceTransfer:cancel()</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1437,32 +1376,32 @@ canceled by calling <a class="reference internal" href="#SpaceCenter.ResourceTra
 </dd></dl>
 
 <dl class="lua class">
-<dt class="sig sig-object lua" id="SpaceCenter.ResourceFlowMode">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">SpaceCenter.</span></span><span class="sig-name descname"><span class="pre">ResourceFlowMode</span></span><a class="headerlink" href="#SpaceCenter.ResourceFlowMode" title="Link to this definition">#</a></dt>
-<dd><p>The way in which a resource flows between parts. See <a class="reference internal" href="#SpaceCenter.Resources.flow_mode" title="SpaceCenter.Resources.flow_mode"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Resources.flow_mode()</span></code></a>.</p>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.ResourceFlowMode">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">SpaceCenter.</span></span><span class="sig-name descname"><span class="pre">ResourceFlowMode</span></span><a class="headerlink" href="#lua-SpaceCenter.ResourceFlowMode" title="Link to this definition">#</a></dt>
+<dd><p>The way in which a resource flows between parts. See <a class="reference internal" href="#lua-SpaceCenter.Resources.flow_mode" title="SpaceCenter.Resources.flow_mode"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Resources.flow_mode()</span></code></a>.</p>
 <dl class="lua data">
-<dt class="sig sig-object lua" id="SpaceCenter.ResourceFlowMode.vessel">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">vessel</span></span><a class="headerlink" href="#SpaceCenter.ResourceFlowMode.vessel" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.ResourceFlowMode.vessel">
+<span class="sig-name descname"><span class="pre">vessel</span></span><a class="headerlink" href="#lua-SpaceCenter.ResourceFlowMode.vessel" title="Link to this definition">#</a></dt>
 <dd><p>The resource flows to any part in the vessel. For example, electric charge.</p>
 </dd></dl>
 
 <dl class="lua data">
-<dt class="sig sig-object lua" id="SpaceCenter.ResourceFlowMode.stage">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">stage</span></span><a class="headerlink" href="#SpaceCenter.ResourceFlowMode.stage" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.ResourceFlowMode.stage">
+<span class="sig-name descname"><span class="pre">stage</span></span><a class="headerlink" href="#lua-SpaceCenter.ResourceFlowMode.stage" title="Link to this definition">#</a></dt>
 <dd><p>The resource flows from parts in the first stage, followed by the second,
 and so on. For example, mono-propellant.</p>
 </dd></dl>
 
 <dl class="lua data">
-<dt class="sig sig-object lua" id="SpaceCenter.ResourceFlowMode.adjacent">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">adjacent</span></span><a class="headerlink" href="#SpaceCenter.ResourceFlowMode.adjacent" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.ResourceFlowMode.adjacent">
+<span class="sig-name descname"><span class="pre">adjacent</span></span><a class="headerlink" href="#lua-SpaceCenter.ResourceFlowMode.adjacent" title="Link to this definition">#</a></dt>
 <dd><p>The resource flows between adjacent parts within the vessel. For example,
 liquid fuel or oxidizer.</p>
 </dd></dl>
 
 <dl class="lua data">
-<dt class="sig sig-object lua" id="SpaceCenter.ResourceFlowMode.none">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">none</span></span><a class="headerlink" href="#SpaceCenter.ResourceFlowMode.none" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.ResourceFlowMode.none">
+<span class="sig-name descname"><span class="pre">none</span></span><a class="headerlink" href="#lua-SpaceCenter.ResourceFlowMode.none" title="Link to this definition">#</a></dt>
 <dd><p>The resource does not flow. For example, solid fuel.</p>
 </dd></dl>
 

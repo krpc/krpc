@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=eadf7411" />
   
@@ -1105,17 +1106,17 @@
 <dl class="java type">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.ServoGroup">
 <span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">ServoGroup</span></span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup" title="Link to this definition">#</a></dt>
-<dd><p>A group of servos, obtained by calling <a class="reference internal" href="infernal-robotics.html#krpc.client.services.InfernalRobotics.InfernalRobotics.servoGroups(SpaceCenter.Vessel)" title="krpc.client.services.InfernalRobotics.InfernalRobotics.servoGroups(SpaceCenter.Vessel)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">servoGroups(SpaceCenter.Vessel)</span></code></a>
-or <a class="reference internal" href="infernal-robotics.html#krpc.client.services.InfernalRobotics.InfernalRobotics.servoGroupWithName(SpaceCenter.Vessel, String)" title="krpc.client.services.InfernalRobotics.InfernalRobotics.servoGroupWithName(SpaceCenter.Vessel, String)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">servoGroupWithName(SpaceCenter.Vessel,</span> <span class="pre">String)</span></code></a>. Represents the “Servo Groups”
+<dd><p>A group of servos, obtained by calling <a class="reference internal" href="infernal-robotics.html#krpc.client.services.InfernalRobotics.InfernalRobotics.servoGroups(SpaceCenter.Vessel)" title="krpc.client.services.InfernalRobotics.InfernalRobotics.servoGroups(SpaceCenter.Vessel)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">InfernalRobotics.servoGroups(SpaceCenter.Vessel)</span></code></a>
+or <a class="reference internal" href="infernal-robotics.html#krpc.client.services.InfernalRobotics.InfernalRobotics.servoGroupWithName(SpaceCenter.Vessel, String)" title="krpc.client.services.InfernalRobotics.InfernalRobotics.servoGroupWithName(SpaceCenter.Vessel, String)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">InfernalRobotics.servoGroupWithName(SpaceCenter.Vessel,</span> <span class="pre">String)</span></code></a>. Represents the “Servo Groups”
 in the InfernalRobotics UI.</p>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.ServoGroup.getName()">
- <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getName</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.getName()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getName</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.getName()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.ServoGroup.setName(String)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setName</span></span><span class="sig-paren">(</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.setName(String)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setName</span></span><span class="sig-paren">(</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.setName(String)" title="Link to this definition">#</a></dt>
 <dd><p>The name of the group.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1132,12 +1133,12 @@ one the rename was made through. Obtain the group again under the new name.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.ServoGroup.getForwardKey()">
- <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getForwardKey</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.getForwardKey()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getForwardKey</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.getForwardKey()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.ServoGroup.setForwardKey(String)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setForwardKey</span></span><span class="sig-paren">(</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.setForwardKey(String)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setForwardKey</span></span><span class="sig-paren">(</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.setForwardKey(String)" title="Link to this definition">#</a></dt>
 <dd><p>The key assigned to be the “forward” key for the group.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1148,12 +1149,12 @@ one the rename was made through. Obtain the group again under the new name.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.ServoGroup.getReverseKey()">
- <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getReverseKey</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.getReverseKey()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getReverseKey</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.getReverseKey()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.ServoGroup.setReverseKey(String)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setReverseKey</span></span><span class="sig-paren">(</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.setReverseKey(String)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setReverseKey</span></span><span class="sig-paren">(</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.setReverseKey(String)" title="Link to this definition">#</a></dt>
 <dd><p>The key assigned to be the “reverse” key for the group.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1164,12 +1165,12 @@ one the rename was made through. Obtain the group again under the new name.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.ServoGroup.getSpeed()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getSpeed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.getSpeed()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getSpeed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.getSpeed()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.ServoGroup.setSpeed(float)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setSpeed</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.setSpeed(float)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setSpeed</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.setSpeed(float)" title="Link to this definition">#</a></dt>
 <dd><p>The speed multiplier for the group.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1180,12 +1181,12 @@ one the rename was made through. Obtain the group again under the new name.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.ServoGroup.getExpanded()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getExpanded</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.getExpanded()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getExpanded</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.getExpanded()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.ServoGroup.setExpanded(boolean)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setExpanded</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.setExpanded(boolean)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setExpanded</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.setExpanded(boolean)" title="Link to this definition">#</a></dt>
 <dd><p>Whether the group is expanded in the InfernalRobotics UI.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1196,7 +1197,7 @@ one the rename was made through. Obtain the group again under the new name.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.ServoGroup.getVessel()">
- <a class="reference internal" href="../../../user-guide/reference-frames.html#krpc.client.services.SpaceCenter" title="krpc.client.services.SpaceCenter"><span class="pre">SpaceCenter</span></a><span class="pre">.</span><a class="reference internal" href="../space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel" title="krpc.client.services.SpaceCenter.Vessel"><span class="pre">Vessel</span></a> <span class="sig-name descname"><span class="pre">getVessel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.getVessel()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="../space-center/space-center.html#krpc.client.services.SpaceCenter.SpaceCenter" title="krpc.client.services.SpaceCenter.SpaceCenter"><span class="pre">SpaceCenter</span></a><span class="pre">.</span><a class="reference internal" href="../space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel" title="krpc.client.services.SpaceCenter.Vessel"><span class="pre">Vessel</span></a> <span class="sig-name descname"><span class="pre">getVessel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.getVessel()" title="Link to this definition">#</a></dt>
 <dd><p>The vessel the group belongs to.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1207,7 +1208,7 @@ one the rename was made through. Obtain the group again under the new name.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.ServoGroup.getMovingDirection()">
- <span class="pre">int</span> <span class="sig-name descname"><span class="pre">getMovingDirection</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.getMovingDirection()" title="Link to this definition">#</a></dt>
+<span class="pre">int</span> <span class="sig-name descname"><span class="pre">getMovingDirection</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.getMovingDirection()" title="Link to this definition">#</a></dt>
 <dd><p>The direction the group is currently moving in: -1 for reverse, 0 for stopped
 and 1 for forward.</p>
 <dl class="field-list simple">
@@ -1219,12 +1220,12 @@ and 1 for forward.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.ServoGroup.getAdvancedMode()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getAdvancedMode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.getAdvancedMode()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getAdvancedMode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.getAdvancedMode()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.ServoGroup.setAdvancedMode(boolean)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setAdvancedMode</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.setAdvancedMode(boolean)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setAdvancedMode</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.setAdvancedMode(boolean)" title="Link to this definition">#</a></dt>
 <dd><p>Whether the group is in advanced mode.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1235,7 +1236,7 @@ and 1 for forward.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.ServoGroup.getElectricChargeRequired()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getElectricChargeRequired</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.getElectricChargeRequired()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getElectricChargeRequired</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.getElectricChargeRequired()" title="Link to this definition">#</a></dt>
 <dd><p>The total rate at which the servos in the group consume electric charge, in units
 per second, when moving.</p>
 <dl class="field-list simple">
@@ -1247,12 +1248,12 @@ per second, when moving.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.ServoGroup.getBuildAid()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getBuildAid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.getBuildAid()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getBuildAid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.getBuildAid()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.ServoGroup.setBuildAid(boolean)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setBuildAid</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.setBuildAid(boolean)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setBuildAid</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.setBuildAid(boolean)" title="Link to this definition">#</a></dt>
 <dd><p>Whether the build aid is enabled for the group.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1263,12 +1264,12 @@ per second, when moving.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.ServoGroup.getIKActive()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getIKActive</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.getIKActive()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getIKActive</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.getIKActive()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.ServoGroup.setIKActive(boolean)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setIKActive</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.setIKActive(boolean)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setIKActive</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.setIKActive(boolean)" title="Link to this definition">#</a></dt>
 <dd><p>Whether inverse kinematics is active for the group.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1279,7 +1280,7 @@ per second, when moving.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.ServoGroup.getServos()">
- <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="servo.html#krpc.client.services.InfernalRobotics.Servo" title="krpc.client.services.InfernalRobotics.Servo"><span class="pre">Servo</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getServos</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.getServos()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="servo.html#krpc.client.services.InfernalRobotics.Servo" title="krpc.client.services.InfernalRobotics.Servo"><span class="pre">Servo</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getServos</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.getServos()" title="Link to this definition">#</a></dt>
 <dd><p>The servos that are in the group.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1290,7 +1291,7 @@ per second, when moving.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.ServoGroup.servoWithName(String)">
- <a class="reference internal" href="servo.html#krpc.client.services.InfernalRobotics.Servo" title="krpc.client.services.InfernalRobotics.Servo"><span class="pre">Servo</span></a> <span class="sig-name descname"><span class="pre">servoWithName</span></span><span class="sig-paren">(</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.servoWithName(String)" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="servo.html#krpc.client.services.InfernalRobotics.Servo" title="krpc.client.services.InfernalRobotics.Servo"><span class="pre">Servo</span></a> <span class="sig-name descname"><span class="pre">servoWithName</span></span><span class="sig-paren">(</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.servoWithName(String)" title="Link to this definition">#</a></dt>
 <dd><p>Returns the servo with the given <em>name</em> from this group,
 or <code class="docutils literal notranslate"><span class="pre">null</span></code> if none exists.</p>
 <dl class="field-list simple">
@@ -1307,7 +1308,7 @@ or <code class="docutils literal notranslate"><span class="pre">null</span></cod
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.ServoGroup.getParts()">
- <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="../../../user-guide/reference-frames.html#krpc.client.services.SpaceCenter" title="krpc.client.services.SpaceCenter"><span class="pre">SpaceCenter</span></a><span class="pre">.</span><a class="reference internal" href="../space-center/parts.html#krpc.client.services.SpaceCenter.Part" title="krpc.client.services.SpaceCenter.Part"><span class="pre">Part</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getParts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.getParts()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="../space-center/space-center.html#krpc.client.services.SpaceCenter.SpaceCenter" title="krpc.client.services.SpaceCenter.SpaceCenter"><span class="pre">SpaceCenter</span></a><span class="pre">.</span><a class="reference internal" href="../space-center/parts.html#krpc.client.services.SpaceCenter.Part" title="krpc.client.services.SpaceCenter.Part"><span class="pre">Part</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getParts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.getParts()" title="Link to this definition">#</a></dt>
 <dd><p>The parts containing the servos in the group.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1318,7 +1319,7 @@ or <code class="docutils literal notranslate"><span class="pre">null</span></cod
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.ServoGroup.moveRight()">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">moveRight</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.moveRight()" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">moveRight</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.moveRight()" title="Link to this definition">#</a></dt>
 <dd><p>Moves all of the servos in the group to the right.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1329,7 +1330,7 @@ or <code class="docutils literal notranslate"><span class="pre">null</span></cod
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.ServoGroup.moveLeft()">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">moveLeft</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.moveLeft()" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">moveLeft</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.moveLeft()" title="Link to this definition">#</a></dt>
 <dd><p>Moves all of the servos in the group to the left.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1340,7 +1341,7 @@ or <code class="docutils literal notranslate"><span class="pre">null</span></cod
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.ServoGroup.moveCenter()">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">moveCenter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.moveCenter()" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">moveCenter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.moveCenter()" title="Link to this definition">#</a></dt>
 <dd><p>Moves all of the servos in the group to the center.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1351,7 +1352,7 @@ or <code class="docutils literal notranslate"><span class="pre">null</span></cod
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.ServoGroup.moveNextPreset()">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">moveNextPreset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.moveNextPreset()" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">moveNextPreset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.moveNextPreset()" title="Link to this definition">#</a></dt>
 <dd><p>Moves all of the servos in the group to the next preset.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1362,7 +1363,7 @@ or <code class="docutils literal notranslate"><span class="pre">null</span></cod
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.ServoGroup.movePrevPreset()">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">movePrevPreset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.movePrevPreset()" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">movePrevPreset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.movePrevPreset()" title="Link to this definition">#</a></dt>
 <dd><p>Moves all of the servos in the group to the previous preset.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1373,7 +1374,7 @@ or <code class="docutils literal notranslate"><span class="pre">null</span></cod
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.ServoGroup.stop()">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.stop()" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.ServoGroup.stop()" title="Link to this definition">#</a></dt>
 <dd><p>Stops the servos in the group.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>

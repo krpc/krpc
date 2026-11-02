@@ -23,14 +23,12 @@ Toggle Group
       The rect transform for the UI object.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`UI.RectTransform`
 
    .. attribute:: layout_element: UI.LayoutElement
 
       How much space the UI object asks a layout for.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`UI.LayoutElement`
 
       .. note::
 
@@ -42,7 +40,6 @@ Toggle Group
       Whether the UI object is visible.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
       .. note::
 
@@ -51,19 +48,17 @@ Toggle Group
          be built with its parts visible, inside a panel that is not, and shown all at
          once by making that panel visible.
 
-   .. attribute:: selected: UI.Toggle
+   .. attribute:: selected: UI.Toggle | Types.none
 
       The toggle in the group that is checked, or ``nil`` if none of them are.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`UI.Toggle` or ``Types.none``
 
    .. attribute:: allow_switch_off: boolean
 
       Whether all of the toggles in the group are allowed to be unchecked at once.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
       .. note::
 

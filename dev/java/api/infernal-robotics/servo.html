@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=eadf7411" />
   
@@ -1109,15 +1110,15 @@
 <dd><p>Represents a servo. Obtained using
 <a class="reference internal" href="servo-group.html#krpc.client.services.InfernalRobotics.ServoGroup.getServos()" title="krpc.client.services.InfernalRobotics.ServoGroup.getServos()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">ServoGroup.getServos()</span></code></a>,
 <a class="reference internal" href="servo-group.html#krpc.client.services.InfernalRobotics.ServoGroup.servoWithName(String)" title="krpc.client.services.InfernalRobotics.ServoGroup.servoWithName(String)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">ServoGroup.servoWithName(String)</span></code></a>
-or <a class="reference internal" href="infernal-robotics.html#krpc.client.services.InfernalRobotics.InfernalRobotics.servoWithName(SpaceCenter.Vessel, String)" title="krpc.client.services.InfernalRobotics.InfernalRobotics.servoWithName(SpaceCenter.Vessel, String)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">servoWithName(SpaceCenter.Vessel,</span> <span class="pre">String)</span></code></a>.</p>
+or <a class="reference internal" href="infernal-robotics.html#krpc.client.services.InfernalRobotics.InfernalRobotics.servoWithName(SpaceCenter.Vessel, String)" title="krpc.client.services.InfernalRobotics.InfernalRobotics.servoWithName(SpaceCenter.Vessel, String)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">InfernalRobotics.servoWithName(SpaceCenter.Vessel,</span> <span class="pre">String)</span></code></a>.</p>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.getName()">
- <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getName</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getName()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getName</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getName()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.setName(String)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setName</span></span><span class="sig-paren">(</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.setName(String)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setName</span></span><span class="sig-paren">(</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.setName(String)" title="Link to this definition">#</a></dt>
 <dd><p>The name of the servo.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1128,7 +1129,7 @@ or <a class="reference internal" href="infernal-robotics.html#krpc.client.servic
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.getUID()">
- <span class="pre">int</span> <span class="sig-name descname"><span class="pre">getUID</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getUID()" title="Link to this definition">#</a></dt>
+<span class="pre">int</span> <span class="sig-name descname"><span class="pre">getUID</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getUID()" title="Link to this definition">#</a></dt>
 <dd><p>The unique identifier of the servo.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1139,7 +1140,7 @@ or <a class="reference internal" href="infernal-robotics.html#krpc.client.servic
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.getPart()">
- <a class="reference internal" href="../../../user-guide/reference-frames.html#krpc.client.services.SpaceCenter" title="krpc.client.services.SpaceCenter"><span class="pre">SpaceCenter</span></a><span class="pre">.</span><a class="reference internal" href="../space-center/parts.html#krpc.client.services.SpaceCenter.Part" title="krpc.client.services.SpaceCenter.Part"><span class="pre">Part</span></a> <span class="sig-name descname"><span class="pre">getPart</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getPart()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="../space-center/space-center.html#krpc.client.services.SpaceCenter.SpaceCenter" title="krpc.client.services.SpaceCenter.SpaceCenter"><span class="pre">SpaceCenter</span></a><span class="pre">.</span><a class="reference internal" href="../space-center/parts.html#krpc.client.services.SpaceCenter.Part" title="krpc.client.services.SpaceCenter.Part"><span class="pre">Part</span></a> <span class="sig-name descname"><span class="pre">getPart</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getPart()" title="Link to this definition">#</a></dt>
 <dd><p>The part containing the servo.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1150,7 +1151,7 @@ or <a class="reference internal" href="infernal-robotics.html#krpc.client.servic
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.getMode()">
- <a class="reference internal" href="#krpc.client.services.InfernalRobotics.ServoMode" title="krpc.client.services.InfernalRobotics.ServoMode"><span class="pre">ServoMode</span></a> <span class="sig-name descname"><span class="pre">getMode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getMode()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.InfernalRobotics.ServoMode" title="krpc.client.services.InfernalRobotics.ServoMode"><span class="pre">ServoMode</span></a> <span class="sig-name descname"><span class="pre">getMode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getMode()" title="Link to this definition">#</a></dt>
 <dd><p>Whether the part acts as a servo or a rotor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1161,7 +1162,7 @@ or <a class="reference internal" href="infernal-robotics.html#krpc.client.servic
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.setHighlight(boolean)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setHighlight</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.setHighlight(boolean)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setHighlight</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.setHighlight(boolean)" title="Link to this definition">#</a></dt>
 <dd><p>Whether the servo should be highlighted in-game.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1172,7 +1173,7 @@ or <a class="reference internal" href="infernal-robotics.html#krpc.client.servic
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.getPosition()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getPosition</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getPosition()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getPosition</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getPosition()" title="Link to this definition">#</a></dt>
 <dd><p>The position of the servo.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1183,7 +1184,7 @@ or <a class="reference internal" href="infernal-robotics.html#krpc.client.servic
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.getMinConfigPosition()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMinConfigPosition</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getMinConfigPosition()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMinConfigPosition</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getMinConfigPosition()" title="Link to this definition">#</a></dt>
 <dd><p>The minimum position of the servo, specified by the part configuration.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1194,7 +1195,7 @@ or <a class="reference internal" href="infernal-robotics.html#krpc.client.servic
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.getMaxConfigPosition()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMaxConfigPosition</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getMaxConfigPosition()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMaxConfigPosition</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getMaxConfigPosition()" title="Link to this definition">#</a></dt>
 <dd><p>The maximum position of the servo, specified by the part configuration.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1205,12 +1206,12 @@ or <a class="reference internal" href="infernal-robotics.html#krpc.client.servic
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.getMinPosition()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMinPosition</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getMinPosition()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMinPosition</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getMinPosition()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.setMinPosition(float)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setMinPosition</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.setMinPosition(float)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setMinPosition</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.setMinPosition(float)" title="Link to this definition">#</a></dt>
 <dd><p>The minimum position of the servo, specified by the in-game tweak menu.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1221,12 +1222,12 @@ or <a class="reference internal" href="infernal-robotics.html#krpc.client.servic
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.getMaxPosition()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMaxPosition</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getMaxPosition()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMaxPosition</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getMaxPosition()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.setMaxPosition(float)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setMaxPosition</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.setMaxPosition(float)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setMaxPosition</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.setMaxPosition(float)" title="Link to this definition">#</a></dt>
 <dd><p>The maximum position of the servo, specified by the in-game tweak menu.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1237,7 +1238,7 @@ or <a class="reference internal" href="infernal-robotics.html#krpc.client.servic
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.getConfigSpeed()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getConfigSpeed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getConfigSpeed()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getConfigSpeed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getConfigSpeed()" title="Link to this definition">#</a></dt>
 <dd><p>The speed multiplier of the servo, specified by the part configuration.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1248,12 +1249,12 @@ or <a class="reference internal" href="infernal-robotics.html#krpc.client.servic
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.getSpeed()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getSpeed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getSpeed()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getSpeed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getSpeed()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.setSpeed(float)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setSpeed</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.setSpeed(float)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setSpeed</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.setSpeed(float)" title="Link to this definition">#</a></dt>
 <dd><p>The speed multiplier of the servo, specified by the in-game tweak menu.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1264,7 +1265,7 @@ or <a class="reference internal" href="infernal-robotics.html#krpc.client.servic
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.getCurrentSpeed()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getCurrentSpeed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getCurrentSpeed()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getCurrentSpeed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getCurrentSpeed()" title="Link to this definition">#</a></dt>
 <dd><p>The current speed at which the servo is moving.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1275,12 +1276,12 @@ or <a class="reference internal" href="infernal-robotics.html#krpc.client.servic
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.getAcceleration()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getAcceleration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getAcceleration()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getAcceleration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getAcceleration()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.setAcceleration(float)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setAcceleration</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.setAcceleration(float)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setAcceleration</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.setAcceleration(float)" title="Link to this definition">#</a></dt>
 <dd><p>The current speed multiplier set in the UI.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1291,7 +1292,7 @@ or <a class="reference internal" href="infernal-robotics.html#krpc.client.servic
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.getIsMoving()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getIsMoving</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getIsMoving()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getIsMoving</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getIsMoving()" title="Link to this definition">#</a></dt>
 <dd><p>Whether the servo is moving.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1302,7 +1303,7 @@ or <a class="reference internal" href="infernal-robotics.html#krpc.client.servic
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.getIsFreeMoving()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getIsFreeMoving</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getIsFreeMoving()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getIsFreeMoving</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getIsFreeMoving()" title="Link to this definition">#</a></dt>
 <dd><p>Whether the servo is freely moving.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1313,12 +1314,12 @@ or <a class="reference internal" href="infernal-robotics.html#krpc.client.servic
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.getIsLocked()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getIsLocked</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getIsLocked()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getIsLocked</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getIsLocked()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.setIsLocked(boolean)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setIsLocked</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.setIsLocked(boolean)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setIsLocked</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.setIsLocked(boolean)" title="Link to this definition">#</a></dt>
 <dd><p>Whether the servo is locked.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1329,12 +1330,12 @@ or <a class="reference internal" href="infernal-robotics.html#krpc.client.servic
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.getIsAxisInverted()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getIsAxisInverted</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getIsAxisInverted()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getIsAxisInverted</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getIsAxisInverted()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.setIsAxisInverted(boolean)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setIsAxisInverted</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.setIsAxisInverted(boolean)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setIsAxisInverted</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.setIsAxisInverted(boolean)" title="Link to this definition">#</a></dt>
 <dd><p>Whether the servos axis is inverted.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1345,7 +1346,7 @@ or <a class="reference internal" href="infernal-robotics.html#krpc.client.servic
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.getTargetPosition()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getTargetPosition</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getTargetPosition()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getTargetPosition</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getTargetPosition()" title="Link to this definition">#</a></dt>
 <dd><p>The target position the servo is moving towards.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1356,7 +1357,7 @@ or <a class="reference internal" href="infernal-robotics.html#krpc.client.servic
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.getTargetSpeed()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getTargetSpeed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getTargetSpeed()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getTargetSpeed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getTargetSpeed()" title="Link to this definition">#</a></dt>
 <dd><p>The target speed the servo is moving at.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1367,7 +1368,7 @@ or <a class="reference internal" href="infernal-robotics.html#krpc.client.servic
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.getCommandedPosition()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getCommandedPosition</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getCommandedPosition()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getCommandedPosition</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getCommandedPosition()" title="Link to this definition">#</a></dt>
 <dd><p>The position the servo is currently being commanded to move to.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1378,7 +1379,7 @@ or <a class="reference internal" href="infernal-robotics.html#krpc.client.servic
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.getDefaultPosition()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getDefaultPosition</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getDefaultPosition()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getDefaultPosition</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getDefaultPosition()" title="Link to this definition">#</a></dt>
 <dd><p>The default (built) position of the servo.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1389,12 +1390,12 @@ or <a class="reference internal" href="infernal-robotics.html#krpc.client.servic
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.getForceLimit()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getForceLimit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getForceLimit()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getForceLimit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getForceLimit()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.setForceLimit(float)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setForceLimit</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.setForceLimit(float)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setForceLimit</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.setForceLimit(float)" title="Link to this definition">#</a></dt>
 <dd><p>The force limit of the servo, as a percentage of the maximum force.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1405,7 +1406,7 @@ or <a class="reference internal" href="infernal-robotics.html#krpc.client.servic
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.getMaxForce()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMaxForce</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getMaxForce()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMaxForce</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getMaxForce()" title="Link to this definition">#</a></dt>
 <dd><p>The maximum force the servo can generate.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1416,7 +1417,7 @@ or <a class="reference internal" href="infernal-robotics.html#krpc.client.servic
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.getMaxAcceleration()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMaxAcceleration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getMaxAcceleration()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMaxAcceleration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getMaxAcceleration()" title="Link to this definition">#</a></dt>
 <dd><p>The maximum acceleration the servo can achieve.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1427,7 +1428,7 @@ or <a class="reference internal" href="infernal-robotics.html#krpc.client.servic
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.getMaxSpeed()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMaxSpeed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getMaxSpeed()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMaxSpeed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getMaxSpeed()" title="Link to this definition">#</a></dt>
 <dd><p>The maximum speed the servo can achieve.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1438,7 +1439,7 @@ or <a class="reference internal" href="infernal-robotics.html#krpc.client.servic
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.getElectricChargeRequired()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getElectricChargeRequired</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getElectricChargeRequired()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getElectricChargeRequired</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getElectricChargeRequired()" title="Link to this definition">#</a></dt>
 <dd><p>The rate at which the servo consumes electric charge, in <span class="math notranslate nohighlight">\(\mathrm{units/s}\)</span>,
 when moving.</p>
 <dl class="field-list simple">
@@ -1450,12 +1451,12 @@ when moving.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.getSpringPower()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getSpringPower</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getSpringPower()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getSpringPower</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getSpringPower()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.setSpringPower(float)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setSpringPower</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.setSpringPower(float)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setSpringPower</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.setSpringPower(float)" title="Link to this definition">#</a></dt>
 <dd><p>The strength of the servo’s spring, when it has one.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1466,12 +1467,12 @@ when moving.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.getDampingPower()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getDampingPower</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getDampingPower()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getDampingPower</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getDampingPower()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.setDampingPower(float)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setDampingPower</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.setDampingPower(float)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setDampingPower</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.setDampingPower(float)" title="Link to this definition">#</a></dt>
 <dd><p>The strength of the servo’s damping.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1482,12 +1483,12 @@ when moving.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.getRotorAcceleration()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getRotorAcceleration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getRotorAcceleration()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getRotorAcceleration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getRotorAcceleration()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.setRotorAcceleration(float)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setRotorAcceleration</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.setRotorAcceleration(float)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setRotorAcceleration</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.setRotorAcceleration(float)" title="Link to this definition">#</a></dt>
 <dd><p>The acceleration of the servo when operating as a rotor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1498,12 +1499,12 @@ when moving.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.getIsLimited()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getIsLimited</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getIsLimited()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getIsLimited</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getIsLimited()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.setIsLimited(boolean)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setIsLimited</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.setIsLimited(boolean)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setIsLimited</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.setIsLimited(boolean)" title="Link to this definition">#</a></dt>
 <dd><p>Whether the servo’s range of movement is limited to the configured minimum and
 maximum positions.</p>
 <dl class="field-list simple">
@@ -1515,7 +1516,7 @@ maximum positions.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.getIsRotational()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getIsRotational</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getIsRotational()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getIsRotational</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getIsRotational()" title="Link to this definition">#</a></dt>
 <dd><p>Whether the servo moves rotationally (as opposed to linearly).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1526,7 +1527,7 @@ maximum positions.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.getIsServo()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getIsServo</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getIsServo()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getIsServo</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getIsServo()" title="Link to this definition">#</a></dt>
 <dd><p>Whether the part is operating as a servo (rather than a rotor).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1537,7 +1538,7 @@ maximum positions.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.getCanHaveLimits()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getCanHaveLimits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getCanHaveLimits()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getCanHaveLimits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getCanHaveLimits()" title="Link to this definition">#</a></dt>
 <dd><p>Whether the servo can have its range of movement limited.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1548,7 +1549,7 @@ maximum positions.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.getHasSpring()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getHasSpring</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getHasSpring()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getHasSpring</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getHasSpring()" title="Link to this definition">#</a></dt>
 <dd><p>Whether the servo has a spring.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1559,7 +1560,7 @@ maximum positions.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.getIsRunning()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getIsRunning</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getIsRunning()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getIsRunning</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getIsRunning()" title="Link to this definition">#</a></dt>
 <dd><p>Whether the servo is running, when operating as a rotor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1570,7 +1571,7 @@ maximum positions.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.getPresetPositions()">
- <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Float.html" title="java.lang.Float"><span class="pre">Float</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getPresetPositions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getPresetPositions()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Float.html" title="java.lang.Float"><span class="pre">Float</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getPresetPositions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.getPresetPositions()" title="Link to this definition">#</a></dt>
 <dd><p>The list of preset positions configured for the servo.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1581,7 +1582,7 @@ maximum positions.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.moveRight()">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">moveRight</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.moveRight()" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">moveRight</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.moveRight()" title="Link to this definition">#</a></dt>
 <dd><p>Moves the servo to the right.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1592,7 +1593,7 @@ maximum positions.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.moveLeft()">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">moveLeft</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.moveLeft()" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">moveLeft</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.moveLeft()" title="Link to this definition">#</a></dt>
 <dd><p>Moves the servo to the left.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1603,7 +1604,7 @@ maximum positions.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.moveCenter()">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">moveCenter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.moveCenter()" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">moveCenter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.moveCenter()" title="Link to this definition">#</a></dt>
 <dd><p>Moves the servo to the center.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1614,7 +1615,7 @@ maximum positions.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.moveTo(float, float)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">moveTo</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">position</span></em>, <span class="pre">float</span><em> <span class="pre">speed</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.moveTo(float, float)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">moveTo</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">position</span></em>, <span class="pre">float</span><em> <span class="pre">speed</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.moveTo(float, float)" title="Link to this definition">#</a></dt>
 <dd><p>Moves the servo to <em>position</em> and sets the
 speed multiplier to <em>speed</em>.</p>
 <dl class="field-list simple">
@@ -1632,7 +1633,7 @@ speed multiplier to <em>speed</em>.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.stop()">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.stop()" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.stop()" title="Link to this definition">#</a></dt>
 <dd><p>Stops the servo.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1643,7 +1644,7 @@ speed multiplier to <em>speed</em>.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.addPreset(float)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">addPreset</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">position</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.addPreset(float)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">addPreset</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">position</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.addPreset(float)" title="Link to this definition">#</a></dt>
 <dd><p>Adds a preset position to the servo.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1659,7 +1660,7 @@ speed multiplier to <em>speed</em>.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.removePresetAt(int)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">removePresetAt</span></span><span class="sig-paren">(</span><span class="pre">int</span><em> <span class="pre">index</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.removePresetAt(int)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">removePresetAt</span></span><span class="sig-paren">(</span><span class="pre">int</span><em> <span class="pre">index</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.removePresetAt(int)" title="Link to this definition">#</a></dt>
 <dd><p>Removes the preset position at the given index.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1675,7 +1676,7 @@ speed multiplier to <em>speed</em>.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.InfernalRobotics.Servo.sortPresets()">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">sortPresets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.sortPresets()" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">sortPresets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.InfernalRobotics.Servo.sortPresets()" title="Link to this definition">#</a></dt>
 <dd><p>Sorts the preset positions of the servo into ascending order.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>

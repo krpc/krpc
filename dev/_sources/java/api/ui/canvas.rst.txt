@@ -8,7 +8,7 @@ Canvas
 
 .. type:: public class Canvas
 
-   A canvas for user interface elements. See :meth:`getStockCanvas()` and :meth:`addCanvas()`.
+   A canvas for user interface elements. See :meth:`UI.getStockCanvas()` and :meth:`UI.addCanvas()`.
 
    .. method:: RectTransform getRectTransform()
 

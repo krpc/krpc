@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=eadf7411" />
   
@@ -1119,19 +1120,19 @@ are converted from kilonewtons and tonnes).</p>
 </div>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Stage.getNumber()">
- <span class="pre">int</span> <span class="sig-name descname"><span class="pre">getNumber</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getNumber()" title="Link to this definition">#</a></dt>
+<span class="pre">int</span> <span class="sig-name descname"><span class="pre">getNumber</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getNumber()" title="Link to this definition">#</a></dt>
 <dd><p>The stage number (activation stage for burn stages, decouple stage otherwise).</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Stage.getParts()">
- <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.Part" title="krpc.client.services.SpaceCenter.Part"><span class="pre">Part</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getParts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getParts()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.Part" title="krpc.client.services.SpaceCenter.Part"><span class="pre">Part</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getParts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getParts()" title="Link to this definition">#</a></dt>
 <dd><p>The parts that belong to this stage.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Stage.resources(boolean)">
- <a class="reference internal" href="resources.html#krpc.client.services.SpaceCenter.Resources" title="krpc.client.services.SpaceCenter.Resources"><span class="pre">Resources</span></a> <span class="sig-name descname"><span class="pre">resources</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">cumulative</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.resources(boolean)" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="resources.html#krpc.client.services.SpaceCenter.Resources" title="krpc.client.services.SpaceCenter.Resources"><span class="pre">Resources</span></a> <span class="sig-name descname"><span class="pre">resources</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">cumulative</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.resources(boolean)" title="Link to this definition">#</a></dt>
 <dd><p>Returns a <a class="reference internal" href="#krpc.client.services.SpaceCenter.Stage.resources(boolean)" title="krpc.client.services.SpaceCenter.Stage.resources(boolean)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Stage.resources(boolean)</span></code></a> object for this stage.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1151,7 +1152,7 @@ the C# <code class="docutils literal notranslate"><span class="pre">Resources()<
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Stage.getDeltaV()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getDeltaV</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getDeltaV()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getDeltaV</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getDeltaV()" title="Link to this definition">#</a></dt>
 <dd><p>Delta-v for this stage in the current situation, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -1162,91 +1163,91 @@ Calling this on a decouple stage raises an error.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Stage.getVacuumDeltaV()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getVacuumDeltaV</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getVacuumDeltaV()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getVacuumDeltaV</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getVacuumDeltaV()" title="Link to this definition">#</a></dt>
 <dd><p>Vacuum delta-v for this stage, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Stage.getSeaLevelDeltaV()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getSeaLevelDeltaV</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getSeaLevelDeltaV()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getSeaLevelDeltaV</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getSeaLevelDeltaV()" title="Link to this definition">#</a></dt>
 <dd><p>Sea-level delta-v for this stage, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Stage.getThrust()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getThrust</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getThrust()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getThrust</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getThrust()" title="Link to this definition">#</a></dt>
 <dd><p>Thrust in the current situation, in newtons.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Stage.getVacuumThrust()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getVacuumThrust</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getVacuumThrust()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getVacuumThrust</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getVacuumThrust()" title="Link to this definition">#</a></dt>
 <dd><p>Vacuum thrust, in newtons.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Stage.getSeaLevelThrust()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getSeaLevelThrust</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getSeaLevelThrust()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getSeaLevelThrust</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getSeaLevelThrust()" title="Link to this definition">#</a></dt>
 <dd><p>Sea-level thrust, in newtons.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Stage.getTWR()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getTWR</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getTWR()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getTWR</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getTWR()" title="Link to this definition">#</a></dt>
 <dd><p>Thrust-to-weight ratio in the current situation.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Stage.getVacuumTWR()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getVacuumTWR</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getVacuumTWR()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getVacuumTWR</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getVacuumTWR()" title="Link to this definition">#</a></dt>
 <dd><p>Vacuum thrust-to-weight ratio.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Stage.getSeaLevelTWR()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getSeaLevelTWR</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getSeaLevelTWR()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getSeaLevelTWR</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getSeaLevelTWR()" title="Link to this definition">#</a></dt>
 <dd><p>Sea-level thrust-to-weight ratio.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Stage.getSpecificImpulse()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getSpecificImpulse</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getSpecificImpulse()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getSpecificImpulse</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getSpecificImpulse()" title="Link to this definition">#</a></dt>
 <dd><p>Specific impulse in the current situation, in seconds.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Stage.getVacuumSpecificImpulse()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getVacuumSpecificImpulse</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getVacuumSpecificImpulse()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getVacuumSpecificImpulse</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getVacuumSpecificImpulse()" title="Link to this definition">#</a></dt>
 <dd><p>Vacuum specific impulse, in seconds.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Stage.getSeaLevelSpecificImpulse()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getSeaLevelSpecificImpulse</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getSeaLevelSpecificImpulse()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getSeaLevelSpecificImpulse</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getSeaLevelSpecificImpulse()" title="Link to this definition">#</a></dt>
 <dd><p>Sea-level specific impulse, in seconds.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Stage.getBurnTime()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getBurnTime</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getBurnTime()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getBurnTime</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getBurnTime()" title="Link to this definition">#</a></dt>
 <dd><p>Burn time for this stage, in seconds.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Stage.getStartMass()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getStartMass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getStartMass()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getStartMass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getStartMass()" title="Link to this definition">#</a></dt>
 <dd><p>The mass of the vessel after the stage activates, in <span class="math notranslate nohighlight">\(\mathrm{kg}\)</span>.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Stage.getEndMass()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getEndMass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getEndMass()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getEndMass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getEndMass()" title="Link to this definition">#</a></dt>
 <dd><p>The mass of the vessel when the stage burns out, in <span class="math notranslate nohighlight">\(\mathrm{kg}\)</span>.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Stage.getDryMass()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getDryMass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getDryMass()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getDryMass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getDryMass()" title="Link to this definition">#</a></dt>
 <dd><p>The dry mass of the vessel after the stage activates, in <span class="math notranslate nohighlight">\(\mathrm{kg}\)</span>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -1256,7 +1257,7 @@ Calling this on a decouple stage raises an error.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Stage.getFuelMass()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getFuelMass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getFuelMass()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getFuelMass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getFuelMass()" title="Link to this definition">#</a></dt>
 <dd><p>The fuel mass of the vessel when the stage activates, in <span class="math notranslate nohighlight">\(\mathrm{kg}\)</span>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>

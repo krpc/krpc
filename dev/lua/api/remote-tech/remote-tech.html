@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=eadf7411" />
   
@@ -1102,62 +1103,40 @@
                   
   <section id="remotetech">
 <h1>RemoteTech<a class="headerlink" href="#remotetech" title="Link to this heading">#</a></h1>
-<p id="module-RemoteTech">This service provides functionality to interact with
+<p id="lua-RemoteTech">This service provides functionality to interact with
 <a class="reference external" href="https://forum.kerbalspaceprogram.com/topic/139167-111-remotetech-v199-2020-12-19/">RemoteTech</a>.</p>
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="RemoteTech.RemoteTech.available">
-<span class="sig-name descname"><span class="pre">available</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#RemoteTech.RemoteTech.available" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-RemoteTech.available">
+<span class="sig-prename descclassname"><span class="pre">RemoteTech.</span></span><span class="sig-name descname"><span class="pre">available</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-RemoteTech.available" title="Link to this definition">#</a></dt>
 <dd><p>Whether RemoteTech is installed.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="RemoteTech.RemoteTech.ground_stations">
-<span class="sig-name descname"><span class="pre">ground_stations</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">List</span><a class="headerlink" href="#RemoteTech.RemoteTech.ground_stations" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-RemoteTech.ground_stations">
+<span class="sig-prename descclassname"><span class="pre">RemoteTech.</span></span><span class="sig-name descname"><span class="pre">ground_stations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">List</span></code><a class="headerlink" href="#lua-RemoteTech.ground_stations" title="Link to this definition">#</a></dt>
 <dd><p>The names of the ground stations.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">List</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="RemoteTech.antenna">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">antenna</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">part</span></em><span class="sig-paren">)</span><a class="headerlink" href="#RemoteTech.antenna" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-RemoteTech.antenna">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">RemoteTech.</span></span><span class="sig-name descname"><span class="pre">antenna</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">part</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../space-center/parts.html#lua-SpaceCenter.Part" title="SpaceCenter.Part"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.Part</span></code></a><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="antenna.html#lua-RemoteTech.Antenna" title="RemoteTech.Antenna"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">RemoteTech.Antenna</span></code></a><a class="headerlink" href="#lua-RemoteTech.antenna" title="Link to this definition">#</a></dt>
 <dd><p>Get the antenna object for a particular part.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>part</strong> (<span><a class="reference internal" href="../space-center/parts.html#SpaceCenter.Part" title="SpaceCenter.Part"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.Part</span></code></a></span>)</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="antenna.html#RemoteTech.Antenna" title="RemoteTech.Antenna"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">RemoteTech.Antenna</span></code></a></p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="RemoteTech.comms">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">comms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">vessel</span></em><span class="sig-paren">)</span><a class="headerlink" href="#RemoteTech.comms" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-RemoteTech.comms">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">RemoteTech.</span></span><span class="sig-name descname"><span class="pre">comms</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">vessel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../space-center/vessel.html#lua-SpaceCenter.Vessel" title="SpaceCenter.Vessel"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.Vessel</span></code></a><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="comms.html#lua-RemoteTech.Comms" title="RemoteTech.Comms"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">RemoteTech.Comms</span></code></a><a class="headerlink" href="#lua-RemoteTech.comms" title="Link to this definition">#</a></dt>
 <dd><p>Get a communications object, representing the communication capability of a particular vessel.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>vessel</strong> (<span><a class="reference internal" href="../space-center/vessel.html#SpaceCenter.Vessel" title="SpaceCenter.Vessel"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.Vessel</span></code></a></span>)</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="comms.html#RemoteTech.Comms" title="RemoteTech.Comms"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">RemoteTech.Comms</span></code></a></p>
-</dd>
-</dl>
 </dd></dl>
 
 </section>

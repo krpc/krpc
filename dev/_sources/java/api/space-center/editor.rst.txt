@@ -11,7 +11,7 @@ Editor
 .. type:: public class Editor
 
    Provides access to the vehicle assembly building and space plane hangar.
-   Obtained by calling :meth:`getEditor()`.
+   Obtained by calling :meth:`SpaceCenter.getEditor()`.
 
    .. method:: EditorFacility getFacility()
 
@@ -66,7 +66,7 @@ Editor
          auto-saved craft file and that is launched, as the game's own launch button does.
          The vessel's own craft file, if it was loaded from one, is left alone.
          The *crew* parameter works as it does for
-         :meth:`launchVessel(String, String, String, java.util.List<String>, boolean, String)`, and takes precedence over the crew assigned
+         :meth:`SpaceCenter.launchVessel(String, String, String, java.util.List<String>, boolean, String)`, and takes precedence over the crew assigned
          in the editor.
          Throws an exception if any of the games pre-flight checks fail.
 

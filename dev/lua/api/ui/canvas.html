@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=eadf7411" />
   
@@ -1103,33 +1104,27 @@
   <section id="canvas">
 <h1>Canvas<a class="headerlink" href="#canvas" title="Link to this heading">#</a></h1>
 <dl class="lua class">
-<dt class="sig sig-object lua" id="UI.Canvas">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">UI.</span></span><span class="sig-name descname"><span class="pre">Canvas</span></span><a class="headerlink" href="#UI.Canvas" title="Link to this definition">#</a></dt>
-<dd><p>A canvas for user interface elements. See <a class="reference internal" href="ui.html#UI.UI.stock_canvas" title="UI.UI.stock_canvas"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">UI.stock_canvas</span></code></a> and <a class="reference internal" href="ui.html#UI.add_canvas" title="UI.add_canvas"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">UI.add_canvas()</span></code></a>.</p>
+<dt class="sig sig-object lua" id="lua-UI.Canvas">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">UI.</span></span><span class="sig-name descname"><span class="pre">Canvas</span></span><a class="headerlink" href="#lua-UI.Canvas" title="Link to this definition">#</a></dt>
+<dd><p>A canvas for user interface elements. See <a class="reference internal" href="ui.html#lua-UI.stock_canvas" title="UI.stock_canvas"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">UI.stock_canvas</span></code></a> and <a class="reference internal" href="ui.html#lua-UI.add_canvas" title="UI.add_canvas"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">UI.add_canvas()</span></code></a>.</p>
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="UI.UI.Canvas.rect_transform">
-<span class="sig-name descname"><span class="pre">rect_transform</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">UI.RectTransform</span><a class="headerlink" href="#UI.UI.Canvas.rect_transform" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.Canvas.rect_transform">
+<span class="sig-name descname"><span class="pre">rect_transform</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="rect-transform.html#lua-UI.RectTransform" title="UI.RectTransform"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">UI.RectTransform</span></code></a><a class="headerlink" href="#lua-UI.Canvas.rect_transform" title="Link to this definition">#</a></dt>
 <dd><p>The rect transform for the UI object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="rect-transform.html#UI.RectTransform" title="UI.RectTransform"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.RectTransform</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="UI.UI.Canvas.layout_element">
-<span class="sig-name descname"><span class="pre">layout_element</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">UI.LayoutElement</span><a class="headerlink" href="#UI.UI.Canvas.layout_element" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.Canvas.layout_element">
+<span class="sig-name descname"><span class="pre">layout_element</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="layout-element.html#lua-UI.LayoutElement" title="UI.LayoutElement"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">UI.LayoutElement</span></code></a><a class="headerlink" href="#lua-UI.Canvas.layout_element" title="Link to this definition">#</a></dt>
 <dd><p>How much space the UI object asks a layout for.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="layout-element.html#UI.LayoutElement" title="UI.LayoutElement"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.LayoutElement</span></code></a></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1140,15 +1135,12 @@ not inside a layout and does not have one.</p>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="UI.UI.Canvas.visible">
-<span class="sig-name descname"><span class="pre">visible</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#UI.UI.Canvas.visible" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.Canvas.visible">
+<span class="sig-name descname"><span class="pre">visible</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-UI.Canvas.visible" title="Link to this definition">#</a></dt>
 <dd><p>Whether the UI object is visible.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1161,93 +1153,73 @@ once by making that panel visible.</p>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="UI.Canvas.add_panel">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">add_panel</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#UI.Canvas.add_panel" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.Canvas.add_panel">
+<span class="sig-name descname"><span class="pre">add_panel</span></span><span class="p"><span class="pre">(</span></span><a class="reference internal" href="#lua-UI.Canvas.visible" title="UI.Canvas.visible"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">visible</span></code></a><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="panel.html#lua-UI.Panel" title="UI.Panel"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">UI.Panel</span></code></a><a class="headerlink" href="#lua-UI.Canvas.add_panel" title="Link to this definition">#</a></dt>
 <dd><p>Create a panel within this object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>visible</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the new panel is visible.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="panel.html#UI.Panel" title="UI.Panel"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.Panel</span></code></a></p>
+<dd class="field-odd"><p><strong>visible</strong> – Whether the new panel is visible. Defaults to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="UI.Canvas.add_text">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">add_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">content</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#UI.Canvas.add_text" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.Canvas.add_text">
+<span class="sig-name descname"><span class="pre">add_text</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">content</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#lua-UI.Canvas.visible" title="UI.Canvas.visible"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">visible</span></code></a><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="text.html#lua-UI.Text" title="UI.Text"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">UI.Text</span></code></a><a class="headerlink" href="#lua-UI.Canvas.add_text" title="Link to this definition">#</a></dt>
 <dd><p>Add text to this object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>content</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – The text.</p></li>
-<li><p><strong>visible</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the text is visible.</p></li>
+<li><p><strong>content</strong> – The text.</p></li>
+<li><p><strong>visible</strong> – Whether the text is visible. Defaults to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="text.html#UI.Text" title="UI.Text"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.Text</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="UI.Canvas.add_input_field">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">add_input_field</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#UI.Canvas.add_input_field" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.Canvas.add_input_field">
+<span class="sig-name descname"><span class="pre">add_input_field</span></span><span class="p"><span class="pre">(</span></span><a class="reference internal" href="#lua-UI.Canvas.visible" title="UI.Canvas.visible"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">visible</span></code></a><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="input-field.html#lua-UI.InputField" title="UI.InputField"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">UI.InputField</span></code></a><a class="headerlink" href="#lua-UI.Canvas.add_input_field" title="Link to this definition">#</a></dt>
 <dd><p>Add an input field to this object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>visible</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the input field is visible.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="input-field.html#UI.InputField" title="UI.InputField"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.InputField</span></code></a></p>
+<dd class="field-odd"><p><strong>visible</strong> – Whether the input field is visible. Defaults to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="UI.Canvas.add_button">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">add_button</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">content</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#UI.Canvas.add_button" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.Canvas.add_button">
+<span class="sig-name descname"><span class="pre">add_button</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">content</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#lua-UI.Canvas.visible" title="UI.Canvas.visible"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">visible</span></code></a><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="button.html#lua-UI.Button" title="UI.Button"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">UI.Button</span></code></a><a class="headerlink" href="#lua-UI.Canvas.add_button" title="Link to this definition">#</a></dt>
 <dd><p>Add a button to this object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>content</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – The label for the button.</p></li>
-<li><p><strong>visible</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the button is visible.</p></li>
+<li><p><strong>content</strong> – The label for the button.</p></li>
+<li><p><strong>visible</strong> – Whether the button is visible. Defaults to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="button.html#UI.Button" title="UI.Button"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.Button</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="UI.Canvas.add_toggle">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">add_toggle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">content</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#UI.Canvas.add_toggle" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.Canvas.add_toggle">
+<span class="sig-name descname"><span class="pre">add_toggle</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">content</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#lua-UI.Canvas.visible" title="UI.Canvas.visible"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">visible</span></code></a><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="toggle.html#lua-UI.Toggle" title="UI.Toggle"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">UI.Toggle</span></code></a><a class="headerlink" href="#lua-UI.Canvas.add_toggle" title="Link to this definition">#</a></dt>
 <dd><p>Add a toggle to this object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>content</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – The label for the toggle.</p></li>
-<li><p><strong>visible</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the toggle is visible.</p></li>
+<li><p><strong>content</strong> – The label for the toggle.</p></li>
+<li><p><strong>visible</strong> – Whether the toggle is visible. Defaults to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="toggle.html#UI.Toggle" title="UI.Toggle"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.Toggle</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="UI.Canvas.add_toggle_group">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">add_toggle_group</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#UI.Canvas.add_toggle_group" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.Canvas.add_toggle_group">
+<span class="sig-name descname"><span class="pre">add_toggle_group</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="toggle-group.html#lua-UI.ToggleGroup" title="UI.ToggleGroup"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">UI.ToggleGroup</span></code></a><a class="headerlink" href="#lua-UI.Canvas.add_toggle_group" title="Link to this definition">#</a></dt>
 <dd><p>Add a toggle group to this object, to make a set of toggles into radio buttons.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="toggle-group.html#UI.ToggleGroup" title="UI.ToggleGroup"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.ToggleGroup</span></code></a></p>
-</dd>
-</dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The group is not drawn and does not take up any space. The toggles that belong
@@ -1256,67 +1228,55 @@ to it can be added anywhere.</p>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="UI.Canvas.add_slider">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">add_slider</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="pre">vertical</span> <span class="pre">=</span> <span class="pre">false</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#UI.Canvas.add_slider" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.Canvas.add_slider">
+<span class="sig-name descname"><span class="pre">add_slider</span></span><span class="p"><span class="pre">(</span></span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">vertical</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#lua-UI.Canvas.visible" title="UI.Canvas.visible"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">visible</span></code></a><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="slider.html#lua-UI.Slider" title="UI.Slider"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">UI.Slider</span></code></a><a class="headerlink" href="#lua-UI.Canvas.add_slider" title="Link to this definition">#</a></dt>
 <dd><p>Add a slider to this object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>vertical</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the slider runs from bottom to top, rather than from left to right.</p></li>
-<li><p><strong>visible</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the slider is visible.</p></li>
+<li><p><strong>vertical</strong> – Whether the slider runs from bottom to top, rather than from left to right. Defaults to <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p></li>
+<li><p><strong>visible</strong> – Whether the slider is visible. Defaults to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="slider.html#UI.Slider" title="UI.Slider"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.Slider</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="UI.Canvas.add_dropdown">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">add_dropdown</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#UI.Canvas.add_dropdown" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.Canvas.add_dropdown">
+<span class="sig-name descname"><span class="pre">add_dropdown</span></span><span class="p"><span class="pre">(</span></span><a class="reference internal" href="#lua-UI.Canvas.visible" title="UI.Canvas.visible"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">visible</span></code></a><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="dropdown.html#lua-UI.Dropdown" title="UI.Dropdown"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">UI.Dropdown</span></code></a><a class="headerlink" href="#lua-UI.Canvas.add_dropdown" title="Link to this definition">#</a></dt>
 <dd><p>Add a dropdown to this object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>visible</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the dropdown is visible.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="dropdown.html#UI.Dropdown" title="UI.Dropdown"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.Dropdown</span></code></a></p>
+<dd class="field-odd"><p><strong>visible</strong> – Whether the dropdown is visible. Defaults to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="UI.Canvas.add_image">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">add_image</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#UI.Canvas.add_image" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.Canvas.add_image">
+<span class="sig-name descname"><span class="pre">add_image</span></span><span class="p"><span class="pre">(</span></span><a class="reference internal" href="#lua-UI.Canvas.visible" title="UI.Canvas.visible"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">visible</span></code></a><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="image.html#lua-UI.Image" title="UI.Image"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">UI.Image</span></code></a><a class="headerlink" href="#lua-UI.Canvas.add_image" title="Link to this definition">#</a></dt>
 <dd><p>Add an image to this object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>visible</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the image is visible.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="image.html#UI.Image" title="UI.Image"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.Image</span></code></a></p>
+<dd class="field-odd"><p><strong>visible</strong> – Whether the image is visible. Defaults to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="UI.Canvas.add_scroll_view">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">add_scroll_view</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#UI.Canvas.add_scroll_view" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.Canvas.add_scroll_view">
+<span class="sig-name descname"><span class="pre">add_scroll_view</span></span><span class="p"><span class="pre">(</span></span><a class="reference internal" href="#lua-UI.Canvas.visible" title="UI.Canvas.visible"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">visible</span></code></a><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="scroll-view.html#lua-UI.ScrollView" title="UI.ScrollView"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">UI.ScrollView</span></code></a><a class="headerlink" href="#lua-UI.Canvas.add_scroll_view" title="Link to this definition">#</a></dt>
 <dd><p>Add a scroll view to this object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>visible</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the scroll view is visible.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="scroll-view.html#UI.ScrollView" title="UI.ScrollView"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.ScrollView</span></code></a></p>
+<dd class="field-odd"><p><strong>visible</strong> – Whether the scroll view is visible. Defaults to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="UI.Canvas.remove">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#UI.Canvas.remove" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.Canvas.remove">
+<span class="sig-name descname"><span class="pre">remove</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-UI.Canvas.remove" title="Link to this definition">#</a></dt>
 <dd><p>Remove the UI object.</p>
 </dd></dl>
 

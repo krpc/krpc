@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=eadf7411" />
   
@@ -1103,41 +1104,35 @@
   <section id="scroll-view">
 <h1>Scroll View<a class="headerlink" href="#scroll-view" title="Link to this heading">#</a></h1>
 <dl class="lua class">
-<dt class="sig sig-object lua" id="UI.ScrollView">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">UI.</span></span><span class="sig-name descname"><span class="pre">ScrollView</span></span><a class="headerlink" href="#UI.ScrollView" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.ScrollView">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">UI.</span></span><span class="sig-name descname"><span class="pre">ScrollView</span></span><a class="headerlink" href="#lua-UI.ScrollView" title="Link to this definition">#</a></dt>
 <dd><p>A view onto a panel that is larger than the space available for it, with scroll bars
 to move around it.
-Added to a <a class="reference internal" href="canvas.html#UI.Canvas" title="UI.Canvas"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.Canvas</span></code></a> or a <a class="reference internal" href="panel.html#UI.Panel" title="UI.Panel"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.Panel</span></code></a>.</p>
+Added to a <a class="reference internal" href="canvas.html#lua-UI.Canvas" title="UI.Canvas"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.Canvas</span></code></a> or a <a class="reference internal" href="panel.html#lua-UI.Panel" title="UI.Panel"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.Panel</span></code></a>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Add the elements to <a class="reference internal" href="#UI.UI.ScrollView.content" title="UI.UI.ScrollView.content"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">UI.ScrollView.content</span></code></a>, not to the scroll view itself. Giving
+<p>Add the elements to <a class="reference internal" href="#lua-UI.ScrollView.content" title="UI.ScrollView.content"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">UI.ScrollView.content</span></code></a>, not to the scroll view itself. Giving
 the content a layout and setting its size fitter to the preferred size is the
 simplest way to have it grow to hold what is put in it.</p>
 </div>
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="UI.UI.ScrollView.rect_transform">
-<span class="sig-name descname"><span class="pre">rect_transform</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">UI.RectTransform</span><a class="headerlink" href="#UI.UI.ScrollView.rect_transform" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.ScrollView.rect_transform">
+<span class="sig-name descname"><span class="pre">rect_transform</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="rect-transform.html#lua-UI.RectTransform" title="UI.RectTransform"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">UI.RectTransform</span></code></a><a class="headerlink" href="#lua-UI.ScrollView.rect_transform" title="Link to this definition">#</a></dt>
 <dd><p>The rect transform for the UI object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="rect-transform.html#UI.RectTransform" title="UI.RectTransform"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.RectTransform</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="UI.UI.ScrollView.layout_element">
-<span class="sig-name descname"><span class="pre">layout_element</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">UI.LayoutElement</span><a class="headerlink" href="#UI.UI.ScrollView.layout_element" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.ScrollView.layout_element">
+<span class="sig-name descname"><span class="pre">layout_element</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="layout-element.html#lua-UI.LayoutElement" title="UI.LayoutElement"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">UI.LayoutElement</span></code></a><a class="headerlink" href="#lua-UI.ScrollView.layout_element" title="Link to this definition">#</a></dt>
 <dd><p>How much space the UI object asks a layout for.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="layout-element.html#UI.LayoutElement" title="UI.LayoutElement"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.LayoutElement</span></code></a></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1148,15 +1143,12 @@ not inside a layout and does not have one.</p>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="UI.UI.ScrollView.visible">
-<span class="sig-name descname"><span class="pre">visible</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#UI.UI.ScrollView.visible" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.ScrollView.visible">
+<span class="sig-name descname"><span class="pre">visible</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-UI.ScrollView.visible" title="Link to this definition">#</a></dt>
 <dd><p>Whether the UI object is visible.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1169,50 +1161,41 @@ once by making that panel visible.</p>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="UI.UI.ScrollView.content">
-<span class="sig-name descname"><span class="pre">content</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">UI.Panel</span><a class="headerlink" href="#UI.UI.ScrollView.content" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.ScrollView.content">
+<span class="sig-name descname"><span class="pre">content</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="panel.html#lua-UI.Panel" title="UI.Panel"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">UI.Panel</span></code></a><a class="headerlink" href="#lua-UI.ScrollView.content" title="Link to this definition">#</a></dt>
 <dd><p>The panel that is scrolled, which the elements to show are added to.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="panel.html#UI.Panel" title="UI.Panel"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.Panel</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="UI.UI.ScrollView.horizontal">
-<span class="sig-name descname"><span class="pre">horizontal</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#UI.UI.ScrollView.horizontal" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.ScrollView.horizontal">
+<span class="sig-name descname"><span class="pre">horizontal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-UI.ScrollView.horizontal" title="Link to this definition">#</a></dt>
 <dd><p>Whether the view can be scrolled from side to side.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="UI.UI.ScrollView.vertical">
-<span class="sig-name descname"><span class="pre">vertical</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#UI.UI.ScrollView.vertical" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.ScrollView.vertical">
+<span class="sig-name descname"><span class="pre">vertical</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-UI.ScrollView.vertical" title="Link to this definition">#</a></dt>
 <dd><p>Whether the view can be scrolled up and down.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="UI.ScrollView.remove">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#UI.ScrollView.remove" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.ScrollView.remove">
+<span class="sig-name descname"><span class="pre">remove</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-UI.ScrollView.remove" title="Link to this definition">#</a></dt>
 <dd><p>Remove the UI object.</p>
 </dd></dl>
 

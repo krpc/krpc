@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=eadf7411" />
   
@@ -1103,155 +1104,125 @@
   <section id="alarm">
 <h1>Alarm<a class="headerlink" href="#alarm" title="Link to this heading">#</a></h1>
 <dl class="lua class">
-<dt class="sig sig-object lua" id="KerbalAlarmClock.Alarm">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">KerbalAlarmClock.</span></span><span class="sig-name descname"><span class="pre">Alarm</span></span><a class="headerlink" href="#KerbalAlarmClock.Alarm" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KerbalAlarmClock.Alarm">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">KerbalAlarmClock.</span></span><span class="sig-name descname"><span class="pre">Alarm</span></span><a class="headerlink" href="#lua-KerbalAlarmClock.Alarm" title="Link to this definition">#</a></dt>
 <dd><p>Represents an alarm. Obtained by calling
-<a class="reference internal" href="kerbal-alarm-clock.html#KerbalAlarmClock.KerbalAlarmClock.alarms" title="KerbalAlarmClock.KerbalAlarmClock.alarms"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">KerbalAlarmClock.alarms</span></code></a>,
-<a class="reference internal" href="kerbal-alarm-clock.html#KerbalAlarmClock.alarm_with_name" title="KerbalAlarmClock.alarm_with_name"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">KerbalAlarmClock.alarm_with_name()</span></code></a> or
-<a class="reference internal" href="kerbal-alarm-clock.html#KerbalAlarmClock.alarms_with_type" title="KerbalAlarmClock.alarms_with_type"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">KerbalAlarmClock.alarms_with_type()</span></code></a>.</p>
+<a class="reference internal" href="kerbal-alarm-clock.html#lua-KerbalAlarmClock.alarms" title="KerbalAlarmClock.alarms"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">KerbalAlarmClock.alarms</span></code></a>,
+<a class="reference internal" href="kerbal-alarm-clock.html#lua-KerbalAlarmClock.alarm_with_name" title="KerbalAlarmClock.alarm_with_name"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">KerbalAlarmClock.alarm_with_name()</span></code></a> or
+<a class="reference internal" href="kerbal-alarm-clock.html#lua-KerbalAlarmClock.alarms_with_type" title="KerbalAlarmClock.alarms_with_type"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">KerbalAlarmClock.alarms_with_type()</span></code></a>.</p>
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KerbalAlarmClock.KerbalAlarmClock.Alarm.action">
-<span class="sig-name descname"><span class="pre">action</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">KerbalAlarmClock.AlarmAction</span><a class="headerlink" href="#KerbalAlarmClock.KerbalAlarmClock.Alarm.action" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KerbalAlarmClock.Alarm.action">
+<span class="sig-name descname"><span class="pre">action</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="alarm-action.html#lua-KerbalAlarmClock.AlarmAction" title="KerbalAlarmClock.AlarmAction"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KerbalAlarmClock.AlarmAction</span></code></a><a class="headerlink" href="#lua-KerbalAlarmClock.Alarm.action" title="Link to this definition">#</a></dt>
 <dd><p>The action that the alarm triggers.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="alarm-action.html#KerbalAlarmClock.AlarmAction" title="KerbalAlarmClock.AlarmAction"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KerbalAlarmClock.AlarmAction</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KerbalAlarmClock.KerbalAlarmClock.Alarm.margin">
-<span class="sig-name descname"><span class="pre">margin</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#KerbalAlarmClock.KerbalAlarmClock.Alarm.margin" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KerbalAlarmClock.Alarm.margin">
+<span class="sig-name descname"><span class="pre">margin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-KerbalAlarmClock.Alarm.margin" title="Link to this definition">#</a></dt>
 <dd><p>The number of seconds before the event that the alarm will fire.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KerbalAlarmClock.KerbalAlarmClock.Alarm.time">
-<span class="sig-name descname"><span class="pre">time</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#KerbalAlarmClock.KerbalAlarmClock.Alarm.time" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KerbalAlarmClock.Alarm.time">
+<span class="sig-name descname"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-KerbalAlarmClock.Alarm.time" title="Link to this definition">#</a></dt>
 <dd><p>The time at which the alarm will fire.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KerbalAlarmClock.KerbalAlarmClock.Alarm.type">
-<span class="sig-name descname"><span class="pre">type</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">KerbalAlarmClock.AlarmType</span><a class="headerlink" href="#KerbalAlarmClock.KerbalAlarmClock.Alarm.type" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KerbalAlarmClock.Alarm.type">
+<span class="sig-name descname"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="alarm-type.html#lua-KerbalAlarmClock.AlarmType" title="KerbalAlarmClock.AlarmType"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KerbalAlarmClock.AlarmType</span></code></a><a class="headerlink" href="#lua-KerbalAlarmClock.Alarm.type" title="Link to this definition">#</a></dt>
 <dd><p>The type of the alarm.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="alarm-type.html#KerbalAlarmClock.AlarmType" title="KerbalAlarmClock.AlarmType"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KerbalAlarmClock.AlarmType</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KerbalAlarmClock.KerbalAlarmClock.Alarm.id">
-<span class="sig-name descname"><span class="pre">id</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">string</span><a class="headerlink" href="#KerbalAlarmClock.KerbalAlarmClock.Alarm.id" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KerbalAlarmClock.Alarm.id">
+<span class="sig-name descname"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><a class="headerlink" href="#lua-KerbalAlarmClock.Alarm.id" title="Link to this definition">#</a></dt>
 <dd><p>The unique identifier for the alarm.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KerbalAlarmClock.KerbalAlarmClock.Alarm.name">
-<span class="sig-name descname"><span class="pre">name</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">string</span><a class="headerlink" href="#KerbalAlarmClock.KerbalAlarmClock.Alarm.name" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KerbalAlarmClock.Alarm.name">
+<span class="sig-name descname"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><a class="headerlink" href="#lua-KerbalAlarmClock.Alarm.name" title="Link to this definition">#</a></dt>
 <dd><p>The short name of the alarm.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KerbalAlarmClock.KerbalAlarmClock.Alarm.notes">
-<span class="sig-name descname"><span class="pre">notes</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">string</span><a class="headerlink" href="#KerbalAlarmClock.KerbalAlarmClock.Alarm.notes" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KerbalAlarmClock.Alarm.notes">
+<span class="sig-name descname"><span class="pre">notes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><a class="headerlink" href="#lua-KerbalAlarmClock.Alarm.notes" title="Link to this definition">#</a></dt>
 <dd><p>The long description of the alarm.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KerbalAlarmClock.KerbalAlarmClock.Alarm.remaining">
-<span class="sig-name descname"><span class="pre">remaining</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#KerbalAlarmClock.KerbalAlarmClock.Alarm.remaining" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KerbalAlarmClock.Alarm.remaining">
+<span class="sig-name descname"><span class="pre">remaining</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-KerbalAlarmClock.Alarm.remaining" title="Link to this definition">#</a></dt>
 <dd><p>The number of seconds until the alarm will fire.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KerbalAlarmClock.KerbalAlarmClock.Alarm.enabled">
-<span class="sig-name descname"><span class="pre">enabled</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#KerbalAlarmClock.KerbalAlarmClock.Alarm.enabled" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KerbalAlarmClock.Alarm.enabled">
+<span class="sig-name descname"><span class="pre">enabled</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-KerbalAlarmClock.Alarm.enabled" title="Link to this definition">#</a></dt>
 <dd><p>Whether the alarm is enabled. A disabled alarm does not fire.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KerbalAlarmClock.KerbalAlarmClock.Alarm.play_sound">
-<span class="sig-name descname"><span class="pre">play_sound</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#KerbalAlarmClock.KerbalAlarmClock.Alarm.play_sound" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KerbalAlarmClock.Alarm.play_sound">
+<span class="sig-name descname"><span class="pre">play_sound</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-KerbalAlarmClock.Alarm.play_sound" title="Link to this definition">#</a></dt>
 <dd><p>Whether the alarm plays a sound when it fires.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KerbalAlarmClock.KerbalAlarmClock.Alarm.triggered">
-<span class="sig-name descname"><span class="pre">triggered</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#KerbalAlarmClock.KerbalAlarmClock.Alarm.triggered" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KerbalAlarmClock.Alarm.triggered">
+<span class="sig-name descname"><span class="pre">triggered</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-KerbalAlarmClock.Alarm.triggered" title="Link to this definition">#</a></dt>
 <dd><p>Whether the alarm has fired. Remains true once the alarm has fired;
 stream this or use it in an event expression to react to the alarm
 firing.</p>
@@ -1259,119 +1230,95 @@ firing.</p>
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KerbalAlarmClock.KerbalAlarmClock.Alarm.repeat">
-<span class="sig-name descname"><span class="pre">repeat</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#KerbalAlarmClock.KerbalAlarmClock.Alarm.repeat" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KerbalAlarmClock.Alarm.repeat">
+<span class="sig-name descname"><span class="pre">repeat</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-KerbalAlarmClock.Alarm.repeat" title="Link to this definition">#</a></dt>
 <dd><p>Whether the alarm will be repeated after it has fired.
 Only has an effect for alarm types that support repeating
-(see <a class="reference internal" href="#KerbalAlarmClock.KerbalAlarmClock.Alarm.supports_repeat" title="KerbalAlarmClock.KerbalAlarmClock.Alarm.supports_repeat"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">KerbalAlarmClock.Alarm.supports_repeat</span></code></a>).</p>
+(see <a class="reference internal" href="#lua-KerbalAlarmClock.Alarm.supports_repeat" title="KerbalAlarmClock.Alarm.supports_repeat"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">KerbalAlarmClock.Alarm.supports_repeat</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KerbalAlarmClock.KerbalAlarmClock.Alarm.supports_repeat">
-<span class="sig-name descname"><span class="pre">supports_repeat</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#KerbalAlarmClock.KerbalAlarmClock.Alarm.supports_repeat" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KerbalAlarmClock.Alarm.supports_repeat">
+<span class="sig-name descname"><span class="pre">supports_repeat</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-KerbalAlarmClock.Alarm.supports_repeat" title="Link to this definition">#</a></dt>
 <dd><p>Whether this alarm’s type supports repeating
-(see <a class="reference internal" href="#KerbalAlarmClock.KerbalAlarmClock.Alarm.repeat" title="KerbalAlarmClock.KerbalAlarmClock.Alarm.repeat"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">KerbalAlarmClock.Alarm.repeat</span></code></a>).</p>
+(see <a class="reference internal" href="#lua-KerbalAlarmClock.Alarm.repeat" title="KerbalAlarmClock.Alarm.repeat"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">KerbalAlarmClock.Alarm.repeat</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KerbalAlarmClock.KerbalAlarmClock.Alarm.repeat_period">
-<span class="sig-name descname"><span class="pre">repeat_period</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#KerbalAlarmClock.KerbalAlarmClock.Alarm.repeat_period" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KerbalAlarmClock.Alarm.repeat_period">
+<span class="sig-name descname"><span class="pre">repeat_period</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-KerbalAlarmClock.Alarm.repeat_period" title="Link to this definition">#</a></dt>
 <dd><p>The time delay to automatically create an alarm after it has fired.
 Only has an effect for alarm types that support a repeat period
-(see <a class="reference internal" href="#KerbalAlarmClock.KerbalAlarmClock.Alarm.supports_repeat_period" title="KerbalAlarmClock.KerbalAlarmClock.Alarm.supports_repeat_period"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">KerbalAlarmClock.Alarm.supports_repeat_period</span></code></a>).</p>
+(see <a class="reference internal" href="#lua-KerbalAlarmClock.Alarm.supports_repeat_period" title="KerbalAlarmClock.Alarm.supports_repeat_period"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">KerbalAlarmClock.Alarm.supports_repeat_period</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KerbalAlarmClock.KerbalAlarmClock.Alarm.supports_repeat_period">
-<span class="sig-name descname"><span class="pre">supports_repeat_period</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#KerbalAlarmClock.KerbalAlarmClock.Alarm.supports_repeat_period" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KerbalAlarmClock.Alarm.supports_repeat_period">
+<span class="sig-name descname"><span class="pre">supports_repeat_period</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-KerbalAlarmClock.Alarm.supports_repeat_period" title="Link to this definition">#</a></dt>
 <dd><p>Whether this alarm’s type supports a repeat period
-(see <a class="reference internal" href="#KerbalAlarmClock.KerbalAlarmClock.Alarm.repeat_period" title="KerbalAlarmClock.KerbalAlarmClock.Alarm.repeat_period"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">KerbalAlarmClock.Alarm.repeat_period</span></code></a>).</p>
+(see <a class="reference internal" href="#lua-KerbalAlarmClock.Alarm.repeat_period" title="KerbalAlarmClock.Alarm.repeat_period"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">KerbalAlarmClock.Alarm.repeat_period</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KerbalAlarmClock.KerbalAlarmClock.Alarm.vessel">
-<span class="sig-name descname"><span class="pre">vessel</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.Vessel</span><a class="headerlink" href="#KerbalAlarmClock.KerbalAlarmClock.Alarm.vessel" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KerbalAlarmClock.Alarm.vessel">
+<span class="sig-name descname"><span class="pre">vessel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../space-center/vessel.html#lua-SpaceCenter.Vessel" title="SpaceCenter.Vessel"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.Vessel</span></code></a><a class="headerlink" href="#lua-KerbalAlarmClock.Alarm.vessel" title="Link to this definition">#</a></dt>
 <dd><p>The vessel that the alarm is attached to.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="../space-center/vessel.html#SpaceCenter.Vessel" title="SpaceCenter.Vessel"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.Vessel</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KerbalAlarmClock.KerbalAlarmClock.Alarm.xfer_origin_body">
-<span class="sig-name descname"><span class="pre">xfer_origin_body</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.CelestialBody</span><a class="headerlink" href="#KerbalAlarmClock.KerbalAlarmClock.Alarm.xfer_origin_body" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KerbalAlarmClock.Alarm.xfer_origin_body">
+<span class="sig-name descname"><span class="pre">xfer_origin_body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../space-center/celestial-body.html#lua-SpaceCenter.CelestialBody" title="SpaceCenter.CelestialBody"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.CelestialBody</span></code></a><a class="headerlink" href="#lua-KerbalAlarmClock.Alarm.xfer_origin_body" title="Link to this definition">#</a></dt>
 <dd><p>The celestial body the vessel is departing from.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="../space-center/celestial-body.html#SpaceCenter.CelestialBody" title="SpaceCenter.CelestialBody"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.CelestialBody</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KerbalAlarmClock.KerbalAlarmClock.Alarm.xfer_target_body">
-<span class="sig-name descname"><span class="pre">xfer_target_body</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.CelestialBody</span><a class="headerlink" href="#KerbalAlarmClock.KerbalAlarmClock.Alarm.xfer_target_body" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KerbalAlarmClock.Alarm.xfer_target_body">
+<span class="sig-name descname"><span class="pre">xfer_target_body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../space-center/celestial-body.html#lua-SpaceCenter.CelestialBody" title="SpaceCenter.CelestialBody"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.CelestialBody</span></code></a><a class="headerlink" href="#lua-KerbalAlarmClock.Alarm.xfer_target_body" title="Link to this definition">#</a></dt>
 <dd><p>The celestial body the vessel is arriving at.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="../space-center/celestial-body.html#SpaceCenter.CelestialBody" title="SpaceCenter.CelestialBody"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.CelestialBody</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="KerbalAlarmClock.Alarm.remove">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KerbalAlarmClock.Alarm.remove" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KerbalAlarmClock.Alarm.remove">
+<span class="sig-name descname"><span class="pre">remove</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-KerbalAlarmClock.Alarm.remove" title="Link to this definition">#</a></dt>
 <dd><p>Removes the alarm. Any further use of this object throws an exception.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>

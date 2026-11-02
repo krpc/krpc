@@ -22,7 +22,6 @@ Flight
       The current G force acting on the vessel in :math:`\mathrm{g}`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: mean_altitude: number
 
@@ -30,7 +29,6 @@ Flight
       Measured from the center of mass of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: surface_altitude: number
 
@@ -38,7 +36,6 @@ Flight
       Measured from the center of mass of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: bedrock_altitude: number
 
@@ -46,7 +43,6 @@ Flight
       Measured from the center of mass of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: elevation: number
 
@@ -54,21 +50,18 @@ Flight
       and is negative when the vessel is over the sea.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: latitude: number
 
       The `latitude <https://en.wikipedia.org/wiki/Latitude>`_ of the vessel for the body being orbited, in degrees.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: longitude: number
 
       The `longitude <https://en.wikipedia.org/wiki/Longitude>`_ of the vessel for the body being orbited, in degrees.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: surface_normal: Tuple
 
@@ -77,16 +70,16 @@ Flight
       and points straight up when the vessel is over water.
 
       :Attribute: Read-only, cannot be set
+
       :returns: The normal as a unit vector.
-      :rtype: Tuple
 
    .. attribute:: velocity: Tuple
 
       The velocity of the vessel, in the reference frame :class:`SpaceCenter.ReferenceFrame`.
 
       :Attribute: Read-only, cannot be set
+
       :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the vessel in :math:`\mathrm{m/s}`.
-      :rtype: Tuple
 
    .. attribute:: speed: number
 
@@ -94,7 +87,6 @@ Flight
       in the reference frame :class:`SpaceCenter.ReferenceFrame`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: horizontal_speed: number
 
@@ -102,7 +94,6 @@ Flight
       in the reference frame :class:`SpaceCenter.ReferenceFrame`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: vertical_speed: number
 
@@ -110,7 +101,6 @@ Flight
       in the reference frame :class:`SpaceCenter.ReferenceFrame`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: acceleration: Tuple
 
@@ -119,8 +109,8 @@ Flight
       time derivative of :attr:`SpaceCenter.Flight.velocity`.
 
       :Attribute: Read-only, cannot be set
+
       :returns: The acceleration as a vector. The vector points in the direction of the acceleration, and its magnitude is the acceleration of the vessel in :math:`\mathrm{m/s^{2}}`.
-      :rtype: Tuple
 
    .. attribute:: center_of_mass: Tuple
 
@@ -128,16 +118,16 @@ Flight
       in the reference frame :class:`SpaceCenter.ReferenceFrame`
 
       :Attribute: Read-only, cannot be set
+
       :returns: The position as a vector.
-      :rtype: Tuple
 
    .. attribute:: rotation: Tuple
 
       The rotation of the vessel, in the reference frame :class:`SpaceCenter.ReferenceFrame`
 
       :Attribute: Read-only, cannot be set
+
       :returns: The rotation as a quaternion of the form ``(x, y, z, w)``.
-      :rtype: Tuple
 
    .. attribute:: direction: Tuple
 
@@ -145,8 +135,8 @@ Flight
       in the reference frame :class:`SpaceCenter.ReferenceFrame`.
 
       :Attribute: Read-only, cannot be set
+
       :returns: The direction as a unit vector.
-      :rtype: Tuple
 
    .. attribute:: pitch: number
 
@@ -154,7 +144,6 @@ Flight
       A value between -90° and +90°.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
       .. note::
 
@@ -169,7 +158,6 @@ Flight
       A value between 0° and 360°.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
       .. note::
 
@@ -183,7 +171,6 @@ Flight
       A value between -180° and +180°.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
       .. note::
 
@@ -199,8 +186,8 @@ Flight
       in the reference frame :class:`SpaceCenter.ReferenceFrame`.
 
       :Attribute: Read-only, cannot be set
+
       :returns: The direction as a unit vector.
-      :rtype: Tuple
 
    .. attribute:: retrograde: Tuple
 
@@ -208,8 +195,8 @@ Flight
       in the reference frame :class:`SpaceCenter.ReferenceFrame`.
 
       :Attribute: Read-only, cannot be set
+
       :returns: The direction as a unit vector.
-      :rtype: Tuple
 
    .. attribute:: surface_prograde: Tuple
 
@@ -218,8 +205,8 @@ Flight
       This is the prograde direction as shown on the navball when in surface mode.
 
       :Attribute: Read-only, cannot be set
+
       :returns: The direction as a unit vector.
-      :rtype: Tuple
 
       .. note::
 
@@ -232,8 +219,8 @@ Flight
       This is the retrograde direction as shown on the navball when in surface mode.
 
       :Attribute: Read-only, cannot be set
+
       :returns: The direction as a unit vector.
-      :rtype: Tuple
 
       .. note::
 
@@ -245,8 +232,8 @@ Flight
       in the reference frame :class:`SpaceCenter.ReferenceFrame`.
 
       :Attribute: Read-only, cannot be set
+
       :returns: The direction as a unit vector.
-      :rtype: Tuple
 
    .. attribute:: anti_normal: Tuple
 
@@ -254,8 +241,8 @@ Flight
       in the reference frame :class:`SpaceCenter.ReferenceFrame`.
 
       :Attribute: Read-only, cannot be set
+
       :returns: The direction as a unit vector.
-      :rtype: Tuple
 
    .. attribute:: radial: Tuple
 
@@ -263,8 +250,8 @@ Flight
       in the reference frame :class:`SpaceCenter.ReferenceFrame`.
 
       :Attribute: Read-only, cannot be set
+
       :returns: The direction as a unit vector.
-      :rtype: Tuple
 
    .. attribute:: anti_radial: Tuple
 
@@ -272,15 +259,14 @@ Flight
       in the reference frame :class:`SpaceCenter.ReferenceFrame`.
 
       :Attribute: Read-only, cannot be set
+
       :returns: The direction as a unit vector.
-      :rtype: Tuple
 
    .. attribute:: atmosphere_density: number
 
       The current density of the atmosphere around the vessel, in :math:`\mathrm{kg/m^{3}}`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: dynamic_pressure: number
 
@@ -290,14 +276,12 @@ Flight
       It is commonly denoted :math:`Q`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: static_pressure: number
 
       The static pressure acting on the vessel, in Pascals.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
       .. note::
 
@@ -309,7 +293,6 @@ Flight
       The static atmospheric pressure at mean sea level, in Pascals.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: displacement: number
 
@@ -317,14 +300,12 @@ Flight
       :math:`\mathrm{m^{3}}`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: displaced_volume: number
 
       The volume of water the vessel is displacing, in :math:`\mathrm{m^{3}}`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: submerged_portion: number
 
@@ -332,17 +313,16 @@ Flight
       :attr:`SpaceCenter.Flight.displaced_volume` over :attr:`SpaceCenter.Flight.displacement`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
-   .. attribute:: center_of_buoyancy: Tuple
+   .. attribute:: center_of_buoyancy: Tuple | Types.none
 
       The point the total buoyant force on the vessel acts through, in reference frame
       :class:`SpaceCenter.ReferenceFrame`. Returns ``nil`` if no part of the vessel is in
       the water.
 
       :Attribute: Read-only, cannot be set
+
       :returns: The position as a vector.
-      :rtype: Tuple or ``Types.none``
 
       .. note::
 
@@ -356,8 +336,8 @@ Flight
       :class:`SpaceCenter.ReferenceFrame`.
 
       :Attribute: Read-only, cannot be set
+
       :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
-      :rtype: Tuple
 
       .. note::
 
@@ -370,8 +350,8 @@ Flight
       in reference frame :class:`SpaceCenter.ReferenceFrame`.
 
       :Attribute: Read-only, cannot be set
+
       :returns: A vector pointing in the direction that the vessel is accelerated, with its magnitude equal to the acceleration in :math:`\mathrm{m/s^{2}}`.
-      :rtype: Tuple
 
    .. attribute:: buoyant_torque: Tuple
 
@@ -379,43 +359,41 @@ Flight
       in reference frame :class:`SpaceCenter.ReferenceFrame`.
 
       :Attribute: Read-only, cannot be set
-      :returns: A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in :math:`\mathrm{N \cdot m}`.
-      :rtype: Tuple
 
-   .. attribute:: fully_submerged_center_of_buoyancy: Tuple
+      :returns: A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in :math:`\mathrm{N \cdot m}`.
+
+   .. attribute:: fully_submerged_center_of_buoyancy: Tuple | Types.none
 
       The point the buoyant force acts through with the vessel fully submerged, in
       reference frame :class:`SpaceCenter.ReferenceFrame`. Returns ``nil`` if no part of
       the vessel displaces any water.
 
       :Attribute: Read-only, cannot be set
+
       :returns: The position as a vector.
-      :rtype: Tuple or ``Types.none``
 
       .. note::
 
          The point is fixed relative to the hull. :attr:`SpaceCenter.Flight.center_of_buoyancy` moves as
          the vessel rides the waves.
 
-   .. method:: buoyant_force_at(density, gravity)
+   .. method:: buoyant_force_at(density: number, gravity: number): number
 
       The buoyant force on the vessel when fully submerged in a fluid of the given
       density, in Newtons.
 
-      :param number density: The density of the fluid, in :math:`\mathrm{kg/m^{3}}`.
-      :param number gravity: The acceleration due to gravity, in :math:`\mathrm{m/s^{2}}`.
-      :rtype: number
+      :param density: The density of the fluid, in :math:`\mathrm{kg/m^{3}}`.
+      :param gravity: The acceleration due to gravity, in :math:`\mathrm{m/s^{2}}`.
 
-   .. method:: buoyant_torque_at(density, gravity)
+   .. method:: buoyant_torque_at(density: number, gravity: number): Tuple
 
       The torque the buoyant force exerts about the vessel's center of mass when fully
       submerged in a fluid of the given density, in reference frame
       :class:`SpaceCenter.ReferenceFrame`. Gravity acts towards the center of the body.
 
-      :param number density: The density of the fluid, in :math:`\mathrm{kg/m^{3}}`.
-      :param number gravity: The acceleration due to gravity, in :math:`\mathrm{m/s^{2}}`.
+      :param density: The density of the fluid, in :math:`\mathrm{kg/m^{3}}`.
+      :param gravity: The acceleration due to gravity, in :math:`\mathrm{m/s^{2}}`.
       :returns: A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in :math:`\mathrm{N \cdot m}`.
-      :rtype: Tuple
 
    .. attribute:: depth: number
 
@@ -423,7 +401,6 @@ Flight
       Negative above the waterline.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: submerged_dynamic_pressure: number
 
@@ -431,7 +408,6 @@ Flight
       Returns zero if no part of the vessel is below the waterline.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: aerodynamic_force: Tuple
 
@@ -439,8 +415,8 @@ Flight
       in reference frame :class:`SpaceCenter.ReferenceFrame`.
 
       :Attribute: Read-only, cannot be set
+
       :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
-      :rtype: Tuple
 
       .. note::
 
@@ -456,8 +432,8 @@ Flight
       :math:`\mathrm{N \cdot m}`.
 
       :Attribute: Read-only, cannot be set
+
       :returns: A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in :math:`\mathrm{N \cdot m}`.
-      :rtype: Tuple
 
       .. note::
 
@@ -467,18 +443,17 @@ Flight
          :meth:`SpaceCenter.Flight.simulate_aerodynamic_torque_at` does. It is intended for validating the
          simulator against the live game state.
 
-   .. method:: simulate_aerodynamic_force_at(body, position, velocity, rotation)
+   .. method:: simulate_aerodynamic_force_at(body: SpaceCenter.CelestialBody, position: Tuple, velocity: Tuple, rotation: Tuple): Tuple
 
       Simulate and return the total aerodynamic forces acting on the vessel,
       if it were traveling with the given velocity, at the given position and
       orientation, in the atmosphere of the given celestial body.
 
-      :param SpaceCenter.CelestialBody body: The celestial body whose atmosphere the forces are simulated in.
-      :param Tuple position: The position of the vessel, in reference frame :class:`SpaceCenter.ReferenceFrame`.
-      :param Tuple velocity: The velocity of the vessel, in reference frame :class:`SpaceCenter.ReferenceFrame`.
-      :param Tuple rotation: The orientation of the vessel, in reference frame :class:`SpaceCenter.ReferenceFrame`, in the same form as :meth:`SpaceCenter.Vessel.rotation`. The angle of attack and sideslip follow from this orientation relative to the velocity; the roll component sets the direction of any aerodynamic lift. Pass the vessel's current rotation to evaluate the force at its current orientation.
+      :param body: The celestial body whose atmosphere the forces are simulated in.
+      :param position: The position of the vessel, in reference frame :class:`SpaceCenter.ReferenceFrame`.
+      :param velocity: The velocity of the vessel, in reference frame :class:`SpaceCenter.ReferenceFrame`.
+      :param rotation: The orientation of the vessel, in reference frame :class:`SpaceCenter.ReferenceFrame`, in the same form as :meth:`SpaceCenter.Vessel.rotation`. The angle of attack and sideslip follow from this orientation relative to the velocity; the roll component sets the direction of any aerodynamic lift. Pass the vessel's current rotation to evaluate the force at its current orientation.
       :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons, in reference frame :class:`SpaceCenter.ReferenceFrame`.
-      :rtype: Tuple
 
       .. note::
 
@@ -489,20 +464,19 @@ Flight
          the requested orientation, not the force in the vessel's current orientation.
          Atmospheric temperature and density are evaluated at the current universal time.
 
-   .. method:: simulate_aerodynamic_torque_at(body, position, velocity, rotation, angular_velocity)
+   .. method:: simulate_aerodynamic_torque_at(body: SpaceCenter.CelestialBody, position: Tuple, velocity: Tuple, rotation: Tuple, angular_velocity: Tuple): Tuple
 
       Simulate and return the total aerodynamic torque acting on the vessel about its
       center of mass, if it were traveling with the given velocity, at the given
       position, orientation and angular velocity, in the atmosphere of the given
       celestial body.
 
-      :param SpaceCenter.CelestialBody body: The celestial body whose atmosphere the torque is simulated in.
-      :param Tuple position: The position of the vessel, in reference frame :class:`SpaceCenter.ReferenceFrame`.
-      :param Tuple velocity: The velocity of the vessel, in reference frame :class:`SpaceCenter.ReferenceFrame`.
-      :param Tuple rotation: The orientation of the vessel, in reference frame :class:`SpaceCenter.ReferenceFrame`, in the same form as :meth:`SpaceCenter.Vessel.rotation`. Pass the vessel's current rotation to evaluate the torque at its current orientation.
-      :param Tuple angular_velocity: The angular velocity of the vessel, in reference frame :class:`SpaceCenter.ReferenceFrame`. This adds the solid-body rotation term to each part's local airflow and the per-part rigid-body angular drag the game applies, together giving the aerodynamic damping torque. Pass a zero vector to evaluate the static torque.
+      :param body: The celestial body whose atmosphere the torque is simulated in.
+      :param position: The position of the vessel, in reference frame :class:`SpaceCenter.ReferenceFrame`.
+      :param velocity: The velocity of the vessel, in reference frame :class:`SpaceCenter.ReferenceFrame`.
+      :param rotation: The orientation of the vessel, in reference frame :class:`SpaceCenter.ReferenceFrame`, in the same form as :meth:`SpaceCenter.Vessel.rotation`. Pass the vessel's current rotation to evaluate the torque at its current orientation.
+      :param angular_velocity: The angular velocity of the vessel, in reference frame :class:`SpaceCenter.ReferenceFrame`. This adds the solid-body rotation term to each part's local airflow and the per-part rigid-body angular drag the game applies, together giving the aerodynamic damping torque. Pass a zero vector to evaluate the static torque.
       :returns: A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in :math:`\mathrm{N \cdot m}`, in reference frame :class:`SpaceCenter.ReferenceFrame`.
-      :rtype: Tuple
 
       .. note::
 
@@ -518,20 +492,19 @@ Flight
          the game applies each part's force to that part and propagates it through the joints
          rather than to the vessel as a rigid body.
 
-   .. method:: simulate_aerodynamic_wrench_at(body, position, velocity, rotation, angular_velocity, ut)
+   .. method:: simulate_aerodynamic_wrench_at(body: SpaceCenter.CelestialBody, position: Tuple, velocity: Tuple, rotation: Tuple, angular_velocity: Tuple, ut: number): SpaceCenter.Wrench
 
       Simulate and return the total aerodynamic force and torque acting on the vessel,
       if its center of mass were traveling with the given velocity, at the given position,
       orientation and angular velocity, in the atmosphere of the given celestial body.
 
-      :param SpaceCenter.CelestialBody body: The celestial body whose atmosphere the wrench is simulated in.
-      :param Tuple position: The position of the vessel's center of mass, in reference frame :class:`SpaceCenter.ReferenceFrame`.
-      :param Tuple velocity: The velocity of the vessel's center of mass, in reference frame :class:`SpaceCenter.ReferenceFrame`.
-      :param Tuple rotation: The orientation of the vessel, in reference frame :class:`SpaceCenter.ReferenceFrame`, in the same form as :meth:`SpaceCenter.Vessel.rotation`. Pass the vessel's current rotation to evaluate the wrench at its current orientation.
-      :param Tuple angular_velocity: The angular velocity of the vessel, in reference frame :class:`SpaceCenter.ReferenceFrame`. This adds the solid-body rotation term to each part's local airflow and the per-part rigid-body angular drag the game applies, together giving the aerodynamic damping force and torque. Pass a zero vector to evaluate the static wrench relative to the reference frame.
-      :param number ut: The universal time used for the atmospheric ephemeris. It selects the body/Sun geometry used for temperature and density, but does not change or propagate :class:`SpaceCenter.ReferenceFrame` or any of the state arguments.
+      :param body: The celestial body whose atmosphere the wrench is simulated in.
+      :param position: The position of the vessel's center of mass, in reference frame :class:`SpaceCenter.ReferenceFrame`.
+      :param velocity: The velocity of the vessel's center of mass, in reference frame :class:`SpaceCenter.ReferenceFrame`.
+      :param rotation: The orientation of the vessel, in reference frame :class:`SpaceCenter.ReferenceFrame`, in the same form as :meth:`SpaceCenter.Vessel.rotation`. Pass the vessel's current rotation to evaluate the wrench at its current orientation.
+      :param angular_velocity: The angular velocity of the vessel, in reference frame :class:`SpaceCenter.ReferenceFrame`. This adds the solid-body rotation term to each part's local airflow and the per-part rigid-body angular drag the game applies, together giving the aerodynamic damping force and torque. Pass a zero vector to evaluate the static wrench relative to the reference frame.
+      :param ut: The universal time used for the atmospheric ephemeris. It selects the body/Sun geometry used for temperature and density, but does not change or propagate :class:`SpaceCenter.ReferenceFrame` or any of the state arguments.
       :returns: The aerodynamic force, and the aerodynamic torque about the vessel's center of mass. Both are vectors in reference frame :class:`SpaceCenter.ReferenceFrame`.
-      :rtype: :class:`SpaceCenter.Wrench`
 
       .. note::
 
@@ -552,8 +525,8 @@ Flight
       currently acting on the vessel.
 
       :Attribute: Read-only, cannot be set
+
       :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
-      :rtype: Tuple
 
       .. note::
 
@@ -568,8 +541,8 @@ Flight
       The aerodynamic side force currently acting on the vessel.
 
       :Attribute: Read-only, cannot be set
+
       :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
-      :rtype: Tuple
 
       .. note::
 
@@ -583,8 +556,8 @@ Flight
       The `aerodynamic drag <https://en.wikipedia.org/wiki/Aerodynamic_force>`_ currently acting on the vessel.
 
       :Attribute: Read-only, cannot be set
+
       :returns: A vector pointing in the direction of the force, with its magnitude equal to the strength of the force in Newtons.
-      :rtype: Tuple
 
       .. note::
 
@@ -598,8 +571,8 @@ Flight
       in reference frame :class:`SpaceCenter.ReferenceFrame`.
 
       :Attribute: Read-only, cannot be set
+
       :returns: A vector pointing in the direction that the vessel is accelerated, with its magnitude equal to the acceleration in :math:`\mathrm{m/s^{2}}`.
-      :rtype: Tuple
 
    .. attribute:: lift_acceleration: Tuple
 
@@ -608,8 +581,8 @@ Flight
       in reference frame :class:`SpaceCenter.ReferenceFrame`.
 
       :Attribute: Read-only, cannot be set
+
       :returns: A vector pointing in the direction that the vessel is accelerated, with its magnitude equal to the acceleration in :math:`\mathrm{m/s^{2}}`.
-      :rtype: Tuple
 
    .. attribute:: drag_acceleration: Tuple
 
@@ -618,29 +591,26 @@ Flight
       in reference frame :class:`SpaceCenter.ReferenceFrame`.
 
       :Attribute: Read-only, cannot be set
+
       :returns: A vector pointing in the direction that the vessel is accelerated, with its magnitude equal to the acceleration in :math:`\mathrm{m/s^{2}}`.
-      :rtype: Tuple
 
    .. attribute:: speed_of_sound: number
 
       The speed of sound, in the atmosphere around the vessel, in :math:`\mathrm{m/s}`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: mach: number
 
       The speed of the vessel, in multiples of the speed of sound.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: reynolds_number: number
 
       The vessels Reynolds number.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
       .. note::
 
@@ -652,7 +622,6 @@ Flight
       of the vessel, in :math:`\mathrm{m/s}`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: equivalent_air_speed: number
 
@@ -660,7 +629,6 @@ Flight
       of the vessel, in :math:`\mathrm{m/s}`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: terminal_velocity: number
 
@@ -668,7 +636,6 @@ Flight
       This is the speed at which the drag forces cancel out the force of gravity.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: angle_of_attack: number
 
@@ -676,14 +643,12 @@ Flight
       in degrees.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: sideslip_angle: number
 
       The yaw angle between the orientation of the vessel and its velocity vector, in degrees.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: total_air_temperature: number
 
@@ -692,14 +657,12 @@ Flight
       This includes the :attr:`SpaceCenter.Flight.static_air_temperature` and the vessel's kinetic energy.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: static_air_temperature: number
 
       The `static (ambient) temperature <https://en.wikipedia.org/wiki/Total_air_temperature>`_ of the atmosphere around the vessel, in Kelvin.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: stall_fraction: number
 
@@ -707,7 +670,6 @@ Flight
       a minor stall and a value greater than 0.5 indicates a large-scale stall.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
       .. note::
 
@@ -719,7 +681,6 @@ Flight
       It depends on air speed, air density and wing area.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
       .. note::
 
@@ -731,7 +692,6 @@ Flight
       depends on air speed, air density and wing area.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
       .. note::
 
@@ -742,7 +702,6 @@ Flight
       The `ballistic coefficient <https://en.wikipedia.org/wiki/Ballistic_coefficient>`_.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
       .. note::
 
@@ -756,7 +715,6 @@ Flight
       per hour, to produce one newton of thrust.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
       .. note::
 
@@ -773,10 +731,7 @@ Flight
 
       The force, in Newtons.
 
-      :rtype: Tuple
 
    .. attribute:: torque: Tuple
 
       The torque, in :math:`\mathrm{N \cdot m}`.
-
-      :rtype: Tuple

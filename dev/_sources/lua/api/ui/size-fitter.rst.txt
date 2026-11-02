@@ -16,14 +16,12 @@ Size Fitter
       How the width of the panel is chosen.
 
       :Attribute: Can be read or written
-      :rtype: :class:`UI.ContentSizeFit`
 
    .. attribute:: vertical_fit: UI.ContentSizeFit
 
       How the height of the panel is chosen.
 
       :Attribute: Can be read or written
-      :rtype: :class:`UI.ContentSizeFit`
 
 
 

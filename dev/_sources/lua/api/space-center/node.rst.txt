@@ -16,7 +16,6 @@ Node
       in :math:`\mathrm{m/s}`.
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: normal: number
 
@@ -24,7 +23,6 @@ Node
       in :math:`\mathrm{m/s}`.
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: radial: number
 
@@ -32,14 +30,12 @@ Node
       in :math:`\mathrm{m/s}`.
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: delta_v: number
 
       The delta-v of the maneuver node, in :math:`\mathrm{m/s}`.
 
       :Attribute: Can be read or written
-      :rtype: number
 
       .. note::
 
@@ -51,29 +47,24 @@ Node
       node is executed. This is equivalent to the delta-v reported in-game.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
-   .. method:: burn_vector([reference_frame = Types.none])
+   .. method:: burn_vector(reference_frame?: SpaceCenter.ReferenceFrame | Types.none): Tuple
 
       Returns the burn vector for the maneuver node.
 
       :param reference_frame: The reference frame that the returned vector is in. Defaults to :attr:`SpaceCenter.Vessel.orbital_reference_frame`.
-      :type reference_frame: :class:`SpaceCenter.ReferenceFrame` or ``Types.none``
       :returns: A vector whose direction is the direction of the maneuver node burn, and magnitude is the delta-v of the burn in :math:`\mathrm{m/s}`.
-      :rtype: Tuple
 
       .. note::
 
          Does not change when executing the maneuver node. See :meth:`SpaceCenter.Node.remaining_burn_vector`.
 
-   .. method:: remaining_burn_vector([reference_frame = Types.none])
+   .. method:: remaining_burn_vector(reference_frame?: SpaceCenter.ReferenceFrame | Types.none): Tuple
 
       Returns the remaining burn vector for the maneuver node.
 
       :param reference_frame: The reference frame that the returned vector is in. Defaults to :attr:`SpaceCenter.Vessel.orbital_reference_frame`.
-      :type reference_frame: :class:`SpaceCenter.ReferenceFrame` or ``Types.none``
       :returns: A vector whose direction is the direction of the maneuver node burn, and magnitude is the delta-v of the burn in :math:`\mathrm{m/s}`.
-      :rtype: Tuple
 
       .. note::
 
@@ -84,21 +75,18 @@ Node
       The universal time at which the maneuver will occur, in seconds.
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: time_to: number
 
       The time until the maneuver node will be encountered, in seconds.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: orbit: SpaceCenter.Orbit
 
       The orbit that results from executing the maneuver node.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Orbit`
 
    .. method:: remove()
 
@@ -113,7 +101,6 @@ Node
       * The x-axis and z-axis point in arbitrary but fixed directions.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.ReferenceFrame`
 
    .. attribute:: orbital_reference_frame: SpaceCenter.ReferenceFrame
 
@@ -130,28 +117,24 @@ Node
         at the position of the maneuver node.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.ReferenceFrame`
 
-   .. method:: position(reference_frame)
+   .. method:: position(reference_frame: SpaceCenter.ReferenceFrame): Tuple
 
       The position vector of the maneuver node in the given reference frame.
 
-      :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned position vector is in.
+      :param reference_frame: The reference frame that the returned position vector is in.
       :returns: The position as a vector.
-      :rtype: Tuple
 
-   .. method:: rotation(reference_frame)
+   .. method:: rotation(reference_frame: SpaceCenter.ReferenceFrame): Tuple
 
       The rotation of the maneuver nodes burn.
 
-      :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned rotation is in.
+      :param reference_frame: The reference frame that the returned rotation is in.
       :returns: The rotation as a quaternion of the form ``(x, y, z, w)``.
-      :rtype: Tuple
 
-   .. method:: direction(reference_frame)
+   .. method:: direction(reference_frame: SpaceCenter.ReferenceFrame): Tuple
 
       The direction of the maneuver nodes burn.
 
-      :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned direction is in.
+      :param reference_frame: The reference frame that the returned direction is in.
       :returns: The direction as a unit vector.
-      :rtype: Tuple

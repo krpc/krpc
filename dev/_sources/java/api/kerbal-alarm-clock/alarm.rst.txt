@@ -9,9 +9,9 @@ Alarm
 .. type:: public class Alarm
 
    Represents an alarm. Obtained by calling
-   :meth:`getAlarms()`,
-   :meth:`alarmWithName(String)` or
-   :meth:`alarmsWithType(AlarmType)`.
+   :meth:`KerbalAlarmClock.getAlarms()`,
+   :meth:`KerbalAlarmClock.alarmWithName(String)` or
+   :meth:`KerbalAlarmClock.alarmsWithType(AlarmType)`.
 
    .. method:: AlarmAction getAction()
 

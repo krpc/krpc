@@ -21,7 +21,6 @@ AutoPilot
       The state of SAS.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
       .. note::
 
@@ -36,7 +35,6 @@ AutoPilot
       when SAS is enabled.
 
       :Attribute: Can be read or written
-      :rtype: :class:`SpaceCenter.SASMode`
 
       .. note::
 
@@ -48,16 +46,14 @@ AutoPilot
       Setting to ``True`` engages the auto-pilot; setting to ``False`` disengages it.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. attribute:: update_mode: SpaceCenter.AutoPilotUpdateMode
 
       When the auto-pilot's control loop runs within a server update, relative to the
       calls the update executes. Defaults to
-      :attr:`SpaceCenter.AutoPilotUpdateMode.after_calls`.
+      :data:`SpaceCenter.AutoPilotUpdateMode.after_calls`.
 
       :Attribute: Can be read or written
-      :rtype: :class:`SpaceCenter.AutoPilotUpdateMode`
 
       .. note::
 
@@ -75,7 +71,7 @@ AutoPilot
 
       .. note::
 
-         For :attr:`SpaceCenter.AutoPilotUpdateMode.manual`, where the loop runs only when this is
+         For :data:`SpaceCenter.AutoPilotUpdateMode.manual`, where the loop runs only when this is
          called. In the other modes this runs it early; either way it runs once per tick. On a
          tick it is not called for, the vessel keeps the control output of the last tick it did
          run on, and after a tenth of a second of that the auto-pilot stops contributing any
@@ -89,7 +85,6 @@ AutoPilot
       hidden when the game is restarted.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. method:: reset()
 
@@ -103,7 +98,6 @@ AutoPilot
       The reference frame for the target direction (:attr:`SpaceCenter.AutoPilot.target_direction`).
 
       :Attribute: Can be read or written
-      :rtype: :class:`SpaceCenter.ReferenceFrame`
 
       .. note::
 
@@ -121,7 +115,6 @@ AutoPilot
       The target pitch, in degrees, between -90° and +90°.
 
       :Attribute: Can be read or written
-      :rtype: number
 
       .. note::
 
@@ -135,7 +128,6 @@ AutoPilot
       The target heading, in degrees, between 0° and 360°.
 
       :Attribute: Can be read or written
-      :rtype: number
 
       .. note::
 
@@ -151,7 +143,6 @@ AutoPilot
       positive roll banks right). ``NaN`` if no target roll is set.
 
       :Attribute: Can be read or written
-      :rtype: number
 
       .. note::
 
@@ -172,7 +163,6 @@ AutoPilot
       frame's up (the zenith / radial-out direction).
 
       :Attribute: Can be read or written
-      :rtype: Tuple
 
       .. note::
 
@@ -188,12 +178,12 @@ AutoPilot
          vessel is still being held in exactly the same orientation. Set the reference first and
          the roll afterwards, or set both at once with :meth:`SpaceCenter.AutoPilot.set_direction_and_up`.
 
-   .. method:: target_pitch_and_heading(pitch, heading)
+   .. method:: target_pitch_and_heading(pitch: number, heading: number)
 
       Set target pitch and heading angles.
 
-      :param number pitch: Target pitch angle, in degrees between -90° and +90°.
-      :param number heading: Target heading angle, in degrees between 0° and 360°.
+      :param pitch: Target pitch angle, in degrees between -90° and +90°.
+      :param heading: Target heading angle, in degrees between 0° and 360°.
 
       .. note::
 
@@ -209,7 +199,6 @@ AutoPilot
       This is in the reference frame specified by :attr:`SpaceCenter.AutoPilot.reference_frame`.
 
       :Attribute: Can be read or written
-      :rtype: Tuple
 
       .. note::
 
@@ -224,9 +213,8 @@ AutoPilot
       This is in the reference frame specified by :attr:`SpaceCenter.AutoPilot.reference_frame`.
 
       :Attribute: Can be read or written
-      :rtype: Tuple
 
-   .. method:: set_direction_and_up(direction, up, [roll = 0.0])
+   .. method:: set_direction_and_up(direction: Tuple, up: Tuple, roll?: number)
 
       Set the target attitude from a nose direction and an up vector: point the nose along
       *direction* and roll so the vessel's dorsal (roof) axis aligns with
@@ -234,9 +222,9 @@ AutoPilot
       *roll* offset about the nose. Both vectors are in the reference frame
       specified by :attr:`SpaceCenter.AutoPilot.reference_frame`.
 
-      :param Tuple direction: The direction to point the nose in.
-      :param Tuple up: The reference direction the roof is rolled towards. Need not be normalized or perpendicular to *direction*, as its component perpendicular to the nose is used. Stored as the :attr:`SpaceCenter.AutoPilot.up_reference`.
-      :param number roll: An additional roll about the nose, in degrees (positive banks right). Defaults to 0.
+      :param direction: The direction to point the nose in.
+      :param up: The reference direction the roof is rolled towards. Need not be normalized or perpendicular to *direction*, as its component perpendicular to the nose is used. Stored as the :attr:`SpaceCenter.AutoPilot.up_reference`.
+      :param roll: An additional roll about the nose, in degrees (positive banks right). Defaults to 0. Defaults to ``0.0``.
 
       .. note::
 
@@ -257,7 +245,6 @@ AutoPilot
       A convenience scalar, ill-defined near the vertical. See :attr:`SpaceCenter.AutoPilot.target_pitch`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: current_target_heading: number
 
@@ -267,7 +254,6 @@ AutoPilot
       A convenience scalar, ill-defined near the vertical. See :attr:`SpaceCenter.AutoPilot.target_heading`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: current_target_roll: number
 
@@ -277,7 +263,6 @@ AutoPilot
       ``NaN`` if no target roll is set.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: current_target_direction: Tuple
 
@@ -287,7 +272,6 @@ AutoPilot
       slewed in when :attr:`SpaceCenter.AutoPilot.target_smoothing_time` is non-zero.
 
       :Attribute: Read-only, cannot be set
-      :rtype: Tuple
 
    .. attribute:: current_target_rotation: Tuple
 
@@ -296,14 +280,13 @@ AutoPilot
       change is slewed in when :attr:`SpaceCenter.AutoPilot.target_smoothing_time` is non-zero.
 
       :Attribute: Read-only, cannot be set
-      :rtype: Tuple
 
-   .. method:: wait([timeout = -1.0])
+   .. method:: wait(timeout?: number)
 
       Blocks until the vessel is pointing in the target direction and has
       the target roll (if set). Throws an exception if the auto-pilot has not been engaged.
 
-      :param number timeout: Maximum time to wait in seconds. If not specified, waits indefinitely.
+      :param timeout: Maximum time to wait in seconds. If not specified, waits indefinitely. Defaults to ``-1.0``.
 
    .. attribute:: stopping_angle_threshold: number
 
@@ -311,7 +294,6 @@ AutoPilot
       :meth:`SpaceCenter.AutoPilot.wait` to return. Defaults to 1 degree.
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: stopping_velocity_threshold: number
 
@@ -320,7 +302,6 @@ AutoPilot
       Defaults to 0.05 :math:`\mathrm{rad/s}`.
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: error: number
 
@@ -329,7 +310,6 @@ AutoPilot
       has not been engaged and SAS is not enabled or is in stability assist mode.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
       .. note::
 
@@ -348,7 +328,6 @@ AutoPilot
       engaged.
 
       :Attribute: Read-only, cannot be set
-      :rtype: Tuple
 
    .. attribute:: pitch_error: number
 
@@ -356,7 +335,6 @@ AutoPilot
       Throws an exception if the auto-pilot has not been engaged.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
       .. note::
 
@@ -369,7 +347,6 @@ AutoPilot
       Throws an exception if the auto-pilot has not been engaged.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
       .. note::
 
@@ -383,7 +360,6 @@ AutoPilot
       Throws an exception if the auto-pilot has not been engaged or no target roll is set.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
       .. note::
 
@@ -401,7 +377,6 @@ AutoPilot
       auto-pilot has not been engaged.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: current_attitude_error: Tuple
 
@@ -413,7 +388,6 @@ AutoPilot
       smoothing is off. Throws an exception if the auto-pilot has not been engaged.
 
       :Attribute: Read-only, cannot be set
-      :rtype: Tuple
 
    .. attribute:: current_pitch_error: number
 
@@ -422,7 +396,6 @@ AutoPilot
       auto-pilot has not been engaged.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
       .. note::
 
@@ -435,7 +408,6 @@ AutoPilot
       auto-pilot has not been engaged.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
       .. note::
 
@@ -448,7 +420,6 @@ AutoPilot
       auto-pilot has not been engaged or no target roll is set.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
       .. note::
 
@@ -461,7 +432,6 @@ AutoPilot
       Defaults to 20 degrees.
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: roll_engage_angle: number
 
@@ -470,7 +440,6 @@ AutoPilot
       Defaults to 15 degrees.
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: max_angular_velocity: Tuple
 
@@ -480,7 +449,6 @@ AutoPilot
       desired. Defaults to 1 :math:`\mathrm{rad/s}` for each axis.
 
       :Attribute: Can be read or written
-      :rtype: Tuple
 
    .. attribute:: limit_angular_velocity: boolean
 
@@ -488,7 +456,6 @@ AutoPilot
       the aerodynamic forces. Defaults to ``True``.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
       .. note::
 
@@ -505,7 +472,6 @@ AutoPilot
       use shrinks in proportion to the share of the torque that comes from control surfaces.
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: roll_attenuation_angle: number
 
@@ -517,7 +483,6 @@ AutoPilot
       surfaces.
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: auto_tune: boolean
 
@@ -526,7 +491,6 @@ AutoPilot
       See :attr:`SpaceCenter.AutoPilot.time_to_peak` and :attr:`SpaceCenter.AutoPilot.overshoot`.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. attribute:: time_to_peak: Tuple
 
@@ -535,7 +499,6 @@ AutoPilot
       Defaults to 1 second for each axis.
 
       :Attribute: Can be read or written
-      :rtype: Tuple
 
    .. attribute:: soft_start_time: number
 
@@ -546,7 +509,6 @@ AutoPilot
       Set to 0 to disable the fade-in.
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: target_smoothing_time: number
 
@@ -559,7 +521,6 @@ AutoPilot
       (instantaneous).
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: overshoot: Tuple
 
@@ -568,14 +529,12 @@ AutoPilot
       Defaults to 0.01 for each axis.
 
       :Attribute: Can be read or written
-      :rtype: Tuple
 
    .. attribute:: pitch_pid_gains: Tuple
 
       Gains for the pitch PID controller.
 
       :Attribute: Can be read or written
-      :rtype: Tuple
 
       .. note::
 
@@ -587,7 +546,6 @@ AutoPilot
       Gains for the roll PID controller.
 
       :Attribute: Can be read or written
-      :rtype: Tuple
 
       .. note::
 
@@ -599,7 +557,6 @@ AutoPilot
       Gains for the yaw PID controller.
 
       :Attribute: Can be read or written
-      :rtype: Tuple
 
       .. note::
 
@@ -610,37 +567,34 @@ AutoPilot
 
       Controls the rate-feedback filtering (the wobble-suppression filter on the measured
       angular velocity) for the pitch and yaw axes of a structurally flexible vessel. When
-      :attr:`SpaceCenter.RateFilterMode.automatic` (the default) the auto-pilot detects the
+      :data:`SpaceCenter.RateFilterMode.automatic` (the default) the auto-pilot detects the
       oscillation at runtime, estimates its frequency and routes it to the appropriate tool
       (a notch filter for a low-frequency mode near the control band, a low-pass for a
-      high-frequency mode). :attr:`SpaceCenter.RateFilterMode.off` disables rate filtering only,
-      leaving the other oscillation mitigations unaffected. :attr:`SpaceCenter.RateFilterMode.notch`
-      and :attr:`SpaceCenter.RateFilterMode.low_pass` force the respective tool unconditionally at
+      high-frequency mode). :data:`SpaceCenter.RateFilterMode.off` disables rate filtering only,
+      leaving the other oscillation mitigations unaffected. :data:`SpaceCenter.RateFilterMode.notch`
+      and :data:`SpaceCenter.RateFilterMode.low_pass` force the respective tool unconditionally at
       :attr:`SpaceCenter.AutoPilot.pitch_yaw_oscillation_frequency`, for a vessel known in advance to be
       flexible.
 
       :Attribute: Can be read or written
-      :rtype: :class:`SpaceCenter.RateFilterMode`
 
    .. attribute:: roll_rate_filter_mode: SpaceCenter.RateFilterMode
 
       Controls the rate-feedback filtering for the roll axis. Behaves as
       :attr:`SpaceCenter.AutoPilot.pitch_yaw_rate_filter_mode` but for roll, using
       :attr:`SpaceCenter.AutoPilot.roll_oscillation_frequency`. Defaults to
-      :attr:`SpaceCenter.RateFilterMode.automatic`.
+      :data:`SpaceCenter.RateFilterMode.automatic`.
 
       :Attribute: Can be read or written
-      :rtype: :class:`SpaceCenter.RateFilterMode`
 
    .. attribute:: pitch_yaw_oscillation_frequency: number
 
       The structural mode frequency, in Hz, for the pitch/yaw axis group. Used directly as the
-      filter frequency in :attr:`SpaceCenter.RateFilterMode.notch` / :attr:`SpaceCenter.RateFilterMode.low_pass`
+      filter frequency in :data:`SpaceCenter.RateFilterMode.notch` / :data:`SpaceCenter.RateFilterMode.low_pass`
       mode, and as the seed for the automatic frequency estimator before it acquires. Defaults
       to 1.5 Hz.
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: roll_oscillation_frequency: number
 
@@ -648,7 +602,6 @@ AutoPilot
       :attr:`SpaceCenter.AutoPilot.pitch_yaw_oscillation_frequency` but for roll. Defaults to 1.5 Hz.
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: oscillation_notch_q: number
 
@@ -658,19 +611,17 @@ AutoPilot
       advanced tuning parameter.
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: oscillation_bandwidth_floor_mode: SpaceCenter.MitigationMode
 
       Controls the bandwidth-floor mitigation: the reduction of the inner control loop
       bandwidth on a structurally flexible axis, the primary oscillation stabilizer. When
-      :attr:`SpaceCenter.MitigationMode.automatic` (the default) it engages on a latched axis
-      while holding (and during a detected limit cycle). :attr:`SpaceCenter.MitigationMode.off`
-      never reduces the bandwidth; :attr:`SpaceCenter.MitigationMode.forced` keeps it fully
+      :data:`SpaceCenter.MitigationMode.automatic` (the default) it engages on a latched axis
+      while holding (and during a detected limit cycle). :data:`SpaceCenter.MitigationMode.off`
+      never reduces the bandwidth; :data:`SpaceCenter.MitigationMode.forced` keeps it fully
       reduced at all times.
 
       :Attribute: Can be read or written
-      :rtype: :class:`SpaceCenter.MitigationMode`
 
    .. attribute:: oscillation_bandwidth_floor: number
 
@@ -681,30 +632,27 @@ AutoPilot
       parameter.
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: oscillation_feedforward_mode: SpaceCenter.MitigationMode
 
       Controls the feedforward-cut mitigation: removal of the acceleration feedforward on a
       structurally flexible axis while holding, so it cannot re-excite a residual mode at
-      the reduced bandwidth. When :attr:`SpaceCenter.MitigationMode.automatic` (the default) it
-      follows the hold gate on a latched axis. :attr:`SpaceCenter.MitigationMode.off` never cuts
-      the feedforward; :attr:`SpaceCenter.MitigationMode.forced` always cuts it fully.
+      the reduced bandwidth. When :data:`SpaceCenter.MitigationMode.automatic` (the default) it
+      follows the hold gate on a latched axis. :data:`SpaceCenter.MitigationMode.off` never cuts
+      the feedforward; :data:`SpaceCenter.MitigationMode.forced` always cuts it fully.
 
       :Attribute: Can be read or written
-      :rtype: :class:`SpaceCenter.MitigationMode`
 
    .. attribute:: oscillation_output_filter_mode: SpaceCenter.MitigationMode
 
       Controls the output-smoothing mitigation: a low-pass on the delivered actuator
       command that caps residual control chatter. When
-      :attr:`SpaceCenter.MitigationMode.automatic` (the default) it engages on a latched axis
+      :data:`SpaceCenter.MitigationMode.automatic` (the default) it engages on a latched axis
       (and, lightly, while the oscillation detector is firing on an unlatched one).
-      :attr:`SpaceCenter.MitigationMode.off` never smooths; :attr:`SpaceCenter.MitigationMode.forced`
+      :data:`SpaceCenter.MitigationMode.off` never smooths; :data:`SpaceCenter.MitigationMode.forced`
       smooths fully at all times.
 
       :Attribute: Can be read or written
-      :rtype: :class:`SpaceCenter.MitigationMode`
 
    .. attribute:: pitch_yaw_control_oscillation: number
 
@@ -713,7 +661,6 @@ AutoPilot
       near zero; a sustained limit cycle drives it toward 1. Read-only.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: roll_control_oscillation: number
 
@@ -722,7 +669,6 @@ AutoPilot
       :attr:`SpaceCenter.AutoPilot.pitch_yaw_control_oscillation`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: oscillation_level: Tuple
 
@@ -731,7 +677,6 @@ AutoPilot
       detected; values approaching 1 mean a sustained structural oscillation. Read-only.
 
       :Attribute: Read-only, cannot be set
-      :rtype: Tuple
 
    .. attribute:: pitch_yaw_oscillation_latched: boolean
 
@@ -740,7 +685,6 @@ AutoPilot
       :attr:`SpaceCenter.AutoPilot.pitch_yaw_rate_filter_mode`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: boolean
 
    .. attribute:: roll_oscillation_latched: boolean
 
@@ -748,7 +692,6 @@ AutoPilot
       oscillation suppression on for it. Read-only. See :attr:`SpaceCenter.AutoPilot.roll_rate_filter_mode`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: boolean
 
    .. attribute:: pitch_yaw_oscillation_detected_frequency: number
 
@@ -757,7 +700,6 @@ AutoPilot
       all modes, so this is observable even when suppression is off or forced. Read-only.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: roll_oscillation_detected_frequency: number
 
@@ -766,7 +708,6 @@ AutoPilot
       :attr:`SpaceCenter.AutoPilot.pitch_yaw_oscillation_detected_frequency`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: diagnostic_logging: boolean
 
@@ -782,7 +723,6 @@ AutoPilot
       ``True`` clears the buffer. Defaults to ``False``.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. attribute:: diagnostic_log: string
 
@@ -794,7 +734,6 @@ AutoPilot
       not been enabled or no ticks have occurred.
 
       :Attribute: Read-only, cannot be set
-      :rtype: string
 
 
 

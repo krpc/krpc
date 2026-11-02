@@ -16,14 +16,12 @@ Button
       The rect transform for the UI object.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`UI.RectTransform`
 
    .. attribute:: layout_element: UI.LayoutElement
 
       How much space the UI object asks a layout for.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`UI.LayoutElement`
 
       .. note::
 
@@ -35,7 +33,6 @@ Button
       Whether the UI object is visible.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
       .. note::
 
@@ -49,14 +46,12 @@ Button
       The text for the button.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`UI.Text`
 
    .. attribute:: clicked: boolean
 
       Whether the button has been clicked.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
       .. note::
 
@@ -68,7 +63,6 @@ Button
       Whether the user is holding the button down right now.
 
       :Attribute: Read-only, cannot be set
-      :rtype: boolean
 
       .. note::
 
@@ -82,7 +76,6 @@ Button
       Whether the control responds to the user.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
       .. note::
 
@@ -95,7 +88,6 @@ Button
       as the skin has it.
 
       :Attribute: Can be read or written
-      :rtype: :class:`StdLib.ColorRGBA`
 
       .. note::
 
@@ -112,7 +104,6 @@ Button
       control. Empty, the default, shows nothing.
 
       :Attribute: Can be read or written
-      :rtype: string
 
    .. method:: remove()
 

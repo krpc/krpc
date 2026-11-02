@@ -18,7 +18,6 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    or ``"MakingHistory"`` (Making History).
 
    :Attribute: Read-only, cannot be set
-   :rtype: List
 
 
 
@@ -28,7 +27,6 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    The current amount of science.
 
    :Attribute: Read-only, cannot be set
-   :rtype: number
 
 
 
@@ -38,7 +36,6 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    The current amount of funds.
 
    :Attribute: Read-only, cannot be set
-   :rtype: number
 
 
 
@@ -48,17 +45,15 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    The current amount of reputation.
 
    :Attribute: Read-only, cannot be set
-   :rtype: number
 
 
 
 
-.. attribute:: active_vessel: SpaceCenter.Vessel
+.. attribute:: active_vessel: SpaceCenter.Vessel | Types.none
 
    The currently active vessel.
 
    :Attribute: Can be read or written
-   :rtype: :class:`SpaceCenter.Vessel` or ``Types.none``
 
 
 
@@ -68,7 +63,6 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    A list of all the vessels in the game.
 
    :Attribute: Read-only, cannot be set
-   :rtype: List
 
 
 
@@ -78,7 +72,6 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    A list of available launch sites.
 
    :Attribute: Read-only, cannot be set
-   :rtype: List
 
 
 
@@ -89,37 +82,33 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    keyed by the name of the body.
 
    :Attribute: Read-only, cannot be set
-   :rtype: Map
 
 
 
 
-.. attribute:: target_body: SpaceCenter.CelestialBody
+.. attribute:: target_body: SpaceCenter.CelestialBody | Types.none
 
    The currently targeted celestial body.
 
    :Attribute: Can be read or written
-   :rtype: :class:`SpaceCenter.CelestialBody` or ``Types.none``
 
 
 
 
-.. attribute:: target_vessel: SpaceCenter.Vessel
+.. attribute:: target_vessel: SpaceCenter.Vessel | Types.none
 
    The currently targeted vessel.
 
    :Attribute: Can be read or written
-   :rtype: :class:`SpaceCenter.Vessel` or ``Types.none``
 
 
 
 
-.. attribute:: target_docking_port: SpaceCenter.DockingPort
+.. attribute:: target_docking_port: SpaceCenter.DockingPort | Types.none
 
    The currently targeted docking port.
 
    :Attribute: Can be read or written
-   :rtype: :class:`SpaceCenter.DockingPort` or ``Types.none``
 
 
 
@@ -132,28 +121,26 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
 
 
-.. staticmethod:: launchable_vessels(craft_directory)
+.. staticmethod:: launchable_vessels(craft_directory: string): List
 
    Returns a list of vessels from the given *craft_directory*
    that can be launched.
 
-   :param string craft_directory: Name of the directory in the current saves "Ships" directory. For example ``"VAB"`` or ``"SPH"``.
-   :rtype: List
+   :param craft_directory: Name of the directory in the current saves "Ships" directory. For example ``"VAB"`` or ``"SPH"``.
 
 
 
 
-.. staticmethod:: launch_vessel(craft_directory, name, launch_site, [crew = Types.none], [recover = true], [flag_url = ''])
+.. staticmethod:: launch_vessel(craft_directory: string, name: string, launch_site: string, crew?: List | Types.none, recover?: boolean, flag_url?: string)
 
    Launch a vessel.
 
-   :param string craft_directory: Name of the directory in the current saves "Ships" directory, that contains the craft file. For example ``"VAB"`` or ``"SPH"``.
-   :param string name: Name of the vessel to launch. This is the name of the ".craft" file in the save directory, without the ".craft" file extension.
-   :param string launch_site: Name of the launch site. For example ``"LaunchPad"`` or ``"Runway"``.
+   :param craft_directory: Name of the directory in the current saves "Ships" directory, that contains the craft file. For example ``"VAB"`` or ``"SPH"``.
+   :param name: Name of the vessel to launch. This is the name of the ".craft" file in the save directory, without the ".craft" file extension.
+   :param launch_site: Name of the launch site. For example ``"LaunchPad"`` or ``"Runway"``.
    :param crew: The Kerbals to place in the craft, by name. Controls how the craft is crewed, as described in the remarks.
-   :type crew: List or ``Types.none``
-   :param boolean recover: If true and there is a vessel on the launch site, recover it before launching.
-   :param string flag_url: If not ``nil``, the asset URL of the mission flag to use for the launch.
+   :param recover: If true and there is a vessel on the launch site, recover it before launching. Defaults to ``true``.
+   :param flag_url: If not ``nil``, the asset URL of the mission flag to use for the launch. Defaults to ``''``.
 
    .. note::
 
@@ -172,12 +159,12 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
 
 
-.. staticmethod:: launch_vessel_from_vab(name, [recover = true])
+.. staticmethod:: launch_vessel_from_vab(name: string, recover?: boolean)
 
    Launch a new vessel from the VAB onto the launchpad.
 
-   :param string name: Name of the vessel to launch.
-   :param boolean recover: If true and there is a vessel on the launch pad, recover it before launching.
+   :param name: Name of the vessel to launch.
+   :param recover: If true and there is a vessel on the launch pad, recover it before launching. Defaults to ``true``.
 
    .. note::
 
@@ -188,12 +175,12 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
 
 
-.. staticmethod:: launch_vessel_from_sph(name, [recover = true])
+.. staticmethod:: launch_vessel_from_sph(name: string, recover?: boolean)
 
    Launch a new vessel from the SPH onto the runway.
 
-   :param string name: Name of the vessel to launch.
-   :param boolean recover: If true and there is a vessel on the runway, recover it before launching.
+   :param name: Name of the vessel to launch.
+   :param recover: If true and there is a vessel on the runway, recover it before launching. Defaults to ``true``.
 
    .. note::
 
@@ -209,29 +196,28 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    The editor, for inspecting the vessel that is being constructed.
 
    :Attribute: Read-only, cannot be set
-   :rtype: :class:`SpaceCenter.Editor`
 
 
 
 
-.. staticmethod:: save(name)
+.. staticmethod:: save(name: string)
 
    Save the game with a given name.
    This will create a save file called ``name.sfs`` in the folder of the
    current save game.
 
-   :param string name: Name of the save.
+   :param name: Name of the save.
 
 
 
 
-.. staticmethod:: load(name)
+.. staticmethod:: load(name: string)
 
    Load the game with the given name.
    This will create a load a save file called ``name.sfs`` from the folder of the
    current save game.
 
-   :param string name: Name of the save.
+   :param name: Name of the save.
 
 
 
@@ -265,23 +251,21 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    Whether the game can be saved.
 
    :Attribute: Read-only, cannot be set
-   :rtype: boolean
 
    .. note::
 
       The game cannot be saved in some flight states, e.g. while under acceleration
       or moving over the surface. Setting
-      :attr:`KRPC.game_scene <KRPC.KRPC.game_scene>` to leave flight saves the
+      :attr:`KRPC.game_scene` to leave flight saves the
       game only when this is true.
 
 
 
 
-.. staticmethod:: can_revert_to_launch()
+.. staticmethod:: can_revert_to_launch(): boolean
 
    Whether the current flight can be reverted to launch.
 
-   :rtype: boolean
 
 
 
@@ -294,12 +278,12 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
 
 
-.. staticmethod:: transfer_crew(crew_member, target_part)
+.. staticmethod:: transfer_crew(crew_member: SpaceCenter.CrewMember, target_part: SpaceCenter.Part)
 
    Transfers a crew member to a different part.
 
-   :param SpaceCenter.CrewMember crew_member: The crew member to transfer.
-   :param SpaceCenter.Part target_part: The part to move them to.
+   :param crew_member: The crew member to transfer.
+   :param target_part: The part to move them to.
 
 
 
@@ -309,7 +293,6 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    Whether the UI is visible.
 
    :Attribute: Can be read or written
-   :rtype: boolean
 
 
 
@@ -319,7 +302,6 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    Whether the navball is visible.
 
    :Attribute: Can be read or written
-   :rtype: boolean
 
 
 
@@ -329,7 +311,6 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    The current mode of the altimeter.
 
    :Attribute: Can be read or written
-   :rtype: :class:`SpaceCenter.AltimeterMode`
 
 
 
@@ -339,7 +320,6 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    The current universal time in seconds.
 
    :Attribute: Read-only, cannot be set
-   :rtype: number
 
 
 
@@ -349,7 +329,6 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    The value of the `gravitational constant <https://en.wikipedia.org/wiki/Gravitational_constant>`_ G in :math:`\mathrm{N(m/kg)^{2}}`.
 
    :Attribute: Read-only, cannot be set
-   :rtype: number
 
 
 
@@ -359,7 +338,6 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    The multiplier the game applies to every buoyant force.
 
    :Attribute: Read-only, cannot be set
-   :rtype: number
 
    .. note::
 
@@ -377,7 +355,6 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    active.
 
    :Attribute: Read-only, cannot be set
-   :rtype: number
 
 
 
@@ -387,11 +364,10 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    The current warp factor. This is the index of the rate at which time
    is passing for either regular "on-rails" or physical time warp. Returns 0
    if time warp is not active. When in on-rails time warp, this is equal to
-   :attr:`SpaceCenter.rails_warp_factor <SpaceCenter.SpaceCenter.rails_warp_factor>`, and in physics time warp, this is equal to
-   :attr:`SpaceCenter.physics_warp_factor <SpaceCenter.SpaceCenter.physics_warp_factor>`.
+   :attr:`SpaceCenter.rails_warp_factor`, and in physics time warp, this is equal to
+   :attr:`SpaceCenter.physics_warp_factor`.
 
    :Attribute: Read-only, cannot be set
-   :rtype: number
 
 
 
@@ -407,7 +383,6 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    planet. See `the KSP wiki <https://wiki.kerbalspaceprogram.com/wiki/Time_warp>`_ for details.
 
    :Attribute: Can be read or written
-   :rtype: number
 
    .. note::
 
@@ -422,12 +397,11 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    no time warp. Returns 0 if regular "on-rails" time warp is active.
 
    :Attribute: Can be read or written
-   :rtype: number
 
 
 
 
-.. staticmethod:: can_rails_warp_at([factor = 1])
+.. staticmethod:: can_rails_warp_at(factor?: number): boolean
 
    Returns ``True`` if regular "on-rails" time warp can be used, at the specified warp
    *factor*. The maximum time warp rate is limited by various things,
@@ -435,8 +409,7 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    `the KSP wiki <https://wiki.kerbalspaceprogram.com/wiki/Time_warp>`_
    for details.
 
-   :param number factor: The warp factor to check.
-   :rtype: boolean
+   :param factor: The warp factor to check. Defaults to ``1``.
 
    .. note::
 
@@ -453,7 +426,6 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    for details.
 
    :Attribute: Read-only, cannot be set
-   :rtype: number
 
    .. note::
 
@@ -462,7 +434,7 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
 
 
-.. staticmethod:: warp_to(ut, [max_rails_rate = 1e+05], [max_physics_rate = 2.0])
+.. staticmethod:: warp_to(ut: number, max_rails_rate?: number, max_physics_rate?: number)
 
    Uses time acceleration to warp forward to a time in the future, specified
    by universal time *ut*. This call blocks until the desired
@@ -472,9 +444,9 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    rate is limited by *max_rails_rate*, and when using physical
    time warp, the warp rate is limited by *max_physics_rate*.
 
-   :param number ut: The universal time to warp to, in seconds.
-   :param number max_rails_rate: The maximum warp rate in regular "on-rails" time warp.
-   :param number max_physics_rate: The maximum warp rate in physical time warp.
+   :param ut: The universal time to warp to, in seconds.
+   :param max_rails_rate: The maximum warp rate in regular "on-rails" time warp. Defaults to ``1e+05``.
+   :param max_physics_rate: The maximum warp rate in physical time warp. Defaults to ``2.0``.
 
    .. note::
 
@@ -484,85 +456,79 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
 
 
-.. staticmethod:: transform_position(position, from, to)
+.. staticmethod:: transform_position(position: Tuple, from: SpaceCenter.ReferenceFrame, to: SpaceCenter.ReferenceFrame): Tuple
 
    Converts a position from one reference frame to another.
 
-   :param Tuple position: Position, as a vector, in reference frame *from*.
-   :param SpaceCenter.ReferenceFrame from: The reference frame that the position is in.
-   :param SpaceCenter.ReferenceFrame to: The reference frame to covert the position to.
+   :param position: Position, as a vector, in reference frame *from*.
+   :param from: The reference frame that the position is in.
+   :param to: The reference frame to covert the position to.
    :returns: The corresponding position, as a vector, in reference frame *to*.
-   :rtype: Tuple
 
 
 
 
-.. staticmethod:: transform_direction(direction, from, to)
+.. staticmethod:: transform_direction(direction: Tuple, from: SpaceCenter.ReferenceFrame, to: SpaceCenter.ReferenceFrame): Tuple
 
    Converts a direction from one reference frame to another.
 
-   :param Tuple direction: Direction, as a vector, in reference frame *from*.
-   :param SpaceCenter.ReferenceFrame from: The reference frame that the direction is in.
-   :param SpaceCenter.ReferenceFrame to: The reference frame to covert the direction to.
+   :param direction: Direction, as a vector, in reference frame *from*.
+   :param from: The reference frame that the direction is in.
+   :param to: The reference frame to covert the direction to.
    :returns: The corresponding direction, as a vector, in reference frame *to*.
-   :rtype: Tuple
 
 
 
 
-.. staticmethod:: transform_rotation(rotation, from, to)
+.. staticmethod:: transform_rotation(rotation: Tuple, from: SpaceCenter.ReferenceFrame, to: SpaceCenter.ReferenceFrame): Tuple
 
    Converts a rotation from one reference frame to another.
 
-   :param Tuple rotation: Rotation, as a quaternion of the form ``(x, y, z, w)``, in reference frame *from*.
-   :param SpaceCenter.ReferenceFrame from: The reference frame that the rotation is in.
-   :param SpaceCenter.ReferenceFrame to: The reference frame to covert the rotation to.
+   :param rotation: Rotation, as a quaternion of the form ``(x, y, z, w)``, in reference frame *from*.
+   :param from: The reference frame that the rotation is in.
+   :param to: The reference frame to covert the rotation to.
    :returns: The corresponding rotation, as a quaternion of the form ``(x, y, z, w)``, in reference frame *to*.
-   :rtype: Tuple
 
 
 
 
-.. staticmethod:: transform_velocity(position, velocity, from, to)
+.. staticmethod:: transform_velocity(position: Tuple, velocity: Tuple, from: SpaceCenter.ReferenceFrame, to: SpaceCenter.ReferenceFrame): Tuple
 
    Converts a velocity (acting at the specified position) from one reference frame
    to another. The position is required to take the relative angular velocity of the
    reference frames into account.
 
-   :param Tuple position: Position, as a vector, in reference frame *from*.
-   :param Tuple velocity: Velocity, as a vector that points in the direction of travel and whose magnitude is the speed in :math:`\mathrm{m/s}`, in reference frame *from*.
-   :param SpaceCenter.ReferenceFrame from: The reference frame that the position and velocity are in.
-   :param SpaceCenter.ReferenceFrame to: The reference frame to covert the velocity to.
+   :param position: Position, as a vector, in reference frame *from*.
+   :param velocity: Velocity, as a vector that points in the direction of travel and whose magnitude is the speed in :math:`\mathrm{m/s}`, in reference frame *from*.
+   :param from: The reference frame that the position and velocity are in.
+   :param to: The reference frame to covert the velocity to.
    :returns: The corresponding velocity, as a vector, in reference frame *to*.
-   :rtype: Tuple
 
 
 
 
-.. staticmethod:: raycast_distance(position, direction, reference_frame)
+.. staticmethod:: raycast_distance(position: Tuple, direction: Tuple, reference_frame: SpaceCenter.ReferenceFrame): number
 
    Cast a ray from a given position in a given direction, and return the distance to the hit point.
    If no hit occurs, returns infinity.
 
-   :param Tuple position: Position, as a vector, of the origin of the ray.
-   :param Tuple direction: Direction of the ray, as a unit vector.
-   :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the position and direction are in.
+   :param position: Position, as a vector, of the origin of the ray.
+   :param direction: Direction of the ray, as a unit vector.
+   :param reference_frame: The reference frame that the position and direction are in.
    :returns: The distance to the hit, in meters, or infinity if there was no hit.
-   :rtype: number
 
 
 
 
-.. staticmethod:: raycast_part(position, direction, reference_frame)
+.. staticmethod:: raycast_part(position: Tuple, direction: Tuple, reference_frame: SpaceCenter.ReferenceFrame): SpaceCenter.Part | Types.none
 
    Cast a ray from a given position in a given direction, and return the part that it hits.
    If no hit occurs, returns ``nil``.
 
-   :param Tuple position: Position, as a vector, of the origin of the ray.
-   :param Tuple direction: Direction of the ray, as a unit vector.
-   :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the position and direction are in.
+   :param position: Position, as a vector, of the origin of the ray.
+   :param direction: Direction of the ray, as a unit vector.
+   :param reference_frame: The reference frame that the position and direction are in.
    :returns: The part that was hit or ``nil`` if there was no hit.
-   :rtype: :class:`SpaceCenter.Part` or ``Types.none``
 
 
 
@@ -572,7 +538,6 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    Whether `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/>`_ is installed.
 
    :Attribute: Read-only, cannot be set
-   :rtype: boolean
 
 
 
@@ -582,28 +547,22 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    Whether `RealFuels <https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/>`_ is installed.
 
    :Attribute: Read-only, cannot be set
-   :rtype: boolean
 
 
 
 
-.. staticmethod:: create_kerbal(name, job, male)
+.. staticmethod:: create_kerbal(name: string, job: string, male: boolean)
 
    Creates a Kerbal.
 
-   :param string name:
-   :param string job:
-   :param boolean male:
 
 
 
 
-.. staticmethod:: get_kerbal(name)
+.. staticmethod:: get_kerbal(name: string): SpaceCenter.CrewMember | Types.none
 
    Find a Kerbal by name.
 
-   :param string name:
-   :rtype: :class:`SpaceCenter.CrewMember` or ``Types.none``
 
 
 
@@ -613,17 +572,16 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    The visible objects in map mode.
 
    :Attribute: Can be read or written
-   :rtype: :class:`SpaceCenter.MapFilterType`
 
 
 
 
-.. staticmethod:: screenshot(file_path, [scale = 1])
+.. staticmethod:: screenshot(file_path: string, scale?: number)
 
    Saves a screenshot.
 
-   :param string file_path: The path of the file to save.
-   :param number scale: Resolution scaling factor
+   :param file_path: The path of the file to save.
+   :param scale: Resolution scaling factor Defaults to ``1``.
 
 
 
@@ -633,19 +591,17 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    The current mode the game is in.
 
    :Attribute: Read-only, cannot be set
-   :rtype: :class:`SpaceCenter.GameMode`
 
 
 
 
 .. attribute:: warp_mode: SpaceCenter.WarpMode
 
-   The current time warp mode. Returns :attr:`SpaceCenter.WarpMode.none` if time
-   warp is not active, :attr:`SpaceCenter.WarpMode.rails` if regular "on-rails" time warp
-   is active, or :attr:`SpaceCenter.WarpMode.physics` if physical time warp is active.
+   The current time warp mode. Returns :data:`SpaceCenter.WarpMode.none` if time
+   warp is not active, :data:`SpaceCenter.WarpMode.rails` if regular "on-rails" time warp
+   is active, or :data:`SpaceCenter.WarpMode.physics` if physical time warp is active.
 
    :Attribute: Read-only, cannot be set
-   :rtype: :class:`SpaceCenter.WarpMode`
 
 
 
@@ -655,7 +611,6 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    An object that can be used to control the camera.
 
    :Attribute: Read-only, cannot be set
-   :rtype: :class:`SpaceCenter.Camera`
 
 
 
@@ -665,7 +620,6 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    The waypoint manager.
 
    :Attribute: Read-only, cannot be set
-   :rtype: :class:`SpaceCenter.WaypointManager`
 
 
 
@@ -675,7 +629,6 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    The contract manager.
 
    :Attribute: Read-only, cannot be set
-   :rtype: :class:`SpaceCenter.ContractManager`
 
 
 
@@ -685,7 +638,6 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    The alarm manager.
 
    :Attribute: Read-only, cannot be set
-   :rtype: :class:`SpaceCenter.AlarmManager`
 
 
 
@@ -741,7 +693,7 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 .. class:: AltimeterMode
 
    The mode of the altitude reported on the altimeter.
-   See :attr:`SpaceCenter.altimeter_mode <SpaceCenter.SpaceCenter.altimeter_mode>`.
+   See :attr:`SpaceCenter.altimeter_mode`.
 
 
    .. data:: default
@@ -884,19 +836,16 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
       The name of the launch site.
 
-      :rtype: string
 
    .. attribute:: body: SpaceCenter.CelestialBody
 
       The celestial body the launch site is on.
 
-      :rtype: :class:`SpaceCenter.CelestialBody`
 
    .. attribute:: editor_facility: SpaceCenter.EditorFacility
 
       Which editor is normally used for this launch site.
 
-      :rtype: :class:`SpaceCenter.EditorFacility`
 
 
 .. class:: EditorFacility

@@ -24,7 +24,6 @@ assembled and run.
       value cannot be sent to a client.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KRPC.Type`
 
       .. note::
 
@@ -37,7 +36,6 @@ assembled and run.
       Whether the expression evaluates to a value.
 
       :Attribute: Read-only, cannot be set
-      :rtype: boolean
 
       .. note::
 
@@ -49,112 +47,98 @@ assembled and run.
       The types of the function's parameters.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
       .. note::
 
          Empty for a function that is not created with :meth:`KRPC.Expression.lambda`.
 
-   .. staticmethod:: constant_double(value)
+   .. staticmethod:: constant_double(value: number): KRPC.Expression
 
       A constant value of double precision floating point type.
 
-      :param number value: The value.
-      :rtype: :class:`KRPC.Expression`
+      :param value: The value.
 
-   .. staticmethod:: constant_float(value)
+   .. staticmethod:: constant_float(value: number): KRPC.Expression
 
       A constant value of single precision floating point type.
 
-      :param number value: The value.
-      :rtype: :class:`KRPC.Expression`
+      :param value: The value.
 
-   .. staticmethod:: constant_int(value)
+   .. staticmethod:: constant_int(value: number): KRPC.Expression
 
       A constant value of integer type.
 
-      :param number value: The value.
-      :rtype: :class:`KRPC.Expression`
+      :param value: The value.
 
-   .. staticmethod:: constant_long(value)
+   .. staticmethod:: constant_long(value: number): KRPC.Expression
 
       A constant value of long integer type.
 
-      :param number value: The value.
-      :rtype: :class:`KRPC.Expression`
+      :param value: The value.
 
-   .. staticmethod:: constant_u_int(value)
+   .. staticmethod:: constant_u_int(value: number): KRPC.Expression
 
       A constant value of unsigned integer type.
 
-      :param number value: The value.
-      :rtype: :class:`KRPC.Expression`
+      :param value: The value.
 
-   .. staticmethod:: constant_u_long(value)
+   .. staticmethod:: constant_u_long(value: number): KRPC.Expression
 
       A constant value of unsigned long integer type.
 
-      :param number value: The value.
-      :rtype: :class:`KRPC.Expression`
+      :param value: The value.
 
-   .. staticmethod:: constant_bool(value)
+   .. staticmethod:: constant_bool(value: boolean): KRPC.Expression
 
       A constant value of boolean type.
 
-      :param boolean value: The value.
-      :rtype: :class:`KRPC.Expression`
+      :param value: The value.
 
-   .. staticmethod:: constant_string(value)
+   .. staticmethod:: constant_string(value: string): KRPC.Expression
 
       A constant value of string type.
 
-      :param string value: The value.
-      :rtype: :class:`KRPC.Expression`
+      :param value: The value.
 
-   .. staticmethod:: constant_bytes(value)
+   .. staticmethod:: constant_bytes(value: string): KRPC.Expression
 
       A constant value of bytes type.
 
-      :param string value: The value.
-      :rtype: :class:`KRPC.Expression`
+      :param value: The value.
 
-   .. staticmethod:: constant_enum(service, name, value)
+   .. staticmethod:: constant_enum(service: string, name: string, value: number): KRPC.Expression
 
       A constant value of an enumeration a service defines.
 
-      :param string service: The name of the service the enumeration is defined in.
-      :param string name: The name of the enumeration.
-      :param number value: The value of the member of the enumeration.
-      :rtype: :class:`KRPC.Expression`
+      :param service: The name of the service the enumeration is defined in.
+      :param name: The name of the enumeration.
+      :param value: The value of the member of the enumeration.
 
-   .. staticmethod:: constant_null(type)
+   .. staticmethod:: constant_null(type: KRPC.Type): KRPC.Expression
 
       A null constant of the given type.
 
-      :param KRPC.Type type: The type of the value.
-      :rtype: :class:`KRPC.Expression`
+      :param type: The type of the value.
 
       .. note::
 
          The type is made nullable, as by :meth:`KRPC.Type.nullable_type`.
 
-   .. staticmethod:: constant_object(value)
+   .. staticmethod:: constant_object(value: number): KRPC.Expression
 
       A constant object, an instance of a class a service defines.
 
-      :param number value: The object identifier of the object.
-      :rtype: :class:`KRPC.Expression`
+      :param value: The object identifier of the object.
 
       .. note::
 
          The object is given by its object identifier.
 
-   .. staticmethod:: call(call)
+   .. staticmethod:: call(call: krpc.schema.ProcedureCall): KRPC.Expression
 
       An RPC call.
 
-      :param krpc.schema.ProcedureCall call: The procedure call.
-      :rtype: :class:`KRPC.Expression`
+      :param call: The procedure call.
 
       .. note::
 
@@ -163,13 +147,12 @@ assembled and run.
          evaluated for its effects, as a statement in a :meth:`KRPC.Expression.block`. A collection the
          procedure returns is copied, as a client would receive it.
 
-   .. staticmethod:: call_with_arguments(call, args)
+   .. staticmethod:: call_with_arguments(call: krpc.schema.ProcedureCall, args: Map): KRPC.Expression
 
       An RPC call, where some or all of the arguments are computed by expressions.
 
-      :param krpc.schema.ProcedureCall call: The RPC to call.
-      :param Map args: Expressions computing the call's arguments, by position.
-      :rtype: :class:`KRPC.Expression`
+      :param call: The RPC to call.
+      :param args: Expressions computing the call's arguments, by position.
 
       .. note::
 
@@ -177,248 +160,222 @@ assembled and run.
          expression takes the argument encoded in the call, or the parameter's default. A
          collection the procedure returns is copied, as a client would receive it.
 
-   .. staticmethod:: equal(arg0, arg1)
+   .. staticmethod:: equal(arg0: KRPC.Expression, arg1: KRPC.Expression): KRPC.Expression
 
       Equality comparison.
 
-      :param KRPC.Expression arg0: The first operand.
-      :param KRPC.Expression arg1: The second operand.
-      :rtype: :class:`KRPC.Expression`
+      :param arg0: The first operand.
+      :param arg1: The second operand.
 
       .. note::
 
          Collections, tuples, bytes and structures compare by their contents. Throws an
          exception if the operands are of unrelated types.
 
-   .. staticmethod:: not_equal(arg0, arg1)
+   .. staticmethod:: not_equal(arg0: KRPC.Expression, arg1: KRPC.Expression): KRPC.Expression
 
       Inequality comparison.
 
-      :param KRPC.Expression arg0: The first operand.
-      :param KRPC.Expression arg1: The second operand.
-      :rtype: :class:`KRPC.Expression`
+      :param arg0: The first operand.
+      :param arg1: The second operand.
 
       .. note::
 
          Collections, tuples, bytes and structures compare by their contents. Throws an
          exception if the operands are of unrelated types.
 
-   .. staticmethod:: greater_than(arg0, arg1)
+   .. staticmethod:: greater_than(arg0: KRPC.Expression, arg1: KRPC.Expression): KRPC.Expression
 
       Greater than numerical comparison.
 
-      :param KRPC.Expression arg0: The first operand.
-      :param KRPC.Expression arg1: The second operand.
-      :rtype: :class:`KRPC.Expression`
+      :param arg0: The first operand.
+      :param arg1: The second operand.
 
-   .. staticmethod:: greater_than_or_equal(arg0, arg1)
+   .. staticmethod:: greater_than_or_equal(arg0: KRPC.Expression, arg1: KRPC.Expression): KRPC.Expression
 
       Greater than or equal numerical comparison.
 
-      :param KRPC.Expression arg0: The first operand.
-      :param KRPC.Expression arg1: The second operand.
-      :rtype: :class:`KRPC.Expression`
+      :param arg0: The first operand.
+      :param arg1: The second operand.
 
-   .. staticmethod:: less_than(arg0, arg1)
+   .. staticmethod:: less_than(arg0: KRPC.Expression, arg1: KRPC.Expression): KRPC.Expression
 
       Less than numerical comparison.
 
-      :param KRPC.Expression arg0: The first operand.
-      :param KRPC.Expression arg1: The second operand.
-      :rtype: :class:`KRPC.Expression`
+      :param arg0: The first operand.
+      :param arg1: The second operand.
 
-   .. staticmethod:: less_than_or_equal(arg0, arg1)
+   .. staticmethod:: less_than_or_equal(arg0: KRPC.Expression, arg1: KRPC.Expression): KRPC.Expression
 
       Less than or equal numerical comparison.
 
-      :param KRPC.Expression arg0: The first operand.
-      :param KRPC.Expression arg1: The second operand.
-      :rtype: :class:`KRPC.Expression`
+      :param arg0: The first operand.
+      :param arg1: The second operand.
 
-   .. staticmethod:: is_null(value)
+   .. staticmethod:: is_null(value: KRPC.Expression): KRPC.Expression
 
       Whether a value is null. Throws an exception if the type of the value cannot be null.
 
-      :param KRPC.Expression value: The value.
-      :rtype: :class:`KRPC.Expression`
+      :param value: The value.
 
-   .. staticmethod:: and(arg0, arg1)
+   .. staticmethod:: and(arg0: KRPC.Expression, arg1: KRPC.Expression): KRPC.Expression
 
       Logical or bitwise and, which evaluates both operands.
 
-      :param KRPC.Expression arg0: The first operand.
-      :param KRPC.Expression arg1: The second operand.
-      :rtype: :class:`KRPC.Expression`
+      :param arg0: The first operand.
+      :param arg1: The second operand.
 
-   .. staticmethod:: or(arg0, arg1)
+   .. staticmethod:: or(arg0: KRPC.Expression, arg1: KRPC.Expression): KRPC.Expression
 
       Logical or bitwise or, which evaluates both operands.
 
-      :param KRPC.Expression arg0: The first operand.
-      :param KRPC.Expression arg1: The second operand.
-      :rtype: :class:`KRPC.Expression`
+      :param arg0: The first operand.
+      :param arg1: The second operand.
 
-   .. staticmethod:: conditional_and(arg0, arg1)
+   .. staticmethod:: conditional_and(arg0: KRPC.Expression, arg1: KRPC.Expression): KRPC.Expression
 
       Logical and, which evaluates the second operand only when the first is true.
 
-      :param KRPC.Expression arg0: The first operand.
-      :param KRPC.Expression arg1: The second operand.
-      :rtype: :class:`KRPC.Expression`
+      :param arg0: The first operand.
+      :param arg1: The second operand.
 
-   .. staticmethod:: conditional_or(arg0, arg1)
+   .. staticmethod:: conditional_or(arg0: KRPC.Expression, arg1: KRPC.Expression): KRPC.Expression
 
       Logical or, which evaluates the second operand only when the first is false.
 
-      :param KRPC.Expression arg0: The first operand.
-      :param KRPC.Expression arg1: The second operand.
-      :rtype: :class:`KRPC.Expression`
+      :param arg0: The first operand.
+      :param arg1: The second operand.
 
-   .. staticmethod:: exclusive_or(arg0, arg1)
+   .. staticmethod:: exclusive_or(arg0: KRPC.Expression, arg1: KRPC.Expression): KRPC.Expression
 
       Logical or bitwise exclusive or.
 
-      :param KRPC.Expression arg0: The first operand.
-      :param KRPC.Expression arg1: The second operand.
-      :rtype: :class:`KRPC.Expression`
+      :param arg0: The first operand.
+      :param arg1: The second operand.
 
-   .. staticmethod:: not(arg)
+   .. staticmethod:: not(arg: KRPC.Expression): KRPC.Expression
 
       Logical or bitwise negation.
 
-      :param KRPC.Expression arg: The operand.
-      :rtype: :class:`KRPC.Expression`
+      :param arg: The operand.
 
-   .. staticmethod:: negate(arg)
+   .. staticmethod:: negate(arg: KRPC.Expression): KRPC.Expression
 
       Numerical negation, which negates a uint as a long.
 
-      :param KRPC.Expression arg: The operand.
-      :rtype: :class:`KRPC.Expression`
+      :param arg: The operand.
 
-   .. staticmethod:: conditional(condition, if_true, if_false)
+   .. staticmethod:: conditional(condition: KRPC.Expression, if_true: KRPC.Expression, if_false: KRPC.Expression): KRPC.Expression
 
       The second argument if the condition is true, and the third argument otherwise.
 
-      :param KRPC.Expression condition: The boolean condition.
-      :param KRPC.Expression if_true: The value when the condition is true.
-      :param KRPC.Expression if_false: The value when the condition is false.
-      :rtype: :class:`KRPC.Expression`
+      :param condition: The boolean condition.
+      :param if_true: The value when the condition is true.
+      :param if_false: The value when the condition is false.
 
       .. note::
 
          Throws an exception if the two values have no common type.
 
-   .. staticmethod:: add(arg0, arg1)
+   .. staticmethod:: add(arg0: KRPC.Expression, arg1: KRPC.Expression): KRPC.Expression
 
       Numerical addition.
 
-      :param KRPC.Expression arg0: The first operand.
-      :param KRPC.Expression arg1: The second operand.
-      :rtype: :class:`KRPC.Expression`
+      :param arg0: The first operand.
+      :param arg1: The second operand.
 
-   .. staticmethod:: subtract(arg0, arg1)
+   .. staticmethod:: subtract(arg0: KRPC.Expression, arg1: KRPC.Expression): KRPC.Expression
 
       Numerical subtraction.
 
-      :param KRPC.Expression arg0: The first operand.
-      :param KRPC.Expression arg1: The second operand.
-      :rtype: :class:`KRPC.Expression`
+      :param arg0: The first operand.
+      :param arg1: The second operand.
 
-   .. staticmethod:: multiply(arg0, arg1)
+   .. staticmethod:: multiply(arg0: KRPC.Expression, arg1: KRPC.Expression): KRPC.Expression
 
       Numerical multiplication.
 
-      :param KRPC.Expression arg0: The first operand.
-      :param KRPC.Expression arg1: The second operand.
-      :rtype: :class:`KRPC.Expression`
+      :param arg0: The first operand.
+      :param arg1: The second operand.
 
-   .. staticmethod:: divide(arg0, arg1)
+   .. staticmethod:: divide(arg0: KRPC.Expression, arg1: KRPC.Expression): KRPC.Expression
 
       Numerical division.
 
-      :param KRPC.Expression arg0: The first operand.
-      :param KRPC.Expression arg1: The second operand.
-      :rtype: :class:`KRPC.Expression`
+      :param arg0: The first operand.
+      :param arg1: The second operand.
 
-   .. staticmethod:: modulo(arg0, arg1)
+   .. staticmethod:: modulo(arg0: KRPC.Expression, arg1: KRPC.Expression): KRPC.Expression
 
       Numerical modulo operator.
 
-      :param KRPC.Expression arg0: The first operand.
-      :param KRPC.Expression arg1: The second operand.
+      :param arg0: The first operand.
+      :param arg1: The second operand.
       :returns: The remainder of arg0 divided by arg1
-      :rtype: :class:`KRPC.Expression`
 
-   .. staticmethod:: power(arg0, arg1)
+   .. staticmethod:: power(arg0: KRPC.Expression, arg1: KRPC.Expression): KRPC.Expression
 
       Numerical power operator.
 
-      :param KRPC.Expression arg0: The first operand.
-      :param KRPC.Expression arg1: The second operand.
+      :param arg0: The first operand.
+      :param arg1: The second operand.
       :returns: arg0 raised to the power of arg1, at the common type of the operands
-      :rtype: :class:`KRPC.Expression`
 
-   .. staticmethod:: left_shift(arg0, arg1)
+   .. staticmethod:: left_shift(arg0: KRPC.Expression, arg1: KRPC.Expression): KRPC.Expression
 
       Bitwise left shift.
 
-      :param KRPC.Expression arg0: The first operand.
-      :param KRPC.Expression arg1: The second operand.
-      :rtype: :class:`KRPC.Expression`
+      :param arg0: The first operand.
+      :param arg1: The second operand.
 
       .. note::
 
          Only the low 5 bits of the count are used for a 32-bit value, and the low 6 bits
          for a 64-bit value.
 
-   .. staticmethod:: right_shift(arg0, arg1)
+   .. staticmethod:: right_shift(arg0: KRPC.Expression, arg1: KRPC.Expression): KRPC.Expression
 
       Bitwise right shift.
 
-      :param KRPC.Expression arg0: The first operand.
-      :param KRPC.Expression arg1: The second operand.
-      :rtype: :class:`KRPC.Expression`
+      :param arg0: The first operand.
+      :param arg1: The second operand.
 
       .. note::
 
          Only the low 5 bits of the count are used for a 32-bit value, and the low 6 bits
          for a 64-bit value.
 
-   .. staticmethod:: cast(arg, type)
+   .. staticmethod:: cast(arg: KRPC.Expression, type: KRPC.Type): KRPC.Expression
 
       A value cast to the given type.
 
-      :param KRPC.Expression arg: The value to cast.
-      :param KRPC.Type type: Type to cast the argument to.
-      :rtype: :class:`KRPC.Expression`
+      :param arg: The value to cast.
+      :param type: Type to cast the argument to.
 
       .. note::
 
          A tuple or collection is cast element by element.
 
-   .. staticmethod:: parameter(name, type)
+   .. staticmethod:: parameter(name: string, type: KRPC.Type): KRPC.Expression
 
       A named parameter of a function.
 
-      :param string name: The name of the parameter.
-      :param KRPC.Type type: The type of the parameter.
+      :param name: The name of the parameter.
+      :param type: The type of the parameter.
       :returns: A named parameter.
-      :rtype: :class:`KRPC.Expression`
 
       .. note::
 
          A value is bound to it by name with :meth:`KRPC.Expression.invoke`, or by its position in
          the parameters of a :meth:`KRPC.Expression.lambda`.
 
-   .. staticmethod:: lambda(parameters, body)
+   .. staticmethod:: lambda(parameters: List, body: KRPC.Expression): KRPC.Expression
 
       A function with the given parameters and body.
 
-      :param List parameters: The parameters of the function.
-      :param KRPC.Expression body: The body of the function.
+      :param parameters: The parameters of the function.
+      :param body: The body of the function.
       :returns: A function.
-      :rtype: :class:`KRPC.Expression`
 
       .. note::
 
@@ -426,52 +383,47 @@ assembled and run.
          evaluated for its effects. A :meth:`KRPC.Expression.return` or :meth:`KRPC.Expression.return_nothing`
          statement ends the evaluation.
 
-   .. staticmethod:: invoke(function, args)
+   .. staticmethod:: invoke(function: KRPC.Expression, args: Map): KRPC.Expression
 
       A function call.
 
-      :param KRPC.Expression function: The function to call.
-      :param Map args: The arguments to call the function with.
+      :param function: The function to call.
+      :param args: The arguments to call the function with.
       :returns: A function call.
-      :rtype: :class:`KRPC.Expression`
 
-   .. staticmethod:: block(statements)
+   .. staticmethod:: block(statements: List): KRPC.Expression
 
       A block of statements, whose value is that of its last statement.
 
-      :param List statements: The statements.
-      :rtype: :class:`KRPC.Expression`
+      :param statements: The statements.
 
-   .. staticmethod:: block_with_variables(variables, statements)
+   .. staticmethod:: block_with_variables(variables: List, statements: List): KRPC.Expression
 
       A block of statements with local variables.
 
-      :param List variables: The local variables of the block.
-      :param List statements: The statements.
-      :rtype: :class:`KRPC.Expression`
+      :param variables: The local variables of the block.
+      :param statements: The statements.
 
       .. note::
 
          The value of the block is that of its last statement. The variables are in scope
          for the statements of the block, including within nested functions.
 
-   .. staticmethod:: variable(name, type)
+   .. staticmethod:: variable(name: string, type: KRPC.Type): KRPC.Expression
 
       A local variable, declared by :meth:`KRPC.Expression.block_with_variables`.
 
-      :param string name: The name of the variable.
-      :param KRPC.Type type: The type of the variable.
+      :param name: The name of the variable.
+      :param type: The type of the variable.
       :returns: A local variable.
-      :rtype: :class:`KRPC.Expression`
 
-   .. staticmethod:: state_variable(name, initial_value)
+   .. staticmethod:: state_variable(name: string, initial_value: KRPC.Expression): KRPC.Expression
 
       A variable that keeps its value between evaluations of a function.
 
-      :param string name: The name of the variable.
-      :param KRPC.Expression initial_value: The initial value of the variable.
+      :param name: The name of the variable.
+      :param initial_value: The initial value of the variable.
       :returns: A state variable.
-      :rtype: :class:`KRPC.Expression`
 
       .. note::
 
@@ -479,64 +431,59 @@ assembled and run.
          variable its type. The value belongs to the variable, so every function that
          contains it shares it.
 
-   .. staticmethod:: assign(variable, value)
+   .. staticmethod:: assign(variable: KRPC.Expression, value: KRPC.Expression): KRPC.Expression
 
       An assignment to a local variable, state variable or function parameter.
 
-      :param KRPC.Expression variable: The variable to assign to.
-      :param KRPC.Expression value: The value to assign.
-      :rtype: :class:`KRPC.Expression`
+      :param variable: The variable to assign to.
+      :param value: The value to assign.
 
       .. note::
 
          The value's type must be assignable to the variable's type. A numeric value of a
          different type is widened, and narrowing it requires a cast.
 
-   .. staticmethod:: if_then(condition, body)
+   .. staticmethod:: if_then(condition: KRPC.Expression, body: KRPC.Expression): KRPC.Expression
 
       An if statement, with no value.
 
-      :param KRPC.Expression condition: The boolean condition.
-      :param KRPC.Expression body: The statement evaluated when the condition is true.
-      :rtype: :class:`KRPC.Expression`
+      :param condition: The boolean condition.
+      :param body: The statement evaluated when the condition is true.
 
       .. note::
 
          Use :meth:`KRPC.Expression.conditional` for an if-then-else that produces a value.
 
-   .. staticmethod:: if_then_else(condition, body, else_body)
+   .. staticmethod:: if_then_else(condition: KRPC.Expression, body: KRPC.Expression, else_body: KRPC.Expression): KRPC.Expression
 
       An if-else statement, with no value.
 
-      :param KRPC.Expression condition: The boolean condition.
-      :param KRPC.Expression body: The statement evaluated when the condition is true.
-      :param KRPC.Expression else_body: The statement evaluated when the condition is false.
-      :rtype: :class:`KRPC.Expression`
+      :param condition: The boolean condition.
+      :param body: The statement evaluated when the condition is true.
+      :param else_body: The statement evaluated when the condition is false.
 
       .. note::
 
          Use :meth:`KRPC.Expression.conditional` for an if-then-else that produces a value.
 
-   .. staticmethod:: while(condition, body)
+   .. staticmethod:: while(condition: KRPC.Expression, body: KRPC.Expression): KRPC.Expression
 
       A while loop, which evaluates the body while the condition is true.
 
-      :param KRPC.Expression condition: The boolean condition.
-      :param KRPC.Expression body: The statement evaluated on each iteration.
-      :rtype: :class:`KRPC.Expression`
+      :param condition: The boolean condition.
+      :param body: The statement evaluated on each iteration.
 
       .. note::
 
          A :meth:`KRPC.Expression.break` or :meth:`KRPC.Expression.continue` in the body applies to this loop.
 
-   .. staticmethod:: for_each(variable, collection, body)
+   .. staticmethod:: for_each(variable: KRPC.Expression, collection: KRPC.Expression, body: KRPC.Expression): KRPC.Expression
 
       A loop that evaluates the body once for each value of a collection.
 
-      :param KRPC.Expression variable: The loop variable.
-      :param KRPC.Expression collection: The collection to iterate over.
-      :param KRPC.Expression body: The statement evaluated on each iteration.
-      :rtype: :class:`KRPC.Expression`
+      :param variable: The loop variable.
+      :param collection: The collection to iterate over.
+      :param body: The statement evaluated on each iteration.
 
       .. note::
 
@@ -544,39 +491,31 @@ assembled and run.
          :meth:`KRPC.Expression.block_with_variables`, or a parameter of an enclosing :meth:`KRPC.Expression.lambda`.
          A :meth:`KRPC.Expression.break` or :meth:`KRPC.Expression.continue` in the body applies to this loop.
 
-   .. staticmethod:: break()
+   .. staticmethod:: break(): KRPC.Expression
 
       A break statement, which ends the enclosing loop.
 
-      :rtype: :class:`KRPC.Expression`
-
-   .. staticmethod:: continue()
+   .. staticmethod:: continue(): KRPC.Expression
 
       A continue statement, which skips to the next iteration of the enclosing loop.
 
-      :rtype: :class:`KRPC.Expression`
-
-   .. staticmethod:: return(value)
+   .. staticmethod:: return(value: KRPC.Expression): KRPC.Expression
 
       A return statement, which ends the enclosing function with a value.
 
-      :param KRPC.Expression value: The value to return.
-      :rtype: :class:`KRPC.Expression`
+      :param value: The value to return.
 
-   .. staticmethod:: return_nothing()
+   .. staticmethod:: return_nothing(): KRPC.Expression
 
       A return statement, which ends the enclosing function with no value.
 
-      :rtype: :class:`KRPC.Expression`
-
-   .. staticmethod:: throw(service, name, message)
+   .. staticmethod:: throw(service: string, name: string, message: KRPC.Expression): KRPC.Expression
 
       A throw statement, which raises the named exception.
 
-      :param string service: The name of the service the exception is defined in.
-      :param string name: The name of the exception.
-      :param KRPC.Expression message: The message of the exception.
-      :rtype: :class:`KRPC.Expression`
+      :param service: The name of the service the exception is defined in.
+      :param name: The name of the exception.
+      :param message: The message of the exception.
 
       .. note::
 
@@ -585,251 +524,227 @@ assembled and run.
          ``Error`` raise :class:`KRPC.Error`. Throws an exception if the service does not
          declare it.
 
-   .. staticmethod:: try_catch(body, service, name, message, handler)
+   .. staticmethod:: try_catch(body: KRPC.Expression, service: string, name: string, message: KRPC.Expression | Types.none, handler: KRPC.Expression): KRPC.Expression
 
       A try-catch statement that handles the named exception.
 
-      :param KRPC.Expression body: The statement to evaluate.
-      :param string service: The name of the service the exception is defined in.
-      :param string name: The name of the exception.
+      :param body: The statement to evaluate.
+      :param service: The name of the service the exception is defined in.
+      :param name: The name of the exception.
       :param message: A string variable assigned the exception's message, or null.
-      :type message: :class:`KRPC.Expression` or ``Types.none``
-      :param KRPC.Expression handler: The statement evaluated when the exception is caught.
-      :rtype: :class:`KRPC.Expression`
+      :param handler: The statement evaluated when the exception is caught.
 
       .. note::
 
          Only an exception a service declares can be named, and :meth:`KRPC.Expression.try_catch_all`
          handles any exception. Throws an exception if the service does not declare it.
 
-   .. staticmethod:: try_catch_all(body, message, handler)
+   .. staticmethod:: try_catch_all(body: KRPC.Expression, message: KRPC.Expression | Types.none, handler: KRPC.Expression): KRPC.Expression
 
       A try-catch statement that handles any exception.
 
-      :param KRPC.Expression body: The statement to evaluate.
+      :param body: The statement to evaluate.
       :param message: A string variable assigned the exception's message, or null.
-      :type message: :class:`KRPC.Expression` or ``Types.none``
-      :param KRPC.Expression handler: The statement evaluated when an exception is caught.
-      :rtype: :class:`KRPC.Expression`
+      :param handler: The statement evaluated when an exception is caught.
 
-   .. staticmethod:: try_finally(body, finalizer)
+   .. staticmethod:: try_finally(body: KRPC.Expression, finalizer: KRPC.Expression): KRPC.Expression
 
       A try-finally statement.
 
-      :param KRPC.Expression body: The statement to evaluate.
-      :param KRPC.Expression finalizer: The statement evaluated after the body.
-      :rtype: :class:`KRPC.Expression`
+      :param body: The statement to evaluate.
+      :param finalizer: The statement evaluated after the body.
 
       .. note::
 
          The finalizer is evaluated after the body, whether or not the body raises an
          exception. A break, continue or return cannot leave the finalizer.
 
-   .. staticmethod:: create_tuple(elements)
+   .. staticmethod:: create_tuple(elements: List): KRPC.Expression
 
       A tuple of the given elements. Throws an exception if there are no elements or more
       than seven.
 
-      :param List elements: The elements.
+      :param elements: The elements.
       :returns: The tuple.
-      :rtype: :class:`KRPC.Expression`
 
-   .. staticmethod:: create_struct(type, field_values)
+   .. staticmethod:: create_struct(type: KRPC.Type, field_values: List): KRPC.Expression
 
       A structure with the given field values. Throws an exception if the field values do
       not match its fields.
 
-      :param KRPC.Type type: The type of the structure.
-      :param List field_values: The values of the structure's fields, in the order the structure declares them.
+      :param type: The type of the structure.
+      :param field_values: The values of the structure's fields, in the order the structure declares them.
       :returns: The structure.
-      :rtype: :class:`KRPC.Expression`
 
-   .. staticmethod:: create_list(values)
+   .. staticmethod:: create_list(values: List): KRPC.Expression
 
       A list of the given values, with numbers widened to their common type. Throws an
       exception if there are no values.
 
-      :param List values: The values.
+      :param values: The values.
       :returns: The list.
-      :rtype: :class:`KRPC.Expression`
 
-   .. staticmethod:: create_set(values)
+   .. staticmethod:: create_set(values: Set): KRPC.Expression
 
       A set of the given values, with numbers widened to their common type. Throws an
       exception if there are no values, or a value is null.
 
-      :param Set values: The values.
+      :param values: The values.
       :returns: The set.
-      :rtype: :class:`KRPC.Expression`
 
       .. note::
 
          The values are evaluated in an unspecified order.
 
-   .. staticmethod:: create_dictionary(keys, values)
+   .. staticmethod:: create_dictionary(keys: List, values: List): KRPC.Expression
 
       A dictionary of the given keys and corresponding values, with numbers widened to
       their common type. Throws an exception if there are no keys, the counts differ, the
       keys are not of a valid key type, or a key is null.
 
-      :param List keys: The keys.
-      :param List values: The values.
+      :param keys: The keys.
+      :param values: The values.
       :returns: The dictionary.
-      :rtype: :class:`KRPC.Expression`
 
       .. note::
 
          A repeated key takes the last of its values.
 
-   .. staticmethod:: create_empty_list(value_type)
+   .. staticmethod:: create_empty_list(value_type: KRPC.Type): KRPC.Expression
 
       An empty list of the given value type.
 
-      :param KRPC.Type value_type: The type of the values the list holds.
+      :param value_type: The type of the values the list holds.
       :returns: The empty list.
-      :rtype: :class:`KRPC.Expression`
 
-   .. staticmethod:: create_empty_set(value_type)
+   .. staticmethod:: create_empty_set(value_type: KRPC.Type): KRPC.Expression
 
       An empty set of the given value type. Throws an exception if the value type is
       nullable.
 
-      :param KRPC.Type value_type: The type of the values the set holds.
+      :param value_type: The type of the values the set holds.
       :returns: The empty set.
-      :rtype: :class:`KRPC.Expression`
 
-   .. staticmethod:: create_empty_dictionary(key_type, value_type)
+   .. staticmethod:: create_empty_dictionary(key_type: KRPC.Type, value_type: KRPC.Type): KRPC.Expression
 
       An empty dictionary of the given key and value types. Throws an exception if the
       key type is nullable or not a valid key type.
 
-      :param KRPC.Type key_type: The type of the dictionary's keys.
-      :param KRPC.Type value_type: The type of the dictionary's values.
+      :param key_type: The type of the dictionary's keys.
+      :param value_type: The type of the dictionary's values.
       :returns: The empty dictionary.
-      :rtype: :class:`KRPC.Expression`
 
-   .. staticmethod:: append(collection, value)
+   .. staticmethod:: append(collection: KRPC.Expression, value: KRPC.Expression): KRPC.Expression
 
       A statement adding a value to a list or a set.
 
-      :param KRPC.Expression collection: The list or set to add to.
-      :param KRPC.Expression value: The value to add.
-      :rtype: :class:`KRPC.Expression`
+      :param collection: The list or set to add to.
+      :param value: The value to add.
 
       .. note::
 
          The value goes on the end of a list. A set holding the value is left unchanged.
 
-   .. staticmethod:: set(collection, index, value)
+   .. staticmethod:: set(collection: KRPC.Expression, index: KRPC.Expression, value: KRPC.Expression): KRPC.Expression
 
       A statement setting an element of a list, or an entry of a dictionary.
 
-      :param KRPC.Expression collection: The list or dictionary.
-      :param KRPC.Expression index: The index of the element, counting from zero, or the key of the entry.
-      :param KRPC.Expression value: The value to set.
-      :rtype: :class:`KRPC.Expression`
+      :param collection: The list or dictionary.
+      :param index: The index of the element, counting from zero, or the key of the entry.
+      :param value: The value to set.
 
       .. note::
 
          A key the dictionary does not hold is added. Throws an exception if the index
          is out of range for the list.
 
-   .. staticmethod:: remove(collection, value)
+   .. staticmethod:: remove(collection: KRPC.Expression, value: KRPC.Expression): KRPC.Expression
 
       A removal of a value from a list or a set, or of an entry from a dictionary.
 
-      :param KRPC.Expression collection: The list, set or dictionary.
-      :param KRPC.Expression value: The value to remove, or the key of the entry to remove.
+      :param collection: The list, set or dictionary.
+      :param value: The value to remove, or the key of the entry to remove.
       :returns: Whether the collection held the value.
-      :rtype: :class:`KRPC.Expression`
 
       .. note::
 
          The first occurrence is removed from a list.
 
-   .. staticmethod:: remove_at(list, index)
+   .. staticmethod:: remove_at(list: KRPC.Expression, index: KRPC.Expression): KRPC.Expression
 
       A statement removing the element at an index of a list.
 
-      :param KRPC.Expression list: The list.
-      :param KRPC.Expression index: The index of the element, counting from zero.
-      :rtype: :class:`KRPC.Expression`
+      :param list: The list.
+      :param index: The index of the element, counting from zero.
 
       .. note::
 
          Throws an exception if the index is out of range.
 
-   .. staticmethod:: clear(collection)
+   .. staticmethod:: clear(collection: KRPC.Expression): KRPC.Expression
 
       A statement removing every value from a list or a set, or every entry from a dictionary.
 
-      :param KRPC.Expression collection: The list, set or dictionary.
-      :rtype: :class:`KRPC.Expression`
+      :param collection: The list, set or dictionary.
 
-   .. staticmethod:: dictionary_keys(dictionary)
+   .. staticmethod:: dictionary_keys(dictionary: KRPC.Expression): KRPC.Expression
 
       The keys of a dictionary, as a list.
 
-      :param KRPC.Expression dictionary: The dictionary.
+      :param dictionary: The dictionary.
       :returns: The keys of the dictionary.
-      :rtype: :class:`KRPC.Expression`
 
       .. note::
 
          The collection operations take the keys of a dictionary from here, and its values
          from :meth:`KRPC.Expression.dictionary_values`.
 
-   .. staticmethod:: dictionary_values(dictionary)
+   .. staticmethod:: dictionary_values(dictionary: KRPC.Expression): KRPC.Expression
 
       The values of a dictionary, as a list.
 
-      :param KRPC.Expression dictionary: The dictionary.
+      :param dictionary: The dictionary.
       :returns: The values of the dictionary.
-      :rtype: :class:`KRPC.Expression`
 
-   .. staticmethod:: to_list(arg)
+   .. staticmethod:: to_list(arg: KRPC.Expression): KRPC.Expression
 
       A collection as a list.
 
-      :param KRPC.Expression arg: The collection.
+      :param arg: The collection.
       :returns: The collection as a list.
-      :rtype: :class:`KRPC.Expression`
 
-   .. staticmethod:: to_set(arg)
+   .. staticmethod:: to_set(arg: KRPC.Expression): KRPC.Expression
 
       A collection as a set.
 
-      :param KRPC.Expression arg: The collection.
+      :param arg: The collection.
       :returns: The collection as a set.
-      :rtype: :class:`KRPC.Expression`
 
       .. note::
 
          Throws an exception if a value is null.
 
-   .. staticmethod:: build_dictionary(arg, key_func, value_func)
+   .. staticmethod:: build_dictionary(arg: KRPC.Expression, key_func: KRPC.Expression, value_func: KRPC.Expression): KRPC.Expression
 
       A dictionary built from a collection, with a key and a value computed from each
       element.
 
-      :param KRPC.Expression arg: The list or set.
-      :param KRPC.Expression key_func: The function computing an element's key.
-      :param KRPC.Expression value_func: The function computing an element's value.
+      :param arg: The list or set.
+      :param key_func: The function computing an element's key.
+      :param value_func: The function computing an element's value.
       :returns: The dictionary.
-      :rtype: :class:`KRPC.Expression`
 
       .. note::
 
          A repeated key takes the last of its values.
 
-   .. staticmethod:: get(arg, index)
+   .. staticmethod:: get(arg: KRPC.Expression, index: KRPC.Expression): KRPC.Expression
 
       An element of a tuple, list or dictionary.
 
-      :param KRPC.Expression arg: The tuple, list or dictionary.
-      :param KRPC.Expression index: The index or key of the element.
+      :param arg: The tuple, list or dictionary.
+      :param index: The index or key of the element.
       :returns: The element.
-      :rtype: :class:`KRPC.Expression`
 
       .. note::
 
@@ -837,23 +752,21 @@ assembled and run.
          dictionary a key. Throws an exception if the index is out of range or the key is
          missing, and for a tuple when the expression is created.
 
-   .. staticmethod:: get_field(arg, name)
+   .. staticmethod:: get_field(arg: KRPC.Expression, name: string): KRPC.Expression
 
       The value of a field of a structure. Throws an exception if the value is not a
       structure, or has no field of the given name.
 
-      :param KRPC.Expression arg: The structure.
-      :param string name: The name of the field to access.
+      :param arg: The structure.
+      :param name: The name of the field to access.
       :returns: The value of the field.
-      :rtype: :class:`KRPC.Expression`
 
-   .. staticmethod:: convert_to_string(arg)
+   .. staticmethod:: convert_to_string(arg: KRPC.Expression): KRPC.Expression
 
       The string representation of a value.
 
-      :param KRPC.Expression arg: The value to convert.
+      :param arg: The value to convert.
       :returns: The string representation of the value.
-      :rtype: :class:`KRPC.Expression`
 
       .. note::
 
@@ -861,519 +774,473 @@ assembled and run.
          formats it, which for a collection is the name of its type. Throws an exception if
          the value is null.
 
-   .. staticmethod:: string_concat(args)
+   .. staticmethod:: string_concat(args: List): KRPC.Expression
 
       The concatenation of strings.
 
-      :param List args: The strings to concatenate, in order.
+      :param args: The strings to concatenate, in order.
       :returns: The concatenated string.
-      :rtype: :class:`KRPC.Expression`
 
       .. note::
 
          Use :meth:`KRPC.Expression.convert_to_string` to convert other values to strings.
 
-   .. staticmethod:: string_length(arg)
+   .. staticmethod:: string_length(arg: KRPC.Expression): KRPC.Expression
 
       The number of characters in a string.
 
-      :param KRPC.Expression arg: The string.
+      :param arg: The string.
       :returns: The length of the string.
-      :rtype: :class:`KRPC.Expression`
 
-   .. staticmethod:: string_get(arg, index)
+   .. staticmethod:: string_get(arg: KRPC.Expression, index: KRPC.Expression): KRPC.Expression
 
       The character at the given position in a string, as a string of length one.
 
-      :param KRPC.Expression arg: The string.
-      :param KRPC.Expression index: The position of the character, counting from zero.
+      :param arg: The string.
+      :param index: The position of the character, counting from zero.
       :returns: The character at the given position.
-      :rtype: :class:`KRPC.Expression`
 
       .. note::
 
          Throws an exception if the index is out of range.
 
-   .. staticmethod:: string_substring(arg, start, length)
+   .. staticmethod:: string_substring(arg: KRPC.Expression, start: KRPC.Expression, length: KRPC.Expression): KRPC.Expression
 
       Part of a string.
 
-      :param KRPC.Expression arg: The string.
-      :param KRPC.Expression start: The position to start at, counting from zero.
-      :param KRPC.Expression length: The number of characters to take.
+      :param arg: The string.
+      :param start: The position to start at, counting from zero.
+      :param length: The number of characters to take.
       :returns: The substring.
-      :rtype: :class:`KRPC.Expression`
 
       .. note::
 
          Throws an exception if the start or the length is out of range.
 
-   .. staticmethod:: string_index_of(arg, value)
+   .. staticmethod:: string_index_of(arg: KRPC.Expression, value: KRPC.Expression): KRPC.Expression
 
       The position of the first occurrence of one string within another.
 
-      :param KRPC.Expression arg: The string to search.
-      :param KRPC.Expression value: The string to search for.
+      :param arg: The string to search.
+      :param value: The string to search for.
       :returns: The position of the value, counting from zero, or -1 if it does not occur.
-      :rtype: :class:`KRPC.Expression`
 
-   .. staticmethod:: string_contains(arg, value)
+   .. staticmethod:: string_contains(arg: KRPC.Expression, value: KRPC.Expression): KRPC.Expression
 
       Whether one string occurs within another.
 
-      :param KRPC.Expression arg: The string to search.
-      :param KRPC.Expression value: The string to search for.
+      :param arg: The string to search.
+      :param value: The string to search for.
       :returns: Whether the value occurs in the string.
-      :rtype: :class:`KRPC.Expression`
 
-   .. staticmethod:: string_starts_with(arg, value)
+   .. staticmethod:: string_starts_with(arg: KRPC.Expression, value: KRPC.Expression): KRPC.Expression
 
       Whether a string starts with another.
 
-      :param KRPC.Expression arg: The string to test.
-      :param KRPC.Expression value: The string to test for.
+      :param arg: The string to test.
+      :param value: The string to test for.
       :returns: Whether the string starts with the value.
-      :rtype: :class:`KRPC.Expression`
 
-   .. staticmethod:: string_ends_with(arg, value)
+   .. staticmethod:: string_ends_with(arg: KRPC.Expression, value: KRPC.Expression): KRPC.Expression
 
       Whether a string ends with another.
 
-      :param KRPC.Expression arg: The string to test.
-      :param KRPC.Expression value: The string to test for.
+      :param arg: The string to test.
+      :param value: The string to test for.
       :returns: Whether the string ends with the value.
-      :rtype: :class:`KRPC.Expression`
 
-   .. staticmethod:: string_to_upper(arg)
+   .. staticmethod:: string_to_upper(arg: KRPC.Expression): KRPC.Expression
 
       A string in upper case, independently of the game's language.
 
-      :param KRPC.Expression arg: The string.
+      :param arg: The string.
       :returns: The string in upper case.
-      :rtype: :class:`KRPC.Expression`
 
-   .. staticmethod:: string_to_lower(arg)
+   .. staticmethod:: string_to_lower(arg: KRPC.Expression): KRPC.Expression
 
       A string in lower case, independently of the game's language.
 
-      :param KRPC.Expression arg: The string.
+      :param arg: The string.
       :returns: The string in lower case.
-      :rtype: :class:`KRPC.Expression`
 
-   .. staticmethod:: string_trim(arg)
+   .. staticmethod:: string_trim(arg: KRPC.Expression): KRPC.Expression
 
       A string with white space removed from both ends.
 
-      :param KRPC.Expression arg: The string.
+      :param arg: The string.
       :returns: The trimmed string.
-      :rtype: :class:`KRPC.Expression`
 
-   .. staticmethod:: string_trim_start(arg)
+   .. staticmethod:: string_trim_start(arg: KRPC.Expression): KRPC.Expression
 
       A string with white space removed from its start.
 
-      :param KRPC.Expression arg: The string.
+      :param arg: The string.
       :returns: The trimmed string.
-      :rtype: :class:`KRPC.Expression`
 
-   .. staticmethod:: string_trim_end(arg)
+   .. staticmethod:: string_trim_end(arg: KRPC.Expression): KRPC.Expression
 
       A string with white space removed from its end.
 
-      :param KRPC.Expression arg: The string.
+      :param arg: The string.
       :returns: The trimmed string.
-      :rtype: :class:`KRPC.Expression`
 
-   .. staticmethod:: string_replace(arg, old_value, new_value)
+   .. staticmethod:: string_replace(arg: KRPC.Expression, old_value: KRPC.Expression, new_value: KRPC.Expression): KRPC.Expression
 
       A string with every occurrence of one string replaced by another.
 
-      :param KRPC.Expression arg: The string to search.
-      :param KRPC.Expression old_value: The string to replace.
-      :param KRPC.Expression new_value: The string to replace it with.
+      :param arg: The string to search.
+      :param old_value: The string to replace.
+      :param new_value: The string to replace it with.
       :returns: The string with the replacements made.
-      :rtype: :class:`KRPC.Expression`
 
       .. note::
 
          Throws an exception if the string to replace is empty.
 
-   .. staticmethod:: string_split(arg, separator)
+   .. staticmethod:: string_split(arg: KRPC.Expression, separator: KRPC.Expression): KRPC.Expression
 
       The parts of a string separated by another string.
 
-      :param KRPC.Expression arg: The string to split.
-      :param KRPC.Expression separator: The string that separates the parts.
+      :param arg: The string to split.
+      :param separator: The string that separates the parts.
       :returns: The parts of the string.
-      :rtype: :class:`KRPC.Expression`
 
-   .. staticmethod:: string_join(separator, values)
+   .. staticmethod:: string_join(separator: KRPC.Expression, values: KRPC.Expression): KRPC.Expression
 
       Strings joined together, separated by another string.
 
-      :param KRPC.Expression separator: The string to put between the values.
-      :param KRPC.Expression values: The strings to join.
+      :param separator: The string to put between the values.
+      :param values: The strings to join.
       :returns: The joined string.
-      :rtype: :class:`KRPC.Expression`
 
-   .. staticmethod:: count(arg)
+   .. staticmethod:: count(arg: KRPC.Expression): KRPC.Expression
 
       The number of values in a collection.
 
-      :param KRPC.Expression arg: The list, set or dictionary.
+      :param arg: The list, set or dictionary.
       :returns: The number of elements in the collection.
-      :rtype: :class:`KRPC.Expression`
 
-   .. staticmethod:: sum(arg)
+   .. staticmethod:: sum(arg: KRPC.Expression): KRPC.Expression
 
       The sum of the values of a collection.
 
-      :param KRPC.Expression arg: The list or set.
+      :param arg: The list or set.
       :returns: The sum of the elements in the collection.
-      :rtype: :class:`KRPC.Expression`
 
-   .. staticmethod:: max(arg)
+   .. staticmethod:: max(arg: KRPC.Expression): KRPC.Expression
 
       The largest value of a collection.
 
-      :param KRPC.Expression arg: The list or set.
+      :param arg: The list or set.
       :returns: The largest value in the collection.
-      :rtype: :class:`KRPC.Expression`
 
       .. note::
 
          Throws an exception if the collection is empty and its values are not nullable.
 
-   .. staticmethod:: min(arg)
+   .. staticmethod:: min(arg: KRPC.Expression): KRPC.Expression
 
       The smallest value of a collection.
 
-      :param KRPC.Expression arg: The list or set.
+      :param arg: The list or set.
       :returns: The smallest value in the collection.
-      :rtype: :class:`KRPC.Expression`
 
       .. note::
 
          Throws an exception if the collection is empty and its values are not nullable.
 
-   .. staticmethod:: average(arg)
+   .. staticmethod:: average(arg: KRPC.Expression): KRPC.Expression
 
       The average of the values of a collection.
 
-      :param KRPC.Expression arg: The list or set.
+      :param arg: The list or set.
       :returns: The average of the elements in the collection.
-      :rtype: :class:`KRPC.Expression`
 
       .. note::
 
          Throws an exception if the collection is empty and its values are not nullable.
 
-   .. staticmethod:: select(arg, func)
+   .. staticmethod:: select(arg: KRPC.Expression, func: KRPC.Expression): KRPC.Expression
 
       The result of a function for each value of a collection.
 
-      :param KRPC.Expression arg: The list or set.
-      :param KRPC.Expression func: The function, taking an element of the collection.
+      :param arg: The list or set.
+      :param func: The function, taking an element of the collection.
       :returns: The collection of function results.
-      :rtype: :class:`KRPC.Expression`
 
       .. note::
 
          The result is lazily evaluated. :meth:`KRPC.Expression.to_list` makes it concrete.
 
-   .. staticmethod:: where(arg, func)
+   .. staticmethod:: where(arg: KRPC.Expression, func: KRPC.Expression): KRPC.Expression
 
       The values of a collection for which a predicate function returns true.
 
-      :param KRPC.Expression arg: The list or set.
-      :param KRPC.Expression func: The predicate function, taking an element of the collection.
+      :param arg: The list or set.
+      :param func: The predicate function, taking an element of the collection.
       :returns: The filtered collection.
-      :rtype: :class:`KRPC.Expression`
 
       .. note::
 
          The result is lazily evaluated. :meth:`KRPC.Expression.to_list` makes it concrete.
 
-   .. staticmethod:: select_many(arg, func)
+   .. staticmethod:: select_many(arg: KRPC.Expression, func: KRPC.Expression): KRPC.Expression
 
       The values of the collections a function returns for each value of a collection,
       flattened into one.
 
-      :param KRPC.Expression arg: The list or set.
-      :param KRPC.Expression func: The function, taking an element of the collection and returning a collection.
+      :param arg: The list or set.
+      :param func: The function, taking an element of the collection and returning a collection.
       :returns: The flattened collection of function results.
-      :rtype: :class:`KRPC.Expression`
 
       .. note::
 
          The result is lazily evaluated. :meth:`KRPC.Expression.to_list` makes it concrete.
 
-   .. staticmethod:: contains(arg, value)
+   .. staticmethod:: contains(arg: KRPC.Expression, value: KRPC.Expression): KRPC.Expression
 
       Whether a collection contains a value.
 
-      :param KRPC.Expression arg: The collection.
-      :param KRPC.Expression value: The value to look for.
+      :param arg: The collection.
+      :param value: The value to look for.
       :returns: Whether the collection contains the value.
-      :rtype: :class:`KRPC.Expression`
 
-   .. staticmethod:: contains_key(dictionary, key)
+   .. staticmethod:: contains_key(dictionary: KRPC.Expression, key: KRPC.Expression): KRPC.Expression
 
       Whether a dictionary contains a key.
 
-      :param KRPC.Expression dictionary: The dictionary.
-      :param KRPC.Expression key: The key to look for.
+      :param dictionary: The dictionary.
+      :param key: The key to look for.
       :returns: Whether the dictionary contains the key.
-      :rtype: :class:`KRPC.Expression`
 
-   .. staticmethod:: aggregate(arg, func)
+   .. staticmethod:: aggregate(arg: KRPC.Expression, func: KRPC.Expression): KRPC.Expression
 
       The result of applying an accumulator function over a collection.
 
-      :param KRPC.Expression arg: The collection.
-      :param KRPC.Expression func: The accumulator function.
+      :param arg: The collection.
+      :param func: The accumulator function.
       :returns: The accumulated value.
-      :rtype: :class:`KRPC.Expression`
 
       .. note::
 
          Throws an exception if the collection is empty.
 
-   .. staticmethod:: aggregate_with_seed(arg, seed, func)
+   .. staticmethod:: aggregate_with_seed(arg: KRPC.Expression, seed: KRPC.Expression, func: KRPC.Expression): KRPC.Expression
 
       The result of applying an accumulator function over a collection, starting from a seed.
 
-      :param KRPC.Expression arg: The collection.
-      :param KRPC.Expression seed: The seed value.
-      :param KRPC.Expression func: The accumulator function.
+      :param arg: The collection.
+      :param seed: The seed value.
+      :param func: The accumulator function.
       :returns: The accumulated value.
-      :rtype: :class:`KRPC.Expression`
 
       .. note::
 
          The seed widens to the type of the accumulated value, the function's result.
 
-   .. staticmethod:: concat(arg1, arg2)
+   .. staticmethod:: concat(arg1: KRPC.Expression, arg2: KRPC.Expression): KRPC.Expression
 
       The values of one collection followed by those of another.
 
-      :param KRPC.Expression arg1: The first collection.
-      :param KRPC.Expression arg2: The second collection.
+      :param arg1: The first collection.
+      :param arg2: The second collection.
       :returns: The first collection followed by the second.
-      :rtype: :class:`KRPC.Expression`
 
       .. note::
 
          The result is lazily evaluated. :meth:`KRPC.Expression.to_list` makes it concrete.
 
-   .. staticmethod:: skip(arg, count)
+   .. staticmethod:: skip(arg: KRPC.Expression, count: KRPC.Expression): KRPC.Expression
 
       A collection without its first count values.
 
-      :param KRPC.Expression arg: The collection.
-      :param KRPC.Expression count: The number of values to skip.
+      :param arg: The collection.
+      :param count: The number of values to skip.
       :returns: The collection without its first count values.
-      :rtype: :class:`KRPC.Expression`
 
       .. note::
 
          The result is lazily evaluated. :meth:`KRPC.Expression.to_list` makes it concrete.
 
-   .. staticmethod:: take(arg, count)
+   .. staticmethod:: take(arg: KRPC.Expression, count: KRPC.Expression): KRPC.Expression
 
       The first count values of a collection.
 
-      :param KRPC.Expression arg: The collection.
-      :param KRPC.Expression count: The number of values to take.
+      :param arg: The collection.
+      :param count: The number of values to take.
       :returns: The first count values of the collection.
-      :rtype: :class:`KRPC.Expression`
 
       .. note::
 
          The result is lazily evaluated. :meth:`KRPC.Expression.to_list` makes it concrete.
 
-   .. staticmethod:: order_by(arg, key)
+   .. staticmethod:: order_by(arg: KRPC.Expression, key: KRPC.Expression): KRPC.Expression
 
       The values of a collection ordered by the key a function produces for each of them.
 
-      :param KRPC.Expression arg: The collection to order.
-      :param KRPC.Expression key: A function producing the key to order values by.
+      :param arg: The collection to order.
+      :param key: A function producing the key to order values by.
       :returns: The ordered collection.
-      :rtype: :class:`KRPC.Expression`
 
       .. note::
 
          The result is lazily evaluated. :meth:`KRPC.Expression.to_list` makes it concrete.
 
-   .. staticmethod:: all(arg, predicate)
+   .. staticmethod:: all(arg: KRPC.Expression, predicate: KRPC.Expression): KRPC.Expression
 
       Whether a predicate function returns true for every value of a collection.
 
-      :param KRPC.Expression arg: The collection.
-      :param KRPC.Expression predicate: The predicate function.
+      :param arg: The collection.
+      :param predicate: The predicate function.
       :returns: Whether all items satisfy the predicate.
-      :rtype: :class:`KRPC.Expression`
 
-   .. staticmethod:: any(arg, predicate)
+   .. staticmethod:: any(arg: KRPC.Expression, predicate: KRPC.Expression): KRPC.Expression
 
       Whether a predicate function returns true for any value of a collection.
 
-      :param KRPC.Expression arg: The collection.
-      :param KRPC.Expression predicate: The predicate function.
+      :param arg: The collection.
+      :param predicate: The predicate function.
       :returns: Whether any item satisfies the predicate.
-      :rtype: :class:`KRPC.Expression`
 
-   .. staticmethod:: first(arg)
+   .. staticmethod:: first(arg: KRPC.Expression): KRPC.Expression
 
       The first value of a collection.
 
-      :param KRPC.Expression arg: The collection.
+      :param arg: The collection.
       :returns: The first value.
-      :rtype: :class:`KRPC.Expression`
 
       .. note::
 
          Throws an exception if the collection is empty.
 
-   .. staticmethod:: last(arg)
+   .. staticmethod:: last(arg: KRPC.Expression): KRPC.Expression
 
       The last value of a collection.
 
-      :param KRPC.Expression arg: The collection.
+      :param arg: The collection.
       :returns: The last value.
-      :rtype: :class:`KRPC.Expression`
 
       .. note::
 
          Throws an exception if the collection is empty.
 
-   .. staticmethod:: element_at(arg, index)
+   .. staticmethod:: element_at(arg: KRPC.Expression, index: KRPC.Expression): KRPC.Expression
 
       The value at the given position in a collection.
 
-      :param KRPC.Expression arg: The collection.
-      :param KRPC.Expression index: The position of the value, counting from zero.
+      :param arg: The collection.
+      :param index: The position of the value, counting from zero.
       :returns: The value at the given position.
-      :rtype: :class:`KRPC.Expression`
 
       .. note::
 
          Throws an exception if the index is out of range.
 
-   .. staticmethod:: min_by(arg, key)
+   .. staticmethod:: min_by(arg: KRPC.Expression, key: KRPC.Expression): KRPC.Expression
 
       The value of a collection with the smallest key.
 
-      :param KRPC.Expression arg: The collection.
-      :param KRPC.Expression key: A function producing the key to compare values by.
+      :param arg: The collection.
+      :param key: A function producing the key to compare values by.
       :returns: The value with the smallest key.
-      :rtype: :class:`KRPC.Expression`
 
       .. note::
 
          Throws an exception if the collection is empty.
 
-   .. staticmethod:: max_by(arg, key)
+   .. staticmethod:: max_by(arg: KRPC.Expression, key: KRPC.Expression): KRPC.Expression
 
       The value of a collection with the largest key.
 
-      :param KRPC.Expression arg: The collection.
-      :param KRPC.Expression key: A function producing the key to compare values by.
+      :param arg: The collection.
+      :param key: A function producing the key to compare values by.
       :returns: The value with the largest key.
-      :rtype: :class:`KRPC.Expression`
 
       .. note::
 
          Throws an exception if the collection is empty.
 
-   .. staticmethod:: distinct(arg)
+   .. staticmethod:: distinct(arg: KRPC.Expression): KRPC.Expression
 
       The values of a collection with duplicates removed, keeping the first
       occurrence of each.
 
-      :param KRPC.Expression arg: The collection.
+      :param arg: The collection.
       :returns: The distinct values of the collection.
-      :rtype: :class:`KRPC.Expression`
 
       .. note::
 
          The result is lazily evaluated. :meth:`KRPC.Expression.to_list` makes it concrete.
 
-   .. staticmethod:: reverse(arg)
+   .. staticmethod:: reverse(arg: KRPC.Expression): KRPC.Expression
 
       The values of a collection in the opposite order.
 
-      :param KRPC.Expression arg: The collection.
+      :param arg: The collection.
       :returns: The reversed collection.
-      :rtype: :class:`KRPC.Expression`
 
       .. note::
 
          The result is lazily evaluated. :meth:`KRPC.Expression.to_list` makes it concrete.
 
-   .. staticmethod:: union(arg1, arg2)
+   .. staticmethod:: union(arg1: KRPC.Expression, arg2: KRPC.Expression): KRPC.Expression
 
       The values in either of two collections, with duplicates removed.
 
-      :param KRPC.Expression arg1: The first collection.
-      :param KRPC.Expression arg2: The second collection.
+      :param arg1: The first collection.
+      :param arg2: The second collection.
       :returns: The union of the two collections.
-      :rtype: :class:`KRPC.Expression`
 
       .. note::
 
          The result is lazily evaluated. :meth:`KRPC.Expression.to_list` makes it concrete.
 
-   .. staticmethod:: intersect(arg1, arg2)
+   .. staticmethod:: intersect(arg1: KRPC.Expression, arg2: KRPC.Expression): KRPC.Expression
 
       The values in both of two collections, with duplicates removed.
 
-      :param KRPC.Expression arg1: The first collection.
-      :param KRPC.Expression arg2: The second collection.
+      :param arg1: The first collection.
+      :param arg2: The second collection.
       :returns: The intersection of the two collections.
-      :rtype: :class:`KRPC.Expression`
 
       .. note::
 
          The result is lazily evaluated. :meth:`KRPC.Expression.to_list` makes it concrete.
 
-   .. staticmethod:: except(arg1, arg2)
+   .. staticmethod:: except(arg1: KRPC.Expression, arg2: KRPC.Expression): KRPC.Expression
 
       The values of the first collection that are not in the second, with
       duplicates removed.
 
-      :param KRPC.Expression arg1: The first collection.
-      :param KRPC.Expression arg2: The second collection.
+      :param arg1: The first collection.
+      :param arg2: The second collection.
       :returns: The difference between the two collections.
-      :rtype: :class:`KRPC.Expression`
 
       .. note::
 
          The result is lazily evaluated. :meth:`KRPC.Expression.to_list` makes it concrete.
 
-   .. staticmethod:: zip(arg1, arg2, func)
+   .. staticmethod:: zip(arg1: KRPC.Expression, arg2: KRPC.Expression, func: KRPC.Expression): KRPC.Expression
 
       The results of a function applied to the values of two collections in pairs.
 
-      :param KRPC.Expression arg1: The first collection.
-      :param KRPC.Expression arg2: The second collection.
-      :param KRPC.Expression func: A function combining a value from each collection.
+      :param arg1: The first collection.
+      :param arg2: The second collection.
+      :param func: A function combining a value from each collection.
       :returns: The combined collection.
-      :rtype: :class:`KRPC.Expression`
 
       .. note::
 
          The result is as long as the shorter of the two collections. It is lazily
          evaluated, and :meth:`KRPC.Expression.to_list` makes it concrete.
 
-   .. staticmethod:: group_by(arg, key)
+   .. staticmethod:: group_by(arg: KRPC.Expression, key: KRPC.Expression): KRPC.Expression
 
       The values of a collection grouped by the key a function produces for each of them.
 
-      :param KRPC.Expression arg: The collection.
-      :param KRPC.Expression key: A function producing the key to group values by.
+      :param arg: The collection.
+      :param key: A function producing the key to group values by.
       :returns: A dictionary of each key to the values that produced it.
-      :rtype: :class:`KRPC.Expression`
 
 
 
@@ -1381,148 +1248,118 @@ assembled and run.
 
    The type of a value a procedure takes or returns.
 
-   .. staticmethod:: double()
+   .. staticmethod:: double(): KRPC.Type
 
       A double precision floating point number type.
 
-      :rtype: :class:`KRPC.Type`
-
-   .. staticmethod:: float()
+   .. staticmethod:: float(): KRPC.Type
 
       A single precision floating point number type.
 
-      :rtype: :class:`KRPC.Type`
-
-   .. staticmethod:: int()
+   .. staticmethod:: int(): KRPC.Type
 
       A signed 32-bit integer type.
 
-      :rtype: :class:`KRPC.Type`
-
-   .. staticmethod:: long()
+   .. staticmethod:: long(): KRPC.Type
 
       A signed 64-bit integer type.
 
-      :rtype: :class:`KRPC.Type`
-
-   .. staticmethod:: u_int()
+   .. staticmethod:: u_int(): KRPC.Type
 
       An unsigned 32-bit integer type.
 
-      :rtype: :class:`KRPC.Type`
-
-   .. staticmethod:: u_long()
+   .. staticmethod:: u_long(): KRPC.Type
 
       An unsigned 64-bit integer type.
 
-      :rtype: :class:`KRPC.Type`
-
-   .. staticmethod:: bool()
+   .. staticmethod:: bool(): KRPC.Type
 
       A boolean type.
 
-      :rtype: :class:`KRPC.Type`
-
-   .. staticmethod:: string()
+   .. staticmethod:: string(): KRPC.Type
 
       A string type.
 
-      :rtype: :class:`KRPC.Type`
-
-   .. staticmethod:: bytes()
+   .. staticmethod:: bytes(): KRPC.Type
 
       A byte sequence type.
 
-      :rtype: :class:`KRPC.Type`
-
-   .. staticmethod:: class_type(service, name)
+   .. staticmethod:: class_type(service: string, name: string): KRPC.Type
 
       The type of a class defined by a service.
 
-      :param string service: The name of the service the class is defined in.
-      :param string name: The name of the class.
-      :rtype: :class:`KRPC.Type`
+      :param service: The name of the service the class is defined in.
+      :param name: The name of the class.
 
-   .. staticmethod:: enumeration_type(service, name)
+   .. staticmethod:: enumeration_type(service: string, name: string): KRPC.Type
 
       The type of an enumeration defined by a service.
 
-      :param string service: The name of the service the enumeration is defined in.
-      :param string name: The name of the enumeration.
-      :rtype: :class:`KRPC.Type`
+      :param service: The name of the service the enumeration is defined in.
+      :param name: The name of the enumeration.
 
-   .. staticmethod:: struct_type(service, name)
+   .. staticmethod:: struct_type(service: string, name: string): KRPC.Type
 
       The type of a structure defined by a service.
 
-      :param string service: The name of the service the structure is defined in.
-      :param string name: The name of the structure.
-      :rtype: :class:`KRPC.Type`
+      :param service: The name of the service the structure is defined in.
+      :param name: The name of the structure.
 
-   .. staticmethod:: tuple_type(value_types)
+   .. staticmethod:: tuple_type(value_types: List): KRPC.Type
 
       A tuple type. Throws an exception if there are no element types or more than seven.
 
-      :param List value_types: The types of the elements of the tuple.
-      :rtype: :class:`KRPC.Type`
+      :param value_types: The types of the elements of the tuple.
 
-   .. staticmethod:: list_type(value_type)
+   .. staticmethod:: list_type(value_type: KRPC.Type): KRPC.Type
 
       A list type.
 
-      :param KRPC.Type value_type: The type of the elements of the list.
-      :rtype: :class:`KRPC.Type`
+      :param value_type: The type of the elements of the list.
 
-   .. staticmethod:: set_type(value_type)
+   .. staticmethod:: set_type(value_type: KRPC.Type): KRPC.Type
 
       A set type. Throws an exception if the element type is nullable.
 
-      :param KRPC.Type value_type: The type of the elements of the set.
-      :rtype: :class:`KRPC.Type`
+      :param value_type: The type of the elements of the set.
 
-   .. staticmethod:: dictionary_type(key_type, value_type)
+   .. staticmethod:: dictionary_type(key_type: KRPC.Type, value_type: KRPC.Type): KRPC.Type
 
       A dictionary type. Throws an exception if the key type is nullable or not a valid
       key type.
 
-      :param KRPC.Type key_type: The type of the keys of the dictionary.
-      :param KRPC.Type value_type: The type of the values of the dictionary.
-      :rtype: :class:`KRPC.Type`
+      :param key_type: The type of the keys of the dictionary.
+      :param value_type: The type of the values of the dictionary.
 
-   .. staticmethod:: nullable_type(value_type)
+   .. staticmethod:: nullable_type(value_type: KRPC.Type): KRPC.Type
 
       A nullable type, holding a value of the given type or null.
 
-      :param KRPC.Type value_type: The type of the value.
-      :rtype: :class:`KRPC.Type`
+      :param value_type: The type of the value.
 
    .. attribute:: code: KRPC.TypeCode
 
       The kind of the type.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KRPC.TypeCode`
 
    .. attribute:: service: string
 
       The service a class, enumeration or structure type is defined in, or an empty string.
 
       :Attribute: Read-only, cannot be set
-      :rtype: string
 
    .. attribute:: name: string
 
       The name of a class, enumeration or structure type, or an empty string.
 
       :Attribute: Read-only, cannot be set
-      :rtype: string
 
    .. attribute:: types: List
 
       The types of the elements of a tuple, list, set or dictionary type.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
       .. note::
 
@@ -1534,7 +1371,6 @@ assembled and run.
       Whether a value of the type may be null.
 
       :Attribute: Read-only, cannot be set
-      :rtype: boolean
 
       .. note::
 

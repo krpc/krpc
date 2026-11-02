@@ -23,14 +23,12 @@ Scroll View
       The rect transform for the UI object.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`UI.RectTransform`
 
    .. attribute:: layout_element: UI.LayoutElement
 
       How much space the UI object asks a layout for.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`UI.LayoutElement`
 
       .. note::
 
@@ -42,7 +40,6 @@ Scroll View
       Whether the UI object is visible.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
       .. note::
 
@@ -56,21 +53,18 @@ Scroll View
       The panel that is scrolled, which the elements to show are added to.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`UI.Panel`
 
    .. attribute:: horizontal: boolean
 
       Whether the view can be scrolled from side to side.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. attribute:: vertical: boolean
 
       Whether the view can be scrolled up and down.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. method:: remove()
 

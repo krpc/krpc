@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=eadf7411" />
   
@@ -1103,265 +1104,217 @@
   <section id="camera">
 <h1>Camera<a class="headerlink" href="#camera" title="Link to this heading">#</a></h1>
 <dl class="lua class">
-<dt class="sig sig-object lua" id="SpaceCenter.Camera">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">SpaceCenter.</span></span><span class="sig-name descname"><span class="pre">Camera</span></span><a class="headerlink" href="#SpaceCenter.Camera" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Camera">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">SpaceCenter.</span></span><span class="sig-name descname"><span class="pre">Camera</span></span><a class="headerlink" href="#lua-SpaceCenter.Camera" title="Link to this definition">#</a></dt>
 <dd><p>Controls the game’s camera.
-Obtained by calling <a class="reference internal" href="space-center.html#SpaceCenter.SpaceCenter.camera" title="SpaceCenter.SpaceCenter.camera"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.camera</span></code></a>.</p>
+Obtained by calling <a class="reference internal" href="space-center.html#lua-SpaceCenter.camera" title="SpaceCenter.camera"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.camera</span></code></a>.</p>
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Camera.mode">
-<span class="sig-name descname"><span class="pre">mode</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.CameraMode</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Camera.mode" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Camera.mode">
+<span class="sig-name descname"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-SpaceCenter.CameraMode" title="SpaceCenter.CameraMode"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.CameraMode</span></code></a><a class="headerlink" href="#lua-SpaceCenter.Camera.mode" title="Link to this definition">#</a></dt>
 <dd><p>The current mode of the camera.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#SpaceCenter.CameraMode" title="SpaceCenter.CameraMode"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.CameraMode</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.Camera.next_camera">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">next_camera</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Camera.next_camera" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Camera.next_camera">
+<span class="sig-name descname"><span class="pre">next_camera</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-SpaceCenter.Camera.next_camera" title="Link to this definition">#</a></dt>
 <dd><p>Switch to the next available camera.
 In flight, this moves to the next flight camera mode. In IVA, it moves the
 view to the next crew member in the active vessel.</p>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.Camera.previous_camera">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">previous_camera</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Camera.previous_camera" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Camera.previous_camera">
+<span class="sig-name descname"><span class="pre">previous_camera</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-SpaceCenter.Camera.previous_camera" title="Link to this definition">#</a></dt>
 <dd><p>Switch to the previous available camera.
 In flight, this moves to the previous flight camera mode. In IVA, it moves
 the view to the previous crew member in the active vessel.</p>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Camera.pitch">
-<span class="sig-name descname"><span class="pre">pitch</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Camera.pitch" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Camera.pitch">
+<span class="sig-name descname"><span class="pre">pitch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Camera.pitch" title="Link to this definition">#</a></dt>
 <dd><p>The pitch of the camera, in degrees.
-A value between <a class="reference internal" href="#SpaceCenter.SpaceCenter.Camera.min_pitch" title="SpaceCenter.SpaceCenter.Camera.min_pitch"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Camera.min_pitch</span></code></a> and <a class="reference internal" href="#SpaceCenter.SpaceCenter.Camera.max_pitch" title="SpaceCenter.SpaceCenter.Camera.max_pitch"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Camera.max_pitch</span></code></a></p>
+A value between <a class="reference internal" href="#lua-SpaceCenter.Camera.min_pitch" title="SpaceCenter.Camera.min_pitch"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Camera.min_pitch</span></code></a> and <a class="reference internal" href="#lua-SpaceCenter.Camera.max_pitch" title="SpaceCenter.Camera.max_pitch"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Camera.max_pitch</span></code></a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Camera.heading">
-<span class="sig-name descname"><span class="pre">heading</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Camera.heading" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Camera.heading">
+<span class="sig-name descname"><span class="pre">heading</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Camera.heading" title="Link to this definition">#</a></dt>
 <dd><p>The heading of the camera, in degrees.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Camera.distance">
-<span class="sig-name descname"><span class="pre">distance</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Camera.distance" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Camera.distance">
+<span class="sig-name descname"><span class="pre">distance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Camera.distance" title="Link to this definition">#</a></dt>
 <dd><p>The distance from the camera to the subject, in meters.
-A value between <a class="reference internal" href="#SpaceCenter.SpaceCenter.Camera.min_distance" title="SpaceCenter.SpaceCenter.Camera.min_distance"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Camera.min_distance</span></code></a> and <a class="reference internal" href="#SpaceCenter.SpaceCenter.Camera.max_distance" title="SpaceCenter.SpaceCenter.Camera.max_distance"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Camera.max_distance</span></code></a>.</p>
+A value between <a class="reference internal" href="#lua-SpaceCenter.Camera.min_distance" title="SpaceCenter.Camera.min_distance"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Camera.min_distance</span></code></a> and <a class="reference internal" href="#lua-SpaceCenter.Camera.max_distance" title="SpaceCenter.Camera.max_distance"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Camera.max_distance</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Camera.fo_v">
-<span class="sig-name descname"><span class="pre">fo_v</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Camera.fo_v" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Camera.fo_v">
+<span class="sig-name descname"><span class="pre">fo_v</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Camera.fo_v" title="Link to this definition">#</a></dt>
 <dd><p>The Field of View of the camera, in degrees.
-A value between <a class="reference internal" href="#SpaceCenter.SpaceCenter.Camera.min_fo_v" title="SpaceCenter.SpaceCenter.Camera.min_fo_v"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Camera.min_fo_v</span></code></a> and <a class="reference internal" href="#SpaceCenter.SpaceCenter.Camera.max_fo_v" title="SpaceCenter.SpaceCenter.Camera.max_fo_v"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Camera.max_fo_v</span></code></a>.</p>
+A value between <a class="reference internal" href="#lua-SpaceCenter.Camera.min_fo_v" title="SpaceCenter.Camera.min_fo_v"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Camera.min_fo_v</span></code></a> and <a class="reference internal" href="#lua-SpaceCenter.Camera.max_fo_v" title="SpaceCenter.Camera.max_fo_v"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Camera.max_fo_v</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Camera.min_pitch">
-<span class="sig-name descname"><span class="pre">min_pitch</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Camera.min_pitch" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Camera.min_pitch">
+<span class="sig-name descname"><span class="pre">min_pitch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Camera.min_pitch" title="Link to this definition">#</a></dt>
 <dd><p>The minimum pitch of the camera.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Camera.max_pitch">
-<span class="sig-name descname"><span class="pre">max_pitch</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Camera.max_pitch" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Camera.max_pitch">
+<span class="sig-name descname"><span class="pre">max_pitch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Camera.max_pitch" title="Link to this definition">#</a></dt>
 <dd><p>The maximum pitch of the camera.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Camera.min_distance">
-<span class="sig-name descname"><span class="pre">min_distance</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Camera.min_distance" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Camera.min_distance">
+<span class="sig-name descname"><span class="pre">min_distance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Camera.min_distance" title="Link to this definition">#</a></dt>
 <dd><p>Minimum distance from the camera to the subject, in meters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Camera.max_distance">
-<span class="sig-name descname"><span class="pre">max_distance</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Camera.max_distance" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Camera.max_distance">
+<span class="sig-name descname"><span class="pre">max_distance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Camera.max_distance" title="Link to this definition">#</a></dt>
 <dd><p>Maximum distance from the camera to the subject, in meters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Camera.min_fo_v">
-<span class="sig-name descname"><span class="pre">min_fo_v</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Camera.min_fo_v" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Camera.min_fo_v">
+<span class="sig-name descname"><span class="pre">min_fo_v</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Camera.min_fo_v" title="Link to this definition">#</a></dt>
 <dd><p>The minimum field of view the camera in degrees.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Camera.max_fo_v">
-<span class="sig-name descname"><span class="pre">max_fo_v</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Camera.max_fo_v" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Camera.max_fo_v">
+<span class="sig-name descname"><span class="pre">max_fo_v</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Camera.max_fo_v" title="Link to this definition">#</a></dt>
 <dd><p>The maximum field of view the camera in degrees.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Camera.default_distance">
-<span class="sig-name descname"><span class="pre">default_distance</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Camera.default_distance" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Camera.default_distance">
+<span class="sig-name descname"><span class="pre">default_distance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Camera.default_distance" title="Link to this definition">#</a></dt>
 <dd><p>Default distance from the camera to the subject, in meters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Camera.default_fo_v">
-<span class="sig-name descname"><span class="pre">default_fo_v</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Camera.default_fo_v" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Camera.default_fo_v">
+<span class="sig-name descname"><span class="pre">default_fo_v</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Camera.default_fo_v" title="Link to this definition">#</a></dt>
 <dd><p>The default field of view the camera in degrees.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Camera.focussed_body">
-<span class="sig-name descname"><span class="pre">focussed_body</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.CelestialBody</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Camera.focussed_body" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Camera.focussed_body">
+<span class="sig-name descname"><span class="pre">focussed_body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="celestial-body.html#lua-SpaceCenter.CelestialBody" title="SpaceCenter.CelestialBody"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.CelestialBody</span></code></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../../lua.html#lua-krpc.Types.none" title="krpc.Types.none"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Types.none</span></code></a><a class="headerlink" href="#lua-SpaceCenter.Camera.focussed_body" title="Link to this definition">#</a></dt>
 <dd><p>In map mode, the celestial body that the camera is focussed on.
 Returns <code class="docutils literal notranslate"><span class="pre">nil</span></code> if the camera is not focussed on a celestial body.
-Throws <a class="reference internal" href="../krpc/krpc.html#KRPC.InvalidOperationException" title="KRPC.InvalidOperationException"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KRPC.InvalidOperationException</span></code></a> if the camera is not in map mode.</p>
+Throws <a class="reference internal" href="../krpc/krpc.html#lua-KRPC.InvalidOperationException" title="KRPC.InvalidOperationException"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KRPC.InvalidOperationException</span></code></a> if the camera is not in map mode.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="celestial-body.html#SpaceCenter.CelestialBody" title="SpaceCenter.CelestialBody"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.CelestialBody</span></code></a> or <code class="docutils literal notranslate"><span class="pre">Types.none</span></code></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Camera.focussed_vessel">
-<span class="sig-name descname"><span class="pre">focussed_vessel</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.Vessel</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Camera.focussed_vessel" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Camera.focussed_vessel">
+<span class="sig-name descname"><span class="pre">focussed_vessel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="vessel.html#lua-SpaceCenter.Vessel" title="SpaceCenter.Vessel"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.Vessel</span></code></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../../lua.html#lua-krpc.Types.none" title="krpc.Types.none"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Types.none</span></code></a><a class="headerlink" href="#lua-SpaceCenter.Camera.focussed_vessel" title="Link to this definition">#</a></dt>
 <dd><p>In map mode, the vessel that the camera is focussed on.
 Returns <code class="docutils literal notranslate"><span class="pre">nil</span></code> if the camera is not focussed on a vessel.
-Throws <a class="reference internal" href="../krpc/krpc.html#KRPC.InvalidOperationException" title="KRPC.InvalidOperationException"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KRPC.InvalidOperationException</span></code></a> if the camera is not in map mode.</p>
+Throws <a class="reference internal" href="../krpc/krpc.html#lua-KRPC.InvalidOperationException" title="KRPC.InvalidOperationException"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KRPC.InvalidOperationException</span></code></a> if the camera is not in map mode.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="vessel.html#SpaceCenter.Vessel" title="SpaceCenter.Vessel"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.Vessel</span></code></a> or <code class="docutils literal notranslate"><span class="pre">Types.none</span></code></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Camera.focussed_node">
-<span class="sig-name descname"><span class="pre">focussed_node</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.Node</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Camera.focussed_node" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Camera.focussed_node">
+<span class="sig-name descname"><span class="pre">focussed_node</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="node.html#lua-SpaceCenter.Node" title="SpaceCenter.Node"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.Node</span></code></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../../lua.html#lua-krpc.Types.none" title="krpc.Types.none"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Types.none</span></code></a><a class="headerlink" href="#lua-SpaceCenter.Camera.focussed_node" title="Link to this definition">#</a></dt>
 <dd><p>In map mode, the maneuver node that the camera is focussed on.
 Returns <code class="docutils literal notranslate"><span class="pre">nil</span></code> if the camera is not focussed on a maneuver node.
-Throws <a class="reference internal" href="../krpc/krpc.html#KRPC.InvalidOperationException" title="KRPC.InvalidOperationException"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KRPC.InvalidOperationException</span></code></a> if the camera is not in map mode.</p>
+Throws <a class="reference internal" href="../krpc/krpc.html#lua-KRPC.InvalidOperationException" title="KRPC.InvalidOperationException"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KRPC.InvalidOperationException</span></code></a> if the camera is not in map mode.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="node.html#SpaceCenter.Node" title="SpaceCenter.Node"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.Node</span></code></a> or <code class="docutils literal notranslate"><span class="pre">Types.none</span></code></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Camera.focussed_crew_member">
-<span class="sig-name descname"><span class="pre">focussed_crew_member</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.CrewMember</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Camera.focussed_crew_member" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Camera.focussed_crew_member">
+<span class="sig-name descname"><span class="pre">focussed_crew_member</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="vessel.html#lua-SpaceCenter.CrewMember" title="SpaceCenter.CrewMember"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.CrewMember</span></code></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../../lua.html#lua-krpc.Types.none" title="krpc.Types.none"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Types.none</span></code></a><a class="headerlink" href="#lua-SpaceCenter.Camera.focussed_crew_member" title="Link to this definition">#</a></dt>
 <dd><p>In IVA mode, the crew member whose view the camera is showing.
 Returns <code class="docutils literal notranslate"><span class="pre">nil</span></code> if no crew member is in view.
-Throws <a class="reference internal" href="../krpc/krpc.html#KRPC.InvalidOperationException" title="KRPC.InvalidOperationException"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KRPC.InvalidOperationException</span></code></a> if the camera is not in IVA mode.
+Throws <a class="reference internal" href="../krpc/krpc.html#lua-KRPC.InvalidOperationException" title="KRPC.InvalidOperationException"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KRPC.InvalidOperationException</span></code></a> if the camera is not in IVA mode.
 Setting this moves the view to the given crew member, switching the camera to
 IVA mode if it is not already. The crew member must be in the active vessel,
 and in a part whose interior the game has placed them in.</p>
@@ -1369,57 +1322,54 @@ and in a part whose interior the game has placed them in.</p>
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="vessel.html#SpaceCenter.CrewMember" title="SpaceCenter.CrewMember"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.CrewMember</span></code></a> or <code class="docutils literal notranslate"><span class="pre">Types.none</span></code></p>
-</dd>
 </dl>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="lua class">
-<dt class="sig sig-object lua" id="SpaceCenter.CameraMode">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">SpaceCenter.</span></span><span class="sig-name descname"><span class="pre">CameraMode</span></span><a class="headerlink" href="#SpaceCenter.CameraMode" title="Link to this definition">#</a></dt>
-<dd><p>See <a class="reference internal" href="#SpaceCenter.SpaceCenter.Camera.mode" title="SpaceCenter.SpaceCenter.Camera.mode"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Camera.mode</span></code></a>.</p>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CameraMode">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">SpaceCenter.</span></span><span class="sig-name descname"><span class="pre">CameraMode</span></span><a class="headerlink" href="#lua-SpaceCenter.CameraMode" title="Link to this definition">#</a></dt>
+<dd><p>See <a class="reference internal" href="#lua-SpaceCenter.Camera.mode" title="SpaceCenter.Camera.mode"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Camera.mode</span></code></a>.</p>
 <dl class="lua data">
-<dt class="sig sig-object lua" id="SpaceCenter.CameraMode.automatic">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">automatic</span></span><a class="headerlink" href="#SpaceCenter.CameraMode.automatic" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CameraMode.automatic">
+<span class="sig-name descname"><span class="pre">automatic</span></span><a class="headerlink" href="#lua-SpaceCenter.CameraMode.automatic" title="Link to this definition">#</a></dt>
 <dd><p>The camera is showing the active vessel, in “auto” mode.</p>
 </dd></dl>
 
 <dl class="lua data">
-<dt class="sig sig-object lua" id="SpaceCenter.CameraMode.free">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">free</span></span><a class="headerlink" href="#SpaceCenter.CameraMode.free" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CameraMode.free">
+<span class="sig-name descname"><span class="pre">free</span></span><a class="headerlink" href="#lua-SpaceCenter.CameraMode.free" title="Link to this definition">#</a></dt>
 <dd><p>The camera is showing the active vessel, in “free” mode.</p>
 </dd></dl>
 
 <dl class="lua data">
-<dt class="sig sig-object lua" id="SpaceCenter.CameraMode.chase">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">chase</span></span><a class="headerlink" href="#SpaceCenter.CameraMode.chase" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CameraMode.chase">
+<span class="sig-name descname"><span class="pre">chase</span></span><a class="headerlink" href="#lua-SpaceCenter.CameraMode.chase" title="Link to this definition">#</a></dt>
 <dd><p>The camera is showing the active vessel, in “chase” mode.</p>
 </dd></dl>
 
 <dl class="lua data">
-<dt class="sig sig-object lua" id="SpaceCenter.CameraMode.locked">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">locked</span></span><a class="headerlink" href="#SpaceCenter.CameraMode.locked" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CameraMode.locked">
+<span class="sig-name descname"><span class="pre">locked</span></span><a class="headerlink" href="#lua-SpaceCenter.CameraMode.locked" title="Link to this definition">#</a></dt>
 <dd><p>The camera is showing the active vessel, in “locked” mode.</p>
 </dd></dl>
 
 <dl class="lua data">
-<dt class="sig sig-object lua" id="SpaceCenter.CameraMode.orbital">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">orbital</span></span><a class="headerlink" href="#SpaceCenter.CameraMode.orbital" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CameraMode.orbital">
+<span class="sig-name descname"><span class="pre">orbital</span></span><a class="headerlink" href="#lua-SpaceCenter.CameraMode.orbital" title="Link to this definition">#</a></dt>
 <dd><p>The camera is showing the active vessel, in “orbital” mode.</p>
 </dd></dl>
 
 <dl class="lua data">
-<dt class="sig sig-object lua" id="SpaceCenter.CameraMode.iva">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">iva</span></span><a class="headerlink" href="#SpaceCenter.CameraMode.iva" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CameraMode.iva">
+<span class="sig-name descname"><span class="pre">iva</span></span><a class="headerlink" href="#lua-SpaceCenter.CameraMode.iva" title="Link to this definition">#</a></dt>
 <dd><p>The Intra-Vehicular Activity view is being shown.</p>
 </dd></dl>
 
 <dl class="lua data">
-<dt class="sig sig-object lua" id="SpaceCenter.CameraMode.map">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">map</span></span><a class="headerlink" href="#SpaceCenter.CameraMode.map" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CameraMode.map">
+<span class="sig-name descname"><span class="pre">map</span></span><a class="headerlink" href="#lua-SpaceCenter.CameraMode.map" title="Link to this definition">#</a></dt>
 <dd><p>The map view is being shown.</p>
 </dd></dl>
 

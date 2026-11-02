@@ -24,7 +24,7 @@ AlarmType
 
    .. data:: maneuver_auto
 
-      See :attr:`KerbalAlarmClock.AlarmType.maneuver`.
+      See :data:`KerbalAlarmClock.AlarmType.maneuver`.
 
 
    .. data:: apoapsis
@@ -60,7 +60,7 @@ AlarmType
 
    .. data:: contract_auto
 
-      See :attr:`KerbalAlarmClock.AlarmType.contract`.
+      See :data:`KerbalAlarmClock.AlarmType.contract`.
 
 
    .. data:: crew
@@ -92,7 +92,7 @@ AlarmType
 
    .. data:: soi_change_auto
 
-      See :attr:`KerbalAlarmClock.AlarmType.soi_change`.
+      See :data:`KerbalAlarmClock.AlarmType.soi_change`.
 
 
    .. data:: transfer
@@ -104,7 +104,7 @@ AlarmType
 
    .. data:: transfer_modelled
 
-      See :attr:`KerbalAlarmClock.AlarmType.transfer`.
+      See :data:`KerbalAlarmClock.AlarmType.transfer`.
 
 
    .. data:: science_lab

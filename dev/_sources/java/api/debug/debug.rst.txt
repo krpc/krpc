@@ -131,7 +131,7 @@ Debug
    .. method:: void setDirection(org.javatuples.Triplet<Double,Double,Double> direction, double roll, SpaceCenter.ReferenceFrame referenceFrame, SpaceCenter.Vessel vessel)
 
       Point a vessel along the given direction in the given reference frame, and stop it
-      rotating. This is :meth:`setPitchHeadingRoll(double, double, double, SpaceCenter.ReferenceFrame, SpaceCenter.Vessel)` with a pointing vector instead
+      rotating. This is :meth:`Debug.setPitchHeadingRoll(double, double, double, SpaceCenter.ReferenceFrame, SpaceCenter.Vessel)` with a pointing vector instead
       of a pitch and heading, matching the attitude the autopilot holds for the same
       target direction and roll.
 

@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=eadf7411" />
   
@@ -1103,98 +1104,80 @@
   <section id="point">
 <h1>Point<a class="headerlink" href="#point" title="Link to this heading">#</a></h1>
 <dl class="lua class">
-<dt class="sig sig-object lua" id="Drawing.Point">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">Drawing.</span></span><span class="sig-name descname"><span class="pre">Point</span></span><a class="headerlink" href="#Drawing.Point" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Point">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">Drawing.</span></span><span class="sig-name descname"><span class="pre">Point</span></span><a class="headerlink" href="#lua-Drawing.Point" title="Link to this definition">#</a></dt>
 <dd><p>A point, drawn as a dot that keeps its size on screen. Created using
-<a class="reference internal" href="drawing.html#Drawing.add_point" title="Drawing.add_point"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">Drawing.add_point()</span></code></a>.</p>
+<a class="reference internal" href="drawing.html#lua-Drawing.add_point" title="Drawing.add_point"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">Drawing.add_point()</span></code></a>.</p>
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.Point.position">
-<span class="sig-name descname"><span class="pre">position</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#Drawing.Drawing.Point.position" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Point.position">
+<span class="sig-name descname"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-Drawing.Point.position" title="Link to this definition">#</a></dt>
 <dd><p>Position of the point.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.Point.reference_frame">
-<span class="sig-name descname"><span class="pre">reference_frame</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.ReferenceFrame</span><a class="headerlink" href="#Drawing.Drawing.Point.reference_frame" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Point.reference_frame">
+<span class="sig-name descname"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../space-center/reference-frame.html#lua-SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a><a class="headerlink" href="#lua-Drawing.Point.reference_frame" title="Link to this definition">#</a></dt>
 <dd><p>Reference frame for the positions of the object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.Point.visible">
-<span class="sig-name descname"><span class="pre">visible</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#Drawing.Drawing.Point.visible" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Point.visible">
+<span class="sig-name descname"><span class="pre">visible</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-Drawing.Point.visible" title="Link to this definition">#</a></dt>
 <dd><p>Whether the object is visible.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.Point.color">
-<span class="sig-name descname"><span class="pre">color</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">StdLib.ColorRGB</span><a class="headerlink" href="#Drawing.Drawing.Point.color" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Point.color">
+<span class="sig-name descname"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../stdlib.html#lua-StdLib.ColorRGB" title="StdLib.ColorRGB"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">StdLib.ColorRGB</span></code></a><a class="headerlink" href="#lua-Drawing.Point.color" title="Link to this definition">#</a></dt>
 <dd><p>The color of the object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="../stdlib.html#StdLib.ColorRGB" title="StdLib.ColorRGB"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">StdLib.ColorRGB</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.Point.size">
-<span class="sig-name descname"><span class="pre">size</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#Drawing.Drawing.Point.size" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Point.size">
+<span class="sig-name descname"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-Drawing.Point.size" title="Link to this definition">#</a></dt>
 <dd><p>Diameter of the point, in pixels.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.Point.material">
-<span class="sig-name descname"><span class="pre">material</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">string</span><a class="headerlink" href="#Drawing.Drawing.Point.material" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Point.material">
+<span class="sig-name descname"><span class="pre">material</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><a class="headerlink" href="#lua-Drawing.Point.material" title="Link to this definition">#</a></dt>
 <dd><p>Material used to render the object.
 Creates the material from a shader with the given name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="Drawing.Point.remove">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.Point.remove" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Point.remove">
+<span class="sig-name descname"><span class="pre">remove</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-Drawing.Point.remove" title="Link to this definition">#</a></dt>
 <dd><p>Remove the object.</p>
 </dd></dl>
 

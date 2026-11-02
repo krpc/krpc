@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=eadf7411" />
   
@@ -1103,89 +1104,71 @@
   <section id="circle">
 <h1>Circle<a class="headerlink" href="#circle" title="Link to this heading">#</a></h1>
 <dl class="lua class">
-<dt class="sig sig-object lua" id="Drawing.Circle">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">Drawing.</span></span><span class="sig-name descname"><span class="pre">Circle</span></span><a class="headerlink" href="#Drawing.Circle" title="Link to this definition">#</a></dt>
-<dd><p>A circle. Created using <a class="reference internal" href="drawing.html#Drawing.add_circle" title="Drawing.add_circle"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">Drawing.add_circle()</span></code></a>.</p>
+<dt class="sig sig-object lua" id="lua-Drawing.Circle">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">Drawing.</span></span><span class="sig-name descname"><span class="pre">Circle</span></span><a class="headerlink" href="#lua-Drawing.Circle" title="Link to this definition">#</a></dt>
+<dd><p>A circle. Created using <a class="reference internal" href="drawing.html#lua-Drawing.add_circle" title="Drawing.add_circle"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">Drawing.add_circle()</span></code></a>.</p>
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.Circle.center">
-<span class="sig-name descname"><span class="pre">center</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#Drawing.Drawing.Circle.center" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Circle.center">
+<span class="sig-name descname"><span class="pre">center</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-Drawing.Circle.center" title="Link to this definition">#</a></dt>
 <dd><p>Position of the center of the circle.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.Circle.normal">
-<span class="sig-name descname"><span class="pre">normal</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#Drawing.Drawing.Circle.normal" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Circle.normal">
+<span class="sig-name descname"><span class="pre">normal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-Drawing.Circle.normal" title="Link to this definition">#</a></dt>
 <dd><p>Normal of the plane of the circle.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.Circle.radius">
-<span class="sig-name descname"><span class="pre">radius</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#Drawing.Drawing.Circle.radius" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Circle.radius">
+<span class="sig-name descname"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-Drawing.Circle.radius" title="Link to this definition">#</a></dt>
 <dd><p>Radius of the circle, in meters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.Circle.reference_frame">
-<span class="sig-name descname"><span class="pre">reference_frame</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.ReferenceFrame</span><a class="headerlink" href="#Drawing.Drawing.Circle.reference_frame" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Circle.reference_frame">
+<span class="sig-name descname"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../space-center/reference-frame.html#lua-SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a><a class="headerlink" href="#lua-Drawing.Circle.reference_frame" title="Link to this definition">#</a></dt>
 <dd><p>Reference frame for the positions of the object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.Circle.visible">
-<span class="sig-name descname"><span class="pre">visible</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#Drawing.Drawing.Circle.visible" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Circle.visible">
+<span class="sig-name descname"><span class="pre">visible</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-Drawing.Circle.visible" title="Link to this definition">#</a></dt>
 <dd><p>Whether the object is visible.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.Circle.color">
-<span class="sig-name descname"><span class="pre">color</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">StdLib.ColorRGB</span><a class="headerlink" href="#Drawing.Drawing.Circle.color" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Circle.color">
+<span class="sig-name descname"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../stdlib.html#lua-StdLib.ColorRGB" title="StdLib.ColorRGB"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">StdLib.ColorRGB</span></code></a><a class="headerlink" href="#lua-Drawing.Circle.color" title="Link to this definition">#</a></dt>
 <dd><p>The color of the path.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="../stdlib.html#StdLib.ColorRGB" title="StdLib.ColorRGB"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">StdLib.ColorRGB</span></code></a></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1195,15 +1178,12 @@
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.Circle.colors">
-<span class="sig-name descname"><span class="pre">colors</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">List</span><a class="headerlink" href="#Drawing.Drawing.Circle.colors" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Circle.colors">
+<span class="sig-name descname"><span class="pre">colors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">List</span></code><a class="headerlink" href="#lua-Drawing.Circle.colors" title="Link to this definition">#</a></dt>
 <dd><p>The colors of the path, blended evenly from its start to its end.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">List</span></code></span></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1213,107 +1193,86 @@
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.Circle.thickness">
-<span class="sig-name descname"><span class="pre">thickness</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#Drawing.Drawing.Circle.thickness" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Circle.thickness">
+<span class="sig-name descname"><span class="pre">thickness</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-Drawing.Circle.thickness" title="Link to this definition">#</a></dt>
 <dd><p>The thickness of the path.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.Circle.start_arrow">
-<span class="sig-name descname"><span class="pre">start_arrow</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#Drawing.Drawing.Circle.start_arrow" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Circle.start_arrow">
+<span class="sig-name descname"><span class="pre">start_arrow</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-Drawing.Circle.start_arrow" title="Link to this definition">#</a></dt>
 <dd><p>Whether an arrow head is drawn at the start.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.Circle.end_arrow">
-<span class="sig-name descname"><span class="pre">end_arrow</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#Drawing.Drawing.Circle.end_arrow" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Circle.end_arrow">
+<span class="sig-name descname"><span class="pre">end_arrow</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-Drawing.Circle.end_arrow" title="Link to this definition">#</a></dt>
 <dd><p>Whether an arrow head is drawn at the end.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.Circle.arrow_size">
-<span class="sig-name descname"><span class="pre">arrow_size</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#Drawing.Drawing.Circle.arrow_size" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Circle.arrow_size">
+<span class="sig-name descname"><span class="pre">arrow_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-Drawing.Circle.arrow_size" title="Link to this definition">#</a></dt>
 <dd><p>The size of the arrow heads, relative to the thickness.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.Circle.dashed">
-<span class="sig-name descname"><span class="pre">dashed</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#Drawing.Drawing.Circle.dashed" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Circle.dashed">
+<span class="sig-name descname"><span class="pre">dashed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-Drawing.Circle.dashed" title="Link to this definition">#</a></dt>
 <dd><p>Whether the path is drawn as a dashed line.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.Circle.label">
-<span class="sig-name descname"><span class="pre">label</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">string</span><a class="headerlink" href="#Drawing.Drawing.Circle.label" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Circle.label">
+<span class="sig-name descname"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><a class="headerlink" href="#lua-Drawing.Circle.label" title="Link to this definition">#</a></dt>
 <dd><p>Text drawn halfway along the path, facing the camera. Empty for no label.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.Circle.material">
-<span class="sig-name descname"><span class="pre">material</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">string</span><a class="headerlink" href="#Drawing.Drawing.Circle.material" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Circle.material">
+<span class="sig-name descname"><span class="pre">material</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><a class="headerlink" href="#lua-Drawing.Circle.material" title="Link to this definition">#</a></dt>
 <dd><p>Material used to render the object.
 Creates the material from a shader with the given name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="Drawing.Circle.remove">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.Circle.remove" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Circle.remove">
+<span class="sig-name descname"><span class="pre">remove</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-Drawing.Circle.remove" title="Link to this definition">#</a></dt>
 <dd><p>Remove the object.</p>
 </dd></dl>
 

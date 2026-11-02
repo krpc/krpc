@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=eadf7411" />
   
@@ -1106,107 +1107,107 @@
 <dt class="sig sig-object java" id="krpc.client.services.KerbalAlarmClock.Alarm">
 <span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">Alarm</span></span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm" title="Link to this definition">#</a></dt>
 <dd><p>Represents an alarm. Obtained by calling
-<a class="reference internal" href="kerbal-alarm-clock.html#krpc.client.services.KerbalAlarmClock.KerbalAlarmClock.getAlarms()" title="krpc.client.services.KerbalAlarmClock.KerbalAlarmClock.getAlarms()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">getAlarms()</span></code></a>,
-<a class="reference internal" href="kerbal-alarm-clock.html#krpc.client.services.KerbalAlarmClock.KerbalAlarmClock.alarmWithName(String)" title="krpc.client.services.KerbalAlarmClock.KerbalAlarmClock.alarmWithName(String)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">alarmWithName(String)</span></code></a> or
-<a class="reference internal" href="kerbal-alarm-clock.html#krpc.client.services.KerbalAlarmClock.KerbalAlarmClock.alarmsWithType(AlarmType)" title="krpc.client.services.KerbalAlarmClock.KerbalAlarmClock.alarmsWithType(AlarmType)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">alarmsWithType(AlarmType)</span></code></a>.</p>
+<a class="reference internal" href="kerbal-alarm-clock.html#krpc.client.services.KerbalAlarmClock.KerbalAlarmClock.getAlarms()" title="krpc.client.services.KerbalAlarmClock.KerbalAlarmClock.getAlarms()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">KerbalAlarmClock.getAlarms()</span></code></a>,
+<a class="reference internal" href="kerbal-alarm-clock.html#krpc.client.services.KerbalAlarmClock.KerbalAlarmClock.alarmWithName(String)" title="krpc.client.services.KerbalAlarmClock.KerbalAlarmClock.alarmWithName(String)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">KerbalAlarmClock.alarmWithName(String)</span></code></a> or
+<a class="reference internal" href="kerbal-alarm-clock.html#krpc.client.services.KerbalAlarmClock.KerbalAlarmClock.alarmsWithType(AlarmType)" title="krpc.client.services.KerbalAlarmClock.KerbalAlarmClock.alarmsWithType(AlarmType)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">KerbalAlarmClock.alarmsWithType(AlarmType)</span></code></a>.</p>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KerbalAlarmClock.Alarm.getAction()">
- <a class="reference internal" href="alarm-action.html#krpc.client.services.KerbalAlarmClock.AlarmAction" title="krpc.client.services.KerbalAlarmClock.AlarmAction"><span class="pre">AlarmAction</span></a> <span class="sig-name descname"><span class="pre">getAction</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.getAction()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="alarm-action.html#krpc.client.services.KerbalAlarmClock.AlarmAction" title="krpc.client.services.KerbalAlarmClock.AlarmAction"><span class="pre">AlarmAction</span></a> <span class="sig-name descname"><span class="pre">getAction</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.getAction()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KerbalAlarmClock.Alarm.setAction(AlarmAction)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setAction</span></span><span class="sig-paren">(</span><a class="reference internal" href="alarm-action.html#krpc.client.services.KerbalAlarmClock.AlarmAction" title="krpc.client.services.KerbalAlarmClock.AlarmAction"><span class="pre">AlarmAction</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.setAction(AlarmAction)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setAction</span></span><span class="sig-paren">(</span><a class="reference internal" href="alarm-action.html#krpc.client.services.KerbalAlarmClock.AlarmAction" title="krpc.client.services.KerbalAlarmClock.AlarmAction"><span class="pre">AlarmAction</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.setAction(AlarmAction)" title="Link to this definition">#</a></dt>
 <dd><p>The action that the alarm triggers.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KerbalAlarmClock.Alarm.getMargin()">
- <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getMargin</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.getMargin()" title="Link to this definition">#</a></dt>
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getMargin</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.getMargin()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KerbalAlarmClock.Alarm.setMargin(double)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setMargin</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.setMargin(double)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setMargin</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.setMargin(double)" title="Link to this definition">#</a></dt>
 <dd><p>The number of seconds before the event that the alarm will fire.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KerbalAlarmClock.Alarm.getTime()">
- <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getTime</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.getTime()" title="Link to this definition">#</a></dt>
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getTime</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.getTime()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KerbalAlarmClock.Alarm.setTime(double)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setTime</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.setTime(double)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setTime</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.setTime(double)" title="Link to this definition">#</a></dt>
 <dd><p>The time at which the alarm will fire.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KerbalAlarmClock.Alarm.getType()">
- <a class="reference internal" href="alarm-type.html#krpc.client.services.KerbalAlarmClock.AlarmType" title="krpc.client.services.KerbalAlarmClock.AlarmType"><span class="pre">AlarmType</span></a> <span class="sig-name descname"><span class="pre">getType</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.getType()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="alarm-type.html#krpc.client.services.KerbalAlarmClock.AlarmType" title="krpc.client.services.KerbalAlarmClock.AlarmType"><span class="pre">AlarmType</span></a> <span class="sig-name descname"><span class="pre">getType</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.getType()" title="Link to this definition">#</a></dt>
 <dd><p>The type of the alarm.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KerbalAlarmClock.Alarm.getID()">
- <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getID</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.getID()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getID</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.getID()" title="Link to this definition">#</a></dt>
 <dd><p>The unique identifier for the alarm.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KerbalAlarmClock.Alarm.getName()">
- <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getName</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.getName()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getName</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.getName()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KerbalAlarmClock.Alarm.setName(String)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setName</span></span><span class="sig-paren">(</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.setName(String)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setName</span></span><span class="sig-paren">(</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.setName(String)" title="Link to this definition">#</a></dt>
 <dd><p>The short name of the alarm.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KerbalAlarmClock.Alarm.getNotes()">
- <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getNotes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.getNotes()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getNotes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.getNotes()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KerbalAlarmClock.Alarm.setNotes(String)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setNotes</span></span><span class="sig-paren">(</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.setNotes(String)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setNotes</span></span><span class="sig-paren">(</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.setNotes(String)" title="Link to this definition">#</a></dt>
 <dd><p>The long description of the alarm.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KerbalAlarmClock.Alarm.getRemaining()">
- <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getRemaining</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.getRemaining()" title="Link to this definition">#</a></dt>
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getRemaining</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.getRemaining()" title="Link to this definition">#</a></dt>
 <dd><p>The number of seconds until the alarm will fire.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KerbalAlarmClock.Alarm.getEnabled()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getEnabled</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.getEnabled()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getEnabled</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.getEnabled()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KerbalAlarmClock.Alarm.setEnabled(boolean)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setEnabled</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.setEnabled(boolean)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setEnabled</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.setEnabled(boolean)" title="Link to this definition">#</a></dt>
 <dd><p>Whether the alarm is enabled. A disabled alarm does not fire.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KerbalAlarmClock.Alarm.getPlaySound()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getPlaySound</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.getPlaySound()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getPlaySound</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.getPlaySound()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KerbalAlarmClock.Alarm.setPlaySound(boolean)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setPlaySound</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.setPlaySound(boolean)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setPlaySound</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.setPlaySound(boolean)" title="Link to this definition">#</a></dt>
 <dd><p>Whether the alarm plays a sound when it fires.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KerbalAlarmClock.Alarm.getTriggered()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getTriggered</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.getTriggered()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getTriggered</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.getTriggered()" title="Link to this definition">#</a></dt>
 <dd><p>Whether the alarm has fired. Remains true once the alarm has fired;
 stream this or use it in an event expression to react to the alarm
 firing.</p>
@@ -1214,12 +1215,12 @@ firing.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KerbalAlarmClock.Alarm.getRepeat()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getRepeat</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.getRepeat()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getRepeat</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.getRepeat()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KerbalAlarmClock.Alarm.setRepeat(boolean)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setRepeat</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.setRepeat(boolean)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setRepeat</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.setRepeat(boolean)" title="Link to this definition">#</a></dt>
 <dd><p>Whether the alarm will be repeated after it has fired.
 Only has an effect for alarm types that support repeating
 (see <a class="reference internal" href="#krpc.client.services.KerbalAlarmClock.Alarm.getSupportsRepeat()" title="krpc.client.services.KerbalAlarmClock.Alarm.getSupportsRepeat()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Alarm.getSupportsRepeat()</span></code></a>).</p>
@@ -1227,19 +1228,19 @@ Only has an effect for alarm types that support repeating
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KerbalAlarmClock.Alarm.getSupportsRepeat()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getSupportsRepeat</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.getSupportsRepeat()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getSupportsRepeat</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.getSupportsRepeat()" title="Link to this definition">#</a></dt>
 <dd><p>Whether this alarm’s type supports repeating
 (see <a class="reference internal" href="#krpc.client.services.KerbalAlarmClock.Alarm.getRepeat()" title="krpc.client.services.KerbalAlarmClock.Alarm.getRepeat()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Alarm.getRepeat()</span></code></a>).</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KerbalAlarmClock.Alarm.getRepeatPeriod()">
- <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getRepeatPeriod</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.getRepeatPeriod()" title="Link to this definition">#</a></dt>
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getRepeatPeriod</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.getRepeatPeriod()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KerbalAlarmClock.Alarm.setRepeatPeriod(double)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setRepeatPeriod</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.setRepeatPeriod(double)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setRepeatPeriod</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.setRepeatPeriod(double)" title="Link to this definition">#</a></dt>
 <dd><p>The time delay to automatically create an alarm after it has fired.
 Only has an effect for alarm types that support a repeat period
 (see <a class="reference internal" href="#krpc.client.services.KerbalAlarmClock.Alarm.getSupportsRepeatPeriod()" title="krpc.client.services.KerbalAlarmClock.Alarm.getSupportsRepeatPeriod()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Alarm.getSupportsRepeatPeriod()</span></code></a>).</p>
@@ -1247,47 +1248,47 @@ Only has an effect for alarm types that support a repeat period
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KerbalAlarmClock.Alarm.getSupportsRepeatPeriod()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getSupportsRepeatPeriod</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.getSupportsRepeatPeriod()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getSupportsRepeatPeriod</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.getSupportsRepeatPeriod()" title="Link to this definition">#</a></dt>
 <dd><p>Whether this alarm’s type supports a repeat period
 (see <a class="reference internal" href="#krpc.client.services.KerbalAlarmClock.Alarm.getRepeatPeriod()" title="krpc.client.services.KerbalAlarmClock.Alarm.getRepeatPeriod()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Alarm.getRepeatPeriod()</span></code></a>).</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KerbalAlarmClock.Alarm.getVessel()">
- <a class="reference internal" href="../../../user-guide/reference-frames.html#krpc.client.services.SpaceCenter" title="krpc.client.services.SpaceCenter"><span class="pre">SpaceCenter</span></a><span class="pre">.</span><a class="reference internal" href="../space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel" title="krpc.client.services.SpaceCenter.Vessel"><span class="pre">Vessel</span></a> <span class="sig-name descname"><span class="pre">getVessel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.getVessel()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="../space-center/space-center.html#krpc.client.services.SpaceCenter.SpaceCenter" title="krpc.client.services.SpaceCenter.SpaceCenter"><span class="pre">SpaceCenter</span></a><span class="pre">.</span><a class="reference internal" href="../space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel" title="krpc.client.services.SpaceCenter.Vessel"><span class="pre">Vessel</span></a> <span class="sig-name descname"><span class="pre">getVessel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.getVessel()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KerbalAlarmClock.Alarm.setVessel(SpaceCenter.Vessel)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setVessel</span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../user-guide/reference-frames.html#krpc.client.services.SpaceCenter" title="krpc.client.services.SpaceCenter"><span class="pre">SpaceCenter</span></a><span class="pre">.</span><a class="reference internal" href="../space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel" title="krpc.client.services.SpaceCenter.Vessel"><span class="pre">Vessel</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.setVessel(SpaceCenter.Vessel)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setVessel</span></span><span class="sig-paren">(</span><a class="reference internal" href="../space-center/space-center.html#krpc.client.services.SpaceCenter.SpaceCenter" title="krpc.client.services.SpaceCenter.SpaceCenter"><span class="pre">SpaceCenter</span></a><span class="pre">.</span><a class="reference internal" href="../space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel" title="krpc.client.services.SpaceCenter.Vessel"><span class="pre">Vessel</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.setVessel(SpaceCenter.Vessel)" title="Link to this definition">#</a></dt>
 <dd><p>The vessel that the alarm is attached to.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KerbalAlarmClock.Alarm.getXferOriginBody()">
- <a class="reference internal" href="../../../user-guide/reference-frames.html#krpc.client.services.SpaceCenter" title="krpc.client.services.SpaceCenter"><span class="pre">SpaceCenter</span></a><span class="pre">.</span><a class="reference internal" href="../space-center/celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody" title="krpc.client.services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a> <span class="sig-name descname"><span class="pre">getXferOriginBody</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.getXferOriginBody()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="../space-center/space-center.html#krpc.client.services.SpaceCenter.SpaceCenter" title="krpc.client.services.SpaceCenter.SpaceCenter"><span class="pre">SpaceCenter</span></a><span class="pre">.</span><a class="reference internal" href="../space-center/celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody" title="krpc.client.services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a> <span class="sig-name descname"><span class="pre">getXferOriginBody</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.getXferOriginBody()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KerbalAlarmClock.Alarm.setXferOriginBody(SpaceCenter.CelestialBody)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setXferOriginBody</span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../user-guide/reference-frames.html#krpc.client.services.SpaceCenter" title="krpc.client.services.SpaceCenter"><span class="pre">SpaceCenter</span></a><span class="pre">.</span><a class="reference internal" href="../space-center/celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody" title="krpc.client.services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.setXferOriginBody(SpaceCenter.CelestialBody)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setXferOriginBody</span></span><span class="sig-paren">(</span><a class="reference internal" href="../space-center/space-center.html#krpc.client.services.SpaceCenter.SpaceCenter" title="krpc.client.services.SpaceCenter.SpaceCenter"><span class="pre">SpaceCenter</span></a><span class="pre">.</span><a class="reference internal" href="../space-center/celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody" title="krpc.client.services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.setXferOriginBody(SpaceCenter.CelestialBody)" title="Link to this definition">#</a></dt>
 <dd><p>The celestial body the vessel is departing from.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KerbalAlarmClock.Alarm.getXferTargetBody()">
- <a class="reference internal" href="../../../user-guide/reference-frames.html#krpc.client.services.SpaceCenter" title="krpc.client.services.SpaceCenter"><span class="pre">SpaceCenter</span></a><span class="pre">.</span><a class="reference internal" href="../space-center/celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody" title="krpc.client.services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a> <span class="sig-name descname"><span class="pre">getXferTargetBody</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.getXferTargetBody()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="../space-center/space-center.html#krpc.client.services.SpaceCenter.SpaceCenter" title="krpc.client.services.SpaceCenter.SpaceCenter"><span class="pre">SpaceCenter</span></a><span class="pre">.</span><a class="reference internal" href="../space-center/celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody" title="krpc.client.services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a> <span class="sig-name descname"><span class="pre">getXferTargetBody</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.getXferTargetBody()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KerbalAlarmClock.Alarm.setXferTargetBody(SpaceCenter.CelestialBody)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setXferTargetBody</span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../user-guide/reference-frames.html#krpc.client.services.SpaceCenter" title="krpc.client.services.SpaceCenter"><span class="pre">SpaceCenter</span></a><span class="pre">.</span><a class="reference internal" href="../space-center/celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody" title="krpc.client.services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.setXferTargetBody(SpaceCenter.CelestialBody)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setXferTargetBody</span></span><span class="sig-paren">(</span><a class="reference internal" href="../space-center/space-center.html#krpc.client.services.SpaceCenter.SpaceCenter" title="krpc.client.services.SpaceCenter.SpaceCenter"><span class="pre">SpaceCenter</span></a><span class="pre">.</span><a class="reference internal" href="../space-center/celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody" title="krpc.client.services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.setXferTargetBody(SpaceCenter.CelestialBody)" title="Link to this definition">#</a></dt>
 <dd><p>The celestial body the vessel is arriving at.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KerbalAlarmClock.Alarm.remove()">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.remove()" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.remove()" title="Link to this definition">#</a></dt>
 <dd><p>Removes the alarm. Any further use of this object throws an exception.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>

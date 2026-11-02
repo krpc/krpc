@@ -24,7 +24,6 @@ colors other services use.
    The constant pi.
 
    :Attribute: Read-only, cannot be set
-   :rtype: number
 
 
 
@@ -34,91 +33,82 @@ colors other services use.
    The constant e, the base of the natural logarithm.
 
    :Attribute: Read-only, cannot be set
-   :rtype: number
 
 
 
 
-.. staticmethod:: abs(x)
+.. staticmethod:: abs(x: number): number
 
    The absolute value of a number.
 
-   :param number x: The number.
-   :rtype: number
+   :param x: The number.
 
 
 
 
-.. staticmethod:: sign(x)
+.. staticmethod:: sign(x: number): number
 
    The sign of a number: -1 if it is negative, 1 if it is positive,
    and 0 if it is zero or not a number.
 
-   :param number x: The number.
-   :rtype: number
+   :param x: The number.
 
 
 
 
-.. staticmethod:: copy_sign(x, y)
+.. staticmethod:: copy_sign(x: number, y: number): number
 
    The magnitude of the first number with the sign of the second.
 
-   :param number x: The number giving the magnitude.
-   :param number y: The number giving the sign.
-   :rtype: number
+   :param x: The number giving the magnitude.
+   :param y: The number giving the sign.
 
 
 
 
-.. staticmethod:: is_nan(x)
+.. staticmethod:: is_nan(x: number): boolean
 
    Whether a number is not a number.
 
-   :param number x: The number.
-   :rtype: boolean
+   :param x: The number.
 
 
 
 
-.. staticmethod:: is_finite(x)
+.. staticmethod:: is_finite(x: number): boolean
 
    Whether a number is neither infinite nor not a number.
 
-   :param number x: The number.
-   :rtype: boolean
+   :param x: The number.
 
 
 
 
-.. staticmethod:: floor(x)
+.. staticmethod:: floor(x: number): number
 
    The largest whole number less than or equal to the given number.
 
-   :param number x: The number.
-   :rtype: number
+   :param x: The number.
 
 
 
 
-.. staticmethod:: ceiling(x)
+.. staticmethod:: ceiling(x: number): number
 
    The smallest whole number greater than or equal to the given number.
 
-   :param number x: The number.
-   :rtype: number
+   :param x: The number.
 
 
 
 
-.. staticmethod:: round(x, [digits = 0])
+.. staticmethod:: round(x: number, digits?: number): number
 
    The given number rounded to the given number of decimal places,
    with a halfway value rounded to the nearer even number.
 
-   :param number x: The number.
-   :param number digits: The number of decimal places to round to. Negative to round to tens, hundreds and beyond.
-   :rtype: number
+   :param x: The number.
+   :param digits: The number of decimal places to round to. Negative to round to tens, hundreds and beyond. Defaults to ``0``.
 
    .. note::
 
@@ -127,14 +117,13 @@ colors other services use.
 
 
 
-.. staticmethod:: round_half_away_from_zero(x, [digits = 0])
+.. staticmethod:: round_half_away_from_zero(x: number, digits?: number): number
 
    The given number rounded to the given number of decimal places,
    with a halfway value rounded away from zero.
 
-   :param number x: The number.
-   :param number digits: The number of decimal places to round to. Negative to round to tens, hundreds and beyond.
-   :rtype: number
+   :param x: The number.
+   :param digits: The number of decimal places to round to. Negative to round to tens, hundreds and beyond. Defaults to ``0``.
 
    .. note::
 
@@ -143,14 +132,13 @@ colors other services use.
 
 
 
-.. staticmethod:: round_half_up(x, [digits = 0])
+.. staticmethod:: round_half_up(x: number, digits?: number): number
 
    The given number rounded to the given number of decimal places,
    with a halfway value rounded toward positive infinity.
 
-   :param number x: The number.
-   :param number digits: The number of decimal places to round to. Negative to round to tens, hundreds and beyond.
-   :rtype: number
+   :param x: The number.
+   :param digits: The number of decimal places to round to. Negative to round to tens, hundreds and beyond. Defaults to ``0``.
 
    .. note::
 
@@ -159,159 +147,144 @@ colors other services use.
 
 
 
-.. staticmethod:: sqrt(x)
+.. staticmethod:: sqrt(x: number): number
 
    The square root of a number.
 
-   :param number x: The number.
-   :rtype: number
+   :param x: The number.
 
 
 
 
-.. staticmethod:: hypot(x, y)
+.. staticmethod:: hypot(x: number, y: number): number
 
    The length of the hypotenuse of a right triangle with the given sides.
 
-   :param number x: The first side.
-   :param number y: The second side.
-   :rtype: number
+   :param x: The first side.
+   :param y: The second side.
 
 
 
 
-.. staticmethod:: sin(x)
+.. staticmethod:: sin(x: number): number
 
    The sine of an angle, in radians.
 
-   :param number x: The angle.
-   :rtype: number
+   :param x: The angle.
 
 
 
 
-.. staticmethod:: cos(x)
+.. staticmethod:: cos(x: number): number
 
    The cosine of an angle, in radians.
 
-   :param number x: The angle.
-   :rtype: number
+   :param x: The angle.
 
 
 
 
-.. staticmethod:: tan(x)
+.. staticmethod:: tan(x: number): number
 
    The tangent of an angle, in radians.
 
-   :param number x: The angle.
-   :rtype: number
+   :param x: The angle.
 
 
 
 
-.. staticmethod:: asin(x)
+.. staticmethod:: asin(x: number): number
 
    The angle, in radians, whose sine is the given number.
 
-   :param number x: The number.
-   :rtype: number
+   :param x: The number.
 
 
 
 
-.. staticmethod:: acos(x)
+.. staticmethod:: acos(x: number): number
 
    The angle, in radians, whose cosine is the given number.
 
-   :param number x: The number.
-   :rtype: number
+   :param x: The number.
 
 
 
 
-.. staticmethod:: atan(x)
+.. staticmethod:: atan(x: number): number
 
    The angle, in radians, whose tangent is the given number.
 
-   :param number x: The number.
-   :rtype: number
+   :param x: The number.
 
 
 
 
-.. staticmethod:: atan2(y, x)
+.. staticmethod:: atan2(y: number, x: number): number
 
    The angle, in radians, between the positive x axis and the point ``(x, y)``.
 
-   :param number y: The y coordinate.
-   :param number x: The x coordinate.
-   :rtype: number
+   :param y: The y coordinate.
+   :param x: The x coordinate.
 
 
 
 
-.. staticmethod:: log(x, [new_base = 2.718281828459045])
+.. staticmethod:: log(x: number, new_base?: number): number
 
    The logarithm of a number, natural unless another base is given.
 
-   :param number x: The number.
-   :param number new_base: The base of the logarithm.
-   :rtype: number
+   :param x: The number.
+   :param new_base: The base of the logarithm. Defaults to ``2.718281828459045``.
 
 
 
 
-.. staticmethod:: log10(x)
+.. staticmethod:: log10(x: number): number
 
    The base 10 logarithm of a number.
 
-   :param number x: The number.
-   :rtype: number
+   :param x: The number.
 
 
 
 
-.. staticmethod:: exp(x)
+.. staticmethod:: exp(x: number): number
 
    The number e raised to the given power.
 
-   :param number x: The power.
-   :rtype: number
+   :param x: The power.
 
 
 
 
-.. staticmethod:: min(x, y)
+.. staticmethod:: min(x: number, y: number): number
 
    The smaller of two numbers.
 
-   :param number x: The first number.
-   :param number y: The second number.
-   :rtype: number
+   :param x: The first number.
+   :param y: The second number.
 
 
 
 
-.. staticmethod:: max(x, y)
+.. staticmethod:: max(x: number, y: number): number
 
    The larger of two numbers.
 
-   :param number x: The first number.
-   :param number y: The second number.
-   :rtype: number
+   :param x: The first number.
+   :param y: The second number.
 
 
 
 
-.. staticmethod:: clamp(x, min, max)
+.. staticmethod:: clamp(x: number, min: number, max: number): number
 
    The given number limited to the given range.
 
-   :param number x: The number.
-   :param number min: The minimum of the range.
-   :param number max: The maximum of the range.
-   :rtype: number
+   :param x: The number.
+   :param min: The minimum of the range.
+   :param max: The maximum of the range.
 
    .. note::
 
@@ -320,14 +293,13 @@ colors other services use.
 
 
 
-.. staticmethod:: lerp(a, b, t)
+.. staticmethod:: lerp(a: number, b: number, t: number): number
 
    Linear interpolation between two numbers.
 
-   :param number a: The number when t is 0.
-   :param number b: The number when t is 1.
-   :param number t: The interpolation parameter.
-   :rtype: number
+   :param a: The number when t is 0.
+   :param b: The number when t is 1.
+   :param t: The interpolation parameter.
 
    .. note::
 
@@ -337,15 +309,14 @@ colors other services use.
 
 
 
-.. staticmethod:: inverse_lerp(a, b, x)
+.. staticmethod:: inverse_lerp(a: number, b: number, x: number): number
 
    The interpolation parameter of a number between two others,
    limited to the range 0 to 1.
 
-   :param number a: The number at 0.
-   :param number b: The number at 1.
-   :param number x: The number.
-   :rtype: number
+   :param a: The number at 0.
+   :param b: The number at 1.
+   :param x: The number.
 
    .. note::
 
@@ -354,97 +325,88 @@ colors other services use.
 
 
 
-.. staticmethod:: degrees_to_radians(x)
+.. staticmethod:: degrees_to_radians(x: number): number
 
    The angle in radians of an angle in degrees.
 
-   :param number x: The angle in degrees.
-   :rtype: number
+   :param x: The angle in degrees.
 
 
 
 
-.. staticmethod:: radians_to_degrees(x)
+.. staticmethod:: radians_to_degrees(x: number): number
 
    The angle in degrees of an angle in radians.
 
-   :param number x: The angle in radians.
-   :rtype: number
+   :param x: The angle in radians.
 
 
 
 
-.. staticmethod:: vector_add(u, v)
+.. staticmethod:: vector_add(u: Tuple, v: Tuple): Tuple
 
    The sum of two vectors.
 
-   :param Tuple u: The first vector.
-   :param Tuple v: The second vector.
-   :rtype: Tuple
+   :param u: The first vector.
+   :param v: The second vector.
 
 
 
 
-.. staticmethod:: vector_subtract(u, v)
+.. staticmethod:: vector_subtract(u: Tuple, v: Tuple): Tuple
 
    The difference of two vectors.
 
-   :param Tuple u: The first vector.
-   :param Tuple v: The second vector.
-   :rtype: Tuple
+   :param u: The first vector.
+   :param v: The second vector.
 
 
 
 
-.. staticmethod:: vector_scale(v, scale)
+.. staticmethod:: vector_scale(v: Tuple, scale: number): Tuple
 
    A vector scaled by a number.
 
-   :param Tuple v: The vector.
-   :param number scale: The scaling factor.
-   :rtype: Tuple
+   :param v: The vector.
+   :param scale: The scaling factor.
 
 
 
 
-.. staticmethod:: vector_dot(u, v)
+.. staticmethod:: vector_dot(u: Tuple, v: Tuple): number
 
    The dot product of two vectors.
 
-   :param Tuple u: The first vector.
-   :param Tuple v: The second vector.
-   :rtype: number
+   :param u: The first vector.
+   :param v: The second vector.
 
 
 
 
-.. staticmethod:: vector_cross(u, v)
+.. staticmethod:: vector_cross(u: Tuple, v: Tuple): Tuple
 
    The cross product of two vectors.
 
-   :param Tuple u: The first vector.
-   :param Tuple v: The second vector.
-   :rtype: Tuple
+   :param u: The first vector.
+   :param v: The second vector.
 
 
 
 
-.. staticmethod:: vector_magnitude(v)
+.. staticmethod:: vector_magnitude(v: Tuple): number
 
    The magnitude (length) of a vector.
 
-   :param Tuple v: The vector.
-   :rtype: number
+   :param v: The vector.
 
 
 
 
-.. staticmethod:: vector_normalize(v)
+.. staticmethod:: vector_normalize(v: Tuple): Tuple
 
    A vector scaled to a magnitude of 1.
 
-   :param Tuple v: The vector.
-   :rtype: Tuple
+   :param v: The vector.
 
    .. note::
 
@@ -453,24 +415,22 @@ colors other services use.
 
 
 
-.. staticmethod:: vector_distance(u, v)
+.. staticmethod:: vector_distance(u: Tuple, v: Tuple): number
 
    The distance between two positions.
 
-   :param Tuple u: The first position.
-   :param Tuple v: The second position.
-   :rtype: number
+   :param u: The first position.
+   :param v: The second position.
 
 
 
 
-.. staticmethod:: vector_angle(u, v)
+.. staticmethod:: vector_angle(u: Tuple, v: Tuple): number
 
    The angle between two vectors, in radians, between 0 and :math:`\pi`.
 
-   :param Tuple u: The first vector.
-   :param Tuple v: The second vector.
-   :rtype: number
+   :param u: The first vector.
+   :param v: The second vector.
 
    .. note::
 
@@ -479,14 +439,13 @@ colors other services use.
 
 
 
-.. staticmethod:: vector_lerp(u, v, t)
+.. staticmethod:: vector_lerp(u: Tuple, v: Tuple, t: number): Tuple
 
    Linear interpolation between two vectors.
 
-   :param Tuple u: The vector when t is 0.
-   :param Tuple v: The vector when t is 1.
-   :param number t: The interpolation parameter.
-   :rtype: Tuple
+   :param u: The vector when t is 0.
+   :param v: The vector when t is 1.
+   :param t: The interpolation parameter.
 
    .. note::
 
@@ -496,14 +455,13 @@ colors other services use.
 
 
 
-.. staticmethod:: quaternion_multiply(q, r)
+.. staticmethod:: quaternion_multiply(q: Tuple, r: Tuple): Tuple
 
    The composition of two rotations: the rotation r followed by the
    rotation q.
 
-   :param Tuple q: The second rotation.
-   :param Tuple r: The first rotation.
-   :rtype: Tuple
+   :param q: The second rotation.
+   :param r: The first rotation.
 
    .. note::
 
@@ -512,12 +470,11 @@ colors other services use.
 
 
 
-.. staticmethod:: quaternion_inverse(q)
+.. staticmethod:: quaternion_inverse(q: Tuple): Tuple
 
    The inverse of a rotation.
 
-   :param Tuple q: The rotation.
-   :rtype: Tuple
+   :param q: The rotation.
 
    .. note::
 
@@ -526,13 +483,12 @@ colors other services use.
 
 
 
-.. staticmethod:: quaternion_rotate_vector(q, v)
+.. staticmethod:: quaternion_rotate_vector(q: Tuple, v: Tuple): Tuple
 
    A vector rotated by a rotation.
 
-   :param Tuple q: The rotation.
-   :param Tuple v: The vector.
-   :rtype: Tuple
+   :param q: The rotation.
+   :param v: The vector.
 
    .. note::
 
@@ -541,13 +497,12 @@ colors other services use.
 
 
 
-.. staticmethod:: quaternion_from_axis_angle(axis, angle)
+.. staticmethod:: quaternion_from_axis_angle(axis: Tuple, angle: number): Tuple
 
    The rotation about an axis by an angle.
 
-   :param Tuple axis: The axis of rotation.
-   :param number angle: The angle of rotation, in radians.
-   :rtype: Tuple
+   :param axis: The axis of rotation.
+   :param angle: The angle of rotation, in radians.
 
    .. note::
 
@@ -556,12 +511,11 @@ colors other services use.
 
 
 
-.. staticmethod:: quaternion_to_axis_angle(q)
+.. staticmethod:: quaternion_to_axis_angle(q: Tuple): StdLib.AxisAngle
 
    The axis and angle of a rotation.
 
-   :param Tuple q: The rotation.
-   :rtype: :class:`StdLib.AxisAngle`
+   :param q: The rotation.
 
    .. note::
 
@@ -570,13 +524,12 @@ colors other services use.
 
 
 
-.. staticmethod:: quaternion_from_to_rotation(u, v)
+.. staticmethod:: quaternion_from_to_rotation(u: Tuple, v: Tuple): Tuple
 
    The shortest rotation that takes one direction onto another.
 
-   :param Tuple u: The direction to rotate from.
-   :param Tuple v: The direction to rotate to.
-   :rtype: Tuple
+   :param u: The direction to rotate from.
+   :param v: The direction to rotate to.
 
    .. note::
 
@@ -586,14 +539,13 @@ colors other services use.
 
 
 
-.. staticmethod:: quaternion_look_rotation(forward, up)
+.. staticmethod:: quaternion_look_rotation(forward: Tuple, up: Tuple): Tuple
 
    The rotation that takes the z axis onto a forward direction, and the y axis
    toward an up direction.
 
-   :param Tuple forward: The direction of the z axis.
-   :param Tuple up: The direction the y axis points toward.
-   :rtype: Tuple
+   :param forward: The direction of the z axis.
+   :param up: The direction the y axis points toward.
 
    .. note::
 
@@ -603,14 +555,13 @@ colors other services use.
 
 
 
-.. staticmethod:: quaternion_angle(q, r)
+.. staticmethod:: quaternion_angle(q: Tuple, r: Tuple): number
 
    The angle of the rotation that takes one rotation to another,
    in radians, between 0 and :math:`\pi`.
 
-   :param Tuple q: The first rotation.
-   :param Tuple r: The second rotation.
-   :rtype: number
+   :param q: The first rotation.
+   :param r: The second rotation.
 
    .. note::
 
@@ -619,14 +570,13 @@ colors other services use.
 
 
 
-.. staticmethod:: quaternion_slerp(q, r, t)
+.. staticmethod:: quaternion_slerp(q: Tuple, r: Tuple, t: number): Tuple
 
    Spherical linear interpolation between two rotations.
 
-   :param Tuple q: The rotation when t is 0.
-   :param Tuple r: The rotation when t is 1.
-   :param number t: The interpolation parameter.
-   :rtype: Tuple
+   :param q: The rotation when t is 0.
+   :param r: The rotation when t is 1.
+   :param t: The interpolation parameter.
 
    .. note::
 
@@ -636,11 +586,11 @@ colors other services use.
 
 
 
-.. staticmethod:: print(message)
+.. staticmethod:: print(message: string)
 
    Writes a message to the game's log, for debugging.
 
-   :param string message: The message.
+   :param message: The message.
 
    .. note::
 
@@ -662,13 +612,11 @@ colors other services use.
 
       The axis of the rotation, as a unit vector, or zero for no rotation.
 
-      :rtype: Tuple
 
    .. attribute:: angle: number
 
       The angle of the rotation, in radians between 0 and :math:`\pi`.
 
-      :rtype: number
 
 
 .. class:: ColorRGB
@@ -680,19 +628,16 @@ colors other services use.
 
       The red component.
 
-      :rtype: number
 
    .. attribute:: g: number
 
       The green component.
 
-      :rtype: number
 
    .. attribute:: b: number
 
       The blue component.
 
-      :rtype: number
 
 
 .. class:: ColorRGBA
@@ -706,22 +651,17 @@ colors other services use.
 
       The red component.
 
-      :rtype: number
 
    .. attribute:: g: number
 
       The green component.
 
-      :rtype: number
 
    .. attribute:: b: number
 
       The blue component.
 
-      :rtype: number
 
    .. attribute:: a: number
 
       The alpha component.
-
-      :rtype: number

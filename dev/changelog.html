@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="_static/lua.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=eadf7411" />
   
@@ -560,6 +561,7 @@
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">AutoPilot.LimitAngularVelocity</span></code>, on by default, which limits the angular velocity to what the control surfaces hold against the aerodynamics (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1191">#1191</a>, <a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/526">#526</a>)</p></li>
 <li><p>Shrink the auto-pilot’s attenuation angles with the share of the torque that comes from control surfaces (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1191">#1191</a>, <a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/526">#526</a>)</p></li>
 <li><p>Add an aerodynamics section to the auto-pilot info window, and make its sections collapsible (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1191">#1191</a>)</p></li>
+<li><p>Fix the <code class="docutils literal notranslate"><span class="pre">Vessel.Flight</span></code> link to the <code class="docutils literal notranslate"><span class="pre">Flight</span></code> class (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1252">#1252</a>)</p></li>
 </ul>
 </section>
 <section id="infernalrobotics-service">
@@ -744,6 +746,10 @@
 <li><p>Fix bytes default arguments in generated C# and C++ code and in the Lua documentation (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1194">#1194</a>)</p></li>
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">krpc-conformance</span></code>, which runs the client conformance tests against a client library (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1220">#1220</a>)</p></li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Set the port of the <code class="docutils literal notranslate"><span class="pre">TestServer</span></code> websockets server with <code class="docutils literal notranslate"><span class="pre">--websockets-port</span></code>, in place of <code class="docutils literal notranslate"><span class="pre">--tcpip-port</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1220">#1220</a>)</p></li>
+<li><p>Generate several pages in one <code class="docutils literal notranslate"><span class="pre">krpc-docgen</span></code> run, with <code class="docutils literal notranslate"><span class="pre">--page</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1252">#1252</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Replace the <code class="docutils literal notranslate"><span class="pre">SOURCE</span></code> and <code class="docutils literal notranslate"><span class="pre">OUTPUT</span></code> arguments of <code class="docutils literal notranslate"><span class="pre">krpc-docgen</span></code> with <code class="docutils literal notranslate"><span class="pre">--page</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1252">#1252</a>)</p></li>
+<li><p>Fix <code class="docutils literal notranslate"><span class="pre">krpc-docgen</span></code> Java links to a service’s own procedures and properties, and to enumeration values (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1252">#1252</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Write the Lua API documentation from <code class="docutils literal notranslate"><span class="pre">krpc-docgen</span></code> for <code class="docutils literal notranslate"><span class="pre">sphinx-lua-ls</span></code>, in place of <code class="docutils literal notranslate"><span class="pre">sphinxcontrib-luadomain</span></code>, with typed signatures (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1202">#1202</a>)</p></li>
 </ul>
 </section>
 </section>

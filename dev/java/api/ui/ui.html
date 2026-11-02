@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=eadf7411" />
   
@@ -1115,23 +1116,23 @@ interface in more than one scene must create it again in each of them.</p>
 </div>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.UI.UI.getStockCanvas()">
- <a class="reference internal" href="canvas.html#krpc.client.services.UI.Canvas" title="krpc.client.services.UI.Canvas"><span class="pre">Canvas</span></a> <span class="sig-name descname"><span class="pre">getStockCanvas</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.UI.getStockCanvas()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="canvas.html#krpc.client.services.UI.Canvas" title="krpc.client.services.UI.Canvas"><span class="pre">Canvas</span></a> <span class="sig-name descname"><span class="pre">getStockCanvas</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.UI.getStockCanvas()" title="Link to this definition">#</a></dt>
 <dd><p>The stock UI canvas.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.UI.UI.addCanvas()">
- <a class="reference internal" href="canvas.html#krpc.client.services.UI.Canvas" title="krpc.client.services.UI.Canvas"><span class="pre">Canvas</span></a> <span class="sig-name descname"><span class="pre">addCanvas</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.UI.addCanvas()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="canvas.html#krpc.client.services.UI.Canvas" title="krpc.client.services.UI.Canvas"><span class="pre">Canvas</span></a> <span class="sig-name descname"><span class="pre">addCanvas</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.UI.addCanvas()" title="Link to this definition">#</a></dt>
 <dd><p>Add a new canvas.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>If you want to add UI elements to KSPs stock UI canvas, use <a class="reference internal" href="#krpc.client.services.UI.UI.getStockCanvas()" title="krpc.client.services.UI.UI.getStockCanvas()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">getStockCanvas()</span></code></a>.</p>
+<p>If you want to add UI elements to KSPs stock UI canvas, use <a class="reference internal" href="#krpc.client.services.UI.UI.getStockCanvas()" title="krpc.client.services.UI.UI.getStockCanvas()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">UI.getStockCanvas()</span></code></a>.</p>
 </div>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.UI.UI.message(String, float, MessagePosition, StdLib.ColorRGBA, float)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">message</span></span><span class="sig-paren">(</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">content</span></em>, <span class="pre">float</span><em> <span class="pre">duration</span></em>, <a class="reference internal" href="#krpc.client.services.UI.MessagePosition" title="krpc.client.services.UI.MessagePosition"><span class="pre">MessagePosition</span></a><em> <span class="pre">position</span></em>, <a class="reference internal" href="../stdlib.html#krpc.client.services.StdLib" title="krpc.client.services.StdLib"><span class="pre">StdLib</span></a><span class="pre">.</span><a class="reference internal" href="../stdlib.html#krpc.client.services.StdLib.ColorRGBA" title="krpc.client.services.StdLib.ColorRGBA"><span class="pre">ColorRGBA</span></a><em> <span class="pre">color</span></em>, <span class="pre">float</span><em> <span class="pre">size</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.UI.message(String, float, MessagePosition, StdLib.ColorRGBA, float)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">message</span></span><span class="sig-paren">(</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">content</span></em>, <span class="pre">float</span><em> <span class="pre">duration</span></em>, <a class="reference internal" href="#krpc.client.services.UI.MessagePosition" title="krpc.client.services.UI.MessagePosition"><span class="pre">MessagePosition</span></a><em> <span class="pre">position</span></em>, <a class="reference internal" href="../stdlib.html#krpc.client.services.StdLib.StdLib" title="krpc.client.services.StdLib.StdLib"><span class="pre">StdLib</span></a><span class="pre">.</span><a class="reference internal" href="../stdlib.html#krpc.client.services.StdLib.ColorRGBA" title="krpc.client.services.StdLib.ColorRGBA"><span class="pre">ColorRGBA</span></a><em> <span class="pre">color</span></em>, <span class="pre">float</span><em> <span class="pre">size</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.UI.message(String, float, MessagePosition, StdLib.ColorRGBA, float)" title="Link to this definition">#</a></dt>
 <dd><p>Display a message on the screen.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1152,7 +1153,7 @@ interface in more than one scene must create it again in each of them.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.UI.UI.clear(boolean)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">clientOnly</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.UI.clear(boolean)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">clientOnly</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.UI.clear(boolean)" title="Link to this definition">#</a></dt>
 <dd><p>Remove all user interface elements.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

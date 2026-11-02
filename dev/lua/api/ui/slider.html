@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=eadf7411" />
   
@@ -1103,34 +1104,28 @@
   <section id="slider">
 <h1>Slider<a class="headerlink" href="#slider" title="Link to this heading">#</a></h1>
 <dl class="lua class">
-<dt class="sig sig-object lua" id="UI.Slider">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">UI.</span></span><span class="sig-name descname"><span class="pre">Slider</span></span><a class="headerlink" href="#UI.Slider" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.Slider">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">UI.</span></span><span class="sig-name descname"><span class="pre">Slider</span></span><a class="headerlink" href="#lua-UI.Slider" title="Link to this definition">#</a></dt>
 <dd><p>A control for choosing a number by dragging a handle along a track.
-Added to a <a class="reference internal" href="canvas.html#UI.Canvas" title="UI.Canvas"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.Canvas</span></code></a> or a <a class="reference internal" href="panel.html#UI.Panel" title="UI.Panel"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.Panel</span></code></a>.</p>
+Added to a <a class="reference internal" href="canvas.html#lua-UI.Canvas" title="UI.Canvas"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.Canvas</span></code></a> or a <a class="reference internal" href="panel.html#lua-UI.Panel" title="UI.Panel"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.Panel</span></code></a>.</p>
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="UI.UI.Slider.rect_transform">
-<span class="sig-name descname"><span class="pre">rect_transform</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">UI.RectTransform</span><a class="headerlink" href="#UI.UI.Slider.rect_transform" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.Slider.rect_transform">
+<span class="sig-name descname"><span class="pre">rect_transform</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="rect-transform.html#lua-UI.RectTransform" title="UI.RectTransform"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">UI.RectTransform</span></code></a><a class="headerlink" href="#lua-UI.Slider.rect_transform" title="Link to this definition">#</a></dt>
 <dd><p>The rect transform for the UI object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="rect-transform.html#UI.RectTransform" title="UI.RectTransform"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.RectTransform</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="UI.UI.Slider.layout_element">
-<span class="sig-name descname"><span class="pre">layout_element</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">UI.LayoutElement</span><a class="headerlink" href="#UI.UI.Slider.layout_element" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.Slider.layout_element">
+<span class="sig-name descname"><span class="pre">layout_element</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="layout-element.html#lua-UI.LayoutElement" title="UI.LayoutElement"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">UI.LayoutElement</span></code></a><a class="headerlink" href="#lua-UI.Slider.layout_element" title="Link to this definition">#</a></dt>
 <dd><p>How much space the UI object asks a layout for.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="layout-element.html#UI.LayoutElement" title="UI.LayoutElement"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.LayoutElement</span></code></a></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1141,15 +1136,12 @@ not inside a layout and does not have one.</p>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="UI.UI.Slider.visible">
-<span class="sig-name descname"><span class="pre">visible</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#UI.UI.Slider.visible" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.Slider.visible">
+<span class="sig-name descname"><span class="pre">visible</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-UI.Slider.visible" title="Link to this definition">#</a></dt>
 <dd><p>Whether the UI object is visible.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1162,60 +1154,48 @@ once by making that panel visible.</p>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="UI.UI.Slider.value">
-<span class="sig-name descname"><span class="pre">value</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#UI.UI.Slider.value" title="Link to this definition">#</a></dt>
-<dd><p>The value of the slider, between <a class="reference internal" href="#UI.UI.Slider.min" title="UI.UI.Slider.min"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">UI.Slider.min</span></code></a> and <a class="reference internal" href="#UI.UI.Slider.max" title="UI.UI.Slider.max"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">UI.Slider.max</span></code></a>.
+<dt class="sig sig-object lua" id="lua-UI.Slider.value">
+<span class="sig-name descname"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-UI.Slider.value" title="Link to this definition">#</a></dt>
+<dd><p>The value of the slider, between <a class="reference internal" href="#lua-UI.Slider.min" title="UI.Slider.min"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">UI.Slider.min</span></code></a> and <a class="reference internal" href="#lua-UI.Slider.max" title="UI.Slider.max"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">UI.Slider.max</span></code></a>.
 Setting a value outside the range is refused.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="UI.UI.Slider.min">
-<span class="sig-name descname"><span class="pre">min</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#UI.UI.Slider.min" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.Slider.min">
+<span class="sig-name descname"><span class="pre">min</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-UI.Slider.min" title="Link to this definition">#</a></dt>
 <dd><p>The value at the low end of the slider, which is its left hand end, or the
-bottom of a vertical slider. Must not be greater than <a class="reference internal" href="#UI.UI.Slider.max" title="UI.UI.Slider.max"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">UI.Slider.max</span></code></a>.</p>
+bottom of a vertical slider. Must not be greater than <a class="reference internal" href="#lua-UI.Slider.max" title="UI.Slider.max"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">UI.Slider.max</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="UI.UI.Slider.max">
-<span class="sig-name descname"><span class="pre">max</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#UI.UI.Slider.max" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.Slider.max">
+<span class="sig-name descname"><span class="pre">max</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-UI.Slider.max" title="Link to this definition">#</a></dt>
 <dd><p>The value at the high end of the slider, which is its right hand end, or the
-top of a vertical slider. Must not be less than <a class="reference internal" href="#UI.UI.Slider.min" title="UI.UI.Slider.min"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">UI.Slider.min</span></code></a>.</p>
+top of a vertical slider. Must not be less than <a class="reference internal" href="#lua-UI.Slider.min" title="UI.Slider.min"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">UI.Slider.min</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="UI.UI.Slider.changed">
-<span class="sig-name descname"><span class="pre">changed</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#UI.UI.Slider.changed" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.Slider.changed">
+<span class="sig-name descname"><span class="pre">changed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-UI.Slider.changed" title="Link to this definition">#</a></dt>
 <dd><p>Whether the slider has been changed.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1227,15 +1207,12 @@ A client script should reset the property to false in order to detect subsequent
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="UI.UI.Slider.interactable">
-<span class="sig-name descname"><span class="pre">interactable</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#UI.UI.Slider.interactable" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.Slider.interactable">
+<span class="sig-name descname"><span class="pre">interactable</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-UI.Slider.interactable" title="Link to this definition">#</a></dt>
 <dd><p>Whether the control responds to the user.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1246,16 +1223,13 @@ but is still visible. Set its visibility to false to hide it instead.</p>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="UI.UI.Slider.color">
-<span class="sig-name descname"><span class="pre">color</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">StdLib.ColorRGBA</span><a class="headerlink" href="#UI.UI.Slider.color" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.Slider.color">
+<span class="sig-name descname"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../stdlib.html#lua-StdLib.ColorRGBA" title="StdLib.ColorRGBA"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">StdLib.ColorRGBA</span></code></a><a class="headerlink" href="#lua-UI.Slider.color" title="Link to this definition">#</a></dt>
 <dd><p>The color the control is tinted with. White, the default, leaves the control drawn
 as the skin has it.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="../stdlib.html#StdLib.ColorRGBA" title="StdLib.ColorRGBA"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">StdLib.ColorRGBA</span></code></a></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1270,23 +1244,20 @@ text.</p>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="UI.UI.Slider.tooltip">
-<span class="sig-name descname"><span class="pre">tooltip</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">string</span><a class="headerlink" href="#UI.UI.Slider.tooltip" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.Slider.tooltip">
+<span class="sig-name descname"><span class="pre">tooltip</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><a class="headerlink" href="#lua-UI.Slider.tooltip" title="Link to this definition">#</a></dt>
 <dd><p>A short piece of text shown beside the pointer while it rests on the
 control. Empty, the default, shows nothing.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="UI.Slider.remove">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#UI.Slider.remove" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.Slider.remove">
+<span class="sig-name descname"><span class="pre">remove</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-UI.Slider.remove" title="Link to this definition">#</a></dt>
 <dd><p>Remove the UI object.</p>
 </dd></dl>
 

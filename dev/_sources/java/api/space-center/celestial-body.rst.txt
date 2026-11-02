@@ -9,7 +9,7 @@ CelestialBody
 .. type:: public class CelestialBody
 
    Represents a celestial body (such as a planet or moon).
-   See :meth:`getBodies()`.
+   See :meth:`SpaceCenter.getBodies()`.
 
    .. method:: String getName()
 

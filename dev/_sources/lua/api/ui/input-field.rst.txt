@@ -16,14 +16,12 @@ InputField
       The rect transform for the UI object.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`UI.RectTransform`
 
    .. attribute:: layout_element: UI.LayoutElement
 
       How much space the UI object asks a layout for.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`UI.LayoutElement`
 
       .. note::
 
@@ -35,7 +33,6 @@ InputField
       Whether the UI object is visible.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
       .. note::
 
@@ -49,14 +46,12 @@ InputField
       The value of the input field.
 
       :Attribute: Can be read or written
-      :rtype: string
 
    .. attribute:: text: UI.Text
 
       The text component of the input field.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`UI.Text`
 
       .. note::
 
@@ -68,7 +63,6 @@ InputField
       The placeholder text component of the input field.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`UI.Text`
 
       .. note::
 
@@ -81,7 +75,6 @@ InputField
       ignored as they are typed, so a numeric field only ever shows a number.
 
       :Attribute: Can be read or written
-      :rtype: :class:`UI.InputContentType`
 
       .. note::
 
@@ -93,7 +86,6 @@ InputField
       The most characters the user can type into the field, or 0 for no limit.
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: read_only: boolean
 
@@ -101,7 +93,6 @@ InputField
       selected and copied, and a client can still set it.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
       .. note::
 
@@ -113,7 +104,6 @@ InputField
       Whether the input field has been changed.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
       .. note::
 
@@ -126,7 +116,6 @@ InputField
       Whether the control responds to the user.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
       .. note::
 
@@ -139,7 +128,6 @@ InputField
       as the skin has it.
 
       :Attribute: Can be read or written
-      :rtype: :class:`StdLib.ColorRGBA`
 
       .. note::
 
@@ -156,7 +144,6 @@ InputField
       control. Empty, the default, shows nothing.
 
       :Attribute: Can be read or written
-      :rtype: string
 
    .. method:: remove()
 

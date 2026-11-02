@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=eadf7411" />
   
@@ -1103,45 +1104,39 @@
   <section id="image">
 <h1>Image<a class="headerlink" href="#image" title="Link to this heading">#</a></h1>
 <dl class="lua class">
-<dt class="sig sig-object lua" id="Drawing.Image">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">Drawing.</span></span><span class="sig-name descname"><span class="pre">Image</span></span><a class="headerlink" href="#Drawing.Image" title="Link to this definition">#</a></dt>
-<dd><p>An image that markers can be drawn with. Created using <a class="reference internal" href="drawing.html#Drawing.add_image" title="Drawing.add_image"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">Drawing.add_image()</span></code></a>.</p>
+<dt class="sig sig-object lua" id="lua-Drawing.Image">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">Drawing.</span></span><span class="sig-name descname"><span class="pre">Image</span></span><a class="headerlink" href="#lua-Drawing.Image" title="Link to this definition">#</a></dt>
+<dd><p>An image that markers can be drawn with. Created using <a class="reference internal" href="drawing.html#lua-Drawing.add_image" title="Drawing.add_image"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">Drawing.add_image()</span></code></a>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>An image is kept across scene changes, until it is removed or the client that
 created it disconnects.</p>
 </div>
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.Image.width">
-<span class="sig-name descname"><span class="pre">width</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#Drawing.Drawing.Image.width" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Image.width">
+<span class="sig-name descname"><span class="pre">width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-Drawing.Image.width" title="Link to this definition">#</a></dt>
 <dd><p>The width of the image, in pixels.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.Image.height">
-<span class="sig-name descname"><span class="pre">height</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#Drawing.Drawing.Image.height" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Image.height">
+<span class="sig-name descname"><span class="pre">height</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-Drawing.Image.height" title="Link to this definition">#</a></dt>
 <dd><p>The height of the image, in pixels.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="Drawing.Image.remove">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.Image.remove" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.Image.remove">
+<span class="sig-name descname"><span class="pre">remove</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-Drawing.Image.remove" title="Link to this definition">#</a></dt>
 <dd><p>Remove the image. A marker drawn with it goes back to its own icon.</p>
 </dd></dl>
 

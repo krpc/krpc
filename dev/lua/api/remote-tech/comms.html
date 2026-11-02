@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=eadf7411" />
   
@@ -1103,131 +1104,99 @@
   <section id="comms">
 <h1>Comms<a class="headerlink" href="#comms" title="Link to this heading">#</a></h1>
 <dl class="lua class">
-<dt class="sig sig-object lua" id="RemoteTech.Comms">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">RemoteTech.</span></span><span class="sig-name descname"><span class="pre">Comms</span></span><a class="headerlink" href="#RemoteTech.Comms" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-RemoteTech.Comms">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">RemoteTech.</span></span><span class="sig-name descname"><span class="pre">Comms</span></span><a class="headerlink" href="#lua-RemoteTech.Comms" title="Link to this definition">#</a></dt>
 <dd><p>Communications for a vessel.</p>
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="RemoteTech.RemoteTech.Comms.vessel">
-<span class="sig-name descname"><span class="pre">vessel</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.Vessel</span><a class="headerlink" href="#RemoteTech.RemoteTech.Comms.vessel" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-RemoteTech.Comms.vessel">
+<span class="sig-name descname"><span class="pre">vessel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../space-center/vessel.html#lua-SpaceCenter.Vessel" title="SpaceCenter.Vessel"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.Vessel</span></code></a><a class="headerlink" href="#lua-RemoteTech.Comms.vessel" title="Link to this definition">#</a></dt>
 <dd><p>Get the vessel.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="../space-center/vessel.html#SpaceCenter.Vessel" title="SpaceCenter.Vessel"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.Vessel</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="RemoteTech.RemoteTech.Comms.has_local_control">
-<span class="sig-name descname"><span class="pre">has_local_control</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#RemoteTech.RemoteTech.Comms.has_local_control" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-RemoteTech.Comms.has_local_control">
+<span class="sig-name descname"><span class="pre">has_local_control</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-RemoteTech.Comms.has_local_control" title="Link to this definition">#</a></dt>
 <dd><p>Whether the vessel can be controlled locally.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="RemoteTech.RemoteTech.Comms.has_flight_computer">
-<span class="sig-name descname"><span class="pre">has_flight_computer</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#RemoteTech.RemoteTech.Comms.has_flight_computer" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-RemoteTech.Comms.has_flight_computer">
+<span class="sig-name descname"><span class="pre">has_flight_computer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-RemoteTech.Comms.has_flight_computer" title="Link to this definition">#</a></dt>
 <dd><p>Whether the vessel has a flight computer on board.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="RemoteTech.RemoteTech.Comms.has_connection">
-<span class="sig-name descname"><span class="pre">has_connection</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#RemoteTech.RemoteTech.Comms.has_connection" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-RemoteTech.Comms.has_connection">
+<span class="sig-name descname"><span class="pre">has_connection</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-RemoteTech.Comms.has_connection" title="Link to this definition">#</a></dt>
 <dd><p>Whether the vessel has any connection.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="RemoteTech.RemoteTech.Comms.has_connection_to_ground_station">
-<span class="sig-name descname"><span class="pre">has_connection_to_ground_station</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#RemoteTech.RemoteTech.Comms.has_connection_to_ground_station" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-RemoteTech.Comms.has_connection_to_ground_station">
+<span class="sig-name descname"><span class="pre">has_connection_to_ground_station</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-RemoteTech.Comms.has_connection_to_ground_station" title="Link to this definition">#</a></dt>
 <dd><p>Whether the vessel has a connection to a ground station.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="RemoteTech.RemoteTech.Comms.signal_delay">
-<span class="sig-name descname"><span class="pre">signal_delay</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#RemoteTech.RemoteTech.Comms.signal_delay" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-RemoteTech.Comms.signal_delay">
+<span class="sig-name descname"><span class="pre">signal_delay</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-RemoteTech.Comms.signal_delay" title="Link to this definition">#</a></dt>
 <dd><p>The shortest signal delay to the vessel, in seconds.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="RemoteTech.RemoteTech.Comms.signal_delay_to_ground_station">
-<span class="sig-name descname"><span class="pre">signal_delay_to_ground_station</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#RemoteTech.RemoteTech.Comms.signal_delay_to_ground_station" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-RemoteTech.Comms.signal_delay_to_ground_station">
+<span class="sig-name descname"><span class="pre">signal_delay_to_ground_station</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-RemoteTech.Comms.signal_delay_to_ground_station" title="Link to this definition">#</a></dt>
 <dd><p>The signal delay between the vessel and the closest ground station, in seconds.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="RemoteTech.Comms.signal_delay_to_vessel">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">signal_delay_to_vessel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">other</span></em><span class="sig-paren">)</span><a class="headerlink" href="#RemoteTech.Comms.signal_delay_to_vessel" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-RemoteTech.Comms.signal_delay_to_vessel">
+<span class="sig-name descname"><span class="pre">signal_delay_to_vessel</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../space-center/vessel.html#lua-SpaceCenter.Vessel" title="SpaceCenter.Vessel"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.Vessel</span></code></a><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-RemoteTech.Comms.signal_delay_to_vessel" title="Link to this definition">#</a></dt>
 <dd><p>The signal delay between the this vessel and another vessel, in seconds.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>other</strong> (<span><a class="reference internal" href="../space-center/vessel.html#SpaceCenter.Vessel" title="SpaceCenter.Vessel"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.Vessel</span></code></a></span>)</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="RemoteTech.RemoteTech.Comms.antennas">
-<span class="sig-name descname"><span class="pre">antennas</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">List</span><a class="headerlink" href="#RemoteTech.RemoteTech.Comms.antennas" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-RemoteTech.Comms.antennas">
+<span class="sig-name descname"><span class="pre">antennas</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">List</span></code><a class="headerlink" href="#lua-RemoteTech.Comms.antennas" title="Link to this definition">#</a></dt>
 <dd><p>The antennas for this vessel.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">List</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>

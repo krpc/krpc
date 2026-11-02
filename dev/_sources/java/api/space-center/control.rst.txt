@@ -580,7 +580,7 @@ Control
 
          When called, the active vessel may change. It is therefore possible that,
          after calling this function, the object(s) returned by previous call(s) to
-         :meth:`getActiveVessel()` no longer refer to the active vessel.
+         :meth:`SpaceCenter.getActiveVessel()` no longer refer to the active vessel.
          Throws an exception if staging is locked.
 
    .. method:: boolean getStageLock()

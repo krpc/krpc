@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=eadf7411" />
   
@@ -1109,19 +1110,19 @@
 <a class="reference external" href="https://forum.kerbalspaceprogram.com/topic/139167-111-remotetech-v199-2020-12-19/">RemoteTech</a>.</p>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.RemoteTech.RemoteTech.getAvailable()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getAvailable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.RemoteTech.RemoteTech.getAvailable()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getAvailable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.RemoteTech.RemoteTech.getAvailable()" title="Link to this definition">#</a></dt>
 <dd><p>Whether RemoteTech is installed.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.RemoteTech.RemoteTech.getGroundStations()">
- <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getGroundStations</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.RemoteTech.RemoteTech.getGroundStations()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getGroundStations</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.RemoteTech.RemoteTech.getGroundStations()" title="Link to this definition">#</a></dt>
 <dd><p>The names of the ground stations.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.RemoteTech.RemoteTech.antenna(SpaceCenter.Part)">
- <a class="reference internal" href="antenna.html#krpc.client.services.RemoteTech.Antenna" title="krpc.client.services.RemoteTech.Antenna"><span class="pre">Antenna</span></a> <span class="sig-name descname"><span class="pre">antenna</span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../user-guide/reference-frames.html#krpc.client.services.SpaceCenter" title="krpc.client.services.SpaceCenter"><span class="pre">SpaceCenter</span></a><span class="pre">.</span><a class="reference internal" href="../space-center/parts.html#krpc.client.services.SpaceCenter.Part" title="krpc.client.services.SpaceCenter.Part"><span class="pre">Part</span></a><em> <span class="pre">part</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.RemoteTech.RemoteTech.antenna(SpaceCenter.Part)" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="antenna.html#krpc.client.services.RemoteTech.Antenna" title="krpc.client.services.RemoteTech.Antenna"><span class="pre">Antenna</span></a> <span class="sig-name descname"><span class="pre">antenna</span></span><span class="sig-paren">(</span><a class="reference internal" href="../space-center/space-center.html#krpc.client.services.SpaceCenter.SpaceCenter" title="krpc.client.services.SpaceCenter.SpaceCenter"><span class="pre">SpaceCenter</span></a><span class="pre">.</span><a class="reference internal" href="../space-center/parts.html#krpc.client.services.SpaceCenter.Part" title="krpc.client.services.SpaceCenter.Part"><span class="pre">Part</span></a><em> <span class="pre">part</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.RemoteTech.RemoteTech.antenna(SpaceCenter.Part)" title="Link to this definition">#</a></dt>
 <dd><p>Get the antenna object for a particular part.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1134,7 +1135,7 @@
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.RemoteTech.RemoteTech.comms(SpaceCenter.Vessel)">
- <a class="reference internal" href="comms.html#krpc.client.services.RemoteTech.Comms" title="krpc.client.services.RemoteTech.Comms"><span class="pre">Comms</span></a> <span class="sig-name descname"><span class="pre">comms</span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../user-guide/reference-frames.html#krpc.client.services.SpaceCenter" title="krpc.client.services.SpaceCenter"><span class="pre">SpaceCenter</span></a><span class="pre">.</span><a class="reference internal" href="../space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel" title="krpc.client.services.SpaceCenter.Vessel"><span class="pre">Vessel</span></a><em> <span class="pre">vessel</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.RemoteTech.RemoteTech.comms(SpaceCenter.Vessel)" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="comms.html#krpc.client.services.RemoteTech.Comms" title="krpc.client.services.RemoteTech.Comms"><span class="pre">Comms</span></a> <span class="sig-name descname"><span class="pre">comms</span></span><span class="sig-paren">(</span><a class="reference internal" href="../space-center/space-center.html#krpc.client.services.SpaceCenter.SpaceCenter" title="krpc.client.services.SpaceCenter.SpaceCenter"><span class="pre">SpaceCenter</span></a><span class="pre">.</span><a class="reference internal" href="../space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel" title="krpc.client.services.SpaceCenter.Vessel"><span class="pre">Vessel</span></a><em> <span class="pre">vessel</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.RemoteTech.RemoteTech.comms(SpaceCenter.Vessel)" title="Link to this definition">#</a></dt>
 <dd><p>Get a communications object, representing the communication capability of a particular vessel.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

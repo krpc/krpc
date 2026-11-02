@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../_static/lua.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=eadf7411" />
   
@@ -547,10 +548,8 @@ chmod<span class="w"> </span>+x<span class="w"> </span>bazelisk-linux-amd64
 sudo<span class="w"> </span>mv<span class="w"> </span>bazelisk-linux-amd64<span class="w"> </span>/usr/local/bin/bazel
 </pre></div>
 </div>
-<p>The documentation needs LaTeX, Graphviz and Enchant, and the serial IO tests need <code class="docutils literal notranslate"><span class="pre">socat</span></code>:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>socat<span class="w"> </span>graphviz<span class="w"> </span>libenchant-2-2<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>latexmk<span class="w"> </span>texlive-latex-base<span class="w"> </span>texlive-latex-recommended<span class="w"> </span>texlive-fonts-recommended<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>texlive-latex-extra<span class="w"> </span>texlive-fonts-extra<span class="w"> </span>tex-gyre
+<p>The documentation needs Graphviz and Enchant, and the serial IO tests need <code class="docutils literal notranslate"><span class="pre">socat</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>socat<span class="w"> </span>graphviz<span class="w"> </span>libenchant-2-2
 </pre></div>
 </div>
 <p>The C and C++ clients build with an LLVM toolchain that Bazel downloads. Pass
@@ -559,8 +558,7 @@ sudo<span class="w"> </span>mv<span class="w"> </span>bazelisk-linux-amd64<span 
 <section id="windows">
 <h3>Windows<a class="headerlink" href="#windows" title="Link to this heading">#</a></h3>
 <p>Pass <code class="docutils literal notranslate"><span class="pre">--config=windows</span></code> to Bazel. The whole tree builds with MSVC, apart from the serial IO
-tests, the C and C++ lint and the PDF documentation, which are skipped. A Windows machine needs
-four settings first.</p>
+tests and the C and C++ lint, which are skipped. A Windows machine needs four settings first.</p>
 <p><strong>Symlinks.</strong> Bazel runs with <code class="docutils literal notranslate"><span class="pre">--windows_enable_symlinks</span></code> and <code class="docutils literal notranslate"><span class="pre">--enable_runfiles</span></code>, and creating a
 symlink needs Developer Mode. Turn it on under Settings &gt; System &gt; For developers, or from an
 elevated prompt:</p>
@@ -613,7 +611,7 @@ its own target:</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">//client/python:python_base</span></code> - the Python client without its generated stubs.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">//protobuf:csharp</span></code>, <code class="docutils literal notranslate"><span class="pre">//protobuf:java</span></code>, <code class="docutils literal notranslate"><span class="pre">//protobuf:lua</span></code>, <code class="docutils literal notranslate"><span class="pre">//protobuf:python</span></code> - the
 protobuf code for each language.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">//doc:html</span></code>, <code class="docutils literal notranslate"><span class="pre">//doc:pdf</span></code> - the documentation.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">//doc:html</span></code> - the documentation.</p></li>
 </ul>
 <p>Serve the documentation locally with:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bazel<span class="w"> </span>run<span class="w"> </span>//doc:serve

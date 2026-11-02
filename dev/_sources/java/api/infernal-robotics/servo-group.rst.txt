@@ -8,8 +8,8 @@ ServoGroup
 
 .. type:: public class ServoGroup
 
-   A group of servos, obtained by calling :meth:`servoGroups(SpaceCenter.Vessel)`
-   or :meth:`servoGroupWithName(SpaceCenter.Vessel, String)`. Represents the "Servo Groups"
+   A group of servos, obtained by calling :meth:`InfernalRobotics.servoGroups(SpaceCenter.Vessel)`
+   or :meth:`InfernalRobotics.servoGroupWithName(SpaceCenter.Vessel, String)`. Represents the "Servo Groups"
    in the InfernalRobotics UI.
 
    .. method:: String getName()

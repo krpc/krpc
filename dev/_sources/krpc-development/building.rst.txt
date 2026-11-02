@@ -18,13 +18,11 @@ Bazel version the repository pins. On Ubuntu:
    chmod +x bazelisk-linux-amd64
    sudo mv bazelisk-linux-amd64 /usr/local/bin/bazel
 
-The documentation needs LaTeX, Graphviz and Enchant, and the serial IO tests need ``socat``:
+The documentation needs Graphviz and Enchant, and the serial IO tests need ``socat``:
 
 .. code-block:: bash
 
-   sudo apt-get install socat graphviz libenchant-2-2 \
-     latexmk texlive-latex-base texlive-latex-recommended texlive-fonts-recommended \
-     texlive-latex-extra texlive-fonts-extra tex-gyre
+   sudo apt-get install socat graphviz libenchant-2-2
 
 The C and C++ clients build with an LLVM toolchain that Bazel downloads. Pass
 ``--config=system-llvm`` to build them with the system LLVM install named by
@@ -34,8 +32,7 @@ Windows
 ^^^^^^^
 
 Pass ``--config=windows`` to Bazel. The whole tree builds with MSVC, apart from the serial IO
-tests, the C and C++ lint and the PDF documentation, which are skipped. A Windows machine needs
-four settings first.
+tests and the C and C++ lint, which are skipped. A Windows machine needs four settings first.
 
 **Symlinks.** Bazel runs with ``--windows_enable_symlinks`` and ``--enable_runfiles``, and creating a
 symlink needs Developer Mode. Turn it on under Settings > System > For developers, or from an
@@ -101,7 +98,7 @@ its own target:
 * ``//client/python:python_base`` - the Python client without its generated stubs.
 * ``//protobuf:csharp``, ``//protobuf:java``, ``//protobuf:lua``, ``//protobuf:python`` - the
   protobuf code for each language.
-* ``//doc:html``, ``//doc:pdf`` - the documentation.
+* ``//doc:html`` - the documentation.
 
 Serve the documentation locally with:
 

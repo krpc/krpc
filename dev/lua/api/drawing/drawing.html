@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=eadf7411" />
   
@@ -1102,7 +1103,7 @@
                   
   <section id="drawing">
 <h1>Drawing<a class="headerlink" href="#drawing" title="Link to this heading">#</a></h1>
-<p id="module-Drawing">Provides functionality for drawing objects in the flight scene, the map view, the editor
+<p id="lua-Drawing">Provides functionality for drawing objects in the flight scene, the map view, the editor
 and the tracking station.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -1110,135 +1111,114 @@ and the tracking station.</p>
 Objects drawn by a client are removed when that client disconnects.</p>
 </div>
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="Drawing.add_line">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">start</span></em>, <em class="sig-param"><span class="pre">end</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_line" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.add_line">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">Drawing.</span></span><span class="sig-name descname"><span class="pre">add_line</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../space-center/reference-frame.html#lua-SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">visible</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="line.html#lua-Drawing.Line" title="Drawing.Line"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Drawing.Line</span></code></a><a class="headerlink" href="#lua-Drawing.add_line" title="Link to this definition">#</a><br /></dt>
 <dd><p>Draw a line in the scene.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>start</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – Position of the start of the line.</p></li>
-<li><p><strong>end</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – Position of the end of the line.</p></li>
-<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – Reference frame that the positions are in.</p></li>
-<li><p><strong>visible</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the line is visible.</p></li>
+<li><p><strong>start</strong> – Position of the start of the line.</p></li>
+<li><p><strong>end</strong> – Position of the end of the line.</p></li>
+<li><p><strong>reference_frame</strong> – Reference frame that the positions are in.</p></li>
+<li><p><strong>visible</strong> – Whether the line is visible. Defaults to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="line.html#Drawing.Line" title="Drawing.Line"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Drawing.Line</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="Drawing.add_direction">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_direction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">direction</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">length</span> <span class="pre">=</span> <span class="pre">1e+01</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_direction" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.add_direction">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">Drawing.</span></span><span class="sig-name descname"><span class="pre">add_direction</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">direction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../space-center/reference-frame.html#lua-SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">length</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">visible</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="line.html#lua-Drawing.Line" title="Drawing.Line"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Drawing.Line</span></code></a><a class="headerlink" href="#lua-Drawing.add_direction" title="Link to this definition">#</a><br /></dt>
 <dd><p>Draw a direction vector in the scene, starting from the origin of the given reference frame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>direction</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – Direction to draw the line in.</p></li>
-<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – Reference frame that the direction is in and defines the start position.</p></li>
-<li><p><strong>length</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The length of the line.</p></li>
-<li><p><strong>visible</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the line is visible.</p></li>
+<li><p><strong>direction</strong> – Direction to draw the line in.</p></li>
+<li><p><strong>reference_frame</strong> – Reference frame that the direction is in and defines the start position.</p></li>
+<li><p><strong>length</strong> – The length of the line. Defaults to <code class="docutils literal notranslate"><span class="pre">1e+01</span></code>.</p></li>
+<li><p><strong>visible</strong> – Whether the line is visible. Defaults to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="line.html#Drawing.Line" title="Drawing.Line"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Drawing.Line</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="Drawing.add_direction_from_com">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_direction_from_com</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">direction</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">length</span> <span class="pre">=</span> <span class="pre">1e+01</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_direction_from_com" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.add_direction_from_com">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">Drawing.</span></span><span class="sig-name descname"><span class="pre">add_direction_from_com</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">direction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../space-center/reference-frame.html#lua-SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">length</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">visible</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="line.html#lua-Drawing.Line" title="Drawing.Line"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Drawing.Line</span></code></a><a class="headerlink" href="#lua-Drawing.add_direction_from_com" title="Link to this definition">#</a><br /></dt>
 <dd><p>Draw a direction vector in the scene, from the center of mass of the active vessel.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>direction</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – Direction to draw the line in.</p></li>
-<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – Reference frame that the direction is in.</p></li>
-<li><p><strong>length</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The length of the line.</p></li>
-<li><p><strong>visible</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the line is visible.</p></li>
+<li><p><strong>direction</strong> – Direction to draw the line in.</p></li>
+<li><p><strong>reference_frame</strong> – Reference frame that the direction is in.</p></li>
+<li><p><strong>length</strong> – The length of the line. Defaults to <code class="docutils literal notranslate"><span class="pre">1e+01</span></code>.</p></li>
+<li><p><strong>visible</strong> – Whether the line is visible. Defaults to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="line.html#Drawing.Line" title="Drawing.Line"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Drawing.Line</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="Drawing.add_axes">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_axes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">reference_frame</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">length</span> <span class="pre">=</span> <span class="pre">1e+01</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_axes" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.add_axes">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">Drawing.</span></span><span class="sig-name descname"><span class="pre">add_axes</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../space-center/reference-frame.html#lua-SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">length</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">visible</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">List</span></code><a class="headerlink" href="#lua-Drawing.add_axes" title="Link to this definition">#</a><br /></dt>
 <dd><p>Draw the axes of a reference frame in the scene, as arrows from its origin.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – The reference frame.</p></li>
-<li><p><strong>length</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The length of each axis.</p></li>
-<li><p><strong>visible</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the axes are visible.</p></li>
+<li><p><strong>reference_frame</strong> – The reference frame.</p></li>
+<li><p><strong>length</strong> – The length of each axis. Defaults to <code class="docutils literal notranslate"><span class="pre">1e+01</span></code>.</p></li>
+<li><p><strong>visible</strong> – Whether the axes are visible. Defaults to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The lines for the x, y and z axes, colored red, green and blue.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">List</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="Drawing.add_polygon">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_polygon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">vertices</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_polygon" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.add_polygon">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">Drawing.</span></span><span class="sig-name descname"><span class="pre">add_polygon</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">vertices</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">List</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../space-center/reference-frame.html#lua-SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">visible</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="polygon.html#lua-Drawing.Polygon" title="Drawing.Polygon"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Drawing.Polygon</span></code></a><a class="headerlink" href="#lua-Drawing.add_polygon" title="Link to this definition">#</a><br /></dt>
 <dd><p>Draw a polygon in the scene, defined by a list of vertices.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>vertices</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">List</span></code></span>) – Vertices of the polygon.</p></li>
-<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – Reference frame that the vertices are in.</p></li>
-<li><p><strong>visible</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the polygon is visible.</p></li>
+<li><p><strong>vertices</strong> – Vertices of the polygon.</p></li>
+<li><p><strong>reference_frame</strong> – Reference frame that the vertices are in.</p></li>
+<li><p><strong>visible</strong> – Whether the polygon is visible. Defaults to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="polygon.html#Drawing.Polygon" title="Drawing.Polygon"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Drawing.Polygon</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="Drawing.add_polyline">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_polyline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">vertices</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_polyline" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.add_polyline">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">Drawing.</span></span><span class="sig-name descname"><span class="pre">add_polyline</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">vertices</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">List</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../space-center/reference-frame.html#lua-SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">visible</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="polyline.html#lua-Drawing.Polyline" title="Drawing.Polyline"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Drawing.Polyline</span></code></a><a class="headerlink" href="#lua-Drawing.add_polyline" title="Link to this definition">#</a><br /></dt>
 <dd><p>Draw an open line through a list of vertices in the scene.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>vertices</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">List</span></code></span>) – Vertices of the line.</p></li>
-<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – Reference frame that the vertices are in.</p></li>
-<li><p><strong>visible</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the line is visible.</p></li>
+<li><p><strong>vertices</strong> – Vertices of the line.</p></li>
+<li><p><strong>reference_frame</strong> – Reference frame that the vertices are in.</p></li>
+<li><p><strong>visible</strong> – Whether the line is visible. Defaults to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="polyline.html#Drawing.Polyline" title="Drawing.Polyline"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Drawing.Polyline</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="Drawing.add_circle">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_circle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">center</span></em>, <em class="sig-param"><span class="pre">normal</span></em>, <em class="sig-param"><span class="pre">radius</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_circle" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.add_circle">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">Drawing.</span></span><span class="sig-name descname"><span class="pre">add_circle</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">center</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">normal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../space-center/reference-frame.html#lua-SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">visible</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="circle.html#lua-Drawing.Circle" title="Drawing.Circle"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Drawing.Circle</span></code></a><a class="headerlink" href="#lua-Drawing.add_circle" title="Link to this definition">#</a><br /></dt>
 <dd><p>Draw a circle in the scene.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>center</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – Position of the center of the circle.</p></li>
-<li><p><strong>normal</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – Normal of the plane of the circle.</p></li>
-<li><p><strong>radius</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Radius of the circle, in meters.</p></li>
-<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – Reference frame that the position and normal are in.</p></li>
-<li><p><strong>visible</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the circle is visible.</p></li>
+<li><p><strong>center</strong> – Position of the center of the circle.</p></li>
+<li><p><strong>normal</strong> – Normal of the plane of the circle.</p></li>
+<li><p><strong>radius</strong> – Radius of the circle, in meters.</p></li>
+<li><p><strong>reference_frame</strong> – Reference frame that the position and normal are in.</p></li>
+<li><p><strong>visible</strong> – Whether the circle is visible. Defaults to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="circle.html#Drawing.Circle" title="Drawing.Circle"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Drawing.Circle</span></code></a></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1248,23 +1228,20 @@ Objects drawn by a client are removed when that client disconnects.</p>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="Drawing.add_arc">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_arc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">center</span></em>, <em class="sig-param"><span class="pre">normal</span></em>, <em class="sig-param"><span class="pre">start_direction</span></em>, <em class="sig-param"><span class="pre">angle</span></em>, <em class="sig-param"><span class="pre">radius</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_arc" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.add_arc">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">Drawing.</span></span><span class="sig-name descname"><span class="pre">add_arc</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">center</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">normal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">start_direction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">angle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../space-center/reference-frame.html#lua-SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">visible</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="arc.html#lua-Drawing.Arc" title="Drawing.Arc"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Drawing.Arc</span></code></a><a class="headerlink" href="#lua-Drawing.add_arc" title="Link to this definition">#</a><br /></dt>
 <dd><p>Draw an arc of a circle in the scene.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>center</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – Position of the center of the arc.</p></li>
-<li><p><strong>normal</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – Normal of the plane of the arc.</p></li>
-<li><p><strong>start_direction</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – Direction from the center to the start of the arc.</p></li>
-<li><p><strong>angle</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Angle of the arc, in radians.</p></li>
-<li><p><strong>radius</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Radius of the arc, in meters.</p></li>
-<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – Reference frame that the position and directions are in.</p></li>
-<li><p><strong>visible</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the arc is visible.</p></li>
+<li><p><strong>center</strong> – Position of the center of the arc.</p></li>
+<li><p><strong>normal</strong> – Normal of the plane of the arc.</p></li>
+<li><p><strong>start_direction</strong> – Direction from the center to the start of the arc.</p></li>
+<li><p><strong>angle</strong> – Angle of the arc, in radians.</p></li>
+<li><p><strong>radius</strong> – Radius of the arc, in meters.</p></li>
+<li><p><strong>reference_frame</strong> – Reference frame that the position and directions are in.</p></li>
+<li><p><strong>visible</strong> – Whether the arc is visible. Defaults to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="arc.html#Drawing.Arc" title="Drawing.Arc"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Drawing.Arc</span></code></a></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1275,18 +1252,15 @@ Throws an exception if the normal is zero, or the start direction is parallel to
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="Drawing.add_orbit">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_orbit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">orbit</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_orbit" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.add_orbit">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">Drawing.</span></span><span class="sig-name descname"><span class="pre">add_orbit</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">orbit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../space-center/orbit.html#lua-SpaceCenter.Orbit" title="SpaceCenter.Orbit"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.Orbit</span></code></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">visible</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="orbit-path.html#lua-Drawing.OrbitPath" title="Drawing.OrbitPath"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Drawing.OrbitPath</span></code></a><a class="headerlink" href="#lua-Drawing.add_orbit" title="Link to this definition">#</a></dt>
 <dd><p>Draw the path of an orbit in the scene.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>orbit</strong> (<span><a class="reference internal" href="../space-center/orbit.html#SpaceCenter.Orbit" title="SpaceCenter.Orbit"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.Orbit</span></code></a></span>) – The orbit.</p></li>
-<li><p><strong>visible</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the path is visible.</p></li>
+<li><p><strong>orbit</strong> – The orbit.</p></li>
+<li><p><strong>visible</strong> – Whether the path is visible. Defaults to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="orbit-path.html#Drawing.OrbitPath" title="Drawing.OrbitPath"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Drawing.OrbitPath</span></code></a></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1297,131 +1271,110 @@ sphere of influence of its body.</p>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="Drawing.add_point">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_point</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">position</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_point" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.add_point">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">Drawing.</span></span><span class="sig-name descname"><span class="pre">add_point</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../space-center/reference-frame.html#lua-SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">visible</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="point.html#lua-Drawing.Point" title="Drawing.Point"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Drawing.Point</span></code></a><a class="headerlink" href="#lua-Drawing.add_point" title="Link to this definition">#</a><br /></dt>
 <dd><p>Draw a point in the scene, as a dot that keeps its size on screen.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>position</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – Position of the point.</p></li>
-<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – Reference frame that the position is in.</p></li>
-<li><p><strong>visible</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the point is visible.</p></li>
+<li><p><strong>position</strong> – Position of the point.</p></li>
+<li><p><strong>reference_frame</strong> – Reference frame that the position is in.</p></li>
+<li><p><strong>visible</strong> – Whether the point is visible. Defaults to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="point.html#Drawing.Point" title="Drawing.Point"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Drawing.Point</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="Drawing.add_box">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_box</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">center</span></em>, <em class="sig-param"><span class="pre">size</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">rotation</span> <span class="pre">=</span> <span class="pre">{0.0</span></em>, <em class="sig-param"><span class="pre">0.0</span></em>, <em class="sig-param"><span class="pre">0.0</span></em>, <em class="sig-param"><span class="pre">1.0}</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_box" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.add_box">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">Drawing.</span></span><span class="sig-name descname"><span class="pre">add_box</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">center</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../space-center/reference-frame.html#lua-SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">rotation</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">visible</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="box.html#lua-Drawing.Box" title="Drawing.Box"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Drawing.Box</span></code></a><a class="headerlink" href="#lua-Drawing.add_box" title="Link to this definition">#</a><br /></dt>
 <dd><p>Draw the edges of a box in the scene.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>center</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – Position of the center of the box.</p></li>
-<li><p><strong>size</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – Lengths of the sides of the box along its x, y and z axes, in meters.</p></li>
-<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – Reference frame that the position and rotation are in.</p></li>
-<li><p><strong>rotation</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – Rotation of the box, as a quaternion.</p></li>
-<li><p><strong>visible</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the box is visible.</p></li>
+<li><p><strong>center</strong> – Position of the center of the box.</p></li>
+<li><p><strong>size</strong> – Lengths of the sides of the box along its x, y and z axes, in meters.</p></li>
+<li><p><strong>reference_frame</strong> – Reference frame that the position and rotation are in.</p></li>
+<li><p><strong>rotation</strong> – Rotation of the box, as a quaternion. Defaults to <code class="docutils literal notranslate"><span class="pre">{0.0,</span> <span class="pre">0.0,</span> <span class="pre">0.0,</span> <span class="pre">1.0}</span></code>.</p></li>
+<li><p><strong>visible</strong> – Whether the box is visible. Defaults to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="box.html#Drawing.Box" title="Drawing.Box"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Drawing.Box</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="Drawing.add_sphere">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_sphere</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">center</span></em>, <em class="sig-param"><span class="pre">radius</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_sphere" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.add_sphere">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">Drawing.</span></span><span class="sig-name descname"><span class="pre">add_sphere</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">center</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../space-center/reference-frame.html#lua-SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">visible</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="sphere.html#lua-Drawing.Sphere" title="Drawing.Sphere"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Drawing.Sphere</span></code></a><a class="headerlink" href="#lua-Drawing.add_sphere" title="Link to this definition">#</a><br /></dt>
 <dd><p>Draw a solid sphere in the scene.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>center</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – Position of the center of the sphere.</p></li>
-<li><p><strong>radius</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Radius of the sphere, in meters.</p></li>
-<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – Reference frame that the position is in.</p></li>
-<li><p><strong>visible</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the sphere is visible.</p></li>
+<li><p><strong>center</strong> – Position of the center of the sphere.</p></li>
+<li><p><strong>radius</strong> – Radius of the sphere, in meters.</p></li>
+<li><p><strong>reference_frame</strong> – Reference frame that the position is in.</p></li>
+<li><p><strong>visible</strong> – Whether the sphere is visible. Defaults to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="sphere.html#Drawing.Sphere" title="Drawing.Sphere"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Drawing.Sphere</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="Drawing.add_text">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">text</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em>, <em class="sig-param"><span class="pre">position</span></em>, <em class="sig-param"><span class="pre">rotation</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_text" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.add_text">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">Drawing.</span></span><span class="sig-name descname"><span class="pre">add_text</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../space-center/reference-frame.html#lua-SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">rotation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">visible</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="text.html#lua-Drawing.Text" title="Drawing.Text"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Drawing.Text</span></code></a><a class="headerlink" href="#lua-Drawing.add_text" title="Link to this definition">#</a><br /></dt>
 <dd><p>Draw text in the scene.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>text</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – The string to draw.</p></li>
-<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – Reference frame that the text position is in.</p></li>
-<li><p><strong>position</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – Position of the text.</p></li>
-<li><p><strong>rotation</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – Rotation of the text, as a quaternion.</p></li>
-<li><p><strong>visible</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the text is visible.</p></li>
+<li><p><strong>text</strong> – The string to draw.</p></li>
+<li><p><strong>reference_frame</strong> – Reference frame that the text position is in.</p></li>
+<li><p><strong>position</strong> – Position of the text.</p></li>
+<li><p><strong>rotation</strong> – Rotation of the text, as a quaternion.</p></li>
+<li><p><strong>visible</strong> – Whether the text is visible. Defaults to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="text.html#Drawing.Text" title="Drawing.Text"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Drawing.Text</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="Drawing.add_navball_marker">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_navball_marker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">direction</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_navball_marker" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.add_navball_marker">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">Drawing.</span></span><span class="sig-name descname"><span class="pre">add_navball_marker</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">direction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../space-center/reference-frame.html#lua-SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">visible</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="navball-marker.html#lua-Drawing.NavballMarker" title="Drawing.NavballMarker"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Drawing.NavballMarker</span></code></a><a class="headerlink" href="#lua-Drawing.add_navball_marker" title="Link to this definition">#</a><br /></dt>
 <dd><p>Draw a marker on the navball, pointing in the given direction.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>direction</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – Direction that the marker points in.</p></li>
-<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – Reference frame that the direction is in.</p></li>
-<li><p><strong>visible</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the marker is visible.</p></li>
+<li><p><strong>direction</strong> – Direction that the marker points in.</p></li>
+<li><p><strong>reference_frame</strong> – Reference frame that the direction is in.</p></li>
+<li><p><strong>visible</strong> – Whether the marker is visible. Defaults to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="navball-marker.html#Drawing.NavballMarker" title="Drawing.NavballMarker"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Drawing.NavballMarker</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="Drawing.add_map_marker">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_map_marker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">position</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">icon</span> <span class="pre">=</span> <span class="pre">Drawing.MapMarkerIcon.generic</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">caption</span> <span class="pre">=</span> <span class="pre">''</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_map_marker" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.add_map_marker">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">Drawing.</span></span><span class="sig-name descname"><span class="pre">add_map_marker</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../space-center/reference-frame.html#lua-SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">icon</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="map-marker.html#lua-Drawing.MapMarkerIcon" title="Drawing.MapMarkerIcon"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Drawing.MapMarkerIcon</span></code></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">caption</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">visible</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="map-marker.html#lua-Drawing.MapMarker" title="Drawing.MapMarker"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Drawing.MapMarker</span></code></a><a class="headerlink" href="#lua-Drawing.add_map_marker" title="Link to this definition">#</a><br /></dt>
 <dd><p>Draw a marker in the map view, with one of the game’s own map icons.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>position</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – Position of the marker.</p></li>
-<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – Reference frame that the position is in.</p></li>
-<li><p><strong>icon</strong> (<span><a class="reference internal" href="map-marker.html#Drawing.MapMarkerIcon" title="Drawing.MapMarkerIcon"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Drawing.MapMarkerIcon</span></code></a></span>) – The icon that the marker is drawn with.</p></li>
-<li><p><strong>caption</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – The caption shown when the mouse is over the marker.</p></li>
-<li><p><strong>visible</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the marker is visible.</p></li>
+<li><p><strong>position</strong> – Position of the marker.</p></li>
+<li><p><strong>reference_frame</strong> – Reference frame that the position is in.</p></li>
+<li><p><strong>icon</strong> – The icon that the marker is drawn with. Defaults to <code class="docutils literal notranslate"><span class="pre">Drawing.MapMarkerIcon.generic</span></code>.</p></li>
+<li><p><strong>caption</strong> – The caption shown when the mouse is over the marker. Defaults to <code class="docutils literal notranslate"><span class="pre">''</span></code>.</p></li>
+<li><p><strong>visible</strong> – Whether the marker is visible. Defaults to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="map-marker.html#Drawing.MapMarker" title="Drawing.MapMarker"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Drawing.MapMarker</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="Drawing.add_image">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">data</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_image" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.add_image">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">Drawing.</span></span><span class="sig-name descname"><span class="pre">add_image</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="image.html#lua-Drawing.Image" title="Drawing.Image"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Drawing.Image</span></code></a><a class="headerlink" href="#lua-Drawing.add_image" title="Link to this definition">#</a></dt>
 <dd><p>Load an image that markers can be drawn with, from the contents of a PNG or JPEG
 file. The transparency of a PNG image is kept.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>data</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – The contents of the image file.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="image.html#Drawing.Image" title="Drawing.Image"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Drawing.Image</span></code></a></p>
+<dd class="field-odd"><p><strong>data</strong> – The contents of the image file.</p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1431,12 +1384,12 @@ file. The transparency of a PNG image is kept.</p>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="Drawing.clear">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="pre">client_only</span> <span class="pre">=</span> <span class="pre">false</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.clear" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.clear">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">Drawing.</span></span><span class="sig-name descname"><span class="pre">clear</span></span><span class="p"><span class="pre">(</span></span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">client_only</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-Drawing.clear" title="Link to this definition">#</a></dt>
 <dd><p>Remove all objects being drawn.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>client_only</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – If true, only remove objects created by the calling client.</p>
+<dd class="field-odd"><p><strong>client_only</strong> – If true, only remove objects created by the calling client. Defaults to <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>

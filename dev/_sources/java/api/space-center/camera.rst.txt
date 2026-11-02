@@ -9,7 +9,7 @@ Camera
 .. type:: public class Camera
 
    Controls the game's camera.
-   Obtained by calling :meth:`getCamera()`.
+   Obtained by calling :meth:`SpaceCenter.getCamera()`.
 
    .. method:: CameraMode getMode()
 

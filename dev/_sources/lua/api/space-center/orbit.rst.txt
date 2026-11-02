@@ -12,20 +12,18 @@ Orbit
    :attr:`SpaceCenter.Vessel.orbit`, or a celestial body, obtained by calling
    :attr:`SpaceCenter.CelestialBody.orbit`.
 
-   .. staticmethod:: create_from_position_and_velocity(body, position, velocity, ut, [reference_frame = Types.none])
+   .. staticmethod:: create_from_position_and_velocity(body: SpaceCenter.CelestialBody, position: Tuple, velocity: Tuple, ut: number, reference_frame?: SpaceCenter.ReferenceFrame | Types.none): SpaceCenter.Orbit
 
       Create the orbit that passes through a given position at a given velocity.
       The orbit coasts freely under the gravity of the body being orbited, so it
       describes where an object left to fall from that position and velocity would
       be at any later time.
 
-      :param SpaceCenter.CelestialBody body: The celestial body being orbited.
-      :param Tuple position: The position, as a position vector.
-      :param Tuple velocity: The velocity, as a vector pointing in the direction of travel, whose magnitude is the speed in :math:`\mathrm{m/s}`.
-      :param number ut: The universal time, in seconds, at which the object is at *position* traveling at *velocity*.
+      :param body: The celestial body being orbited.
+      :param position: The position, as a position vector.
+      :param velocity: The velocity, as a vector pointing in the direction of travel, whose magnitude is the speed in :math:`\mathrm{m/s}`.
+      :param ut: The universal time, in seconds, at which the object is at *position* traveling at *velocity*.
       :param reference_frame: The reference frame that *position* and *velocity* are in. Defaults to :attr:`SpaceCenter.CelestialBody.non_rotating_reference_frame` of *body*.
-      :type reference_frame: :class:`SpaceCenter.ReferenceFrame` or ``Types.none``
-      :rtype: :class:`SpaceCenter.Orbit`
 
       .. note::
 
@@ -46,22 +44,21 @@ Orbit
          that created it disconnects. Remove each one created by a script that creates
          them repeatedly, for example once per update.
 
-   .. staticmethod:: create_from_orbital_elements(body, semi_major_axis, eccentricity, inclination, longitude_of_ascending_node, argument_of_periapsis, mean_anomaly_at_epoch, epoch)
+   .. staticmethod:: create_from_orbital_elements(body: SpaceCenter.CelestialBody, semi_major_axis: number, eccentricity: number, inclination: number, longitude_of_ascending_node: number, argument_of_periapsis: number, mean_anomaly_at_epoch: number, epoch: number): SpaceCenter.Orbit
 
       Create the orbit with the given
       `orbital elements <https://en.wikipedia.org/wiki/Orbital_elements>`_
       around a given body. The orbit coasts freely under the gravity of that body,
       so it describes where an object on it would be at any time.
 
-      :param SpaceCenter.CelestialBody body: The celestial body being orbited.
-      :param number semi_major_axis: The semi-major axis of the orbit, in meters. Positive for an ellipse and negative for a hyperbola.
-      :param number eccentricity: The eccentricity of the orbit. Below one for an ellipse and above one for a hyperbola.
-      :param number inclination: The inclination of the orbit, in radians.
-      :param number longitude_of_ascending_node: The longitude of the ascending node, in radians.
-      :param number argument_of_periapsis: The argument of periapsis, in radians.
-      :param number mean_anomaly_at_epoch: The mean anomaly at *epoch*, in radians.
-      :param number epoch: The universal time, in seconds, that *mean_anomaly_at_epoch* is measured at.
-      :rtype: :class:`SpaceCenter.Orbit`
+      :param body: The celestial body being orbited.
+      :param semi_major_axis: The semi-major axis of the orbit, in meters. Positive for an ellipse and negative for a hyperbola.
+      :param eccentricity: The eccentricity of the orbit. Below one for an ellipse and above one for a hyperbola.
+      :param inclination: The inclination of the orbit, in radians.
+      :param longitude_of_ascending_node: The longitude of the ascending node, in radians.
+      :param argument_of_periapsis: The argument of periapsis, in radians.
+      :param mean_anomaly_at_epoch: The mean anomaly at *epoch*, in radians.
+      :param epoch: The universal time, in seconds, that *mean_anomaly_at_epoch* is measured at.
 
       .. note::
 
@@ -107,7 +104,6 @@ Orbit
       The celestial body (e.g. planet or moon) around which the object is orbiting.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.CelestialBody`
 
    .. attribute:: reference_frame: SpaceCenter.ReferenceFrame
 
@@ -122,7 +118,6 @@ Orbit
         :attr:`SpaceCenter.Orbit.body`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.ReferenceFrame`
 
       .. note::
 
@@ -145,7 +140,6 @@ Orbit
       * The z-axis points in the orbital normal direction.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.ReferenceFrame`
 
       .. note::
 
@@ -159,7 +153,6 @@ Orbit
       of the body being orbited.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
       .. note::
 
@@ -172,7 +165,6 @@ Orbit
       of the body being orbited.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
       .. note::
 
@@ -184,7 +176,6 @@ Orbit
       The apoapsis of the orbit, in meters, above the sea level of the body being orbited.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
       .. note::
 
@@ -195,7 +186,6 @@ Orbit
       The periapsis of the orbit, in meters, above the sea level of the body being orbited.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
       .. note::
 
@@ -206,21 +196,18 @@ Orbit
       The semi-major axis of the orbit, in meters.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: semi_minor_axis: number
 
       The semi-minor axis of the orbit, in meters.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: semi_latus_rectum: number
 
       The semi-latus rectum of the orbit, in meters.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: radius: number
 
@@ -229,7 +216,6 @@ Orbit
       is orbiting.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
       .. note::
 
@@ -241,132 +227,112 @@ Orbit
       being orbited.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
       .. note::
 
          This is equal to :attr:`SpaceCenter.Orbit.radius` minus the equatorial radius of the body.
 
-   .. method:: radius_at(ut)
+   .. method:: radius_at(ut: number): number
 
       The orbital radius at the given time, in meters.
 
-      :param number ut: The universal time to measure the radius at.
-      :rtype: number
+      :param ut: The universal time to measure the radius at.
 
-   .. method:: radius_at_true_anomaly(true_anomaly)
+   .. method:: radius_at_true_anomaly(true_anomaly: number): number
 
       The orbital radius at the point in the orbit given by the true anomaly.
 
-      :param number true_anomaly: The true anomaly.
-      :rtype: number
+      :param true_anomaly: The true anomaly.
 
-   .. method:: position([reference_frame = Types.none])
+   .. method:: position(reference_frame?: SpaceCenter.ReferenceFrame | Types.none): Tuple
 
       The position the orbit has reached at the current time, in the given reference
       frame.
 
       :param reference_frame: The reference frame that the returned position vector is in. Defaults to :attr:`SpaceCenter.CelestialBody.non_rotating_reference_frame` of :attr:`SpaceCenter.Orbit.body`.
-      :type reference_frame: :class:`SpaceCenter.ReferenceFrame` or ``Types.none``
       :returns: The position as a vector.
-      :rtype: Tuple
 
-   .. method:: position_at(ut, [reference_frame = Types.none])
+   .. method:: position_at(ut: number, reference_frame?: SpaceCenter.ReferenceFrame | Types.none): Tuple
 
       The position at a given time, in the specified reference frame.
 
-      :param number ut: The universal time to measure the position at.
+      :param ut: The universal time to measure the position at.
       :param reference_frame: The reference frame that the returned position vector is in. Defaults to :attr:`SpaceCenter.CelestialBody.non_rotating_reference_frame` of :attr:`SpaceCenter.Orbit.body`.
-      :type reference_frame: :class:`SpaceCenter.ReferenceFrame` or ``Types.none``
       :returns: The position as a vector.
-      :rtype: Tuple
 
-   .. method:: position_at_true_anomaly(true_anomaly, [reference_frame = Types.none])
+   .. method:: position_at_true_anomaly(true_anomaly: number, reference_frame?: SpaceCenter.ReferenceFrame | Types.none): Tuple
 
       The position at the point in the orbit given by the true anomaly, in the specified
       reference frame.
 
-      :param number true_anomaly: The true anomaly.
+      :param true_anomaly: The true anomaly.
       :param reference_frame: The reference frame that the returned position vector is in. Defaults to :attr:`SpaceCenter.CelestialBody.non_rotating_reference_frame` of :attr:`SpaceCenter.Orbit.body`.
-      :type reference_frame: :class:`SpaceCenter.ReferenceFrame` or ``Types.none``
       :returns: The position as a vector.
-      :rtype: Tuple
 
-   .. method:: velocity([reference_frame = Types.none])
+   .. method:: velocity(reference_frame?: SpaceCenter.ReferenceFrame | Types.none): Tuple
 
       The velocity the orbit has reached at the current time, in the given reference
       frame.
 
       :param reference_frame: The reference frame that the returned velocity vector is in. Defaults to :attr:`SpaceCenter.CelestialBody.non_rotating_reference_frame` of :attr:`SpaceCenter.Orbit.body`.
-      :type reference_frame: :class:`SpaceCenter.ReferenceFrame` or ``Types.none``
       :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in :math:`\mathrm{m/s}`.
-      :rtype: Tuple
 
-   .. method:: velocity_at(ut, [reference_frame = Types.none])
+   .. method:: velocity_at(ut: number, reference_frame?: SpaceCenter.ReferenceFrame | Types.none): Tuple
 
       The velocity at a given time, in the specified reference frame.
 
-      :param number ut: The universal time to measure the velocity at.
+      :param ut: The universal time to measure the velocity at.
       :param reference_frame: The reference frame that the returned velocity vector is in. Defaults to :attr:`SpaceCenter.CelestialBody.non_rotating_reference_frame` of :attr:`SpaceCenter.Orbit.body`.
-      :type reference_frame: :class:`SpaceCenter.ReferenceFrame` or ``Types.none``
       :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in :math:`\mathrm{m/s}`.
-      :rtype: Tuple
 
-   .. method:: velocity_at_true_anomaly(true_anomaly, [reference_frame = Types.none])
+   .. method:: velocity_at_true_anomaly(true_anomaly: number, reference_frame?: SpaceCenter.ReferenceFrame | Types.none): Tuple
 
       The velocity at the point in the orbit given by the true anomaly, in the specified
       reference frame.
 
-      :param number true_anomaly: The true anomaly.
+      :param true_anomaly: The true anomaly.
       :param reference_frame: The reference frame that the returned velocity vector is in. Defaults to :attr:`SpaceCenter.CelestialBody.non_rotating_reference_frame` of :attr:`SpaceCenter.Orbit.body`.
-      :type reference_frame: :class:`SpaceCenter.ReferenceFrame` or ``Types.none``
       :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in :math:`\mathrm{m/s}`.
-      :rtype: Tuple
 
    .. attribute:: speed: number
 
       The current orbital speed of the object in :math:`\mathrm{m/s}`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
       .. note::
 
          This value will change over time if the orbit is elliptical.
 
-   .. method:: speed_at(ut)
+   .. method:: speed_at(ut: number): number
 
       The orbital speed at the given time, in :math:`\mathrm{m/s}`.
 
-      :param number ut: The universal time to measure the speed at.
-      :rtype: number
+      :param ut: The universal time to measure the speed at.
 
-   .. method:: speed_at_radius(radius)
+   .. method:: speed_at_radius(radius: number): number
 
       The orbital speed at the given orbital radius, in :math:`\mathrm{m/s}`.
 
-      :param number radius: The orbital radius in meters.
-      :rtype: number
+      :param radius: The orbital radius in meters.
 
       .. note::
 
          This is the vis-viva speed. A radius the orbit never reaches is accepted. On
          an ellipse the speed is ``NaN`` above twice the semi-major axis.
 
-   .. method:: speed_at_true_anomaly(true_anomaly)
+   .. method:: speed_at_true_anomaly(true_anomaly: number): number
 
       The orbital speed at the point in the orbit given by the true anomaly, in
       :math:`\mathrm{m/s}`.
 
-      :param number true_anomaly: The true anomaly.
-      :rtype: number
+      :param true_anomaly: The true anomaly.
 
    .. attribute:: specific_energy: number
 
       The specific orbital energy, in :math:`\mathrm{J/kg}`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
       .. note::
 
@@ -380,35 +346,30 @@ Orbit
       The specific relative angular momentum, in :math:`\mathrm{m^{2}/s}`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: period: number
 
       The orbital period, in seconds.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: mean_motion: number
 
       The mean motion, in :math:`\mathrm{rad/s}`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: time_to_apoapsis: number
 
       The time until the object reaches apoapsis, in seconds.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: time_to_periapsis: number
 
       The time until the object reaches periapsis, in seconds.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: eccentricity: number
 
@@ -416,7 +377,6 @@ Orbit
       of the orbit.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: inclination: number
 
@@ -425,14 +385,12 @@ Orbit
       in radians.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: longitude_of_ascending_node: number
 
       The `longitude of the ascending node <https://en.wikipedia.org/wiki/Longitude_of_the_ascending_node>`_, in radians.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
       .. note::
 
@@ -444,7 +402,6 @@ Orbit
       The `argument of periapsis <https://en.wikipedia.org/wiki/Argument_of_periapsis>`_, in radians.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
       .. note::
 
@@ -456,7 +413,6 @@ Orbit
       The `mean anomaly at epoch <https://en.wikipedia.org/wiki/Mean_anomaly>`_.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: epoch: number
 
@@ -465,77 +421,66 @@ Orbit
       is measured.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: mean_anomaly: number
 
       The `mean anomaly <https://en.wikipedia.org/wiki/Mean_anomaly>`_.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
-   .. method:: mean_anomaly_at_ut(ut)
+   .. method:: mean_anomaly_at_ut(ut: number): number
 
       The mean anomaly at the given time.
 
-      :param number ut: The universal time in seconds.
-      :rtype: number
+      :param ut: The universal time in seconds.
 
    .. attribute:: eccentric_anomaly: number
 
       The `eccentric anomaly <https://en.wikipedia.org/wiki/Eccentric_anomaly>`_.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
-   .. method:: eccentric_anomaly_at_ut(ut)
+   .. method:: eccentric_anomaly_at_ut(ut: number): number
 
       The eccentric anomaly at the given universal time.
 
-      :param number ut: The universal time, in seconds.
-      :rtype: number
+      :param ut: The universal time, in seconds.
 
    .. attribute:: true_anomaly: number
 
       The `true anomaly <https://en.wikipedia.org/wiki/True_anomaly>`_.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
-   .. method:: true_anomaly_at_ut(ut)
+   .. method:: true_anomaly_at_ut(ut: number): number
 
       The true anomaly at the given time.
 
-      :param number ut: The universal time in seconds.
-      :rtype: number
+      :param ut: The universal time in seconds.
 
-   .. method:: true_anomaly_at_radius(radius)
+   .. method:: true_anomaly_at_radius(radius: number): number
 
       The true anomaly at the given orbital radius.
 
-      :param number radius: The orbital radius in meters.
-      :rtype: number
+      :param radius: The orbital radius in meters.
 
-   .. method:: ut_at_true_anomaly(true_anomaly)
+   .. method:: ut_at_true_anomaly(true_anomaly: number): number
 
       The universal time, in seconds, corresponding to the given true anomaly.
 
-      :param number true_anomaly: True anomaly.
-      :rtype: number
+      :param true_anomaly: True anomaly.
 
-   .. method:: true_anomaly_at_an(target)
+   .. method:: true_anomaly_at_an(target: SpaceCenter.Orbit): number
 
       The true anomaly of the ascending node with the given target orbit.
 
-      :param SpaceCenter.Orbit target: Target orbit.
-      :rtype: number
+      :param target: Target orbit.
 
-   .. method:: true_anomaly_at_dn(target)
+   .. method:: true_anomaly_at_dn(target: SpaceCenter.Orbit): number
 
       The true anomaly of the descending node with the given target orbit.
 
-      :param SpaceCenter.Orbit target: Target orbit.
-      :rtype: number
+      :param target: Target orbit.
 
    .. attribute:: orbital_speed: number
 
@@ -544,16 +489,14 @@ Orbit
       The current orbital speed in :math:`\mathrm{m/s}`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
-   .. method:: orbital_speed_at(ut)
+   .. method:: orbital_speed_at(ut: number): number
 
       .. warning:: Deprecated. Use :meth:`SpaceCenter.Orbit.speed_at` instead.
 
       The orbital speed at the given time, in :math:`\mathrm{m/s}`.
 
-      :param number ut: The universal time to measure the speed at.
-      :rtype: number
+      :param ut: The universal time to measure the speed at.
 
    .. attribute:: orbital_energy: number
 
@@ -562,33 +505,29 @@ Orbit
       The specific orbital energy of the orbit, in :math:`\mathrm{J/kg}`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
-   .. staticmethod:: reference_plane_normal(reference_frame)
+   .. staticmethod:: reference_plane_normal(reference_frame: SpaceCenter.ReferenceFrame): Tuple
 
       The direction that is normal to the orbits reference plane,
       in the given reference frame.
       The reference plane is the plane from which the orbits inclination is measured.
 
-      :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned direction is in.
+      :param reference_frame: The reference frame that the returned direction is in.
       :returns: The direction as a unit vector.
-      :rtype: Tuple
 
-   .. staticmethod:: reference_plane_direction(reference_frame)
+   .. staticmethod:: reference_plane_direction(reference_frame: SpaceCenter.ReferenceFrame): Tuple
 
       The direction from which the orbits longitude of ascending node is measured,
       in the given reference frame.
 
-      :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned direction is in.
+      :param reference_frame: The reference frame that the returned direction is in.
       :returns: The direction as a unit vector.
-      :rtype: Tuple
 
-   .. method:: relative_inclination(target)
+   .. method:: relative_inclination(target: SpaceCenter.Orbit): number
 
       Relative inclination of this orbit and the target orbit, in radians.
 
-      :param SpaceCenter.Orbit target: Target orbit.
-      :rtype: number
+      :param target: Target orbit.
 
    .. attribute:: time_to_soi_change: number
 
@@ -596,28 +535,24 @@ Orbit
       if the object is not going to change sphere of influence.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
-   .. attribute:: next_orbit: SpaceCenter.Orbit
+   .. attribute:: next_orbit: SpaceCenter.Orbit | Types.none
 
       If the object is going to change sphere of influence in the future, returns the new
       orbit after the change. Otherwise returns ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Orbit` or ``Types.none``
 
-   .. method:: next_closest_approach(target)
+   .. method:: next_closest_approach(target: SpaceCenter.Orbit): SpaceCenter.ClosestApproach
 
       The next closest approach to a target orbit.
 
-      :param SpaceCenter.Orbit target: Target orbit.
-      :rtype: :class:`SpaceCenter.ClosestApproach`
+      :param target: Target orbit.
 
-   .. method:: closest_approaches(target, orbits)
+   .. method:: closest_approaches(target: SpaceCenter.Orbit, orbits: number): List
 
       A list of the closest approaches to a target orbit, one for each of the next
       *orbits* orbital periods.
 
-      :param SpaceCenter.Orbit target: Target orbit.
-      :param number orbits: The number of future orbits to search.
-      :rtype: List
+      :param target: Target orbit.
+      :param orbits: The number of future orbits to search.

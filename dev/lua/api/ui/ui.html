@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=eadf7411" />
   
@@ -1102,7 +1103,7 @@
                   
   <section id="ui">
 <h1>UI<a class="headerlink" href="#ui" title="Link to this heading">#</a></h1>
-<p id="module-UI">Provides functionality for drawing and interacting with in-game user interface elements.</p>
+<p id="lua-UI">Provides functionality for drawing and interacting with in-game user interface elements.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>For drawing 3D objects in the flight scene, see the Drawing service.
@@ -1111,46 +1112,38 @@ disconnects, and when the game scene changes. A client that needs its
 interface in more than one scene must create it again in each of them.</p>
 </div>
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="UI.UI.stock_canvas">
-<span class="sig-name descname"><span class="pre">stock_canvas</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">UI.Canvas</span><a class="headerlink" href="#UI.UI.stock_canvas" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.stock_canvas">
+<span class="sig-prename descclassname"><span class="pre">UI.</span></span><span class="sig-name descname"><span class="pre">stock_canvas</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="canvas.html#lua-UI.Canvas" title="UI.Canvas"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">UI.Canvas</span></code></a><a class="headerlink" href="#lua-UI.stock_canvas" title="Link to this definition">#</a></dt>
 <dd><p>The stock UI canvas.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="canvas.html#UI.Canvas" title="UI.Canvas"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.Canvas</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="UI.add_canvas">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_canvas</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#UI.add_canvas" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.add_canvas">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">UI.</span></span><span class="sig-name descname"><span class="pre">add_canvas</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="canvas.html#lua-UI.Canvas" title="UI.Canvas"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">UI.Canvas</span></code></a><a class="headerlink" href="#lua-UI.add_canvas" title="Link to this definition">#</a></dt>
 <dd><p>Add a new canvas.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="canvas.html#UI.Canvas" title="UI.Canvas"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.Canvas</span></code></a></p>
-</dd>
-</dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>If you want to add UI elements to KSPs stock UI canvas, use <a class="reference internal" href="#UI.UI.stock_canvas" title="UI.UI.stock_canvas"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">UI.stock_canvas</span></code></a>.</p>
+<p>If you want to add UI elements to KSPs stock UI canvas, use <a class="reference internal" href="#lua-UI.stock_canvas" title="UI.stock_canvas"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">UI.stock_canvas</span></code></a>.</p>
 </div>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="UI.message">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">content</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">duration</span> <span class="pre">=</span> <span class="pre">1.0</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">position</span> <span class="pre">=</span> <span class="pre">UI.MessagePosition.top_center</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">color</span> <span class="pre">=</span> <span class="pre">{1.0</span></em>, <em class="sig-param"><span class="pre">0.92</span></em>, <em class="sig-param"><span class="pre">0.016</span></em>, <em class="sig-param"><span class="pre">1.0}</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">size</span> <span class="pre">=</span> <span class="pre">2e+01</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#UI.message" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.message">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">UI.</span></span><span class="sig-name descname"><span class="pre">message</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">content</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">duration</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">position</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-UI.MessagePosition" title="UI.MessagePosition"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">UI.MessagePosition</span></code></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">color</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../stdlib.html#lua-StdLib.ColorRGBA" title="StdLib.ColorRGBA"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">StdLib.ColorRGBA</span></code></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">size</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><br /><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-UI.message" title="Link to this definition">#</a><br /></dt>
 <dd><p>Display a message on the screen.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>content</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – Message content.</p></li>
-<li><p><strong>duration</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Duration before the message disappears, in seconds.</p></li>
-<li><p><strong>position</strong> (<span><a class="reference internal" href="#UI.MessagePosition" title="UI.MessagePosition"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.MessagePosition</span></code></a></span>) – Position to display the message.</p></li>
-<li><p><strong>color</strong> (<span><a class="reference internal" href="../stdlib.html#StdLib.ColorRGBA" title="StdLib.ColorRGBA"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">StdLib.ColorRGBA</span></code></a></span>) – The color of the message.</p></li>
-<li><p><strong>size</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Size of the message, differs per position.</p></li>
+<li><p><strong>content</strong> – Message content.</p></li>
+<li><p><strong>duration</strong> – Duration before the message disappears, in seconds. Defaults to <code class="docutils literal notranslate"><span class="pre">1.0</span></code>.</p></li>
+<li><p><strong>position</strong> – Position to display the message. Defaults to <code class="docutils literal notranslate"><span class="pre">UI.MessagePosition.top_center</span></code>.</p></li>
+<li><p><strong>color</strong> – The color of the message. Defaults to <code class="docutils literal notranslate"><span class="pre">{1.0,</span> <span class="pre">0.92,</span> <span class="pre">0.016,</span> <span class="pre">1.0}</span></code>.</p></li>
+<li><p><strong>size</strong> – Size of the message, differs per position. Defaults to <code class="docutils literal notranslate"><span class="pre">2e+01</span></code>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1161,41 +1154,41 @@ interface in more than one scene must create it again in each of them.</p>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="UI.clear">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="pre">client_only</span> <span class="pre">=</span> <span class="pre">false</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#UI.clear" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.clear">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">UI.</span></span><span class="sig-name descname"><span class="pre">clear</span></span><span class="p"><span class="pre">(</span></span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">client_only</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-UI.clear" title="Link to this definition">#</a></dt>
 <dd><p>Remove all user interface elements.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>client_only</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – If true, only remove objects created by the calling client.</p>
+<dd class="field-odd"><p><strong>client_only</strong> – If true, only remove objects created by the calling client. Defaults to <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua class">
-<dt class="sig sig-object lua" id="UI.MessagePosition">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">UI.</span></span><span class="sig-name descname"><span class="pre">MessagePosition</span></span><a class="headerlink" href="#UI.MessagePosition" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.MessagePosition">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">UI.</span></span><span class="sig-name descname"><span class="pre">MessagePosition</span></span><a class="headerlink" href="#lua-UI.MessagePosition" title="Link to this definition">#</a></dt>
 <dd><p>Message position.</p>
 <dl class="lua data">
-<dt class="sig sig-object lua" id="UI.MessagePosition.top_left">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">top_left</span></span><a class="headerlink" href="#UI.MessagePosition.top_left" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.MessagePosition.top_left">
+<span class="sig-name descname"><span class="pre">top_left</span></span><a class="headerlink" href="#lua-UI.MessagePosition.top_left" title="Link to this definition">#</a></dt>
 <dd><p>Top left.</p>
 </dd></dl>
 
 <dl class="lua data">
-<dt class="sig sig-object lua" id="UI.MessagePosition.top_center">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">top_center</span></span><a class="headerlink" href="#UI.MessagePosition.top_center" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.MessagePosition.top_center">
+<span class="sig-name descname"><span class="pre">top_center</span></span><a class="headerlink" href="#lua-UI.MessagePosition.top_center" title="Link to this definition">#</a></dt>
 <dd><p>Top center.</p>
 </dd></dl>
 
 <dl class="lua data">
-<dt class="sig sig-object lua" id="UI.MessagePosition.top_right">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">top_right</span></span><a class="headerlink" href="#UI.MessagePosition.top_right" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.MessagePosition.top_right">
+<span class="sig-name descname"><span class="pre">top_right</span></span><a class="headerlink" href="#lua-UI.MessagePosition.top_right" title="Link to this definition">#</a></dt>
 <dd><p>Top right.</p>
 </dd></dl>
 
 <dl class="lua data">
-<dt class="sig sig-object lua" id="UI.MessagePosition.bottom_center">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">bottom_center</span></span><a class="headerlink" href="#UI.MessagePosition.bottom_center" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.MessagePosition.bottom_center">
+<span class="sig-name descname"><span class="pre">bottom_center</span></span><a class="headerlink" href="#lua-UI.MessagePosition.bottom_center" title="Link to this definition">#</a></dt>
 <dd><p>Bottom center.</p>
 </dd></dl>
 

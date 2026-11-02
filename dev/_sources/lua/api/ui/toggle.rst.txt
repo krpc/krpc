@@ -22,14 +22,12 @@ Toggle
       The rect transform for the UI object.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`UI.RectTransform`
 
    .. attribute:: layout_element: UI.LayoutElement
 
       How much space the UI object asks a layout for.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`UI.LayoutElement`
 
       .. note::
 
@@ -41,7 +39,6 @@ Toggle
       Whether the UI object is visible.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
       .. note::
 
@@ -55,26 +52,23 @@ Toggle
       The text for the toggle.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`UI.Text`
 
    .. attribute:: checked: boolean
 
       Whether the toggle is checked.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
       .. note::
 
          Checking a toggle that belongs to a :class:`UI.ToggleGroup` unchecks the rest
          of that group, whether or not it is on the screen.
 
-   .. attribute:: group: UI.ToggleGroup
+   .. attribute:: group: UI.ToggleGroup | Types.none
 
       The group that the toggle belongs to, or ``nil`` if it does not belong to one.
 
       :Attribute: Can be read or written
-      :rtype: :class:`UI.ToggleGroup` or ``Types.none``
 
       .. note::
 
@@ -87,7 +81,6 @@ Toggle
       Whether the toggle has been changed.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
       .. note::
 
@@ -100,7 +93,6 @@ Toggle
       Whether the control responds to the user.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
       .. note::
 
@@ -113,7 +105,6 @@ Toggle
       as the skin has it.
 
       :Attribute: Can be read or written
-      :rtype: :class:`StdLib.ColorRGBA`
 
       .. note::
 
@@ -130,7 +121,6 @@ Toggle
       control. Empty, the default, shows nothing.
 
       :Attribute: Can be read or written
-      :rtype: string
 
    .. method:: remove()
 

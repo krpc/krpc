@@ -24,7 +24,7 @@ AlarmType
 
    .. field:: public AlarmType MANEUVER_AUTO
 
-      See :meth:`AlarmType.MANEUVER`.
+      See :field:`AlarmType.MANEUVER`.
 
 
    .. field:: public AlarmType APOAPSIS
@@ -60,7 +60,7 @@ AlarmType
 
    .. field:: public AlarmType CONTRACT_AUTO
 
-      See :meth:`AlarmType.CONTRACT`.
+      See :field:`AlarmType.CONTRACT`.
 
 
    .. field:: public AlarmType CREW
@@ -92,7 +92,7 @@ AlarmType
 
    .. field:: public AlarmType SOI_CHANGE_AUTO
 
-      See :meth:`AlarmType.SOI_CHANGE`.
+      See :field:`AlarmType.SOI_CHANGE`.
 
 
    .. field:: public AlarmType TRANSFER
@@ -104,7 +104,7 @@ AlarmType
 
    .. field:: public AlarmType TRANSFER_MODELLED
 
-      See :meth:`AlarmType.TRANSFER`.
+      See :field:`AlarmType.TRANSFER`.
 
 
    .. field:: public AlarmType SCIENCE_LAB

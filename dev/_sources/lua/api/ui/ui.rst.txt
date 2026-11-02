@@ -24,33 +24,31 @@ Provides functionality for drawing and interacting with in-game user interface e
    The stock UI canvas.
 
    :Attribute: Read-only, cannot be set
-   :rtype: :class:`UI.Canvas`
 
 
 
 
-.. staticmethod:: add_canvas()
+.. staticmethod:: add_canvas(): UI.Canvas
 
    Add a new canvas.
 
-   :rtype: :class:`UI.Canvas`
 
    .. note::
 
-      If you want to add UI elements to KSPs stock UI canvas, use :attr:`UI.stock_canvas <UI.UI.stock_canvas>`.
+      If you want to add UI elements to KSPs stock UI canvas, use :attr:`UI.stock_canvas`.
 
 
 
 
-.. staticmethod:: message(content, [duration = 1.0], [position = UI.MessagePosition.top_center], [color = {1.0, 0.92, 0.016, 1.0}], [size = 2e+01])
+.. staticmethod:: message(content: string, duration?: number, position?: UI.MessagePosition, color?: StdLib.ColorRGBA, size?: number)
 
    Display a message on the screen.
 
-   :param string content: Message content.
-   :param number duration: Duration before the message disappears, in seconds.
-   :param UI.MessagePosition position: Position to display the message.
-   :param StdLib.ColorRGBA color: The color of the message.
-   :param number size: Size of the message, differs per position.
+   :param content: Message content.
+   :param duration: Duration before the message disappears, in seconds. Defaults to ``1.0``.
+   :param position: Position to display the message. Defaults to ``UI.MessagePosition.top_center``.
+   :param color: The color of the message. Defaults to ``{1.0, 0.92, 0.016, 1.0}``.
+   :param size: Size of the message, differs per position. Defaults to ``2e+01``.
 
    .. note::
 
@@ -59,11 +57,11 @@ Provides functionality for drawing and interacting with in-game user interface e
 
 
 
-.. staticmethod:: clear([client_only = false])
+.. staticmethod:: clear(client_only?: boolean)
 
    Remove all user interface elements.
 
-   :param boolean client_only: If true, only remove objects created by the calling client.
+   :param client_only: If true, only remove objects created by the calling client. Defaults to ``false``.
 
 
 

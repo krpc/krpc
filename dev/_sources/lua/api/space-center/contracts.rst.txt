@@ -9,153 +9,133 @@ Contracts
 .. class:: ContractManager
 
    Contracts manager.
-   Obtained by calling :attr:`SpaceCenter.contract_manager <SpaceCenter.SpaceCenter.contract_manager>`.
+   Obtained by calling :attr:`SpaceCenter.contract_manager`.
 
    .. attribute:: types: Set
 
       A list of all contract types.
 
       :Attribute: Read-only, cannot be set
-      :rtype: Set
 
    .. attribute:: all_contracts: List
 
       A list of all contracts.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
    .. attribute:: active_contracts: List
 
       A list of all active contracts.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
    .. attribute:: offered_contracts: List
 
       A list of all offered, but unaccepted, contracts.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
    .. attribute:: completed_contracts: List
 
       A list of all completed contracts.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
    .. attribute:: failed_contracts: List
 
       A list of all failed contracts.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
 
 
 .. class:: Contract
 
-   A contract. Can be accessed using :attr:`SpaceCenter.contract_manager <SpaceCenter.SpaceCenter.contract_manager>`.
+   A contract. Can be accessed using :attr:`SpaceCenter.contract_manager`.
 
    .. attribute:: type: string
 
       Type of the contract.
 
       :Attribute: Read-only, cannot be set
-      :rtype: string
 
    .. attribute:: title: string
 
       Title of the contract.
 
       :Attribute: Read-only, cannot be set
-      :rtype: string
 
    .. attribute:: description: string
 
       Description of the contract.
 
       :Attribute: Read-only, cannot be set
-      :rtype: string
 
    .. attribute:: notes: string
 
       Notes for the contract.
 
       :Attribute: Read-only, cannot be set
-      :rtype: string
 
    .. attribute:: synopsis: string
 
       Synopsis for the contract.
 
       :Attribute: Read-only, cannot be set
-      :rtype: string
 
    .. attribute:: keywords: List
 
       Keywords for the contract.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
    .. attribute:: state: SpaceCenter.ContractState
 
       State of the contract.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.ContractState`
 
    .. attribute:: seen: boolean
 
       Whether the contract has been seen.
 
       :Attribute: Read-only, cannot be set
-      :rtype: boolean
 
    .. attribute:: read: boolean
 
       Whether the contract has been read.
 
       :Attribute: Read-only, cannot be set
-      :rtype: boolean
 
    .. attribute:: active: boolean
 
       Whether the contract is active.
 
       :Attribute: Read-only, cannot be set
-      :rtype: boolean
 
    .. attribute:: failed: boolean
 
       Whether the contract has been failed.
 
       :Attribute: Read-only, cannot be set
-      :rtype: boolean
 
    .. attribute:: can_be_canceled: boolean
 
       Whether the contract can be canceled.
 
       :Attribute: Read-only, cannot be set
-      :rtype: boolean
 
    .. attribute:: can_be_declined: boolean
 
       Whether the contract can be declined.
 
       :Attribute: Read-only, cannot be set
-      :rtype: boolean
 
    .. attribute:: can_be_failed: boolean
 
       Whether the contract can be failed.
 
       :Attribute: Read-only, cannot be set
-      :rtype: boolean
 
    .. method:: accept()
 
@@ -174,49 +154,42 @@ Contracts
       Funds received when accepting the contract.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: funds_completion: number
 
       Funds received on completion of the contract.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: funds_failure: number
 
       Funds lost if the contract is failed.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: reputation_completion: number
 
       Reputation gained on completion of the contract.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: reputation_failure: number
 
       Reputation lost if the contract is failed.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: science_completion: number
 
       Science gained on completion of the contract.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: parameters: List
 
       Parameters for the contract.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
    .. attribute:: date_accepted: number
 
@@ -224,7 +197,6 @@ Contracts
       Zero if the contract has not been accepted.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: date_deadline: number
 
@@ -232,7 +204,6 @@ Contracts
       Zero if the contract has no deadline.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: date_expire: number
 
@@ -240,7 +211,6 @@ Contracts
       Zero if the contract has no expiry date.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: date_finished: number
 
@@ -248,7 +218,6 @@ Contracts
       Zero if the contract has not finished or KSP did not record a finish time.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
 
 
@@ -317,74 +286,63 @@ Contracts
       Title of the parameter.
 
       :Attribute: Read-only, cannot be set
-      :rtype: string
 
    .. attribute:: notes: string
 
       Notes for the parameter.
 
       :Attribute: Read-only, cannot be set
-      :rtype: string
 
    .. attribute:: children: List
 
       Child contract parameters.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
    .. attribute:: completed: boolean
 
       Whether the parameter has been completed.
 
       :Attribute: Read-only, cannot be set
-      :rtype: boolean
 
    .. attribute:: failed: boolean
 
       Whether the parameter has been failed.
 
       :Attribute: Read-only, cannot be set
-      :rtype: boolean
 
    .. attribute:: optional: boolean
 
       Whether the contract parameter is optional.
 
       :Attribute: Read-only, cannot be set
-      :rtype: boolean
 
    .. attribute:: funds_completion: number
 
       Funds received on completion of the contract parameter.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: funds_failure: number
 
       Funds lost if the contract parameter is failed.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: reputation_completion: number
 
       Reputation gained on completion of the contract parameter.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: reputation_failure: number
 
       Reputation lost if the contract parameter is failed.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: science_completion: number
 
       Science gained on completion of the contract parameter.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number

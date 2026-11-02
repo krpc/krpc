@@ -67,7 +67,7 @@ Layout
    .. method:: void setConstraintCount(int value)
 
       The number of columns or rows that :meth:`Layout.getConstraint()` fixes, ignored when
-      the constraint is :meth:`GridConstraint.FLEXIBLE`.
+      the constraint is :field:`GridConstraint.FLEXIBLE`.
 
    
 

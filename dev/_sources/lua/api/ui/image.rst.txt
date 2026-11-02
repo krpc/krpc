@@ -16,14 +16,12 @@ Image
       The rect transform for the UI object.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`UI.RectTransform`
 
    .. attribute:: layout_element: UI.LayoutElement
 
       How much space the UI object asks a layout for.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`UI.LayoutElement`
 
       .. note::
 
@@ -35,7 +33,6 @@ Image
       Whether the UI object is visible.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
       .. note::
 
@@ -50,7 +47,6 @@ Image
       array to show a plain rectangle instead.
 
       :Attribute: Can be read or written
-      :rtype: string
 
       .. note::
 
@@ -58,22 +54,22 @@ Image
          an empty array if no picture has been set. A picture drawn with
          :meth:`UI.Image.set_pixels` is not returned here either.
 
-   .. method:: set_pixels(data, width, height)
+   .. method:: set_pixels(data: string, width: number, height: number)
 
       Draw the picture from raw pixels rather than a file, so that a client can
       draw whatever it likes, a graph for instance, and redraw it as often as it
       likes.
 
-      :param string data: The pixels, 4 bytes per pixel: red, green, blue and alpha, each 0 to 255. Pixels run left to right and rows run top to bottom, the way image files store them, so the array must hold width times height times 4 bytes.
-      :param number width: How many pixels wide the picture is.
-      :param number height: How many pixels tall the picture is.
+      :param data: The pixels, 4 bytes per pixel: red, green, blue and alpha, each 0 to 255. Pixels run left to right and rows run top to bottom, the way image files store them, so the array must hold width times height times 4 bytes.
+      :param width: How many pixels wide the picture is.
+      :param height: How many pixels tall the picture is.
 
       .. note::
 
          Redrawing at an unchanged size draws into the picture already there, so a
          picture redrawn every update does not build a new one each time.
 
-   .. method:: update_pixels(data, x, y, width, height)
+   .. method:: update_pixels(data: string, x: number, y: number, width: number, height: number)
 
       Redraw part of a picture drawn with :meth:`UI.Image.set_pixels`: a block of the
       given size, with its top left corner x pixels in from the left edge and y
@@ -81,11 +77,11 @@ Image
       change to a small part of a large picture, one new column of a scrolling
       graph for instance, only sends the part that changed.
 
-      :param string data: The pixels of the block, laid out as for :meth:`UI.Image.set_pixels`: 4 bytes per pixel, rows top to bottom, width times height times 4 bytes in all.
-      :param number x: How many pixels the block sits in from the left edge.
-      :param number y: How many pixels the block sits down from the top.
-      :param number width: How many pixels wide the block is.
-      :param number height: How many pixels tall the block is.
+      :param data: The pixels of the block, laid out as for :meth:`UI.Image.set_pixels`: 4 bytes per pixel, rows top to bottom, width times height times 4 bytes in all.
+      :param x: How many pixels the block sits in from the left edge.
+      :param y: How many pixels the block sits down from the top.
+      :param width: How many pixels wide the block is.
+      :param height: How many pixels tall the block is.
 
       .. note::
 
@@ -100,7 +96,6 @@ Image
       picture is set.
 
       :Attribute: Can be read or written
-      :rtype: :class:`StdLib.ColorRGBA`
 
    .. method:: remove()
 

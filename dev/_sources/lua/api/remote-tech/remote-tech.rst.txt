@@ -17,7 +17,6 @@ This service provides functionality to interact with
    Whether RemoteTech is installed.
 
    :Attribute: Read-only, cannot be set
-   :rtype: boolean
 
 
 
@@ -27,24 +26,18 @@ This service provides functionality to interact with
    The names of the ground stations.
 
    :Attribute: Read-only, cannot be set
-   :rtype: List
 
 
 
 
-.. staticmethod:: antenna(part)
+.. staticmethod:: antenna(part: SpaceCenter.Part): RemoteTech.Antenna
 
    Get the antenna object for a particular part.
 
-   :param SpaceCenter.Part part:
-   :rtype: :class:`RemoteTech.Antenna`
 
 
 
 
-.. staticmethod:: comms(vessel)
+.. staticmethod:: comms(vessel: SpaceCenter.Vessel): RemoteTech.Comms
 
    Get a communications object, representing the communication capability of a particular vessel.
-
-   :param SpaceCenter.Vessel vessel:
-   :rtype: :class:`RemoteTech.Comms`

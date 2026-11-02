@@ -45,7 +45,7 @@ KRPC
 
    .. method:: void holdTick()
 
-      Hold the game on its current physics tick until :meth:`releaseTick()` is called
+      Hold the game on its current physics tick until :meth:`KRPC.releaseTick()` is called
       or the hold times out. Every call made in between is executed before the game
       advances, so a read, compute and write all happen in the state of one tick.
 
@@ -68,7 +68,7 @@ KRPC
 
    .. method:: void releaseTick()
 
-      Let the game move on from the tick that :meth:`holdTick()` held it on. Does
+      Let the game move on from the tick that :meth:`KRPC.holdTick()` held it on. Does
       nothing when no tick is held, which is the case once a hold has timed out.
 
    
@@ -88,9 +88,9 @@ KRPC
          act on every tick, work, and come back to it.
 
          The game advances one tick per call, so it runs at the rate of the loop for as long
-         as the loop runs. End the loop with :meth:`releaseTick()`.
+         as the loop runs. End the loop with :meth:`KRPC.releaseTick()`.
 
-         Every limit of :meth:`holdTick()` applies, the timeout included. A hold lost to
+         Every limit of :meth:`KRPC.holdTick()` applies, the timeout included. A hold lost to
          the timeout is not reported, and the next call takes whatever tick it lands on.
 
    .. method:: GameScene getGameScene()
@@ -101,9 +101,9 @@ KRPC
       scene, or opens/closes the corresponding facility for the pseudo-scenes.
       Scene changes happen asynchronously: setting this property returns
       immediately, and clients should poll it until it reports the requested
-      scene. Setting it to :meth:`GameScene.FLIGHT` resumes the save's
+      scene. Setting it to :field:`GameScene.FLIGHT` resumes the save's
       active vessel, and fails if there is none. Moving between
-      :meth:`GameScene.EDITOR_VAB` and :meth:`GameScene.EDITOR_SPH`
+      :field:`GameScene.EDITOR_VAB` and :field:`GameScene.EDITOR_SPH`
       keeps the vessel that is being constructed, as the game's own switch
       editor button does. Leaving flight saves the game first, unless the game
       cannot be saved, e.g. while under acceleration.
@@ -230,7 +230,7 @@ KRPC
 
 .. type:: public enum GameScene
 
-   The game scene. See :meth:`getGameScene()`.
+   The game scene. See :meth:`KRPC.getGameScene()`.
 
 
    .. field:: public GameScene SPACE_CENTER
@@ -294,7 +294,7 @@ KRPC
 
    .. note::
 
-      See :meth:`getClients()`.
+      See :meth:`KRPC.getClients()`.
 
    .. constructor:: public ClientInfo(byte[] id, String name, String address, int protocolVersion)
 
@@ -324,7 +324,7 @@ KRPC
 
    .. note::
 
-      See :meth:`getStatus()`.
+      See :meth:`KRPC.getStatus()`.
 
    .. constructor:: public ServerStatus(String version, int protocolVersion, ServerSettings settings, ServerStatistics statistics)
 

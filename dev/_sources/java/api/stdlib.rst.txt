@@ -504,7 +504,7 @@ Standard Library
 
    .. note::
 
-      See :meth:`quaternionToAxisAngle(org.javatuples.Quartet<Double,Double,Double,Double>)`.
+      See :meth:`StdLib.quaternionToAxisAngle(org.javatuples.Quartet<Double,Double,Double,Double>)`.
 
    .. constructor:: public AxisAngle(org.javatuples.Triplet<Double,Double,Double> axis, double angle)
 

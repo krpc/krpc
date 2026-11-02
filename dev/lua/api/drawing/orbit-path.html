@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=eadf7411" />
   
@@ -1103,99 +1104,81 @@
   <section id="orbitpath">
 <h1>OrbitPath<a class="headerlink" href="#orbitpath" title="Link to this heading">#</a></h1>
 <dl class="lua class">
-<dt class="sig sig-object lua" id="Drawing.OrbitPath">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">Drawing.</span></span><span class="sig-name descname"><span class="pre">OrbitPath</span></span><a class="headerlink" href="#Drawing.OrbitPath" title="Link to this definition">#</a></dt>
-<dd><p>The path of an orbit. Created using <a class="reference internal" href="drawing.html#Drawing.add_orbit" title="Drawing.add_orbit"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">Drawing.add_orbit()</span></code></a>.</p>
+<dt class="sig sig-object lua" id="lua-Drawing.OrbitPath">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">Drawing.</span></span><span class="sig-name descname"><span class="pre">OrbitPath</span></span><a class="headerlink" href="#lua-Drawing.OrbitPath" title="Link to this definition">#</a></dt>
+<dd><p>The path of an orbit. Created using <a class="reference internal" href="drawing.html#lua-Drawing.add_orbit" title="Drawing.add_orbit"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">Drawing.add_orbit()</span></code></a>.</p>
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.OrbitPath.orbit">
-<span class="sig-name descname"><span class="pre">orbit</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.Orbit</span><a class="headerlink" href="#Drawing.Drawing.OrbitPath.orbit" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.OrbitPath.orbit">
+<span class="sig-name descname"><span class="pre">orbit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../space-center/orbit.html#lua-SpaceCenter.Orbit" title="SpaceCenter.Orbit"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.Orbit</span></code></a><a class="headerlink" href="#lua-Drawing.OrbitPath.orbit" title="Link to this definition">#</a></dt>
 <dd><p>The orbit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="../space-center/orbit.html#SpaceCenter.Orbit" title="SpaceCenter.Orbit"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.Orbit</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.OrbitPath.whole_orbit">
-<span class="sig-name descname"><span class="pre">whole_orbit</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#Drawing.Drawing.OrbitPath.whole_orbit" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.OrbitPath.whole_orbit">
+<span class="sig-name descname"><span class="pre">whole_orbit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-Drawing.OrbitPath.whole_orbit" title="Link to this definition">#</a></dt>
 <dd><p>Whether the whole orbit is drawn, up to where it leaves the sphere of influence of
-its body. When false, the orbit is drawn from <a class="reference internal" href="#Drawing.Drawing.OrbitPath.start_true_anomaly" title="Drawing.Drawing.OrbitPath.start_true_anomaly"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">Drawing.OrbitPath.start_true_anomaly</span></code></a>
-to <a class="reference internal" href="#Drawing.Drawing.OrbitPath.end_true_anomaly" title="Drawing.Drawing.OrbitPath.end_true_anomaly"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">Drawing.OrbitPath.end_true_anomaly</span></code></a>.</p>
+its body. When false, the orbit is drawn from <a class="reference internal" href="#lua-Drawing.OrbitPath.start_true_anomaly" title="Drawing.OrbitPath.start_true_anomaly"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">Drawing.OrbitPath.start_true_anomaly</span></code></a>
+to <a class="reference internal" href="#lua-Drawing.OrbitPath.end_true_anomaly" title="Drawing.OrbitPath.end_true_anomaly"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">Drawing.OrbitPath.end_true_anomaly</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.OrbitPath.start_true_anomaly">
-<span class="sig-name descname"><span class="pre">start_true_anomaly</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#Drawing.Drawing.OrbitPath.start_true_anomaly" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.OrbitPath.start_true_anomaly">
+<span class="sig-name descname"><span class="pre">start_true_anomaly</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-Drawing.OrbitPath.start_true_anomaly" title="Link to this definition">#</a></dt>
 <dd><p>The true anomaly at which the path starts, in radians.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Setting this sets <a class="reference internal" href="#Drawing.Drawing.OrbitPath.whole_orbit" title="Drawing.Drawing.OrbitPath.whole_orbit"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">Drawing.OrbitPath.whole_orbit</span></code></a> to false.</p>
+<p>Setting this sets <a class="reference internal" href="#lua-Drawing.OrbitPath.whole_orbit" title="Drawing.OrbitPath.whole_orbit"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">Drawing.OrbitPath.whole_orbit</span></code></a> to false.</p>
 </div>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.OrbitPath.end_true_anomaly">
-<span class="sig-name descname"><span class="pre">end_true_anomaly</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#Drawing.Drawing.OrbitPath.end_true_anomaly" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.OrbitPath.end_true_anomaly">
+<span class="sig-name descname"><span class="pre">end_true_anomaly</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-Drawing.OrbitPath.end_true_anomaly" title="Link to this definition">#</a></dt>
 <dd><p>The true anomaly at which the path ends, in radians.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Setting this sets <a class="reference internal" href="#Drawing.Drawing.OrbitPath.whole_orbit" title="Drawing.Drawing.OrbitPath.whole_orbit"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">Drawing.OrbitPath.whole_orbit</span></code></a> to false.</p>
+<p>Setting this sets <a class="reference internal" href="#lua-Drawing.OrbitPath.whole_orbit" title="Drawing.OrbitPath.whole_orbit"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">Drawing.OrbitPath.whole_orbit</span></code></a> to false.</p>
 </div>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.OrbitPath.visible">
-<span class="sig-name descname"><span class="pre">visible</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#Drawing.Drawing.OrbitPath.visible" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.OrbitPath.visible">
+<span class="sig-name descname"><span class="pre">visible</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-Drawing.OrbitPath.visible" title="Link to this definition">#</a></dt>
 <dd><p>Whether the object is visible.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.OrbitPath.color">
-<span class="sig-name descname"><span class="pre">color</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">StdLib.ColorRGB</span><a class="headerlink" href="#Drawing.Drawing.OrbitPath.color" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.OrbitPath.color">
+<span class="sig-name descname"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../stdlib.html#lua-StdLib.ColorRGB" title="StdLib.ColorRGB"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">StdLib.ColorRGB</span></code></a><a class="headerlink" href="#lua-Drawing.OrbitPath.color" title="Link to this definition">#</a></dt>
 <dd><p>The color of the path.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="../stdlib.html#StdLib.ColorRGB" title="StdLib.ColorRGB"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">StdLib.ColorRGB</span></code></a></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1205,15 +1188,12 @@ to <a class="reference internal" href="#Drawing.Drawing.OrbitPath.end_true_anoma
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.OrbitPath.colors">
-<span class="sig-name descname"><span class="pre">colors</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">List</span><a class="headerlink" href="#Drawing.Drawing.OrbitPath.colors" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.OrbitPath.colors">
+<span class="sig-name descname"><span class="pre">colors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">List</span></code><a class="headerlink" href="#lua-Drawing.OrbitPath.colors" title="Link to this definition">#</a></dt>
 <dd><p>The colors of the path, blended evenly from its start to its end.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">List</span></code></span></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1223,107 +1203,86 @@ to <a class="reference internal" href="#Drawing.Drawing.OrbitPath.end_true_anoma
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.OrbitPath.thickness">
-<span class="sig-name descname"><span class="pre">thickness</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#Drawing.Drawing.OrbitPath.thickness" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.OrbitPath.thickness">
+<span class="sig-name descname"><span class="pre">thickness</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-Drawing.OrbitPath.thickness" title="Link to this definition">#</a></dt>
 <dd><p>The thickness of the path.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.OrbitPath.start_arrow">
-<span class="sig-name descname"><span class="pre">start_arrow</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#Drawing.Drawing.OrbitPath.start_arrow" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.OrbitPath.start_arrow">
+<span class="sig-name descname"><span class="pre">start_arrow</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-Drawing.OrbitPath.start_arrow" title="Link to this definition">#</a></dt>
 <dd><p>Whether an arrow head is drawn at the start.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.OrbitPath.end_arrow">
-<span class="sig-name descname"><span class="pre">end_arrow</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#Drawing.Drawing.OrbitPath.end_arrow" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.OrbitPath.end_arrow">
+<span class="sig-name descname"><span class="pre">end_arrow</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-Drawing.OrbitPath.end_arrow" title="Link to this definition">#</a></dt>
 <dd><p>Whether an arrow head is drawn at the end.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.OrbitPath.arrow_size">
-<span class="sig-name descname"><span class="pre">arrow_size</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#Drawing.Drawing.OrbitPath.arrow_size" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.OrbitPath.arrow_size">
+<span class="sig-name descname"><span class="pre">arrow_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-Drawing.OrbitPath.arrow_size" title="Link to this definition">#</a></dt>
 <dd><p>The size of the arrow heads, relative to the thickness.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.OrbitPath.dashed">
-<span class="sig-name descname"><span class="pre">dashed</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#Drawing.Drawing.OrbitPath.dashed" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.OrbitPath.dashed">
+<span class="sig-name descname"><span class="pre">dashed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-Drawing.OrbitPath.dashed" title="Link to this definition">#</a></dt>
 <dd><p>Whether the path is drawn as a dashed line.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.OrbitPath.label">
-<span class="sig-name descname"><span class="pre">label</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">string</span><a class="headerlink" href="#Drawing.Drawing.OrbitPath.label" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.OrbitPath.label">
+<span class="sig-name descname"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><a class="headerlink" href="#lua-Drawing.OrbitPath.label" title="Link to this definition">#</a></dt>
 <dd><p>Text drawn halfway along the path, facing the camera. Empty for no label.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="Drawing.Drawing.OrbitPath.material">
-<span class="sig-name descname"><span class="pre">material</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">string</span><a class="headerlink" href="#Drawing.Drawing.OrbitPath.material" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.OrbitPath.material">
+<span class="sig-name descname"><span class="pre">material</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><a class="headerlink" href="#lua-Drawing.OrbitPath.material" title="Link to this definition">#</a></dt>
 <dd><p>Material used to render the object.
 Creates the material from a shader with the given name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="Drawing.OrbitPath.remove">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.OrbitPath.remove" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-Drawing.OrbitPath.remove">
+<span class="sig-name descname"><span class="pre">remove</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-Drawing.OrbitPath.remove" title="Link to this definition">#</a></dt>
 <dd><p>Remove the object.</p>
 </dd></dl>
 

@@ -144,7 +144,7 @@ Vessel
 
    .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Flight(krpc_connection_t connection, krpc_SpaceCenter_Flight_t * returnValue, krpc_SpaceCenter_Vessel_t instance, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
-      Returns a :func:`krpc_SpaceCenter_Vessel_Flight` object that can be used to get flight
+      Returns a :type:`krpc_SpaceCenter_Flight_t` object that can be used to get flight
       telemetry for the vessel, in the specified reference frame.
 
       :Parameters:

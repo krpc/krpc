@@ -11,7 +11,7 @@ Servo
    Represents a servo. Obtained using
    :meth:`ServoGroup.getServos()`,
    :meth:`ServoGroup.servoWithName(String)`
-   or :meth:`servoWithName(SpaceCenter.Vessel, String)`.
+   or :meth:`InfernalRobotics.servoWithName(SpaceCenter.Vessel, String)`.
 
    .. method:: String getName()
 

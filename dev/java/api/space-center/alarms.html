@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=eadf7411" />
   
@@ -1106,16 +1107,16 @@
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AlarmManager">
 <span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">AlarmManager</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AlarmManager" title="Link to this definition">#</a></dt>
 <dd><p>Alarm manager.
-Obtained by calling <a class="reference internal" href="space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.getAlarmManager()" title="krpc.client.services.SpaceCenter.SpaceCenter.getAlarmManager()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">getAlarmManager()</span></code></a>.</p>
+Obtained by calling <a class="reference internal" href="space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.getAlarmManager()" title="krpc.client.services.SpaceCenter.SpaceCenter.getAlarmManager()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">SpaceCenter.getAlarmManager()</span></code></a>.</p>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AlarmManager.getAlarms()">
- <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.Alarm" title="krpc.client.services.SpaceCenter.Alarm"><span class="pre">Alarm</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getAlarms</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AlarmManager.getAlarms()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.Alarm" title="krpc.client.services.SpaceCenter.Alarm"><span class="pre">Alarm</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getAlarms</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AlarmManager.getAlarms()" title="Link to this definition">#</a></dt>
 <dd><p>A list of all alarms.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AlarmManager.alarmsWithType(AlarmType)">
- <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.Alarm" title="krpc.client.services.SpaceCenter.Alarm"><span class="pre">Alarm</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">alarmsWithType</span></span><span class="sig-paren">(</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.AlarmType" title="krpc.client.services.SpaceCenter.AlarmType"><span class="pre">AlarmType</span></a><em> <span class="pre">type</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AlarmManager.alarmsWithType(AlarmType)" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.Alarm" title="krpc.client.services.SpaceCenter.Alarm"><span class="pre">Alarm</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">alarmsWithType</span></span><span class="sig-paren">(</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.AlarmType" title="krpc.client.services.SpaceCenter.AlarmType"><span class="pre">AlarmType</span></a><em> <span class="pre">type</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AlarmManager.alarmsWithType(AlarmType)" title="Link to this definition">#</a></dt>
 <dd><p>A list of all alarms of the given type.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1128,7 +1129,7 @@ Obtained by calling <a class="reference internal" href="space-center.html#krpc.c
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AlarmManager.alarmWithName(String)">
- <a class="reference internal" href="#krpc.client.services.SpaceCenter.Alarm" title="krpc.client.services.SpaceCenter.Alarm"><span class="pre">Alarm</span></a> <span class="sig-name descname"><span class="pre">alarmWithName</span></span><span class="sig-paren">(</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AlarmManager.alarmWithName(String)" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.Alarm" title="krpc.client.services.SpaceCenter.Alarm"><span class="pre">Alarm</span></a> <span class="sig-name descname"><span class="pre">alarmWithName</span></span><span class="sig-paren">(</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AlarmManager.alarmWithName(String)" title="Link to this definition">#</a></dt>
 <dd><p>Returns the first alarm with the given title, or <code class="docutils literal notranslate"><span class="pre">null</span></code> if no such
 alarm exists. Alarm titles are not guaranteed to be unique; if more than
 one alarm shares the given title, the first one found is returned.</p>
@@ -1267,10 +1268,10 @@ properties on the returned alarm can still be used to inspect or adjust it.</p>
 <dl class="java type">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Alarm">
 <span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">Alarm</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm" title="Link to this definition">#</a></dt>
-<dd><p>An alarm. Can be accessed using <a class="reference internal" href="space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.getAlarmManager()" title="krpc.client.services.SpaceCenter.SpaceCenter.getAlarmManager()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">getAlarmManager()</span></code></a>.</p>
+<dd><p>An alarm. Can be accessed using <a class="reference internal" href="space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.getAlarmManager()" title="krpc.client.services.SpaceCenter.SpaceCenter.getAlarmManager()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">SpaceCenter.getAlarmManager()</span></code></a>.</p>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Alarm.getID()">
- <span class="pre">int</span> <span class="sig-name descname"><span class="pre">getID</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.getID()" title="Link to this definition">#</a></dt>
+<span class="pre">int</span> <span class="sig-name descname"><span class="pre">getID</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.getID()" title="Link to this definition">#</a></dt>
 <dd><p>Unique identifier of the alarm.
 KSP destroys and recreates an alarm when it is edited.
 This id will remain constant between the old and new alarms.</p>
@@ -1278,57 +1279,57 @@ This id will remain constant between the old and new alarms.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Alarm.getType()">
- <a class="reference internal" href="#krpc.client.services.SpaceCenter.AlarmType" title="krpc.client.services.SpaceCenter.AlarmType"><span class="pre">AlarmType</span></a> <span class="sig-name descname"><span class="pre">getType</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.getType()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.AlarmType" title="krpc.client.services.SpaceCenter.AlarmType"><span class="pre">AlarmType</span></a> <span class="sig-name descname"><span class="pre">getType</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.getType()" title="Link to this definition">#</a></dt>
 <dd><p>Type of alarm.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Alarm.getTitle()">
- <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getTitle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.getTitle()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getTitle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.getTitle()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Alarm.setTitle(String)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setTitle</span></span><span class="sig-paren">(</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.setTitle(String)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setTitle</span></span><span class="sig-paren">(</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.setTitle(String)" title="Link to this definition">#</a></dt>
 <dd><p>Title of the alarm.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Alarm.getDescription()">
- <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getDescription</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.getDescription()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getDescription</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.getDescription()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Alarm.setDescription(String)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setDescription</span></span><span class="sig-paren">(</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.setDescription(String)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setDescription</span></span><span class="sig-paren">(</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.setDescription(String)" title="Link to this definition">#</a></dt>
 <dd><p>Description of the alarm.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Alarm.getTime()">
- <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getTime</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.getTime()" title="Link to this definition">#</a></dt>
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getTime</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.getTime()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Alarm.setTime(double)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setTime</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.setTime(double)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setTime</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.setTime(double)" title="Link to this definition">#</a></dt>
 <dd><p>Time the alarm will trigger, in seconds since epoch.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Alarm.getTimeUntil()">
- <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getTimeUntil</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.getTimeUntil()" title="Link to this definition">#</a></dt>
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getTimeUntil</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.getTimeUntil()" title="Link to this definition">#</a></dt>
 <dd><p>Time until the alarm triggers, in seconds.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Alarm.getEventOffset()">
- <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getEventOffset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.getEventOffset()" title="Link to this definition">#</a></dt>
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getEventOffset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.getEventOffset()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Alarm.setEventOffset(double)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setEventOffset</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.setEventOffset(double)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setEventOffset</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.setEventOffset(double)" title="Link to this definition">#</a></dt>
 <dd><p>Seconds between the alarm going off and the event it references.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -1339,121 +1340,121 @@ before the start of the burn, and the value read back includes half the burn tim
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Alarm.getVessel()">
- <a class="reference internal" href="vessel.html#krpc.client.services.SpaceCenter.Vessel" title="krpc.client.services.SpaceCenter.Vessel"><span class="pre">Vessel</span></a> <span class="sig-name descname"><span class="pre">getVessel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.getVessel()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="vessel.html#krpc.client.services.SpaceCenter.Vessel" title="krpc.client.services.SpaceCenter.Vessel"><span class="pre">Vessel</span></a> <span class="sig-name descname"><span class="pre">getVessel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.getVessel()" title="Link to this definition">#</a></dt>
 <dd><p>Vessel the alarm references. <code class="docutils literal notranslate"><span class="pre">null</span></code> if it does not reference a vessel.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Alarm.getNode()">
- <a class="reference internal" href="node.html#krpc.client.services.SpaceCenter.Node" title="krpc.client.services.SpaceCenter.Node"><span class="pre">Node</span></a> <span class="sig-name descname"><span class="pre">getNode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.getNode()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="node.html#krpc.client.services.SpaceCenter.Node" title="krpc.client.services.SpaceCenter.Node"><span class="pre">Node</span></a> <span class="sig-name descname"><span class="pre">getNode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.getNode()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Alarm.setNode(Node)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setNode</span></span><span class="sig-paren">(</span><a class="reference internal" href="node.html#krpc.client.services.SpaceCenter.Node" title="krpc.client.services.SpaceCenter.Node"><span class="pre">Node</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.setNode(Node)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setNode</span></span><span class="sig-paren">(</span><a class="reference internal" href="node.html#krpc.client.services.SpaceCenter.Node" title="krpc.client.services.SpaceCenter.Node"><span class="pre">Node</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.setNode(Node)" title="Link to this definition">#</a></dt>
 <dd><p>Maneuver node the alarm references. Only valid for alarms of type
-<a class="reference internal" href="#krpc.client.services.SpaceCenter.AlarmType.MANEUVER" title="krpc.client.services.SpaceCenter.AlarmType.MANEUVER"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AlarmType.MANEUVER</span></code></a>.</p>
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.AlarmType.MANEUVER" title="krpc.client.services.SpaceCenter.AlarmType.MANEUVER"><code class="xref java java-field docutils literal notranslate"><span class="pre">AlarmType.MANEUVER</span></code></a>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Throws an exception if the alarm is not of
-type <a class="reference internal" href="#krpc.client.services.SpaceCenter.AlarmType.MANEUVER" title="krpc.client.services.SpaceCenter.AlarmType.MANEUVER"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AlarmType.MANEUVER</span></code></a>.</p>
+type <a class="reference internal" href="#krpc.client.services.SpaceCenter.AlarmType.MANEUVER" title="krpc.client.services.SpaceCenter.AlarmType.MANEUVER"><code class="xref java java-field docutils literal notranslate"><span class="pre">AlarmType.MANEUVER</span></code></a>.</p>
 </div>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Alarm.getOriginBody()">
- <a class="reference internal" href="celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody" title="krpc.client.services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a> <span class="sig-name descname"><span class="pre">getOriginBody</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.getOriginBody()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody" title="krpc.client.services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a> <span class="sig-name descname"><span class="pre">getOriginBody</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.getOriginBody()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Alarm.setOriginBody(CelestialBody)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setOriginBody</span></span><span class="sig-paren">(</span><a class="reference internal" href="celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody" title="krpc.client.services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.setOriginBody(CelestialBody)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setOriginBody</span></span><span class="sig-paren">(</span><a class="reference internal" href="celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody" title="krpc.client.services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.setOriginBody(CelestialBody)" title="Link to this definition">#</a></dt>
 <dd><p>Origin body for the transfer window. Only valid for alarms of type
-<a class="reference internal" href="#krpc.client.services.SpaceCenter.AlarmType.TRANSFER_WINDOW" title="krpc.client.services.SpaceCenter.AlarmType.TRANSFER_WINDOW"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AlarmType.TRANSFER_WINDOW</span></code></a>.</p>
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.AlarmType.TRANSFER_WINDOW" title="krpc.client.services.SpaceCenter.AlarmType.TRANSFER_WINDOW"><code class="xref java java-field docutils literal notranslate"><span class="pre">AlarmType.TRANSFER_WINDOW</span></code></a>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Throws an exception if the alarm is not of
-type <a class="reference internal" href="#krpc.client.services.SpaceCenter.AlarmType.TRANSFER_WINDOW" title="krpc.client.services.SpaceCenter.AlarmType.TRANSFER_WINDOW"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AlarmType.TRANSFER_WINDOW</span></code></a>.</p>
+type <a class="reference internal" href="#krpc.client.services.SpaceCenter.AlarmType.TRANSFER_WINDOW" title="krpc.client.services.SpaceCenter.AlarmType.TRANSFER_WINDOW"><code class="xref java java-field docutils literal notranslate"><span class="pre">AlarmType.TRANSFER_WINDOW</span></code></a>.</p>
 </div>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Alarm.getDestinationBody()">
- <a class="reference internal" href="celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody" title="krpc.client.services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a> <span class="sig-name descname"><span class="pre">getDestinationBody</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.getDestinationBody()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody" title="krpc.client.services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a> <span class="sig-name descname"><span class="pre">getDestinationBody</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.getDestinationBody()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Alarm.setDestinationBody(CelestialBody)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setDestinationBody</span></span><span class="sig-paren">(</span><a class="reference internal" href="celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody" title="krpc.client.services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.setDestinationBody(CelestialBody)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setDestinationBody</span></span><span class="sig-paren">(</span><a class="reference internal" href="celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody" title="krpc.client.services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.setDestinationBody(CelestialBody)" title="Link to this definition">#</a></dt>
 <dd><p>Destination body for the transfer window. Only valid for alarms of type
-<a class="reference internal" href="#krpc.client.services.SpaceCenter.AlarmType.TRANSFER_WINDOW" title="krpc.client.services.SpaceCenter.AlarmType.TRANSFER_WINDOW"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AlarmType.TRANSFER_WINDOW</span></code></a>.</p>
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.AlarmType.TRANSFER_WINDOW" title="krpc.client.services.SpaceCenter.AlarmType.TRANSFER_WINDOW"><code class="xref java java-field docutils literal notranslate"><span class="pre">AlarmType.TRANSFER_WINDOW</span></code></a>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Throws an exception if the alarm is not of
-type <a class="reference internal" href="#krpc.client.services.SpaceCenter.AlarmType.TRANSFER_WINDOW" title="krpc.client.services.SpaceCenter.AlarmType.TRANSFER_WINDOW"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AlarmType.TRANSFER_WINDOW</span></code></a>.</p>
+type <a class="reference internal" href="#krpc.client.services.SpaceCenter.AlarmType.TRANSFER_WINDOW" title="krpc.client.services.SpaceCenter.AlarmType.TRANSFER_WINDOW"><code class="xref java java-field docutils literal notranslate"><span class="pre">AlarmType.TRANSFER_WINDOW</span></code></a>.</p>
 </div>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Alarm.getWarpAction()">
- <a class="reference internal" href="#krpc.client.services.SpaceCenter.AlarmWarpAction" title="krpc.client.services.SpaceCenter.AlarmWarpAction"><span class="pre">AlarmWarpAction</span></a> <span class="sig-name descname"><span class="pre">getWarpAction</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.getWarpAction()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.AlarmWarpAction" title="krpc.client.services.SpaceCenter.AlarmWarpAction"><span class="pre">AlarmWarpAction</span></a> <span class="sig-name descname"><span class="pre">getWarpAction</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.getWarpAction()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Alarm.setWarpAction(AlarmWarpAction)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setWarpAction</span></span><span class="sig-paren">(</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.AlarmWarpAction" title="krpc.client.services.SpaceCenter.AlarmWarpAction"><span class="pre">AlarmWarpAction</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.setWarpAction(AlarmWarpAction)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setWarpAction</span></span><span class="sig-paren">(</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.AlarmWarpAction" title="krpc.client.services.SpaceCenter.AlarmWarpAction"><span class="pre">AlarmWarpAction</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.setWarpAction(AlarmWarpAction)" title="Link to this definition">#</a></dt>
 <dd><p>The action taken on time warp when the alarm fires.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Alarm.getMessageAction()">
- <a class="reference internal" href="#krpc.client.services.SpaceCenter.AlarmMessageAction" title="krpc.client.services.SpaceCenter.AlarmMessageAction"><span class="pre">AlarmMessageAction</span></a> <span class="sig-name descname"><span class="pre">getMessageAction</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.getMessageAction()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.AlarmMessageAction" title="krpc.client.services.SpaceCenter.AlarmMessageAction"><span class="pre">AlarmMessageAction</span></a> <span class="sig-name descname"><span class="pre">getMessageAction</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.getMessageAction()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Alarm.setMessageAction(AlarmMessageAction)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setMessageAction</span></span><span class="sig-paren">(</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.AlarmMessageAction" title="krpc.client.services.SpaceCenter.AlarmMessageAction"><span class="pre">AlarmMessageAction</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.setMessageAction(AlarmMessageAction)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setMessageAction</span></span><span class="sig-paren">(</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.AlarmMessageAction" title="krpc.client.services.SpaceCenter.AlarmMessageAction"><span class="pre">AlarmMessageAction</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.setMessageAction(AlarmMessageAction)" title="Link to this definition">#</a></dt>
 <dd><p>The on-screen message behavior when the alarm fires.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Alarm.getPlaySound()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getPlaySound</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.getPlaySound()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getPlaySound</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.getPlaySound()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Alarm.setPlaySound(boolean)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setPlaySound</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.setPlaySound(boolean)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setPlaySound</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.setPlaySound(boolean)" title="Link to this definition">#</a></dt>
 <dd><p>Whether the alarm plays a sound when it fires.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Alarm.getDeleteOnDismiss()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getDeleteOnDismiss</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.getDeleteOnDismiss()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getDeleteOnDismiss</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.getDeleteOnDismiss()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Alarm.setDeleteOnDismiss(boolean)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setDeleteOnDismiss</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.setDeleteOnDismiss(boolean)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setDeleteOnDismiss</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.setDeleteOnDismiss(boolean)" title="Link to this definition">#</a></dt>
 <dd><p>Whether the alarm is deleted automatically once the player has dismissed
 the triggered message.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Alarm.getTriggered()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getTriggered</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.getTriggered()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getTriggered</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.getTriggered()" title="Link to this definition">#</a></dt>
 <dd><p>Whether the time of the alarm has passed and its actions have been triggered.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Alarm.getActioned()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getActioned</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.getActioned()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getActioned</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.getActioned()" title="Link to this definition">#</a></dt>
 <dd><p>Whether the alarm’s actions were triggered and then completed or closed.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Alarm.remove()">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.remove()" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Alarm.remove()" title="Link to this definition">#</a></dt>
 <dd><p>Removes the alarm.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>

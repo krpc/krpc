@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=eadf7411" />
   
@@ -1103,12 +1104,12 @@
   <section id="control">
 <h1>Control<a class="headerlink" href="#control" title="Link to this heading">#</a></h1>
 <dl class="lua class">
-<dt class="sig sig-object lua" id="SpaceCenter.Control">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">SpaceCenter.</span></span><span class="sig-name descname"><span class="pre">Control</span></span><a class="headerlink" href="#SpaceCenter.Control" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">SpaceCenter.</span></span><span class="sig-name descname"><span class="pre">Control</span></span><a class="headerlink" href="#lua-SpaceCenter.Control" title="Link to this definition">#</a></dt>
 <dd><p>Used to manipulate the controls of a vessel. This includes adjusting the
 throttle, enabling/disabling systems such as SAS and RCS, or altering the
 direction in which the vessel is pointing.
-Obtained by calling <a class="reference internal" href="vessel.html#SpaceCenter.SpaceCenter.Vessel.control" title="SpaceCenter.SpaceCenter.Vessel.control"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Vessel.control</span></code></a>.</p>
+Obtained by calling <a class="reference internal" href="vessel.html#lua-SpaceCenter.Vessel.control" title="SpaceCenter.Vessel.control"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Vessel.control</span></code></a>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Control inputs (pitch, yaw, roll, translation, wheel throttle, wheel steering
@@ -1116,164 +1117,137 @@ and the custom axes) are zeroed when all clients that have set one or more of
 these inputs are no longer connected. The throttle is an exception: it keeps
 its value when clients disconnect.</p>
 <p>A kerbal on EVA is a vessel, and is driven by these same controls. The
-translation inputs move it: <a class="reference internal" href="#SpaceCenter.SpaceCenter.Control.forward" title="SpaceCenter.SpaceCenter.Control.forward"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Control.forward</span></code></a> and <a class="reference internal" href="#SpaceCenter.SpaceCenter.Control.right" title="SpaceCenter.SpaceCenter.Control.right"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Control.right</span></code></a> walk
+translation inputs move it: <a class="reference internal" href="#lua-SpaceCenter.Control.forward" title="SpaceCenter.Control.forward"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Control.forward</span></code></a> and <a class="reference internal" href="#lua-SpaceCenter.Control.right" title="SpaceCenter.Control.right"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Control.right</span></code></a> walk
 it about, relative to the direction it is facing, and all three translate its
 jetpack once that is deployed. Walking is not throttled by the size of the
 input, only started by it. The rotation inputs turn it, at a rate proportional
-to the input: <a class="reference internal" href="#SpaceCenter.SpaceCenter.Control.yaw" title="SpaceCenter.SpaceCenter.Control.yaw"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Control.yaw</span></code></a> steers it as it walks, and all three turn its
+to the input: <a class="reference internal" href="#lua-SpaceCenter.Control.yaw" title="SpaceCenter.Control.yaw"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Control.yaw</span></code></a> steers it as it walks, and all three turn its
 jetpack. Turning the jetpack releases the kerbal from the orientation it was
 holding; it stops and holds its new orientation once the input returns to zero.
-<a class="reference internal" href="#SpaceCenter.SpaceCenter.Control.rcs" title="SpaceCenter.SpaceCenter.Control.rcs"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Control.rcs</span></code></a> deploys and stows the jetpack and <a class="reference internal" href="#SpaceCenter.SpaceCenter.Control.lights" title="SpaceCenter.SpaceCenter.Control.lights"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Control.lights</span></code></a>
+<a class="reference internal" href="#lua-SpaceCenter.Control.rcs" title="SpaceCenter.Control.rcs"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Control.rcs</span></code></a> deploys and stows the jetpack and <a class="reference internal" href="#lua-SpaceCenter.Control.lights" title="SpaceCenter.Control.lights"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Control.lights</span></code></a>
 switches the helmet lamp. The remaining controls do nothing for a kerbal.
 A kerbal is also sent out and brought back in from here: with
-<a class="reference internal" href="vessel.html#SpaceCenter.CrewMember.eva" title="SpaceCenter.CrewMember.eva"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.CrewMember.eva()</span></code></a> and <a class="reference internal" href="#SpaceCenter.Control.board" title="SpaceCenter.Control.board"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Control.board()</span></code></a>, and
-<a class="reference internal" href="#SpaceCenter.Control.grab_ladder" title="SpaceCenter.Control.grab_ladder"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Control.grab_ladder()</span></code></a> and <a class="reference internal" href="#SpaceCenter.Control.release_ladder" title="SpaceCenter.Control.release_ladder"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Control.release_ladder()</span></code></a> for the ladders it
+<a class="reference internal" href="vessel.html#lua-SpaceCenter.CrewMember.eva" title="SpaceCenter.CrewMember.eva"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.CrewMember:eva()</span></code></a> and <a class="reference internal" href="#lua-SpaceCenter.Control.board" title="SpaceCenter.Control.board"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Control:board()</span></code></a>, and
+<a class="reference internal" href="#lua-SpaceCenter.Control.grab_ladder" title="SpaceCenter.Control.grab_ladder"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Control:grab_ladder()</span></code></a> and <a class="reference internal" href="#lua-SpaceCenter.Control.release_ladder" title="SpaceCenter.Control.release_ladder"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Control:release_ladder()</span></code></a> for the ladders it
 passes on the way.</p>
 </div>
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.source">
-<span class="sig-name descname"><span class="pre">source</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.ControlSource</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.source" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.source">
+<span class="sig-name descname"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-SpaceCenter.ControlSource" title="SpaceCenter.ControlSource"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ControlSource</span></code></a><a class="headerlink" href="#lua-SpaceCenter.Control.source" title="Link to this definition">#</a></dt>
 <dd><p>The source of the vessels control, for example by a kerbal or a probe core.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#SpaceCenter.ControlSource" title="SpaceCenter.ControlSource"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ControlSource</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.state">
-<span class="sig-name descname"><span class="pre">state</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.ControlState</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.state" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.state">
+<span class="sig-name descname"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-SpaceCenter.ControlState" title="SpaceCenter.ControlState"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ControlState</span></code></a><a class="headerlink" href="#lua-SpaceCenter.Control.state" title="Link to this definition">#</a></dt>
 <dd><p>The control state of the vessel.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#SpaceCenter.ControlState" title="SpaceCenter.ControlState"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ControlState</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.sas">
-<span class="sig-name descname"><span class="pre">sas</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.sas" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.sas">
+<span class="sig-name descname"><span class="pre">sas</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.Control.sas" title="Link to this definition">#</a></dt>
 <dd><p>The state of SAS.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Equivalent to <a class="reference internal" href="auto-pilot.html#SpaceCenter.SpaceCenter.AutoPilot.sas" title="SpaceCenter.SpaceCenter.AutoPilot.sas"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.sas</span></code></a>.
+<p>Equivalent to <a class="reference internal" href="auto-pilot.html#lua-SpaceCenter.AutoPilot.sas" title="SpaceCenter.AutoPilot.sas"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.sas</span></code></a>.
 Throws an exception if set to <code class="docutils literal notranslate"><span class="pre">True</span></code> while the auto-pilot is engaged, as the
 auto-pilot holds SAS off for as long as it is flying the vessel.</p>
 </div>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.sas_mode">
-<span class="sig-name descname"><span class="pre">sas_mode</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.SASMode</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.sas_mode" title="Link to this definition">#</a></dt>
-<dd><p>The current <a class="reference internal" href="#SpaceCenter.SpaceCenter.Control.sas_mode" title="SpaceCenter.SpaceCenter.Control.sas_mode"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Control.sas_mode</span></code></a>.
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.sas_mode">
+<span class="sig-name descname"><span class="pre">sas_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-SpaceCenter.SASMode" title="SpaceCenter.SASMode"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.SASMode</span></code></a><a class="headerlink" href="#lua-SpaceCenter.Control.sas_mode" title="Link to this definition">#</a></dt>
+<dd><p>The current <a class="reference internal" href="#lua-SpaceCenter.Control.sas_mode" title="SpaceCenter.Control.sas_mode"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Control.sas_mode</span></code></a>.
 These modes are equivalent to the mode buttons to
 the left of the navball that appear when SAS is enabled.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#SpaceCenter.SASMode" title="SpaceCenter.SASMode"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.SASMode</span></code></a></p>
-</dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Equivalent to <a class="reference internal" href="auto-pilot.html#SpaceCenter.SpaceCenter.AutoPilot.sas_mode" title="SpaceCenter.SpaceCenter.AutoPilot.sas_mode"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.sas_mode</span></code></a></p>
+<p>Equivalent to <a class="reference internal" href="auto-pilot.html#lua-SpaceCenter.AutoPilot.sas_mode" title="SpaceCenter.AutoPilot.sas_mode"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.sas_mode</span></code></a></p>
 </div>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.speed_mode">
-<span class="sig-name descname"><span class="pre">speed_mode</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.SpeedMode</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.speed_mode" title="Link to this definition">#</a></dt>
-<dd><p>The current <a class="reference internal" href="#SpaceCenter.SpaceCenter.Control.speed_mode" title="SpaceCenter.SpaceCenter.Control.speed_mode"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Control.speed_mode</span></code></a> of the navball.
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.speed_mode">
+<span class="sig-name descname"><span class="pre">speed_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-SpaceCenter.SpeedMode" title="SpaceCenter.SpeedMode"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.SpeedMode</span></code></a><a class="headerlink" href="#lua-SpaceCenter.Control.speed_mode" title="Link to this definition">#</a></dt>
+<dd><p>The current <a class="reference internal" href="#lua-SpaceCenter.Control.speed_mode" title="SpaceCenter.Control.speed_mode"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Control.speed_mode</span></code></a> of the navball.
 This is the mode displayed next to the speed at the top of the navball.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#SpaceCenter.SpeedMode" title="SpaceCenter.SpeedMode"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.SpeedMode</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.engine_gimbals">
-<span class="sig-name descname"><span class="pre">engine_gimbals</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.engine_gimbals" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.engine_gimbals">
+<span class="sig-name descname"><span class="pre">engine_gimbals</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.Control.engine_gimbals" title="Link to this definition">#</a></dt>
 <dd><p>Returns whether all gimballed engines on the vessel have gimbal enabled,
 and sets the gimbal enabled state of all gimballed engines.
-See <a class="reference internal" href="parts.html#SpaceCenter.SpaceCenter.Engine.gimbal_locked" title="SpaceCenter.SpaceCenter.Engine.gimbal_locked"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Engine.gimbal_locked</span></code></a>.</p>
+See <a class="reference internal" href="parts.html#lua-SpaceCenter.Engine.gimbal_locked" title="SpaceCenter.Engine.gimbal_locked"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Engine.gimbal_locked</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.thrust_reversers">
-<span class="sig-name descname"><span class="pre">thrust_reversers</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.thrust_reversers" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.thrust_reversers">
+<span class="sig-name descname"><span class="pre">thrust_reversers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.Control.thrust_reversers" title="Link to this definition">#</a></dt>
 <dd><p>Returns whether all engines with a thrust reverser on the vessel have
 their thrust reverser engaged, and sets the thrust reverser state of all
 such engines.
-See <a class="reference internal" href="parts.html#SpaceCenter.SpaceCenter.Engine.thrust_reversed" title="SpaceCenter.SpaceCenter.Engine.thrust_reversed"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Engine.thrust_reversed</span></code></a>.</p>
+See <a class="reference internal" href="parts.html#lua-SpaceCenter.Engine.thrust_reversed" title="SpaceCenter.Engine.thrust_reversed"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Engine.thrust_reversed</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.aero_surfaces">
-<span class="sig-name descname"><span class="pre">aero_surfaces</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.aero_surfaces" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.aero_surfaces">
+<span class="sig-name descname"><span class="pre">aero_surfaces</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.Control.aero_surfaces" title="Link to this definition">#</a></dt>
 <dd><p>Returns whether all control surfaces on the vessel have pitch, yaw and roll enabled,
 and sets the pitch, yaw and roll enabled state of all control surfaces.
-See <a class="reference internal" href="parts.html#SpaceCenter.SpaceCenter.ControlSurface.pitch_enabled" title="SpaceCenter.SpaceCenter.ControlSurface.pitch_enabled"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.ControlSurface.pitch_enabled</span></code></a>,
-<a class="reference internal" href="parts.html#SpaceCenter.SpaceCenter.ControlSurface.yaw_enabled" title="SpaceCenter.SpaceCenter.ControlSurface.yaw_enabled"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.ControlSurface.yaw_enabled</span></code></a> and
-<a class="reference internal" href="parts.html#SpaceCenter.SpaceCenter.ControlSurface.roll_enabled" title="SpaceCenter.SpaceCenter.ControlSurface.roll_enabled"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.ControlSurface.roll_enabled</span></code></a>.</p>
+See <a class="reference internal" href="parts.html#lua-SpaceCenter.ControlSurface.pitch_enabled" title="SpaceCenter.ControlSurface.pitch_enabled"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.ControlSurface.pitch_enabled</span></code></a>,
+<a class="reference internal" href="parts.html#lua-SpaceCenter.ControlSurface.yaw_enabled" title="SpaceCenter.ControlSurface.yaw_enabled"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.ControlSurface.yaw_enabled</span></code></a> and
+<a class="reference internal" href="parts.html#lua-SpaceCenter.ControlSurface.roll_enabled" title="SpaceCenter.ControlSurface.roll_enabled"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.ControlSurface.roll_enabled</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.rcs">
-<span class="sig-name descname"><span class="pre">rcs</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.rcs" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.rcs">
+<span class="sig-name descname"><span class="pre">rcs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.Control.rcs" title="Link to this definition">#</a></dt>
 <dd><p>The state of RCS.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1285,79 +1259,64 @@ setting this does nothing.</p>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.reaction_wheels">
-<span class="sig-name descname"><span class="pre">reaction_wheels</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.reaction_wheels" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.reaction_wheels">
+<span class="sig-name descname"><span class="pre">reaction_wheels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.Control.reaction_wheels" title="Link to this definition">#</a></dt>
 <dd><p>Returns whether all reactive wheels on the vessel are active,
 and sets the active state of all reaction wheels.
-See <a class="reference internal" href="parts.html#SpaceCenter.SpaceCenter.ReactionWheel.active" title="SpaceCenter.SpaceCenter.ReactionWheel.active"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.ReactionWheel.active</span></code></a>.</p>
+See <a class="reference internal" href="parts.html#lua-SpaceCenter.ReactionWheel.active" title="SpaceCenter.ReactionWheel.active"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.ReactionWheel.active</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.gear">
-<span class="sig-name descname"><span class="pre">gear</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.gear" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.gear">
+<span class="sig-name descname"><span class="pre">gear</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.Control.gear" title="Link to this definition">#</a></dt>
 <dd><p>The state of the landing gear/legs.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.legs">
-<span class="sig-name descname"><span class="pre">legs</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.legs" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.legs">
+<span class="sig-name descname"><span class="pre">legs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.Control.legs" title="Link to this definition">#</a></dt>
 <dd><p>Returns whether all landing legs on the vessel are deployed,
 and sets the deployment state of all landing legs.
 Does not include wheels (for example landing gear).
-See <a class="reference internal" href="parts.html#SpaceCenter.SpaceCenter.Leg.deployed" title="SpaceCenter.SpaceCenter.Leg.deployed"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Leg.deployed</span></code></a>.</p>
+See <a class="reference internal" href="parts.html#lua-SpaceCenter.Leg.deployed" title="SpaceCenter.Leg.deployed"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Leg.deployed</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.wheels">
-<span class="sig-name descname"><span class="pre">wheels</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.wheels" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.wheels">
+<span class="sig-name descname"><span class="pre">wheels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.Control.wheels" title="Link to this definition">#</a></dt>
 <dd><p>Returns whether all wheels on the vessel are deployed,
 and sets the deployment state of all wheels.
 Does not include landing legs.
-See <a class="reference internal" href="parts.html#SpaceCenter.SpaceCenter.Wheel.deployed" title="SpaceCenter.SpaceCenter.Wheel.deployed"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Wheel.deployed</span></code></a>.</p>
+See <a class="reference internal" href="parts.html#lua-SpaceCenter.Wheel.deployed" title="SpaceCenter.Wheel.deployed"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Wheel.deployed</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.lights">
-<span class="sig-name descname"><span class="pre">lights</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.lights" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.lights">
+<span class="sig-name descname"><span class="pre">lights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.Control.lights" title="Link to this definition">#</a></dt>
 <dd><p>The state of the lights.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1368,174 +1327,141 @@ kerbal to be the active vessel; otherwise setting this does nothing.</p>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.brakes">
-<span class="sig-name descname"><span class="pre">brakes</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.brakes" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.brakes">
+<span class="sig-name descname"><span class="pre">brakes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.Control.brakes" title="Link to this definition">#</a></dt>
 <dd><p>The state of the wheel brakes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.antennas">
-<span class="sig-name descname"><span class="pre">antennas</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.antennas" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.antennas">
+<span class="sig-name descname"><span class="pre">antennas</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.Control.antennas" title="Link to this definition">#</a></dt>
 <dd><p>Returns whether all antennas on the vessel are deployed,
 and sets the deployment state of all antennas.
-See <a class="reference internal" href="parts.html#SpaceCenter.SpaceCenter.Antenna.deployed" title="SpaceCenter.SpaceCenter.Antenna.deployed"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Antenna.deployed</span></code></a>.</p>
+See <a class="reference internal" href="parts.html#lua-SpaceCenter.Antenna.deployed" title="SpaceCenter.Antenna.deployed"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Antenna.deployed</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.cargo_bays">
-<span class="sig-name descname"><span class="pre">cargo_bays</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.cargo_bays" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.cargo_bays">
+<span class="sig-name descname"><span class="pre">cargo_bays</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.Control.cargo_bays" title="Link to this definition">#</a></dt>
 <dd><p>Returns whether any of the cargo bays on the vessel are open,
 and sets the open state of all cargo bays.
-See <a class="reference internal" href="parts.html#SpaceCenter.SpaceCenter.CargoBay.open" title="SpaceCenter.SpaceCenter.CargoBay.open"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.CargoBay.open</span></code></a>.</p>
+See <a class="reference internal" href="parts.html#lua-SpaceCenter.CargoBay.open" title="SpaceCenter.CargoBay.open"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.CargoBay.open</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.intakes">
-<span class="sig-name descname"><span class="pre">intakes</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.intakes" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.intakes">
+<span class="sig-name descname"><span class="pre">intakes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.Control.intakes" title="Link to this definition">#</a></dt>
 <dd><p>Returns whether all of the air intakes on the vessel are open,
 and sets the open state of all air intakes.
-See <a class="reference internal" href="parts.html#SpaceCenter.SpaceCenter.Intake.open" title="SpaceCenter.SpaceCenter.Intake.open"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Intake.open</span></code></a>.</p>
+See <a class="reference internal" href="parts.html#lua-SpaceCenter.Intake.open" title="SpaceCenter.Intake.open"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Intake.open</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.parachutes">
-<span class="sig-name descname"><span class="pre">parachutes</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.parachutes" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.parachutes">
+<span class="sig-name descname"><span class="pre">parachutes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.Control.parachutes" title="Link to this definition">#</a></dt>
 <dd><p>Returns whether all parachutes on the vessel are deployed,
 and sets the deployment state of all parachutes.
 Cannot be set to <code class="docutils literal notranslate"><span class="pre">False</span></code>.
-See <a class="reference internal" href="parts.html#SpaceCenter.SpaceCenter.Parachute.deployed" title="SpaceCenter.SpaceCenter.Parachute.deployed"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Parachute.deployed</span></code></a>.</p>
+See <a class="reference internal" href="parts.html#lua-SpaceCenter.Parachute.deployed" title="SpaceCenter.Parachute.deployed"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Parachute.deployed</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.radiators">
-<span class="sig-name descname"><span class="pre">radiators</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.radiators" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.radiators">
+<span class="sig-name descname"><span class="pre">radiators</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.Control.radiators" title="Link to this definition">#</a></dt>
 <dd><p>Returns whether all radiators on the vessel are deployed,
 and sets the deployment state of all radiators.
-See <a class="reference internal" href="parts.html#SpaceCenter.SpaceCenter.Radiator.deployed" title="SpaceCenter.SpaceCenter.Radiator.deployed"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Radiator.deployed</span></code></a>.</p>
+See <a class="reference internal" href="parts.html#lua-SpaceCenter.Radiator.deployed" title="SpaceCenter.Radiator.deployed"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Radiator.deployed</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.resource_harvesters">
-<span class="sig-name descname"><span class="pre">resource_harvesters</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.resource_harvesters" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.resource_harvesters">
+<span class="sig-name descname"><span class="pre">resource_harvesters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.Control.resource_harvesters" title="Link to this definition">#</a></dt>
 <dd><p>Returns whether all of the resource harvesters on the vessel are deployed,
 and sets the deployment state of all resource harvesters.
-See <a class="reference internal" href="parts.html#SpaceCenter.SpaceCenter.ResourceHarvester.deployed" title="SpaceCenter.SpaceCenter.ResourceHarvester.deployed"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.ResourceHarvester.deployed</span></code></a>.</p>
+See <a class="reference internal" href="parts.html#lua-SpaceCenter.ResourceHarvester.deployed" title="SpaceCenter.ResourceHarvester.deployed"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.ResourceHarvester.deployed</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.resource_harvesters_active">
-<span class="sig-name descname"><span class="pre">resource_harvesters_active</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.resource_harvesters_active" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.resource_harvesters_active">
+<span class="sig-name descname"><span class="pre">resource_harvesters_active</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.Control.resource_harvesters_active" title="Link to this definition">#</a></dt>
 <dd><p>Returns whether any of the resource harvesters on the vessel are active,
 and sets the active state of all resource harvesters.
-See <a class="reference internal" href="parts.html#SpaceCenter.SpaceCenter.ResourceHarvester.active" title="SpaceCenter.SpaceCenter.ResourceHarvester.active"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.ResourceHarvester.active</span></code></a>.</p>
+See <a class="reference internal" href="parts.html#lua-SpaceCenter.ResourceHarvester.active" title="SpaceCenter.ResourceHarvester.active"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.ResourceHarvester.active</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.solar_panels">
-<span class="sig-name descname"><span class="pre">solar_panels</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.solar_panels" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.solar_panels">
+<span class="sig-name descname"><span class="pre">solar_panels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.Control.solar_panels" title="Link to this definition">#</a></dt>
 <dd><p>Returns whether all solar panels on the vessel are deployed,
 and sets the deployment state of all solar panels.
-See <a class="reference internal" href="parts.html#SpaceCenter.SpaceCenter.SolarPanel.deployed" title="SpaceCenter.SpaceCenter.SolarPanel.deployed"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.SolarPanel.deployed</span></code></a>.</p>
+See <a class="reference internal" href="parts.html#lua-SpaceCenter.SolarPanel.deployed" title="SpaceCenter.SolarPanel.deployed"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.SolarPanel.deployed</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.abort">
-<span class="sig-name descname"><span class="pre">abort</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.abort" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.abort">
+<span class="sig-name descname"><span class="pre">abort</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.Control.abort" title="Link to this definition">#</a></dt>
 <dd><p>The state of the abort action group.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.throttle">
-<span class="sig-name descname"><span class="pre">throttle</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.throttle" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.throttle">
+<span class="sig-name descname"><span class="pre">throttle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Control.throttle" title="Link to this definition">#</a></dt>
 <dd><p>The state of the throttle. A value between 0 and 1.
 Unlike the other control inputs, the throttle is not zeroed when the
 clients that set it disconnect.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1548,8 +1474,8 @@ a set returns the previously applied value rather than the value just set.</p>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.input_mode">
-<span class="sig-name descname"><span class="pre">input_mode</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.ControlInputMode</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.input_mode" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.input_mode">
+<span class="sig-name descname"><span class="pre">input_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-SpaceCenter.ControlInputMode" title="SpaceCenter.ControlInputMode"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ControlInputMode</span></code></a><a class="headerlink" href="#lua-SpaceCenter.Control.input_mode" title="Link to this definition">#</a></dt>
 <dd><p>Sets the behavior of the pitch, yaw, roll and translation control inputs.
 When set to additive, these inputs are added to the vessels current inputs.
 This mode is the default.
@@ -1560,15 +1486,12 @@ they are set.</p>
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#SpaceCenter.ControlInputMode" title="SpaceCenter.ControlInputMode"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ControlInputMode</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.pitch">
-<span class="sig-name descname"><span class="pre">pitch</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.pitch" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.pitch">
+<span class="sig-name descname"><span class="pre">pitch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Control.pitch" title="Link to this definition">#</a></dt>
 <dd><p>The state of the pitch control.
 A value between -1 and 1.
 Equivalent to the w and s keys.</p>
@@ -1576,9 +1499,6 @@ Equivalent to the w and s keys.</p>
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -1590,8 +1510,8 @@ a set returns the previously applied value rather than the value just set.</p>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.yaw">
-<span class="sig-name descname"><span class="pre">yaw</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.yaw" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.yaw">
+<span class="sig-name descname"><span class="pre">yaw</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Control.yaw" title="Link to this definition">#</a></dt>
 <dd><p>The state of the yaw control.
 A value between -1 and 1.
 Equivalent to the a and d keys.</p>
@@ -1599,9 +1519,6 @@ Equivalent to the a and d keys.</p>
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -1613,8 +1530,8 @@ a set returns the previously applied value rather than the value just set.</p>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.roll">
-<span class="sig-name descname"><span class="pre">roll</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.roll" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.roll">
+<span class="sig-name descname"><span class="pre">roll</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Control.roll" title="Link to this definition">#</a></dt>
 <dd><p>The state of the roll control.
 A value between -1 and 1.
 Equivalent to the q and e keys.</p>
@@ -1622,9 +1539,6 @@ Equivalent to the q and e keys.</p>
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -1636,8 +1550,8 @@ a set returns the previously applied value rather than the value just set.</p>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.pitch_trim">
-<span class="sig-name descname"><span class="pre">pitch_trim</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.pitch_trim" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.pitch_trim">
+<span class="sig-name descname"><span class="pre">pitch_trim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Control.pitch_trim" title="Link to this definition">#</a></dt>
 <dd><p>The state of the pitch trim.
 A value between -1 and 1.
 Equivalent to the Alt+W and Alt+S keys.
@@ -1649,15 +1563,12 @@ when clients disconnect.</p>
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.yaw_trim">
-<span class="sig-name descname"><span class="pre">yaw_trim</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.yaw_trim" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.yaw_trim">
+<span class="sig-name descname"><span class="pre">yaw_trim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Control.yaw_trim" title="Link to this definition">#</a></dt>
 <dd><p>The state of the yaw trim.
 A value between -1 and 1.
 Equivalent to the Alt+A and Alt+D keys.
@@ -1669,15 +1580,12 @@ when clients disconnect.</p>
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.roll_trim">
-<span class="sig-name descname"><span class="pre">roll_trim</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.roll_trim" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.roll_trim">
+<span class="sig-name descname"><span class="pre">roll_trim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Control.roll_trim" title="Link to this definition">#</a></dt>
 <dd><p>The state of the roll trim.
 A value between -1 and 1.
 Equivalent to the Alt+Q and Alt+E keys.
@@ -1689,15 +1597,12 @@ when clients disconnect.</p>
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.precision_mode">
-<span class="sig-name descname"><span class="pre">precision_mode</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.precision_mode" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.precision_mode">
+<span class="sig-name descname"><span class="pre">precision_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.Control.precision_mode" title="Link to this definition">#</a></dt>
 <dd><p>Whether precision control mode is enabled.
 Equivalent to the Caps Lock key.
 This is a game setting rather than a vessel setting,
@@ -1708,20 +1613,17 @@ when clients disconnect.</p>
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Precision mode weakens the RCS thrust that the control inputs produce. A block
-driven by <a class="reference internal" href="parts.html#SpaceCenter.SpaceCenter.RCS.input_override" title="SpaceCenter.SpaceCenter.RCS.input_override"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.RCS.input_override</span></code></a> is exempt.</p>
+driven by <a class="reference internal" href="parts.html#lua-SpaceCenter.RCS.input_override" title="SpaceCenter.RCS.input_override"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.RCS.input_override</span></code></a> is exempt.</p>
 </div>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.forward">
-<span class="sig-name descname"><span class="pre">forward</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.forward" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Control.forward" title="Link to this definition">#</a></dt>
 <dd><p>The state of the forward translational control.
 A value between -1 and 1.
 Equivalent to the h and n keys.</p>
@@ -1729,9 +1631,6 @@ Equivalent to the h and n keys.</p>
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -1743,8 +1642,8 @@ a set returns the previously applied value rather than the value just set.</p>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.up">
-<span class="sig-name descname"><span class="pre">up</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.up" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.up">
+<span class="sig-name descname"><span class="pre">up</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Control.up" title="Link to this definition">#</a></dt>
 <dd><p>The state of the up translational control.
 A value between -1 and 1.
 Equivalent to the i and k keys.</p>
@@ -1752,9 +1651,6 @@ Equivalent to the i and k keys.</p>
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -1766,8 +1662,8 @@ a set returns the previously applied value rather than the value just set.</p>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.right">
-<span class="sig-name descname"><span class="pre">right</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.right" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.right">
+<span class="sig-name descname"><span class="pre">right</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Control.right" title="Link to this definition">#</a></dt>
 <dd><p>The state of the right translational control.
 A value between -1 and 1.
 Equivalent to the j and l keys.</p>
@@ -1775,9 +1671,6 @@ Equivalent to the j and l keys.</p>
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -1789,8 +1682,8 @@ a set returns the previously applied value rather than the value just set.</p>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.wheel_throttle">
-<span class="sig-name descname"><span class="pre">wheel_throttle</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.wheel_throttle" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.wheel_throttle">
+<span class="sig-name descname"><span class="pre">wheel_throttle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Control.wheel_throttle" title="Link to this definition">#</a></dt>
 <dd><p>The state of the wheel throttle.
 A value between -1 and 1.
 A value of 1 rotates the wheels forwards, a value of -1 rotates
@@ -1799,9 +1692,6 @@ the wheels backwards.</p>
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -1813,8 +1703,8 @@ a set returns the previously applied value rather than the value just set.</p>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.wheel_steering">
-<span class="sig-name descname"><span class="pre">wheel_steering</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.wheel_steering" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.wheel_steering">
+<span class="sig-name descname"><span class="pre">wheel_steering</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Control.wheel_steering" title="Link to this definition">#</a></dt>
 <dd><p>The state of the wheel steering.
 A value between -1 and 1.
 A value of 1 steers to the left, and a value of -1 steers to the right.</p>
@@ -1822,9 +1712,6 @@ A value of 1 steers to the left, and a value of -1 steers to the right.</p>
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -1836,111 +1723,90 @@ a set returns the previously applied value rather than the value just set.</p>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.custom_axis01">
-<span class="sig-name descname"><span class="pre">custom_axis01</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.custom_axis01" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.custom_axis01">
+<span class="sig-name descname"><span class="pre">custom_axis01</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Control.custom_axis01" title="Link to this definition">#</a></dt>
 <dd><p>The state of CustomAxis01.
 A value between -1 and 1.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.custom_axis02">
-<span class="sig-name descname"><span class="pre">custom_axis02</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.custom_axis02" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.custom_axis02">
+<span class="sig-name descname"><span class="pre">custom_axis02</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Control.custom_axis02" title="Link to this definition">#</a></dt>
 <dd><p>The state of CustomAxis02.
 A value between -1 and 1.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.custom_axis03">
-<span class="sig-name descname"><span class="pre">custom_axis03</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.custom_axis03" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.custom_axis03">
+<span class="sig-name descname"><span class="pre">custom_axis03</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Control.custom_axis03" title="Link to this definition">#</a></dt>
 <dd><p>The state of CustomAxis03.
 A value between -1 and 1.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.custom_axis04">
-<span class="sig-name descname"><span class="pre">custom_axis04</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.custom_axis04" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.custom_axis04">
+<span class="sig-name descname"><span class="pre">custom_axis04</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Control.custom_axis04" title="Link to this definition">#</a></dt>
 <dd><p>The state of CustomAxis04.
 A value between -1 and 1.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.current_stage">
-<span class="sig-name descname"><span class="pre">current_stage</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.current_stage" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.current_stage">
+<span class="sig-name descname"><span class="pre">current_stage</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Control.current_stage" title="Link to this definition">#</a></dt>
 <dd><p>The current stage of the vessel. Corresponds to the stage number in
 the in-game UI.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.Control.activate_next_stage">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">activate_next_stage</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Control.activate_next_stage" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.activate_next_stage">
+<span class="sig-name descname"><span class="pre">activate_next_stage</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">List</span></code><a class="headerlink" href="#lua-SpaceCenter.Control.activate_next_stage" title="Link to this definition">#</a></dt>
 <dd><p>Activates the next stage. Equivalent to pressing the space bar in-game.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>A list of vessel objects that are jettisoned from the active vessel.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">List</span></code></span></p>
 </dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>When called, the active vessel may change. It is therefore possible that,
 after calling this function, the object(s) returned by previous call(s) to
-<a class="reference internal" href="space-center.html#SpaceCenter.SpaceCenter.active_vessel" title="SpaceCenter.SpaceCenter.active_vessel"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.active_vessel</span></code></a> no longer refer to the active vessel.
+<a class="reference internal" href="space-center.html#lua-SpaceCenter.active_vessel" title="SpaceCenter.active_vessel"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.active_vessel</span></code></a> no longer refer to the active vessel.
 Throws an exception if staging is locked.</p>
 </div>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.stage_lock">
-<span class="sig-name descname"><span class="pre">stage_lock</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.stage_lock" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.stage_lock">
+<span class="sig-name descname"><span class="pre">stage_lock</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.Control.stage_lock" title="Link to this definition">#</a></dt>
 <dd><p>Whether staging is locked on the vessel.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1950,59 +1816,50 @@ Throws an exception if staging is locked.</p>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.Control.get_action_group">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">get_action_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">group</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Control.get_action_group" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.get_action_group">
+<span class="sig-name descname"><span class="pre">get_action_group</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">group</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.Control.get_action_group" title="Link to this definition">#</a></dt>
 <dd><p>Returns <code class="docutils literal notranslate"><span class="pre">True</span></code> if the given action group is enabled.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>group</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the <a class="reference external" href="https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/">Extended Action Groups mod</a> is installed.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
+<dd class="field-odd"><p><strong>group</strong> – A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the <a class="reference external" href="https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/">Extended Action Groups mod</a> is installed.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.Control.set_action_group">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">set_action_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">group</span></em>, <em class="sig-param"><span class="pre">state</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Control.set_action_group" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.set_action_group">
+<span class="sig-name descname"><span class="pre">set_action_group</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">group</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-SpaceCenter.Control.set_action_group" title="Link to this definition">#</a></dt>
 <dd><p>Sets the state of the given action group.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>group</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – <p>A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the <a class="reference external" href="https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/">Extended Action Groups mod</a> is installed.</p>
-</p></li>
-<li><p><strong>state</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>)</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.Control.toggle_action_group">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">toggle_action_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">group</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Control.toggle_action_group" title="Link to this definition">#</a></dt>
-<dd><p>Toggles the state of the given action group.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>group</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – <p>A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the <a class="reference external" href="https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/">Extended Action Groups mod</a> is installed.</p>
+<dd class="field-odd"><p><strong>group</strong> – <p>A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the <a class="reference external" href="https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/">Extended Action Groups mod</a> is installed.</p>
 </p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.Control.get_action_group_actions">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">get_action_group_actions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">group</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Control.get_action_group_actions" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.toggle_action_group">
+<span class="sig-name descname"><span class="pre">toggle_action_group</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">group</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-SpaceCenter.Control.toggle_action_group" title="Link to this definition">#</a></dt>
+<dd><p>Toggles the state of the given action group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>group</strong> – <p>A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the <a class="reference external" href="https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/">Extended Action Groups mod</a> is installed.</p>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua method">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.get_action_group_actions">
+<span class="sig-name descname"><span class="pre">get_action_group_actions</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">group</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">List</span></code><a class="headerlink" href="#lua-SpaceCenter.Control.get_action_group_actions" title="Link to this definition">#</a></dt>
 <dd><p>Returns a list of all the part actions that are assigned to the given action group.
 Each entry identifies the part, the part module, and the action’s name and identifier.
 Returns an empty list if no actions are assigned to the group.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>group</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – <p>A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the <a class="reference external" href="https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/">Extended Action Groups mod</a> is installed.</p>
+<dd class="field-odd"><p><strong>group</strong> – <p>A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the <a class="reference external" href="https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/">Extended Action Groups mod</a> is installed.</p>
 </p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">List</span></code></span></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -2014,73 +1871,64 @@ the mod instead, so that actions assigned to its additional groups are included.
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.Control.add_node">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">add_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">ut</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">prograde</span> <span class="pre">=</span> <span class="pre">0.0</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">normal</span> <span class="pre">=</span> <span class="pre">0.0</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">radial</span> <span class="pre">=</span> <span class="pre">0.0</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Control.add_node" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.add_node">
+<span class="sig-name descname"><span class="pre">add_node</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">ut</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">prograde</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">normal</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">radial</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="node.html#lua-SpaceCenter.Node" title="SpaceCenter.Node"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.Node</span></code></a><a class="headerlink" href="#lua-SpaceCenter.Control.add_node" title="Link to this definition">#</a><br /></dt>
 <dd><p>Creates a maneuver node at the given universal time, and returns a
-<a class="reference internal" href="node.html#SpaceCenter.Node" title="SpaceCenter.Node"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.Node</span></code></a> object that can be used to modify it.
+<a class="reference internal" href="node.html#lua-SpaceCenter.Node" title="SpaceCenter.Node"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.Node</span></code></a> object that can be used to modify it.
 Optionally sets the magnitude of the delta-v for the maneuver node
 in the prograde, normal and radial directions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>ut</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Universal time of the maneuver node.</p></li>
-<li><p><strong>prograde</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Delta-v in the prograde direction.</p></li>
-<li><p><strong>normal</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Delta-v in the normal direction.</p></li>
-<li><p><strong>radial</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Delta-v in the radial direction.</p></li>
+<li><p><strong>ut</strong> – Universal time of the maneuver node.</p></li>
+<li><p><strong>prograde</strong> – Delta-v in the prograde direction. Defaults to <code class="docutils literal notranslate"><span class="pre">0.0</span></code>.</p></li>
+<li><p><strong>normal</strong> – Delta-v in the normal direction. Defaults to <code class="docutils literal notranslate"><span class="pre">0.0</span></code>.</p></li>
+<li><p><strong>radial</strong> – Delta-v in the radial direction. Defaults to <code class="docutils literal notranslate"><span class="pre">0.0</span></code>.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="node.html#SpaceCenter.Node" title="SpaceCenter.Node"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.Node</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.nodes">
-<span class="sig-name descname"><span class="pre">nodes</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">List</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.nodes" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.nodes">
+<span class="sig-name descname"><span class="pre">nodes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">List</span></code><a class="headerlink" href="#lua-SpaceCenter.Control.nodes" title="Link to this definition">#</a></dt>
 <dd><p>Returns a list of all existing maneuver nodes, ordered by time from first to last.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">List</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.Control.remove_nodes">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">remove_nodes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Control.remove_nodes" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.remove_nodes">
+<span class="sig-name descname"><span class="pre">remove_nodes</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-SpaceCenter.Control.remove_nodes" title="Link to this definition">#</a></dt>
 <dd><p>Remove all maneuver nodes.</p>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.airlock">
-<span class="sig-name descname"><span class="pre">airlock</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.Part</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.airlock" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.airlock">
+<span class="sig-name descname"><span class="pre">airlock</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="parts.html#lua-SpaceCenter.Part" title="SpaceCenter.Part"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.Part</span></code></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../../lua.html#lua-krpc.Types.none" title="krpc.Types.none"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Types.none</span></code></a><a class="headerlink" href="#lua-SpaceCenter.Control.airlock" title="Link to this definition">#</a></dt>
 <dd><p>The part whose hatch the kerbal is standing at, and so the one
-<a class="reference internal" href="#SpaceCenter.Control.board" title="SpaceCenter.Control.board"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Control.board()</span></code></a> would put it in. <code class="docutils literal notranslate"><span class="pre">nil</span></code> if it is not at a hatch or the
+<a class="reference internal" href="#lua-SpaceCenter.Control.board" title="SpaceCenter.Control.board"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Control:board()</span></code></a> would put it in. <code class="docutils literal notranslate"><span class="pre">nil</span></code> if it is not at a hatch or the
 vessel is not a kerbal on EVA.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="parts.html#SpaceCenter.Part" title="SpaceCenter.Part"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.Part</span></code></a> or <code class="docutils literal notranslate"><span class="pre">Types.none</span></code></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.Control.board">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">board</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Control.board" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.board">
+<span class="sig-name descname"><span class="pre">board</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-SpaceCenter.Control.board" title="Link to this definition">#</a></dt>
 <dd><p>Climb into the part whose hatch the kerbal is standing at, ending the EVA. The
 kerbal takes a seat in that part and its own vessel ceases to exist. If the
 kerbal was the active vessel, the game switches to the vessel it boarded.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>A kerbal can only board through a hatch it is already at, which
-<a class="reference internal" href="#SpaceCenter.SpaceCenter.Control.airlock" title="SpaceCenter.SpaceCenter.Control.airlock"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Control.airlock</span></code></a> reports; it does not walk to one. Throws an exception if
+<a class="reference internal" href="#lua-SpaceCenter.Control.airlock" title="SpaceCenter.Control.airlock"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Control.airlock</span></code></a> reports; it does not walk to one. Throws an exception if
 the vessel is not a kerbal on EVA, if the kerbal is not at a hatch, if boarding
 is disabled for the game, if the part has no free seat, or if the kerbal is
 carrying science data that the part cannot store, as the game asks what to do
@@ -2089,26 +1937,23 @@ with it in that case.</p>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.ladder">
-<span class="sig-name descname"><span class="pre">ladder</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.Part</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.ladder" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.ladder">
+<span class="sig-name descname"><span class="pre">ladder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="parts.html#lua-SpaceCenter.Part" title="SpaceCenter.Part"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.Part</span></code></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../../lua.html#lua-krpc.Types.none" title="krpc.Types.none"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Types.none</span></code></a><a class="headerlink" href="#lua-SpaceCenter.Control.ladder" title="Link to this definition">#</a></dt>
 <dd><p>The ladder the kerbal is holding on to, or <code class="docutils literal notranslate"><span class="pre">nil</span></code> if it is not holding one
 or the vessel is not a kerbal on EVA.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="parts.html#SpaceCenter.Part" title="SpaceCenter.Part"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.Part</span></code></a> or <code class="docutils literal notranslate"><span class="pre">Types.none</span></code></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.Control.grab_ladder">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">grab_ladder</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Control.grab_ladder" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.grab_ladder">
+<span class="sig-name descname"><span class="pre">grab_ladder</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-SpaceCenter.Control.grab_ladder" title="Link to this definition">#</a></dt>
 <dd><p>Take hold of the ladder the kerbal is standing at, as pressing the grab key
 in-game does. A kerbal can only take hold of a ladder it is already alongside;
-it does not walk to one. <a class="reference internal" href="#SpaceCenter.SpaceCenter.Control.ladder" title="SpaceCenter.SpaceCenter.Control.ladder"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Control.ladder</span></code></a> reports the one it ends up
+it does not walk to one. <a class="reference internal" href="#lua-SpaceCenter.Control.ladder" title="SpaceCenter.Control.ladder"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Control.ladder</span></code></a> reports the one it ends up
 holding. Does nothing if the kerbal is already holding a ladder.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -2118,8 +1963,8 @@ within reach, or if the kerbal is doing something it cannot grab a ladder from.<
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="SpaceCenter.Control.release_ladder">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">release_ladder</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Control.release_ladder" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Control.release_ladder">
+<span class="sig-name descname"><span class="pre">release_ladder</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-SpaceCenter.Control.release_ladder" title="Link to this definition">#</a></dt>
 <dd><p>Let go of the ladder the kerbal is holding, as pressing the jump key in-game
 does. Does nothing if it is not holding one.</p>
 <div class="admonition note">
@@ -2131,213 +1976,193 @@ does. Does nothing if it is not holding one.</p>
 </dd></dl>
 
 <dl class="lua class">
-<dt class="sig sig-object lua" id="SpaceCenter.ActionGroupAction">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">SpaceCenter.</span></span><span class="sig-name descname"><span class="pre">ActionGroupAction</span></span><a class="headerlink" href="#SpaceCenter.ActionGroupAction" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.ActionGroupAction">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">SpaceCenter.</span></span><span class="sig-name descname"><span class="pre">ActionGroupAction</span></span><a class="headerlink" href="#lua-SpaceCenter.ActionGroupAction" title="Link to this definition">#</a></dt>
 <dd><p>An action, belonging to a part module, that is assigned to an action group.
-Obtained by calling <a class="reference internal" href="#SpaceCenter.Control.get_action_group_actions" title="SpaceCenter.Control.get_action_group_actions"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Control.get_action_group_actions()</span></code></a>.</p>
+Obtained by calling <a class="reference internal" href="#lua-SpaceCenter.Control.get_action_group_actions" title="SpaceCenter.Control.get_action_group_actions"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Control:get_action_group_actions()</span></code></a>.</p>
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.ActionGroupAction.part">
-<span class="sig-name descname"><span class="pre">part</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.Part</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.ActionGroupAction.part" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.ActionGroupAction.part">
+<span class="sig-name descname"><span class="pre">part</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="parts.html#lua-SpaceCenter.Part" title="SpaceCenter.Part"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.Part</span></code></a><a class="headerlink" href="#lua-SpaceCenter.ActionGroupAction.part" title="Link to this definition">#</a></dt>
 <dd><p>The part that the action acts on.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="parts.html#SpaceCenter.Part" title="SpaceCenter.Part"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.Part</span></code></a></p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.ActionGroupAction.module">
-<span class="sig-name descname"><span class="pre">module</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.Module</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.ActionGroupAction.module" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.ActionGroupAction.module">
+<span class="sig-name descname"><span class="pre">module</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="parts.html#lua-SpaceCenter.Module" title="SpaceCenter.Module"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.Module</span></code></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../../lua.html#lua-krpc.Types.none" title="krpc.Types.none"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Types.none</span></code></a><a class="headerlink" href="#lua-SpaceCenter.ActionGroupAction.module" title="Link to this definition">#</a></dt>
 <dd><p>The part module that the action belongs to. Returns <code class="docutils literal notranslate"><span class="pre">nil</span></code> for a
 part-level action that is not associated with a module. This only occurs when
 the Extended Action Groups mod is installed, as it can assign actions defined
 directly on a part, rather than on one of its modules, to an action group.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="parts.html#SpaceCenter.Module" title="SpaceCenter.Module"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.Module</span></code></a> or <code class="docutils literal notranslate"><span class="pre">Types.none</span></code></p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.ActionGroupAction.name">
-<span class="sig-name descname"><span class="pre">name</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">string</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.ActionGroupAction.name" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.ActionGroupAction.name">
+<span class="sig-name descname"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><a class="headerlink" href="#lua-SpaceCenter.ActionGroupAction.name" title="Link to this definition">#</a></dt>
 <dd><p>The human-readable name of the action, as shown in the action group editor.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span></p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.ActionGroupAction.id">
-<span class="sig-name descname"><span class="pre">id</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">string</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.ActionGroupAction.id" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.ActionGroupAction.id">
+<span class="sig-name descname"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><a class="headerlink" href="#lua-SpaceCenter.ActionGroupAction.id" title="Link to this definition">#</a></dt>
 <dd><p>The non-localized identifier for the action.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span></p>
-</dd>
-</dl>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="lua class">
-<dt class="sig sig-object lua" id="SpaceCenter.ControlState">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">SpaceCenter.</span></span><span class="sig-name descname"><span class="pre">ControlState</span></span><a class="headerlink" href="#SpaceCenter.ControlState" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.ControlState">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">SpaceCenter.</span></span><span class="sig-name descname"><span class="pre">ControlState</span></span><a class="headerlink" href="#lua-SpaceCenter.ControlState" title="Link to this definition">#</a></dt>
 <dd><p>The control state of a vessel.
-See <a class="reference internal" href="#SpaceCenter.SpaceCenter.Control.state" title="SpaceCenter.SpaceCenter.Control.state"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Control.state</span></code></a>.</p>
+See <a class="reference internal" href="#lua-SpaceCenter.Control.state" title="SpaceCenter.Control.state"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Control.state</span></code></a>.</p>
 <dl class="lua data">
-<dt class="sig sig-object lua" id="SpaceCenter.ControlState.full">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">full</span></span><a class="headerlink" href="#SpaceCenter.ControlState.full" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.ControlState.full">
+<span class="sig-name descname"><span class="pre">full</span></span><a class="headerlink" href="#lua-SpaceCenter.ControlState.full" title="Link to this definition">#</a></dt>
 <dd><p>Full controllable.</p>
 </dd></dl>
 
 <dl class="lua data">
-<dt class="sig sig-object lua" id="SpaceCenter.ControlState.partial">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">partial</span></span><a class="headerlink" href="#SpaceCenter.ControlState.partial" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.ControlState.partial">
+<span class="sig-name descname"><span class="pre">partial</span></span><a class="headerlink" href="#lua-SpaceCenter.ControlState.partial" title="Link to this definition">#</a></dt>
 <dd><p>Partially controllable.</p>
 </dd></dl>
 
 <dl class="lua data">
-<dt class="sig sig-object lua" id="SpaceCenter.ControlState.none">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">none</span></span><a class="headerlink" href="#SpaceCenter.ControlState.none" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.ControlState.none">
+<span class="sig-name descname"><span class="pre">none</span></span><a class="headerlink" href="#lua-SpaceCenter.ControlState.none" title="Link to this definition">#</a></dt>
 <dd><p>Not controllable.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="lua class">
-<dt class="sig sig-object lua" id="SpaceCenter.ControlSource">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">SpaceCenter.</span></span><span class="sig-name descname"><span class="pre">ControlSource</span></span><a class="headerlink" href="#SpaceCenter.ControlSource" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.ControlSource">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">SpaceCenter.</span></span><span class="sig-name descname"><span class="pre">ControlSource</span></span><a class="headerlink" href="#lua-SpaceCenter.ControlSource" title="Link to this definition">#</a></dt>
 <dd><p>The control source of a vessel.
-See <a class="reference internal" href="#SpaceCenter.SpaceCenter.Control.source" title="SpaceCenter.SpaceCenter.Control.source"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Control.source</span></code></a>.</p>
+See <a class="reference internal" href="#lua-SpaceCenter.Control.source" title="SpaceCenter.Control.source"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Control.source</span></code></a>.</p>
 <dl class="lua data">
-<dt class="sig sig-object lua" id="SpaceCenter.ControlSource.kerbal">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">kerbal</span></span><a class="headerlink" href="#SpaceCenter.ControlSource.kerbal" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.ControlSource.kerbal">
+<span class="sig-name descname"><span class="pre">kerbal</span></span><a class="headerlink" href="#lua-SpaceCenter.ControlSource.kerbal" title="Link to this definition">#</a></dt>
 <dd><p>Vessel is controlled by a Kerbal.</p>
 </dd></dl>
 
 <dl class="lua data">
-<dt class="sig sig-object lua" id="SpaceCenter.ControlSource.probe">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">probe</span></span><a class="headerlink" href="#SpaceCenter.ControlSource.probe" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.ControlSource.probe">
+<span class="sig-name descname"><span class="pre">probe</span></span><a class="headerlink" href="#lua-SpaceCenter.ControlSource.probe" title="Link to this definition">#</a></dt>
 <dd><p>Vessel is controlled by a probe core.</p>
 </dd></dl>
 
 <dl class="lua data">
-<dt class="sig sig-object lua" id="SpaceCenter.ControlSource.none">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">none</span></span><a class="headerlink" href="#SpaceCenter.ControlSource.none" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.ControlSource.none">
+<span class="sig-name descname"><span class="pre">none</span></span><a class="headerlink" href="#lua-SpaceCenter.ControlSource.none" title="Link to this definition">#</a></dt>
 <dd><p>Vessel is not controlled.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="lua class">
-<dt class="sig sig-object lua" id="SpaceCenter.SASMode">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">SpaceCenter.</span></span><span class="sig-name descname"><span class="pre">SASMode</span></span><a class="headerlink" href="#SpaceCenter.SASMode" title="Link to this definition">#</a></dt>
-<dd><p>The behavior of the SAS auto-pilot. See <a class="reference internal" href="auto-pilot.html#SpaceCenter.SpaceCenter.AutoPilot.sas_mode" title="SpaceCenter.SpaceCenter.AutoPilot.sas_mode"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.sas_mode</span></code></a>.</p>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.SASMode">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">SpaceCenter.</span></span><span class="sig-name descname"><span class="pre">SASMode</span></span><a class="headerlink" href="#lua-SpaceCenter.SASMode" title="Link to this definition">#</a></dt>
+<dd><p>The behavior of the SAS auto-pilot. See <a class="reference internal" href="auto-pilot.html#lua-SpaceCenter.AutoPilot.sas_mode" title="SpaceCenter.AutoPilot.sas_mode"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.sas_mode</span></code></a>.</p>
 <dl class="lua data">
-<dt class="sig sig-object lua" id="SpaceCenter.SASMode.stability_assist">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">stability_assist</span></span><a class="headerlink" href="#SpaceCenter.SASMode.stability_assist" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.SASMode.stability_assist">
+<span class="sig-name descname"><span class="pre">stability_assist</span></span><a class="headerlink" href="#lua-SpaceCenter.SASMode.stability_assist" title="Link to this definition">#</a></dt>
 <dd><p>Stability assist mode. Dampen out any rotation.</p>
 </dd></dl>
 
 <dl class="lua data">
-<dt class="sig sig-object lua" id="SpaceCenter.SASMode.maneuver">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">maneuver</span></span><a class="headerlink" href="#SpaceCenter.SASMode.maneuver" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.SASMode.maneuver">
+<span class="sig-name descname"><span class="pre">maneuver</span></span><a class="headerlink" href="#lua-SpaceCenter.SASMode.maneuver" title="Link to this definition">#</a></dt>
 <dd><p>Point in the burn direction of the next maneuver node.</p>
 </dd></dl>
 
 <dl class="lua data">
-<dt class="sig sig-object lua" id="SpaceCenter.SASMode.prograde">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">prograde</span></span><a class="headerlink" href="#SpaceCenter.SASMode.prograde" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.SASMode.prograde">
+<span class="sig-name descname"><span class="pre">prograde</span></span><a class="headerlink" href="#lua-SpaceCenter.SASMode.prograde" title="Link to this definition">#</a></dt>
 <dd><p>Point in the prograde direction.</p>
 </dd></dl>
 
 <dl class="lua data">
-<dt class="sig sig-object lua" id="SpaceCenter.SASMode.retrograde">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">retrograde</span></span><a class="headerlink" href="#SpaceCenter.SASMode.retrograde" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.SASMode.retrograde">
+<span class="sig-name descname"><span class="pre">retrograde</span></span><a class="headerlink" href="#lua-SpaceCenter.SASMode.retrograde" title="Link to this definition">#</a></dt>
 <dd><p>Point in the retrograde direction.</p>
 </dd></dl>
 
 <dl class="lua data">
-<dt class="sig sig-object lua" id="SpaceCenter.SASMode.normal">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">normal</span></span><a class="headerlink" href="#SpaceCenter.SASMode.normal" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.SASMode.normal">
+<span class="sig-name descname"><span class="pre">normal</span></span><a class="headerlink" href="#lua-SpaceCenter.SASMode.normal" title="Link to this definition">#</a></dt>
 <dd><p>Point in the orbit normal direction.</p>
 </dd></dl>
 
 <dl class="lua data">
-<dt class="sig sig-object lua" id="SpaceCenter.SASMode.anti_normal">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">anti_normal</span></span><a class="headerlink" href="#SpaceCenter.SASMode.anti_normal" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.SASMode.anti_normal">
+<span class="sig-name descname"><span class="pre">anti_normal</span></span><a class="headerlink" href="#lua-SpaceCenter.SASMode.anti_normal" title="Link to this definition">#</a></dt>
 <dd><p>Point in the orbit anti-normal direction.</p>
 </dd></dl>
 
 <dl class="lua data">
-<dt class="sig sig-object lua" id="SpaceCenter.SASMode.radial">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">radial</span></span><a class="headerlink" href="#SpaceCenter.SASMode.radial" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.SASMode.radial">
+<span class="sig-name descname"><span class="pre">radial</span></span><a class="headerlink" href="#lua-SpaceCenter.SASMode.radial" title="Link to this definition">#</a></dt>
 <dd><p>Point in the orbit radial direction.</p>
 </dd></dl>
 
 <dl class="lua data">
-<dt class="sig sig-object lua" id="SpaceCenter.SASMode.anti_radial">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">anti_radial</span></span><a class="headerlink" href="#SpaceCenter.SASMode.anti_radial" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.SASMode.anti_radial">
+<span class="sig-name descname"><span class="pre">anti_radial</span></span><a class="headerlink" href="#lua-SpaceCenter.SASMode.anti_radial" title="Link to this definition">#</a></dt>
 <dd><p>Point in the orbit anti-radial direction.</p>
 </dd></dl>
 
 <dl class="lua data">
-<dt class="sig sig-object lua" id="SpaceCenter.SASMode.target">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">target</span></span><a class="headerlink" href="#SpaceCenter.SASMode.target" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.SASMode.target">
+<span class="sig-name descname"><span class="pre">target</span></span><a class="headerlink" href="#lua-SpaceCenter.SASMode.target" title="Link to this definition">#</a></dt>
 <dd><p>Point in the direction of the current target.</p>
 </dd></dl>
 
 <dl class="lua data">
-<dt class="sig sig-object lua" id="SpaceCenter.SASMode.anti_target">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">anti_target</span></span><a class="headerlink" href="#SpaceCenter.SASMode.anti_target" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.SASMode.anti_target">
+<span class="sig-name descname"><span class="pre">anti_target</span></span><a class="headerlink" href="#lua-SpaceCenter.SASMode.anti_target" title="Link to this definition">#</a></dt>
 <dd><p>Point away from the current target.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="lua class">
-<dt class="sig sig-object lua" id="SpaceCenter.SpeedMode">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">SpaceCenter.</span></span><span class="sig-name descname"><span class="pre">SpeedMode</span></span><a class="headerlink" href="#SpaceCenter.SpeedMode" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.SpeedMode">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">SpaceCenter.</span></span><span class="sig-name descname"><span class="pre">SpeedMode</span></span><a class="headerlink" href="#lua-SpaceCenter.SpeedMode" title="Link to this definition">#</a></dt>
 <dd><p>The mode of the speed reported in the navball.
-See <a class="reference internal" href="#SpaceCenter.SpaceCenter.Control.speed_mode" title="SpaceCenter.SpaceCenter.Control.speed_mode"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Control.speed_mode</span></code></a>.</p>
+See <a class="reference internal" href="#lua-SpaceCenter.Control.speed_mode" title="SpaceCenter.Control.speed_mode"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Control.speed_mode</span></code></a>.</p>
 <dl class="lua data">
-<dt class="sig sig-object lua" id="SpaceCenter.SpeedMode.orbit">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">orbit</span></span><a class="headerlink" href="#SpaceCenter.SpeedMode.orbit" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.SpeedMode.orbit">
+<span class="sig-name descname"><span class="pre">orbit</span></span><a class="headerlink" href="#lua-SpaceCenter.SpeedMode.orbit" title="Link to this definition">#</a></dt>
 <dd><p>Speed is relative to the vessel’s orbit.</p>
 </dd></dl>
 
 <dl class="lua data">
-<dt class="sig sig-object lua" id="SpaceCenter.SpeedMode.surface">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">surface</span></span><a class="headerlink" href="#SpaceCenter.SpeedMode.surface" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.SpeedMode.surface">
+<span class="sig-name descname"><span class="pre">surface</span></span><a class="headerlink" href="#lua-SpaceCenter.SpeedMode.surface" title="Link to this definition">#</a></dt>
 <dd><p>Speed is relative to the surface of the body being orbited.</p>
 </dd></dl>
 
 <dl class="lua data">
-<dt class="sig sig-object lua" id="SpaceCenter.SpeedMode.target">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">target</span></span><a class="headerlink" href="#SpaceCenter.SpeedMode.target" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.SpeedMode.target">
+<span class="sig-name descname"><span class="pre">target</span></span><a class="headerlink" href="#lua-SpaceCenter.SpeedMode.target" title="Link to this definition">#</a></dt>
 <dd><p>Speed is relative to the current target.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="lua class">
-<dt class="sig sig-object lua" id="SpaceCenter.ControlInputMode">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">SpaceCenter.</span></span><span class="sig-name descname"><span class="pre">ControlInputMode</span></span><a class="headerlink" href="#SpaceCenter.ControlInputMode" title="Link to this definition">#</a></dt>
-<dd><p>See <a class="reference internal" href="#SpaceCenter.SpaceCenter.Control.input_mode" title="SpaceCenter.SpaceCenter.Control.input_mode"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Control.input_mode</span></code></a>.</p>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.ControlInputMode">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">SpaceCenter.</span></span><span class="sig-name descname"><span class="pre">ControlInputMode</span></span><a class="headerlink" href="#lua-SpaceCenter.ControlInputMode" title="Link to this definition">#</a></dt>
+<dd><p>See <a class="reference internal" href="#lua-SpaceCenter.Control.input_mode" title="SpaceCenter.Control.input_mode"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Control.input_mode</span></code></a>.</p>
 <dl class="lua data">
-<dt class="sig sig-object lua" id="SpaceCenter.ControlInputMode.additive">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">additive</span></span><a class="headerlink" href="#SpaceCenter.ControlInputMode.additive" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.ControlInputMode.additive">
+<span class="sig-name descname"><span class="pre">additive</span></span><a class="headerlink" href="#lua-SpaceCenter.ControlInputMode.additive" title="Link to this definition">#</a></dt>
 <dd><p>Control inputs are added to the vessels current control inputs.</p>
 </dd></dl>
 
 <dl class="lua data">
-<dt class="sig sig-object lua" id="SpaceCenter.ControlInputMode.override">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">override</span></span><a class="headerlink" href="#SpaceCenter.ControlInputMode.override" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-SpaceCenter.ControlInputMode.override">
+<span class="sig-name descname"><span class="pre">override</span></span><a class="headerlink" href="#lua-SpaceCenter.ControlInputMode.override" title="Link to this definition">#</a></dt>
 <dd><p>Control inputs (when they are non-zero) override the vessels current control inputs.</p>
 </dd></dl>
 

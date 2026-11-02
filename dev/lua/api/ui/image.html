@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=eadf7411" />
   
@@ -1103,34 +1104,28 @@
   <section id="image">
 <h1>Image<a class="headerlink" href="#image" title="Link to this heading">#</a></h1>
 <dl class="lua class">
-<dt class="sig sig-object lua" id="UI.Image">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">UI.</span></span><span class="sig-name descname"><span class="pre">Image</span></span><a class="headerlink" href="#UI.Image" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.Image">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">UI.</span></span><span class="sig-name descname"><span class="pre">Image</span></span><a class="headerlink" href="#lua-UI.Image" title="Link to this definition">#</a></dt>
 <dd><p>A picture, or a plain colored rectangle.
-Added to a <a class="reference internal" href="canvas.html#UI.Canvas" title="UI.Canvas"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.Canvas</span></code></a> or a <a class="reference internal" href="panel.html#UI.Panel" title="UI.Panel"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.Panel</span></code></a>.</p>
+Added to a <a class="reference internal" href="canvas.html#lua-UI.Canvas" title="UI.Canvas"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.Canvas</span></code></a> or a <a class="reference internal" href="panel.html#lua-UI.Panel" title="UI.Panel"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.Panel</span></code></a>.</p>
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="UI.UI.Image.rect_transform">
-<span class="sig-name descname"><span class="pre">rect_transform</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">UI.RectTransform</span><a class="headerlink" href="#UI.UI.Image.rect_transform" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.Image.rect_transform">
+<span class="sig-name descname"><span class="pre">rect_transform</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="rect-transform.html#lua-UI.RectTransform" title="UI.RectTransform"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">UI.RectTransform</span></code></a><a class="headerlink" href="#lua-UI.Image.rect_transform" title="Link to this definition">#</a></dt>
 <dd><p>The rect transform for the UI object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="rect-transform.html#UI.RectTransform" title="UI.RectTransform"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.RectTransform</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="UI.UI.Image.layout_element">
-<span class="sig-name descname"><span class="pre">layout_element</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">UI.LayoutElement</span><a class="headerlink" href="#UI.UI.Image.layout_element" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.Image.layout_element">
+<span class="sig-name descname"><span class="pre">layout_element</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="layout-element.html#lua-UI.LayoutElement" title="UI.LayoutElement"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">UI.LayoutElement</span></code></a><a class="headerlink" href="#lua-UI.Image.layout_element" title="Link to this definition">#</a></dt>
 <dd><p>How much space the UI object asks a layout for.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="layout-element.html#UI.LayoutElement" title="UI.LayoutElement"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.LayoutElement</span></code></a></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1141,15 +1136,12 @@ not inside a layout and does not have one.</p>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="UI.UI.Image.visible">
-<span class="sig-name descname"><span class="pre">visible</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#UI.UI.Image.visible" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.Image.visible">
+<span class="sig-name descname"><span class="pre">visible</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-UI.Image.visible" title="Link to this definition">#</a></dt>
 <dd><p>Whether the UI object is visible.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1162,38 +1154,35 @@ once by making that panel visible.</p>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="UI.UI.Image.content">
-<span class="sig-name descname"><span class="pre">content</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">string</span><a class="headerlink" href="#UI.UI.Image.content" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.Image.content">
+<span class="sig-name descname"><span class="pre">content</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><a class="headerlink" href="#lua-UI.Image.content" title="Link to this definition">#</a></dt>
 <dd><p>The picture to show, as the contents of a PNG or JPEG file. Set it to an empty
 array to show a plain rectangle instead.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span></p>
-</dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Reading this returns what was last set, not what is on the screen, and returns
 an empty array if no picture has been set. A picture drawn with
-<a class="reference internal" href="#UI.Image.set_pixels" title="UI.Image.set_pixels"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">UI.Image.set_pixels()</span></code></a> is not returned here either.</p>
+<a class="reference internal" href="#lua-UI.Image.set_pixels" title="UI.Image.set_pixels"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">UI.Image:set_pixels()</span></code></a> is not returned here either.</p>
 </div>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="UI.Image.set_pixels">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">set_pixels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">data</span></em>, <em class="sig-param"><span class="pre">width</span></em>, <em class="sig-param"><span class="pre">height</span></em><span class="sig-paren">)</span><a class="headerlink" href="#UI.Image.set_pixels" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.Image.set_pixels">
+<span class="sig-name descname"><span class="pre">set_pixels</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">height</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-UI.Image.set_pixels" title="Link to this definition">#</a></dt>
 <dd><p>Draw the picture from raw pixels rather than a file, so that a client can
 draw whatever it likes, a graph for instance, and redraw it as often as it
 likes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – The pixels, 4 bytes per pixel: red, green, blue and alpha, each 0 to 255. Pixels run left to right and rows run top to bottom, the way image files store them, so the array must hold width times height times 4 bytes.</p></li>
-<li><p><strong>width</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – How many pixels wide the picture is.</p></li>
-<li><p><strong>height</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – How many pixels tall the picture is.</p></li>
+<li><p><strong>data</strong> – The pixels, 4 bytes per pixel: red, green, blue and alpha, each 0 to 255. Pixels run left to right and rows run top to bottom, the way image files store them, so the array must hold width times height times 4 bytes.</p></li>
+<li><p><strong>width</strong> – How many pixels wide the picture is.</p></li>
+<li><p><strong>height</strong> – How many pixels tall the picture is.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1205,9 +1194,9 @@ picture redrawn every update does not build a new one each time.</p>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="UI.Image.update_pixels">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">update_pixels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">data</span></em>, <em class="sig-param"><span class="pre">x</span></em>, <em class="sig-param"><span class="pre">y</span></em>, <em class="sig-param"><span class="pre">width</span></em>, <em class="sig-param"><span class="pre">height</span></em><span class="sig-paren">)</span><a class="headerlink" href="#UI.Image.update_pixels" title="Link to this definition">#</a></dt>
-<dd><p>Redraw part of a picture drawn with <a class="reference internal" href="#UI.Image.set_pixels" title="UI.Image.set_pixels"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">UI.Image.set_pixels()</span></code></a>: a block of the
+<dt class="sig sig-object lua" id="lua-UI.Image.update_pixels">
+<span class="sig-name descname"><span class="pre">update_pixels</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">height</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><br /><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-UI.Image.update_pixels" title="Link to this definition">#</a><br /></dt>
+<dd><p>Redraw part of a picture drawn with <a class="reference internal" href="#lua-UI.Image.set_pixels" title="UI.Image.set_pixels"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">UI.Image:set_pixels()</span></code></a>: a block of the
 given size, with its top left corner x pixels in from the left edge and y
 pixels down from the top. The rest of the picture is left as it is, so a
 change to a small part of a large picture, one new column of a scrolling
@@ -1215,11 +1204,11 @@ graph for instance, only sends the part that changed.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – The pixels of the block, laid out as for <a class="reference internal" href="#UI.Image.set_pixels" title="UI.Image.set_pixels"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">UI.Image.set_pixels()</span></code></a>: 4 bytes per pixel, rows top to bottom, width times height times 4 bytes in all.</p></li>
-<li><p><strong>x</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – How many pixels the block sits in from the left edge.</p></li>
-<li><p><strong>y</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – How many pixels the block sits down from the top.</p></li>
-<li><p><strong>width</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – How many pixels wide the block is.</p></li>
-<li><p><strong>height</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – How many pixels tall the block is.</p></li>
+<li><p><strong>data</strong> – The pixels of the block, laid out as for <a class="reference internal" href="#lua-UI.Image.set_pixels" title="UI.Image.set_pixels"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">UI.Image:set_pixels()</span></code></a>: 4 bytes per pixel, rows top to bottom, width times height times 4 bytes in all.</p></li>
+<li><p><strong>x</strong> – How many pixels the block sits in from the left edge.</p></li>
+<li><p><strong>y</strong> – How many pixels the block sits down from the top.</p></li>
+<li><p><strong>width</strong> – How many pixels wide the block is.</p></li>
+<li><p><strong>height</strong> – How many pixels tall the block is.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1233,23 +1222,20 @@ would no longer be what is on the screen.</p>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="UI.UI.Image.color">
-<span class="sig-name descname"><span class="pre">color</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">StdLib.ColorRGBA</span><a class="headerlink" href="#UI.UI.Image.color" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.Image.color">
+<span class="sig-name descname"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../stdlib.html#lua-StdLib.ColorRGBA" title="StdLib.ColorRGBA"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">StdLib.ColorRGBA</span></code></a><a class="headerlink" href="#lua-UI.Image.color" title="Link to this definition">#</a></dt>
 <dd><p>The color the image is tinted with, or the color of the rectangle when no
 picture is set.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="../stdlib.html#StdLib.ColorRGBA" title="StdLib.ColorRGBA"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">StdLib.ColorRGBA</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="UI.Image.remove">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#UI.Image.remove" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.Image.remove">
+<span class="sig-name descname"><span class="pre">remove</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-UI.Image.remove" title="Link to this definition">#</a></dt>
 <dd><p>Remove the UI object.</p>
 </dd></dl>
 

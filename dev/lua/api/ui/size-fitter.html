@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=eadf7411" />
   
@@ -1103,34 +1104,28 @@
   <section id="size-fitter">
 <h1>Size Fitter<a class="headerlink" href="#size-fitter" title="Link to this heading">#</a></h1>
 <dl class="lua class">
-<dt class="sig sig-object lua" id="UI.SizeFitter">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">UI.</span></span><span class="sig-name descname"><span class="pre">SizeFitter</span></span><a class="headerlink" href="#UI.SizeFitter" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.SizeFitter">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">UI.</span></span><span class="sig-name descname"><span class="pre">SizeFitter</span></span><a class="headerlink" href="#lua-UI.SizeFitter" title="Link to this definition">#</a></dt>
 <dd><p>Sizes a panel to fit what it contains, rather than the other way round.
-See <a class="reference internal" href="panel.html#UI.UI.Panel.size_fitter" title="UI.UI.Panel.size_fitter"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">UI.Panel.size_fitter</span></code></a>.</p>
+See <a class="reference internal" href="panel.html#lua-UI.Panel.size_fitter" title="UI.Panel.size_fitter"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">UI.Panel.size_fitter</span></code></a>.</p>
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="UI.UI.SizeFitter.horizontal_fit">
-<span class="sig-name descname"><span class="pre">horizontal_fit</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">UI.ContentSizeFit</span><a class="headerlink" href="#UI.UI.SizeFitter.horizontal_fit" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.SizeFitter.horizontal_fit">
+<span class="sig-name descname"><span class="pre">horizontal_fit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-UI.ContentSizeFit" title="UI.ContentSizeFit"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">UI.ContentSizeFit</span></code></a><a class="headerlink" href="#lua-UI.SizeFitter.horizontal_fit" title="Link to this definition">#</a></dt>
 <dd><p>How the width of the panel is chosen.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#UI.ContentSizeFit" title="UI.ContentSizeFit"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.ContentSizeFit</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="UI.UI.SizeFitter.vertical_fit">
-<span class="sig-name descname"><span class="pre">vertical_fit</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">UI.ContentSizeFit</span><a class="headerlink" href="#UI.UI.SizeFitter.vertical_fit" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.SizeFitter.vertical_fit">
+<span class="sig-name descname"><span class="pre">vertical_fit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-UI.ContentSizeFit" title="UI.ContentSizeFit"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">UI.ContentSizeFit</span></code></a><a class="headerlink" href="#lua-UI.SizeFitter.vertical_fit" title="Link to this definition">#</a></dt>
 <dd><p>How the height of the panel is chosen.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#UI.ContentSizeFit" title="UI.ContentSizeFit"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.ContentSizeFit</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1138,24 +1133,24 @@ See <a class="reference internal" href="panel.html#UI.UI.Panel.size_fitter" titl
 </dd></dl>
 
 <dl class="lua class">
-<dt class="sig sig-object lua" id="UI.ContentSizeFit">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">UI.</span></span><span class="sig-name descname"><span class="pre">ContentSizeFit</span></span><a class="headerlink" href="#UI.ContentSizeFit" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.ContentSizeFit">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">UI.</span></span><span class="sig-name descname"><span class="pre">ContentSizeFit</span></span><a class="headerlink" href="#lua-UI.ContentSizeFit" title="Link to this definition">#</a></dt>
 <dd><p>How a size fitter sizes a panel along one direction.</p>
 <dl class="lua data">
-<dt class="sig sig-object lua" id="UI.ContentSizeFit.unconstrained">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">unconstrained</span></span><a class="headerlink" href="#UI.ContentSizeFit.unconstrained" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.ContentSizeFit.unconstrained">
+<span class="sig-name descname"><span class="pre">unconstrained</span></span><a class="headerlink" href="#lua-UI.ContentSizeFit.unconstrained" title="Link to this definition">#</a></dt>
 <dd><p>Leave the size alone.</p>
 </dd></dl>
 
 <dl class="lua data">
-<dt class="sig sig-object lua" id="UI.ContentSizeFit.min_size">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">min_size</span></span><a class="headerlink" href="#UI.ContentSizeFit.min_size" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.ContentSizeFit.min_size">
+<span class="sig-name descname"><span class="pre">min_size</span></span><a class="headerlink" href="#lua-UI.ContentSizeFit.min_size" title="Link to this definition">#</a></dt>
 <dd><p>Use the smallest size the contents will fit in.</p>
 </dd></dl>
 
 <dl class="lua data">
-<dt class="sig sig-object lua" id="UI.ContentSizeFit.preferred_size">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">preferred_size</span></span><a class="headerlink" href="#UI.ContentSizeFit.preferred_size" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.ContentSizeFit.preferred_size">
+<span class="sig-name descname"><span class="pre">preferred_size</span></span><a class="headerlink" href="#lua-UI.ContentSizeFit.preferred_size" title="Link to this definition">#</a></dt>
 <dd><p>Use the size the contents ask for.</p>
 </dd></dl>
 

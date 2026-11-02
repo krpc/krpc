@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=eadf7411" />
   
@@ -1107,16 +1108,16 @@
 <span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">WaypointManager</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.WaypointManager" title="Link to this definition">#</a></dt>
 <dd><p>Waypoints are the location markers you can see on the map view showing you where contracts are targeted for.
 With this structure, you can obtain coordinate data for the locations of these waypoints.
-Obtained by calling <a class="reference internal" href="space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.getWaypointManager()" title="krpc.client.services.SpaceCenter.SpaceCenter.getWaypointManager()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">getWaypointManager()</span></code></a>.</p>
+Obtained by calling <a class="reference internal" href="space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.getWaypointManager()" title="krpc.client.services.SpaceCenter.SpaceCenter.getWaypointManager()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">SpaceCenter.getWaypointManager()</span></code></a>.</p>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.WaypointManager.getWaypoints()">
- <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.Waypoint" title="krpc.client.services.SpaceCenter.Waypoint"><span class="pre">Waypoint</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getWaypoints</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.WaypointManager.getWaypoints()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.Waypoint" title="krpc.client.services.SpaceCenter.Waypoint"><span class="pre">Waypoint</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getWaypoints</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.WaypointManager.getWaypoints()" title="Link to this definition">#</a></dt>
 <dd><p>A list of all existing waypoints.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.WaypointManager.addWaypoint(double, double, CelestialBody, String)">
- <a class="reference internal" href="#krpc.client.services.SpaceCenter.Waypoint" title="krpc.client.services.SpaceCenter.Waypoint"><span class="pre">Waypoint</span></a> <span class="sig-name descname"><span class="pre">addWaypoint</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">latitude</span></em>, <span class="pre">double</span><em> <span class="pre">longitude</span></em>, <a class="reference internal" href="celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody" title="krpc.client.services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a><em> <span class="pre">body</span></em>, <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.WaypointManager.addWaypoint(double, double, CelestialBody, String)" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.Waypoint" title="krpc.client.services.SpaceCenter.Waypoint"><span class="pre">Waypoint</span></a> <span class="sig-name descname"><span class="pre">addWaypoint</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">latitude</span></em>, <span class="pre">double</span><em> <span class="pre">longitude</span></em>, <a class="reference internal" href="celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody" title="krpc.client.services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a><em> <span class="pre">body</span></em>, <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.WaypointManager.addWaypoint(double, double, CelestialBody, String)" title="Link to this definition">#</a></dt>
 <dd><p>Creates a waypoint at the given position at ground level, and returns a
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.Waypoint" title="krpc.client.services.SpaceCenter.Waypoint"><code class="xref java java-type docutils literal notranslate"><span class="pre">Waypoint</span></code></a> object that can be used to modify it.</p>
 <dl class="field-list simple">
@@ -1133,7 +1134,7 @@ Obtained by calling <a class="reference internal" href="space-center.html#krpc.c
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.WaypointManager.addWaypointAtAltitude(double, double, double, CelestialBody, String)">
- <a class="reference internal" href="#krpc.client.services.SpaceCenter.Waypoint" title="krpc.client.services.SpaceCenter.Waypoint"><span class="pre">Waypoint</span></a> <span class="sig-name descname"><span class="pre">addWaypointAtAltitude</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">latitude</span></em>, <span class="pre">double</span><em> <span class="pre">longitude</span></em>, <span class="pre">double</span><em> <span class="pre">altitude</span></em>, <a class="reference internal" href="celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody" title="krpc.client.services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a><em> <span class="pre">body</span></em>, <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.WaypointManager.addWaypointAtAltitude(double, double, double, CelestialBody, String)" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.Waypoint" title="krpc.client.services.SpaceCenter.Waypoint"><span class="pre">Waypoint</span></a> <span class="sig-name descname"><span class="pre">addWaypointAtAltitude</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">latitude</span></em>, <span class="pre">double</span><em> <span class="pre">longitude</span></em>, <span class="pre">double</span><em> <span class="pre">altitude</span></em>, <a class="reference internal" href="celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody" title="krpc.client.services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a><em> <span class="pre">body</span></em>, <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.WaypointManager.addWaypointAtAltitude(double, double, double, CelestialBody, String)" title="Link to this definition">#</a></dt>
 <dd><p>Creates a waypoint at the given position and altitude, and returns a
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.Waypoint" title="krpc.client.services.SpaceCenter.Waypoint"><code class="xref java java-type docutils literal notranslate"><span class="pre">Waypoint</span></code></a> object that can be used to modify it.</p>
 <dl class="field-list simple">
@@ -1151,14 +1152,14 @@ Obtained by calling <a class="reference internal" href="space-center.html#krpc.c
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.WaypointManager.getColors()">
- <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="java.util.Map"><span class="pre">Map</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="java.lang.Integer"><span class="pre">Integer</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getColors</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.WaypointManager.getColors()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="java.util.Map"><span class="pre">Map</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="java.lang.Integer"><span class="pre">Integer</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getColors</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.WaypointManager.getColors()" title="Link to this definition">#</a></dt>
 <dd><p>An example map of known color - seed pairs.
 Any other integers may be used as seed.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.WaypointManager.getIcons()">
- <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getIcons</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.WaypointManager.getIcons()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getIcons</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.WaypointManager.getIcons()" title="Link to this definition">#</a></dt>
 <dd><p>Returns all available icons (from “GameData/Squad/Contracts/Icons/”).</p>
 </dd></dl>
 
@@ -1170,12 +1171,12 @@ Any other integers may be used as seed.</p>
 <dd><p>Represents a waypoint. Can be created using <a class="reference internal" href="#krpc.client.services.SpaceCenter.WaypointManager.addWaypoint(double, double, CelestialBody, String)" title="krpc.client.services.SpaceCenter.WaypointManager.addWaypoint(double, double, CelestialBody, String)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">WaypointManager.addWaypoint(double,</span> <span class="pre">double,</span> <span class="pre">CelestialBody,</span> <span class="pre">String)</span></code></a>.</p>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Waypoint.getBody()">
- <a class="reference internal" href="celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody" title="krpc.client.services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a> <span class="sig-name descname"><span class="pre">getBody</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.getBody()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody" title="krpc.client.services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a> <span class="sig-name descname"><span class="pre">getBody</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.getBody()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Waypoint.setBody(CelestialBody)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setBody</span></span><span class="sig-paren">(</span><a class="reference internal" href="celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody" title="krpc.client.services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.setBody(CelestialBody)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setBody</span></span><span class="sig-paren">(</span><a class="reference internal" href="celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody" title="krpc.client.services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.setBody(CelestialBody)" title="Link to this definition">#</a></dt>
 <dd><p>The celestial body the waypoint is attached to.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1186,12 +1187,12 @@ Any other integers may be used as seed.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Waypoint.getName()">
- <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getName</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.getName()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getName</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.getName()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Waypoint.setName(String)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setName</span></span><span class="sig-paren">(</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.setName(String)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setName</span></span><span class="sig-paren">(</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.setName(String)" title="Link to this definition">#</a></dt>
 <dd><p>The name of the waypoint as it appears on the map and the contract.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1202,12 +1203,12 @@ Any other integers may be used as seed.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Waypoint.getColor()">
- <span class="pre">int</span> <span class="sig-name descname"><span class="pre">getColor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.getColor()" title="Link to this definition">#</a></dt>
+<span class="pre">int</span> <span class="sig-name descname"><span class="pre">getColor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.getColor()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Waypoint.setColor(int)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setColor</span></span><span class="sig-paren">(</span><span class="pre">int</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.setColor(int)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setColor</span></span><span class="sig-paren">(</span><span class="pre">int</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.setColor(int)" title="Link to this definition">#</a></dt>
 <dd><p>The seed of the icon color. See <a class="reference internal" href="#krpc.client.services.SpaceCenter.WaypointManager.getColors()" title="krpc.client.services.SpaceCenter.WaypointManager.getColors()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">WaypointManager.getColors()</span></code></a> for example colors.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1218,12 +1219,12 @@ Any other integers may be used as seed.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Waypoint.getIcon()">
- <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getIcon</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.getIcon()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getIcon</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.getIcon()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Waypoint.setIcon(String)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setIcon</span></span><span class="sig-paren">(</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.setIcon(String)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setIcon</span></span><span class="sig-paren">(</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.setIcon(String)" title="Link to this definition">#</a></dt>
 <dd><p>The icon of the waypoint.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1234,12 +1235,12 @@ Any other integers may be used as seed.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Waypoint.getLatitude()">
- <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getLatitude</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.getLatitude()" title="Link to this definition">#</a></dt>
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getLatitude</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.getLatitude()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Waypoint.setLatitude(double)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setLatitude</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.setLatitude(double)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setLatitude</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.setLatitude(double)" title="Link to this definition">#</a></dt>
 <dd><p>The latitude of the waypoint.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1250,12 +1251,12 @@ Any other integers may be used as seed.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Waypoint.getLongitude()">
- <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getLongitude</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.getLongitude()" title="Link to this definition">#</a></dt>
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getLongitude</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.getLongitude()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Waypoint.setLongitude(double)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setLongitude</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.setLongitude(double)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setLongitude</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.setLongitude(double)" title="Link to this definition">#</a></dt>
 <dd><p>The longitude of the waypoint.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1266,12 +1267,12 @@ Any other integers may be used as seed.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Waypoint.getMeanAltitude()">
- <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getMeanAltitude</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.getMeanAltitude()" title="Link to this definition">#</a></dt>
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getMeanAltitude</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.getMeanAltitude()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Waypoint.setMeanAltitude(double)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setMeanAltitude</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.setMeanAltitude(double)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setMeanAltitude</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.setMeanAltitude(double)" title="Link to this definition">#</a></dt>
 <dd><p>The altitude of the waypoint above sea level, in meters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1282,12 +1283,12 @@ Any other integers may be used as seed.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Waypoint.getSurfaceAltitude()">
- <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getSurfaceAltitude</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.getSurfaceAltitude()" title="Link to this definition">#</a></dt>
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getSurfaceAltitude</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.getSurfaceAltitude()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Waypoint.setSurfaceAltitude(double)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setSurfaceAltitude</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.setSurfaceAltitude(double)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setSurfaceAltitude</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.setSurfaceAltitude(double)" title="Link to this definition">#</a></dt>
 <dd><p>The altitude of the waypoint above the surface of the body or sea level,
 whichever is closer, in meters.</p>
 <dl class="field-list simple">
@@ -1299,12 +1300,12 @@ whichever is closer, in meters.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Waypoint.getBedrockAltitude()">
- <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getBedrockAltitude</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.getBedrockAltitude()" title="Link to this definition">#</a></dt>
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getBedrockAltitude</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.getBedrockAltitude()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Waypoint.setBedrockAltitude(double)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setBedrockAltitude</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.setBedrockAltitude(double)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setBedrockAltitude</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.setBedrockAltitude(double)" title="Link to this definition">#</a></dt>
 <dd><p>The altitude of the waypoint above the surface of the body, in meters.
 When over water, this is the altitude above the sea floor.</p>
 <dl class="field-list simple">
@@ -1316,7 +1317,7 @@ When over water, this is the altitude above the sea floor.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Waypoint.getNearSurface()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getNearSurface</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.getNearSurface()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getNearSurface</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.getNearSurface()" title="Link to this definition">#</a></dt>
 <dd><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if the waypoint is near to the surface of a body.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1327,7 +1328,7 @@ When over water, this is the altitude above the sea floor.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Waypoint.getGrounded()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getGrounded</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.getGrounded()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getGrounded</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.getGrounded()" title="Link to this definition">#</a></dt>
 <dd><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if the waypoint is attached to the ground.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1338,7 +1339,7 @@ When over water, this is the altitude above the sea floor.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Waypoint.getIndex()">
- <span class="pre">int</span> <span class="sig-name descname"><span class="pre">getIndex</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.getIndex()" title="Link to this definition">#</a></dt>
+<span class="pre">int</span> <span class="sig-name descname"><span class="pre">getIndex</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.getIndex()" title="Link to this definition">#</a></dt>
 <dd><p>The integer index of this waypoint within its cluster of sibling waypoints.
 In other words, when you have a cluster of waypoints called “Somewhere Alpha”,
 “Somewhere Beta” and “Somewhere Gamma”, the alpha site has index 0, the beta
@@ -1353,7 +1354,7 @@ When <a class="reference internal" href="#krpc.client.services.SpaceCenter.Waypo
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Waypoint.getClustered()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getClustered</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.getClustered()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getClustered</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.getClustered()" title="Link to this definition">#</a></dt>
 <dd><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if this waypoint is part of a set of clustered waypoints with greek letter
 names appended (Alpha, Beta, Gamma, etc).
 If <code class="docutils literal notranslate"><span class="pre">true</span></code>, there is a one-to-one correspondence with the greek letter name and
@@ -1367,7 +1368,7 @@ the <a class="reference internal" href="#krpc.client.services.SpaceCenter.Waypoi
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Waypoint.getHasContract()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getHasContract</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.getHasContract()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getHasContract</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.getHasContract()" title="Link to this definition">#</a></dt>
 <dd><p>Whether the waypoint belongs to a contract.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1378,7 +1379,7 @@ the <a class="reference internal" href="#krpc.client.services.SpaceCenter.Waypoi
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Waypoint.getContract()">
- <a class="reference internal" href="contracts.html#krpc.client.services.SpaceCenter.Contract" title="krpc.client.services.SpaceCenter.Contract"><span class="pre">Contract</span></a> <span class="sig-name descname"><span class="pre">getContract</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.getContract()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="contracts.html#krpc.client.services.SpaceCenter.Contract" title="krpc.client.services.SpaceCenter.Contract"><span class="pre">Contract</span></a> <span class="sig-name descname"><span class="pre">getContract</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.getContract()" title="Link to this definition">#</a></dt>
 <dd><p>The associated contract.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1389,7 +1390,7 @@ the <a class="reference internal" href="#krpc.client.services.SpaceCenter.Waypoi
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Waypoint.remove()">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.remove()" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Waypoint.remove()" title="Link to this definition">#</a></dt>
 <dd><p>Removes the waypoint.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>

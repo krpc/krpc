@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=eadf7411" />
   
@@ -1103,9 +1104,9 @@
   <section id="layout-element">
 <h1>Layout Element<a class="headerlink" href="#layout-element" title="Link to this heading">#</a></h1>
 <dl class="lua class">
-<dt class="sig sig-object lua" id="UI.LayoutElement">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">UI.</span></span><span class="sig-name descname"><span class="pre">LayoutElement</span></span><a class="headerlink" href="#UI.LayoutElement" title="Link to this definition">#</a></dt>
-<dd><p>How much space a user interface element asks a <a class="reference internal" href="layout.html#UI.Layout" title="UI.Layout"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.Layout</span></code></a> for.</p>
+<dt class="sig sig-object lua" id="lua-UI.LayoutElement">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">UI.</span></span><span class="sig-name descname"><span class="pre">LayoutElement</span></span><a class="headerlink" href="#lua-UI.LayoutElement" title="Link to this definition">#</a></dt>
+<dd><p>How much space a user interface element asks a <a class="reference internal" href="layout.html#lua-UI.Layout" title="UI.Layout"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.Layout</span></code></a> for.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>A layout gives every element its minimum size first. Any space left over is shared
@@ -1113,60 +1114,48 @@ out to bring elements up to their preferred size, and anything still left over i
 shared between the elements with a flexible size, in proportion to it.</p>
 </div>
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="UI.UI.LayoutElement.min_size">
-<span class="sig-name descname"><span class="pre">min_size</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#UI.UI.LayoutElement.min_size" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.LayoutElement.min_size">
+<span class="sig-name descname"><span class="pre">min_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-UI.LayoutElement.min_size" title="Link to this definition">#</a></dt>
 <dd><p>The smallest size the element can be given, in pixels. A negative value in either
 direction leaves that direction unconstrained.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="UI.UI.LayoutElement.preferred_size">
-<span class="sig-name descname"><span class="pre">preferred_size</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#UI.UI.LayoutElement.preferred_size" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.LayoutElement.preferred_size">
+<span class="sig-name descname"><span class="pre">preferred_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-UI.LayoutElement.preferred_size" title="Link to this definition">#</a></dt>
 <dd><p>The size the element asks for, in pixels. A negative value in either direction
 leaves that direction unconstrained.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="UI.UI.LayoutElement.flexible_size">
-<span class="sig-name descname"><span class="pre">flexible_size</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#UI.UI.LayoutElement.flexible_size" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.LayoutElement.flexible_size">
+<span class="sig-name descname"><span class="pre">flexible_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-UI.LayoutElement.flexible_size" title="Link to this definition">#</a></dt>
 <dd><p>The share the element takes of the space left over once every element has its
 preferred size. A negative value in either direction takes no share.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="UI.UI.LayoutElement.ignore_layout">
-<span class="sig-name descname"><span class="pre">ignore_layout</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#UI.UI.LayoutElement.ignore_layout" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-UI.LayoutElement.ignore_layout">
+<span class="sig-name descname"><span class="pre">ignore_layout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-UI.LayoutElement.ignore_layout" title="Link to this definition">#</a></dt>
 <dd><p>Whether the layout leaves the element out and lets it be positioned by hand.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>

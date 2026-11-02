@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=eadf7411" />
   
@@ -1103,92 +1104,74 @@
   <section id="antenna">
 <h1>Antenna<a class="headerlink" href="#antenna" title="Link to this heading">#</a></h1>
 <dl class="lua class">
-<dt class="sig sig-object lua" id="RemoteTech.Antenna">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">RemoteTech.</span></span><span class="sig-name descname"><span class="pre">Antenna</span></span><a class="headerlink" href="#RemoteTech.Antenna" title="Link to this definition">#</a></dt>
-<dd><p>A RemoteTech antenna. Obtained by calling <a class="reference internal" href="comms.html#RemoteTech.RemoteTech.Comms.antennas" title="RemoteTech.RemoteTech.Comms.antennas"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">RemoteTech.Comms.antennas</span></code></a> or <a class="reference internal" href="remote-tech.html#RemoteTech.antenna" title="RemoteTech.antenna"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">RemoteTech.antenna()</span></code></a>.</p>
+<dt class="sig sig-object lua" id="lua-RemoteTech.Antenna">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">RemoteTech.</span></span><span class="sig-name descname"><span class="pre">Antenna</span></span><a class="headerlink" href="#lua-RemoteTech.Antenna" title="Link to this definition">#</a></dt>
+<dd><p>A RemoteTech antenna. Obtained by calling <a class="reference internal" href="comms.html#lua-RemoteTech.Comms.antennas" title="RemoteTech.Comms.antennas"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">RemoteTech.Comms.antennas</span></code></a> or <a class="reference internal" href="remote-tech.html#lua-RemoteTech.antenna" title="RemoteTech.antenna"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">RemoteTech.antenna()</span></code></a>.</p>
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="RemoteTech.RemoteTech.Antenna.part">
-<span class="sig-name descname"><span class="pre">part</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.Part</span><a class="headerlink" href="#RemoteTech.RemoteTech.Antenna.part" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-RemoteTech.Antenna.part">
+<span class="sig-name descname"><span class="pre">part</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../space-center/parts.html#lua-SpaceCenter.Part" title="SpaceCenter.Part"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.Part</span></code></a><a class="headerlink" href="#lua-RemoteTech.Antenna.part" title="Link to this definition">#</a></dt>
 <dd><p>Get the part containing this antenna.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="../space-center/parts.html#SpaceCenter.Part" title="SpaceCenter.Part"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.Part</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="RemoteTech.RemoteTech.Antenna.has_connection">
-<span class="sig-name descname"><span class="pre">has_connection</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#RemoteTech.RemoteTech.Antenna.has_connection" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-RemoteTech.Antenna.has_connection">
+<span class="sig-name descname"><span class="pre">has_connection</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-RemoteTech.Antenna.has_connection" title="Link to this definition">#</a></dt>
 <dd><p>Whether the antenna has a connection.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="RemoteTech.RemoteTech.Antenna.target">
-<span class="sig-name descname"><span class="pre">target</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">RemoteTech.Target</span><a class="headerlink" href="#RemoteTech.RemoteTech.Antenna.target" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-RemoteTech.Antenna.target">
+<span class="sig-name descname"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-RemoteTech.Target" title="RemoteTech.Target"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">RemoteTech.Target</span></code></a><a class="headerlink" href="#lua-RemoteTech.Antenna.target" title="Link to this definition">#</a></dt>
 <dd><p>The object that the antenna is targetting.
-This property can be used to set the target to <a class="reference internal" href="#RemoteTech.Target.none" title="RemoteTech.Target.none"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">RemoteTech.Target.none</span></code></a> or <a class="reference internal" href="#RemoteTech.Target.active_vessel" title="RemoteTech.Target.active_vessel"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">RemoteTech.Target.active_vessel</span></code></a>.
-To set the target to a celestial body, ground station or vessel see <a class="reference internal" href="#RemoteTech.RemoteTech.Antenna.target_body" title="RemoteTech.RemoteTech.Antenna.target_body"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">RemoteTech.Antenna.target_body</span></code></a>,
-<a class="reference internal" href="#RemoteTech.RemoteTech.Antenna.target_ground_station" title="RemoteTech.RemoteTech.Antenna.target_ground_station"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">RemoteTech.Antenna.target_ground_station</span></code></a> and <a class="reference internal" href="#RemoteTech.RemoteTech.Antenna.target_vessel" title="RemoteTech.RemoteTech.Antenna.target_vessel"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">RemoteTech.Antenna.target_vessel</span></code></a>.</p>
+This property can be used to set the target to <a class="reference internal" href="#lua-RemoteTech.Target.none" title="RemoteTech.Target.none"><code class="xref lua lua-data docutils literal notranslate"><span class="pre">RemoteTech.Target.none</span></code></a> or <a class="reference internal" href="#lua-RemoteTech.Target.active_vessel" title="RemoteTech.Target.active_vessel"><code class="xref lua lua-data docutils literal notranslate"><span class="pre">RemoteTech.Target.active_vessel</span></code></a>.
+To set the target to a celestial body, ground station or vessel see <a class="reference internal" href="#lua-RemoteTech.Antenna.target_body" title="RemoteTech.Antenna.target_body"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">RemoteTech.Antenna.target_body</span></code></a>,
+<a class="reference internal" href="#lua-RemoteTech.Antenna.target_ground_station" title="RemoteTech.Antenna.target_ground_station"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">RemoteTech.Antenna.target_ground_station</span></code></a> and <a class="reference internal" href="#lua-RemoteTech.Antenna.target_vessel" title="RemoteTech.Antenna.target_vessel"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">RemoteTech.Antenna.target_vessel</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#RemoteTech.Target" title="RemoteTech.Target"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">RemoteTech.Target</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="RemoteTech.RemoteTech.Antenna.target_body">
-<span class="sig-name descname"><span class="pre">target_body</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.CelestialBody</span><a class="headerlink" href="#RemoteTech.RemoteTech.Antenna.target_body" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-RemoteTech.Antenna.target_body">
+<span class="sig-name descname"><span class="pre">target_body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../space-center/celestial-body.html#lua-SpaceCenter.CelestialBody" title="SpaceCenter.CelestialBody"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.CelestialBody</span></code></a><a class="headerlink" href="#lua-RemoteTech.Antenna.target_body" title="Link to this definition">#</a></dt>
 <dd><p>The celestial body the antenna is targetting.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="../space-center/celestial-body.html#SpaceCenter.CelestialBody" title="SpaceCenter.CelestialBody"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.CelestialBody</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="RemoteTech.RemoteTech.Antenna.target_ground_station">
-<span class="sig-name descname"><span class="pre">target_ground_station</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">string</span><a class="headerlink" href="#RemoteTech.RemoteTech.Antenna.target_ground_station" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-RemoteTech.Antenna.target_ground_station">
+<span class="sig-name descname"><span class="pre">target_ground_station</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><a class="headerlink" href="#lua-RemoteTech.Antenna.target_ground_station" title="Link to this definition">#</a></dt>
 <dd><p>The ground station the antenna is targetting.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="RemoteTech.RemoteTech.Antenna.target_vessel">
-<span class="sig-name descname"><span class="pre">target_vessel</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.Vessel</span><a class="headerlink" href="#RemoteTech.RemoteTech.Antenna.target_vessel" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-RemoteTech.Antenna.target_vessel">
+<span class="sig-name descname"><span class="pre">target_vessel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../space-center/vessel.html#lua-SpaceCenter.Vessel" title="SpaceCenter.Vessel"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.Vessel</span></code></a><a class="headerlink" href="#lua-RemoteTech.Antenna.target_vessel" title="Link to this definition">#</a></dt>
 <dd><p>The vessel the antenna is targetting.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="../space-center/vessel.html#SpaceCenter.Vessel" title="SpaceCenter.Vessel"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.Vessel</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1196,37 +1179,37 @@ To set the target to a celestial body, ground station or vessel see <a class="re
 </dd></dl>
 
 <dl class="lua class">
-<dt class="sig sig-object lua" id="RemoteTech.Target">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">RemoteTech.</span></span><span class="sig-name descname"><span class="pre">Target</span></span><a class="headerlink" href="#RemoteTech.Target" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-RemoteTech.Target">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">RemoteTech.</span></span><span class="sig-name descname"><span class="pre">Target</span></span><a class="headerlink" href="#lua-RemoteTech.Target" title="Link to this definition">#</a></dt>
 <dd><p>The type of object an antenna is targetting.
-See <a class="reference internal" href="#RemoteTech.RemoteTech.Antenna.target" title="RemoteTech.RemoteTech.Antenna.target"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">RemoteTech.Antenna.target</span></code></a>.</p>
+See <a class="reference internal" href="#lua-RemoteTech.Antenna.target" title="RemoteTech.Antenna.target"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">RemoteTech.Antenna.target</span></code></a>.</p>
 <dl class="lua data">
-<dt class="sig sig-object lua" id="RemoteTech.Target.active_vessel">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">active_vessel</span></span><a class="headerlink" href="#RemoteTech.Target.active_vessel" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-RemoteTech.Target.active_vessel">
+<span class="sig-name descname"><span class="pre">active_vessel</span></span><a class="headerlink" href="#lua-RemoteTech.Target.active_vessel" title="Link to this definition">#</a></dt>
 <dd><p>The active vessel.</p>
 </dd></dl>
 
 <dl class="lua data">
-<dt class="sig sig-object lua" id="RemoteTech.Target.celestial_body">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">celestial_body</span></span><a class="headerlink" href="#RemoteTech.Target.celestial_body" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-RemoteTech.Target.celestial_body">
+<span class="sig-name descname"><span class="pre">celestial_body</span></span><a class="headerlink" href="#lua-RemoteTech.Target.celestial_body" title="Link to this definition">#</a></dt>
 <dd><p>A celestial body.</p>
 </dd></dl>
 
 <dl class="lua data">
-<dt class="sig sig-object lua" id="RemoteTech.Target.ground_station">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">ground_station</span></span><a class="headerlink" href="#RemoteTech.Target.ground_station" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-RemoteTech.Target.ground_station">
+<span class="sig-name descname"><span class="pre">ground_station</span></span><a class="headerlink" href="#lua-RemoteTech.Target.ground_station" title="Link to this definition">#</a></dt>
 <dd><p>A ground station.</p>
 </dd></dl>
 
 <dl class="lua data">
-<dt class="sig sig-object lua" id="RemoteTech.Target.vessel">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">vessel</span></span><a class="headerlink" href="#RemoteTech.Target.vessel" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-RemoteTech.Target.vessel">
+<span class="sig-name descname"><span class="pre">vessel</span></span><a class="headerlink" href="#lua-RemoteTech.Target.vessel" title="Link to this definition">#</a></dt>
 <dd><p>A specific vessel.</p>
 </dd></dl>
 
 <dl class="lua data">
-<dt class="sig sig-object lua" id="RemoteTech.Target.none">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">none</span></span><a class="headerlink" href="#RemoteTech.Target.none" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-RemoteTech.Target.none">
+<span class="sig-name descname"><span class="pre">none</span></span><a class="headerlink" href="#lua-RemoteTech.Target.none" title="Link to this definition">#</a></dt>
 <dd><p>No target.</p>
 </dd></dl>
 

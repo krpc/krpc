@@ -22,7 +22,6 @@ Layout Element
       direction leaves that direction unconstrained.
 
       :Attribute: Can be read or written
-      :rtype: Tuple
 
    .. attribute:: preferred_size: Tuple
 
@@ -30,7 +29,6 @@ Layout Element
       leaves that direction unconstrained.
 
       :Attribute: Can be read or written
-      :rtype: Tuple
 
    .. attribute:: flexible_size: Tuple
 
@@ -38,11 +36,9 @@ Layout Element
       preferred size. A negative value in either direction takes no share.
 
       :Attribute: Can be read or written
-      :rtype: Tuple
 
    .. attribute:: ignore_layout: boolean
 
       Whether the layout leaves the element out and lets it be positioned by hand.
 
       :Attribute: Can be read or written
-      :rtype: boolean

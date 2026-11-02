@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=eadf7411" />
   
@@ -1102,33 +1103,22 @@
                   
   <section id="lidar">
 <h1>LIDAR<a class="headerlink" href="#lidar" title="Link to this heading">#</a></h1>
-<p id="module-LIDAR">LaserDist service.</p>
+<p id="lua-LIDAR">LaserDist service.</p>
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="LIDAR.LIDAR.available">
-<span class="sig-name descname"><span class="pre">available</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#LIDAR.LIDAR.available" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-LIDAR.available">
+<span class="sig-prename descclassname"><span class="pre">LIDAR.</span></span><span class="sig-name descname"><span class="pre">available</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-LIDAR.available" title="Link to this definition">#</a></dt>
 <dd><p>Check if the LaserDist API is available.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="LIDAR.laser">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">laser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">part</span></em><span class="sig-paren">)</span><a class="headerlink" href="#LIDAR.laser" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-LIDAR.laser">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">LIDAR.</span></span><span class="sig-name descname"><span class="pre">laser</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">part</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../space-center/parts.html#lua-SpaceCenter.Part" title="SpaceCenter.Part"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.Part</span></code></a><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="laser.html#lua-LIDAR.Laser" title="LIDAR.Laser"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">LIDAR.Laser</span></code></a><a class="headerlink" href="#lua-LIDAR.laser" title="Link to this definition">#</a></dt>
 <dd><p>Get a LaserDist part.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>part</strong> (<span><a class="reference internal" href="../space-center/parts.html#SpaceCenter.Part" title="SpaceCenter.Part"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.Part</span></code></a></span>)</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="laser.html#LIDAR.Laser" title="LIDAR.Laser"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">LIDAR.Laser</span></code></a></p>
-</dd>
-</dl>
 </dd></dl>
 
 </section>

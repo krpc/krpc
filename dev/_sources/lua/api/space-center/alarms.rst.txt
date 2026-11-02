@@ -9,102 +9,92 @@ Alarms
 .. class:: AlarmManager
 
    Alarm manager.
-   Obtained by calling :attr:`SpaceCenter.alarm_manager <SpaceCenter.SpaceCenter.alarm_manager>`.
+   Obtained by calling :attr:`SpaceCenter.alarm_manager`.
 
    .. attribute:: alarms: List
 
       A list of all alarms.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
-   .. method:: alarms_with_type(type)
+   .. method:: alarms_with_type(type: SpaceCenter.AlarmType): List
 
       A list of all alarms of the given type.
 
-      :param SpaceCenter.AlarmType type: The type of alarm to return.
-      :rtype: List
+      :param type: The type of alarm to return.
 
-   .. method:: alarm_with_name(name)
+   .. method:: alarm_with_name(name: string): SpaceCenter.Alarm | Types.none
 
       Returns the first alarm with the given title, or ``nil`` if no such
       alarm exists. Alarm titles are not guaranteed to be unique; if more than
       one alarm shares the given title, the first one found is returned.
 
-      :param string name: The title of the alarm to return.
-      :rtype: :class:`SpaceCenter.Alarm` or ``Types.none``
+      :param name: The title of the alarm to return.
 
-   .. staticmethod:: add_alarm(time, [title = 'Alarm'], [description = ''])
+   .. staticmethod:: add_alarm(time: number, title?: string, description?: string): SpaceCenter.Alarm
 
       Create an alarm.
 
-      :param number time: Number of seconds from now that the alarm should trigger.
-      :param string title: Title for the alarm.
-      :param string description: Description for the alarm.
-      :rtype: :class:`SpaceCenter.Alarm`
+      :param time: Number of seconds from now that the alarm should trigger.
+      :param title: Title for the alarm. Defaults to ``'Alarm'``.
+      :param description: Description for the alarm. Defaults to ``''``.
 
-   .. staticmethod:: add_vessel_alarm(time, vessel, [title = 'Vessel Alarm'], [description = ''])
+   .. staticmethod:: add_vessel_alarm(time: number, vessel: SpaceCenter.Vessel, title?: string, description?: string): SpaceCenter.Alarm
 
       Create an alarm linked to a vessel.
 
-      :param number time: Number of seconds from now that the alarm should trigger.
-      :param SpaceCenter.Vessel vessel: Vessel to link the alarm to.
-      :param string title: Title for the alarm.
-      :param string description: Description for the alarm.
-      :rtype: :class:`SpaceCenter.Alarm`
+      :param time: Number of seconds from now that the alarm should trigger.
+      :param vessel: Vessel to link the alarm to.
+      :param title: Title for the alarm. Defaults to ``'Vessel Alarm'``.
+      :param description: Description for the alarm. Defaults to ``''``.
 
-   .. staticmethod:: add_apoapsis_alarm(vessel, [offset = 60.0], [title = 'Apoapsis Alarm'], [description = ''])
+   .. staticmethod:: add_apoapsis_alarm(vessel: SpaceCenter.Vessel, offset?: number, title?: string, description?: string): SpaceCenter.Alarm
 
       Create an alarm for the given vessel's next apoapsis.
 
-      :param SpaceCenter.Vessel vessel: The vessel.
-      :param number offset: Time in seconds to offset the alarm by.
-      :param string title: Title for the alarm.
-      :param string description: Description for the alarm.
-      :rtype: :class:`SpaceCenter.Alarm`
+      :param vessel: The vessel.
+      :param offset: Time in seconds to offset the alarm by. Defaults to ``60.0``.
+      :param title: Title for the alarm. Defaults to ``'Apoapsis Alarm'``.
+      :param description: Description for the alarm. Defaults to ``''``.
 
-   .. staticmethod:: add_periapsis_alarm(vessel, [offset = 60.0], [title = 'Periapsis Alarm'], [description = ''])
+   .. staticmethod:: add_periapsis_alarm(vessel: SpaceCenter.Vessel, offset?: number, title?: string, description?: string): SpaceCenter.Alarm
 
       Create an alarm for the given vessel's next periapsis.
 
-      :param SpaceCenter.Vessel vessel: The vessel.
-      :param number offset: Time in seconds to offset the alarm by.
-      :param string title: Title for the alarm.
-      :param string description: Description for the alarm.
-      :rtype: :class:`SpaceCenter.Alarm`
+      :param vessel: The vessel.
+      :param offset: Time in seconds to offset the alarm by. Defaults to ``60.0``.
+      :param title: Title for the alarm. Defaults to ``'Periapsis Alarm'``.
+      :param description: Description for the alarm. Defaults to ``''``.
 
-   .. staticmethod:: add_maneuver_node_alarm(vessel, node, [offset = 60.0], [add_burn_time = true], [title = 'Maneuver Node Alarm'], [description = ''])
+   .. staticmethod:: add_maneuver_node_alarm(vessel: SpaceCenter.Vessel, node: SpaceCenter.Node, offset?: number, add_burn_time?: boolean, title?: string, description?: string): SpaceCenter.Alarm
 
       Create an alarm for the given vessel and maneuver node.
 
-      :param SpaceCenter.Vessel vessel: The vessel.
-      :param SpaceCenter.Node node: The maneuver node.
-      :param number offset: Time in seconds to offset the alarm by.
-      :param boolean add_burn_time: Whether the node's burn time should be included in the alarm.
-      :param string title: Title for the alarm.
-      :param string description: Description for the alarm.
-      :rtype: :class:`SpaceCenter.Alarm`
+      :param vessel: The vessel.
+      :param node: The maneuver node.
+      :param offset: Time in seconds to offset the alarm by. Defaults to ``60.0``.
+      :param add_burn_time: Whether the node's burn time should be included in the alarm. Defaults to ``true``.
+      :param title: Title for the alarm. Defaults to ``'Maneuver Node Alarm'``.
+      :param description: Description for the alarm. Defaults to ``''``.
 
-   .. staticmethod:: add_soi_alarm(vessel, [offset = 60.0], [title = 'SOI Change Alarm'], [description = ''])
+   .. staticmethod:: add_soi_alarm(vessel: SpaceCenter.Vessel, offset?: number, title?: string, description?: string): SpaceCenter.Alarm
 
       Create an alarm for the given vessel's next sphere of influence change.
 
-      :param SpaceCenter.Vessel vessel: The vessel.
-      :param number offset: Time in seconds to offset the alarm by.
-      :param string title: Title for the alarm.
-      :param string description: Description for the alarm.
-      :rtype: :class:`SpaceCenter.Alarm`
+      :param vessel: The vessel.
+      :param offset: Time in seconds to offset the alarm by. Defaults to ``60.0``.
+      :param title: Title for the alarm. Defaults to ``'SOI Change Alarm'``.
+      :param description: Description for the alarm. Defaults to ``''``.
 
-   .. staticmethod:: add_transfer_window_alarm(vessel, target, [title = 'Transfer Window Alarm'], [description = ''])
+   .. staticmethod:: add_transfer_window_alarm(vessel: SpaceCenter.Vessel, target: SpaceCenter.CelestialBody, title?: string, description?: string): SpaceCenter.Alarm
 
       Create an alarm for the next planetary transfer window from the vessel's
       current parent body to the target body.
 
-      :param SpaceCenter.Vessel vessel: The vessel.
-      :param SpaceCenter.CelestialBody target: The target body.
-      :param string title: Title for the alarm.
-      :param string description: Description for the alarm.
-      :rtype: :class:`SpaceCenter.Alarm`
+      :param vessel: The vessel.
+      :param target: The target body.
+      :param title: Title for the alarm. Defaults to ``'Transfer Window Alarm'``.
+      :param description: Description for the alarm. Defaults to ``''``.
 
       .. note::
 
@@ -117,7 +107,7 @@ Alarms
 
 .. class:: Alarm
 
-   An alarm. Can be accessed using :attr:`SpaceCenter.alarm_manager <SpaceCenter.SpaceCenter.alarm_manager>`.
+   An alarm. Can be accessed using :attr:`SpaceCenter.alarm_manager`.
 
    .. attribute:: id: number
 
@@ -126,121 +116,107 @@ Alarms
       This id will remain constant between the old and new alarms.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: type: SpaceCenter.AlarmType
 
       Type of alarm.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.AlarmType`
 
    .. attribute:: title: string
 
       Title of the alarm.
 
       :Attribute: Can be read or written
-      :rtype: string
 
    .. attribute:: description: string
 
       Description of the alarm.
 
       :Attribute: Can be read or written
-      :rtype: string
 
    .. attribute:: time: number
 
       Time the alarm will trigger, in seconds since epoch.
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: time_until: number
 
       Time until the alarm triggers, in seconds.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: event_offset: number
 
       Seconds between the alarm going off and the event it references.
 
       :Attribute: Can be read or written
-      :rtype: number
 
       .. note::
 
          For a maneuver alarm that includes the burn time, setting this sets the margin
          before the start of the burn, and the value read back includes half the burn time.
 
-   .. attribute:: vessel: SpaceCenter.Vessel
+   .. attribute:: vessel: SpaceCenter.Vessel | Types.none
 
       Vessel the alarm references. ``nil`` if it does not reference a vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Vessel` or ``Types.none``
 
    .. attribute:: node: SpaceCenter.Node
 
       Maneuver node the alarm references. Only valid for alarms of type
-      :attr:`SpaceCenter.AlarmType.maneuver`.
+      :data:`SpaceCenter.AlarmType.maneuver`.
 
       :Attribute: Can be read or written
-      :rtype: :class:`SpaceCenter.Node`
 
       .. note::
 
          Throws an exception if the alarm is not of
-         type :attr:`SpaceCenter.AlarmType.maneuver`.
+         type :data:`SpaceCenter.AlarmType.maneuver`.
 
    .. attribute:: origin_body: SpaceCenter.CelestialBody
 
       Origin body for the transfer window. Only valid for alarms of type
-      :attr:`SpaceCenter.AlarmType.transfer_window`.
+      :data:`SpaceCenter.AlarmType.transfer_window`.
 
       :Attribute: Can be read or written
-      :rtype: :class:`SpaceCenter.CelestialBody`
 
       .. note::
 
          Throws an exception if the alarm is not of
-         type :attr:`SpaceCenter.AlarmType.transfer_window`.
+         type :data:`SpaceCenter.AlarmType.transfer_window`.
 
    .. attribute:: destination_body: SpaceCenter.CelestialBody
 
       Destination body for the transfer window. Only valid for alarms of type
-      :attr:`SpaceCenter.AlarmType.transfer_window`.
+      :data:`SpaceCenter.AlarmType.transfer_window`.
 
       :Attribute: Can be read or written
-      :rtype: :class:`SpaceCenter.CelestialBody`
 
       .. note::
 
          Throws an exception if the alarm is not of
-         type :attr:`SpaceCenter.AlarmType.transfer_window`.
+         type :data:`SpaceCenter.AlarmType.transfer_window`.
 
    .. attribute:: warp_action: SpaceCenter.AlarmWarpAction
 
       The action taken on time warp when the alarm fires.
 
       :Attribute: Can be read or written
-      :rtype: :class:`SpaceCenter.AlarmWarpAction`
 
    .. attribute:: message_action: SpaceCenter.AlarmMessageAction
 
       The on-screen message behavior when the alarm fires.
 
       :Attribute: Can be read or written
-      :rtype: :class:`SpaceCenter.AlarmMessageAction`
 
    .. attribute:: play_sound: boolean
 
       Whether the alarm plays a sound when it fires.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. attribute:: delete_on_dismiss: boolean
 
@@ -248,21 +224,18 @@ Alarms
       the triggered message.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. attribute:: triggered: boolean
 
       Whether the time of the alarm has passed and its actions have been triggered.
 
       :Attribute: Read-only, cannot be set
-      :rtype: boolean
 
    .. attribute:: actioned: boolean
 
       Whether the alarm's actions were triggered and then completed or closed.
 
       :Attribute: Read-only, cannot be set
-      :rtype: boolean
 
    .. method:: remove()
 
