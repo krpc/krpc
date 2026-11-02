@@ -92,5 +92,39 @@ namespace KRPC.Test
                 Logger.Writer = writer;
             }
         }
+
+        [Test]
+        public void AdaptiveRateControlKeepsTheConfiguredMaxTimePerUpdate ()
+        {
+            var core = Core.Instance;
+            var config = Configuration.Instance;
+            var blockingRecv = config.BlockingRecv;
+            var maxTimePerUpdate = config.MaxTimePerUpdate;
+            var adaptiveRateControl = config.AdaptiveRateControl;
+            config.BlockingRecv = false;
+            config.AdaptiveRateControl = true;
+            config.MaxTimePerUpdate = 5000;
+            try {
+                Assert.AreEqual (5000, core.MaxTimePerUpdate);
+                // An idle update moves the working limit off the configured one, in either direction
+                core.Update ();
+                Assert.AreEqual (5000, config.MaxTimePerUpdate);
+                Assert.AreNotEqual (5000, core.MaxTimePerUpdate);
+
+                config.MaxTimePerUpdate = 2000;
+                Assert.AreEqual (2000, core.MaxTimePerUpdate);
+
+                core.Update ();
+                Assert.AreNotEqual (2000, core.MaxTimePerUpdate);
+                config.AdaptiveRateControl = false;
+                Assert.AreEqual (2000, core.MaxTimePerUpdate);
+                core.Update ();
+                Assert.AreEqual (2000, core.MaxTimePerUpdate);
+            } finally {
+                config.BlockingRecv = blockingRecv;
+                config.MaxTimePerUpdate = maxTimePerUpdate;
+                config.AdaptiveRateControl = adaptiveRateControl;
+            }
+        }
     }
 }

@@ -140,7 +140,7 @@ class ServerSettings(NamedTuple):
     """
     max_time_per_update: int
     """
-    The maximum time spent executing calls per update, in microseconds.
+    The current maximum time spent executing calls per update, in microseconds.
     """
     adaptive_rate_control: bool
     """

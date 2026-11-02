@@ -2600,7 +2600,7 @@ id(id), name(name), address(address), protocol_version(protocol_version) {}
      */
     bool one_rpc_per_update;
     /**
-     * The maximum time spent executing calls per update, in microseconds.
+     * The current maximum time spent executing calls per update, in microseconds.
      */
     uint32_t max_time_per_update;
     /**

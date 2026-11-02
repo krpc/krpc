@@ -986,7 +986,7 @@ public class KRPC {
         }
 
         /**
-         * The maximum time spent executing calls per update, in microseconds.
+         * The current maximum time spent executing calls per update, in microseconds.
          */
         public int getMaxTimePerUpdate() {
             return maxTimePerUpdate;

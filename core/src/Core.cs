@@ -457,23 +457,52 @@ namespace KRPC
             // If very little time is being spent executing RPCs (<1ms), MaxTimePerUpdate is set to 10ms.
             // This prevents MaxTimePerUpdate from being set to a high value when the server is idle, which would
             // cause a drop in framerate if a large burst of RPCs are received.
-            var config = Configuration.Instance;
             // An update that held the tick ran for as long as the client asked. Adapting to it
             // would wind the limit down to its floor for every other client.
-            if (config.AdaptiveRateControl && !heldTick) {
+            SyncMaxTimePerUpdate ();
+            if (Configuration.Instance.AdaptiveRateControl && !heldTick) {
                 var targetTicks = Stopwatch.Frequency / 59;
                 if (ticksElapsed > targetTicks) {
-                    if (config.MaxTimePerUpdate > 1000)
-                        config.MaxTimePerUpdate -= 100;
+                    if (maxTimePerUpdate > 1000)
+                        maxTimePerUpdate -= 100;
                 } else {
                     if (ExecTimePerRPCUpdate < 0.001) {
-                        config.MaxTimePerUpdate = 10000;
+                        maxTimePerUpdate = 10000;
                     } else {
-                        if (config.MaxTimePerUpdate < 25000)
-                            config.MaxTimePerUpdate += 100;
+                        if (maxTimePerUpdate < 25000)
+                            maxTimePerUpdate += 100;
                     }
                 }
             }
+        }
+
+        uint maxTimePerUpdate;
+        uint configuredMaxTimePerUpdate;
+        bool configuredAdaptiveRateControl;
+
+        /// <summary>
+        /// The time limit on executing calls in an update, in microseconds. Adaptive rate
+        /// control adjusts it, starting from <see cref="Configuration.MaxTimePerUpdate"/>.
+        /// </summary>
+        public uint MaxTimePerUpdate {
+            get {
+                SyncMaxTimePerUpdate ();
+                return maxTimePerUpdate;
+            }
+        }
+
+        /// <summary>
+        /// Restart the working limit from the configured one when either rate setting changes.
+        /// </summary>
+        void SyncMaxTimePerUpdate ()
+        {
+            var config = Configuration.Instance;
+            if (config.MaxTimePerUpdate == configuredMaxTimePerUpdate &&
+                config.AdaptiveRateControl == configuredAdaptiveRateControl)
+                return;
+            configuredMaxTimePerUpdate = config.MaxTimePerUpdate;
+            configuredAdaptiveRateControl = config.AdaptiveRateControl;
+            maxTimePerUpdate = configuredMaxTimePerUpdate;
         }
 
         /// <summary>
@@ -511,7 +540,7 @@ namespace KRPC
             rpcExecTimer.Reset ();
             heldTick = false;
             var config = Configuration.Instance;
-            long maxTimePerUpdateTicks = StopwatchExtensions.MicrosecondsToTicks (config.MaxTimePerUpdate);
+            long maxTimePerUpdateTicks = StopwatchExtensions.MicrosecondsToTicks (MaxTimePerUpdate);
             long recvTimeoutTicks = StopwatchExtensions.MicrosecondsToTicks (config.RecvTimeout);
             ulong rpcsExecuted = 0;
 
