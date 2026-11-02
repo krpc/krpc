@@ -41,6 +41,12 @@ MODS = {
         ("clickthroughblocker", "000_ClickThroughBlocker"),
         ("toolbarcontrol", "001_ToolbarControl"),
     ],
+    "DockingCamera": [
+        ("docking_camera", "DockingCamKURS"),
+        ("harmony", "000_Harmony"),
+        ("clickthroughblocker", "000_ClickThroughBlocker"),
+        ("toolbarcontrol", "001_ToolbarControl"),
+    ],
     "RealChute": [
         ("realchute", "RealChute"),
         ("harmony", "000_Harmony"),
