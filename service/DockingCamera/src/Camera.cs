@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using KRPC.Server;
 using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
@@ -16,9 +15,9 @@ namespace KRPC.DockingCamera
     [KRPCClass(Service = "DockingCamera")]
     public class Camera : Equatable<Camera>, IGameObjectState
     {
-        // The module that makes a part a camera. The mod's API takes the part, so the part
-        // identifies the camera
+        // The module that makes a part a camera
         const string moduleName = "PartCameraModule";
+        const int imageSize = 256;
 
         internal static bool Is(SpaceCenter.Services.Parts.Part part)
         {
@@ -88,31 +87,17 @@ namespace KRPC.DockingCamera
         }
 
         /// <summary>
-        /// Get an image.
-        /// Returns an empty byte array on failure.
+        /// The image from the camera, a 256 by 256 pixel PNG.
+        /// Throws an exception if the camera is off or not started.
         /// </summary>
+        /// <remarks>
+        /// The camera is switched on by setting the <c>IsEnabled</c> field of its
+        /// <c>PartCameraModule</c> to <c>true</c>, which also opens the camera window.
+        /// </remarks>
         [KRPCProperty]
         public byte[] Image
         {
-            get {
-                if (API.IsAvailable)
-                {
-                    try
-                    {
-                        return API.GetImage(InternalPart);
-                    }
-                    catch(System.Exception e)
-                    {
-                        if (KRPC.Utils.Logger.ShouldLog(KRPC.Utils.Logger.Severity.Debug))
-                            KRPC.Utils.Logger.WriteLine("Failed to get a docking camera image for client " + CallContext.Client.Label() + ": " + e, KRPC.Utils.Logger.Severity.Debug);
-                        return Array.Empty<byte>();
-                    }
-                }
-                else
-                {
-                    return Array.Empty<byte>();
-                }
-            }
+            get { return API.GetImage(InternalPart.Modules[moduleName], imageSize, imageSize); }
         }
     }
 }
