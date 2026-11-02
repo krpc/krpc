@@ -4,3 +4,5 @@
 - **Breaking:** Replace the `SOURCE` and `OUTPUT` arguments of `krpc-docgen` with `--page` (#1252)
 - Fix `krpc-docgen` Java links to a service's own procedures and properties, and to enumeration
   values (#1252)
+- **Breaking:** Write the Lua API documentation from `krpc-docgen` for `sphinx-lua-ls`, in place of
+  `sphinxcontrib-luadomain`, with typed signatures (#1202)

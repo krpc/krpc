@@ -21,7 +21,7 @@ extensions = [
     'sphinx.ext.extlinks',
     'sphinx_design',
     'sphinx_tabs.tabs',
-    'sphinxcontrib.luadomain',
+    'sphinx_lua_ls',
     'sphinx_csharp',
     'javasphinx'
 ]
@@ -31,6 +31,12 @@ extensions = [
 # for it (sphinx-build -t spelling) rather than by every build.
 if tags.has('spelling'):  # noqa: F821  -- sphinx supplies tags to conf.py
     extensions.append('sphinxcontrib.spelling')
+
+# The Lua API is written with the domain's directives, so sphinx-lua-ls needs no
+# language server to analyze Lua sources
+lua_ls_backend = 'disable'
+# Resolve Types.none in signatures against the krpc module, where lua.rst declares it
+lua_ls_default_options = {'using': 'krpc'}
 
 # Render Graphviz diagrams as SVG in HTML so they stay crisp when scaled.
 graphviz_output_format = 'svg'
@@ -257,18 +263,6 @@ nitpick_ignore = [
     ('java:type', 'krpc.schema.KRPC.Services'),
     ('java:type', 'krpc.schema.KRPC.Stream'),
 
-    ('lua:class', 'boolean'),
-    ('lua:class', 'number'),
-    ('lua:class', 'string'),
-    ('lua:class', 'Tuple'),
-    ('lua:class', 'List'),
-    ('lua:class', 'Set'),
-    ('lua:class', 'Map'),
-    ('lua:class', 'krpc.schema.Event'),
-    ('lua:class', 'krpc.schema.ProcedureCall'),
-    ('lua:class', 'krpc.schema.Services'),
-    ('lua:class', 'krpc.schema.Stream'),
-
     ('py:class', 'bool'),
     ('py:class', 'float'),
     ('py:class', 'double'),
@@ -300,6 +294,14 @@ PY_BUILTIN_TYPES = frozenset(
 
 
 def setup(app):
+    # sphinx-lua-ls warns that apidoc needs a language server whenever the backend
+    # is disabled, even with no apidoc roots configured
+    import logging
+
+    logging.getLogger('sphinx.sphinx_lua_ls').addFilter(
+        lambda record: not record.getMessage().startswith(
+            'apidoc requested, but the language server backend is disabled'))
+
     from sphinx.domains.python import PythonDomain
 
     class KRPCPythonDomain(PythonDomain):

@@ -86,7 +86,7 @@ Calling Remote Procedures
 
 The server provides *procedures* for your program to call, grouped into *services*.
 
-The following gets the active vessel from :attr:`~SpaceCenter.SpaceCenter.active_vessel`, an object
+The following gets the active vessel from :attr:`~SpaceCenter.active_vessel`, an object
 of type :class:`~SpaceCenter.Vessel`. It sets the vessel's name, then prints its altitude:
 
 .. literalinclude:: /scripts/lua/RemoteProcedures.lua
@@ -165,44 +165,45 @@ Client API Reference
 
 .. module:: krpc
 
-.. function:: connect([name=''], [address='127.0.0.1'], [port=50000], [handshake_timeout=5])
+.. function:: connect(name?: string, address?: string, port?: number, handshake_timeout?: number | false): krpc.Client
 
    Connects to a kRPC server, and returns a :class:`~krpc.Client`.
 
-   :param string name: A name for the connection, shown in the server window in the game.
-   :param string address: The address of the server, as a host name or an IP address. Defaults to
-                          ``'127.0.0.1'``.
-   :param number port: The port of the server. Defaults to 50000.
-   :param number handshake_timeout: How many seconds to wait for the server to accept the
-                          connection. Defaults to 5. ``false`` waits indefinitely, such as for a
-                          server that asks the player to approve each connection.
+   :param name: A name for the connection, shown in the server window in the game. Defaults to
+                ``''``.
+   :param address: The address of the server, as a host name or an IP address. Defaults to
+                   ``'127.0.0.1'``.
+   :param port: The port of the server. Defaults to 50000.
+   :param handshake_timeout: How many seconds to wait for the server to accept the connection.
+                             Defaults to 5. ``false`` waits indefinitely, such as for a server
+                             that asks the player to approve each connection.
 
    Raises an error if the connection fails or the server refuses it, and for a timeout that is not
    positive.
 
-.. function:: connect_local([name=''], [path], [handshake_timeout=5])
+.. function:: connect_local(name?: string, path?: string, handshake_timeout?: number | false): krpc.Client
 
    Connects to a kRPC server on the same machine over a local socket, and returns a
    :class:`~krpc.Client`. The server must use the local socket protocol.
 
    This needs luasocket's ``socket.unix`` module, which luasocket builds on Linux and macOS.
 
-   :param string name: A name for the connection, shown in the server window in the game.
-   :param string path: The path of the server's socket, shown in the server window in the game.
-                       Defaults to the path the server uses unless it was configured with another.
-   :param number handshake_timeout: As for :func:`~krpc.connect`.
+   :param name: A name for the connection, shown in the server window in the game. Defaults to
+                ``''``.
+   :param path: The path of the server's socket, shown in the server window in the game.
+                Defaults to the path the server uses unless it was configured with another.
+   :param handshake_timeout: As for :func:`~krpc.connect`.
 
    Raises an error as :func:`~krpc.connect` does, if ``socket.unix`` is not available, and if no
    ``path`` is given and the default path cannot be found.
 
-.. function:: get_object_id(obj)
+.. function:: get_object_id(obj): number
 
    The identifier of a remote object on the server, e.g. to pass to
    :meth:`~KRPC.Expression.constant_object`. Raises an error if the object is ``nil`` or
    :data:`Types.none <krpc.Types.none>`.
 
    :param obj: The remote object.
-   :rtype: number
 
 .. class:: Client
 
@@ -213,7 +214,7 @@ Client API Reference
 
       Closes the connection. Closing a connection that is already closed does nothing.
 
-   .. attribute:: krpc
+   .. attribute:: krpc: KRPC
 
       The :mod:`KRPC` service, providing the server's basic functionality. Each of the server's
       other services is a field too, such as ``space_center``.
