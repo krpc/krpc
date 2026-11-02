@@ -6,3 +6,7 @@
   values (#1252)
 - **Breaking:** Write the Lua API documentation from `krpc-docgen` for `sphinx-lua-ls`, in place of
   `sphinxcontrib-luadomain`, with typed signatures (#1202)
+
+## service/SpaceCenter
+
+- Fix the `Vessel.Flight` link to the `Flight` class (#1252)
