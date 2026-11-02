@@ -7,8 +7,10 @@ using KRPC.Utils;
 namespace KRPC.LiDAR
 {
     /// <summary>
-    /// LaserDist service.
+    /// Provides RPCs to interact with the
+    /// <a href="https://github.com/nullprofile/LaserDist">LiDAR</a> mod.
     /// </summary>
+    [Obsolete ("Use <see cref=\"M:KRPC.SpaceCenter.Services.SpaceCenter.RaycastDistance\"/> instead.")]
     [KRPCService(Id = 10, GameScene = GameScene.All)]
     public static class LIDAR
     {
@@ -19,7 +21,7 @@ namespace KRPC.LiDAR
         }
 
         /// <summary>
-        /// Check if the LaserDist API is available.
+        /// Whether the LiDAR mod is installed.
         /// </summary>
         [KRPCProperty]
         public static bool Available
@@ -28,7 +30,7 @@ namespace KRPC.LiDAR
         }
 
         /// <summary>
-        /// Get a LaserDist part.
+        /// Get the LiDAR on a part.
         /// </summary>
         [KRPCProcedure]
         public static Laser Laser(SpaceCenter.Services.Parts.Part part)

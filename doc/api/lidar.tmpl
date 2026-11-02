@@ -1,10 +1,16 @@
 .. default-domain:: {{ domain.sphinxname }}
 .. highlight:: {{ domain.highlight }}
+{{ domain.currentmodule('LIDAR') }}
 
 LIDAR API
 =========
 
-Provides RPCs to interact with the `LaserDist <https://github.com/nullprofile/LaserDist>`_ mod.
+.. warning::
+
+   Deprecated. The LIDAR service will be removed in a future release. Use
+   {{ see('M:SpaceCenter.RaycastDistance') }} instead.
+
+Provides RPCs to interact with the `LiDAR <https://github.com/nullprofile/LaserDist>`_ mod.
 
 .. toctree::
    :includehidden:
@@ -12,3 +18,15 @@ Provides RPCs to interact with the `LaserDist <https://github.com/nullprofile/La
 
    lidar/lidar
    lidar/laser
+
+LiDAR Replacement
+-----------------
+
+A LiDAR casts a fan of rays from its part. {{ see('M:SpaceCenter.RaycastDistance') }} casts one
+ray. This example casts 8 rays below the root part of the active vessel:
+
+.. literalinclude:: /scripts/api/lidar/RaycastExample.{{ domain.codeext }}
+{% if domain.name in ('python', 'csharp') %}
+
+The function stream casts every ray in the same physics tick, as a LiDAR does.
+{% endif %}
