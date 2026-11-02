@@ -95,7 +95,7 @@
 
    .. method:: String deprecatedProcedure(float value)
 
-      .. warning:: Deprecated. Use :meth:`floatToString(float)` instead.
+      .. warning:: Deprecated. Use :meth:`TestService.floatToString(float)` instead.
 
       Deprecated procedure documentation string.
 
@@ -115,7 +115,7 @@
 
    .. method:: void setDeprecatedProperty(String value)
 
-      .. warning:: Deprecated. Use :meth:`getStringProperty()` instead.
+      .. warning:: Deprecated. Use :meth:`TestService.getStringProperty()` instead.
 
       Deprecated property documentation string.
 
@@ -713,10 +713,10 @@
 
          Links to each kind of member: :type:`TestService`, :type:`TestClass`,
          :type:`TestEnum`, :type:`TestStruct`, :type:`KRPC.InvalidOperationException`,
-         :meth:`floatToString(float)`, :meth:`getStringProperty()`,
-         :meth:`setStringPropertyPrivateGet(String)`, :meth:`TestClass.floatToString(float)`,
+         :meth:`TestService.floatToString(float)`, :meth:`TestService.getStringProperty()`,
+         :meth:`TestService.setStringPropertyPrivateGet(String)`, :meth:`TestClass.floatToString(float)`,
          :meth:`TestClass.staticMethod(String, String)`, :meth:`TestClass.getIntProperty()`,
-         :meth:`TestClass.setStringPropertyPrivateGet(String)`, :meth:`TestEnum.VALUE_A` and
+         :meth:`TestClass.setStringPropertyPrivateGet(String)`, :field:`TestEnum.VALUE_A` and
          :meth:`TestStruct.getIntField()`.
 
    .. method:: int throwCustomExceptionLater()
@@ -933,7 +933,7 @@
 
    .. field:: public DeprecatedEnum VALUE_B
 
-      .. warning:: Deprecated. Use :meth:`DeprecatedEnum.VALUE_A` instead.
+      .. warning:: Deprecated. Use :field:`DeprecatedEnum.VALUE_A` instead.
 
       Deprecated enum ValueB documentation string.
 
