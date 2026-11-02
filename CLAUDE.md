@@ -88,6 +88,20 @@ monodis --output=/tmp/ksp.il "$KSP_DIR/KSP_Data/Managed/Assembly-CSharp.dll"
 The whole game is in that one assembly, and the listing is millions of lines — grep it
 (`\.class.*<Name>`, `\.custom.*KSPScenario`) rather than reading it.
 
+### Reflection
+
+Access a non-public game member, or a member of another mod, through `KRPC.Utils.Accessor`
+(`Getter`, `Setter`, `Field`, `StaticGetter`, `Method`), not `FieldInfo` or `MethodInfo`. It
+compiles a typed delegate, so a call costs one delegate invocation, with no boxing.
+
+ * Build each delegate once: in a static field, or per type with `DictionaryExtensions.GetOrAdd`
+   when the declaring type is only known at run time, such as a mod's subclass of a part module.
+ * Each helper returns null when the member is missing or its type does not convert. Check at
+   load, and log a warning or mark the integration unavailable.
+ * Mod assemblies are never referenced at compile time. Their types are found by name at run time.
+ * A KSP part module field set through `BaseField.SetValue` also fires `OnValueModified`. Keep
+   that call where the module reacts to the change.
+
 ## Integration tests
 
 Python tests driving a live game, in `service/*/test/`. Need a real KSP install via `KSP_DIR` or
