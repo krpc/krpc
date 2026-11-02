@@ -1109,6 +1109,14 @@ namespace KRPC.SpaceCenter.Services
                 throw new ArgumentNullException (nameof (to));
         }
 
+        // Skips trigger colliders, the detection volumes of parts such as the robotic arm scanner
+        static bool Raycast (Vector3 position, Vector3 direction, out RaycastHit hitInfo)
+        {
+            return Physics.Raycast (
+                position, direction, out hitInfo, Mathf.Infinity,
+                Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
+        }
+
         /// <summary>
         /// Cast a ray from a given position in a given direction, and return the distance to the hit point.
         /// If no hit occurs, returns infinity.
@@ -1123,7 +1131,7 @@ namespace KRPC.SpaceCenter.Services
             var worldPosition = referenceFrame.PositionToWorldSpace (position.ToVector ());
             var worldDirection = referenceFrame.DirectionToWorldSpace (direction.ToVector ());
             RaycastHit hitInfo;
-            bool hit = Physics.Raycast(worldPosition, worldDirection, out hitInfo);
+            bool hit = Raycast (worldPosition, worldDirection, out hitInfo);
             return hit ? hitInfo.distance : Double.PositiveInfinity;
         }
 
@@ -1141,7 +1149,7 @@ namespace KRPC.SpaceCenter.Services
             var worldPosition = referenceFrame.PositionToWorldSpace (position.ToVector ());
             var worldDirection = referenceFrame.DirectionToWorldSpace (direction.ToVector ());
             RaycastHit hitInfo;
-            bool hit = Physics.Raycast(worldPosition, worldDirection, out hitInfo);
+            bool hit = Raycast (worldPosition, worldDirection, out hitInfo);
             if (!hit)
                 return null;
             var part = hitInfo.collider.gameObject.GetComponentInParent<global::Part>();
