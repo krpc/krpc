@@ -367,7 +367,7 @@ KRPC
 
    .. method:: int getMaxTimePerUpdate()
 
-      The maximum time spent executing calls per update, in microseconds.
+      The current maximum time spent executing calls per update, in microseconds.
 
    .. method:: boolean getAdaptiveRateControl()
 

@@ -45,6 +45,7 @@ Core
 
 * Resolve documentation references to the procedures and properties of a service with a custom name (:issue:`1188`)
 * Fix RPCs stopping on .NET after a client disconnects during a yielding call (:issue:`1189`)
+* Fix adaptive rate control overwriting the configured "Max. time per update" setting (:issue:`1236`)
 * Server status
 
   * :breaking:`Breaking` Return ``KRPC.GetStatus`` as the struct ``KRPC.ServerStatus``, with the settings and statistics in nested structs, and remove the ``Status`` message (:issue:`1244`)

@@ -399,7 +399,7 @@ KRPC
 
    .. property:: uint MaxTimePerUpdate { get; }
 
-      The maximum time spent executing calls per update, in microseconds.
+      The current maximum time spent executing calls per update, in microseconds.
 
    .. property:: bool AdaptiveRateControl { get; }
 

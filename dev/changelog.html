@@ -521,6 +521,7 @@
 </li>
 <li><p>Resolve documentation references to the procedures and properties of a service with a custom name (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1188">#1188</a>)</p></li>
 <li><p>Fix RPCs stopping on .NET after a client disconnects during a yielding call (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1189">#1189</a>)</p></li>
+<li><p>Fix adaptive rate control overwriting the configured “Max. time per update” setting (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1236">#1236</a>)</p></li>
 <li><p>Server status</p>
 <ul>
 <li><p><span class="changelog-marker breaking">Breaking</span> Return <code class="docutils literal notranslate"><span class="pre">KRPC.GetStatus</span></code> as the struct <code class="docutils literal notranslate"><span class="pre">KRPC.ServerStatus</span></code>, with the settings and statistics in nested structs, and remove the <code class="docutils literal notranslate"><span class="pre">Status</span></code> message (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1244">#1244</a>)</p></li>

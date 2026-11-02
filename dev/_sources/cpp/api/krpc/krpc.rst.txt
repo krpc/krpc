@@ -382,7 +382,7 @@ KRPC
 
    .. member:: uint32_t max_time_per_update
 
-      The maximum time spent executing calls per update, in microseconds.
+      The current maximum time spent executing calls per update, in microseconds.
 
    .. member:: bool adaptive_rate_control
 
