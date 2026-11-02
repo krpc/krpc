@@ -47,6 +47,21 @@ GENERATORS = {
 }
 
 
+def _reference_dirs(args):
+    """The directories to load the assemblies a service references from. --ksp names
+    those of a Kerbal Space Program install."""
+    reference_dirs = list(args.reference_dir)
+    if args.ksp:
+        for data in ("KSP_Data", "KSP_x64_Data"):
+            path = os.path.join(args.ksp, data, "Managed")
+            if os.path.isdir(path):
+                reference_dirs.append(path)
+                break
+        else:
+            raise RuntimeError("No managed assemblies found in '%s'." % args.ksp)
+    return reference_dirs
+
+
 def main():
     prog = "krpc-clientgen"
     # The dispatch generators are for the conformance testees in the kRPC repository
@@ -78,9 +93,18 @@ def main():
         + "If not specified, writes source code to standard output.",
     )
     parser.add_argument(
+        "--reference-dir",
+        action="append",
+        default=[],
+        metavar="DIR",
+        help="When reading from an assembly DLL, a directory to load the assemblies "
+        + "the service references from, such as the game's managed assemblies. "
+        + "Can be repeated.",
+    )
+    parser.add_argument(
         "--ksp",
-        help="Path to Kerbal Space Program directory. "
-        + "Required when reading from an assembly DLL(s)",
+        help="Deprecated: pass the KSP_Data/Managed directory of a Kerbal Space Program "
+        + "install with --reference-dir.",
     )
     parser.add_argument(
         "--include",
@@ -98,6 +122,10 @@ def main():
     )
     args = parser.parse_args()
     warnings.showwarning = _show_warning
+    if args.ksp:
+        sys.stderr.write(
+            "Warning: --ksp is deprecated, pass --reference-dir instead.\n"
+        )
 
     try:
         includes = {}
@@ -133,12 +161,7 @@ def main():
                     defs.update(json.load(fp))
         if dlls:
             # From assembly DLLs
-            if not args.ksp:
-                raise RuntimeError(
-                    "KSP directory not set. You must pass --ksp when "
-                    + "generating code from an assembly DLL."
-                )
-            dll_defs = servicedefs(args.ksp, args.service, dlls)
+            dll_defs = servicedefs(args.service, dlls, _reference_dirs(args))
             if args.output_defs:
                 with builtins.open(args.output_defs, "w", encoding="utf-8") as fp:
                     fp.write(dll_defs)
@@ -196,4 +219,4 @@ def load_generator(path):
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

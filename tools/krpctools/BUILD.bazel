@@ -169,8 +169,11 @@ py_library(
     srcs = glob(["krpctools/**/*.py"]) + [":version-py"],
     data = glob(["krpctools/**/*.tmpl"]),
     imports = ["."],
-    # The conformance driver finds the bundled TestServer through krpctools
-    visibility = ["//client/conformance:__pkg__"],
+    # The conformance driver and the smoke test find the bundled tools through krpctools
+    visibility = [
+        "//client/conformance:__pkg__",
+        "//tools/ci:__pkg__",
+    ],
     deps = [
         "//client/python:krpc_base_lib",
         "@krpc_pypi//jinja2",

@@ -22,7 +22,7 @@ You can then run the script from the command line:
 
    $ krpc-clientgen --help
 
-   usage: krpc-clientgen [-h] [-v] [-o OUTPUT] [--ksp KSP]
+   usage: krpc-clientgen [-h] [-v] [-o OUTPUT] [--reference-dir DIR] [--ksp KSP]
                          [--include SERVICE=PATH] [--output-defs OUTPUT_DEFS]
                          language service input [input ...]
 
@@ -39,11 +39,13 @@ You can then run the script from the command line:
    options:
      -h, --help            show this help message and exit
      -v, --version         show program's version number and exit
-     -o OUTPUT, --output OUTPUT
-                           Path to write source code to. If not specified, writes
+     -o, --output OUTPUT   Path to write source code to. If not specified, writes
                            source code to standard output.
-     --ksp KSP             Path to Kerbal Space Program directory. Required when
-                           reading from an assembly DLL(s)
+     --reference-dir DIR   When reading from an assembly DLL, a directory to load
+                           the assemblies the service references from, such as
+                           the game's managed assemblies. Can be repeated.
+     --ksp KSP             Deprecated: pass the KSP_Data/Managed directory of a
+                           Kerbal Space Program install with --reference-dir.
      --include SERVICE=PATH
                            Include the generated code of another service, whose
                            types the service uses, from the given path. Required
@@ -66,9 +68,20 @@ flag).
 A service that uses a structure from another service also needs the definitions of that service.
 Pass its JSON file from ``GameData/kRPC`` as another input, e.g. ``KRPC.StdLib.json``.
 
-Generating client code from an assembly DLL requires a copy of Kerbal Space Program and a C# runtime
-to be available on the machine. In contrast, generating client code from a JSON file does not have
-these requirements and so is more portable.
+Generating client code from an assembly DLL needs the
+`.NET 10 runtime <https://dotnet.microsoft.com/download/dotnet/10.0>`_, on Linux or Windows. It also
+needs the assemblies the service references, such as the game's. Pass each directory that holds
+them with ``--reference-dir``. For Kerbal Space Program this is ``KSP_Data/Managed``, or
+``KSP_x64_Data/Managed`` on Windows. Generating from a JSON file needs neither, so it is more
+portable.
+
+``krpc-servicedefs`` generates the JSON file from the assemblies, and takes ``--reference-dir`` in
+the same way:
+
+.. code-block:: console
+
+   $ krpc-servicedefs --reference-dir=/path/to/ksp/KSP_Data/Managed -o LaunchControl.json \
+       LaunchControl LaunchControl.dll
 
 Example
 -------
@@ -76,13 +89,13 @@ Example
 The following demonstrates how to generate code for the C++ and C# clients to interact with the
 LaunchControl service, given in an example previously.
 
-krpc-clientgen expects to be passed the location of your copy of Kerbal Space Program, the name of
+krpc-clientgen expects to be passed the directory of the game's managed assemblies, the name of
 the language to generate, the name of the service (from the :cs:attr:`KRPCService` attribute), a
 path to the assembly containing the service and the path to write the generated code to.
 
 For C++, run the following:
 
-``krpc-clientgen --ksp=/path/to/ksp cpp LaunchControl LaunchControl.dll launch_control.hpp``
+``krpc-clientgen --reference-dir=/path/to/ksp/KSP_Data/Managed -o launch_control.hpp cpp LaunchControl LaunchControl.dll``
 
 To then use the LaunchControl service from C++, you need to link your code against the C++ client
 library, and include `launch_control.hpp`. If the service uses types from another service, pass
@@ -91,7 +104,7 @@ e.g. ``--include=SpaceCenter=krpc/services/space_center.hpp``.
 
 For C#, run the following:
 
-``krpc-clientgen --ksp=/path/to/ksp csharp LaunchControl LaunchControl.dll LaunchControl.cs``
+``krpc-clientgen --reference-dir=/path/to/ksp/KSP_Data/Managed -o LaunchControl.cs csharp LaunchControl LaunchControl.dll``
 
 To then use the LaunchControl service from a C# client, you need to reference the `KRPC.Client.dll`
 and include `LaunchControl.cs` in your project.

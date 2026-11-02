@@ -10,29 +10,12 @@ import subprocess
 import sys
 import tempfile
 import time
-from importlib.resources import files
 
 import krpc
+from krpctools import dotnet
 
 # The package ships the module, which Bazel has at tools/build/serverprocess.py
 from krpctools.conformance import serverprocess  # pyright: ignore[reportMissingImports]
-
-# The KSP assemblies krpc-servicedefs copies, which the KRPC service never loads
-KSP_DLLS = [
-    "Assembly-CSharp.dll",
-    "Assembly-CSharp-firstpass.dll",
-    "UnityEngine.dll",
-    "UnityEngine.AnimationModule.dll",
-    "UnityEngine.CoreModule.dll",
-    "UnityEngine.IMGUIModule.dll",
-    "UnityEngine.ImageConversionModule.dll",
-    "UnityEngine.InputLegacyModule.dll",
-    "UnityEngine.ScreenCaptureModule.dll",
-    "UnityEngine.SharedInternalsModule.dll",
-    "UnityEngine.TextRenderingModule.dll",
-    "UnityEngine.UI.dll",
-    "UnityEngine.UIModule.dll",
-]
 
 
 def run(*command):
@@ -76,14 +59,18 @@ def test_testserver():
 
 def test_krpctools(directory):
     """Run each krpctools command on the KRPC service in the bundled KRPC.Core.dll."""
-    ksp = os.path.join(directory, "ksp")
-    managed = os.path.join(ksp, "KSP_Data", "Managed")
-    os.makedirs(managed)
-    for dll in KSP_DLLS:
-        open(os.path.join(managed, dll), "wb").close()
-    core = str(files("krpctools") / "bin" / "ServiceDefinitions" / "KRPC.Core.dll")
+    bundle = dotnet.servicedefinitions_dir()
+    core = os.path.join(bundle, "KRPC.Core.dll")
     defs = os.path.join(directory, "KRPC.json")
-    run("krpc-servicedefs", ksp, "KRPC", core, "--output", defs)
+    run(
+        "krpc-servicedefs",
+        "--reference-dir",
+        bundle,
+        "--output",
+        defs,
+        "KRPC",
+        core,
+    )
     run(
         "krpc-clientgen",
         "python",
@@ -91,6 +78,17 @@ def test_krpctools(directory):
         defs,
         "--output",
         os.path.join(directory, "krpc.py"),
+    )
+    # From the assembly, through the ServiceDefinitions tool
+    run(
+        "krpc-clientgen",
+        "csharp",
+        "KRPC",
+        core,
+        "--reference-dir",
+        bundle,
+        "--output",
+        os.path.join(directory, "KRPC.cs"),
     )
     run(
         "krpc-docgen",

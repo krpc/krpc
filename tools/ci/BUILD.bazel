@@ -76,5 +76,6 @@ py_pyright_test(
     deps = [
         "//:changelog",
         "//client/python:krpc_lib",
+        "//tools/krpctools:krpctools_lib",
     ],
 )
