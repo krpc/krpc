@@ -14,6 +14,13 @@ def _get_src_dir(srcs, short_path = False):
                 return src.dirname
     return None
 
+# The sphinx-build workers, reserved as CPUs so Bazel schedules around them. More workers gain
+# little, as much of the build is serial.
+_JOBS = 4
+
+def _build_resources(_os, _inputs_size):
+    return {"cpu": _JOBS}
+
 def _build_impl(ctx):
     # sphinx-build is given the source directory, never the list of .rst files. Sphinx resolves
     # symlinks in filenames passed on the command line and then skips any that do not resolve
@@ -25,7 +32,7 @@ def _build_impl(ctx):
     # sphinx-build writes into a tree artifact, which write_zip then archives
     html_dir = ctx.actions.declare_directory(out.basename + ".sphinx-html")
     build_args = ctx.actions.args()
-    build_args.add_all(["-b", "html", "-E", "-d", html_dir.path + ".doctrees"])
+    build_args.add_all(["-b", "html", "-E", "-j", str(_JOBS), "-d", html_dir.path + ".doctrees"])
     build_args.add_all(["-W", "-n", "-N", "-T", "-q", src_dir, html_dir.path])
     build_args.add_all(["-D%s=%s" % x for x in ctx.attr.opts.items()])
     ctx.actions.run(
@@ -35,6 +42,7 @@ def _build_impl(ctx):
         outputs = [html_dir],
         progress_message = "Generating html documentation",
         mnemonic = "SphinxHtml",
+        resource_set = _build_resources,
     )
 
     zip_args = ctx.actions.args()

@@ -23,7 +23,7 @@ extensions = [
     'sphinx_tabs.tabs',
     'sphinx_lua_ls',
     'sphinx_csharp',
-    'javasphinx'
+    'sphinx_java'
 ]
 
 # The spellchecker loads a native library through pyenchant, and only the
@@ -141,12 +141,10 @@ extlinks = {
 sphinx_tabs_disable_tab_closing = True
 
 # The forum and CurseForge reject requests from scripts. The wiki serves its
-# anchors to browsers only. javasphinx links a nested generic type to a page
-# named after the whole type, e.g. Triplet<Double,Double,Double>.html.
+# anchors to browsers only.
 linkcheck_ignore = [
     r'https://forum\.kerbalspaceprogram\.com/',
     r'https://www\.curseforge\.com/',
-    r'.*/org/javatuples/.*<',
 ]
 linkcheck_anchors_ignore_for_url = [r'https://wiki\.kerbalspaceprogram\.com/']
 linkcheck_retries = 3
@@ -240,24 +238,6 @@ nitpick_ignore = [
     ('java:type', 'ConnectionResponse.Status'),
     ('java:type', 'Disconnect'),
     ('java:type', 'Disconnect.Reason'),
-    ('java:type', 'int'),
-    ('java:type', 'long'),
-    ('java:type', 'boolean'),
-    ('java:type', 'float'),
-    ('java:type', 'long'),
-    ('java:type', 'double'),
-    ('java:type', 'byte[]'),
-    ('java:type', 'Single'),
-    ('java:type', 'Double,Double,Double'),
-    ('java:type', 'Double,Double,Double,Double'),
-    ('java:type', 'String,Expression'),
-    ('java:type', 'Integer,Expression'),
-    ('java:type', 'T'),
-    ('java:type', 'org'),
-    ('java:type', 'java'),
-    ('java:type', 'org.javatuples'),
-    ('java:type', 'krpc'),
-    ('java:type', 'krpc.schema'),
     ('java:type', 'krpc.schema.KRPC'),
     ('java:type', 'krpc.schema.KRPC.ProcedureCall'),
     ('java:type', 'krpc.schema.KRPC.Services'),
