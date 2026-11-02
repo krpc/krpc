@@ -54,10 +54,6 @@ jobs:
             build: //doc:html
             artifact: docs-html
             path: bazel-bin/doc/html.zip
-          - name: build-docs-pdf
-            build: //doc:pdf
-            artifact: docs-pdf
-            path: bazel-bin/doc/krpc-*.pdf
           - name: build-docs-examples
             build: //doc:compile-scripts
             cpp-cache: restore
@@ -136,8 +132,8 @@ jobs:
           path: ${{ matrix.path }}
 
   # The Linux matrix above, for Windows. Windows has no equivalent of the
-  # entries whose every target needs a POSIX tool -- the serial transport, the
-  # pdf documentation -- because there would be nothing left in them to run.
+  # entries whose every target needs a POSIX tool, such as the serial transport,
+  # because there would be nothing left in them to run.
   # Nothing here uploads an artifact: the releases are built on Linux. The C++
   # client is windows-test-client-cpp, which saves the C++ cache.
   windows:
@@ -773,12 +769,6 @@ jobs:
         with:
           name: docs-html
           path: artifacts/docs-html/
-      - name: upload-docs-pdf
-        if: steps.merge-group-run.outputs.run-id
-        uses: actions/upload-artifact@v7
-        with:
-          name: docs-pdf
-          path: artifacts/docs-pdf/
       - name: upload-client-csharp-nupkg
         if: steps.merge-group-run.outputs.run-id
         uses: actions/upload-artifact@v7

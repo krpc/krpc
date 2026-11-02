@@ -9,13 +9,12 @@ load("//tools/build:lua.bzl", "lua_luacheck_test")
 load("//tools/build:pkg.bzl", "stage_files")
 load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
 load("//tools/build:sphinx.bzl", "sphinx_build", "sphinx_linkcheck_test", "sphinx_spelling_test")
-load("//tools/krpctools:docgen.bzl", "docgen_multiple")
+load("//tools/krpctools:docgen.bzl", "docgen")
 
 filegroup(
     name = "doc",
     srcs = [
         ":html",
-        ":pdf",
     ],
 )
 
@@ -114,15 +113,14 @@ py_console_script_binary(
     script = "sphinx-build",
     visibility = ["//visibility:public"],
     deps = [
-        "@krpc_pypi//javalang",
-        "@krpc_pypi//javasphinx",
         "@krpc_pypi//pydata_sphinx_theme",
         "@krpc_pypi//pyenchant",
         "@krpc_pypi//requests",
         "@krpc_pypi//sphinx_csharp",
         "@krpc_pypi//sphinx_design",
+        "@krpc_pypi//sphinx_java",
+        "@krpc_pypi//sphinx_lua_ls",
         "@krpc_pypi//sphinx_tabs",
-        "@krpc_pypi//sphinxcontrib_luadomain",
         "@krpc_pypi//sphinxcontrib_spelling",
     ],
 )
@@ -135,8 +133,6 @@ py_binary(
     srcs = ["serve_docs.py"],
     main = "serve_docs.py",
     deps = [
-        "@krpc_pypi//javalang",
-        "@krpc_pypi//javasphinx",
         "@krpc_pypi//pydata_sphinx_theme",
         "@krpc_pypi//pyenchant",
         "@krpc_pypi//requests",
@@ -144,8 +140,9 @@ py_binary(
         "@krpc_pypi//sphinx_autobuild",
         "@krpc_pypi//sphinx_csharp",
         "@krpc_pypi//sphinx_design",
+        "@krpc_pypi//sphinx_java",
+        "@krpc_pypi//sphinx_lua_ls",
         "@krpc_pypi//sphinx_tabs",
-        "@krpc_pypi//sphinxcontrib_luadomain",
         "@krpc_pypi//sphinxcontrib_spelling",
         "@krpc_pypi//watchdog",
     ],
@@ -174,7 +171,6 @@ sphinx_build(
     name = "html",
     srcs = [":srcs"],
     out = "html.zip",
-    builder = "html",
     # Stamp -Dversion to match conf.py's version, so DOCUMENTATION_OPTIONS.VERSION
     # is "dev" for a dev build and the release number otherwise.
     opts = {"version": docs_version},
@@ -182,18 +178,6 @@ sphinx_build(
     # The dot graphs are drawn by graphviz, which is a system install rather than
     # something the build fetches, and only the Linux image carries it.
     target_compatible_with = ["@platforms//os:linux"],
-)
-
-sphinx_build(
-    name = "pdf",
-    srcs = [":srcs"],
-    out = "krpc-doc-%s.pdf" % version,
-    builder = "latex",
-    opts = {"version": version},
-    sphinx_build = ":sphinx-build",
-    # The latex->pdf step needs `make` and a LaTeX toolchain (texlive).
-    target_compatible_with = ["@platforms//os:linux"],
-    visibility = ["//:__pkg__"],
 )
 
 png_images(
@@ -215,7 +199,7 @@ defs = [
     "//service/Debug:ServiceDefinitions",
 ]
 
-docgen_multiple(
+docgen(
     name = "cnano-api",
     srcs = glob(["api/**/*.tmpl"]),
     defs = defs,
@@ -223,7 +207,7 @@ docgen_multiple(
     outdir = "src/cnano",
 )
 
-docgen_multiple(
+docgen(
     name = "csharp-api",
     srcs = glob(["api/**/*.tmpl"]),
     defs = defs,
@@ -231,7 +215,7 @@ docgen_multiple(
     outdir = "src/csharp",
 )
 
-docgen_multiple(
+docgen(
     name = "cpp-api",
     srcs = glob(["api/**/*.tmpl"]),
     defs = defs,
@@ -239,7 +223,7 @@ docgen_multiple(
     outdir = "src/cpp",
 )
 
-docgen_multiple(
+docgen(
     name = "java-api",
     srcs = glob(["api/**/*.tmpl"]),
     defs = defs,
@@ -247,7 +231,7 @@ docgen_multiple(
     outdir = "src/java",
 )
 
-docgen_multiple(
+docgen(
     name = "lua-api",
     srcs = glob(["api/**/*.tmpl"]),
     defs = defs,
@@ -255,7 +239,7 @@ docgen_multiple(
     outdir = "src/lua",
 )
 
-docgen_multiple(
+docgen(
     name = "python-api",
     srcs = glob(["api/**/*.tmpl"]),
     defs = defs,

@@ -21,26 +21,22 @@ extensions = [
     'sphinx.ext.extlinks',
     'sphinx_design',
     'sphinx_tabs.tabs',
-    'sphinxcontrib.luadomain',
+    'sphinx_lua_ls',
     'sphinx_csharp',
-    'javasphinx'
+    'sphinx_java'
 ]
-
-# The home page card icons are left out of the PDF
-suppress_warnings = ['design.fa-build']
-
-# The coverage table's check and cross marks, which pdflatex has no glyph for
-latex_elements = {
-    'preamble': r'\usepackage{pifont}'
-    r'\DeclareUnicodeCharacter{2713}{\ding{51}}'
-    r'\DeclareUnicodeCharacter{2717}{\ding{55}}',
-}
 
 # The spellchecker loads a native library through pyenchant, and only the
 # spelling builder has any use for it, so it is added when that builder asks
 # for it (sphinx-build -t spelling) rather than by every build.
 if tags.has('spelling'):  # noqa: F821  -- sphinx supplies tags to conf.py
     extensions.append('sphinxcontrib.spelling')
+
+# The Lua API is written with the domain's directives, so sphinx-lua-ls needs no
+# language server to analyze Lua sources
+lua_ls_backend = 'disable'
+# Resolve Types.none in signatures against the krpc module, where lua.rst declares it
+lua_ls_default_options = {'using': 'krpc'}
 
 # Render Graphviz diagrams as SVG in HTML so they stay crisp when scaled.
 graphviz_output_format = 'svg'
@@ -145,12 +141,10 @@ extlinks = {
 sphinx_tabs_disable_tab_closing = True
 
 # The forum and CurseForge reject requests from scripts. The wiki serves its
-# anchors to browsers only. javasphinx links a nested generic type to a page
-# named after the whole type, e.g. Triplet<Double,Double,Double>.html.
+# anchors to browsers only.
 linkcheck_ignore = [
     r'https://forum\.kerbalspaceprogram\.com/',
     r'https://www\.curseforge\.com/',
-    r'.*/org/javatuples/.*<',
 ]
 linkcheck_anchors_ignore_for_url = [r'https://wiki\.kerbalspaceprogram\.com/']
 linkcheck_retries = 3
@@ -244,40 +238,10 @@ nitpick_ignore = [
     ('java:type', 'ConnectionResponse.Status'),
     ('java:type', 'Disconnect'),
     ('java:type', 'Disconnect.Reason'),
-    ('java:type', 'int'),
-    ('java:type', 'long'),
-    ('java:type', 'boolean'),
-    ('java:type', 'float'),
-    ('java:type', 'long'),
-    ('java:type', 'double'),
-    ('java:type', 'byte[]'),
-    ('java:type', 'Single'),
-    ('java:type', 'Double,Double,Double'),
-    ('java:type', 'Double,Double,Double,Double'),
-    ('java:type', 'String,Expression'),
-    ('java:type', 'Integer,Expression'),
-    ('java:type', 'T'),
-    ('java:type', 'org'),
-    ('java:type', 'java'),
-    ('java:type', 'org.javatuples'),
-    ('java:type', 'krpc'),
-    ('java:type', 'krpc.schema'),
     ('java:type', 'krpc.schema.KRPC'),
     ('java:type', 'krpc.schema.KRPC.ProcedureCall'),
     ('java:type', 'krpc.schema.KRPC.Services'),
     ('java:type', 'krpc.schema.KRPC.Stream'),
-
-    ('lua:class', 'boolean'),
-    ('lua:class', 'number'),
-    ('lua:class', 'string'),
-    ('lua:class', 'Tuple'),
-    ('lua:class', 'List'),
-    ('lua:class', 'Set'),
-    ('lua:class', 'Map'),
-    ('lua:class', 'krpc.schema.Event'),
-    ('lua:class', 'krpc.schema.ProcedureCall'),
-    ('lua:class', 'krpc.schema.Services'),
-    ('lua:class', 'krpc.schema.Stream'),
 
     ('py:class', 'bool'),
     ('py:class', 'float'),
@@ -310,6 +274,14 @@ PY_BUILTIN_TYPES = frozenset(
 
 
 def setup(app):
+    # sphinx-lua-ls warns that apidoc needs a language server whenever the backend
+    # is disabled, even with no apidoc roots configured
+    import logging
+
+    logging.getLogger('sphinx.sphinx_lua_ls').addFilter(
+        lambda record: not record.getMessage().startswith(
+            'apidoc requested, but the language server backend is disabled'))
+
     from sphinx.domains.python import PythonDomain
 
     class KRPCPythonDomain(PythonDomain):

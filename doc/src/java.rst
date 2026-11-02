@@ -521,9 +521,9 @@ Client API Reference
    .. method:: krpc.schema.KRPC.ProcedureCall getCall(RemoteObject instance, String method, Object... args)
    .. method:: krpc.schema.KRPC.ProcedureCall getCall(Class<?> clazz, String method, Object... args)
 
-      Converts a call to a method of a remote object, or of a class as for :meth:`addStream`, into
-      a procedure call message. The message is for a server side function built with the
-      expression API. See :std:ref:`server-side-functions-api`.
+      Converts a call to a method of a remote object, or of a class as for
+      :meth:`~Connection.addStream`, into a procedure call message. The message is for a server
+      side function built with the expression API. See :std:ref:`server-side-functions-api`.
 
       Throws an :type:`RPCException` if there is no method of that name taking the arguments.
 

@@ -43,7 +43,7 @@
 {% endmacro %}
 
 {% macro procedure(x) %}{{ mark_documented(x) }}
-.. staticmethod:: {{ x.name | snakecase }}({{ parameters(x.parameters) }})
+.. staticmethod:: {{ x.name | snakecase }}({{ parameters(x.parameters) }}){% if x.return_type != None %}: {{ domain.return_type(x.return_type) }}{% endif +%}
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 
@@ -51,15 +51,12 @@
 {{ gendoc(x.documentation) | indent }}
 
 {% for p in x.parameters %}
-   :param {% if not p.type.nullable %}{{ domain.parameter_type(p.type) }} {% endif %}{{ p.name | snakecase }}:{% if hasdoc(p.documentation, './param[@name=\''+p.name+'\']') %} {{ gendoc(p.documentation, './param[@name=\''+p.name+'\']') | singleline }}{% endif %}{% if p.type.nullable %}
+{% if hasdoc(p.documentation, './param[@name=\''+p.name+'\']') or (p.has_default_value and p.default_value is not none) %}
+   :param {{ p.name | snakecase }}:{% if hasdoc(p.documentation, './param[@name=\''+p.name+'\']') %} {{ gendoc(p.documentation, './param[@name=\''+p.name+'\']') | singleline }}{% endif %}{% if p.has_default_value and p.default_value is not none %} Defaults to ``{{ domain.default_value(p.default_value, p.type) }}``.{% endif %}
 
-   :type {{ p.name | snakecase }}: {{ domain.type_description(p.type) }}{% endif %}
-
+{% endif %}
 {% endfor %}
 {% if hasdoc(x.documentation, './returns') %}{{ returns(x.documentation) | indent }}
-{% endif %}
-{% if x.return_type != None %}
-   :rtype: {{ domain.type_description(x.return_type) }}
 {% endif %}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
@@ -70,19 +67,18 @@
 {% endmacro %}
 
 {% macro property(x) %}{{ mark_documented(x) }}
-.. attribute:: {{ x.name | snakecase }}: {{ domain.type(x.type) }}
+.. attribute:: {{ x.name | snakecase }}: {{ domain.return_type(x.type) }}
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 
 {% endif %}
 {{ gendoc(x.documentation) | indent }}
 
-   :Attribute: {% if x.getter != None and x.setter != None %}Can be read or written{% elif x.getter != None %}Read-only, cannot be set{% else %}Write-only, cannot be read{% endif %}
+   :Attribute: {% if x.getter != None and x.setter != None %}Can be read or written{% elif x.getter != None %}Read-only, cannot be set{% else %}Write-only, cannot be read{% endif +%}
 
 {% if hasdoc(x.documentation, './returns') %}{{ returns(x.documentation) | indent }}
-{% endif %}
-   :rtype: {{ domain.type_description(x.type) }}
 
+{% endif %}
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
 
 {% endif %}
@@ -91,7 +87,7 @@
 {% endmacro %}
 
 {% macro class_method(x) %}{{ mark_documented(x) }}
-.. method:: {{ x.name | snakecase }}({{ parameters(x.parameters[1:]) }})
+.. method:: {{ x.name | snakecase }}({{ parameters(x.parameters[1:]) }}){% if x.return_type != None %}: {{ domain.return_type(x.return_type) }}{% endif +%}
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 
@@ -99,15 +95,12 @@
 {{ gendoc(x.documentation) | indent }}
 
 {% for p in x.parameters[1:] %}
-   :param {% if not p.type.nullable %}{{ domain.parameter_type(p.type) }} {% endif %}{{ p.name | snakecase }}:{% if hasdoc(p.documentation, './param[@name=\''+p.name+'\']') %} {{ gendoc(p.documentation, './param[@name=\''+p.name+'\']') | singleline }}{% endif %}{% if p.type.nullable %}
+{% if hasdoc(p.documentation, './param[@name=\''+p.name+'\']') or (p.has_default_value and p.default_value is not none) %}
+   :param {{ p.name | snakecase }}:{% if hasdoc(p.documentation, './param[@name=\''+p.name+'\']') %} {{ gendoc(p.documentation, './param[@name=\''+p.name+'\']') | singleline }}{% endif %}{% if p.has_default_value and p.default_value is not none %} Defaults to ``{{ domain.default_value(p.default_value, p.type) }}``.{% endif %}
 
-   :type {{ p.name | snakecase }}: {{ domain.type_description(p.type) }}{% endif %}
-
+{% endif %}
 {% endfor %}
 {% if hasdoc(x.documentation, './returns') %}{{ returns(x.documentation) | indent }}
-{% endif %}
-{% if x.return_type != None %}
-   :rtype: {{ domain.type_description(x.return_type) }}
 {% endif %}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
@@ -118,7 +111,7 @@
 {% endmacro %}
 
 {% macro class_static_method(x) %}{{ mark_documented(x) }}
-.. staticmethod:: {{ x.name | snakecase }}({{ parameters(x.parameters) }})
+.. staticmethod:: {{ x.name | snakecase }}({{ parameters(x.parameters) }}){% if x.return_type != None %}: {{ domain.return_type(x.return_type) }}{% endif +%}
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 
@@ -126,15 +119,12 @@
 {{ gendoc(x.documentation) | indent }}
 
 {% for p in x.parameters %}
-   :param {% if not p.type.nullable %}{{ domain.parameter_type(p.type) }} {% endif %}{{ p.name | snakecase }}:{% if hasdoc(p.documentation, './param[@name=\''+p.name+'\']') %} {{ gendoc(p.documentation, './param[@name=\''+p.name+'\']') | singleline }}{% endif %}{% if p.type.nullable %}
+{% if hasdoc(p.documentation, './param[@name=\''+p.name+'\']') or (p.has_default_value and p.default_value is not none) %}
+   :param {{ p.name | snakecase }}:{% if hasdoc(p.documentation, './param[@name=\''+p.name+'\']') %} {{ gendoc(p.documentation, './param[@name=\''+p.name+'\']') | singleline }}{% endif %}{% if p.has_default_value and p.default_value is not none %} Defaults to ``{{ domain.default_value(p.default_value, p.type) }}``.{% endif %}
 
-   :type {{ p.name | snakecase }}: {{ domain.type_description(p.type) }}{% endif %}
-
+{% endif %}
 {% endfor %}
 {% if hasdoc(x.documentation, './returns') %}{{ returns(x.documentation) | indent }}
-{% endif %}
-{% if x.return_type != None %}
-   :rtype: {{ domain.type_description(x.return_type) }}
 {% endif %}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
@@ -186,7 +176,6 @@
 {% endif %}
 {{ gendoc(field.documentation) | indent(width=6) }}
 
-      :rtype: {{ domain.type_description(field.type) }}
 {% endfor %}
 {% endmacro %}
 
@@ -205,13 +194,9 @@
 {% for p in x %}{{ parameter(p) }}{% if not loop.last %}, {% endif %}{% endfor %}
 {% endmacro %}
 
-{% macro parameter(x) %}
-{% if not x.has_default_value -%}
-{{ x.name | snakecase }}
-{%- else -%}
-[{{ x.name | snakecase }} = {{ domain.default_value(x.default_value, x.type) }}]
-{%- endif %}
-{% endmacro %}
+{% macro parameter(x) -%}
+{{ x.name | snakecase }}{% if x.has_default_value %}?{% endif %}: {{ domain.parameter_type(x.type) }}
+{%- endmacro %}
 
 {% macro returns(x) %}
 :returns: {{ gendoc(x, './returns') | singleline }}

@@ -118,6 +118,9 @@ class JavaDomain(Domain[JavaLanguage]):
 
     def ref(self, obj):
         name = obj.fullname
+        # A service's procedures and properties are members of the class named after the service
+        if isinstance(obj, (Procedure, Property)):
+            name = obj.service_name + "." + name
         if isinstance(obj, (Procedure, ClassMethod, ClassStaticMethod)):
             parameters = [self.type(p.type) for p in obj.parameters]
             if isinstance(obj, ClassMethod):
@@ -156,11 +159,12 @@ class JavaDomain(Domain[JavaLanguage]):
                 ClassStaticMethod,
                 Property,
                 ClassProperty,
-                EnumerationValue,
                 StructField,
             )
         ):
             prefix = "meth"
+        elif isinstance(obj, EnumerationValue):
+            prefix = "field"
         elif any(
             isinstance(obj, cls) for cls in (Class, Enumeration, Struct, ExceptionNode)
         ):

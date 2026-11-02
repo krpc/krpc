@@ -192,6 +192,8 @@ def serve(port, open_browser=True):
             "-W",
             "-n",
             "-T",
+            "-j",
+            "auto",
             "--host",
             "0.0.0.0",
             "--port",

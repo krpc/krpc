@@ -3,60 +3,34 @@
 {{ domain.currentmodule('SpaceCenter') }}
 {% import domain.macros as macros with context %}
 
-{% macro pdf_safe_figure_right(img, figwidth, caption) %}
-.. only:: html
+{% macro figure_right(img, figwidth, caption) %}
+.. figure:: {{ img }}
+   :align: right
+   :figwidth: {{ figwidth }}
 
-   .. figure:: {{ img }}
-      :align: right
-      :figwidth: {{ figwidth }}
-
-      {{ caption }}
-
-.. only:: latex
-
-   .. figure:: {{ img }}
-      :align: center
-      :width: 55%
-
-      {{ caption }}
+   {{ caption }}
 {% endmacro %}
 
-{% macro pdf_safe_figure_pair(left_img, right_img, figwidth, left_caption, right_caption) %}
-.. only:: html
+{% macro figure_pair(left_img, right_img, figwidth, left_caption, right_caption) %}
+.. container:: clearer
 
-   .. container:: clearer
+   ..
 
-      ..
+.. figure:: {{ left_img }}
+   :align: left
+   :figwidth: {{ figwidth }}
 
-   .. figure:: {{ left_img }}
-      :align: left
-      :figwidth: {{ figwidth }}
+   {{ left_caption }}
 
-      {{ left_caption }}
+.. figure:: {{ right_img }}
+   :align: right
+   :figwidth: {{ figwidth }}
 
-   .. figure:: {{ right_img }}
-      :align: right
-      :figwidth: {{ figwidth }}
+   {{ right_caption }}
 
-      {{ right_caption }}
+.. container:: clearer
 
-   .. container:: clearer
-
-      ..
-
-.. only:: latex
-
-   .. figure:: {{ left_img }}
-      :align: center
-      :width: 55%
-
-      {{ left_caption }}
-
-   .. figure:: {{ right_img }}
-      :align: center
-      :width: 55%
-
-      {{ right_caption }}
+   ..
 {% endmacro %}
 
 .. _{{ domain.name }}-api-parts:
@@ -318,7 +292,7 @@ Vessels in KSP are comprised of a number of parts, connected to one another in a
 tree of parts in Figure 2. The craft file for this example can also be
 :download:`downloaded here </crafts/PartsTree.craft>`.
 
-{{ pdf_safe_figure_pair('/images/api/parts.png', '/images/api/parts-tree.png', 275, '**Figure 1** -- Example parts making up a vessel.', '**Figure 2** -- Tree of parts for the vessel in Figure 1. Arrows point from the parent part to the child part.') }}
+{{ figure_pair('/images/api/parts.png', '/images/api/parts-tree.png', 275, '**Figure 1** -- Example parts making up a vessel.', '**Figure 2** -- Tree of parts for the vessel in Figure 1. Arrows point from the parent part to the child part.') }}
 
 Traversing the Tree
 ^^^^^^^^^^^^^^^^^^^
@@ -418,9 +392,9 @@ above, the following is printed out::
 Fuel Lines
 ----------
 
-{{ pdf_safe_figure_right('/images/api/parts-fuel-lines.png', 200, '**Figure 5** -- Fuel lines from the example in Figure 1. Fuel flows from the parts highlighted in green, into the part highlighted in blue.') }}
+{{ figure_right('/images/api/parts-fuel-lines.png', 200, '**Figure 5** -- Fuel lines from the example in Figure 1. Fuel flows from the parts highlighted in green, into the part highlighted in blue.') }}
 
-{{ pdf_safe_figure_right('/images/api/parts-fuel-lines-tree.png', 200, '**Figure 4** -- A subset of the parts tree from Figure 2 above.') }}
+{{ figure_right('/images/api/parts-fuel-lines-tree.png', 200, '**Figure 4** -- A subset of the parts tree from Figure 2 above.') }}
 
 Fuel lines are considered parts, and are included in the parts tree (for
 example, as pictured in Figure 4). However, the parts tree does not contain
@@ -452,7 +426,7 @@ stage), use the :rst:ref:`{{ domain.name }}-api-stage` class via
 {{ see('M:SpaceCenter.Vessel.Stages') }} and
 {{ see('M:SpaceCenter.Vessel.DecoupleStages') }}.
 
-{{ pdf_safe_figure_right('/images/api/parts-staging.png', 340, '**Figure 6** -- Example vessel from Figure 1 with a staging sequence.') }}
+{{ figure_right('/images/api/parts-staging.png', 340, '**Figure 6** -- Example vessel from Figure 1 with a staging sequence.') }}
 
 Each part has two staging numbers associated with it: the stage in which the
 part is *activated* and the stage in which the part is *decoupled*. These values
@@ -466,4 +440,4 @@ Figure 6 shows an example staging sequence for a vessel. Figure 7 shows the
 stages in which each part of the vessel will be *activated*. Figure 8 shows the
 stages in which each part of the vessel will be *decoupled*.
 
-{{ pdf_safe_figure_pair('/images/api/parts-staging-activate.png', '/images/api/parts-staging-decouple.png', 250, '**Figure 7** -- The stage in which each part is *activated*.', '**Figure 8** -- The stage in which each part is *decoupled*.') }}
+{{ figure_pair('/images/api/parts-staging-activate.png', '/images/api/parts-staging-decouple.png', 250, '**Figure 7** -- The stage in which each part is *activated*.', '**Figure 8** -- The stage in which each part is *decoupled*.') }}

@@ -18,7 +18,6 @@ TARGETS = (
     "//client/java",
     "//client/lua",
     "//client/python",
-    "//doc:pdf",
     "//tools/krpctools",
     "//tools/TestServer:archive",
 )
@@ -35,7 +34,6 @@ def assets():
             "bazel-bin/client/java/krpc-java-{version}.jar",
             "bazel-bin/client/lua/krpc-lua-{version}.zip",
             "bazel-bin/client/python/krpc-python-{version}.tar.gz",
-            "bazel-bin/doc/krpc-doc-{version}.pdf",
             "bazel-bin/tools/krpctools/krpctools-{version}.tar.gz",
             "bazel-bin/tools/TestServer/TestServer-{version}.zip",
             "bazel-bin/krpc-genfiles-{version}.zip",

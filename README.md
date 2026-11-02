@@ -11,7 +11,6 @@ kRPC allows you to control Kerbal Space Program from scripts running outside of
 the game, and comes with client libraries for many popular languages.
 
  * [Web Documentation](https://krpc.github.io/krpc)
- * [PDF Documentation](https://github.com/krpc/krpc/releases)
  * [Forum release thread](https://forum.kerbalspaceprogram.com/topic/130742-1125-krpc-control-the-game-using-c-c-java-lua-python-ruby-haskell-c-arduino-v060/)
  * [Discord](https://discord.gg/bXuaTrj)
 

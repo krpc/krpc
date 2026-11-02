@@ -9,629 +9,506 @@
 Service documentation string.
 
 
-.. staticmethod:: add_multiple_values(x, y, z)
-
-
-
-   :param number x:
-   :param number y:
-   :param number z:
-   :rtype: string
+.. staticmethod:: add_multiple_values(x: number, y: number, z: number): string
 
 
 
 
-.. staticmethod:: add_to_object_dictionary(d, key)
 
 
 
-   :param Map d:
-   :param string key:
-   :rtype: Map
-
-
-
-
-.. staticmethod:: add_to_object_list(l, value)
-
-
-
-   :param List l:
-   :param string value:
-   :rtype: List
+.. staticmethod:: add_to_object_dictionary(d: Map, key: string): Map
 
 
 
 
-.. staticmethod:: add_to_object_set(h, value)
 
 
 
-   :param Set h:
-   :param string value:
-   :rtype: Set
-
-
-
-
-.. staticmethod:: blocking_procedure(n, [sum = 0])
-
-
-
-   :param number n:
-   :param number sum:
-   :rtype: number
+.. staticmethod:: add_to_object_list(l: List, value: string): List
 
 
 
 
-.. staticmethod:: bool_to_string(value)
 
 
 
-   :param boolean value:
-   :rtype: string
-
-
-
-
-.. staticmethod:: bytes_default([x = '\202\254'])
-
-
-
-   :param string x:
-   :rtype: string
+.. staticmethod:: add_to_object_set(h: Set, value: string): Set
 
 
 
 
-.. staticmethod:: bytes_to_hex_string(value)
 
 
 
-   :param string value:
-   :rtype: string
+.. staticmethod:: blocking_procedure(n: number, sum?: number): number
 
 
 
-
-.. staticmethod:: counter([id = ''], [divisor = 1])
-
-
-
-   :param string id:
-   :param number divisor:
-   :rtype: number
+   :param sum: Defaults to ``0``.
 
 
 
 
-.. staticmethod:: counter_struct([id = ''])
+.. staticmethod:: bool_to_string(value: boolean): string
+
+
+
+
+
+
+
+.. staticmethod:: bytes_default(x?: string): string
+
+
+
+   :param x: Defaults to ``'\202\254'``.
+
+
+
+
+.. staticmethod:: bytes_to_hex_string(value: string): string
+
+
+
+
+
+
+
+.. staticmethod:: counter(id?: string, divisor?: number): number
+
+
+
+   :param id: Defaults to ``''``.
+   :param divisor: Defaults to ``1``.
+
+
+
+
+.. staticmethod:: counter_struct(id?: string): TestService.TestStruct
 
    Returns a struct whose IntField counts the number of times it has been called,
    so that a stream on it changes on every update.
 
-   :param string id:
-   :rtype: :class:`TestService.TestStruct`
+   :param id: Defaults to ``''``.
 
 
 
 
-.. staticmethod:: create_test_object(value)
-
-
-
-   :param string value:
-   :rtype: :class:`TestService.TestClass`
+.. staticmethod:: create_test_object(value: string): TestService.TestClass
 
 
 
 
-.. staticmethod:: deprecated_procedure(value)
+
+
+
+.. staticmethod:: deprecated_procedure(value: number): string
 
    .. warning:: Deprecated. Use :meth:`TestService.float_to_string` instead.
 
    Deprecated procedure documentation string.
 
-   :param number value:
-   :rtype: string
 
 
 
 
-.. staticmethod:: deprecated_procedure_no_message(value)
+.. staticmethod:: deprecated_procedure_no_message(value: number): string
 
    .. warning:: Deprecated.
 
    Deprecated procedure with no reason documentation string.
 
-   :param number value:
-   :rtype: string
 
 
 
 
 .. attribute:: deprecated_property: string
 
-   .. warning:: Deprecated. Use :attr:`TestService.string_property <TestService.TestService.string_property>` instead.
+   .. warning:: Deprecated. Use :attr:`TestService.string_property` instead.
 
    Deprecated property documentation string.
 
    :Attribute: Can be read or written
-   :rtype: string
 
 
 
 
-.. staticmethod:: dictionary_default([x = {[1] = false, [2] = true}])
+.. staticmethod:: dictionary_default(x?: Map): Map
 
 
 
-   :param Map x:
-   :rtype: Map
+   :param x: Defaults to ``{[1] = false, [2] = true}``.
 
 
 
 
-.. staticmethod:: double_special_defaults([nan = 0/0], [infinity = math.huge], [negative_infinity = -math.huge], [maximum = krpc.limits.DOUBLE_MAX], [lowest = krpc.limits.DOUBLE_LOWEST])
+.. staticmethod:: double_special_defaults(nan?: number, infinity?: number, negative_infinity?: number, maximum?: number, lowest?: number): List
 
    Procedure whose defaults are the special values of double.
 
-   :param number nan:
-   :param number infinity:
-   :param number negative_infinity:
-   :param number maximum:
-   :param number lowest:
-   :rtype: List
+   :param nan: Defaults to ``0/0``.
+   :param infinity: Defaults to ``math.huge``.
+   :param negative_infinity: Defaults to ``-math.huge``.
+   :param maximum: Defaults to ``krpc.limits.DOUBLE_MAX``.
+   :param lowest: Defaults to ``krpc.limits.DOUBLE_LOWEST``.
 
 
 
 
-.. staticmethod:: double_to_string(value)
-
-
-
-   :param number value:
-   :rtype: string
+.. staticmethod:: double_to_string(value: number): string
 
 
 
 
-.. staticmethod:: dump_expression_tree(expression)
+
+
+
+.. staticmethod:: dump_expression_tree(expression: KRPC.Expression): string
 
    The expression tree of a function, as text.
 
-   :param KRPC.Expression expression:
-   :rtype: string
 
 
 
 
-.. staticmethod:: echo_dictionary_of_nullable_objects(d)
+.. staticmethod:: echo_dictionary_of_nullable_objects(d: Map): Map
 
 
 
-   :param Map d:
-   :rtype: Map
 
 
 
 
-.. staticmethod:: echo_list_of_nullable_ints(l)
+.. staticmethod:: echo_list_of_nullable_ints(l: List): List
 
 
 
-   :param List l:
-   :rtype: List
 
 
 
 
-.. staticmethod:: echo_list_of_nullable_objects(l)
+.. staticmethod:: echo_list_of_nullable_objects(l: List): List
 
 
 
-   :param List l:
-   :rtype: List
 
 
 
 
-.. staticmethod:: echo_nested_list_of_nullable_objects(l)
+.. staticmethod:: echo_nested_list_of_nullable_objects(l: List): List
 
 
 
-   :param List l:
-   :rtype: List
 
 
 
 
-.. staticmethod:: echo_nested_nullable_struct(value)
+.. staticmethod:: echo_nested_nullable_struct(value: TestService.TestNestedNullableStruct): TestService.TestNestedNullableStruct
 
 
 
-   :param TestService.TestNestedNullableStruct value:
-   :rtype: :class:`TestService.TestNestedNullableStruct`
 
 
 
 
-.. staticmethod:: echo_nullable_bool(value)
+.. staticmethod:: echo_nullable_bool(value: boolean | Types.none): boolean | Types.none
 
 
 
-   :param value:
-   :type value: boolean or ``Types.none``
-   :rtype: boolean or ``Types.none``
 
 
 
 
-.. staticmethod:: echo_nullable_bytes(value)
+.. staticmethod:: echo_nullable_bytes(value: string | Types.none): string | Types.none
 
 
 
-   :param value:
-   :type value: string or ``Types.none``
-   :rtype: string or ``Types.none``
 
 
 
 
-.. staticmethod:: echo_nullable_dictionary(d)
+.. staticmethod:: echo_nullable_dictionary(d: Map | Types.none): Map | Types.none
 
 
 
-   :param d:
-   :type d: Map or ``Types.none``
-   :rtype: Map or ``Types.none``
 
 
 
 
-.. staticmethod:: echo_nullable_double(value)
+.. staticmethod:: echo_nullable_double(value: number | Types.none): number | Types.none
 
 
 
-   :param value:
-   :type value: number or ``Types.none``
-   :rtype: number or ``Types.none``
 
 
 
 
-.. staticmethod:: echo_nullable_enum(x)
+.. staticmethod:: echo_nullable_enum(x: TestService.TestEnum | Types.none): TestService.TestEnum | Types.none
 
 
 
-   :param x:
-   :type x: :class:`TestService.TestEnum` or ``Types.none``
-   :rtype: :class:`TestService.TestEnum` or ``Types.none``
 
 
 
 
-.. staticmethod:: echo_nullable_float(value)
+.. staticmethod:: echo_nullable_float(value: number | Types.none): number | Types.none
 
 
 
-   :param value:
-   :type value: number or ``Types.none``
-   :rtype: number or ``Types.none``
 
 
 
 
-.. staticmethod:: echo_nullable_int(value)
+.. staticmethod:: echo_nullable_int(value: number | Types.none): number | Types.none
 
    Returns the given value.
 
    :param value: The value, or ``nil``.
-   :type value: number or ``Types.none``
    :returns: The value.
-   :rtype: number or ``Types.none``
 
 
 
 
-.. staticmethod:: echo_nullable_list(l)
+.. staticmethod:: echo_nullable_list(l: List | Types.none): List | Types.none
 
 
 
-   :param l:
-   :type l: List or ``Types.none``
-   :rtype: List or ``Types.none``
 
 
 
 
-.. staticmethod:: echo_nullable_long(value)
+.. staticmethod:: echo_nullable_long(value: number | Types.none): number | Types.none
 
 
 
-   :param value:
-   :type value: number or ``Types.none``
-   :rtype: number or ``Types.none``
 
 
 
 
-.. staticmethod:: echo_nullable_set(h)
+.. staticmethod:: echo_nullable_set(h: Set | Types.none): Set | Types.none
 
 
 
-   :param h:
-   :type h: Set or ``Types.none``
-   :rtype: Set or ``Types.none``
 
 
 
 
-.. staticmethod:: echo_nullable_string(value)
+.. staticmethod:: echo_nullable_string(value: string | Types.none): string | Types.none
 
 
 
-   :param value:
-   :type value: string or ``Types.none``
-   :rtype: string or ``Types.none``
 
 
 
 
-.. staticmethod:: echo_nullable_tuple(t)
+.. staticmethod:: echo_nullable_tuple(t: Tuple | Types.none): Tuple | Types.none
 
 
 
-   :param t:
-   :type t: Tuple or ``Types.none``
-   :rtype: Tuple or ``Types.none``
 
 
 
 
-.. staticmethod:: echo_nullable_u_int(value)
+.. staticmethod:: echo_nullable_u_int(value: number | Types.none): number | Types.none
 
 
 
-   :param value:
-   :type value: number or ``Types.none``
-   :rtype: number or ``Types.none``
 
 
 
 
-.. staticmethod:: echo_nullable_u_long(value)
+.. staticmethod:: echo_nullable_u_long(value: number | Types.none): number | Types.none
 
 
 
-   :param value:
-   :type value: number or ``Types.none``
-   :rtype: number or ``Types.none``
 
 
 
 
-.. staticmethod:: echo_string_set(h)
+.. staticmethod:: echo_string_set(h: Set): Set
 
 
 
-   :param Set h:
-   :rtype: Set
 
 
 
 
-.. staticmethod:: echo_test_object(value)
+.. staticmethod:: echo_test_object(value: TestService.TestClass | Types.none): TestService.TestClass | Types.none
 
 
 
-   :param value:
-   :type value: :class:`TestService.TestClass` or ``Types.none``
-   :rtype: :class:`TestService.TestClass` or ``Types.none``
 
 
 
 
-.. staticmethod:: echo_tuple_with_a_nullable_object(t)
+.. staticmethod:: echo_tuple_with_a_nullable_object(t: Tuple): Tuple
 
 
 
-   :param Tuple t:
-   :rtype: Tuple
 
 
 
 
-.. staticmethod:: empty_list_default([x = {}])
+.. staticmethod:: empty_list_default(x?: List): List
 
 
 
-   :param List x:
-   :rtype: List
+   :param x: Defaults to ``{}``.
 
 
 
 
-.. staticmethod:: enum_default([x = TestService.TestEnum.value_c])
+.. staticmethod:: enum_default(x?: TestService.TestEnum): TestService.TestEnum
 
 
 
-   :param TestService.TestEnum x:
-   :rtype: :class:`TestService.TestEnum`
+   :param x: Defaults to ``TestService.TestEnum.value_c``.
 
 
 
 
-.. staticmethod:: enum_echo(x)
+.. staticmethod:: enum_echo(x: TestService.TestEnum): TestService.TestEnum
 
 
 
-   :param TestService.TestEnum x:
-   :rtype: :class:`TestService.TestEnum`
 
 
 
 
-.. staticmethod:: enum_list_default([x = {TestService.TestEnum.value_b, TestService.TestEnum.value_c}])
+.. staticmethod:: enum_list_default(x?: List): List
 
 
 
-   :param List x:
-   :rtype: List
+   :param x: Defaults to ``{TestService.TestEnum.value_b, TestService.TestEnum.value_c}``.
 
 
 
 
-.. staticmethod:: enum_to_string(x)
+.. staticmethod:: enum_to_string(x: TestService.TestEnum): string
 
 
 
-   :param TestService.TestEnum x:
-   :rtype: string
 
 
 
 
-.. staticmethod:: float_special_defaults([nan = 0/0], [infinity = math.huge], [negative_infinity = -math.huge], [maximum = krpc.limits.FLOAT_MAX], [lowest = krpc.limits.FLOAT_LOWEST], [fraction = 0.1])
+.. staticmethod:: float_special_defaults(nan?: number, infinity?: number, negative_infinity?: number, maximum?: number, lowest?: number, fraction?: number): List
 
    Procedure whose defaults are the special values of float, plus a finite fraction
    that no float can hold exactly.
 
-   :param number nan:
-   :param number infinity:
-   :param number negative_infinity:
-   :param number maximum:
-   :param number lowest:
-   :param number fraction:
-   :rtype: List
+   :param nan: Defaults to ``0/0``.
+   :param infinity: Defaults to ``math.huge``.
+   :param negative_infinity: Defaults to ``-math.huge``.
+   :param maximum: Defaults to ``krpc.limits.FLOAT_MAX``.
+   :param lowest: Defaults to ``krpc.limits.FLOAT_LOWEST``.
+   :param fraction: Defaults to ``0.1``.
 
 
 
 
-.. staticmethod:: float_to_string(value)
+.. staticmethod:: float_to_string(value: number): string
 
    Procedure documentation string.
 
-   :param number value:
-   :rtype: string
 
 
 
 
-.. staticmethod:: hex_string_to_bytes(value)
-
-
-
-   :param string value:
-   :rtype: string
+.. staticmethod:: hex_string_to_bytes(value: string): string
 
 
 
 
-.. staticmethod:: increment_dictionary(d)
 
 
 
-   :param Map d:
-   :rtype: Map
-
-
-
-
-.. staticmethod:: increment_list(l)
-
-
-
-   :param List l:
-   :rtype: List
+.. staticmethod:: increment_dictionary(d: Map): Map
 
 
 
 
-.. staticmethod:: increment_list_of_structs(l)
 
 
 
-   :param List l:
-   :rtype: List
-
-
-
-
-.. staticmethod:: increment_nested_collection(d)
-
-
-
-   :param Map d:
-   :rtype: Map
+.. staticmethod:: increment_list(l: List): List
 
 
 
 
-.. staticmethod:: increment_set(h)
 
 
 
-   :param Set h:
-   :rtype: Set
-
-
-
-
-.. staticmethod:: increment_tuple(t)
-
-
-
-   :param Tuple t:
-   :rtype: Tuple
+.. staticmethod:: increment_list_of_structs(l: List): List
 
 
 
 
-.. staticmethod:: int32_special_defaults([maximum = krpc.limits.SINT32_MAX], [minimum = krpc.limits.SINT32_MIN])
+
+
+
+.. staticmethod:: increment_nested_collection(d: Map): Map
+
+
+
+
+
+
+
+.. staticmethod:: increment_set(h: Set): Set
+
+
+
+
+
+
+
+.. staticmethod:: increment_tuple(t: Tuple): Tuple
+
+
+
+
+
+
+
+.. staticmethod:: int32_special_defaults(maximum?: number, minimum?: number): List
 
    Procedure whose defaults are the extremes of int.
 
-   :param number maximum:
-   :param number minimum:
-   :rtype: List
+   :param maximum: Defaults to ``krpc.limits.SINT32_MAX``.
+   :param minimum: Defaults to ``krpc.limits.SINT32_MIN``.
 
 
 
 
-.. staticmethod:: int32_to_string(value)
-
-
-
-   :param number value:
-   :rtype: string
+.. staticmethod:: int32_to_string(value: number): string
 
 
 
 
-.. staticmethod:: int64_special_defaults([maximum = krpc.limits.SINT64_MAX], [minimum = krpc.limits.SINT64_MIN])
+
+
+
+.. staticmethod:: int64_special_defaults(maximum?: number, minimum?: number): List
 
    Procedure whose defaults are the extremes of long.
 
-   :param number maximum:
-   :param number minimum:
-   :rtype: List
+   :param maximum: Defaults to ``krpc.limits.SINT64_MAX``.
+   :param minimum: Defaults to ``krpc.limits.SINT64_MIN``.
 
 
 
 
-.. staticmethod:: int64_to_string(value)
-
-
-
-   :param number value:
-   :rtype: string
+.. staticmethod:: int64_to_string(value: number): string
 
 
 
 
-.. staticmethod:: join_with_at_sign(first_value, from)
+
+
+
+.. staticmethod:: join_with_at_sign(first_value: string, from: string): string
 
    Returns *first_value* and *from* joined by an at
    sign, e.g. ``name@host``. The parameter names are:
@@ -639,126 +516,105 @@ Service documentation string.
    * a name in camel case, and
    * a name that is a keyword in some languages.
 
-   :param string first_value: The string before the at sign.
-   :param string from: The string after the at sign.
+   :param first_value: The string before the at sign.
+   :param from: The string after the at sign.
    :returns: The strings joined.
-   :rtype: string
 
 
 
 
-.. staticmethod:: list_default([x = {1, 2, 3}])
+.. staticmethod:: list_default(x?: List): List
 
 
 
-   :param List x:
-   :rtype: List
-
-
-
-
-.. staticmethod:: nested_struct_echo(x)
-
-
-
-   :param TestService.TestNestedStruct x:
-   :rtype: :class:`TestService.TestNestedStruct`
+   :param x: Defaults to ``{1, 2, 3}``.
 
 
 
 
-.. staticmethod:: not_nullable_object(value)
-
-
-
-   :param TestService.TestClass value:
-   :rtype: :class:`TestService.TestClass`
+.. staticmethod:: nested_struct_echo(x: TestService.TestNestedStruct): TestService.TestNestedStruct
 
 
 
 
-.. staticmethod:: null_default([obj = Types.none])
 
 
 
-   :param obj:
-   :type obj: :class:`TestService.TestClass` or ``Types.none``
-   :rtype: string
+.. staticmethod:: not_nullable_object(value: TestService.TestClass): TestService.TestClass
 
 
 
 
-.. attribute:: nullable_object: TestService.TestClass
+
+
+
+.. staticmethod:: null_default(obj?: TestService.TestClass | Types.none): string
+
+
+
+
+
+
+
+.. attribute:: nullable_object: TestService.TestClass | Types.none
 
 
 
    :Attribute: Can be read or written
-   :rtype: :class:`TestService.TestClass` or ``Types.none``
 
 
 
 
-.. staticmethod:: nullable_struct_echo(x)
-
-
-
-   :param TestService.TestNullableStruct x:
-   :rtype: :class:`TestService.TestNullableStruct`
+.. staticmethod:: nullable_struct_echo(x: TestService.TestNullableStruct): TestService.TestNullableStruct
 
 
 
 
-.. attribute:: object_property: TestService.TestClass
+
+
+
+.. attribute:: object_property: TestService.TestClass | Types.none
 
    A property holding an object.
 
    :Attribute: Can be read or written
+
    :returns: The object, or ``nil``.
-   :rtype: :class:`TestService.TestClass` or ``Types.none``
 
 
 
 
-.. staticmethod:: on_timer(milliseconds, [repeats = 1])
+.. staticmethod:: on_timer(milliseconds: number, repeats?: number): krpc.schema.Event
 
 
 
-   :param number milliseconds:
-   :param number repeats:
-   :rtype: :class:`krpc.schema.Event`
-
-
-
-
-.. staticmethod:: optional_arguments(x, [y = 'foo'], [z = 'bar'], [obj = Types.none])
-
-
-
-   :param string x:
-   :param string y:
-   :param string z:
-   :param obj:
-   :type obj: :class:`TestService.TestClass` or ``Types.none``
-   :rtype: string
+   :param repeats: Defaults to ``1``.
 
 
 
 
-.. staticmethod:: remove_event_after(milliseconds)
+.. staticmethod:: optional_arguments(x: string, y?: string, z?: string, obj?: TestService.TestClass | Types.none): string
 
 
 
-   :param number milliseconds:
-   :rtype: :class:`krpc.schema.Event`
+   :param y: Defaults to ``'foo'``.
+   :param z: Defaults to ``'bar'``.
 
 
 
 
-.. staticmethod:: remove_test_object(value)
+.. staticmethod:: remove_event_after(milliseconds: number): krpc.schema.Event
 
 
 
-   :param TestService.TestClass value:
+
+
+
+
+.. staticmethod:: remove_test_object(value: TestService.TestClass)
+
+
+
 
 
 
@@ -779,41 +635,37 @@ Service documentation string.
 
 
 
-.. staticmethod:: return_null_when_not_allowed()
-
-
-
-   :rtype: :class:`TestService.TestClass`
+.. staticmethod:: return_null_when_not_allowed(): TestService.TestClass
 
 
 
 
-.. staticmethod:: scalar_default([x = 42])
 
 
 
-   :param number x:
-   :rtype: number
+.. staticmethod:: scalar_default(x?: number): number
 
 
 
-
-.. staticmethod:: set_default([x = {1, 2, 3}])
-
-
-
-   :param Set x:
-   :rtype: Set
+   :param x: Defaults to ``42``.
 
 
 
 
-.. staticmethod:: string_default([x = 'foo'])
+.. staticmethod:: set_default(x?: Set): Set
 
 
 
-   :param string x:
-   :rtype: string
+   :param x: Defaults to ``{1, 2, 3}``.
+
+
+
+
+.. staticmethod:: string_default(x?: string): string
+
+
+
+   :param x: Defaults to ``'foo'``.
 
 
 
@@ -823,7 +675,6 @@ Service documentation string.
    Property documentation string.
 
    :Attribute: Can be read or written
-   :rtype: string
 
 
 
@@ -833,7 +684,6 @@ Service documentation string.
 
 
    :Attribute: Write-only, cannot be read
-   :rtype: string
 
 
 
@@ -843,264 +693,221 @@ Service documentation string.
 
 
    :Attribute: Read-only, cannot be set
-   :rtype: string
 
 
 
 
-.. staticmethod:: string_to_bool(value)
+.. staticmethod:: string_to_bool(value: string): boolean
 
 
 
-   :param string value:
-   :rtype: boolean
 
 
 
 
-.. staticmethod:: string_to_double(value)
+.. staticmethod:: string_to_double(value: string): number
 
 
 
-   :param string value:
-   :rtype: number
 
 
 
 
-.. staticmethod:: string_to_enum(value)
+.. staticmethod:: string_to_enum(value: string): TestService.TestEnum
 
 
 
-   :param string value:
-   :rtype: :class:`TestService.TestEnum`
 
 
 
 
-.. staticmethod:: string_to_float(value)
+.. staticmethod:: string_to_float(value: string): number
 
 
 
-   :param string value:
-   :rtype: number
 
 
 
 
-.. staticmethod:: string_to_int32(value)
+.. staticmethod:: string_to_int32(value: string): number
 
 
 
-   :param string value:
-   :rtype: number
 
 
 
 
-.. staticmethod:: string_to_int64(value)
+.. staticmethod:: string_to_int64(value: string): number
 
 
 
-   :param string value:
-   :rtype: number
 
 
 
 
-.. staticmethod:: string_to_u_int32(value)
+.. staticmethod:: string_to_u_int32(value: string): number
 
 
 
-   :param string value:
-   :rtype: number
 
 
 
 
-.. staticmethod:: string_to_u_int64(value)
+.. staticmethod:: string_to_u_int64(value: string): number
 
 
 
-   :param string value:
-   :rtype: number
 
 
 
 
-.. staticmethod:: struct_default([x = {42, 'alpha', TestService.TestEnum.value_b, {1, 2, 3}}])
+.. staticmethod:: struct_default(x?: TestService.TestStruct): TestService.TestStruct
 
 
 
-   :param TestService.TestStruct x:
-   :rtype: :class:`TestService.TestStruct`
+   :param x: Defaults to ``{42, 'alpha', TestService.TestEnum.value_b, {1, 2, 3}}``.
 
 
 
 
-.. staticmethod:: struct_echo(x)
+.. staticmethod:: struct_echo(x: TestService.TestStruct): TestService.TestStruct
 
 
 
-   :param TestService.TestStruct x:
-   :rtype: :class:`TestService.TestStruct`
 
 
 
 
-.. staticmethod:: struct_echo_nullable(x)
+.. staticmethod:: struct_echo_nullable(x: TestService.TestStruct | Types.none): TestService.TestStruct | Types.none
 
 
 
-   :param x:
-   :type x: :class:`TestService.TestStruct` or ``Types.none``
-   :rtype: :class:`TestService.TestStruct` or ``Types.none``
 
 
 
 
-.. staticmethod:: swap_object_tuple(t)
+.. staticmethod:: swap_object_tuple(t: Tuple): Tuple
 
 
 
-   :param Tuple t:
-   :rtype: Tuple
 
 
 
 
-.. staticmethod:: throw_argument_exception()
+.. staticmethod:: throw_argument_exception(): number
 
 
 
-   :rtype: number
 
 
 
 
-.. staticmethod:: throw_argument_null_exception(foo)
+.. staticmethod:: throw_argument_null_exception(foo: string): number
 
 
 
-   :param string foo:
-   :rtype: number
 
 
 
 
-.. staticmethod:: throw_argument_out_of_range_exception(foo)
+.. staticmethod:: throw_argument_out_of_range_exception(foo: number): number
 
 
 
-   :param number foo:
-   :rtype: number
 
 
 
 
-.. staticmethod:: throw_custom_exception()
+.. staticmethod:: throw_custom_exception(): number
 
    Throws a :class:`TestService.CustomException`.
 
-   :rtype: number
 
    .. note::
 
       Links to each kind of member: :mod:`TestService`, :class:`TestService.TestClass`,
       :class:`TestService.TestEnum`, :class:`TestService.TestStruct`, :class:`KRPC.InvalidOperationException`,
-      :meth:`TestService.float_to_string`, :attr:`TestService.string_property <TestService.TestService.string_property>`,
-      :attr:`TestService.string_property_private_get <TestService.TestService.string_property_private_get>`, :meth:`TestService.TestClass.float_to_string`,
+      :meth:`TestService.float_to_string`, :attr:`TestService.string_property`,
+      :attr:`TestService.string_property_private_get`, :meth:`TestService.TestClass.float_to_string`,
       :meth:`TestService.TestClass.static_method`, :attr:`TestService.TestClass.int_property`,
-      :attr:`TestService.TestClass.string_property_private_get`, :attr:`TestService.TestEnum.value_a` and
+      :attr:`TestService.TestClass.string_property_private_get`, :data:`TestService.TestEnum.value_a` and
       :attr:`TestService.TestStruct.int_field`.
 
 
 
 
-.. staticmethod:: throw_custom_exception_later()
-
-
-
-   :rtype: number
+.. staticmethod:: throw_custom_exception_later(): number
 
 
 
 
-.. staticmethod:: throw_invalid_operation_exception()
 
 
 
-   :rtype: number
-
-
-
-
-.. staticmethod:: throw_invalid_operation_exception_later()
-
-
-
-   :rtype: number
+.. staticmethod:: throw_invalid_operation_exception(): number
 
 
 
 
-.. staticmethod:: throw_mapped_exception(name)
+
+
+
+.. staticmethod:: throw_invalid_operation_exception_later(): number
+
+
+
+
+
+
+
+.. staticmethod:: throw_mapped_exception(name: string): number
 
    Throws the system exception of the given name, which the server maps to the KRPC
    exception of that name.
 
-   :param string name:
-   :rtype: number
 
 
 
 
-.. staticmethod:: tuple_default([x = {1, false}])
+.. staticmethod:: tuple_default(x?: Tuple): Tuple
 
 
 
-   :param Tuple x:
-   :rtype: Tuple
-
-
-
-
-.. staticmethod:: u_int32_to_string(value)
-
-
-
-   :param number value:
-   :rtype: string
+   :param x: Defaults to ``{1, false}``.
 
 
 
 
-.. staticmethod:: u_int64_to_string(value)
-
-
-
-   :param number value:
-   :rtype: string
+.. staticmethod:: u_int32_to_string(value: number): string
 
 
 
 
-.. staticmethod:: uint32_special_defaults([maximum = krpc.limits.UINT32_MAX])
+
+
+
+.. staticmethod:: u_int64_to_string(value: number): string
+
+
+
+
+
+
+
+.. staticmethod:: uint32_special_defaults(maximum?: number): List
 
    Procedure whose default is the largest uint.
 
-   :param number maximum:
-   :rtype: List
+   :param maximum: Defaults to ``krpc.limits.UINT32_MAX``.
 
 
 
 
-.. staticmethod:: uint64_special_defaults([maximum = krpc.limits.UINT64_MAX])
+.. staticmethod:: uint64_special_defaults(maximum?: number): List
 
    Procedure whose default is the largest ulong.
 
-   :param number maximum:
-   :rtype: List
+   :param maximum: Defaults to ``krpc.limits.UINT64_MAX``.
 
 
 
@@ -1110,102 +917,65 @@ Service documentation string.
 
    Class documentation string.
 
-   .. method:: echo_nullable_object(value)
+   .. method:: echo_nullable_object(value: TestService.TestClass | Types.none): TestService.TestClass | Types.none
 
+   .. method:: float_to_string(x: number): string
 
-
-      :param value:
-      :type value: :class:`TestService.TestClass` or ``Types.none``
-      :rtype: :class:`TestService.TestClass` or ``Types.none``
-
-   .. method:: float_to_string(x)
-
-
-
-      :param number x:
-      :rtype: string
-
-   .. method:: get_value()
+   .. method:: get_value(): string
 
       Method documentation string.
-
-      :rtype: string
 
    .. attribute:: int_property: number
 
       Property documentation string.
 
       :Attribute: Can be read or written
-      :rtype: number
 
-   .. attribute:: object_property: TestService.TestClass
+   .. attribute:: object_property: TestService.TestClass | Types.none
 
       A property of the object, holding another object.
 
       :Attribute: Can be read or written
+
       :returns: The other object, or ``nil``.
-      :rtype: :class:`TestService.TestClass` or ``Types.none``
 
-   .. method:: object_to_string(other)
+   .. method:: object_to_string(other: TestService.TestClass | Types.none): string
 
-
-
-      :param other:
-      :type other: :class:`TestService.TestClass` or ``Types.none``
-      :rtype: string
-
-   .. method:: optional_arguments(x, [y = 'foo'], [z = 'bar'], [obj = Types.none])
+   .. method:: optional_arguments(x: string, y?: string, z?: string, obj?: TestService.TestClass | Types.none): string
 
 
 
-      :param string x:
-      :param string y:
-      :param string z:
-      :param obj:
-      :type obj: :class:`TestService.TestClass` or ``Types.none``
-      :rtype: string
+      :param y: Defaults to ``'foo'``.
+      :param z: Defaults to ``'bar'``.
 
-   .. staticmethod:: static_method([a = ''], [b = ''])
+   .. staticmethod:: static_method(a?: string, b?: string): string
 
       Returns static followed by *a* and *b*.
 
-      :param string a: The first string.
-      :param string b: The second string.
+      :param a: The first string. Defaults to ``''``.
+      :param b: The second string. Defaults to ``''``.
       :returns: The strings joined.
-      :rtype: string
 
-   .. staticmethod:: static_nullable_object(value)
+   .. staticmethod:: static_nullable_object(value: TestService.TestClass | Types.none): TestService.TestClass | Types.none
 
-
-
-      :param value:
-      :type value: :class:`TestService.TestClass` or ``Types.none``
-      :rtype: :class:`TestService.TestClass` or ``Types.none``
-
-   .. staticmethod:: static_optional_arguments(x, [y = 'foo'], [z = 'bar'], [obj = Types.none])
+   .. staticmethod:: static_optional_arguments(x: string, y?: string, z?: string, obj?: TestService.TestClass | Types.none): string
 
 
 
-      :param string x:
-      :param string y:
-      :param string z:
-      :param obj:
-      :type obj: :class:`TestService.TestClass` or ``Types.none``
-      :rtype: string
+      :param y: Defaults to ``'foo'``.
+      :param z: Defaults to ``'bar'``.
 
    .. attribute:: string_property_private_get: string
 
 
 
       :Attribute: Write-only, cannot be read
-      :rtype: string
 
    .. attribute:: string_property_private_set: string
 
 
 
       :Attribute: Read-only, cannot be set
-      :rtype: string
 
 
 
@@ -1215,13 +985,11 @@ Service documentation string.
 
    Deprecated class documentation string.
 
-   .. method:: deprecated_method()
+   .. method:: deprecated_method(): string
 
       .. warning:: Deprecated. Use :meth:`TestService.TestClass.get_value` instead.
 
       Deprecated method documentation string.
-
-      :rtype: string
 
 
 
@@ -1261,7 +1029,7 @@ Service documentation string.
 
    .. data:: value_b
 
-      .. warning:: Deprecated. Use :attr:`TestService.DeprecatedEnum.value_a` instead.
+      .. warning:: Deprecated. Use :data:`TestService.DeprecatedEnum.value_a` instead.
 
       Deprecated enum ValueB documentation string.
 
@@ -1276,25 +1044,21 @@ Service documentation string.
 
       Struct IntField documentation string.
 
-      :rtype: number
 
    .. attribute:: string_field: string
 
 
 
-      :rtype: string
 
    .. attribute:: enum_field: TestService.TestEnum
 
 
 
-      :rtype: :class:`TestService.TestEnum`
 
    .. attribute:: list_field: List
 
 
 
-      :rtype: List
 
 
 .. class:: TestNestedStruct
@@ -1306,19 +1070,16 @@ Service documentation string.
 
 
 
-      :rtype: :class:`TestService.TestStruct`
 
    .. attribute:: object_field: TestService.TestClass
 
 
 
-      :rtype: :class:`TestService.TestClass`
 
    .. attribute:: string_field: string
 
 
 
-      :rtype: string
 
 
 .. class:: TestNullableStruct
@@ -1330,31 +1091,26 @@ Service documentation string.
 
 
 
-      :rtype: number
 
-   .. attribute:: nullable_int_field: number
-
-
-
-      :rtype: number or ``Types.none``
-
-   .. attribute:: nullable_enum_field: TestService.TestEnum
+   .. attribute:: nullable_int_field: number | Types.none
 
 
 
-      :rtype: :class:`TestService.TestEnum` or ``Types.none``
 
-   .. attribute:: nullable_string_field: string
-
-
-
-      :rtype: string or ``Types.none``
-
-   .. attribute:: nullable_object_field: TestService.TestClass
+   .. attribute:: nullable_enum_field: TestService.TestEnum | Types.none
 
 
 
-      :rtype: :class:`TestService.TestClass` or ``Types.none``
+
+   .. attribute:: nullable_string_field: string | Types.none
+
+
+
+
+   .. attribute:: nullable_object_field: TestService.TestClass | Types.none
+
+
+
 
 
 .. class:: TestNestedNullableStruct
@@ -1366,13 +1122,11 @@ Service documentation string.
 
 
 
-      :rtype: List
 
    .. attribute:: string_field: string
 
 
 
-      :rtype: string
 
 
 .. class:: DeprecatedStruct
@@ -1386,7 +1140,6 @@ Service documentation string.
 
       Deprecated struct Value documentation string.
 
-      :rtype: number
 
    .. attribute:: old_value: number
 
@@ -1394,7 +1147,6 @@ Service documentation string.
 
       Deprecated struct OldValue documentation string.
 
-      :rtype: number
 
 
 .. class:: CustomException

@@ -5,6 +5,11 @@ import jinja2.nodes
 class AppendExtension(jinja2.ext.Extension):
     tags = set(["append"])
 
+    def __init__(self, environment):
+        super().__init__(environment)
+        # The nodes a render appended to, for the caller to clear
+        self.appended_nodes = []
+
     def parse(self, parser):
         lineno = next(parser.stream).lineno
         args = [parser.parse_expression()]
@@ -13,7 +18,7 @@ class AppendExtension(jinja2.ext.Extension):
             self.call_method("_append_support", args), [], [], body
         ).set_lineno(lineno)
 
-    @staticmethod
-    def _append_support(obj, caller):
+    def _append_support(self, obj, caller):
         obj.append(caller())
+        self.appended_nodes.append(obj)
         return ""

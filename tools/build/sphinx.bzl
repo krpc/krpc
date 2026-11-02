@@ -14,80 +14,55 @@ def _get_src_dir(srcs, short_path = False):
                 return src.dirname
     return None
 
-def _build_impl(ctx):
-    srcs = ctx.files.srcs
+# The sphinx-build workers, reserved as CPUs so Bazel schedules around them. More workers gain
+# little, as much of the build is serial.
+_JOBS = 4
 
+def _build_resources(_os, _inputs_size):
+    return {"cpu": _JOBS}
+
+def _build_impl(ctx):
     # sphinx-build is given the source directory, never the list of .rst files. Sphinx resolves
     # symlinks in filenames passed on the command line and then skips any that do not resolve
     # inside the source dir. The sources here are Bazel symlinks pointing outside the staged
     # tree, so passing them individually would silently build an empty doctree rather than fail.
-    src_dir = _get_src_dir(srcs)
+    src_dir = _get_src_dir(ctx.files.srcs)
     out = ctx.outputs.out
-    sphinx_build = ctx.executable.sphinx_build
-    builder = ctx.attr.builder
-    opts = ["-D%s=%s" % x for x in ctx.attr.opts.items()]
 
-    if builder == "html":
-        # OS-independent: sphinx-build (hermetic python) into a tree artifact,
-        # then archived by write_zip. No system zip, no /tmp doctree cache.
-        html_dir = ctx.actions.declare_directory(out.basename + ".sphinx-html")
-        build_args = ctx.actions.args()
-        build_args.add_all(["-b", "html", "-E", "-d", html_dir.path + ".doctrees"])
-        build_args.add_all(["-W", "-n", "-N", "-T", "-q", src_dir, html_dir.path])
-        build_args.add_all(opts)
-        ctx.actions.run(
-            executable = sphinx_build,
-            arguments = [build_args],
-            inputs = srcs,
-            outputs = [html_dir],
-            progress_message = "Generating html documentation",
-            mnemonic = "SphinxHtml",
-        )
+    # sphinx-build writes into a tree artifact, which write_zip then archives
+    html_dir = ctx.actions.declare_directory(out.basename + ".sphinx-html")
+    build_args = ctx.actions.args()
+    build_args.add_all(["-b", "html", "-E", "-j", str(_JOBS), "-d", html_dir.path + ".doctrees"])
+    build_args.add_all(["-W", "-n", "-N", "-T", "-q", src_dir, html_dir.path])
+    build_args.add_all(["-D%s=%s" % x for x in ctx.attr.opts.items()])
+    ctx.actions.run(
+        executable = ctx.executable.sphinx_build,
+        arguments = [build_args],
+        inputs = ctx.files.srcs,
+        outputs = [html_dir],
+        progress_message = "Generating html documentation",
+        mnemonic = "SphinxHtml",
+        resource_set = _build_resources,
+    )
 
-        zip_args = ctx.actions.args()
-        zip_args.add("--out", out.path)
-        zip_args.add("--tree", html_dir.path)
-        ctx.actions.run(
-            executable = ctx.executable._write_zip,
-            arguments = [zip_args],
-            inputs = [html_dir],
-            outputs = [out],
-            progress_message = "Archiving html documentation",
-            mnemonic = "SphinxHtmlZip",
-        )
-        return
-
-    # latex -> pdf needs `make` and a LaTeX toolchain (texlive); Linux-only, so
-    # kept on the shell. The pdf target is tagged target_compatible_with linux.
-    out_dir = out.path + ".sphinx-build-out"
-    opts_str = " ".join(opts)
-    sub_commands = [
-        "%s -b %s -E -d /tmp/bazel-sphinx-build-%s -W -n -N -T -q %s %s %s" %
-        (sphinx_build.path, builder, builder, src_dir, out_dir, opts_str),
-        "make -e -C %s 1>/dev/null 2>/dev/null" % out_dir,
-        "find %s -name *.pdf -exec cp {} %s \\;" % (out_dir, out.path),
-        "rm -rf %s" % out_dir,
-    ]
-    ctx.actions.run_shell(
-        tools = [sphinx_build],
-        inputs = srcs,
+    zip_args = ctx.actions.args()
+    zip_args.add("--out", out.path)
+    zip_args.add("--tree", html_dir.path)
+    ctx.actions.run(
+        executable = ctx.executable._write_zip,
+        arguments = [zip_args],
+        inputs = [html_dir],
         outputs = [out],
-        progress_message = "Generating %s documentation" % builder,
-        command = " && \\\n".join(sub_commands),
-        # The default shell environment supplies PATH, needed to find make and the
-        # LaTeX toolchain. LC_ALL is set on top of it so that hyphenation, sorting
-        # and date formatting do not vary with whoever runs the build; unlike the
-        # inherited variables it also forms part of the action key.
-        use_default_shell_env = True,
-        env = {"LC_ALL": "C.UTF-8"},
+        progress_message = "Archiving html documentation",
+        mnemonic = "SphinxHtmlZip",
     )
 
 sphinx_build = rule(
     implementation = _build_impl,
+    doc = "Builds the html documentation into a zip archive.",
     attrs = {
         "srcs": attr.label_list(allow_files = True),
         "sphinx_build": attr.label(executable = True, mandatory = True, cfg = "exec"),
-        "builder": attr.string(mandatory = True),
         "opts": attr.string_dict(),
         "out": attr.output(mandatory = True),
         "_write_zip": attr.label(

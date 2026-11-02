@@ -313,7 +313,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Returns a <see cref="Flight"/> object that can be used to get flight
+        /// Returns a <see cref="T:KRPC.SpaceCenter.Services.Flight"/> object that can be used to get flight
         /// telemetry for the vessel, in the specified reference frame.
         /// </summary>
         /// <param name="referenceFrame">

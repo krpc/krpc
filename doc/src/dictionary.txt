@@ -144,7 +144,6 @@ omni
 online
 overdamped
 parametrized
-pdflatex
 periapsis
 physicsless
 plugin
