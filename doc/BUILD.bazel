@@ -9,7 +9,7 @@ load("//tools/build:lua.bzl", "lua_luacheck_test")
 load("//tools/build:pkg.bzl", "stage_files")
 load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
 load("//tools/build:sphinx.bzl", "sphinx_build", "sphinx_linkcheck_test", "sphinx_spelling_test")
-load("//tools/krpctools:docgen.bzl", "docgen_multiple")
+load("//tools/krpctools:docgen.bzl", "docgen")
 
 filegroup(
     name = "doc",
@@ -201,7 +201,7 @@ defs = [
     "//service/Debug:ServiceDefinitions",
 ]
 
-docgen_multiple(
+docgen(
     name = "cnano-api",
     srcs = glob(["api/**/*.tmpl"]),
     defs = defs,
@@ -209,7 +209,7 @@ docgen_multiple(
     outdir = "src/cnano",
 )
 
-docgen_multiple(
+docgen(
     name = "csharp-api",
     srcs = glob(["api/**/*.tmpl"]),
     defs = defs,
@@ -217,7 +217,7 @@ docgen_multiple(
     outdir = "src/csharp",
 )
 
-docgen_multiple(
+docgen(
     name = "cpp-api",
     srcs = glob(["api/**/*.tmpl"]),
     defs = defs,
@@ -225,7 +225,7 @@ docgen_multiple(
     outdir = "src/cpp",
 )
 
-docgen_multiple(
+docgen(
     name = "java-api",
     srcs = glob(["api/**/*.tmpl"]),
     defs = defs,
@@ -233,7 +233,7 @@ docgen_multiple(
     outdir = "src/java",
 )
 
-docgen_multiple(
+docgen(
     name = "lua-api",
     srcs = glob(["api/**/*.tmpl"]),
     defs = defs,
@@ -241,7 +241,7 @@ docgen_multiple(
     outdir = "src/lua",
 )
 
-docgen_multiple(
+docgen(
     name = "python-api",
     srcs = glob(["api/**/*.tmpl"]),
     defs = defs,

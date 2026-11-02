@@ -4,6 +4,7 @@ import json
 import os
 import sys
 from importlib.resources import files
+from typing import cast
 
 import jinja2
 
@@ -27,7 +28,14 @@ from .utils import lookup_cref
 def main():
     prog = "krpc-docgen"
     parser = argparse.ArgumentParser(
-        prog=prog, description="Generate API documentation for a kRPC service"
+        prog=prog,
+        description="Generate API documentation for a kRPC service",
+        usage=(
+            "%(prog)s [options] LANGUAGE ORDER_FILE [DEFINITIONS ...] "
+            "--page SOURCE OUTPUT [--page SOURCE OUTPUT ...]"
+        ),
+        epilog="Arguments are read from a file, one per line, with @FILE.",
+        fromfile_prefix_chars="@",
     )
     parser.add_argument(
         "-v",
@@ -37,18 +45,25 @@ def main():
     )
     parser.add_argument(
         "language",
-        choices=("cnano", "cpp", "csharp", "java", "lua", "python"),
+        choices=sorted(DOMAINS),
         help="Language to generate",
     )
     parser.add_argument(
-        "source", action="store", help="Path to source reStructuredText file"
+        "order_file", metavar="ORDER_FILE", help="Path to the ordering file"
     )
     parser.add_argument(
-        "order_file", action="store", default="order.txt", help="Path to ordering file"
+        "definitions",
+        nargs="*",
+        metavar="DEFINITIONS",
+        help="Paths to the service definition files",
     )
-    parser.add_argument("output", action="store", help="Path to write output to")
     parser.add_argument(
-        "definitions", nargs="*", default=[], help="Paths to service definition files"
+        "--page",
+        nargs=2,
+        action="append",
+        required=True,
+        metavar=("SOURCE", "OUTPUT"),
+        help="Path to a template, and the path to write its page to. Can be repeated.",
     )
     parser.add_argument(
         "--no-warnings", action="store_true", default=False, help="Suppress warnings"
@@ -62,40 +77,54 @@ def main():
     parser.add_argument(
         "--documented",
         action="store",
-        help="Path to output a list of documented members",
+        help="Path to output a list of the members the pages document",
     )
-    args = parser.parse_args()
+    args = parser.parse_intermixed_args()
 
-    macros = str(files(__name__).joinpath("%s.tmpl" % args.language))
+    services = build_services(
+        load_definitions(args.definitions), load_ordering(args.order_file)
+    )
+    documented = set()
+    for source, output in args.page:
+        content, page_documented = generate(args.language, services, source)
+        write_file(output, content)
+        documented.update(page_documented)
+    if args.documented:
+        write_file(args.documented, "\n".join(sorted(documented)) + "\n")
 
-    if args.language == "cnano":
-        domain = CnanoDomain(macros)
-    elif args.language == "cpp":
-        domain = CppDomain(macros)
-    elif args.language == "csharp":
-        domain = CsharpDomain(macros)
-    elif args.language == "java":
-        domain = JavaDomain(macros)
-    elif args.language == "lua":
-        domain = LuaDomain(macros)
-    else:  # python
-        domain = PythonDomain(macros)
 
-    if not os.path.exists(args.order_file):
-        raise RuntimeError("Ordering file '%s' does not exist" % args.order_file)
-    with builtins.open(args.order_file, encoding="utf-8") as fp:
-        ordering = [x.strip() for x in fp.readlines()]
-        ordering = {value: i for i, value in enumerate(ordering)}
+DOMAINS = {
+    "cnano": CnanoDomain,
+    "cpp": CppDomain,
+    "csharp": CsharpDomain,
+    "java": JavaDomain,
+    "lua": LuaDomain,
+    "python": PythonDomain,
+}
 
+
+def load_definitions(paths):
+    """The service definitions in the given files, merged into one dictionary"""
     services_info = {}
-    for path in args.definitions:
+    for path in paths:
         with builtins.open(path, encoding="utf-8") as fp:
             services_info.update(json.load(fp))
-
     if not services_info:
         print("No services found in services definition files")
         sys.exit(1)
+    return services_info
 
+
+def load_ordering(path):
+    """The position of each member in the ordering file, by full name"""
+    if not os.path.exists(path):
+        raise RuntimeError("Ordering file '%s' does not exist" % path)
+    with builtins.open(path, encoding="utf-8") as fp:
+        return {x.strip(): i for i, x in enumerate(fp.readlines())}
+
+
+def build_services(services_info, ordering):
+    """The documentation nodes for the services"""
     sort_failed = []
 
     def sort(member):
@@ -105,40 +134,35 @@ def main():
             return 0
         return key
 
-    def parse_service_info(info):
+    for info in services_info.values():
         del info["id"]
-        return info
 
     # Register everything the services define before building any documentation node, as a node
     # for a procedure's default value is built from the type the value decodes through
     definitions = Definitions(services_info)
 
     services = {
-        name: Service(
-            name, sort=sort, types=definitions.types, **parse_service_info(info)
-        )
+        name: Service(name, sort=sort, types=definitions.types, **info)
         for name, info in services_info.items()
     }
 
     if sort_failed:
         raise RuntimeError("Don't know how to order:\n" + "\n".join(sort_failed))
+    return services
 
-    content, documented = process_file(domain, services, args.source)
 
-    output = os.path.abspath(os.path.expanduser(os.path.expandvars(args.output)))
-    if not os.path.exists(os.path.dirname(output)):
-        os.makedirs(os.path.dirname(output))
-    with builtins.open(output, "w", encoding="utf8") as fp:
+def generate(language, services, source):
+    """The documentation for a template, and the members it documents"""
+    domain = DOMAINS[language](str(files(__name__).joinpath("%s.tmpl" % language)))
+    return process_file(domain, services, source)
+
+
+def write_file(path, content):
+    """Write the content to the path, creating its directory if needed"""
+    path = os.path.abspath(os.path.expanduser(os.path.expandvars(path)))
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with builtins.open(path, "w", encoding="utf-8") as fp:
         fp.write(content)
-
-    if args.documented:
-        documented_path = os.path.abspath(
-            os.path.expanduser(os.path.expandvars(args.documented))
-        )
-        if not os.path.exists(os.path.dirname(documented_path)):
-            os.makedirs(os.path.dirname(documented_path))
-        with builtins.open(documented_path, "w", encoding="utf-8") as fp:
-            fp.write("\n".join(documented) + "\n")
 
 
 def process_file(domain, services, path):
@@ -192,7 +216,13 @@ def process_file(domain, services, path):
     template_env.filters["singleline"] = single_line
 
     template = template_env.get_template(os.path.basename(path))
-    content = template.render(context)
+    # A template appends to the nodes it renders, and the nodes are shared between templates
+    try:
+        content = template.render(context)
+    finally:
+        extension = template_env.extensions[AppendExtension.identifier]
+        for node in cast(AppendExtension, extension).appended_nodes:
+            node.clear_appended()
 
     return (content.rstrip() + "\n", sorted(documented))
 

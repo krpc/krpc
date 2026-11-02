@@ -12,6 +12,9 @@ class Appendable:
     def append(self, value):
         self._appended.append(value)
 
+    def clear_appended(self):
+        self._appended = []
+
     @property
     def appended(self):
         return "\n\n".join(self._appended)
