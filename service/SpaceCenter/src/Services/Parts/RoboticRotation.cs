@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 using Expansions.Serenity;
 using KRPC.Service;
 using KRPC.Service.Attributes;
@@ -84,9 +83,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             // the live transform angle directly (this is the value KSP copies into currentAngle).
             get
             {
-                return (float)typeof(ModuleRoboticRotationServo)
-                    .GetMethod("currentTransformAngle", BindingFlags.Instance | BindingFlags.NonPublic)
-                    .Invoke(InternalServo, null);
+                return InternalServo.CurrentTransformAngle ();
             }
         }
 
@@ -181,9 +178,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             get
             {
-                return (bool)typeof(BaseServo)
-                    .GetMethod("IsMoving", BindingFlags.Instance | BindingFlags.NonPublic)
-                    .Invoke(InternalServo, null);
+                return InternalServo.IsMoving ();
             }
         }
 

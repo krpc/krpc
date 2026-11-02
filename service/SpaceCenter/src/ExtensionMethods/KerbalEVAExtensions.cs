@@ -1,5 +1,6 @@
+using System;
 using System.Collections.Generic;
-using System.Reflection;
+using KRPC.Utils;
 using UnityEngine;
 
 namespace KRPC.SpaceCenter.ExtensionMethods
@@ -11,17 +12,17 @@ namespace KRPC.SpaceCenter.ExtensionMethods
     /// </summary>
     static class KerbalEVAExtensions
     {
-        static readonly FieldInfo airlockPart = typeof (KerbalEVA).GetField (
-            "currentAirlockPart", BindingFlags.NonPublic | BindingFlags.Instance);
-        static readonly FieldInfo ladderTriggers = typeof (KerbalEVA).GetField (
-            "currentLadderTriggers", BindingFlags.NonPublic | BindingFlags.Instance);
+        static readonly Func<KerbalEVA, global::Part> airlockPart =
+            Accessor.Getter<KerbalEVA, global::Part> ("currentAirlockPart");
+        static readonly Func<KerbalEVA, List<Collider>> ladderTriggers =
+            Accessor.Getter<KerbalEVA, List<Collider>> ("currentLadderTriggers");
 
         /// <summary>
         /// The part whose hatch the kerbal is standing at, or <c>null</c> if it is not at one.
         /// </summary>
         public static global::Part CurrentAirlock (this KerbalEVA eva)
         {
-            var part = airlockPart == null ? null : airlockPart.GetValue (eva) as global::Part;
+            var part = airlockPart == null ? null : airlockPart (eva);
             // A destroyed part is still a reference, and only compares equal to null through
             // Unity's operator, so return it through one.
             return part == null ? null : part;
@@ -32,8 +33,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// </summary>
         public static bool LadderInReach (this KerbalEVA eva)
         {
-            var triggers = ladderTriggers == null
-                ? null : ladderTriggers.GetValue (eva) as List<Collider>;
+            var triggers = ladderTriggers == null ? null : ladderTriggers (eva);
             return triggers != null && triggers.Count > 0;
         }
     }

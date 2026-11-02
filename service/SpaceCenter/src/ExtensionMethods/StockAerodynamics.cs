@@ -28,7 +28,7 @@
  * in this Software without prior written authorization from the copyright holders.
  */
 using System;
-using System.Reflection;
+using KRPC.Utils;
 using UnityEngine;
 
 namespace KRPC.SpaceCenter.ExtensionMethods
@@ -37,12 +37,10 @@ namespace KRPC.SpaceCenter.ExtensionMethods
     {
         // Cached once: ModuleControlSurface.FixedUpdate reads these protected fields
         // when splitting force between fixed and moving areas (issue #622).
-        static readonly FieldInfo controlSurfaceDeflectionField =
-            typeof(ModuleControlSurface).GetField(
-                "deflection", BindingFlags.Instance | BindingFlags.NonPublic);
-        static readonly FieldInfo liftingSurfaceBaseTransformField =
-            typeof(ModuleLiftingSurface).GetField(
-                "baseTransform", BindingFlags.Instance | BindingFlags.NonPublic);
+        static readonly Func<ModuleControlSurface, float> controlSurfaceDeflection =
+            Accessor.Getter<ModuleControlSurface, float> ("deflection");
+        static readonly Func<ModuleLiftingSurface, Transform> liftingSurfaceBaseTransform =
+            Accessor.Getter<ModuleLiftingSurface, Transform> ("baseTransform");
         static bool loggedControlSurfaceReflectionFailure;
 
         /// <summary>
@@ -634,28 +632,18 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         {
             deflection = 0f;
             baseTransform = null;
-            if (controlSurfaceDeflectionField == null || liftingSurfaceBaseTransformField == null) {
+            if (controlSurfaceDeflection == null || liftingSurfaceBaseTransform == null) {
                 LogControlSurfaceReflectionFailureOnce ();
                 return;
             }
-            try {
-                var deflectionValue = controlSurfaceDeflectionField.GetValue (surface);
-                var transformValue = liftingSurfaceBaseTransformField.GetValue (surface);
-                if (!(deflectionValue is float) || !(transformValue is Transform)) {
-                    LogControlSurfaceReflectionFailureOnce ();
-                    return;
-                }
-                var transform = (Transform)transformValue;
-                // Unity overloaded == treats destroyed objects as null.
-                if (transform == null) {
-                    LogControlSurfaceReflectionFailureOnce ();
-                    return;
-                }
-                deflection = (float)deflectionValue;
-                baseTransform = transform;
-            } catch (Exception) {
+            var transform = liftingSurfaceBaseTransform (surface);
+            // Unity overloaded == treats destroyed objects as null.
+            if (transform == null) {
                 LogControlSurfaceReflectionFailureOnce ();
+                return;
             }
+            deflection = controlSurfaceDeflection (surface);
+            baseTransform = transform;
         }
 
         static void LogControlSurfaceReflectionFailureOnce ()

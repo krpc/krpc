@@ -233,7 +233,7 @@ namespace KRPC.SpaceCenter.Services
                 return PlanetariumCamera.fetch.getPitch ();
             case CameraMode.IVA:
                 var camera = InternalCamera.Instance;
-                return (float) InternalCameraExtensions.GetPitch(camera);
+                return InternalCameraExtensions.GetPitch(camera);
             default:
                 return FlightCamera.fetch.getPitch ();
             }
@@ -284,7 +284,7 @@ namespace KRPC.SpaceCenter.Services
                 return PlanetariumCamera.fetch.getYaw ();
             case CameraMode.IVA:
                 var camera = InternalCamera.Instance;
-                return (float) InternalCameraExtensions.GetRot(camera);
+                return InternalCameraExtensions.GetRot(camera);
             default:
                 return FlightCamera.fetch.getYaw ();
             }
@@ -375,7 +375,7 @@ namespace KRPC.SpaceCenter.Services
                 throw new NotImplementedException ();
             case CameraMode.IVA:
                 var camera = InternalCamera.Instance;
-                return (float) InternalCameraExtensions.GetFoV(camera);
+                return InternalCameraExtensions.GetFoV(camera);
             default:
                 return FlightCamera.fetch.FieldOfView;
             }
@@ -389,7 +389,7 @@ namespace KRPC.SpaceCenter.Services
             case CameraMode.IVA:
                 {
                     var camera = InternalCamera.Instance;
-                    InternalCameraExtensions.SetZoom(camera, (value / (float) InternalCameraExtensions.GetDefaultFoV(camera)).Clamp(camera.maxZoom, camera.minZoom));
+                    InternalCameraExtensions.SetZoom(camera, (value / InternalCameraExtensions.GetDefaultFoV(camera)).Clamp(camera.maxZoom, camera.minZoom));
                     break;
                 }
             default:
@@ -548,7 +548,7 @@ namespace KRPC.SpaceCenter.Services
                         throw new NotImplementedException();
                     case CameraMode.IVA:
                         var camera = InternalCamera.Instance;
-                        return (float) InternalCameraExtensions.GetDefaultFoV(camera) * camera.minZoom;
+                        return InternalCameraExtensions.GetDefaultFoV(camera) * camera.minZoom;
                     default:
                         return FlightCamera.fetch.fovMax;
                 }
@@ -566,7 +566,7 @@ namespace KRPC.SpaceCenter.Services
                         throw new NotImplementedException();
                     case CameraMode.IVA:
                         var camera = InternalCamera.Instance;
-                        return (float) InternalCameraExtensions.GetDefaultFoV(camera) * camera.maxZoom;
+                        return InternalCameraExtensions.GetDefaultFoV(camera) * camera.maxZoom;
                     default:
                         return FlightCamera.fetch.fovMin;
                 }
@@ -584,7 +584,7 @@ namespace KRPC.SpaceCenter.Services
                         throw new NotImplementedException();
                     case CameraMode.IVA:
                         var camera = InternalCamera.Instance;
-                        return (float) InternalCameraExtensions.GetDefaultFoV(camera);
+                        return InternalCameraExtensions.GetDefaultFoV(camera);
                     default:
                         return FlightCamera.fetch.fovDefault;
                 }

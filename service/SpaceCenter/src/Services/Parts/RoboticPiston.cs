@@ -5,7 +5,6 @@ using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
 using UnityEngine;
-using System.Reflection;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {
@@ -15,6 +14,9 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass(Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public class RoboticPiston : Equatable<RoboticPiston>, IGameObjectState
     {
+        static readonly Func<ModuleRoboticServoPiston, BaseAxisField> targetExtensionAxisField =
+            Accessor.Getter<ModuleRoboticServoPiston, BaseAxisField> ("targetExtensionAxisField");
+
         ModuleRef servoRef;
 
         internal static bool Is(Part part)
@@ -162,9 +164,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             get
             {
-                return (bool)typeof(BaseServo)
-                    .GetMethod("IsMoving", BindingFlags.Instance | BindingFlags.NonPublic)
-                    .Invoke(InternalServo, null);
+                return InternalServo.IsMoving ();
             }
         }
 
@@ -179,8 +179,7 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         private void SetExtension(float value)
         {
-            BaseAxisField field = (BaseAxisField)typeof(ModuleRoboticServoPiston)
-                .GetField("targetExtensionAxisField", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(InternalServo);
+            var field = targetExtensionAxisField (InternalServo);
             field.SetValue((float)value, field.module);
         }
     }

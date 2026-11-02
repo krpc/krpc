@@ -1,26 +1,22 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
 using KRPC.Utils;
 
 namespace KRPC.SpaceCenter.ExternalAPI
 {
     static class AGExt
     {
-        static MethodInfo groupActionsMethod;
-        static FieldInfo partField;
-        static FieldInfo actionField;
+        static Func<uint, int, object> groupActions;
+        static Func<object, global::Part> actionPart;
+        static Func<object, BaseAction> actionAction;
 
         public static void Load ()
         {
             var type = APILoader.Load (typeof(AGExt), "AGExt", "ActionGroupsExtended.AGExtExternal");
             IsAvailable = (type != null);
             if (IsAvailable) {
-                groupActionsMethod = type.GetMethod (
-                    "AGX2VslGroupActions",
-                    BindingFlags.Public | BindingFlags.Static, null,
-                    new Type[] { typeof(uint), typeof(int) }, null);
+                groupActions = Accessor.Method<Func<uint, int, object>> (type, "AGX2VslGroupActions");
             }
         }
 
@@ -43,23 +39,23 @@ namespace KRPC.SpaceCenter.ExternalAPI
         public static IList<Tuple<global::Part, BaseAction>> GroupActions (uint flightId, int group)
         {
             var result = new List<Tuple<global::Part, BaseAction>> ();
-            if (groupActionsMethod == null)
+            if (groupActions == null)
                 return result;
-            var actions = groupActionsMethod.Invoke (null, new object[] { flightId, group }) as IEnumerable;
+            var actions = groupActions (flightId, group) as IEnumerable;
             if (actions == null)
                 return result;
             foreach (var action in actions) {
                 if (action == null)
                     continue;
-                if (partField == null) {
+                if (actionPart == null) {
                     var actionType = action.GetType ();
-                    partField = actionType.GetField ("prt");
-                    actionField = actionType.GetField ("ba");
+                    actionPart = Accessor.Getter<object, global::Part> (actionType, "prt");
+                    actionAction = Accessor.Getter<object, BaseAction> (actionType, "ba");
                 }
-                if (partField == null || actionField == null)
+                if (actionPart == null || actionAction == null)
                     continue;
-                var part = partField.GetValue (action) as global::Part;
-                var baseAction = actionField.GetValue (action) as BaseAction;
+                var part = actionPart (action);
+                var baseAction = actionAction (action);
                 if (part != null && baseAction != null)
                     result.Add (Tuple.Create (part, baseAction));
             }
