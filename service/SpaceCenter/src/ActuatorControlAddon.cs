@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Expansions.Missions.Adjusters;
@@ -104,6 +105,16 @@ namespace KRPC.SpaceCenter
         }
 
         /// <summary>
+        /// Override individual RCS thrusters using IndividualRCS.
+        /// </summary>
+        sealed class ThrusterEntry : ClientOwnedEntry
+        {
+            // Actual type is IndividualRCS.AdjusterIndividualRCS
+            public object Adjuster;
+            public float[] ThrusterLevels;
+        }
+
+        /// <summary>
         /// A control surface override. Control surfaces have no deflection adjuster
         /// (the KSP adjuster only overrides actuation speed), so the override is driven
         /// through the persistent <c>deploy</c>/<c>deployAngle</c> fields with cooked
@@ -124,11 +135,13 @@ namespace KRPC.SpaceCenter
             new ClientOwnedOverrides<ModuleGimbal, GimbalEntry> (InstallGimbal, ReleaseGimbal);
         static readonly ClientOwnedOverrides<ModuleRCS, RCSEntry> rcs =
             new ClientOwnedOverrides<ModuleRCS, RCSEntry> (InstallRCS, ReleaseRCS);
+        static readonly ClientOwnedOverrides<ModuleRCS, ThrusterEntry> thrusters =
+            new ClientOwnedOverrides<ModuleRCS, ThrusterEntry>(InstallThrusters, ReleaseThrusters);
         static readonly ClientOwnedOverrides<ModuleControlSurface, ControlSurfaceEntry> controlSurfaces =
             new ClientOwnedOverrides<ModuleControlSurface, ControlSurfaceEntry> (
                 InstallControlSurface, RestoreControlSurface);
 
-        static readonly IClientOwnedCollection[] collections = { gimbals, rcs, controlSurfaces };
+        static readonly IClientOwnedCollection[] collections = { gimbals, rcs, thrusters, controlSurfaces };
 
         /// <summary>
         /// The actuator override registries.
@@ -297,6 +310,55 @@ namespace KRPC.SpaceCenter
             var entry = rcs.Own (module);
             if (entry != null)
                 entry.Adjuster.Linear = translation.Clamp (-1f, 1f);
+        }
+
+        static ThrusterEntry InstallThrusters(ModuleRCS module)
+        {
+            System.Type type = System.Type.GetType("IndividualRCS.AdjusterIndividualRCS, IndividualRCS", true);
+            PropertyInfo prop = type.GetProperty("ThrusterLevels");
+            object adjuster = System.Activator.CreateInstance(type);
+
+            prop.SetValue(adjuster, new float[module.thrusterTransforms.Count]);
+            var entry = new ThrusterEntry
+            {
+                Adjuster = adjuster,
+                // So we don't have to use reflection each time it's accessed
+                ThrusterLevels = (float[])prop.GetValue(adjuster),
+            };
+
+            CacheAdd(rcsAdjusterCache, module, entry.Adjuster);
+            return entry;
+        }
+
+        static void ReleaseThrusters(ModuleRCS module, ThrusterEntry entry)
+        {
+            if (Destroyed(module))
+                return;
+            CacheRemove(rcsAdjusterCache, module, entry.Adjuster);
+        }
+
+        internal static void SetRCSThruster(ModuleRCS module, int transformIndex, float thrusterLevel)
+        {
+            var entry = thrusters.Own(module);
+            if (entry != null)
+            {
+                entry.ThrusterLevels[transformIndex] = thrusterLevel.Clamp(0f, 1f);
+            }
+        }
+
+        internal static bool GetThrusterOverride(ModuleRCS module)
+        {
+            return thrusters.IsSet(module);
+        }
+
+        internal static void SetThrusterOverride(ModuleRCS module, bool enabled)
+        {
+            if (!KRPC.SpaceCenter.Services.SpaceCenter.IndividualRCSAvailable)
+            {
+                throw new InvalidOperationException("IndividualRCS is required to override RCS thrusters");
+            }
+
+            thrusters.Set(module, enabled);
         }
 
         static ControlSurfaceEntry InstallControlSurface (ModuleControlSurface module)
