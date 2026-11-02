@@ -53,8 +53,6 @@ Windows runs everything Linux runs, except these:
   build. Windows tests its serial backend against a stand-in, in
   `//client/cnano:communication-serialio`.
 - **clang-tidy.** It needs the libc++ headers that only the LLVM toolchain supplies.
-- **`//tools/krpctools:conformance-test`.** The TestServer that krpctools bundles is built for
-  linux-x64.
 - **`//tools/build/python:requirements.test`.** The Python lock file is resolved on Linux.
 - **The C++ CMake fetch scenario.** It builds protobuf and abseil from source, and on Windows
   that build is uncached and takes the job past 30 minutes. Windows builds the system scenario,
@@ -96,6 +94,13 @@ number of commits since the last release tag. The count orders dev builds and st
 16-bit build field of a .NET assembly version. The checkout is shallow, so the action deepens it
 first, fetching commits but no trees or blobs. The `g` prefix stops Python packaging reading an
 all-digit sha as a number.
+
+### The Tool Packages
+
+`test-tool-packages` installs the krpctools sdist and the Python client with pip, on bare Linux
+and Windows runners with Python and .NET but no Bazel. `tools/ci/smoke_test_tools.py` then runs
+each krpctools command once, as a user would. It checks what the Bazel tests cannot: the package
+installs, its entry points run, and the bundled .NET tools start on the runner's dotnet host.
 
 ### The Solution Build
 
