@@ -12,16 +12,29 @@ runs:
         # repositories in a sibling contents/ dir, which must stay out of the GitHub
         # cache. CI uses a system LLVM, so no ~2 GB LLVM archive lands here.
         echo "BAZEL_DOWNLOAD_CACHE=$(bazel info repository_cache)/content_addressable" >> "$GITHUB_ENV"
+    # A change to the dependencies restores the newest cache for this Bazel
+    # version, so the fetch downloads only the archives that changed
     - name: restore-bazel-cache
       id: bazel-cache
       uses: actions/cache/restore@v6
       with:
         path: ${{ env.BAZEL_DOWNLOAD_CACHE }}
         key: bazel-repo-cache-${{ runner.os }}-${{ env.BAZEL_VERSION }}-${{ hashFiles('MODULE.bazel', 'tools/build/python/requirements_lock.txt') }}
+        restore-keys: bazel-repo-cache-${{ runner.os }}-${{ env.BAZEL_VERSION }}-
     - name: bazel-fetch
       if: steps.bazel-cache.outputs.cache-hit != 'true'
       shell: bash
-      run: bazel fetch //...
+      run: |
+        touch "$RUNNER_TEMP/bazel-fetch-start"
+        bazel fetch //...
+        # Bazel updates the mtime of each archive it reads from the cache, so an
+        # archive older than the fetch is one the dependencies no longer use. We
+        # remove its directory, which also holds the archive's id files.
+        find "$BAZEL_DOWNLOAD_CACHE" -type f -name file ! -newer "$RUNNER_TEMP/bazel-fetch-start" |
+          while read -r archive; do
+            echo "pruning $archive"
+            rm -rf "$(dirname "$archive")"
+          done
     - name: save-bazel-cache
       if: steps.bazel-cache.outputs.cache-hit != 'true'
       uses: actions/cache/save@v6

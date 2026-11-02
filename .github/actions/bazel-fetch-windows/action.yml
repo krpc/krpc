@@ -19,16 +19,28 @@ runs:
         # its cache of extracted repositories in a sibling directory, which is far
         # larger and is rebuilt per job anyway.
         echo "BAZEL_DOWNLOAD_CACHE=$(bazelisk info repository_cache)/content_addressable" >> "$GITHUB_ENV"
+    # A change to the dependencies restores the newest cache for this Bazel
+    # version, as the Linux action does
     - name: restore-bazel-cache
       id: bazel-cache
       uses: actions/cache/restore@v6
       with:
         path: ${{ env.BAZEL_DOWNLOAD_CACHE }}
         key: bazel-repo-cache-${{ runner.os }}-${{ env.BAZEL_VERSION }}-${{ hashFiles('MODULE.bazel', 'tools/build/python/requirements_lock.txt') }}
+        restore-keys: bazel-repo-cache-${{ runner.os }}-${{ env.BAZEL_VERSION }}-
     - name: bazel-fetch
       if: steps.bazel-cache.outputs.cache-hit != 'true'
       shell: bash
-      run: bazelisk fetch //...
+      run: |
+        start="${RUNNER_TEMP//\\//}/bazel-fetch-start"
+        touch "$start"
+        bazelisk fetch //...
+        # Drop the archives the fetch did not read, as the Linux action does
+        find "$BAZEL_DOWNLOAD_CACHE" -type f -name file ! -newer "$start" |
+          while read -r archive; do
+            echo "pruning $archive"
+            rm -rf "$(dirname "$archive")"
+          done
     - name: save-bazel-cache
       if: steps.bazel-cache.outputs.cache-hit != 'true'
       uses: actions/cache/save@v6
