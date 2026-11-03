@@ -219,13 +219,13 @@ class TestPartsModule(krpctest.TestCase):
         self.assertFalse(config.has_value("DoesntExist"))
         self.assertRaises(RuntimeError, config.get_value, "DoesntExist")
         self.assertEqual("ModuleCommand", config.values["name"])
-        self.assertEqual(["ModuleCommand"], config.get_values("name"))
+        self.assertEqual(["ModuleCommand"], config.find_values("name"))
 
         # Part.config returns the whole part cfg, including module and resource nodes.
         part_config = part.config
         self.assertIsNotNone(part_config)
         self.assertTrue(part_config.has_node("MODULE"))
-        module_names = [n.get_value("name") for n in part_config.get_nodes("MODULE")]
+        module_names = [n.get_value("name") for n in part_config.find_nodes("MODULE")]
         self.assertIn("ModuleCommand", module_names)
         self.assertIn("MODULE", [n.name for n in part_config.nodes])
         self.assertFalse(part_config.has_node("DoesntExist"))
@@ -234,7 +234,7 @@ class TestPartsModule(krpctest.TestCase):
         # Static data not exposed as a field: the electric charge stored by the pod.
         electric_charge = next(
             r
-            for r in part_config.get_nodes("RESOURCE")
+            for r in part_config.find_nodes("RESOURCE")
             if r.get_value("name") == "ElectricCharge"
         )
         self.assertGreater(float(electric_charge.get_value("amount")), 0)
@@ -257,7 +257,7 @@ class TestPartsModule(krpctest.TestCase):
         output = next(
             (
                 n
-                for n in gen_config.get_nodes("OUTPUT_RESOURCE")
+                for n in gen_config.find_nodes("OUTPUT_RESOURCE")
                 if n.get_value("name") == "ElectricCharge"
             ),
             None,
