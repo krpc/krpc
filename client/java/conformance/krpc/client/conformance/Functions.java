@@ -9,6 +9,7 @@ import krpc.client.services.TestService.TestClass;
 import krpc.client.services.TestService.TestEnum;
 import krpc.conformance.Testee.AddFunctionEvent;
 import krpc.conformance.Testee.AddFunctionStream;
+import krpc.conformance.Testee.CallWithArguments;
 import krpc.conformance.Testee.Invoke;
 import krpc.conformance.Testee.RunFunction;
 import krpc.conformance.Testee.Value;
@@ -19,6 +20,16 @@ final class Functions {
 
   static Value call(Connection connection, Invoke invoke) throws Exception {
     return Values.resultObject(Expression.call(connection, Dispatch.call(connection, invoke)));
+  }
+
+  static Value callWithArguments(Connection connection, CallWithArguments command)
+      throws Exception {
+    Map<Integer, Expression> arguments = new HashMap<Integer, Expression>();
+    for (Map.Entry<Integer, Value> argument : command.getArgumentsMap().entrySet()) {
+      arguments.put(argument.getKey(), function(argument.getValue()));
+    }
+    krpc.schema.KRPC.ProcedureCall call = Dispatch.call(connection, command.getInvoke());
+    return Values.resultObject(Expression.callWithArguments(connection, call, arguments));
   }
 
   static StreamHandle addStream(Connection connection, AddFunctionStream command)

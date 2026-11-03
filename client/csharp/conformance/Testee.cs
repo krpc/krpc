@@ -181,6 +181,9 @@ namespace KRPC.Client.Conformance
             case Command.CommandOneofCase.Call:
                 reply.Value = Functions.Call (Connected (), command.Call.Invoke);
                 break;
+            case Command.CommandOneofCase.CallWithArguments:
+                reply.Value = Functions.CallWithArguments (Connected (), command.CallWithArguments);
+                break;
             case Command.CommandOneofCase.AddFunctionStream:
                 reply.Stream = Handles.Add (Functions.AddStream (Connected (), command.AddFunctionStream));
                 break;

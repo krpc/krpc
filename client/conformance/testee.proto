@@ -91,6 +91,7 @@ message Command {
     NotifyCondition notify_condition = 51;
     HashHandle hash_handle = 52;
     FailWrite fail_write = 53;
+    CallWithArguments call_with_arguments = 54;
   }
 }
 
@@ -224,6 +225,14 @@ message AddStream {
 // client builds for its stream. Replies with the function as an object Value.
 message Call {
   Invoke invoke = 1;
+}
+
+// Builds a server side function that makes a call, with KRPC.Expression.CallWithArguments over
+// the call the client builds for its stream. Each argument is a server side function, an object
+// Value, keyed by the position it computes. Replies with the function as an object Value.
+message CallWithArguments {
+  Invoke invoke = 1;
+  map<uint32, Value> arguments = 2;
 }
 
 // Adds a stream of a server side function, a KRPC.Expression object. The type is the function's
