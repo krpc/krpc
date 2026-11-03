@@ -70,8 +70,8 @@ namespace KRPC.Service.KRPC
         }
 
         /// <summary>
-        /// Returns information on all services, procedures, classes, properties etc. provided by the server.
-        /// Can be used by client libraries to automatically create functionality such as stubs.
+        /// The services the server provides, with their procedures, classes, enumerations,
+        /// structures and exceptions.
         /// </summary>
         [KRPCProcedure]
         public static Messages.Services GetServices ()

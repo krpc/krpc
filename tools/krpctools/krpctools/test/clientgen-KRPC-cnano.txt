@@ -371,8 +371,8 @@ static inline krpc_error_t krpc_KRPC_GetClientID(krpc_connection_t connection, k
 static inline krpc_error_t krpc_KRPC_GetClientName(krpc_connection_t connection, char * * returnValue);
 
 /**
- * Returns information on all services, procedures, classes, properties etc. provided by the server.
- * Can be used by client libraries to automatically create functionality such as stubs.
+ * The services the server provides, with their procedures, classes, enumerations,
+ * structures and exceptions.
  */
 static inline krpc_error_t krpc_KRPC_GetServices(krpc_connection_t connection, krpc_schema_Services * returnValue);
 
