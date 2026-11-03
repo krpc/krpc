@@ -160,9 +160,17 @@ The fields of a procedure call are:
     <communication-protocol-null-values>`.
 
 A call names its service with ``service`` or ``service_id``, and its procedure with ``procedure``
-or ``procedure_id``. The names are the same in every server version. The integer identifiers make
-both the messages and the client code smaller, which suits a client on a microcontroller. They can
-change between server versions.
+or ``procedure_id``. The integer identifiers make both the messages and the client code smaller,
+which suits a client on a microcontroller.
+
+An identifier is the first 4 bytes of the SHA-256 hash of the UTF-8 name, read as a little-endian
+integer. The procedure name is the one the request carries, e.g. ``Vessel_get_Name``. An
+identifier is as stable as the name it comes from.
+
+A service or procedure can also set its identifier by hand, to resolve a clash.
+:ref:`communication-protocol-get-services` reports every identifier, hashed or set by hand.
+Service identifiers 1 to 255 are reserved for the services that ship with kRPC, which keeps them
+short on the wire.
 
 A parameter can have a default value, listed in the procedure's
 :ref:`description <communication-protocol-service-description-message>`. A call can leave out the
@@ -474,6 +482,8 @@ The fields of a ``Service`` are:
 
 * ``name`` - The name of the service.
 
+* ``id`` - The identifier of the service, for the ``service_id`` field of a call.
+
 * ``procedures`` - A list of ``Procedure`` messages, one for each procedure defined by the service.
 
 * ``classes`` - A list of ``Class`` messages, one for each :cs:attr:`KRPCClass` defined by the
@@ -522,6 +532,8 @@ The fields are:
 
 * ``name`` - The name of the procedure. See :ref:`communication-protocol-procedure-names` for more
   information.
+
+* ``id`` - The identifier of the procedure, for the ``procedure_id`` field of a call.
 
 * ``parameters`` - A list of ``Parameter`` messages containing details of the
   procedure's parameters, with the following fields:

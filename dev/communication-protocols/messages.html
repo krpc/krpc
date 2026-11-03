@@ -754,9 +754,15 @@ permitted for parameters that accept null. See <a class="reference internal" hre
 </li>
 </ul>
 <p>A call names its service with <code class="docutils literal notranslate"><span class="pre">service</span></code> or <code class="docutils literal notranslate"><span class="pre">service_id</span></code>, and its procedure with <code class="docutils literal notranslate"><span class="pre">procedure</span></code>
-or <code class="docutils literal notranslate"><span class="pre">procedure_id</span></code>. The names are the same in every server version. The integer identifiers make
-both the messages and the client code smaller, which suits a client on a microcontroller. They can
-change between server versions.</p>
+or <code class="docutils literal notranslate"><span class="pre">procedure_id</span></code>. The integer identifiers make both the messages and the client code smaller,
+which suits a client on a microcontroller.</p>
+<p>An identifier is the first 4 bytes of the SHA-256 hash of the UTF-8 name, read as a little-endian
+integer. The procedure name is the one the request carries, e.g. <code class="docutils literal notranslate"><span class="pre">Vessel_get_Name</span></code>. An
+identifier is as stable as the name it comes from.</p>
+<p>A service or procedure can also set its identifier by hand, to resolve a clash.
+<a class="reference internal" href="#communication-protocol-get-services"><span class="std std-ref">GetServices</span></a> reports every identifier, hashed or set by hand.
+Service identifiers 1 to 255 are reserved for the services that ship with kRPC, which keeps them
+short on the wire.</p>
 <p>A parameter can have a default value, listed in the procedure’s
 <a class="reference internal" href="#communication-protocol-service-description-message"><span class="std std-ref">description</span></a>. A call can leave out the
 <code class="docutils literal notranslate"><span class="pre">Argument</span></code> for such a parameter, and the procedure runs with the default. The <code class="docutils literal notranslate"><span class="pre">position</span></code> field
@@ -1046,6 +1052,7 @@ message, holding a <code class="docutils literal notranslate"><span class="pre">
 
 <span class="kd">message</span><span class="w"> </span><span class="nc">Service</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">uint32</span><span class="w"> </span><span class="na">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
 <span class="w">  </span><span class="k">repeated</span><span class="w"> </span><span class="n">Procedure</span><span class="w"> </span><span class="na">procedures</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
 <span class="w">  </span><span class="k">repeated</span><span class="w"> </span><span class="n">Class</span><span class="w"> </span><span class="na">classes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
 <span class="w">  </span><span class="k">repeated</span><span class="w"> </span><span class="n">Enumeration</span><span class="w"> </span><span class="na">enumerations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
@@ -1060,6 +1067,7 @@ message, holding a <code class="docutils literal notranslate"><span class="pre">
 <p>The fields of a <code class="docutils literal notranslate"><span class="pre">Service</span></code> are:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">name</span></code> - The name of the service.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">id</span></code> - The identifier of the service, for the <code class="docutils literal notranslate"><span class="pre">service_id</span></code> field of a call.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">procedures</span></code> - A list of <code class="docutils literal notranslate"><span class="pre">Procedure</span></code> messages, one for each procedure defined by the service.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">classes</span></code> - A list of <code class="docutils literal notranslate"><span class="pre">Class</span></code> messages, one for each <a class="reference internal" href="../extending/attributes.html#attribute-KRPCClass" title="attribute: KRPCClass"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a> defined by the
 service.</p></li>
@@ -1086,6 +1094,7 @@ and <a class="reference internal" href="../extending/attributes.html#attribute-K
 <p>Details about a procedure are given by a <code class="docutils literal notranslate"><span class="pre">Procedure</span></code> message, with the format:</p>
 <div class="highlight-protobuf notranslate"><div class="highlight"><pre><span></span><span class="kd">message</span><span class="w"> </span><span class="nc">Procedure</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">uint32</span><span class="w"> </span><span class="na">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">9</span><span class="p">;</span>
 <span class="w">  </span><span class="k">repeated</span><span class="w"> </span><span class="n">Parameter</span><span class="w"> </span><span class="na">parameters</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
 <span class="w">  </span><span class="n">Type</span><span class="w"> </span><span class="na">return_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
 <span class="w">  </span><span class="k">repeated</span><span class="w"> </span><span class="n">GameScene</span><span class="w"> </span><span class="na">game_scenes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span>
@@ -1108,6 +1117,7 @@ and <a class="reference internal" href="../extending/attributes.html#attribute-K
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">name</span></code> - The name of the procedure. See <a class="reference internal" href="#communication-protocol-procedure-names"><span class="std std-ref">Procedure Names</span></a> for more
 information.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">id</span></code> - The identifier of the procedure, for the <code class="docutils literal notranslate"><span class="pre">procedure_id</span></code> field of a call.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">parameters</span></code> - A list of <code class="docutils literal notranslate"><span class="pre">Parameter</span></code> messages containing details of the
 procedure’s parameters, with the following fields:</p>
 <ul class="simple">

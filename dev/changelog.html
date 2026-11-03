@@ -531,6 +531,14 @@
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">ClientInfo.ProtocolVersion</span></code>, the protocol version of each client (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1244">#1244</a>)</p></li>
 </ul>
 </li>
+<li><p>Procedure ids</p>
+<ul>
+<li><p><span class="changelog-marker breaking">Breaking</span> Derive each procedure id from a hash of its name, which changes every id (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1265">#1265</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Id</span></code> to <code class="docutils literal notranslate"><span class="pre">KRPCProcedure</span></code> and <code class="docutils literal notranslate"><span class="pre">KRPCMethod</span></code>, and <code class="docutils literal notranslate"><span class="pre">GetterId</span></code> and <code class="docutils literal notranslate"><span class="pre">SetterId</span></code> to <code class="docutils literal notranslate"><span class="pre">KRPCProperty</span></code>, to resolve an id clash (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1265">#1265</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">KRPCProcedureId</span></code> to set the id of a procedure a class inherits (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1265">#1265</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">id</span></code> to the <code class="docutils literal notranslate"><span class="pre">Service</span></code> and <code class="docutils literal notranslate"><span class="pre">Procedure</span></code> messages that <code class="docutils literal notranslate"><span class="pre">KRPC.GetServices</span></code> returns (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1265">#1265</a>)</p></li>
+</ul>
+</li>
 </ul>
 </section>
 <section id="server">
@@ -610,6 +618,7 @@
 <li><p>Document every parameter of a service function, with the value returned under <code class="docutils literal notranslate"><span class="pre">returnValue</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1185">#1185</a>)</p></li>
 <li><p>Fix the documentation of the services that Doxygen warns about, such as code holding an <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1185">#1185</a>)</p></li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Return <code class="docutils literal notranslate"><span class="pre">krpc_KRPC_GetStatus</span></code> as <code class="docutils literal notranslate"><span class="pre">krpc_KRPC_ServerStatus_t</span></code>, whose <code class="docutils literal notranslate"><span class="pre">version</span></code> is allocated on the heap (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1244">#1244</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Call procedures by the hashed ids, which needs a server of the same version (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1265">#1265</a>)</p></li>
 </ul>
 </section>
 <section id="c-client">

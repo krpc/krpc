@@ -53,6 +53,13 @@ Core
   * Add ``TickHoldTimeout``, ``DeferredCalls`` and ``StreamUpdatesSent`` to the server status (:issue:`1244`)
   * Add ``ClientInfo.ProtocolVersion``, the protocol version of each client (:issue:`1244`)
 
+* Procedure ids
+
+  * :breaking:`Breaking` Derive each procedure id from a hash of its name, which changes every id (:issue:`1265`)
+  * Add ``Id`` to ``KRPCProcedure`` and ``KRPCMethod``, and ``GetterId`` and ``SetterId`` to ``KRPCProperty``, to resolve an id clash (:issue:`1265`)
+  * Add ``KRPCProcedureId`` to set the id of a procedure a class inherits (:issue:`1265`)
+  * Add ``id`` to the ``Service`` and ``Procedure`` messages that ``KRPC.GetServices`` returns (:issue:`1265`)
+
 
 
 Server
@@ -131,6 +138,7 @@ C-nano client
 * Document every parameter of a service function, with the value returned under ``returnValue`` (:issue:`1185`)
 * Fix the documentation of the services that Doxygen warns about, such as code holding an ``@`` (:issue:`1185`)
 * :breaking:`Breaking` Return ``krpc_KRPC_GetStatus`` as ``krpc_KRPC_ServerStatus_t``, whose ``version`` is allocated on the heap (:issue:`1244`)
+* :breaking:`Breaking` Call procedures by the hashed ids, which needs a server of the same version (:issue:`1265`)
 
 
 C# client

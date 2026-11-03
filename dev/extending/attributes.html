@@ -547,7 +547,8 @@ to add functionality to the kRPC server.</p>
 the class this attribute is applied to.</p></li>
 <li><p><strong>Id</strong> – Optional integer identifier for the service, used by clients that call procedures
 by id rather than by name. If omitted or set to 0, an identifier is generated from a hash of
-the service name.</p></li>
+the service name. Identifiers 1 to 255 are reserved for the services that ship with kRPC.
+Set it only to resolve a clash with another service.</p></li>
 <li><p><strong>GameScene</strong> – The game scenes in which the services procedures are available. Defaults to
 all game scenes. If this is set to <a class="reference internal" href="game-scenes.html#enumerator-KRPC.Service.GameScene.Inherit" title="enumerator: KRPC.Service.GameScene.Inherit"><code class="xref cs cs-value docutils literal notranslate"><span class="pre">KRPC.Service.GameScene.Inherit</span></code></a> the service
 will be available in all game scenes.</p></li>
@@ -606,13 +607,16 @@ scene:</p>
 
 <dl class="cs attribute">
 <dt class="sig sig-object cs" id="attribute-KRPCProcedure">
-<span class="sig-name descname"><span class="pre">KRPCProcedure</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="n"><span class="pre">Nullable</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">false</span></span>, <a class="reference internal" href="game-scenes.html#enum-KRPC.Service.GameScene" title="enum: KRPC.Service.GameScene"><span class="pre">KRPC.Service.GameScene</span></a><span class="w"> </span><span class="n"><span class="pre">GameScene</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">KRPC.Service.GameScene.Inherit</span></span><span class="sig-paren">)</span><a class="headerlink" href="#attribute-KRPCProcedure" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">KRPCProcedure</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="n"><span class="pre">Nullable</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">false</span></span>, <a class="reference internal" href="game-scenes.html#enum-KRPC.Service.GameScene" title="enum: KRPC.Service.GameScene"><span class="pre">KRPC.Service.GameScene</span></a><span class="w"> </span><span class="n"><span class="pre">GameScene</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">KRPC.Service.GameScene.Inherit</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a><span class="w"> </span><span class="n"><span class="pre">Id</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span><span class="sig-paren">)</span><a class="headerlink" href="#attribute-KRPCProcedure" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>Nullable</strong> – Whether the return value of the procedure can be null. Defaults to false.</p></li>
 <li><p><strong>GameScene</strong> – The game scenes in which the procedure is available. Defaults to inherit this
 setting from the service the procedure is defined in.</p></li>
+<li><p><strong>Id</strong> – Optional integer identifier for the procedure, used by clients that call
+procedures by id. If omitted or set to 0, an identifier is generated from a hash of the
+procedure name. Set it only to resolve a clash with another procedure in the service.</p></li>
 </ul>
 </dd>
 </dl>
@@ -711,13 +715,16 @@ its <code class="docutils literal notranslate"><span class="pre">Service</span><
 
 <dl class="cs attribute">
 <dt class="sig sig-object cs" id="attribute-KRPCMethod">
-<span class="sig-name descname"><span class="pre">KRPCMethod</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="n"><span class="pre">Nullable</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">false</span></span>, <a class="reference internal" href="game-scenes.html#enum-KRPC.Service.GameScene" title="enum: KRPC.Service.GameScene"><span class="pre">KRPC.Service.GameScene</span></a><span class="w"> </span><span class="n"><span class="pre">GameScene</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">KRPC.Service.GameScene.Inherit</span></span><span class="sig-paren">)</span><a class="headerlink" href="#attribute-KRPCMethod" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">KRPCMethod</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="n"><span class="pre">Nullable</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">false</span></span>, <a class="reference internal" href="game-scenes.html#enum-KRPC.Service.GameScene" title="enum: KRPC.Service.GameScene"><span class="pre">KRPC.Service.GameScene</span></a><span class="w"> </span><span class="n"><span class="pre">GameScene</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">KRPC.Service.GameScene.Inherit</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a><span class="w"> </span><span class="n"><span class="pre">Id</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span><span class="sig-paren">)</span><a class="headerlink" href="#attribute-KRPCMethod" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>Nullable</strong> – Whether the return value of the procedure can be null. Defaults to false.</p></li>
 <li><p><strong>GameScene</strong> – The game scenes in which the method is available. Defaults to inherit this
 setting from the class the method is defined in.</p></li>
+<li><p><strong>Id</strong> – Optional integer identifier for the method, as for <a class="reference internal" href="#attribute-KRPCProcedure" title="attribute: KRPCProcedure"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCProcedure</span></code></a>. On a
+method that a subclass inherits, it applies only to the class that declares the method. See
+<a class="reference internal" href="#attribute-KRPCProcedureId" title="attribute: KRPCProcedureId"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCProcedureId</span></code></a>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -753,7 +760,7 @@ to true. A parameter that may be <code class="docutils literal notranslate"><spa
 
 <dl class="cs attribute">
 <dt class="sig sig-object cs" id="attribute-KRPCProperty">
-<span class="sig-name descname"><span class="pre">KRPCProperty</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="n"><span class="pre">Nullable</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">false</span></span>, <a class="reference internal" href="game-scenes.html#enum-KRPC.Service.GameScene" title="enum: KRPC.Service.GameScene"><span class="pre">KRPC.Service.GameScene</span></a><span class="w"> </span><span class="n"><span class="pre">GameScene</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">KRPC.Service.GameScene.Inherit</span></span><span class="sig-paren">)</span><a class="headerlink" href="#attribute-KRPCProperty" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">KRPCProperty</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="n"><span class="pre">Nullable</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">false</span></span>, <a class="reference internal" href="game-scenes.html#enum-KRPC.Service.GameScene" title="enum: KRPC.Service.GameScene"><span class="pre">KRPC.Service.GameScene</span></a><span class="w"> </span><span class="n"><span class="pre">GameScene</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">KRPC.Service.GameScene.Inherit</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a><span class="w"> </span><span class="n"><span class="pre">GetterId</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a><span class="w"> </span><span class="n"><span class="pre">SetterId</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span><span class="sig-paren">)</span><a class="headerlink" href="#attribute-KRPCProperty" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -762,6 +769,10 @@ and the setter’s argument nullable, and on a field of a <a class="reference in
 the field nullable. Defaults to false.</p></li>
 <li><p><strong>GameScene</strong> – The game scenes in which the property is available. Defaults to inherit this
 setting from the class the property is defined in.</p></li>
+<li><p><strong>GetterId</strong>, <strong>SetterId</strong> – Optional integer identifiers for the getter and the setter,
+as for <a class="reference internal" href="#attribute-KRPCProcedure" title="attribute: KRPCProcedure"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCProcedure</span></code></a>, and applying only to the class that declares the property.
+Each can only be set if the property has that getter or setter. A field of a
+<a class="reference internal" href="#attribute-KRPCStruct" title="attribute: KRPCStruct"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCStruct</span></code></a> sets neither.</p></li>
 </ul>
 </dd>
 </dl>
@@ -826,6 +837,43 @@ is not nullable fails with an error. See <a class="reference internal" href="typ
 </div>
 </li>
 </ul>
+</dd></dl>
+
+<dl class="cs attribute">
+<dt class="sig sig-object cs" id="attribute-KRPCProcedureId">
+<span class="sig-name descname"><span class="pre">KRPCProcedureId</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="n"><span class="pre">Member</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a><span class="w"> </span><span class="n"><span class="pre">Id</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a><span class="w"> </span><span class="n"><span class="pre">GetterId</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a><span class="w"> </span><span class="n"><span class="pre">SetterId</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span><span class="sig-paren">)</span><a class="headerlink" href="#attribute-KRPCProcedureId" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Member</strong> – The name of the inherited method or property. Pass it with <code class="docutils literal notranslate"><span class="pre">nameof</span></code> so the
+compiler checks it.</p></li>
+<li><p><strong>Id</strong> – The integer identifier for a method.</p></li>
+<li><p><strong>GetterId</strong>, <strong>SetterId</strong> – The integer identifiers for the getter and the setter of a
+property.</p></li>
+</ul>
+</dd>
+</dl>
+<p>This <a class="reference external" href="https://msdn.microsoft.com/en-us/library/aa287992.aspx">attribute</a> is applied to a
+<a class="reference internal" href="#attribute-KRPCClass" title="attribute: KRPCClass"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a>. It sets the ids of a member the class inherits from a base class, as
+<a class="reference internal" href="#attribute-KRPCMethod" title="attribute: KRPCMethod"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCMethod</span></code></a> and <a class="reference internal" href="#attribute-KRPCProperty" title="attribute: KRPCProperty"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCProperty</span></code></a> do for a member the class declares. It can be
+applied once per member.</p>
+<p><strong>Example</strong></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">Flag</span></code> class inherits the <code class="docutils literal notranslate"><span class="pre">Label</span></code> property, and sets the id of its getter:</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="na">[KRPCClass (Service = "EVA")]</span>
+<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Marker</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="na">[KRPCProperty]</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Label</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="na">[KRPCClass (Service = "EVA")]</span>
+<span class="na">[KRPCProcedureId (nameof (Marker.Label), GetterId = 42)]</span>
+<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Flag</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Marker</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// ...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>An id set on a member of <code class="docutils literal notranslate"><span class="pre">Marker</span></code> applies only to the <code class="docutils literal notranslate"><span class="pre">Marker</span></code> procedure. A base class that is
+not a <a class="reference internal" href="#attribute-KRPCClass" title="attribute: KRPCClass"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a> sets no ids, on its members or with this attribute.</p>
 </dd></dl>
 
 <dl class="cs attribute">
