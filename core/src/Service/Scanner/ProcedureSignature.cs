@@ -87,6 +87,8 @@ namespace KRPC.Service.Scanner
             Deprecated = deprecated;
             DeprecatedReason = deprecatedReason;
             Internal = isInternal;
+            if (Internal && serviceName != "KRPC")
+                throw new ServiceException (FullyQualifiedName + " is internal, which only a procedure of the KRPC service can be");
             Parameters = handler.Parameters.Select (x => new ParameterSignature (FullyQualifiedName, x)).ToList ();
 
             var returnType = handler.ReturnType;
@@ -95,6 +97,13 @@ namespace KRPC.Service.Scanner
                 // Check it's a valid return type
                 if (!TypeUtils.IsAValidType (returnType))
                     throw new ServiceException (returnType + " is not a valid Procedure return type, " + "in " + FullyQualifiedName);
+                // A stream or an event is returned only as the whole value, and a stream only by an
+                // internal procedure
+                if (TypeUtils.HoldsAStream (returnType) &&
+                    returnType != typeof(Messages.Stream) && returnType != typeof(Messages.Event))
+                    throw new ServiceException ("The return value of " + FullyQualifiedName + " holds a stream or an event inside another value");
+                if (returnType == typeof(Messages.Stream) && !Internal)
+                    throw new ServiceException ("The return value of " + FullyQualifiedName + " holds a stream, which only an internal procedure can return");
                 ReturnSpec = TypeSpec.Create (
                     returnType, handler.ReturnIsNullable, handler.ReturnNullablePaths,
                     "the return value of " + FullyQualifiedName);

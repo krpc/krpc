@@ -2,6 +2,8 @@
 
 - Add `internal` to the `Procedure` message
 - Mark the stream, event and server side function procedures of the `KRPC` service as internal
+- **Breaking:** Reject a service that holds a stream or an event anywhere but a return value, or a
+  stream returned by a procedure that is not internal
 
 ## client/cnano
 

@@ -41,6 +41,8 @@ namespace KRPC.Service.Scanner
             // Check the parameter type is valid
             if (!TypeUtils.IsAValidType (parameter.Type))
                 throw new ServiceException (parameter.Type + " is not a valid Procedure parameter type, in " + fullProcedureName);
+            if (TypeUtils.HoldsAStream (parameter.Type))
+                throw new ServiceException ("Parameter " + Name + " of " + fullProcedureName + " holds a stream or an event, which a parameter cannot");
 
             HasDefaultValue = parameter.HasDefaultValue;
             if (HasDefaultValue)
