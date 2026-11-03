@@ -38,6 +38,8 @@ Outputs in `bazel-bin`, test logs in `bazel-testlogs`.
  * `//doc:spelling` — American-English gate; `//doc:check-documented` — every RPC documented.
  * `//:csproj-test` — `.csproj` file-list check.
  * Game tests are **not** in `//:test` — see below.
+ * Deprecating a member switches its tests to the replacement. Deprecated members are unsupported
+   and get no tests.
  * Client comms tests use a local `TestServer` (no KSP needed); SerialIO ones need `socat`.
  * Flags: `--test_output=streamed`, `--cache_test_results=false`, `--subcommands`,
    `--config=system-llvm` (C/C++ as CI), `--config=windows`.
