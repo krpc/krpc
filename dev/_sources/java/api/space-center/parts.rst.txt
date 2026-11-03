@@ -1742,7 +1742,7 @@ Config Node
       .. note::
 
          If a name appears more than once, only the first value is included. Use
-         :meth:`ConfigNode.getValues(String)` to get all of the values with a given name.
+         :meth:`ConfigNode.findValues(String)` to get all of the values with a given name.
 
    .. method:: boolean hasValue(String name)
 
@@ -1760,7 +1760,16 @@ Config Node
       :param String name: Name of the value.
    
 
+   .. method:: java.util.List<String> findValues(String name)
+
+      Returns all of the values with the given name, as a list.
+
+      :param String name: Name of the values.
+   
+
    .. method:: java.util.List<String> getValues(String name)
+
+      .. warning:: Deprecated. Use :meth:`ConfigNode.findValues(String)` instead.
 
       Returns all of the values with the given name, as a list.
 
@@ -1790,7 +1799,16 @@ Config Node
       :param String name: Name of the child node.
    
 
+   .. method:: java.util.List<ConfigNode> findNodes(String name)
+
+      Returns all of the child nodes with the given name, as a list.
+
+      :param String name: Name of the child nodes.
+   
+
    .. method:: java.util.List<ConfigNode> getNodes(String name)
+
+      .. warning:: Deprecated. Use :meth:`ConfigNode.findNodes(String)` instead.
 
       Returns all of the child nodes with the given name, as a list.
 

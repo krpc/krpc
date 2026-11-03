@@ -3711,7 +3711,7 @@ static configuration of a part or part module, for example via
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>If a name appears more than once, only the first value is included. Use
-<a class="reference internal" href="#function-KRPC.Client.Services.SpaceCenter.ConfigNode.GetValues" title="function: KRPC.Client.Services.SpaceCenter.ConfigNode.GetValues"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">ConfigNode.GetValues</span></code></a> to get all of the values with a given name.</p>
+<a class="reference internal" href="#function-KRPC.Client.Services.SpaceCenter.ConfigNode.FindValues" title="function: KRPC.Client.Services.SpaceCenter.ConfigNode.FindValues"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">ConfigNode.FindValues</span></code></a> to get all of the values with a given name.</p>
 </div>
 </dd></dl>
 
@@ -3750,9 +3750,29 @@ value with the given name.</p>
 </dd></dl>
 
 <dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.ConfigNode.FindValues">
+<span id="function-KRPC.Client.Services.SpaceCenter.ConfigNode.FindValues(string)"></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IList-1" title="type: msdn ~&gt; System.Collections.Generic.IList"><span class="pre">IList</span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">FindValues</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="n"><span class="pre">name</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.ConfigNode.FindValues" title="Link to this definition">#</a></dt>
+<dd><p>Returns all of the values with the given name, as a list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – Name of the values.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs function">
 <dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.ConfigNode.GetValues">
 <span id="function-KRPC.Client.Services.SpaceCenter.ConfigNode.GetValues(string)"></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IList-1" title="type: msdn ~&gt; System.Collections.Generic.IList"><span class="pre">IList</span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetValues</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="n"><span class="pre">name</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.ConfigNode.GetValues" title="Link to this definition">#</a></dt>
-<dd><p>Returns all of the values with the given name, as a list.</p>
+<dd><div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Deprecated. Use <a class="reference internal" href="#function-KRPC.Client.Services.SpaceCenter.ConfigNode.FindValues" title="function: KRPC.Client.Services.SpaceCenter.ConfigNode.FindValues"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">ConfigNode.FindValues</span></code></a> instead.</p>
+</div>
+<p>Returns all of the values with the given name, as a list.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -3811,9 +3831,29 @@ is no child node with the given name.</p>
 </dd></dl>
 
 <dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.ConfigNode.FindNodes">
+<span id="function-KRPC.Client.Services.SpaceCenter.ConfigNode.FindNodes(string)"></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IList-1" title="type: msdn ~&gt; System.Collections.Generic.IList"><span class="pre">IList</span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#class-KRPC.Client.Services.SpaceCenter.ConfigNode" title="class: KRPC.Client.Services.SpaceCenter.ConfigNode"><span class="pre">ConfigNode</span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">FindNodes</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="n"><span class="pre">name</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.ConfigNode.FindNodes" title="Link to this definition">#</a></dt>
+<dd><p>Returns all of the child nodes with the given name, as a list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – Name of the child nodes.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs function">
 <dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.ConfigNode.GetNodes">
 <span id="function-KRPC.Client.Services.SpaceCenter.ConfigNode.GetNodes(string)"></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IList-1" title="type: msdn ~&gt; System.Collections.Generic.IList"><span class="pre">IList</span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#class-KRPC.Client.Services.SpaceCenter.ConfigNode" title="class: KRPC.Client.Services.SpaceCenter.ConfigNode"><span class="pre">ConfigNode</span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetNodes</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="n"><span class="pre">name</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.ConfigNode.GetNodes" title="Link to this definition">#</a></dt>
-<dd><p>Returns all of the child nodes with the given name, as a list.</p>
+<dd><div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Deprecated. Use <a class="reference internal" href="#function-KRPC.Client.Services.SpaceCenter.ConfigNode.FindNodes" title="function: KRPC.Client.Services.SpaceCenter.ConfigNode.FindNodes"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">ConfigNode.FindNodes</span></code></a> instead.</p>
+</div>
+<p>Returns all of the child nodes with the given name, as a list.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">

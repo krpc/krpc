@@ -84,6 +84,10 @@ SpaceCenter service
 * Shrink the auto-pilot's attenuation angles with the share of the torque that comes from control surfaces (:issue:`1191`, :issue:`526`)
 * Add an aerodynamics section to the auto-pilot info window, and make its sections collapsible (:issue:`1191`)
 * Fix the ``Vessel.Flight`` link to the ``Flight`` class (:issue:`1252`)
+* Parts
+
+  * :deprecated:`Deprecated` ``ConfigNode.GetValues`` and ``ConfigNode.GetNodes``, superseded by ``ConfigNode.FindValues`` and ``ConfigNode.FindNodes`` (:issue:`1261`)
+
 
 
 InfernalRobotics service

@@ -3191,7 +3191,7 @@ static configuration of a part or part module, for example via
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>If a name appears more than once, only the first value is included. Use
-<a class="reference internal" href="#c.krpc_SpaceCenter_ConfigNode_t.krpc_SpaceCenter_ConfigNode_GetValues" title="krpc_SpaceCenter_ConfigNode_GetValues"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ConfigNode_GetValues()</span></code></a> to get all of the values with a given name.</p>
+<a class="reference internal" href="#c.krpc_SpaceCenter_ConfigNode_t.krpc_SpaceCenter_ConfigNode_FindValues" title="krpc_SpaceCenter_ConfigNode_FindValues"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ConfigNode_FindValues()</span></code></a> to get all of the values with a given name.</p>
 </div>
 </dd></dl>
 
@@ -3224,9 +3224,26 @@ value with the given name.</p>
 </dd></dl>
 
 <dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ConfigNode_t.krpc_SpaceCenter_ConfigNode_FindValues">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ConfigNode_FindValues</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_list_string_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_ConfigNode_t" title="krpc_SpaceCenter_ConfigNode_t"><span class="n"><span class="pre">krpc_SpaceCenter_ConfigNode_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">name</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_ConfigNode_t.krpc_SpaceCenter_ConfigNode_FindValues" title="Link to this definition">#</a><br /></dt>
+<dd><p>Returns all of the values with the given name, as a list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – Name of the values.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_ConfigNode_t.krpc_SpaceCenter_ConfigNode_GetValues">
 <a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ConfigNode_GetValues</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_list_string_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_ConfigNode_t" title="krpc_SpaceCenter_ConfigNode_t"><span class="n"><span class="pre">krpc_SpaceCenter_ConfigNode_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">name</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_ConfigNode_t.krpc_SpaceCenter_ConfigNode_GetValues" title="Link to this definition">#</a><br /></dt>
-<dd><p>Returns all of the values with the given name, as a list.</p>
+<dd><div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Deprecated. Use <a class="reference internal" href="#c.krpc_SpaceCenter_ConfigNode_t.krpc_SpaceCenter_ConfigNode_FindValues" title="krpc_SpaceCenter_ConfigNode_FindValues"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ConfigNode_FindValues()</span></code></a> instead.</p>
+</div>
+<p>Returns all of the values with the given name, as a list.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -3271,9 +3288,26 @@ is no child node with the given name.</p>
 </dd></dl>
 
 <dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ConfigNode_t.krpc_SpaceCenter_ConfigNode_FindNodes">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ConfigNode_FindNodes</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_list_object_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_ConfigNode_t" title="krpc_SpaceCenter_ConfigNode_t"><span class="n"><span class="pre">krpc_SpaceCenter_ConfigNode_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">name</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_ConfigNode_t.krpc_SpaceCenter_ConfigNode_FindNodes" title="Link to this definition">#</a><br /></dt>
+<dd><p>Returns all of the child nodes with the given name, as a list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – Name of the child nodes.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_ConfigNode_t.krpc_SpaceCenter_ConfigNode_GetNodes">
 <a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ConfigNode_GetNodes</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_list_object_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_ConfigNode_t" title="krpc_SpaceCenter_ConfigNode_t"><span class="n"><span class="pre">krpc_SpaceCenter_ConfigNode_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">name</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_ConfigNode_t.krpc_SpaceCenter_ConfigNode_GetNodes" title="Link to this definition">#</a><br /></dt>
-<dd><p>Returns all of the child nodes with the given name, as a list.</p>
+<dd><div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Deprecated. Use <a class="reference internal" href="#c.krpc_SpaceCenter_ConfigNode_t.krpc_SpaceCenter_ConfigNode_FindNodes" title="krpc_SpaceCenter_ConfigNode_FindNodes"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ConfigNode_FindNodes()</span></code></a> instead.</p>
+</div>
+<p>Returns all of the child nodes with the given name, as a list.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">

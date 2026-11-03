@@ -1903,7 +1903,7 @@ Config Node
       .. note::
 
          If a name appears more than once, only the first value is included. Use
-         :meth:`ConfigNode.get_values` to get all of the values with a given name.
+         :meth:`ConfigNode.find_values` to get all of the values with a given name.
 
    .. method:: has_value(name)
 
@@ -1923,7 +1923,17 @@ Config Node
       :rtype: str
    
 
+   .. method:: find_values(name)
+
+      Returns all of the values with the given name, as a list.
+
+      :param str name: Name of the values.
+      :rtype: list(str)
+   
+
    .. method:: get_values(name)
+
+      .. warning:: Deprecated. Use :meth:`ConfigNode.find_values` instead.
 
       Returns all of the values with the given name, as a list.
 
@@ -1957,7 +1967,17 @@ Config Node
       :rtype: :class:`ConfigNode`
    
 
+   .. method:: find_nodes(name)
+
+      Returns all of the child nodes with the given name, as a list.
+
+      :param str name: Name of the child nodes.
+      :rtype: list(:class:`ConfigNode`)
+   
+
    .. method:: get_nodes(name)
+
+      .. warning:: Deprecated. Use :meth:`ConfigNode.find_nodes` instead.
 
       Returns all of the child nodes with the given name, as a list.
 

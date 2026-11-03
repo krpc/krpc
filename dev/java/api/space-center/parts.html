@@ -3191,7 +3191,7 @@ static configuration of a part or part module, for example via
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>If a name appears more than once, only the first value is included. Use
-<a class="reference internal" href="#krpc.client.services.SpaceCenter.ConfigNode.getValues(String)" title="krpc.client.services.SpaceCenter.ConfigNode.getValues(String)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">ConfigNode.getValues(String)</span></code></a> to get all of the values with a given name.</p>
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.ConfigNode.findValues(String)" title="krpc.client.services.SpaceCenter.ConfigNode.findValues(String)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">ConfigNode.findValues(String)</span></code></a> to get all of the values with a given name.</p>
 </div>
 </dd></dl>
 
@@ -3224,9 +3224,26 @@ value with the given name.</p>
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ConfigNode.findValues(String)">
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">findValues</span></span><span class="sig-paren">(</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ConfigNode.findValues(String)" title="Link to this definition">#</a></dt>
+<dd><p>Returns all of the values with the given name, as a list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>) – Name of the values.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ConfigNode.getValues(String)">
 <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getValues</span></span><span class="sig-paren">(</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ConfigNode.getValues(String)" title="Link to this definition">#</a></dt>
-<dd><p>Returns all of the values with the given name, as a list.</p>
+<dd><div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Deprecated. Use <a class="reference internal" href="#krpc.client.services.SpaceCenter.ConfigNode.findValues(String)" title="krpc.client.services.SpaceCenter.ConfigNode.findValues(String)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">ConfigNode.findValues(String)</span></code></a> instead.</p>
+</div>
+<p>Returns all of the values with the given name, as a list.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -3271,9 +3288,26 @@ is no child node with the given name.</p>
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ConfigNode.findNodes(String)">
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.ConfigNode" title="krpc.client.services.SpaceCenter.ConfigNode"><span class="pre">ConfigNode</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">findNodes</span></span><span class="sig-paren">(</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ConfigNode.findNodes(String)" title="Link to this definition">#</a></dt>
+<dd><p>Returns all of the child nodes with the given name, as a list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>) – Name of the child nodes.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ConfigNode.getNodes(String)">
 <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.ConfigNode" title="krpc.client.services.SpaceCenter.ConfigNode"><span class="pre">ConfigNode</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getNodes</span></span><span class="sig-paren">(</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ConfigNode.getNodes(String)" title="Link to this definition">#</a></dt>
-<dd><p>Returns all of the child nodes with the given name, as a list.</p>
+<dd><div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Deprecated. Use <a class="reference internal" href="#krpc.client.services.SpaceCenter.ConfigNode.findNodes(String)" title="krpc.client.services.SpaceCenter.ConfigNode.findNodes(String)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">ConfigNode.findNodes(String)</span></code></a> instead.</p>
+</div>
+<p>Returns all of the child nodes with the given name, as a list.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">

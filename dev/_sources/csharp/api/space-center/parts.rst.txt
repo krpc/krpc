@@ -1658,7 +1658,7 @@ Config Node
       .. note::
 
          If a name appears more than once, only the first value is included. Use
-         :meth:`ConfigNode.GetValues` to get all of the values with a given name.
+         :meth:`ConfigNode.FindValues` to get all of the values with a given name.
 
    .. function:: bool HasValue(string name)
 
@@ -1682,7 +1682,19 @@ Config Node
 
       :Game Scenes: All
 
+   .. function:: System.Collections.Generic.IList<string> FindValues(string name)
+
+      Returns all of the values with the given name, as a list.
+
+      :parameters:
+
+       * **name** -- Name of the values.
+
+      :Game Scenes: All
+
    .. function:: System.Collections.Generic.IList<string> GetValues(string name)
+
+      .. warning:: Deprecated. Use :meth:`ConfigNode.FindValues` instead.
 
       Returns all of the values with the given name, as a list.
 
@@ -1720,7 +1732,19 @@ Config Node
 
       :Game Scenes: All
 
+   .. function:: System.Collections.Generic.IList<ConfigNode> FindNodes(string name)
+
+      Returns all of the child nodes with the given name, as a list.
+
+      :parameters:
+
+       * **name** -- Name of the child nodes.
+
+      :Game Scenes: All
+
    .. function:: System.Collections.Generic.IList<ConfigNode> GetNodes(string name)
+
+      .. warning:: Deprecated. Use :meth:`ConfigNode.FindNodes` instead.
 
       Returns all of the child nodes with the given name, as a list.
 
