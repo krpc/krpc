@@ -1,9 +1,16 @@
+import functools
 import struct
 import unittest
 
 import krpctest
 
 PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
+
+# The part of each kind of camera on the test craft, and its module
+CAMERAS = [
+    ("OnboardCamera", "PartCameraModule"),
+    ("dockingPort3", "DockingCameraModule"),
+]
 
 
 class TestDockingCamera(krpctest.TestCase):
@@ -17,57 +24,71 @@ class TestDockingCamera(krpctest.TestCase):
         conn = cls.connect()
         cls.dc = conn.docking_camera
         cls.parts = conn.space_center.active_vessel.parts
-        cls.part = cls.parts.with_name("OnboardCamera")[0]
-        module = next(m for m in cls.part.modules if m.name == "PartCameraModule")
-        cls.enabled = next(f for f in module.field_list if f.name == "IsEnabled")
+        cls.cameras = []
+        for part_name, module_name in CAMERAS:
+            part = cls.parts.with_name(part_name)[0]
+            module = next(m for m in part.modules if m.name == module_name)
+            enabled = next(f for f in module.field_list if f.name == "IsEnabled")
+            cls.cameras.append((part, enabled))
 
     def setUp(self):
-        self.set_enabled(False)
+        for _, enabled in self.cameras:
+            self.set_enabled(enabled, False)
 
-    def set_enabled(self, value):
-        self.enabled.bool_value = value
-        self.wait_until(lambda: self.enabled.bool_value == value)
+    def set_enabled(self, enabled, value):
+        enabled.bool_value = value
+        self.wait_until(lambda: enabled.bool_value == value)
+
+    @staticmethod
+    def image(camera):
+        """The camera's image, or None while the camera is off."""
+        try:
+            return camera.image
+        except RuntimeError:
+            return None
+
+    @classmethod
+    def is_off(cls, camera):
+        return cls.image(camera) is None
 
     def test_available(self):
         self.assertTrue(self.dc.available)
 
     def test_camera(self):
-        camera = self.dc.camera(self.part)
-        self.assertEqual(self.part, camera.part)
-        self.assertEqual(camera, self.dc.camera(self.part))
+        for part, _ in self.cameras:
+            with self.subTest(part=part.name):
+                camera = self.dc.camera(part)
+                self.assertEqual(part, camera.part)
+                self.assertEqual(camera, self.dc.camera(part))
 
     def test_not_a_camera(self):
         with self.assertRaises(ValueError):
             self.dc.camera(self.parts.root)
 
     def test_image_while_off(self):
-        camera = self.dc.camera(self.part)
-
-        # The mod destroys its cameras in the module's next update
-        def is_off():
-            try:
-                _ = camera.image
-            except RuntimeError:
-                return True
-            return False
-
-        self.wait_until(is_off, message="the camera to switch off")
+        for part, _ in self.cameras:
+            with self.subTest(part=part.name):
+                camera = self.dc.camera(part)
+                # The mod destroys its cameras in the module's next update
+                self.wait_until(
+                    functools.partial(self.is_off, camera),
+                    message="the camera to switch off",
+                )
 
     def test_image(self):
-        camera = self.dc.camera(self.part)
-        self.set_enabled(True)
-
-        # The mod creates its cameras in the module's next update
-        def try_image():
-            try:
-                return camera.image
-            except RuntimeError:
-                return None
-
-        image = self.wait_until(try_image, message="the camera to switch on")
-        self.assertEqual(PNG_SIGNATURE, image[:8])
-        # The width and height from the IHDR chunk
-        self.assertEqual((256, 256), struct.unpack(">II", image[16:24]))
+        for part, enabled in self.cameras:
+            with self.subTest(part=part.name):
+                camera = self.dc.camera(part)
+                self.set_enabled(enabled, True)
+                # The mod creates its cameras in the module's next update
+                image = self.wait_until(
+                    functools.partial(self.image, camera),
+                    message="the camera to switch on",
+                )
+                self.assertEqual(PNG_SIGNATURE, image[:8])
+                # The width and height from the IHDR chunk
+                self.assertEqual((256, 256), struct.unpack(">II", image[16:24]))
+                self.set_enabled(enabled, False)
 
 
 if __name__ == "__main__":

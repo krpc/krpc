@@ -13,8 +13,12 @@ namespace KRPC.DockingCamera
     {
         const string assemblyName = "DockingCamKURS";
 
-        // PartCameraModule._camera, a PartCamera
-        static Func<PartModule, object> camera;
+        // The camera modules, in order of preference for a part with both. MM_KSPCamera.cfg adds
+        // DockingCameraModule to each docking port.
+        static readonly string[] moduleNames = { "PartCameraModule", "DockingCameraModule" };
+        // The _camera field of each module, a subclass of BaseCamera
+        static readonly Dictionary<string, Func<PartModule, object>> cameras =
+            new Dictionary<string, Func<PartModule, object>>();
         // BaseCamera.AllCameras, the Unity cameras for each render layer. Empty while the camera is off.
         static Func<object, List<UnityEngine.Camera>> allCameras;
 
@@ -28,13 +32,17 @@ namespace KRPC.DockingCamera
                 Logger.WriteLine("Load API: " + assemblyName + " not found; skipping");
                 return;
             }
-            var moduleType = assembly.assembly.GetType("OLDD_camera.Modules.PartCameraModule");
+            cameras.Clear();
+            foreach (var name in moduleNames) {
+                var moduleType = assembly.assembly.GetType("OLDD_camera.Modules." + name);
+                var getter = moduleType == null ? null : Accessor.Getter<PartModule, object>(moduleType, "_camera");
+                if (getter != null)
+                    cameras[name] = getter;
+            }
             var cameraType = assembly.assembly.GetType("OLDD_camera.Camera.BaseCamera");
-            if (moduleType != null)
-                camera = Accessor.Getter<PartModule, object>(moduleType, "_camera");
             if (cameraType != null)
                 allCameras = Accessor.Getter<object, List<UnityEngine.Camera>>(cameraType, "AllCameras");
-            if (camera == null || allCameras == null) {
+            if (cameras.Count != moduleNames.Length || allCameras == null) {
                 Logger.WriteLine("Load API: " + assemblyName + " camera members not found; skipping", Logger.Severity.Error);
                 return;
             }
@@ -42,19 +50,26 @@ namespace KRPC.DockingCamera
             Logger.WriteLine("Load API: Successfully loaded " + assemblyName + " version " + assembly.assembly.GetName().Version);
         }
 
+        // The camera module on a part, or null if it has none
+        public static PartModule GetModule(global::Part part)
+        {
+            var name = moduleNames.FirstOrDefault(n => part.Modules.Contains(n));
+            return name == null ? null : part.Modules[name];
+        }
+
         // Renders the cameras into a texture and encodes it as a PNG, as BaseCamera.GetPic does
         public static byte[] GetImage(PartModule module, int width, int height)
         {
-            var partCamera = camera(module);
-            var cameras = partCamera == null ? null : allCameras(partCamera);
-            if (cameras == null || cameras.Count == 0)
+            var camera = cameras[module.moduleName](module);
+            var unityCameras = camera == null ? null : allCameras(camera);
+            if (unityCameras == null || unityCameras.Count == 0)
                 throw new InvalidOperationException("The camera is off or not started");
             var renderTexture = RenderTexture.GetTemporary(width, height, 24);
             var image = new Texture2D(width, height, TextureFormat.RGB24, false);
             var active = RenderTexture.active;
-            var targets = cameras.Select(c => c.targetTexture).ToList();
+            var targets = unityCameras.Select(c => c.targetTexture).ToList();
             try {
-                foreach (var c in cameras) {
+                foreach (var c in unityCameras) {
                     c.targetTexture = renderTexture;
                     c.Render();
                 }
@@ -64,8 +79,8 @@ namespace KRPC.DockingCamera
                 return image.EncodeToPNG();
             } finally {
                 // Restore the mod's own render targets
-                for (int i = 0; i < cameras.Count; i++)
-                    cameras[i].targetTexture = targets[i];
+                for (int i = 0; i < unityCameras.Count; i++)
+                    unityCameras[i].targetTexture = targets[i];
                 RenderTexture.active = active;
                 RenderTexture.ReleaseTemporary(renderTexture);
                 UnityEngine.Object.Destroy(image);

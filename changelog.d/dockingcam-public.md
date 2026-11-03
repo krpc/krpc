@@ -4,3 +4,4 @@
   unreleased fork (#1232)
 - **Breaking:** `Camera.Image` throws an exception if the camera is off or not started, in place
   of returning an empty array (#1232)
+- Support the cameras Docking Camera (KURS) adds to docking ports (#1232)

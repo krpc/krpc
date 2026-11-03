@@ -30,7 +30,7 @@ namespace KRPC.DockingCamera
 
         /// <summary>
         /// Get the camera on a part.
-        /// Throws an exception if the part is not an onboard camera.
+        /// Throws an exception if the part is not an onboard camera or a docking port.
         /// </summary>
         /// <param name="part">The part.</param>
         [KRPCProcedure]

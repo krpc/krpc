@@ -10,18 +10,16 @@ using ObjectDestroyedException = KRPC.Service.KRPC.ObjectDestroyedException;
 namespace KRPC.DockingCamera
 {
     /// <summary>
-    /// A Docking Camera.
+    /// A camera from Docking Camera (KURS), on an onboard camera part or a docking port.
     /// </summary>
     [KRPCClass(Service = "DockingCamera")]
     public class Camera : Equatable<Camera>, IGameObjectState
     {
-        // The module that makes a part a camera
-        const string moduleName = "PartCameraModule";
         const int imageSize = 256;
 
         internal static bool Is(SpaceCenter.Services.Parts.Part part)
         {
-            return part.InternalPart.Modules.Contains(moduleName);
+            return API.GetModule(part.InternalPart) != null;
         }
 
         /// <summary>
@@ -35,22 +33,21 @@ namespace KRPC.DockingCamera
                 var state = Part.GameObjectState;
                 if (state != GameObjectState.Live)
                     return state;
-                return Part.InternalPart.Modules.Contains(moduleName)
+                return API.GetModule(Part.InternalPart) != null
                     ? GameObjectState.Live : GameObjectState.Destroyed;
             }
         }
 
-        // The part it is on, checked to still carry the module. Every member that reaches
-        // the mod goes through this.
-        global::Part InternalPart
+        // The camera module of the part. Every member that reaches the mod goes through this.
+        PartModule Module
         {
             get
             {
-                var innerPart = Part.InternalPart;
-                if (!innerPart.Modules.Contains(moduleName))
+                var module = API.GetModule(Part.InternalPart);
+                if (module == null)
                     throw new ObjectDestroyedException(
                         "The camera no longer exists, as its part no longer has one.");
-                return innerPart;
+                return module;
             }
         }
 
@@ -92,12 +89,13 @@ namespace KRPC.DockingCamera
         /// </summary>
         /// <remarks>
         /// The camera is switched on by setting the <c>IsEnabled</c> field of its
-        /// <c>PartCameraModule</c> to <c>true</c>, which also opens the camera window.
+        /// <c>PartCameraModule</c> or <c>DockingCameraModule</c> to <c>true</c>, which also opens
+        /// the camera window.
         /// </remarks>
         [KRPCProperty]
         public byte[] Image
         {
-            get { return API.GetImage(InternalPart.Modules[moduleName], imageSize, imageSize); }
+            get { return API.GetImage(Module, imageSize, imageSize); }
         }
     }
 }
