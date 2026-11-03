@@ -20,6 +20,16 @@ namespace KRPC.Service.Attributes
         public GameScene GameScene { get; set; }
 
         /// <summary>
+        /// The id of the getter, which defaults to a hash of its name.
+        /// </summary>
+        public uint GetterId { get; set; }
+
+        /// <summary>
+        /// The id of the setter, which defaults to a hash of its name.
+        /// </summary>
+        public uint SetterId { get; set; }
+
+        /// <summary>
         /// A kRPC property.
         /// </summary>
         public KRPCPropertyAttribute ()

@@ -17,7 +17,7 @@ namespace KRPC.Test.Service
             return obj.IntProperty;
         }
 
-        [KRPCProcedure]
+        [KRPCProcedure (Id = 1)]
         public static TestService.TestClass ClassTypeFromOtherServiceAsReturn (string value)
         {
             return new TestService.TestClass (value);

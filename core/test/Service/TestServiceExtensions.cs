@@ -53,7 +53,7 @@ namespace KRPC.Test.Service
             return obj.Value;
         }
 
-        [KRPCProperty]
+        [KRPCProperty (GetterId = 5)]
         public static int GetExtensionReadWriteProperty (this TestService.TestClass obj)
         {
             return obj.IntProperty;

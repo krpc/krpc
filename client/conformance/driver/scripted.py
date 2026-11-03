@@ -4,6 +4,7 @@ handshake and disconnect rules a TestServer cannot be made to break."""
 from __future__ import annotations
 
 import errno
+import hashlib
 import os
 import select
 import shutil
@@ -36,13 +37,22 @@ def definitions(server: Endpoint, *names: str) -> bytes:
     return result.SerializeToString()
 
 
+def _procedure_id(name: str) -> int:
+    """The id the server derives from a procedure name: the first 4 bytes of its SHA-256
+    hash, read as a little-endian integer."""
+    return int.from_bytes(hashlib.sha256(name.encode("utf-8")).digest()[:4], "little")
+
+
 def is_call(call: KRPC.ProcedureCall, procedure: str) -> bool:
-    """Whether a call is to the procedure. A scripted server has no table of procedure ids.
-    So a call by id matches every procedure, which suits a script waiting for one call."""
-    # Note: match the id against the name hash once procedure ids are name hashes
-    return call.procedure == procedure or (
-        call.procedure == "" and call.procedure_id != 0
-    )
+    """Whether a call is to the procedure, named or by id."""
+    if call.procedure:
+        return call.procedure == procedure
+    return call.procedure_id == _procedure_id(procedure)
+
+
+def _is_service_call(call: KRPC.ProcedureCall, service: str, procedure: str) -> bool:
+    # Note: a call by id is matched on its procedure alone, as service ids are set by hand
+    return (not call.service or call.service == service) and is_call(call, procedure)
 
 
 class SerialLine:
@@ -346,7 +356,7 @@ class ScriptedServer:
             if message is None or message.WhichOneof("content") != "request":
                 return
             response = KRPC.Response(id=message.request.id)
-            if message.request.calls[0].procedure == "GetServices":
+            if _is_service_call(message.request.calls[0], "KRPC", "GetServices"):
                 response.results.add(value=self.services)
             else:
                 response.results.append(result(message.request))
@@ -365,15 +375,15 @@ class ScriptedServer:
             self.answer(message.request)
 
     def _result(self, call: KRPC.ProcedureCall) -> bytes:
-        if call.service == "KRPC" and call.procedure == "GetServices":
+        if _is_service_call(call, "KRPC", "GetServices"):
             return self.services
-        if call.service == "KRPC" and call.procedure == "AddStream":
+        if _is_service_call(call, "KRPC", "AddStream"):
             stream_id = self._next_stream_id
             self._next_stream_id += 1
             return KRPC.Stream(id=stream_id).SerializeToString()
-        if call.service == "KRPC" and call.procedure == "RemoveStream":
+        if _is_service_call(call, "KRPC", "RemoveStream"):
             return b""
-        if call.service == "TestService" and call.procedure == "OnTimer":
+        if _is_service_call(call, "TestService", "OnTimer"):
             stream_id = self._next_stream_id
             self._next_stream_id += 1
             return KRPC.Event(stream=KRPC.Stream(id=stream_id)).SerializeToString()

@@ -58,6 +58,17 @@ namespace KRPC.Test.Service
         }
 
         [Test]
+        public void ExtensionPropertyIdForTheOtherAccessor ()
+        {
+            string cls;
+            var service = ServiceWithTestClass (out cls);
+            var exn = Assert.Throws<ServiceException> (
+                () => service.AddClassExtensionProperty (
+                    cls, typeof(TestService.TestClass), typeof(InvalidExtensions).GetMethod ("GetPropertyWithASetterId")));
+            StringAssert.Contains ("sets SetterId, but has no setter", exn.Message);
+        }
+
+        [Test]
         public void ExtensionPropertyAccessorPair ()
         {
             string cls;

@@ -293,6 +293,49 @@ namespace KRPC.Test.Service
             Assert.AreEqual (id, TypeUtils.GetServiceId(type));
         }
 
+        [TestCase ("GetStatus", 0u, 2007570979u)]
+        [TestCase ("SpaceCenter", 0u, 2640568483u)]
+        [TestCase ("GetStatus", 42u, 42u)]
+        public void GetId (string name, uint id, uint expected)
+        {
+            Assert.AreEqual (expected, TypeUtils.GetId (name, id));
+        }
+
+        [Test]
+        public void GetClassProcedureIds ()
+        {
+            var cls = typeof(ValidProcedureIds);
+            Assert.DoesNotThrow (() => TypeUtils.ValidateKRPCProcedureIds (cls));
+            Assert.AreEqual (22, TypeUtils.GetClassMethodId (cls, cls.GetMethod ("OwnMethod")));
+            Assert.AreEqual (0, TypeUtils.GetClassMethodId (cls, cls.GetMethod ("Method")));
+            Assert.AreEqual (21, TypeUtils.GetClassPropertyId (cls, cls.GetProperty ("Property"), false));
+            Assert.AreEqual (0, TypeUtils.GetClassPropertyId (cls, cls.GetProperty ("Property"), true));
+        }
+
+        [Test]
+        public void GetClassMethodIdInheritedFromANonKRPCClass ()
+        {
+            var cls = typeof(ValidProcedureIds);
+            var exn = Assert.Throws<ServiceException> (
+                () => TypeUtils.GetClassMethodId (cls, cls.GetMethod ("MethodWithAnId")));
+            StringAssert.Contains ("is not a KRPCClass; set the id on", exn.Message);
+        }
+
+        [TestCase (typeof(ProcedureIdForAMissingMember), "for Missing does not name a member the class inherits")]
+        [TestCase (typeof(ProcedureIdForAnOwnMethod), "for OwnMethod does not name a member the class inherits")]
+        [TestCase (typeof(ProcedureIdForAMethodWithoutId), "for Method does not set Id")]
+        [TestCase (typeof(ProcedureIdForAMethodWithGetterId), "for Method sets GetterId or SetterId, but the member is a method")]
+        [TestCase (typeof(ProcedureIdForAPropertyWithId), "for Property sets Id, but the member is a property")]
+        [TestCase (typeof(ProcedureIdForAPropertyWithoutIds), "for Property sets neither GetterId nor SetterId")]
+        [TestCase (typeof(ProcedureIdForAMissingSetter), "for ReadOnlyProperty sets SetterId, but has no setter")]
+        [TestCase (typeof(ProcedureIdOnABaseClass), "is applied to KRPC.Test.Service.ValidProcedureIds, a base of KRPC.Test.Service.ProcedureIdOnABaseClass that is not a KRPCClass")]
+        [TestCase (typeof(ProcedureIdAppliedTwice), "for Method is applied more than once")]
+        public void ValidateKRPCProcedureIds (Type cls, string message)
+        {
+            var exn = Assert.Throws<ServiceException> (() => TypeUtils.ValidateKRPCProcedureIds (cls));
+            StringAssert.Contains (message, exn.Message);
+        }
+
         [TestCase (typeof(TestService), GameScene.Flight)]
         [TestCase (typeof(TestService2), GameScene.All)]
         [TestCase (typeof(TestService3), GameScene.Editor)]
