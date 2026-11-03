@@ -5,7 +5,7 @@ namespace TestServer
     /// <summary>
     /// A second service. An extension member of TestService returns its class.
     /// </summary>
-    [KRPCService (Id = 9997)]
+    [KRPCService]
     public static class TestService2
     {
         /// <summary>

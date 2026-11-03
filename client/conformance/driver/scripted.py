@@ -51,7 +51,7 @@ def is_call(call: KRPC.ProcedureCall, procedure: str) -> bool:
 
 
 def _is_service_call(call: KRPC.ProcedureCall, service: str, procedure: str) -> bool:
-    # Note: a call by id is matched on its procedure alone, as service ids are set by hand
+    # Note: a call by id is matched on its procedure alone, as the KRPC service id is set by hand
     return (not call.service or call.service == service) and is_call(call, procedure)
 
 

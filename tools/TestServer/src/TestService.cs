@@ -12,7 +12,7 @@ namespace TestServer
     /// <summary>
     /// Service documentation string.
     /// </summary>
-    [KRPCService (Id = 9999)]
+    [KRPCService]
     public static class TestService
     {
         /// <summary>

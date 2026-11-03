@@ -13,7 +13,7 @@ namespace TestServer
     /// Server state the conformance tests control, so a test chooses when a stream updates, an
     /// event fires or a connection ends. State is keyed by name, and shared by every client.
     /// </summary>
-    [KRPCService (Id = 9996)]
+    [KRPCService]
     public static class ConformanceService
     {
         static readonly IDictionary<string, int> values = new Dictionary<string, int> ();
