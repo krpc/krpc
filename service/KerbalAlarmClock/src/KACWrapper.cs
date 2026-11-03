@@ -443,7 +443,8 @@ namespace KRPC.KerbalAlarmClock
                     SupportsRepeatPeriodProperty = Accessor.Getter<Object, Boolean>(KACAlarmType, "SupportsRepeatPeriod");
 
                     EnabledField = Accessor.Field<Object, Boolean>(KACAlarmType, "Enabled");
-                    PlaySoundField = Accessor.Field<Object, Boolean>(KACAlarmType, "PlaySound");
+                    ActionsField = Accessor.Getter<Object, Object>(KACAlarmType, "Actions");
+                    PlaySoundField = Accessor.Field<Object, Boolean>(KACAlarmType.Assembly.GetType("KerbalAlarmClock.AlarmActions"), "PlaySound");
                     TriggeredField = Accessor.Getter<Object, Boolean>(KACAlarmType, "Triggered");
 
                     //PropertyInfo[] pis = KACAlarmType.GetProperties();
@@ -610,14 +611,16 @@ namespace KRPC.KerbalAlarmClock
                     get { return EnabledField.Get(actualAlarm); }
                     set { EnabledField.Set(actualAlarm, value); }
                 }
+                // The alarm's own PlaySound field is persisted but unused. The mod reads the one in Actions.
+                private static Func<Object, Object> ActionsField;
                 private static Field<Object, Boolean> PlaySoundField;
                 /// <summary>
                 /// Whether the alarm plays a sound when it fires
                 /// </summary>
                 public Boolean PlaySound
                 {
-                    get { return PlaySoundField.Get(actualAlarm); }
-                    set { PlaySoundField.Set(actualAlarm, value); }
+                    get { return PlaySoundField.Get(ActionsField(actualAlarm)); }
+                    set { PlaySoundField.Set(ActionsField(actualAlarm), value); }
                 }
                 private static Func<Object, Boolean> TriggeredField;
                 /// <summary>

@@ -108,6 +108,10 @@ namespace KRPC.KerbalAlarmClock
         /// <summary>
         /// The action that the alarm triggers.
         /// </summary>
+        /// <remarks>
+        /// An alarm that plays a sound has the action <see cref="AlarmAction.Custom"/>.
+        /// See <see cref="PlaySound"/>.
+        /// </remarks>
         [KRPCProperty]
         public AlarmAction Action {
             get { return Internal.AlarmAction.ToAlarmAction (); }
@@ -188,6 +192,10 @@ namespace KRPC.KerbalAlarmClock
         /// <summary>
         /// Whether the alarm plays a sound when it fires.
         /// </summary>
+        /// <remarks>
+        /// An alarm that plays a sound has the action <see cref="AlarmAction.Custom"/>.
+        /// Setting <see cref="Action"/> to any other value turns the sound off.
+        /// </remarks>
         [KRPCProperty]
         public bool PlaySound {
             get { return Internal.PlaySound; }
