@@ -13,6 +13,7 @@ Current version: `tools/krpc-version.sh`. Full setup: `doc/src/krpc-development/
  * `tools/krpctools/` — `clientgen` (stubs), `docgen` (API docs), `servicedefs`.
  * `tools/krpctest/` — in-game test framework; `tools/TestServer/` — game-less server.
  * `tools/build/` — Bazel rules/toolchains. KSP assemblies come from `@ksp` in `MODULE.bazel`; no `lib/`.
+ * `.github/` — CI. `CI-Guide.md` says how it works and why; a CI change updates it.
  * `doc/` — documentation sources.
 
 ## Build
