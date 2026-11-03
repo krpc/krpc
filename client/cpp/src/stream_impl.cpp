@@ -13,8 +13,8 @@
 
 #include "krpc/client.hpp"
 #include "krpc/error.hpp"
+#include "krpc/internal_procedures.hpp"
 #include "krpc/race_point.hpp"
-#include "krpc/services/krpc.hpp"
 #include "krpc/stream_manager.hpp"
 
 namespace krpc {
@@ -65,7 +65,7 @@ void StreamImpl::set_rate(float value) {
   // Holding the manager keeps its client alive for the call
   auto held_manager = manager.lock();
   if (!held_manager || has_ended()) return;
-  services::KRPC(client).set_stream_rate(id, value);
+  internal_procedures::set_stream_rate(client, id, value);
 }
 
 std::string StreamImpl::get_data(bool* is_null) {

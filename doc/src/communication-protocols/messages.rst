@@ -582,6 +582,9 @@ The fields are:
 
 * ``deprecated_reason`` - The reason for the deprecation.
 
+* ``internal`` - Whether the procedure is for client libraries only, which call it to implement
+  streams, events and server side functions. The services a client library exposes leave it out.
+
 Classes
 ^^^^^^^
 

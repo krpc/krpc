@@ -251,6 +251,14 @@ namespace KRPC.Service
         }
 
         /// <summary>
+        /// Whether the attribute of the given procedure marks it internal.
+        /// </summary>
+        public static bool GetProcedureInternal (MethodInfo method)
+        {
+            return Reflection.GetAttribute<KRPCProcedureAttribute> (method).Internal;
+        }
+
+        /// <summary>
         /// The id set in the attribute of the given property for its getter or setter, or
         /// 0 for none.
         /// </summary>

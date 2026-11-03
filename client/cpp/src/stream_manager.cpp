@@ -16,9 +16,9 @@
 #include "krpc/connection.hpp"
 #include "krpc/encoder.hpp"
 #include "krpc/error.hpp"
+#include "krpc/internal_procedures.hpp"
 #include "krpc/krpc.pb.hpp"
 #include "krpc/race_point.hpp"
-#include "krpc/services/krpc.hpp"
 #include "krpc/session.hpp"
 #include "krpc/stream_impl.hpp"
 
@@ -101,7 +101,7 @@ void StreamManager::close() {
 }
 
 std::shared_ptr<StreamImpl> StreamManager::add_stream(const schema::ProcedureCall& call) {
-  uint64_t id = services::KRPC(client.get()).add_stream(call);
+  uint64_t id = internal_procedures::add_stream(client.get(), call);
   return get_stream(id);
 }
 
@@ -190,7 +190,7 @@ void StreamManager::remove_stream(StreamImpl* stream) {
   // ending holds whether or not the call succeeds
   auto ending = std::make_exception_ptr(StreamError("Stream does not exist"));
   call_end_callbacks(stream->end(ending), ending);
-  services::KRPC(client.get()).remove_stream(id);
+  internal_procedures::remove_stream(client.get(), id);
 }
 
 Condition& StreamManager::get_update_condition() { return condition; }

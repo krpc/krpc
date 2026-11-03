@@ -268,9 +268,9 @@ function service.create_service(client, svc)
     end
   end
 
-  -- Add procedures
+  -- Add procedures. An internal procedure is for client libraries only
   for _,procedure in ipairs(svc.procedures) do
-    if Attributes.is_a_procedure(procedure.name) then
+    if Attributes.is_a_procedure(procedure.name) and not procedure.internal then
       _skipping_unknown_types(svc.name .. '.' .. procedure.name, function ()
         cls:_add_service_procedure(procedure)
       end)

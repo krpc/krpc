@@ -54,6 +54,11 @@ namespace KRPC.Service.Scanner
         public string DeprecatedReason { get; private set; }
 
         /// <summary>
+        /// Whether the procedure is for client libraries only.
+        /// </summary>
+        public bool Internal { get; private set; }
+
+        /// <summary>
         /// The procedure's parameters.
         /// </summary>
         public IList<ParameterSignature> Parameters { get; private set; }
@@ -71,7 +76,7 @@ namespace KRPC.Service.Scanner
         /// <summary>
         /// Create a procedure signature. An id of 0 means the id is generated from the name.
         /// </summary>
-        internal ProcedureSignature (string serviceName, string procedureName, uint id, string documentation, IProcedureHandler handler, GameScene gameScene, bool deprecated, string deprecatedReason)
+        internal ProcedureSignature (string serviceName, string procedureName, uint id, string documentation, IProcedureHandler handler, GameScene gameScene, bool deprecated, string deprecatedReason, bool isInternal = false)
         {
             Name = procedureName;
             FullyQualifiedName = serviceName + "." + Name;
@@ -81,6 +86,7 @@ namespace KRPC.Service.Scanner
             GameScene = gameScene;
             Deprecated = deprecated;
             DeprecatedReason = deprecatedReason;
+            Internal = isInternal;
             Parameters = handler.Parameters.Select (x => new ParameterSignature (FullyQualifiedName, x)).ToList ();
 
             var returnType = handler.ReturnType;
@@ -111,6 +117,8 @@ namespace KRPC.Service.Scanner
                 info.AddValue ("deprecated", true);
                 info.AddValue ("deprecated_reason", DeprecatedReason);
             }
+            if (Internal)
+                info.AddValue ("internal", true);
         }
     }
 }

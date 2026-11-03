@@ -84,7 +84,7 @@ namespace KRPC.Client
 
         public StreamImpl AddStream (TypeSpec returnType, ProcedureCall call)
         {
-            var id = connection.KRPC ().AddStream (call);
+            var id = InternalProcedures.AddStream (connection, call);
             return GetStream (returnType, id);
         }
 
@@ -164,7 +164,7 @@ namespace KRPC.Client
             var endCallbacks = stream.End (ending);
             foreach (var callback in endCallbacks)
                 InvokeEndCallback (callback, ending);
-            connection.KRPC ().RemoveStream (stream.Id);
+            InternalProcedures.RemoveStream (connection, stream.Id);
         }
 
         /// <summary>

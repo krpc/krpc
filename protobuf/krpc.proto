@@ -134,6 +134,7 @@ message Procedure {
   string documentation = 5;
   bool deprecated = 7;
   string deprecated_reason = 8;
+  bool internal = 10;
 
   enum GameScene {
     SPACE_CENTER = 0;

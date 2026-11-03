@@ -145,7 +145,7 @@ class StreamImpl:
         self._rate = value
         # The server has no stream for the id once it ends
         if not self.ended:
-            self._client.krpc.set_stream_rate(self._stream_id, value)
+            self._client._internal.set_stream_rate(self._stream_id, value)
 
     @property
     def ended(self) -> bool:
@@ -516,7 +516,7 @@ class StreamManager:
             self._registered.add(stream)
 
     def add_stream(self, return_type: TypeBase, call: KRPC.ProcedureCall) -> StreamImpl:
-        stream_id = self._client.krpc.add_stream(call)
+        stream_id = self._client._internal.add_stream(call)
         return self.get_stream(return_type, stream_id)
 
     def get_stream(self, return_type: TypeBase, stream_id: int) -> StreamImpl:
@@ -562,7 +562,7 @@ class StreamManager:
         callbacks = stream.end(ending)
         deferred = _call_end_callbacks(callbacks, ending)
         try:
-            self._client.krpc.remove_stream(stream_id)
+            self._client._internal.remove_stream(stream_id)
         finally:
             if deferred is not None:
                 raise deferred

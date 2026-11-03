@@ -295,44 +295,6 @@ class KRPC : public Service {
   };
 
   /**
-   * Create an event from a server side function that evaluates to a boolean value.
-   *
-   * The event fires when the function becomes true, and again each time it becomes true
-   * after being false. Client libraries call this procedure to implement events. Use the
-   * events of your client library instead. Calling this directly while using a client
-   * library has undefined behavior.
-   */
-  ::krpc::Event add_event(KRPC::Expression function);
-
-  /**
-   * Add a stream of the value a server side function computes on each update.
-   *
-   * Client libraries call this procedure to implement server side functions. Use the
-   * server side functions of your client library instead. Calling this directly while
-   * using a client library has undefined behavior.
-   */
-  uint64_t add_function_stream(KRPC::Expression function);
-
-  /**
-   * Add a streaming request and return its identifier.
-   *
-   * Client libraries call this procedure to implement streams. Use the streams of your
-   * client library instead. Calling this directly while using a client library has
-   * undefined behavior.
-   */
-  uint64_t add_stream(krpc::schema::ProcedureCall call);
-
-  /**
-   * Compile a server side function, so that running, streaming or adding it as an
-   * event does not compile it.
-   *
-   * Client libraries call this procedure to implement server side functions. Use the
-   * server side functions of your client library instead. Calling this directly while
-   * using a client library has undefined behavior.
-   */
-  void compile_function(KRPC::Expression function);
-
-  /**
    * Returns the identifier for the current client.
    */
   std::string get_client_id();
@@ -398,38 +360,6 @@ class KRPC : public Service {
   void release_tick();
 
   /**
-   * Remove a streaming request.
-   *
-   * Client libraries call this procedure to implement streams. Use the streams of your
-   * client library instead. Calling this directly while using a client library has
-   * undefined behavior.
-   */
-  void remove_stream(uint64_t id);
-
-  /**
-   * Run a server side function once, within a single physics tick, and return
-   * the value it produces.
-   *
-   * Client libraries call this procedure to implement server side functions. Use the
-   * server side functions of your client library instead. Calling this directly while
-   * using a client library has undefined behavior.
-   * @return The encoded value of the function, or no bytes for a function with no
-   * value.
-   * @param function The function to run.
-   * @param arguments The encoded arguments, one per parameter.
-   */
-  std::optional<std::string> run_function(KRPC::Expression function, std::vector<std::optional<std::string> > arguments);
-
-  /**
-   * Set the update rate for a stream in Hz.
-   *
-   * Client libraries call this procedure to implement streams. Use the streams of your
-   * client library instead. Calling this directly while using a client library has
-   * undefined behavior.
-   */
-  void set_stream_rate(uint64_t id, float rate);
-
-  /**
    * The clients that are currently connected to the server.
    */
   std::vector<KRPC::ClientInfo> clients();
@@ -479,12 +409,6 @@ class KRPC : public Service {
    */
   void set_paused(bool value);
 
-  ::krpc::Stream<::krpc::Event> add_event_stream(KRPC::Expression function);
-
-  ::krpc::Stream<uint64_t> add_function_stream_stream(KRPC::Expression function);
-
-  ::krpc::Stream<uint64_t> add_stream_stream(krpc::schema::ProcedureCall call);
-
   ::krpc::Stream<std::string> get_client_id_stream();
 
   ::krpc::Stream<std::string> get_client_name_stream();
@@ -493,8 +417,6 @@ class KRPC : public Service {
 
   ::krpc::Stream<KRPC::ServerStatus> get_status_stream();
 
-  ::krpc::Stream<std::optional<std::string>> run_function_stream(KRPC::Expression function, std::vector<std::optional<std::string> > arguments);
-
   ::krpc::Stream<std::vector<KRPC::ClientInfo>> clients_stream();
 
   ::krpc::Stream<KRPC::GameScene> game_scene_stream();
@@ -502,14 +424,6 @@ class KRPC : public Service {
   ::krpc::Stream<uint32_t> game_state_loads_stream();
 
   ::krpc::Stream<bool> paused_stream();
-
-  ::krpc::schema::ProcedureCall add_event_call(KRPC::Expression function);
-
-  ::krpc::schema::ProcedureCall add_function_stream_call(KRPC::Expression function);
-
-  ::krpc::schema::ProcedureCall add_stream_call(krpc::schema::ProcedureCall call);
-
-  ::krpc::schema::ProcedureCall compile_function_call(KRPC::Expression function);
 
   ::krpc::schema::ProcedureCall get_client_id_call();
 
@@ -524,12 +438,6 @@ class KRPC : public Service {
   ::krpc::schema::ProcedureCall next_tick_call();
 
   ::krpc::schema::ProcedureCall release_tick_call();
-
-  ::krpc::schema::ProcedureCall remove_stream_call(uint64_t id);
-
-  ::krpc::schema::ProcedureCall run_function_call(KRPC::Expression function, std::vector<std::optional<std::string> > arguments);
-
-  ::krpc::schema::ProcedureCall set_stream_rate_call(uint64_t id, float rate);
 
   ::krpc::schema::ProcedureCall clients_call();
 
@@ -3175,46 +3083,6 @@ inline KRPC::KRPC(Client* client):
     [] (const std::string& msg) { throw UnsupportedSceneException(msg); });
 }
 
-inline ::krpc::Event KRPC::add_event(KRPC::Expression function) {
-  std::vector<krpc::encoder::Value> _args;
-  _args.reserve(1);
-  _args.push_back(encoder::encode_arg(function));
-  auto _data = this->_client->invoke("KRPC", "AddEvent", _args, ::krpc::Client::Returns::stream);
-  ::krpc::Event _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), this->_client);
-  return _result;
-}
-
-inline uint64_t KRPC::add_function_stream(KRPC::Expression function) {
-  std::vector<krpc::encoder::Value> _args;
-  _args.reserve(1);
-  _args.push_back(encoder::encode_arg(function));
-  auto _data = this->_client->invoke("KRPC", "AddFunctionStream", _args, ::krpc::Client::Returns::stream);
-  uint64_t _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), this->_client);
-  return _result;
-}
-
-inline uint64_t KRPC::add_stream(krpc::schema::ProcedureCall call) {
-  std::vector<krpc::encoder::Value> _args;
-  _args.reserve(1);
-  _args.push_back(encoder::encode_arg(call));
-  auto _data = this->_client->invoke("KRPC", "AddStream", _args, ::krpc::Client::Returns::stream);
-  uint64_t _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), this->_client);
-  return _result;
-}
-
-inline void KRPC::compile_function(KRPC::Expression function) {
-  std::vector<krpc::encoder::Value> _args;
-  _args.reserve(1);
-  _args.push_back(encoder::encode_arg(function));
-  this->_client->invoke("KRPC", "CompileFunction", _args, ::krpc::Client::Returns::value);
-}
-
 inline std::string KRPC::get_client_id() {
   auto _data = this->_client->invoke("KRPC", "GetClientID", {}, ::krpc::Client::Returns::value);
   std::string _result{};
@@ -3257,33 +3125,6 @@ inline void KRPC::next_tick() {
 
 inline void KRPC::release_tick() {
   this->_client->invoke("KRPC", "ReleaseTick", {}, ::krpc::Client::Returns::value);
-}
-
-inline void KRPC::remove_stream(uint64_t id) {
-  std::vector<krpc::encoder::Value> _args;
-  _args.reserve(1);
-  _args.push_back(encoder::encode_arg(id));
-  this->_client->invoke("KRPC", "RemoveStream", _args, ::krpc::Client::Returns::value);
-}
-
-inline std::optional<std::string> KRPC::run_function(KRPC::Expression function, std::vector<std::optional<std::string> > arguments = std::vector<std::optional<std::string>>{}) {
-  std::vector<krpc::encoder::Value> _args;
-  _args.reserve(2);
-  _args.push_back(encoder::encode_arg(function));
-  _args.push_back(encoder::encode_arg(arguments));
-  auto _data = this->_client->invoke("KRPC", "RunFunction", _args, ::krpc::Client::Returns::value);
-  std::optional<std::string> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), this->_client);
-  return _result;
-}
-
-inline void KRPC::set_stream_rate(uint64_t id, float rate) {
-  std::vector<krpc::encoder::Value> _args;
-  _args.reserve(2);
-  _args.push_back(encoder::encode_arg(id));
-  _args.push_back(encoder::encode_arg(rate));
-  this->_client->invoke("KRPC", "SetStreamRate", _args, ::krpc::Client::Returns::value);
 }
 
 inline std::vector<KRPC::ClientInfo> KRPC::clients() {
@@ -3332,27 +3173,6 @@ inline void KRPC::set_paused(bool value) {
   this->_client->invoke("KRPC", "set_Paused", _args, ::krpc::Client::Returns::value);
 }
 
-inline ::krpc::Stream<::krpc::Event> KRPC::add_event_stream(KRPC::Expression function) {
-  std::vector<krpc::encoder::Value> _args;
-  _args.reserve(1);
-  _args.push_back(encoder::encode_arg(function));
-  return ::krpc::Stream<::krpc::Event>(this->_client, this->_client->build_call("KRPC", "AddEvent", _args));
-}
-
-inline ::krpc::Stream<uint64_t> KRPC::add_function_stream_stream(KRPC::Expression function) {
-  std::vector<krpc::encoder::Value> _args;
-  _args.reserve(1);
-  _args.push_back(encoder::encode_arg(function));
-  return ::krpc::Stream<uint64_t>(this->_client, this->_client->build_call("KRPC", "AddFunctionStream", _args));
-}
-
-inline ::krpc::Stream<uint64_t> KRPC::add_stream_stream(krpc::schema::ProcedureCall call) {
-  std::vector<krpc::encoder::Value> _args;
-  _args.reserve(1);
-  _args.push_back(encoder::encode_arg(call));
-  return ::krpc::Stream<uint64_t>(this->_client, this->_client->build_call("KRPC", "AddStream", _args));
-}
-
 inline ::krpc::Stream<std::string> KRPC::get_client_id_stream() {
   return ::krpc::Stream<std::string>(this->_client, this->_client->build_call("KRPC", "GetClientID"));
 }
@@ -3369,14 +3189,6 @@ inline ::krpc::Stream<KRPC::ServerStatus> KRPC::get_status_stream() {
   return ::krpc::Stream<KRPC::ServerStatus>(this->_client, this->_client->build_call("KRPC", "GetStatus"));
 }
 
-inline ::krpc::Stream<std::optional<std::string>> KRPC::run_function_stream(KRPC::Expression function, std::vector<std::optional<std::string> > arguments = std::vector<std::optional<std::string>>{}) {
-  std::vector<krpc::encoder::Value> _args;
-  _args.reserve(2);
-  _args.push_back(encoder::encode_arg(function));
-  _args.push_back(encoder::encode_arg(arguments));
-  return ::krpc::Stream<std::optional<std::string>>(this->_client, this->_client->build_call("KRPC", "RunFunction", _args));
-}
-
 inline ::krpc::Stream<std::vector<KRPC::ClientInfo>> KRPC::clients_stream() {
   return ::krpc::Stream<std::vector<KRPC::ClientInfo>>(this->_client, this->_client->build_call("KRPC", "get_Clients"));
 }
@@ -3391,34 +3203,6 @@ inline ::krpc::Stream<uint32_t> KRPC::game_state_loads_stream() {
 
 inline ::krpc::Stream<bool> KRPC::paused_stream() {
   return ::krpc::Stream<bool>(this->_client, this->_client->build_call("KRPC", "get_Paused"));
-}
-
-inline ::krpc::schema::ProcedureCall KRPC::add_event_call(KRPC::Expression function) {
-  std::vector<krpc::encoder::Value> _args;
-  _args.reserve(1);
-  _args.push_back(encoder::encode_arg(function));
-  return this->_client->build_call("KRPC", "AddEvent", _args);
-}
-
-inline ::krpc::schema::ProcedureCall KRPC::add_function_stream_call(KRPC::Expression function) {
-  std::vector<krpc::encoder::Value> _args;
-  _args.reserve(1);
-  _args.push_back(encoder::encode_arg(function));
-  return this->_client->build_call("KRPC", "AddFunctionStream", _args);
-}
-
-inline ::krpc::schema::ProcedureCall KRPC::add_stream_call(krpc::schema::ProcedureCall call) {
-  std::vector<krpc::encoder::Value> _args;
-  _args.reserve(1);
-  _args.push_back(encoder::encode_arg(call));
-  return this->_client->build_call("KRPC", "AddStream", _args);
-}
-
-inline ::krpc::schema::ProcedureCall KRPC::compile_function_call(KRPC::Expression function) {
-  std::vector<krpc::encoder::Value> _args;
-  _args.reserve(1);
-  _args.push_back(encoder::encode_arg(function));
-  return this->_client->build_call("KRPC", "CompileFunction", _args);
 }
 
 inline ::krpc::schema::ProcedureCall KRPC::get_client_id_call() {
@@ -3447,29 +3231,6 @@ inline ::krpc::schema::ProcedureCall KRPC::next_tick_call() {
 
 inline ::krpc::schema::ProcedureCall KRPC::release_tick_call() {
   return this->_client->build_call("KRPC", "ReleaseTick");
-}
-
-inline ::krpc::schema::ProcedureCall KRPC::remove_stream_call(uint64_t id) {
-  std::vector<krpc::encoder::Value> _args;
-  _args.reserve(1);
-  _args.push_back(encoder::encode_arg(id));
-  return this->_client->build_call("KRPC", "RemoveStream", _args);
-}
-
-inline ::krpc::schema::ProcedureCall KRPC::run_function_call(KRPC::Expression function, std::vector<std::optional<std::string> > arguments = std::vector<std::optional<std::string>>{}) {
-  std::vector<krpc::encoder::Value> _args;
-  _args.reserve(2);
-  _args.push_back(encoder::encode_arg(function));
-  _args.push_back(encoder::encode_arg(arguments));
-  return this->_client->build_call("KRPC", "RunFunction", _args);
-}
-
-inline ::krpc::schema::ProcedureCall KRPC::set_stream_rate_call(uint64_t id, float rate) {
-  std::vector<krpc::encoder::Value> _args;
-  _args.reserve(2);
-  _args.push_back(encoder::encode_arg(id));
-  _args.push_back(encoder::encode_arg(rate));
-  return this->_client->build_call("KRPC", "SetStreamRate", _args);
 }
 
 inline ::krpc::schema::ProcedureCall KRPC::clients_call() {

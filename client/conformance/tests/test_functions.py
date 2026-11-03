@@ -12,7 +12,8 @@ from driver import profile, section, values
 from driver.errors import assert_argument_error, assert_error_kind, is_removed_error
 from driver.functions import Functions
 from driver.helpers import ended, name, raised
-from driver.testee import REPLY_TIMEOUT, wait_until
+from driver.scripted import null_stream_ids
+from driver.testee import REPLY_TIMEOUT, TesteeError, wait_until
 
 
 @pytest.fixture
@@ -392,6 +393,36 @@ def test_two_streams_of_one_function(connected, functions, control, request):
 
 
 section("Events")
+
+
+@profile("functions", "streams")
+def test_null_stream_id(client, server, scripted_server):
+    """A null result for the call that adds a stream of a function raises the encoding
+    error. The next call succeeds."""
+    null_stream_ids(client, server, scripted_server)
+    try:
+        function = Functions(client).expression("ConstantInt", values.sint32(2))
+        with pytest.raises(TesteeError) as info:
+            client.add_function_stream(function, "sint32")
+        assert_error_kind(client, info.value.error, pb.Error.ENCODING)
+        assert client.invoke("TestService", "Int32ToString", values.sint32(1)) == ""
+    finally:
+        client.close()
+
+
+@profile("events", "functions")
+def test_null_event(client, server, scripted_server):
+    """A null result for the call that adds an event over a function raises the encoding
+    error. The next call succeeds."""
+    null_stream_ids(client, server, scripted_server)
+    try:
+        function = Functions(client).expression("ConstantBool", values.boolean(True))
+        with pytest.raises(TesteeError) as info:
+            client.add_function_event(function)
+        assert_error_kind(client, info.value.error, pb.Error.ENCODING)
+        assert client.invoke("TestService", "Int32ToString", values.sint32(1)) == ""
+    finally:
+        client.close()
 
 
 @profile("events", "functions")

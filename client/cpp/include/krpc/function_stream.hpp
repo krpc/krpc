@@ -12,6 +12,7 @@
 #include <vector>
 
 #include "krpc/event.hpp"
+#include "krpc/internal_procedures.hpp"
 #include "krpc/object.hpp"
 #include "krpc/services/krpc.hpp"
 #include "krpc/stream.hpp"
@@ -395,8 +396,7 @@ template <typename T>
 inline Stream<T> add_stream(const services::KRPC::Expression& function) {
   function._client->check_stream_connection();
   function_stream_detail::check_return_type<T>(function);
-  services::KRPC krpc_service(function._client);
-  uint64_t stream_id = krpc_service.add_function_stream(function);
+  uint64_t stream_id = internal_procedures::add_function_stream(function);
   return function_stream_detail::function_streams::create<T>(
       function._client, stream_id, !function_stream_detail::is_optional<T>::value);
 }
@@ -409,8 +409,7 @@ inline Stream<T> add_stream(const services::KRPC::Expression& function) {
  */
 inline Event add_event(const services::KRPC::Expression& function) {
   function._client->check_stream_connection();
-  services::KRPC krpc_service(function._client);
-  return krpc_service.add_event(function);
+  return internal_procedures::add_event(function);
 }
 
 /**
@@ -427,8 +426,7 @@ template <typename T = void, typename... Args>
 inline T run(const services::KRPC::Expression& function, const Args&... args) {
   if constexpr (!std::is_void_v<T>) function_stream_detail::check_return_type<T>(function);
   auto arguments = function_stream_detail::encode_arguments(function, args...);
-  services::KRPC krpc_service(function._client);
-  [[maybe_unused]] auto data = krpc_service.run_function(function, arguments);
+  [[maybe_unused]] auto data = internal_procedures::run_function(function, arguments);
   if constexpr (!std::is_void_v<T>) {
     // A null value is signaled out-of-band by is_null
     T result{};

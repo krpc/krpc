@@ -204,7 +204,7 @@ def expected_members(services, service_name, name, style):
                 names.add(member_name(procedure.name, style))
         return names
     for procedure in service.procedures:
-        if not Attributes.is_a_class_member(procedure.name):
+        if not Attributes.is_a_class_member(procedure.name) and not procedure.internal:
             names.add(member_name(procedure.name, style))
     types = [service.classes, service.enumerations, service.structs]
     if style.exceptions:
@@ -386,10 +386,10 @@ def with_definitions(client, server, scripted_server, *added):
 @pytest.mark.parametrize("roster", list(ROSTERS))
 def test_exposed_members(connected, control, roster):
     """The client exposes exactly the services the server defines, and for each service its
-    procedures, properties, classes, enumerations and structures. A client in a language with
-    exception types also exposes the service's exceptions. Each class exposes its methods,
-    static methods and properties, including those another service adds, and each enumeration
-    its values."""
+    procedures other than internal ones, properties, classes, enumerations and structures. A
+    client in a language with exception types also exposes the service's exceptions. Each class
+    exposes its methods, static methods and properties, including those another service adds,
+    and each enumeration its values."""
     service, name = ROSTERS[roster]
     style = connected.conventions.naming
     exposed = connected.members(service, name)
@@ -424,6 +424,25 @@ def test_member_name_case(client, server, scripted_server):
     )
     try:
         assert client.members("Names", "Names") == set(names.values())
+    finally:
+        client.close()
+
+
+@profile("dynamic")
+def test_internal_procedure(client, server, scripted_server):
+    """The client leaves out a procedure the server marks internal. The client library calls
+    an internal procedure itself, to implement streams, events and server side functions."""
+    service = KRPC.Service(
+        name="Internals",
+        procedures=[
+            KRPC.Procedure(name="Visible"),
+            KRPC.Procedure(name="Concealed", internal=True),
+        ],
+    )
+    with_definitions(client, server, scripted_server, service)
+    try:
+        style = client.conventions.naming
+        assert client.members("Internals", "") == {style.convert("Visible")}
     finally:
         client.close()
 

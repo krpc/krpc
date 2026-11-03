@@ -143,7 +143,7 @@ def build_services(services_info, ordering):
 
     services = {
         name: Service(name, sort=sort, types=definitions.types, **info)
-        for name, info in services_info.items()
+        for name, info in definitions.services.items()
     }
 
     if sort_failed:

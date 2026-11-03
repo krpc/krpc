@@ -1,50 +1,11 @@
 # The conformance tests the C++ client fails, one per line, with the reason as a comment
 test_connection.py::test_call_after_end[close]  # No close: a Client closes when it is destroyed
-test_errors.py::test_mapped_exceptions[ArgumentException]  # KRPC exception types are registered only by a KRPC service object
+test_errors.py::test_mapped_exceptions[ArgumentException]  # The testee names std::logic_error before std::invalid_argument
 test_errors.py::test_mapped_exceptions[ArgumentNullException]  # As above
-test_errors.py::test_mapped_exceptions[ArgumentOutOfRangeException]  # As above
-test_errors.py::test_mapped_exceptions[DivideByZeroException]  # As above
-test_errors.py::test_mapped_exceptions[IndexOutOfRangeException]  # As above
-test_errors.py::test_mapped_exceptions[InvalidOperationException]  # As above
-test_errors.py::test_mapped_exceptions[KeyNotFoundException]  # As above
-test_errors.py::test_mapped_exceptions[NotSupportedException]  # As above
+test_errors.py::test_mapped_exceptions[NotSupportedException]  # The conventions file has no native type for the exception
 test_errors.py::test_mapped_exceptions[NullReferenceException]  # As above
-test_errors.py::test_mapped_exceptions[OverflowException]  # As above
 test_errors.py::test_mapped_exceptions[TimeoutException]  # As above
-test_errors.py::test_service_exceptions[krpc]  # As test_mapped_exceptions
-test_errors.py::test_setter_error  # As test_mapped_exceptions
-test_errors.py::test_message[ArgumentException]  # As test_mapped_exceptions, so the message has the prefix for an unknown type
-test_errors.py::test_message[ArgumentNullException]  # As above
-test_errors.py::test_message[ArgumentOutOfRangeException]  # As above
-test_errors.py::test_message[DivideByZeroException]  # As above
-test_errors.py::test_message[IndexOutOfRangeException]  # As above
-test_errors.py::test_message[InvalidOperationException]  # As above
-test_errors.py::test_message[KeyNotFoundException]  # As above
-test_errors.py::test_message[NotSupportedException]  # As above
-test_errors.py::test_message[NullReferenceException]  # As above
-test_errors.py::test_message[OverflowException]  # As above
-test_errors.py::test_message[TimeoutException]  # As above
-test_errors.py::test_whole_message[ArgumentException]  # As test_message
-test_errors.py::test_whole_message[ArgumentNullException]  # As above
-test_errors.py::test_whole_message[ArgumentOutOfRangeException]  # As above
-test_errors.py::test_whole_message[DivideByZeroException]  # As above
-test_errors.py::test_whole_message[IndexOutOfRangeException]  # As above
-test_errors.py::test_whole_message[InvalidOperationException]  # As above
-test_errors.py::test_whole_message[KeyNotFoundException]  # As above
-test_errors.py::test_whole_message[NotSupportedException]  # As above
-test_errors.py::test_whole_message[NullReferenceException]  # As above
-test_errors.py::test_whole_message[OverflowException]  # As above
-test_errors.py::test_whole_message[TimeoutException]  # As above
-test_errors.py::test_description[astral]  # As test_message
-test_errors.py::test_description[empty]  # As above
-test_errors.py::test_description[long]  # As above
-test_errors.py::test_description[multi-line]  # As above
-test_errors.py::test_description[non-ascii]  # As above
 test_calls.py::test_class_extension_members  # The testee dispatch covers KRPC and TestService only
-test_objects.py::test_unknown_object_id[zero-argument]  # As test_errors.py::test_service_exceptions[krpc]
-test_objects.py::test_unknown_object_id[zero-target]  # As test_errors.py::test_service_exceptions[krpc]
-test_objects.py::test_unknown_object_id[never-issued-argument]  # As test_errors.py::test_service_exceptions[krpc]
-test_objects.py::test_unknown_object_id[never-issued-target]  # As test_errors.py::test_service_exceptions[krpc]
 test_streams.py::test_members[extension-member]  # The testee dispatch covers KRPC and TestService only
 test_streams.py::test_undecodable_value  # A stream value is decoded when it is read, so a read after a value that fails to decode raises
 test_connection.py::test_close_twice  # As test_call_after_end[close]
@@ -69,9 +30,6 @@ test_functions.py::test_null_for_non_nullable_type[double]  # Raises std::runtim
 test_functions.py::test_stream_null_for_non_nullable_type[double]  # As test_null_for_non_nullable_type[double]
 test_functions.py::test_null_for_non_nullable_type[TestClass]  # As test_null_for_non_nullable_type[double]
 test_functions.py::test_stream_null_for_non_nullable_type[TestClass]  # As test_null_for_non_nullable_type[TestClass]
-test_events.py::test_server_end  # An event the server ends raises an unnamed RPC error, not KRPC.StreamRemovedException or the stream error
-test_events.py::test_ended_without_firing  # As test_server_end
-test_events.py::test_end_callback[server]  # As test_server_end
 test_threading.py::test_close_with_a_call_in_flight  # No close: a Client closes when its last copy is destroyed, and the calling thread holds one
 test_threading.py::test_response_after_close  # As test_threading.py::test_close_with_a_call_in_flight
 test_threading.py::test_wait_holding_another @skip  # The dispatcher thread waits for the condition held, so the update of the stream waited on is never announced

@@ -558,6 +558,8 @@ namespace KRPC.Client.Conformance
                 if (connectionException.Reason.HasValue)
                     error.Reason = EnumName (
                         Disconnect.Descriptor.EnumTypes [0], (int)connectionException.Reason.Value);
+            } else if (exn is EncodingException) {
+                error.Kind = Error.Types.Kind.Encoding;
             } else if (exn is ArgumentException) {
                 // The client's argument error, which is also the type of a server
                 // ArgumentException

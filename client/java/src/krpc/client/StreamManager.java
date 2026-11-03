@@ -11,7 +11,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
-import krpc.client.services.KRPC;
 import krpc.schema.KRPC.ProcedureCall;
 import krpc.schema.KRPC.ProcedureResult;
 import krpc.schema.KRPC.StreamResult;
@@ -24,7 +23,6 @@ import krpc.schema.KRPC.Type;
 class StreamManager {
   private Connection connection;
   private Session session;
-  private KRPC krpc;
   final Object updateLock;
   // Concurrent, so the session can ask whether it is empty without the update lock
   private final Map<Long, StreamImpl> streams = new ConcurrentHashMap<Long, StreamImpl>();
@@ -39,7 +37,6 @@ class StreamManager {
   StreamManager(Connection connection, Session session) {
     this.connection = connection;
     this.session = session;
-    krpc = KRPC.newInstance(connection);
     updateLock = new Object();
   }
 
@@ -101,7 +98,7 @@ class StreamManager {
   }
 
   StreamImpl addStream(Type returnType, ProcedureCall call) throws RPCException {
-    long id = krpc.addStream(call);
+    long id = InternalProcedures.addStream(connection, call);
     return getStream(returnType, id);
   }
 
@@ -164,7 +161,7 @@ class StreamManager {
     }
     // An Error from an end callback is thrown once the server has removed the stream
     try {
-      krpc.removeStream(id);
+      InternalProcedures.removeStream(connection, id);
     } finally {
       if (deferred != null) {
         throw deferred;

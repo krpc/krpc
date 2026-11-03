@@ -865,6 +865,10 @@ Client API Reference
 
    Thrown for an error from the server that the client has no exception class for.
 
+.. class:: EncodingException
+
+   Thrown when the server returns null for a value that cannot be null.
+
 .. class:: FunctionCompilationException
 
    Thrown when a lambda expression cannot be compiled into a server side function. The message

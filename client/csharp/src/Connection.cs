@@ -485,7 +485,7 @@ namespace KRPC.Client
 
         Services.KRPC.Expression CompiledOnServer (Services.KRPC.Expression function)
         {
-            Services.KRPC.ExtensionMethods.KRPC (this).CompileFunction (function);
+            InternalProcedures.CompileFunction (this, function);
             return function;
         }
 
@@ -500,7 +500,7 @@ namespace KRPC.Client
         {
             CheckDisposed ();
             var compiled = FunctionCompiler.Compile (this, expression, expressionRemoteTypes, true);
-            return Services.KRPC.ExtensionMethods.KRPC (this).AddEvent (compiled);
+            return InternalProcedures.AddEvent (this, compiled);
         }
 
         /// <summary>
@@ -511,7 +511,7 @@ namespace KRPC.Client
             CheckDisposed ();
             if (ReferenceEquals (function, null))
                 throw new ArgumentNullException (nameof (function));
-            return Services.KRPC.ExtensionMethods.KRPC (this).AddEvent (function);
+            return InternalProcedures.AddEvent (this, function);
         }
 
         /// <summary>
@@ -534,13 +534,13 @@ namespace KRPC.Client
         TResult RunCheckedFunction<TResult> (
             Services.KRPC.Expression function, TypeSpec spec, IList<byte[]> arguments = null)
         {
-            var data = Services.KRPC.ExtensionMethods.KRPC (this).RunFunction (function, arguments);
+            var data = InternalProcedures.RunFunction (this, function, arguments);
             // A null value is signaled out of band by is_null, which the stub reports as
             // no data at all
             if (data == null) {
                 if (typeof (TResult).IsValueType &&
                     System.Nullable.GetUnderlyingType (typeof (TResult)) == null)
-                    throw new InvalidOperationException (
+                    throw new EncodingException (
                         "The function produced a null value, which " + typeof (TResult) +
                         " cannot hold. Use a nullable type for the result.");
                 return default (TResult);
@@ -576,7 +576,7 @@ namespace KRPC.Client
         {
             CheckDisposed ();
             var compiled = FunctionCompiler.Compile (this, expression, expressionRemoteTypes);
-            Services.KRPC.ExtensionMethods.KRPC (this).RunFunction (compiled);
+            InternalProcedures.RunFunction (this, compiled);
         }
 
         /// <summary>
@@ -591,7 +591,7 @@ namespace KRPC.Client
             CheckDisposed ();
             if (ReferenceEquals (function, null))
                 throw new ArgumentNullException (nameof (function));
-            Services.KRPC.ExtensionMethods.KRPC (this).RunFunction (function, EncodeArguments (function, args));
+            InternalProcedures.RunFunction (this, function, EncodeArguments (function, args));
         }
 
         /// <summary>
@@ -706,7 +706,7 @@ namespace KRPC.Client
 
         Stream<TResult> AddCheckedStream<TResult> (Services.KRPC.Expression function, TypeSpec spec)
         {
-            var streamId = Services.KRPC.ExtensionMethods.KRPC (this).AddFunctionStream (function);
+            var streamId = InternalProcedures.AddFunctionStream (this, function);
             return new Stream<TResult> (this, streamId, spec);
         }
 

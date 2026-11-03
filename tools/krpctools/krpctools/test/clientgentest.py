@@ -166,6 +166,30 @@ class ClientGenTestCase(_Base):
         )
         self.generate("ServiceA", {"ServiceA": service, "ServiceB": other})
 
+    def test_internal_procedure(self):
+        # An internal procedure is for client libraries only, so its stub is left out
+        def procedure(pid, internal):
+            info = {"id": pid, "parameters": [], "documentation": ""}
+            if internal:
+                info["internal"] = True
+            return info
+
+        service = {
+            "id": 1,
+            "documentation": "",
+            "procedures": {
+                "Visible": procedure(1, False),
+                "Concealed": procedure(2, True),
+            },
+            "classes": {},
+            "enumerations": {},
+            "exceptions": {},
+            "structs": {},
+        }
+        content = self.generate("ServiceA", {"ServiceA": service}).lower()
+        self.assertIn("visible", content)
+        self.assertNotIn("concealed", content)
+
     def test_service_that_is_not_defined(self):
         defs = self.load("Ordering")
         del defs["ServiceB"]

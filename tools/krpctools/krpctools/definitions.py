@@ -17,10 +17,14 @@ class Definitions:
     which everything they define is registered.
 
     The registry belongs to the run rather than to the process, so that generating from one set
-    of definitions does not see the types of another."""
+    of definitions does not see the types of another. An internal procedure is for client
+    libraries only, so the definitions leave it out of the generated code and the docs."""
 
     def __init__(self, services_info):
-        self._services = services_info
+        self._services = {
+            name: _without_internal_procedures(info)
+            for name, info in services_info.items()
+        }
         self._types = Types()
         register_all(self._types, _definitions(services_info))
 
@@ -48,6 +52,18 @@ class Definitions:
             lambda typ: typ.protobuf_type.SerializeToString(),
             _contained_collection_types,
         )
+
+
+def _without_internal_procedures(info):
+    procedures = info.get("procedures", {})
+    return {
+        **info,
+        "procedures": {
+            name: procedure
+            for name, procedure in procedures.items()
+            if not procedure.get("internal", False)
+        },
+    }
 
 
 def _definitions(services_info):

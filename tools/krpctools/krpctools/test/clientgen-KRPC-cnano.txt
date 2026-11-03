@@ -199,46 +199,6 @@ static inline krpc_error_t krpc_decode_list_KRPC_ClientInfo(
 
 #endif  // KRPC_TYPE_LIST_KRPC_CLIENTINFO
 
-#ifndef KRPC_TYPE_NULLABLE_BYTES
-#define KRPC_TYPE_NULLABLE_BYTES
-
-typedef struct krpc_nullable_bytes_s krpc_nullable_bytes_t;
-struct krpc_nullable_bytes_s {
-  krpc_bytes_t value;
-  bool has_value;
-};
-
-static inline krpc_error_t krpc_encode_nullable_bytes(
-  pb_ostream_t * stream, const krpc_nullable_bytes_t * value);
-static inline krpc_error_t krpc_encode_size_nullable_bytes(
-  size_t * size, const krpc_nullable_bytes_t * value);
-static inline bool krpc_encode_callback_nullable_bytes(
-  pb_ostream_t * stream, const pb_field_t * field, void * const * arg);
-static inline krpc_error_t krpc_decode_nullable_bytes(
-  pb_istream_t * stream, krpc_nullable_bytes_t * value);
-
-#endif  // KRPC_TYPE_NULLABLE_BYTES
-
-#ifndef KRPC_TYPE_LIST_NULLABLE_BYTES
-#define KRPC_TYPE_LIST_NULLABLE_BYTES
-
-typedef struct krpc_list_nullable_bytes_s krpc_list_nullable_bytes_t;
-struct krpc_list_nullable_bytes_s {
-  size_t size;
-  krpc_nullable_bytes_t * items;
-};
-
-static inline krpc_error_t krpc_encode_list_nullable_bytes(
-  pb_ostream_t * stream, const krpc_list_nullable_bytes_t * value);
-static inline krpc_error_t krpc_encode_size_list_nullable_bytes(
-  size_t * size, const krpc_list_nullable_bytes_t * value);
-static inline bool krpc_encode_callback_list_nullable_bytes(
-  pb_ostream_t * stream, const pb_field_t * field, void * const * arg);
-static inline krpc_error_t krpc_decode_list_nullable_bytes(
-  pb_istream_t * stream, krpc_list_nullable_bytes_t * value);
-
-#endif  // KRPC_TYPE_LIST_NULLABLE_BYTES
-
 #ifndef KRPC_TYPE_LIST_OBJECT
 #define KRPC_TYPE_LIST_OBJECT
 
@@ -400,44 +360,6 @@ typedef enum {
 } krpc_KRPC_TypeCode_t;
 
 /**
- * Create an event from a server side function that evaluates to a boolean value.
- *
- * The event fires when the function becomes true, and again each time it becomes true
- * after being false. Client libraries call this procedure to implement events. Use the
- * events of your client library instead. Calling this directly while using a client
- * library has undefined behavior.
- */
-static inline krpc_error_t krpc_KRPC_AddEvent(krpc_connection_t connection, uint64_t * returnValue, krpc_KRPC_Expression_t function);
-
-/**
- * Add a stream of the value a server side function computes on each update.
- *
- * Client libraries call this procedure to implement server side functions. Use the
- * server side functions of your client library instead. Calling this directly while
- * using a client library has undefined behavior.
- */
-static inline krpc_error_t krpc_KRPC_AddFunctionStream(krpc_connection_t connection, uint64_t * returnValue, krpc_KRPC_Expression_t function);
-
-/**
- * Add a streaming request and return its identifier.
- *
- * Client libraries call this procedure to implement streams. Use the streams of your
- * client library instead. Calling this directly while using a client library has
- * undefined behavior.
- */
-static inline krpc_error_t krpc_KRPC_AddStream(krpc_connection_t connection, uint64_t * returnValue, const krpc_schema_ProcedureCall * call);
-
-/**
- * Compile a server side function, so that running, streaming or adding it as an
- * event does not compile it.
- *
- * Client libraries call this procedure to implement server side functions. Use the
- * server side functions of your client library instead. Calling this directly while
- * using a client library has undefined behavior.
- */
-static inline krpc_error_t krpc_KRPC_CompileFunction(krpc_connection_t connection, krpc_KRPC_Expression_t function);
-
-/**
  * Returns the identifier for the current client.
  */
 static inline krpc_error_t krpc_KRPC_GetClientID(krpc_connection_t connection, krpc_bytes_t * returnValue);
@@ -501,40 +423,6 @@ static inline krpc_error_t krpc_KRPC_NextTick(krpc_connection_t connection);
  * nothing when no tick is held, which is the case once a hold has timed out.
  */
 static inline krpc_error_t krpc_KRPC_ReleaseTick(krpc_connection_t connection);
-
-/**
- * Remove a streaming request.
- *
- * Client libraries call this procedure to implement streams. Use the streams of your
- * client library instead. Calling this directly while using a client library has
- * undefined behavior.
- */
-static inline krpc_error_t krpc_KRPC_RemoveStream(krpc_connection_t connection, uint64_t id);
-
-/**
- * Run a server side function once, within a single physics tick, and return
- * the value it produces.
- *
- * Client libraries call this procedure to implement server side functions. Use the
- * server side functions of your client library instead. Calling this directly while
- * using a client library has undefined behavior.
- * @param connection A connection object.
- * @param returnValue The encoded value of the function, or no bytes for a function with no
- * value.
- * @param returnValueIsNull Set to whether the value returned is null.
- * @param function The function to run.
- * @param arguments The encoded arguments, one per parameter.
- */
-static inline krpc_error_t krpc_KRPC_RunFunction(krpc_connection_t connection, krpc_bytes_t * returnValue, bool * returnValueIsNull, krpc_KRPC_Expression_t function, const krpc_list_nullable_bytes_t * arguments);
-
-/**
- * Set the update rate for a stream in Hz.
- *
- * Client libraries call this procedure to implement streams. Use the streams of your
- * client library instead. Calling this directly while using a client library has
- * undefined behavior.
- */
-static inline krpc_error_t krpc_KRPC_SetStreamRate(krpc_connection_t connection, uint64_t id, float rate);
 
 /**
  * The clients that are currently connected to the server.
@@ -2985,135 +2873,6 @@ static inline krpc_error_t krpc_decode_list_KRPC_ClientInfo(
 
 #endif  // KRPC_IMPL_TYPE_LIST_KRPC_CLIENTINFO
 
-#ifndef KRPC_IMPL_TYPE_NULLABLE_BYTES
-#define KRPC_IMPL_TYPE_NULLABLE_BYTES
-
-
-static inline krpc_error_t krpc_encode_nullable_bytes(
-  pb_ostream_t * stream, const krpc_nullable_bytes_t * value) {
-  // A nullable position carries a presence bool before its value, and holds nothing else
-  // when that bool is false
-  KRPC_RETURN_ON_ERROR(krpc_encode_bool(stream, value->has_value));
-  if (value->has_value)
-    KRPC_RETURN_ON_ERROR(krpc_encode_bytes(stream, value->value));
-  return KRPC_OK;
-}
-
-static inline krpc_error_t krpc_encode_size_nullable_bytes(
-  size_t * size, const krpc_nullable_bytes_t * value) {
-  pb_ostream_t stream = PB_OSTREAM_SIZING;
-  KRPC_RETURN_ON_ERROR(krpc_encode_nullable_bytes(&stream, value));
-  *size = stream.bytes_written;
-  return KRPC_OK;
-}
-
-static inline bool krpc_encode_callback_nullable_bytes(
-  pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
-  if (!pb_encode_tag_for_field(stream, field))
-    KRPC_CALLBACK_RETURN_ERROR("encoding tag for nullable_bytes");
-  krpc_nullable_bytes_t * value = (krpc_nullable_bytes_t*)(*arg);
-  size_t size;
-  KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_nullable_bytes(&size, value));
-  if (!pb_encode_varint(stream, size))
-    KRPC_CALLBACK_RETURN_ERROR("encoding size for nullable_bytes");
-  KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_nullable_bytes(stream, value));
-  return true;
-}
-
-
-static inline krpc_error_t krpc_decode_nullable_bytes(
-  pb_istream_t * stream, krpc_nullable_bytes_t * value) {
-  // An absent value is left zeroed, so the member is defined whatever the caller passed in
-  memset(&value->value, 0, sizeof(value->value));
-  KRPC_RETURN_ON_ERROR(krpc_decode_bool(stream, &value->has_value));
-  if (value->has_value)
-    KRPC_RETURN_ON_ERROR(krpc_decode_bytes(stream, &value->value));
-  return KRPC_OK;
-}
-
-#endif  // KRPC_IMPL_TYPE_NULLABLE_BYTES
-
-#ifndef KRPC_IMPL_TYPE_LIST_NULLABLE_BYTES
-#define KRPC_IMPL_TYPE_LIST_NULLABLE_BYTES
-
-static inline bool krpc_encode_callback_items_list_nullable_bytes(
-  pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
-  const krpc_list_nullable_bytes_t * value = (const krpc_list_nullable_bytes_t*)(*arg);
-  size_t i = 0;
-  for (; i < value->size; i++) {
-    if (!pb_encode_tag_for_field(stream, field))
-      KRPC_CALLBACK_RETURN_ERROR("encoding tag for list item");
-    size_t size;
-    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_nullable_bytes(&size, &value->items[i]));
-    if (!pb_encode_varint(stream, size))
-      KRPC_CALLBACK_RETURN_ERROR("encoding size for list item");
-    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_nullable_bytes(stream, &value->items[i]));
-  }
-  return true;
-}
-
-static inline krpc_error_t krpc_encode_list_nullable_bytes(
-  pb_ostream_t * stream, const krpc_list_nullable_bytes_t * value) {
-  krpc_schema_List message = krpc_schema_List_init_default;
-  message.items.funcs.encode = &krpc_encode_callback_items_list_nullable_bytes;
-  message.items.arg = (krpc_list_nullable_bytes_t*)value;
-  KRPC_RETURN_ON_ERROR(krpc_encode_message_List(stream, &message));
-  return KRPC_OK;
-}
-
-static inline krpc_error_t krpc_encode_size_list_nullable_bytes(
-  size_t * size, const krpc_list_nullable_bytes_t * value) {
-  pb_ostream_t stream = PB_OSTREAM_SIZING;
-  KRPC_RETURN_ON_ERROR(krpc_encode_list_nullable_bytes(&stream, value));
-  *size = stream.bytes_written;
-  return KRPC_OK;
-}
-
-static inline bool krpc_encode_callback_list_nullable_bytes(
-  pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
-  if (!pb_encode_tag_for_field(stream, field))
-    KRPC_CALLBACK_RETURN_ERROR("encoding tag for list_nullable_bytes");
-  krpc_list_nullable_bytes_t * value = (krpc_list_nullable_bytes_t*)(*arg);
-  size_t size;
-  KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_list_nullable_bytes(&size, value));
-  if (!pb_encode_varint(stream, size))
-    KRPC_CALLBACK_RETURN_ERROR("encoding size for list_nullable_bytes");
-  KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_list_nullable_bytes(stream, value));
-  return true;
-}
-
-static inline bool krpc_decode_callback_item_list_nullable_bytes(
-  pb_istream_t * stream, const pb_field_t * field, void ** arg) {
-  typedef struct State { size_t capacity; krpc_list_nullable_bytes_t * value; } State;
-  State * state = (State*)(*arg);
-  size_t i = state->value->size;
-  state->value->size++;
-  if (state->capacity > 0 && state->value->size > state->capacity) {
-    state->value->items = (krpc_nullable_bytes_t*)krpc_recalloc(state->value->items, state->capacity, KRPC_ALLOC_BLOCK_SIZE, sizeof(krpc_nullable_bytes_t));
-    state->capacity += KRPC_ALLOC_BLOCK_SIZE;
-  }
-  KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_nullable_bytes(stream, &state->value->items[i]));
-  return true;
-}
-
-static inline krpc_error_t krpc_decode_list_nullable_bytes(
-  pb_istream_t * stream, krpc_list_nullable_bytes_t * value) {
-  typedef struct State { size_t capacity; krpc_list_nullable_bytes_t * value; } State;
-  State state = { 0, value };
-  value->size = 0;
-  if (value->items == NULL) {
-    value->items = (krpc_nullable_bytes_t*)krpc_calloc(KRPC_ALLOC_BLOCK_SIZE, sizeof(krpc_nullable_bytes_t));
-    state.capacity = KRPC_ALLOC_BLOCK_SIZE;
-  }
-  krpc_schema_List message = krpc_schema_List_init_default;
-  message.items.funcs.decode = &krpc_decode_callback_item_list_nullable_bytes;
-  message.items.arg = &state;
-  KRPC_RETURN_ON_ERROR(krpc_decode_message_List(stream, &message));
-  return KRPC_OK;
-}
-
-#endif  // KRPC_IMPL_TYPE_LIST_NULLABLE_BYTES
-
 #ifndef KRPC_IMPL_TYPE_LIST_OBJECT
 #define KRPC_IMPL_TYPE_LIST_OBJECT
 
@@ -3276,69 +3035,6 @@ static inline krpc_error_t krpc_decode_set_object(
 
 #endif  // KRPC_IMPL_TYPE_SET_OBJECT
 
-static inline krpc_error_t krpc_KRPC_AddEvent(krpc_connection_t connection, uint64_t * returnValue, krpc_KRPC_Expression_t function) {
-  krpc_call_t _call;
-  krpc_argument_t _arguments[1];
-  KRPC_CHECK(krpc_call(&_call, 1, 2092563751, 1, _arguments));
-  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_object, &function));
-  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
-  KRPC_CHECK(krpc_init_result(&_result));
-  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
-  if (returnValue) {
-    pb_istream_t _stream;
-    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
-    KRPC_CHECK(krpc_decode_uint64(&_stream, returnValue));
-  }
-  KRPC_CHECK(krpc_free_result(&_result));
-  return KRPC_OK;
-}
-
-static inline krpc_error_t krpc_KRPC_AddFunctionStream(krpc_connection_t connection, uint64_t * returnValue, krpc_KRPC_Expression_t function) {
-  krpc_call_t _call;
-  krpc_argument_t _arguments[1];
-  KRPC_CHECK(krpc_call(&_call, 1, 282214072, 1, _arguments));
-  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_object, &function));
-  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
-  KRPC_CHECK(krpc_init_result(&_result));
-  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
-  if (returnValue) {
-    pb_istream_t _stream;
-    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
-    KRPC_CHECK(krpc_decode_uint64(&_stream, returnValue));
-  }
-  KRPC_CHECK(krpc_free_result(&_result));
-  return KRPC_OK;
-}
-
-static inline krpc_error_t krpc_KRPC_AddStream(krpc_connection_t connection, uint64_t * returnValue, const krpc_schema_ProcedureCall * call) {
-  krpc_call_t _call;
-  krpc_argument_t _arguments[1];
-  KRPC_CHECK(krpc_call(&_call, 1, 3354426240, 1, _arguments));
-  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_message_ProcedureCall, call));
-  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
-  KRPC_CHECK(krpc_init_result(&_result));
-  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
-  if (returnValue) {
-    pb_istream_t _stream;
-    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
-    KRPC_CHECK(krpc_decode_uint64(&_stream, returnValue));
-  }
-  KRPC_CHECK(krpc_free_result(&_result));
-  return KRPC_OK;
-}
-
-static inline krpc_error_t krpc_KRPC_CompileFunction(krpc_connection_t connection, krpc_KRPC_Expression_t function) {
-  krpc_call_t _call;
-  krpc_argument_t _arguments[1];
-  KRPC_CHECK(krpc_call(&_call, 1, 1025785238, 1, _arguments));
-  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_object, &function));
-  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
-  KRPC_CHECK(krpc_init_result(&_result));
-  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
-  KRPC_CHECK(krpc_free_result(&_result));
-  return KRPC_OK;
-}
-
 static inline krpc_error_t krpc_KRPC_GetClientID(krpc_connection_t connection, krpc_bytes_t * returnValue) {
   krpc_call_t _call;
   KRPC_CHECK(krpc_call(&_call, 1, 3459659327, 0, NULL));
@@ -3422,56 +3118,6 @@ static inline krpc_error_t krpc_KRPC_NextTick(krpc_connection_t connection) {
 static inline krpc_error_t krpc_KRPC_ReleaseTick(krpc_connection_t connection) {
   krpc_call_t _call;
   KRPC_CHECK(krpc_call(&_call, 1, 1884195753, 0, NULL));
-  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
-  KRPC_CHECK(krpc_init_result(&_result));
-  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
-  KRPC_CHECK(krpc_free_result(&_result));
-  return KRPC_OK;
-}
-
-static inline krpc_error_t krpc_KRPC_RemoveStream(krpc_connection_t connection, uint64_t id) {
-  krpc_call_t _call;
-  krpc_argument_t _arguments[1];
-  KRPC_CHECK(krpc_call(&_call, 1, 3536946462, 1, _arguments));
-  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_uint64, &id));
-  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
-  KRPC_CHECK(krpc_init_result(&_result));
-  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
-  KRPC_CHECK(krpc_free_result(&_result));
-  return KRPC_OK;
-}
-
-static inline krpc_error_t krpc_KRPC_RunFunction(krpc_connection_t connection, krpc_bytes_t * returnValue, bool * returnValueIsNull, krpc_KRPC_Expression_t function, const krpc_list_nullable_bytes_t * arguments) {
-  krpc_call_t _call;
-  krpc_argument_t _arguments[2];
-  KRPC_CHECK(krpc_call(&_call, 1, 3583116652, 2, _arguments));
-  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_object, &function));
-  KRPC_CHECK(krpc_add_argument(&_call, 1, &krpc_encode_callback_list_nullable_bytes, arguments));
-  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
-  KRPC_CHECK(krpc_init_result(&_result));
-  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
-  if (returnValue) {
-    if (_result.message.is_null) {
-      if (returnValueIsNull)
-        *returnValueIsNull = true;
-    } else {
-      if (returnValueIsNull)
-        *returnValueIsNull = false;
-      pb_istream_t _stream;
-      KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
-      KRPC_CHECK(krpc_decode_bytes(&_stream, returnValue));
-    }
-  }
-  KRPC_CHECK(krpc_free_result(&_result));
-  return KRPC_OK;
-}
-
-static inline krpc_error_t krpc_KRPC_SetStreamRate(krpc_connection_t connection, uint64_t id, float rate) {
-  krpc_call_t _call;
-  krpc_argument_t _arguments[2];
-  KRPC_CHECK(krpc_call(&_call, 1, 1914146520, 2, _arguments));
-  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_uint64, &id));
-  KRPC_CHECK(krpc_add_argument(&_call, 1, &krpc_encode_callback_float, &rate));
   krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
   KRPC_CHECK(krpc_init_result(&_result));
   KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
