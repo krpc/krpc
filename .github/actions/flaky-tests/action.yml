@@ -1,0 +1,21 @@
+name: flaky-tests
+description: Report the tests that passed on a retry, and upload the report for the flaky-tests workflow
+inputs:
+  name:
+    description: The name of the job, which names the artifact
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: report
+      shell: bash
+      continue-on-error: true
+      run: python tools/ci/flaky_tests.py report bazel-test-events.json --json flaky-tests.json
+    # A re-run of the job that finds a flaky test replaces the earlier attempt's report
+    - name: upload
+      uses: actions/upload-artifact@v7
+      with:
+        name: flaky-tests-${{ inputs.name }}
+        path: flaky-tests.json
+        if-no-files-found: ignore
+        overwrite: true
