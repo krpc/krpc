@@ -8,17 +8,19 @@ DockingCamera
 
 .. type:: public class DockingCamera
 
-   Camera service.
+   This service provides functionality to interact with
+   `Docking Camera (KURS) <https://spacedock.info/mod/1542>`_.
 
    .. method:: boolean getAvailable()
 
 
-      Check if the Camera API is available.
+      Whether Docking Camera (KURS) is available.
 
    
 
    .. method:: Camera camera(SpaceCenter.Part part)
 
-      Get a Camera part.
+      Get the camera on a part.
+      Throws an exception if the part is not an onboard camera or a docking port.
 
-      :param SpaceCenter.Part part:
+      :param SpaceCenter.Part part: The part.

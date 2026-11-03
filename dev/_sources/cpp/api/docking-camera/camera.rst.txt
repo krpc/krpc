@@ -8,7 +8,7 @@ Camera
 
 .. class:: Camera
 
-   A Docking Camera.
+   A camera from Docking Camera (KURS), on an onboard camera part or a docking port.
 
    .. function:: SpaceCenter::Part part()
 
@@ -18,5 +18,13 @@ Camera
 
    .. function:: std::string image()
 
-      Get an image.
-      Returns an empty byte array on failure.
+      The image from the camera, a 256 by 256 pixel PNG.
+      Throws an exception if the camera is off or not started.
+
+   
+
+      .. note::
+
+         The camera is switched on by setting the ``IsEnabled`` field of its
+         ``PartCameraModule`` or ``DockingCameraModule`` to ``true``, which also opens
+         the camera window.

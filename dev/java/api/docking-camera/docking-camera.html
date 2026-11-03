@@ -1106,21 +1106,23 @@
 <dl class="java type">
 <dt class="sig sig-object java" id="krpc.client.services.DockingCamera.DockingCamera">
 <span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">DockingCamera</span></span><a class="headerlink" href="#krpc.client.services.DockingCamera.DockingCamera" title="Link to this definition">#</a></dt>
-<dd><p>Camera service.</p>
+<dd><p>This service provides functionality to interact with
+<a class="reference external" href="https://spacedock.info/mod/1542">Docking Camera (KURS)</a>.</p>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.DockingCamera.DockingCamera.getAvailable()">
 <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getAvailable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.DockingCamera.DockingCamera.getAvailable()" title="Link to this definition">#</a></dt>
-<dd><p>Check if the Camera API is available.</p>
+<dd><p>Whether Docking Camera (KURS) is available.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.DockingCamera.DockingCamera.camera(SpaceCenter.Part)">
 <a class="reference internal" href="camera.html#krpc.client.services.DockingCamera.Camera" title="krpc.client.services.DockingCamera.Camera"><span class="pre">Camera</span></a> <span class="sig-name descname"><span class="pre">camera</span></span><span class="sig-paren">(</span><a class="reference internal" href="../space-center/space-center.html#krpc.client.services.SpaceCenter.SpaceCenter" title="krpc.client.services.SpaceCenter.SpaceCenter"><span class="pre">SpaceCenter</span></a><span class="pre">.</span><a class="reference internal" href="../space-center/parts.html#krpc.client.services.SpaceCenter.Part" title="krpc.client.services.SpaceCenter.Part"><span class="pre">Part</span></a><em> <span class="pre">part</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.DockingCamera.DockingCamera.camera(SpaceCenter.Part)" title="Link to this definition">#</a></dt>
-<dd><p>Get a Camera part.</p>
+<dd><p>Get the camera on a part.
+Throws an exception if the part is not an onboard camera or a docking port.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>part</strong> (<span><a class="reference internal" href="../space-center/parts.html#krpc.client.services.SpaceCenter.Part" title="krpc.client.services.SpaceCenter.Part"><code class="xref java java-type docutils literal notranslate"><span class="pre">SpaceCenter.Part</span></code></a></span>)</p></li>
+<li><p><strong>part</strong> (<span><a class="reference internal" href="../space-center/parts.html#krpc.client.services.SpaceCenter.Part" title="krpc.client.services.SpaceCenter.Part"><code class="xref java java-type docutils literal notranslate"><span class="pre">SpaceCenter.Part</span></code></a></span>) – The part.</p></li>
 </ul>
 </dd>
 </dl>

@@ -8,12 +8,13 @@ DockingCamera
 
 .. module:: DockingCamera
 
-Camera service.
+This service provides functionality to interact with
+`Docking Camera (KURS) <https://spacedock.info/mod/1542>`_.
 
 
 .. attribute:: available: boolean
 
-   Check if the Camera API is available.
+   Whether Docking Camera (KURS) is available.
 
    :Attribute: Read-only, cannot be set
 
@@ -22,4 +23,7 @@ Camera service.
 
 .. staticmethod:: camera(part: SpaceCenter.Part): DockingCamera.Camera
 
-   Get a Camera part.
+   Get the camera on a part.
+   Throws an exception if the part is not an onboard camera or a docking port.
+
+   :param part: The part.

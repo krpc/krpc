@@ -1106,7 +1106,7 @@
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services13DockingCamera6CameraE">
 <span id="_CPPv3N4krpc8services13DockingCamera6CameraE"></span><span id="_CPPv2N4krpc8services13DockingCamera6CameraE"></span><span id="krpc::services::DockingCamera::Camera"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Camera</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services13DockingCamera6CameraE" title="Link to this definition">#</a><br /></dt>
-<dd><p>A Docking Camera.</p>
+<dd><p>A camera from Docking Camera (KURS), on an onboard camera part or a docking port.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services13DockingCamera6Camera4partEv">
 <span id="_CPPv3N4krpc8services13DockingCamera6Camera4partEv"></span><span id="_CPPv2N4krpc8services13DockingCamera6Camera4partEv"></span><span id="krpc::services::DockingCamera::Camera::part"></span><a class="reference internal" href="../space-center/space-center.html#_CPPv4N4krpc8services11SpaceCenterE" title="krpc::services::SpaceCenter"><span class="n"><span class="pre">SpaceCenter</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter4PartE" title="krpc::services::SpaceCenter::Part"><span class="n"><span class="pre">Part</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">part</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services13DockingCamera6Camera4partEv" title="Link to this definition">#</a><br /></dt>
@@ -1116,8 +1116,14 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services13DockingCamera6Camera5imageEv">
 <span id="_CPPv3N4krpc8services13DockingCamera6Camera5imageEv"></span><span id="_CPPv2N4krpc8services13DockingCamera6Camera5imageEv"></span><span id="krpc::services::DockingCamera::Camera::image"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">image</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services13DockingCamera6Camera5imageEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>Get an image.
-Returns an empty byte array on failure.</p>
+<dd><p>The image from the camera, a 256 by 256 pixel PNG.
+Throws an exception if the camera is off or not started.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The camera is switched on by setting the <code class="docutils literal notranslate"><span class="pre">IsEnabled</span></code> field of its
+<code class="docutils literal notranslate"><span class="pre">PartCameraModule</span></code> or <code class="docutils literal notranslate"><span class="pre">DockingCameraModule</span></code> to <code class="docutils literal notranslate"><span class="pre">true</span></code>, which also opens
+the camera window.</p>
+</div>
 </dd></dl>
 
 </dd></dl>

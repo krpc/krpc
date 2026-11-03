@@ -1106,7 +1106,8 @@
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services13DockingCameraE">
 <span id="_CPPv3N4krpc8services13DockingCameraE"></span><span id="_CPPv2N4krpc8services13DockingCameraE"></span><span id="krpc::services::DockingCamera"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DockingCamera</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">krpc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Service</span></span><a class="headerlink" href="#_CPPv4N4krpc8services13DockingCameraE" title="Link to this definition">#</a><br /></dt>
-<dd><p>Camera service.</p>
+<dd><p>This service provides functionality to interact with
+<a class="reference external" href="https://spacedock.info/mod/1542">Docking Camera (KURS)</a>.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services13DockingCamera13DockingCameraEPN4krpc6ClientE">
 <span id="_CPPv3N4krpc8services13DockingCamera13DockingCameraEPN4krpc6ClientE"></span><span id="_CPPv2N4krpc8services13DockingCamera13DockingCameraEPN4krpc6ClientE"></span><span id="krpc::services::DockingCamera::DockingCamera__krpc::ClientP"></span><span class="sig-name descname"><span class="n"><span class="pre">DockingCamera</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../../../cpp.html#_CPPv4N4krpc6ClientE" title="krpc::Client"><span class="n"><span class="pre">Client</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">client</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services13DockingCamera13DockingCameraEPN4krpc6ClientE" title="Link to this definition">#</a><br /></dt>
@@ -1116,16 +1117,20 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services13DockingCamera9availableEv">
 <span id="_CPPv3N4krpc8services13DockingCamera9availableEv"></span><span id="_CPPv2N4krpc8services13DockingCamera9availableEv"></span><span id="krpc::services::DockingCamera::available"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">available</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services13DockingCamera9availableEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>Check if the Camera API is available.</p>
+<dd><p>Whether Docking Camera (KURS) is available.</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services13DockingCamera6cameraEN11SpaceCenter4PartE">
 <span id="_CPPv3N4krpc8services13DockingCamera6cameraEN11SpaceCenter4PartE"></span><span id="_CPPv2N4krpc8services13DockingCamera6cameraEN11SpaceCenter4PartE"></span><span id="krpc::services::DockingCamera::camera__SpaceCenter::Part"></span><a class="reference internal" href="camera.html#_CPPv4N4krpc8services13DockingCamera6CameraE" title="krpc::services::DockingCamera::Camera"><span class="n"><span class="pre">Camera</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">camera</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../space-center/space-center.html#_CPPv4N4krpc8services11SpaceCenterE" title="krpc::services::SpaceCenter"><span class="n"><span class="pre">SpaceCenter</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter4PartE" title="krpc::services::SpaceCenter::Part"><span class="n"><span class="pre">Part</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">part</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services13DockingCamera6cameraEN11SpaceCenter4PartE" title="Link to this definition">#</a><br /></dt>
-<dd><p>Get a Camera part.</p>
+<dd><p>Get the camera on a part.
+Throws an exception if the part is not an onboard camera or a docking port.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p></dd>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>part</strong> – The part.</p></li>
+</ul>
+</dd>
 </dl>
 </dd></dl>
 

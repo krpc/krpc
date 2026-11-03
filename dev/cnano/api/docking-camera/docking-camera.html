@@ -1103,20 +1103,25 @@
                   
   <section id="dockingcamera">
 <h1>DockingCamera<a class="headerlink" href="#dockingcamera" title="Link to this heading">#</a></h1>
-<p>Camera service.</p>
+<p>This service provides functionality to interact with
+<a class="reference external" href="https://spacedock.info/mod/1542">Docking Camera (KURS)</a>.</p>
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_DockingCamera_Available">
 <a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_DockingCamera_Available</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_DockingCamera_Available" title="Link to this definition">#</a><br /></dt>
-<dd><p>Check if the Camera API is available.</p>
+<dd><p>Whether Docking Camera (KURS) is available.</p>
 </dd></dl>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_DockingCamera_Camera">
 <a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_DockingCamera_Camera</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="camera.html#c.krpc_DockingCamera_Camera_t" title="krpc_DockingCamera_Camera_t"><span class="n"><span class="pre">krpc_DockingCamera_Camera_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="../space-center/parts.html#c.krpc_SpaceCenter_Part_t" title="krpc_SpaceCenter_Part_t"><span class="n"><span class="pre">krpc_SpaceCenter_Part_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">part</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_DockingCamera_Camera" title="Link to this definition">#</a><br /></dt>
-<dd><p>Get a Camera part.</p>
+<dd><p>Get the camera on a part.
+Throws an exception if the part is not an onboard camera or a docking port.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p></dd>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>part</strong> – The part.</p></li>
+</ul>
+</dd>
 </dl>
 </dd></dl>
 
