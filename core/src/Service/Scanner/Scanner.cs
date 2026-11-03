@@ -32,6 +32,8 @@ namespace KRPC.Service.Scanner
                 try {
                     CurrentAssembly = serviceType.Assembly;
                     var serviceId = TypeUtils.GetServiceId (serviceType);
+                    if (serviceId == 0)
+                        HandleError(errors, "service " + TypeUtils.GetServiceName(serviceType), "Service has id 0");
                     if (serviceIds.Contains (serviceId))
                         HandleError(errors, "service " + TypeUtils.GetServiceName(serviceType), "Service id clashes with another service");
                     serviceIds.Add (serviceId);
