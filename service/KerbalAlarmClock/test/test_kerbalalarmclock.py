@@ -73,9 +73,23 @@ class TestKerbalAlarmClock(krpctest.TestCase):
         alarm.enabled = False
         self.assertFalse(alarm.enabled)
         alarm.enabled = True
-        sound = alarm.play_sound
-        alarm.play_sound = not sound
-        self.assertEqual(not sound, alarm.play_sound)
+
+    def test_play_sound(self):
+        # The mod keeps the sound in the alarm's actions, alongside the
+        # warp and message settings that make up the action
+        alarm = self.create()
+        alarm.action = self.action.kill_warp
+        self.assertFalse(alarm.play_sound)
+        alarm.play_sound = True
+        self.assertTrue(alarm.play_sound)
+        self.assertEqual(self.action.custom, alarm.action)
+        alarm.play_sound = False
+        self.assertFalse(alarm.play_sound)
+        self.assertEqual(self.action.kill_warp, alarm.action)
+        # Setting the action turns the sound off
+        alarm.play_sound = True
+        alarm.action = self.action.pause_game
+        self.assertFalse(alarm.play_sound)
 
     def test_repeat(self):
         # Raw alarms support repeating and a repeat period
