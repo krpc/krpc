@@ -904,3 +904,26 @@ def test_wrong_collection(connected, case):
     with pytest.raises(TesteeError) as info:
         connected.invoke("TestService", procedure, value)
     assert_value_error(connected, info.value.error)
+
+
+# Throwaway probe for testing the CI flaky test report. Do not merge.
+PROBE_MODE = "flaky"
+PROBE_CLIENTS = ("//client/python:", "//client/csharp:")
+
+
+def test_zz_flaky_probe():
+    """A probe that fails on its first attempt, or on every attempt."""
+    import os
+    import pathlib
+
+    target = os.environ.get("TEST_TARGET", "")
+    if not target.startswith(PROBE_CLIENTS):
+        pytest.skip("probe off for this client")
+    if PROBE_MODE == "always":
+        raise AssertionError("probe fails on every attempt")
+    root = "C:/" if os.name == "nt" else "/tmp/"
+    name = "krpc-flaky-probe-" + "".join(c if c.isalnum() else "_" for c in target)
+    marker = pathlib.Path(root + name)
+    if not marker.exists():
+        marker.write_text("x")
+        raise AssertionError("probe fails on the first attempt")
