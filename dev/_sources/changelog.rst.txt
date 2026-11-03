@@ -83,6 +83,7 @@ SpaceCenter service
 * Add ``AutoPilot.LimitAngularVelocity``, on by default, which limits the angular velocity to what the control surfaces hold against the aerodynamics (:issue:`1191`, :issue:`526`)
 * Shrink the auto-pilot's attenuation angles with the share of the torque that comes from control surfaces (:issue:`1191`, :issue:`526`)
 * Add an aerodynamics section to the auto-pilot info window, and make its sections collapsible (:issue:`1191`)
+* Fix ``RaycastDistance`` and ``RaycastPart`` hitting trigger volumes, such as the robotic arm scanner's (:issue:`1233`)
 * Fix the ``Vessel.Flight`` link to the ``Flight`` class (:issue:`1252`)
 * Parts
 
@@ -100,6 +101,12 @@ KerbalAlarmClock service
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 * Fix ``Alarm.PlaySound`` having no effect (:issue:`1179`)
+
+
+LIDAR service
+^^^^^^^^^^^^^
+
+* :deprecated:`Deprecated` The ``LIDAR`` service, superseded by ``SpaceCenter.RaycastDistance`` (:issue:`1233`)
 
 
 DockingCamera service

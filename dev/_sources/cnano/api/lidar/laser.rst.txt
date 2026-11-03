@@ -8,7 +8,9 @@ Laser
 
 .. type:: krpc_LIDAR_Laser_t
 
-   A LaserDist laser.
+   .. warning:: Deprecated. Use :func:`krpc_SpaceCenter_RaycastDistance` instead.
+
+   A LiDAR. Obtained by calling :func:`krpc_LIDAR_Laser`.
 
    .. function:: krpc_error_t krpc_LIDAR_Laser_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_LIDAR_Laser_t instance)
 

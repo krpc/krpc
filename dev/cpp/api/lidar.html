@@ -1100,13 +1100,46 @@
                   
   <section id="lidar-api">
 <h1>LIDAR API<a class="headerlink" href="#lidar-api" title="Link to this heading">#</a></h1>
-<p>Provides RPCs to interact with the <a class="reference external" href="https://github.com/nullprofile/LaserDist">LaserDist</a> mod.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Deprecated. The LIDAR service will be removed in a future release. Use
+<a class="reference internal" href="space-center/space-center.html#_CPPv4N4krpc8services11SpaceCenter16raycast_distanceENSt5tupleIdddEENSt5tupleIdddEE14ReferenceFrame" title="krpc::services::SpaceCenter::raycast_distance"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">SpaceCenter::raycast_distance()</span></code></a> instead.</p>
+</div>
+<p>Provides RPCs to interact with the <a class="reference external" href="https://github.com/nullprofile/LaserDist">LiDAR</a> mod.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="lidar/lidar.html">LIDAR</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lidar/laser.html">Laser</a></li>
 </ul>
 </div>
+<section id="lidar-replacement">
+<h2>LiDAR Replacement<a class="headerlink" href="#lidar-replacement" title="Link to this heading">#</a></h2>
+<p>A LiDAR casts a fan of rays from its part. <a class="reference internal" href="space-center/space-center.html#_CPPv4N4krpc8services11SpaceCenter16raycast_distanceENSt5tupleIdddEENSt5tupleIdddEE14ReferenceFrame" title="krpc::services::SpaceCenter::raycast_distance"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">SpaceCenter::raycast_distance()</span></code></a> casts one
+ray. This example casts 8 rays below the root part of the active vessel:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cmath&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;tuple&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc/services/space_center.hpp&gt;</span>
+
+<span class="k">static</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">pi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">3.1415926535897</span><span class="p">;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">krpc</span><span class="o">::</span><span class="n">Client</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="o">::</span><span class="n">connect</span><span class="p">(</span><span class="s">"Raycast Example"</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc</span><span class="o">::</span><span class="n">services</span><span class="o">::</span><span class="n">SpaceCenter</span><span class="w"> </span><span class="n">sc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">);</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">part</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sc</span><span class="p">.</span><span class="n">active_vessel</span><span class="p">().</span><span class="n">value</span><span class="p">().</span><span class="n">parts</span><span class="p">().</span><span class="n">root</span><span class="p">();</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">frame</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">part</span><span class="p">.</span><span class="n">reference_frame</span><span class="p">();</span>
+
+<span class="w">  </span><span class="c1">// A fan of 8 rays below the part, 10 degrees apart</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">8</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">angle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">10</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">35</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">pi</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">180</span><span class="p">;</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">direction</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_tuple</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">sin</span><span class="p">(</span><span class="n">angle</span><span class="p">),</span><span class="w"> </span><span class="o">-</span><span class="n">std</span><span class="o">::</span><span class="n">cos</span><span class="p">(</span><span class="n">angle</span><span class="p">),</span><span class="w"> </span><span class="mf">0.0</span><span class="p">);</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">sc</span><span class="p">.</span><span class="n">raycast_distance</span><span class="p">({</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">},</span><span class="w"> </span><span class="n">direction</span><span class="p">,</span><span class="w"> </span><span class="n">frame</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
 </section>
 
 
@@ -1147,6 +1180,18 @@
                 <dialog id="pst-secondary-sidebar-modal"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lidar-replacement">LiDAR Replacement</a></li>
+</ul>
+  </nav></div>
 
   <div class="sidebar-secondary-item">
 

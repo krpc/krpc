@@ -1106,7 +1106,12 @@
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services5LIDARE">
 <span id="_CPPv3N4krpc8services5LIDARE"></span><span id="_CPPv2N4krpc8services5LIDARE"></span><span id="krpc::services::LIDAR"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LIDAR</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">krpc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Service</span></span><a class="headerlink" href="#_CPPv4N4krpc8services5LIDARE" title="Link to this definition">#</a><br /></dt>
-<dd><p>LaserDist service.</p>
+<dd><div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Deprecated. Use <a class="reference internal" href="../space-center/space-center.html#_CPPv4N4krpc8services11SpaceCenter16raycast_distanceENSt5tupleIdddEENSt5tupleIdddEE14ReferenceFrame" title="krpc::services::SpaceCenter::raycast_distance"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">SpaceCenter::raycast_distance()</span></code></a> instead.</p>
+</div>
+<p>Provides RPCs to interact with the
+<a class="reference external" href="https://github.com/nullprofile/LaserDist">LiDAR</a> mod.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services5LIDAR5LIDAREPN4krpc6ClientE">
 <span id="_CPPv3N4krpc8services5LIDAR5LIDAREPN4krpc6ClientE"></span><span id="_CPPv2N4krpc8services5LIDAR5LIDAREPN4krpc6ClientE"></span><span id="krpc::services::LIDAR::LIDAR__krpc::ClientP"></span><span class="sig-name descname"><span class="n"><span class="pre">LIDAR</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../../../cpp.html#_CPPv4N4krpc6ClientE" title="krpc::Client"><span class="n"><span class="pre">Client</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">client</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services5LIDAR5LIDAREPN4krpc6ClientE" title="Link to this definition">#</a><br /></dt>
@@ -1116,13 +1121,13 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services5LIDAR9availableEv">
 <span id="_CPPv3N4krpc8services5LIDAR9availableEv"></span><span id="_CPPv2N4krpc8services5LIDAR9availableEv"></span><span id="krpc::services::LIDAR::available"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">available</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services5LIDAR9availableEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>Check if the LaserDist API is available.</p>
+<dd><p>Whether the LiDAR mod is installed.</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services5LIDAR5laserEN11SpaceCenter4PartE">
 <span id="_CPPv3N4krpc8services5LIDAR5laserEN11SpaceCenter4PartE"></span><span id="_CPPv2N4krpc8services5LIDAR5laserEN11SpaceCenter4PartE"></span><span id="krpc::services::LIDAR::laser__SpaceCenter::Part"></span><a class="reference internal" href="laser.html#_CPPv4N4krpc8services5LIDAR5LaserE" title="krpc::services::LIDAR::Laser"><span class="n"><span class="pre">Laser</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">laser</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../space-center/space-center.html#_CPPv4N4krpc8services11SpaceCenterE" title="krpc::services::SpaceCenter"><span class="n"><span class="pre">SpaceCenter</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter4PartE" title="krpc::services::SpaceCenter::Part"><span class="n"><span class="pre">Part</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">part</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services5LIDAR5laserEN11SpaceCenter4PartE" title="Link to this definition">#</a><br /></dt>
-<dd><p>Get a LaserDist part.</p>
+<dd><p>Get the LiDAR on a part.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p></p></dd>

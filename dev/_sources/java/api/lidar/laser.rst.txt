@@ -8,7 +8,9 @@ Laser
 
 .. type:: public class Laser
 
-   A LaserDist laser.
+   .. warning:: Deprecated. Use :meth:`SpaceCenter.SpaceCenter.raycastDistance(org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Triplet<Double,Double,Double>, SpaceCenter.ReferenceFrame)` instead.
+
+   A LiDAR. Obtained by calling :meth:`LIDAR.laser(SpaceCenter.Part)`.
 
    .. method:: SpaceCenter.Part getPart()
 

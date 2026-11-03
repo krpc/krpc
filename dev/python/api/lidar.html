@@ -1100,13 +1100,47 @@
                   
   <section id="lidar-api">
 <h1>LIDAR API<a class="headerlink" href="#lidar-api" title="Link to this heading">#</a></h1>
-<p>Provides RPCs to interact with the <a class="reference external" href="https://github.com/nullprofile/LaserDist">LaserDist</a> mod.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Deprecated. The LIDAR service will be removed in a future release. Use
+<a class="reference internal" href="space-center/space-center.html#SpaceCenter.raycast_distance" title="SpaceCenter.raycast_distance"><code class="xref py py-meth docutils literal notranslate"><span class="pre">SpaceCenter.raycast_distance()</span></code></a> instead.</p>
+</div>
+<p>Provides RPCs to interact with the <a class="reference external" href="https://github.com/nullprofile/LaserDist">LiDAR</a> mod.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="lidar/lidar.html">LIDAR</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lidar/laser.html">Laser</a></li>
 </ul>
 </div>
+<section id="lidar-replacement">
+<h2>LiDAR Replacement<a class="headerlink" href="#lidar-replacement" title="Link to this heading">#</a></h2>
+<p>A LiDAR casts a fan of rays from its part. <a class="reference internal" href="space-center/space-center.html#SpaceCenter.raycast_distance" title="SpaceCenter.raycast_distance"><code class="xref py py-meth docutils literal notranslate"><span class="pre">SpaceCenter.raycast_distance()</span></code></a> casts one
+ray. This example casts 8 rays below the root part of the active vessel:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"Raycast Example"</span><span class="p">)</span>
+<span class="n">sc</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span>
+<span class="n">part</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">active_vessel</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">root</span>
+<span class="n">frame</span> <span class="o">=</span> <span class="n">part</span><span class="o">.</span><span class="n">reference_frame</span>
+
+<span class="c1"># A fan of 8 rays below the part, 10 degrees apart</span>
+<span class="n">origin</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+<span class="n">directions</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">):</span>
+    <span class="n">angle</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">35</span><span class="p">)</span>
+    <span class="n">directions</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">angle</span><span class="p">),</span> <span class="o">-</span><span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">angle</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">))</span>
+
+<span class="c1"># Cast every ray in the same physics tick</span>
+<span class="n">distances</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_stream</span><span class="p">(</span>
+    <span class="k">lambda</span><span class="p">:</span> <span class="p">[</span><span class="n">sc</span><span class="o">.</span><span class="n">raycast_distance</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">frame</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">directions</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">distances</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>The function stream casts every ray in the same physics tick, as a LiDAR does.</p>
+</section>
 </section>
 
 
@@ -1147,6 +1181,18 @@
                 <dialog id="pst-secondary-sidebar-modal"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lidar-replacement">LiDAR Replacement</a></li>
+</ul>
+  </nav></div>
 
   <div class="sidebar-secondary-item">
 

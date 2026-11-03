@@ -1103,11 +1103,16 @@
                   
   <section id="module-LIDAR">
 <span id="lidar"></span><h1>LIDAR<a class="headerlink" href="#module-LIDAR" title="Link to this heading">#</a></h1>
-<p>LaserDist service.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Deprecated. Use <a class="reference internal" href="../space-center/space-center.html#SpaceCenter.raycast_distance" title="SpaceCenter.raycast_distance"><code class="xref py py-meth docutils literal notranslate"><span class="pre">SpaceCenter.raycast_distance()</span></code></a> instead.</p>
+</div>
+<p>Provides RPCs to interact with the
+<a class="reference external" href="https://github.com/nullprofile/LaserDist">LiDAR</a> mod.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="LIDAR.available">
 <span class="sig-name descname"><span class="pre">available</span></span><a class="headerlink" href="#LIDAR.available" title="Link to this definition">#</a></dt>
-<dd><p>Check if the LaserDist API is available.</p>
+<dd><p>Whether the LiDAR mod is installed.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
@@ -1121,7 +1126,7 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="LIDAR.laser">
 <span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">laser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">part</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#LIDAR.laser" title="Link to this definition">#</a></dt>
-<dd><p>Get a LaserDist part.</p>
+<dd><p>Get the LiDAR on a part.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>part</strong> (<a class="reference internal" href="../space-center/parts.html#SpaceCenter.Part" title="SpaceCenter.Part"><em>SpaceCenter.Part</em></a>)</p>

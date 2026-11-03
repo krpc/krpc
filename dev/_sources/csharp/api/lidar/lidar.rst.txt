@@ -8,17 +8,20 @@ LIDAR
 
 .. class:: LIDAR
 
-   LaserDist service.
+   .. warning:: Deprecated. Use :meth:`SpaceCenter.RaycastDistance <SpaceCenter.SpaceCenter.RaycastDistance>` instead.
+
+   Provides RPCs to interact with the
+   `LiDAR <https://github.com/nullprofile/LaserDist>`_ mod.
 
    .. property:: bool Available { get; }
 
-      Check if the LaserDist API is available.
+      Whether the LiDAR mod is installed.
 
       :Game Scenes: All
 
    .. function:: Laser Laser(SpaceCenter.Part part)
 
-      Get a LaserDist part.
+      Get the LiDAR on a part.
 
       :parameters:
 

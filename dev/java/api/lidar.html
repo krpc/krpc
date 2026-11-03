@@ -1099,14 +1099,54 @@
                 <article class="bd-article">
                   
   <section id="lidar-api">
-<h1>LIDAR API<a class="headerlink" href="#lidar-api" title="Link to this heading">#</a></h1>
-<p>Provides RPCs to interact with the <a class="reference external" href="https://github.com/nullprofile/LaserDist">LaserDist</a> mod.</p>
+<span id="package-krpc.client.services.LIDAR"></span><h1>LIDAR API<a class="headerlink" href="#lidar-api" title="Link to this heading">#</a></h1>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Deprecated. The LIDAR service will be removed in a future release. Use
+<a class="reference internal" href="space-center/space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.raycastDistance(org.javatuples.Triplet, org.javatuples.Triplet, ReferenceFrame)" title="krpc.client.services.SpaceCenter.SpaceCenter.raycastDistance(org.javatuples.Triplet, org.javatuples.Triplet, ReferenceFrame)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">SpaceCenter.SpaceCenter.raycastDistance(org.javatuples.Triplet&lt;Double,Double,Double&gt;,</span> <span class="pre">org.javatuples.Triplet&lt;Double,Double,Double&gt;,</span> <span class="pre">SpaceCenter.ReferenceFrame)</span></code></a> instead.</p>
+</div>
+<p>Provides RPCs to interact with the <a class="reference external" href="https://github.com/nullprofile/LaserDist">LiDAR</a> mod.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="lidar/lidar.html">LIDAR</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lidar/laser.html">Laser</a></li>
 </ul>
 </div>
+<section id="lidar-replacement">
+<h2>LiDAR Replacement<a class="headerlink" href="#lidar-replacement" title="Link to this heading">#</a></h2>
+<p>A LiDAR casts a fan of rays from its part. <a class="reference internal" href="space-center/space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.raycastDistance(org.javatuples.Triplet, org.javatuples.Triplet, ReferenceFrame)" title="krpc.client.services.SpaceCenter.SpaceCenter.raycastDistance(org.javatuples.Triplet, org.javatuples.Triplet, ReferenceFrame)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">SpaceCenter.SpaceCenter.raycastDistance(org.javatuples.Triplet&lt;Double,Double,Double&gt;,</span> <span class="pre">org.javatuples.Triplet&lt;Double,Double,Double&gt;,</span> <span class="pre">SpaceCenter.ReferenceFrame)</span></code></a> casts one
+ray. This example casts 8 rays below the root part of the active vessel:</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.RPCException</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter.Part</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter.ReferenceFrame</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.javatuples.Triplet</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.io.IOException</span><span class="p">;</span>
+
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">RaycastExample</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="p">,</span><span class="w"> </span><span class="n">RPCException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Connection</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="s">"Raycast Example"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">SpaceCenter</span><span class="w"> </span><span class="n">sc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SpaceCenter</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="n">connection</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Part</span><span class="w"> </span><span class="n">part</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sc</span><span class="p">.</span><span class="na">getActiveVessel</span><span class="p">().</span><span class="na">getParts</span><span class="p">().</span><span class="na">getRoot</span><span class="p">();</span>
+<span class="w">        </span><span class="n">ReferenceFrame</span><span class="w"> </span><span class="n">frame</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">part</span><span class="p">.</span><span class="na">getReferenceFrame</span><span class="p">();</span>
+
+<span class="w">        </span><span class="c1">// A fan of 8 rays below the part, 10 degrees apart</span>
+<span class="w">        </span><span class="n">Triplet</span><span class="o">&lt;</span><span class="n">Double</span><span class="p">,</span><span class="w"> </span><span class="n">Double</span><span class="p">,</span><span class="w"> </span><span class="n">Double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">origin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Triplet</span><span class="o">&lt;</span><span class="n">Double</span><span class="p">,</span><span class="w"> </span><span class="n">Double</span><span class="p">,</span><span class="w"> </span><span class="n">Double</span><span class="o">&gt;</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">);</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">8</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="kt">double</span><span class="w"> </span><span class="n">angle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Math</span><span class="p">.</span><span class="na">toRadians</span><span class="p">(</span><span class="mi">10</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">35</span><span class="p">);</span>
+<span class="w">            </span><span class="n">Triplet</span><span class="o">&lt;</span><span class="n">Double</span><span class="p">,</span><span class="w"> </span><span class="n">Double</span><span class="p">,</span><span class="w"> </span><span class="n">Double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">direction</span><span class="w"> </span><span class="o">=</span>
+<span class="w">                </span><span class="k">new</span><span class="w"> </span><span class="n">Triplet</span><span class="o">&lt;</span><span class="n">Double</span><span class="p">,</span><span class="w"> </span><span class="n">Double</span><span class="p">,</span><span class="w"> </span><span class="n">Double</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Math</span><span class="p">.</span><span class="na">sin</span><span class="p">(</span><span class="n">angle</span><span class="p">),</span><span class="w"> </span><span class="o">-</span><span class="n">Math</span><span class="p">.</span><span class="na">cos</span><span class="p">(</span><span class="n">angle</span><span class="p">),</span><span class="w"> </span><span class="mf">0.0</span><span class="p">);</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">sc</span><span class="p">.</span><span class="na">raycastDistance</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span><span class="w"> </span><span class="n">direction</span><span class="p">,</span><span class="w"> </span><span class="n">frame</span><span class="p">));</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">connection</span><span class="p">.</span><span class="na">close</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
 </section>
 
 
@@ -1147,6 +1187,18 @@
                 <dialog id="pst-secondary-sidebar-modal"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lidar-replacement">LiDAR Replacement</a></li>
+</ul>
+  </nav></div>
 
   <div class="sidebar-secondary-item">
 

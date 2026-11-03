@@ -8,7 +8,9 @@ Laser
 
 .. class:: Laser
 
-   A LaserDist laser.
+   .. warning:: Deprecated. Use :meth:`SpaceCenter.RaycastDistance <SpaceCenter.SpaceCenter.RaycastDistance>` instead.
+
+   A LiDAR. Obtained by calling :meth:`LIDAR.Laser <LIDAR.LIDAR.Laser>`.
 
    .. property:: SpaceCenter.Part Part { get; }
 

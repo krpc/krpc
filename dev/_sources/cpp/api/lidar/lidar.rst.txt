@@ -9,7 +9,10 @@ LIDAR
 .. namespace:: krpc::services
 .. class:: LIDAR : public krpc::Service
 
-   LaserDist service.
+   .. warning:: Deprecated. Use :func:`SpaceCenter::raycast_distance` instead.
+
+   Provides RPCs to interact with the
+   `LiDAR <https://github.com/nullprofile/LaserDist>`_ mod.
 
    .. function:: LIDAR(krpc::Client* client)
 
@@ -17,12 +20,12 @@ LIDAR
 
    .. function:: bool available()
 
-      Check if the LaserDist API is available.
+      Whether the LiDAR mod is installed.
 
    
 
    .. function:: Laser laser(SpaceCenter::Part part)
 
-      Get a LaserDist part.
+      Get the LiDAR on a part.
 
       :Parameters:

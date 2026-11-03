@@ -1103,17 +1103,22 @@
                   
   <section id="lidar">
 <h1>LIDAR<a class="headerlink" href="#lidar" title="Link to this heading">#</a></h1>
-<p>LaserDist service.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Deprecated. Use <a class="reference internal" href="../space-center/space-center.html#c.krpc_SpaceCenter_RaycastDistance" title="krpc_SpaceCenter_RaycastDistance"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_RaycastDistance()</span></code></a> instead.</p>
+</div>
+<p>Provides RPCs to interact with the
+<a class="reference external" href="https://github.com/nullprofile/LaserDist">LiDAR</a> mod.</p>
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_LIDAR_Available">
 <a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_LIDAR_Available</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_LIDAR_Available" title="Link to this definition">#</a><br /></dt>
-<dd><p>Check if the LaserDist API is available.</p>
+<dd><p>Whether the LiDAR mod is installed.</p>
 </dd></dl>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_LIDAR_Laser">
 <a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_LIDAR_Laser</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="laser.html#c.krpc_LIDAR_Laser_t" title="krpc_LIDAR_Laser_t"><span class="n"><span class="pre">krpc_LIDAR_Laser_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="../space-center/parts.html#c.krpc_SpaceCenter_Part_t" title="krpc_SpaceCenter_Part_t"><span class="n"><span class="pre">krpc_SpaceCenter_Part_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">part</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_LIDAR_Laser" title="Link to this definition">#</a><br /></dt>
-<dd><p>Get a LaserDist part.</p>
+<dd><p>Get the LiDAR on a part.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p></p></dd>

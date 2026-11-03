@@ -1,10 +1,16 @@
 .. default-domain:: c
 .. highlight:: c
 
+
 LIDAR API
 =========
 
-Provides RPCs to interact with the `LaserDist <https://github.com/nullprofile/LaserDist>`_ mod.
+.. warning::
+
+   Deprecated. The LIDAR service will be removed in a future release. Use
+   :func:`krpc_SpaceCenter_RaycastDistance` instead.
+
+Provides RPCs to interact with the `LiDAR <https://github.com/nullprofile/LaserDist>`_ mod.
 
 .. toctree::
    :includehidden:
@@ -12,3 +18,11 @@ Provides RPCs to interact with the `LaserDist <https://github.com/nullprofile/La
 
    lidar/lidar
    lidar/laser
+
+LiDAR Replacement
+-----------------
+
+A LiDAR casts a fan of rays from its part. :func:`krpc_SpaceCenter_RaycastDistance` casts one
+ray. This example casts 8 rays below the root part of the active vessel:
+
+.. literalinclude:: /scripts/api/lidar/RaycastExample.c
