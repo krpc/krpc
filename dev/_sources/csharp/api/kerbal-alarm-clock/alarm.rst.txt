@@ -19,6 +19,12 @@ Alarm
 
       :Game Scenes: All
 
+
+      .. note::
+
+         An alarm that plays a sound has the action :value:`AlarmAction.Custom`.
+         See :prop:`Alarm.PlaySound`.
+
    .. property:: double Margin { get; set; }
 
       The number of seconds before the event that the alarm will fire.
@@ -72,6 +78,12 @@ Alarm
       Whether the alarm plays a sound when it fires.
 
       :Game Scenes: All
+
+
+      .. note::
+
+         An alarm that plays a sound has the action :value:`AlarmAction.Custom`.
+         Setting :prop:`Alarm.Action` to any other value turns the sound off.
 
    .. property:: bool Triggered { get; }
 

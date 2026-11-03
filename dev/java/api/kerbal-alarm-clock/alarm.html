@@ -1119,6 +1119,11 @@
 <dt class="sig sig-object java" id="krpc.client.services.KerbalAlarmClock.Alarm.setAction(AlarmAction)">
 <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setAction</span></span><span class="sig-paren">(</span><a class="reference internal" href="alarm-action.html#krpc.client.services.KerbalAlarmClock.AlarmAction" title="krpc.client.services.KerbalAlarmClock.AlarmAction"><span class="pre">AlarmAction</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.setAction(AlarmAction)" title="Link to this definition">#</a></dt>
 <dd><p>The action that the alarm triggers.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>An alarm that plays a sound has the action <a class="reference internal" href="alarm-action.html#krpc.client.services.KerbalAlarmClock.AlarmAction.CUSTOM" title="krpc.client.services.KerbalAlarmClock.AlarmAction.CUSTOM"><code class="xref java java-field docutils literal notranslate"><span class="pre">AlarmAction.CUSTOM</span></code></a>.
+See <a class="reference internal" href="#krpc.client.services.KerbalAlarmClock.Alarm.getPlaySound()" title="krpc.client.services.KerbalAlarmClock.Alarm.getPlaySound()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Alarm.getPlaySound()</span></code></a>.</p>
+</div>
 </dd></dl>
 
 <dl class="java method">
@@ -1203,6 +1208,11 @@
 <dt class="sig sig-object java" id="krpc.client.services.KerbalAlarmClock.Alarm.setPlaySound(boolean)">
 <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setPlaySound</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KerbalAlarmClock.Alarm.setPlaySound(boolean)" title="Link to this definition">#</a></dt>
 <dd><p>Whether the alarm plays a sound when it fires.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>An alarm that plays a sound has the action <a class="reference internal" href="alarm-action.html#krpc.client.services.KerbalAlarmClock.AlarmAction.CUSTOM" title="krpc.client.services.KerbalAlarmClock.AlarmAction.CUSTOM"><code class="xref java java-field docutils literal notranslate"><span class="pre">AlarmAction.CUSTOM</span></code></a>.
+Setting <a class="reference internal" href="#krpc.client.services.KerbalAlarmClock.Alarm.getAction()" title="krpc.client.services.KerbalAlarmClock.Alarm.getAction()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Alarm.getAction()</span></code></a> to any other value turns the sound off.</p>
+</div>
 </dd></dl>
 
 <dl class="java method">

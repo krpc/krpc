@@ -19,6 +19,11 @@ Alarm
 
       :Attribute: Can be read or written
 
+      .. note::
+
+         An alarm that plays a sound has the action :data:`KerbalAlarmClock.AlarmAction.custom`.
+         See :attr:`KerbalAlarmClock.Alarm.play_sound`.
+
    .. attribute:: margin: number
 
       The number of seconds before the event that the alarm will fire.
@@ -72,6 +77,11 @@ Alarm
       Whether the alarm plays a sound when it fires.
 
       :Attribute: Can be read or written
+
+      .. note::
+
+         An alarm that plays a sound has the action :data:`KerbalAlarmClock.AlarmAction.custom`.
+         Setting :attr:`KerbalAlarmClock.Alarm.action` to any other value turns the sound off.
 
    .. attribute:: triggered: boolean
 

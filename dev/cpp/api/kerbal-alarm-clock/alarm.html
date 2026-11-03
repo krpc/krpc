@@ -1119,6 +1119,11 @@
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services16KerbalAlarmClock5Alarm10set_actionE11AlarmAction">
 <span id="_CPPv3N4krpc8services16KerbalAlarmClock5Alarm10set_actionE11AlarmAction"></span><span id="_CPPv2N4krpc8services16KerbalAlarmClock5Alarm10set_actionE11AlarmAction"></span><span id="krpc::services::KerbalAlarmClock::Alarm::set_action__AlarmAction"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_action</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="alarm-action.html#_CPPv4N4krpc8services16KerbalAlarmClock11AlarmActionE" title="krpc::services::KerbalAlarmClock::AlarmAction"><span class="n"><span class="pre">AlarmAction</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services16KerbalAlarmClock5Alarm10set_actionE11AlarmAction" title="Link to this definition">#</a><br /></dt>
 <dd><p>The action that the alarm triggers.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>An alarm that plays a sound has the action <a class="reference internal" href="alarm-action.html#_CPPv4N4krpc8services16KerbalAlarmClock11AlarmAction6customE" title="krpc::services::KerbalAlarmClock::AlarmAction::custom"><code class="xref cpp cpp-enumerator docutils literal notranslate"><span class="pre">AlarmAction::custom</span></code></a>.
+See <a class="reference internal" href="#_CPPv4N4krpc8services16KerbalAlarmClock5Alarm10play_soundEv" title="krpc::services::KerbalAlarmClock::Alarm::play_sound"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Alarm::play_sound()</span></code></a>.</p>
+</div>
 </dd></dl>
 
 <dl class="cpp function">
@@ -1203,6 +1208,11 @@
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services16KerbalAlarmClock5Alarm14set_play_soundEb">
 <span id="_CPPv3N4krpc8services16KerbalAlarmClock5Alarm14set_play_soundEb"></span><span id="_CPPv2N4krpc8services16KerbalAlarmClock5Alarm14set_play_soundEb"></span><span id="krpc::services::KerbalAlarmClock::Alarm::set_play_sound__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_play_sound</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services16KerbalAlarmClock5Alarm14set_play_soundEb" title="Link to this definition">#</a><br /></dt>
 <dd><p>Whether the alarm plays a sound when it fires.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>An alarm that plays a sound has the action <a class="reference internal" href="alarm-action.html#_CPPv4N4krpc8services16KerbalAlarmClock11AlarmAction6customE" title="krpc::services::KerbalAlarmClock::AlarmAction::custom"><code class="xref cpp cpp-enumerator docutils literal notranslate"><span class="pre">AlarmAction::custom</span></code></a>.
+Setting <a class="reference internal" href="#_CPPv4N4krpc8services16KerbalAlarmClock5Alarm6actionEv" title="krpc::services::KerbalAlarmClock::Alarm::action"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Alarm::action()</span></code></a> to any other value turns the sound off.</p>
+</div>
 </dd></dl>
 
 <dl class="cpp function">

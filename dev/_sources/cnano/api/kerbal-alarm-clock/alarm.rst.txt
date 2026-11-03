@@ -20,6 +20,11 @@ Alarm
 
    
 
+      .. note::
+
+         An alarm that plays a sound has the action :macro:`KRPC_KERBALALARMCLOCK_ALARMACTION_CUSTOM`.
+         See :func:`krpc_KerbalAlarmClock_Alarm_PlaySound`.
+
    .. function:: krpc_error_t krpc_KerbalAlarmClock_Alarm_Margin(krpc_connection_t connection, double * returnValue, krpc_KerbalAlarmClock_Alarm_t instance)
    .. function:: krpc_error_t krpc_KerbalAlarmClock_Alarm_set_Margin(krpc_connection_t connection, krpc_KerbalAlarmClock_Alarm_t instance, double value)
 
@@ -79,6 +84,11 @@ Alarm
       Whether the alarm plays a sound when it fires.
 
    
+
+      .. note::
+
+         An alarm that plays a sound has the action :macro:`KRPC_KERBALALARMCLOCK_ALARMACTION_CUSTOM`.
+         Setting :func:`krpc_KerbalAlarmClock_Alarm_Action` to any other value turns the sound off.
 
    .. function:: krpc_error_t krpc_KerbalAlarmClock_Alarm_Triggered(krpc_connection_t connection, bool * returnValue, krpc_KerbalAlarmClock_Alarm_t instance)
 

@@ -96,6 +96,12 @@ InfernalRobotics service
 * Relicense the InfernalRobotics service under the GPLv3 (:issue:`1221`)
 
 
+KerbalAlarmClock service
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Fix ``Alarm.PlaySound`` having no effect (:issue:`1179`)
+
+
 DockingCamera service
 ^^^^^^^^^^^^^^^^^^^^^
 

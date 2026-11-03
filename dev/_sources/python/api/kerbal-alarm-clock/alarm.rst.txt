@@ -21,6 +21,11 @@ Alarm
       :rtype: :class:`AlarmAction`
    
 
+      .. note::
+
+         An alarm that plays a sound has the action :attr:`AlarmAction.custom`.
+         See :attr:`Alarm.play_sound`.
+
    .. attribute:: margin
 
       The number of seconds before the event that the alarm will fire.
@@ -92,6 +97,11 @@ Alarm
       :Attribute: Can be read or written
       :rtype: bool
    
+
+      .. note::
+
+         An alarm that plays a sound has the action :attr:`AlarmAction.custom`.
+         Setting :attr:`Alarm.action` to any other value turns the sound off.
 
    .. attribute:: triggered
 
