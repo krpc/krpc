@@ -1,5 +1,11 @@
-load("@rules_python//python:defs.bzl", "py_test")
+load("@rules_python//python:defs.bzl", "py_library", "py_test")
 load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
+
+py_library(
+    name = "gh_cli",
+    srcs = ["gh_cli.py"],
+    imports = ["."],
+)
 
 py_test(
     name = "changelog-hints-test",
@@ -10,13 +16,39 @@ py_test(
     ],
     imports = ["."],
     main = "changelog_hints_test.py",
-    deps = ["//:changelog"],
+    deps = [
+        ":gh_cli",
+        "//:changelog",
+    ],
+)
+
+py_test(
+    name = "flaky-tests-test",
+    size = "small",
+    srcs = [
+        "flaky_tests.py",
+        "flaky_tests_test.py",
+    ],
+    imports = ["."],
+    main = "flaky_tests_test.py",
+    deps = [":gh_cli"],
+)
+
+py_test(
+    name = "gh-cli-test",
+    size = "small",
+    srcs = ["gh_cli_test.py"],
+    imports = ["."],
+    main = "gh_cli_test.py",
+    deps = [":gh_cli"],
 )
 
 test_suite(
     name = "test",
     tests = [
         ":changelog-hints-test",
+        ":flaky-tests-test",
+        ":gh-cli-test",
         ":pyright",
         ":ruff",
     ],

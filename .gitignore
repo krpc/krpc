@@ -1,5 +1,7 @@
 MODULE.bazel.lock
 /bazel-*
+# Written by tools/ci/flaky_tests.py in CI
+/flaky-tests.json
 .vs/
 .idea/
 generated_deps
