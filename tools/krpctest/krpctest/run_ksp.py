@@ -54,26 +54,86 @@ def _terminate(proc):
         kill_ksp()
 
 
-def _follow_log(path, needle, proc):
+def _stat(path):
+    """The stat of the file at path, or None if it does not exist."""
+    try:
+        return os.stat(path)
+    except FileNotFoundError:
+        return None
+
+
+def _open(path):
+    """The file at path opened for binary reading, or None if it does not exist."""
+    try:
+        return open(path, "rb")
+    except FileNotFoundError:
+        return None
+
+
+def _identity(stat):
+    return (stat.st_ino, stat.st_size, stat.st_mtime_ns)
+
+
+def _follow_log(path, needle, proc, previous):
     """Print appended lines of the log at path that contain needle (case-insensitive),
-    a small stand-in for `tail -f path | grep -i needle`. Returns when KSP exits."""
+    a small stand-in for `tail -F path | grep -i needle`. previous is the stat of the
+    log before KSP was launched, or None. Returns when KSP exits."""
     needle = needle.lower()
-    # Wait for KSP to create the log; give up if it exits first.
-    while not os.path.exists(path):
+
+    def emit(data):
+        # Windows builds of KSP end lines with CRLF
+        line = data.rstrip(b"\r").decode("utf-8", errors="replace")
+        if needle in line.lower():
+            sys.stdout.write(line + "\n")
+            sys.stdout.flush()
+
+    # Wait for KSP to start the log of this run
+    while True:
+        stat = _stat(path)
+        if stat is not None and (
+            previous is None or _identity(stat) != _identity(previous)
+        ):
+            break
         if proc.poll() is not None:
             return
         time.sleep(0.5)
-    with open(path, encoding="utf-8", errors="replace") as log:
+
+    log = _open(path)
+    # An incomplete last line, held back until its newline is written
+    pending = b""
+    exited = False
+    try:
         while True:
-            line = log.readline()
-            if line:
-                if needle in line.lower():
-                    sys.stdout.write(line)
-                    sys.stdout.flush()
+            data = log.read() if log is not None else b""
+            if data:
+                *lines, pending = (pending + data).split(b"\n")
+                for line in lines:
+                    emit(line)
                 continue
-            if proc.poll() is not None:
+            if exited:
+                if pending:
+                    emit(pending)
                 return
+            if proc.poll() is not None:
+                # Read once more, for lines written just before KSP exited
+                exited = True
+                continue
+            # Reopen the log if KSP truncated or replaced it
+            stat = _stat(path)
+            if stat is not None and (
+                log is None
+                or stat.st_ino != os.fstat(log.fileno()).st_ino
+                or stat.st_size < log.tell()
+            ):
+                if log is not None:
+                    log.close()
+                log = _open(path)
+                pending = b""
+                continue
             time.sleep(0.1)
+    finally:
+        if log is not None:
+            log.close()
 
 
 # Runner --load-* options mapped to the TestingTools --krpctest-load-* arguments they
@@ -205,9 +265,11 @@ def main():
     if args.load_game is not None:
         _stage_blank_save(args.load_game, ksp_dir)
 
+    log_path = os.path.join(ksp_dir, _KSP_LOG)
+    previous_log = _stat(log_path)
     proc = subprocess.Popen([get_ksp_executable(ksp_dir), *ksp_args], cwd=ksp_dir)
     try:
-        _follow_log(os.path.join(ksp_dir, _KSP_LOG), "krpc", proc)
+        _follow_log(log_path, "krpc", proc, previous_log)
     except KeyboardInterrupt:
         pass
     finally:
