@@ -7,7 +7,8 @@ using KRPC.Utils;
 namespace KRPC.DockingCamera
 {
     /// <summary>
-    /// Camera service.
+    /// This service provides functionality to interact with
+    /// <a href="https://spacedock.info/mod/1542">Docking Camera (KURS)</a>.
     /// </summary>
     [KRPCService(Id = 11, GameScene = GameScene.All)]
     public static class DockingCamera
@@ -15,11 +16,11 @@ namespace KRPC.DockingCamera
         static void CheckAPI()
         {
             if (!API.IsAvailable)
-                throw new InvalidOperationException("Camera is not available");
+                throw new InvalidOperationException("Docking Camera (KURS) is not available");
         }
 
         /// <summary>
-        /// Check if the Camera API is available.
+        /// Whether Docking Camera (KURS) is available.
         /// </summary>
         [KRPCProperty]
         public static bool Available
@@ -28,8 +29,10 @@ namespace KRPC.DockingCamera
         }
 
         /// <summary>
-        /// Get a Camera part.
+        /// Get the camera on a part.
+        /// Throws an exception if the part is not an onboard camera or a docking port.
         /// </summary>
+        /// <param name="part">The part.</param>
         [KRPCProcedure]
         public static Camera Camera(SpaceCenter.Services.Parts.Part part)
         {

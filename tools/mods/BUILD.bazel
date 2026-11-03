@@ -12,6 +12,9 @@
 #   KerbalAlarmClock  -> GameData/TriggerTech
 #                        + GameData/000_Harmony, GameData/000_ClickThroughBlocker,
 #                          GameData/001_ToolbarControl (deps)
+#   DockingCamera     -> GameData/DockingCamKURS
+#                        + GameData/000_Harmony, GameData/000_ClickThroughBlocker,
+#                          GameData/001_ToolbarControl (deps, shared with KerbalAlarmClock)
 #   RealChute         -> GameData/RealChute
 #                        + GameData/000_Harmony, GameData/000_ClickThroughBlocker,
 #                          GameData/001_ToolbarControl (deps, shared with KerbalAlarmClock)
@@ -49,6 +52,12 @@ filegroup(
 filegroup(
     name = "kerbal_alarm_clock",
     srcs = ["@kerbal_alarm_clock//:gamedata"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "docking_camera",
+    srcs = ["@docking_camera//:gamedata"],
     visibility = ["//visibility:public"],
 )
 

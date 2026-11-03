@@ -507,11 +507,11 @@ http_file(
 )
 
 # ----------------------- Third-party mods (integration testing) -------------------------
-# The RemoteTech, InfernalRobotics and KerbalAlarmClock services wrap these mods, and the
-# SpaceCenter Parachute class wraps RealChute. They are installed into GameData by
-# `krpc-install --mods=...` for the integration tests, and are not part of the release. Each
-# filegroup exports only the mod's own GameData subtree (the RemoteTech archive also bundles
-# an older ModuleManager, which is deliberately excluded).
+# The RemoteTech, InfernalRobotics, KerbalAlarmClock and DockingCamera services wrap these
+# mods, and the SpaceCenter Parachute class wraps RealChute. They are installed into GameData
+# by `krpc-install --mods=...` for the integration tests, and are not part of the release.
+# Each filegroup exports only the mod's own GameData subtree (the RemoteTech archive also
+# bundles an older ModuleManager, which is deliberately excluded).
 
 http_archive(
     name = "remotetech",
@@ -534,6 +534,15 @@ http_archive(
     build_file_content = "filegroup(name = 'gamedata', srcs = glob(['GameData/TriggerTech/**']), visibility = ['//visibility:public'])",
     sha256 = "cdc06631ce478de4656d309ed04df08a2ebeb19e1d3b7fe79b221e38c1e04410",
     url = "https://github.com/linuxgurugamer/KerbalAlarmClock/releases/download/3.14.2.7/KerbalAlarmClock-1.12.5-3.14.2.7.zip",
+)
+
+# Docking Camera (KURS), for the DockingCamera service. It needs ClickThroughBlocker and
+# ToolbarControl, shared with KerbalAlarmClock.
+http_archive(
+    name = "docking_camera",
+    build_file_content = "filegroup(name = 'gamedata', srcs = glob(['GameData/DockingCamKURS/**']), visibility = ['//visibility:public'])",
+    sha256 = "b2f6d153edc65d0e39049c2d1da8ad818d51705d66e1c1413f9a3f0520974413",
+    url = "https://github.com/linuxgurugamer/DockingCam/releases/download/1.3.9/DockingCamera-1.12.0-1.3.9.zip",
 )
 
 http_archive(
