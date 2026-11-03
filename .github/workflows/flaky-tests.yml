@@ -1,0 +1,39 @@
+name: flaky-tests
+
+# Comments on a pull request when a run of ci passed a test only on a retry, and
+# mentions the maintainer, so the flake reaches them by email. Each ci job that
+# found a flaky test uploads a flaky-tests-* artifact. Runs on workflow_run, as
+# the token of a pull request run from a fork cannot comment. It checks out the
+# default branch and reads the artifacts as data. No code from the pull request
+# runs. workflow_dispatch reports a given run of ci again.
+on:
+  workflow_run:
+    workflows: [ci]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      run-id:
+        description: The id of the ci run to report
+        required: true
+
+permissions:
+  actions: read
+  contents: read
+  pull-requests: write
+
+jobs:
+  notify:
+    # A push run of ci only refreshes the caches, and runs no conformance tests
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.event != 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: notify
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ inputs.run-id || github.event.workflow_run.id }}
+        run: python3 tools/ci/flaky_tests.py notify --repo "$GITHUB_REPOSITORY" --run "$RUN_ID"

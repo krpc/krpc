@@ -6,29 +6,57 @@ runs:
     - name: bazel-config
       shell: pwsh
       run: Set-Content -Path "$env:ProgramData\bazel.bazelrc" -Value "common --config=ci-windows"
-    - name: get-bazel-info
+    - name: get-bazel-version
       shell: bash
       run: |
-        echo "BAZEL_VERSION=$(bazelisk --version | cut -d' ' -f2)" >> "$GITHUB_ENV"
+        echo "BAZEL_VERSION=$(cat .bazelversion)" >> "$GITHUB_ENV"
         # Git Bash (MSYS2) rewrites arguments that look like POSIX paths, which
         # mangles Bazel's //pkg:target patterns (e.g. //core:test -> /core:test).
         # Set here rather than on the workflow because the Windows jobs that do
         # not use Bazel drive tools which want that rewriting left alone.
         echo 'MSYS2_ARG_CONV_EXCL=*' >> "$GITHUB_ENV"
+    # Cache the Bazel binary, as the Linux action does
+    - name: restore-bazelisk
+      id: bazelisk-cache
+      uses: actions/cache/restore@v6
+      with:
+        path: ~/AppData/Local/bazelisk
+        key: bazelisk-${{ runner.os }}-${{ env.BAZEL_VERSION }}
+    - name: get-bazel-info
+      shell: bash
+      run: |
         # Cache only the download archives, as the Linux action does: Bazel keeps
         # its cache of extracted repositories in a sibling directory, which is far
         # larger and is rebuilt per job anyway.
         echo "BAZEL_DOWNLOAD_CACHE=$(bazelisk info repository_cache)/content_addressable" >> "$GITHUB_ENV"
+    - name: save-bazelisk
+      if: steps.bazelisk-cache.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v6
+      with:
+        path: ~/AppData/Local/bazelisk
+        key: bazelisk-${{ runner.os }}-${{ env.BAZEL_VERSION }}
+    # A change to the dependencies restores the newest cache for this Bazel
+    # version, as the Linux action does
     - name: restore-bazel-cache
       id: bazel-cache
       uses: actions/cache/restore@v6
       with:
         path: ${{ env.BAZEL_DOWNLOAD_CACHE }}
         key: bazel-repo-cache-${{ runner.os }}-${{ env.BAZEL_VERSION }}-${{ hashFiles('MODULE.bazel', 'tools/build/python/requirements_lock.txt') }}
+        restore-keys: bazel-repo-cache-${{ runner.os }}-${{ env.BAZEL_VERSION }}-
     - name: bazel-fetch
       if: steps.bazel-cache.outputs.cache-hit != 'true'
       shell: bash
-      run: bazelisk fetch //...
+      run: |
+        start="${RUNNER_TEMP//\\//}/bazel-fetch-start"
+        touch "$start"
+        bazelisk fetch //...
+        # Drop the archives the fetch did not read, as the Linux action does
+        find "$BAZEL_DOWNLOAD_CACHE" -type f -name file ! -newer "$start" |
+          while read -r archive; do
+            echo "pruning $archive"
+            rm -rf "$(dirname "$archive")"
+          done
     - name: save-bazel-cache
       if: steps.bazel-cache.outputs.cache-hit != 'true'
       uses: actions/cache/save@v6

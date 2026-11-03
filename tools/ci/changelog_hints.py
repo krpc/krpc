@@ -12,9 +12,7 @@ Usage: changelog_hints.py --repo OWNER/NAME --pr NUMBER
 import argparse
 import json
 import re
-import subprocess
 import sys
-import time
 import urllib.parse
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -22,6 +20,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "release"))
 
 import changelog  # noqa: E402
+from gh_cli import gh, gh_create, gh_lines  # noqa: E402
 
 MARKER = "<!-- changelog-hints -->"
 CHECKED_LABEL = "changelog-checked"
@@ -304,42 +303,6 @@ def comment_body(found, repo, labels=()):
     return "\n".join(lines)
 
 
-# The waits before each retry of a failed GitHub API call, in seconds
-RETRY_DELAYS = (10, 30)
-# The time limit on one call, in seconds
-CALL_TIMEOUT = 60
-
-
-def gh(*args, stdin=None, retry=True):
-    """Run gh and return its standard output, retrying a failed call."""
-    delays = RETRY_DELAYS if retry else ()
-    for attempt in range(len(delays) + 1):
-        try:
-            return subprocess.run(
-                ["gh", *args],
-                input=stdin,
-                capture_output=True,
-                text=True,
-                check=True,
-                timeout=CALL_TIMEOUT,
-            ).stdout
-        except subprocess.CalledProcessError as error:
-            print(f"gh {args[0]} {args[-1]} failed: {error.stderr}", file=sys.stderr)
-            if attempt == len(delays):
-                raise
-        except subprocess.TimeoutExpired:
-            print(f"gh {args[0]} {args[-1]} timed out", file=sys.stderr)
-            if attempt == len(delays):
-                raise
-        time.sleep(delays[attempt])
-    raise AssertionError("unreachable")
-
-
-def gh_lines(*args):
-    """Run a paginated gh api call whose --jq emits one JSON value per line."""
-    return [json.loads(line) for line in gh(*args).splitlines() if line]
-
-
 def fetch(repo, number):
     """Fetch a pull request and the text of the fragments it adds or changes."""
     data = json.loads(gh("api", f"repos/{repo}/pulls/{number}"))
@@ -411,7 +374,6 @@ def update_comment(repo, number, body, found):
         gh("api", "-X", "DELETE", f"repos/{repo}/issues/comments/{comment}")
     if not found and not existing:
         return
-    body = json.dumps({"body": body})
     if existing:
         gh(
             "api",
@@ -420,18 +382,10 @@ def update_comment(repo, number, body, found):
             f"repos/{repo}/issues/comments/{existing[0]}",
             "--input",
             "-",
-            stdin=body,
+            stdin=json.dumps({"body": body}),
         )
     else:
-        # Not retried, as a retry after a lost response would post a second comment
-        gh(
-            "api",
-            f"repos/{repo}/issues/{number}/comments",
-            "--input",
-            "-",
-            stdin=body,
-            retry=False,
-        )
+        gh_create(f"repos/{repo}/issues/{number}/comments", {"body": body})
 
 
 def main():

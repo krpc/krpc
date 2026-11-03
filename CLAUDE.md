@@ -13,6 +13,7 @@ Current version: `tools/krpc-version.sh`. Full setup: `doc/src/krpc-development/
  * `tools/krpctools/` — `clientgen` (stubs), `docgen` (API docs), `servicedefs`.
  * `tools/krpctest/` — in-game test framework; `tools/TestServer/` — game-less server.
  * `tools/build/` — Bazel rules/toolchains. KSP assemblies come from `@ksp` in `MODULE.bazel`; no `lib/`.
+ * `.github/` — CI. `CI-Guide.md` says how it works and why; a CI change updates it.
  * `doc/` — documentation sources.
 
 ## Build
@@ -60,8 +61,11 @@ the tests: a test's docstring is the requirement's text, its markers the level a
    API and idioms, and its internals.
  * A new testee command goes in `client/conformance/testee.proto` and every testee.
  * A failing client lists the test in `client/<client>/conformance/expected-failures.txt`, with
-   the reason. A test its language cannot carry out goes in
-   `client/<client>/conformance/unsupported.txt`. A stale line in either fails the run.
+   the reason. A test that fails now and then takes `@flaky` after its name. CI runs a failing
+   conformance target up to three times. The `flaky-tests` workflow comments on the pull
+   request with each test that passed on a retry, under the job it ran in. A test its language
+   cannot carry out goes in `client/<client>/conformance/unsupported.txt`. A stale line in
+   either fails the run.
  * A client's profiles are listed in its `conformance_test` target.
  * Run every client in one command: `bazel test //client/{cnano,cpp,csharp,java,lua,python}:conformance
    //client/python:conformance-base //client/websockets:conformance //client/conformance:test`.

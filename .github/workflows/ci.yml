@@ -124,6 +124,11 @@ jobs:
       - name: test
         if: matrix.test
         run: bazel test ${{ matrix.test }}
+      - name: flaky-tests
+        if: ${{ !cancelled() && matrix.test }}
+        uses: ./.github/actions/flaky-tests
+        with:
+          name: linux-${{ matrix.name }}
       - name: upload-artifact
         if: matrix.artifact
         uses: ./.github/actions/upload-artifact
@@ -205,6 +210,11 @@ jobs:
         if: matrix.test
         shell: bash
         run: bazelisk test ${{ matrix.test }}
+      - name: flaky-tests
+        if: ${{ !cancelled() && matrix.test }}
+        uses: ./.github/actions/flaky-tests
+        with:
+          name: windows-${{ matrix.name }}
 
   windows-test-client-cpp:
     runs-on: windows-latest
@@ -229,6 +239,11 @@ jobs:
         if: github.event_name != 'push' || steps.cpp-cache.outputs.cache-hit != 'true'
         shell: bash
         run: bazelisk test //client/cpp:test
+      - name: flaky-tests
+        if: ${{ !cancelled() }}
+        uses: ./.github/actions/flaky-tests
+        with:
+          name: windows-test-client-cpp
       - name: save-cpp-cache
         if: steps.cpp-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@v6
@@ -388,6 +403,11 @@ jobs:
         run: bazel build //client/cnano:cnano
       - name: test
         run: bazel test //client/cnano:test
+      - name: flaky-tests
+        if: ${{ !cancelled() }}
+        uses: ./.github/actions/flaky-tests
+        with:
+          name: linux-test-client-cnano
       - name: upload-artifact
         uses: ./.github/actions/upload-artifact
         with:
@@ -419,8 +439,8 @@ jobs:
           packages: nanopb
       - name: setup-cmake
         run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends ccache
+          sudo apt-get -o Acquire::Retries=5 update
+          sudo apt-get -o Acquire::Retries=5 install -y --no-install-recommends ccache
           # The system scenarios find the packages the vcpkg step installed
           echo "CMAKE_PREFIX_PATH=$RUNNER_TEMP/vcpkg-deps/x64-linux" >> "$GITHUB_ENV"
           # Set after the vcpkg step, which builds and detects its compiler without ccache
@@ -597,6 +617,11 @@ jobs:
       - name: test
         if: github.event_name != 'push' || steps.cpp-cache.outputs.cache-hit != 'true'
         run: bazel test //client/cpp:test
+      - name: flaky-tests
+        if: ${{ !cancelled() }}
+        uses: ./.github/actions/flaky-tests
+        with:
+          name: linux-test-client-cpp
       - name: save-cpp-cache
         if: steps.cpp-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@v6
@@ -633,8 +658,8 @@ jobs:
           packages: protobuf asio
       - name: setup-cmake
         run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends ccache
+          sudo apt-get -o Acquire::Retries=5 update
+          sudo apt-get -o Acquire::Retries=5 install -y --no-install-recommends ccache
           # The system scenarios find the packages the vcpkg step installed
           echo "CMAKE_PREFIX_PATH=$RUNNER_TEMP/vcpkg-deps/x64-linux" >> "$GITHUB_ENV"
           echo "CMAKE_C_COMPILER_LAUNCHER=ccache" >> "$GITHUB_ENV"

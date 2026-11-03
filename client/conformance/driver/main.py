@@ -71,6 +71,10 @@ def main() -> int:
         "--profiles=" + args.profiles,
         "--conventions=" + args.conventions,
     ]
+    # Bazel keeps the XML of each failed attempt, which the CI flaky test report reads
+    xml_output = os.environ.get("XML_OUTPUT_FILE")
+    if xml_output:
+        arguments.append("--junitxml=" + xml_output)
     return pytest.main(arguments + pytest_args)
 
 
