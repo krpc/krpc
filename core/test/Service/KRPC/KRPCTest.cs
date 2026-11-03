@@ -219,6 +219,25 @@ namespace KRPC.Test.Service.KRPC
         }
 
         [Test]
+        public void GetServicesIds ()
+        {
+            var services = global::KRPC.Service.KRPC.KRPC.GetServices ().ServicesList;
+            var krpc = services.First (x => x.Name == "KRPC");
+            Assert.AreEqual (1, krpc.Id);
+            Assert.AreEqual (2007570979, krpc.Procedures.First (x => x.Name == "GetStatus").Id);
+            Assert.AreEqual (1234, services.First (x => x.Name == "TestService3Name").Id);
+            var testService = services.First (x => x.Name == "TestService");
+            Assert.AreEqual (global::KRPC.Service.TypeUtils.GetId ("TestService", 0), testService.Id);
+            Assert.AreEqual (3, testService.Procedures.First (x => x.Name == "TestClass_ObjectToString").Id);
+            var signatures = global::KRPC.Service.Services.Instance.Signatures;
+            foreach (var service in services) {
+                Assert.AreEqual (signatures [service.Name].Id, service.Id);
+                foreach (var procedure in service.Procedures)
+                    Assert.AreEqual (signatures [service.Name].Procedures [procedure.Name].Id, procedure.Id);
+            }
+        }
+
+        [Test]
         public void PauseUnpause ()
         {
             bool paused = false;

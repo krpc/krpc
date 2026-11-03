@@ -11,7 +11,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
     {
         static Schema.KRPC.Procedure Encode (GameScene scenes)
         {
-            var procedure = new Procedure ("ProcedureName");
+            var procedure = new Procedure ("ProcedureName", 42);
             procedure.GameScene = scenes;
             return procedure.ToProtobufMessage ();
         }
@@ -30,6 +30,13 @@ namespace KRPC.Test.Server.ProtocolBuffers
             CollectionAssert.AreEqual (
                 new [] { WireGameScene.SpaceCenter, WireGameScene.AstronautComplex },
                 Encode (GameScene.SpaceCenter | GameScene.AstronautComplex).GameScenes);
+        }
+
+        [Test]
+        public void EncodeIds ()
+        {
+            Assert.AreEqual (42, Encode (GameScene.All).Id);
+            Assert.AreEqual (7, new global::KRPC.Service.Messages.Service ("ServiceName", 7).ToProtobufMessage ().Id);
         }
 
         [Test]

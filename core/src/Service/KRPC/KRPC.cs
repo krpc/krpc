@@ -78,9 +78,9 @@ namespace KRPC.Service.KRPC
         {
             var services = new Messages.Services ();
             foreach (var serviceSignature in Services.Instance.Signatures.Values) {
-                var service = new Messages.Service (serviceSignature.Name);
+                var service = new Messages.Service (serviceSignature.Name, serviceSignature.Id);
                 foreach (var procedureSignature in serviceSignature.Procedures.Values) {
-                    var procedure = new Procedure (procedureSignature.Name);
+                    var procedure = new Procedure (procedureSignature.Name, procedureSignature.Id);
                     if (procedureSignature.HasReturnType)
                         procedure.ReturnType = procedureSignature.ReturnSpec;
                     foreach (var parameterSignature in procedureSignature.Parameters) {
