@@ -9,8 +9,9 @@ using ObjectDestroyedException = KRPC.Service.KRPC.ObjectDestroyedException;
 namespace KRPC.LiDAR
 {
     /// <summary>
-    /// A LaserDist laser.
+    /// A LiDAR. Obtained by calling <see cref="LIDAR.Laser"/>.
     /// </summary>
+    [Obsolete ("Use <see cref=\"M:KRPC.SpaceCenter.Services.SpaceCenter.RaycastDistance\"/> instead.")]
     [KRPCClass(Service = "LIDAR")]
     public class Laser : Equatable<Laser>, IGameObjectState
     {
