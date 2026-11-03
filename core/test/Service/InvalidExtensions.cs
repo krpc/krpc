@@ -69,6 +69,24 @@ namespace KRPC.Test.Service
         {
         }
 
+        [KRPCProperty (SetterId = 6)]
+        public static string GetPropertyWithASetterId (this TestService.TestClass obj)
+        {
+            return obj.Value;
+        }
+
+        [KRPCMethod (Id = 7)]
+        public static string FirstMethodSharingAnId (this TestService.TestClass obj)
+        {
+            return obj.Value;
+        }
+
+        [KRPCMethod (Id = 7)]
+        public static string SecondMethodSharingAnId (this TestService.TestClass obj)
+        {
+            return obj.Value;
+        }
+
         /// <summary>
         /// Adds a setter to a property that TestClass declares read-only.
         /// </summary>

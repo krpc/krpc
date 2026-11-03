@@ -222,16 +222,149 @@ namespace KRPC.Service
         {
             ValidateKRPCService (type);
             var attribute = Reflection.GetAttribute<KRPCServiceAttribute> (type);
-            var id = attribute.Id;
-            if (id == 0) {
-                // Generate a service id from the service name
-                var serviceName = TypeUtils.GetServiceName(type);
-                using (var sha256 = SHA256.Create()) {
-                    var hash = sha256.ComputeHash(Encoding.UTF8.GetBytes(serviceName));
-                    id= (uint)BitConverter.ToInt64(hash, 0);
-                }
+            return GetId (GetServiceName (type), attribute.Id);
+        }
+
+        /// <summary>
+        /// The given id, or if it is 0 the id generated from the given name: the first 4
+        /// bytes of its SHA-256 hash, read as a little-endian integer.
+        /// </summary>
+        public static uint GetId (string name, uint id)
+        {
+            if (id != 0)
+                return id;
+            using (var sha256 = SHA256.Create ()) {
+                var hash = sha256.ComputeHash (Encoding.UTF8.GetBytes (name));
+                return hash [0] | (uint)hash [1] << 8 | (uint)hash [2] << 16 | (uint)hash [3] << 24;
             }
-            return id;
+        }
+
+        /// <summary>
+        /// The id set in the attribute of the given procedure, method or extension method,
+        /// or 0 for none.
+        /// </summary>
+        public static uint GetMethodId (MethodInfo method)
+        {
+            if (Reflection.HasAttribute<KRPCProcedureAttribute> (method))
+                return Reflection.GetAttribute<KRPCProcedureAttribute> (method).Id;
+            return Reflection.GetAttribute<KRPCMethodAttribute> (method).Id;
+        }
+
+        /// <summary>
+        /// The id set in the attribute of the given property for its getter or setter, or
+        /// 0 for none.
+        /// </summary>
+        public static uint GetPropertyId (ICustomAttributeProvider property, bool isSetter)
+        {
+            var attribute = Reflection.GetAttribute<KRPCPropertyAttribute> (property);
+            return isSetter ? attribute.SetterId : attribute.GetterId;
+        }
+
+        /// <summary>
+        /// The id set for a method of the given class, or 0 for none.
+        /// </summary>
+        public static uint GetClassMethodId (Type cls, MethodInfo method)
+        {
+            return GetClassMemberId (cls, method, GetMethodId (method), x => x.Id);
+        }
+
+        /// <summary>
+        /// The id set for the getter or setter of a property of the given class, or 0 for none.
+        /// </summary>
+        public static uint GetClassPropertyId (Type cls, PropertyInfo property, bool isSetter)
+        {
+            return GetClassMemberId (cls, property, GetPropertyId (property, isSetter),
+                                     x => isSetter ? x.SetterId : x.GetterId);
+        }
+
+        /// <summary>
+        /// The id set for a member of the given class. The member's own attribute sets it when
+        /// the class declares the member, and a KRPCProcedureId on the class when the class
+        /// inherits it.
+        /// </summary>
+        static uint GetClassMemberId (Type cls, MemberInfo member, uint memberId,
+                                      Func<KRPCProcedureIdAttribute, uint> inheritedId)
+        {
+            var declaringType = member.DeclaringType;
+            if (declaringType == cls)
+                return memberId;
+            // An id on a member of a base KRPCClass belongs to the base's procedure
+            if (memberId != 0 && !Reflection.HasAttribute<KRPCClassAttribute> (declaringType))
+                throw new ServiceException (
+                    (member is MethodInfo ? "KRPCMethod " : "KRPCProperty ") + declaringType + "." + member.Name +
+                    " sets an id, but " + declaringType + " is not a KRPCClass; set the id on " + cls +
+                    " with KRPCProcedureId");
+            var attribute = Reflection.GetAttributes<KRPCProcedureIdAttribute> (cls)
+                .FirstOrDefault (x => x.Member == member.Name);
+            return attribute == null ? 0 : inheritedId (attribute);
+        }
+
+        /// <summary>
+        /// Check that each KRPCProcedureId on the given class names a member the class inherits,
+        /// once, and sets ids only for the procedures that member has. A base class that is not
+        /// a KRPCClass cannot carry the attribute.
+        /// </summary>
+        public static void ValidateKRPCProcedureIds (Type cls)
+        {
+            for (var type = cls.BaseType; type != null; type = type.BaseType) {
+                if (!Reflection.HasAttribute<KRPCClassAttribute> (type) &&
+                    Reflection.GetAttributes<KRPCProcedureIdAttribute> (type).Any ())
+                    throw new ServiceException (
+                        "KRPCProcedureId is applied to " + type + ", a base of " + cls +
+                        " that is not a KRPCClass; apply it to " + cls);
+            }
+            var methods = new HashSet<string> ();
+            foreach (var method in Reflection.GetMethodsWith<KRPCMethodAttribute> (cls)) {
+                if (method.DeclaringType != cls)
+                    methods.Add (method.Name);
+            }
+            var properties = new Dictionary<string, PropertyInfo> ();
+            foreach (var property in Reflection.GetPropertiesWith<KRPCPropertyAttribute> (cls)) {
+                if (property.DeclaringType != cls)
+                    properties [property.Name] = property;
+            }
+            var named = new HashSet<string> ();
+            foreach (var attribute in Reflection.GetAttributes<KRPCProcedureIdAttribute> (cls)) {
+                var context = "KRPCProcedureId on " + cls + " for " + attribute.Member;
+                PropertyInfo property;
+                if (methods.Contains (attribute.Member)) {
+                    if (attribute.GetterId != 0 || attribute.SetterId != 0)
+                        throw new ServiceException (context + " sets GetterId or SetterId, but the member is a method");
+                    if (attribute.Id == 0)
+                        throw new ServiceException (context + " does not set Id");
+                } else if (properties.TryGetValue (attribute.Member, out property)) {
+                    if (attribute.Id != 0)
+                        throw new ServiceException (context + " sets Id, but the member is a property");
+                    if (attribute.GetterId == 0 && attribute.SetterId == 0)
+                        throw new ServiceException (context + " sets neither GetterId nor SetterId");
+                    ValidateAccessorIds (context, attribute.GetterId, attribute.SetterId,
+                                         property.GetGetMethod () != null, property.GetSetMethod () != null);
+                } else {
+                    throw new ServiceException (context + " does not name a member the class inherits");
+                }
+                if (!named.Add (attribute.Member))
+                    throw new ServiceException (context + " is applied more than once");
+            }
+        }
+
+        /// <summary>
+        /// Check that a property sets an id only for an accessor it has.
+        /// </summary>
+        static void ValidatePropertyIds (MemberInfo property, bool hasGetter, bool hasSetter)
+        {
+            var attribute = Reflection.GetAttribute<KRPCPropertyAttribute> (property);
+            ValidateAccessorIds ("KRPCProperty " + property, attribute.GetterId, attribute.SetterId, hasGetter, hasSetter);
+        }
+
+        /// <summary>
+        /// Check that ids are set only for the accessors a property has.
+        /// </summary>
+        static void ValidateAccessorIds (string context, uint getterId, uint setterId, bool hasGetter, bool hasSetter)
+        {
+            if (getterId != 0 && !hasGetter)
+                throw new ServiceException (context + " sets GetterId, but has no getter");
+            if (setterId != 0 && !hasSetter)
+                throw new ServiceException (context + " sets SetterId, but has no setter");
         }
 
         /// <summary>
@@ -487,6 +620,7 @@ namespace KRPC.Service
             var declaringType = property.DeclaringType;
             if (declaringType == null || !Reflection.HasAttribute<KRPCServiceAttribute> (declaringType))
                 throw new ServiceException ("KRPCProperty " + property + " is not declared inside a KRPCService");
+            ValidatePropertyIds (property, property.GetGetMethod () != null, property.GetSetMethod () != null);
         }
 
         /// <summary>
@@ -623,6 +757,8 @@ namespace KRPC.Service
                 var propertyAttribute = Reflection.GetAttribute<KRPCPropertyAttribute> (property);
                 if (propertyAttribute.GameScene != GameScene.Inherit)
                     throw new ServiceException ("KRPCStruct " + type + " field " + property.Name + " sets a game scene, which struct fields cannot do");
+                if (propertyAttribute.GetterId != 0 || propertyAttribute.SetterId != 0)
+                    throw new ServiceException ("KRPCStruct " + type + " field " + property.Name + " sets an id, which struct fields cannot do");
             }
             if (GetStructFields (type).Count == 0)
                 throw new ServiceException ("KRPCStruct " + type + " does not have any fields");
@@ -712,6 +848,7 @@ namespace KRPC.Service
             var declaringType = property.DeclaringType;
             if (declaringType == null || !declaringType.IsAssignableFrom (cls))
                 throw new ServiceException ("KRPCProperty " + property + " is not declared inside a KRPCClass");
+            ValidatePropertyIds (property, property.GetGetMethod () != null, property.GetSetMethod () != null);
         }
 
         /// <summary>
@@ -803,6 +940,7 @@ namespace KRPC.Service
                 throw new ServiceException ("KRPCProperty " + method + " is not a property setter; it must take the value to set and return nothing");
             if (!isSetter && !(numParameters == 1 && method.ReturnType != typeof(void)))
                 throw new ServiceException ("KRPCProperty " + method + " is not a property getter; it must take no arguments and return a value");
+            ValidatePropertyIds (method, !isSetter, isSetter);
         }
 
         /// <summary>

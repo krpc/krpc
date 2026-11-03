@@ -7,6 +7,8 @@ namespace KRPC.Service.Messages
     {
         public string Name { get; private set; }
 
+        public uint Id { get; private set; }
+
         public IList<Parameter> Parameters { get; private set; }
 
         public bool HasReturnType {
@@ -23,9 +25,10 @@ namespace KRPC.Service.Messages
 
         public string DeprecatedReason { get; set; }
 
-        public Procedure (string name)
+        public Procedure (string name, uint id)
         {
             Name = name;
+            Id = id;
             Parameters = new List<Parameter> ();
             Documentation = string.Empty;
             DeprecatedReason = string.Empty;

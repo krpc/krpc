@@ -82,6 +82,7 @@ namespace KRPC.Server.ProtocolBuffers
         {
             var result = new Schema.KRPC.Service ();
             result.Name = service.Name;
+            result.Id = service.Id;
             result.Procedures.Add (service.Procedures.Select (ToProtobufMessage));
             result.Classes.Add (service.Classes.Select (ToProtobufMessage));
             result.Enumerations.Add (service.Enumerations.Select (ToProtobufMessage));
@@ -97,6 +98,7 @@ namespace KRPC.Server.ProtocolBuffers
         {
             var result = new Schema.KRPC.Procedure ();
             result.Name = procedure.Name;
+            result.Id = procedure.Id;
             result.Parameters.Add (procedure.Parameters.Select (ToProtobufMessage));
             if (procedure.ReturnType != null)
                 result.ReturnType = procedure.ReturnType.ToProtobufMessage ();

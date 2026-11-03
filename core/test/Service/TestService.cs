@@ -58,7 +58,7 @@ namespace KRPC.Test.Service
             return Service.ProcedureSingleArgReturns (x);
         }
 
-        [KRPCProperty]
+        [KRPCProperty (GetterId = 1, SetterId = 2)]
         public static string PropertyWithGetAndSet {
             get { return Service.PropertyWithGetAndSet; }
             set { Service.PropertyWithGetAndSet = value; }
@@ -201,7 +201,7 @@ namespace KRPC.Test.Service
                 return Value + x;
             }
 
-            [KRPCMethod]
+            [KRPCMethod (Id = 3)]
             public string ObjectToString (TestClass other)
             {
                 return Value + other.Value;
@@ -219,7 +219,7 @@ namespace KRPC.Test.Service
                 return Value + x;
             }
 
-            [KRPCProperty]
+            [KRPCProperty (SetterId = 4)]
             public int IntProperty { get; set; }
 
             [KRPCProperty (Nullable = true)]

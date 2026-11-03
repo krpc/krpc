@@ -17,7 +17,7 @@ namespace KRPC.Benchmarks
     /// It does not ship with the mod. The scripts that drive it live in
     /// <c>tools/benchmarks/</c>.
     /// </summary>
-    [KRPCService (Id = 9998, GameScene = GameScene.All)]
+    [KRPCService (GameScene = GameScene.All)]
     public static class Benchmark
     {
         /// <summary>

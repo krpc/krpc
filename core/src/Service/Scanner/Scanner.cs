@@ -32,6 +32,8 @@ namespace KRPC.Service.Scanner
                 try {
                     CurrentAssembly = serviceType.Assembly;
                     var serviceId = TypeUtils.GetServiceId (serviceType);
+                    if (serviceId == 0)
+                        HandleError(errors, "service " + TypeUtils.GetServiceName(serviceType), "Service has id 0");
                     if (serviceIds.Contains (serviceId))
                         HandleError(errors, "service " + TypeUtils.GetServiceName(serviceType), "Service id clashes with another service");
                     serviceIds.Add (serviceId);
@@ -158,7 +160,26 @@ namespace KRPC.Service.Scanner
             if (!signatures.ContainsKey ("KRPC"))
                 HandleError(errors, string.Empty, "KRPC service could not be found");
 
+            foreach (var service in signatures.Values)
+                CheckProcedureIds (service, errors);
             return signatures;
+        }
+
+        /// <summary>
+        /// Check that no two procedures in the service share an id, and that none has an id of 0.
+        /// </summary>
+        internal static void CheckProcedureIds (ServiceSignature service, IList<string> errors)
+        {
+            foreach (var group in service.Procedures.Values.GroupBy (x => x.Id).OrderBy (x => x.Key)) {
+                var names = group.Select (x => x.FullyQualifiedName).OrderBy (x => x, StringComparer.Ordinal).ToList ();
+                if (group.Key == 0) {
+                    foreach (var name in names)
+                        HandleError (errors, "service " + service.Name, "Procedure " + name + " has id 0");
+                } else if (names.Count > 1) {
+                    HandleError (errors, "service " + service.Name,
+                        "Procedures " + string.Join (", ", names.ToArray ()) + " share the id " + group.Key);
+                }
+            }
         }
 
         /// <summary>

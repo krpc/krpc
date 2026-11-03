@@ -114,6 +114,7 @@ message Services {
 
 message Service {
   string name = 1;
+  uint32 id = 10;
   repeated Procedure procedures = 2;
   repeated Class classes = 3;
   repeated Enumeration enumerations = 4;
@@ -126,6 +127,7 @@ message Service {
 
 message Procedure {
   string name = 1;
+  uint32 id = 9;
   repeated Parameter parameters = 2;
   Type return_type = 3;
   repeated GameScene game_scenes = 6;

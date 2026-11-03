@@ -23,7 +23,7 @@ namespace KRPC.Test.Utils
         public void GetTypesWithAttribute ()
         {
             Assert.AreEqual (6, Reflection.GetTypesWith<KRPCServiceAttribute> ().Count ());
-            Assert.AreEqual (6, Reflection.GetTypesWith<KRPCClassAttribute> ().Count ());
+            Assert.AreEqual (9, Reflection.GetTypesWith<KRPCClassAttribute> ().Count ());
             Assert.AreEqual (10, Reflection.GetTypesWith<KRPCStructAttribute> ().Count ());
             Assert.AreEqual (0, Reflection.GetTypesWith<KRPCPropertyAttribute> ().Count ());
         }
@@ -48,7 +48,7 @@ namespace KRPC.Test.Utils
                 .Count (x => x.DeclaringType == typeof(TestServiceExtensions)));
             // A class that is not public is searched too, so that the scanner can report the
             // members it puts out of reach, valid or not
-            Assert.AreEqual (5, methods.Count (x => x.DeclaringType == typeof(InvalidExtensions)));
+            Assert.AreEqual (7, methods.Count (x => x.DeclaringType == typeof(InvalidExtensions)));
             CollectionAssert.Contains (methods.Select (x => x.Name).ToList (), "MethodWithoutThis");
             // Only the assemblies that can declare the attribute are searched
             var assemblies = methods.Select (x => x.DeclaringType.Assembly).Distinct ().ToList ();

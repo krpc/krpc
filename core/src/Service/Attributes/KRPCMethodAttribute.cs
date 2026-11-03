@@ -19,6 +19,11 @@ namespace KRPC.Service.Attributes
         public GameScene GameScene { get; set; }
 
         /// <summary>
+        /// The id of the method, which defaults to a hash of its name.
+        /// </summary>
+        public uint Id { get; set; }
+
+        /// <summary>
         /// A kRPC method.
         /// </summary>
         public KRPCMethodAttribute ()

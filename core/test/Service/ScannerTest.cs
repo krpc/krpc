@@ -54,8 +54,8 @@ namespace KRPC.Test.Service
         public void TestService3Name ()
         {
             var service = services.ServicesList.First (x => x.Name == "TestService3Name");
-            Assert.AreEqual (3, service.Procedures.Count);
-            Assert.AreEqual (1, service.Classes.Count);
+            Assert.AreEqual (10, service.Procedures.Count);
+            Assert.AreEqual (4, service.Classes.Count);
             Assert.AreEqual (0, service.Enumerations.Count);
             Assert.AreEqual (string.Empty, service.Documentation);
             MessageAssert.IsNotDeprecated (service);
@@ -89,6 +89,68 @@ namespace KRPC.Test.Service
             }
             // InvalidExtensions is internal, so its members are named in a warning and skipped
             Assert.AreEqual (1, warnings.Count (x => x.Contains ("InvalidExtensions")));
+        }
+
+        [Test]
+        public void ProcedureIdsFromNames ()
+        {
+            var krpc = global::KRPC.Service.Services.Instance.Signatures ["KRPC"];
+            Assert.AreEqual (2007570979, krpc.Procedures ["GetStatus"].Id);
+            Assert.AreEqual (3459659327, krpc.Procedures ["GetClientID"].Id);
+        }
+
+        [TestCase ("TestService2", "ClassTypeFromOtherServiceAsReturn", 1u)]
+        [TestCase ("TestService", "get_PropertyWithGetAndSet", 1u)]
+        [TestCase ("TestService", "set_PropertyWithGetAndSet", 2u)]
+        [TestCase ("TestService", "TestClass_ObjectToString", 3u)]
+        [TestCase ("TestService", "TestClass_set_IntProperty", 4u)]
+        [TestCase ("TestService", "TestClass_get_ExtensionReadWriteProperty", 5u)]
+        public void ProcedureIdsSetInTheAttribute (string service, string procedure, uint id)
+        {
+            var signature = global::KRPC.Service.Services.Instance.Signatures [service];
+            Assert.AreEqual (id, signature.Procedures [procedure].Id);
+        }
+
+        [TestCase ("TestBaseClass3_BaseMethod", 10u)]
+        [TestCase ("TestBaseClass3_get_BaseProperty", 11u)]
+        [TestCase ("TestDerivedClass3_set_BaseProperty", 12u)]
+        [TestCase ("TestGenericDerivedClass3_GenericMethod", 13u)]
+        [TestCase ("TestDerivedClass3_BaseMethod", 0u)]
+        [TestCase ("TestDerivedClass3_get_BaseProperty", 0u)]
+        [TestCase ("TestBaseClass3_set_BaseProperty", 0u)]
+        public void ProcedureIdsOfInheritedMembers (string procedure, uint id)
+        {
+            var service = global::KRPC.Service.Services.Instance.Signatures ["TestService3Name"];
+            Assert.AreEqual (global::KRPC.Service.TypeUtils.GetId (procedure, id), service.Procedures [procedure].Id);
+        }
+
+        [Test]
+        public void ProcedureIdsOfTheOtherAccessor ()
+        {
+            var service = global::KRPC.Service.Services.Instance.Signatures ["TestService"];
+            Assert.AreEqual (global::KRPC.Service.TypeUtils.GetId ("TestClass_get_IntProperty", 0),
+                             service.Procedures ["TestClass_get_IntProperty"].Id);
+            Assert.AreEqual (global::KRPC.Service.TypeUtils.GetId ("TestClass_set_ExtensionReadWriteProperty", 0),
+                             service.Procedures ["TestClass_set_ExtensionReadWriteProperty"].Id);
+        }
+
+        [Test]
+        public void ProcedureIdsShared ()
+        {
+            var service = new global::KRPC.Service.Scanner.ServiceSignature (typeof(TestService), 1);
+            var classType = typeof(TestService.TestClass);
+            var cls = service.AddClass (classType);
+            service.AddClassExtensionMethod (cls, classType, typeof(InvalidExtensions).GetMethod ("FirstMethodSharingAnId"));
+            service.AddClassExtensionMethod (cls, classType, typeof(InvalidExtensions).GetMethod ("SecondMethodSharingAnId"));
+            service.AddProcedure (typeof(TestService).GetMethod ("ProcedureNoArgsNoReturn"));
+            var errors = new List<string> ();
+            global::KRPC.Service.Scanner.Scanner.CheckProcedureIds (service, errors);
+            Assert.AreEqual (1, errors.Count);
+            StringAssert.Contains (
+                "TestService.TestClass_FirstMethodSharingAnId, TestService.TestClass_SecondMethodSharingAnId share the id 7",
+                errors [0]);
+            Assert.Throws<global::KRPC.Service.ServiceException> (
+                () => global::KRPC.Service.Scanner.Scanner.CheckProcedureIds (service, null));
         }
 
         [Test]

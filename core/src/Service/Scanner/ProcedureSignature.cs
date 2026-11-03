@@ -68,11 +68,14 @@ namespace KRPC.Service.Scanner
         /// </summary>
         public TypeSpec ReturnSpec { get; private set; }
 
+        /// <summary>
+        /// Create a procedure signature. An id of 0 means the id is generated from the name.
+        /// </summary>
         internal ProcedureSignature (string serviceName, string procedureName, uint id, string documentation, IProcedureHandler handler, GameScene gameScene, bool deprecated, string deprecatedReason)
         {
             Name = procedureName;
             FullyQualifiedName = serviceName + "." + Name;
-            Id = id;
+            Id = TypeUtils.GetId (procedureName, id);
             Documentation = DocumentationUtils.ResolveCrefs (documentation);
             Handler = handler;
             GameScene = gameScene;

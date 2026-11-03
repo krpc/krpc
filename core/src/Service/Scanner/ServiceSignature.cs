@@ -114,12 +114,6 @@ namespace KRPC.Service.Scanner
             DeprecatedReason = string.Empty;
         }
 
-        uint nextProcedureId = 1;
-
-        uint NextProcedureId {
-            get { return nextProcedureId++; }
-        }
-
         /// <summary>
         /// Add a procedure to the service
         /// </summary>
@@ -139,7 +133,7 @@ namespace KRPC.Service.Scanner
             string deprecatedReason;
             var deprecated = TypeUtils.GetDeprecated (method, out deprecatedReason);
             AddProcedure (new ProcedureSignature (
-                Name, method.Name, NextProcedureId, method.GetDocumentation (),
+                Name, method.Name, TypeUtils.GetMethodId (method), method.GetDocumentation (),
                 new ProcedureHandler (method, TypeUtils.GetNullable (method), TypeUtils.GetNullablePaths (method)),
                 TypeUtils.GetProcedureGameScene(method, gameScene),
                 deprecated, deprecatedReason));
@@ -176,7 +170,7 @@ namespace KRPC.Service.Scanner
             string deprecatedReason;
             var deprecated = TypeUtils.GetPropertyDeprecated (property, method, out deprecatedReason);
             AddProcedure (new ProcedureSignature (
-                Name, method.Name, NextProcedureId, property.GetDocumentation (), handler,
+                Name, method.Name, TypeUtils.GetPropertyId (property, isSetter), property.GetDocumentation (), handler,
                 TypeUtils.GetPropertyGameScene(property, gameScene),
                 deprecated, deprecatedReason));
         }
@@ -188,6 +182,7 @@ namespace KRPC.Service.Scanner
         public string AddClass (Type classType)
         {
             TypeUtils.ValidateKRPCClass (classType);
+            TypeUtils.ValidateKRPCProcedureIds (classType);
             var name = classType.Name;
             if (Classes.ContainsKey (name))
                 throw new ServiceException ("Service " + Name + " contains duplicate classes " + name);
@@ -269,7 +264,7 @@ namespace KRPC.Service.Scanner
             if (!Classes.ContainsKey (cls))
                 throw new ArgumentException ("Class " + cls + " does not exist");
             var name = method.Name;
-            var id = NextProcedureId;
+            var id = TypeUtils.GetClassMethodId (classType, method);
             var classGameScene = TypeUtils.GetClassGameScene(classType, gameScene);
             string deprecatedReason;
             var deprecated = TypeUtils.GetDeprecated (method, out deprecatedReason);
@@ -323,7 +318,8 @@ namespace KRPC.Service.Scanner
             string deprecatedReason;
             var deprecated = TypeUtils.GetPropertyDeprecated (property, method, out deprecatedReason);
             AddProcedure (new ProcedureSignature (
-                Name, cls + '_' + method.Name, NextProcedureId, property.GetDocumentation (), handler,
+                Name, cls + '_' + method.Name, TypeUtils.GetClassPropertyId (classType, property, isSetter),
+                property.GetDocumentation (), handler,
                 TypeUtils.GetClassPropertyGameScene(classType, property, classGameScene),
                 deprecated, deprecatedReason));
         }
@@ -341,7 +337,7 @@ namespace KRPC.Service.Scanner
             string deprecatedReason;
             var deprecated = TypeUtils.GetDeprecated (method, out deprecatedReason);
             AddExtensionProcedure (
-                cls + '_' + method.Name, method, method.GetDocumentation (),
+                cls + '_' + method.Name, TypeUtils.GetMethodId (method), method, method.GetDocumentation (),
                 new ClassStaticMethodHandler (method, TypeUtils.GetNullable (method), TypeUtils.GetNullablePaths (method), true),
                 TypeUtils.GetExtensionMethodGameScene (method, classGameScene),
                 deprecated, deprecatedReason);
@@ -363,7 +359,7 @@ namespace KRPC.Service.Scanner
             string deprecatedReason;
             var deprecated = TypeUtils.GetDeprecated (method, out deprecatedReason);
             AddExtensionProcedure (
-                cls + (isSetter ? "_set_" : "_get_") + property,
+                cls + (isSetter ? "_set_" : "_get_") + property, TypeUtils.GetPropertyId (method, isSetter),
                 method, method.GetDocumentation (),
                 new ClassStaticMethodHandler (method, TypeUtils.GetNullable (method), TypeUtils.GetNullablePaths (method), true),
                 TypeUtils.GetExtensionPropertyGameScene (method, classGameScene),
@@ -399,14 +395,14 @@ namespace KRPC.Service.Scanner
                 Name + "." + procedureName + ", which is declared by " + declaredBy);
         }
 
-        void AddExtensionProcedure (string procedureName, MethodInfo method, string documentation,
+        void AddExtensionProcedure (string procedureName, uint id, MethodInfo method, string documentation,
                                     IProcedureHandler handler, GameScene procedureGameScene,
                                     bool deprecated, string deprecatedReason)
         {
             if (Procedures.ContainsKey (procedureName))
                 throw Clash (procedureName, method);
             AddProcedure (new ProcedureSignature (
-                Name, procedureName, NextProcedureId, documentation, handler,
+                Name, procedureName, id, documentation, handler,
                 procedureGameScene, deprecated, deprecatedReason));
             extensionMembers [procedureName] = method.DeclaringType;
         }

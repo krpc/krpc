@@ -7,6 +7,8 @@ namespace KRPC.Service.Messages
     {
         public string Name { get; private set; }
 
+        public uint Id { get; private set; }
+
         public IList<Procedure> Procedures { get; private set; }
 
         public IList<Class> Classes { get; private set; }
@@ -23,9 +25,10 @@ namespace KRPC.Service.Messages
 
         public string DeprecatedReason { get; set; }
 
-        public Service (string name)
+        public Service (string name, uint id)
         {
             Name = name;
+            Id = id;
             Procedures = new List<Procedure> ();
             Classes = new List<Class> ();
             Enumerations = new List<Enumeration> ();
