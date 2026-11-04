@@ -1,5 +1,5 @@
 ## service/SpaceCenter
 
 - Parts
-  - **Deprecated:** `ConfigNode.GetValues` and `ConfigNode.GetNodes`, superseded by
+  - **Breaking:** Rename `ConfigNode.GetValues` and `ConfigNode.GetNodes` to
     `ConfigNode.FindValues` and `ConfigNode.FindNodes` (#1261)

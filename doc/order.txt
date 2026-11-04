@@ -1132,12 +1132,10 @@ SpaceCenter.ConfigNode.Values
 SpaceCenter.ConfigNode.HasValue
 SpaceCenter.ConfigNode.GetValue
 SpaceCenter.ConfigNode.FindValues
-SpaceCenter.ConfigNode.GetValues
 SpaceCenter.ConfigNode.Nodes
 SpaceCenter.ConfigNode.HasNode
 SpaceCenter.ConfigNode.GetNode
 SpaceCenter.ConfigNode.FindNodes
-SpaceCenter.ConfigNode.GetNodes
 SpaceCenter.Antenna
 SpaceCenter.Antenna.Part
 SpaceCenter.Antenna.State

@@ -105,17 +105,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Returns all of the values with the given name, as a list.
-        /// </summary>
-        /// <param name="name">Name of the values.</param>
-        [Obsolete ("Use <see cref='FindValues'/> instead.")]
-        [KRPCMethod]
-        public IList<string> GetValues (string name)
-        {
-            return FindValues (name);
-        }
-
-        /// <summary>
         /// The child nodes contained in this node.
         /// </summary>
         [KRPCProperty]
@@ -163,17 +152,6 @@ namespace KRPC.SpaceCenter.Services.Parts
             foreach (var child in node.GetNodes (name))
                 result.Add (new ConfigNode (child));
             return result;
-        }
-
-        /// <summary>
-        /// Returns all of the child nodes with the given name, as a list.
-        /// </summary>
-        /// <param name="name">Name of the child nodes.</param>
-        [Obsolete ("Use <see cref='FindNodes'/> instead.")]
-        [KRPCMethod]
-        public IList<ConfigNode> GetNodes (string name)
-        {
-            return FindNodes (name);
         }
     }
 }
