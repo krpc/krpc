@@ -150,12 +150,16 @@ jobs:
         include:
           - name: build-krpc
             build: //:krpc //:csproj //tools/krpctools //tools/TestServer:archive
+          - name: build-docs-html
+            build: //doc:html
           - name: build-docs-examples
             build: //doc:compile-scripts
             cpp-cache: restore
           - name: build-benchmarks
             build: //tools/benchmarks/...
             cpp-cache: restore
+          - name: test-docs
+            test: //doc:test
           - name: test-core
             test: //core:test
           - name: test-service

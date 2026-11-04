@@ -22,24 +22,39 @@ def _build_resources(_os, _inputs_size):
     return {"cpu": _JOBS}
 
 def _build_impl(ctx):
-    # sphinx-build is given the source directory, never the list of .rst files. Sphinx resolves
-    # symlinks in filenames passed on the command line and then skips any that do not resolve
-    # inside the source dir. The sources here are Bazel symlinks pointing outside the staged
-    # tree, so passing them individually would silently build an empty doctree rather than fail.
-    src_dir = _get_src_dir(ctx.files.srcs)
     out = ctx.outputs.out
+
+    # sphinx-build reads every file in its source directory. An unsandboxed build, as on Windows,
+    # sees files staged by earlier builds in the staging directory, so we copy the sources into a
+    # tree artifact, which Bazel empties before the action runs.
+    src_dir = ctx.actions.declare_directory(out.basename + ".sphinx-src")
+    copy_args = ctx.actions.args()
+    copy_args.use_param_file("@%s", use_always = True)
+    copy_args.set_param_file_format("multiline")
+    copy_args.add("--out", src_dir.path)
+    copy_args.add("--base", _get_src_dir(ctx.files.srcs))
+    copy_args.add_all(ctx.files.srcs)
+    ctx.actions.run(
+        executable = ctx.executable._copy_tree,
+        arguments = [copy_args],
+        inputs = ctx.files.srcs,
+        outputs = [src_dir],
+        progress_message = "Staging html documentation sources",
+        mnemonic = "SphinxHtmlSrcs",
+    )
 
     # sphinx-build writes into a tree artifact, which write_zip then archives
     html_dir = ctx.actions.declare_directory(out.basename + ".sphinx-html")
+    doctrees_dir = ctx.actions.declare_directory(out.basename + ".sphinx-doctrees")
     build_args = ctx.actions.args()
-    build_args.add_all(["-b", "html", "-E", "-j", str(_JOBS), "-d", html_dir.path + ".doctrees"])
-    build_args.add_all(["-W", "-n", "-N", "-T", "-q", src_dir, html_dir.path])
+    build_args.add_all(["-b", "html", "-E", "-j", str(_JOBS), "-d", doctrees_dir.path])
+    build_args.add_all(["-W", "-n", "-N", "-T", "-q", src_dir.path, html_dir.path])
     build_args.add_all(["-D%s=%s" % x for x in ctx.attr.opts.items()])
     ctx.actions.run(
         executable = ctx.executable.sphinx_build,
         arguments = [build_args],
-        inputs = ctx.files.srcs,
-        outputs = [html_dir],
+        inputs = [src_dir],
+        outputs = [html_dir, doctrees_dir],
         progress_message = "Generating html documentation",
         mnemonic = "SphinxHtml",
         resource_set = _build_resources,
@@ -65,6 +80,11 @@ sphinx_build = rule(
         "sphinx_build": attr.label(executable = True, mandatory = True, cfg = "exec"),
         "opts": attr.string_dict(),
         "out": attr.output(mandatory = True),
+        "_copy_tree": attr.label(
+            default = Label("//tools/build:copy_tree"),
+            executable = True,
+            cfg = "exec",
+        ),
         "_write_zip": attr.label(
             default = Label("//tools/build:write_zip"),
             executable = True,

@@ -49,6 +49,11 @@ py_binary(
 )
 
 py_binary(
+    name = "copy_tree",
+    srcs = ["copy_tree.py"],
+)
+
+py_binary(
     name = "write_zip",
     srcs = ["write_zip.py"],
 )
