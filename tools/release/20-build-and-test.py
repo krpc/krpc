@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Builds everything and runs the full headless test and lint suites locally.
+"""Builds everything, and runs the full headless test suite and the docs link check locally.
 
 Pass --expunge to start from a completely clean Bazel state first.
 """
@@ -28,8 +28,8 @@ def main():
     lib.banner("Building everything")
     lib.run("bazel", "build", "//...")
 
-    lib.banner("Running the test and lint suites")
-    lib.run("bazel", "test", "//:test", "//:lint")
+    lib.banner("Running the test suite and the link check")
+    lib.run("bazel", "test", "//:test", "//doc:linkcheck")
 
     lib.banner("Done")
     print("Next: tools/release/30-tag.py")

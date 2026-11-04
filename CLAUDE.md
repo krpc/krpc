@@ -29,12 +29,17 @@ Outputs in `bazel-bin`, test logs in `bazel-testlogs`.
 
 ### Tests and lint
 
- * `bazel test //:test` — full non-game suite. **A gate before proposing a change.**
-   `bazel test //...` does not work.
+ * `bazel test //:test` — full non-game suite, including each package's linters: Python, C++, C,
+   Java, Lua (luacheck, `.luacheckrc`), Bazel (buildifier) and the docs. **A gate before proposing
+   a change.** `bazel test //...` does not work.
  * `bazel build //...` — **the second gate**: `//:test` does not build every target. Its log must
    be clean, build progress messages only, with no warnings or other output.
- * `//:lint` — Python, C++, C, Java, Lua (luacheck, `.luacheckrc`), Bazel (buildifier), doc lint.
- * `//core:test`, `//client/python:test`, … — one package, when iterating.
+ * **While iterating, run the targeted tests for the code being changed**, such as `//core:test`
+   or one client's `:conformance`. The two gates are the final pass before a pull request, and lint
+   is part of that pass, not the iteration loop. Run a formatter's own target first, such as
+   `//client/cpp:clangformat` or `//client/conformance:ruff`, to catch formatting in seconds.
+ * `//doc:linkcheck` — checks the docs' external links. It is in no suite, and runs with the
+   release checks.
  * `//doc:spelling` — American-English gate; `//doc:check-documented` — every RPC documented.
  * `//:csproj-test` — `.csproj` file-list check.
  * Game tests are **not** in `//:test` — see below.
