@@ -40,8 +40,8 @@ page of this specification:
      - Adding streams, reading their values and removing them
    * - :doc:`events <client-spec/events>`
      - Waiting on events and calling back on them
-   * - :doc:`threading <client-spec/threading>`
-     - Using one connection from several threads
+   * - :doc:`concurrency <client-spec/concurrency>`
+     - Using one connection from several threads or async tasks
    * - :doc:`functions <client-spec/functions>`
      - Streaming, running and waiting on server side functions
 
@@ -123,6 +123,6 @@ A client implements the ``core`` profile, and any of the others:
    client-spec/objects
    client-spec/streams
    client-spec/events
-   client-spec/threading
+   client-spec/concurrency
    client-spec/functions
    client-spec/coverage

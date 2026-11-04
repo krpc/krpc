@@ -90,7 +90,7 @@ An ``@skip`` after the test name marks a test that hangs the testee. The test is
 
 .. code-block:: none
 
-   test_threading.py::test_wait_holding_another @skip  # The update is never announced
+   test_concurrency.py::test_wait_holding_another @skip  # The update is never announced
 
 Unsupported Tests
 -----------------

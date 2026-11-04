@@ -125,7 +125,7 @@ COVERAGE_ORDER = ["tests/test_%s.py" % x for x in [
     "objects",
     "streams",
     "events",
-    "threading",
+    "concurrency",
     "functions",
 ]]
 

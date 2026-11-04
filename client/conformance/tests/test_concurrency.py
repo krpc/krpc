@@ -1,7 +1,8 @@
-"""Threading requirements.
+"""Concurrency requirements.
 
-Each command runs on a named thread of the testee, and Client.start sends one without waiting
-for its reply, so a test can have one thread wait or call while another removes or closes.
+Each command runs on a named task of the testee, a thread or an async task, and Client.start
+sends one without waiting for its reply. A test can have one task wait or call while another
+removes or closes.
 """
 
 import threading

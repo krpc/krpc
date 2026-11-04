@@ -113,7 +113,7 @@ test:ci --test_output=errors
 # catching flaky tests
 test:ci --nocache_test_results
 # Run a failing client conformance test up to three times. Known bugs in the
-# clients fail the threading tests now and then. The flaky-tests workflow
+# clients fail the concurrency tests now and then. The flaky-tests workflow
 # comments on the pull request with each test that passed on a retry.
 test:ci --flaky_test_attempts=//client/.*:conformance-.*@3
 # The test results that tools/ci/flaky_tests.py reads
