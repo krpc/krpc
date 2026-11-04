@@ -10,6 +10,7 @@ from pathlib import Path
 
 import changelog
 import lib
+import maven
 
 # Reported as a failure if missing, as it creates the release
 REQUIRED_GITHUB_SCOPES = ("repo",)
@@ -126,7 +127,7 @@ def check_tools(report):
             report.fail(f"{tool} not found (required)")
     # Needed by the individual publish steps; missing ones only matter for the
     # steps that use them, so they warn rather than fail.
-    for tool in ("twine", "dotnet", "luarocks", "aws"):
+    for tool in ("twine", "dotnet", "luarocks", "aws", "gpg", "gpgconf"):
         if shutil.which(tool):
             report.ok(tool)
         else:
@@ -209,12 +210,13 @@ def check_credentials(report):
         else:
             report.fail(f"{key} is not set in {lib.CREDENTIALS_FILE}")
 
-    # GitHub, luarocks.org and AWS can all be asked whether a credential works
-    # without publishing anything, so a bad one is a failure. PyPI and
-    # nuget.org offer no such check: the only thing that exercises those keys
-    # is an upload, which cannot be undone. They get a check of the format the
-    # services issue, which catches a truncated or misplaced value but cannot
-    # tell whether the key is live, so a surprise there is a warning.
+    # GitHub, luarocks.org, AWS and the Central Portal can all be asked
+    # whether a credential works without publishing anything, so a bad one is
+    # a failure. PyPI and nuget.org offer no such check: the only thing that
+    # exercises those keys is an upload, which cannot be undone. They get a
+    # check of the format the services issue, which catches a truncated or
+    # misplaced value but cannot tell whether the key is live, so a surprise
+    # there is a warning.
     if credentials.get("GITHUB_TOKEN"):
         check_github(report, credentials["GITHUB_TOKEN"])
 
@@ -240,6 +242,30 @@ def check_credentials(report):
         "AWS_SECRET_ACCESS_KEY"
     ):
         check_aws(report, credentials)
+
+    if all(credentials.get(key) for key in maven.CREDENTIAL_KEYS):
+        check_maven(report, credentials)
+
+
+def check_maven(report, credentials):
+    try:
+        if maven.published(credentials):
+            report.fail(f"the Java client {lib.VERSION} is already on Maven Central")
+        else:
+            report.ok("the Central Portal accepts the MAVEN_CENTRAL_* token")
+    except lib.ReleaseError as exception:
+        report.fail(str(exception))
+
+    if not (shutil.which("gpg") and shutil.which("gpgconf")):
+        report.warn("cannot check MAVEN_GPG_KEY without gpg and gpgconf")
+        return
+    try:
+        with maven.gpg(credentials) as (sign, fingerprint):
+            maven.check_signing_key(sign, fingerprint)
+    except lib.ReleaseError as exception:
+        report.fail(f"MAVEN_GPG_KEY: {exception}")
+        return
+    report.ok(f"MAVEN_GPG_KEY signs with key {fingerprint}, on a key server")
 
 
 def main():

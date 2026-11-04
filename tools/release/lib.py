@@ -103,11 +103,17 @@ def run(*command, env=None, stdin=None, cwd=None):
         raise ReleaseError(f"{command[0]} failed with exit status {status.returncode}")
 
 
-def capture(*command, env=None, cwd=None):
+def capture(*command, env=None, stdin=None, cwd=None):
     """Run a command and return its standard output, stripped."""
     command = [str(argument) for argument in command]
     status = subprocess.run(
-        command, capture_output=True, text=True, env=env, cwd=cwd, check=False
+        command,
+        capture_output=True,
+        text=True,
+        input=stdin,
+        env=env,
+        cwd=cwd,
+        check=False,
     )
     if status.returncode != 0:
         raise ReleaseError(
@@ -207,6 +213,10 @@ CREDENTIAL_KEYS = (
     "LUAROCKS_API_KEY",
     "AWS_ACCESS_KEY_ID",
     "AWS_SECRET_ACCESS_KEY",
+    "MAVEN_CENTRAL_USERNAME",
+    "MAVEN_CENTRAL_PASSWORD",
+    "MAVEN_GPG_KEY",
+    "MAVEN_GPG_PASSPHRASE",
 )
 
 
