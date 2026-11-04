@@ -415,10 +415,10 @@ class Expression(ClassBase):
             self._client._types.bool_type
         )
 
-    def _return_type_has_return_type(self) -> TypeBase:
+    def _return_type__has_return_type(self) -> TypeBase:
         return self._client._types.bool_type
 
-    def _build_call_has_return_type(self) -> KRPC_pb2.ProcedureCall:
+    def _build_call__has_return_type(self) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "KRPC",
             "Expression_get_HasReturnType",
@@ -442,10 +442,10 @@ class Expression(ClassBase):
             self._client._types.list_type(self._client._types.class_type("KRPC", "Type"))
         )
 
-    def _return_type_parameter_types(self) -> TypeBase:
+    def _return_type__parameter_types(self) -> TypeBase:
         return self._client._types.list_type(self._client._types.class_type("KRPC", "Type"))
 
-    def _build_call_parameter_types(self) -> KRPC_pb2.ProcedureCall:
+    def _build_call__parameter_types(self) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "KRPC",
             "Expression_get_ParameterTypes",
@@ -472,10 +472,10 @@ class Expression(ClassBase):
             self._client._types.class_type("KRPC", "Type")
         )
 
-    def _return_type_return_type(self) -> TypeBase:
+    def _return_type__return_type(self) -> TypeBase:
         return self._client._types.class_type("KRPC", "Type")
 
-    def _build_call_return_type(self) -> KRPC_pb2.ProcedureCall:
+    def _build_call__return_type(self) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "KRPC",
             "Expression_get_ReturnType",
@@ -503,12 +503,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_add(cls) -> TypeBase:
+    def _return_type__add(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_add(cls, arg0: Expression, arg1: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__add(cls, arg0: Expression, arg1: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -541,12 +541,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_aggregate(cls) -> TypeBase:
+    def _return_type__aggregate(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_aggregate(cls, arg: Expression, func: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__aggregate(cls, arg: Expression, func: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -581,12 +581,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_aggregate_with_seed(cls) -> TypeBase:
+    def _return_type__aggregate_with_seed(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_aggregate_with_seed(cls, arg: Expression, seed: Expression, func: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__aggregate_with_seed(cls, arg: Expression, seed: Expression, func: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -617,12 +617,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_all(cls) -> TypeBase:
+    def _return_type__all(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_all(cls, arg: Expression, predicate: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__all(cls, arg: Expression, predicate: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -651,12 +651,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_and_(cls) -> TypeBase:
+    def _return_type__and_(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_and_(cls, arg0: Expression, arg1: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__and_(cls, arg0: Expression, arg1: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -687,12 +687,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_any(cls) -> TypeBase:
+    def _return_type__any(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_any(cls, arg: Expression, predicate: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__any(cls, arg: Expression, predicate: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -723,12 +723,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_append(cls) -> TypeBase:
+    def _return_type__append(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_append(cls, collection: Expression, value: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__append(cls, collection: Expression, value: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -760,12 +760,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_assign(cls) -> TypeBase:
+    def _return_type__assign(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_assign(cls, variable: Expression, value: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__assign(cls, variable: Expression, value: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -796,12 +796,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_average(cls) -> TypeBase:
+    def _return_type__average(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_average(cls, arg: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__average(cls, arg: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -828,12 +828,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_block(cls) -> TypeBase:
+    def _return_type__block(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_block(cls, statements: List[Expression]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__block(cls, statements: List[Expression]) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -865,12 +865,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_block_with_variables(cls) -> TypeBase:
+    def _return_type__block_with_variables(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_block_with_variables(cls, variables: List[Expression], statements: List[Expression]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__block_with_variables(cls, variables: List[Expression], statements: List[Expression]) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -895,12 +895,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_break_(cls) -> TypeBase:
+    def _return_type__break_(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_break_(cls, ) -> KRPC_pb2.ProcedureCall:
+    def _build_call__break_(cls, ) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -936,12 +936,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_build_dictionary(cls) -> TypeBase:
+    def _return_type__build_dictionary(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_build_dictionary(cls, arg: Expression, key_func: Expression, value_func: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__build_dictionary(cls, arg: Expression, key_func: Expression, value_func: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -973,12 +973,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_call(cls) -> TypeBase:
+    def _return_type__call(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_call(cls, call: KRPC_pb2.ProcedureCall) -> KRPC_pb2.ProcedureCall:
+    def _build_call__call(cls, call: KRPC_pb2.ProcedureCall) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -1011,12 +1011,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_call_with_arguments(cls) -> TypeBase:
+    def _return_type__call_with_arguments(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_call_with_arguments(cls, call: KRPC_pb2.ProcedureCall, args: Dict[int, Expression]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__call_with_arguments(cls, call: KRPC_pb2.ProcedureCall, args: Dict[int, Expression]) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -1047,12 +1047,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_cast(cls) -> TypeBase:
+    def _return_type__cast(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_cast(cls, arg: Expression, type: Type) -> KRPC_pb2.ProcedureCall:
+    def _build_call__cast(cls, arg: Expression, type: Type) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -1079,12 +1079,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_clear(cls) -> TypeBase:
+    def _return_type__clear(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_clear(cls, collection: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__clear(cls, collection: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -1117,12 +1117,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_concat(cls) -> TypeBase:
+    def _return_type__concat(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_concat(cls, arg1: Expression, arg2: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__concat(cls, arg1: Expression, arg2: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -1155,12 +1155,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_conditional(cls) -> TypeBase:
+    def _return_type__conditional(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_conditional(cls, condition: Expression, if_true: Expression, if_false: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__conditional(cls, condition: Expression, if_true: Expression, if_false: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -1189,12 +1189,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_conditional_and(cls) -> TypeBase:
+    def _return_type__conditional_and(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_conditional_and(cls, arg0: Expression, arg1: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__conditional_and(cls, arg0: Expression, arg1: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -1223,12 +1223,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_conditional_or(cls) -> TypeBase:
+    def _return_type__conditional_or(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_conditional_or(cls, arg0: Expression, arg1: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__conditional_or(cls, arg0: Expression, arg1: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -1255,12 +1255,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_constant_bool(cls) -> TypeBase:
+    def _return_type__constant_bool(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_constant_bool(cls, value: bool) -> KRPC_pb2.ProcedureCall:
+    def _build_call__constant_bool(cls, value: bool) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -1287,12 +1287,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_constant_bytes(cls) -> TypeBase:
+    def _return_type__constant_bytes(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_constant_bytes(cls, value: bytes) -> KRPC_pb2.ProcedureCall:
+    def _build_call__constant_bytes(cls, value: bytes) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -1319,12 +1319,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_constant_double(cls) -> TypeBase:
+    def _return_type__constant_double(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_constant_double(cls, value: float) -> KRPC_pb2.ProcedureCall:
+    def _build_call__constant_double(cls, value: float) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -1355,12 +1355,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_constant_enum(cls) -> TypeBase:
+    def _return_type__constant_enum(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_constant_enum(cls, service: str, name: str, value: int) -> KRPC_pb2.ProcedureCall:
+    def _build_call__constant_enum(cls, service: str, name: str, value: int) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -1387,12 +1387,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_constant_float(cls) -> TypeBase:
+    def _return_type__constant_float(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_constant_float(cls, value: float) -> KRPC_pb2.ProcedureCall:
+    def _build_call__constant_float(cls, value: float) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -1419,12 +1419,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_constant_int(cls) -> TypeBase:
+    def _return_type__constant_int(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_constant_int(cls, value: int) -> KRPC_pb2.ProcedureCall:
+    def _build_call__constant_int(cls, value: int) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -1451,12 +1451,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_constant_long(cls) -> TypeBase:
+    def _return_type__constant_long(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_constant_long(cls, value: int) -> KRPC_pb2.ProcedureCall:
+    def _build_call__constant_long(cls, value: int) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -1485,12 +1485,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_constant_null(cls) -> TypeBase:
+    def _return_type__constant_null(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_constant_null(cls, type: Type) -> KRPC_pb2.ProcedureCall:
+    def _build_call__constant_null(cls, type: Type) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -1519,12 +1519,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_constant_object(cls) -> TypeBase:
+    def _return_type__constant_object(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_constant_object(cls, value: int) -> KRPC_pb2.ProcedureCall:
+    def _build_call__constant_object(cls, value: int) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -1551,12 +1551,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_constant_string(cls) -> TypeBase:
+    def _return_type__constant_string(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_constant_string(cls, value: str) -> KRPC_pb2.ProcedureCall:
+    def _build_call__constant_string(cls, value: str) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -1583,12 +1583,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_constant_u_int(cls) -> TypeBase:
+    def _return_type__constant_u_int(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_constant_u_int(cls, value: int) -> KRPC_pb2.ProcedureCall:
+    def _build_call__constant_u_int(cls, value: int) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -1615,12 +1615,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_constant_u_long(cls) -> TypeBase:
+    def _return_type__constant_u_long(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_constant_u_long(cls, value: int) -> KRPC_pb2.ProcedureCall:
+    def _build_call__constant_u_long(cls, value: int) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -1651,12 +1651,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_contains(cls) -> TypeBase:
+    def _return_type__contains(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_contains(cls, arg: Expression, value: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__contains(cls, arg: Expression, value: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -1687,12 +1687,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_contains_key(cls) -> TypeBase:
+    def _return_type__contains_key(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_contains_key(cls, dictionary: Expression, key: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__contains_key(cls, dictionary: Expression, key: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -1717,12 +1717,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_continue_(cls) -> TypeBase:
+    def _return_type__continue_(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_continue_(cls, ) -> KRPC_pb2.ProcedureCall:
+    def _build_call__continue_(cls, ) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -1755,12 +1755,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_convert_to_string(cls) -> TypeBase:
+    def _return_type__convert_to_string(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_convert_to_string(cls, arg: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__convert_to_string(cls, arg: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -1789,12 +1789,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_count(cls) -> TypeBase:
+    def _return_type__count(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_count(cls, arg: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__count(cls, arg: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -1829,12 +1829,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_create_dictionary(cls) -> TypeBase:
+    def _return_type__create_dictionary(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_create_dictionary(cls, keys: List[Expression], values: List[Expression]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__create_dictionary(cls, keys: List[Expression], values: List[Expression]) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -1866,12 +1866,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_create_empty_dictionary(cls) -> TypeBase:
+    def _return_type__create_empty_dictionary(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_create_empty_dictionary(cls, key_type: Type, value_type: Type) -> KRPC_pb2.ProcedureCall:
+    def _build_call__create_empty_dictionary(cls, key_type: Type, value_type: Type) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -1900,12 +1900,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_create_empty_list(cls) -> TypeBase:
+    def _return_type__create_empty_list(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_create_empty_list(cls, value_type: Type) -> KRPC_pb2.ProcedureCall:
+    def _build_call__create_empty_list(cls, value_type: Type) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -1935,12 +1935,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_create_empty_set(cls) -> TypeBase:
+    def _return_type__create_empty_set(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_create_empty_set(cls, value_type: Type) -> KRPC_pb2.ProcedureCall:
+    def _build_call__create_empty_set(cls, value_type: Type) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -1970,12 +1970,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_create_list(cls) -> TypeBase:
+    def _return_type__create_list(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_create_list(cls, values: List[Expression]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__create_list(cls, values: List[Expression]) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -2007,12 +2007,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_create_set(cls) -> TypeBase:
+    def _return_type__create_set(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_create_set(cls, values: Set[Expression]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__create_set(cls, values: Set[Expression]) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -2045,12 +2045,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_create_struct(cls) -> TypeBase:
+    def _return_type__create_struct(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_create_struct(cls, type: Type, field_values: List[Expression]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__create_struct(cls, type: Type, field_values: List[Expression]) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -2080,12 +2080,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_create_tuple(cls) -> TypeBase:
+    def _return_type__create_tuple(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_create_tuple(cls, elements: List[Expression]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__create_tuple(cls, elements: List[Expression]) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -2117,12 +2117,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_dictionary_keys(cls) -> TypeBase:
+    def _return_type__dictionary_keys(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_dictionary_keys(cls, dictionary: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__dictionary_keys(cls, dictionary: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -2151,12 +2151,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_dictionary_values(cls) -> TypeBase:
+    def _return_type__dictionary_values(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_dictionary_values(cls, dictionary: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__dictionary_values(cls, dictionary: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -2188,12 +2188,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_distinct(cls) -> TypeBase:
+    def _return_type__distinct(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_distinct(cls, arg: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__distinct(cls, arg: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -2222,12 +2222,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_divide(cls) -> TypeBase:
+    def _return_type__divide(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_divide(cls, arg0: Expression, arg1: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__divide(cls, arg0: Expression, arg1: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -2260,12 +2260,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_element_at(cls) -> TypeBase:
+    def _return_type__element_at(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_element_at(cls, arg: Expression, index: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__element_at(cls, arg: Expression, index: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -2297,12 +2297,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_equal(cls) -> TypeBase:
+    def _return_type__equal(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_equal(cls, arg0: Expression, arg1: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__equal(cls, arg0: Expression, arg1: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -2336,12 +2336,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_except_(cls) -> TypeBase:
+    def _return_type__except_(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_except_(cls, arg1: Expression, arg2: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__except_(cls, arg1: Expression, arg2: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -2370,12 +2370,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_exclusive_or(cls) -> TypeBase:
+    def _return_type__exclusive_or(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_exclusive_or(cls, arg0: Expression, arg1: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__exclusive_or(cls, arg0: Expression, arg1: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -2406,12 +2406,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_first(cls) -> TypeBase:
+    def _return_type__first(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_first(cls, arg: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__first(cls, arg: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -2446,12 +2446,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_for_each(cls) -> TypeBase:
+    def _return_type__for_each(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_for_each(cls, variable: Expression, collection: Expression, body: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__for_each(cls, variable: Expression, collection: Expression, body: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -2486,12 +2486,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_get(cls) -> TypeBase:
+    def _return_type__get(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_get(cls, arg: Expression, index: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__get(cls, arg: Expression, index: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -2523,12 +2523,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_get_field(cls) -> TypeBase:
+    def _return_type__get_field(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_get_field(cls, arg: Expression, name: str) -> KRPC_pb2.ProcedureCall:
+    def _build_call__get_field(cls, arg: Expression, name: str) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -2557,12 +2557,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_greater_than(cls) -> TypeBase:
+    def _return_type__greater_than(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_greater_than(cls, arg0: Expression, arg1: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__greater_than(cls, arg0: Expression, arg1: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -2591,12 +2591,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_greater_than_or_equal(cls) -> TypeBase:
+    def _return_type__greater_than_or_equal(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_greater_than_or_equal(cls, arg0: Expression, arg1: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__greater_than_or_equal(cls, arg0: Expression, arg1: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -2627,12 +2627,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_group_by(cls) -> TypeBase:
+    def _return_type__group_by(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_group_by(cls, arg: Expression, key: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__group_by(cls, arg: Expression, key: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -2663,12 +2663,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_if_then(cls) -> TypeBase:
+    def _return_type__if_then(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_if_then(cls, condition: Expression, body: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__if_then(cls, condition: Expression, body: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -2701,12 +2701,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_if_then_else(cls) -> TypeBase:
+    def _return_type__if_then_else(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_if_then_else(cls, condition: Expression, body: Expression, else_body: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__if_then_else(cls, condition: Expression, body: Expression, else_body: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -2739,12 +2739,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_intersect(cls) -> TypeBase:
+    def _return_type__intersect(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_intersect(cls, arg1: Expression, arg2: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__intersect(cls, arg1: Expression, arg2: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -2775,12 +2775,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_invoke(cls) -> TypeBase:
+    def _return_type__invoke(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_invoke(cls, function: Expression, args: Dict[str, Expression]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__invoke(cls, function: Expression, args: Dict[str, Expression]) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -2807,12 +2807,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_is_null(cls) -> TypeBase:
+    def _return_type__is_null(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_is_null(cls, value: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__is_null(cls, value: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -2847,12 +2847,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_lambda_(cls) -> TypeBase:
+    def _return_type__lambda_(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_lambda_(cls, parameters: List[Expression], body: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__lambda_(cls, parameters: List[Expression], body: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -2883,12 +2883,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_last(cls) -> TypeBase:
+    def _return_type__last(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_last(cls, arg: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__last(cls, arg: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -2920,12 +2920,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_left_shift(cls) -> TypeBase:
+    def _return_type__left_shift(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_left_shift(cls, arg0: Expression, arg1: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__left_shift(cls, arg0: Expression, arg1: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -2954,12 +2954,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_less_than(cls) -> TypeBase:
+    def _return_type__less_than(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_less_than(cls, arg0: Expression, arg1: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__less_than(cls, arg0: Expression, arg1: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -2988,12 +2988,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_less_than_or_equal(cls) -> TypeBase:
+    def _return_type__less_than_or_equal(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_less_than_or_equal(cls, arg0: Expression, arg1: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__less_than_or_equal(cls, arg0: Expression, arg1: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -3024,12 +3024,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_max(cls) -> TypeBase:
+    def _return_type__max(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_max(cls, arg: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__max(cls, arg: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -3062,12 +3062,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_max_by(cls) -> TypeBase:
+    def _return_type__max_by(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_max_by(cls, arg: Expression, key: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__max_by(cls, arg: Expression, key: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -3098,12 +3098,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_min(cls) -> TypeBase:
+    def _return_type__min(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_min(cls, arg: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__min(cls, arg: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -3136,12 +3136,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_min_by(cls) -> TypeBase:
+    def _return_type__min_by(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_min_by(cls, arg: Expression, key: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__min_by(cls, arg: Expression, key: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -3172,12 +3172,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_modulo(cls) -> TypeBase:
+    def _return_type__modulo(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_modulo(cls, arg0: Expression, arg1: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__modulo(cls, arg0: Expression, arg1: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -3206,12 +3206,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_multiply(cls) -> TypeBase:
+    def _return_type__multiply(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_multiply(cls, arg0: Expression, arg1: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__multiply(cls, arg0: Expression, arg1: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -3238,12 +3238,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_negate(cls) -> TypeBase:
+    def _return_type__negate(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_negate(cls, arg: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__negate(cls, arg: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -3270,12 +3270,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_not_(cls) -> TypeBase:
+    def _return_type__not_(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_not_(cls, arg: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__not_(cls, arg: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -3307,12 +3307,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_not_equal(cls) -> TypeBase:
+    def _return_type__not_equal(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_not_equal(cls, arg0: Expression, arg1: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__not_equal(cls, arg0: Expression, arg1: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -3341,12 +3341,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_or_(cls) -> TypeBase:
+    def _return_type__or_(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_or_(cls, arg0: Expression, arg1: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__or_(cls, arg0: Expression, arg1: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -3379,12 +3379,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_order_by(cls) -> TypeBase:
+    def _return_type__order_by(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_order_by(cls, arg: Expression, key: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__order_by(cls, arg: Expression, key: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -3418,12 +3418,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_parameter(cls) -> TypeBase:
+    def _return_type__parameter(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_parameter(cls, name: str, type: Type) -> KRPC_pb2.ProcedureCall:
+    def _build_call__parameter(cls, name: str, type: Type) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -3454,12 +3454,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_power(cls) -> TypeBase:
+    def _return_type__power(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_power(cls, arg0: Expression, arg1: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__power(cls, arg0: Expression, arg1: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -3493,12 +3493,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_remove(cls) -> TypeBase:
+    def _return_type__remove(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_remove(cls, collection: Expression, value: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__remove(cls, collection: Expression, value: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -3529,12 +3529,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_remove_at(cls) -> TypeBase:
+    def _return_type__remove_at(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_remove_at(cls, list: Expression, index: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__remove_at(cls, list: Expression, index: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -3561,12 +3561,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_return_(cls) -> TypeBase:
+    def _return_type__return_(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_return_(cls, value: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__return_(cls, value: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -3591,12 +3591,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_return_nothing(cls) -> TypeBase:
+    def _return_type__return_nothing(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_return_nothing(cls, ) -> KRPC_pb2.ProcedureCall:
+    def _build_call__return_nothing(cls, ) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -3627,12 +3627,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_reverse(cls) -> TypeBase:
+    def _return_type__reverse(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_reverse(cls, arg: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__reverse(cls, arg: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -3664,12 +3664,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_right_shift(cls) -> TypeBase:
+    def _return_type__right_shift(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_right_shift(cls, arg0: Expression, arg1: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__right_shift(cls, arg0: Expression, arg1: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -3702,12 +3702,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_select(cls) -> TypeBase:
+    def _return_type__select(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_select(cls, arg: Expression, func: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__select(cls, arg: Expression, func: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -3742,12 +3742,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_select_many(cls) -> TypeBase:
+    def _return_type__select_many(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_select_many(cls, arg: Expression, func: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__select_many(cls, arg: Expression, func: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -3781,12 +3781,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_set(cls) -> TypeBase:
+    def _return_type__set(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_set(cls, collection: Expression, index: Expression, value: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__set(cls, collection: Expression, index: Expression, value: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -3819,12 +3819,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_skip(cls) -> TypeBase:
+    def _return_type__skip(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_skip(cls, arg: Expression, count: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__skip(cls, arg: Expression, count: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -3859,12 +3859,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_state_variable(cls) -> TypeBase:
+    def _return_type__state_variable(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_state_variable(cls, name: str, initial_value: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__state_variable(cls, name: str, initial_value: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -3895,12 +3895,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_string_concat(cls) -> TypeBase:
+    def _return_type__string_concat(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_string_concat(cls, args: List[Expression]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__string_concat(cls, args: List[Expression]) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -3931,12 +3931,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_string_contains(cls) -> TypeBase:
+    def _return_type__string_contains(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_string_contains(cls, arg: Expression, value: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__string_contains(cls, arg: Expression, value: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -3967,12 +3967,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_string_ends_with(cls) -> TypeBase:
+    def _return_type__string_ends_with(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_string_ends_with(cls, arg: Expression, value: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__string_ends_with(cls, arg: Expression, value: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -4005,12 +4005,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_string_get(cls) -> TypeBase:
+    def _return_type__string_get(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_string_get(cls, arg: Expression, index: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__string_get(cls, arg: Expression, index: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -4041,12 +4041,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_string_index_of(cls) -> TypeBase:
+    def _return_type__string_index_of(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_string_index_of(cls, arg: Expression, value: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__string_index_of(cls, arg: Expression, value: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -4077,12 +4077,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_string_join(cls) -> TypeBase:
+    def _return_type__string_join(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_string_join(cls, separator: Expression, values: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__string_join(cls, separator: Expression, values: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -4111,12 +4111,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_string_length(cls) -> TypeBase:
+    def _return_type__string_length(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_string_length(cls, arg: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__string_length(cls, arg: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -4151,12 +4151,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_string_replace(cls) -> TypeBase:
+    def _return_type__string_replace(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_string_replace(cls, arg: Expression, old_value: Expression, new_value: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__string_replace(cls, arg: Expression, old_value: Expression, new_value: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -4187,12 +4187,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_string_split(cls) -> TypeBase:
+    def _return_type__string_split(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_string_split(cls, arg: Expression, separator: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__string_split(cls, arg: Expression, separator: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -4223,12 +4223,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_string_starts_with(cls) -> TypeBase:
+    def _return_type__string_starts_with(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_string_starts_with(cls, arg: Expression, value: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__string_starts_with(cls, arg: Expression, value: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -4263,12 +4263,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_string_substring(cls) -> TypeBase:
+    def _return_type__string_substring(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_string_substring(cls, arg: Expression, start: Expression, length: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__string_substring(cls, arg: Expression, start: Expression, length: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -4297,12 +4297,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_string_to_lower(cls) -> TypeBase:
+    def _return_type__string_to_lower(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_string_to_lower(cls, arg: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__string_to_lower(cls, arg: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -4331,12 +4331,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_string_to_upper(cls) -> TypeBase:
+    def _return_type__string_to_upper(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_string_to_upper(cls, arg: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__string_to_upper(cls, arg: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -4365,12 +4365,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_string_trim(cls) -> TypeBase:
+    def _return_type__string_trim(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_string_trim(cls, arg: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__string_trim(cls, arg: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -4399,12 +4399,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_string_trim_end(cls) -> TypeBase:
+    def _return_type__string_trim_end(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_string_trim_end(cls, arg: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__string_trim_end(cls, arg: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -4433,12 +4433,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_string_trim_start(cls) -> TypeBase:
+    def _return_type__string_trim_start(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_string_trim_start(cls, arg: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__string_trim_start(cls, arg: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -4467,12 +4467,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_subtract(cls) -> TypeBase:
+    def _return_type__subtract(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_subtract(cls, arg0: Expression, arg1: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__subtract(cls, arg0: Expression, arg1: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -4501,12 +4501,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_sum(cls) -> TypeBase:
+    def _return_type__sum(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_sum(cls, arg: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__sum(cls, arg: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -4539,12 +4539,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_take(cls) -> TypeBase:
+    def _return_type__take(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_take(cls, arg: Expression, count: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__take(cls, arg: Expression, count: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -4580,12 +4580,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_throw(cls) -> TypeBase:
+    def _return_type__throw(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_throw(cls, service: str, name: str, message: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__throw(cls, service: str, name: str, message: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -4614,12 +4614,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_to_list(cls) -> TypeBase:
+    def _return_type__to_list(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_to_list(cls, arg: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__to_list(cls, arg: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -4650,12 +4650,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_to_set(cls) -> TypeBase:
+    def _return_type__to_set(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_to_set(cls, arg: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__to_set(cls, arg: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -4693,12 +4693,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_try_catch(cls) -> TypeBase:
+    def _return_type__try_catch(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_try_catch(cls, body: Expression, service: str, name: str, message: Optional[Expression], handler: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__try_catch(cls, body: Expression, service: str, name: str, message: Optional[Expression], handler: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -4729,12 +4729,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_try_catch_all(cls) -> TypeBase:
+    def _return_type__try_catch_all(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_try_catch_all(cls, body: Expression, message: Optional[Expression], handler: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__try_catch_all(cls, body: Expression, message: Optional[Expression], handler: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -4766,12 +4766,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_try_finally(cls) -> TypeBase:
+    def _return_type__try_finally(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_try_finally(cls, body: Expression, finalizer: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__try_finally(cls, body: Expression, finalizer: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -4804,12 +4804,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_union(cls) -> TypeBase:
+    def _return_type__union(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_union(cls, arg1: Expression, arg2: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__union(cls, arg1: Expression, arg2: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -4840,12 +4840,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_variable(cls) -> TypeBase:
+    def _return_type__variable(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_variable(cls, name: str, type: Type) -> KRPC_pb2.ProcedureCall:
+    def _build_call__variable(cls, name: str, type: Type) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -4878,12 +4878,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_where(cls) -> TypeBase:
+    def _return_type__where(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_where(cls, arg: Expression, func: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__where(cls, arg: Expression, func: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -4914,12 +4914,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_while_(cls) -> TypeBase:
+    def _return_type__while_(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_while_(cls, condition: Expression, body: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__while_(cls, condition: Expression, body: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -4955,12 +4955,12 @@ class Expression(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_zip(cls) -> TypeBase:
+    def _return_type__zip(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Expression")
 
     @StaticMethod
-    def _build_call_zip(cls, arg1: Expression, arg2: Expression, func: Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__zip(cls, arg1: Expression, arg2: Expression, func: Expression) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -4989,10 +4989,10 @@ class Type(ClassBase):
             self._client._types.enumeration_type("KRPC", "TypeCode")
         )
 
-    def _return_type_code(self) -> TypeBase:
+    def _return_type__code(self) -> TypeBase:
         return self._client._types.enumeration_type("KRPC", "TypeCode")
 
-    def _build_call_code(self) -> KRPC_pb2.ProcedureCall:
+    def _build_call__code(self) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "KRPC",
             "Type_get_Code",
@@ -5014,10 +5014,10 @@ class Type(ClassBase):
             self._client._types.string_type
         )
 
-    def _return_type_name(self) -> TypeBase:
+    def _return_type__name(self) -> TypeBase:
         return self._client._types.string_type
 
-    def _build_call_name(self) -> KRPC_pb2.ProcedureCall:
+    def _build_call__name(self) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "KRPC",
             "Type_get_Name",
@@ -5042,10 +5042,10 @@ class Type(ClassBase):
             self._client._types.bool_type
         )
 
-    def _return_type_nullable(self) -> TypeBase:
+    def _return_type__nullable(self) -> TypeBase:
         return self._client._types.bool_type
 
-    def _build_call_nullable(self) -> KRPC_pb2.ProcedureCall:
+    def _build_call__nullable(self) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "KRPC",
             "Type_get_Nullable",
@@ -5067,10 +5067,10 @@ class Type(ClassBase):
             self._client._types.string_type
         )
 
-    def _return_type_service(self) -> TypeBase:
+    def _return_type__service(self) -> TypeBase:
         return self._client._types.string_type
 
-    def _build_call_service(self) -> KRPC_pb2.ProcedureCall:
+    def _build_call__service(self) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "KRPC",
             "Type_get_Service",
@@ -5095,10 +5095,10 @@ class Type(ClassBase):
             self._client._types.list_type(self._client._types.class_type("KRPC", "Type"))
         )
 
-    def _return_type_types(self) -> TypeBase:
+    def _return_type__types(self) -> TypeBase:
         return self._client._types.list_type(self._client._types.class_type("KRPC", "Type"))
 
-    def _build_call_types(self) -> KRPC_pb2.ProcedureCall:
+    def _build_call__types(self) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "KRPC",
             "Type_get_Types",
@@ -5122,12 +5122,12 @@ class Type(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_bool(cls) -> TypeBase:
+    def _return_type__bool(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Type")
 
     @StaticMethod
-    def _build_call_bool(cls, ) -> KRPC_pb2.ProcedureCall:
+    def _build_call__bool(cls, ) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -5152,12 +5152,12 @@ class Type(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_bytes(cls) -> TypeBase:
+    def _return_type__bytes(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Type")
 
     @StaticMethod
-    def _build_call_bytes(cls, ) -> KRPC_pb2.ProcedureCall:
+    def _build_call__bytes(cls, ) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -5186,12 +5186,12 @@ class Type(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_class_type(cls) -> TypeBase:
+    def _return_type__class_type(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Type")
 
     @StaticMethod
-    def _build_call_class_type(cls, service: str, name: str) -> KRPC_pb2.ProcedureCall:
+    def _build_call__class_type(cls, service: str, name: str) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -5221,12 +5221,12 @@ class Type(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_dictionary_type(cls) -> TypeBase:
+    def _return_type__dictionary_type(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Type")
 
     @StaticMethod
-    def _build_call_dictionary_type(cls, key_type: Type, value_type: Type) -> KRPC_pb2.ProcedureCall:
+    def _build_call__dictionary_type(cls, key_type: Type, value_type: Type) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -5251,12 +5251,12 @@ class Type(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_double(cls) -> TypeBase:
+    def _return_type__double(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Type")
 
     @StaticMethod
-    def _build_call_double(cls, ) -> KRPC_pb2.ProcedureCall:
+    def _build_call__double(cls, ) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -5285,12 +5285,12 @@ class Type(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_enumeration_type(cls) -> TypeBase:
+    def _return_type__enumeration_type(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Type")
 
     @StaticMethod
-    def _build_call_enumeration_type(cls, service: str, name: str) -> KRPC_pb2.ProcedureCall:
+    def _build_call__enumeration_type(cls, service: str, name: str) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -5315,12 +5315,12 @@ class Type(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_float(cls) -> TypeBase:
+    def _return_type__float(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Type")
 
     @StaticMethod
-    def _build_call_float(cls, ) -> KRPC_pb2.ProcedureCall:
+    def _build_call__float(cls, ) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -5345,12 +5345,12 @@ class Type(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_int(cls) -> TypeBase:
+    def _return_type__int(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Type")
 
     @StaticMethod
-    def _build_call_int(cls, ) -> KRPC_pb2.ProcedureCall:
+    def _build_call__int(cls, ) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -5377,12 +5377,12 @@ class Type(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_list_type(cls) -> TypeBase:
+    def _return_type__list_type(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Type")
 
     @StaticMethod
-    def _build_call_list_type(cls, value_type: Type) -> KRPC_pb2.ProcedureCall:
+    def _build_call__list_type(cls, value_type: Type) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -5407,12 +5407,12 @@ class Type(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_long(cls) -> TypeBase:
+    def _return_type__long(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Type")
 
     @StaticMethod
-    def _build_call_long(cls, ) -> KRPC_pb2.ProcedureCall:
+    def _build_call__long(cls, ) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -5439,12 +5439,12 @@ class Type(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_nullable_type(cls) -> TypeBase:
+    def _return_type__nullable_type(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Type")
 
     @StaticMethod
-    def _build_call_nullable_type(cls, value_type: Type) -> KRPC_pb2.ProcedureCall:
+    def _build_call__nullable_type(cls, value_type: Type) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -5471,12 +5471,12 @@ class Type(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_set_type(cls) -> TypeBase:
+    def _return_type__set_type(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Type")
 
     @StaticMethod
-    def _build_call_set_type(cls, value_type: Type) -> KRPC_pb2.ProcedureCall:
+    def _build_call__set_type(cls, value_type: Type) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -5501,12 +5501,12 @@ class Type(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_string(cls) -> TypeBase:
+    def _return_type__string(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Type")
 
     @StaticMethod
-    def _build_call_string(cls, ) -> KRPC_pb2.ProcedureCall:
+    def _build_call__string(cls, ) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -5535,12 +5535,12 @@ class Type(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_struct_type(cls) -> TypeBase:
+    def _return_type__struct_type(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Type")
 
     @StaticMethod
-    def _build_call_struct_type(cls, service: str, name: str) -> KRPC_pb2.ProcedureCall:
+    def _build_call__struct_type(cls, service: str, name: str) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -5567,12 +5567,12 @@ class Type(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_tuple_type(cls) -> TypeBase:
+    def _return_type__tuple_type(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Type")
 
     @StaticMethod
-    def _build_call_tuple_type(cls, value_types: List[Type]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__tuple_type(cls, value_types: List[Type]) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -5597,12 +5597,12 @@ class Type(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_u_int(cls) -> TypeBase:
+    def _return_type__u_int(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Type")
 
     @StaticMethod
-    def _build_call_u_int(cls, ) -> KRPC_pb2.ProcedureCall:
+    def _build_call__u_int(cls, ) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -5627,12 +5627,12 @@ class Type(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_u_long(cls) -> TypeBase:
+    def _return_type__u_long(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("KRPC", "Type")
 
     @StaticMethod
-    def _build_call_u_long(cls, ) -> KRPC_pb2.ProcedureCall:
+    def _build_call__u_long(cls, ) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "KRPC",
@@ -5784,10 +5784,10 @@ class KRPC(_KRPCDefinitions):
             self._client._types.list_type(self._client._types.struct_type("KRPC", "ClientInfo"))
         )
 
-    def _return_type_clients(self) -> TypeBase:
+    def _return_type__clients(self) -> TypeBase:
         return self._client._types.list_type(self._client._types.struct_type("KRPC", "ClientInfo"))
 
-    def _build_call_clients(self) -> KRPC_pb2.ProcedureCall:
+    def _build_call__clients(self) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "KRPC",
             "get_Clients",
@@ -5837,10 +5837,10 @@ class KRPC(_KRPCDefinitions):
             None
         )
 
-    def _return_type_game_scene(self) -> TypeBase:
+    def _return_type__game_scene(self) -> TypeBase:
         return self._client._types.enumeration_type("KRPC", "GameScene")
 
-    def _build_call_game_scene(self) -> KRPC_pb2.ProcedureCall:
+    def _build_call__game_scene(self) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "KRPC",
             "get_GameScene",
@@ -5864,10 +5864,10 @@ class KRPC(_KRPCDefinitions):
             self._client._types.uint32_type
         )
 
-    def _return_type_game_state_loads(self) -> TypeBase:
+    def _return_type__game_state_loads(self) -> TypeBase:
         return self._client._types.uint32_type
 
-    def _build_call_game_state_loads(self) -> KRPC_pb2.ProcedureCall:
+    def _build_call__game_state_loads(self) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "KRPC",
             "get_GameStateLoads",
@@ -5908,10 +5908,10 @@ class KRPC(_KRPCDefinitions):
             None
         )
 
-    def _return_type_paused(self) -> TypeBase:
+    def _return_type__paused(self) -> TypeBase:
         return self._client._types.bool_type
 
-    def _build_call_paused(self) -> KRPC_pb2.ProcedureCall:
+    def _build_call__paused(self) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "KRPC",
             "get_Paused",
@@ -5932,10 +5932,10 @@ class KRPC(_KRPCDefinitions):
             self._client._types.bytes_type
         )
 
-    def _return_type_get_client_id(self) -> TypeBase:
+    def _return_type__get_client_id(self) -> TypeBase:
         return self._client._types.bytes_type
 
-    def _build_call_get_client_id(self) -> KRPC_pb2.ProcedureCall:
+    def _build_call__get_client_id(self) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "KRPC",
             "GetClientID",
@@ -5957,10 +5957,10 @@ class KRPC(_KRPCDefinitions):
             self._client._types.string_type
         )
 
-    def _return_type_get_client_name(self) -> TypeBase:
+    def _return_type__get_client_name(self) -> TypeBase:
         return self._client._types.string_type
 
-    def _build_call_get_client_name(self) -> KRPC_pb2.ProcedureCall:
+    def _build_call__get_client_name(self) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "KRPC",
             "GetClientName",
@@ -5982,10 +5982,10 @@ class KRPC(_KRPCDefinitions):
             self._client._types.services_type
         )
 
-    def _return_type_get_services(self) -> TypeBase:
+    def _return_type__get_services(self) -> TypeBase:
         return self._client._types.services_type
 
-    def _build_call_get_services(self) -> KRPC_pb2.ProcedureCall:
+    def _build_call__get_services(self) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "KRPC",
             "GetServices",
@@ -6006,10 +6006,10 @@ class KRPC(_KRPCDefinitions):
             self._client._types.struct_type("KRPC", "ServerStatus")
         )
 
-    def _return_type_get_status(self) -> TypeBase:
+    def _return_type__get_status(self) -> TypeBase:
         return self._client._types.struct_type("KRPC", "ServerStatus")
 
-    def _build_call_get_status(self) -> KRPC_pb2.ProcedureCall:
+    def _build_call__get_status(self) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "KRPC",
             "GetStatus",
@@ -6045,10 +6045,10 @@ class KRPC(_KRPCDefinitions):
             None
         )
 
-    def _return_type_hold_tick(self) -> TypeBase | None:
+    def _return_type__hold_tick(self) -> TypeBase | None:
         return None
 
-    def _build_call_hold_tick(self) -> KRPC_pb2.ProcedureCall:
+    def _build_call__hold_tick(self) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "KRPC",
             "HoldTick",
@@ -6081,10 +6081,10 @@ class KRPC(_KRPCDefinitions):
             None
         )
 
-    def _return_type_next_tick(self) -> TypeBase | None:
+    def _return_type__next_tick(self) -> TypeBase | None:
         return None
 
-    def _build_call_next_tick(self) -> KRPC_pb2.ProcedureCall:
+    def _build_call__next_tick(self) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "KRPC",
             "NextTick",
@@ -6106,10 +6106,10 @@ class KRPC(_KRPCDefinitions):
             None
         )
 
-    def _return_type_release_tick(self) -> TypeBase | None:
+    def _return_type__release_tick(self) -> TypeBase | None:
         return None
 
-    def _build_call_release_tick(self) -> KRPC_pb2.ProcedureCall:
+    def _build_call__release_tick(self) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "KRPC",
             "ReleaseTick",

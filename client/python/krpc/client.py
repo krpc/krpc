@@ -336,7 +336,7 @@ class Client(krpc.services.Client):
         return (
             owner is not None
             and name is not None
-            and hasattr(owner, "_build_call_" + name)
+            and hasattr(owner, "_build_call__" + name)
         )
 
     @contextmanager
@@ -566,7 +566,7 @@ class Client(krpc.services.Client):
         property's name and, for setattr, the value."""
         if func == getattr:
             name = cast(str, args[1])
-            builder = getattr(args[0], "_build_call_" + name)
+            builder = getattr(args[0], "_build_call__" + name)
             args = tuple()
             kwargs = {}
         elif func == setattr:
@@ -577,7 +577,7 @@ class Client(krpc.services.Client):
         else:
             builder = getattr(
                 func.__self__,  # pyright: ignore[reportFunctionMemberAccess]
-                "_build_call_" + func.__name__,
+                "_build_call__" + func.__name__,
             )
         return cast(KRPC.ProcedureCall, builder(*args, **kwargs))
 
@@ -590,13 +590,13 @@ class Client(krpc.services.Client):
         """Get the return type for a remote procedure call"""
         if func == getattr:
             name = cast(str, args[1])
-            return_type_fn = getattr(args[0], "_return_type_" + name)
+            return_type_fn = getattr(args[0], "_return_type__" + name)
         elif func == setattr:
             return self._types.no_value_type
         else:
             return_type_fn = getattr(
                 func.__self__,  # pyright: ignore[reportFunctionMemberAccess]
-                "_return_type_" + func.__name__,
+                "_return_type__" + func.__name__,
             )
         return_type = cast("TypeBase | None", return_type_fn())
         return self._types.no_value_type if return_type is None else return_type
