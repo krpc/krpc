@@ -12,6 +12,9 @@ load("//tools/build:sphinx.bzl", "sphinx_build", "sphinx_linkcheck_test", "sphin
 load("//tools/krpctools:docgen.bzl", "docgen")
 load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
 
+# The release version, without the suffix CI stamps on a dev build
+package_version = version.partition("-")[0]
+
 filegroup(
     name = "doc",
     srcs = [
@@ -106,8 +109,7 @@ changeloggen(
         "//tools/krpctools:CHANGELOG.md",
     ],
     fragments = ["//:changelog-fragments"],
-    # The release version, without the suffix CI stamps on a dev build
-    version = version.partition("-")[0],
+    version = package_version,
 )
 
 py_console_script_binary(
@@ -169,7 +171,8 @@ genrule(
     # commit sha is deliberately not substituted in: it reaches a dev build's
     # footer at page-load time via build-info.json, keeping the HTML identical
     # from one commit to the next.
-    cmd = "sed -e 's/%VERSION%/" + docs_version + "/g' -e 's/%SUBPATH%/" + docs_version + "/g' \"$<\" > \"$@\"",
+    cmd = ("sed -e 's/%VERSION%/" + docs_version + "/g' -e 's/%SUBPATH%/" + docs_version +
+           "/g' -e 's/%PACKAGE_VERSION%/" + package_version + "/g' \"$<\" > \"$@\""),
 )
 
 sphinx_build(
