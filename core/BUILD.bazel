@@ -114,10 +114,7 @@ genrule(
     srcs = [":KRPC.Core.net10"],
     outs = ["xmldoc-net10/KRPC.Core.xml"],
     cmd = 'for f in $(SRCS); do case "$$f" in *.xml) cp "$$f" "$@";; esac; done',
-    visibility = [
-        "//tools/TestServer:__pkg__",
-        "//tools/krpctools:__pkg__",
-    ],
+    visibility = ["//tools/krpctools:__pkg__"],
 )
 
 service_definitions(

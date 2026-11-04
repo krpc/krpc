@@ -1,11 +1,10 @@
 import argparse
 import os
-import shutil
 import subprocess
 import sys
 import tempfile
-from importlib.resources import files
 
+from ..dotnet import command, servicedefinitions_dir
 from ..version import __version__
 
 
@@ -20,7 +19,6 @@ def main():
         action="version",
         version="%s version v%s" % (prog, __version__),
     )
-    parser.add_argument("ksp", help="Path to Kerbal Space Program directory")
     parser.add_argument("service", help="Name of service")
     parser.add_argument(
         "assemblies",
@@ -34,10 +32,18 @@ def main():
         help="Path to write output to. If not specified, "
         + "output is written to standard output.",
     )
+    parser.add_argument(
+        "--reference-dir",
+        action="append",
+        default=[],
+        metavar="DIR",
+        help="Directory to load the assemblies the service references from, such as "
+        + "the game's managed assemblies. Can be repeated.",
+    )
     args = parser.parse_args()
 
     try:
-        defs = servicedefs(args.ksp, args.service, args.assemblies)
+        defs = servicedefs(args.service, args.assemblies, args.reference_dir)
     except RuntimeError as ex:
         sys.stderr.write("Error: %s\n" % str(ex))
         return 1
@@ -51,61 +57,28 @@ def main():
     return 0
 
 
-def servicedefs(ksp, service, assemblies):
+def servicedefs(service, assemblies, reference_dirs=()):
     """Generate service definitions from assembly DLLs using the
-    ServiceDefinitions tool (requires the .NET 10 runtime)"""
+    ServiceDefinitions tool (requires the .NET 10 runtime). The tool also
+    loads referenced assemblies from the directories of the given assemblies."""
 
-    if not os.path.exists(ksp):
-        raise RuntimeError("Kerbal Space Program directory does not exist.")
+    for directory in reference_dirs:
+        if not os.path.isdir(directory):
+            raise RuntimeError("Reference directory '%s' does not exist." % directory)
 
-    bindir = tempfile.mkdtemp(prefix="krpc-servicedefs-")
-    tmpout = bindir + "/out.json"
-
-    # Copy binaries to the tmp dir
-    binpath = str(files("krpctools").joinpath("bin"))
-    for filename in os.listdir(binpath):
-        filename = os.path.join(binpath, filename)
-        if os.path.isfile(filename):
-            shutil.copy(filename, bindir)
-
-    # Copy KSP DLLs to the tmp dir
-    ksp_dlls = [
-        "Assembly-CSharp.dll",
-        "Assembly-CSharp-firstpass.dll",
-        "UnityEngine.dll",
-        "UnityEngine.AnimationModule.dll",
-        "UnityEngine.CoreModule.dll",
-        "UnityEngine.IMGUIModule.dll",
-        "UnityEngine.ImageConversionModule.dll",
-        "UnityEngine.InputLegacyModule.dll",
-        "UnityEngine.ScreenCaptureModule.dll",
-        "UnityEngine.SharedInternalsModule.dll",
-        "UnityEngine.TextRenderingModule.dll",
-        "UnityEngine.UI.dll",
-        "UnityEngine.UIModule.dll",
-    ]
-    ksp_data = "KSP_Data/Managed"
-    if not os.path.exists(os.path.join(ksp, ksp_data)):
-        ksp_data = "KSP_x64_Data/Managed"
-    for dll in ksp_dlls:
-        shutil.copy(os.path.join(ksp, ksp_data, dll), bindir)
-
-    # Generate the service definitions
-    try:
-        subprocess.check_output(
-            [bindir + "/ServiceDefinitions", "--output=%s" % tmpout, service]
-            + assemblies,
-            stderr=subprocess.STDOUT,
-        )
-    except subprocess.CalledProcessError as ex:
-        shutil.rmtree(bindir)
-        raise RuntimeError(ex.output) from ex
-
-    with open(tmpout, encoding="utf-8") as fp:
-        return fp.read()
-
-    shutil.rmtree(bindir)
+    tool = os.path.join(servicedefinitions_dir(), "ServiceDefinitions.dll")
+    with tempfile.TemporaryDirectory(prefix="krpc-servicedefs-") as directory:
+        output = os.path.join(directory, "out.json")
+        args = ["--output=" + output]
+        args += ["--reference-dir=" + os.path.abspath(x) for x in reference_dirs]
+        args += [service] + [os.path.abspath(x) for x in assemblies]
+        try:
+            subprocess.check_output(command(tool, args), stderr=subprocess.STDOUT)
+        except subprocess.CalledProcessError as ex:
+            raise RuntimeError(ex.output.decode("utf-8", "replace")) from ex
+        with open(output, encoding="utf-8") as fp:
+            return fp.read()
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

@@ -11,9 +11,8 @@ from pathlib import Path
 import changelog
 import lib
 
-# Reported as a failure if either is missing: the first to create the release,
-# the second to push the TestServer image to ghcr.io
-REQUIRED_GITHUB_SCOPES = ("repo", "write:packages")
+# Reported as a failure if missing, as it creates the release
+REQUIRED_GITHUB_SCOPES = ("repo",)
 
 GREEN_BOLD = lib.GREEN + lib.BOLD
 RED_BOLD = lib.RED + lib.BOLD
@@ -127,7 +126,7 @@ def check_tools(report):
             report.fail(f"{tool} not found (required)")
     # Needed by the individual publish steps; missing ones only matter for the
     # steps that use them, so they warn rather than fail.
-    for tool in ("twine", "dotnet", "docker", "luarocks", "aws"):
+    for tool in ("twine", "dotnet", "luarocks", "aws"):
         if shutil.which(tool):
             report.ok(tool)
         else:
@@ -150,8 +149,7 @@ def check_github(report, token):
     report.ok(f"GITHUB_TOKEN authenticates as {login}")
     if scopes is None:
         report.warn(
-            "GITHUB_TOKEN does not report its scopes; check it can "
-            "create releases and push packages"
+            "GITHUB_TOKEN does not report its scopes; check it can create releases"
         )
         return
     for scope in REQUIRED_GITHUB_SCOPES:

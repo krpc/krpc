@@ -60,6 +60,7 @@ The following pages cover each part of the Service API:
 * :doc:`extending/extending-other-services`, by adding members to their classes.
 * :doc:`extending/documentation` for a service, sent to clients and rendered in the API reference.
 * :doc:`extending/clientgen`, the stubs for clients that need them.
+* :doc:`extending/docgen` for a service, in each client language.
 
 .. toctree::
    :hidden:
@@ -73,3 +74,4 @@ The following pages cover each part of the Service API:
    extending/extending-other-services
    extending/documentation
    extending/clientgen
+   extending/docgen

@@ -1,19 +1,7 @@
 "python build tools"
 
 load("@rules_python//python:defs.bzl", _native_py_test = "py_test")
-
-# buildifier: disable=function-docstring-header
-def _apply_path_map(path_map, path):
-    """Apply the path mappings to a path.
-    Replaces the longest prefix match from the mapping."""
-    matchlen = 0
-    match = path
-    for x, y in path_map.items():
-        if path.startswith(x):
-            if len(x) > matchlen:
-                match = y + path[len(x):]
-                matchlen = len(x)
-    return match
+load(":pkg.bzl", "apply_exclude", "apply_path_map")
 
 def _sdist_impl(ctx):
     output = ctx.outputs.out
@@ -25,7 +13,9 @@ def _sdist_impl(ctx):
     staging_dir = output.basename + ".py-sdist-tmp"
     staging_inputs = []
     for input in inputs:
-        staging_path = staging_dir + "/" + _apply_path_map(path_map, input.short_path)
+        if apply_exclude(ctx.attr.exclude, input.short_path):
+            continue
+        staging_path = staging_dir + "/" + apply_path_map(path_map, input.short_path)
         staging_file = ctx.actions.declare_file(staging_path)
         ctx.actions.symlink(output = staging_file, target_file = input)
         staging_inputs.append(staging_file)
@@ -58,6 +48,7 @@ py_sdist = rule(
     attrs = {
         "files": attr.label_list(allow_files = True, mandatory = True, allow_empty = True),
         "path_map": attr.string_dict(),
+        "exclude": attr.string_list(doc = "Patterns of the input paths to leave out, as for pkg_zip"),
         "out": attr.output(mandatory = True),
         "_hatchling": attr.label(
             default = Label("//tools/build/python:hatchling"),

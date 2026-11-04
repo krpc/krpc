@@ -1,9 +1,9 @@
 load("@rules_dotnet//dotnet:defs.bzl", "publish_binary")
-load("//:config.bzl", "assembly_version", "author", "version")
+load("//:config.bzl", "assembly_version", "author")
 load("//tools/build:assembly_info.bzl", "csharp_assembly_info")
 load("//tools/build:csharp.bzl", "csharp_binary", "csharp_library")
-load("//tools/build:pkg.bzl", "pkg_zip")
 load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
+load(":rids.bzl", "RIDS")
 
 csharp_assembly_info(
     name = "AssemblyInfo",
@@ -49,67 +49,6 @@ exe_deps = [
     "//tools/build/dotnet:NDesk.Options",
 ]
 
-license_text = """This license (LGPL v3) applies to all parts of TestServer except for the following:
-
-  - Google.Protobuf.dll is a binary from Google's protobuf project.
-    See LICENSE.protobuf
-
-  - NDesk.Options.dll is under the MIT license.
-    See https://www.nuget.org/packages/NDesk.Options/
-
-  - System.IO.Ports.dll and runtimes/ are binaries from the .NET project, under the MIT license.
-    See https://github.com/dotnet/runtime
-
-Copyright 2015-2026 kRPC Org
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the Lesser GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-Lesser GNU General Public License for more details.
-
-You should have received a copy of the Lesser GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
-"""
-
-genrule(
-    name = "license",
-    outs = ["LICENSE"],
-    cmd = 'echo "%s" > "$@"' % license_text,
-)
-
-pkg_zip(
-    name = "archive",
-    out = "TestServer-%s.zip" % version,
-    exclude = ["*.pdb"],
-    files = [
-        ":README.md",
-        ":TestServer-xmldoc",
-        ":license",
-        ":publish",
-        "//:COPYING",
-        "//:COPYING.LESSER",
-        "//:version",
-        "//core:KRPC.Core.net10-xmldoc",
-        "//tools/build/protobuf:LICENSE.Google.Protobuf",
-    ],
-    mode_map = {
-        "TestServer": "755",
-    },
-    path_map = {
-        "core/xmldoc-net10/": "",
-        "tools/TestServer/publish/publish/linux-x64/": "",
-        "tools/TestServer/xmldoc/": "",
-        "tools/TestServer/": "",
-        "tools/build/protobuf/LICENSE.Google.Protobuf": "LICENSE.protobuf",
-    },
-    visibility = ["//visibility:public"],
-)
-
 csharp_binary(
     name = "TestServer",
     srcs = exe_srcs,
@@ -125,25 +64,28 @@ csharp_binary(
 )
 
 # The server reads API documentation from the XML doc file next to each
-# assembly at runtime, so the release archive ships it beside the binaries.
+# assembly at runtime, so krpctools ships it beside the binaries.
 genrule(
     name = "TestServer-xmldoc",
     srcs = [":TestServer"],
     outs = ["xmldoc/TestServer.xml"],
     cmd = 'for f in $(SRCS); do case "$$f" in *.xml) cp "$$f" "$@";; esac; done',
-)
-
-# Published (framework-dependent) layout of TestServer for the release
-# archive; requires the .NET 10 runtime to be installed to run.
-# TODO: publish per-platform archives when Windows support lands.
-publish_binary(
-    name = "publish",
-    binary = ":TestServer",
-    runtime_identifier = "linux-x64",
-    self_contained = False,
-    target_framework = "net10.0",
     visibility = ["//tools/krpctools:__pkg__"],
 )
+
+# Framework-dependent layouts of TestServer for krpctools, one per RID, as serial IO needs the
+# System.IO.Ports build for the platform. Each runs with `dotnet TestServer.dll`.
+[
+    publish_binary(
+        name = "publish-" + rid,
+        binary = ":TestServer",
+        runtime_identifier = rid,
+        self_contained = False,
+        target_framework = "net10.0",
+        visibility = ["//tools/krpctools:__pkg__"],
+    )
+    for rid in RIDS
+]
 
 csharp_library(
     name = "TestService",

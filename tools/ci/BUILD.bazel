@@ -73,5 +73,9 @@ py_pyright_test(
     size = "medium",
     srcs = glob(["*.py"]),
     python_version = "3.12",
-    deps = ["//:changelog"],
+    deps = [
+        "//:changelog",
+        "//client/python:krpc_lib",
+        "//tools/krpctools:krpctools_lib",
+    ],
 )

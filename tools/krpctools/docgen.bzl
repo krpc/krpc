@@ -23,7 +23,7 @@ def _generate(ctx, srcs, documented):
     outputs = [documented]
     args = ctx.actions.args()
     args.add(ctx.attr.language)
-    args.add(ctx.file._order)
+    args.add(ctx.file.order)
     args.add_all(ctx.files.defs)
     for src in srcs:
         path = _page_path(src).removesuffix(".tmpl")
@@ -36,7 +36,7 @@ def _generate(ctx, srcs, documented):
     args.set_param_file_format("multiline")
 
     ctx.actions.run(
-        inputs = ctx.files.defs + srcs + [ctx.file._order],
+        inputs = ctx.files.defs + srcs + [ctx.file.order],
         outputs = outputs,
         progress_message = "Generating %s documentation for %%{label}" % ctx.attr.language,
         mnemonic = "Docgen",
@@ -58,6 +58,10 @@ docgen = rule(
             executable = True,
             cfg = "exec",
         ),
-        "_order": attr.label(default = Label("//doc:order.txt"), allow_single_file = True),
+        "order": attr.label(
+            default = Label("//doc:order.txt"),
+            allow_single_file = True,
+            doc = "The ordering file, listing every member of the services in page order",
+        ),
     },
 )

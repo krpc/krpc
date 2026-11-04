@@ -10,6 +10,7 @@ load("//tools/build:pkg.bzl", "stage_files")
 load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
 load("//tools/build:sphinx.bzl", "sphinx_build", "sphinx_linkcheck_test", "sphinx_spelling_test")
 load("//tools/krpctools:docgen.bzl", "docgen")
+load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
 
 filegroup(
     name = "doc",
@@ -32,6 +33,8 @@ stage_files(
         "src/scripts/**/*.lua",
         "src/scripts/**/*.py",
         "src/scripts/**/*.js",
+        "src/scripts/**/*.tmpl",
+        "src/scripts/**/*.txt",
     ]) + [
         "src/_static/build-info.js",
         "src/_static/custom.css",
@@ -353,8 +356,26 @@ filegroup(
         ":compile-scripts-cnano",
         ":compile-scripts-cpp",
         ":compile-scripts-csharp",
+        ":compile-scripts-docgen",
         ":compile-scripts-java",
     ],
+)
+
+# The krpc-docgen example, run on the LaunchControl example service
+service_definitions(
+    name = "compile-scripts-docgen-defs",
+    out = "compile-scripts-docgen/LaunchControl.json",
+    assemblies = [":compile-scripts-csharp-libs/src/scripts/extending/ServiceAPIExample.lib.cs"],
+    service = "LaunchControl",
+)
+
+docgen(
+    name = "compile-scripts-docgen",
+    srcs = ["src/scripts/extending/docgen/launch-control.tmpl"],
+    defs = [":compile-scripts-docgen-defs"],
+    language = "python",
+    order = "src/scripts/extending/docgen/order.txt",
+    outdir = "compile-scripts-docgen",
 )
 
 filegroup(

@@ -30,8 +30,7 @@ def main() -> int:
     parser.add_argument("--testee", help="The command that starts the testee")
     parser.add_argument(
         "--server",
-        default=os.path.join(os.path.dirname(root), "bin", "TestServer", "TestServer"),
-        help="The TestServer executable",
+        help="The TestServer executable or assembly, by default the one krpctools bundles",
     )
     parser.add_argument("--protocol", default="tcpip")
     parser.add_argument("--expected-failures", default="")
@@ -52,6 +51,13 @@ def main() -> int:
         args.conventions = config["conventions"]
     if not args.testee:
         parser.error("the testee command is required")
+    if not args.server:
+        # Only the installed package bundles a TestServer
+        try:
+            from krpctools.dotnet import testserver  # noqa: PLC0415
+        except ImportError:
+            parser.error("--server is required without the krpctools package")
+        args.server = testserver()
     arguments = [
         os.path.join(root, "tests"),
         "--rootdir=" + root,

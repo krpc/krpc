@@ -108,6 +108,7 @@ kRPCs
 kerbal
 krpc
 krpctest
+krpctools
 laplace
 latus
 libxml
@@ -165,6 +166,7 @@ radians
 reactively
 reflow
 rect
+reStructuredText
 respawn
 rethrow
 reverser

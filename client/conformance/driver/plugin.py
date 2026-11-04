@@ -65,7 +65,9 @@ def pytest_addoption(parser: pytest.Parser) -> None:
     group.addoption(
         "--testee", required=True, help="The command that starts the testee"
     )
-    group.addoption("--server", required=True, help="The TestServer executable")
+    group.addoption(
+        "--server", required=True, help="The TestServer executable or assembly"
+    )
     group.addoption("--protocol", default="tcpip", choices=sorted(SERVER_TYPES))
     group.addoption(
         "--expected-failures", default="", help="The expected failures file"
@@ -270,7 +272,19 @@ def server(request: pytest.FixtureRequest) -> Iterator[Endpoint]:
         socat, server_port, client_port = serverprocess.start_socat(directory)
         arguments.append("--serialio-port=" + server_port)
     executable = os.path.abspath(_option(request.config, "server"))
-    process = serverprocess.start([executable] + arguments, env=_environment())
+    if executable.lower().endswith(".dll"):
+        # The assembly the installed package bundles, run on the dotnet host
+        try:
+            from krpctools.dotnet import command as dotnet_command  # noqa: PLC0415
+        except ImportError:
+            pytest.exit("a .dll server needs the krpctools package", returncode=1)
+        try:
+            command = dotnet_command(executable, arguments)
+        except RuntimeError as ex:
+            pytest.exit(str(ex), returncode=1)
+    else:
+        command = [executable, *arguments]
+    process = serverprocess.start(command, env=_environment())
     try:
         reader = serverprocess.Reader(process, serverprocess.SERVER_READY)
         reader.wait("the server")
