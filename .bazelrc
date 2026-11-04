@@ -34,6 +34,10 @@ build:linux --linkopt=-Wno-gcc-install-dir-libstdcxx --host_linkopt=-Wno-gcc-ins
 # using APIs and attributes that newer clang releases deprecate.
 build:linux --per_file_copt=external/.*@-w --host_per_file_copt=external/.*@-w
 build:macos --per_file_copt=external/.*@-w --host_per_file_copt=external/.*@-w
+# Abseil sets /W3 itself, and overriding it prints warning D9025 for each file. Its
+# sources compile clean under MSVC, so they keep their warnings.
+build:windows --per_file_copt=external/.*,-external/abseil-cpp[+]/.*@/w
+build:windows --host_per_file_copt=external/.*,-external/abseil-cpp[+]/.*@/w
 
 # The LLVM toolchain turns on clang's thread-safety analysis, and libc++ annotates
 # std::lock_guard for it. The C++ client's RecursiveMutex carries no capability

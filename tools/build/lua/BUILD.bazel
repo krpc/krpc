@@ -22,6 +22,15 @@ exports_files([
 cc_binary(
     name = "lua",
     srcs = ["linit.c"],
+    # lfs.h marks luaopen_lfs dllexport on Windows, which has the linker write an
+    # import library for the interpreter
+    linkopts = select({
+        "@platforms//os:windows": [
+            "/NOIMPLIB",
+            "/NOEXP",
+        ],
+        "//conditions:default": [],
+    }),
     visibility = ["//visibility:public"],
     deps = [
         "@lua//:interpreter",

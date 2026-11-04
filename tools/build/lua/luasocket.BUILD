@@ -31,12 +31,6 @@ cc_library(
         "@platforms//os:windows": ["src/wsocket.c"],
         "//conditions:default": ["src/usocket.c"],
     }),
-    # Upstream sources, compiled unmodified. The warnings the toolchain's -Wall
-    # finds in them are not ours to fix.
-    copts = select({
-        "@platforms//os:windows": ["/w"],
-        "//conditions:default": ["-w"],
-    }),
     linkopts = select({
         # The sockets are winsock's on Windows, which is a library of its own rather
         # than part of the C runtime.
