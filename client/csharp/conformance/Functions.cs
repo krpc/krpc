@@ -112,6 +112,11 @@ namespace KRPC.Client.Conformance
             return Get (command.Type).AddStream (connection, Arg.Object<Expression> (command.Function), nullable);
         }
 
+        public static void Compile (Connection connection, CompileFunction command)
+        {
+            connection.Compile (Arg.Object<Expression> (command.Function));
+        }
+
         public static Value AddEvent (Connection connection, AddFunctionEvent command)
         {
             return Result.Event (connection.AddEvent (Arg.Object<Expression> (command.Function)));

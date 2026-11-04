@@ -493,6 +493,11 @@ class Testee {
         reply->set_stream(Handles::instance().add_stream(stream));
         break;
       }
+      case Command::kCompileFunction: {
+        krpc::compile(
+            Object<functions::Expression>::arg(connected(), command.compile_function().function()));
+        break;
+      }
       case Command::kAddFunctionEvent: {
         auto function = Object<functions::Expression>::arg(connected(),
                                                            command.add_function_event().function());

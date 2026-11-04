@@ -510,6 +510,11 @@ Client API Reference
       Throws an :type:`~java.lang.IllegalArgumentException` if the number of arguments differs from
       the number of parameters, or if a parameter cannot take its argument.
 
+   .. method:: KRPC.Expression compile(KRPC.Expression function)
+
+      Compiles a server side function on the server, so that its first run is as fast as later
+      ones, and returns the function.
+
    .. method:: Event addEvent(KRPC.Expression function)
 
       Creates an event from a server side function that evaluates to a boolean value, and returns

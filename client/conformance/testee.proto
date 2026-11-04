@@ -92,6 +92,7 @@ message Command {
     HashHandle hash_handle = 52;
     FailWrite fail_write = 53;
     CallWithArguments call_with_arguments = 54;
+    CompileFunction compile_function = 55;
   }
 }
 
@@ -245,6 +246,12 @@ message CallWithArguments {
 message AddFunctionStream {
   Value function = 1;
   string type = 2;
+}
+
+// Compiles a server side function, a KRPC.Expression object built with the expression API.
+// Replies with no value.
+message CompileFunction {
+  Value function = 1;
 }
 
 // Adds an event over a server side function. Replies with an event Value.

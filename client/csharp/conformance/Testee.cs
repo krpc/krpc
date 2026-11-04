@@ -187,6 +187,9 @@ namespace KRPC.Client.Conformance
             case Command.CommandOneofCase.AddFunctionStream:
                 reply.Stream = Handles.Add (Functions.AddStream (Connected (), command.AddFunctionStream));
                 break;
+            case Command.CommandOneofCase.CompileFunction:
+                Functions.Compile (Connected (), command.CompileFunction);
+                break;
             case Command.CommandOneofCase.AddFunctionEvent:
                 reply.Value = Functions.AddEvent (Connected (), command.AddFunctionEvent);
                 break;

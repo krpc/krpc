@@ -402,6 +402,15 @@ inline Stream<T> add_stream(const services::KRPC::Expression& function) {
 }
 
 /**
+ * Compile a server side function built with the expression API on the server, so that its first
+ * run is as fast as later ones. Returns the function.
+ */
+inline services::KRPC::Expression compile(const services::KRPC::Expression& function) {
+  internal_procedures::compile_function(function);
+  return function;
+}
+
+/**
  * Create an event from a server side function that evaluates to a boolean value. Each call
  * creates a new event. Throws StreamError if the client is not connected to a server, and
  * services::KRPC::ArgumentException if the function does not evaluate to a boolean value or has

@@ -228,6 +228,9 @@ class Testee:
             reply.value.CopyFrom(self._to_value(self._call(command)))
         elif case == "add_function_stream":
             reply.stream = self._add_function_stream(command.add_function_stream)
+        elif case == "compile_function":
+            function = self._from_value(command.compile_function.function)
+            self._connection().compile(function)
         elif case == "add_function_event":
             function = self._from_value(command.add_function_event.function)
             event = self._connection().add_event(function)

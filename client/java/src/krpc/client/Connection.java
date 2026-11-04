@@ -854,6 +854,21 @@ public class Connection implements AutoCloseable {
   }
 
   /**
+   * Compile a server side function built with the expression API on the server, so that its
+   * first run is as fast as later ones.
+   *
+   * @param function
+   *            The function to compile.
+   *
+   * @return The function.
+   */
+  public krpc.client.services.KRPC.Expression compile(
+      krpc.client.services.KRPC.Expression function) throws RPCException {
+    InternalProcedures.compileFunction(this, function);
+    return function;
+  }
+
+  /**
    * Run a server side function within a single physics tick, and return its value.
    * The value is decoded at the type the server reports for the function, and is
    * null for a function with no value. The arguments are passed to the function's

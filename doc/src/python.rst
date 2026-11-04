@@ -810,7 +810,9 @@ Client API Reference
       Compiles a Python function or lambda into a server side function, a ``KRPC.Expression``
       object. A ``def`` can take parameters, each with a type annotation. Can be used as a
       decorator. Raises :class:`krpc.error.FunctionCompilationError` for a construct with no
-      server side equivalent. See :ref:`python-client-compiling-functions`.
+      server side equivalent. See :ref:`python-client-compiling-functions`. Given a
+      ``KRPC.Expression`` object built with the expression API, compiles it on the server and
+      returns it.
 
    .. method:: get_call(func, *args, **kwargs)
 

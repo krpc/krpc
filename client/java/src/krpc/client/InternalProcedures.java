@@ -50,6 +50,10 @@ final class InternalProcedures {
     return (long) decodeNonNull(result, UINT64, connection);
   }
 
+  static void compileFunction(Connection connection, Expression function) throws RPCException {
+    connection.invokeKrpc("CompileFunction", false, Encoder.encode(function, EXPRESSION));
+  }
+
   /** Run a server side function. Returns null for a null value. */
   static byte[] runFunction(Connection connection, Expression function, List<byte[]> arguments)
       throws RPCException {

@@ -475,6 +475,20 @@ namespace KRPC.Client
             return CompileWithParameters (expression);
         }
 
+        /// <summary>
+        /// Compile a server side function built with the expression API, and return it.
+        /// </summary>
+        /// <remarks>
+        /// Compiling a function before it is needed makes its first run as fast as later ones.
+        /// </remarks>
+        public Services.KRPC.Expression Compile (Services.KRPC.Expression function)
+        {
+            CheckDisposed ();
+            if (ReferenceEquals (function, null))
+                throw new ArgumentNullException (nameof (function));
+            return CompiledOnServer (function);
+        }
+
         Services.KRPC.Expression CompileWithParameters (LambdaExpression expression)
         {
             CheckDisposed ();

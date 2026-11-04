@@ -12,7 +12,7 @@ from driver import profile, section, values
 from driver.errors import assert_argument_error, assert_error_kind, is_removed_error
 from driver.functions import Functions
 from driver.helpers import ended, name, raised
-from driver.scripted import null_stream_ids
+from driver.scripted import functions_script, null_stream_ids
 from driver.testee import REPLY_TIMEOUT, TesteeError, wait_until
 
 
@@ -449,6 +449,21 @@ def test_two_events_of_one_function(connected, functions, control, request):
 
 
 section("Running")
+
+
+@profile("functions")
+def test_compile(client, server, scripted_server):
+    """Compiling a function built with the expression API calls ``KRPC.CompileFunction`` with
+    it."""
+    scripted = functions_script(client, server, scripted_server)
+    try:
+        function = Functions(client).expression("ConstantInt", values.sint32(2))
+        client.compile_function(function)
+        (call,) = scripted.wait_for_call("CompileFunction")
+        # The scripted server gives each function the object id 1
+        assert call.arguments[0].value == b"\x01"
+    finally:
+        client.close()
 
 
 @profile("functions")

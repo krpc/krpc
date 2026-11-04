@@ -10,6 +10,7 @@ import krpc.client.services.TestService.TestEnum;
 import krpc.conformance.Testee.AddFunctionEvent;
 import krpc.conformance.Testee.AddFunctionStream;
 import krpc.conformance.Testee.CallWithArguments;
+import krpc.conformance.Testee.CompileFunction;
 import krpc.conformance.Testee.Invoke;
 import krpc.conformance.Testee.RunFunction;
 import krpc.conformance.Testee.Value;
@@ -42,6 +43,10 @@ final class Functions {
       return result.apply(value);
     };
     return new StreamHandle(connection.addStream(function(command.getFunction())), convert);
+  }
+
+  static void compile(Connection connection, CompileFunction command) throws Exception {
+    connection.compile(function(command.getFunction()));
   }
 
   static Value addEvent(Connection connection, AddFunctionEvent command) throws Exception {

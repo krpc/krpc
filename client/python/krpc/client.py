@@ -349,14 +349,18 @@ class Client(krpc.services.Client):
         finally:
             stream.remove()
 
-    def compile(self, func: Callable) -> Any:
+    def compile(self, func: Any) -> Any:
         """Compile a Python function or lambda into a server side function, a
         KRPC.Expression object. Each run makes the function's remote procedure
         calls again, and uses its other values as they were when it was
         compiled. A def can take parameters, each with a type annotation, and
         the run method passes its arguments to them. Compiling takes a round
         trip per node, so compile a function once to use it repeatedly. Can be
-        used as a decorator."""
+        used as a decorator. Given a KRPC.Expression object built with the
+        expression API, compiles it on the server and returns it."""
+        if isinstance(func, self._internal.expression_type.python_type):
+            self._internal.compile_function(func)
+            return func
         function, return_type, parameters = compile_function_with_type(self, func)
         self._internal.compile_function(function)
         self._function_parameters[function._object_id] = parameters

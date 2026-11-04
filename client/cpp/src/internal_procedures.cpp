@@ -55,6 +55,11 @@ uint64_t add_function_stream(const services::KRPC::Expression& function) {
   return decode_non_null_result<uint64_t>(client, result);
 }
 
+void compile_function(const services::KRPC::Expression& function) {
+  function._client->invoke("KRPC", "CompileFunction", {encoder::encode_arg(function)},
+                           Client::Returns::value);
+}
+
 std::optional<std::string> run_function(const services::KRPC::Expression& function,
                                         const std::vector<std::optional<std::string>>& arguments) {
   Client* client = function._client;

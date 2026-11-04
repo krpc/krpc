@@ -358,7 +358,8 @@ returns the call as a message, for :func:`~krpc::services::KRPC::Expression::cal
 function. :ref:`server-side-functions-api` in the :ref:`server side functions guide
 <server-side-functions>` describes how to build functions.
 
-:func:`~krpc::run`, :func:`~krpc::add_stream` and :func:`~krpc::add_event` are declared in
+:func:`~krpc::run`, :func:`~krpc::compile`, :func:`~krpc::add_stream` and :func:`~krpc::add_event`
+are declared in
 ``krpc/function_stream.hpp``.
 
 Running a Function
@@ -699,6 +700,11 @@ Client API Reference
    A class, enumeration or structure argument is checked by kind only. The server checks its
    class, and a null for a parameter that is not nullable, and throws
    :class:`~krpc::services::KRPC::ArgumentException` for a mismatch.
+
+.. function:: services::KRPC::Expression compile(const services::KRPC::Expression& function)
+
+   Compiles a server side function on the server, so that its first run is as fast as later ones,
+   and returns the function.
 
 .. function:: template <typename T> Stream<T> add_stream(const services::KRPC::Expression& function)
 

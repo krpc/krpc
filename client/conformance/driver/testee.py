@@ -403,6 +403,12 @@ class Client:
         )
         return Stream(self, reply.stream)
 
+    def compile_function(self, function: values.Object) -> None:
+        """Compile a server side function built with the expression API."""
+        self.testee.run(
+            compile_function=pb.CompileFunction(function=values.obj(function))
+        )
+
     def add_function_event(self, function: values.Object) -> Event:
         """Add an event over a server side function."""
         reply = self.testee.run(
