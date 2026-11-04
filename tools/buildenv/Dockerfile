@@ -10,7 +10,7 @@ RUN apt-get update && \
     apt-get clean
 
 # Install Bazelisk, which fetches the Bazel version in the repository's .bazelversion
-RUN curl -fsSL https://github.com/bazelbuild/bazelisk/releases/download/v1.29.0/bazelisk-linux-amd64 -o /usr/local/bin/bazel && \
+RUN curl -fsSL https://github.com/bazelbuild/bazelisk/releases/download/v1.30.0/bazelisk-linux-amd64 -o /usr/local/bin/bazel && \
     chmod +x /usr/local/bin/bazel
 
 # Install socat for the serial transport tests

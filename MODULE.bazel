@@ -6,9 +6,9 @@ http_file = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_
 
 bazel_dep(name = "platforms", version = "1.1.0")
 bazel_dep(name = "bazel_skylib", version = "1.9.2")
-bazel_dep(name = "rules_cc", version = "0.2.26")
+bazel_dep(name = "rules_cc", version = "0.2.27")
 bazel_dep(name = "rules_pkg", version = "1.3.0")
-bazel_dep(name = "rules_python", version = "2.4.2")
+bazel_dep(name = "rules_python", version = "2.4.6")
 bazel_dep(name = "rules_java", version = "9.9.0")
 bazel_dep(name = "protobuf", version = "36.2")
 
@@ -29,7 +29,7 @@ register_toolchains("@dotnet_toolchains//:all")
 # variants: a hermetic download (the default, used on dev) and a system install
 # (used in CI via `--config=system-llvm`, which avoids the ~2 GB download). Switch
 # with `--//tools/build/llvm:toolchain=system` (see .bazelrc + tools/build/llvm).
-bazel_dep(name = "toolchains_llvm", version = "1.11.3")
+bazel_dep(name = "toolchains_llvm", version = "1.12.0")
 
 llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm")
 
@@ -110,7 +110,7 @@ maven.install(
     artifacts = [
         "com.google.protobuf:protobuf-java:4.36.2",
         "com.google.protobuf:protobuf-java-util:4.36.2",
-        "com.puppycrawl.tools:checkstyle:14.3.0",
+        "com.puppycrawl.tools:checkstyle:14.4.0",
         "junit:junit:4.13.2",
         "org.hamcrest:hamcrest:3.0",
         "org.javatuples:javatuples:1.2",
@@ -309,25 +309,25 @@ http_archive(
 http_archive(
     name = "csharp_system_io_ports",
     build_file_content = "exports_files(['lib/net10.0/System.IO.Ports.dll', 'runtimes/unix/lib/net10.0/System.IO.Ports.dll', 'runtimes/win/lib/net10.0/System.IO.Ports.dll'])",
-    sha256 = "d3ffe6417b0e1989fa60650f73be49bc76bba410f7a86f7dd5afd096521e1554",
+    sha256 = "1b5341f39c992bc148e556a0a70b931fa37aef452a50e76f34f8d1242b5db5fa",
     type = "zip",
-    url = "https://www.nuget.org/api/v2/package/System.IO.Ports/10.0.13",
+    url = "https://www.nuget.org/api/v2/package/System.IO.Ports/10.0.14",
 )
 
 http_archive(
     name = "csharp_system_io_ports_native_linux_x64",
     build_file_content = "exports_files(['runtimes/linux-x64/native/libSystem.IO.Ports.Native.so'])",
-    sha256 = "24804052e6c74d3df354cb630dcf6860c7c9eb567c4f78d5d82437b000587b6e",
+    sha256 = "5690e1047075717d6494b10778c100c7dda612ceb4f17edea7777d53618ded88",
     type = "zip",
-    url = "https://www.nuget.org/api/v2/package/runtime.linux-x64.runtime.native.System.IO.Ports/10.0.13",
+    url = "https://www.nuget.org/api/v2/package/runtime.linux-x64.runtime.native.System.IO.Ports/10.0.14",
 )
 
 http_archive(
     name = "csharp_netanalyzers",
     build_file_content = "exports_files(['analyzers/dotnet/cs/Microsoft.CodeAnalysis.NetAnalyzers.dll', 'analyzers/dotnet/cs/Microsoft.CodeAnalysis.CSharp.NetAnalyzers.dll'])",
-    sha256 = "2c96a39f96c00f12c1e5847c2c7ab061184c58887563e7f80aabb916ed43ce40",
+    sha256 = "17bc3cd141fa7e9c595673f3878927bf5729ace97a8fae8baf7ff33ba1648f88",
     type = "zip",
-    url = "https://www.nuget.org/api/v2/package/Microsoft.CodeAnalysis.NetAnalyzers/10.0.402",
+    url = "https://www.nuget.org/api/v2/package/Microsoft.CodeAnalysis.NetAnalyzers/10.0.403",
 )
 
 http_archive(
@@ -457,9 +457,9 @@ http_archive(
 http_archive(
     name = "lua_protobuf",
     build_file = "//tools/build/lua:lua_protobuf.BUILD",
-    sha256 = "54feb9c48e13304e50a4177976b66c1ad395364c500bf00cbf9e3cb59c36ed91",
-    strip_prefix = "lua-protobuf-0.5.3",
-    url = "https://github.com/starwing/lua-protobuf/archive/refs/tags/0.5.3.tar.gz",
+    sha256 = "466b7baaaabc036cba8c5060736a2761cc3ef18de6f9d42efcf778b9df2e0e59",
+    strip_prefix = "lua-protobuf-0.6.0",
+    url = "https://github.com/starwing/lua-protobuf/archive/refs/tags/0.6.0.tar.gz",
 )
 
 # The head of lunarmodules/luasocket#469, which builds socket.unix on Windows for the

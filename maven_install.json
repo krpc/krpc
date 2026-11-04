@@ -8,7 +8,7 @@
     "com.google.j2objc:j2objc-annotations": 2003271689,
     "com.google.protobuf:protobuf-java": 130636446,
     "com.google.protobuf:protobuf-java-util": 892947361,
-    "com.puppycrawl.tools:checkstyle": -1716498070,
+    "com.puppycrawl.tools:checkstyle": 781517867,
     "junit:junit": -744267592,
     "org.hamcrest:hamcrest": 1547523135,
     "org.javatuples:javatuples": -2040795969,
@@ -19,18 +19,18 @@
     "com.google.code.gson:gson": -1575757252,
     "com.google.errorprone:error_prone_annotations": 652227016,
     "com.google.guava:failureaccess": 1715931538,
-    "com.google.guava:guava": 311464563,
+    "com.google.guava:guava": 713545847,
     "com.google.guava:listenablefuture": 1079558157,
     "com.google.j2objc:j2objc-annotations": -1008747351,
     "com.google.protobuf:protobuf-java": -1812001120,
     "com.google.protobuf:protobuf-java-util": -2010159683,
-    "com.puppycrawl.tools:checkstyle": -1773896522,
+    "com.puppycrawl.tools:checkstyle": -1753121521,
     "commons-beanutils:commons-beanutils": 852036681,
     "commons-collections:commons-collections": 7509648,
     "commons-logging:commons-logging": -2039356713,
     "info.picocli:picocli": 996750497,
     "junit:junit": -1256429642,
-    "net.sf.saxon:Saxon-HE": -560158028,
+    "net.sf.saxon:Saxon-HE": -1112923966,
     "org.antlr:antlr4-runtime": 460090011,
     "org.hamcrest:hamcrest": 1282317766,
     "org.hamcrest:hamcrest-core": 649657847,
@@ -40,12 +40,12 @@
     "org.reflections:reflections": -1307719966,
     "org.slf4j:slf4j-api": -736053657,
     "org.slf4j:slf4j-simple": -506243416,
-    "org.xmlresolver:xmlresolver": -2072175398,
-    "org.xmlresolver:xmlresolver:jar:data": 792867476
+    "org.xmlresolver:xmlresolver": 602572078,
+    "org.xmlresolver:xmlresolver:jar:data": 1791221573
   },
   "conflict_resolution": {
     "com.google.errorprone:error_prone_annotations:2.5.1": "com.google.errorprone:error_prone_annotations:2.50.0",
-    "com.google.guava:guava:32.0.1-jre": "com.google.guava:guava:33.7.1-jre",
+    "com.google.guava:guava:32.0.1-jre": "com.google.guava:guava:33.7.2-jre",
     "com.google.j2objc:j2objc-annotations:2.8": "com.google.j2objc:j2objc-annotations:3.1"
   },
   "artifacts": {
@@ -75,9 +75,9 @@
     },
     "com.google.guava:guava": {
       "shasums": {
-        "jar": "796d8e28ac64e83a47c4c5935a8fecc4682650a04bbdead738ef0f5a3a0e6c46"
+        "jar": "b530942257fb935f8b2cfaa5f8eb5bd59c555fd8e8d01b8ce98912e077ea606c"
       },
-      "version": "33.7.1-jre"
+      "version": "33.7.2-jre"
     },
     "com.google.guava:listenablefuture": {
       "shasums": {
@@ -105,9 +105,9 @@
     },
     "com.puppycrawl.tools:checkstyle": {
       "shasums": {
-        "jar": "131555de8f1621b3058249c782982f201adca22372cdecc96b8b1f5435d91796"
+        "jar": "a6e737092ce4e034b1cb9b975af41d7f16638dffbcc197e553b837a951ccb52c"
       },
-      "version": "14.3.0"
+      "version": "14.4.0"
     },
     "commons-beanutils:commons-beanutils": {
       "shasums": {
@@ -141,9 +141,9 @@
     },
     "net.sf.saxon:Saxon-HE": {
       "shasums": {
-        "jar": "8f3a9216a537367132293eacbba9df062eace8f8b16a184af59e2e4839d4cd41"
+        "jar": "91986ee8d80c4bafce10decfff01e618c00bd6368f0103da59b2b88b19cf75d3"
       },
-      "version": "12.9"
+      "version": "13.1"
     },
     "org.antlr:antlr4-runtime": {
       "shasums": {
@@ -201,10 +201,10 @@
     },
     "org.xmlresolver:xmlresolver": {
       "shasums": {
-        "data": "b0c487ad2f3e558be8d829c916d2458d10aca6a5bafa7a4d0524b70845e48a5c",
-        "jar": "1fe4d5b92f708dcdb82dbce12919e0171e6b5ca62c6dca6220483625098feb5f"
+        "data": "1d6e4db99401ae8ba3c390ab7cb4d794a46084e1a36bdcafae91e2338e7c5b0d",
+        "jar": "bf787a469cfc591e3a896dc8ef388c2c8bce11500cc7d37aed16113728382033"
       },
-      "version": "5.3.3"
+      "version": "6.1.0"
     }
   },
   "dependencies": {
@@ -425,12 +425,15 @@
       "net.sf.saxon.lib",
       "net.sf.saxon.ma",
       "net.sf.saxon.ma.arrays",
+      "net.sf.saxon.ma.jnode",
       "net.sf.saxon.ma.json",
       "net.sf.saxon.ma.map",
       "net.sf.saxon.ma.trie",
       "net.sf.saxon.ma.zeno",
       "net.sf.saxon.om",
       "net.sf.saxon.pattern",
+      "net.sf.saxon.pattern.nodetest",
+      "net.sf.saxon.pattern.qname",
       "net.sf.saxon.pull",
       "net.sf.saxon.query",
       "net.sf.saxon.regex",
@@ -440,8 +443,10 @@
       "net.sf.saxon.s9api.push",
       "net.sf.saxon.s9api.streams",
       "net.sf.saxon.sapling",
+      "net.sf.saxon.sapling.dsl",
       "net.sf.saxon.serialize",
       "net.sf.saxon.serialize.charcode",
+      "net.sf.saxon.serialize.jcs",
       "net.sf.saxon.stax",
       "net.sf.saxon.str",
       "net.sf.saxon.style",
@@ -459,6 +464,8 @@
       "net.sf.saxon.tree.util",
       "net.sf.saxon.tree.wrapper",
       "net.sf.saxon.type",
+      "net.sf.saxon.type.coercion",
+      "net.sf.saxon.type.gnode",
       "net.sf.saxon.value",
       "net.sf.saxon.xpath",
       "net.sf.saxon.z"
@@ -534,13 +541,14 @@
     ],
     "org.xmlresolver:xmlresolver": [
       "org.xmlresolver",
-      "org.xmlresolver.cache",
+      "org.xmlresolver.adapters",
       "org.xmlresolver.catalog.entry",
       "org.xmlresolver.catalog.query",
       "org.xmlresolver.exceptions",
       "org.xmlresolver.loaders",
       "org.xmlresolver.logging",
       "org.xmlresolver.sources",
+      "org.xmlresolver.spi",
       "org.xmlresolver.tools",
       "org.xmlresolver.utils"
     ]

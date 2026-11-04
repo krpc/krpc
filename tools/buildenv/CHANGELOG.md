@@ -3,6 +3,7 @@
 - Remove `graphviz` (the documentation's one graph is an SVG image in the source)
 - Remove `libenchant-2-2` (the spelling check uses a Hunspell dictionary fetched by the Bazel build)
 - Add `fonts-dejavu-core`, the font the documentation's diagrams are drawn with
+- Update Bazelisk to 1.30.0
 
 ## [v3.15.0]
 - Add clangd, which the system LLVM toolchain links to
