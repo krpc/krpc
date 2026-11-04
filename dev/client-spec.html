@@ -437,6 +437,7 @@
 <li class="toctree-l2"><a class="reference internal" href="extending/extending-other-services.html">Extending Other Services</a></li>
 <li class="toctree-l2"><a class="reference internal" href="extending/documentation.html">Documentation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="extending/clientgen.html">Generating Service Code for Static Clients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending/docgen.html">API Reference Pages</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="communication-protocols.html">Communication Protocols</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -449,6 +450,7 @@
 </details></li>
 <li class="toctree-l1 current active has-children"><a aria-current="page" class="current reference internal" href="#">Client Specification</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="client-spec/conformance.html">Conformance Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client-spec/testserver.html">Test Server</a></li>
 <li class="toctree-l2"><a class="reference internal" href="client-spec/connection.html">Connection</a></li>
 <li class="toctree-l2"><a class="reference internal" href="client-spec/calls.html">Calls</a></li>
 <li class="toctree-l2"><a class="reference internal" href="client-spec/values.html">Values</a></li>
@@ -462,6 +464,7 @@
 <li class="toctree-l2"><a class="reference internal" href="client-spec/coverage.html">Client Coverage</a></li>
 </ul>
 </details></li>
+<li class="toctree-l1"><a class="reference internal" href="krpctools.html">krpctools</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="krpc-development.html">kRPC Development</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="krpc-development/code-structure.html">Code Structure</a></li>
 <li class="toctree-l2"><a class="reference internal" href="krpc-development/building.html">Building from Source</a></li>
@@ -537,7 +540,8 @@ sees, such as how a client reports a refused connection, matches responses to ca
 stream values.</p>
 <p>The requirements are generated from the <a class="reference internal" href="client-spec/conformance.html"><span class="doc">conformance tests</span></a>. Each
 requirement has a test that checks it, and the text and the test are one source. A change to a
-requirement is a change to its test, so the two cannot drift apart.</p>
+requirement is a change to its test, so the two cannot drift apart. The tests run against the
+<a class="reference internal" href="client-spec/testserver.html"><span class="doc">TestServer</span></a>, a server that runs without the game.</p>
 <p>This specification is versioned with kRPC. The conformance tests in the <code class="docutils literal notranslate"><span class="pre">krpctools</span></code> package of
 a release check the specification of that release.</p>
 <section id="requirements">

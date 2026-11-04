@@ -9,7 +9,7 @@ result. To test your own client, write a testee for it.
 Running the Tests
 -----------------
 
-The driver ships in the `krpctools <https://pypi.org/project/krpctools>`_ Python package, with a
+The driver ships in the :doc:`krpctools </krpctools>` Python package, with a
 TestServer to run the tests against. Install it, then run the tests against your testee:
 
 .. code-block:: sh
@@ -18,9 +18,10 @@ TestServer to run the tests against. Install it, then run the tests against your
    krpc-conformance --testee "./my-testee --some-option" \
        --expected-failures my-client-failures.txt
 
-The TestServer runs on Linux, and needs the
+The TestServer runs on Linux and Windows, and needs the
 `.NET 10 runtime <https://dotnet.microsoft.com/download/dotnet/10.0>`_. The tests over serial IO
-also need ``socat``.
+also need ``socat``, so they run on Linux only. :doc:`krpc-testserver <testserver>` runs the same
+server on its own.
 
 The driver starts the TestServer for each run, and ``--server`` names a different one.
 ``--protocol`` picks the :doc:`communication protocol </communication-protocols>` to test

@@ -437,6 +437,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../extending/extending-other-services.html">Extending Other Services</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../extending/documentation.html">Documentation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../extending/clientgen.html">Generating Service Code for Static Clients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/docgen.html">API Reference Pages</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../communication-protocols.html">Communication Protocols</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -449,6 +450,7 @@
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../client-spec.html">Client Specification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../client-spec/conformance.html">Conformance Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/testserver.html">Test Server</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../client-spec/connection.html">Connection</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../client-spec/calls.html">Calls</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../client-spec/values.html">Values</a></li>
@@ -462,6 +464,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../client-spec/coverage.html">Client Coverage</a></li>
 </ul>
 </details></li>
+<li class="toctree-l1"><a class="reference internal" href="../krpctools.html">krpctools</a></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../krpc-development.html">kRPC Development</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="code-structure.html">Code Structure</a></li>
 <li class="toctree-l2 current active"><a aria-current="page" class="current reference internal" href="#">Building from Source</a></li>
@@ -557,8 +560,8 @@ sudo<span class="w"> </span>mv<span class="w"> </span>bazelisk-linux-amd64<span 
 <section id="windows">
 <h3>Windows<a class="headerlink" href="#windows" title="Link to this heading">#</a></h3>
 <p>Bazel applies the <code class="docutils literal notranslate"><span class="pre">windows</span></code> configuration on a Windows host. The whole tree builds with MSVC.
-Bazel skips the targets that need Linux: the serial IO tests, clang-tidy,
-<code class="docutils literal notranslate"><span class="pre">//tools/krpctools:conformance-test</span></code> and the Python lock file check. A Windows machine needs these first.</p>
+Bazel skips the targets that need Linux: the serial IO tests, clang-tidy and the Python lock file
+check. A Windows machine needs these first.</p>
 <p><strong>Symlinks.</strong> Bazel runs with <code class="docutils literal notranslate"><span class="pre">--windows_enable_symlinks</span></code> and <code class="docutils literal notranslate"><span class="pre">--enable_runfiles</span></code>, and creating a
 symlink needs Developer Mode. Turn it on under Settings &gt; System &gt; For developers, or from an
 elevated prompt:</p>

@@ -59,7 +59,7 @@
     <link rel="icon" href="../_static/logo-mark.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Communication Protocols" href="../communication-protocols.html" />
+    <link rel="next" title="API Reference Pages" href="docgen.html" />
     <link rel="prev" title="Documentation" href="documentation.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
@@ -437,6 +437,7 @@
 <li class="toctree-l2"><a class="reference internal" href="extending-other-services.html">Extending Other Services</a></li>
 <li class="toctree-l2"><a class="reference internal" href="documentation.html">Documentation</a></li>
 <li class="toctree-l2 current active"><a aria-current="page" class="current reference internal" href="#">Generating Service Code for Static Clients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docgen.html">API Reference Pages</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../communication-protocols.html">Communication Protocols</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -449,6 +450,7 @@
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../client-spec.html">Client Specification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../client-spec/conformance.html">Conformance Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/testserver.html">Test Server</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../client-spec/connection.html">Connection</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../client-spec/calls.html">Calls</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../client-spec/values.html">Values</a></li>
@@ -462,6 +464,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../client-spec/coverage.html">Client Coverage</a></li>
 </ul>
 </details></li>
+<li class="toctree-l1"><a class="reference internal" href="../krpctools.html">krpctools</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../krpc-development.html">kRPC Development</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../krpc-development/code-structure.html">Code Structure</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../krpc-development/building.html">Building from Source</a></li>
@@ -540,13 +543,13 @@ code. Such client libraries include those for Python and Lua.</p>
 <p>Other client libraries required code to be generated and compiled into them statically. They do not
 automatically pick up changes to service code. Such client libraries include those for C++ and C#.</p>
 <p>Code for these ‘static’ libraries is generated using the krpc-clientgen tool. This is provided as
-part of the <a class="reference external" href="https://pypi.python.org/pypi/krpctools">krpctools python package</a>. It can be
+part of the <a class="reference internal" href="../krpctools.html"><span class="doc">krpctools</span></a> Python package. It can be
 installed using pip:</p>
 <p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">krpctools</span></code></p>
 <p>You can then run the script from the command line:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>krpc-clientgen<span class="w"> </span>--help
 
-<span class="go">usage: krpc-clientgen [-h] [-v] [-o OUTPUT] [--ksp KSP]</span>
+<span class="go">usage: krpc-clientgen [-h] [-v] [-o OUTPUT] [--reference-dir DIR] [--ksp KSP]</span>
 <span class="go">                      [--include SERVICE=PATH] [--output-defs OUTPUT_DEFS]</span>
 <span class="go">                      language service input [input ...]</span>
 
@@ -563,11 +566,13 @@ installed using pip:</p>
 <span class="go">options:</span>
 <span class="go">  -h, --help            show this help message and exit</span>
 <span class="go">  -v, --version         show program's version number and exit</span>
-<span class="go">  -o OUTPUT, --output OUTPUT</span>
-<span class="go">                        Path to write source code to. If not specified, writes</span>
+<span class="go">  -o, --output OUTPUT   Path to write source code to. If not specified, writes</span>
 <span class="go">                        source code to standard output.</span>
-<span class="go">  --ksp KSP             Path to Kerbal Space Program directory. Required when</span>
-<span class="go">                        reading from an assembly DLL(s)</span>
+<span class="go">  --reference-dir DIR   When reading from an assembly DLL, a directory to load</span>
+<span class="go">                        the assemblies the service references from, such as</span>
+<span class="go">                        the game's managed assemblies. Can be repeated.</span>
+<span class="go">  --ksp KSP             Deprecated: pass the KSP_Data/Managed directory of a</span>
+<span class="go">                        Kerbal Space Program install with --reference-dir.</span>
 <span class="go">  --include SERVICE=PATH</span>
 <span class="go">                        Include the generated code of another service, whose</span>
 <span class="go">                        types the service uses, from the given path. Required</span>
@@ -589,24 +594,33 @@ another service’s class is generated alongside that service’s assembly; see
 </div>
 <p>A service that uses a structure from another service also needs the definitions of that service.
 Pass its JSON file from <code class="docutils literal notranslate"><span class="pre">GameData/kRPC</span></code> as another input, e.g. <code class="docutils literal notranslate"><span class="pre">KRPC.StdLib.json</span></code>.</p>
-<p>Generating client code from an assembly DLL requires a copy of Kerbal Space Program and a C# runtime
-to be available on the machine. In contrast, generating client code from a JSON file does not have
-these requirements and so is more portable.</p>
+<p>Generating client code from an assembly DLL needs the
+<a class="reference external" href="https://dotnet.microsoft.com/download/dotnet/10.0">.NET 10 runtime</a>, on Linux or Windows. It also
+needs the assemblies the service references, such as the game’s. Pass each directory that holds
+them with <code class="docutils literal notranslate"><span class="pre">--reference-dir</span></code>. For Kerbal Space Program this is <code class="docutils literal notranslate"><span class="pre">KSP_Data/Managed</span></code>, or
+<code class="docutils literal notranslate"><span class="pre">KSP_x64_Data/Managed</span></code> on Windows. Generating from a JSON file needs neither, so it is more
+portable.</p>
+<p><code class="docutils literal notranslate"><span class="pre">krpc-servicedefs</span></code> generates the JSON file from the assemblies, and takes <code class="docutils literal notranslate"><span class="pre">--reference-dir</span></code> in
+the same way:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>krpc-servicedefs<span class="w"> </span>--reference-dir<span class="o">=</span>/path/to/ksp/KSP_Data/Managed<span class="w"> </span>-o<span class="w"> </span>LaunchControl.json<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>LaunchControl<span class="w"> </span>LaunchControl.dll
+</pre></div>
+</div>
 <section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Link to this heading">#</a></h2>
 <p>The following demonstrates how to generate code for the C++ and C# clients to interact with the
 LaunchControl service, given in an example previously.</p>
-<p>krpc-clientgen expects to be passed the location of your copy of Kerbal Space Program, the name of
+<p>krpc-clientgen expects to be passed the directory of the game’s managed assemblies, the name of
 the language to generate, the name of the service (from the <a class="reference internal" href="attributes.html#attribute-KRPCService" title="attribute: KRPCService"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCService</span></code></a> attribute), a
 path to the assembly containing the service and the path to write the generated code to.</p>
 <p>For C++, run the following:</p>
-<p><code class="docutils literal notranslate"><span class="pre">krpc-clientgen</span> <span class="pre">--ksp=/path/to/ksp</span> <span class="pre">cpp</span> <span class="pre">LaunchControl</span> <span class="pre">LaunchControl.dll</span> <span class="pre">launch_control.hpp</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">krpc-clientgen</span> <span class="pre">--reference-dir=/path/to/ksp/KSP_Data/Managed</span> <span class="pre">-o</span> <span class="pre">launch_control.hpp</span> <span class="pre">cpp</span> <span class="pre">LaunchControl</span> <span class="pre">LaunchControl.dll</span></code></p>
 <p>To then use the LaunchControl service from C++, you need to link your code against the C++ client
 library, and include <cite>launch_control.hpp</cite>. If the service uses types from another service, pass
 <code class="docutils literal notranslate"><span class="pre">--include</span></code> with the path of that service’s header, so that <cite>launch_control.hpp</cite> includes it,
 e.g. <code class="docutils literal notranslate"><span class="pre">--include=SpaceCenter=krpc/services/space_center.hpp</span></code>.</p>
 <p>For C#, run the following:</p>
-<p><code class="docutils literal notranslate"><span class="pre">krpc-clientgen</span> <span class="pre">--ksp=/path/to/ksp</span> <span class="pre">csharp</span> <span class="pre">LaunchControl</span> <span class="pre">LaunchControl.dll</span> <span class="pre">LaunchControl.cs</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">krpc-clientgen</span> <span class="pre">--reference-dir=/path/to/ksp/KSP_Data/Managed</span> <span class="pre">-o</span> <span class="pre">LaunchControl.cs</span> <span class="pre">csharp</span> <span class="pre">LaunchControl</span> <span class="pre">LaunchControl.dll</span></code></p>
 <p>To then use the LaunchControl service from a C# client, you need to reference the <cite>KRPC.Client.dll</cite>
 and include <cite>LaunchControl.cs</cite> in your project.</p>
 </section>
@@ -632,11 +646,11 @@ and include <cite>LaunchControl.cs</cite> in your project.</p>
       </div>
     </a>
     <a class="right-next"
-       href="../communication-protocols.html"
+       href="docgen.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Communication Protocols</p>
+        <p class="prev-next-title">API Reference Pages</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

@@ -59,7 +59,7 @@
     <link rel="icon" href="../_static/logo-mark.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Connection" href="connection.html" />
+    <link rel="next" title="Test Server" href="testserver.html" />
     <link rel="prev" title="Client Specification" href="../client-spec.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
@@ -437,6 +437,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../extending/extending-other-services.html">Extending Other Services</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../extending/documentation.html">Documentation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../extending/clientgen.html">Generating Service Code for Static Clients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/docgen.html">API Reference Pages</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../communication-protocols.html">Communication Protocols</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -449,6 +450,7 @@
 </details></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../client-spec.html">Client Specification</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2 current active"><a aria-current="page" class="current reference internal" href="#">Conformance Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testserver.html">Test Server</a></li>
 <li class="toctree-l2"><a class="reference internal" href="connection.html">Connection</a></li>
 <li class="toctree-l2"><a class="reference internal" href="calls.html">Calls</a></li>
 <li class="toctree-l2"><a class="reference internal" href="values.html">Values</a></li>
@@ -462,6 +464,7 @@
 <li class="toctree-l2"><a class="reference internal" href="coverage.html">Client Coverage</a></li>
 </ul>
 </details></li>
+<li class="toctree-l1"><a class="reference internal" href="../krpctools.html">krpctools</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../krpc-development.html">kRPC Development</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../krpc-development/code-structure.html">Code Structure</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../krpc-development/building.html">Building from Source</a></li>
@@ -540,16 +543,17 @@ testee. The testee turns each command it reads into a call on the client, and wr
 result. To test your own client, write a testee for it.</p>
 <section id="running-the-tests">
 <h2>Running the Tests<a class="headerlink" href="#running-the-tests" title="Link to this heading">#</a></h2>
-<p>The driver ships in the <a class="reference external" href="https://pypi.org/project/krpctools">krpctools</a> Python package, with a
+<p>The driver ships in the <a class="reference internal" href="../krpctools.html"><span class="doc">krpctools</span></a> Python package, with a
 TestServer to run the tests against. Install it, then run the tests against your testee:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>krpctools
 krpc-conformance<span class="w"> </span>--testee<span class="w"> </span><span class="s2">"./my-testee --some-option"</span><span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--expected-failures<span class="w"> </span>my-client-failures.txt
 </pre></div>
 </div>
-<p>The TestServer runs on Linux, and needs the
+<p>The TestServer runs on Linux and Windows, and needs the
 <a class="reference external" href="https://dotnet.microsoft.com/download/dotnet/10.0">.NET 10 runtime</a>. The tests over serial IO
-also need <code class="docutils literal notranslate"><span class="pre">socat</span></code>.</p>
+also need <code class="docutils literal notranslate"><span class="pre">socat</span></code>, so they run on Linux only. <a class="reference internal" href="testserver.html"><span class="doc">krpc-testserver</span></a> runs the same
+server on its own.</p>
 <p>The driver starts the TestServer for each run, and <code class="docutils literal notranslate"><span class="pre">--server</span></code> names a different one.
 <code class="docutils literal notranslate"><span class="pre">--protocol</span></code> picks the <a class="reference internal" href="../communication-protocols.html"><span class="doc">communication protocol</span></a> to test
 over: <code class="docutils literal notranslate"><span class="pre">tcpip</span></code> (the default), <code class="docutils literal notranslate"><span class="pre">localsocket</span></code>, <code class="docutils literal notranslate"><span class="pre">serialio</span></code> or <code class="docutils literal notranslate"><span class="pre">websockets</span></code>. Every test runs
@@ -664,11 +668,11 @@ file lacks a section a profile needs.</p>
       </div>
     </a>
     <a class="right-next"
-       href="connection.html"
+       href="testserver.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Connection</p>
+        <p class="prev-next-title">Test Server</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

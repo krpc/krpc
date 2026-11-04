@@ -32,8 +32,8 @@ Windows
 ^^^^^^^
 
 Bazel applies the ``windows`` configuration on a Windows host. The whole tree builds with MSVC.
-Bazel skips the targets that need Linux: the serial IO tests, clang-tidy,
-``//tools/krpctools:conformance-test`` and the Python lock file check. A Windows machine needs these first.
+Bazel skips the targets that need Linux: the serial IO tests, clang-tidy and the Python lock file
+check. A Windows machine needs these first.
 
 **Symlinks.** Bazel runs with ``--windows_enable_symlinks`` and ``--enable_runfiles``, and creating a
 symlink needs Developer Mode. Turn it on under Settings > System > For developers, or from an

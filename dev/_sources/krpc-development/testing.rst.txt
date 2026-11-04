@@ -115,7 +115,3 @@ The tests leave a game they did not start unchanged, so it must already have the
 
    A test run that is killed, not interrupted, leaves the game running. Stop it with
    ``pkill -f KSP.x86_64``, or ``taskkill /f /im KSP_x64.exe`` on Windows.
-
-Each release also publishes the ``krpctest`` package. Installed with ``pip``, it provides the
-``krpc-install`` and ``krpc-run-ksp`` commands and a pytest plugin, for running the tests outside a
-checkout of the repository.
