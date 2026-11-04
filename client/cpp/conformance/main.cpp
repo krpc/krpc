@@ -992,7 +992,7 @@ int main() {
   hello.mutable_hello()->set_client("cpp");
   for (const char* profile :
        {"core", "error-types", "defaults", "streams", "events", "functions", "function-types",
-        "connections", "threads", "callbacks", "conditions", "ordering", "races"})
+        "connections", "concurrency", "callbacks", "conditions", "ordering", "races"})
     hello.mutable_hello()->add_profiles(profile);
   for (const char* protocol : {"tcpip", "localsocket"})
     hello.mutable_hello()->add_protocols(protocol);

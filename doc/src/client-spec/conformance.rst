@@ -58,8 +58,8 @@ does for each command. The file also ships in the ``krpctools`` package, as
   language's own value, so a bug in the client's encoder cannot cancel out a bug in its decoder.
 * A callback the driver adds writes a ``Notification`` for each of its calls. A notification can
   arrive between a command and its reply.
-* A testee with the ``threads`` profile runs commands on worker threads, named in the command. A
-  testee without it runs every command in order on one thread.
+* A testee with the ``concurrency`` profile runs commands on tasks named in the command, as
+  threads or async tasks. A testee without it runs every command in order on one thread.
 * A command the client offers no way to carry out gets an ``Error`` of kind ``UNSUPPORTED``.
 
 The testee exits when its standard input closes.

@@ -20,6 +20,8 @@ import inspect
 import os
 from dataclasses import dataclass, field
 
+from profiles import PROFILES, PROTOCOLS, unknown_names
+
 LEVELS = {"should": "SHOULD"}
 
 
@@ -78,7 +80,14 @@ def _requirement(path: str, area: str, node: ast.FunctionDef) -> Requirement:
         if name in LEVELS:
             requirement.level = LEVELS[name]
         elif name in ("profile", "protocol") and isinstance(decorator, ast.Call):
-            requirement.profiles += [ast.literal_eval(x) for x in decorator.args]
+            names = [ast.literal_eval(x) for x in decorator.args]
+            known = PROFILES if name == "profile" else PROTOCOLS
+            if unknown_names(names, known):
+                raise SystemExit(
+                    "%s: %s names unknown %ss %s"
+                    % (path, node.name, name, ", ".join(unknown_names(names, known)))
+                )
+            requirement.profiles += names
         elif name == "untested" and isinstance(decorator, ast.Call):
             requirement.untested = ast.literal_eval(decorator.args[0])
     return requirement
@@ -135,9 +144,15 @@ class Client:
     def read(
         name: str, profiles: str, expected_failures: str, unsupported: str
     ) -> Client:
+        listed = set(_read_listing(profiles))
+        if unknown_names(listed, PROFILES | PROTOCOLS):
+            raise SystemExit(
+                "%s lists unknown profiles %s"
+                % (profiles, ", ".join(unknown_names(listed, PROFILES | PROTOCOLS)))
+            )
         return Client(
             name,
-            set(_read_listing(profiles)),
+            listed,
             _read_listing(expected_failures),
             _read_listing(unsupported),
         )

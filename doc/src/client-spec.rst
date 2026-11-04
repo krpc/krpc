@@ -102,8 +102,8 @@ A client implements the ``core`` profile, and any of the others:
      - Checking the type a program names for the value of a server side function
    * - ``connections``
      - Several connections open at once, sharing objects
-   * - ``threads``
-     - Concurrent calls, and callbacks and closes from other threads
+   * - ``concurrency``
+     - Concurrent calls, waits, callbacks and closes, on threads or async tasks
    * - ``ordering``
      - Ordering objects, in a language that orders values
    * - ``races``

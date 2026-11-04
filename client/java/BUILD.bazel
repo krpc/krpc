@@ -151,7 +151,7 @@ conformance_test(
         "events",
         "functions",
         "connections",
-        "threads",
+        "concurrency",
         "callbacks",
         "conditions",
         "ordering",

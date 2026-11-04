@@ -43,7 +43,7 @@ PROFILES = [
     "events",
     "functions",
     "connections",
-    "threads",
+    "concurrency",
     "callbacks",
     "conditions",
     "ordering",

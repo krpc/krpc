@@ -216,7 +216,7 @@ def test_removed_callback_leaves_firing(fixture):
     assert removed.calls == []
 
 
-@profile("events", "callbacks", "threads", "races")
+@profile("events", "callbacks", "concurrency", "races")
 def test_callback_added_during_replay(fixture):
     """Of two callbacks added after an unseen firing, only one is called for it, though the
     second is added while the firing is replayed to the first."""
@@ -230,7 +230,7 @@ def test_callback_added_during_replay(fixture):
     assert len(first.calls) + len(second.calls) == 1
 
 
-@profile("events", "callbacks", "threads", "races")
+@profile("events", "callbacks", "concurrency", "races")
 def test_callback_removed_during_add(fixture):
     """A callback added after an unseen firing, and removed before the replay calls it,
     leaves the firing unseen, so a callback added later is called for it."""
@@ -416,7 +416,7 @@ def start_wait(fixture, thread):
     )
 
 
-@profile("events", "threads")
+@profile("events", "concurrency")
 def test_two_waiters(fixture):
     """Two threads waiting on one event both return when it fires."""
     first = start_wait(fixture, "first")
@@ -427,7 +427,7 @@ def test_two_waiters(fixture):
     assert second.result() is True
 
 
-@profile("events", "threads")
+@profile("events", "concurrency")
 @pytest.mark.parametrize("end", ["remove", "close", "connection-failure"])
 def test_wake_waiter(fixture, request, end):
     """A thread waiting on an event wakes when the event is removed, the connection closes

@@ -27,6 +27,7 @@ from typing import Any, NamedTuple
 
 import pytest
 import serverprocess
+from profiles import PROFILES, PROTOCOLS, unknown_names
 
 import krpc
 from driver import conventions as conventions_file
@@ -121,6 +122,7 @@ def pytest_collection_modifyitems(
     unknown = {x for x in [*expected, *unsupported] if x.split("::")[0] in collected}
     for item in items:
         _check_docstring(item)
+        _check_profile_markers(item)
         untested = item.get_closest_marker("untested")
         if untested is not None:
             item.add_marker(pytest.mark.skip(reason=untested.args[0]))
@@ -140,6 +142,17 @@ def pytest_collection_modifyitems(
         raise pytest.UsageError(
             "Listed tests name no test: %s" % ", ".join(sorted(unknown))
         )
+
+
+def _check_profile_markers(item: pytest.Item) -> None:
+    """Check that a test names only profiles and protocols of the client spec."""
+    for kind, known in (("profile", PROFILES), ("protocol", PROTOCOLS)):
+        for marker in item.iter_markers(kind):
+            names = unknown_names(list(marker.args), known)
+            if names:
+                raise pytest.UsageError(
+                    "%s names unknown %ss %s" % (item.nodeid, kind, ", ".join(names))
+                )
 
 
 def _listed(listing: dict[str, Listed], item: pytest.Item) -> str | None:
@@ -338,14 +351,21 @@ def _check_conventions(conventions: Conventions, testee: Testee) -> None:
 
 
 def _check_profiles(path: str, protocol: str, testee: Testee) -> None:
-    """Check that the testee reports the profiles its profiles file lists, and the protocol
-    under test."""
+    """Check that the testee reports profiles of the client spec, the profiles its profiles
+    file lists, and the protocol under test."""
+    hello = testee.hello
+    names = unknown_names(set(hello.profiles), PROFILES)
+    if names:
+        testee.stop()
+        pytest.exit(
+            "%s reports unknown profiles %s" % (hello.client, ", ".join(names)),
+            returncode=1,
+        )
     if not path:
         return
     with open(path, encoding="utf-8") as listing:
         declared = {x.strip() for x in listing if x.strip()}
     profiles = declared - set(SERVER_TYPES)
-    hello = testee.hello
     if set(hello.profiles) != profiles or protocol not in hello.protocols:
         testee.stop()
         pytest.exit(

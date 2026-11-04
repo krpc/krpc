@@ -36,8 +36,8 @@ message Command {
   // Copied onto the reply to the command.
   uint64 id = 1;
   // The worker thread to run the command on, created on first use. Commands for one thread run
-  // in order. Unset runs the command on the default thread. A testee without the threads profile
-  // gets no thread name.
+  // in order. Unset runs the command on the default thread. A testee without the concurrency
+  // profile gets no thread name.
   string thread = 2;
   // A stream or event handle whose condition the testee holds while it runs the command, as a
   // program that locks the condition to read or wait does. Zero holds none.

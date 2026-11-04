@@ -66,6 +66,12 @@ py_library(
     deps = ["@krpc_pypi//protobuf"],
 )
 
+py_library(
+    name = "profiles",
+    srcs = ["profiles.py"],
+    imports = ["."],
+)
+
 # The pytest plugin and the tests it runs. The tests are data, collected by pytest at run time.
 py_library(
     name = "driver",
@@ -73,6 +79,7 @@ py_library(
     data = glob(["tests/*.py"]) + ["pytest.ini"],
     imports = ["."],
     deps = [
+        ":profiles",
         ":testee_py",
         "//client/python:krpc_lib",
         "//tools/build:serverprocess",
@@ -83,6 +90,7 @@ py_library(
 py_binary(
     name = "specgen",
     srcs = ["specgen.py"],
+    deps = [":profiles"],
 )
 
 # The requirement lists of the client specification, one per test file, for the docs to include
@@ -160,6 +168,7 @@ py_test(
     ],
     imports = ["."],
     main = "specgen_test.py",
+    deps = [":profiles"],
 )
 
 # The driver as it ships in the krpctools package, to test a client outside this repository
@@ -169,6 +178,7 @@ filegroup(
         "driver/*.py",
         "tests/*.py",
     ]) + [
+        "profiles.py",
         "pytest.ini",
         "testee.proto",
         ":testee-py",
@@ -199,6 +209,7 @@ py_ruff_test(
         "driver/*.py",
         "tests/*.py",
     ]) + [
+        "profiles.py",
         "specgen.py",
         "specgen_test.py",
     ],
@@ -211,6 +222,7 @@ py_pyright_test(
         "driver/*.py",
         "tests/*.py",
     ]) + [
+        "profiles.py",
         "specgen.py",
         "specgen_test.py",
     ],

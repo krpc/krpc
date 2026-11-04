@@ -710,7 +710,7 @@ def test_too_many_arguments(connected, kind):
 section("Responses")
 
 
-@profile("threads")
+@profile("concurrency")
 def test_unique_ids(client, server, scripted_server):
     """Each request has an id that no other waiting request has."""
     held = []
@@ -725,7 +725,7 @@ def test_unique_ids(client, server, scripted_server):
     assert len({x.id for x in held}) == 3
 
 
-@profile("threads")
+@profile("concurrency")
 def test_match_by_id(client, server, scripted_server):
     """The client matches a response to its call by the id, in any order the responses
     arrive."""
@@ -743,7 +743,7 @@ def test_match_by_id(client, server, scripted_server):
 
 
 @should
-@profile("threads")
+@profile("concurrency")
 def test_abandoned_id(client, server, scripted_server):
     """A call interrupted while waiting abandons its id. The client discards the
     response to that id."""

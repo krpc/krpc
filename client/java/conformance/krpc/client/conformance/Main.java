@@ -29,7 +29,7 @@ import krpc.conformance.Testee.Value;
  */
 public final class Main {
   private static final String[] PROFILES = {
-    "core", "error-types", "streams", "events", "functions", "connections", "threads",
+    "core", "error-types", "streams", "events", "functions", "connections", "concurrency",
     "callbacks", "conditions", "ordering", "races"
   };
   private static final String[] PROTOCOLS = {"tcpip", "localsocket"};
