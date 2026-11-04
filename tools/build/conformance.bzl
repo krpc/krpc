@@ -52,7 +52,6 @@ def conformance_test(
         unsupported = None,
         conventions = None,
         protocols = ["tcpip"],
-        protocol_testees = {},
         **kwargs):
     """Runs the conformance tests against a client's testee, once per protocol.
 
@@ -66,8 +65,6 @@ def conformance_test(
       conventions: The file of the client's native error types and naming, for a client with
         the error-types or dynamic profile.
       protocols: The protocols to test over.
-      protocol_testees: The testee for a protocol whose library is built for it alone, by
-        protocol.
       **kwargs: Passed to each test.
     """
     server = Label("//tools/TestServer")
@@ -81,7 +78,6 @@ def conformance_test(
     for protocol in protocols:
         test = name + "-" + protocol
         config = test + "-config"
-        protocol_testee = protocol_testees.get(protocol, testee)
         test_kwargs = dict(kwargs)
 
         # The serial line is a pair of pseudo-terminals that socat links, as for client_test
@@ -89,7 +85,7 @@ def conformance_test(
             test_kwargs["target_compatible_with"] = ["@platforms//os:linux"]
         _conformance_test_config(
             name = config,
-            testee = protocol_testee,
+            testee = testee,
             server = server,
             protocol = protocol,
             expected_failures = expected_failures,
@@ -108,7 +104,7 @@ def conformance_test(
                 expected_failures,
                 profiles,
                 server,
-                protocol_testee,
+                testee,
             ] + ([unsupported] if unsupported else []) + ([conventions] if conventions else []),
             deps = [Label("//client/conformance:driver")],
             **test_kwargs

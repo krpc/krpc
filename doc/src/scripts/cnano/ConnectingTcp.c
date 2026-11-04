@@ -3,10 +3,7 @@
 
 int main() {
   krpc_connection_t conn;
-  krpc_connection_config_t config;
-  config.address = "127.0.0.1";
-  config.port = 50000;
-  if (krpc_open(&conn, &config) != KRPC_OK)
+  if (krpc_open_tcp(&conn, "127.0.0.1", 50000) != KRPC_OK)
     return 1;
   if (krpc_connect(conn, "My Example Program") != KRPC_OK)
     return 1;

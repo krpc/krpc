@@ -43,9 +43,7 @@ collections. Each client is timed from inside itself, so each target is a progra
 language. The report has one block per transport, TCP/IP and local socket.
 
 The C-nano target uses a socket, not a serial port. The server polls a serial port at an interval
-longer than every measured case, so a serial port would measure the poll. The transport is a
-compile-time choice, so there is one program per transport, ``//client/cnano:benchmark`` and
-``//client/cnano:benchmark-localsocket``.
+longer than every measured case, so a serial port would measure the poll.
 
 The client targets run the server with ``--no-frame-pacing``, so its update loop runs as fast as
 it can. A paced server adds the rest of each update to a round trip. It also serves a client that

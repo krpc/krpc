@@ -29,7 +29,7 @@ For an Arduino sketch, install the library from the Arduino Library Manager by s
 .. note::
 
    The Arduino Library Manager installs the source files with names ending in ``.cpp``, so that
-   they are built with the C++ compiler. The library uses the C++ ``HardwareSerial`` class to
+   they are built with the C++ compiler. The library uses the C++ ``Stream`` class to
    communicate.
 
 vcpkg
@@ -51,39 +51,13 @@ The client is available from `vcpkg <https://vcpkg.io>`_. To install it:
 
          vcpkg install krpc-cnano:x64-windows
 
-This builds the library to communicate over a serial port. The ``tcp`` feature builds it to
-communicate over TCP/IP instead:
-
-.. tabs::
-
-   .. tab:: Linux
-
-      .. code-block:: bash
-
-         vcpkg install "krpc-cnano[tcp]"
-
-   .. tab:: Windows
-
-      .. code-block:: bash
-
-         vcpkg install "krpc-cnano[tcp]:x64-windows"
-
-The ``localsocket`` feature builds it to communicate over a local socket:
-
-.. code-block:: bash
-
-   vcpkg install "krpc-cnano[localsocket]"
-
-A project in manifest mode lists the client in its ``vcpkg.json`` instead, with any feature it
-needs, and vcpkg installs it when you configure the project. The following asks for the TCP/IP
-build:
+A project in manifest mode lists the client in its ``vcpkg.json`` instead, and vcpkg installs it
+when you configure the project:
 
 .. code-block:: json
 
    {
-     "dependencies": [
-       { "name": "krpc-cnano", "features": ["tcp"] }
-     ]
+     "dependencies": ["krpc-cnano"]
    }
 
 CMake
@@ -101,10 +75,6 @@ The build requires CMake 3.15 or later, a C99 compiler, ``protoc`` and Python 3.
 
 By default, CMake looks for a system-installed nanopb. Pass ``-DKRPC_FETCH_DEPS=ON`` or
 ``-DKRPC_FETCH_NANOPB=ON`` to the configure step to download nanopb at build time instead.
-
-Pass ``-DKRPC_COMMUNICATION_TCP=ON`` or ``-DKRPC_COMMUNICATION_LOCALSOCKET=ON`` to build the
-library to communicate over TCP/IP or a local socket. A program that links the library is then
-built for the same protocol.
 
 To install the client in a directory of your choice, pass ``CMAKE_INSTALL_PREFIX`` when you
 configure it:
@@ -127,9 +97,6 @@ Find the installed library, and link your program against it, in your ``CMakeLis
 
    find_package(krpc_cnano CONFIG REQUIRED)
    target_link_libraries(my_app PRIVATE krpc_cnano::krpc_cnano)
-
-The library's target carries the protocol it was built for, so your program is built for the
-same one.
 
 For a client installed with vcpkg, pass the vcpkg toolchain file when you configure your project:
 
@@ -164,8 +131,8 @@ saved as ``main.c``:
 
          clang main.c -lkrpc_cnano -lprotobuf-nanopb
 
-For a library built for TCP/IP or a local socket, also pass ``-DKRPC_COMMUNICATION_TCP`` or
-``-DKRPC_COMMUNICATION_LOCALSOCKET``, so that your program is built for the same protocol.
+On Windows, also link ``ws2_32``, the winsock library the TCP/IP and local socket transports
+use.
 
 .. _cnano-client-compilation-options:
 
@@ -192,21 +159,6 @@ compiler's ``-D`` argument.
   * ``PB_NO_ERRMSG`` disables the error messages of the nanopb library, which kRPC uses to encode
     and decode messages. The Arduino version of the library defines it by default.
 
-* Communication
-
-  * ``KRPC_COMMUNICATION_POSIX`` communicates over a serial port with the POSIX ``read`` and
-    ``write`` functions. This is the default when no other platform is detected.
-  * ``KRPC_COMMUNICATION_WINDOWS`` communicates over a serial port with the Windows API. It is
-    detected on Windows.
-  * ``KRPC_COMMUNICATION_ARDUINO`` communicates over an Arduino ``HardwareSerial``. It is
-    detected on Arduino.
-  * ``KRPC_COMMUNICATION_TCP`` communicates over TCP/IP. On Windows, a program that links the
-    library also links winsock.
-  * ``KRPC_COMMUNICATION_LOCALSOCKET`` communicates over a local socket, with a server on the same
-    machine.
-  * ``KRPC_COMMUNICATION_CUSTOM`` lets you provide your own implementation of
-    :func:`krpc_open`, :func:`krpc_close`, :func:`krpc_read` and :func:`krpc_write`.
-
 * Memory allocation
 
   * ``KRPC_BUFFER_SIZE`` is how much of a message to hold in memory while it is written to or
@@ -231,10 +183,14 @@ Connecting to the Server
 The game must be running with the server started. :ref:`getting-started-server` in the
 getting started guide shows how to install and start it.
 
-The client connects over a serial port, TCP/IP or a local socket. The library is built for one of
-them, chosen by the :ref:`compilation options <cnano-client-compilation-options>`. Each server in
-the server window uses one protocol, and accepts connections over that protocol only. Pick the
-protocol when you add the server, and build the library for the matching one.
+The client connects over a serial port, TCP/IP, a local socket or a transport of your own. Each
+transport has a function that opens a connection over it. Each server in the server window uses
+one protocol, and accepts connections over that protocol only. Pick the protocol when you add the
+server, and open the matching transport.
+
+The library includes the serial port, TCP/IP and local socket transports on Windows, Linux and
+macOS, and a serial port transport on Arduino. On any other platform, such as a microcontroller
+outside Arduino, it includes none, and you supply your own.
 
 Over a Serial Port
 ^^^^^^^^^^^^^^^^^^
@@ -244,19 +200,28 @@ name and the baud rate. The following connects to a server, and prints its versi
 
 .. literalinclude:: /scripts/cnano/ConnectingSerial.c
 
-:func:`krpc_open` opens the serial port named by its second argument, such as ``COM3`` on Windows
-or ``/dev/ttyS0`` on Linux. It writes the connection into its first argument. You pass the
+:func:`krpc_open_serial` opens the serial port named by its second argument, such as ``COM3`` on
+Windows or ``/dev/ttyS0`` on Linux. It writes the connection into its first argument. You pass the
 connection to every call. :func:`krpc_connect` then starts a session, with a name for the
 connection that appears in the server window in the game. Both return an error code, and the
 example ends on a failure.
 
-On an Arduino, :func:`krpc_open` takes a pointer to a ``HardwareSerial``:
+On an Arduino, :func:`krpc_open_serial` takes a serial port, such as ``&Serial``, and its baud
+rate:
 
 .. literalinclude:: /scripts/cnano/ConnectingArduino.ino
    :language: c
 
 A client that resets can find part of a message from its earlier session on the line. The
 example retries :func:`krpc_connect` until the server drops the partial message.
+
+For framing other than 8 data bits, no parity and 1 stop bit, start the port in your sketch, then
+open the connection with :func:`krpc_open_stream`:
+
+.. code-block:: c
+
+   Serial1.begin(115200, SERIAL_8E1);
+   krpc_open_stream(&conn, &Serial1);
 
 .. note::
 
@@ -267,10 +232,9 @@ example retries :func:`krpc_connect` until the server drops the partial message.
 Over TCP/IP
 ^^^^^^^^^^^
 
-Select "Protobuf over TCP/IP" as the server's protocol, and build the library with
-``KRPC_COMMUNICATION_TCP``. :func:`krpc_open` then takes a :type:`krpc_connection_config_t` with
-the address and port of the server. The following connects to a server with the default settings,
-address ``127.0.0.1`` and port 50000, and prints its version:
+Select "Protobuf over TCP/IP" as the server's protocol. :func:`krpc_open_tcp` takes the address
+and port of the server. The following connects to a server with the default settings, address
+``127.0.0.1`` and port 50000, and prints its version:
 
 .. literalinclude:: /scripts/cnano/ConnectingTcp.c
 
@@ -280,14 +244,26 @@ your program can run on a different machine from the game.
 Over a Local Socket
 ^^^^^^^^^^^^^^^^^^^
 
-Select "Protobuf over local socket" as the server's protocol, and build the library with
-``KRPC_COMMUNICATION_LOCALSOCKET``. :func:`krpc_open` then takes the path of the server's socket,
-shown in the server window. The following connects to a server, and prints its version:
+Select "Protobuf over local socket" as the server's protocol. :func:`krpc_open_localsocket` takes
+the path of the server's socket, shown in the server window. The following connects to a server,
+and prints its version:
 
 .. literalinclude:: /scripts/cnano/ConnectingLocal.c
 
 A local socket works only on the machine running the game. It has lower overhead than TCP/IP, so
 it is faster.
+
+Over a Custom Transport
+^^^^^^^^^^^^^^^^^^^^^^^
+
+A :type:`krpc_transport_t` holds the functions that read, write and close a connection. Fill one
+in to connect over a link the library has no transport for, such as a UART on a microcontroller.
+The following connects over the program's standard input and output:
+
+.. literalinclude:: /scripts/cnano/ConnectingCustom.c
+
+The connection holds the transport and a handle, which is passed to each of its functions. The
+handle is any integer or pointer, such as a pointer to your own state for the link.
 
 Closing the Connection
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -337,7 +313,7 @@ the error from loading a save that does not exist:
   disconnect, returns :macro:`KRPC_ERROR_CONNECTION_FAILED`.
 
 The :ref:`compilation options <cnano-client-compilation-options>` can instead exit, fail an
-assertion or call a handler on each error from a procedure. :func:`krpc_open`,
+assertion or call a handler on each error from a procedure. The functions that open a connection,
 :func:`krpc_connect` and :func:`krpc_disconnect` always return the error code.
 
 Remote Objects
@@ -401,62 +377,97 @@ A service with no stub, such as one added by another mod, needs stubs of its own
 Client API Reference
 --------------------
 
-.. function:: krpc_error_t krpc_open(krpc_connection_t * connection, const krpc_connection_config_t * arg)
+.. function:: krpc_error_t krpc_open_serial(krpc_connection_t * connection, const char * port)
 
-   Opens a connection, and writes it into *connection*. What *arg* holds depends on the protocol
-   the library is built for:
+   Opens the serial port named *port*, such as ``/dev/ttyS0`` or ``COM3``, and writes the
+   connection into *connection*. The port keeps its baud rate and framing, so set them to match
+   the server window, such as with ``stty`` on Linux.
 
-   * ``KRPC_COMMUNICATION_POSIX`` and ``KRPC_COMMUNICATION_WINDOWS``: the name of the serial port,
-     as a ``const char *``. For example, ``krpc_open(&conn, "/dev/ttyS0")`` or
-     ``krpc_open(&conn, "COM3")``. The port keeps its baud rate and framing, so set them to match
-     the server window, such as with ``stty`` on Linux.
-   * ``KRPC_COMMUNICATION_TCP``: a pointer to a :type:`krpc_connection_config_t` holding the
-     address and port of the server. The address is a host name or an IP address, and each
-     endpoint it resolves to is tried in turn.
-   * ``KRPC_COMMUNICATION_LOCALSOCKET``: the path of the server's socket, as a ``const char *``.
-   * ``KRPC_COMMUNICATION_ARDUINO``: *connection* points to a ``HardwareSerial *``, such as
-     ``&Serial``, set before the call. *arg* is a pointer to a :type:`krpc_connection_config_t`
-     holding the baud rate and the data, parity and stop bits, or ``NULL`` for 9600 baud and
-     ``SERIAL_8N1``.
+   On Arduino, it takes a serial port and a baud rate instead:
+   ``krpc_open_serial(&conn, &Serial, 9600)``. It starts the port with 8 data bits, no parity and
+   1 stop bit, waits for the port to be ready, then opens a connection over it with
+   :func:`krpc_open_stream`.
 
-   Returns :macro:`KRPC_ERROR_IO` if the connection fails to open, such as for an address that
-   does not resolve or a socket path that is too long. On Arduino it returns :macro:`KRPC_OK`.
+   Returns :macro:`KRPC_ERROR_IO` if the port fails to open.
+
+.. function:: krpc_error_t krpc_open_stream(krpc_connection_t * connection, Stream * stream)
+
+   Opens a connection over an Arduino ``Stream`` that the sketch has started, such as a serial
+   port after ``begin``. Closing the connection leaves the stream open. Arduino only.
 
    .. note::
 
       A serial port has no end-of-file, so on Arduino a read fails with :macro:`KRPC_ERROR_EOF`
-      when the serial timeout elapses without a single byte arriving. The timeout is one second
-      by default and applies to each byte. Raise it with ``Serial.setTimeout`` before calling
-      :func:`krpc_open` if the server can take longer to reply.
+      when the stream timeout elapses without a single byte arriving. The timeout is one second
+      by default and applies to each byte. Raise it with ``setTimeout`` on the port if the server
+      can take longer to reply.
+
+.. function:: krpc_error_t krpc_open_tcp(krpc_connection_t * connection, const char * address, uint16_t port)
+
+   Opens a TCP/IP connection to the server at *address* and *port*, and writes it into
+   *connection*. The address is a host name or an IP address, and each endpoint it resolves to is
+   tried in turn. Windows, Linux and macOS only.
+
+   Returns :macro:`KRPC_ERROR_IO` if the address does not resolve or no endpoint accepts the
+   connection.
+
+.. function:: krpc_error_t krpc_open_localsocket(krpc_connection_t * connection, const char * path)
+
+   Opens a connection to the server's local socket at *path*, and writes it into *connection*.
+   Windows, Linux and macOS only. On Windows, it needs Windows 10 version 1803 or later, and a
+   Windows SDK with ``afunix.h``, 10.0.17134 or later. With an older SDK the library leaves it
+   out, and a call to it fails to compile.
+
+   Returns :macro:`KRPC_ERROR_IO` if the path is too long or the connection fails.
 
 .. type:: krpc_connection_t
 
-   The connection that :func:`krpc_open` opens and every call takes. It is a file descriptor on
-   POSIX, a ``HANDLE`` on Windows, a ``HardwareSerial *`` on Arduino, and a socket over TCP/IP or
-   a local socket. A ``KRPC_COMMUNICATION_CUSTOM`` build defines it, and
-   :type:`krpc_connection_config_t`, before it includes ``krpc_cnano.h``.
+   A connection, which every call takes. A structure with the fields
+   ``const krpc_transport_t * transport`` and ``uintptr_t handle``. The handle is passed to each
+   of the transport's functions.
 
-.. type:: krpc_connection_config_t
+.. type:: krpc_transport_t
 
-   The configuration :func:`krpc_open` takes. For ``KRPC_COMMUNICATION_TCP``, a structure with the
-   fields ``const char * address`` and ``uint16_t port``. For ``KRPC_COMMUNICATION_ARDUINO``, a
-   structure with the fields ``uint32_t speed``, the baud rate, and ``uint8_t config``, such as
-   ``SERIAL_8N1``. For a serial port or a local socket, ``char``, so *arg* is a string.
+   A transport, as the functions that carry a connection's bytes. A structure with the fields:
+
+   * ``krpc_error_t (*read)(uintptr_t handle, uint8_t * buf, size_t count)`` reads exactly *count*
+     bytes into *buf*. It returns :macro:`KRPC_ERROR_EOF` once the connection has ended.
+   * ``krpc_error_t (*write)(uintptr_t handle, const uint8_t * buf, size_t count)`` writes all
+     *count* bytes from *buf*.
+   * ``krpc_error_t (*close)(uintptr_t handle)`` closes the connection. ``NULL`` for a transport
+     with nothing to close.
+   * ``bool resumable`` is whether the link outlives a session, as a serial line does. A client
+     that resets can then find part of a message from its earlier session on the link, and
+     :func:`krpc_connect` leaves the connection open after such a failure.
+
+.. var:: const krpc_transport_t krpc_transport_serial
+
+   The serial port transport. Its handle is a file descriptor, or a ``HANDLE`` on Windows.
+
+.. var:: const krpc_transport_t krpc_transport_socket
+
+   The TCP/IP and local socket transport. Its handle is a file descriptor, or a ``SOCKET`` on
+   Windows.
+
+.. var:: const krpc_transport_t krpc_transport_stream
+
+   The Arduino ``Stream`` transport. Its handle is a ``Stream *``.
 
 .. function:: krpc_error_t krpc_connect(krpc_connection_t connection, const char * name)
 
-   Starts a session on a connection opened with :func:`krpc_open`, and waits for the server to
-   accept it. The client supports one session at a time.
+   Starts a session on an open connection, and waits for the server to accept it. The client
+   supports one session at a time.
 
    :param connection: The connection.
    :param name: A name for the connection, shown in the server window in the game.
 
-   Returns :macro:`KRPC_ERROR_CONNECTION_REFUSED`, and closes the connection, if the server
-   denies it or does not support the client's protocol version. Over TCP/IP or a local socket,
-   any other failure closes the connection too.
+   Returns :macro:`KRPC_ERROR_IO` for a connection whose open failed. Returns
+   :macro:`KRPC_ERROR_CONNECTION_REFUSED`, and closes the connection, if the server denies it or
+   does not support the client's protocol version. Over TCP/IP, a local socket, or any transport
+   with ``resumable`` false, any other failure closes the connection too.
 
-   On a serial port or a custom transport, part of a message from an earlier session can garble
-   the connection request or its response. This then returns
+   On a resumable transport, such as a serial port, part of a message from an earlier session can
+   garble the connection request or its response. This then returns
    :macro:`KRPC_ERROR_CONNECTION_FAILED` and leaves the port open. Wait more than 3 seconds, so
    that the server drops the partial message, then call this again.
 
@@ -466,8 +477,7 @@ Client API Reference
 
 .. function:: krpc_error_t krpc_close(krpc_connection_t connection)
 
-   Closes the connection, without sending the server a disconnect. A
-   ``KRPC_COMMUNICATION_CUSTOM`` build provides it, as it does :func:`krpc_open`.
+   Closes the connection, without sending the server a disconnect.
 
 .. type:: krpc_error_t
 
@@ -601,12 +611,12 @@ Client API Reference
 
    Reads exactly *count* bytes from the connection into *buf*, waiting until they arrive. Returns
    :macro:`KRPC_ERROR_EOF` if the connection ends first, or :macro:`KRPC_ERROR_IO` if the read
-   fails. A ``KRPC_COMMUNICATION_CUSTOM`` build provides it.
+   fails.
 
 .. function:: krpc_error_t krpc_write(krpc_connection_t connection, const uint8_t * buf, size_t count)
 
    Writes all *count* bytes from *buf* to the connection. Returns :macro:`KRPC_ERROR_IO` if the
-   write fails. A ``KRPC_COMMUNICATION_CUSTOM`` build provides it.
+   write fails.
 
 API Reference
 -------------

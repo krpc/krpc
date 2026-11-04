@@ -57,12 +57,31 @@ srcs = glob(["src/**/*.c"])
 
 hdrs = glob(["include/**/*.h"]) + services
 
+# Winsock is a library of its own on Windows, not part of the C runtime
+ws2_32 = select({
+    "@platforms//os:windows": ["ws2_32.lib"],
+    "//conditions:default": [],
+})
+
 cc_library(
     name = "krpc_cnano",
     srcs = srcs + [":protobuf"],
     hdrs = hdrs + [":protobuf"],
     includes = ["include"],
+    linkopts = ws2_32,
     visibility = ["//visibility:public"],
+    deps = ["@c_nanopb//:nanopb"],
+)
+
+# The library with server error messages, for the tests, so that they cover decoding them and a
+# failure says what the server objected to, and for the benchmark
+cc_library(
+    name = "krpc_cnano_error_messages",
+    srcs = srcs + [":protobuf"],
+    hdrs = hdrs + [":protobuf"],
+    defines = ["KRPC_ERROR_MESSAGES"],
+    includes = ["include"],
+    linkopts = ws2_32,
     deps = ["@c_nanopb//:nanopb"],
 )
 
@@ -72,9 +91,9 @@ test_suite(
         ":client-tcpip",
         ":cog",
         ":communication-arduino",
-        ":communication-localsocket",
         ":communication-serialio",
-        ":communication-tcpip",
+        ":communication-socket",
+        ":communication-transport",
         ":conformance",
         ":doxygen",
         ":lint",
@@ -94,125 +113,46 @@ cog_test(
     ],
 )
 
-# The library built for each of the transports that can be tested here. They all enable server
-# error messages, so that the tests cover decoding them and a failure says what the server
-# objected to; the default build, with them disabled, is covered by the krpc_cnano library itself.
-# The socket ones are not testonly, as a benchmark program is built on each of them too.
-cc_library(
-    name = "krpc_cnano_serialio",
-    testonly = True,
-    srcs = srcs + [":protobuf"],
-    hdrs = hdrs + [":protobuf"],
-    defines = [
-        "KRPC_ERROR_MESSAGES",
-        "KRPC_WRITE_FAULTS",
-    ],
-    includes = ["include"],
-    deps = ["@c_nanopb//:nanopb"],
-)
-
-cc_library(
-    name = "krpc_cnano_tcpip",
-    srcs = srcs + [":protobuf"],
-    hdrs = hdrs + [":protobuf"],
-    defines = [
-        "KRPC_COMMUNICATION_TCP",
-        "KRPC_ERROR_MESSAGES",
-    ],
-    includes = ["include"],
-    # The sockets are winsock's on Windows, which is a library of its own rather
-    # than part of the C runtime.
-    linkopts = select({
-        "@platforms//os:windows": ["ws2_32.lib"],
-        "//conditions:default": [],
-    }),
-    visibility = ["//doc:__pkg__"],
-    deps = ["@c_nanopb//:nanopb"],
-)
-
-cc_library(
-    name = "krpc_cnano_localsocket",
-    srcs = srcs + [":protobuf"],
-    hdrs = hdrs + [":protobuf"],
-    defines = [
-        "KRPC_COMMUNICATION_LOCALSOCKET",
-        "KRPC_ERROR_MESSAGES",
-    ],
-    includes = ["include"],
-    linkopts = select({
-        "@platforms//os:windows": ["ws2_32.lib"],
-        "//conditions:default": [],
-    }),
-    visibility = ["//doc:__pkg__"],
-    deps = ["@c_nanopb//:nanopb"],
-)
-
-# The socket libraries with the write fault compiled in, for the conformance testees
-cc_library(
-    name = "krpc_cnano_tcpip_testee",
-    testonly = True,
-    srcs = srcs + [":protobuf"],
-    hdrs = hdrs + [":protobuf"],
-    defines = [
-        "KRPC_COMMUNICATION_TCP",
-        "KRPC_ERROR_MESSAGES",
-        "KRPC_WRITE_FAULTS",
-    ],
-    includes = ["include"],
-    linkopts = select({
-        "@platforms//os:windows": ["ws2_32.lib"],
-        "//conditions:default": [],
-    }),
-    deps = ["@c_nanopb//:nanopb"],
-)
-
-cc_library(
-    name = "krpc_cnano_localsocket_testee",
-    testonly = True,
-    srcs = srcs + [":protobuf"],
-    hdrs = hdrs + [":protobuf"],
-    defines = [
-        "KRPC_COMMUNICATION_LOCALSOCKET",
-        "KRPC_ERROR_MESSAGES",
-        "KRPC_WRITE_FAULTS",
-    ],
-    includes = ["include"],
-    linkopts = select({
-        "@platforms//os:windows": ["ws2_32.lib"],
-        "//conditions:default": [],
-    }),
-    deps = ["@c_nanopb//:nanopb"],
-)
-
-# The communication backends, for what the conformance tests do not reach. Every one of them
-# runs against something that behaves as the thing it talks to does, so none needs the
-# hardware, port or server it is written for. The serial conformance tests run on Linux only,
-# so the Windows serial backend is tested here.
+# The transports, for what the conformance tests do not reach. Each runs against something that
+# behaves as the thing it talks to does, so none needs the hardware, port or server it is written
+# for. The serial conformance tests run on Linux only, so the Windows serial transport is tested
+# here.
 cc_test(
     name = "communication-serialio",
     size = "small",
     srcs = ["test/test_windows.cpp"],
     target_compatible_with = ["@platforms//os:windows"],
     deps = [
-        ":krpc_cnano_serialio",
+        ":krpc_cnano_error_messages",
         "@cpp_googletest//:gtest",
     ],
 )
 
 cc_test(
-    name = "communication-tcpip",
+    name = "communication-socket",
     size = "small",
     srcs = ["test/test_socket.cpp"],
+    tags = ["requires-network"],
     deps = [
-        ":krpc_cnano_tcpip",
+        ":krpc_cnano_error_messages",
         "@cpp_googletest//:gtest",
     ],
 )
 
-# Builds the Arduino communication backend for the host, against a stand-in for the Arduino
-# HardwareSerial class, so it can be tested without hardware. It deliberately does not depend
-# on krpc_cnano, whose copy of communication.c is built for the host platform instead and
-# defines the same functions.
+# A transport the program supplies
+cc_test(
+    name = "communication-transport",
+    size = "small",
+    srcs = ["test/test_transport.cpp"],
+    deps = [
+        ":krpc_cnano_error_messages",
+        "@cpp_googletest//:gtest",
+    ],
+)
+
+# Builds the Arduino stream transport for the host, against a stand-in for the Arduino core, so
+# it can be tested without hardware. It does not depend on krpc_cnano, whose transports are built
+# for the host platform instead.
 cc_test(
     name = "communication-arduino",
     size = "small",
@@ -220,11 +160,12 @@ cc_test(
         "include/krpc_cnano/communication.h",
         "include/krpc_cnano/error.h",
         "src/communication.c",
-        "test/HardwareSerial.h",
+        "src/stream.c",
+        "test/Arduino.h",
         "test/test_arduino.cpp",
     ],
-    # communication.c is C, but the Arduino backend it holds is C++ and the header
-    # says so. Compile it as C++, spelled for the active compiler.
+    # The Arduino build is C++, so the sources are compiled as C++, spelled for the active
+    # compiler
     copts = select({
         "@platforms//os:windows": ["/TP"],
         "//conditions:default": ["-xc++"],
@@ -237,79 +178,32 @@ cc_test(
     deps = ["@cpp_googletest//:gtest"],
 )
 
-# The library built for a unix domain socket, with the tests it shares with the other socket
-# transport.
-cc_test(
-    name = "communication-localsocket",
-    size = "small",
-    srcs = ["test/test_socket.cpp"],
-    deps = [
-        ":krpc_cnano_localsocket",
-        "@cpp_googletest//:gtest",
-    ],
-)
-
-# The conformance tests, driving the client through its testee. The library is built for one
-# transport, so there is a testee for each.
-conformance_testee_srcs = [
-    "conformance/codec.hpp",
-    "conformance/dispatch_values.hpp",
-    "conformance/framing.hpp",
-    "conformance/main.cpp",
-    ":services-testservice",
-] + clientgen_dispatch(
-    out = "conformance/{snake_service}_dispatch.hpp",
-    language = "cnano",
-    services_out = "conformance/services/{snake_service}.h",
-)
-
-# The dispatch calls the deprecated TestService members
-conformance_testee_copts = select({
-    "@rules_cc//cc/compiler:msvc-cl": ["/wd4996"],
-    "//conditions:default": ["-Wno-deprecated-declarations"],
-})
-
+# The conformance tests, driving the client through its testee over each transport
 cc_binary(
     name = "conformance-testee",
     testonly = True,
-    srcs = conformance_testee_srcs,
-    copts = conformance_testee_copts,
+    srcs = [
+        "conformance/codec.hpp",
+        "conformance/dispatch_values.hpp",
+        "conformance/framing.hpp",
+        "conformance/main.cpp",
+        ":services-testservice",
+    ] + clientgen_dispatch(
+        out = "conformance/{snake_service}_dispatch.hpp",
+        language = "cnano",
+        services_out = "conformance/services/{snake_service}.h",
+    ),
+    # The dispatch calls the deprecated TestService members
+    copts = select({
+        "@rules_cc//cc/compiler:msvc-cl": ["/wd4996"],
+        "//conditions:default": ["-Wno-deprecated-declarations"],
+    }),
     includes = [
         "conformance",
         "test",
     ],
     deps = [
-        ":krpc_cnano_tcpip_testee",
-        "//client/conformance:testee-cpp",
-    ],
-)
-
-cc_binary(
-    name = "conformance-testee-serialio",
-    testonly = True,
-    srcs = conformance_testee_srcs,
-    copts = conformance_testee_copts,
-    includes = [
-        "conformance",
-        "test",
-    ],
-    deps = [
-        ":krpc_cnano_serialio",
-        "//client/conformance:testee-cpp",
-    ],
-)
-
-cc_binary(
-    name = "conformance-testee-localsocket",
-    testonly = True,
-    srcs = conformance_testee_srcs,
-    copts = conformance_testee_copts,
-    includes = [
-        "conformance",
-        "test",
-    ],
-    deps = [
-        ":krpc_cnano_localsocket_testee",
+        ":krpc_cnano_error_messages",
         "//client/conformance:testee-cpp",
     ],
 )
@@ -319,10 +213,6 @@ conformance_test(
     size = "medium",
     expected_failures = "conformance/expected-failures.txt",
     profiles = ["core"],
-    protocol_testees = {
-        "localsocket": ":conformance-testee-localsocket",
-        "serialio": ":conformance-testee-serialio",
-    },
     protocols = [
         "tcpip",
         "localsocket",
@@ -352,14 +242,12 @@ cc_binary(
     testonly = True,
     srcs = ["test/test_client.cpp"],
     deps = [
-        ":krpc_cnano_tcpip",
+        ":krpc_cnano_error_messages",
         "@cpp_googletest//:gtest",
     ],
 )
 
-# The benchmark program, run by //tools/benchmarks:cnano. Not a test: it measures. One per
-# transport, since this client is compiled for the one it talks over rather than choosing when
-# it connects, and the runner measures both.
+# The benchmark program, run by //tools/benchmarks:cnano. Not a test: it measures.
 cc_binary(
     name = "benchmark",
     srcs = [
@@ -368,18 +256,7 @@ cc_binary(
     ],
     includes = ["test"],
     visibility = ["//tools/benchmarks:__pkg__"],
-    deps = [":krpc_cnano_tcpip"],
-)
-
-cc_binary(
-    name = "benchmark-localsocket",
-    srcs = [
-        "benchmark/benchmark.c",
-        ":services-testservice",
-    ],
-    includes = ["test"],
-    visibility = ["//tools/benchmarks:__pkg__"],
-    deps = [":krpc_cnano_localsocket"],
+    deps = [":krpc_cnano_error_messages"],
 )
 
 test_suite(

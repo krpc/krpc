@@ -4,7 +4,7 @@
 
 // The serial transport reads and writes its port through the file API, which a pipe answers to
 // in the same way, so these need no serial port to run against.
-#if defined(KRPC_COMMUNICATION_WINDOWS)
+#if defined(KRPC_PLATFORM_WINDOWS)
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -13,6 +13,13 @@
 
 #include <chrono>
 #include <thread>
+
+static krpc_connection_t serial_connection(HANDLE handle) {
+  krpc_connection_t connection;
+  connection.transport = &krpc_transport_serial;
+  connection.handle = reinterpret_cast<uintptr_t>(handle);
+  return connection;
+}
 
 // A read that returns fewer bytes than requested must resume at the point the previous one
 // finished, and not restart at the beginning of the buffer.
@@ -35,7 +42,7 @@ TEST(test_windows, test_read_partial) {
   });
 
   uint8_t buf[8] = {0};
-  krpc_error_t error = krpc_read(read_end, buf, sizeof(buf));
+  krpc_error_t error = krpc_read(serial_connection(read_end), buf, sizeof(buf));
   writer.join();
   CloseHandle(read_end);
   CloseHandle(write_end);
@@ -54,7 +61,7 @@ TEST(test_windows, test_read_peer_closed) {
   CloseHandle(write_end);
 
   uint8_t buf[4] = {0};
-  krpc_error_t error = krpc_read(read_end, buf, sizeof(buf));
+  krpc_error_t error = krpc_read(serial_connection(read_end), buf, sizeof(buf));
   CloseHandle(read_end);
 
   ASSERT_EQ(KRPC_ERROR_IO, error);

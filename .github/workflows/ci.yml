@@ -520,24 +520,12 @@ jobs:
           name: client-cnano
           run-id: ${{ steps.merge-group-run.outputs.run-id }}
           github-token: ${{ github.token }}
-      - name: build-system-serialio
+      - name: build-system
         if: github.event_name != 'push' || steps.merge-group-run.outputs.run-id
-        run: client/cnano/test-cmake-linux.sh krpc-cnano-*.zip system-serialio
-      - name: build-system-tcpip
+        run: client/cnano/test-cmake-linux.sh krpc-cnano-*.zip system
+      - name: build-fetch
         if: github.event_name != 'push' || steps.merge-group-run.outputs.run-id
-        run: client/cnano/test-cmake-linux.sh krpc-cnano-*.zip system-tcpip
-      - name: build-system-localsocket
-        if: github.event_name != 'push' || steps.merge-group-run.outputs.run-id
-        run: client/cnano/test-cmake-linux.sh krpc-cnano-*.zip system-localsocket
-      - name: build-fetch-serialio
-        if: github.event_name != 'push' || steps.merge-group-run.outputs.run-id
-        run: client/cnano/test-cmake-linux.sh krpc-cnano-*.zip fetch-serialio
-      - name: build-fetch-tcpip
-        if: github.event_name != 'push' || steps.merge-group-run.outputs.run-id
-        run: client/cnano/test-cmake-linux.sh krpc-cnano-*.zip fetch-tcpip
-      - name: build-fetch-localsocket
-        if: github.event_name != 'push' || steps.merge-group-run.outputs.run-id
-        run: client/cnano/test-cmake-linux.sh krpc-cnano-*.zip fetch-localsocket
+        run: client/cnano/test-cmake-linux.sh krpc-cnano-*.zip fetch
 
   windows-build-client-cnano-cmake:
     needs: linux-test-client-cnano
@@ -557,30 +545,14 @@ jobs:
         uses: ./.github/actions/vcpkg-windows
         with:
           packages: nanopb:x64-windows
-      - name: build-system-serialio
+      - name: build-system
         if: github.event_name != 'push'
         shell: bash
-        run: client/cnano/test-cmake-windows.sh system-serialio
-      - name: build-system-tcpip
+        run: client/cnano/test-cmake-windows.sh system
+      - name: build-fetch
         if: github.event_name != 'push'
         shell: bash
-        run: client/cnano/test-cmake-windows.sh system-tcpip
-      - name: build-system-localsocket
-        if: github.event_name != 'push'
-        shell: bash
-        run: client/cnano/test-cmake-windows.sh system-localsocket
-      - name: build-fetch-serialio
-        if: github.event_name != 'push'
-        shell: bash
-        run: client/cnano/test-cmake-windows.sh fetch-serialio
-      - name: build-fetch-tcpip
-        if: github.event_name != 'push'
-        shell: bash
-        run: client/cnano/test-cmake-windows.sh fetch-tcpip
-      - name: build-fetch-localsocket
-        if: github.event_name != 'push'
-        shell: bash
-        run: client/cnano/test-cmake-windows.sh fetch-localsocket
+        run: client/cnano/test-cmake-windows.sh fetch
 
   linux-build-client-cnano-vcpkg:
     needs: linux-test-client-cnano

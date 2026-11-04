@@ -1,12 +1,9 @@
 #!/bin/bash
 # Test building the C-nano client using CMake.
 # Accepts the release archive as the first argument.
-# Covers the two things a build chooses between, crossed with each other:
-#   how nanopb is provided) system) a system-installed nanopb
-#                           fetch)  nanopb fetched via FetchContent (KRPC_FETCH_DEPS=ON)
-#   which transport)        serialio)    a serial port, the default
-#                           tcpip)       TCP/IP (KRPC_COMMUNICATION_TCP=ON)
-#                           localsocket) a unix domain socket (KRPC_COMMUNICATION_LOCALSOCKET=ON)
+# Covers each way nanopb is provided:
+#   system) a system-installed nanopb
+#   fetch)  nanopb fetched via FetchContent (KRPC_FETCH_DEPS=ON)
 # Each is followed by a consumer test using find_package(krpc_cnano CONFIG REQUIRED).
 # Usage: test-cmake-linux.sh ARCHIVE [SCENARIO]  (default: run all)
 set -e
@@ -14,8 +11,7 @@ set -o pipefail
 set -x
 set -o functrace
 
-scenarios="system-serialio system-tcpip system-localsocket \
-fetch-serialio fetch-tcpip fetch-localsocket"
+scenarios="system fetch"
 
 archive="$(realpath "${1:?Usage: test-cmake-linux.sh ARCHIVE [$(echo $scenarios | tr ' ' '|')]}")"
 scenario="${2:-all}"
@@ -79,8 +75,7 @@ function check_absent {
 }
 
 # Build the consumer project against the installed package, to verify the package config and
-# targets work end-to-end. Where the library is built for a socket the program opens a connection,
-# which is what proves the transport reaches it through the package.
+# targets work end-to-end.
 function consumer_test {
   local install_dir=$1
   local build_dir=$2
@@ -90,8 +85,7 @@ function consumer_test {
   cmake --build "$build_dir" --parallel $(nproc)
 }
 
-# Build, install and consume the library for one scenario, named for how nanopb is provided and
-# which transport the library talks over.
+# Build, install and consume the library for one scenario, named for how nanopb is provided
 function run_scenario {
   local name=$1
   local dir="$out/$name"
@@ -99,14 +93,8 @@ function run_scenario {
   local options=()
 
   case "$name" in
-    fetch-*)  options+=(-DKRPC_FETCH_DEPS=ON) ;;
-    system-*) ;;
-    *) echo "unknown scenario '$name'"; exit 1 ;;
-  esac
-  case "$name" in
-    *-tcpip)       options+=(-DKRPC_COMMUNICATION_TCP=ON) ;;
-    *-localsocket) options+=(-DKRPC_COMMUNICATION_LOCALSOCKET=ON) ;;
-    *-serialio) ;;
+    fetch)  options+=(-DKRPC_FETCH_DEPS=ON) ;;
+    system) ;;
     *) echo "unknown scenario '$name'"; exit 1 ;;
   esac
 
@@ -114,11 +102,11 @@ function run_scenario {
 
   # Which of the two ways of providing nanopb the configure step actually took
   case "$name" in
-    fetch-*)
+    fetch)
       check_present "$log" "Fetching nanopb via FetchContent"
       check_absent  "$log" "Found nanopb"
       ;;
-    system-*)
+    system)
       check_present "$log" "Found nanopb"
       check_absent  "$log" "Fetching nanopb via FetchContent"
       ;;
