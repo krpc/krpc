@@ -98,16 +98,6 @@ class TestFunction(ServerTestCase, unittest.TestCase):
             with self.conn.stream(lambda: [obj.int_property]) as stream:
                 self.assertEqual([4], stream())
 
-    def test_valueless_function(self) -> None:
-        expression = self.conn.krpc.Expression
-        # A void procedure. The tests that use the count it resets reset it first
-        call = expression.call(
-            self.conn.get_call(self.conn.test_service.reset_custom_exception_later)
-        )
-        self.assertIsNone(self.conn.run(call))
-        with self.assertRaises(StreamError):
-            self.conn.add_stream(call)
-
     def test_compiled_valueless_function_caches_no_type(self) -> None:
         service = self.conn.test_service
 

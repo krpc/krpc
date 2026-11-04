@@ -763,7 +763,7 @@ class _Compiler:
         if base.is_value:
             value = base.value
             if isinstance(value, ClassBase) or self._is_service_object(value):
-                if not hasattr(value, "_build_call_" + node.attr):
+                if not hasattr(value, "_build_call__" + node.attr):
                     member = getattr(value, node.attr, None)
                     # The class, enumeration and structure types a service defines
                     # are attributes of it alongside its remote members
@@ -791,7 +791,7 @@ class _Compiler:
                 if procedure is not None and procedure.HasField("return_type"):
                     ptype = procedure.return_type
                 else:
-                    ptype = getattr(value, "_return_type_" + node.attr)().protobuf_type
+                    ptype = getattr(value, "_return_type__" + node.attr)().protobuf_type
                 # A StdLib property has the same value on every evaluation
                 if call.service != "StdLib":
                     self._remote_calls += 1
@@ -4551,7 +4551,7 @@ class _Compiler:
         if isinstance(value, type) and issubclass(value, ClassBase):
             return False
         cls = value if isinstance(value, type) else type(value)
-        return any(name.startswith("_build_call_") for name in dir(cls))
+        return any(name.startswith("_build_call__") for name in dir(cls))
 
     @staticmethod
     def _service_name(value: object) -> str:

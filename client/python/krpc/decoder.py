@@ -22,6 +22,7 @@ from krpc.types import (
     EventType,
     ListType,
     MessageType,
+    NoValueType,
     SetType,
     StreamType,
     StructType,
@@ -145,6 +146,8 @@ class Decoder:
             return typ.python_type(
                 *cls._decode_items(client, msg.items, typ.field_types)
             )
+        if isinstance(typ, NoValueType):
+            return None
         raise EncodingError("Cannot decode type %s" % str(typ))
 
     @classmethod

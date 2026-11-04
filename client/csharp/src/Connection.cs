@@ -357,6 +357,35 @@ namespace KRPC.Client
         }
 
         /// <summary>
+        /// Create a stream from a lambda expression with no value, which runs on each update
+        /// for its effects.
+        /// </summary>
+        /// <remarks>
+        /// A single remote procedure call with fixed arguments is streamed as that call. Any
+        /// other lambda is translated as <see cref="Compile(Expression{Action})"/> translates
+        /// it. Throws an exception if the lambda's body has a value, or if the lambda cannot be
+        /// compiled.
+        /// </remarks>
+        public Stream AddStream (Expression<Action> expression)
+        {
+            CheckDisposed ();
+            if (ReferenceEquals (expression, null))
+                throw new ArgumentNullException (nameof (expression));
+            // A compiled function has the type of its body
+            var bodyType = FunctionCompiler.ResultBody (expression).Type;
+            if (bodyType != typeof (void))
+                throw new ArgumentException (
+                    "The lambda evaluates to a " + bodyType +
+                    ". Call AddStream with a type parameter.");
+            Expression rpc;
+            if (IsASingleCall (expression, out rpc) && !FunctionCompiler.HasRemoteArguments (rpc))
+                return new Stream (this, GetCall (expression, out rpc));
+            var compiled = FunctionCompiler.Compile (this, expression, expressionRemoteTypes, true);
+            var streamId = InternalProcedures.AddFunctionStream (this, compiled);
+            return new Stream (this, streamId);
+        }
+
+        /// <summary>
         /// Compile a lambda expression into a server side function.
         /// </summary>
         /// <remarks>
@@ -718,6 +747,25 @@ namespace KRPC.Client
             return AddCheckedStream<TResult> (function, FunctionSpec<TResult> (function, true));
         }
 
+        /// <summary>
+        /// Create a stream of a server side function with no value, which runs on each update
+        /// for its effects.
+        /// </summary>
+        /// <remarks>
+        /// Throws an exception if the function has a value.
+        /// </remarks>
+        public Stream AddStream (Services.KRPC.Expression function)
+        {
+            CheckDisposed ();
+            if (ReferenceEquals (function, null))
+                throw new ArgumentNullException (nameof (function));
+            if (FunctionReturnType (function) != null)
+                throw new InvalidOperationException (
+                    "The function evaluates to a value. Call AddStream with a type parameter.");
+            var streamId = InternalProcedures.AddFunctionStream (this, function);
+            return new Stream (this, streamId);
+        }
+
         Stream<TResult> AddCheckedStream<TResult> (Services.KRPC.Expression function, TypeSpec spec)
         {
             var streamId = InternalProcedures.AddFunctionStream (this, function);
@@ -798,10 +846,9 @@ namespace KRPC.Client
         {
             var type = FunctionReturnType (function);
             if (type == null)
-                throw new InvalidOperationException (streamed
-                    ? "The function does not evaluate to a value, so it cannot be streamed."
-                    : "The function does not evaluate to a value. Call Run " +
-                      "without a type parameter.");
+                throw new InvalidOperationException (
+                    "The function does not evaluate to a value. Call " + (streamed ? "AddStream" : "Run") +
+                    " without a type parameter.");
             var decoded = FunctionCompiler.DecodedType (typeof (TResult), type);
             if (decoded == null)
                 throw new InvalidOperationException (
@@ -885,6 +932,14 @@ namespace KRPC.Client
         /// Return the procedure call message for a remote procedure call.
         /// </summary>
         public static ProcedureCall GetCall<TResult> (Expression<Func<TResult>> expression)
+        {
+            return GetCall ((LambdaExpression) expression);
+        }
+
+        /// <summary>
+        /// Return the procedure call message for a remote procedure call with no value.
+        /// </summary>
+        public static ProcedureCall GetCall (Expression<Action> expression)
         {
             return GetCall ((LambdaExpression) expression);
         }

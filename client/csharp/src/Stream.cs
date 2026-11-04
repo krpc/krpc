@@ -5,37 +5,28 @@ using KRPC.Schema.KRPC;
 namespace KRPC.Client
 {
     /// <summary>
-    /// Object representing a stream.
+    /// Object representing a stream. A stream of a call or function with no value runs on each
+    /// update for its effects.
     /// </summary>
-    public class Stream<TReturnType> : IEquatable<Stream<TReturnType>>
+    public class Stream : IEquatable<Stream>
     {
+        internal static readonly TypeSpec NoValue = TypeSpec.For (typeof (void));
+
         internal readonly StreamImpl stream;
-        readonly Func<object, TReturnType> convert;
+
+        internal Stream (StreamImpl stream)
+        {
+            this.stream = stream;
+        }
 
         internal Stream (Connection connection, ulong id)
+            : this (connection.StreamManager.GetStream (NoValue, id))
         {
-            stream = connection.StreamManager.GetStream (TypeSpec.For (typeof(TReturnType)), id);
         }
 
-        internal Stream (Connection connection, ulong id, TypeSpec returnType)
+        internal Stream (Connection connection, ProcedureCall call)
+            : this (connection.StreamManager.AddStream (NoValue, call))
         {
-            stream = connection.StreamManager.GetStream (returnType, id);
-        }
-
-        internal Stream (Connection connection, ProcedureCall call, TypeSpec returnType)
-        {
-            stream = connection.StreamManager.AddStream (returnType, call);
-        }
-
-        /// <summary>
-        /// A stream of a call, whose values are converted on the client.
-        /// </summary>
-        internal Stream (
-            Connection connection, ProcedureCall call, TypeSpec returnType,
-            Func<object, TReturnType> convert)
-        {
-            stream = connection.StreamManager.AddStream (returnType, call);
-            this.convert = convert;
         }
 
         /// <summary>
@@ -47,14 +38,14 @@ namespace KRPC.Client
                 return true;
             if (ReferenceEquals (obj, null))
                 return false;
-            var typedObj = obj as Stream<TReturnType>;
+            var typedObj = obj as Stream;
             return typedObj != null && Equals (typedObj);
         }
 
         /// <summary>
         /// Returns true if the objects are equal.
         /// </summary>
-        public bool Equals (Stream<TReturnType> other)
+        public bool Equals (Stream other)
         {
             return !ReferenceEquals (other, null) && stream.Id == other.stream.Id;
         }
@@ -62,25 +53,19 @@ namespace KRPC.Client
         /// <summary>
         /// Returns true if the objects are equal.
         /// </summary>
-        public static bool operator == (Stream<TReturnType> lhs, Stream<TReturnType> rhs)
+        public static bool operator == (Stream lhs, Stream rhs)
         {
             if (ReferenceEquals (lhs, null) || ReferenceEquals (rhs, null))
                 return ReferenceEquals (lhs, rhs);
-            if (ReferenceEquals (lhs, rhs))
-                return true;
-            return lhs.Equals (rhs);
+            return ReferenceEquals (lhs, rhs) || lhs.Equals (rhs);
         }
 
         /// <summary>
         /// Returns true if the objects are not equal.
         /// </summary>
-        public static bool operator != (Stream<TReturnType> lhs, Stream<TReturnType> rhs)
+        public static bool operator != (Stream lhs, Stream rhs)
         {
-            if (ReferenceEquals (lhs, null) || ReferenceEquals (rhs, null))
-                return !ReferenceEquals (lhs, rhs);
-            if (ReferenceEquals (lhs, rhs))
-                return false;
-            return !(lhs.Equals (rhs));
+            return !(lhs == rhs);
         }
 
         /// <summary>
@@ -100,37 +85,30 @@ namespace KRPC.Client
         }
 
         /// <summary>
-        /// The most recent value of the stream.
+        /// Wait for the stream's first update.
         /// </summary>
         /// <remarks>
-        /// Blocks until the first value arrives. Throws the exception that ended the stream, if
-        /// it has ended.
+        /// Throws the exception that ended the stream, if it has ended.
         /// </remarks>
-        public TReturnType Get () {
-            if (!stream.Updated) {
-                var condition = stream.Condition;
-                lock (condition) {
-                    while (!stream.Updated && !stream.Ended)
-                        Monitor.Wait (condition);
-                }
-            }
-            return Convert (stream.Value);
+        public void Get () {
+            WaitForFirstUpdate ();
+            // Throws the exception that ended the stream
+            _ = stream.Value;
         }
 
-        TReturnType Convert (object value)
+        internal void WaitForFirstUpdate ()
         {
-            if (convert != null)
-                return convert (value);
-            if (value == null && typeof (TReturnType).IsValueType &&
-                System.Nullable.GetUnderlyingType (typeof (TReturnType)) == null)
-                throw new System.InvalidOperationException (
-                    "The stream's value is null, which " + typeof (TReturnType) +
-                    " cannot hold. Use a nullable type for the stream.");
-            return (TReturnType) value;
+            if (stream.Updated)
+                return;
+            var condition = stream.Condition;
+            lock (condition) {
+                while (!stream.Updated && !stream.Ended)
+                    Monitor.Wait (condition);
+            }
         }
 
         /// <summary>
-        /// Condition variable that is notified when the streams value changes.
+        /// Condition variable that is notified when the stream updates.
         /// </summary>
         public object Condition {
             get { return stream.Condition; }
@@ -156,21 +134,22 @@ namespace KRPC.Client
         }
 
         /// <summary>
-        /// Add a callback that is invoked whenever the stream is updated.
+        /// Add a callback, with no arguments, that is invoked whenever the stream updates.
         /// </summary>
         /// <remarks>
-        /// The callback is invoked straight away with the value the stream already has, if any.
-        /// An error ends the stream and does not invoke the callback.
+        /// A stream with no value updates once, after its first run. The callback is invoked
+        /// straight away if the stream has updated. An error ends the stream and does not invoke
+        /// the callback.
         /// </remarks>
-        public int AddCallback (Action<TReturnType> callback) {
-            return stream.AddCallback ((object x) => callback (Convert (x)));
+        public int AddCallback (Action callback) {
+            return stream.AddCallback ((object x) => callback ());
         }
 
         /// <summary>
         /// Remove a callback, based on its tag.
         /// </summary>
         public void RemoveCallback (int tag) {
-          stream.RemoveCallback (tag);
+            stream.RemoveCallback (tag);
         }
 
         /// <summary>
@@ -200,6 +179,75 @@ namespace KRPC.Client
         public void Remove ()
         {
             stream.Remove ();
+        }
+    }
+
+    /// <summary>
+    /// Object representing a stream with a value.
+    /// </summary>
+    public class Stream<TReturnType> : Stream
+    {
+        readonly Func<object, TReturnType> convert;
+
+        internal Stream (Connection connection, ulong id)
+            : base (connection.StreamManager.GetStream (TypeSpec.For (typeof(TReturnType)), id))
+        {
+        }
+
+        internal Stream (Connection connection, ulong id, TypeSpec returnType)
+            : base (connection.StreamManager.GetStream (returnType, id))
+        {
+        }
+
+        internal Stream (Connection connection, ProcedureCall call, TypeSpec returnType)
+            : base (connection.StreamManager.AddStream (returnType, call))
+        {
+        }
+
+        /// <summary>
+        /// A stream of a call, whose values are converted on the client.
+        /// </summary>
+        internal Stream (
+            Connection connection, ProcedureCall call, TypeSpec returnType,
+            Func<object, TReturnType> convert)
+            : base (connection.StreamManager.AddStream (returnType, call))
+        {
+            this.convert = convert;
+        }
+
+        /// <summary>
+        /// The most recent value of the stream.
+        /// </summary>
+        /// <remarks>
+        /// Blocks until the first value arrives. Throws the exception that ended the stream, if
+        /// it has ended.
+        /// </remarks>
+        public new TReturnType Get () {
+            WaitForFirstUpdate ();
+            return Convert (stream.Value);
+        }
+
+        TReturnType Convert (object value)
+        {
+            if (convert != null)
+                return convert (value);
+            if (value == null && typeof (TReturnType).IsValueType &&
+                System.Nullable.GetUnderlyingType (typeof (TReturnType)) == null)
+                throw new System.InvalidOperationException (
+                    "The stream's value is null, which " + typeof (TReturnType) +
+                    " cannot hold. Use a nullable type for the stream.");
+            return (TReturnType) value;
+        }
+
+        /// <summary>
+        /// Add a callback that is invoked with each new value of the stream.
+        /// </summary>
+        /// <remarks>
+        /// The callback is invoked straight away with the value the stream already has, if any.
+        /// An error ends the stream and does not invoke the callback.
+        /// </remarks>
+        public int AddCallback (Action<TReturnType> callback) {
+            return stream.AddCallback ((object x) => callback (Convert (x)));
         }
     }
 }

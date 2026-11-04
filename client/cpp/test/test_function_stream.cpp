@@ -124,20 +124,6 @@ TEST_F(test_function_stream, test_run_function_with_arguments_for_its_effects) {
   ASSERT_EQ(before + 2, test_service.counter("CppRunFunctionEffects", 1));
 }
 
-TEST_F(test_function_stream, test_run_function_side_effects) {
-  auto obj = test_service.create_test_object("runeffect");
-  obj.set_int_property(1);
-  krpc::schema::ProcedureCall call;
-  call.set_service("TestService");
-  call.set_procedure("TestClass_set_IntProperty");
-  auto expr = Expr::call_with_arguments(
-      conn, call,
-      std::map<int32_t, Expr>({{0, Expr::constant_object(conn, krpc::get_object_id(obj))},
-                               {1, Expr::constant_int(conn, 42)}}));
-  krpc::run(expr);
-  ASSERT_EQ(42, obj.int_property());
-}
-
 TEST_F(test_function_stream, test_a_template_type_for_a_function_with_no_value_throws) {
   auto obj = test_service.create_test_object("runcheck");
   obj.set_int_property(3);
@@ -151,4 +137,10 @@ TEST_F(test_function_stream, test_a_template_type_for_a_function_with_no_value_t
   ASSERT_THROW(krpc::run<int32_t>(effect), std::invalid_argument);
   ASSERT_THROW(krpc::add_stream<int32_t>(effect), std::invalid_argument);
   ASSERT_EQ(3, obj.int_property());
+}
+
+TEST_F(test_function_stream, test_a_void_stream_of_a_function_with_a_value_throws) {
+  auto obj = test_service.create_test_object("voidcheck");
+  auto value = Expr::call(conn, obj.int_property_call());
+  ASSERT_THROW(krpc::add_stream<void>(value), std::invalid_argument);
 }

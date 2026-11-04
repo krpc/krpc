@@ -77,10 +77,10 @@ namespace KRPC.Client.Conformance
     /// </summary>
     sealed class Writer
     {
-        readonly Stream stream;
+        readonly System.IO.Stream stream;
         readonly object writeLock = new object ();
 
-        public Writer (Stream stream)
+        public Writer (System.IO.Stream stream)
         {
             this.stream = stream;
         }

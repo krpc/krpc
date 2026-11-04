@@ -99,7 +99,9 @@ tick. One function reads the state, computes the control and writes it, all in t
    :end-before: [/docs]
 
 Each iteration is one call, and runs in whichever tick the call lands on. The game can run ticks
-between the iterations, so a loop that has to act on every tick still uses ``next_tick``.
+between the iterations, so a loop that has to act on every tick still uses ``next_tick``. A stream
+of the function runs it on every tick instead, with no call at all. See
+:ref:`server-side-functions-control-loops`.
 
 The Cost of a Hold
 ------------------

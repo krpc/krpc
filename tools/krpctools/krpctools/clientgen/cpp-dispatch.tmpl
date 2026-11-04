@@ -61,7 +61,11 @@ inline StreamHandle add_stream_{{ service_name | snake_case }}(::krpc::Client& c
     {% for p in variant.parameters %}
     auto {{ p.name }} = {{ p.tag }}::arg(client, args.Get({{ p.index }}));
     {% endfor %}
+    {% if member.result %}
     return result_stream({{ variant.stream }}, [](const auto& x) { return {{ member.result.tag }}::result(x); });
+    {% else %}
+    return result_stream({{ variant.stream }});
+    {% endif %}
   }
   {% endfor %}
   {% endfor %}

@@ -22,6 +22,7 @@ namespace KRPC.Service
         float delay;
         Stopwatch timer;
         bool updated;
+        bool ranWithNoValue;
 
         /// <summary>
         /// The value of the stream.
@@ -108,6 +109,16 @@ namespace KRPC.Service
             result.Reset ();
             result.Error = Services.Instance.HandleException (exn);
             Changed = true;
+        }
+
+        /// <summary>
+        /// Record a run with no value. A result with no value changes once, from no result to
+        /// the first.
+        /// </summary>
+        internal void RanWithNoValue ()
+        {
+            Changed |= !ranWithNoValue;
+            ranWithNoValue = true;
         }
 
         /// <summary>

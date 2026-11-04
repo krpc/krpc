@@ -46,7 +46,11 @@ namespace KRPC.Client.Conformance
                     {% for p in variant.parameters %}
                     var {{ p.name }} = {{ p.arg }} (args [{{ p.index }}]);
                     {% endfor %}
+                    {% if member.result %}
                     return Result.Stream<{{ member.result.type }}> ({{ variant.stream }}, {{ member.result.result }});
+                    {% else %}
+                    return Result.Stream ({{ variant.stream }});
+                    {% endif %}
                 }
                 {% endfor %}
                 throw WrongArgumentCount (procedure, args.Count);

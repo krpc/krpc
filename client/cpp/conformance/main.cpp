@@ -486,9 +486,11 @@ class Testee {
         const auto& add = command.add_function_stream();
         auto function = Object<functions::Expression>::arg(connected(), add.function());
         StreamHandle stream;
-        if (!functions::with_type(add.type(), [&](auto tag) {
-              stream = functions::add_stream<decltype(tag)>(function);
-            }))
+        if (add.type().empty())
+          stream = result_stream(krpc::add_stream<void>(function));
+        else if (!functions::with_type(add.type(), [&](auto tag) {
+                   stream = functions::add_stream<decltype(tag)>(function);
+                 }))
           throw Unsupported("A function of type " + add.type());
         reply->set_stream(Handles::instance().add_stream(stream));
         break;

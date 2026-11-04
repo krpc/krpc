@@ -392,6 +392,22 @@ def test_two_streams_of_one_function(connected, functions, control, request):
     assert is_removed_error(connected, raised(first.get))
 
 
+@profile("functions", "streams")
+def test_stream_without_a_value(connected, control, request):
+    """A stream of a function with no value runs the function on each update, for its
+    effects. Its value is the client's null value. An error from the function ends the
+    stream with that error."""
+    function = connected.call_function(
+        "ConformanceService", "Increment", values.string(name(request))
+    )
+    stream = connected.add_function_stream(function, "")
+    assert stream.get() is None
+    assert wait_until(lambda: control.conformance_service.value(name(request)) >= 3)
+    control.conformance_service.fail_value(name(request), "Failed by the test")
+    assert wait_until(lambda: ended(stream))
+    assert "Failed by the test" in raised(stream.get).message
+
+
 section("Events")
 
 
@@ -581,6 +597,17 @@ def test_call_with_a_call_argument(connected):
         "TestService", "TestClass_GetValue", [values.obj(obj)], {0: create}
     )
     assert connected.run_function(function, "string") == "value=beta"
+
+
+@profile("functions")
+def test_run_without_a_value(connected, control, request):
+    """Running a function with no value runs it once, for its effects, and returns the
+    client's null value."""
+    function = connected.call_function(
+        "ConformanceService", "Increment", values.string(name(request))
+    )
+    assert connected.run_function(function, "") is None
+    assert control.conformance_service.value(name(request)) == 1
 
 
 @profile("functions")

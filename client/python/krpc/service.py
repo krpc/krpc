@@ -663,8 +663,8 @@ class ServiceBase(DynamicType):
             )
             doc = _deprecated_doc(doc, procedure.deprecated_reason, cls._name)
         cls._add_class_method(name, func, doc=doc)
-        cls._add_class_method("_build_call_" + name, build_call)
-        cls._add_class_method("_return_type_" + name, lambda cls: return_type)
+        cls._add_class_method("_build_call__" + name, build_call)
+        cls._add_class_method("_return_type__" + name, lambda cls: return_type)
 
     @classmethod
     def _add_service_property(
@@ -717,9 +717,9 @@ class ServiceBase(DynamicType):
                 return_type,
             )
             getter_return_type = return_type
-            cls._add_method("_build_call_" + member_name, build_call)
+            cls._add_method("_build_call__" + member_name, build_call)
             cls._add_method(
-                "_return_type_" + member_name, lambda self: getter_return_type
+                "_return_type__" + member_name, lambda self: getter_return_type
             )
         if setter:
             param_names, param_types, _, _, _ = cls._parse_procedure(setter)
@@ -738,6 +738,18 @@ class ServiceBase(DynamicType):
                 setter_fn = _wrap_deprecated(
                     setter_fn, qualified_name, setter.deprecated_reason, cls._name
                 )
+            build_set_call = _construct_func(
+                cls._client._build_call,
+                cls._name,
+                setter.name,
+                ["self"],
+                param_names,
+                param_types,
+                [True],
+                [None],
+                None,
+            )
+            cls._add_method("_build_call_set__" + member_name, build_set_call)
         cls._add_property(member_name, getter_fn, setter_fn, doc=doc)
 
     @classmethod
@@ -788,8 +800,8 @@ class ServiceBase(DynamicType):
             )
             doc = _deprecated_doc(doc, procedure.deprecated_reason, cls._name)
         class_cls._add_method(name, func, doc=doc)
-        class_cls._add_method("_build_call_" + name, build_call)
-        class_cls._add_method("_return_type_" + name, lambda self: return_type)
+        class_cls._add_method("_build_call__" + name, build_call)
+        class_cls._add_method("_return_type__" + name, lambda self: return_type)
 
     @classmethod
     def _add_service_class_static_method(
@@ -836,8 +848,8 @@ class ServiceBase(DynamicType):
             )
             doc = _deprecated_doc(doc, procedure.deprecated_reason, cls._name)
         class_cls._add_class_method(name, func, doc=doc)
-        class_cls._add_class_method("_build_call_" + name, build_call)
-        class_cls._add_class_method("_return_type_" + name, lambda cls: return_type)
+        class_cls._add_class_method("_build_call__" + name, build_call)
+        class_cls._add_class_method("_return_type__" + name, lambda cls: return_type)
 
     @classmethod
     def _add_service_class_property(
@@ -898,12 +910,14 @@ class ServiceBase(DynamicType):
                 return_type,
             )
             getter_return_type = return_type
-            class_cls._add_method("_build_call_" + member_name, build_call)
+            class_cls._add_method("_build_call__" + member_name, build_call)
             class_cls._add_method(
-                "_return_type_" + member_name, lambda self: getter_return_type
+                "_return_type__" + member_name, lambda self: getter_return_type
             )
         if setter:
             param_names, param_types, _, _, return_type = cls._parse_procedure(setter)
+            if "self" not in param_names:
+                param_names[0] = "self"
             setter_fn = _construct_func(
                 cls._client._invoke,
                 cls._name,
@@ -919,4 +933,16 @@ class ServiceBase(DynamicType):
                 setter_fn = _wrap_deprecated(
                     setter_fn, qualified_name, setter.deprecated_reason, cls._name
                 )
+            build_set_call = _construct_func(
+                cls._client._build_call,
+                cls._name,
+                setter.name,
+                [],
+                param_names,
+                param_types,
+                [True, True],
+                [None, None],
+                None,
+            )
+            class_cls._add_method("_build_call_set__" + member_name, build_set_call)
         class_cls._add_property(member_name, getter_fn, setter_fn, doc=doc)

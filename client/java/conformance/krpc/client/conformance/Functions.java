@@ -35,6 +35,10 @@ final class Functions {
 
   static StreamHandle addStream(Connection connection, AddFunctionStream command)
       throws Exception {
+    if (command.getType().isEmpty()) {
+      return new StreamHandle(
+          connection.addStream(function(command.getFunction())), value -> Values.resultNone());
+    }
     Function<Object, Value> result = result(command.getType());
     Function<Object, Value> convert = value -> {
       if (value == null && !command.getType().startsWith("nullable ")) {

@@ -9,6 +9,7 @@
 #include <mutex>  // NOLINT(build/c++11)
 #include <stdexcept>
 #include <string>
+#include <type_traits>
 #include <utility>
 
 #include "krpc/client.hpp"
@@ -24,6 +25,22 @@ namespace function_stream_detail {
 struct function_streams;
 }  // namespace function_stream_detail
 
+namespace stream_detail {
+/** The callback of a stream with values of type T, which takes no argument for void. */
+template <typename T>
+struct callback {
+  typedef std::function<void(T)> type;
+};
+template <>
+struct callback<void> {
+  typedef std::function<void()> type;
+};
+}  // namespace stream_detail
+
+/**
+ * A stream. A Stream<void> is a stream of a call or function with no value, which runs on
+ * each update for its effects. Calling it returns nothing, and its callbacks take no argument.
+ */
 template <typename T>
 class Stream {
  public:
@@ -56,7 +73,7 @@ class Stream {
       ends before or during the wait. Throws std::invalid_argument for a negative or NaN
       timeout. */
   bool wait(double timeout = std::numeric_limits<double>::infinity());
-  typedef std::function<void(T)> Callback;
+  typedef typename stream_detail::callback<T>::type Callback;
   /**
    * Add a callback that is invoked whenever the stream is updated. It is invoked straight
    * away with the value the stream already has, if any. An error from the stream does not
@@ -192,20 +209,24 @@ inline T Stream<T>::operator()() {
 template <typename T>
 inline T Stream<T>::decode_value(const std::string& data, bool is_null, bool null_is_an_error,
                                  Client* client) {
-  // A null value is signaled out-of-band by is_null, and leaves the value default
-  // constructed, which for a nullable stream is an empty optional.
-  T value{};
-  if (is_null) {
-    if (null_is_an_error)
-      throw std::runtime_error(
-          "The function produced a null value; use a std::optional for the result");
+  if constexpr (std::is_void_v<T>) {
+    return;
+  } else {
+    // A null value is signaled out-of-band by is_null, and leaves the value default
+    // constructed, which for a nullable stream is an empty optional.
+    T value{};
+    if (is_null) {
+      if (null_is_an_error)
+        throw std::runtime_error(
+            "The function produced a null value; use a std::optional for the result");
+      return value;
+    }
+    // Unqualified, so that argument dependent lookup finds the overload for a type a
+    // service defines at the point this template is used
+    using decoder::decode;
+    decode(value, data, client);
     return value;
   }
-  // Unqualified, so that argument dependent lookup finds the overload for a type a
-  // service defines at the point this template is used
-  using decoder::decode;
-  decode(value, data, client);
-  return value;
 }
 
 template <typename T>
@@ -255,13 +276,18 @@ inline int Stream<T>::add_callback(const Callback& callback) {
   // Captures no handle, as the handle can be moved or destroyed while the callback is added
   auto callback_wrapper = [client = impl->get_client(), null_is_an_error = null_is_an_error,
                            callback](const std::string& data, bool is_null) {
-    T value{};
-    try {
-      value = decode_value(data, is_null, null_is_an_error, client);
-    } catch (const std::exception& exn) {
-      throw CallbackDecodeError(exn.what());
+    if constexpr (std::is_void_v<T>) {
+      (void)null_is_an_error;
+      callback();
+    } else {
+      T value{};
+      try {
+        value = decode_value(data, is_null, null_is_an_error, client);
+      } catch (const std::exception& exn) {
+        throw CallbackDecodeError(exn.what());
+      }
+      callback(std::move(value));
     }
-    callback(std::move(value));
   };
   return impl->add_callback(callback_wrapper);
 }

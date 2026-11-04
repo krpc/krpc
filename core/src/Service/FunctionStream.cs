@@ -10,12 +10,15 @@ namespace KRPC.Service
     {
         readonly global::KRPC.Service.KRPC.Expression function;
         readonly TypeSpec spec;
+        readonly bool hasValue;
 
         public FunctionStream (global::KRPC.Service.KRPC.Expression function)
         {
             function.CheckNoParameters ();
             // Check that the type of the value produced can be sent to the client
-            function.GetValidReturnType ();
+            hasValue = function.HasReturnType;
+            if (hasValue)
+                function.GetValidReturnType ();
             spec = function.FunctionSpec;
             function.Check ();
             function.Compile ();
@@ -30,6 +33,10 @@ namespace KRPC.Service
                 value = function.Evaluate ();
             } catch (System.Exception e) {
                 SetError (e);
+                return;
+            }
+            if (!hasValue) {
+                RanWithNoValue ();
                 return;
             }
             // An encoding error, such as a null element in a list of objects, fails only this

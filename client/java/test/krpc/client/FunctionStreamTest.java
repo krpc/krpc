@@ -1,7 +1,6 @@
 package krpc.client;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
@@ -9,20 +8,16 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 import krpc.client.services.KRPC.Expression;
 import krpc.client.services.KRPC.Type;
 import krpc.client.services.TestService;
-import krpc.client.services.TestService.TestClass;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
  * How the Java type of an argument converts to the type of a function's parameter. The
- * conformance suite covers the rest of server side functions, except a function with no value,
- * as the testees build calls only of procedures with a value.
+ * conformance suite covers the rest of server side functions.
  */
 public class FunctionStreamTest {
 
@@ -41,24 +36,6 @@ public class FunctionStreamTest {
   private Expression identity(Type type) throws RPCException {
     Expression x = Expression.parameter(connection, "x", type);
     return Expression.lambda(connection, Arrays.asList(x), x);
-  }
-
-  @Test
-  public void testRunFunctionSideEffects()
-      throws RPCException {
-    TestClass obj = testService.createTestObject("runeffect");
-    obj.setIntProperty(1);
-    krpc.schema.KRPC.ProcedureCall call = krpc.schema.KRPC.ProcedureCall.newBuilder()
-        .setService("TestService")
-        .setProcedure("TestClass_set_IntProperty")
-        .build();
-    Map<Integer, Expression> arguments = new HashMap<Integer, Expression>();
-    arguments.put(0, Expression.constantObject(connection, RemoteObject.getObjectId(obj)));
-    arguments.put(1, Expression.constantInt(connection, 42));
-    Expression expr = Expression.callWithArguments(connection, call, arguments);
-    assertNull(connection.run(expr));
-    assertEquals(42, obj.getIntProperty());
-    assertThrows(StreamException.class, () -> connection.addStream(expr));
   }
 
   @Test

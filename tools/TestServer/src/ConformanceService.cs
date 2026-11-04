@@ -45,6 +45,16 @@ namespace TestServer
         }
 
         /// <summary>
+        /// Adds one to a named value, so a test can count the runs of a call. Throws as
+        /// <see cref="Value"/> does after <see cref="FailValue"/>.
+        /// </summary>
+        [KRPCProcedure]
+        public static void Increment (string name)
+        {
+            values [name] = Value (name) + 1;
+        }
+
+        /// <summary>
         /// Makes <see cref="Value"/> throw an <see cref="InvalidOperationException"/> with the
         /// given message.
         /// </summary>

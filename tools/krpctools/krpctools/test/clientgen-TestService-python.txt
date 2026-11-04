@@ -136,10 +136,10 @@ class DeprecatedClass(ClassBase):
             self._client._types.string_type
         )
 
-    def _return_type_deprecated_method(self) -> TypeBase:
+    def _return_type__deprecated_method(self) -> TypeBase:
         return self._client._types.string_type
 
-    def _build_call_deprecated_method(self) -> KRPC_pb2.ProcedureCall:
+    def _build_call__deprecated_method(self) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "DeprecatedClass_DeprecatedMethod",
@@ -177,10 +177,19 @@ class TestClass(ClassBase):
             None
         )
 
-    def _return_type_int_property(self) -> TypeBase:
+    def _build_call_set__int_property(self, value: int) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "TestService",
+            "TestClass_set_IntProperty",
+            [self, value],
+            [self._client._types.class_type("TestService", "TestClass"), self._client._types.sint32_type],
+            None
+        )
+
+    def _return_type__int_property(self) -> TypeBase:
         return self._client._types.sint32_type
 
-    def _build_call_int_property(self) -> KRPC_pb2.ProcedureCall:
+    def _build_call__int_property(self) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "TestClass_get_IntProperty",
@@ -214,10 +223,19 @@ class TestClass(ClassBase):
             None
         )
 
-    def _return_type_object_property(self) -> TypeBase:
+    def _build_call_set__object_property(self, value: Optional[TestClass]) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "TestService",
+            "TestClass_set_ObjectProperty",
+            [self, value],
+            [self._client._types.class_type("TestService", "TestClass"), self._client._types.class_type("TestService", "TestClass")],
+            None
+        )
+
+    def _return_type__object_property(self) -> TypeBase:
         return self._client._types.class_type("TestService", "TestClass")
 
-    def _build_call_object_property(self) -> KRPC_pb2.ProcedureCall:
+    def _build_call__object_property(self) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "TestClass_get_ObjectProperty",
@@ -240,6 +258,15 @@ class TestClass(ClassBase):
             None
         )
 
+    def _build_call_set__string_property_private_get(self, value: str) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "TestService",
+            "TestClass_set_StringPropertyPrivateGet",
+            [self, value],
+            [self._client._types.class_type("TestService", "TestClass"), self._client._types.string_type],
+            None
+        )
+
     @property
     def string_property_private_set(self) -> str:
         return self._client._invoke(
@@ -250,10 +277,10 @@ class TestClass(ClassBase):
             self._client._types.string_type
         )
 
-    def _return_type_string_property_private_set(self) -> TypeBase:
+    def _return_type__string_property_private_set(self) -> TypeBase:
         return self._client._types.string_type
 
-    def _build_call_string_property_private_set(self) -> KRPC_pb2.ProcedureCall:
+    def _build_call__string_property_private_set(self) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "TestClass_get_StringPropertyPrivateSet",
@@ -271,10 +298,10 @@ class TestClass(ClassBase):
             self._client._types.class_type("TestService", "TestClass")
         )
 
-    def _return_type_echo_nullable_object(self) -> TypeBase:
+    def _return_type__echo_nullable_object(self) -> TypeBase:
         return self._client._types.class_type("TestService", "TestClass")
 
-    def _build_call_echo_nullable_object(self, value: Optional[TestClass]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__echo_nullable_object(self, value: Optional[TestClass]) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "TestClass_EchoNullableObject",
@@ -292,10 +319,10 @@ class TestClass(ClassBase):
             self._client._types.string_type
         )
 
-    def _return_type_float_to_string(self) -> TypeBase:
+    def _return_type__float_to_string(self) -> TypeBase:
         return self._client._types.string_type
 
-    def _build_call_float_to_string(self, x: float) -> KRPC_pb2.ProcedureCall:
+    def _build_call__float_to_string(self, x: float) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "TestClass_FloatToString",
@@ -316,10 +343,10 @@ class TestClass(ClassBase):
             self._client._types.string_type
         )
 
-    def _return_type_get_value(self) -> TypeBase:
+    def _return_type__get_value(self) -> TypeBase:
         return self._client._types.string_type
 
-    def _build_call_get_value(self) -> KRPC_pb2.ProcedureCall:
+    def _build_call__get_value(self) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "TestClass_GetValue",
@@ -337,10 +364,10 @@ class TestClass(ClassBase):
             self._client._types.string_type
         )
 
-    def _return_type_object_to_string(self) -> TypeBase:
+    def _return_type__object_to_string(self) -> TypeBase:
         return self._client._types.string_type
 
-    def _build_call_object_to_string(self, other: Optional[TestClass]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__object_to_string(self, other: Optional[TestClass]) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "TestClass_ObjectToString",
@@ -358,10 +385,10 @@ class TestClass(ClassBase):
             self._client._types.string_type
         )
 
-    def _return_type_optional_arguments(self) -> TypeBase:
+    def _return_type__optional_arguments(self) -> TypeBase:
         return self._client._types.string_type
 
-    def _build_call_optional_arguments(self, x: str, y: str = 'foo', z: str = 'bar', obj: Optional[TestClass] = None) -> KRPC_pb2.ProcedureCall:
+    def _build_call__optional_arguments(self, x: str, y: str = 'foo', z: str = 'bar', obj: Optional[TestClass] = None) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "TestClass_OptionalArguments",
@@ -391,12 +418,12 @@ class TestClass(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_static_method(cls) -> TypeBase:
+    def _return_type__static_method(cls) -> TypeBase:
         self = cls
         return self._client._types.string_type
 
     @StaticMethod
-    def _build_call_static_method(cls, a: str = '', b: str = '') -> KRPC_pb2.ProcedureCall:
+    def _build_call__static_method(cls, a: str = '', b: str = '') -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "TestService",
@@ -418,12 +445,12 @@ class TestClass(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_static_nullable_object(cls) -> TypeBase:
+    def _return_type__static_nullable_object(cls) -> TypeBase:
         self = cls
         return self._client._types.class_type("TestService", "TestClass")
 
     @StaticMethod
-    def _build_call_static_nullable_object(cls, value: Optional[TestClass]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__static_nullable_object(cls, value: Optional[TestClass]) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "TestService",
@@ -445,12 +472,12 @@ class TestClass(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_static_optional_arguments(cls) -> TypeBase:
+    def _return_type__static_optional_arguments(cls) -> TypeBase:
         self = cls
         return self._client._types.string_type
 
     @StaticMethod
-    def _build_call_static_optional_arguments(cls, x: str, y: str = 'foo', z: str = 'bar', obj: Optional[TestClass] = None) -> KRPC_pb2.ProcedureCall:
+    def _build_call__static_optional_arguments(cls, x: str, y: str = 'foo', z: str = 'bar', obj: Optional[TestClass] = None) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
             "TestService",
@@ -577,10 +604,19 @@ class TestService(_TestServiceDefinitions):
             None
         )
 
-    def _return_type_deprecated_property(self) -> TypeBase:
+    def _build_call_set__deprecated_property(self, value: str) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "TestService",
+            "set_DeprecatedProperty",
+            [value],
+            [self._client._types.string_type],
+            None
+        )
+
+    def _return_type__deprecated_property(self) -> TypeBase:
         return self._client._types.string_type
 
-    def _build_call_deprecated_property(self) -> KRPC_pb2.ProcedureCall:
+    def _build_call__deprecated_property(self) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "get_DeprecatedProperty",
@@ -609,10 +645,19 @@ class TestService(_TestServiceDefinitions):
             None
         )
 
-    def _return_type_nullable_object(self) -> TypeBase:
+    def _build_call_set__nullable_object(self, value: Optional[TestClass]) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "TestService",
+            "set_NullableObject",
+            [value],
+            [self._client._types.class_type("TestService", "TestClass")],
+            None
+        )
+
+    def _return_type__nullable_object(self) -> TypeBase:
         return self._client._types.class_type("TestService", "TestClass")
 
-    def _build_call_nullable_object(self) -> KRPC_pb2.ProcedureCall:
+    def _build_call__nullable_object(self) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "get_NullableObject",
@@ -646,10 +691,19 @@ class TestService(_TestServiceDefinitions):
             None
         )
 
-    def _return_type_object_property(self) -> TypeBase:
+    def _build_call_set__object_property(self, value: Optional[TestClass]) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "TestService",
+            "set_ObjectProperty",
+            [value],
+            [self._client._types.class_type("TestService", "TestClass")],
+            None
+        )
+
+    def _return_type__object_property(self) -> TypeBase:
         return self._client._types.class_type("TestService", "TestClass")
 
-    def _build_call_object_property(self) -> KRPC_pb2.ProcedureCall:
+    def _build_call__object_property(self) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "get_ObjectProperty",
@@ -681,10 +735,19 @@ class TestService(_TestServiceDefinitions):
             None
         )
 
-    def _return_type_string_property(self) -> TypeBase:
+    def _build_call_set__string_property(self, value: str) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "TestService",
+            "set_StringProperty",
+            [value],
+            [self._client._types.string_type],
+            None
+        )
+
+    def _return_type__string_property(self) -> TypeBase:
         return self._client._types.string_type
 
-    def _build_call_string_property(self) -> KRPC_pb2.ProcedureCall:
+    def _build_call__string_property(self) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "get_StringProperty",
@@ -707,6 +770,15 @@ class TestService(_TestServiceDefinitions):
             None
         )
 
+    def _build_call_set__string_property_private_get(self, value: str) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "TestService",
+            "set_StringPropertyPrivateGet",
+            [value],
+            [self._client._types.string_type],
+            None
+        )
+
     @property
     def string_property_private_set(self) -> str:
         return self._client._invoke(
@@ -717,10 +789,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.string_type
         )
 
-    def _return_type_string_property_private_set(self) -> TypeBase:
+    def _return_type__string_property_private_set(self) -> TypeBase:
         return self._client._types.string_type
 
-    def _build_call_string_property_private_set(self) -> KRPC_pb2.ProcedureCall:
+    def _build_call__string_property_private_set(self) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "get_StringPropertyPrivateSet",
@@ -738,10 +810,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.string_type
         )
 
-    def _return_type_add_multiple_values(self) -> TypeBase:
+    def _return_type__add_multiple_values(self) -> TypeBase:
         return self._client._types.string_type
 
-    def _build_call_add_multiple_values(self, x: float, y: int, z: int) -> KRPC_pb2.ProcedureCall:
+    def _build_call__add_multiple_values(self, x: float, y: int, z: int) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "AddMultipleValues",
@@ -759,10 +831,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.dictionary_type(self._client._types.string_type, self._client._types.class_type("TestService", "TestClass"))
         )
 
-    def _return_type_add_to_object_dictionary(self) -> TypeBase:
+    def _return_type__add_to_object_dictionary(self) -> TypeBase:
         return self._client._types.dictionary_type(self._client._types.string_type, self._client._types.class_type("TestService", "TestClass"))
 
-    def _build_call_add_to_object_dictionary(self, d: Dict[str, TestClass], key: str) -> KRPC_pb2.ProcedureCall:
+    def _build_call__add_to_object_dictionary(self, d: Dict[str, TestClass], key: str) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "AddToObjectDictionary",
@@ -780,10 +852,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.list_type(self._client._types.class_type("TestService", "TestClass"))
         )
 
-    def _return_type_add_to_object_list(self) -> TypeBase:
+    def _return_type__add_to_object_list(self) -> TypeBase:
         return self._client._types.list_type(self._client._types.class_type("TestService", "TestClass"))
 
-    def _build_call_add_to_object_list(self, l: List[TestClass], value: str) -> KRPC_pb2.ProcedureCall:
+    def _build_call__add_to_object_list(self, l: List[TestClass], value: str) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "AddToObjectList",
@@ -801,10 +873,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.set_type(self._client._types.class_type("TestService", "TestClass"))
         )
 
-    def _return_type_add_to_object_set(self) -> TypeBase:
+    def _return_type__add_to_object_set(self) -> TypeBase:
         return self._client._types.set_type(self._client._types.class_type("TestService", "TestClass"))
 
-    def _build_call_add_to_object_set(self, h: Set[TestClass], value: str) -> KRPC_pb2.ProcedureCall:
+    def _build_call__add_to_object_set(self, h: Set[TestClass], value: str) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "AddToObjectSet",
@@ -822,10 +894,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.sint32_type
         )
 
-    def _return_type_blocking_procedure(self) -> TypeBase:
+    def _return_type__blocking_procedure(self) -> TypeBase:
         return self._client._types.sint32_type
 
-    def _build_call_blocking_procedure(self, n: int, sum: int = 0) -> KRPC_pb2.ProcedureCall:
+    def _build_call__blocking_procedure(self, n: int, sum: int = 0) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "BlockingProcedure",
@@ -843,10 +915,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.string_type
         )
 
-    def _return_type_bool_to_string(self) -> TypeBase:
+    def _return_type__bool_to_string(self) -> TypeBase:
         return self._client._types.string_type
 
-    def _build_call_bool_to_string(self, value: bool) -> KRPC_pb2.ProcedureCall:
+    def _build_call__bool_to_string(self, value: bool) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "BoolToString",
@@ -864,10 +936,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.bytes_type
         )
 
-    def _return_type_bytes_default(self) -> TypeBase:
+    def _return_type__bytes_default(self) -> TypeBase:
         return self._client._types.bytes_type
 
-    def _build_call_bytes_default(self, x: bytes = b'\xca\xfe') -> KRPC_pb2.ProcedureCall:
+    def _build_call__bytes_default(self, x: bytes = b'\xca\xfe') -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "BytesDefault",
@@ -885,10 +957,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.string_type
         )
 
-    def _return_type_bytes_to_hex_string(self) -> TypeBase:
+    def _return_type__bytes_to_hex_string(self) -> TypeBase:
         return self._client._types.string_type
 
-    def _build_call_bytes_to_hex_string(self, value: bytes) -> KRPC_pb2.ProcedureCall:
+    def _build_call__bytes_to_hex_string(self, value: bytes) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "BytesToHexString",
@@ -906,10 +978,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.sint32_type
         )
 
-    def _return_type_counter(self) -> TypeBase:
+    def _return_type__counter(self) -> TypeBase:
         return self._client._types.sint32_type
 
-    def _build_call_counter(self, id: str = '', divisor: int = 1) -> KRPC_pb2.ProcedureCall:
+    def _build_call__counter(self, id: str = '', divisor: int = 1) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "Counter",
@@ -931,10 +1003,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.struct_type("TestService", "TestStruct")
         )
 
-    def _return_type_counter_struct(self) -> TypeBase:
+    def _return_type__counter_struct(self) -> TypeBase:
         return self._client._types.struct_type("TestService", "TestStruct")
 
-    def _build_call_counter_struct(self, id: str = '') -> KRPC_pb2.ProcedureCall:
+    def _build_call__counter_struct(self, id: str = '') -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "CounterStruct",
@@ -952,10 +1024,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.class_type("TestService", "TestClass")
         )
 
-    def _return_type_create_test_object(self) -> TypeBase:
+    def _return_type__create_test_object(self) -> TypeBase:
         return self._client._types.class_type("TestService", "TestClass")
 
-    def _build_call_create_test_object(self, value: str) -> KRPC_pb2.ProcedureCall:
+    def _build_call__create_test_object(self, value: str) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "CreateTestObject",
@@ -979,10 +1051,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.string_type
         )
 
-    def _return_type_deprecated_procedure(self) -> TypeBase:
+    def _return_type__deprecated_procedure(self) -> TypeBase:
         return self._client._types.string_type
 
-    def _build_call_deprecated_procedure(self, value: float) -> KRPC_pb2.ProcedureCall:
+    def _build_call__deprecated_procedure(self, value: float) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "DeprecatedProcedure",
@@ -1006,10 +1078,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.string_type
         )
 
-    def _return_type_deprecated_procedure_no_message(self) -> TypeBase:
+    def _return_type__deprecated_procedure_no_message(self) -> TypeBase:
         return self._client._types.string_type
 
-    def _build_call_deprecated_procedure_no_message(self, value: float) -> KRPC_pb2.ProcedureCall:
+    def _build_call__deprecated_procedure_no_message(self, value: float) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "DeprecatedProcedureNoMessage",
@@ -1027,10 +1099,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.dictionary_type(self._client._types.sint32_type, self._client._types.bool_type)
         )
 
-    def _return_type_dictionary_default(self) -> TypeBase:
+    def _return_type__dictionary_default(self) -> TypeBase:
         return self._client._types.dictionary_type(self._client._types.sint32_type, self._client._types.bool_type)
 
-    def _build_call_dictionary_default(self, x: Dict[int, bool] = {1: False, 2: True}) -> KRPC_pb2.ProcedureCall:
+    def _build_call__dictionary_default(self, x: Dict[int, bool] = {1: False, 2: True}) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "DictionaryDefault",
@@ -1051,10 +1123,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.list_type(self._client._types.double_type)
         )
 
-    def _return_type_double_special_defaults(self) -> TypeBase:
+    def _return_type__double_special_defaults(self) -> TypeBase:
         return self._client._types.list_type(self._client._types.double_type)
 
-    def _build_call_double_special_defaults(self, nan: float = float("nan"), infinity: float = float("inf"), negative_infinity: float = -float("inf"), maximum: float = krpc.limits.DOUBLE_MAX, lowest: float = krpc.limits.DOUBLE_LOWEST) -> KRPC_pb2.ProcedureCall:
+    def _build_call__double_special_defaults(self, nan: float = float("nan"), infinity: float = float("inf"), negative_infinity: float = -float("inf"), maximum: float = krpc.limits.DOUBLE_MAX, lowest: float = krpc.limits.DOUBLE_LOWEST) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "DoubleSpecialDefaults",
@@ -1072,10 +1144,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.string_type
         )
 
-    def _return_type_double_to_string(self) -> TypeBase:
+    def _return_type__double_to_string(self) -> TypeBase:
         return self._client._types.string_type
 
-    def _build_call_double_to_string(self, value: float) -> KRPC_pb2.ProcedureCall:
+    def _build_call__double_to_string(self, value: float) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "DoubleToString",
@@ -1096,10 +1168,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.string_type
         )
 
-    def _return_type_dump_expression_tree(self) -> TypeBase:
+    def _return_type__dump_expression_tree(self) -> TypeBase:
         return self._client._types.string_type
 
-    def _build_call_dump_expression_tree(self, expression: _service_krpc.Expression) -> KRPC_pb2.ProcedureCall:
+    def _build_call__dump_expression_tree(self, expression: _service_krpc.Expression) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "DumpExpressionTree",
@@ -1117,10 +1189,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.dictionary_type(self._client._types.string_type, self._client._types.nullable(self._client._types.class_type("TestService", "TestClass")))
         )
 
-    def _return_type_echo_dictionary_of_nullable_objects(self) -> TypeBase:
+    def _return_type__echo_dictionary_of_nullable_objects(self) -> TypeBase:
         return self._client._types.dictionary_type(self._client._types.string_type, self._client._types.nullable(self._client._types.class_type("TestService", "TestClass")))
 
-    def _build_call_echo_dictionary_of_nullable_objects(self, d: Dict[str, Optional[TestClass]]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__echo_dictionary_of_nullable_objects(self, d: Dict[str, Optional[TestClass]]) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "EchoDictionaryOfNullableObjects",
@@ -1138,10 +1210,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.list_type(self._client._types.nullable(self._client._types.sint32_type))
         )
 
-    def _return_type_echo_list_of_nullable_ints(self) -> TypeBase:
+    def _return_type__echo_list_of_nullable_ints(self) -> TypeBase:
         return self._client._types.list_type(self._client._types.nullable(self._client._types.sint32_type))
 
-    def _build_call_echo_list_of_nullable_ints(self, l: List[Optional[int]]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__echo_list_of_nullable_ints(self, l: List[Optional[int]]) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "EchoListOfNullableInts",
@@ -1159,10 +1231,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.list_type(self._client._types.nullable(self._client._types.class_type("TestService", "TestClass")))
         )
 
-    def _return_type_echo_list_of_nullable_objects(self) -> TypeBase:
+    def _return_type__echo_list_of_nullable_objects(self) -> TypeBase:
         return self._client._types.list_type(self._client._types.nullable(self._client._types.class_type("TestService", "TestClass")))
 
-    def _build_call_echo_list_of_nullable_objects(self, l: List[Optional[TestClass]]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__echo_list_of_nullable_objects(self, l: List[Optional[TestClass]]) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "EchoListOfNullableObjects",
@@ -1180,10 +1252,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.list_type(self._client._types.list_type(self._client._types.nullable(self._client._types.class_type("TestService", "TestClass"))))
         )
 
-    def _return_type_echo_nested_list_of_nullable_objects(self) -> TypeBase:
+    def _return_type__echo_nested_list_of_nullable_objects(self) -> TypeBase:
         return self._client._types.list_type(self._client._types.list_type(self._client._types.nullable(self._client._types.class_type("TestService", "TestClass"))))
 
-    def _build_call_echo_nested_list_of_nullable_objects(self, l: List[List[Optional[TestClass]]]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__echo_nested_list_of_nullable_objects(self, l: List[List[Optional[TestClass]]]) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "EchoNestedListOfNullableObjects",
@@ -1201,10 +1273,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.struct_type("TestService", "TestNestedNullableStruct")
         )
 
-    def _return_type_echo_nested_nullable_struct(self) -> TypeBase:
+    def _return_type__echo_nested_nullable_struct(self) -> TypeBase:
         return self._client._types.struct_type("TestService", "TestNestedNullableStruct")
 
-    def _build_call_echo_nested_nullable_struct(self, value: TestNestedNullableStruct) -> KRPC_pb2.ProcedureCall:
+    def _build_call__echo_nested_nullable_struct(self, value: TestNestedNullableStruct) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "EchoNestedNullableStruct",
@@ -1222,10 +1294,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.bool_type
         )
 
-    def _return_type_echo_nullable_bool(self) -> TypeBase:
+    def _return_type__echo_nullable_bool(self) -> TypeBase:
         return self._client._types.bool_type
 
-    def _build_call_echo_nullable_bool(self, value: Optional[bool]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__echo_nullable_bool(self, value: Optional[bool]) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "EchoNullableBool",
@@ -1243,10 +1315,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.bytes_type
         )
 
-    def _return_type_echo_nullable_bytes(self) -> TypeBase:
+    def _return_type__echo_nullable_bytes(self) -> TypeBase:
         return self._client._types.bytes_type
 
-    def _build_call_echo_nullable_bytes(self, value: Optional[bytes]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__echo_nullable_bytes(self, value: Optional[bytes]) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "EchoNullableBytes",
@@ -1264,10 +1336,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.dictionary_type(self._client._types.string_type, self._client._types.sint32_type)
         )
 
-    def _return_type_echo_nullable_dictionary(self) -> TypeBase:
+    def _return_type__echo_nullable_dictionary(self) -> TypeBase:
         return self._client._types.dictionary_type(self._client._types.string_type, self._client._types.sint32_type)
 
-    def _build_call_echo_nullable_dictionary(self, d: Optional[Dict[str, int]]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__echo_nullable_dictionary(self, d: Optional[Dict[str, int]]) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "EchoNullableDictionary",
@@ -1285,10 +1357,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.double_type
         )
 
-    def _return_type_echo_nullable_double(self) -> TypeBase:
+    def _return_type__echo_nullable_double(self) -> TypeBase:
         return self._client._types.double_type
 
-    def _build_call_echo_nullable_double(self, value: Optional[float]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__echo_nullable_double(self, value: Optional[float]) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "EchoNullableDouble",
@@ -1306,10 +1378,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.enumeration_type("TestService", "TestEnum")
         )
 
-    def _return_type_echo_nullable_enum(self) -> TypeBase:
+    def _return_type__echo_nullable_enum(self) -> TypeBase:
         return self._client._types.enumeration_type("TestService", "TestEnum")
 
-    def _build_call_echo_nullable_enum(self, x: Optional[TestEnum]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__echo_nullable_enum(self, x: Optional[TestEnum]) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "EchoNullableEnum",
@@ -1327,10 +1399,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.float_type
         )
 
-    def _return_type_echo_nullable_float(self) -> TypeBase:
+    def _return_type__echo_nullable_float(self) -> TypeBase:
         return self._client._types.float_type
 
-    def _build_call_echo_nullable_float(self, value: Optional[float]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__echo_nullable_float(self, value: Optional[float]) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "EchoNullableFloat",
@@ -1355,10 +1427,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.sint32_type
         )
 
-    def _return_type_echo_nullable_int(self) -> TypeBase:
+    def _return_type__echo_nullable_int(self) -> TypeBase:
         return self._client._types.sint32_type
 
-    def _build_call_echo_nullable_int(self, value: Optional[int]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__echo_nullable_int(self, value: Optional[int]) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "EchoNullableInt",
@@ -1376,10 +1448,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.list_type(self._client._types.sint32_type)
         )
 
-    def _return_type_echo_nullable_list(self) -> TypeBase:
+    def _return_type__echo_nullable_list(self) -> TypeBase:
         return self._client._types.list_type(self._client._types.sint32_type)
 
-    def _build_call_echo_nullable_list(self, l: Optional[List[int]]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__echo_nullable_list(self, l: Optional[List[int]]) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "EchoNullableList",
@@ -1397,10 +1469,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.sint64_type
         )
 
-    def _return_type_echo_nullable_long(self) -> TypeBase:
+    def _return_type__echo_nullable_long(self) -> TypeBase:
         return self._client._types.sint64_type
 
-    def _build_call_echo_nullable_long(self, value: Optional[int]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__echo_nullable_long(self, value: Optional[int]) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "EchoNullableLong",
@@ -1418,10 +1490,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.set_type(self._client._types.sint32_type)
         )
 
-    def _return_type_echo_nullable_set(self) -> TypeBase:
+    def _return_type__echo_nullable_set(self) -> TypeBase:
         return self._client._types.set_type(self._client._types.sint32_type)
 
-    def _build_call_echo_nullable_set(self, h: Optional[Set[int]]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__echo_nullable_set(self, h: Optional[Set[int]]) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "EchoNullableSet",
@@ -1439,10 +1511,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.string_type
         )
 
-    def _return_type_echo_nullable_string(self) -> TypeBase:
+    def _return_type__echo_nullable_string(self) -> TypeBase:
         return self._client._types.string_type
 
-    def _build_call_echo_nullable_string(self, value: Optional[str]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__echo_nullable_string(self, value: Optional[str]) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "EchoNullableString",
@@ -1460,10 +1532,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.tuple_type(self._client._types.sint32_type, self._client._types.sint64_type)
         )
 
-    def _return_type_echo_nullable_tuple(self) -> TypeBase:
+    def _return_type__echo_nullable_tuple(self) -> TypeBase:
         return self._client._types.tuple_type(self._client._types.sint32_type, self._client._types.sint64_type)
 
-    def _build_call_echo_nullable_tuple(self, t: Optional[Tuple[int,int]]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__echo_nullable_tuple(self, t: Optional[Tuple[int,int]]) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "EchoNullableTuple",
@@ -1481,10 +1553,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.uint32_type
         )
 
-    def _return_type_echo_nullable_u_int(self) -> TypeBase:
+    def _return_type__echo_nullable_u_int(self) -> TypeBase:
         return self._client._types.uint32_type
 
-    def _build_call_echo_nullable_u_int(self, value: Optional[int]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__echo_nullable_u_int(self, value: Optional[int]) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "EchoNullableUInt",
@@ -1502,10 +1574,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.uint64_type
         )
 
-    def _return_type_echo_nullable_u_long(self) -> TypeBase:
+    def _return_type__echo_nullable_u_long(self) -> TypeBase:
         return self._client._types.uint64_type
 
-    def _build_call_echo_nullable_u_long(self, value: Optional[int]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__echo_nullable_u_long(self, value: Optional[int]) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "EchoNullableULong",
@@ -1523,10 +1595,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.set_type(self._client._types.string_type)
         )
 
-    def _return_type_echo_string_set(self) -> TypeBase:
+    def _return_type__echo_string_set(self) -> TypeBase:
         return self._client._types.set_type(self._client._types.string_type)
 
-    def _build_call_echo_string_set(self, h: Set[str]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__echo_string_set(self, h: Set[str]) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "EchoStringSet",
@@ -1544,10 +1616,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.class_type("TestService", "TestClass")
         )
 
-    def _return_type_echo_test_object(self) -> TypeBase:
+    def _return_type__echo_test_object(self) -> TypeBase:
         return self._client._types.class_type("TestService", "TestClass")
 
-    def _build_call_echo_test_object(self, value: Optional[TestClass]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__echo_test_object(self, value: Optional[TestClass]) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "EchoTestObject",
@@ -1565,10 +1637,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.tuple_type(self._client._types.sint32_type, self._client._types.nullable(self._client._types.class_type("TestService", "TestClass")))
         )
 
-    def _return_type_echo_tuple_with_a_nullable_object(self) -> TypeBase:
+    def _return_type__echo_tuple_with_a_nullable_object(self) -> TypeBase:
         return self._client._types.tuple_type(self._client._types.sint32_type, self._client._types.nullable(self._client._types.class_type("TestService", "TestClass")))
 
-    def _build_call_echo_tuple_with_a_nullable_object(self, t: Tuple[int,Optional[TestClass]]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__echo_tuple_with_a_nullable_object(self, t: Tuple[int,Optional[TestClass]]) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "EchoTupleWithANullableObject",
@@ -1586,10 +1658,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.list_type(self._client._types.string_type)
         )
 
-    def _return_type_empty_list_default(self) -> TypeBase:
+    def _return_type__empty_list_default(self) -> TypeBase:
         return self._client._types.list_type(self._client._types.string_type)
 
-    def _build_call_empty_list_default(self, x: List[str] = []) -> KRPC_pb2.ProcedureCall:
+    def _build_call__empty_list_default(self, x: List[str] = []) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "EmptyListDefault",
@@ -1607,10 +1679,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.enumeration_type("TestService", "TestEnum")
         )
 
-    def _return_type_enum_default(self) -> TypeBase:
+    def _return_type__enum_default(self) -> TypeBase:
         return self._client._types.enumeration_type("TestService", "TestEnum")
 
-    def _build_call_enum_default(self, x: TestEnum = TestEnum.value_c) -> KRPC_pb2.ProcedureCall:
+    def _build_call__enum_default(self, x: TestEnum = TestEnum.value_c) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "EnumDefault",
@@ -1628,10 +1700,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.enumeration_type("TestService", "TestEnum")
         )
 
-    def _return_type_enum_echo(self) -> TypeBase:
+    def _return_type__enum_echo(self) -> TypeBase:
         return self._client._types.enumeration_type("TestService", "TestEnum")
 
-    def _build_call_enum_echo(self, x: TestEnum) -> KRPC_pb2.ProcedureCall:
+    def _build_call__enum_echo(self, x: TestEnum) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "EnumEcho",
@@ -1649,10 +1721,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.list_type(self._client._types.enumeration_type("TestService", "TestEnum"))
         )
 
-    def _return_type_enum_list_default(self) -> TypeBase:
+    def _return_type__enum_list_default(self) -> TypeBase:
         return self._client._types.list_type(self._client._types.enumeration_type("TestService", "TestEnum"))
 
-    def _build_call_enum_list_default(self, x: List[TestEnum] = [TestEnum.value_b, TestEnum.value_c]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__enum_list_default(self, x: List[TestEnum] = [TestEnum.value_b, TestEnum.value_c]) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "EnumListDefault",
@@ -1670,10 +1742,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.string_type
         )
 
-    def _return_type_enum_to_string(self) -> TypeBase:
+    def _return_type__enum_to_string(self) -> TypeBase:
         return self._client._types.string_type
 
-    def _build_call_enum_to_string(self, x: TestEnum) -> KRPC_pb2.ProcedureCall:
+    def _build_call__enum_to_string(self, x: TestEnum) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "EnumToString",
@@ -1695,10 +1767,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.list_type(self._client._types.float_type)
         )
 
-    def _return_type_float_special_defaults(self) -> TypeBase:
+    def _return_type__float_special_defaults(self) -> TypeBase:
         return self._client._types.list_type(self._client._types.float_type)
 
-    def _build_call_float_special_defaults(self, nan: float = float("nan"), infinity: float = float("inf"), negative_infinity: float = -float("inf"), maximum: float = krpc.limits.FLOAT_MAX, lowest: float = krpc.limits.FLOAT_LOWEST, fraction: float = 0.1) -> KRPC_pb2.ProcedureCall:
+    def _build_call__float_special_defaults(self, nan: float = float("nan"), infinity: float = float("inf"), negative_infinity: float = -float("inf"), maximum: float = krpc.limits.FLOAT_MAX, lowest: float = krpc.limits.FLOAT_LOWEST, fraction: float = 0.1) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "FloatSpecialDefaults",
@@ -1719,10 +1791,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.string_type
         )
 
-    def _return_type_float_to_string(self) -> TypeBase:
+    def _return_type__float_to_string(self) -> TypeBase:
         return self._client._types.string_type
 
-    def _build_call_float_to_string(self, value: float) -> KRPC_pb2.ProcedureCall:
+    def _build_call__float_to_string(self, value: float) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "FloatToString",
@@ -1740,10 +1812,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.bytes_type
         )
 
-    def _return_type_hex_string_to_bytes(self) -> TypeBase:
+    def _return_type__hex_string_to_bytes(self) -> TypeBase:
         return self._client._types.bytes_type
 
-    def _build_call_hex_string_to_bytes(self, value: str) -> KRPC_pb2.ProcedureCall:
+    def _build_call__hex_string_to_bytes(self, value: str) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "HexStringToBytes",
@@ -1761,10 +1833,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.dictionary_type(self._client._types.string_type, self._client._types.sint32_type)
         )
 
-    def _return_type_increment_dictionary(self) -> TypeBase:
+    def _return_type__increment_dictionary(self) -> TypeBase:
         return self._client._types.dictionary_type(self._client._types.string_type, self._client._types.sint32_type)
 
-    def _build_call_increment_dictionary(self, d: Dict[str, int]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__increment_dictionary(self, d: Dict[str, int]) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "IncrementDictionary",
@@ -1782,10 +1854,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.list_type(self._client._types.sint32_type)
         )
 
-    def _return_type_increment_list(self) -> TypeBase:
+    def _return_type__increment_list(self) -> TypeBase:
         return self._client._types.list_type(self._client._types.sint32_type)
 
-    def _build_call_increment_list(self, l: List[int]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__increment_list(self, l: List[int]) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "IncrementList",
@@ -1803,10 +1875,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.list_type(self._client._types.struct_type("TestService", "TestStruct"))
         )
 
-    def _return_type_increment_list_of_structs(self) -> TypeBase:
+    def _return_type__increment_list_of_structs(self) -> TypeBase:
         return self._client._types.list_type(self._client._types.struct_type("TestService", "TestStruct"))
 
-    def _build_call_increment_list_of_structs(self, l: List[TestStruct]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__increment_list_of_structs(self, l: List[TestStruct]) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "IncrementListOfStructs",
@@ -1824,10 +1896,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.dictionary_type(self._client._types.string_type, self._client._types.list_type(self._client._types.sint32_type))
         )
 
-    def _return_type_increment_nested_collection(self) -> TypeBase:
+    def _return_type__increment_nested_collection(self) -> TypeBase:
         return self._client._types.dictionary_type(self._client._types.string_type, self._client._types.list_type(self._client._types.sint32_type))
 
-    def _build_call_increment_nested_collection(self, d: Dict[str, List[int]]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__increment_nested_collection(self, d: Dict[str, List[int]]) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "IncrementNestedCollection",
@@ -1845,10 +1917,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.set_type(self._client._types.sint32_type)
         )
 
-    def _return_type_increment_set(self) -> TypeBase:
+    def _return_type__increment_set(self) -> TypeBase:
         return self._client._types.set_type(self._client._types.sint32_type)
 
-    def _build_call_increment_set(self, h: Set[int]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__increment_set(self, h: Set[int]) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "IncrementSet",
@@ -1866,10 +1938,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.tuple_type(self._client._types.sint32_type, self._client._types.sint64_type)
         )
 
-    def _return_type_increment_tuple(self) -> TypeBase:
+    def _return_type__increment_tuple(self) -> TypeBase:
         return self._client._types.tuple_type(self._client._types.sint32_type, self._client._types.sint64_type)
 
-    def _build_call_increment_tuple(self, t: Tuple[int,int]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__increment_tuple(self, t: Tuple[int,int]) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "IncrementTuple",
@@ -1890,10 +1962,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.list_type(self._client._types.sint32_type)
         )
 
-    def _return_type_int32_special_defaults(self) -> TypeBase:
+    def _return_type__int32_special_defaults(self) -> TypeBase:
         return self._client._types.list_type(self._client._types.sint32_type)
 
-    def _build_call_int32_special_defaults(self, maximum: int = krpc.limits.SINT32_MAX, minimum: int = krpc.limits.SINT32_MIN) -> KRPC_pb2.ProcedureCall:
+    def _build_call__int32_special_defaults(self, maximum: int = krpc.limits.SINT32_MAX, minimum: int = krpc.limits.SINT32_MIN) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "Int32SpecialDefaults",
@@ -1911,10 +1983,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.string_type
         )
 
-    def _return_type_int32_to_string(self) -> TypeBase:
+    def _return_type__int32_to_string(self) -> TypeBase:
         return self._client._types.string_type
 
-    def _build_call_int32_to_string(self, value: int) -> KRPC_pb2.ProcedureCall:
+    def _build_call__int32_to_string(self, value: int) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "Int32ToString",
@@ -1935,10 +2007,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.list_type(self._client._types.sint64_type)
         )
 
-    def _return_type_int64_special_defaults(self) -> TypeBase:
+    def _return_type__int64_special_defaults(self) -> TypeBase:
         return self._client._types.list_type(self._client._types.sint64_type)
 
-    def _build_call_int64_special_defaults(self, maximum: int = krpc.limits.SINT64_MAX, minimum: int = krpc.limits.SINT64_MIN) -> KRPC_pb2.ProcedureCall:
+    def _build_call__int64_special_defaults(self, maximum: int = krpc.limits.SINT64_MAX, minimum: int = krpc.limits.SINT64_MIN) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "Int64SpecialDefaults",
@@ -1956,10 +2028,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.string_type
         )
 
-    def _return_type_int64_to_string(self) -> TypeBase:
+    def _return_type__int64_to_string(self) -> TypeBase:
         return self._client._types.string_type
 
-    def _build_call_int64_to_string(self, value: int) -> KRPC_pb2.ProcedureCall:
+    def _build_call__int64_to_string(self, value: int) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "Int64ToString",
@@ -1990,10 +2062,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.string_type
         )
 
-    def _return_type_join_with_at_sign(self) -> TypeBase:
+    def _return_type__join_with_at_sign(self) -> TypeBase:
         return self._client._types.string_type
 
-    def _build_call_join_with_at_sign(self, first_value: str, from_: str) -> KRPC_pb2.ProcedureCall:
+    def _build_call__join_with_at_sign(self, first_value: str, from_: str) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "JoinWithAtSign",
@@ -2011,10 +2083,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.list_type(self._client._types.sint32_type)
         )
 
-    def _return_type_list_default(self) -> TypeBase:
+    def _return_type__list_default(self) -> TypeBase:
         return self._client._types.list_type(self._client._types.sint32_type)
 
-    def _build_call_list_default(self, x: List[int] = [1, 2, 3]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__list_default(self, x: List[int] = [1, 2, 3]) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "ListDefault",
@@ -2032,10 +2104,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.struct_type("TestService", "TestNestedStruct")
         )
 
-    def _return_type_nested_struct_echo(self) -> TypeBase:
+    def _return_type__nested_struct_echo(self) -> TypeBase:
         return self._client._types.struct_type("TestService", "TestNestedStruct")
 
-    def _build_call_nested_struct_echo(self, x: TestNestedStruct) -> KRPC_pb2.ProcedureCall:
+    def _build_call__nested_struct_echo(self, x: TestNestedStruct) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "NestedStructEcho",
@@ -2053,10 +2125,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.class_type("TestService", "TestClass")
         )
 
-    def _return_type_not_nullable_object(self) -> TypeBase:
+    def _return_type__not_nullable_object(self) -> TypeBase:
         return self._client._types.class_type("TestService", "TestClass")
 
-    def _build_call_not_nullable_object(self, value: TestClass) -> KRPC_pb2.ProcedureCall:
+    def _build_call__not_nullable_object(self, value: TestClass) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "NotNullableObject",
@@ -2074,10 +2146,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.string_type
         )
 
-    def _return_type_null_default(self) -> TypeBase:
+    def _return_type__null_default(self) -> TypeBase:
         return self._client._types.string_type
 
-    def _build_call_null_default(self, obj: Optional[TestClass] = None) -> KRPC_pb2.ProcedureCall:
+    def _build_call__null_default(self, obj: Optional[TestClass] = None) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "NullDefault",
@@ -2095,10 +2167,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.struct_type("TestService", "TestNullableStruct")
         )
 
-    def _return_type_nullable_struct_echo(self) -> TypeBase:
+    def _return_type__nullable_struct_echo(self) -> TypeBase:
         return self._client._types.struct_type("TestService", "TestNullableStruct")
 
-    def _build_call_nullable_struct_echo(self, x: TestNullableStruct) -> KRPC_pb2.ProcedureCall:
+    def _build_call__nullable_struct_echo(self, x: TestNullableStruct) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "NullableStructEcho",
@@ -2116,10 +2188,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.event_type
         )
 
-    def _return_type_on_timer(self) -> TypeBase:
+    def _return_type__on_timer(self) -> TypeBase:
         return self._client._types.event_type
 
-    def _build_call_on_timer(self, milliseconds: int, repeats: int = 1) -> KRPC_pb2.ProcedureCall:
+    def _build_call__on_timer(self, milliseconds: int, repeats: int = 1) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "OnTimer",
@@ -2137,10 +2209,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.string_type
         )
 
-    def _return_type_optional_arguments(self) -> TypeBase:
+    def _return_type__optional_arguments(self) -> TypeBase:
         return self._client._types.string_type
 
-    def _build_call_optional_arguments(self, x: str, y: str = 'foo', z: str = 'bar', obj: Optional[TestClass] = None) -> KRPC_pb2.ProcedureCall:
+    def _build_call__optional_arguments(self, x: str, y: str = 'foo', z: str = 'bar', obj: Optional[TestClass] = None) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "OptionalArguments",
@@ -2158,10 +2230,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.event_type
         )
 
-    def _return_type_remove_event_after(self) -> TypeBase:
+    def _return_type__remove_event_after(self) -> TypeBase:
         return self._client._types.event_type
 
-    def _build_call_remove_event_after(self, milliseconds: int) -> KRPC_pb2.ProcedureCall:
+    def _build_call__remove_event_after(self, milliseconds: int) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "RemoveEventAfter",
@@ -2179,10 +2251,10 @@ class TestService(_TestServiceDefinitions):
             None
         )
 
-    def _return_type_remove_test_object(self) -> TypeBase:
+    def _return_type__remove_test_object(self) -> TypeBase | None:
         return None
 
-    def _build_call_remove_test_object(self, value: TestClass) -> KRPC_pb2.ProcedureCall:
+    def _build_call__remove_test_object(self, value: TestClass) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "RemoveTestObject",
@@ -2200,10 +2272,10 @@ class TestService(_TestServiceDefinitions):
             None
         )
 
-    def _return_type_reset_custom_exception_later(self) -> TypeBase:
+    def _return_type__reset_custom_exception_later(self) -> TypeBase | None:
         return None
 
-    def _build_call_reset_custom_exception_later(self) -> KRPC_pb2.ProcedureCall:
+    def _build_call__reset_custom_exception_later(self) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "ResetCustomExceptionLater",
@@ -2221,10 +2293,10 @@ class TestService(_TestServiceDefinitions):
             None
         )
 
-    def _return_type_reset_invalid_operation_exception_later(self) -> TypeBase:
+    def _return_type__reset_invalid_operation_exception_later(self) -> TypeBase | None:
         return None
 
-    def _build_call_reset_invalid_operation_exception_later(self) -> KRPC_pb2.ProcedureCall:
+    def _build_call__reset_invalid_operation_exception_later(self) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "ResetInvalidOperationExceptionLater",
@@ -2242,10 +2314,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.class_type("TestService", "TestClass")
         )
 
-    def _return_type_return_null_when_not_allowed(self) -> TypeBase:
+    def _return_type__return_null_when_not_allowed(self) -> TypeBase:
         return self._client._types.class_type("TestService", "TestClass")
 
-    def _build_call_return_null_when_not_allowed(self) -> KRPC_pb2.ProcedureCall:
+    def _build_call__return_null_when_not_allowed(self) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "ReturnNullWhenNotAllowed",
@@ -2263,10 +2335,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.sint32_type
         )
 
-    def _return_type_scalar_default(self) -> TypeBase:
+    def _return_type__scalar_default(self) -> TypeBase:
         return self._client._types.sint32_type
 
-    def _build_call_scalar_default(self, x: int = 42) -> KRPC_pb2.ProcedureCall:
+    def _build_call__scalar_default(self, x: int = 42) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "ScalarDefault",
@@ -2284,10 +2356,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.set_type(self._client._types.sint32_type)
         )
 
-    def _return_type_set_default(self) -> TypeBase:
+    def _return_type__set_default(self) -> TypeBase:
         return self._client._types.set_type(self._client._types.sint32_type)
 
-    def _build_call_set_default(self, x: Set[int] = {1, 2, 3}) -> KRPC_pb2.ProcedureCall:
+    def _build_call__set_default(self, x: Set[int] = {1, 2, 3}) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "SetDefault",
@@ -2305,10 +2377,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.string_type
         )
 
-    def _return_type_string_default(self) -> TypeBase:
+    def _return_type__string_default(self) -> TypeBase:
         return self._client._types.string_type
 
-    def _build_call_string_default(self, x: str = 'foo') -> KRPC_pb2.ProcedureCall:
+    def _build_call__string_default(self, x: str = 'foo') -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "StringDefault",
@@ -2326,10 +2398,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.bool_type
         )
 
-    def _return_type_string_to_bool(self) -> TypeBase:
+    def _return_type__string_to_bool(self) -> TypeBase:
         return self._client._types.bool_type
 
-    def _build_call_string_to_bool(self, value: str) -> KRPC_pb2.ProcedureCall:
+    def _build_call__string_to_bool(self, value: str) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "StringToBool",
@@ -2347,10 +2419,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.double_type
         )
 
-    def _return_type_string_to_double(self) -> TypeBase:
+    def _return_type__string_to_double(self) -> TypeBase:
         return self._client._types.double_type
 
-    def _build_call_string_to_double(self, value: str) -> KRPC_pb2.ProcedureCall:
+    def _build_call__string_to_double(self, value: str) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "StringToDouble",
@@ -2368,10 +2440,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.enumeration_type("TestService", "TestEnum")
         )
 
-    def _return_type_string_to_enum(self) -> TypeBase:
+    def _return_type__string_to_enum(self) -> TypeBase:
         return self._client._types.enumeration_type("TestService", "TestEnum")
 
-    def _build_call_string_to_enum(self, value: str) -> KRPC_pb2.ProcedureCall:
+    def _build_call__string_to_enum(self, value: str) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "StringToEnum",
@@ -2389,10 +2461,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.float_type
         )
 
-    def _return_type_string_to_float(self) -> TypeBase:
+    def _return_type__string_to_float(self) -> TypeBase:
         return self._client._types.float_type
 
-    def _build_call_string_to_float(self, value: str) -> KRPC_pb2.ProcedureCall:
+    def _build_call__string_to_float(self, value: str) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "StringToFloat",
@@ -2410,10 +2482,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.sint32_type
         )
 
-    def _return_type_string_to_int32(self) -> TypeBase:
+    def _return_type__string_to_int32(self) -> TypeBase:
         return self._client._types.sint32_type
 
-    def _build_call_string_to_int32(self, value: str) -> KRPC_pb2.ProcedureCall:
+    def _build_call__string_to_int32(self, value: str) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "StringToInt32",
@@ -2431,10 +2503,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.sint64_type
         )
 
-    def _return_type_string_to_int64(self) -> TypeBase:
+    def _return_type__string_to_int64(self) -> TypeBase:
         return self._client._types.sint64_type
 
-    def _build_call_string_to_int64(self, value: str) -> KRPC_pb2.ProcedureCall:
+    def _build_call__string_to_int64(self, value: str) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "StringToInt64",
@@ -2452,10 +2524,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.uint32_type
         )
 
-    def _return_type_string_to_u_int32(self) -> TypeBase:
+    def _return_type__string_to_u_int32(self) -> TypeBase:
         return self._client._types.uint32_type
 
-    def _build_call_string_to_u_int32(self, value: str) -> KRPC_pb2.ProcedureCall:
+    def _build_call__string_to_u_int32(self, value: str) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "StringToUInt32",
@@ -2473,10 +2545,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.uint64_type
         )
 
-    def _return_type_string_to_u_int64(self) -> TypeBase:
+    def _return_type__string_to_u_int64(self) -> TypeBase:
         return self._client._types.uint64_type
 
-    def _build_call_string_to_u_int64(self, value: str) -> KRPC_pb2.ProcedureCall:
+    def _build_call__string_to_u_int64(self, value: str) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "StringToUInt64",
@@ -2494,10 +2566,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.struct_type("TestService", "TestStruct")
         )
 
-    def _return_type_struct_default(self) -> TypeBase:
+    def _return_type__struct_default(self) -> TypeBase:
         return self._client._types.struct_type("TestService", "TestStruct")
 
-    def _build_call_struct_default(self, x: TestStruct = TestStruct(42, 'alpha', TestEnum.value_b, [1, 2, 3])) -> KRPC_pb2.ProcedureCall:
+    def _build_call__struct_default(self, x: TestStruct = TestStruct(42, 'alpha', TestEnum.value_b, [1, 2, 3])) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "StructDefault",
@@ -2515,10 +2587,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.struct_type("TestService", "TestStruct")
         )
 
-    def _return_type_struct_echo(self) -> TypeBase:
+    def _return_type__struct_echo(self) -> TypeBase:
         return self._client._types.struct_type("TestService", "TestStruct")
 
-    def _build_call_struct_echo(self, x: TestStruct) -> KRPC_pb2.ProcedureCall:
+    def _build_call__struct_echo(self, x: TestStruct) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "StructEcho",
@@ -2536,10 +2608,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.struct_type("TestService", "TestStruct")
         )
 
-    def _return_type_struct_echo_nullable(self) -> TypeBase:
+    def _return_type__struct_echo_nullable(self) -> TypeBase:
         return self._client._types.struct_type("TestService", "TestStruct")
 
-    def _build_call_struct_echo_nullable(self, x: Optional[TestStruct]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__struct_echo_nullable(self, x: Optional[TestStruct]) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "StructEchoNullable",
@@ -2557,10 +2629,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.tuple_type(self._client._types.class_type("TestService", "TestClass"), self._client._types.class_type("TestService", "TestClass"))
         )
 
-    def _return_type_swap_object_tuple(self) -> TypeBase:
+    def _return_type__swap_object_tuple(self) -> TypeBase:
         return self._client._types.tuple_type(self._client._types.class_type("TestService", "TestClass"), self._client._types.class_type("TestService", "TestClass"))
 
-    def _build_call_swap_object_tuple(self, t: Tuple[TestClass,TestClass]) -> KRPC_pb2.ProcedureCall:
+    def _build_call__swap_object_tuple(self, t: Tuple[TestClass,TestClass]) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "SwapObjectTuple",
@@ -2578,10 +2650,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.sint32_type
         )
 
-    def _return_type_throw_argument_exception(self) -> TypeBase:
+    def _return_type__throw_argument_exception(self) -> TypeBase:
         return self._client._types.sint32_type
 
-    def _build_call_throw_argument_exception(self) -> KRPC_pb2.ProcedureCall:
+    def _build_call__throw_argument_exception(self) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "ThrowArgumentException",
@@ -2599,10 +2671,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.sint32_type
         )
 
-    def _return_type_throw_argument_null_exception(self) -> TypeBase:
+    def _return_type__throw_argument_null_exception(self) -> TypeBase:
         return self._client._types.sint32_type
 
-    def _build_call_throw_argument_null_exception(self, foo: str) -> KRPC_pb2.ProcedureCall:
+    def _build_call__throw_argument_null_exception(self, foo: str) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "ThrowArgumentNullException",
@@ -2620,10 +2692,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.sint32_type
         )
 
-    def _return_type_throw_argument_out_of_range_exception(self) -> TypeBase:
+    def _return_type__throw_argument_out_of_range_exception(self) -> TypeBase:
         return self._client._types.sint32_type
 
-    def _build_call_throw_argument_out_of_range_exception(self, foo: int) -> KRPC_pb2.ProcedureCall:
+    def _build_call__throw_argument_out_of_range_exception(self, foo: int) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "ThrowArgumentOutOfRangeException",
@@ -2652,10 +2724,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.sint32_type
         )
 
-    def _return_type_throw_custom_exception(self) -> TypeBase:
+    def _return_type__throw_custom_exception(self) -> TypeBase:
         return self._client._types.sint32_type
 
-    def _build_call_throw_custom_exception(self) -> KRPC_pb2.ProcedureCall:
+    def _build_call__throw_custom_exception(self) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "ThrowCustomException",
@@ -2673,10 +2745,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.sint32_type
         )
 
-    def _return_type_throw_custom_exception_later(self) -> TypeBase:
+    def _return_type__throw_custom_exception_later(self) -> TypeBase:
         return self._client._types.sint32_type
 
-    def _build_call_throw_custom_exception_later(self) -> KRPC_pb2.ProcedureCall:
+    def _build_call__throw_custom_exception_later(self) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "ThrowCustomExceptionLater",
@@ -2694,10 +2766,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.sint32_type
         )
 
-    def _return_type_throw_invalid_operation_exception(self) -> TypeBase:
+    def _return_type__throw_invalid_operation_exception(self) -> TypeBase:
         return self._client._types.sint32_type
 
-    def _build_call_throw_invalid_operation_exception(self) -> KRPC_pb2.ProcedureCall:
+    def _build_call__throw_invalid_operation_exception(self) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "ThrowInvalidOperationException",
@@ -2715,10 +2787,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.sint32_type
         )
 
-    def _return_type_throw_invalid_operation_exception_later(self) -> TypeBase:
+    def _return_type__throw_invalid_operation_exception_later(self) -> TypeBase:
         return self._client._types.sint32_type
 
-    def _build_call_throw_invalid_operation_exception_later(self) -> KRPC_pb2.ProcedureCall:
+    def _build_call__throw_invalid_operation_exception_later(self) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "ThrowInvalidOperationExceptionLater",
@@ -2740,10 +2812,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.sint32_type
         )
 
-    def _return_type_throw_mapped_exception(self) -> TypeBase:
+    def _return_type__throw_mapped_exception(self) -> TypeBase:
         return self._client._types.sint32_type
 
-    def _build_call_throw_mapped_exception(self, name: str) -> KRPC_pb2.ProcedureCall:
+    def _build_call__throw_mapped_exception(self, name: str) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "ThrowMappedException",
@@ -2761,10 +2833,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.tuple_type(self._client._types.sint32_type, self._client._types.bool_type)
         )
 
-    def _return_type_tuple_default(self) -> TypeBase:
+    def _return_type__tuple_default(self) -> TypeBase:
         return self._client._types.tuple_type(self._client._types.sint32_type, self._client._types.bool_type)
 
-    def _build_call_tuple_default(self, x: Tuple[int,bool] = (1, False)) -> KRPC_pb2.ProcedureCall:
+    def _build_call__tuple_default(self, x: Tuple[int,bool] = (1, False)) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "TupleDefault",
@@ -2782,10 +2854,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.string_type
         )
 
-    def _return_type_u_int32_to_string(self) -> TypeBase:
+    def _return_type__u_int32_to_string(self) -> TypeBase:
         return self._client._types.string_type
 
-    def _build_call_u_int32_to_string(self, value: int) -> KRPC_pb2.ProcedureCall:
+    def _build_call__u_int32_to_string(self, value: int) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "UInt32ToString",
@@ -2803,10 +2875,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.string_type
         )
 
-    def _return_type_u_int64_to_string(self) -> TypeBase:
+    def _return_type__u_int64_to_string(self) -> TypeBase:
         return self._client._types.string_type
 
-    def _build_call_u_int64_to_string(self, value: int) -> KRPC_pb2.ProcedureCall:
+    def _build_call__u_int64_to_string(self, value: int) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "UInt64ToString",
@@ -2827,10 +2899,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.list_type(self._client._types.uint32_type)
         )
 
-    def _return_type_uint32_special_defaults(self) -> TypeBase:
+    def _return_type__uint32_special_defaults(self) -> TypeBase:
         return self._client._types.list_type(self._client._types.uint32_type)
 
-    def _build_call_uint32_special_defaults(self, maximum: int = krpc.limits.UINT32_MAX) -> KRPC_pb2.ProcedureCall:
+    def _build_call__uint32_special_defaults(self, maximum: int = krpc.limits.UINT32_MAX) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "Uint32SpecialDefaults",
@@ -2851,10 +2923,10 @@ class TestService(_TestServiceDefinitions):
             self._client._types.list_type(self._client._types.uint64_type)
         )
 
-    def _return_type_uint64_special_defaults(self) -> TypeBase:
+    def _return_type__uint64_special_defaults(self) -> TypeBase:
         return self._client._types.list_type(self._client._types.uint64_type)
 
-    def _build_call_uint64_special_defaults(self, maximum: int = krpc.limits.UINT64_MAX) -> KRPC_pb2.ProcedureCall:
+    def _build_call__uint64_special_defaults(self, maximum: int = krpc.limits.UINT64_MAX) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "Uint64SpecialDefaults",

@@ -6,8 +6,15 @@ import krpc.schema.KRPC.Type;
 
 /** A stream that receives live updates from the server. */
 public class Stream<T> implements Comparable<Stream<T>> {
+  /** The type of a stream of a call or function with no value. */
+  static final Type NO_VALUE = Type.newBuilder().setCode(Type.TypeCode.NONE).build();
+
   private Connection connection;
   StreamImpl stream;
+
+  static boolean hasNoValue(Type type) {
+    return type.getCode() == Type.TypeCode.NONE;
+  }
 
   Stream(Connection connection, Type returnType, long id) {
     this.connection = connection;

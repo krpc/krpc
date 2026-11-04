@@ -219,25 +219,6 @@ def test_null_stream_id(client, server, scripted_server):
         client.close()
 
 
-@profile("streams", "dynamic")
-def test_procedure_without_a_value(connected):
-    """Streaming a procedure that returns no value, such as a property setter, raises the
-    stream error."""
-    calls = [
-        ("TestService", "set_StringProperty", values.string("foo")),
-        (
-            "TestService",
-            "TestClass_set_IntProperty",
-            values.obj(create(connected)),
-            values.sint32(42),
-        ),
-        ("TestService", "ResetCustomExceptionLater"),
-    ]
-    for call in calls:
-        error = raised(lambda call=call: connected.add_stream(*call))
-        assert_error_kind(connected, error, pb.Error.STREAM)
-
-
 @profile("streams")
 def test_procedure_returning_an_event(connected):
     """Streaming a procedure that returns an event raises the stream error."""
@@ -264,6 +245,86 @@ def test_add_twice(connected, control, request, case):
     control.conformance_service.set_value(name(request), 5)
     assert wait_until(lambda: second.get() == 5)
     assert is_removed_error(connected, raised(first.get))
+
+
+section("Streams With No Value")
+
+
+def incremented(connected, request):
+    """A stream of a call to ConformanceService.Increment, which counts its runs."""
+    return connected.add_stream(
+        "ConformanceService", "Increment", values.string(name(request))
+    )
+
+
+@profile("streams")
+def test_no_value(connected, control, request):
+    """A stream of a procedure with no return value runs the call on each update, for its
+    effects. Its value is the client's null value."""
+    stream = incremented(connected, request)
+    assert stream.get() is None
+    assert wait_until(lambda: control.conformance_service.value(name(request)) >= 3)
+    assert stream.get() is None
+
+
+@profile("streams", "callbacks")
+def test_no_value_updates_once(connected, control, request):
+    """A stream with no value updates once, after its first run. Its callbacks are called
+    once, with the client's null value, and a wait after the first update times out."""
+    stream = incremented(connected, request)
+    callback = stream.add_callback()
+    assert callback.wait_for_calls(1) == [None]
+    stream.get()
+    assert not stream.wait(SHORT_WAIT)
+    count = control.conformance_service.value(name(request))
+    assert wait_until(lambda: control.conformance_service.value(name(request)) > count)
+    time.sleep(SETTLE)
+    assert callback.calls == [None]
+
+
+@profile("streams")
+def test_no_value_error(connected, control, request):
+    """An error from a call with no value ends its stream with that error."""
+    stream = incremented(connected, request)
+    assert stream.get() is None
+    control.conformance_service.fail_value(name(request), "Failed by the test")
+    assert wait_until(lambda: ended(stream))
+    error = raised(stream.get)
+    assert_native_error(connected, control, error, "InvalidOperationException")
+    assert "Failed by the test" in error.message
+
+
+@profile("streams")
+def test_no_value_remove(connected, control, request):
+    """Removing a stream with no value stops its runs."""
+    stream = incremented(connected, request)
+    assert stream.get() is None
+    stream.remove()
+    count = control.conformance_service.value(name(request))
+    time.sleep(SETTLE)
+    assert control.conformance_service.value(name(request)) == count
+
+
+@profile("streams", "dynamic")
+def test_property_setter(connected, request):
+    """A stream can be made of a property setter, with the value to set. It sets the
+    property on each update, and its value is the client's null value."""
+    obj = create(connected, name(request))
+    stream = connected.add_stream(
+        "TestService", "TestClass_set_IntProperty", values.obj(obj), values.sint32(42)
+    )
+
+    def value():
+        return connected.invoke(
+            "TestService", "TestClass_get_IntProperty", values.obj(obj)
+        )
+
+    assert stream.get() is None
+    assert value() == 42
+    connected.invoke(
+        "TestService", "TestClass_set_IntProperty", values.obj(obj), values.sint32(1)
+    )
+    assert wait_until(lambda: value() == 42)
 
 
 section("Handles")

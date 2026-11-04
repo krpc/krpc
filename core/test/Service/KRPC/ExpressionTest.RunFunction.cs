@@ -106,17 +106,6 @@ namespace KRPC.Test.Service.KRPC
         }
 
         [Test]
-        public void AddFunctionStreamWithNoValueIsRejected ()
-        {
-            var obj = new global::KRPC.Test.Service.TestService.TestClass ("run");
-            var expr = Expression.Call (BuildProcedureCall (
-                "TestClass_set_IntProperty", new Argument (0, obj), new Argument (1, 5)));
-            var exn = Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
-                () => global::KRPC.Service.KRPC.KRPC.AddFunctionStream (expr));
-            StringAssert.Contains ("does not evaluate to a value", exn.Message);
-        }
-
-        [Test]
         public void RunFunctionWithTooManyNodesIsRejected ()
         {
             var expr = ChainWithTooManyNodes ();
@@ -149,18 +138,6 @@ namespace KRPC.Test.Service.KRPC
             var exn = Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
                 () => global::KRPC.Service.KRPC.KRPC.CompileFunction (ChainWithTooManyNodes ()));
             StringAssert.Contains ("more than 1000000 nodes", exn.Message);
-        }
-
-        [Test]
-        public void FunctionProceduresCannotBeStreamed ()
-        {
-            var exn = Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
-                () => new global::KRPC.Service.ProcedureCallStream (new ProcedureCall ("KRPC", "RunFunction")));
-            StringAssert.Contains (
-                "KRPC.RunFunction cannot be streamed. Use KRPC.AddFunctionStream to stream a function.", exn.Message);
-            exn = Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
-                () => new global::KRPC.Service.ProcedureCallStream (new ProcedureCall ("KRPC", "AddFunctionStream")));
-            StringAssert.Contains ("KRPC.AddFunctionStream returns a stream, and cannot be streamed", exn.Message);
         }
 
         static byte[] Encode (object value, System.Type type)

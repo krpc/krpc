@@ -45,7 +45,6 @@ test_codec.py::test_out_of_range[sint64]  # As test_values.py::test_out_of_range
 test_codec.py::test_out_of_range[uint32]  # As test_values.py::test_out_of_range[sint32-above]
 test_codec.py::test_empty_data  # As test_malformed_data[double]
 test_streams.py::test_procedure_returning_an_event  # Raises the server's InvalidOperationException, not the stream error
-test_streams.py::test_procedure_without_a_value  # As test_procedure_returning_an_event
 test_calls.py::test_unknown_type  # A structure holding a left-out structure is exposed
 test_calls.py::test_undefined_type[class]  # A member whose type names an undefined class or enumeration is exposed
 test_calls.py::test_undefined_type[enumeration]  # As above
