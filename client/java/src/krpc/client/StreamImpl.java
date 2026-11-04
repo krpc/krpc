@@ -9,7 +9,6 @@ import java.util.Queue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
-import krpc.client.services.KRPC;
 import krpc.schema.KRPC.ProcedureResult;
 import krpc.schema.KRPC.Type;
 
@@ -84,7 +83,7 @@ class StreamImpl {
   public void setRate(float rate) throws RPCException {
     // The server has no stream for the id once it ends
     if (ending == null) {
-      KRPC.newInstance(connection).setStreamRate(id, rate);
+      InternalProcedures.setStreamRate(connection, id, rate);
     }
     this.rate = rate;
   }

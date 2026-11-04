@@ -23,6 +23,18 @@ namespace KRPC.Test.Service
         {
         }
 
+        public static void TakesAStream (global::KRPC.Service.Messages.Stream x)
+        {
+        }
+
+        public static void TakesStreamsInADictionary (IDictionary<string,global::KRPC.Service.Messages.Stream> x)
+        {
+        }
+
+        public static void TakesAnEvent (global::KRPC.Service.Messages.Event x)
+        {
+        }
+
         public static class UndeclaredList
         {
             public static IList<TestService.TestEnum> Create ()
@@ -79,6 +91,16 @@ namespace KRPC.Test.Service
             StringAssert.Contains ("TestService." + method, exn.Message);
             StringAssert.Contains ("holds 7", exn.Message);
             StringAssert.Contains ("TestEnum", exn.Message);
+        }
+
+        [TestCase ("TakesAStream")]
+        [TestCase ("TakesStreamsInADictionary")]
+        [TestCase ("TakesAnEvent")]
+        public void ParameterHoldsAStream (string method)
+        {
+            var exn = Assert.Throws<ServiceException> (() => Signature (method));
+            StringAssert.Contains ("TestService." + method, exn.Message);
+            StringAssert.Contains ("holds a stream", exn.Message);
         }
     }
 }

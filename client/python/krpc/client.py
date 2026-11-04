@@ -23,6 +23,7 @@ from krpc.functioncompiler import (
     Parameters,
     compile_function_with_type,
 )
+from krpc.internalprocedures import InternalProcedures
 from krpc.service import (
     create_service,
     extended_stub_classes,
@@ -210,8 +211,11 @@ class Client(krpc.services.Client):
     ) -> None:
         super().__init__()
         self._types = Types()
+        self._internal = InternalProcedures(self)
         self._connection = connection
-        self._session = Session(connection, self._remove_stream_request, stall_timeout)
+        self._session = Session(
+            connection, self._internal.remove_stream_request, stall_timeout
+        )
         self._stream_manager = StreamManager(self, self._session.dispatch)
         self._session.start(self._stream_manager)
         # The type a server side function returns, and the types of its
@@ -317,7 +321,7 @@ class Client(krpc.services.Client):
         function, return_type, _ = self._function_and_type(func, streamed=True)
         if return_type is None:
             raise StreamError("The function does not evaluate to a value")
-        stream_id = self.krpc.add_function_stream(function)
+        stream_id = self._internal.add_function_stream(function)
         return krpc.stream.Stream.from_stream_id(
             self, stream_id, self._types.as_type(return_type)
         )
@@ -345,16 +349,20 @@ class Client(krpc.services.Client):
         finally:
             stream.remove()
 
-    def compile(self, func: Callable) -> Any:
+    def compile(self, func: Any) -> Any:
         """Compile a Python function or lambda into a server side function, a
         KRPC.Expression object. Each run makes the function's remote procedure
         calls again, and uses its other values as they were when it was
         compiled. A def can take parameters, each with a type annotation, and
         the run method passes its arguments to them. Compiling takes a round
         trip per node, so compile a function once to use it repeatedly. Can be
-        used as a decorator."""
+        used as a decorator. Given a KRPC.Expression object built with the
+        expression API, compiles it on the server and returns it."""
+        if isinstance(func, self._internal.expression_type.python_type):
+            self._internal.compile_function(func)
+            return func
         function, return_type, parameters = compile_function_with_type(self, func)
-        self.krpc.compile_function(function)
+        self._internal.compile_function(function)
         self._function_parameters[function._object_id] = parameters
         # A type the compiler tracked need not be introspected on the first run
         if return_type is NO_VALUE:
@@ -404,12 +412,12 @@ class Client(krpc.services.Client):
         if callable(function):
             function, _, _ = compile_function_with_type(self, function, streamed=True)
         self._check_no_parameters(function)
-        return cast(Event, self.krpc.add_event(function))
+        return self._internal.add_event(function)
 
     def _check_function(self, function: Any, procedure: str = "") -> None:
         """Raises TypeError for a value that is neither a Python function nor
         a KRPC.Expression object."""
-        expression = self._types.class_type("KRPC", "Expression").python_type
+        expression = self._internal.expression_type.python_type
         if callable(function) or isinstance(function, expression):
             return
         raise TypeError(
@@ -451,7 +459,7 @@ class Client(krpc.services.Client):
             values = list(args)
             parameter_types = self._parameter_types(function)
         arguments = self._encode_arguments(parameter_types, values)
-        data = self.krpc.run_function(function, arguments)
+        data = self._internal.run_function(function, arguments)
         # A null value has no data
         if data is None or return_type is None:
             return None
@@ -622,18 +630,6 @@ class Client(krpc.services.Client):
         if return_type is None or result.is_null:
             return None
         return Decoder.decode(self, result.value, return_type)
-
-    def _remove_stream_request(self, stream_id: int) -> KRPC.Request:
-        """A request to remove a stream on the server."""
-        request = KRPC.Request()
-        self._encode_call(
-            request.calls.add(),
-            "KRPC",
-            "RemoveStream",
-            [stream_id],
-            [self._types.uint64_type],
-        )
-        return request
 
     def _build_call(
         self,

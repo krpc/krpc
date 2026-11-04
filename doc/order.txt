@@ -20,13 +20,6 @@ KRPC.GameScene.ResearchAndDevelopment
 KRPC.GameScene.Administration
 KRPC.Paused
 KRPC.GameStateLoads
-KRPC.AddStream
-KRPC.AddFunctionStream
-KRPC.AddEvent
-KRPC.RunFunction
-KRPC.CompileFunction
-KRPC.SetStreamRate
-KRPC.RemoveStream
 KRPC.ClientInfo
 KRPC.ClientInfo.Id
 KRPC.ClientInfo.Name

@@ -28,7 +28,7 @@ from driver.helpers import (
     single_ending,
     watched,
 )
-from driver.scripted import ScriptedServer, definitions
+from driver.scripted import ScriptedServer, definitions, null_stream_ids
 from driver.testee import (
     AT_ONCE,
     REPLY_TIMEOUT,
@@ -203,6 +203,20 @@ def test_members(connected, member):
     service adds to a class."""
     stream, expected = member_stream(connected, member)
     assert stream.get() == expected
+
+
+@profile("streams")
+def test_null_stream_id(client, server, scripted_server):
+    """A null result for the call that adds a stream raises the encoding error. The next
+    call succeeds."""
+    null_stream_ids(client, server, scripted_server)
+    try:
+        with pytest.raises(TesteeError) as info:
+            client.add_stream("TestService", "Int32ToString", values.sint32(1))
+        assert_error_kind(client, info.value.error, pb.Error.ENCODING)
+        assert client.invoke("TestService", "Int32ToString", values.sint32(1)) == ""
+    finally:
+        client.close()
 
 
 @profile("streams", "dynamic")

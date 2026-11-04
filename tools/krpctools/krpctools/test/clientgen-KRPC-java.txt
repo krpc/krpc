@@ -297,75 +297,6 @@ public class KRPC {
     }
 
     /**
-     * Create an event from a server side function that evaluates to a boolean value.
-     *
-     * The event fires when the function becomes true, and again each time it becomes true
-     * after being false. Client libraries call this procedure to implement events. Use the
-     * events of your client library instead. Calling this directly while using a client
-     * library has undefined behavior.
-     */
-    @SuppressWarnings({ "unchecked" })
-    @RPCInfo(service = "KRPC", procedure = "AddEvent", types = _Types.class)
-    public krpc.client.Event addEvent(krpc.client.services.KRPC.Expression function) throws RPCException {
-        ByteString[] _args = new ByteString[] {
-            Encoder.encode(function, krpc.client.Types.createClass("KRPC", "Expression"))
-        };
-        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("KRPC", "AddEvent", _args);
-        return (krpc.client.Event) Encoder.decode(_data.getValue(), krpc.client.Types.createMessage(krpc.schema.KRPC.Type.TypeCode.EVENT), this.connection);
-    }
-
-    /**
-     * Add a stream of the value a server side function computes on each update.
-     *
-     * Client libraries call this procedure to implement server side functions. Use the
-     * server side functions of your client library instead. Calling this directly while
-     * using a client library has undefined behavior.
-     */
-    @SuppressWarnings({ "unchecked" })
-    @RPCInfo(service = "KRPC", procedure = "AddFunctionStream", types = _Types.class)
-    public long addFunctionStream(krpc.client.services.KRPC.Expression function) throws RPCException {
-        ByteString[] _args = new ByteString[] {
-            Encoder.encode(function, krpc.client.Types.createClass("KRPC", "Expression"))
-        };
-        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("KRPC", "AddFunctionStream", _args);
-        return (long) Encoder.decode(_data.getValue(), krpc.client.Types.createMessage(krpc.schema.KRPC.Type.TypeCode.STREAM), this.connection);
-    }
-
-    /**
-     * Add a streaming request and return its identifier.
-     *
-     * Client libraries call this procedure to implement streams. Use the streams of your
-     * client library instead. Calling this directly while using a client library has
-     * undefined behavior.
-     */
-    @SuppressWarnings({ "unchecked" })
-    @RPCInfo(service = "KRPC", procedure = "AddStream", types = _Types.class)
-    public long addStream(krpc.schema.KRPC.ProcedureCall call) throws RPCException {
-        ByteString[] _args = new ByteString[] {
-            Encoder.encode(call, krpc.client.Types.createMessage(krpc.schema.KRPC.Type.TypeCode.PROCEDURE_CALL))
-        };
-        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("KRPC", "AddStream", _args);
-        return (long) Encoder.decode(_data.getValue(), krpc.client.Types.createMessage(krpc.schema.KRPC.Type.TypeCode.STREAM), this.connection);
-    }
-
-    /**
-     * Compile a server side function, so that running, streaming or adding it as an
-     * event does not compile it.
-     *
-     * Client libraries call this procedure to implement server side functions. Use the
-     * server side functions of your client library instead. Calling this directly while
-     * using a client library has undefined behavior.
-     */
-    @SuppressWarnings({ "unchecked" })
-    @RPCInfo(service = "KRPC", procedure = "CompileFunction", types = _Types.class)
-    public void compileFunction(krpc.client.services.KRPC.Expression function) throws RPCException {
-        ByteString[] _args = new ByteString[] {
-            Encoder.encode(function, krpc.client.Types.createClass("KRPC", "Expression"))
-        };
-        this.connection.invoke("KRPC", "CompileFunction", _args);
-    }
-
-    /**
      * Returns the identifier for the current client.
      */
     @SuppressWarnings({ "unchecked" })
@@ -387,8 +318,8 @@ public class KRPC {
     }
 
     /**
-     * Returns information on all services, procedures, classes, properties etc. provided by the server.
-     * Can be used by client libraries to automatically create functionality such as stubs.
+     * The services the server provides, with their procedures, classes, enumerations,
+     * structures and exceptions.
      */
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "KRPC", procedure = "GetServices", types = _Types.class)
@@ -460,65 +391,6 @@ public class KRPC {
     @RPCInfo(service = "KRPC", procedure = "ReleaseTick", types = _Types.class)
     public void releaseTick() throws RPCException {
         this.connection.invoke("KRPC", "ReleaseTick");
-    }
-
-    /**
-     * Remove a streaming request.
-     *
-     * Client libraries call this procedure to implement streams. Use the streams of your
-     * client library instead. Calling this directly while using a client library has
-     * undefined behavior.
-     */
-    @SuppressWarnings({ "unchecked" })
-    @RPCInfo(service = "KRPC", procedure = "RemoveStream", types = _Types.class)
-    public void removeStream(long id) throws RPCException {
-        ByteString[] _args = new ByteString[] {
-            Encoder.encode(id, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT64))
-        };
-        this.connection.invoke("KRPC", "RemoveStream", _args);
-    }
-
-    /**
-     * Run a server side function once, within a single physics tick, and return
-     * the value it produces.
-     *
-     * Client libraries call this procedure to implement server side functions. Use the
-     * server side functions of your client library instead. Calling this directly while
-     * using a client library has undefined behavior.
-     * @return The encoded value of the function, or no bytes for a function with no
-     * value.
-     * @param function The function to run.
-     * @param arguments The encoded arguments, one per parameter.
-     */
-    @SuppressWarnings({ "unchecked" })
-    @RPCInfo(service = "KRPC", procedure = "RunFunction", types = _Types.class)
-    public byte[] runFunction(krpc.client.services.KRPC.Expression function, java.util.List<byte[]> arguments) throws RPCException {
-        ByteString[] _args = new ByteString[] {
-            Encoder.encode(function, krpc.client.Types.createClass("KRPC", "Expression")),
-            Encoder.encode(arguments, krpc.client.Types.createList(krpc.client.Types.nullable(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BYTES))))
-        };
-        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("KRPC", "RunFunction", _args);
-        if (_data.getIsNull()) {
-          return null;
-        }
-        return (byte[]) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BYTES), this.connection);
-    }
-
-    /**
-     * Set the update rate for a stream in Hz.
-     *
-     * Client libraries call this procedure to implement streams. Use the streams of your
-     * client library instead. Calling this directly while using a client library has
-     * undefined behavior.
-     */
-    @SuppressWarnings({ "unchecked" })
-    @RPCInfo(service = "KRPC", procedure = "SetStreamRate", types = _Types.class)
-    public void setStreamRate(long id, float rate) throws RPCException {
-        ByteString[] _args = new ByteString[] {
-            Encoder.encode(id, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT64)),
-            Encoder.encode(rate, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT))
-        };
-        this.connection.invoke("KRPC", "SetStreamRate", _args);
     }
 
     /**
@@ -4215,14 +4087,6 @@ public class KRPC {
         }
 
         private static void initTypes0() {
-            RETURN_TYPES.put("AddEvent", krpc.client.Types.createMessage(krpc.schema.KRPC.Type.TypeCode.EVENT));
-            PARAMETER_TYPES.put("AddEvent", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression") });
-            RETURN_TYPES.put("AddFunctionStream", krpc.client.Types.createMessage(krpc.schema.KRPC.Type.TypeCode.STREAM));
-            PARAMETER_TYPES.put("AddFunctionStream", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression") });
-            RETURN_TYPES.put("AddStream", krpc.client.Types.createMessage(krpc.schema.KRPC.Type.TypeCode.STREAM));
-            PARAMETER_TYPES.put("AddStream", new krpc.schema.KRPC.Type[] { krpc.client.Types.createMessage(krpc.schema.KRPC.Type.TypeCode.PROCEDURE_CALL) });
-            RETURN_TYPES.put("CompileFunction", null);
-            PARAMETER_TYPES.put("CompileFunction", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression") });
             RETURN_TYPES.put("GetClientID", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BYTES));
             PARAMETER_TYPES.put("GetClientID", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("GetClientName", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
@@ -4237,12 +4101,6 @@ public class KRPC {
             PARAMETER_TYPES.put("NextTick", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("ReleaseTick", null);
             PARAMETER_TYPES.put("ReleaseTick", new krpc.schema.KRPC.Type[] {  });
-            RETURN_TYPES.put("RemoveStream", null);
-            PARAMETER_TYPES.put("RemoveStream", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT64) });
-            RETURN_TYPES.put("RunFunction", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BYTES));
-            PARAMETER_TYPES.put("RunFunction", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createList(krpc.client.Types.nullable(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BYTES))) });
-            RETURN_TYPES.put("SetStreamRate", null);
-            PARAMETER_TYPES.put("SetStreamRate", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT64), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT) });
             RETURN_TYPES.put("get_Clients", krpc.client.Types.createList(krpc.client.Types.createStruct("KRPC", "ClientInfo")));
             PARAMETER_TYPES.put("get_Clients", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("get_GameScene", krpc.client.Types.createEnumeration("KRPC", "GameScene"));
@@ -4315,9 +4173,6 @@ public class KRPC {
             PARAMETER_TYPES.put("Expression_static_ConstantFloat", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT) });
             RETURN_TYPES.put("Expression_static_ConstantInt", krpc.client.Types.createClass("KRPC", "Expression"));
             PARAMETER_TYPES.put("Expression_static_ConstantInt", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32) });
-        }
-
-        private static void initTypes1() {
             RETURN_TYPES.put("Expression_static_ConstantLong", krpc.client.Types.createClass("KRPC", "Expression"));
             PARAMETER_TYPES.put("Expression_static_ConstantLong", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT64) });
             RETURN_TYPES.put("Expression_static_ConstantNull", krpc.client.Types.createClass("KRPC", "Expression"));
@@ -4332,6 +4187,9 @@ public class KRPC {
             PARAMETER_TYPES.put("Expression_static_ConstantULong", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT64) });
             RETURN_TYPES.put("Expression_static_Contains", krpc.client.Types.createClass("KRPC", "Expression"));
             PARAMETER_TYPES.put("Expression_static_Contains", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createClass("KRPC", "Expression") });
+        }
+
+        private static void initTypes1() {
             RETURN_TYPES.put("Expression_static_ContainsKey", krpc.client.Types.createClass("KRPC", "Expression"));
             PARAMETER_TYPES.put("Expression_static_ContainsKey", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createClass("KRPC", "Expression") });
             RETURN_TYPES.put("Expression_static_Continue", krpc.client.Types.createClass("KRPC", "Expression"));
@@ -4418,9 +4276,6 @@ public class KRPC {
             PARAMETER_TYPES.put("Expression_static_Modulo", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createClass("KRPC", "Expression") });
             RETURN_TYPES.put("Expression_static_Multiply", krpc.client.Types.createClass("KRPC", "Expression"));
             PARAMETER_TYPES.put("Expression_static_Multiply", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createClass("KRPC", "Expression") });
-        }
-
-        private static void initTypes2() {
             RETURN_TYPES.put("Expression_static_Negate", krpc.client.Types.createClass("KRPC", "Expression"));
             PARAMETER_TYPES.put("Expression_static_Negate", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression") });
             RETURN_TYPES.put("Expression_static_Not", krpc.client.Types.createClass("KRPC", "Expression"));
@@ -4435,6 +4290,9 @@ public class KRPC {
             PARAMETER_TYPES.put("Expression_static_Parameter", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createClass("KRPC", "Type") });
             RETURN_TYPES.put("Expression_static_Power", krpc.client.Types.createClass("KRPC", "Expression"));
             PARAMETER_TYPES.put("Expression_static_Power", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createClass("KRPC", "Expression") });
+        }
+
+        private static void initTypes2() {
             RETURN_TYPES.put("Expression_static_Remove", krpc.client.Types.createClass("KRPC", "Expression"));
             PARAMETER_TYPES.put("Expression_static_Remove", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createClass("KRPC", "Expression") });
             RETURN_TYPES.put("Expression_static_RemoveAt", krpc.client.Types.createClass("KRPC", "Expression"));
@@ -4521,9 +4379,6 @@ public class KRPC {
             PARAMETER_TYPES.put("Type_get_Code", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Type") });
             RETURN_TYPES.put("Type_get_Name", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
             PARAMETER_TYPES.put("Type_get_Name", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Type") });
-        }
-
-        private static void initTypes3() {
             RETURN_TYPES.put("Type_get_Nullable", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL));
             PARAMETER_TYPES.put("Type_get_Nullable", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Type") });
             RETURN_TYPES.put("Type_get_Service", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
@@ -4538,6 +4393,9 @@ public class KRPC {
             PARAMETER_TYPES.put("Type_static_ClassType", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
             RETURN_TYPES.put("Type_static_DictionaryType", krpc.client.Types.createClass("KRPC", "Type"));
             PARAMETER_TYPES.put("Type_static_DictionaryType", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Type"), krpc.client.Types.createClass("KRPC", "Type") });
+        }
+
+        private static void initTypes3() {
             RETURN_TYPES.put("Type_static_Double", krpc.client.Types.createClass("KRPC", "Type"));
             PARAMETER_TYPES.put("Type_static_Double", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("Type_static_EnumerationType", krpc.client.Types.createClass("KRPC", "Type"));

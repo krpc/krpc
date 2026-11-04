@@ -720,6 +720,11 @@ Client API Reference
       Compiles a lambda expression with a parameter into a server side function. Overloads take
       up to four parameters, with or without a value.
 
+   .. function:: KRPC.Client.Services.KRPC.Expression Compile(KRPC.Client.Services.KRPC.Expression function)
+
+      Compiles a server side function built with the expression API on the server, so that its
+      first run is as fast as later ones, and returns the function.
+
    .. function:: static KRPC.Schema.KRPC.ProcedureCall GetCall<TResult>(Expression<Func<TResult>> expression)
 
       Converts a lambda expression that makes one remote procedure call into a
@@ -864,6 +869,10 @@ Client API Reference
 .. class:: RPCException
 
    Thrown for an error from the server that the client has no exception class for.
+
+.. class:: EncodingException
+
+   Thrown when the server returns null for a value that cannot be null.
 
 .. class:: FunctionCompilationException
 

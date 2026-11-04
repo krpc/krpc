@@ -181,8 +181,14 @@ namespace KRPC.Client.Conformance
             case Command.CommandOneofCase.Call:
                 reply.Value = Functions.Call (Connected (), command.Call.Invoke);
                 break;
+            case Command.CommandOneofCase.CallWithArguments:
+                reply.Value = Functions.CallWithArguments (Connected (), command.CallWithArguments);
+                break;
             case Command.CommandOneofCase.AddFunctionStream:
                 reply.Stream = Handles.Add (Functions.AddStream (Connected (), command.AddFunctionStream));
+                break;
+            case Command.CommandOneofCase.CompileFunction:
+                Functions.Compile (Connected (), command.CompileFunction);
                 break;
             case Command.CommandOneofCase.AddFunctionEvent:
                 reply.Value = Functions.AddEvent (Connected (), command.AddFunctionEvent);
@@ -558,6 +564,8 @@ namespace KRPC.Client.Conformance
                 if (connectionException.Reason.HasValue)
                     error.Reason = EnumName (
                         Disconnect.Descriptor.EnumTypes [0], (int)connectionException.Reason.Value);
+            } else if (exn is EncodingException) {
+                error.Kind = Error.Types.Kind.Encoding;
             } else if (exn is ArgumentException) {
                 // The client's argument error, which is also the type of a server
                 // ArgumentException

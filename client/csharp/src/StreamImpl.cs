@@ -58,7 +58,7 @@ namespace KRPC.Client
                 rate = value;
                 // The server has no stream for the id once it ends
                 if (!Ended)
-                    connection.KRPC ().SetStreamRate (Id, value);
+                    InternalProcedures.SetStreamRate (connection, Id, value);
             }
         }
 

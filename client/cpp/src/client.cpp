@@ -14,6 +14,7 @@
 #include "krpc/decoder.hpp"
 #include "krpc/encoder.hpp"
 #include "krpc/error.hpp"
+#include "krpc/services/krpc.hpp"
 #include "krpc/session.hpp"
 #include "krpc/stream_manager.hpp"
 
@@ -114,6 +115,8 @@ Client::Client(const std::string& name, const std::shared_ptr<Connection>& conne
     throw;
   }
   stream_manager = StreamManager::create(this, connection, stall_timeout);
+  // Constructing the KRPC service registers its exception types
+  services::KRPC krpc_service(this);
 }
 
 schema::ProcedureResult Client::invoke(const schema::Request& request) {

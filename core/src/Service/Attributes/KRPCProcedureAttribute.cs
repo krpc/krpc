@@ -24,6 +24,11 @@ namespace KRPC.Service.Attributes
         public uint Id { get; set; }
 
         /// <summary>
+        /// Whether the procedure is for client libraries only. Only the KRPC service sets it.
+        /// </summary>
+        public bool Internal { get; set; }
+
+        /// <summary>
         /// A kRPC procedure.
         /// </summary>
         public KRPCProcedureAttribute ()

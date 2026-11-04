@@ -102,6 +102,7 @@ namespace KRPC.Server.ProtocolBuffers
             result.Documentation = procedure.Documentation;
             result.Deprecated = procedure.Deprecated;
             result.DeprecatedReason = procedure.DeprecatedReason;
+            result.Internal = procedure.Internal;
             return result;
         }
 

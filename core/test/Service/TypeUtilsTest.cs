@@ -478,6 +478,24 @@ namespace KRPC.Test.Service
             }
         }
 
+        public struct StructWithAStreamField
+        {
+            [KRPCProperty]
+            public global::KRPC.Service.Messages.Stream Field { get; set; }
+        }
+
+        public struct StructWithStreamsInAListField
+        {
+            [KRPCProperty]
+            public IList<global::KRPC.Service.Messages.Stream> Field { get; set; }
+        }
+
+        public struct StructWithAnEventField
+        {
+            [KRPCProperty]
+            public global::KRPC.Service.Messages.Event Field { get; set; }
+        }
+
         public struct StructWithAGameSceneField
         {
             [KRPCProperty (GameScene = GameScene.Flight)]
@@ -500,6 +518,9 @@ namespace KRPC.Test.Service
         [TestCase (typeof(StructWithAnInvalidFieldType))]
         [TestCase (typeof(StructWithAFieldWithoutASetter))]
         [TestCase (typeof(StructWithAGameSceneField))]
+        [TestCase (typeof(StructWithAStreamField))]
+        [TestCase (typeof(StructWithStreamsInAListField))]
+        [TestCase (typeof(StructWithAnEventField))]
         public void InvalidStructFields (Type type)
         {
             Assert.Throws<ServiceException> (() => TypeUtils.ValidateStructFields (type));

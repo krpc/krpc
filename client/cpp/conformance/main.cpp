@@ -472,6 +472,16 @@ class Testee {
         *reply->mutable_value() = result_object(
             krpc::services::KRPC::Expression::call(connected(), call(command.call().invoke())));
         break;
+      case Command::kCallWithArguments: {
+        const auto& command_call = command.call_with_arguments();
+        std::map<int32_t, functions::Expression> arguments;
+        for (const auto& [position, value] : command_call.arguments())
+          arguments[static_cast<int32_t>(position)] =
+              Object<functions::Expression>::arg(connected(), value);
+        *reply->mutable_value() = result_object(functions::Expression::call_with_arguments(
+            connected(), call(command_call.invoke()), arguments));
+        break;
+      }
       case Command::kAddFunctionStream: {
         const auto& add = command.add_function_stream();
         auto function = Object<functions::Expression>::arg(connected(), add.function());
@@ -481,6 +491,11 @@ class Testee {
             }))
           throw Unsupported("A function of type " + add.type());
         reply->set_stream(Handles::instance().add_stream(stream));
+        break;
+      }
+      case Command::kCompileFunction: {
+        krpc::compile(
+            Object<functions::Expression>::arg(connected(), command.compile_function().function()));
         break;
       }
       case Command::kAddFunctionEvent: {

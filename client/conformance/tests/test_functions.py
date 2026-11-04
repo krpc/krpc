@@ -12,7 +12,8 @@ from driver import profile, section, values
 from driver.errors import assert_argument_error, assert_error_kind, is_removed_error
 from driver.functions import Functions
 from driver.helpers import ended, name, raised
-from driver.testee import REPLY_TIMEOUT, wait_until
+from driver.scripted import functions_script, null_stream_ids
+from driver.testee import REPLY_TIMEOUT, TesteeError, wait_until
 
 
 @pytest.fixture
@@ -394,6 +395,36 @@ def test_two_streams_of_one_function(connected, functions, control, request):
 section("Events")
 
 
+@profile("functions", "streams")
+def test_null_stream_id(client, server, scripted_server):
+    """A null result for the call that adds a stream of a function raises the encoding
+    error. The next call succeeds."""
+    null_stream_ids(client, server, scripted_server)
+    try:
+        function = Functions(client).expression("ConstantInt", values.sint32(2))
+        with pytest.raises(TesteeError) as info:
+            client.add_function_stream(function, "sint32")
+        assert_error_kind(client, info.value.error, pb.Error.ENCODING)
+        assert client.invoke("TestService", "Int32ToString", values.sint32(1)) == ""
+    finally:
+        client.close()
+
+
+@profile("events", "functions")
+def test_null_event(client, server, scripted_server):
+    """A null result for the call that adds an event over a function raises the encoding
+    error. The next call succeeds."""
+    null_stream_ids(client, server, scripted_server)
+    try:
+        function = Functions(client).expression("ConstantBool", values.boolean(True))
+        with pytest.raises(TesteeError) as info:
+            client.add_function_event(function)
+        assert_error_kind(client, info.value.error, pb.Error.ENCODING)
+        assert client.invoke("TestService", "Int32ToString", values.sint32(1)) == ""
+    finally:
+        client.close()
+
+
 @profile("events", "functions")
 def test_add_event(connected, functions, control, request):
     """An event added with ``KRPC.AddEvent``, over a server side function, fires."""
@@ -418,6 +449,21 @@ def test_two_events_of_one_function(connected, functions, control, request):
 
 
 section("Running")
+
+
+@profile("functions")
+def test_compile(client, server, scripted_server):
+    """Compiling a function built with the expression API calls ``KRPC.CompileFunction`` with
+    it."""
+    scripted = functions_script(client, server, scripted_server)
+    try:
+        function = Functions(client).expression("ConstantInt", values.sint32(2))
+        client.compile_function(function)
+        (call,) = scripted.wait_for_call("CompileFunction")
+        # The scripted server gives each function the object id 1
+        assert call.arguments[0].value == b"\x01"
+    finally:
+        client.close()
 
 
 @profile("functions")
@@ -468,6 +514,73 @@ def test_run_a_call(connected):
         "TestService", "Int32ToString", values.sint32(42)
     )
     assert connected.run_function(function, "string") == "42"
+
+
+@profile("functions")
+@pytest.mark.parametrize(
+    "case", ["procedure", "property", "method", "class-property", "static-method"]
+)
+def test_call_member_kinds(connected, case):
+    """The client builds the call for a stream of each kind of member: a procedure, a
+    property, a class method, a class property and a static method. A function that makes
+    the call with ``KRPC.Expression.Call`` returns the member's value."""
+    obj = connected.invoke("TestService", "CreateTestObject", values.string("alpha"))
+    if case == "procedure":
+        call = ("Int32ToString", values.sint32(42))
+        typ, expected = "string", "42"
+    elif case == "property":
+        connected.invoke("TestService", "set_StringProperty", values.string("foo"))
+        call = ("get_StringProperty",)
+        typ, expected = "string", "foo"
+    elif case == "method":
+        call = ("TestClass_GetValue", values.obj(obj))
+        typ, expected = "string", "value=alpha"
+    elif case == "class-property":
+        connected.invoke(
+            "TestService",
+            "TestClass_set_IntProperty",
+            values.obj(obj),
+            values.sint32(7),
+        )
+        call = ("TestClass_get_IntProperty", values.obj(obj))
+        typ, expected = "sint32", 7
+    else:
+        call = (
+            "TestClass_static_StaticMethod",
+            values.string("beta"),
+            values.string("gamma"),
+        )
+        typ, expected = "string", "staticbetagamma"
+    function = connected.call_function("TestService", *call)
+    assert connected.run_function(function, typ) == expected
+
+
+@profile("functions")
+def test_call_with_arguments(connected, functions):
+    """The client passes the call it builds for a stream to
+    ``KRPC.Expression.CallWithArguments``. A position with a function takes the function's
+    value, and a position without one takes the argument encoded in the call."""
+    function = connected.call_with_arguments(
+        "TestService",
+        "TestClass_static_StaticMethod",
+        [values.string("beta"), values.string("gamma")],
+        {1: functions.expression("ConstantString", values.string("delta"))},
+    )
+    assert connected.run_function(function, "string") == "staticbetadelta"
+
+
+@profile("functions")
+def test_call_with_a_call_argument(connected):
+    """A function the client builds over one call computes an argument of another call. Here
+    the instance of a class method is computed by a call that creates the object."""
+    obj = connected.invoke("TestService", "CreateTestObject", values.string("alpha"))
+    create = connected.call_function(
+        "TestService", "CreateTestObject", values.string("beta")
+    )
+    function = connected.call_with_arguments(
+        "TestService", "TestClass_GetValue", [values.obj(obj)], {0: create}
+    )
+    assert connected.run_function(function, "string") == "value=beta"
 
 
 @profile("functions")

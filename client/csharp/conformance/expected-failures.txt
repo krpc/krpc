@@ -65,8 +65,7 @@ test_objects.py::test_sorting  # A remote object has no ordering
 test_threading.py::test_value_read_before_wake  # The client has no race points
 test_streams.py::test_value_as_first_call_ends  # The client has no race points
 test_codec.py::test_invalid_utf8  # As test_malformed_data[bytes]
-test_functions.py::test_null_for_non_nullable_type[double]  # Raises InvalidOperationException, as the client has no encoding error type
-test_functions.py::test_stream_null_for_non_nullable_type[double]  # As test_null_for_non_nullable_type[double]
+test_functions.py::test_stream_null_for_non_nullable_type[double]  # Raises InvalidOperationException, as only Run raises EncodingException for a null value
 test_threading.py::test_close_from_an_end_callback[remove] @flaky  # As test_connection.py::test_call_after_end[close], for a remove that loses the race with the close
 test_threading.py::test_wait_holding_another @skip  # The dispatcher thread waits for the condition held, so the update of the stream waited on is never announced
 test_threading.py::test_held_stream_ending_before_value  # A read on the thread holding the condition raises "Stream has no value", as the ending is announced only once the condition is free

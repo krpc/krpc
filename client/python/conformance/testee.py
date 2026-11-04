@@ -191,6 +191,22 @@ class Testee:
             raise Unsupported("A Python thread cannot be interrupted")
         self._connection().close()
 
+    def _call(self, command: pb.Command) -> object:
+        """A server side function over the call the client builds, for a Call or a
+        CallWithArguments command"""
+        conn = self._connection()
+        if command.HasField("call"):
+            func, args = self._resolve(command.call.invoke)
+            return conn.krpc.Expression.call(conn.get_call(func, *args))
+        func, args = self._resolve(command.call_with_arguments.invoke)
+        arguments = {
+            position: self._from_value(value)
+            for position, value in command.call_with_arguments.arguments.items()
+        }
+        return conn.krpc.Expression.call_with_arguments(
+            conn.get_call(func, *args), arguments
+        )
+
     def _dispatch(self, command: pb.Command, reply: pb.Reply) -> None:
         case = command.WhichOneof("command")
         if case == "connect":
@@ -208,13 +224,13 @@ class Testee:
             reply.value.CopyFrom(self._to_value(func(*args, **kwargs)))
         elif case in STREAM_COMMANDS:
             self._dispatch_stream(case, command, reply)
-        elif case == "call":
-            func, args = self._resolve(command.call.invoke)
-            conn = self._connection()
-            function = conn.krpc.Expression.call(conn.get_call(func, *args))
-            reply.value.CopyFrom(self._to_value(function))
+        elif case in ("call", "call_with_arguments"):
+            reply.value.CopyFrom(self._to_value(self._call(command)))
         elif case == "add_function_stream":
             reply.stream = self._add_function_stream(command.add_function_stream)
+        elif case == "compile_function":
+            function = self._from_value(command.compile_function.function)
+            self._connection().compile(function)
         elif case == "add_function_event":
             function = self._from_value(command.add_function_event.function)
             event = self._connection().add_event(function)

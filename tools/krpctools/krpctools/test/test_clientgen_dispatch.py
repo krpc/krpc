@@ -11,12 +11,16 @@ from ..clientgen.dispatch import (
 from ..definitions import Definitions
 
 
-def generate(language, generator, service):
+def generate_from(language, generator, service, defs):
     template = (
         files("krpctools.clientgen")
         .joinpath(language + "-dispatch.tmpl")
         .read_text(encoding="utf-8")
     )
+    return generator(template, service, Definitions(defs)).generate()
+
+
+def generate(language, generator, service):
     defs = {}
     for name in ("KRPC", "TestService"):
         defs.update(
@@ -26,7 +30,7 @@ def generate(language, generator, service):
                 .read_text(encoding="utf-8")
             )
         )
-    return generator(template, service, Definitions(defs)).generate()
+    return generate_from(language, generator, service, defs)
 
 
 class TestClientGenDispatch(unittest.TestCase):
@@ -198,14 +202,37 @@ class TestClientGenDispatch(unittest.TestCase):
             "return Result_KRPC_ServerStatus (connection.KRPC ().GetStatus ());",
             content,
         )
-        # A stream is returned as its id
-        self.assertIn(
-            "return Result.Uint64 (connection.KRPC ().AddFunctionStream (", content
-        )
+        # An internal procedure has no stub to call
+        self.assertNotIn('"AddFunctionStream"', content)
         content = generate("cnano", CnanoDispatchGenerator, "KRPC")
         self.assertIn("return KRPC_ServerStatus::result(result);", content)
         # A protobuf message is never an argument
         self.assertNotIn('"AddStream"', content)
+
+    def test_stream(self):
+        # A stream is returned as its id
+        service = {
+            "id": 1,
+            "documentation": "",
+            "procedures": {
+                "GetStream": {
+                    "id": 1,
+                    "parameters": [],
+                    "return_type": {"code": "STREAM"},
+                    "documentation": "",
+                }
+            },
+            "classes": {},
+            "enumerations": {},
+            "exceptions": {},
+            "structs": {},
+        }
+        content = generate_from(
+            "csharp", CsharpDispatchGenerator, "ServiceA", {"ServiceA": service}
+        )
+        self.assertIn(
+            "return Result.Uint64 (connection.ServiceA ().GetStream ());", content
+        )
 
 
 if __name__ == "__main__":

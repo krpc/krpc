@@ -25,6 +25,8 @@ namespace KRPC.Service.Messages
 
         public string DeprecatedReason { get; set; }
 
+        public bool Internal { get; set; }
+
         public Procedure (string name, uint id)
         {
             Name = name;

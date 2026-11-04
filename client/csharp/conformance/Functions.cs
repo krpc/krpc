@@ -97,10 +97,24 @@ namespace KRPC.Client.Conformance
             return Result.Object (Expression.Call (connection, Conformance.Dispatch.Call (connection, invoke)));
         }
 
+        public static Value CallWithArguments (Connection connection, CallWithArguments command)
+        {
+            var arguments = new Dictionary<int, Expression> ();
+            foreach (var argument in command.Arguments)
+                arguments [(int)argument.Key] = Arg.Object<Expression> (argument.Value);
+            var call = Conformance.Dispatch.Call (connection, command.Invoke);
+            return Result.Object (Expression.CallWithArguments (connection, call, arguments));
+        }
+
         public static IStreamHandle AddStream (Connection connection, AddFunctionStream command)
         {
             var nullable = command.Type.StartsWith ("nullable ", StringComparison.Ordinal);
             return Get (command.Type).AddStream (connection, Arg.Object<Expression> (command.Function), nullable);
+        }
+
+        public static void Compile (Connection connection, CompileFunction command)
+        {
+            connection.Compile (Arg.Object<Expression> (command.Function));
         }
 
         public static Value AddEvent (Connection connection, AddFunctionEvent command)

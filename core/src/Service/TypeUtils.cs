@@ -86,6 +86,16 @@ namespace KRPC.Service
         }
 
         /// <summary>
+        /// Returns true if a value of the given type holds a stream or an event, at any position.
+        /// </summary>
+        public static bool HoldsAStream (Type type)
+        {
+            if (type == typeof(Messages.Stream) || type == typeof(Messages.Event))
+                return true;
+            return type.IsGenericType && type.GetGenericArguments ().Any (HoldsAStream);
+        }
+
+        /// <summary>
         /// Returns true if the given type can be used as a kRPC class type.
         /// </summary>
         public static bool IsAClassType (ICustomAttributeProvider type)
@@ -248,6 +258,14 @@ namespace KRPC.Service
             if (Reflection.HasAttribute<KRPCProcedureAttribute> (method))
                 return Reflection.GetAttribute<KRPCProcedureAttribute> (method).Id;
             return Reflection.GetAttribute<KRPCMethodAttribute> (method).Id;
+        }
+
+        /// <summary>
+        /// Whether the attribute of the given procedure marks it internal.
+        /// </summary>
+        public static bool GetProcedureInternal (MethodInfo method)
+        {
+            return Reflection.GetAttribute<KRPCProcedureAttribute> (method).Internal;
         }
 
         /// <summary>
@@ -754,6 +772,8 @@ namespace KRPC.Service
                     throw new ServiceException ("KRPCStruct " + type + " field " + property.Name + " does not have both a getter and a setter");
                 if (!IsAValidType (GetStructFieldType (property)))
                     throw new ServiceException ("KRPCStruct " + type + " field " + property.Name + " has type " + property.PropertyType + ", which is not a valid kRPC type");
+                if (HoldsAStream (GetStructFieldType (property)))
+                    throw new ServiceException ("KRPCStruct " + type + " field " + property.Name + " holds a stream or an event, which a struct field cannot");
                 var propertyAttribute = Reflection.GetAttribute<KRPCPropertyAttribute> (property);
                 if (propertyAttribute.GameScene != GameScene.Inherit)
                     throw new ServiceException ("KRPCStruct " + type + " field " + property.Name + " sets a game scene, which struct fields cannot do");

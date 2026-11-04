@@ -478,9 +478,12 @@ public class Connection implements AutoCloseable {
       channel.close();
       throw exn;
     }
-    session = new Session(channel, reader, this::removeStreamRequest, stallTimeout);
+    session = new Session(
+        channel, reader, id -> InternalProcedures.removeStreamRequest(this, id), stallTimeout);
     streamManager = new StreamManager(this, session);
     session.start(streamManager);
+    // Register the KRPC exception types, which a procedure of any service can throw
+    krpc.client.services.KRPC.newInstance(this);
   }
 
   /** Sends the connection request, and checks the server's response to it. */
@@ -535,14 +538,6 @@ public class Connection implements AutoCloseable {
     }
   }
 
-  /** A request to remove a stream on the server. */
-  private KRPC.Request removeStreamRequest(long id) {
-    KRPC.Type uint64 = KRPC.Type.newBuilder().setCode(KRPC.Type.TypeCode.UINT64).build();
-    return KRPC.Request.newBuilder()
-        .addCalls(buildCall("KRPC", "RemoveStream", Encoder.encode(id, uint64)))
-        .build();
-  }
-
   /** Close the connection. Sends the server a disconnect first. */
   @Override
   public void close() throws IOException {
@@ -571,7 +566,19 @@ public class Connection implements AutoCloseable {
   }
 
   private KRPC.ProcedureResult invoke(KRPC.ProcedureCall call) throws RPCException {
-    KRPC.Response response = invokeInternal(call);
+    return getCheckedResult(invokeInternal(call));
+  }
+
+  /**
+   * Invoke an internal procedure of the KRPC service. It has no generated stub to look up, so the
+   * caller gives whether it adds a stream.
+   */
+  KRPC.ProcedureResult invokeKrpc(String procedure, boolean addsStream, ByteString... arguments)
+      throws RPCException {
+    return getCheckedResult(invokeInternal(buildCall("KRPC", procedure, arguments), addsStream));
+  }
+
+  private KRPC.ProcedureResult getCheckedResult(KRPC.Response response) throws RPCException {
     KRPC.Error error = getErrorFromResponse(response);
     if (error != null) {
       throwException(error);
@@ -580,11 +587,21 @@ public class Connection implements AutoCloseable {
   }
 
   KRPC.Response invokeInternal(KRPC.ProcedureCall call) throws RPCException {
+    // The reader registers a stream or an event the call adds before it reads the stream's
+    // first update
+    KRPC.Type.TypeCode code;
     try {
-      // The reader registers a stream or an event the call adds before it reads the stream's
-      // first update
-      KRPC.Type.TypeCode code = getReturnTypeCode(call.getService(), call.getProcedure());
-      boolean addsStream = code == KRPC.Type.TypeCode.STREAM || code == KRPC.Type.TypeCode.EVENT;
+      code = getReturnTypeCode(call.getService(), call.getProcedure());
+    } catch (IOException exn) {
+      throw new RPCException("Failed to invoke call", exn);
+    }
+    boolean addsStream = code == KRPC.Type.TypeCode.STREAM || code == KRPC.Type.TypeCode.EVENT;
+    return invokeInternal(call, addsStream);
+  }
+
+  private KRPC.Response invokeInternal(KRPC.ProcedureCall call, boolean addsStream)
+      throws RPCException {
+    try {
       return session.call(KRPC.Request.newBuilder().addCalls(call), addsStream);
     } catch (IOException exn) {
       throw new RPCException("Failed to invoke call", exn);
@@ -828,13 +845,27 @@ public class Connection implements AutoCloseable {
    */
   public <T> Stream<T> addStream(krpc.client.services.KRPC.Expression function)
       throws StreamException, RPCException {
-    krpc.client.services.KRPC krpcService = krpc.client.services.KRPC.newInstance(this);
     KRPC.Type returnType = expressionReturnType(function);
     if (returnType == null) {
       throw new StreamException("The function does not evaluate to a value");
     }
-    long streamId = krpcService.addFunctionStream(function);
+    long streamId = InternalProcedures.addFunctionStream(this, function);
     return new Stream<T>(this, returnType, streamId);
+  }
+
+  /**
+   * Compile a server side function built with the expression API on the server, so that its
+   * first run is as fast as later ones.
+   *
+   * @param function
+   *            The function to compile.
+   *
+   * @return The function.
+   */
+  public krpc.client.services.KRPC.Expression compile(
+      krpc.client.services.KRPC.Expression function) throws RPCException {
+    InternalProcedures.compileFunction(this, function);
+    return function;
   }
 
   /**
@@ -860,8 +891,7 @@ public class Connection implements AutoCloseable {
   @SuppressWarnings("unchecked")
   public <T> T run(krpc.client.services.KRPC.Expression function, Object... args)
       throws RPCException {
-    krpc.client.services.KRPC krpcService = krpc.client.services.KRPC.newInstance(this);
-    byte[] data = krpcService.runFunction(function, encodeArguments(function, args));
+    byte[] data = InternalProcedures.runFunction(this, function, encodeArguments(function, args));
     // The stub returns null for a null value
     if (data == null) {
       return null;
@@ -884,7 +914,7 @@ public class Connection implements AutoCloseable {
    * @return An event object.
    */
   public Event addEvent(krpc.client.services.KRPC.Expression function) throws RPCException {
-    return krpc.client.services.KRPC.newInstance(this).addEvent(function);
+    return InternalProcedures.addEvent(this, function);
   }
 
   /**

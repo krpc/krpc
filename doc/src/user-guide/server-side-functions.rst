@@ -638,7 +638,7 @@ Compiling a function also compiles it to native code on the server. A lambda pas
 stutter.
 
 Compile a function before it is needed, such as before launch, and every run is fast. For a
-function built with the expression API, ``KRPC.CompileFunction`` compiles it on the
+function built with the expression API, the client's ``compile`` function compiles it on the
 server.
 
 .. _server-side-functions-api:
@@ -660,15 +660,14 @@ evaluations are fast.
 Each node is a constant, an embedded remote procedure call, an operator, a statement or a nested
 function. Statements are assignments, loops and if statements.
 
-Three RPCs consume these trees:
+You use a tree in one of three ways:
 
-* ``AddEvent`` takes a function that evaluates to a boolean, and returns an event. The server
-  evaluates the function on each stream update, and triggers the event when it returns true.
-* ``AddFunctionStream`` takes a function whose value can be sent to a client, such as a number,
-  a string, a collection or an object. It returns a stream of the value, recomputed on each
-  stream update.
-* ``RunFunction`` evaluates a function once, within a single physics tick, and returns its
-  value. Use it for a function with side effects.
+* An event, from a function that evaluates to a boolean. The server evaluates the function on
+  each stream update, and triggers the event when it returns true.
+* A stream, from a function whose value can be sent to a client, such as a number, a string, a
+  collection or an object. The value is recomputed on each stream update.
+* A run, which evaluates a function once, within a single physics tick, and returns its value.
+  Use it for a function with side effects.
 
 Two rules hold for every server side function:
 

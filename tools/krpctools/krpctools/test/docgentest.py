@@ -64,7 +64,7 @@ class DocGenTestCase(_Base):
             name: Service(
                 name, sort=sort, types=definitions.types, **parse_service_info(info)
             )
-            for name, info in defs.items()
+            for name, info in definitions.services.items()
         }
 
         rst_content = [
@@ -76,21 +76,21 @@ class DocGenTestCase(_Base):
             "",
             "{{ macros.service(services['%s']) }}" % service_name,
         ]
-        for cls in defs[service_name]["classes"].keys():
+        for cls in definitions.services[service_name]["classes"].keys():
             rst_content.append(
                 "{{ macros.class(services['%s'].classes['%s']) }}" % (service_name, cls)
             )
-        for enm in defs[service_name]["enumerations"].keys():
+        for enm in definitions.services[service_name]["enumerations"].keys():
             rst_content.append(
                 "{{ macros.enumeration(services['%s'].enumerations['%s']) }}"
                 % (service_name, enm)
             )
-        for struct in defs[service_name].get("structs", {}).keys():
+        for struct in definitions.services[service_name].get("structs", {}).keys():
             rst_content.append(
                 "{{ macros.struct(services['%s'].structs['%s']) }}"
                 % (service_name, struct)
             )
-        for exn in defs[service_name]["exceptions"].keys():
+        for exn in definitions.services[service_name]["exceptions"].keys():
             rst_content.append(
                 "{{ macros.exception(services['%s'].exceptions['%s']) }}"
                 % (service_name, exn)
@@ -150,6 +150,34 @@ class DocGenTestCase(_Base):
             self.generate("BadService", self.load("UndeclaredEnumValue"))
         self.assertIn("BadService.Frob parameter mode", str(cm.exception))
         self.assertIn("7 is not a valid Mode", str(cm.exception))
+
+    def test_internal_procedure(self):
+        # An internal procedure is for client libraries only, so it is left out of the docs
+        def procedure(pid, internal):
+            info = {
+                "id": pid,
+                "parameters": [],
+                "documentation": "<doc><summary>A procedure.</summary></doc>",
+            }
+            if internal:
+                info["internal"] = True
+            return info
+
+        service = {
+            "id": 1,
+            "documentation": "",
+            "procedures": {
+                "Visible": procedure(1, False),
+                "Concealed": procedure(2, True),
+            },
+            "classes": {},
+            "enumerations": {},
+            "exceptions": {},
+            "structs": {},
+        }
+        content = self.generate("ServiceA", {"ServiceA": service}).lower()
+        self.assertIn("visible", content)
+        self.assertNotIn("concealed", content)
 
     def test_invalid_documentation_markup(self):
         for summary, problem in [

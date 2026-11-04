@@ -9,6 +9,8 @@ import krpc.client.services.TestService.TestClass;
 import krpc.client.services.TestService.TestEnum;
 import krpc.conformance.Testee.AddFunctionEvent;
 import krpc.conformance.Testee.AddFunctionStream;
+import krpc.conformance.Testee.CallWithArguments;
+import krpc.conformance.Testee.CompileFunction;
 import krpc.conformance.Testee.Invoke;
 import krpc.conformance.Testee.RunFunction;
 import krpc.conformance.Testee.Value;
@@ -21,6 +23,16 @@ final class Functions {
     return Values.resultObject(Expression.call(connection, Dispatch.call(connection, invoke)));
   }
 
+  static Value callWithArguments(Connection connection, CallWithArguments command)
+      throws Exception {
+    Map<Integer, Expression> arguments = new HashMap<Integer, Expression>();
+    for (Map.Entry<Integer, Value> argument : command.getArgumentsMap().entrySet()) {
+      arguments.put(argument.getKey(), function(argument.getValue()));
+    }
+    krpc.schema.KRPC.ProcedureCall call = Dispatch.call(connection, command.getInvoke());
+    return Values.resultObject(Expression.callWithArguments(connection, call, arguments));
+  }
+
   static StreamHandle addStream(Connection connection, AddFunctionStream command)
       throws Exception {
     Function<Object, Value> result = result(command.getType());
@@ -31,6 +43,10 @@ final class Functions {
       return result.apply(value);
     };
     return new StreamHandle(connection.addStream(function(command.getFunction())), convert);
+  }
+
+  static void compile(Connection connection, CompileFunction command) throws Exception {
+    connection.compile(function(command.getFunction()));
   }
 
   static Value addEvent(Connection connection, AddFunctionEvent command) throws Exception {

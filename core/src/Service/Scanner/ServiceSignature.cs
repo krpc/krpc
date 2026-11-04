@@ -136,7 +136,8 @@ namespace KRPC.Service.Scanner
                 Name, method.Name, TypeUtils.GetMethodId (method), method.GetDocumentation (),
                 new ProcedureHandler (method, TypeUtils.GetNullable (method), TypeUtils.GetNullablePaths (method)),
                 TypeUtils.GetProcedureGameScene(method, gameScene),
-                deprecated, deprecatedReason));
+                deprecated, deprecatedReason,
+                TypeUtils.GetProcedureInternal (method)));
         }
 
         /// <summary>

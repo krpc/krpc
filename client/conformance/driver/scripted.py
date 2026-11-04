@@ -20,11 +20,12 @@ from driver import localsocket, raw
 from driver.framing import (
     CLIENT_IDENTIFIER,
     PROTOCOL_VERSION,
+    encode_sint32,
     encode_size,
     frame,
     receive_frame,
 )
-from driver.testee import Endpoint
+from driver.testee import Client, Endpoint
 from driver.websocket import WebSocket
 
 # The time a script has to finish once the test is done with it
@@ -59,6 +60,70 @@ def is_call(call: KRPC.ProcedureCall, procedure: str) -> bool:
 def _is_service_call(call: KRPC.ProcedureCall, service: str, procedure: str) -> bool:
     # Note: a call by id is matched on its procedure alone, as the KRPC service id is set by hand
     return (not call.service or call.service == service) and is_call(call, procedure)
+
+
+def null_stream_ids(
+    client: Client,
+    server: Endpoint,
+    scripted_server: Callable[[Callable[[ScriptedServer], None]], ScriptedServer],
+) -> ScriptedServer:
+    """Connect the client to a script that answers each call that adds a stream with a null
+    result, and each other call as functions_script does."""
+    return functions_script(
+        client,
+        server,
+        scripted_server,
+        null=("AddStream", "AddFunctionStream", "AddEvent"),
+    )
+
+
+def functions_script(
+    client: Client,
+    server: Endpoint,
+    scripted_server: Callable[[Callable[[ScriptedServer], None]], ScriptedServer],
+    null: Iterable[str] = (),
+) -> ScriptedServer:
+    """Connect the client to a script that answers a call to each named KRPC procedure with a
+    null result. Each other KRPC call gets a value of its return type: the object id 1, true,
+    an empty collection, or the type code SInt32, so a server side function can be built and
+    inspected. Any other call gets an empty string."""
+    null = tuple(null)
+    services = definitions(server, "KRPC", "TestService")
+    krpc = next(
+        x for x in KRPC.Services.FromString(services).services if x.name == "KRPC"
+    )
+    type_codes = next(x for x in krpc.enumerations if x.name == "TypeCode")
+    sint32 = next(x.value for x in type_codes.values if x.name == "SInt32")
+    by_code = {
+        KRPC.Type.CLASS: b"\x01",
+        KRPC.Type.BOOL: b"\x01",
+        KRPC.Type.ENUMERATION: encode_sint32(sint32),
+        KRPC.Type.LIST: b"",
+        KRPC.Type.SET: b"",
+        KRPC.Type.DICTIONARY: b"",
+    }
+    returns = {
+        x.name: by_code[x.return_type.code]
+        for x in krpc.procedures
+        if x.return_type.code in by_code
+    }
+
+    def result(request: KRPC.Request) -> KRPC.ProcedureResult:
+        call = request.calls[0]
+        if any(_is_service_call(call, "KRPC", x) for x in null):
+            return KRPC.ProcedureResult(is_null=True)
+        if call.service == "KRPC" and call.procedure in returns:
+            return KRPC.ProcedureResult(value=returns[call.procedure])
+        return KRPC.ProcedureResult(value=b"\x00")
+
+    def script(scripted: ScriptedServer) -> None:
+        scripted.accept()
+        scripted.answer_each(result)
+
+    scripted = scripted_server(script)
+    scripted.services = services
+    client.connect(scripted.endpoint())
+    return scripted
 
 
 class SerialLine:
@@ -356,7 +421,8 @@ class ScriptedServer:
         self, result: Callable[[KRPC.Request], KRPC.ProcedureResult]
     ) -> None:
         """Answer each request until the client stops sending them: GetServices with the
-        services attribute, and any other request with the one result the function gives."""
+        services attribute, and any other request with the one result the function gives.
+        Each call is recorded once its response is sent."""
         while True:
             message = self.receive()
             if message is None or message.WhichOneof("content") != "request":
@@ -367,6 +433,9 @@ class ScriptedServer:
             else:
                 response.results.append(result(message.request))
             self.send(KRPC.Message(response=response))
+            with self._condition:
+                self._calls.extend(message.request.calls)
+                self._condition.notify_all()
 
     def answer_until(self, procedure: str) -> KRPC.Request:
         """Answer each request as serve does, until a call of the procedure, and return that

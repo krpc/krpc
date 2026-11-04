@@ -384,9 +384,10 @@ def create_service(client: Client, service: KRPC.Service) -> object:
         if client._types.struct_type(service.name, struct.name).has_fields:
             cls._add_service_struct(struct)
 
-    # Add procedures
+    # Add procedures. An internal procedure is for the client library only, which calls it
+    # directly
     for procedure in service.procedures:
-        if Attributes.is_a_procedure(procedure.name):
+        if Attributes.is_a_procedure(procedure.name) and not procedure.internal:
             _skipping_unknown_types(
                 "%s.%s" % (service.name, procedure.name),
                 cls._add_service_procedure,

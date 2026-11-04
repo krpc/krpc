@@ -214,9 +214,15 @@ final class Testee {
       case CALL:
         reply.setValue(Functions.call(connected(), command.getCall().getInvoke()));
         break;
+      case CALL_WITH_ARGUMENTS:
+        reply.setValue(Functions.callWithArguments(connected(), command.getCallWithArguments()));
+        break;
       case ADD_FUNCTION_STREAM:
         reply.setStream(
             Values.addHandle(Functions.addStream(connected(), command.getAddFunctionStream())));
+        break;
+      case COMPILE_FUNCTION:
+        Functions.compile(connected(), command.getCompileFunction());
         break;
       case ADD_FUNCTION_EVENT:
         reply.setValue(Functions.addEvent(connected(), command.getAddFunctionEvent()));

@@ -1102,7 +1102,7 @@ namespace KRPC.Client.Test
             Assert.IsNull (Connection.Run (() => obj.ObjectProperty));
             // The function's type is int, so the null reaches the check for one
             var testService = Connection.TestService ();
-            var exn = Assert.Throws<InvalidOperationException> (
+            var exn = Assert.Throws<EncodingException> (
                 () => Connection.Run<int> (
                     Connection.Compile (() => testService.EchoNullableInt (null))));
             StringAssert.Contains ("produced a null value", exn.Message);

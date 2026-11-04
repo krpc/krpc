@@ -70,8 +70,8 @@ namespace KRPC.Service.KRPC
         }
 
         /// <summary>
-        /// Returns information on all services, procedures, classes, properties etc. provided by the server.
-        /// Can be used by client libraries to automatically create functionality such as stubs.
+        /// The services the server provides, with their procedures, classes, enumerations,
+        /// structures and exceptions.
         /// </summary>
         [KRPCProcedure]
         public static Messages.Services GetServices ()
@@ -95,6 +95,7 @@ namespace KRPC.Service.KRPC
                         procedure.Documentation = procedureSignature.Documentation;
                     procedure.Deprecated = procedureSignature.Deprecated;
                     procedure.DeprecatedReason = procedureSignature.DeprecatedReason;
+                    procedure.Internal = procedureSignature.Internal;
                     service.Procedures.Add (procedure);
                 }
                 foreach (var clsSignature in serviceSignature.Classes.Values) {
@@ -245,7 +246,7 @@ namespace KRPC.Service.KRPC
         /// client library instead. Calling this directly while using a client library has
         /// undefined behavior.
         /// </remarks>
-        [KRPCProcedure]
+        [KRPCProcedure (Internal = true)]
         public static Messages.Stream AddStream (ProcedureCall call)
         {
             var callStream = new ProcedureCallStream (call);
@@ -260,7 +261,7 @@ namespace KRPC.Service.KRPC
         /// client library instead. Calling this directly while using a client library has
         /// undefined behavior.
         /// </remarks>
-        [KRPCProcedure]
+        [KRPCProcedure (Internal = true)]
         public static void SetStreamRate (ulong id, float rate)
         {
             Core.Instance.SetStreamRate (CallContext.Client, id, rate);
@@ -274,7 +275,7 @@ namespace KRPC.Service.KRPC
         /// client library instead. Calling this directly while using a client library has
         /// undefined behavior.
         /// </remarks>
-        [KRPCProcedure]
+        [KRPCProcedure (Internal = true)]
         public static void RemoveStream (ulong id)
         {
             Core.Instance.RemoveStream (CallContext.Client, id);
@@ -288,7 +289,7 @@ namespace KRPC.Service.KRPC
         /// server side functions of your client library instead. Calling this directly while
         /// using a client library has undefined behavior.
         /// </remarks>
-        [KRPCProcedure]
+        [KRPCProcedure (Internal = true)]
         public static Messages.Stream AddFunctionStream (Expression function)
         {
             if (ReferenceEquals (function, null))
@@ -306,7 +307,7 @@ namespace KRPC.Service.KRPC
         /// server side functions of your client library instead. Calling this directly while
         /// using a client library has undefined behavior.
         /// </remarks>
-        [KRPCProcedure]
+        [KRPCProcedure (Internal = true)]
         public static void CompileFunction (Expression function)
         {
             if (ReferenceEquals (function, null))
@@ -328,7 +329,7 @@ namespace KRPC.Service.KRPC
         /// value.</returns>
         /// <param name="function">The function to run.</param>
         /// <param name="arguments">The encoded arguments, one per parameter.</param>
-        [KRPCProcedure (Nullable = true)]
+        [KRPCProcedure (Nullable = true, Internal = true)]
         public static byte[] RunFunction (
             Expression function,
             [KRPCDefaultValue (typeof (NoArguments))]
@@ -368,7 +369,7 @@ namespace KRPC.Service.KRPC
         /// events of your client library instead. Calling this directly while using a client
         /// library has undefined behavior.
         /// </remarks>
-        [KRPCProcedure]
+        [KRPCProcedure (Internal = true)]
         public static Messages.Event AddEvent(Expression function)
         {
             var stream = new EventStream (EventCondition (function), false);
