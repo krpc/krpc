@@ -122,6 +122,7 @@ py_console_script_binary(
         "@krpc_pypi//sphinx_lua_ls",
         "@krpc_pypi//sphinx_tabs",
         "@krpc_pypi//sphinxcontrib_spelling",
+        "@krpc_pypi//spylls",
     ],
 )
 
@@ -144,6 +145,7 @@ py_binary(
         "@krpc_pypi//sphinx_lua_ls",
         "@krpc_pypi//sphinx_tabs",
         "@krpc_pypi//sphinxcontrib_spelling",
+        "@krpc_pypi//spylls",
         "@krpc_pypi//watchdog",
     ],
 )
@@ -175,9 +177,6 @@ sphinx_build(
     # is "dev" for a dev build and the release number otherwise.
     opts = {"version": docs_version},
     sphinx_build = ":sphinx-build",
-    # The dot graphs are drawn by graphviz, which is a system install rather than
-    # something the build fetches, and only the Linux image carries it.
-    target_compatible_with = ["@platforms//os:linux"],
 )
 
 png_images(
@@ -280,6 +279,8 @@ sphinx_spelling_test(
     name = "spelling",
     size = "medium",
     srcs = [":srcs"],
+    aff = "@hunspell_en_us_aff//file",
+    dic = "@hunspell_en_us_dic//file",
     opts = {"version": version},
     sphinx_build = ":sphinx-build",
 )

@@ -18,7 +18,7 @@ basedpyright==1.40.2
 cogapp==3.6.0
 hatchling
 pytest
-ruff==0.17.1
+ruff==0.17.3
 
 # Rasterizing the SVG icons and diagrams. pyvips-binary carries libvips and the
 # librsvg that renders them, as wheels for every platform the build runs on, so
@@ -27,7 +27,7 @@ pyvips==3.2.0
 pyvips-binary==8.18.7
 
 # Sphinx and extensions for the documentation
-pydata-sphinx-theme==0.23.0
+pydata-sphinx-theme==0.24.0
 pyenchant==3.3.0
 sphinx==9.1.1
 sphinx-csharp==1.0.0
@@ -36,6 +36,7 @@ sphinx-java==1.0.0
 sphinx-lua-ls==3.12.1
 sphinx-tabs==3.5.0
 sphinxcontrib-spelling==8.0.2
+spylls==0.1.7
 
 # Live-serving the documentation website (bazel run //doc:serve)
 sphinx-autobuild

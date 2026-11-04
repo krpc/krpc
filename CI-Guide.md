@@ -47,18 +47,28 @@ lines each. A job stays outside a matrix when it produces more than one artifact
 other than Bazel, saves a cache on a push, or is named in another job's `needs`, which cannot
 address a single matrix entry.
 
-Windows runs everything that does not need a POSIX tool. The serial transport, clang-tidy and
-the Linux-only lint stay on Linux. Releases are built on Linux, so only the Linux jobs upload
-artifacts.
+Windows runs everything Linux runs, except these:
+
+- **The serial transport tests.** They link two pseudo-terminals with socat, which has no Windows
+  build. Windows tests its serial backend against a stand-in, in
+  `//client/cnano:communication-serialio`.
+- **clang-tidy.** It needs the libc++ headers that only the LLVM toolchain supplies.
+- **`//tools/krpctools:conformance-test`.** The TestServer that krpctools bundles is built for
+  linux-x64.
+- **`//tools/build/python:requirements.test`.** The Python lock file is resolved on Linux.
+- **The C++ CMake fetch scenario.** It builds protobuf and abseil from source, and on Windows
+  that build is uncached and takes the job past 30 minutes. Windows builds the system scenario,
+  which shows the client compiles there.
+
+Releases are built on Linux, so only the Linux jobs upload artifacts.
 
 ### Linux
 
 The Linux Bazel jobs run in the `ghcr.io/krpc/buildenv` image (`tools/buildenv/`), pinned by
-version in each job. The image holds the system tools some targets need, such as socat and
-Graphviz, and an LLVM install that the Linux jobs use in place of Bazel's own (see
-[Bazel Configuration](#bazel-configuration)). The .NET SDK for the `KRPC.sln` build comes from
-`actions/setup-dotnet`. The container runs as the `runner` user, so it owns the files the
-checkout writes.
+version in each job. The image holds socat for the serial transport tests, and an LLVM install
+that the Linux jobs use in place of Bazel's own (see [Bazel Configuration](#bazel-configuration)).
+The .NET SDK for the `KRPC.sln` build comes from `actions/setup-dotnet`. The container runs as
+the `runner` user, so it owns the files the checkout writes.
 
 The CMake and vcpkg consumer jobs run on the bare runner. They need only a compiler and the
 packages the `vcpkg-linux` action installs.
@@ -66,8 +76,10 @@ packages the `vcpkg-linux` action installs.
 ### Windows
 
 The Windows jobs use the tools the runner image ships: MSVC, Bazelisk and Git Bash. The
-`bazel-fetch-windows` action writes the CI config to the system-wide `bazel.bazelrc`. It also
-sets `MSYS2_ARG_CONV_EXCL=*`, as Git Bash otherwise rewrites `//pkg:target` patterns as paths.
+`bazel-fetch-windows` action writes the CI config to the system-wide `bazel.bazelrc`, with the
+output root at `D:/b`. The default root, under the runner's profile, puts DLLs in the
+sphinx-build runfiles past `MAX_PATH`. The action also sets `MSYS2_ARG_CONV_EXCL=*`, as Git
+Bash otherwise rewrites `//pkg:target` patterns as paths.
 The jobs build in `dbg` mode, whose `/DEBUG:FULL` link flag avoids the LNK4315 warning rules_cc
 causes in fastbuild.
 

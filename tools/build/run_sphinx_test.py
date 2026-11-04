@@ -4,8 +4,9 @@
 
 CONFIG is the json file written by the sphinx_spelling_test and
 sphinx_linkcheck_test rules, naming the sphinx-build launcher and the staged
-source directory, both runfiles-root-relative, the builder to run and the
--D options to give it.
+source directory, both runfiles-root-relative, the builder to run, the
+-D options to give it and the files to name to conf.py in environment
+variables.
 
 The spelling builder reports each misspelling as a warning, so it is run with
 -W to make one fail the test. The link checker collects every link it could not
@@ -65,6 +66,10 @@ def run(config):
     environment = dict(os.environ)
     if "RUNFILES_DIR" not in environment and "TEST_SRCDIR" in environment:
         environment["RUNFILES_DIR"] = environment["TEST_SRCDIR"]
+    # Files the rule passes to conf.py, as absolute paths so they resolve from
+    # any working directory
+    for key, path in config["env"].items():
+        environment[key] = os.path.abspath(path)
 
     command = [sphinx_build, "-b", builder, "-E", "-N", "-T"]
     if builder == "spelling":

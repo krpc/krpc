@@ -36,7 +36,11 @@ Each client's ``:test`` suite groups its tests by what they depend on:
   on.
 * ``:lint`` - the language's linters, where it has them.
 
-``//:lint`` runs the linters for every language. Useful options for ``bazel test`` are:
+``//:test`` includes each language's linters. ``//doc:linkcheck`` checks the external links in
+the documentation. It needs network access and is in no suite. Run it by name, as the release
+checks do.
+
+Useful options for ``bazel test`` are:
 
 * ``--cache_test_results=false`` runs tests whose results are cached.
 * ``--test_output=all`` prints the log of every test, not just the failed ones.

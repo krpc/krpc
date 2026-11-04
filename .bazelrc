@@ -34,6 +34,10 @@ build:linux --linkopt=-Wno-gcc-install-dir-libstdcxx --host_linkopt=-Wno-gcc-ins
 # using APIs and attributes that newer clang releases deprecate.
 build:linux --per_file_copt=external/.*@-w --host_per_file_copt=external/.*@-w
 build:macos --per_file_copt=external/.*@-w --host_per_file_copt=external/.*@-w
+# Abseil sets /W3 itself, and overriding it prints warning D9025 for each file. Its
+# sources compile clean under MSVC, so they keep their warnings.
+build:windows --per_file_copt=external/.*,-external/abseil-cpp[+]/.*@/w
+build:windows --host_per_file_copt=external/.*,-external/abseil-cpp[+]/.*@/w
 
 # The LLVM toolchain turns on clang's thread-safety analysis, and libc++ annotates
 # std::lock_guard for it. The C++ client's RecursiveMutex carries no capability
@@ -79,6 +83,12 @@ test --test_env=LC_ALL=C.UTF-8
 startup --windows_enable_symlinks
 common:windows --enable_runfiles
 
+# Windows: genrules, and repository rules such as the maven fetch, run under the
+# bash from Git for Windows. Without BAZEL_SH, Bazel looks for an MSYS2 install
+# at c:/msys64. Override both in your user .bazelrc for Git in another place.
+build:windows "--shell_executable=C:/Program Files/Git/usr/bin/bash.exe"
+common:windows "--repo_env=BAZEL_SH=C:/Program Files/Git/usr/bin/bash.exe"
+
 # rules_cc misdetects recent MSVC toolchains as supporting /DEBUG:FASTLINK and
 # links fastbuild binaries with it, warning LNK4315 on every link as it falls
 # back to /DEBUG:FULL. Build in dbg mode, whose debug flag is the supported
@@ -122,4 +132,6 @@ common:ci-linux --config=ci --config=system-llvm
 build:ci-linux --features=-parse_headers --host_features=-parse_headers
 
 # The Windows CI jobs. D: is the workspace disk of a GitHub Windows runner.
+# The bazel-fetch-windows action sets the output root, as a config cannot hold
+# a startup option.
 common:ci-windows --config=ci --repository_cache=D:/bazel-repo

@@ -1409,74 +1409,10 @@ the manual controls).
 In outline, the signals flow from the two measured inputs, through the observation and
 gating layers, to the four mitigations that tap into the control loop:
 
-.. graphviz::
+.. figure:: /images/user-guide/autopilot-oscillation.png
    :align: center
-   :caption: Oscillation observation, gating and mitigation pipeline.
 
-   digraph oscillation {
-       rankdir=TB;
-       bgcolor="transparent";
-       node [shape=box, style=rounded, fontname="Helvetica,Arial,sans-serif", fontsize=11];
-       edge [fontname="Helvetica,Arial,sans-serif", fontsize=9, color="#555555"];
-
-       // Inputs
-       omega [label="measured rate ω\n(root part, carries wobble)", shape=box, style=filled, fillcolor="#eeeeee"];
-       uout  [label="delivered control output", shape=box, style=filled, fillcolor="#eeeeee"];
-       theta [label="pointing error θ", shape=box, style=filled, fillcolor="#eeeeee"];
-
-       // Observation layer
-       subgraph cluster_obs {
-           label="OBSERVATION"; labeljust="l"; fontsize=10; fontname="Helvetica,Arial,sans-serif";
-           style="dashed,rounded"; color="#999999";
-           chatter [label="chatter\ndetector"];
-           freq    [label="frequency\nestimator"];
-           envel   [label="control-osc.\nenvelope"];
-       }
-
-       // Gating layer
-       subgraph cluster_gate {
-           label="GATING"; labeljust="l"; fontsize=10; fontname="Helvetica,Arial,sans-serif";
-           style="dashed,rounded"; color="#999999";
-           node [shape=box, style="filled,rounded", fillcolor="#dce8f5", color="#4a6f9c"];
-           hold    [label="hold factor\n= f(θ)"];
-           backoff [label="back-off = f(envelope)\n[latched axes only]"];
-           level   [label="level = ramp ·\nmax(hold factor, back-off)"];
-           tool    [label="tool = notch /\nlow-pass / broadband"];
-           hold    -> level;
-           backoff -> level;
-       }
-
-       // Mitigation layer
-       subgraph cluster_mit {
-           label="MITIGATION"; labeljust="l"; fontsize=10; fontname="Helvetica,Arial,sans-serif";
-           style="dashed,rounded"; color="#999999";
-           rate  [label="rate filter\n→ measured rate"];
-           bw    [label="bandwidth floor\n→ inner-loop gain"];
-           ffcut [label="feedforward cut\n→ accel. feedforward"];
-           outf  [label="output filter\n→ delivered command"];
-       }
-
-       loop [label="control loop  —  actuates in [−1, 1]", shape=box, style=filled, fillcolor="#eeeeee"];
-
-       omega -> chatter;
-       omega -> freq;
-       uout  -> envel;
-
-       chatter -> level   [label="latch → ramp"];
-       freq    -> tool    [label="f"];
-       envel   -> backoff [label="envelope"];
-       theta   -> hold;
-
-       tool  -> rate  [label="tool, f, latch"];
-       level -> bw    [label="level"];
-       level -> ffcut [label="level (hold gate)"];
-       level -> outf  [label="latch, level"];
-
-       rate  -> loop;
-       bw    -> loop;
-       ffcut -> loop;
-       outf  -> loop;
-   }
+   Oscillation observation, gating and mitigation pipeline.
 
 The observation layer never acts on the craft; it only sets the latch, frequency and
 envelope. The gating layer combines those with the pointing error into the per-axis

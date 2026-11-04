@@ -299,42 +299,6 @@ alias(
     actual = "//tools/krpctest:run-ksp",
 )
 
-test_suite(
-    name = "lint",
-    tests = [
-        "//:buildifier",
-        "//:pyright-release",
-        "//:ruff-release",
-        "//client/cnano:lint",
-        "//client/conformance:lint",
-        "//client/cpp:lint",
-        "//client/java:lint",
-        "//client/lua:lint",
-        "//client/python:lint",
-        "//client/websockets:lint",
-        "//doc:linkcheck",
-        "//doc:lint",
-        "//service/Debug:lint",
-        "//service/DockingCamera:lint",
-        "//service/Drawing:lint",
-        "//service/InfernalRobotics:lint",
-        "//service/KerbalAlarmClock:lint",
-        "//service/RemoteTech:lint",
-        "//service/SpaceCenter:lint",
-        "//service/UI:lint",
-        "//tools/benchmarks:lint",
-        "//tools/build:pyright",
-        "//tools/build:ruff",
-        "//tools/build/protobuf:pyright",
-        "//tools/build/protobuf:ruff",
-        "//tools/build/python:pyright",
-        "//tools/build/python:ruff",
-        "//tools/ci:lint",
-        "//tools/krpctest:lint",
-        "//tools/krpctools:lint",
-    ],
-)
-
 filegroup(
     name = "csproj",
     testonly = True,

@@ -1,5 +1,12 @@
 import datetime
 import os
+import warnings
+
+# On Windows the runfiles path to charset_normalizer's compiled modules exceeds
+# MAX_PATH, so the DLL fails to load and requests warns at import. Sphinx works
+# without it.
+warnings.filterwarnings(
+    'ignore', message='Unable to find acceptable character detection dependency')
 
 project = 'kRPC'
 version = '%VERSION%'
@@ -16,7 +23,6 @@ master_doc = 'index'
 source_suffix = '.rst'
 extensions = [
     'sphinx.ext.mathjax',
-    'sphinx.ext.graphviz',
     'sphinx.ext.todo',
     'sphinx.ext.extlinks',
     'sphinx_design',
@@ -26,10 +32,54 @@ extensions = [
     'sphinx_java'
 ]
 
-# The spellchecker loads a native library through pyenchant, and only the
-# spelling builder has any use for it, so it is added when that builder asks
-# for it (sphinx-build -t spelling) rather than by every build.
+# The spellchecker is added when the spelling builder asks for it
+# (sphinx-build -t spelling), as no other builder has a use for it.
 if tags.has('spelling'):  # noqa: F821  -- sphinx supplies tags to conf.py
+    # sphinxcontrib-spelling checks words through pyenchant, which loads the
+    # Enchant library at import. We register the enchant package without running
+    # its __init__, so only pyenchant's tokenizer loads, which is pure Python.
+    # Words are checked with spylls, a Python port of Hunspell, against the
+    # dictionary the build fetches.
+    import importlib.util
+    import sys
+    import types
+    enchant = types.ModuleType('enchant')
+    enchant.__path__ = importlib.util.find_spec('enchant').submodule_search_locations
+    sys.modules['enchant'] = enchant
+    from spylls.hunspell import Dictionary, readers
+    from spylls.hunspell.readers.file_reader import FileReader
+
+    class HunspellDictWithPWL:
+        """The part of enchant.DictWithPWL that sphinxcontrib-spelling uses."""
+
+        def __init__(self, lang, pwl):
+            aff, context = readers.read_aff(FileReader(os.environ['KRPC_SPELLING_AFF']))
+            dic = readers.read_dic(
+                FileReader(os.environ['KRPC_SPELLING_DIC'], encoding=context.encoding),
+                aff=aff, context=context)
+            self.dictionary = Dictionary(aff, dic)
+            with open(pwl, encoding='utf-8') as words:
+                self.words = {word.strip() for word in words if word.strip()}
+            self.checked = {}
+
+        def check(self, word):
+            if word not in self.checked:
+                self.checked[word] = self.in_words(word) or self.dictionary.lookup(word)
+            return self.checked[word]
+
+        # Enchant's casing rule for a personal word list: an entry also matches
+        # its capitalized and upper case forms
+        def in_words(self, word):
+            if word in self.words:
+                return True
+            if word.istitle() and word.lower() in self.words:
+                return True
+            return word.isupper() and (word.lower() in self.words or word.capitalize() in self.words)
+
+        def suggest(self, word):
+            return list(self.dictionary.suggest(word))
+
+    enchant.DictWithPWL = HunspellDictWithPWL
     extensions.append('sphinxcontrib.spelling')
 
 # The Lua API is written with the domain's directives, so sphinx-lua-ls needs no
@@ -37,9 +87,6 @@ if tags.has('spelling'):  # noqa: F821  -- sphinx supplies tags to conf.py
 lua_ls_backend = 'disable'
 # Resolve Types.none in signatures against the krpc module, where lua.rst declares it
 lua_ls_default_options = {'using': 'krpc'}
-
-# Render Graphviz diagrams as SVG in HTML so they stay crisp when scaled.
-graphviz_output_format = 'svg'
 
 html_theme = 'pydata_sphinx_theme'
 htmlhelp_basename = 'krpc-doc'
