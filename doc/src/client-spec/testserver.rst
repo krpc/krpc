@@ -7,7 +7,7 @@ and you can test your own client against it while you write it.
 Running the Server
 ------------------
 
-The TestServer ships in the `krpctools <https://pypi.org/project/krpctools>`_ Python package.
+The TestServer ships in the :doc:`krpctools </krpctools>` Python package.
 Install it, then start the server on port 50000:
 
 .. code-block:: sh

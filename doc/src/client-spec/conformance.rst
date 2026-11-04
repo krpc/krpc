@@ -9,7 +9,7 @@ result. To test your own client, write a testee for it.
 Running the Tests
 -----------------
 
-The driver ships in the `krpctools <https://pypi.org/project/krpctools>`_ Python package, with a
+The driver ships in the :doc:`krpctools </krpctools>` Python package, with a
 TestServer to run the tests against. Install it, then run the tests against your testee:
 
 .. code-block:: sh

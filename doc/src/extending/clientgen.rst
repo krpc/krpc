@@ -11,7 +11,7 @@ Other client libraries required code to be generated and compiled into them stat
 automatically pick up changes to service code. Such client libraries include those for C++ and C#.
 
 Code for these 'static' libraries is generated using the krpc-clientgen tool. This is provided as
-part of the `krpctools python package <https://pypi.python.org/pypi/krpctools>`_. It can be
+part of the :doc:`krpctools </krpctools>` Python package. It can be
 installed using pip:
 
 ``pip install krpctools``
