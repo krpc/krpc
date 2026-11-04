@@ -241,12 +241,15 @@ http_archive(
     url = "https://www.nuget.org/api/v2/package/Google.Protobuf/3.10.1",
 )
 
+# Note: the C# client compiles against the System.Memory and Unsafe versions that
+# Google.Protobuf's netstandard2.0 build depends on. A .NET Framework program
+# gets those versions from NuGet, and has no newer one to bind a reference to.
 http_archive(
     name = "csharp_system_memory",
     build_file_content = "exports_files(['lib/netstandard2.0/System.Memory.dll'])",
-    sha256 = "26078aeb758c9ae985e8bf851f973026061da6a5eb4837204d0c2d2204c72955",
+    sha256 = "0af97b45b45b46ef6a2b37910568dabd492c793da3859054595d523e2a545859",
     type = "zip",
-    url = "https://www.nuget.org/api/v2/package/System.Memory/4.6.3",
+    url = "https://www.nuget.org/api/v2/package/System.Memory/4.5.3",
 )
 
 http_archive(
@@ -260,9 +263,9 @@ http_archive(
 http_archive(
     name = "csharp_system_runtime_compilerservices_unsafe",
     build_file_content = "exports_files(['lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll'])",
-    sha256 = "5f6a7f53af3465f92beb6da873ebe0e496206c313313b98badee4355a6b25937",
+    sha256 = "f1e5175c658ed8b2fbb804cc6727b6882a503844e7da309c8d4846e9ca11e4ef",
     type = "zip",
-    url = "https://www.nuget.org/api/v2/package/System.Runtime.CompilerServices.Unsafe/6.1.2",
+    url = "https://www.nuget.org/api/v2/package/System.Runtime.CompilerServices.Unsafe/4.5.2",
 )
 
 http_file(
