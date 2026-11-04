@@ -15,13 +15,13 @@ namespace KRPC.Client
         global::KRPC.Schema.KRPC.ProcedureResult Invoke (string service, string procedure, IList<ByteString> arguments = null);
 
         /// <summary>
-        /// Invoke a remote procedure call that returns a value of the given type.
+        /// Invoke a remote procedure call that returns a value with the given type code.
         /// </summary>
         /// <remarks>
-        /// Called by generated service stubs. The type is used to note the ids of the streams
-        /// and events the procedure returns.
+        /// Called by generated service stubs. The type code is used to note the ids of the
+        /// streams and events the procedure returns.
         /// </remarks>
-        global::KRPC.Schema.KRPC.ProcedureResult Invoke (string service, string procedure, IList<ByteString> arguments, Type returnType);
+        global::KRPC.Schema.KRPC.ProcedureResult Invoke (string service, string procedure, IList<ByteString> arguments, global::KRPC.Schema.KRPC.Type.Types.TypeCode returnCode);
 
         /// <summary>
         /// Add an exception type

@@ -51,9 +51,9 @@ class Client {
       std::string_view service, std::string_view procedure,
       const std::vector<encoder::Value>& args = std::vector<encoder::Value>());
 
-  /** The kind of value a procedure returns: a new stream as a KRPC.Stream message, a new event
-      as a KRPC.Event message, or any other value. */
-  enum class Returns : uint8_t { value, stream, event };
+  /** The kind of value a procedure returns: the id of a new stream, which for an event is the id
+      of its stream, or any other value. */
+  enum class Returns : uint8_t { value, stream };
   /** Invoke a procedure that returns what returns says, as generated stubs do. A new stream or
       event is registered with the stream manager. */
   schema::ProcedureResult invoke(std::string_view service, std::string_view procedure,

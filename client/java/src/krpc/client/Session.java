@@ -43,16 +43,19 @@ class Session {
   // The wait for the server to close its side once ours is closed
   private static final long CLOSE_TIMEOUT_MILLISECONDS = 1000;
 
-  /** A call waiting for its response. Changed under the state lock. */
+  /**
+   * A call waiting for its response. addsStream is whether the call returns a stream or an event,
+   * as the id of the stream it adds. Changed under the state lock.
+   */
   private static class Slot {
-    final KRPC.Type.TypeCode streamCode;
+    final boolean addsStream;
     boolean abandoned;
     volatile boolean done;
     KRPC.Response response;
     ConnectionException error;
 
-    Slot(KRPC.Type.TypeCode streamCode, boolean abandoned) {
-      this.streamCode = streamCode;
+    Slot(boolean addsStream, boolean abandoned) {
+      this.addsStream = addsStream;
       this.abandoned = abandoned;
     }
   }
@@ -169,9 +172,9 @@ class Session {
    * Send a request and wait for its response. Throws the connection error if the connection has
    * failed or fails before the response arrives.
    */
-  KRPC.Response call(KRPC.Request.Builder request, KRPC.Type.TypeCode streamCode)
+  KRPC.Response call(KRPC.Request.Builder request, boolean addsStream)
       throws ConnectionException {
-    Slot slot = new Slot(streamCode, false);
+    Slot slot = new Slot(addsStream, false);
     boolean isReader;
     // The slot is added before the request is written, so a fast response finds it. A caller that
     // finds no thread reading becomes the reader in the same hold of the lock.
@@ -249,7 +252,7 @@ class Session {
           continue;
         }
         synchronized (stateLock) {
-          if (pending.get(response.getId()) == slot && slot.streamCode == null) {
+          if (pending.get(response.getId()) == slot && !slot.addsStream) {
             pending.remove(response.getId());
             slot.response = response;
             slot.done = true;
@@ -335,7 +338,7 @@ class Session {
           return;
         }
         request.setId(nextId);
-        pending.put(nextId, new Slot(null, true));
+        pending.put(nextId, new Slot(false, true));
         nextId++;
       }
       writeRequest(request.build());
@@ -787,7 +790,7 @@ class Session {
 
   /** The id of the stream a call that returns a stream or an event added, or null. */
   private static Long streamId(Slot slot, KRPC.Response response) {
-    if (slot.streamCode == null || response.hasError() || response.getResultsCount() == 0) {
+    if (!slot.addsStream || response.hasError() || response.getResultsCount() == 0) {
       return null;
     }
     KRPC.ProcedureResult result = response.getResults(0);
@@ -795,11 +798,8 @@ class Session {
       return null;
     }
     try {
-      if (slot.streamCode == KRPC.Type.TypeCode.STREAM) {
-        return KRPC.Stream.parseFrom(result.getValue()).getId();
-      }
-      return KRPC.Event.parseFrom(result.getValue()).getStream().getId();
-    } catch (InvalidProtocolBufferException exn) {
+      return Encoder.decodeUint64(result.getValue());
+    } catch (IOException exn) {
       // The call has succeeded, and its caller decodes the value
       return null;
     }

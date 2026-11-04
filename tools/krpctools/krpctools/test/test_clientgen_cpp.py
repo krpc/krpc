@@ -41,8 +41,8 @@ class TestClientGenCpp(ClientGenTestCase, unittest.TestCase):
         }
         actual = self.generate("ServiceA", {"ServiceA": service})
         for name, returns in (
-            ("GetEvent", "event"),
-            ("GetNullableEvent", "event"),
+            ("GetEvent", "stream"),
+            ("GetNullableEvent", "stream"),
             ("GetStream", "stream"),
             ("GetNullableStream", "stream"),
             ("GetValue", "value"),
@@ -53,7 +53,7 @@ class TestClientGenCpp(ClientGenTestCase, unittest.TestCase):
                 actual,
             )
         self.assertIn("std::optional<::krpc::Event>", actual)
-        self.assertIn("std::optional<krpc::schema::Stream>", actual)
+        self.assertIn("std::optional<uint64_t>", actual)
 
     def test_includes_the_services_it_uses(self):
         # ServiceA uses an enumeration of ServiceB only

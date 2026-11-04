@@ -11,12 +11,8 @@ namespace KRPC.Server.ProtocolBuffers
         public static Google.Protobuf.IMessage ToProtobufMessage (this IMessage message)
         {
             var type = message.GetType ();
-            if (type == typeof(Service.Messages.Event))
-                return ((Service.Messages.Event)message).ToProtobufMessage ();
             if (type == typeof(Service.Messages.Services))
                 return ((Service.Messages.Services)message).ToProtobufMessage ();
-            if (type == typeof(Service.Messages.Stream))
-                return ((Service.Messages.Stream)message).ToProtobufMessage ();
             throw new ArgumentException ("Cannot convert a " + type + " to a protobuf message");
         }
 
@@ -280,20 +276,6 @@ namespace KRPC.Server.ProtocolBuffers
                 result.Code = Schema.KRPC.Type.Types.TypeCode.Tuple;
                 result.Types_.Add (spec.Types.Select (ToProtobufMessage));
             }
-            return result;
-        }
-
-        public static Schema.KRPC.Event ToProtobufMessage (this Service.Messages.Event evnt)
-        {
-            var result = new Schema.KRPC.Event ();
-            result.Stream = evnt.Stream.ToProtobufMessage ();
-            return result;
-        }
-
-        public static Schema.KRPC.Stream ToProtobufMessage (this Service.Messages.Stream stream)
-        {
-            var result = new Schema.KRPC.Stream ();
-            result.Id = stream.Id;
             return result;
         }
 

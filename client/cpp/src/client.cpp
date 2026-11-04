@@ -144,9 +144,7 @@ schema::ProcedureResult Client::send_request(schema::Request request, const Retu
   check_stream_connection();
   std::vector<Session::Adds> adds;
   auto to_adds = [](Returns value) {
-    return value == Returns::stream  ? Session::Adds::stream
-           : value == Returns::event ? Session::Adds::event
-                                     : Session::Adds::nothing;
+    return value == Returns::value ? Session::Adds::nothing : Session::Adds::stream;
   };
   if (returns != nullptr) {
     adds.push_back(to_adds(*returns));
@@ -204,8 +202,7 @@ Client::ReturnsByProcedure Client::list_returns() {
     for (const auto& procedure : service.procedures()) {
       auto code = procedure.return_type().code();
       if (code != schema::Type::STREAM && code != schema::Type::EVENT) continue;
-      result[std::make_pair(service.name(), procedure.name())] =
-          code == schema::Type::EVENT ? Returns::event : Returns::stream;
+      result[std::make_pair(service.name(), procedure.name())] = Returns::stream;
     }
   }
   return result;

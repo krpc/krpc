@@ -3,9 +3,11 @@ from krpc.types import (
     ClassType,
     DictionaryType,
     EnumerationType,
+    EventType,
     ListType,
     MessageType,
     SetType,
+    StreamType,
     TupleType,
     ValueType,
 )
@@ -152,6 +154,9 @@ class CnanoLanguage(Language):
         if isinstance(typ, ValueType):
             ctype = self.type_map[typ.protobuf_type.code]
             ptr = False
+        elif isinstance(typ, (StreamType, EventType)):
+            ctype = self.type_map[Type.UINT64]
+            ptr = False
         elif isinstance(typ, MessageType):
             ctype = "krpc_schema_%s" % typ.python_type.__name__
         elif isinstance(typ, ListType):
@@ -222,6 +227,8 @@ class CnanoLanguage(Language):
     def parse_type_name(self, typ):
         if isinstance(typ, ValueType):
             return self.type_name_map[typ.protobuf_type.code]
+        if isinstance(typ, (StreamType, EventType)):
+            return self.type_name_map[Type.UINT64]
         if isinstance(typ, MessageType):
             return "message_%s" % typ.python_type.__name__
         if isinstance(typ, ListType):

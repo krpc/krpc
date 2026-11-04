@@ -177,7 +177,7 @@ krpc_error_t krpc_decode_bytes(pb_istream_t *stream, krpc_bytes_t *value) {
 
 /*[[[cog
 types = ['Tuple', 'List', 'Set', 'Dictionary', 'DictionaryEntry',
-         'Event', 'Stream', 'Services']
+         'Services']
 for typ in types:
   cog.outl("""
 krpc_error_t krpc_decode_message_""" + typ + """(
@@ -216,18 +216,6 @@ krpc_error_t krpc_decode_message_DictionaryEntry(pb_istream_t *stream,
                                                  krpc_schema_DictionaryEntry *value) {
   if (!pb_decode(stream, krpc_schema_DictionaryEntry_fields, value))
     KRPC_RETURN_STREAM_ERROR(DECODING_FAILED, "failed to decode DictionaryEntry", stream);
-  return KRPC_OK;
-}
-
-krpc_error_t krpc_decode_message_Event(pb_istream_t *stream, krpc_schema_Event *value) {
-  if (!pb_decode(stream, krpc_schema_Event_fields, value))
-    KRPC_RETURN_STREAM_ERROR(DECODING_FAILED, "failed to decode Event", stream);
-  return KRPC_OK;
-}
-
-krpc_error_t krpc_decode_message_Stream(pb_istream_t *stream, krpc_schema_Stream *value) {
-  if (!pb_decode(stream, krpc_schema_Stream_fields, value))
-    KRPC_RETURN_STREAM_ERROR(DECODING_FAILED, "failed to decode Stream", stream);
   return KRPC_OK;
 }
 

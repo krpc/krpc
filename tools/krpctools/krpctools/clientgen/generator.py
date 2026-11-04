@@ -8,8 +8,10 @@ from krpc.attributes import Attributes
 from krpc.definitions import topological_order
 from krpc.types import (
     DictionaryType,
+    EventType,
     ListType,
     SetType,
+    StreamType,
     StructType,
     TupleType,
 )
@@ -276,6 +278,7 @@ class Generator(Generic[LanguageT]):
                     "parameters": self.generate_context_parameters(name, procedure),
                     "return_type": self.parse_return_type(return_type),
                     "return_is_nullable": is_nullable(return_type),
+                    "returns": returns_kind(return_type),
                     "documentation": self.parse_documentation(
                         procedure["documentation"]
                     ),
@@ -303,6 +306,7 @@ class Generator(Generic[LanguageT]):
                     "procedure": procedure,
                     "remote_name": name,
                     "remote_id": procedure["id"],
+                    "returns": returns_kind(return_type),
                 }
 
             elif Attributes.is_a_property_setter(name):
@@ -337,6 +341,7 @@ class Generator(Generic[LanguageT]):
                     "parameters": params[1:],
                     "return_type": self.parse_return_type(return_type),
                     "return_is_nullable": is_nullable(return_type),
+                    "returns": returns_kind(return_type),
                     "documentation": self.parse_documentation(
                         procedure["documentation"]
                     ),
@@ -357,6 +362,7 @@ class Generator(Generic[LanguageT]):
                     "parameters": self.generate_context_parameters(name, procedure),
                     "return_type": self.parse_return_type(return_type),
                     "return_is_nullable": is_nullable(return_type),
+                    "returns": returns_kind(return_type),
                     "documentation": self.parse_documentation(
                         procedure["documentation"]
                     ),
@@ -386,6 +392,7 @@ class Generator(Generic[LanguageT]):
                     "procedure": procedure,
                     "remote_name": name,
                     "remote_id": procedure["id"],
+                    "returns": returns_kind(return_type),
                 }
 
             elif Attributes.is_a_class_property_setter(name):
@@ -454,6 +461,16 @@ class Generator(Generic[LanguageT]):
 
     def parse_default_value(self, value, typ):
         return self.language.parse_default_value(value, typ)
+
+
+def returns_kind(typ):
+    """What a call returns: "event" or "stream" for a call that adds a stream, whose id the
+    client registers before it reads the stream's first update, and "value" otherwise"""
+    if isinstance(typ, EventType):
+        return "event"
+    if isinstance(typ, StreamType):
+        return "stream"
+    return "value"
 
 
 def _ordered_structs(structs, service_name):

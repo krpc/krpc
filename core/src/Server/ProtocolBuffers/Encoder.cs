@@ -122,6 +122,12 @@ namespace KRPC.Server.ProtocolBuffers
             case TypeKind.Dictionary:
                 WriteDictionary (value, spec, stream);
                 break;
+            case TypeKind.Stream:
+                stream.WriteUInt64 (((Service.Messages.Stream)value).Id);
+                break;
+            case TypeKind.Event:
+                stream.WriteUInt64 (((Service.Messages.Event)value).Stream.Id);
+                break;
             case TypeKind.Message:
                 WriteMessage (value, stream);
                 break;

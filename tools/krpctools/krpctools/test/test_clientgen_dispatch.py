@@ -198,6 +198,10 @@ class TestClientGenDispatch(unittest.TestCase):
             "return Result_KRPC_ServerStatus (connection.KRPC ().GetStatus ());",
             content,
         )
+        # A stream is returned as its id
+        self.assertIn(
+            "return Result.Uint64 (connection.KRPC ().AddFunctionStream (", content
+        )
         content = generate("cnano", CnanoDispatchGenerator, "KRPC")
         self.assertIn("return KRPC_ServerStatus::result(result);", content)
         # A protobuf message is never an argument

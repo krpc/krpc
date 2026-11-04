@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING, NoReturn
 
 import krpc.schema.KRPC_pb2 as KRPC
 from krpc.connection import Connection, MalformedSize, ReadTimeout
-from krpc.decoder import decode_response_message
+from krpc.decoder import decode_response_message, decode_stream_id
 from krpc.error import ConnectionError
 
 if TYPE_CHECKING:
@@ -44,9 +44,8 @@ def disconnect_reason_name(reason: int) -> str:
 
 
 class _Slot:
-    """A call waiting for its response. stream_type is the message type a call that
-    returns a stream or an event returns, KRPC.Stream or KRPC.Event. Changed under the
-    session's lock."""
+    """A call waiting for its response. adds_stream is whether the call returns a stream
+    or an event, as the id of the stream it adds. Changed under the session's lock."""
 
     __slots__ = (
         "abandoned",
@@ -55,11 +54,11 @@ class _Slot:
         "error",
         "reading",
         "response",
-        "stream_type",
+        "adds_stream",
     )
 
-    def __init__(self, stream_type: type | None, abandoned: bool = False) -> None:
-        self.stream_type = stream_type
+    def __init__(self, adds_stream: bool, abandoned: bool = False) -> None:
+        self.adds_stream = adds_stream
         self.abandoned = abandoned
         self.done = False
         self.response: KRPC.Response | None = None
@@ -157,10 +156,10 @@ class Session:
         """Queue work for the dispatcher thread."""
         self._queue.put(work)
 
-    def call(self, request: KRPC.Request, stream_type: type | None) -> KRPC.Response:
+    def call(self, request: KRPC.Request, adds_stream: bool) -> KRPC.Response:
         """Send a request and wait for its response. Raises the connection error if the
         connection has failed or fails before the response arrives."""
-        slot = _Slot(stream_type)
+        slot = _Slot(adds_stream)
         # The slot records the role and count it takes, for the release in finally
         try:
             # The slot is added before the request is written, so a fast response finds
@@ -234,7 +233,7 @@ class Session:
                     self._handle(self._parse(data))
                     continue
                 with self._lock:
-                    if pending.get(response.id) is slot and slot.stream_type is None:
+                    if pending.get(response.id) is slot and not slot.adds_stream:
                         del pending[response.id]
                         slot.response = response
                         slot.done = True
@@ -290,7 +289,7 @@ class Session:
         def remove() -> None:
             try:
                 self._send(
-                    self._remove_stream_request(stream_id), _Slot(None, abandoned=True)
+                    self._remove_stream_request(stream_id), _Slot(False, abandoned=True)
                 )
             except ConnectionError:
                 pass
@@ -606,15 +605,14 @@ class Session:
     @staticmethod
     def _stream_id(slot: _Slot, response: KRPC.Response) -> int | None:
         """The id of the stream a call that returns a stream or an event added, or None."""
-        if slot.stream_type is None:
+        if not slot.adds_stream:
             return None
         if response.HasField("error") or not response.results:
             return None
         result = response.results[0]
         if result.HasField("error") or result.is_null:
             return None
-        message = slot.stream_type.FromString(result.value)
-        return message.id if isinstance(message, KRPC.Stream) else message.stream.id
+        return decode_stream_id(result.value)
 
     def _received_disconnect(self, disconnect: KRPC.Disconnect) -> Exception:
         reason = disconnect_reason_name(disconnect.reason)

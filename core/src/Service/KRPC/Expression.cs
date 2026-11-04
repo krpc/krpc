@@ -982,11 +982,16 @@ namespace KRPC.Service.KRPC
                     ", as procedures of the KRPC service cannot be called from a function");
             // Creating an event or a stream adds a stream to the client, and a function
             // can be evaluated while the server iterates over the client's streams
+            if (procedure.HasReturnType &&
+                (procedure.ReturnSpec.Kind == TypeKind.Stream || procedure.ReturnSpec.Kind == TypeKind.Event))
+                throw new InvalidOperationException (
+                    "A function cannot call " + procedure.FullyQualifiedName +
+                    ", as it returns a value of type " + procedure.ReturnSpec.Type.Name +
+                    ", which adds a stream to the client");
             if (procedure.HasReturnType && TypeUtils.IsAMessageType (procedure.ReturnSpec.Type))
                 throw new InvalidOperationException (
                     "A function cannot call " + procedure.FullyQualifiedName +
-                    ", as it returns a protocol buffer message of type " +
-                    procedure.ReturnSpec.Type.Name);
+                    ", as it returns a protocol buffer message of type " + procedure.ReturnSpec.Type.Name);
 
             var parameters = procedure.Parameters;
             var numParameters = parameters.Count;

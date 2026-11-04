@@ -396,9 +396,9 @@ inline Stream<T> add_stream(const services::KRPC::Expression& function) {
   function._client->check_stream_connection();
   function_stream_detail::check_return_type<T>(function);
   services::KRPC krpc_service(function._client);
-  krpc::schema::Stream stream = krpc_service.add_function_stream(function);
+  uint64_t stream_id = krpc_service.add_function_stream(function);
   return function_stream_detail::function_streams::create<T>(
-      function._client, stream.id(), !function_stream_detail::is_optional<T>::value);
+      function._client, stream_id, !function_stream_detail::is_optional<T>::value);
 }
 
 /**

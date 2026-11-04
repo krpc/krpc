@@ -56,7 +56,7 @@ krpc_error_t krpc_decode_enum(pb_istream_t* stream, krpc_enum_t* value);
 
 /*[[[cog
 types = ['Tuple', 'List', 'Set', 'Dictionary', 'DictionaryEntry',
-         'Event', 'Stream', 'Services']
+         'Services']
 for typ in types:
   cog.outl("""krpc_error_t krpc_decode_message_%s(
   pb_istream_t * stream, krpc_schema_%s * value);""" % (typ, typ))
@@ -67,8 +67,6 @@ krpc_error_t krpc_decode_message_Set(pb_istream_t* stream, krpc_schema_Set* valu
 krpc_error_t krpc_decode_message_Dictionary(pb_istream_t* stream, krpc_schema_Dictionary* value);
 krpc_error_t krpc_decode_message_DictionaryEntry(pb_istream_t* stream,
                                                  krpc_schema_DictionaryEntry* value);
-krpc_error_t krpc_decode_message_Event(pb_istream_t* stream, krpc_schema_Event* value);
-krpc_error_t krpc_decode_message_Stream(pb_istream_t* stream, krpc_schema_Stream* value);
 krpc_error_t krpc_decode_message_Services(pb_istream_t* stream, krpc_schema_Services* value);
 // [[[end]]]
 

@@ -7,9 +7,11 @@ from krpc.types import (
     ClassType,
     DictionaryType,
     EnumerationType,
+    EventType,
     ListType,
     MessageType,
     SetType,
+    StreamType,
     StructType,
     TupleType,
     ValueType,
@@ -38,7 +40,7 @@ class JavaGenerator(Generator[JavaLanguage]):
                 + "krpc.schema.KRPC.Type.TypeCode.%s)"
                 % Type.TypeCode.Name(typ.protobuf_type.code)
             )
-        if isinstance(typ, MessageType):
+        if isinstance(typ, (MessageType, StreamType, EventType)):
             return (
                 "krpc.client.Types.createMessage("
                 + "krpc.schema.KRPC.Type.TypeCode.%s)"

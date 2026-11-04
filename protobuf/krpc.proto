@@ -231,7 +231,7 @@ message Type {
     ENUMERATION = 101;
     STRUCT = 102;
 
-    // Messages
+    // Messages, except an EVENT or STREAM value, which is the uint64 id of its stream
     EVENT = 200;
     PROCEDURE_CALL = 201;
     STREAM = 202;
@@ -266,14 +266,4 @@ message Dictionary {
 message DictionaryEntry {
   bytes key = 1;
   bytes value = 2;
-}
-
-// Aggregate data structures
-
-message Stream {
-  uint64 id = 1;
-}
-
-message Event {
-  Stream stream = 1;
 }

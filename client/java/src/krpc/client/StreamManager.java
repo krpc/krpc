@@ -101,7 +101,7 @@ class StreamManager {
   }
 
   StreamImpl addStream(Type returnType, ProcedureCall call) throws RPCException {
-    long id = krpc.addStream(call).getId();
+    long id = krpc.addStream(call);
     return getStream(returnType, id);
   }
 

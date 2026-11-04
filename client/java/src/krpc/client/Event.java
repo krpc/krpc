@@ -3,7 +3,6 @@ package krpc.client;
 import java.lang.Runnable;
 import java.util.function.Consumer;
 import krpc.client.Stream;
-import krpc.schema.KRPC;
 import krpc.schema.KRPC.Type;
 import krpc.schema.KRPC.Type.TypeCode;
 
@@ -13,9 +12,9 @@ public class Event implements Comparable<Event> {
   // The number of firings when a wait on this handle last returned
   private volatile long seen = 0;
 
-  Event(Connection connection, KRPC.Event event) {
+  Event(Connection connection, long streamId) {
     Type returnType = Type.newBuilder().setCode(TypeCode.BOOL).build();
-    stream = new Stream<Boolean>(connection, returnType, event.getStream().getId());
+    stream = new Stream<Boolean>(connection, returnType, streamId);
   }
 
   @Override

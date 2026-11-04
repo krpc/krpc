@@ -323,12 +323,12 @@ public class KRPC {
      */
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "KRPC", procedure = "AddFunctionStream", types = _Types.class)
-    public krpc.schema.KRPC.Stream addFunctionStream(krpc.client.services.KRPC.Expression function) throws RPCException {
+    public long addFunctionStream(krpc.client.services.KRPC.Expression function) throws RPCException {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(function, krpc.client.Types.createClass("KRPC", "Expression"))
         };
         krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("KRPC", "AddFunctionStream", _args);
-        return (krpc.schema.KRPC.Stream) Encoder.decode(_data.getValue(), krpc.client.Types.createMessage(krpc.schema.KRPC.Type.TypeCode.STREAM), this.connection);
+        return (long) Encoder.decode(_data.getValue(), krpc.client.Types.createMessage(krpc.schema.KRPC.Type.TypeCode.STREAM), this.connection);
     }
 
     /**
@@ -340,12 +340,12 @@ public class KRPC {
      */
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "KRPC", procedure = "AddStream", types = _Types.class)
-    public krpc.schema.KRPC.Stream addStream(krpc.schema.KRPC.ProcedureCall call) throws RPCException {
+    public long addStream(krpc.schema.KRPC.ProcedureCall call) throws RPCException {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(call, krpc.client.Types.createMessage(krpc.schema.KRPC.Type.TypeCode.PROCEDURE_CALL))
         };
         krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("KRPC", "AddStream", _args);
-        return (krpc.schema.KRPC.Stream) Encoder.decode(_data.getValue(), krpc.client.Types.createMessage(krpc.schema.KRPC.Type.TypeCode.STREAM), this.connection);
+        return (long) Encoder.decode(_data.getValue(), krpc.client.Types.createMessage(krpc.schema.KRPC.Type.TypeCode.STREAM), this.connection);
     }
 
     /**

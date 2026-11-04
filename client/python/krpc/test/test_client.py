@@ -1,5 +1,9 @@
 import unittest
 
+import krpc.schema.KRPC_pb2 as KRPC
+from krpc.decoder import Decoder
+from krpc.encoder import Encoder
+from krpc.event import Event
 from krpc.test.servertestcase import ServerTestCase
 
 
@@ -27,6 +31,19 @@ class TestClient(ServerTestCase, unittest.TestCase):
         obj = self.conn.test_service.create_test_object("alpha")
         self.assertEqual("static", obj.static_method())
         self.assertEqual("staticbetagamma", obj.static_method("beta", "gamma"))
+
+    def test_events_inside_a_value(self) -> None:
+        # An event at a position inside a value is an Event, as a returned one is
+        types = self.conn._types
+        uint64 = types.uint64_type
+        items = [Encoder.encode(stream_id, uint64) for stream_id in (17, 18)]
+        data = KRPC.List(items=items).SerializeToString()
+        value = Decoder.decode(self.conn, data, types.list_type(types.event_type))
+        assert isinstance(value, list)
+        self.assertEqual(2, len(value))
+        for event, stream_id in zip(value, (17, 18)):
+            self.assertIsInstance(event, Event)
+            self.assertEqual(stream_id, event.stream._stream._stream_id)
 
 
 if __name__ == "__main__":

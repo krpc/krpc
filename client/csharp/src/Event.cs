@@ -13,9 +13,9 @@ namespace KRPC.Client
         readonly Stream<bool> stream;
         long seen;
 
-        internal Event (Connection connection, KRPC.Schema.KRPC.Event evnt)
+        internal Event (Connection connection, ulong streamId)
         {
-            stream = new Stream<bool> (connection, evnt.Stream.Id);
+            stream = new Stream<bool> (connection, streamId);
         }
 
         /// <summary>

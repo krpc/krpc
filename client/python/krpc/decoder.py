@@ -14,13 +14,16 @@ from google.protobuf.internal import wire_format as protobuf_wire_format
 import krpc.platform
 import krpc.schema.KRPC_pb2 as KRPC
 from krpc.error import EncodingError
+from krpc.event import Event
 from krpc.types import (
     ClassType,
     DictionaryType,
     EnumerationType,
+    EventType,
     ListType,
     MessageType,
     SetType,
+    StreamType,
     StructType,
     TupleType,
     TypeBase,
@@ -73,6 +76,11 @@ def decode_response_message(data: bytes) -> KRPC.Response | None:
     return KRPC.Response.FromString(data[position:])
 
 
+def decode_stream_id(data: bytes) -> int:
+    """The id of the stream that a value of a stream or an event type holds."""
+    return _decode_varint(data)[0]
+
+
 class Decoder:
     """Routines for decoding messages and values from
     the protocol buffer serialization format"""
@@ -99,6 +107,11 @@ class Decoder:
             object_id_typ = cls._types.uint64_type
             object_id = cls._decode_value(data, object_id_typ)
             return typ.python_type(client, object_id)
+        if isinstance(typ, StreamType):
+            return cls._decode_value(data, cls._types.uint64_type)
+        if isinstance(typ, EventType):
+            stream_id = cast(int, cls._decode_value(data, cls._types.uint64_type))
+            return Event(cast("Client", client), stream_id)
         msg: object
         if isinstance(typ, ListType):
             msg = cast(KRPC.List, cls.decode_message(data, KRPC.List))

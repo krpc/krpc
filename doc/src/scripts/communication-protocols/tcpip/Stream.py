@@ -94,15 +94,14 @@ assert len(response.results) == 1
 if response.results[0].HasField("error"):
     raise RuntimeError("ERROR: " + str(response.results[0].error))
 
-# Decode the return value as a Stream message
-stream = KRPC.Stream()
-stream.ParseFromString(response.results[0].value)
+# Decode the return value, which is the stream id as a uint64
+stream_id = decode_varint(response.results[0].value)
 
 # Repeatedly receive stream updates, which arrive on the same connection
 while True:
     update = recv_message(conn).stream_update
     assert len(update.results) == 1
-    assert stream.id == update.results[0].id
+    assert stream_id == update.results[0].id
     # Decode the return value, a ServerStatus structure sent as a Tuple of its fields. Its
     # fourth field is the server statistics, another structure, whose second field is the
     # number of bytes the server has written.

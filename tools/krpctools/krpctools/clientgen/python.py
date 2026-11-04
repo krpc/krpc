@@ -6,9 +6,11 @@ from krpc.types import (
     ClassType,
     DictionaryType,
     EnumerationType,
+    EventType,
     ListType,
     MessageType,
     SetType,
+    StreamType,
     StructType,
     TupleType,
     ValueType,
@@ -79,6 +81,10 @@ class PythonGenerator(Generator[StubLanguage]):
                 KRPC.Type.BYTES: "bytes",
             }
             return "self._client._types.%s_type" % mapping[typ.protobuf_type.code]
+        if isinstance(typ, StreamType):
+            return "self._client._types.stream_type"
+        if isinstance(typ, EventType):
+            return "self._client._types.event_type"
         if isinstance(typ, MessageType):
             return "self._client._types.%s_type" % snake_case(typ.python_type.__name__)
         if isinstance(typ, ClassType):
@@ -122,11 +128,12 @@ class PythonGenerator(Generator[StubLanguage]):
             return "None"
         if isinstance(typ, ValueType):
             spec = self.language.parse_type(typ)
+        elif isinstance(typ, StreamType):
+            spec = "int"
+        elif isinstance(typ, EventType):
+            spec = "Event"
         elif isinstance(typ, MessageType):
-            if typ.python_type == KRPC.Event:
-                spec = "Event"
-            else:
-                spec = "KRPC_pb2.%s" % typ.python_type.__name__
+            spec = "KRPC_pb2.%s" % typ.python_type.__name__
         elif isinstance(typ, (ClassType, EnumerationType, StructType)):
             spec = self.language.parse_type(typ)
         elif isinstance(typ, TupleType):

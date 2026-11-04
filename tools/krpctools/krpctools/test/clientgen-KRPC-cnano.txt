@@ -407,7 +407,7 @@ typedef enum {
  * events of your client library instead. Calling this directly while using a client
  * library has undefined behavior.
  */
-static inline krpc_error_t krpc_KRPC_AddEvent(krpc_connection_t connection, krpc_schema_Event * returnValue, krpc_KRPC_Expression_t function);
+static inline krpc_error_t krpc_KRPC_AddEvent(krpc_connection_t connection, uint64_t * returnValue, krpc_KRPC_Expression_t function);
 
 /**
  * Add a stream of the value a server side function computes on each update.
@@ -416,7 +416,7 @@ static inline krpc_error_t krpc_KRPC_AddEvent(krpc_connection_t connection, krpc
  * server side functions of your client library instead. Calling this directly while
  * using a client library has undefined behavior.
  */
-static inline krpc_error_t krpc_KRPC_AddFunctionStream(krpc_connection_t connection, krpc_schema_Stream * returnValue, krpc_KRPC_Expression_t function);
+static inline krpc_error_t krpc_KRPC_AddFunctionStream(krpc_connection_t connection, uint64_t * returnValue, krpc_KRPC_Expression_t function);
 
 /**
  * Add a streaming request and return its identifier.
@@ -425,7 +425,7 @@ static inline krpc_error_t krpc_KRPC_AddFunctionStream(krpc_connection_t connect
  * client library instead. Calling this directly while using a client library has
  * undefined behavior.
  */
-static inline krpc_error_t krpc_KRPC_AddStream(krpc_connection_t connection, krpc_schema_Stream * returnValue, const krpc_schema_ProcedureCall * call);
+static inline krpc_error_t krpc_KRPC_AddStream(krpc_connection_t connection, uint64_t * returnValue, const krpc_schema_ProcedureCall * call);
 
 /**
  * Compile a server side function, so that running, streaming or adding it as an
@@ -3276,7 +3276,7 @@ static inline krpc_error_t krpc_decode_set_object(
 
 #endif  // KRPC_IMPL_TYPE_SET_OBJECT
 
-static inline krpc_error_t krpc_KRPC_AddEvent(krpc_connection_t connection, krpc_schema_Event * returnValue, krpc_KRPC_Expression_t function) {
+static inline krpc_error_t krpc_KRPC_AddEvent(krpc_connection_t connection, uint64_t * returnValue, krpc_KRPC_Expression_t function) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 1, 2092563751, 1, _arguments));
@@ -3287,13 +3287,13 @@ static inline krpc_error_t krpc_KRPC_AddEvent(krpc_connection_t connection, krpc
   if (returnValue) {
     pb_istream_t _stream;
     KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
-    KRPC_CHECK(krpc_decode_message_Event(&_stream, returnValue));
+    KRPC_CHECK(krpc_decode_uint64(&_stream, returnValue));
   }
   KRPC_CHECK(krpc_free_result(&_result));
   return KRPC_OK;
 }
 
-static inline krpc_error_t krpc_KRPC_AddFunctionStream(krpc_connection_t connection, krpc_schema_Stream * returnValue, krpc_KRPC_Expression_t function) {
+static inline krpc_error_t krpc_KRPC_AddFunctionStream(krpc_connection_t connection, uint64_t * returnValue, krpc_KRPC_Expression_t function) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 1, 282214072, 1, _arguments));
@@ -3304,13 +3304,13 @@ static inline krpc_error_t krpc_KRPC_AddFunctionStream(krpc_connection_t connect
   if (returnValue) {
     pb_istream_t _stream;
     KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
-    KRPC_CHECK(krpc_decode_message_Stream(&_stream, returnValue));
+    KRPC_CHECK(krpc_decode_uint64(&_stream, returnValue));
   }
   KRPC_CHECK(krpc_free_result(&_result));
   return KRPC_OK;
 }
 
-static inline krpc_error_t krpc_KRPC_AddStream(krpc_connection_t connection, krpc_schema_Stream * returnValue, const krpc_schema_ProcedureCall * call) {
+static inline krpc_error_t krpc_KRPC_AddStream(krpc_connection_t connection, uint64_t * returnValue, const krpc_schema_ProcedureCall * call) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 1, 3354426240, 1, _arguments));
@@ -3321,7 +3321,7 @@ static inline krpc_error_t krpc_KRPC_AddStream(krpc_connection_t connection, krp
   if (returnValue) {
     pb_istream_t _stream;
     KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
-    KRPC_CHECK(krpc_decode_message_Stream(&_stream, returnValue));
+    KRPC_CHECK(krpc_decode_uint64(&_stream, returnValue));
   }
   KRPC_CHECK(krpc_free_result(&_result));
   return KRPC_OK;

@@ -65,6 +65,7 @@ class CppGenerator(Generator[CppLanguage]):
                     "return_set_client": self.parse_set_client(
                         info["getter"]["procedure"]
                     ),
+                    "returns": info["getter"]["returns"],
                     "documentation": info["documentation"],
                     "deprecated": info["deprecated"],
                     "deprecated_reason": info["deprecated_reason"],
@@ -77,6 +78,7 @@ class CppGenerator(Generator[CppLanguage]):
                     ),
                     "return_type": "void",
                     "return_set_client": False,
+                    "returns": "value",
                     "documentation": info["setter_documentation"],
                     "deprecated": info["deprecated"],
                     "deprecated_reason": info["deprecated_reason"],
@@ -100,6 +102,7 @@ class CppGenerator(Generator[CppLanguage]):
                         "return_set_client_fn": self.parse_set_client(
                             info["getter"]["procedure"]
                         ),
+                        "returns": info["getter"]["returns"],
                         "documentation": info["documentation"],
                         "deprecated": info["deprecated"],
                         "deprecated_reason": info["deprecated_reason"],
@@ -115,6 +118,7 @@ class CppGenerator(Generator[CppLanguage]):
                         ],
                         "return_type": "void",
                         "return_set_client": False,
+                        "returns": "value",
                         "documentation": info["setter_documentation"],
                         "deprecated": info["deprecated"],
                         "deprecated_reason": info["deprecated_reason"],

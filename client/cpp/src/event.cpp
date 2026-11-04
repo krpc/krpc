@@ -6,7 +6,6 @@
 #include <string>
 
 #include "krpc/condition.hpp"
-#include "krpc/krpc.pb.hpp"
 #include "krpc/stream_impl.hpp"
 
 namespace krpc {
@@ -15,8 +14,7 @@ class Client;
 
 Event::Event() {}
 
-Event::Event(Client* client, const krpc::schema::Event& message)
-    : _stream(client, message.stream().id()) {}
+Event::Event(Client* client, uint64_t stream_id) : _stream(client, stream_id) {}
 
 Condition& Event::get_condition() const { return _stream.get_condition(); }
 

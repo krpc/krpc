@@ -39,10 +39,8 @@ VALUE_TYPES = {
 }
 
 MESSAGE_TYPES = {
-    KRPC.Type.EVENT: KRPC.Event,
     KRPC.Type.PROCEDURE_CALL: KRPC.ProcedureCall,
     KRPC.Type.SERVICES: KRPC.Services,
-    KRPC.Type.STREAM: KRPC.Stream,
 }
 
 # The builtin each .NET exception a server maps onto a kRPC exception stands for, keyed by the
@@ -76,6 +74,8 @@ _KNOWN_TYPE_CODES = (
     | {
         KRPC.Type.NONE,
         KRPC.Type.CLASS,
+        KRPC.Type.STREAM,
+        KRPC.Type.EVENT,
         KRPC.Type.ENUMERATION,
         KRPC.Type.STRUCT,
         KRPC.Type.TUPLE,
@@ -138,8 +138,8 @@ class Types:
         # hash instead of building and serializing a protobuf message.
         self._type_cache: dict[tuple[object, ...], TypeBase] = {}
 
-        # The value types are the same objects for the lifetime of the store, so
-        # they are resolved once here rather than on every access
+        # The value, stream and event types are the same objects for the lifetime of
+        # the store, so they are resolved once here rather than on every access
         self.double_type = self._value_type(KRPC.Type.DOUBLE)
         self.float_type = self._value_type(KRPC.Type.FLOAT)
         self.sint32_type = self._value_type(KRPC.Type.SINT32)
@@ -149,9 +149,10 @@ class Types:
         self.bool_type = self._value_type(KRPC.Type.BOOL)
         self.string_type = self._value_type(KRPC.Type.STRING)
         self.bytes_type = self._value_type(KRPC.Type.BYTES)
-        self.event_type = cast(
-            MessageType, self.as_type(_protobuf_type(KRPC.Type.EVENT))
+        self.stream_type = cast(
+            StreamType, self.as_type(_protobuf_type(KRPC.Type.STREAM))
         )
+        self.event_type = cast(EventType, self.as_type(_protobuf_type(KRPC.Type.EVENT)))
 
     def _value_type(self, code: KRPC.Type.TypeCode) -> ValueType:
         return cast(ValueType, self.as_type(_protobuf_type(code)))
@@ -205,6 +206,10 @@ class Types:
             typ = SetType(protobuf_type, self)
         elif protobuf_type.code == KRPC.Type.DICTIONARY:
             typ = DictionaryType(protobuf_type, self)
+        elif protobuf_type.code == KRPC.Type.STREAM:
+            typ = StreamType(protobuf_type)
+        elif protobuf_type.code == KRPC.Type.EVENT:
+            typ = EventType(protobuf_type)
         elif protobuf_type.code in MESSAGE_TYPES:
             typ = MessageType(protobuf_type)
         else:
@@ -337,11 +342,6 @@ class Types:
     def services_type(self) -> MessageType:
         """Get a Services message type"""
         return cast(MessageType, self.as_type(_protobuf_type(KRPC.Type.SERVICES)))
-
-    @property
-    def stream_type(self) -> MessageType:
-        """Get a Stream message type"""
-        return cast(MessageType, self.as_type(_protobuf_type(KRPC.Type.STREAM)))
 
     def coerce_to(self, value: object, typ: TypeBase) -> object:
         """Coerce a value to the specified type (specified by a type object).
@@ -617,6 +617,25 @@ class DictionaryType(TypeBase):
         self.value_type = types.as_type(protobuf_type.types[1])
         string = "Dict(%s,%s)" % (self.key_type._string, self.value_type._string)
         super().__init__(protobuf_type, dict, string)
+
+
+class StreamType(TypeBase):
+    """A stream, represented by a uint64 identifier"""
+
+    def __init__(self, protobuf_type: KRPC.Type) -> None:
+        if protobuf_type.code != KRPC.Type.STREAM:
+            raise ValueError("Not a stream type")
+        super().__init__(protobuf_type, int, "Stream")
+
+
+class EventType(TypeBase):
+    """An event, represented by the uint64 identifier of its stream. The client wraps
+    the identifier in an Event."""
+
+    def __init__(self, protobuf_type: KRPC.Type) -> None:
+        if protobuf_type.code != KRPC.Type.EVENT:
+            raise ValueError("Not an event type")
+        super().__init__(protobuf_type, int, "Event")
 
 
 class MessageType(TypeBase):

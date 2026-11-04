@@ -49,16 +49,14 @@ VALUE_TYPES:set(Types.BYTES, 'string')
 
 -- The name of the message each message type code is carried as, in the krpc.schema package
 local MESSAGE_TYPES = Map{}
-MESSAGE_TYPES:set(Types.EVENT, 'Event')
 MESSAGE_TYPES:set(Types.PROCEDURE_CALL, 'ProcedureCall')
-MESSAGE_TYPES:set(Types.STREAM, 'Stream')
 MESSAGE_TYPES:set(Types.SERVICES, 'Services')
 
 -- Every type code a type object can be built for. A definition from a newer server may name a
 -- type code that is not among them, which is what makes a definition partly unusable rather
 -- than malformed
 local KNOWN_TYPE_CODES = Set{
-  Types.CLASS, Types.ENUMERATION, Types.STRUCT,
+  Types.CLASS, Types.ENUMERATION, Types.STRUCT, Types.STREAM, Types.EVENT,
   Types.TUPLE, Types.LIST, Types.SET, Types.DICTIONARY
 }
 for code in VALUE_TYPES:iter() do
@@ -165,6 +163,8 @@ function Types:as_type(protobuf_type)
     typ = Types.SetType(protobuf_type, self)
   elseif protobuf_type.code == Types.DICTIONARY then
     typ = Types.DictionaryType(protobuf_type, self)
+  elseif protobuf_type.code == Types.STREAM or protobuf_type.code == Types.EVENT then
+    typ = Types.StreamType(protobuf_type)
   elseif MESSAGE_TYPES:get(protobuf_type.code) then
     typ = Types.MessageType(protobuf_type)
   else
@@ -265,7 +265,7 @@ function Types:procedure_call_type()
 end
 
 function Types:stream_type()
-  -- Get a Stream message type
+  -- Get a stream type
   return self:as_type(_protobuf_type(Types.STREAM))
 end
 
@@ -566,6 +566,16 @@ function Types.DictionaryType:_init(protobuf_type, types)
   self.value_type = types:as_type(protobuf_type.types[2])
   local type_string = 'Dict(' .. self.key_type._string .. ',' .. self.value_type._string .. ')'
   self:super(protobuf_type, Map, type_string)
+end
+
+-- A stream, or an event, which is the uint64 id of its stream
+Types.StreamType = class(Types.TypeBase)
+
+function Types.StreamType:_init(protobuf_type)
+  if protobuf_type.code ~= Types.STREAM and protobuf_type.code ~= Types.EVENT then
+    error('Not a stream type')
+  end
+  self:super(protobuf_type, 'number', CODE_TO_STRING:get(protobuf_type.code))
 end
 
 Types.MessageType = class(Types.TypeBase)

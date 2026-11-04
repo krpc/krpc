@@ -12,14 +12,11 @@
 namespace krpc {
 
 class Client;
-namespace schema {
-class Event;
-}
 
 class Event {
  public:
   Event();
-  Event(Client* client, const krpc::schema::Event& message);
+  Event(Client* client, uint64_t stream_id);
   /** Condition variable that is notified when the event occurs. Every copy of the event object
       shares it. */
   Condition& get_condition() const;

@@ -706,8 +706,8 @@ namespace KRPC.Client
 
         Stream<TResult> AddCheckedStream<TResult> (Services.KRPC.Expression function, TypeSpec spec)
         {
-            var stream = Services.KRPC.ExtensionMethods.KRPC (this).AddFunctionStream (function);
-            return new Stream<TResult> (this, stream.Id, spec);
+            var streamId = Services.KRPC.ExtensionMethods.KRPC (this).AddFunctionStream (function);
+            return new Stream<TResult> (this, streamId, spec);
         }
 
         /// <summary>
@@ -820,23 +820,23 @@ namespace KRPC.Client
         /// </summary>
         public ProcedureResult Invoke (string service, string procedure, IList<ByteString> arguments = null)
         {
-            return Invoke (service, procedure, arguments, null);
+            return Invoke (service, procedure, arguments, global::KRPC.Schema.KRPC.Type.Types.TypeCode.None);
         }
 
         /// <summary>
-        /// Invoke a remote procedure that returns a value of the given type.
+        /// Invoke a remote procedure that returns a value with the given type code.
         /// Should not be called directly. This interface is used by service client stubs.
         /// </summary>
-        public ProcedureResult Invoke (string service, string procedure, IList<ByteString> arguments, System.Type returnType)
+        public ProcedureResult Invoke (string service, string procedure, IList<ByteString> arguments, global::KRPC.Schema.KRPC.Type.Types.TypeCode returnCode)
         {
             CheckDisposed ();
             var request = new Request ();
             request.Calls.Add (GetCall (service, procedure, arguments));
             // The reader registers a stream or an event the call adds before it reads the
             // stream's first update
-            var streamType = returnType == typeof (global::KRPC.Schema.KRPC.Stream) || returnType == typeof (Event)
-                ? returnType : null;
-            var response = session.Call (request, streamType);
+            var addsStream = returnCode == global::KRPC.Schema.KRPC.Type.Types.TypeCode.Stream ||
+                returnCode == global::KRPC.Schema.KRPC.Type.Types.TypeCode.Event;
+            var response = session.Call (request, addsStream);
             if (response.Error != null)
                 throw GetException(response.Error);
             if (response.Results[0].Error != null)

@@ -5931,7 +5931,7 @@ class KRPC(_KRPCDefinitions):
             self._client._types.event_type
         )
 
-    def add_function_stream(self, function: Expression) -> KRPC_pb2.Stream:
+    def add_function_stream(self, function: Expression) -> int:
         """
         Add a stream of the value a server side function computes on each update.
 
@@ -5959,7 +5959,7 @@ class KRPC(_KRPCDefinitions):
             self._client._types.stream_type
         )
 
-    def add_stream(self, call: KRPC_pb2.ProcedureCall) -> KRPC_pb2.Stream:
+    def add_stream(self, call: KRPC_pb2.ProcedureCall) -> int:
         """
         Add a streaming request and return its identifier.
 

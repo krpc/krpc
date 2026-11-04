@@ -26,11 +26,11 @@ namespace KRPC.Client
         // The wait for the server to close its side once ours is closed
         static readonly TimeSpan CloseTimeout = TimeSpan.FromSeconds (1);
 
-        // A call waiting for its response. StreamType is the type a call that returns a stream
-        // or an event returns. Changed under the state lock.
+        // A call waiting for its response. AddsStream is whether the call returns a stream or
+        // an event, as the id of the stream it adds. Changed under the state lock.
         sealed class Slot
         {
-            public System.Type StreamType;
+            public bool AddsStream;
             public bool Abandoned;
             public volatile bool Done;
             public Response Response;
@@ -199,9 +199,9 @@ namespace KRPC.Client
         /// Send a request and wait for its response. Throws the connection error if the
         /// connection has failed or fails before the response arrives.
         /// </summary>
-        public Response Call (Request request, System.Type streamType)
+        public Response Call (Request request, bool addsStream)
         {
-            var slot = new Slot { StreamType = streamType };
+            var slot = new Slot { AddsStream = addsStream };
             bool isReader;
             // The slot is added before the request is written, so a fast response finds it. A
             // caller that finds no thread reading becomes the reader in the same hold of the lock.
@@ -288,7 +288,7 @@ namespace KRPC.Client
                     Enter (stateLock);
                     try {
                         Slot found;
-                        if (pending.TryGetValue (response.Id, out found) && found == slot && slot.StreamType == null) {
+                        if (pending.TryGetValue (response.Id, out found) && found == slot && !slot.AddsStream) {
                             pending.Remove (response.Id);
                             slot.Response = response;
                             slot.Done = true;
@@ -821,18 +821,13 @@ namespace KRPC.Client
         static bool StreamId (Slot slot, Response response, out ulong id)
         {
             id = 0;
-            if (slot.StreamType == null || response.Error != null || response.Results.Count == 0)
+            if (!slot.AddsStream || response.Error != null || response.Results.Count == 0)
                 return false;
             var result = response.Results [0];
             if (result.Error != null || result.IsNull)
                 return false;
             try {
-                var stream = slot.StreamType == typeof (Schema.KRPC.Stream)
-                    ? Schema.KRPC.Stream.Parser.ParseFrom (result.Value)
-                    : Schema.KRPC.Event.Parser.ParseFrom (result.Value).Stream;
-                if (stream == null)
-                    return false;
-                id = stream.Id;
+                id = result.Value.CreateCodedInput ().ReadUInt64 ();
                 return true;
             } catch (InvalidProtocolBufferException) {
                 // The call has succeeded, and its caller decodes the value

@@ -3,9 +3,11 @@ from krpc.types import (
     ClassType,
     DictionaryType,
     EnumerationType,
+    EventType,
     ListType,
     MessageType,
     SetType,
+    StreamType,
     StructType,
     TupleType,
     ValueType,
@@ -161,7 +163,11 @@ class JavaLanguage(Language):
             if in_collection or typ.nullable:
                 return self.type_map_classes[typ.protobuf_type.code]
             return self.type_map[typ.protobuf_type.code]
-        if isinstance(typ, MessageType) and typ.protobuf_type.code == Type.EVENT:
+        if isinstance(typ, StreamType):
+            if in_collection or typ.nullable:
+                return self.type_map_classes[Type.UINT64]
+            return self.type_map[Type.UINT64]
+        if isinstance(typ, EventType):
             return "krpc.client.Event"
         if isinstance(typ, MessageType):
             return "krpc.schema.KRPC.%s" % typ.python_type.__name__

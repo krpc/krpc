@@ -275,7 +275,6 @@ namespace KRPC.Service.KRPC
         /// undefined behavior.
         /// </remarks>
         [KRPCProcedure]
-        // FIXME: should be a Stream not a ulong
         public static void RemoveStream (ulong id)
         {
             Core.Instance.RemoveStream (CallContext.Client, id);

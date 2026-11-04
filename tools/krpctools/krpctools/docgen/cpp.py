@@ -3,9 +3,11 @@ from krpc.types import (
     ClassType,
     DictionaryType,
     EnumerationType,
+    EventType,
     ListType,
     MessageType,
     SetType,
+    StreamType,
     StructType,
     TupleType,
     ValueType,
@@ -52,7 +54,9 @@ class CppDomain(Domain[CppLanguage]):
         return self.language.parse_name(name)
 
     def type(self, typ):
-        if isinstance(typ, MessageType) and typ.protobuf_type.code == Type.EVENT:
+        if isinstance(typ, StreamType):
+            return self.language.type_map[Type.UINT64]
+        if isinstance(typ, EventType):
             return "krpc::Event"
         return super().type(typ)
 
@@ -61,7 +65,9 @@ class CppDomain(Domain[CppLanguage]):
             return "void"
         if isinstance(typ, ValueType):
             return self.language.type_map[typ.protobuf_type.code]
-        if isinstance(typ, MessageType) and typ.protobuf_type.code == Type.EVENT:
+        if isinstance(typ, StreamType):
+            return self.language.type_map[Type.UINT64]
+        if isinstance(typ, EventType):
             return ":class:`krpc::Event`"
         if isinstance(typ, MessageType):
             return ":class:`krpc::schema::%s`" % typ.python_type.__name__

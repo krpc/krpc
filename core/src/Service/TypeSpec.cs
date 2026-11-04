@@ -268,6 +268,10 @@ namespace KRPC.Service
                 return TypeKind.Set;
             if (TypeUtils.IsADictionaryCollectionType (type))
                 return TypeKind.Dictionary;
+            if (type == typeof (Messages.Stream))
+                return TypeKind.Stream;
+            if (type == typeof (Messages.Event))
+                return TypeKind.Event;
             if (TypeUtils.IsAMessageType (type))
                 return TypeKind.Message;
             return TypeKind.Unknown;

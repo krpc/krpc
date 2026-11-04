@@ -930,11 +930,11 @@ static inline krpc_error_t krpc_TestService_NullDefault(krpc_connection_t connec
 
 static inline krpc_error_t krpc_TestService_NullableStructEcho(krpc_connection_t connection, krpc_TestService_TestNullableStruct_t * returnValue, const krpc_TestService_TestNullableStruct_t * x);
 
-static inline krpc_error_t krpc_TestService_OnTimer(krpc_connection_t connection, krpc_schema_Event * returnValue, uint32_t milliseconds, uint32_t repeats);
+static inline krpc_error_t krpc_TestService_OnTimer(krpc_connection_t connection, uint64_t * returnValue, uint32_t milliseconds, uint32_t repeats);
 
 static inline krpc_error_t krpc_TestService_OptionalArguments(krpc_connection_t connection, char * * returnValue, const char * x, const char * y, const char * z, krpc_TestService_TestClass_t obj);
 
-static inline krpc_error_t krpc_TestService_RemoveEventAfter(krpc_connection_t connection, krpc_schema_Event * returnValue, uint32_t milliseconds);
+static inline krpc_error_t krpc_TestService_RemoveEventAfter(krpc_connection_t connection, uint64_t * returnValue, uint32_t milliseconds);
 
 static inline krpc_error_t krpc_TestService_RemoveTestObject(krpc_connection_t connection, krpc_TestService_TestClass_t value);
 
@@ -5336,7 +5336,7 @@ static inline krpc_error_t krpc_TestService_NullableStructEcho(krpc_connection_t
   return KRPC_OK;
 }
 
-static inline krpc_error_t krpc_TestService_OnTimer(krpc_connection_t connection, krpc_schema_Event * returnValue, uint32_t milliseconds, uint32_t repeats) {
+static inline krpc_error_t krpc_TestService_OnTimer(krpc_connection_t connection, uint64_t * returnValue, uint32_t milliseconds, uint32_t repeats) {
   krpc_call_t _call;
   krpc_argument_t _arguments[2];
   KRPC_CHECK(krpc_call(&_call, 857051661, 4057887549, 2, _arguments));
@@ -5348,7 +5348,7 @@ static inline krpc_error_t krpc_TestService_OnTimer(krpc_connection_t connection
   if (returnValue) {
     pb_istream_t _stream;
     KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
-    KRPC_CHECK(krpc_decode_message_Event(&_stream, returnValue));
+    KRPC_CHECK(krpc_decode_uint64(&_stream, returnValue));
   }
   KRPC_CHECK(krpc_free_result(&_result));
   return KRPC_OK;
@@ -5378,7 +5378,7 @@ static inline krpc_error_t krpc_TestService_OptionalArguments(krpc_connection_t 
   return KRPC_OK;
 }
 
-static inline krpc_error_t krpc_TestService_RemoveEventAfter(krpc_connection_t connection, krpc_schema_Event * returnValue, uint32_t milliseconds) {
+static inline krpc_error_t krpc_TestService_RemoveEventAfter(krpc_connection_t connection, uint64_t * returnValue, uint32_t milliseconds) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 857051661, 3112705118, 1, _arguments));
@@ -5389,7 +5389,7 @@ static inline krpc_error_t krpc_TestService_RemoveEventAfter(krpc_connection_t c
   if (returnValue) {
     pb_istream_t _stream;
     KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
-    KRPC_CHECK(krpc_decode_message_Event(&_stream, returnValue));
+    KRPC_CHECK(krpc_decode_uint64(&_stream, returnValue));
   }
   KRPC_CHECK(krpc_free_result(&_result));
   return KRPC_OK;
