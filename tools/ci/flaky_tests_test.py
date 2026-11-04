@@ -29,7 +29,7 @@ ATTEMPT_XML = """\
 <?xml version="1.0" encoding="utf-8"?>
 <testsuites><testsuite name="pytest" errors="1" failures="2" skipped="1" tests="5">
 <testcase classname="tests.test_calls" name="test_service_procedure" time="0.1" />
-<testcase classname="tests.test_threading" name="test_close_from_an_end_callback[remove]">
+<testcase classname="tests.test_concurrency" name="test_close_from_an_end_callback[remove]">
 <failure message="AssertionError: lost the race&#10;assert 1 == 2">trace</failure>
 </testcase>
 <testcase classname="tests.test_streams" name="test_rate[a - b]">
@@ -58,7 +58,7 @@ class TestFailures(unittest.TestCase):
         self.assertEqual(
             [
                 Failure(
-                    "test_threading.py::test_close_from_an_end_callback[remove]",
+                    "test_concurrency.py::test_close_from_an_end_callback[remove]",
                     "AssertionError: lost the race",
                 ),
                 Failure(
@@ -181,7 +181,7 @@ class TestReport(unittest.TestCase):
     def setUp(self):
         self.directory = tempfile.TemporaryDirectory()
         xml = (
-            '<testsuite><testcase classname="tests.test_threading" '
+            '<testsuite><testcase classname="tests.test_concurrency" '
             'name="test_race[remove]"><failure message="a: b, c" /></testcase></testsuite>'
         )
         self.found = flaky_targets(
@@ -200,7 +200,7 @@ class TestReport(unittest.TestCase):
         self.assertEqual(
             [
                 "::warning title=Flaky test //client/csharp%3Aconformance-localsocket::"
-                "test_threading.py::test_race[remove] failed and passed on a retry: a: b, c"
+                "test_concurrency.py::test_race[remove] failed and passed on a retry: a: b, c"
             ],
             annotations(self.found),
         )
@@ -208,7 +208,7 @@ class TestReport(unittest.TestCase):
     def test_failure_lines(self):
         self.assertEqual(
             [
-                "- `test_threading.py::test_race[remove]` in "
+                "- `test_concurrency.py::test_race[remove]` in "
                 "`//client/csharp:conformance-localsocket`: `a: b, c`"
             ],
             failure_lines(self.found),
@@ -222,7 +222,7 @@ class TestReport(unittest.TestCase):
 FLAKY = [
     FlakyTarget(
         "//client/csharp:conformance-localsocket",
-        [Failure("test_threading.py::test_race[remove]", "AssertionError: lost")],
+        [Failure("test_concurrency.py::test_race[remove]", "AssertionError: lost")],
     )
 ]
 
@@ -383,7 +383,7 @@ class TestNotify(unittest.TestCase):
         urls = {job["name"]: job["html_url"] for job in JOBS}
         body = comment_body(REPORTS, "7", MERGE_QUEUE_RUN, urls)
         line = (
-            "- `test_threading.py::test_race[remove]` in "
+            "- `test_concurrency.py::test_race[remove]` in "
             "`//client/csharp:conformance-localsocket`: `AssertionError: lost`"
         )
         self.assertEqual(

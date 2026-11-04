@@ -20,14 +20,14 @@ section("Waiting", "Some prose.")
 
 
 @should
-@profile("streams", "threads")
+@profile("streams", "concurrency")
 def test_two_words(connected):
     """A requirement that spans
     two lines."""
     assert True
 
 
-@profile("streams", "threads")
+@profile("streams", "concurrency")
 @untested("No command for it")
 def test_third():
     """The third requirement."""
@@ -46,13 +46,13 @@ Some prose.
 
 .. _spec-area-two-words:
 
-``area-two-words [streams, threads] [SHOULD]``
+``area-two-words [streams, concurrency] [SHOULD]``
    A requirement that spans
    two lines.
 
 .. _spec-area-third:
 
-``area-third [streams, threads] [MUST]``
+``area-third [streams, concurrency] [MUST]``
    The third requirement.
 """
 
@@ -104,12 +104,31 @@ class TestSpecgen(unittest.TestCase):
         self.assertIn("``area-fifth [core] [MUST]``\n", out)
         self.assertIn("``area-sixth [core, without error-types] [MUST]``\n", out)
 
+    def test_unknown_names(self) -> None:
+        for decorator in ('@profile("!threads")', '@protocol("localsockett")'):
+            with open(self.path, "w", encoding="utf-8") as tests:
+                tests.write(
+                    textwrap.dedent('''
+                    %s
+                    def test_first(connected):
+                        """The first requirement."""
+                    ''')
+                    % decorator
+                )
+            with self.assertRaises(SystemExit):
+                specgen.read_area(self.path)
+        profiles = os.path.join(self.directory.name, "profiles.txt")
+        with open(profiles, "w", encoding="utf-8") as listing:
+            listing.write("core\nthreads\ntcpip\n")
+        with self.assertRaises(SystemExit):
+            specgen.Client.read("Python", profiles, self.path, self.path)
+
     def test_coverage_status(self) -> None:
         sections = specgen.read_area(self.path)
         first, two_words, third = [r for x in sections for r in x.requirements]
         client = specgen.Client(
             "Python",
-            {"core", "streams", "threads"},
+            {"core", "streams", "concurrency"},
             {"test_area.py::test_first": {""}, "test_area.py::test_two_words[a]": {""}},
         )
         self.assertEqual("fail", client.status(self.path, "test_first", first))

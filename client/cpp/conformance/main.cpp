@@ -301,7 +301,7 @@ class Testee {
     reply.set_id(command.id());
     current_connection = command.connection();
     HeldClient held_client;
-    reply.set_thread(thread_name());
+    reply.set_task(thread_name());
     try {
       if (command.condition() != 0) {
         Holding holding(command.condition());
@@ -373,7 +373,7 @@ class Testee {
     Output message;
     auto notification = message.mutable_notification();
     notification->set_callback(callback);
-    notification->set_thread(thread_name());
+    notification->set_task(thread_name());
     fill(notification);
     output->write(message);
     uint32_t count;
@@ -390,7 +390,7 @@ class Testee {
         if (!report) return;
         Output message;
         message.mutable_notification()->set_callback(callback);
-        message.mutable_notification()->set_thread(thread_name());
+        message.mutable_notification()->set_task(thread_name());
         message.mutable_notification()->set_returned(true);
         writer->write(message);
       }
@@ -405,7 +405,7 @@ class Testee {
       case krpc::conformance::Behavior::kRun: {
         Output result;
         result.mutable_notification()->set_callback(callback);
-        result.mutable_notification()->set_thread(thread_name());
+        result.mutable_notification()->set_task(thread_name());
         *result.mutable_notification()->mutable_result() = reply(behavior.run());
         output->write(result);
         break;
@@ -992,7 +992,7 @@ int main() {
   hello.mutable_hello()->set_client("cpp");
   for (const char* profile :
        {"core", "error-types", "defaults", "streams", "events", "functions", "function-types",
-        "connections", "threads", "callbacks", "conditions", "ordering", "races"})
+        "connections", "concurrency", "callbacks", "conditions", "ordering", "races"})
     hello.mutable_hello()->add_profiles(profile);
   for (const char* protocol : {"tcpip", "localsocket"})
     hello.mutable_hello()->add_protocols(protocol);
@@ -1001,7 +1001,7 @@ int main() {
   krpc_conformance::Testee testee(&output);
   std::map<std::string, std::unique_ptr<Worker>> workers;
   while (auto command = krpc_conformance::read_command()) {
-    auto& worker = workers[command->thread()];
+    auto& worker = workers[command->task()];
     if (!worker)
       worker = std::make_unique<Worker>(
           [&testee](const krpc::conformance::Command& x) { testee.run(x); });

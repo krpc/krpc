@@ -39,9 +39,9 @@ connects to a server and calls a procedure:
 
    < {"hello":{"client":"python","profiles":["core","streams"],"protocols":["tcpip"]}}
    > {"id":"1","connect":{"protocol":"tcpip","address":"127.0.0.1","port":50000}}
-   < {"reply":{"id":"1","value":{},"thread":"140213"}}
+   < {"reply":{"id":"1","value":{},"task":"140213"}}
    > {"id":"2","invoke":{"service":"TestService","procedure":"Int32ToString","arguments":[{"sint32":42}]}}
-   < {"reply":{"id":"2","value":{"string":"42"},"thread":"140213"}}
+   < {"reply":{"id":"2","value":{"string":"42"},"task":"140213"}}
 
 Each line is a message in the proto3 JSON mapping: a ``Command`` from the driver, and an
 ``Output`` from the testee. :download:`testee.proto </client-spec/testee.proto>` defines the
@@ -58,8 +58,8 @@ does for each command. The file also ships in the ``krpctools`` package, as
   language's own value, so a bug in the client's encoder cannot cancel out a bug in its decoder.
 * A callback the driver adds writes a ``Notification`` for each of its calls. A notification can
   arrive between a command and its reply.
-* A testee with the ``threads`` profile runs commands on worker threads, named in the command. A
-  testee without it runs every command in order on one thread.
+* A testee with the ``concurrency`` profile runs commands on tasks named in the command, as
+  threads or async tasks. A testee without it runs every command in order on one thread.
 * A command the client offers no way to carry out gets an ``Error`` of kind ``UNSUPPORTED``.
 
 The testee exits when its standard input closes.
@@ -90,7 +90,7 @@ An ``@skip`` after the test name marks a test that hangs the testee. The test is
 
 .. code-block:: none
 
-   test_threading.py::test_wait_holding_another @skip  # The update is never announced
+   test_concurrency.py::test_wait_holding_another @skip  # The update is never announced
 
 Unsupported Tests
 -----------------

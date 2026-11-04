@@ -319,7 +319,7 @@ class Testee:
         self._conn: Connection | None = None
 
     def run(self, command: pb.Command) -> pb.Reply:
-        reply = pb.Reply(id=command.id, thread="main")
+        reply = pb.Reply(id=command.id, task="main")
         try:
             case = command.WhichOneof("command")
             if case == "connect":

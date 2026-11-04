@@ -711,7 +711,7 @@ def test_connection_failure_cause(client, scripted, failure):
     assert error.cause != ""
 
 
-@profile("streams", "callbacks", "threads")
+@profile("streams", "callbacks", "concurrency")
 def test_close_after_failure(connected, control, request):
     """A connection closed after it fails, before its streams have ended, ends them with
     the connection error and the reason for the failure."""
@@ -799,9 +799,9 @@ def test_wait_timeout_values(connected, control, request, timeout):
     assert values.native(reply.value) is True
 
 
-@profile("streams", "threads")
+@profile("streams", "concurrency")
 def test_two_waiters(connected, control, request):
-    """Two threads waiting on one stream both return on its next update."""
+    """Two waits on one stream both return on its next update."""
     stream = watched(connected, name(request))
     stream.get()
     first = connected.start("first", wait=pb.Wait(stream=stream.handle))
@@ -812,11 +812,11 @@ def test_two_waiters(connected, control, request):
     assert second.result() is True
 
 
-@profile("streams", "threads")
+@profile("streams", "concurrency")
 @pytest.mark.parametrize("end", ["remove", "close", "connection-failure"])
 def test_wake_waiter(connected, control, request, end):
-    """A thread waiting on a stream wakes when the stream is removed, the connection closes
-    or the connection fails. The wait raises the error for a removed stream, or the
+    """A wait on a stream ends when the stream is removed, the connection closes or the
+    connection fails. The wait raises the error for a removed stream, or the
     connection error, with the reason for a failure."""
     stream = watched(connected, name(request))
     stream.get()
@@ -970,7 +970,7 @@ def test_first_call_on_add(connected, control, request):
     assert stream.add_callback().calls == [4]
 
 
-@profile("streams", "callbacks", "threads", "races")
+@profile("streams", "callbacks", "concurrency", "races")
 def test_first_call_superseded(connected, control, request):
     """A first call is skipped if an update passes the callback a newer value first."""
     control.conformance_service.set_value(name(request), 1)
@@ -985,7 +985,7 @@ def test_first_call_superseded(connected, control, request):
     assert callback.calls == [2]
 
 
-@profile("streams", "callbacks", "threads")
+@profile("streams", "callbacks", "concurrency")
 def test_queued_value_before_ending(connected, control, request):
     """A value that arrives while a first call runs is passed to the callback once that call
     returns. This holds when the server ends the stream meanwhile. The end callbacks are
@@ -1012,7 +1012,7 @@ def test_queued_value_before_ending(connected, control, request):
     ]
 
 
-@profile("streams", "callbacks", "threads")
+@profile("streams", "callbacks", "concurrency")
 def test_queued_value_dropped_by_remove(connected, control, request):
     """A value that arrives while a first call runs is not passed to the callback once the
     program removes the stream."""
@@ -1036,7 +1036,7 @@ def test_queued_value_dropped_by_remove(connected, control, request):
     assert callback.calls == [0]
 
 
-@profile("streams", "callbacks", "threads", "races")
+@profile("streams", "callbacks", "concurrency", "races")
 def test_value_as_first_call_ends(connected, control, request):
     """A value that arrives once a first call and the values queued during it have been
     passed, and before the add returns, is passed to the callback."""
@@ -1055,7 +1055,7 @@ def test_value_as_first_call_ends(connected, control, request):
 section("Callback Errors")
 
 
-@profile("streams", "callbacks", "threads")
+@profile("streams", "callbacks", "concurrency")
 def test_callback_error(connected, control, request):
     """An error raised by a callback leaves the other callbacks and streams running."""
     raising = watched(connected, name(request) + "raising")
@@ -1072,10 +1072,10 @@ def test_callback_error(connected, control, request):
     assert wait_until(lambda: beside.calls[-1:] == [3])
 
 
-@profile("streams", "callbacks", "threads")
+@profile("streams", "callbacks", "concurrency")
 def test_callback_fatal_error(connected, control, request):
     """An error of the kind the language keeps apart from its ordinary exceptions, such as
-    an ``Error`` in Java, raised by a callback running on a thread of the client, leaves the
+    an ``Error`` in Java, raised by a callback the client runs in the background, leaves the
     other callbacks and streams running."""
     raising = watched(connected, name(request) + "raising")
     # The first call can run on the thread that adds the callback

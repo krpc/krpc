@@ -1,7 +1,8 @@
-"""Threading requirements.
+"""Concurrency requirements.
 
-Each command runs on a named thread of the testee, and Client.start sends one without waiting
-for its reply, so a test can have one thread wait or call while another removes or closes.
+Each command runs on a named task of the testee, a thread or an async task, and Client.start
+sends one without waiting for its reply. A test can have one task wait or call while another
+removes or closes. In an async client, each thread in these requirements is an async task.
 """
 
 import threading
@@ -56,10 +57,9 @@ def assert_closed(client):
 section("Calls")
 
 
-@profile("threads")
-def test_calls_on_several_threads(connected):
-    """Calls made from several threads on one connection each return their own
-    result."""
+@profile("concurrency")
+def test_concurrent_calls(connected):
+    """Concurrent calls on one connection each return their own result."""
     calls = [
         (i, connected.start("caller%d" % (i % 4), invoke=to_string(i)))
         for i in range(40)
@@ -68,11 +68,10 @@ def test_calls_on_several_threads(connected):
         assert call.result() == str(i)
 
 
-@profile("threads")
+@profile("concurrency")
 def test_interleaved_calls(client, server, scripted_server):
-    """A call on one thread writes its request while a call on another thread waits for
-    its response. Each call returns its own result, in whichever order the responses
-    arrive."""
+    """One call writes its request while another call waits for its response. Each call
+    returns its own result, in whichever order the responses arrive."""
     # The server answers a client's requests in order, so a scripted server holds both
     # requests, then answers the second call before the first
     requests = []
@@ -108,9 +107,9 @@ def test_interleaved_calls(client, server, scripted_server):
         client.close()
 
 
-@profile("streams", "threads")
-def test_streams_added_on_several_threads(connected, control, request):
-    """Streams added from several threads at once are each registered."""
+@profile("streams", "concurrency")
+def test_concurrent_stream_adds(connected, control, request):
+    """Streams added concurrently are each registered."""
     names = ["%s%d" % (name(request), i) for i in range(4)]
     adds = [
         connected.start(
@@ -129,10 +128,10 @@ def test_streams_added_on_several_threads(connected, control, request):
         assert wait_until(lambda stream=stream, i=i: stream.get() == i + 1)
 
 
-@profile("threads")
+@profile("concurrency")
 def test_close_with_a_call_in_flight(connected):
-    """A thread closes the connection while another thread waits for a response. The
-    waiting call raises the connection error."""
+    """The program closes the connection while a call waits for a response. The waiting
+    call raises the connection error."""
     slow = connected.start("slow", invoke=block(5000))
     time.sleep(SETTLE)
     start = time.perf_counter()
@@ -142,7 +141,7 @@ def test_close_with_a_call_in_flight(connected):
     assert time.perf_counter() - start < 4
 
 
-@profile("threads")
+@profile("concurrency")
 def test_response_after_close(client, server, scripted_server):
     """A response that arrives after the client sends its ``disconnect`` does not reach
     the call waiting for it. The call raises the connection error."""
@@ -236,7 +235,7 @@ def test_wait_for_update(connected, request):
         assert stream.get() == count
 
 
-@profile("streams", "conditions", "threads")
+@profile("streams", "conditions", "concurrency")
 def test_held_value(connected, control, request):
     """While a thread holds the condition of a stream, the value it reads changes only
     when it waits. A thread that does not hold the condition reads the latest value. A
@@ -256,7 +255,7 @@ def test_held_value(connected, control, request):
         assert stream.get() == 5
 
 
-@profile("streams", "conditions", "threads")
+@profile("streams", "conditions", "concurrency")
 def test_held_stream_ending(connected, control, request):
     """While a thread holds the condition of a stream, an error that ends the stream
     reaches it as a value does. The thread reads the old value until it waits. The wait
@@ -281,7 +280,7 @@ def test_held_stream_ending(connected, control, request):
             assert "Failed by the test" in raised(read).message
 
 
-@profile("streams", "conditions", "threads")
+@profile("streams", "conditions", "concurrency")
 def test_held_stream_ending_before_value(client, server, scripted_server):
     """While a thread holds the condition of a stream with no value, an error ends the
     stream. A read on the thread raises the error."""
@@ -348,7 +347,7 @@ def test_call_while_holding(connected, request):
     assert call.result() == "1"
 
 
-@profile("streams", "conditions", "threads")
+@profile("streams", "conditions", "concurrency")
 def test_wait_on_condition_object(connected, control, request):
     """A thread holding a stream's condition waits on the condition object itself, as the
     language waits on a condition variable. Other threads can take the condition while it
@@ -371,7 +370,7 @@ def test_wait_on_condition_object(connected, control, request):
     assert other.result() == 1
 
 
-@profile("streams", "events", "conditions", "threads")
+@profile("streams", "events", "conditions", "concurrency")
 @pytest.mark.parametrize("kind", ["stream", "event"])
 def test_spurious_wake(connected, request, kind):
     """A wait with a timeout, woken by a notification of the condition with no update,
@@ -401,7 +400,7 @@ def test_spurious_wake(connected, request, kind):
 section("Sharing a Condition")
 
 
-@profile("streams", "conditions", "threads")
+@profile("streams", "conditions", "concurrency")
 def test_hold_twice(connected, request):
     """A thread holding the condition of a stream takes it again. Other threads wait for
     the condition until the thread releases every hold."""
@@ -415,7 +414,7 @@ def test_hold_twice(connected, request):
     assert other.result() == 0
 
 
-@profile("streams", "conditions", "threads")
+@profile("streams", "conditions", "concurrency")
 def test_wait_holding_twice(connected, control, request):
     """A thread that holds the condition of a stream twice waits on it. The wait returns
     for an update, or times out, and the thread then holds the condition twice again."""
@@ -433,7 +432,7 @@ def test_wait_holding_twice(connected, control, request):
     assert other.result() == 5
 
 
-@profile("streams", "conditions", "threads")
+@profile("streams", "conditions", "concurrency")
 def test_copies_share_condition(connected, request):
     """Copies of a stream handle share one condition. A thread holds it through each copy
     at once, and other threads wait for it until the thread releases both holds."""
@@ -449,7 +448,7 @@ def test_copies_share_condition(connected, request):
     assert other.result() == 0
 
 
-@profile("events", "conditions", "threads")
+@profile("events", "conditions", "concurrency")
 def test_event_shares_condition(connected, request):
     """An event and its stream share one condition. A thread holding it through the event
     keeps other threads from taking it through the stream."""
@@ -464,7 +463,7 @@ def test_event_shares_condition(connected, request):
     event.remove()
 
 
-@profile("events", "conditions", "threads")
+@profile("events", "conditions", "concurrency")
 @pytest.mark.parametrize("case", ["event-then-stream", "stream-then-event", "copy"])
 def test_release_through_another_handle(connected, request, case):
     """A thread lets go of a condition through a handle other than the one it took the
@@ -542,7 +541,7 @@ def test_close_while_holding(connected, request, condition):
     assert len(ending.wait_for_calls(1)) == 1
 
 
-@profile("streams", "conditions", "threads")
+@profile("streams", "conditions", "concurrency")
 def test_wait_holding_another(connected, control, request):
     """A thread holding the condition of one stream waits on a second stream. The wait
     returns on the second stream's next update, when an update of the first stream
@@ -565,13 +564,13 @@ def test_wait_holding_another(connected, control, request):
         connected.start("holder", release_condition=pb.ReleaseCondition()).reply()
 
 
-@profile("streams", "conditions", "threads")
+@profile("streams", "conditions", "concurrency")
 @pytest.mark.parametrize("end", ["close", "connection-failure"])
 def test_wake_waiter_holding_another(connected, control, request, end):
-    """A close or a failure of the connection wakes two threads: one waiting on a stream
-    while it holds the condition of a second stream, and one waiting on that second
-    stream. Both waits raise the connection error. The wait on the second stream raises
-    once the first thread lets go of its condition."""
+    """A close or a failure of the connection wakes two waits: one on a stream, made while
+    holding the condition of a second stream, and one on that second stream. Both waits
+    raise the connection error. The wait on the second stream raises once the task holding
+    its condition lets go of it."""
     held = watched(connected, name(request) + "held")
     waited = watched(connected, name(request) + "waited")
     held.get()
@@ -598,7 +597,7 @@ def test_wake_waiter_holding_another(connected, control, request, end):
     assert held_waiting.error().kind == pb.Error.CONNECTION
 
 
-@profile("streams", "conditions", "threads")
+@profile("streams", "conditions", "concurrency")
 @pytest.mark.parametrize("end", ["close", "connection-failure"])
 def test_wake_update_waiter(connected, control, request, end):
     """A close or a failure of the connection wakes a thread waiting for an update while
@@ -649,7 +648,7 @@ def wait_on_event(connected, control, request):
     return waiting, runs_on
 
 
-@profile("streams", "events", "threads")
+@profile("streams", "events", "concurrency")
 @pytest.mark.parametrize(
     "wait_on", [wait_on_stream, wait_on_event], ids=["stream", "event"]
 )
@@ -725,7 +724,7 @@ def test_add_callback_while_callback_waits(connected, request):
 section("Callback Threads")
 
 
-@profile("streams", "callbacks", "threads")
+@profile("streams", "callbacks", "concurrency")
 def test_callbacks_run_off_the_caller(connected, control, request):
     """Callbacks for stream updates run on a thread of the client, and never on a thread
     that makes calls. The first call of a callback, with the value the stream already
@@ -736,15 +735,15 @@ def test_callbacks_run_off_the_caller(connected, control, request):
     callback = stream.add_callback()
     callback.wait_for_calls(1)
     callers = {
-        connected.start(thread, invoke=to_string(1)).reply().thread
-        for thread in ("", "a", "b")
+        connected.start(task, invoke=to_string(1)).reply().task
+        for task in ("", "a", "b")
     }
     # Each update is waited for, as a callback is passed only the latest value
     for value in (1, 2):
         control.conformance_service.set_value(name(request), value)
         callback.wait_for_calls(value + 1)
     later = [x for x in callback.notifications if not x.returned][1:]
-    assert not {x.thread for x in later} & callers
+    assert not {x.task for x in later} & callers
 
 
 @profile("streams", "callbacks")
@@ -759,7 +758,7 @@ def test_first_call_waits(connected, request):
     assert values.native(single_result(callback).value) is True
 
 
-@profile("streams", "callbacks", "threads")
+@profile("streams", "callbacks", "concurrency")
 def test_blocked_callback(connected, control, request):
     """Calls return, and reads of a stream return its latest value, while a callback
     blocks. Waits and other callbacks can stall. The callback is passed the latest value
@@ -788,8 +787,8 @@ def test_blocked_callback(connected, control, request):
 
 @profile("streams", "callbacks")
 @timing
-def test_callback_one_thread_at_a_time(connected, request):
-    """A callback never runs on two threads at once."""
+def test_callback_one_call_at_a_time(connected, request):
+    """The calls of a callback never overlap."""
     stream = counter(connected, name(request))
     callback = stream.add_callback(pb.Behavior(sleep=0.05, report_return=True))
     notifications = callback.wait_for(lambda xs: len(xs) >= 10)
@@ -799,7 +798,7 @@ def test_callback_one_thread_at_a_time(connected, request):
     assert returns[: 2 * pairs] == [False, True] * pairs
 
 
-@profile("streams", "callbacks", "threads", "races")
+@profile("streams", "callbacks", "concurrency", "races")
 def test_close_during_first_call(connected, control, request):
     """Closing the connection returns while an update of a stream waits for the first
     call of a callback to finish."""
@@ -815,7 +814,7 @@ def test_close_during_first_call(connected, control, request):
     adding.reply()
 
 
-@profile("streams", "callbacks", "threads", "races")
+@profile("streams", "callbacks", "concurrency", "races")
 def test_update_callback_after_close(connected, control, request):
     """An update callback is not called once the connection is closed, though the update
     arrived before the close."""

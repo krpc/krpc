@@ -44,7 +44,7 @@ namespace KRPC.Client.Conformance
 
         Reply Reply (Command command)
         {
-            var reply = new Reply { Id = command.Id, Thread = ThreadName () };
+            var reply = new Reply { Id = command.Id, Task = ThreadName () };
             currentConnection = command.Connection;
             try {
                 if (command.Condition != 0) {
@@ -98,7 +98,7 @@ namespace KRPC.Client.Conformance
         /// </summary>
         void CallBack (ulong callback, Behavior behavior, Action<Notification> fill = null)
         {
-            var notification = new Notification { Callback = callback, Thread = ThreadName () };
+            var notification = new Notification { Callback = callback, Task = ThreadName () };
             if (fill != null)
                 fill (notification);
             output.Write (new Output { Notification = notification });
@@ -120,14 +120,14 @@ namespace KRPC.Client.Conformance
                     break;
                 case Behavior.ActionOneofCase.Run:
                     var result = Reply (behavior.Run);
-                    output.Write (new Output { Notification = new Notification { Callback = callback, Thread = ThreadName (), Result = result } });
+                    output.Write (new Output { Notification = new Notification { Callback = callback, Task = ThreadName (), Result = result } });
                     break;
                 case Behavior.ActionOneofCase.Fail:
                     throw new InvalidOperationException (behavior.Fail);
                 }
             } finally {
                 if (behavior.ReportReturn)
-                    output.Write (new Output { Notification = new Notification { Callback = callback, Thread = ThreadName (), Returned = true } });
+                    output.Write (new Output { Notification = new Notification { Callback = callback, Task = ThreadName (), Returned = true } });
             }
         }
 

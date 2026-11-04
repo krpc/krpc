@@ -211,7 +211,7 @@ conformance_test(
         "functions",
         "function-types",
         "connections",
-        "threads",
+        "concurrency",
         "callbacks",
         "conditions",
         "ordering",

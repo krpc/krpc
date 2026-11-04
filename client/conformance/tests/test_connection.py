@@ -980,7 +980,7 @@ def test_close_wait_limit(client, server, scripted_server):
     assert time.perf_counter() - start < 1.5
 
 
-@profile("threads")
+@profile("concurrency")
 def test_close_interrupted(client, scripted_server):
     """Closing from a thread with an interrupt pending sends a ``disconnect`` with the
     reason ``CLOSED`` and waits for the server to close. The interrupt is
@@ -1032,7 +1032,7 @@ def test_lost(client, server, scripted_server, ending):
         assert REMOVED_MESSAGE in error.message
 
 
-@profile("threads")
+@profile("concurrency")
 def test_lost_pending_calls(client, server, scripted_server):
     """The calls waiting for a response when the connection fails raise the connection
     error."""
