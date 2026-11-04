@@ -88,6 +88,21 @@ http_archive(
     url = "https://github.com/doxygen/doxygen/releases/download/Release_1_18_0/doxygen-1.18.0.windows.x64.bin.zip",
 )
 
+# The en_US Hunspell dictionary (SCOWL 2020.12.07) that the documentation's spelling check uses
+http_file(
+    name = "hunspell_en_us_aff",
+    downloaded_file_path = "en_US.aff",
+    sha256 = "c7a8c4d08c29d237880844b1623099f59092602f189be38ce3912e457ff38bc1",
+    url = "https://raw.githubusercontent.com/LibreOffice/dictionaries/4fa94195b8136364dd40bf2b0366a0fe32058899/en/en_US.aff",
+)
+
+http_file(
+    name = "hunspell_en_us_dic",
+    downloaded_file_path = "en_US.dic",
+    sha256 = "f0b1a234bd178bdd01875b2a392a9647f888b8fe879f79c52aae62c2759b3647",
+    url = "https://raw.githubusercontent.com/LibreOffice/dictionaries/4fa94195b8136364dd40bf2b0366a0fe32058899/en/en_US.dic",
+)
+
 bazel_dep(name = "rules_jvm_external", version = "7.2")
 
 maven = use_extension("@rules_jvm_external//:extensions.bzl", "maven")

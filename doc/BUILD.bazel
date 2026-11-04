@@ -122,6 +122,7 @@ py_console_script_binary(
         "@krpc_pypi//sphinx_lua_ls",
         "@krpc_pypi//sphinx_tabs",
         "@krpc_pypi//sphinxcontrib_spelling",
+        "@krpc_pypi//spylls",
     ],
 )
 
@@ -144,6 +145,7 @@ py_binary(
         "@krpc_pypi//sphinx_lua_ls",
         "@krpc_pypi//sphinx_tabs",
         "@krpc_pypi//sphinxcontrib_spelling",
+        "@krpc_pypi//spylls",
         "@krpc_pypi//watchdog",
     ],
 )
@@ -277,6 +279,8 @@ sphinx_spelling_test(
     name = "spelling",
     size = "medium",
     srcs = [":srcs"],
+    aff = "@hunspell_en_us_aff//file",
+    dic = "@hunspell_en_us_dic//file",
     opts = {"version": version},
     sphinx_build = ":sphinx-build",
 )

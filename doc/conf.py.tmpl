@@ -25,10 +25,49 @@ extensions = [
     'sphinx_java'
 ]
 
-# The spellchecker loads a native library through pyenchant, and only the
-# spelling builder has any use for it, so it is added when that builder asks
-# for it (sphinx-build -t spelling) rather than by every build.
+# The spellchecker is added when the spelling builder asks for it
+# (sphinx-build -t spelling), as no other builder has a use for it.
 if tags.has('spelling'):  # noqa: F821  -- sphinx supplies tags to conf.py
+    # sphinxcontrib-spelling checks words through pyenchant, which loads the
+    # Enchant library at import. We take only pyenchant's tokenizer, which is
+    # pure Python, and check words with spylls, a Python port of Hunspell,
+    # against the dictionary the build fetches.
+    os.environ['PYENCHANT_IGNORE_MISSING_LIB'] = '1'
+    import enchant
+    from spylls.hunspell import Dictionary, readers
+    from spylls.hunspell.readers.file_reader import FileReader
+
+    class HunspellDictWithPWL:
+        """The part of enchant.DictWithPWL that sphinxcontrib-spelling uses."""
+
+        def __init__(self, lang, pwl):
+            aff, context = readers.read_aff(FileReader(os.environ['KRPC_SPELLING_AFF']))
+            dic = readers.read_dic(
+                FileReader(os.environ['KRPC_SPELLING_DIC'], encoding=context.encoding),
+                aff=aff, context=context)
+            self.dictionary = Dictionary(aff, dic)
+            with open(pwl, encoding='utf-8') as words:
+                self.words = {word.strip() for word in words if word.strip()}
+            self.checked = {}
+
+        def check(self, word):
+            if word not in self.checked:
+                self.checked[word] = self.in_words(word) or self.dictionary.lookup(word)
+            return self.checked[word]
+
+        # Enchant's casing rule for a personal word list: an entry also matches
+        # its capitalized and upper case forms
+        def in_words(self, word):
+            if word in self.words:
+                return True
+            if word.istitle() and word.lower() in self.words:
+                return True
+            return word.isupper() and (word.lower() in self.words or word.capitalize() in self.words)
+
+        def suggest(self, word):
+            return list(self.dictionary.suggest(word))
+
+    enchant.DictWithPWL = HunspellDictWithPWL
     extensions.append('sphinxcontrib.spelling')
 
 # The Lua API is written with the domain's directives, so sphinx-lua-ls needs no

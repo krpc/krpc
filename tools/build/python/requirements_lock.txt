@@ -807,6 +807,10 @@ sphinxcontrib-spelling==8.0.2 \
     --hash=sha256:afbc7b8e93721ab88f12bdd39d848b92017b3763b9ed6226b4b0e54b06664fea \
     --hash=sha256:db8b3b2945683d49e87a8a5133d2b8ed4206cb593038b986ca8686a485f9980d
     # via -r tools/build/python/requirements.in
+spylls==0.1.7 \
+    --hash=sha256:0c7fa4b66615f390bd12fd37939b85934c012309fd3cce8584844c54270b7776 \
+    --hash=sha256:7045892dcbd324d3685f69c5a760063e78fb839913724ce18077cf0a0c93f220
+    # via -r tools/build/python/requirements.in
 starlette==1.9.0 \
     --hash=sha256:3d931de246ed870e35ce605974440816ef895e592f255d1396cfdf191d4c4318 \
     --hash=sha256:fd3f159936e882d06c1108f84688f7cda2cf85fc6a592a50edbd175e882c2ddc

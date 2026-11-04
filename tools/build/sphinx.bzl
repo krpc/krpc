@@ -73,6 +73,11 @@ sphinx_build = rule(
     },
 )
 
+# The runfiles-root-relative path of a file, which for a file in an external repository starts
+# with ../
+def _rootpath(target):
+    return target[DefaultInfo].files.to_list()[0].short_path
+
 def _test_config_impl(ctx):
     config = ctx.actions.declare_file(ctx.label.name + ".json")
     ctx.actions.write(
@@ -82,6 +87,7 @@ def _test_config_impl(ctx):
             "builder": ctx.attr.builder,
             "src_dir": _get_src_dir(ctx.files.srcs, short_path = True),
             "opts": ctx.attr.opts,
+            "env": {key: _rootpath(target) for key, target in ctx.attr.env_files.items()},
         }),
     )
     return DefaultInfo(files = depset([config]))
@@ -95,17 +101,19 @@ _sphinx_test_config = rule(
     implementation = _test_config_impl,
     attrs = {
         "builder": attr.string(mandatory = True),
+        "env_files": attr.string_keyed_label_dict(allow_files = True),
         "opts": attr.string_dict(),
         "sphinx_build": attr.label(executable = True, mandatory = True, cfg = "target"),
         "srcs": attr.label_list(allow_files = True),
     },
 )
 
-def _sphinx_test(name, builder, srcs, sphinx_build, opts, kwargs):
+def _sphinx_test(name, builder, srcs, sphinx_build, opts, kwargs, env_files = {}):
     config = name + "-config"
     _sphinx_test_config(
         name = config,
         builder = builder,
+        env_files = env_files,
         opts = opts,
         sphinx_build = sphinx_build,
         srcs = srcs,
@@ -116,14 +124,16 @@ def _sphinx_test(name, builder, srcs, sphinx_build, opts, kwargs):
         srcs = [Label("//tools/build:run_sphinx_test.py")],
         main = Label("//tools/build:run_sphinx_test.py"),
         args = ["$(rootpath :%s)" % config],
-        data = [config, sphinx_build] + srcs,
+        data = [config, sphinx_build] + srcs + env_files.values(),
         **kwargs
     )
 
-# Check the prose for misspellings.
+# Check the prose for misspellings, against the Hunspell dictionary in the aff and dic files.
+# conf.py finds them through KRPC_SPELLING_AFF and KRPC_SPELLING_DIC.
 # buildifier: disable=function-docstring
-def sphinx_spelling_test(name, srcs, sphinx_build, opts = {}, **kwargs):
-    _sphinx_test(name, "spelling", srcs, sphinx_build, opts, kwargs)
+def sphinx_spelling_test(name, srcs, sphinx_build, aff, dic, opts = {}, **kwargs):
+    env_files = {"KRPC_SPELLING_AFF": aff, "KRPC_SPELLING_DIC": dic}
+    _sphinx_test(name, "spelling", srcs, sphinx_build, opts, kwargs, env_files)
 
 # Check that every link the documentation makes can still be followed.
 # buildifier: disable=function-docstring

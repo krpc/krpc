@@ -36,6 +36,7 @@ sphinx-java==1.0.0
 sphinx-lua-ls==3.12.1
 sphinx-tabs==3.5.0
 sphinxcontrib-spelling==8.0.2
+spylls==0.1.7
 
 # Live-serving the documentation website (bazel run //doc:serve)
 sphinx-autobuild
