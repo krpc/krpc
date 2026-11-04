@@ -2,27 +2,26 @@ FROM ubuntu:24.04
 LABEL maintainer="djungelorm <djungelorm@users.noreply.github.com>"
 
 # Install essential packages. python-is-python3 provides a `python` executable for
-# the CI workflow steps. The Bazel build uses the hermetic rules_python toolchain.
+# the CI workflow steps, and unzip unpacks an archive in the CI steps. The Bazel
+# build uses the hermetic rules_python toolchain.
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    curl ca-certificates git python3 python-is-python3 && \
+    curl ca-certificates git python3 python-is-python3 unzip && \
     apt-get clean
 
 # Install Bazelisk, which fetches the Bazel version in the repository's .bazelversion
 RUN curl -fsSL https://github.com/bazelbuild/bazelisk/releases/download/v1.29.0/bazelisk-linux-amd64 -o /usr/local/bin/bazel && \
     chmod +x /usr/local/bin/bazel
 
-# Install latex
+# Install socat for the serial transport tests
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    latexmk make texlive-latex-base texlive-latex-recommended texlive-fonts-recommended \
-    texlive-latex-extra tex-gyre libenchant-2-2 && \
+    apt-get install -y --no-install-recommends socat && \
     apt-get clean
 
-# Install other build tools: socat for the serial transport tests, graphviz for
-# the documentation's dot graphs and unzip for the CI steps that unpack an archive
+# Install a font for the text in the documentation's diagrams, which the build
+# rasterizes from SVG
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends socat graphviz unzip && \
+    apt-get install -y --no-install-recommends fonts-dejavu-core && \
     apt-get clean
 
 # Install system LLVM (clang-23) from apt.llvm.org for CI's C/C++ client build and

@@ -54,11 +54,10 @@ artifacts.
 ### Linux
 
 The Linux Bazel jobs run in the `ghcr.io/krpc/buildenv` image (`tools/buildenv/`), pinned by
-version in each job. The image holds the system tools some targets need, such as socat and
-Graphviz, and an LLVM install that the Linux jobs use in place of Bazel's own (see
-[Bazel Configuration](#bazel-configuration)). The .NET SDK for the `KRPC.sln` build comes from
-`actions/setup-dotnet`. The container runs as the `runner` user, so it owns the files the
-checkout writes.
+version in each job. The image holds socat for the serial transport tests, and an LLVM install
+that the Linux jobs use in place of Bazel's own (see [Bazel Configuration](#bazel-configuration)).
+The .NET SDK for the `KRPC.sln` build comes from `actions/setup-dotnet`. The container runs as
+the `runner` user, so it owns the files the checkout writes.
 
 The CMake and vcpkg consumer jobs run on the bare runner. They need only a compiler and the
 packages the `vcpkg-linux` action installs.

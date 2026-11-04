@@ -1,3 +1,9 @@
+## [v3.16.0]
+- Remove LaTeX, which built the documentation PDF
+- Remove `graphviz` (the documentation's one graph is an SVG image in the source)
+- Remove `libenchant-2-2` (the spelling check uses a Hunspell dictionary fetched by the Bazel build)
+- Add `fonts-dejavu-core`, the font the documentation's diagrams are drawn with
+
 ## [v3.15.0]
 - Add clangd, which the system LLVM toolchain links to
 

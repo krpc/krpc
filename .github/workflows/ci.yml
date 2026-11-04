@@ -103,7 +103,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     container:
-      image: ghcr.io/krpc/buildenv:3.15.0
+      image: ghcr.io/krpc/buildenv:3.16.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -256,7 +256,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     container:
-      image: ghcr.io/krpc/buildenv:3.15.0
+      image: ghcr.io/krpc/buildenv:3.16.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -294,7 +294,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     container:
-      image: ghcr.io/krpc/buildenv:3.15.0
+      image: ghcr.io/krpc/buildenv:3.16.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -318,7 +318,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     container:
-      image: ghcr.io/krpc/buildenv:3.15.0
+      image: ghcr.io/krpc/buildenv:3.16.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -385,7 +385,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     container:
-      image: ghcr.io/krpc/buildenv:3.15.0
+      image: ghcr.io/krpc/buildenv:3.16.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -593,7 +593,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     container:
-      image: ghcr.io/krpc/buildenv:3.15.0
+      image: ghcr.io/krpc/buildenv:3.16.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
