@@ -136,9 +136,8 @@ jobs:
           name: ${{ matrix.artifact }}
           path: ${{ matrix.path }}
 
-  # The Linux matrix above, for Windows. Windows has no equivalent of the
-  # entries whose every target needs a POSIX tool, such as the serial transport,
-  # because there would be nothing left in them to run.
+  # The Linux matrix above, for Windows. A target that cannot run on Windows,
+  # such as a serial transport test, is marked incompatible, and Bazel skips it.
   # Nothing here uploads an artifact: the releases are built on Linux. The C++
   # client is windows-test-client-cpp, which saves the C++ cache.
   windows:
@@ -706,6 +705,10 @@ jobs:
         if: github.event_name != 'push' || steps.merge-group-run.outputs.run-id
         run: client/cpp/test-cmake-linux.sh krpc-cpp-*.zip fetch
 
+  # The system scenario only. The fetch scenario stays on Linux on purpose. On
+  # Windows it builds protobuf and abseil from source with no compiler cache,
+  # which takes the job past 30 minutes. FetchContent takes the same path on
+  # both platforms, so Linux covers it.
   windows-build-client-cpp-cmake:
     needs: linux-test-client-cpp
     runs-on: windows-latest

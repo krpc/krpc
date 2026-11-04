@@ -31,8 +31,9 @@ The C and C++ clients build with an LLVM toolchain that Bazel downloads. Pass
 Windows
 ^^^^^^^
 
-Pass ``--config=windows`` to Bazel. The whole tree builds with MSVC, apart from the serial IO
-tests and the C and C++ lint, which are skipped. A Windows machine needs four settings first.
+Pass ``--config=windows`` to Bazel. The whole tree builds with MSVC. Bazel skips the targets
+that need Linux: the serial IO tests, clang-tidy and ``//tools/krpctools:conformance-test``. A
+Windows machine needs four settings first.
 
 **Symlinks.** Bazel runs with ``--windows_enable_symlinks`` and ``--enable_runfiles``, and creating a
 symlink needs Developer Mode. Turn it on under Settings > System > For developers, or from an

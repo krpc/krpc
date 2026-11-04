@@ -47,9 +47,20 @@ lines each. A job stays outside a matrix when it produces more than one artifact
 other than Bazel, saves a cache on a push, or is named in another job's `needs`, which cannot
 address a single matrix entry.
 
-Windows runs everything that does not need a POSIX tool. The serial transport, clang-tidy and
-the Linux-only lint stay on Linux. Releases are built on Linux, so only the Linux jobs upload
-artifacts.
+Windows runs everything Linux runs, except these:
+
+- **The serial transport tests.** They link two pseudo-terminals with socat, which has no Windows
+  build. Windows tests its serial backend against a stand-in, in
+  `//client/cnano:communication-serialio`.
+- **clang-tidy.** It needs the libc++ headers that only the LLVM toolchain supplies.
+- **`//tools/krpctools:conformance-test`.** The TestServer that krpctools bundles is built for
+  linux-x64.
+- **`//tools/build/python:requirements.test`.** The Python lock file is resolved on Linux.
+- **The C++ CMake fetch scenario.** It builds protobuf and abseil from source, and on Windows
+  that build is uncached and takes the job past 30 minutes. Windows builds the system scenario,
+  which shows the client compiles there.
+
+Releases are built on Linux, so only the Linux jobs upload artifacts.
 
 ### Linux
 
