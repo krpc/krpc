@@ -1684,18 +1684,6 @@ Config Node
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_ConfigNode_GetValues(krpc_connection_t connection, krpc_list_string_t * returnValue, krpc_SpaceCenter_ConfigNode_t instance, const char * name)
-
-      .. warning:: Deprecated. Use :func:`krpc_SpaceCenter_ConfigNode_FindValues` instead.
-
-      Returns all of the values with the given name, as a list.
-
-      :Parameters:
-
-       * **name** -- Name of the values.
-
-   
-
    .. function:: krpc_error_t krpc_SpaceCenter_ConfigNode_Nodes(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_SpaceCenter_ConfigNode_t instance)
 
       The child nodes contained in this node.
@@ -1725,18 +1713,6 @@ Config Node
    
 
    .. function:: krpc_error_t krpc_SpaceCenter_ConfigNode_FindNodes(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_SpaceCenter_ConfigNode_t instance, const char * name)
-
-      Returns all of the child nodes with the given name, as a list.
-
-      :Parameters:
-
-       * **name** -- Name of the child nodes.
-
-   
-
-   .. function:: krpc_error_t krpc_SpaceCenter_ConfigNode_GetNodes(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_SpaceCenter_ConfigNode_t instance, const char * name)
-
-      .. warning:: Deprecated. Use :func:`krpc_SpaceCenter_ConfigNode_FindNodes` instead.
 
       Returns all of the child nodes with the given name, as a list.
 

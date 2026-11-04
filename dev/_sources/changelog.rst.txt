@@ -100,7 +100,7 @@ SpaceCenter service
 * Fix the ``Vessel.Flight`` link to the ``Flight`` class (:issue:`1252`)
 * Parts
 
-  * :deprecated:`Deprecated` ``ConfigNode.GetValues`` and ``ConfigNode.GetNodes``, superseded by ``ConfigNode.FindValues`` and ``ConfigNode.FindNodes`` (:issue:`1261`)
+  * :breaking:`Breaking` Rename ``ConfigNode.GetValues`` and ``ConfigNode.GetNodes`` to ``ConfigNode.FindValues`` and ``ConfigNode.FindNodes`` (:issue:`1261`)
 
 
 

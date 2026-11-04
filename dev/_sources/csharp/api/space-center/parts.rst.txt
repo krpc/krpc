@@ -1692,18 +1692,6 @@ Config Node
 
       :Game Scenes: All
 
-   .. function:: System.Collections.Generic.IList<string> GetValues(string name)
-
-      .. warning:: Deprecated. Use :meth:`ConfigNode.FindValues` instead.
-
-      Returns all of the values with the given name, as a list.
-
-      :parameters:
-
-       * **name** -- Name of the values.
-
-      :Game Scenes: All
-
    .. property:: System.Collections.Generic.IList<ConfigNode> Nodes { get; }
 
       The child nodes contained in this node.
@@ -1733,18 +1721,6 @@ Config Node
       :Game Scenes: All
 
    .. function:: System.Collections.Generic.IList<ConfigNode> FindNodes(string name)
-
-      Returns all of the child nodes with the given name, as a list.
-
-      :parameters:
-
-       * **name** -- Name of the child nodes.
-
-      :Game Scenes: All
-
-   .. function:: System.Collections.Generic.IList<ConfigNode> GetNodes(string name)
-
-      .. warning:: Deprecated. Use :meth:`ConfigNode.FindNodes` instead.
 
       Returns all of the child nodes with the given name, as a list.
 

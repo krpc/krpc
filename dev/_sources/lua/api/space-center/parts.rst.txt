@@ -1558,14 +1558,6 @@ Config Node
 
       :param name: Name of the values.
 
-   .. method:: get_values(name: string): List
-
-      .. warning:: Deprecated. Use :meth:`SpaceCenter.ConfigNode.find_values` instead.
-
-      Returns all of the values with the given name, as a list.
-
-      :param name: Name of the values.
-
    .. attribute:: nodes: List
 
       The child nodes contained in this node.
@@ -1587,14 +1579,6 @@ Config Node
       :param name: Name of the child node.
 
    .. method:: find_nodes(name: string): List
-
-      Returns all of the child nodes with the given name, as a list.
-
-      :param name: Name of the child nodes.
-
-   .. method:: get_nodes(name: string): List
-
-      .. warning:: Deprecated. Use :meth:`SpaceCenter.ConfigNode.find_nodes` instead.
 
       Returns all of the child nodes with the given name, as a list.
 

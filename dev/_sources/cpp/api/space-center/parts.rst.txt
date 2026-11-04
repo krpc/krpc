@@ -1686,18 +1686,6 @@ Config Node
 
    
 
-   .. function:: std::vector<std::string> get_values(std::string name)
-
-      .. warning:: Deprecated. Use :func:`ConfigNode::find_values` instead.
-
-      Returns all of the values with the given name, as a list.
-
-      :Parameters:
-
-       * **name** -- Name of the values.
-
-   
-
    .. function:: std::vector<ConfigNode> nodes()
 
       The child nodes contained in this node.
@@ -1727,18 +1715,6 @@ Config Node
    
 
    .. function:: std::vector<ConfigNode> find_nodes(std::string name)
-
-      Returns all of the child nodes with the given name, as a list.
-
-      :Parameters:
-
-       * **name** -- Name of the child nodes.
-
-   
-
-   .. function:: std::vector<ConfigNode> get_nodes(std::string name)
-
-      .. warning:: Deprecated. Use :func:`ConfigNode::find_nodes` instead.
 
       Returns all of the child nodes with the given name, as a list.
 

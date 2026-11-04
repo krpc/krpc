@@ -1931,16 +1931,6 @@ Config Node
       :rtype: list(str)
    
 
-   .. method:: get_values(name)
-
-      .. warning:: Deprecated. Use :meth:`ConfigNode.find_values` instead.
-
-      Returns all of the values with the given name, as a list.
-
-      :param str name: Name of the values.
-      :rtype: list(str)
-   
-
    .. attribute:: nodes
 
       The child nodes contained in this node.
@@ -1968,16 +1958,6 @@ Config Node
    
 
    .. method:: find_nodes(name)
-
-      Returns all of the child nodes with the given name, as a list.
-
-      :param str name: Name of the child nodes.
-      :rtype: list(:class:`ConfigNode`)
-   
-
-   .. method:: get_nodes(name)
-
-      .. warning:: Deprecated. Use :meth:`ConfigNode.find_nodes` instead.
 
       Returns all of the child nodes with the given name, as a list.
 

@@ -1767,15 +1767,6 @@ Config Node
       :param String name: Name of the values.
    
 
-   .. method:: java.util.List<String> getValues(String name)
-
-      .. warning:: Deprecated. Use :meth:`ConfigNode.findValues(String)` instead.
-
-      Returns all of the values with the given name, as a list.
-
-      :param String name: Name of the values.
-   
-
    .. method:: java.util.List<ConfigNode> getNodes()
 
 
@@ -1800,15 +1791,6 @@ Config Node
    
 
    .. method:: java.util.List<ConfigNode> findNodes(String name)
-
-      Returns all of the child nodes with the given name, as a list.
-
-      :param String name: Name of the child nodes.
-   
-
-   .. method:: java.util.List<ConfigNode> getNodes(String name)
-
-      .. warning:: Deprecated. Use :meth:`ConfigNode.findNodes(String)` instead.
 
       Returns all of the child nodes with the given name, as a list.
 
