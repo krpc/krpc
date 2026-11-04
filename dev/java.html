@@ -1423,8 +1423,9 @@ method’s value. <a class="reference internal" href="#krpc.client.Stream.get()"
 </div>
 <p>A procedure of a service is streamed with the service’s class in place of an object, such as
 <code class="docutils literal notranslate"><span class="pre">connection.addStream(SpaceCenter.class,</span> <span class="pre">&quot;getUT&quot;)</span></code>.</p>
-<p>A stream can be made of any procedure or property that returns a value. Each call to
-<a class="reference internal" href="#krpc.client.Connection.addStream(Class, String, Object)" title="krpc.client.Connection.addStream(Class, String, Object)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">addStream</span></code></a> creates another stream.</p>
+<p>Each call to <a class="reference internal" href="#krpc.client.Connection.addStream(Class, String, Object)" title="krpc.client.Connection.addStream(Class, String, Object)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">addStream</span></code></a> creates another stream. A stream of a procedure with no
+return value runs the call on each update for its effects. Its value is <code class="docutils literal notranslate"><span class="pre">null</span></code>, as a
+<code class="docutils literal notranslate"><span class="pre">Stream&lt;Void&gt;</span></code>.</p>
 <p>A stream runs until you remove it with <a class="reference internal" href="#krpc.client.Stream.remove()" title="krpc.client.Stream.remove()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">remove</span></code></a>, your program drops its last
 reference to it, or the connection closes. Keep a reference to a stream for as long as you need its
 values or its callbacks.</p>
@@ -2085,8 +2086,9 @@ arguments.</p>
 <dd><p>Creates a stream from a server side function, evaluated on each update, and returns a
 <a class="reference internal" href="#krpc.client.Stream" title="krpc.client.Stream"><code class="xref java java-type docutils literal notranslate"><span class="pre">Stream</span></code></a>. Each call creates a new stream. The type parameter must hold the function’s
 value, or assigning a value throws a <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/ClassCastException.html" title="java.lang.ClassCastException"><code class="xref java java-type docutils literal notranslate"><span class="pre">ClassCastException</span></code></a>.</p>
-<p>Throws a <a class="reference internal" href="#krpc.client.StreamException" title="krpc.client.StreamException"><code class="xref java java-type docutils literal notranslate"><span class="pre">StreamException</span></code></a> if the function has no value, and an
-<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="java.lang.IllegalArgumentException"><code class="xref java java-type docutils literal notranslate"><span class="pre">IllegalArgumentException</span></code></a> if it has parameters.</p>
+<p>A function with no value runs on each update for its effects, and the stream’s value is
+<code class="docutils literal notranslate"><span class="pre">null</span></code>, as a <code class="docutils literal notranslate"><span class="pre">Stream&lt;Void&gt;</span></code>. Throws an <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="java.lang.IllegalArgumentException"><code class="xref java java-type docutils literal notranslate"><span class="pre">IllegalArgumentException</span></code></a> if
+the function has parameters.</p>
 </dd></dl>
 
 <dl class="java method">

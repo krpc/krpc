@@ -555,6 +555,12 @@ streams running.</p>
 other, and reading the removed one raises the error for a removed stream.</p>
 </dd>
 </dl>
+<dl class="simple" id="spec-functions-stream-without-a-value">
+<dt><code class="docutils literal notranslate"><span class="pre">functions-stream-without-a-value</span> <span class="pre">[functions,</span> <span class="pre">streams]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A stream of a function with no value runs the function on each update, for its
+effects. Its value is the client’s null value. An error from the function ends the
+stream with that error.</p>
+</dd>
+</dl>
 </section>
 <section id="events">
 <h2>Events<a class="headerlink" href="#events" title="Link to this heading">#</a></h2>
@@ -617,6 +623,11 @@ value, and a position without one takes the argument encoded in the call.</p>
 <dl class="simple" id="spec-functions-call-with-a-call-argument">
 <dt><code class="docutils literal notranslate"><span class="pre">functions-call-with-a-call-argument</span> <span class="pre">[functions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A function the client builds over one call computes an argument of another call. Here
 the instance of a class method is computed by a call that creates the object.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-functions-run-without-a-value">
+<dt><code class="docutils literal notranslate"><span class="pre">functions-run-without-a-value</span> <span class="pre">[functions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Running a function with no value runs it once, for its effects, and returns the
+client’s null value.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-functions-run-error">

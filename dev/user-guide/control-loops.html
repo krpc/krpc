@@ -598,7 +598,9 @@ tick. One function reads the state, computes the control and writes it, all in t
 </pre></div>
 </div>
 <p>Each iteration is one call, and runs in whichever tick the call lands on. The game can run ticks
-between the iterations, so a loop that has to act on every tick still uses <code class="docutils literal notranslate"><span class="pre">next_tick</span></code>.</p>
+between the iterations, so a loop that has to act on every tick still uses <code class="docutils literal notranslate"><span class="pre">next_tick</span></code>. A stream
+of the function runs it on every tick instead, with no call at all. See
+<a class="reference internal" href="server-side-functions.html#server-side-functions-control-loops"><span class="std std-ref">Control Loops on the Server</span></a>.</p>
 </section>
 <section id="the-cost-of-a-hold">
 <h2>The Cost of a Hold<a class="headerlink" href="#the-cost-of-a-hold" title="Link to this heading">#</a></h2>

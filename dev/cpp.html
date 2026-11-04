@@ -1440,8 +1440,9 @@ template argument is the procedure’s return type. Calling the stream returns i
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>A stream can be made of any procedure or property that returns a value. Each call to a
-<code class="docutils literal notranslate"><span class="pre">_stream</span></code> function creates another stream.</p>
+<p>Each call to a <code class="docutils literal notranslate"><span class="pre">_stream</span></code> function creates another stream. A procedure with no return value
+streams as a <code class="docutils literal notranslate"><span class="pre">Stream&lt;void&gt;</span></code>, which runs the call on each update for its effects. Calling it
+returns nothing, and its callbacks take no arguments.</p>
 <p>A stream runs until you remove it with <a class="reference internal" href="#_CPPv4N4krpc6Stream6removeEv" title="krpc::Stream::remove"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">remove()</span></code></a>, or the connection closes.
 A stream object can be copied, and every copy refers to the same stream. Destroying the last copy
 also removes the stream, so a stream declared in a block is removed at the end of the block:</p>
@@ -2028,7 +2029,9 @@ a null object, whose identifier is 0.</p>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN4krpc6StreamE">
 <span id="_CPPv3I0EN4krpc6StreamE"></span><span id="_CPPv2I0EN4krpc6StreamE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Stream</span></span></span><a class="headerlink" href="#_CPPv4I0EN4krpc6StreamE" title="Link to this definition">#</a><br /></dt>
-<dd><p>A stream, created by a procedure’s <code class="docutils literal notranslate"><span class="pre">_stream</span></code> function. See <a class="reference internal" href="#cpp-client-streams"><span class="std std-ref">Streaming Data</span></a>.</p>
+<dd><p>A stream, created by a procedure’s <code class="docutils literal notranslate"><span class="pre">_stream</span></code> function. See <a class="reference internal" href="#cpp-client-streams"><span class="std std-ref">Streaming Data</span></a>. A
+<code class="docutils literal notranslate"><span class="pre">Stream&lt;void&gt;</span></code> is a stream of a call or function with no value. It runs on each update for
+its effects, and the server sends one update, after the first run.</p>
 <p>Stream objects are copy constructible and assignable, and every copy refers to the same stream.
 Call <a class="reference internal" href="#_CPPv4N4krpc6Stream6removeEv" title="krpc::Stream::remove"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">remove()</span></code></a>, or destroy every copy, to remove the stream from the server. A
 default-constructed stream object refers to no stream. Its members throw
@@ -2173,7 +2176,8 @@ and returns the function.</p>
 <dd><p>Creates a stream from a server side function, evaluated on each update. Each call creates a
 new stream. A function that can produce a null needs a <code class="docutils literal notranslate"><span class="pre">std::optional</span></code> template type, and
 reading a null without one throws <a class="reference internal" href="#_CPPv4N4krpc13EncodingErrorE" title="krpc::EncodingError"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">EncodingError</span></code></a>. A callback is not called for
-a null value.</p>
+a null value. A function with no value takes <code class="docutils literal notranslate"><span class="pre">void</span></code> as the template type, and runs on each
+update for its effects.</p>
 <p>Throws <code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code> if the template type does not describe the function’s value,
 <a class="reference internal" href="#_CPPv4N4krpc11StreamErrorE" title="krpc::StreamError"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">StreamError</span></code></a> if the client is not connected to a server, and
 <a class="reference internal" href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC17ArgumentExceptionE" title="krpc::services::KRPC::ArgumentException"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">ArgumentException</span></code></a> if the function has parameters.</p>

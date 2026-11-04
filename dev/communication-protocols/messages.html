@@ -988,6 +988,8 @@ returns a <code class="docutils literal notranslate"><span class="pre">Services<
 <p>The <code class="docutils literal notranslate"><span class="pre">AddStream</span></code> procedure adds a stream of a remote procedure. Its argument is the call, as a
 <code class="docutils literal notranslate"><span class="pre">ProcedureCall</span></code> message. See <a class="reference internal" href="#communication-protocol-anatomy-of-a-request"><span class="std std-ref">Anatomy of a Request</span></a>. It returns the
 stream’s identifier, described under <a class="reference internal" href="#communication-protocol-streams"><span class="std std-ref">Streams</span></a>.</p>
+<p>A procedure with no return value runs on each update for its effects. Its first run sends a
+result with an empty value. Later runs send nothing, unless an error ends the stream.</p>
 </section>
 <section id="addfunctionstream">
 <span id="communication-protocol-add-function-stream"></span><h3>AddFunctionStream<a class="headerlink" href="#addfunctionstream" title="Link to this heading">#</a></h3>
@@ -995,7 +997,8 @@ stream’s identifier, described under <a class="reference internal" href="#comm
 each update. Its argument is the function, built using the <code class="docutils literal notranslate"><span class="pre">KRPC.Expression</span></code> class.</p>
 <p>The procedure returns the stream’s identifier. The stream’s values have the type given by the
 function’s <code class="docutils literal notranslate"><span class="pre">ReturnType</span></code> property. The function must take no parameters. Any exception from the
-function ends the stream with that error.</p>
+function ends the stream with that error. A function with no value runs for its effects, and
+sends results as a procedure with no return value does.</p>
 </section>
 <section id="addevent">
 <span id="communication-protocol-add-event"></span><h3>AddEvent<a class="headerlink" href="#addevent" title="Link to this heading">#</a></h3>

@@ -162,8 +162,9 @@ A property is streamed with ``getattr`` and the property's name:
 
 .. literalinclude:: /scripts/python/Streaming4.py
 
-A stream can be made of any procedure or property that returns a value. Each call to
-:meth:`~krpc.client.Client.add_stream` creates another stream.
+Each call to :meth:`~krpc.client.Client.add_stream` creates another stream. A stream of a
+procedure with no return value, or of a property setter passed with ``setattr``, runs the call on
+each update for its effects. Its value is ``None``.
 
 A stream runs until you remove it with :meth:`~krpc.stream.Stream.remove`, your program drops its
 last reference to it, or the connection closes. Keep a reference to a stream for as long as you
@@ -749,15 +750,18 @@ Client API Reference
 
       Creates a stream for the remote procedure *func* called with arguments *args* and *kwargs*,
       and returns a :class:`krpc.stream.Stream`. Each call creates a new stream. Stream a property
-      by passing ``getattr`` as *func*, then the object and the property's name.
+      by passing ``getattr`` as *func*, then the object and the property's name. Stream a
+      property setter by passing ``setattr``, then the object, the property's name and the value.
 
       *func* can also be a server side function, which the stream evaluates on each update. It
       is a ``KRPC.Expression`` object, or a Python function or lambda that is compiled with
       :meth:`compile` on every call. A server side function takes no arguments.
 
-      Raises :class:`krpc.error.StreamError` for a property setter, for arguments passed with a
-      server side function, for a function with no result, and for a compiled function with
-      parameters. Raises ``TypeError`` for any other value.
+      A call or function with no value runs on each update for its effects, and the stream's
+      value is ``None``.
+
+      Raises :class:`krpc.error.StreamError` for arguments passed with a server side function,
+      and for a compiled function with parameters. Raises ``TypeError`` for any other value.
 
    .. method:: stream(func, *args, **kwargs)
 
@@ -818,7 +822,8 @@ Client API Reference
 
       Converts a call to the remote procedure *func* with arguments *args* and *kwargs* into a
       ``KRPC.ProcedureCall`` message, for use in a server side function built with the
-      expression API. See :ref:`server-side-functions-api`.
+      expression API. See :ref:`server-side-functions-api`. Pass ``getattr`` or ``setattr`` as
+      *func* for a property, as with :meth:`add_stream`.
 
 .. class:: krpc.stream.Stream
 

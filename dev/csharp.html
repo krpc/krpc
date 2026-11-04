@@ -1345,20 +1345,21 @@ The server runs the call repeatedly, and sends your program the result each time
 </pre></div>
 </div>
 <p><a class="reference internal" href="#function-KRPC.Client.Connection.AddStream" title="function: KRPC.Client.Connection.AddStream"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">AddStream</span></code></a> creates the stream from a lambda expression that makes
-the call, and returns a <a class="reference internal" href="#class-KRPC.Client.Stream-1" title="class: KRPC.Client.Stream&lt;TReturnType&gt;"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">Stream</span></code></a>. Calling <a class="reference internal" href="#function-KRPC.Client.Stream-1.Get" title="function: KRPC.Client.Stream.Get"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Get</span></code></a>
+the call, and returns a <a class="reference internal" href="#class-KRPC.Client.Stream" title="class: KRPC.Client.Stream"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">Stream</span></code></a>. Calling <a class="reference internal" href="#function-KRPC.Client.Stream.Get" title="function: KRPC.Client.Stream.Get"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Get</span></code></a>
 returns the stream’s latest value.</p>
 <p>A property is streamed with a lambda that reads it, such as <code class="docutils literal notranslate"><span class="pre">()</span> <span class="pre">=&gt;</span> <span class="pre">flight.MeanAltitude</span></code>.</p>
 <p>A lambda that makes one call with fixed arguments streams that call. The object the call is made
 on is evaluated once, when the stream is created. Any other lambda is compiled into a
 <a class="reference internal" href="#csharp-client-compiling-lambdas"><span class="std std-ref">server side function</span></a>, which the server evaluates on each
 update.</p>
-<p>A stream can be made of any procedure or property that returns a value. Each call to
-<a class="reference internal" href="#function-KRPC.Client.Connection.AddStream" title="function: KRPC.Client.Connection.AddStream"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">AddStream</span></code></a> creates another stream.</p>
-<p>A stream runs until you remove it with <a class="reference internal" href="#function-KRPC.Client.Stream-1.Remove" title="function: KRPC.Client.Stream.Remove"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Remove</span></code></a>, your program drops its
+<p>Each call to <a class="reference internal" href="#function-KRPC.Client.Connection.AddStream" title="function: KRPC.Client.Connection.AddStream"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">AddStream</span></code></a> creates another stream. A lambda with no
+value, such as a call to a procedure with no return value, streams as a
+<a class="reference internal" href="#class-KRPC.Client.Stream" title="class: KRPC.Client.Stream"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">Stream</span></code></a> with no type parameter. It runs on each update for its effects.</p>
+<p>A stream runs until you remove it with <a class="reference internal" href="#function-KRPC.Client.Stream.Remove" title="function: KRPC.Client.Stream.Remove"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Remove</span></code></a>, your program drops its
 last reference to it, or the connection closes. Keep a reference to a stream for as long as you
 need its values or its callbacks.</p>
 <p>By default, the server sends a stream’s value each time it changes. Set
-<a class="reference internal" href="#property-KRPC.Client.Stream-1.Rate" title="property: KRPC.Client.Stream.Rate"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Rate</span></code></a> to limit how many times a second the stream updates:</p>
+<a class="reference internal" href="#property-KRPC.Client.Stream.Rate" title="property: KRPC.Client.Stream.Rate"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Rate</span></code></a> to limit how many times a second the stream updates:</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client.Services.SpaceCenter</span><span class="p">;</span>
 
@@ -1376,7 +1377,7 @@ need its values or its callbacks.</p>
 <section id="waiting-for-changes">
 <h3>Waiting for Changes<a class="headerlink" href="#waiting-for-changes" title="Link to this heading">#</a></h3>
 <p>Each stream has a condition variable, an object you lock with the <code class="docutils literal notranslate"><span class="pre">lock</span></code> statement.
-<a class="reference internal" href="#function-KRPC.Client.Stream-1.Wait" title="function: KRPC.Client.Stream.Wait"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Wait</span></code></a> blocks until the stream’s value changes. The following waits for
+<a class="reference internal" href="#function-KRPC.Client.Stream.Wait" title="function: KRPC.Client.Stream.Wait"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Wait</span></code></a> blocks until the stream’s value changes. The following waits for
 the abort button to be pressed:</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client.Services.SpaceCenter</span><span class="p">;</span>
@@ -1394,11 +1395,11 @@ the abort button to be pressed:</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Lock the condition when you call <a class="reference internal" href="#function-KRPC.Client.Stream-1.Wait" title="function: KRPC.Client.Stream.Wait"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Wait</span></code></a>, as the <code class="docutils literal notranslate"><span class="pre">lock</span></code> statement does
+<p>Lock the condition when you call <a class="reference internal" href="#function-KRPC.Client.Stream.Wait" title="function: KRPC.Client.Stream.Wait"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Wait</span></code></a>, as the <code class="docutils literal notranslate"><span class="pre">lock</span></code> statement does
 here. While you hold it, the value changes only when you wait, so the loop misses no updates. An
 ending reaches you the same way: the wait returns, and your next read or wait throws the exception
 that ended the stream.</p>
-<p><a class="reference internal" href="#function-KRPC.Client.Stream-1.Wait" title="function: KRPC.Client.Stream.Wait"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Wait</span></code></a> takes a timeout in seconds, and returns <code class="docutils literal notranslate"><span class="pre">false</span></code> when it elapses
+<p><a class="reference internal" href="#function-KRPC.Client.Stream.Wait" title="function: KRPC.Client.Stream.Wait"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Wait</span></code></a> takes a timeout in seconds, and returns <code class="docutils literal notranslate"><span class="pre">false</span></code> when it elapses
 before an update.</p>
 </section>
 <section id="callbacks">
@@ -1445,8 +1446,8 @@ worker thread from the callback.</p>
 <section id="stream-endings">
 <span id="csharp-client-stream-endings"></span><h3>Stream Endings<a class="headerlink" href="#stream-endings" title="Link to this heading">#</a></h3>
 <p>A stream ends when its procedure throws an exception, when the server removes it, when you remove
-it, or when the connection closes. Calling <a class="reference internal" href="#function-KRPC.Client.Stream-1.Get" title="function: KRPC.Client.Stream.Get"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Get</span></code></a> or
-<a class="reference internal" href="#function-KRPC.Client.Stream-1.Wait" title="function: KRPC.Client.Stream.Wait"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Wait</span></code></a> then throws the exception that ended it. The following streams
+it, or when the connection closes. Calling <a class="reference internal" href="#function-KRPC.Client.Stream.Get" title="function: KRPC.Client.Stream.Get"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Get</span></code></a> or
+<a class="reference internal" href="#function-KRPC.Client.Stream.Wait" title="function: KRPC.Client.Stream.Wait"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Wait</span></code></a> then throws the exception that ended it. The following streams
 the temperature of a part until the part is destroyed:</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client</span><span class="p">;</span>
@@ -1486,7 +1487,7 @@ value. The updates resume once the object or the scene is available.</p>
 <p><a class="reference internal" href="user-guide/object-lifetime.html"><span class="doc">Object Lifetime</span></a> describes when each kind of object is not loaded,
 and how streams behave around a load.</p>
 </div>
-<p><a class="reference internal" href="#function-KRPC.Client.Stream-1.AddEndCallback" title="function: KRPC.Client.Stream.AddEndCallback"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">AddEndCallback</span></code></a> adds a callback that is called once when the stream
+<p><a class="reference internal" href="#function-KRPC.Client.Stream.AddEndCallback" title="function: KRPC.Client.Stream.AddEndCallback"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">AddEndCallback</span></code></a> adds a callback that is called once when the stream
 ends, with the exception. The following prints the temperature of a part with a callback, and
 prints the exception when the stream ends:</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
@@ -1720,7 +1721,7 @@ waiting for it.</p></li>
 <li><p>A thread holding a stream’s condition does not stop other threads from making calls.</p></li>
 <li><p>Callbacks run on the connection’s callback thread, one at a time, and never on your program’s
 threads. A callback added to a stream that already has a value is different. Its first call, with
-that value, might run on your thread, before <a class="reference internal" href="#function-KRPC.Client.Stream-1.AddCallback" title="function: KRPC.Client.Stream.AddCallback"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">AddCallback</span></code></a> returns.
+that value, might run on your thread, before <a class="reference internal" href="#function-KRPC.Client.Stream.AddCallback" title="function: KRPC.Client.Stream.AddCallback"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">AddCallback</span></code></a> returns.
 Protect state that a callback shares with your program’s threads, such as with a <code class="docutils literal notranslate"><span class="pre">lock</span></code>
 statement.</p></li>
 </ul>
@@ -1770,7 +1771,7 @@ its result.</p></li>
 <li><p>Passing a delegate, or a value whose type overrides a method such as <code class="docutils literal notranslate"><span class="pre">ToString</span></code>, to the base
 library, as in <code class="docutils literal notranslate"><span class="pre">&quot;a&quot;</span> <span class="pre">+</span> <span class="pre">obj</span></code>, <code class="docutils literal notranslate"><span class="pre">list.Select(MyMethod)</span></code> and your own
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1" title="type: msdn ~&gt; System.Collections.Generic.IEnumerable"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">IEnumerable&lt;T&gt;</span></code></a> or <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IComparer-1" title="type: msdn ~&gt; System.Collections.Generic.IComparer-1"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">IComparer&lt;T&gt;</span></code></a> given to LINQ. So is reading <code class="docutils literal notranslate"><span class="pre">Lazy&lt;T&gt;.Value</span></code>.</p></li>
-<li><p>Reading a stream with <a class="reference internal" href="#function-KRPC.Client.Stream-1.Get" title="function: KRPC.Client.Stream.Get"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Get</span></code></a>, as the stream would be read once. Make
+<li><p>Reading a stream with <a class="reference internal" href="#function-KRPC.Client.Stream.Get" title="function: KRPC.Client.Stream.Get"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Get</span></code></a>, as the stream would be read once. Make
 the stream’s remote procedure call in the lambda instead.</p></li>
 <li><p>A lambda passed to <a class="reference internal" href="#function-KRPC.Client.Connection.AddEvent" title="function: KRPC.Client.Connection.AddEvent"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">AddEvent</span></code></a> or
 <a class="reference internal" href="#function-KRPC.Client.Connection.AddStream" title="function: KRPC.Client.Connection.AddStream"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">AddStream</span></code></a> that makes no remote procedure call, as its value is
@@ -2015,7 +2016,7 @@ as the constructor does.</p>
 <dt class="sig sig-object cs" id="function-KRPC.Client.Connection.AddStream">
 <span id="function-KRPC.Client.Connection.AddStream<TResult>(Expression<Func<TResult>>)"></span><a class="reference internal" href="#class-KRPC.Client.Stream-1" title="class: KRPC.Client.Stream&lt;TReturnType&gt;"><span class="pre">Stream</span></a><span class="p"><span class="pre">&lt;</span></span><span class="pre">TResult</span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">AddStream</span></span><span class="p"><span class="pre">&lt;</span></span><span class="pre">TResult</span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Linq.Expressions.Expression-1" title="type: msdn ~&gt; System.Linq.Expressions.Expression"><span class="pre">Expression</span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Func-1" title="type: msdn ~&gt; System.Func"><span class="pre">Func</span></a><span class="p"><span class="pre">&lt;</span></span><span class="pre">TResult</span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n"><span class="pre">expression</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Connection.AddStream" title="Link to this definition">#</a></dt>
 <dd><p>Creates a stream from a lambda expression with no parameters, and returns a
-<a class="reference internal" href="#class-KRPC.Client.Stream-1" title="class: KRPC.Client.Stream&lt;TReturnType&gt;"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">Stream</span></code></a>. Each call creates a new stream. A lambda that makes one remote
+<a class="reference internal" href="#class-KRPC.Client.Stream" title="class: KRPC.Client.Stream"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">Stream</span></code></a>. Each call creates a new stream. A lambda that makes one remote
 procedure call with fixed arguments streams that call. Any other lambda is compiled into a
 server side function on every call, which the stream evaluates on each update. Throws
 <a class="reference internal" href="#class-KRPC.Client.FunctionCompilationException" title="class: KRPC.Client.FunctionCompilationException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">FunctionCompilationException</span></code></a> if the lambda cannot be compiled, or makes
@@ -2031,12 +2032,29 @@ no remote procedure call.</p>
 </dd></dl>
 
 <dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Connection.AddStream(Expression&lt;Action&gt;)">
+<a class="reference internal" href="#class-KRPC.Client.Stream" title="class: KRPC.Client.Stream"><span class="pre">Stream</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">AddStream</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Linq.Expressions.Expression-1" title="type: msdn ~&gt; System.Linq.Expressions.Expression"><span class="pre">Expression</span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Action" title="type: msdn ~&gt; System.Action"><span class="pre">Action</span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n"><span class="pre">expression</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Connection.AddStream(Expression<Action>)" title="Link to this definition">#</a></dt>
+<dd><p>Creates a stream from a lambda expression with no value, which runs on each update for its
+effects. A lambda that makes one remote procedure call with fixed arguments streams that
+call. Any other lambda is compiled into a server side function on every call. Throws an
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.ArgumentException" title="type: msdn ~&gt; System.ArgumentException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">System.ArgumentException</span></code></a> if the lambda’s body has a value, and
+<a class="reference internal" href="#class-KRPC.Client.FunctionCompilationException" title="class: KRPC.Client.FunctionCompilationException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">FunctionCompilationException</span></code></a> if the lambda cannot be compiled.</p>
+</dd></dl>
+
+<dl class="cs function">
 <dt class="sig sig-object cs" id="function-KRPC.Client.Connection.AddStream&lt;TResult&gt;(KRPC.Client.Services.KRPC.Expression)">
 <a class="reference internal" href="#class-KRPC.Client.Stream-1" title="class: KRPC.Client.Stream&lt;TReturnType&gt;"><span class="pre">Stream</span></a><span class="p"><span class="pre">&lt;</span></span><span class="pre">TResult</span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">AddStream</span></span><span class="p"><span class="pre">&lt;</span></span><span class="pre">TResult</span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference internal" href="csharp/api/krpc/expressions.html#class-KRPC.Client.Services.KRPC.Expression" title="class: KRPC.Client.Services.KRPC.Expression"><span class="pre">KRPC.Client.Services.KRPC.Expression</span></a><span class="w"> </span><span class="n"><span class="pre">function</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Connection.AddStream<TResult>(KRPC.Client.Services.KRPC.Expression)" title="Link to this definition">#</a></dt>
 <dd><p>Creates a stream of the value of a server side function, which takes no arguments. Throws
 an <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.InvalidOperationException" title="type: msdn ~&gt; System.InvalidOperationException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">System.InvalidOperationException</span></code></a> if the function has no value. Throws an
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.ArgumentException" title="type: msdn ~&gt; System.ArgumentException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">System.ArgumentException</span></code></a> if the function takes parameters, or <code class="docutils literal notranslate"><span class="pre">TResult</span></code> cannot
 hold its value.</p>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Connection.AddStream(KRPC.Client.Services.KRPC.Expression)">
+<a class="reference internal" href="#class-KRPC.Client.Stream" title="class: KRPC.Client.Stream"><span class="pre">Stream</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">AddStream</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference internal" href="csharp/api/krpc/expressions.html#class-KRPC.Client.Services.KRPC.Expression" title="class: KRPC.Client.Services.KRPC.Expression"><span class="pre">KRPC.Client.Services.KRPC.Expression</span></a><span class="w"> </span><span class="n"><span class="pre">function</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Connection.AddStream(KRPC.Client.Services.KRPC.Expression)" title="Link to this definition">#</a></dt>
+<dd><p>Creates a stream of a server side function with no value, which runs on each update for its
+effects. Throws an <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.InvalidOperationException" title="type: msdn ~&gt; System.InvalidOperationException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">System.InvalidOperationException</span></code></a> if the function has a value.</p>
 </dd></dl>
 
 <dl class="cs function">
@@ -2130,6 +2148,13 @@ member that is not a remote procedure.</p>
 </dd></dl>
 
 <dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Connection.GetCall(Expression&lt;Action&gt;)">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="pre">KRPC.Schema.KRPC.ProcedureCall</span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetCall</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Linq.Expressions.Expression-1" title="type: msdn ~&gt; System.Linq.Expressions.Expression"><span class="pre">Expression</span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Action" title="type: msdn ~&gt; System.Action"><span class="pre">Action</span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n"><span class="pre">expression</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Connection.GetCall(Expression<Action>)" title="Link to this definition">#</a></dt>
+<dd><p>Converts a lambda expression that makes one call to a procedure with no return value, as
+the overload above does.</p>
+</dd></dl>
+
+<dl class="cs function">
 <dt class="sig sig-object cs" id="function-KRPC.Client.Connection.GetCall(LambdaExpression)">
 <span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="pre">KRPC.Schema.KRPC.ProcedureCall</span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetCall</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Linq.Expressions.LambdaExpression" title="type: msdn ~&gt; System.Linq.Expressions.LambdaExpression"><span class="pre">LambdaExpression</span></a><span class="w"> </span><span class="n"><span class="pre">expression</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Connection.GetCall(LambdaExpression)" title="Link to this definition">#</a></dt>
 <dd><p>Converts a lambda expression of any delegate type, as the overload above does.</p>
@@ -2153,24 +2178,26 @@ equal.</p>
 </dd></dl>
 
 <dl class="cs class">
-<dt class="sig sig-object cs" id="class-KRPC.Client.Stream-1">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Stream</span></span><span class="p"><span class="pre">&lt;</span></span><span class="pre">TReturnType</span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#class-KRPC.Client.Stream-1" title="Link to this definition">#</a></dt>
-<dd><p>A stream. See <a class="reference internal" href="#csharp-client-streams"><span class="std std-ref">Streaming Data</span></a>. Two stream objects are equal if they are bound to the
-same stream on the server. Each call to <a class="reference internal" href="#function-KRPC.Client.Connection.AddStream" title="function: KRPC.Client.Connection.AddStream"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">AddStream</span></code></a> creates a new
-stream, so two streams of the same call are not equal.</p>
+<dt class="sig sig-object cs" id="class-KRPC.Client.Stream">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Stream</span></span><a class="headerlink" href="#class-KRPC.Client.Stream" title="Link to this definition">#</a></dt>
+<dd><p>A stream. See <a class="reference internal" href="#csharp-client-streams"><span class="std std-ref">Streaming Data</span></a>. A stream of a call or function with no value runs on
+each update for its effects, and the server sends one update, after the first run. Two stream
+objects are equal if they are bound to the same stream on the server. Each call to
+<a class="reference internal" href="#function-KRPC.Client.Connection.AddStream" title="function: KRPC.Client.Connection.AddStream"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">AddStream</span></code></a> creates a new stream, so two streams of the same call
+are not equal.</p>
 <dl class="cs function">
-<dt class="sig sig-object cs" id="function-KRPC.Client.Stream-1.Get">
-<span id="function-KRPC.Client.Stream-1.Get()"></span><span class="pre">TReturnType</span><span class="w"> </span><span class="sig-name descname"><span class="pre">Get</span></span><span class="w"> </span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Stream-1.Get" title="Link to this definition">#</a></dt>
-<dd><p>Returns the most recent value of the stream, waiting for the first value if none has
-arrived yet. Throws the exception that ended the stream, if it has ended.</p>
+<dt class="sig sig-object cs" id="function-KRPC.Client.Stream.Get">
+<span id="function-KRPC.Client.Stream.Get()"></span><span class="pre">void</span><span class="w"> </span><span class="sig-name descname"><span class="pre">Get</span></span><span class="w"> </span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Stream.Get" title="Link to this definition">#</a></dt>
+<dd><p>Waits for the stream’s first update. Throws the exception that ended the stream, if it has
+ended.</p>
 </dd></dl>
 
 <dl class="cs function">
-<dt class="sig sig-object cs" id="function-KRPC.Client.Stream-1.Wait">
-<span id="function-KRPC.Client.Stream-1.Wait(double)"></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Wait</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="n"><span class="pre">timeout</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">double.PositiveInfinity</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Stream-1.Wait" title="Link to this definition">#</a></dt>
-<dd><p>Blocks until the value of the stream changes, or the timeout elapses. Returns <code class="docutils literal notranslate"><span class="pre">true</span></code> if the
-value changed, and <code class="docutils literal notranslate"><span class="pre">false</span></code> on a timeout. Lock <a class="reference internal" href="#property-KRPC.Client.Stream-1.Condition" title="property: KRPC.Client.Stream.Condition"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Condition</span></code></a> when
-calling this method.</p>
+<dt class="sig sig-object cs" id="function-KRPC.Client.Stream.Wait">
+<span id="function-KRPC.Client.Stream.Wait(double)"></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Wait</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="n"><span class="pre">timeout</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">double.PositiveInfinity</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Stream.Wait" title="Link to this definition">#</a></dt>
+<dd><p>Blocks until the stream updates, or the timeout elapses. Returns <code class="docutils literal notranslate"><span class="pre">true</span></code> if the stream
+updated, and <code class="docutils literal notranslate"><span class="pre">false</span></code> on a timeout. Lock <a class="reference internal" href="#property-KRPC.Client.Stream.Condition" title="property: KRPC.Client.Stream.Condition"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Condition</span></code></a> when calling
+this method.</p>
 <p>The timeout is in seconds, and an infinite timeout waits indefinitely. Throws an
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.ArgumentOutOfRangeException" title="type: msdn ~&gt; System.ArgumentOutOfRangeException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">System.ArgumentOutOfRangeException</span></code></a> for a negative or NaN timeout. Throws the exception
 that ended the stream, if it ends before or during the wait. A thread holding the condition
@@ -2179,50 +2206,72 @@ exception.</p>
 </dd></dl>
 
 <dl class="cs property">
-<dt class="sig sig-object cs" id="property-KRPC.Client.Stream-1.Condition">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Object" title="type: msdn ~&gt; System.Object"><span class="pre">object</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Condition</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Stream-1.Condition" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object cs" id="property-KRPC.Client.Stream.Condition">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Object" title="type: msdn ~&gt; System.Object"><span class="pre">object</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Condition</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Stream.Condition" title="Link to this definition">#</a></dt>
 <dd><p>A condition variable, locked with the <code class="docutils literal notranslate"><span class="pre">lock</span></code> statement, pulsed with <code class="docutils literal notranslate"><span class="pre">Monitor.PulseAll</span></code>
-when the value of the stream changes.</p>
+when the stream updates.</p>
 </dd></dl>
 
 <dl class="cs property">
-<dt class="sig sig-object cs" id="property-KRPC.Client.Stream-1.Rate">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Rate</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Stream-1.Rate" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object cs" id="property-KRPC.Client.Stream.Rate">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Rate</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Stream.Rate" title="Link to this definition">#</a></dt>
 <dd><p>The update rate of the stream, in Hertz. Zero, the default, means no limit.</p>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Stream.AddCallback">
+<span id="function-KRPC.Client.Stream.AddCallback(Action)"></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Int32" title="type: msdn ~&gt; System.Int32"><span class="pre">int</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">AddCallback</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Action" title="type: msdn ~&gt; System.Action"><span class="pre">Action</span></a><span class="w"> </span><span class="n"><span class="pre">callback</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Stream.AddCallback" title="Link to this definition">#</a></dt>
+<dd><p>Adds a callback, with no arguments, called each time the stream updates, and returns a tag
+for <a class="reference internal" href="#function-KRPC.Client.Stream.RemoveCallback" title="function: KRPC.Client.Stream.RemoveCallback"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">RemoveCallback</span></code></a>. It is called straight away if the stream has
+updated. The exception that ends a stream goes to its end callbacks.</p>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Stream.RemoveCallback">
+<span id="function-KRPC.Client.Stream.RemoveCallback(int)"></span><span class="pre">void</span><span class="w"> </span><span class="sig-name descname"><span class="pre">RemoveCallback</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Int32" title="type: msdn ~&gt; System.Int32"><span class="pre">int</span></a><span class="w"> </span><span class="n"><span class="pre">tag</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Stream.RemoveCallback" title="Link to this definition">#</a></dt>
+<dd><p>Removes a callback, given the tag <a class="reference internal" href="#function-KRPC.Client.Stream.AddCallback" title="function: KRPC.Client.Stream.AddCallback"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">AddCallback</span></code></a> returned.</p>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Stream.AddEndCallback">
+<span id="function-KRPC.Client.Stream.AddEndCallback(Action<System.Exception>)"></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Int32" title="type: msdn ~&gt; System.Int32"><span class="pre">int</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">AddEndCallback</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Action-1" title="type: msdn ~&gt; System.Action"><span class="pre">Action</span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Exception" title="type: msdn ~&gt; System.Exception"><span class="pre">Exception</span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n"><span class="pre">callback</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Stream.AddEndCallback" title="Link to this definition">#</a></dt>
+<dd><p>Adds a callback, called once when the stream ends, with the exception that ended it, and
+returns a tag for <a class="reference internal" href="#function-KRPC.Client.Stream.RemoveEndCallback" title="function: KRPC.Client.Stream.RemoveEndCallback"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">RemoveEndCallback</span></code></a>. It is called straight away if
+the stream has already ended.</p>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Stream.RemoveEndCallback">
+<span id="function-KRPC.Client.Stream.RemoveEndCallback(int)"></span><span class="pre">void</span><span class="w"> </span><span class="sig-name descname"><span class="pre">RemoveEndCallback</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Int32" title="type: msdn ~&gt; System.Int32"><span class="pre">int</span></a><span class="w"> </span><span class="n"><span class="pre">tag</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Stream.RemoveEndCallback" title="Link to this definition">#</a></dt>
+<dd><p>Removes an end callback, given the tag <a class="reference internal" href="#function-KRPC.Client.Stream.AddEndCallback" title="function: KRPC.Client.Stream.AddEndCallback"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">AddEndCallback</span></code></a> returned.</p>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Stream.Remove">
+<span id="function-KRPC.Client.Stream.Remove()"></span><span class="pre">void</span><span class="w"> </span><span class="sig-name descname"><span class="pre">Remove</span></span><span class="w"> </span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Stream.Remove" title="Link to this definition">#</a></dt>
+<dd><p>Removes the stream from the server. Other streams of the same call are not affected.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cs class">
+<dt class="sig sig-object cs" id="class-KRPC.Client.Stream-1">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Stream</span></span><span class="p"><span class="pre">&lt;</span></span><span class="pre">TReturnType</span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#class-KRPC.Client.Stream-1" title="Link to this definition">#</a></dt>
+<dd><p>A stream with a value, derived from <a class="reference internal" href="#class-KRPC.Client.Stream" title="class: KRPC.Client.Stream"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">Stream</span></code></a>. The stream updates each time
+its value changes. It adds:</p>
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Stream-1.Get">
+<span id="function-KRPC.Client.Stream-1.Get()"></span><span class="pre">TReturnType</span><span class="w"> </span><span class="sig-name descname"><span class="pre">Get</span></span><span class="w"> </span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Stream-1.Get" title="Link to this definition">#</a></dt>
+<dd><p>Returns the most recent value of the stream, waiting for the first value if none has
+arrived yet. Throws the exception that ended the stream, if it has ended.</p>
 </dd></dl>
 
 <dl class="cs function">
 <dt class="sig sig-object cs" id="function-KRPC.Client.Stream-1.AddCallback">
 <span id="function-KRPC.Client.Stream-1.AddCallback(Action<TReturnType>)"></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Int32" title="type: msdn ~&gt; System.Int32"><span class="pre">int</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">AddCallback</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Action-1" title="type: msdn ~&gt; System.Action"><span class="pre">Action</span></a><span class="p"><span class="pre">&lt;</span></span><span class="pre">TReturnType</span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n"><span class="pre">callback</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Stream-1.AddCallback" title="Link to this definition">#</a></dt>
 <dd><p>Adds a callback, called with each new value of the stream, and returns a tag for
-<a class="reference internal" href="#function-KRPC.Client.Stream-1.RemoveCallback" title="function: KRPC.Client.Stream.RemoveCallback"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">RemoveCallback</span></code></a>. If the stream already has a value, the callback is
-called with it straight away. The exception that ends a stream goes to its end callbacks.</p>
-</dd></dl>
-
-<dl class="cs function">
-<dt class="sig sig-object cs" id="function-KRPC.Client.Stream-1.RemoveCallback">
-<span id="function-KRPC.Client.Stream-1.RemoveCallback(int)"></span><span class="pre">void</span><span class="w"> </span><span class="sig-name descname"><span class="pre">RemoveCallback</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Int32" title="type: msdn ~&gt; System.Int32"><span class="pre">int</span></a><span class="w"> </span><span class="n"><span class="pre">tag</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Stream-1.RemoveCallback" title="Link to this definition">#</a></dt>
-<dd><p>Removes a callback, given the tag <a class="reference internal" href="#function-KRPC.Client.Stream-1.AddCallback" title="function: KRPC.Client.Stream.AddCallback"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">AddCallback</span></code></a> returned.</p>
-</dd></dl>
-
-<dl class="cs function">
-<dt class="sig sig-object cs" id="function-KRPC.Client.Stream-1.AddEndCallback">
-<span id="function-KRPC.Client.Stream-1.AddEndCallback(Action<System.Exception>)"></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Int32" title="type: msdn ~&gt; System.Int32"><span class="pre">int</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">AddEndCallback</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Action-1" title="type: msdn ~&gt; System.Action"><span class="pre">Action</span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Exception" title="type: msdn ~&gt; System.Exception"><span class="pre">Exception</span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n"><span class="pre">callback</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Stream-1.AddEndCallback" title="Link to this definition">#</a></dt>
-<dd><p>Adds a callback, called once when the stream ends, with the exception that ended it, and
-returns a tag for <a class="reference internal" href="#function-KRPC.Client.Stream-1.RemoveEndCallback" title="function: KRPC.Client.Stream.RemoveEndCallback"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">RemoveEndCallback</span></code></a>. It is called straight away if
-the stream has already ended.</p>
-</dd></dl>
-
-<dl class="cs function">
-<dt class="sig sig-object cs" id="function-KRPC.Client.Stream-1.RemoveEndCallback">
-<span id="function-KRPC.Client.Stream-1.RemoveEndCallback(int)"></span><span class="pre">void</span><span class="w"> </span><span class="sig-name descname"><span class="pre">RemoveEndCallback</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Int32" title="type: msdn ~&gt; System.Int32"><span class="pre">int</span></a><span class="w"> </span><span class="n"><span class="pre">tag</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Stream-1.RemoveEndCallback" title="Link to this definition">#</a></dt>
-<dd><p>Removes an end callback, given the tag <a class="reference internal" href="#function-KRPC.Client.Stream-1.AddEndCallback" title="function: KRPC.Client.Stream.AddEndCallback"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">AddEndCallback</span></code></a> returned.</p>
-</dd></dl>
-
-<dl class="cs function">
-<dt class="sig sig-object cs" id="function-KRPC.Client.Stream-1.Remove">
-<span id="function-KRPC.Client.Stream-1.Remove()"></span><span class="pre">void</span><span class="w"> </span><span class="sig-name descname"><span class="pre">Remove</span></span><span class="w"> </span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Stream-1.Remove" title="Link to this definition">#</a></dt>
-<dd><p>Removes the stream from the server. Other streams of the same call are not affected.</p>
+<a class="reference internal" href="#function-KRPC.Client.Stream.RemoveCallback" title="function: KRPC.Client.Stream.RemoveCallback"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">RemoveCallback</span></code></a>. If the stream already has a value, the callback is
+called with it straight away.</p>
 </dd></dl>
 
 </dd></dl>

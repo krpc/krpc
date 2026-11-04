@@ -386,6 +386,9 @@ The ``AddStream`` procedure adds a stream of a remote procedure. Its argument is
 ``ProcedureCall`` message. See :ref:`communication-protocol-anatomy-of-a-request`. It returns the
 stream's identifier, described under :ref:`communication-protocol-streams`.
 
+A procedure with no return value runs on each update for its effects. Its first run sends a
+result with an empty value. Later runs send nothing, unless an error ends the stream.
+
 .. _communication-protocol-add-function-stream:
 
 AddFunctionStream
@@ -396,7 +399,8 @@ each update. Its argument is the function, built using the ``KRPC.Expression`` c
 
 The procedure returns the stream's identifier. The stream's values have the type given by the
 function's ``ReturnType`` property. The function must take no parameters. Any exception from the
-function ends the stream with that error.
+function ends the stream with that error. A function with no value runs for its effects, and
+sends results as a procedure with no return value does.
 
 .. _communication-protocol-add-event:
 

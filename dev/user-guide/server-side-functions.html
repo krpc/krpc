@@ -730,8 +730,8 @@ that returns no value gives the client’s null value, or runs through a <code c
 the client has one.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>An event or stream re-runs its function on every stream update, effects included. Keep
-event and stream functions free of side effects.</p>
+<p>An event or stream runs its function on every stream update, effects included. See
+<a class="reference internal" href="#server-side-functions-control-loops"><span class="std std-ref">Control Loops on the Server</span></a>.</p>
 </div>
 </section>
 <section id="function-arguments">
@@ -791,6 +791,26 @@ state across every run, stream and event. The state belongs to the function, so 
 compiled function advance it twice per update. Compile the function twice for separate states.</p>
 <p>A function passed straight to <code class="docutils literal notranslate"><span class="pre">Run</span></code> or a stream starts again from the captured value on each
 call. With the expression API, create the variable with <a class="reference internal" href="../python/api/krpc/expressions.html#KRPC.Expression.state_variable" title="KRPC.Expression.state_variable"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Expression.state_variable()</span></code></a>.</p>
+</section>
+<section id="control-loops-on-the-server">
+<span id="server-side-functions-control-loops"></span><h3>Control Loops on the Server<a class="headerlink" href="#control-loops-on-the-server" title="Link to this heading">#</a></h3>
+<p>A stream of a function with no value runs the function on every stream update, for its effects.
+The function is a control loop that runs in the game, with no round trip to the client. This one
+throttles back as the vertical speed nears 100 m/s:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@conn</span><span class="o">.</span><span class="n">compile</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">limit_throttle</span><span class="p">():</span>
+    <span class="c1"># Throttle back as the vertical speed nears 100 m/s</span>
+    <span class="n">control</span><span class="o">.</span><span class="n">throttle</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">100</span> <span class="o">-</span> <span class="n">flight</span><span class="o">.</span><span class="n">vertical_speed</span><span class="p">)</span> <span class="o">/</span> <span class="mi">20</span><span class="p">))</span>
+
+
+<span class="k">with</span> <span class="n">conn</span><span class="o">.</span><span class="n">stream</span><span class="p">(</span><span class="n">limit_throttle</span><span class="p">):</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The stream’s value is the client’s null value. The server sends it once, after the first run, so
+a callback is called once. An error from the function ends the stream and stops the loop. Set the
+stream’s rate to run the function less often.</p>
+<p>A stream of a remote procedure with no return value runs the call in the same way.</p>
 </section>
 <section id="strings">
 <h3>Strings<a class="headerlink" href="#strings" title="Link to this heading">#</a></h3>
@@ -1419,7 +1439,8 @@ operand only when the first does not decide the result.</p>
 </section>
 <section id="function-streams">
 <h3>Function Streams<a class="headerlink" href="#function-streams" title="Link to this heading">#</a></h3>
-<p>A function whose value can be sent to a client can be streamed:</p>
+<p>A function whose value can be sent to a client can be streamed. A function with no value can be
+streamed too, and runs for its effects, as in <a class="reference internal" href="#server-side-functions-control-loops"><span class="std std-ref">Control Loops on the Server</span></a>:</p>
 <div class="sphinx-tabs docutils container">
 <div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-19-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-19-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-19-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-19-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-19-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-19-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-19-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-19-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button></div><div aria-labelledby="tab-19-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-19-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 
@@ -2057,6 +2078,7 @@ embeds any procedure with <a class="reference internal" href="../python/api/krpc
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#side-effects-and-run-once-functions">Side Effects and Run-Once Functions</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#function-arguments">Function Arguments</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#state-between-updates">State Between Updates</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#control-loops-on-the-server">Control Loops on the Server</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#strings">Strings</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exceptions">Exceptions</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-standard-library">The Standard Library</a></li>

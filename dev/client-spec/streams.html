@@ -552,11 +552,6 @@ service adds to a class.</p>
 call succeeds.</p>
 </dd>
 </dl>
-<dl class="simple" id="spec-streams-procedure-without-a-value">
-<dt><code class="docutils literal notranslate"><span class="pre">streams-procedure-without-a-value</span> <span class="pre">[streams,</span> <span class="pre">dynamic]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Streaming a procedure that returns no value, such as a property setter, raises the
-stream error.</p>
-</dd>
-</dl>
 <dl class="simple" id="spec-streams-procedure-returning-an-event">
 <dt><code class="docutils literal notranslate"><span class="pre">streams-procedure-returning-an-event</span> <span class="pre">[streams]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Streaming a procedure that returns an event raises the stream error.</p>
 </dd>
@@ -564,6 +559,32 @@ stream error.</p>
 <dl class="simple" id="spec-streams-add-twice">
 <dt><code class="docutils literal notranslate"><span class="pre">streams-add-twice</span> <span class="pre">[streams]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Each add makes a new stream with its own id and lifetime, including an add of a
 call already streamed or removed.</p>
+</dd>
+</dl>
+</section>
+<section id="streams-with-no-value">
+<h2>Streams With No Value<a class="headerlink" href="#streams-with-no-value" title="Link to this heading">#</a></h2>
+<dl class="simple" id="spec-streams-no-value">
+<dt><code class="docutils literal notranslate"><span class="pre">streams-no-value</span> <span class="pre">[streams]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A stream of a procedure with no return value runs the call on each update, for its
+effects. Its value is the client’s null value.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-streams-no-value-updates-once">
+<dt><code class="docutils literal notranslate"><span class="pre">streams-no-value-updates-once</span> <span class="pre">[streams,</span> <span class="pre">callbacks]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A stream with no value updates once, after its first run. Its callbacks are called
+once, with the client’s null value, and a wait after the first update times out.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-streams-no-value-error">
+<dt><code class="docutils literal notranslate"><span class="pre">streams-no-value-error</span> <span class="pre">[streams]</span> <span class="pre">[MUST]</span></code></dt><dd><p>An error from a call with no value ends its stream with that error.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-streams-no-value-remove">
+<dt><code class="docutils literal notranslate"><span class="pre">streams-no-value-remove</span> <span class="pre">[streams]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Removing a stream with no value stops its runs.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-streams-property-setter">
+<dt><code class="docutils literal notranslate"><span class="pre">streams-property-setter</span> <span class="pre">[streams,</span> <span class="pre">dynamic]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A stream can be made of a property setter, with the value to set. It sets the
+property on each update, and its value is the client’s null value.</p>
 </dd>
 </dl>
 </section>
@@ -910,6 +931,7 @@ has ended, propagates from the add.</p>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-streams">Adding Streams</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#streams-with-no-value">Streams With No Value</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#handles">Handles</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rate">Rate</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#values">Values</a></li>

@@ -1295,8 +1295,9 @@ returns a <a class="reference internal" href="#krpc.stream.Stream" title="krpc.s
     <span class="nb">print</span><span class="p">(</span><span class="n">altitude</span><span class="p">())</span>
 </pre></div>
 </div>
-<p>A stream can be made of any procedure or property that returns a value. Each call to
-<a class="reference internal" href="#krpc.client.Client.add_stream" title="krpc.client.Client.add_stream"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_stream()</span></code></a> creates another stream.</p>
+<p>Each call to <a class="reference internal" href="#krpc.client.Client.add_stream" title="krpc.client.Client.add_stream"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_stream()</span></code></a> creates another stream. A stream of a
+procedure with no return value, or of a property setter passed with <code class="docutils literal notranslate"><span class="pre">setattr</span></code>, runs the call on
+each update for its effects. Its value is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
 <p>A stream runs until you remove it with <a class="reference internal" href="#krpc.stream.Stream.remove" title="krpc.stream.Stream.remove"><code class="xref py py-meth docutils literal notranslate"><span class="pre">remove()</span></code></a>, your program drops its
 last reference to it, or the connection closes. Keep a reference to a stream for as long as you
 need its values or its callbacks. <a class="reference internal" href="#krpc.client.Client.stream" title="krpc.client.Client.stream"><code class="xref py py-meth docutils literal notranslate"><span class="pre">stream()</span></code></a> creates a stream in a
@@ -2078,13 +2079,15 @@ to call those. Each of the server’s other services is an attribute too, such a
 <span class="sig-name descname"><span class="pre">add_stream</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Client.add_stream" title="Link to this definition">#</a></dt>
 <dd><p>Creates a stream for the remote procedure <em>func</em> called with arguments <em>args</em> and <em>kwargs</em>,
 and returns a <a class="reference internal" href="#krpc.stream.Stream" title="krpc.stream.Stream"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.stream.Stream</span></code></a>. Each call creates a new stream. Stream a property
-by passing <code class="docutils literal notranslate"><span class="pre">getattr</span></code> as <em>func</em>, then the object and the property’s name.</p>
+by passing <code class="docutils literal notranslate"><span class="pre">getattr</span></code> as <em>func</em>, then the object and the property’s name. Stream a
+property setter by passing <code class="docutils literal notranslate"><span class="pre">setattr</span></code>, then the object, the property’s name and the value.</p>
 <p><em>func</em> can also be a server side function, which the stream evaluates on each update. It
 is a <code class="docutils literal notranslate"><span class="pre">KRPC.Expression</span></code> object, or a Python function or lambda that is compiled with
 <a class="reference internal" href="#krpc.client.Client.compile" title="krpc.client.Client.compile"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compile()</span></code></a> on every call. A server side function takes no arguments.</p>
-<p>Raises <a class="reference internal" href="#krpc.error.StreamError" title="krpc.error.StreamError"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.error.StreamError</span></code></a> for a property setter, for arguments passed with a
-server side function, for a function with no result, and for a compiled function with
-parameters. Raises <code class="docutils literal notranslate"><span class="pre">TypeError</span></code> for any other value.</p>
+<p>A call or function with no value runs on each update for its effects, and the stream’s
+value is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+<p>Raises <a class="reference internal" href="#krpc.error.StreamError" title="krpc.error.StreamError"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.error.StreamError</span></code></a> for arguments passed with a server side function,
+and for a compiled function with parameters. Raises <code class="docutils literal notranslate"><span class="pre">TypeError</span></code> for any other value.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -2161,7 +2164,8 @@ returns it.</p>
 <span class="sig-name descname"><span class="pre">get_call</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Client.get_call" title="Link to this definition">#</a></dt>
 <dd><p>Converts a call to the remote procedure <em>func</em> with arguments <em>args</em> and <em>kwargs</em> into a
 <code class="docutils literal notranslate"><span class="pre">KRPC.ProcedureCall</span></code> message, for use in a server side function built with the
-expression API. See <a class="reference internal" href="user-guide/server-side-functions.html#server-side-functions-api"><span class="std std-ref">The Expression API</span></a>.</p>
+expression API. See <a class="reference internal" href="user-guide/server-side-functions.html#server-side-functions-api"><span class="std std-ref">The Expression API</span></a>. Pass <code class="docutils literal notranslate"><span class="pre">getattr</span></code> or <code class="docutils literal notranslate"><span class="pre">setattr</span></code> as
+<em>func</em> for a property, as with <a class="reference internal" href="#krpc.client.Client.add_stream" title="krpc.client.Client.add_stream"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_stream()</span></code></a>.</p>
 </dd></dl>
 
 </dd></dl>

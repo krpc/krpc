@@ -264,8 +264,9 @@ A property is streamed the same way, with ``_stream`` added to the name of its g
 
 .. literalinclude:: /scripts/cpp/Streaming3.cpp
 
-A stream can be made of any procedure or property that returns a value. Each call to a
-``_stream`` function creates another stream.
+Each call to a ``_stream`` function creates another stream. A procedure with no return value
+streams as a ``Stream<void>``, which runs the call on each update for its effects. Calling it
+returns nothing, and its callbacks take no arguments.
 
 A stream runs until you remove it with :func:`~krpc::Stream::remove`, or the connection closes.
 A stream object can be copied, and every copy refers to the same stream. Destroying the last copy
@@ -597,7 +598,9 @@ Client API Reference
 
 .. class:: template <typename T> Stream
 
-   A stream, created by a procedure's ``_stream`` function. See :ref:`cpp-client-streams`.
+   A stream, created by a procedure's ``_stream`` function. See :ref:`cpp-client-streams`. A
+   ``Stream<void>`` is a stream of a call or function with no value. It runs on each update for
+   its effects, and the server sends one update, after the first run.
 
    Stream objects are copy constructible and assignable, and every copy refers to the same stream.
    Call :func:`remove`, or destroy every copy, to remove the stream from the server. A
@@ -711,7 +714,8 @@ Client API Reference
    Creates a stream from a server side function, evaluated on each update. Each call creates a
    new stream. A function that can produce a null needs a ``std::optional`` template type, and
    reading a null without one throws :class:`~krpc::EncodingError`. A callback is not called for
-   a null value.
+   a null value. A function with no value takes ``void`` as the template type, and runs on each
+   update for its effects.
 
    Throws ``std::invalid_argument`` if the template type does not describe the function's value,
    :class:`~krpc::StreamError` if the client is not connected to a server, and
