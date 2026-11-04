@@ -4,12 +4,12 @@
 
 #include <algorithm>
 #include <asio/buffer.hpp>
-#include <asio/connect.hpp>  // IWYU pragma: keep
+#include <asio/connect.hpp>
 #include <asio/error.hpp>
 #include <asio/error_code.hpp>
 #include <asio/local/stream_protocol.hpp>
 #include <asio/steady_timer.hpp>
-#include <asio/write.hpp>  // IWYU pragma: keep
+#include <asio/write.hpp>
 #include <climits>
 #include <cstdint>
 #include <exception>
@@ -18,11 +18,6 @@
 #include <ostream>
 #include <string>
 #include <utility>
-// IWYU pragma: no_include <asio/detail/impl/epoll_reactor.hpp>
-// IWYU pragma: no_include <asio/detail/impl/reactive_socket_service_base.ipp>
-// IWYU pragma: no_include <asio/impl/connect.hpp>
-// IWYU pragma: no_include <asio/impl/read.hpp>
-// IWYU pragma: no_include <asio/impl/write.hpp>
 
 #include "krpc/decoder.hpp"
 #include "krpc/error.hpp"
