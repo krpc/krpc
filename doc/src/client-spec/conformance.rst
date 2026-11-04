@@ -39,9 +39,9 @@ connects to a server and calls a procedure:
 
    < {"hello":{"client":"python","profiles":["core","streams"],"protocols":["tcpip"]}}
    > {"id":"1","connect":{"protocol":"tcpip","address":"127.0.0.1","port":50000}}
-   < {"reply":{"id":"1","value":{},"thread":"140213"}}
+   < {"reply":{"id":"1","value":{},"task":"140213"}}
    > {"id":"2","invoke":{"service":"TestService","procedure":"Int32ToString","arguments":[{"sint32":42}]}}
-   < {"reply":{"id":"2","value":{"string":"42"},"thread":"140213"}}
+   < {"reply":{"id":"2","value":{"string":"42"},"task":"140213"}}
 
 Each line is a message in the proto3 JSON mapping: a ``Command`` from the driver, and an
 ``Output`` from the testee. :download:`testee.proto </client-spec/testee.proto>` defines the

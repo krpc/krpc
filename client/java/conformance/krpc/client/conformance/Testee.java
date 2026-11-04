@@ -78,7 +78,7 @@ final class Testee {
   }
 
   private Reply reply(Command command) {
-    Reply.Builder reply = Reply.newBuilder().setId(command.getId()).setThread(threadName());
+    Reply.Builder reply = Reply.newBuilder().setId(command.getId()).setTask(threadName());
     currentConnection.set(command.getConnection());
     try {
       if (command.getCondition() != 0) {
@@ -122,7 +122,7 @@ final class Testee {
   /** Writes the notification for a call of a callback, then does what its behavior says. */
   private void callBack(long callback, Behavior behavior, Consumer<Notification.Builder> fill) {
     Notification.Builder notification =
-        Notification.newBuilder().setCallback(callback).setThread(threadName());
+        Notification.newBuilder().setCallback(callback).setTask(threadName());
     fill.accept(notification);
     output.write(Output.newBuilder().setNotification(notification).build());
     int count;
@@ -148,7 +148,7 @@ final class Testee {
           Reply result = reply(behavior.getRun());
           output.write(Output.newBuilder()
               .setNotification(Notification.newBuilder()
-                  .setCallback(callback).setThread(threadName()).setResult(result))
+                  .setCallback(callback).setTask(threadName()).setResult(result))
               .build());
           break;
         case FAIL:
@@ -162,7 +162,7 @@ final class Testee {
       if (behavior.getReportReturn()) {
         output.write(Output.newBuilder()
             .setNotification(Notification.newBuilder()
-                .setCallback(callback).setThread(threadName()).setReturned(true))
+                .setCallback(callback).setTask(threadName()).setReturned(true))
             .build());
       }
     }

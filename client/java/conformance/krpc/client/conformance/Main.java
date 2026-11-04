@@ -186,7 +186,7 @@ public final class Main {
       Command command = builder.build();
       if (command.hasInterrupt()) {
         // Run here, as the worker to interrupt is busy
-        Worker worker = workers.get(command.getInterrupt().getThread());
+        Worker worker = workers.get(command.getInterrupt().getTask());
         if (worker != null) {
           worker.interrupt();
         }
@@ -195,7 +195,7 @@ public final class Main {
             .build());
         continue;
       }
-      workers.computeIfAbsent(command.getThread(), x -> new Worker(testee)).submit(command);
+      workers.computeIfAbsent(command.getTask(), x -> new Worker(testee)).submit(command);
     }
     for (Worker worker : workers.values()) {
       worker.stop();

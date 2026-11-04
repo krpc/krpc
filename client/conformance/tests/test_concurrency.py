@@ -737,15 +737,15 @@ def test_callbacks_run_off_the_caller(connected, control, request):
     callback = stream.add_callback()
     callback.wait_for_calls(1)
     callers = {
-        connected.start(thread, invoke=to_string(1)).reply().thread
-        for thread in ("", "a", "b")
+        connected.start(task, invoke=to_string(1)).reply().task
+        for task in ("", "a", "b")
     }
     # Each update is waited for, as a callback is passed only the latest value
     for value in (1, 2):
         control.conformance_service.set_value(name(request), value)
         callback.wait_for_calls(value + 1)
     later = [x for x in callback.notifications if not x.returned][1:]
-    assert not {x.thread for x in later} & callers
+    assert not {x.task for x in later} & callers
 
 
 @profile("streams", "callbacks")

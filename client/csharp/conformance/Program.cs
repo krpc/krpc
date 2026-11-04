@@ -53,14 +53,14 @@ namespace KRPC.Client.Conformance
                 Worker worker;
                 if (command.CommandCase == Command.CommandOneofCase.Interrupt) {
                     // Run here, as the worker to interrupt is busy
-                    if (workers.TryGetValue (command.Interrupt.Thread, out worker))
+                    if (workers.TryGetValue (command.Interrupt.Task, out worker))
                         worker.Interrupt ();
                     output.Write (new Output { Reply = new Reply { Id = command.Id, Value = new Value () } });
                     continue;
                 }
-                if (!workers.TryGetValue (command.Thread, out worker)) {
+                if (!workers.TryGetValue (command.Task, out worker)) {
                     worker = new Worker (testee.Run);
-                    workers [command.Thread] = worker;
+                    workers [command.Task] = worker;
                 }
                 worker.Submit (command);
             }

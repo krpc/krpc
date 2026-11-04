@@ -410,9 +410,9 @@ def test_wait_timeout_values(fixture, timeout):
     assert values.native(reply.value) is True
 
 
-def start_wait(fixture, thread):
+def start_wait(fixture, task):
     return fixture.client.start(
-        thread, wait_event=pb.WaitEvent(event=fixture.event.handle)
+        task, wait_event=pb.WaitEvent(event=fixture.event.handle)
     )
 
 

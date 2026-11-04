@@ -114,7 +114,7 @@ class Testee:
         self._reader.join(5)
 
     def send(
-        self, thread: str = "", condition: int = 0, connection: str = "", **command: Any
+        self, task: str = "", condition: int = 0, connection: str = "", **command: Any
     ) -> int:
         """Send a command, returning its id."""
         with self._write_lock:
@@ -122,7 +122,7 @@ class Testee:
             self._next_id += 1
             message = pb.Command(
                 id=command_id,
-                thread=thread,
+                task=task,
                 condition=condition,
                 connection=connection,
                 **command,
@@ -162,11 +162,11 @@ class Testee:
     def run(
         self,
         timeout: float = REPLY_TIMEOUT,
-        thread: str = "",
+        task: str = "",
         connection: str = "",
         **command: Any,
     ) -> pb.Reply:
-        return self.reply(self.send(thread, connection=connection, **command), timeout)
+        return self.reply(self.send(task, connection=connection, **command), timeout)
 
     def new_callback(self) -> int:
         """An id for a callback, unique for the testee's lifetime, as its notifications are
@@ -522,7 +522,7 @@ class Client:
     @contextlib.contextmanager
     def holding(self, handle: int = 0, release: int = 0) -> Iterator[None]:
         """Hold the condition of a stream or an event, or of the connection's stream updates
-        for a handle of zero, while the default thread runs the commands in the block. The
+        for a handle of zero, while the default task runs the commands in the block. The
         hold is let go of through the release handle, or through the one that took it."""
         self.testee.run(hold_condition=pb.HoldCondition(stream=handle))
         try:
@@ -537,11 +537,11 @@ class Client:
             command.timeout = timeout
         self.testee.run(REPLY_TIMEOUT + (timeout or 0), wait_for_update=command)
 
-    def start(self, thread: str, condition: int = 0, **command: Any) -> Pending:
-        """Send a command to run on a thread of the testee, without waiting for its reply.
+    def start(self, task: str, condition: int = 0, **command: Any) -> Pending:
+        """Send a command to run on a task of the testee, without waiting for its reply.
         The testee holds the condition of the stream or event with the given handle while it
         runs the command."""
-        return Pending(self.testee, self.testee.send(thread, condition, **command))
+        return Pending(self.testee, self.testee.send(task, condition, **command))
 
     @contextlib.contextmanager
     def paused(self, point: pb.RacePoint) -> Iterator[Pause]:
@@ -559,10 +559,10 @@ class Client:
         message, as a failed socket write does."""
         self.testee.run(fail_write=pb.FailWrite(message=message))
 
-    def interrupt(self, thread: str) -> None:
-        """Interrupt the command running on a thread. Raises Unsupported where the language
+    def interrupt(self, task: str) -> None:
+        """Interrupt the command running on a task. Raises Unsupported where the language
         cannot."""
-        self.testee.run(thread="interrupter", interrupt=pb.Interrupt(thread=thread))
+        self.testee.run(task="interrupter", interrupt=pb.Interrupt(task=task))
 
 
 class Pause:
@@ -615,12 +615,12 @@ class _Handle:
         return Callback(self._client.testee, callback, "remove_callback")
 
     def start_callback(
-        self, thread: str, behavior: pb.Behavior | None = None
+        self, task: str, behavior: pb.Behavior | None = None
     ) -> tuple[Callback, Pending]:
-        """Add a callback on a thread of the testee, without waiting for the add to
+        """Add a callback on a task of the testee, without waiting for the add to
         return."""
         callback = self._client.new_callback()
-        pending = self._client.start(thread, **self._add_callback(callback, behavior))
+        pending = self._client.start(task, **self._add_callback(callback, behavior))
         return Callback(self._client.testee, callback, "remove_callback"), pending
 
     def add_end_callback(self, behavior: pb.Behavior | None = None) -> Callback:

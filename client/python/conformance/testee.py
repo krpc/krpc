@@ -150,7 +150,7 @@ class Testee:
         self._output.write(pb.Output(reply=self._reply(command)))
 
     def _reply(self, command: pb.Command) -> pb.Reply:
-        reply = pb.Reply(id=command.id, thread=thread_name())
+        reply = pb.Reply(id=command.id, task=thread_name())
         self._local.connection = command.connection
         try:
             if command.condition:
@@ -472,7 +472,7 @@ class Testee:
         call: Callable[[pb.Notification], None] | None = None,
     ) -> None:
         """Write the notification for a call of a callback, then do what its behavior says."""
-        notification = pb.Notification(callback=callback, thread=thread_name())
+        notification = pb.Notification(callback=callback, task=thread_name())
         if call is not None:
             call(notification)
         self._output.write(pb.Output(notification=notification))
@@ -489,7 +489,7 @@ class Testee:
             elif action == "run":
                 result = self._reply(behavior.run)
                 notification = pb.Notification(
-                    callback=callback, thread=thread_name(), result=result
+                    callback=callback, task=thread_name(), result=result
                 )
                 self._output.write(pb.Output(notification=notification))
             elif action == "fail":
@@ -499,7 +499,7 @@ class Testee:
         finally:
             if behavior.report_return:
                 notification = pb.Notification(
-                    callback=callback, thread=thread_name(), returned=True
+                    callback=callback, task=thread_name(), returned=True
                 )
                 self._output.write(pb.Output(notification=notification))
 
@@ -821,9 +821,9 @@ def main() -> int:
         command = read_command(sys.stdin.buffer)
         if command is None:
             break
-        if command.thread not in workers:
-            workers[command.thread] = Worker(testee.run)
-        workers[command.thread].submit(command)
+        if command.task not in workers:
+            workers[command.task] = Worker(testee.run)
+        workers[command.task].submit(command)
     for worker in workers.values():
         worker.submit(None)
         worker.join()
