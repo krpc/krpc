@@ -1,11 +1,11 @@
 #pragma once
 
-#include <chrono>              // NOLINT(build/c++11)
-#include <condition_variable>  // NOLINT(build/c++11)
+#include <chrono>
+#include <condition_variable>
 #include <cstddef>
-#include <mutex>  // NOLINT(build/c++11)
+#include <mutex>
 #include <system_error>
-#include <thread>  // NOLINT(build/c++11)
+#include <thread>
 #include <utility>
 
 namespace krpc {

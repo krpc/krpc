@@ -7,10 +7,10 @@
 #include <functional>
 #include <map>
 #include <memory>
-#include <mutex>  // NOLINT(build/c++11)
+#include <mutex>
 #include <stdexcept>
 #include <string>
-#include <thread>  // NOLINT(build/c++11)
+#include <thread>
 #include <utility>
 #include <vector>
 

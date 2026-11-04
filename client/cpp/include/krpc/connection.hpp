@@ -1,6 +1,6 @@
 #pragma once
 
-#include <chrono>  // NOLINT(build/c++11)
+#include <chrono>
 #include <cstddef>
 #include <stdexcept>
 #include <string>

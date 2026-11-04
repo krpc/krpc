@@ -1,12 +1,12 @@
 #include <gtest/gtest-message.h>
 #include <gtest/gtest-test-part.h>
 
-#include <chrono>  // NOLINT(build/c++11)
+#include <chrono>
 #include <functional>
 #include <future>
 #include <memory>
 #include <string>
-#include <thread>  // NOLINT(build/c++11)
+#include <thread>
 #include <type_traits>
 
 #include "gtest/gtest.h"

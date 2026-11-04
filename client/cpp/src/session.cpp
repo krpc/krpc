@@ -2,7 +2,7 @@
 
 #include <google/protobuf/io/coded_stream.h>
 
-#include <chrono>  // NOLINT(build/c++11)
+#include <chrono>
 #include <cstdint>
 #include <exception>
 #include <iostream>

@@ -1,11 +1,11 @@
 #pragma once
 
-#include <chrono>  // NOLINT(build/c++11)
+#include <chrono>
 #include <cstdint>
 #include <functional>
 #include <map>
 #include <memory>
-#include <mutex>  // NOLINT(build/c++11)
+#include <mutex>
 #include <string>
 #include <string_view>
 #include <utility>

@@ -4,7 +4,7 @@
 #include <exception>
 #include <functional>
 #include <limits>
-#include <mutex>  // NOLINT(build/c++11)
+#include <mutex>
 
 #include "krpc/condition.hpp"
 #include "krpc/stream.hpp"

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <chrono>  // NOLINT(build/c++11)
+#include <chrono>
 #include <string>
 
 #include "krpc/client.hpp"   // IWYU pragma: export

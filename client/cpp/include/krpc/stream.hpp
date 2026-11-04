@@ -6,7 +6,7 @@
 #include <limits>
 #include <map>
 #include <memory>
-#include <mutex>  // NOLINT(build/c++11)
+#include <mutex>
 #include <stdexcept>
 #include <string>
 #include <type_traits>

@@ -1,13 +1,13 @@
 #pragma once
 
-#include <chrono>  // NOLINT(build/c++11)
+#include <chrono>
 #include <functional>
 #include <krpc.hpp>
 #include <krpc/connection.hpp>
 #include <krpc/services/krpc.hpp>
 #include <memory>
 #include <string>
-#include <thread>  // NOLINT(build/c++11)
+#include <thread>
 
 #include "services/test_service.hpp"
 
