@@ -47,7 +47,7 @@ Outputs in `bazel-bin`, test logs in `bazel-testlogs`.
    and get no tests.
  * Client comms tests use a local `TestServer` (no KSP needed); SerialIO ones need `socat`.
  * Flags: `--test_output=streamed`, `--cache_test_results=false`, `--subcommands`,
-   `--config=system-llvm` (C/C++ as CI), `--config=windows`.
+   `--config=system-llvm` (C/C++ as CI). Bazel applies the `windows` config on a Windows host.
  * A full `//:test` takes several minutes, over the foreground Bash timeout. Start it with
    `run_in_background` and wait for the completion notification, which carries the exit code.
    Judge the result by the exit code, then `Read` the tail of the output file for the summary.

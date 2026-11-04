@@ -31,9 +31,9 @@ The C and C++ clients build with an LLVM toolchain that Bazel downloads. Pass
 Windows
 ^^^^^^^
 
-Pass ``--config=windows`` to Bazel. The whole tree builds with MSVC. Bazel skips the targets
-that need Linux: the serial IO tests, clang-tidy and ``//tools/krpctools:conformance-test``. A
-Windows machine needs four settings first.
+Bazel applies the ``windows`` configuration on a Windows host. The whole tree builds with MSVC.
+Bazel skips the targets that need Linux: the serial IO tests, clang-tidy and
+``//tools/krpctools:conformance-test``. A Windows machine needs these first.
 
 **Symlinks.** Bazel runs with ``--windows_enable_symlinks`` and ``--enable_runfiles``, and creating a
 symlink needs Developer Mode. Turn it on under Settings > System > For developers, or from an
@@ -67,12 +67,14 @@ Windows SDK:
 Bazel caches the compiler it finds. If Bazel ran before the install, set ``BAZEL_VC`` to
 ``...\BuildTools\VC`` to make it search again.
 
-**A shell.** Bazel runs test and shell rules with bash. Under PowerShell, point ``BAZEL_SH`` at the
-bash from Git for Windows:
+**A shell.** Bazel runs shell rules with the bash from Git for Windows, installed at
+``C:\Program Files\Git``. For Git installed elsewhere, set the bash path in
+``%USERPROFILE%\.bazelrc``:
 
-.. code-block:: powershell
+.. code-block:: text
 
-   $env:BAZEL_SH = 'C:\Program Files\Git\usr\bin\bash.exe'
+   build:windows "--shell_executable=D:/Git/usr/bin/bash.exe"
+   common:windows "--repo_env=BAZEL_SH=D:/Git/usr/bin/bash.exe"
 
 Under Git Bash, set ``MSYS2_ARG_CONV_EXCL="*"``. Without it, Git Bash rewrites ``//core:test`` into
 the path ``/core:test``.
