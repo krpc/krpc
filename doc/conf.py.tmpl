@@ -1,5 +1,12 @@
 import datetime
 import os
+import warnings
+
+# On Windows the runfiles path to charset_normalizer's compiled modules exceeds
+# MAX_PATH, so the DLL fails to load and requests warns at import. Sphinx works
+# without it.
+warnings.filterwarnings(
+    'ignore', message='Unable to find acceptable character detection dependency')
 
 project = 'kRPC'
 version = '%VERSION%'
