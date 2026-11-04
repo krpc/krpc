@@ -36,11 +36,16 @@ extensions = [
 # (sphinx-build -t spelling), as no other builder has a use for it.
 if tags.has('spelling'):  # noqa: F821  -- sphinx supplies tags to conf.py
     # sphinxcontrib-spelling checks words through pyenchant, which loads the
-    # Enchant library at import. We take only pyenchant's tokenizer, which is
-    # pure Python, and check words with spylls, a Python port of Hunspell,
-    # against the dictionary the build fetches.
-    os.environ['PYENCHANT_IGNORE_MISSING_LIB'] = '1'
-    import enchant
+    # Enchant library at import. We register the enchant package without running
+    # its __init__, so only pyenchant's tokenizer loads, which is pure Python.
+    # Words are checked with spylls, a Python port of Hunspell, against the
+    # dictionary the build fetches.
+    import importlib.util
+    import sys
+    import types
+    enchant = types.ModuleType('enchant')
+    enchant.__path__ = importlib.util.find_spec('enchant').submodule_search_locations
+    sys.modules['enchant'] = enchant
     from spylls.hunspell import Dictionary, readers
     from spylls.hunspell.readers.file_reader import FileReader
 
