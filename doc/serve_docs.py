@@ -17,6 +17,7 @@ import argparse
 import filecmp
 import os
 import shutil
+import stat
 import subprocess
 import sys
 import threading
@@ -70,6 +71,13 @@ def declared_outputs():
     }
 
 
+def remove(path):
+    """Delete a staged file. The copies keep the read-only mode of the Bazel
+    outputs, and Windows refuses to delete a read-only file."""
+    os.chmod(path, stat.S_IWRITE)
+    os.unlink(path)
+
+
 def update_stage(strict=False):
     """Rebuild the staged doc tree and mirror it into the stage directory.
 
@@ -100,9 +108,9 @@ def update_stage(strict=False):
     for basepath, dirnames, filenames in os.walk(STAGE, topdown=False):
         for filename in filenames:
             path = os.path.relpath(os.path.join(basepath, filename), STAGE)
-            if path not in declared:
+            if path.replace(os.sep, "/") not in declared:
                 print("Removing", path)
-                os.unlink(os.path.join(STAGE, path))
+                remove(os.path.join(STAGE, path))
         for dirname in dirnames:
             dirpath = os.path.join(basepath, dirname)
             if not os.listdir(dirpath):
@@ -118,7 +126,7 @@ def update_stage(strict=False):
             shutil.copy(srcpath, stagepath)
         elif not filecmp.cmp(srcpath, stagepath):
             print("Updating file", path)
-            os.unlink(stagepath)
+            remove(stagepath)
             shutil.copy(srcpath, stagepath)
 
 
