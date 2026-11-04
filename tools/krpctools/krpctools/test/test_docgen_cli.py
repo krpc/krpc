@@ -98,6 +98,29 @@ class TestDocGenCli(unittest.TestCase):
         self.run_docgen("@" + self.write("arguments.txt", "\n".join(arguments)))
         self.assertIn("Page for Demo", self.read("hello.rst"))
 
+    def test_unordered_members(self):
+        self.write("order.txt", "Demo.Hello\n")
+        stderr = io.StringIO()
+        with (
+            mock.patch(
+                "sys.argv",
+                [
+                    "krpc-docgen",
+                    "python",
+                    self.order,
+                    self.definitions,
+                    "--page",
+                    self.hello,
+                    self.path("hello.rst"),
+                ],
+            ),
+            contextlib.redirect_stderr(stderr),
+        ):
+            self.assertEqual(1, main())
+        self.assertEqual(
+            "Error: Don't know how to order:\nDemo.Goodbye\n", stderr.getvalue()
+        )
+
     def test_page_without_order_file(self):
         with self.assertRaises(SystemExit):
             self.run_docgen("python", "--page", self.hello, self.path("hello.rst"))

@@ -3,6 +3,7 @@
 - Add `krpc-testserver`, which runs the `TestServer` bundled with krpctools (#1228)
 - Run `krpc-servicedefs` and the `TestServer` on Windows (#1228)
 - Fix serial IO in the `TestServer` (#1228)
+- Print a plain error when the `krpc-docgen` ordering file is missing a member (#1228)
 - **Breaking:** Stop releasing the `TestServer` archive and Docker image, replaced by
   `krpc-testserver` (#1228)
 - **Breaking:** Pass the directories of the assemblies a service references to

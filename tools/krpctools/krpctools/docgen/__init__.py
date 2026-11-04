@@ -81,16 +81,21 @@ def main():
     )
     args = parser.parse_intermixed_args()
 
-    services = build_services(
-        load_definitions(args.definitions), load_ordering(args.order_file)
-    )
-    documented = set()
-    for source, output in args.page:
-        content, page_documented = generate(args.language, services, source)
-        write_file(output, content)
-        documented.update(page_documented)
+    try:
+        services = build_services(
+            load_definitions(args.definitions), load_ordering(args.order_file)
+        )
+        documented = set()
+        for source, output in args.page:
+            content, page_documented = generate(args.language, services, source)
+            write_file(output, content)
+            documented.update(page_documented)
+    except RuntimeError as ex:
+        sys.stderr.write("Error: %s\n" % str(ex))
+        return 1
     if args.documented:
         write_file(args.documented, "\n".join(sorted(documented)) + "\n")
+    return 0
 
 
 DOMAINS = {
@@ -228,4 +233,4 @@ def process_file(domain, services, path):
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
