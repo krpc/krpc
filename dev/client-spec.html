@@ -457,7 +457,7 @@
 <li class="toctree-l2"><a class="reference internal" href="client-spec/objects.html">Objects</a></li>
 <li class="toctree-l2"><a class="reference internal" href="client-spec/streams.html">Streams</a></li>
 <li class="toctree-l2"><a class="reference internal" href="client-spec/events.html">Events</a></li>
-<li class="toctree-l2"><a class="reference internal" href="client-spec/threading.html">Threading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client-spec/concurrency.html">Concurrency</a></li>
 <li class="toctree-l2"><a class="reference internal" href="client-spec/functions.html">Server Side Functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="client-spec/coverage.html">Client Coverage</a></li>
 </ul>
@@ -575,8 +575,8 @@ page of this specification:</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="client-spec/events.html"><span class="doc">events</span></a></p></td>
 <td><p>Waiting on events and calling back on them</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="client-spec/threading.html"><span class="doc">threading</span></a></p></td>
-<td><p>Using one connection from several threads</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="client-spec/concurrency.html"><span class="doc">concurrency</span></a></p></td>
+<td><p>Using one connection from several threads or async tasks</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="client-spec/functions.html"><span class="doc">functions</span></a></p></td>
 <td><p>Streaming, running and waiting on server side functions</p></td>
@@ -645,8 +645,8 @@ reason recorded in its documentation.</p>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">connections</span></code></p></td>
 <td><p>Several connections open at once, sharing objects</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">threads</span></code></p></td>
-<td><p>Concurrent calls, and callbacks and closes from other threads</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">concurrency</span></code></p></td>
+<td><p>Concurrent calls, waits, callbacks and closes, on threads or async tasks</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ordering</span></code></p></td>
 <td><p>Ordering objects, in a language that orders values</p></td>

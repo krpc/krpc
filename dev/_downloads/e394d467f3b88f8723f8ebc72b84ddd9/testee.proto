@@ -35,10 +35,10 @@ message Hello {
 message Command {
   // Copied onto the reply to the command.
   uint64 id = 1;
-  // The worker thread to run the command on, created on first use. Commands for one thread run
-  // in order. Unset runs the command on the default thread. A testee without the threads profile
-  // gets no thread name.
-  string thread = 2;
+  // The task to run the command on, created on first use: a thread in a threaded testee, or a
+  // chain of async tasks in an async one. Commands for one task run in order. Unset runs the
+  // command on the default task. A testee without the concurrency profile gets no task name.
+  string task = 2;
   // A stream or event handle whose condition the testee holds while it runs the command, as a
   // program that locks the condition to read or wait does. Zero holds none.
   uint64 condition = 3;
@@ -98,9 +98,11 @@ message Command {
 
 message Reply {
   uint64 id = 1;
-  // The thread that ran the command, in a form the testee chooses. Equal for two replies when
-  // one thread ran both commands.
-  string thread = 5;
+  // The task that ran the command, in a form the testee chooses: the thread in a threaded testee,
+  // or the name of the chain of async tasks (Command.task) in an async one. The testee names the
+  // default chain, with a name other than the empty string. Equal for two replies when one task
+  // ran both commands.
+  string task = 5;
   oneof result {
     Value value = 2;
     Error error = 3;
@@ -117,8 +119,9 @@ message Notification {
     Value value = 2;
     Ending ending = 3;
   }
-  // The thread the callback ran on, in the form of Reply.thread.
-  string thread = 4;
+  // The task the callback ran on, in the form of Reply.task. In an async testee, a callback that
+  // runs outside every chain reports a name no chain has.
+  string task = 4;
   // Written as the callback returns, for a callback whose behavior reports its return. A
   // notification for a return carries no call.
   bool returned = 5;
@@ -157,10 +160,11 @@ message Release {
   uint64 callback = 1;
 }
 
-// Interrupts the command running on the named thread, as the language interrupts a thread. A
-// testee whose language cannot replies with an UNSUPPORTED error.
+// Interrupts the command running on the named task: interrupts the thread in a threaded testee,
+// or cancels the running async task in an async one. A testee whose language cannot replies with
+// an UNSUPPORTED error.
 message Interrupt {
-  string thread = 1;
+  string task = 1;
 }
 
 // The end of a stream, as passed to an end callback.

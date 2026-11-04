@@ -457,7 +457,7 @@
 <li class="toctree-l2"><a class="reference internal" href="objects.html">Objects</a></li>
 <li class="toctree-l2"><a class="reference internal" href="streams.html">Streams</a></li>
 <li class="toctree-l2"><a class="reference internal" href="events.html">Events</a></li>
-<li class="toctree-l2"><a class="reference internal" href="threading.html">Threading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concurrency.html">Concurrency</a></li>
 <li class="toctree-l2"><a class="reference internal" href="functions.html">Server Side Functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="coverage.html">Client Coverage</a></li>
 </ul>
@@ -727,7 +727,7 @@ close frame. The client then waits for the server’s close frame.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-connection-close-interrupted">
-<dt><code class="docutils literal notranslate"><span class="pre">connection-close-interrupted</span> <span class="pre">[threads]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Closing from a thread with an interrupt pending sends a <code class="docutils literal notranslate"><span class="pre">disconnect</span></code> with the
+<dt><code class="docutils literal notranslate"><span class="pre">connection-close-interrupted</span> <span class="pre">[concurrency]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Closing from a thread with an interrupt pending sends a <code class="docutils literal notranslate"><span class="pre">disconnect</span></code> with the
 reason <code class="docutils literal notranslate"><span class="pre">CLOSED</span></code> and waits for the server to close. The interrupt is
 still pending once the close returns.</p>
 </dd>
@@ -746,7 +746,7 @@ connection error, with the reason and message of the <code class="docutils liter
 </dd>
 </dl>
 <dl class="simple" id="spec-connection-lost-pending-calls">
-<dt><code class="docutils literal notranslate"><span class="pre">connection-lost-pending-calls</span> <span class="pre">[threads]</span> <span class="pre">[MUST]</span></code></dt><dd><p>The calls waiting for a response when the connection fails raise the connection
+<dt><code class="docutils literal notranslate"><span class="pre">connection-lost-pending-calls</span> <span class="pre">[concurrency]</span> <span class="pre">[MUST]</span></code></dt><dd><p>The calls waiting for a response when the connection fails raise the connection
 error.</p>
 </dd>
 </dl>

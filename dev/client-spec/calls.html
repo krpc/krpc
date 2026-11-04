@@ -457,7 +457,7 @@
 <li class="toctree-l2"><a class="reference internal" href="objects.html">Objects</a></li>
 <li class="toctree-l2"><a class="reference internal" href="streams.html">Streams</a></li>
 <li class="toctree-l2"><a class="reference internal" href="events.html">Events</a></li>
-<li class="toctree-l2"><a class="reference internal" href="threading.html">Threading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concurrency.html">Concurrency</a></li>
 <li class="toctree-l2"><a class="reference internal" href="functions.html">Server Side Functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="coverage.html">Client Coverage</a></li>
 </ul>
@@ -665,16 +665,16 @@ duplicate or unknown name raises the argument error.</p>
 <section id="responses">
 <h2>Responses<a class="headerlink" href="#responses" title="Link to this heading">#</a></h2>
 <dl class="simple" id="spec-calls-unique-ids">
-<dt><code class="docutils literal notranslate"><span class="pre">calls-unique-ids</span> <span class="pre">[threads]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Each request has an id that no other waiting request has.</p>
+<dt><code class="docutils literal notranslate"><span class="pre">calls-unique-ids</span> <span class="pre">[concurrency]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Each request has an id that no other waiting request has.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-calls-match-by-id">
-<dt><code class="docutils literal notranslate"><span class="pre">calls-match-by-id</span> <span class="pre">[threads]</span> <span class="pre">[MUST]</span></code></dt><dd><p>The client matches a response to its call by the id, in any order the responses
+<dt><code class="docutils literal notranslate"><span class="pre">calls-match-by-id</span> <span class="pre">[concurrency]</span> <span class="pre">[MUST]</span></code></dt><dd><p>The client matches a response to its call by the id, in any order the responses
 arrive.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-calls-abandoned-id">
-<dt><code class="docutils literal notranslate"><span class="pre">calls-abandoned-id</span> <span class="pre">[threads]</span> <span class="pre">[SHOULD]</span></code></dt><dd><p>A call interrupted while waiting abandons its id. The client discards the
+<dt><code class="docutils literal notranslate"><span class="pre">calls-abandoned-id</span> <span class="pre">[concurrency]</span> <span class="pre">[SHOULD]</span></code></dt><dd><p>A call interrupted while waiting abandons its id. The client discards the
 response to that id.</p>
 </dd>
 </dl>

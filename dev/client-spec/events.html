@@ -59,7 +59,7 @@
     <link rel="icon" href="../_static/logo-mark.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Threading" href="threading.html" />
+    <link rel="next" title="Concurrency" href="concurrency.html" />
     <link rel="prev" title="Streams" href="streams.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
@@ -457,7 +457,7 @@
 <li class="toctree-l2"><a class="reference internal" href="objects.html">Objects</a></li>
 <li class="toctree-l2"><a class="reference internal" href="streams.html">Streams</a></li>
 <li class="toctree-l2 current active"><a aria-current="page" class="current reference internal" href="#">Events</a></li>
-<li class="toctree-l2"><a class="reference internal" href="threading.html">Threading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concurrency.html">Concurrency</a></li>
 <li class="toctree-l2"><a class="reference internal" href="functions.html">Server Side Functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="coverage.html">Client Coverage</a></li>
 </ul>
@@ -605,12 +605,12 @@ later is called for it.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-events-callback-added-during-replay">
-<dt><code class="docutils literal notranslate"><span class="pre">events-callback-added-during-replay</span> <span class="pre">[events,</span> <span class="pre">callbacks,</span> <span class="pre">threads,</span> <span class="pre">races]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Of two callbacks added after an unseen firing, only one is called for it, though the
+<dt><code class="docutils literal notranslate"><span class="pre">events-callback-added-during-replay</span> <span class="pre">[events,</span> <span class="pre">callbacks,</span> <span class="pre">concurrency,</span> <span class="pre">races]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Of two callbacks added after an unseen firing, only one is called for it, though the
 second is added while the firing is replayed to the first.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-events-callback-removed-during-add">
-<dt><code class="docutils literal notranslate"><span class="pre">events-callback-removed-during-add</span> <span class="pre">[events,</span> <span class="pre">callbacks,</span> <span class="pre">threads,</span> <span class="pre">races]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A callback added after an unseen firing, and removed before the replay calls it,
+<dt><code class="docutils literal notranslate"><span class="pre">events-callback-removed-during-add</span> <span class="pre">[events,</span> <span class="pre">callbacks,</span> <span class="pre">concurrency,</span> <span class="pre">races]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A callback added after an unseen firing, and removed before the replay calls it,
 leaves the firing unseen, so a callback added later is called for it.</p>
 </dd>
 </dl>
@@ -674,12 +674,12 @@ timeout raises the argument error.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-events-two-waiters">
-<dt><code class="docutils literal notranslate"><span class="pre">events-two-waiters</span> <span class="pre">[events,</span> <span class="pre">threads]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Two threads waiting on one event both return when it fires.</p>
+<dt><code class="docutils literal notranslate"><span class="pre">events-two-waiters</span> <span class="pre">[events,</span> <span class="pre">concurrency]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Two waits on one event both return when it fires.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-events-wake-waiter">
-<dt><code class="docutils literal notranslate"><span class="pre">events-wake-waiter</span> <span class="pre">[events,</span> <span class="pre">threads]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A thread waiting on an event wakes when the event is removed, the connection closes
-or the connection fails. The wait raises the error for a removed stream, or the
+<dt><code class="docutils literal notranslate"><span class="pre">events-wake-waiter</span> <span class="pre">[events,</span> <span class="pre">concurrency]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A wait on an event ends when the event is removed, the connection closes or the
+connection fails. The wait raises the error for a removed stream, or the
 connection error, with the reason for a failure.</p>
 </dd>
 </dl>
@@ -717,11 +717,11 @@ none of its callbacks.</p>
       </div>
     </a>
     <a class="right-next"
-       href="threading.html"
+       href="concurrency.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Threading</p>
+        <p class="prev-next-title">Concurrency</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

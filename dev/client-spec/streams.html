@@ -457,7 +457,7 @@
 <li class="toctree-l2"><a class="reference internal" href="objects.html">Objects</a></li>
 <li class="toctree-l2 current active"><a aria-current="page" class="current reference internal" href="#">Streams</a></li>
 <li class="toctree-l2"><a class="reference internal" href="events.html">Events</a></li>
-<li class="toctree-l2"><a class="reference internal" href="threading.html">Threading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concurrency.html">Concurrency</a></li>
 <li class="toctree-l2"><a class="reference internal" href="functions.html">Server Side Functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="coverage.html">Client Coverage</a></li>
 </ul>
@@ -697,7 +697,7 @@ as its cause, such as a lost connection or a message that fails to parse.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-streams-close-after-failure">
-<dt><code class="docutils literal notranslate"><span class="pre">streams-close-after-failure</span> <span class="pre">[streams,</span> <span class="pre">callbacks,</span> <span class="pre">threads]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A connection closed after it fails, before its streams have ended, ends them with
+<dt><code class="docutils literal notranslate"><span class="pre">streams-close-after-failure</span> <span class="pre">[streams,</span> <span class="pre">callbacks,</span> <span class="pre">concurrency]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A connection closed after it fails, before its streams have ended, ends them with
 the connection error and the reason for the failure.</p>
 </dd>
 </dl>
@@ -720,12 +720,12 @@ timeout raises the argument error.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-streams-two-waiters">
-<dt><code class="docutils literal notranslate"><span class="pre">streams-two-waiters</span> <span class="pre">[streams,</span> <span class="pre">threads]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Two threads waiting on one stream both return on its next update.</p>
+<dt><code class="docutils literal notranslate"><span class="pre">streams-two-waiters</span> <span class="pre">[streams,</span> <span class="pre">concurrency]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Two waits on one stream both return on its next update.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-streams-wake-waiter">
-<dt><code class="docutils literal notranslate"><span class="pre">streams-wake-waiter</span> <span class="pre">[streams,</span> <span class="pre">threads]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A thread waiting on a stream wakes when the stream is removed, the connection closes
-or the connection fails. The wait raises the error for a removed stream, or the
+<dt><code class="docutils literal notranslate"><span class="pre">streams-wake-waiter</span> <span class="pre">[streams,</span> <span class="pre">concurrency]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A wait on a stream ends when the stream is removed, the connection closes or the
+connection fails. The wait raises the error for a removed stream, or the
 connection error, with the reason for a failure.</p>
 </dd>
 </dl>
@@ -777,22 +777,22 @@ the callback’s first call. Later values follow it.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-streams-first-call-superseded">
-<dt><code class="docutils literal notranslate"><span class="pre">streams-first-call-superseded</span> <span class="pre">[streams,</span> <span class="pre">callbacks,</span> <span class="pre">threads,</span> <span class="pre">races]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A first call is skipped if an update passes the callback a newer value first.</p>
+<dt><code class="docutils literal notranslate"><span class="pre">streams-first-call-superseded</span> <span class="pre">[streams,</span> <span class="pre">callbacks,</span> <span class="pre">concurrency,</span> <span class="pre">races]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A first call is skipped if an update passes the callback a newer value first.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-streams-queued-value-before-ending">
-<dt><code class="docutils literal notranslate"><span class="pre">streams-queued-value-before-ending</span> <span class="pre">[streams,</span> <span class="pre">callbacks,</span> <span class="pre">threads]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A value that arrives while a first call runs is passed to the callback once that call
+<dt><code class="docutils literal notranslate"><span class="pre">streams-queued-value-before-ending</span> <span class="pre">[streams,</span> <span class="pre">callbacks,</span> <span class="pre">concurrency]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A value that arrives while a first call runs is passed to the callback once that call
 returns. This holds when the server ends the stream meanwhile. The end callbacks are
 then called after the value.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-streams-queued-value-dropped-by-remove">
-<dt><code class="docutils literal notranslate"><span class="pre">streams-queued-value-dropped-by-remove</span> <span class="pre">[streams,</span> <span class="pre">callbacks,</span> <span class="pre">threads]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A value that arrives while a first call runs is not passed to the callback once the
+<dt><code class="docutils literal notranslate"><span class="pre">streams-queued-value-dropped-by-remove</span> <span class="pre">[streams,</span> <span class="pre">callbacks,</span> <span class="pre">concurrency]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A value that arrives while a first call runs is not passed to the callback once the
 program removes the stream.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-streams-value-as-first-call-ends">
-<dt><code class="docutils literal notranslate"><span class="pre">streams-value-as-first-call-ends</span> <span class="pre">[streams,</span> <span class="pre">callbacks,</span> <span class="pre">threads,</span> <span class="pre">races]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A value that arrives once a first call and the values queued during it have been
+<dt><code class="docutils literal notranslate"><span class="pre">streams-value-as-first-call-ends</span> <span class="pre">[streams,</span> <span class="pre">callbacks,</span> <span class="pre">concurrency,</span> <span class="pre">races]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A value that arrives once a first call and the values queued during it have been
 passed, and before the add returns, is passed to the callback.</p>
 </dd>
 </dl>
@@ -800,12 +800,12 @@ passed, and before the add returns, is passed to the callback.</p>
 <section id="callback-errors">
 <h2>Callback Errors<a class="headerlink" href="#callback-errors" title="Link to this heading">#</a></h2>
 <dl class="simple" id="spec-streams-callback-error">
-<dt><code class="docutils literal notranslate"><span class="pre">streams-callback-error</span> <span class="pre">[streams,</span> <span class="pre">callbacks,</span> <span class="pre">threads]</span> <span class="pre">[MUST]</span></code></dt><dd><p>An error raised by a callback leaves the other callbacks and streams running.</p>
+<dt><code class="docutils literal notranslate"><span class="pre">streams-callback-error</span> <span class="pre">[streams,</span> <span class="pre">callbacks,</span> <span class="pre">concurrency]</span> <span class="pre">[MUST]</span></code></dt><dd><p>An error raised by a callback leaves the other callbacks and streams running.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-streams-callback-fatal-error">
-<dt><code class="docutils literal notranslate"><span class="pre">streams-callback-fatal-error</span> <span class="pre">[streams,</span> <span class="pre">callbacks,</span> <span class="pre">threads]</span> <span class="pre">[MUST]</span></code></dt><dd><p>An error of the kind the language keeps apart from its ordinary exceptions, such as
-an <code class="docutils literal notranslate"><span class="pre">Error</span></code> in Java, raised by a callback running on a thread of the client, leaves the
+<dt><code class="docutils literal notranslate"><span class="pre">streams-callback-fatal-error</span> <span class="pre">[streams,</span> <span class="pre">callbacks,</span> <span class="pre">concurrency]</span> <span class="pre">[MUST]</span></code></dt><dd><p>An error of the kind the language keeps apart from its ordinary exceptions, such as
+an <code class="docutils literal notranslate"><span class="pre">Error</span></code> in Java, raised by a callback the client runs in the background, leaves the
 other callbacks and streams running.</p>
 </dd>
 </dl>

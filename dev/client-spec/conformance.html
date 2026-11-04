@@ -457,7 +457,7 @@
 <li class="toctree-l2"><a class="reference internal" href="objects.html">Objects</a></li>
 <li class="toctree-l2"><a class="reference internal" href="streams.html">Streams</a></li>
 <li class="toctree-l2"><a class="reference internal" href="events.html">Events</a></li>
-<li class="toctree-l2"><a class="reference internal" href="threading.html">Threading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concurrency.html">Concurrency</a></li>
 <li class="toctree-l2"><a class="reference internal" href="functions.html">Server Side Functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="coverage.html">Client Coverage</a></li>
 </ul>
@@ -563,9 +563,9 @@ writes its replies to standard output. Here the testee writes its <code class="d
 connects to a server and calls a procedure:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt; {"hello":{"client":"python","profiles":["core","streams"],"protocols":["tcpip"]}}
 &gt; {"id":"1","connect":{"protocol":"tcpip","address":"127.0.0.1","port":50000}}
-&lt; {"reply":{"id":"1","value":{},"thread":"140213"}}
+&lt; {"reply":{"id":"1","value":{},"task":"140213"}}
 &gt; {"id":"2","invoke":{"service":"TestService","procedure":"Int32ToString","arguments":[{"sint32":42}]}}
-&lt; {"reply":{"id":"2","value":{"string":"42"},"thread":"140213"}}
+&lt; {"reply":{"id":"2","value":{"string":"42"},"task":"140213"}}
 </pre></div>
 </div>
 <p>Each line is a message in the proto3 JSON mapping: a <code class="docutils literal notranslate"><span class="pre">Command</span></code> from the driver, and an
@@ -583,8 +583,8 @@ handle, or an <code class="docutils literal notranslate"><span class="pre">Error
 language’s own value, so a bug in the client’s encoder cannot cancel out a bug in its decoder.</p></li>
 <li><p>A callback the driver adds writes a <code class="docutils literal notranslate"><span class="pre">Notification</span></code> for each of its calls. A notification can
 arrive between a command and its reply.</p></li>
-<li><p>A testee with the <code class="docutils literal notranslate"><span class="pre">threads</span></code> profile runs commands on worker threads, named in the command. A
-testee without it runs every command in order on one thread.</p></li>
+<li><p>A testee with the <code class="docutils literal notranslate"><span class="pre">concurrency</span></code> profile runs commands on tasks named in the command, as
+threads or async tasks. A testee without it runs every command in order on one thread.</p></li>
 <li><p>A command the client offers no way to carry out gets an <code class="docutils literal notranslate"><span class="pre">Error</span></code> of kind <code class="docutils literal notranslate"><span class="pre">UNSUPPORTED</span></code>.</p></li>
 </ul>
 <p>The testee exits when its standard input closes.</p>
@@ -606,7 +606,7 @@ the test name marks a test the client fails only now and then, which may pass:</
 </pre></div>
 </div>
 <p>An <code class="docutils literal notranslate"><span class="pre">&#64;skip</span></code> after the test name marks a test that hangs the testee. The test is not run:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>test_threading.py::test_wait_holding_another @skip  # The update is never announced
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>test_concurrency.py::test_wait_holding_another @skip  # The update is never announced
 </pre></div>
 </div>
 </section>

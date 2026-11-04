@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Threading &#8212; kRPC vdev documentation</title>
+    <title>Concurrency &#8212; kRPC vdev documentation</title>
   
   
   
@@ -44,7 +44,7 @@
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'client-spec/threading';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'client-spec/concurrency';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.24.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://krpc.github.io/krpc/switcher.json';
@@ -55,7 +55,7 @@
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <script src="../_static/external-links.js?v=e8892020"></script>
     <script src="../_static/build-info.js?v=19ceb065"></script>
-    <link rel="canonical" href="https://krpc.github.io/krpc/dev/client-spec/threading.html" />
+    <link rel="canonical" href="https://krpc.github.io/krpc/dev/client-spec/concurrency.html" />
     <link rel="icon" href="../_static/logo-mark.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -457,7 +457,7 @@
 <li class="toctree-l2"><a class="reference internal" href="objects.html">Objects</a></li>
 <li class="toctree-l2"><a class="reference internal" href="streams.html">Streams</a></li>
 <li class="toctree-l2"><a class="reference internal" href="events.html">Events</a></li>
-<li class="toctree-l2 current active"><a aria-current="page" class="current reference internal" href="#">Threading</a></li>
+<li class="toctree-l2 current active"><a aria-current="page" class="current reference internal" href="#">Concurrency</a></li>
 <li class="toctree-l2"><a class="reference internal" href="functions.html">Server Side Functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="coverage.html">Client Coverage</a></li>
 </ul>
@@ -515,7 +515,7 @@
     
     <li class="breadcrumb-item"><a href="../client-spec.html" class="nav-link">Client Specification</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Threading</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Concurrency</span></li>
   </ul>
 </nav>
 </div>
@@ -532,34 +532,33 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="threading">
-<h1>Threading<a class="headerlink" href="#threading" title="Link to this heading">#</a></h1>
-<p>This page covers using one connection from several threads, holding the condition of a stream,
-and the threads callbacks run on.</p>
+  <section id="concurrency">
+<h1>Concurrency<a class="headerlink" href="#concurrency" title="Link to this heading">#</a></h1>
+<p>This page covers using one connection from several threads or async tasks, holding the condition
+of a stream, and the threads callbacks run on. In an async client, each thread in these
+requirements is an async task.</p>
 <section id="calls">
 <h2>Calls<a class="headerlink" href="#calls" title="Link to this heading">#</a></h2>
-<dl class="simple" id="spec-threading-calls-on-several-threads">
-<dt><code class="docutils literal notranslate"><span class="pre">threading-calls-on-several-threads</span> <span class="pre">[threads]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Calls made from several threads on one connection each return their own
-result.</p>
+<dl class="simple" id="spec-concurrency-concurrent-calls">
+<dt><code class="docutils literal notranslate"><span class="pre">concurrency-concurrent-calls</span> <span class="pre">[concurrency]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Concurrent calls on one connection each return their own result.</p>
 </dd>
 </dl>
-<dl class="simple" id="spec-threading-interleaved-calls">
-<dt><code class="docutils literal notranslate"><span class="pre">threading-interleaved-calls</span> <span class="pre">[threads]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A call on one thread writes its request while a call on another thread waits for
-its response. Each call returns its own result, in whichever order the responses
-arrive.</p>
+<dl class="simple" id="spec-concurrency-interleaved-calls">
+<dt><code class="docutils literal notranslate"><span class="pre">concurrency-interleaved-calls</span> <span class="pre">[concurrency]</span> <span class="pre">[MUST]</span></code></dt><dd><p>One call writes its request while another call waits for its response. Each call
+returns its own result, in whichever order the responses arrive.</p>
 </dd>
 </dl>
-<dl class="simple" id="spec-threading-streams-added-on-several-threads">
-<dt><code class="docutils literal notranslate"><span class="pre">threading-streams-added-on-several-threads</span> <span class="pre">[streams,</span> <span class="pre">threads]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Streams added from several threads at once are each registered.</p>
+<dl class="simple" id="spec-concurrency-concurrent-stream-adds">
+<dt><code class="docutils literal notranslate"><span class="pre">concurrency-concurrent-stream-adds</span> <span class="pre">[streams,</span> <span class="pre">concurrency]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Streams added concurrently are each registered.</p>
 </dd>
 </dl>
-<dl class="simple" id="spec-threading-close-with-a-call-in-flight">
-<dt><code class="docutils literal notranslate"><span class="pre">threading-close-with-a-call-in-flight</span> <span class="pre">[threads]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A thread closes the connection while another thread waits for a response. The
-waiting call raises the connection error.</p>
+<dl class="simple" id="spec-concurrency-close-with-a-call-in-flight">
+<dt><code class="docutils literal notranslate"><span class="pre">concurrency-close-with-a-call-in-flight</span> <span class="pre">[concurrency]</span> <span class="pre">[MUST]</span></code></dt><dd><p>The program closes the connection while a call waits for a response. The waiting
+call raises the connection error.</p>
 </dd>
 </dl>
-<dl class="simple" id="spec-threading-response-after-close">
-<dt><code class="docutils literal notranslate"><span class="pre">threading-response-after-close</span> <span class="pre">[threads]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A response that arrives after the client sends its <code class="docutils literal notranslate"><span class="pre">disconnect</span></code> does not reach
+<dl class="simple" id="spec-concurrency-response-after-close">
+<dt><code class="docutils literal notranslate"><span class="pre">concurrency-response-after-close</span> <span class="pre">[concurrency]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A response that arrives after the client sends its <code class="docutils literal notranslate"><span class="pre">disconnect</span></code> does not reach
 the call waiting for it. The call raises the connection error.</p>
 </dd>
 </dl>
@@ -567,85 +566,85 @@ the call waiting for it. The call raises the connection error.</p>
 <section id="conditions">
 <h2>Conditions<a class="headerlink" href="#conditions" title="Link to this heading">#</a></h2>
 <p>Each stream has a condition: a lock that a thread holds while it reads the stream’s value and waits for the next one. While a thread holds it, the value the thread reads changes only when it waits, so the thread misses no update. The connection has a condition for its updates too.</p>
-<dl class="simple" id="spec-threading-wait-holding">
-<dt><code class="docutils literal notranslate"><span class="pre">threading-wait-holding</span> <span class="pre">[streams,</span> <span class="pre">conditions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A thread holding a stream’s condition sees one update per wait, and the value
+<dl class="simple" id="spec-concurrency-wait-holding">
+<dt><code class="docutils literal notranslate"><span class="pre">concurrency-wait-holding</span> <span class="pre">[streams,</span> <span class="pre">conditions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A thread holding a stream’s condition sees one update per wait, and the value
 after the wait is the next value. While it holds the condition, a zero timeout
 returns false.</p>
 </dd>
 </dl>
-<dl class="simple" id="spec-threading-wait-for-update">
-<dt><code class="docutils literal notranslate"><span class="pre">threading-wait-for-update</span> <span class="pre">[streams,</span> <span class="pre">conditions]</span> <span class="pre">[SHOULD]</span></code></dt><dd><p>The client offers a wait for the next update message of any stream, under a
+<dl class="simple" id="spec-concurrency-wait-for-update">
+<dt><code class="docutils literal notranslate"><span class="pre">concurrency-wait-for-update</span> <span class="pre">[streams,</span> <span class="pre">conditions]</span> <span class="pre">[SHOULD]</span></code></dt><dd><p>The client offers a wait for the next update message of any stream, under a
 condition for the connection’s updates. Holding that condition, a thread sees one
 update per wait.</p>
 </dd>
 </dl>
-<dl class="simple" id="spec-threading-held-value">
-<dt><code class="docutils literal notranslate"><span class="pre">threading-held-value</span> <span class="pre">[streams,</span> <span class="pre">conditions,</span> <span class="pre">threads]</span> <span class="pre">[MUST]</span></code></dt><dd><p>While a thread holds the condition of a stream, the value it reads changes only
+<dl class="simple" id="spec-concurrency-held-value">
+<dt><code class="docutils literal notranslate"><span class="pre">concurrency-held-value</span> <span class="pre">[streams,</span> <span class="pre">conditions,</span> <span class="pre">concurrency]</span> <span class="pre">[MUST]</span></code></dt><dd><p>While a thread holds the condition of a stream, the value it reads changes only
 when it waits. A thread that does not hold the condition reads the latest value. A
 wait returns for a value that arrived while the holder read the old one.</p>
 </dd>
 </dl>
-<dl class="simple" id="spec-threading-held-stream-ending">
-<dt><code class="docutils literal notranslate"><span class="pre">threading-held-stream-ending</span> <span class="pre">[streams,</span> <span class="pre">conditions,</span> <span class="pre">threads]</span> <span class="pre">[MUST]</span></code></dt><dd><p>While a thread holds the condition of a stream, an error that ends the stream
+<dl class="simple" id="spec-concurrency-held-stream-ending">
+<dt><code class="docutils literal notranslate"><span class="pre">concurrency-held-stream-ending</span> <span class="pre">[streams,</span> <span class="pre">conditions,</span> <span class="pre">concurrency]</span> <span class="pre">[MUST]</span></code></dt><dd><p>While a thread holds the condition of a stream, an error that ends the stream
 reaches it as a value does. The thread reads the old value until it waits. The wait
 returns, and later reads and waits raise the error.</p>
 </dd>
 </dl>
-<dl class="simple" id="spec-threading-held-stream-ending-before-value">
-<dt><code class="docutils literal notranslate"><span class="pre">threading-held-stream-ending-before-value</span> <span class="pre">[streams,</span> <span class="pre">conditions,</span> <span class="pre">threads]</span> <span class="pre">[MUST]</span></code></dt><dd><p>While a thread holds the condition of a stream with no value, an error ends the
+<dl class="simple" id="spec-concurrency-held-stream-ending-before-value">
+<dt><code class="docutils literal notranslate"><span class="pre">concurrency-held-stream-ending-before-value</span> <span class="pre">[streams,</span> <span class="pre">conditions,</span> <span class="pre">concurrency]</span> <span class="pre">[MUST]</span></code></dt><dd><p>While a thread holds the condition of a stream with no value, an error ends the
 stream. A read on the thread raises the error.</p>
 </dd>
 </dl>
-<dl class="simple" id="spec-threading-wait-for-unread-value">
-<dt><code class="docutils literal notranslate"><span class="pre">threading-wait-for-unread-value</span> <span class="pre">[streams,</span> <span class="pre">conditions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A wait returns only for a value newer than the last one the thread read,
+<dl class="simple" id="spec-concurrency-wait-for-unread-value">
+<dt><code class="docutils literal notranslate"><span class="pre">concurrency-wait-for-unread-value</span> <span class="pre">[streams,</span> <span class="pre">conditions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A wait returns only for a value newer than the last one the thread read,
 including a value it read without holding the condition.</p>
 </dd>
 </dl>
-<dl class="simple" id="spec-threading-value-read-before-wake">
-<dt><code class="docutils literal notranslate"><span class="pre">threading-value-read-before-wake</span> <span class="pre">[streams,</span> <span class="pre">conditions,</span> <span class="pre">races]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A wait does not return for a value the thread read before the update woke the
+<dl class="simple" id="spec-concurrency-value-read-before-wake">
+<dt><code class="docutils literal notranslate"><span class="pre">concurrency-value-read-before-wake</span> <span class="pre">[streams,</span> <span class="pre">conditions,</span> <span class="pre">races]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A wait does not return for a value the thread read before the update woke the
 stream’s waiters.</p>
 </dd>
 </dl>
-<dl class="simple" id="spec-threading-call-while-holding">
-<dt><code class="docutils literal notranslate"><span class="pre">threading-call-while-holding</span> <span class="pre">[streams,</span> <span class="pre">conditions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A thread holding the condition of a stream makes a call, which returns.</p>
+<dl class="simple" id="spec-concurrency-call-while-holding">
+<dt><code class="docutils literal notranslate"><span class="pre">concurrency-call-while-holding</span> <span class="pre">[streams,</span> <span class="pre">conditions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A thread holding the condition of a stream makes a call, which returns.</p>
 </dd>
 </dl>
-<dl class="simple" id="spec-threading-wait-on-condition-object">
-<dt><code class="docutils literal notranslate"><span class="pre">threading-wait-on-condition-object</span> <span class="pre">[streams,</span> <span class="pre">conditions,</span> <span class="pre">threads]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A thread holding a stream’s condition waits on the condition object itself, as the
+<dl class="simple" id="spec-concurrency-wait-on-condition-object">
+<dt><code class="docutils literal notranslate"><span class="pre">concurrency-wait-on-condition-object</span> <span class="pre">[streams,</span> <span class="pre">conditions,</span> <span class="pre">concurrency]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A thread holding a stream’s condition waits on the condition object itself, as the
 language waits on a condition variable. Other threads can take the condition while it
 waits. An update wakes the wait, and the thread then holds the condition again.</p>
 </dd>
 </dl>
-<dl class="simple" id="spec-threading-spurious-wake">
-<dt><code class="docutils literal notranslate"><span class="pre">threading-spurious-wake</span> <span class="pre">[streams,</span> <span class="pre">events,</span> <span class="pre">conditions,</span> <span class="pre">threads]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A wait with a timeout, woken by a notification of the condition with no update,
+<dl class="simple" id="spec-concurrency-spurious-wake">
+<dt><code class="docutils literal notranslate"><span class="pre">concurrency-spurious-wake</span> <span class="pre">[streams,</span> <span class="pre">events,</span> <span class="pre">conditions,</span> <span class="pre">concurrency]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A wait with a timeout, woken by a notification of the condition with no update,
 waits on until the timeout and returns false.</p>
 </dd>
 </dl>
 </section>
 <section id="sharing-a-condition">
 <h2>Sharing a Condition<a class="headerlink" href="#sharing-a-condition" title="Link to this heading">#</a></h2>
-<dl class="simple" id="spec-threading-hold-twice">
-<dt><code class="docutils literal notranslate"><span class="pre">threading-hold-twice</span> <span class="pre">[streams,</span> <span class="pre">conditions,</span> <span class="pre">threads]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A thread holding the condition of a stream takes it again. Other threads wait for
+<dl class="simple" id="spec-concurrency-hold-twice">
+<dt><code class="docutils literal notranslate"><span class="pre">concurrency-hold-twice</span> <span class="pre">[streams,</span> <span class="pre">conditions,</span> <span class="pre">concurrency]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A thread holding the condition of a stream takes it again. Other threads wait for
 the condition until the thread releases every hold.</p>
 </dd>
 </dl>
-<dl class="simple" id="spec-threading-wait-holding-twice">
-<dt><code class="docutils literal notranslate"><span class="pre">threading-wait-holding-twice</span> <span class="pre">[streams,</span> <span class="pre">conditions,</span> <span class="pre">threads]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A thread that holds the condition of a stream twice waits on it. The wait returns
+<dl class="simple" id="spec-concurrency-wait-holding-twice">
+<dt><code class="docutils literal notranslate"><span class="pre">concurrency-wait-holding-twice</span> <span class="pre">[streams,</span> <span class="pre">conditions,</span> <span class="pre">concurrency]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A thread that holds the condition of a stream twice waits on it. The wait returns
 for an update, or times out, and the thread then holds the condition twice again.</p>
 </dd>
 </dl>
-<dl class="simple" id="spec-threading-copies-share-condition">
-<dt><code class="docutils literal notranslate"><span class="pre">threading-copies-share-condition</span> <span class="pre">[streams,</span> <span class="pre">conditions,</span> <span class="pre">threads]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Copies of a stream handle share one condition. A thread holds it through each copy
+<dl class="simple" id="spec-concurrency-copies-share-condition">
+<dt><code class="docutils literal notranslate"><span class="pre">concurrency-copies-share-condition</span> <span class="pre">[streams,</span> <span class="pre">conditions,</span> <span class="pre">concurrency]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Copies of a stream handle share one condition. A thread holds it through each copy
 at once, and other threads wait for it until the thread releases both holds.</p>
 </dd>
 </dl>
-<dl class="simple" id="spec-threading-event-shares-condition">
-<dt><code class="docutils literal notranslate"><span class="pre">threading-event-shares-condition</span> <span class="pre">[events,</span> <span class="pre">conditions,</span> <span class="pre">threads]</span> <span class="pre">[MUST]</span></code></dt><dd><p>An event and its stream share one condition. A thread holding it through the event
+<dl class="simple" id="spec-concurrency-event-shares-condition">
+<dt><code class="docutils literal notranslate"><span class="pre">concurrency-event-shares-condition</span> <span class="pre">[events,</span> <span class="pre">conditions,</span> <span class="pre">concurrency]</span> <span class="pre">[MUST]</span></code></dt><dd><p>An event and its stream share one condition. A thread holding it through the event
 keeps other threads from taking it through the stream.</p>
 </dd>
 </dl>
-<dl class="simple" id="spec-threading-release-through-another-handle">
-<dt><code class="docutils literal notranslate"><span class="pre">threading-release-through-another-handle</span> <span class="pre">[events,</span> <span class="pre">conditions,</span> <span class="pre">threads]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A thread lets go of a condition through a handle other than the one it took the
+<dl class="simple" id="spec-concurrency-release-through-another-handle">
+<dt><code class="docutils literal notranslate"><span class="pre">concurrency-release-through-another-handle</span> <span class="pre">[events,</span> <span class="pre">conditions,</span> <span class="pre">concurrency]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A thread lets go of a condition through a handle other than the one it took the
 condition through, which shares the condition: the event’s stream for an event, the
 event for its stream, or a copy of a stream handle. Other threads can then take the
 condition.</p>
@@ -654,45 +653,45 @@ condition.</p>
 </section>
 <section id="removing-and-closing">
 <h2>Removing and Closing<a class="headerlink" href="#removing-and-closing" title="Link to this heading">#</a></h2>
-<dl class="simple" id="spec-threading-remove-while-holding">
-<dt><code class="docutils literal notranslate"><span class="pre">threading-remove-while-holding</span> <span class="pre">[streams,</span> <span class="pre">conditions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A thread holding the condition of a stream removes the stream, while updates for
+<dl class="simple" id="spec-concurrency-remove-while-holding">
+<dt><code class="docutils literal notranslate"><span class="pre">concurrency-remove-while-holding</span> <span class="pre">[streams,</span> <span class="pre">conditions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A thread holding the condition of a stream removes the stream, while updates for
 the stream arrive. A wait by that thread then raises the error for a removed
 stream.</p>
 </dd>
 </dl>
-<dl class="simple" id="spec-threading-remove-event-while-holding">
-<dt><code class="docutils literal notranslate"><span class="pre">threading-remove-event-while-holding</span> <span class="pre">[events,</span> <span class="pre">conditions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A thread holding the condition of an event removes the event, while the event
+<dl class="simple" id="spec-concurrency-remove-event-while-holding">
+<dt><code class="docutils literal notranslate"><span class="pre">concurrency-remove-event-while-holding</span> <span class="pre">[events,</span> <span class="pre">conditions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A thread holding the condition of an event removes the event, while the event
 fires. A wait by that thread then raises the error for a removed stream, at once.</p>
 </dd>
 </dl>
-<dl class="simple" id="spec-threading-close-while-holding">
-<dt><code class="docutils literal notranslate"><span class="pre">threading-close-while-holding</span> <span class="pre">[streams,</span> <span class="pre">conditions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A thread holding the condition of a stream, or the condition for the connection’s
+<dl class="simple" id="spec-concurrency-close-while-holding">
+<dt><code class="docutils literal notranslate"><span class="pre">concurrency-close-while-holding</span> <span class="pre">[streams,</span> <span class="pre">conditions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A thread holding the condition of a stream, or the condition for the connection’s
 updates, closes the connection while updates for the stream arrive. A wait on the
 stream by that thread then raises the connection error, and the stream’s end
 callbacks are called once.</p>
 </dd>
 </dl>
-<dl class="simple" id="spec-threading-wait-holding-another">
-<dt><code class="docutils literal notranslate"><span class="pre">threading-wait-holding-another</span> <span class="pre">[streams,</span> <span class="pre">conditions,</span> <span class="pre">threads]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A thread holding the condition of one stream waits on a second stream. The wait
+<dl class="simple" id="spec-concurrency-wait-holding-another">
+<dt><code class="docutils literal notranslate"><span class="pre">concurrency-wait-holding-another</span> <span class="pre">[streams,</span> <span class="pre">conditions,</span> <span class="pre">concurrency]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A thread holding the condition of one stream waits on a second stream. The wait
 returns on the second stream’s next update, when an update of the first stream
 arrives before it.</p>
 </dd>
 </dl>
-<dl class="simple" id="spec-threading-wake-waiter-holding-another">
-<dt><code class="docutils literal notranslate"><span class="pre">threading-wake-waiter-holding-another</span> <span class="pre">[streams,</span> <span class="pre">conditions,</span> <span class="pre">threads]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A close or a failure of the connection wakes two threads: one waiting on a stream
-while it holds the condition of a second stream, and one waiting on that second
-stream. Both waits raise the connection error. The wait on the second stream raises
-once the first thread lets go of its condition.</p>
+<dl class="simple" id="spec-concurrency-wake-waiter-holding-another">
+<dt><code class="docutils literal notranslate"><span class="pre">concurrency-wake-waiter-holding-another</span> <span class="pre">[streams,</span> <span class="pre">conditions,</span> <span class="pre">concurrency]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A close or a failure of the connection wakes two waits: one on a stream, made while
+holding the condition of a second stream, and one on that second stream. Both waits
+raise the connection error. The wait on the second stream raises once the task holding
+its condition lets go of it.</p>
 </dd>
 </dl>
-<dl class="simple" id="spec-threading-wake-update-waiter">
-<dt><code class="docutils literal notranslate"><span class="pre">threading-wake-update-waiter</span> <span class="pre">[streams,</span> <span class="pre">conditions,</span> <span class="pre">threads]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A close or a failure of the connection wakes a thread waiting for an update while
+<dl class="simple" id="spec-concurrency-wake-update-waiter">
+<dt><code class="docutils literal notranslate"><span class="pre">concurrency-wake-update-waiter</span> <span class="pre">[streams,</span> <span class="pre">conditions,</span> <span class="pre">concurrency]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A close or a failure of the connection wakes a thread waiting for an update while
 it holds the condition of a stream. The wait returns or raises the connection error,
 and a read of the stream then raises the connection error.</p>
 </dd>
 </dl>
-<dl class="simple" id="spec-threading-interrupted-wait">
-<dt><code class="docutils literal notranslate"><span class="pre">threading-interrupted-wait</span> <span class="pre">[streams,</span> <span class="pre">events,</span> <span class="pre">threads]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Interrupting a thread that waits on a stream or an event, such as with
+<dl class="simple" id="spec-concurrency-interrupted-wait">
+<dt><code class="docutils literal notranslate"><span class="pre">concurrency-interrupted-wait</span> <span class="pre">[streams,</span> <span class="pre">events,</span> <span class="pre">concurrency]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Interrupting a thread that waits on a stream or an event, such as with
 <code class="docutils literal notranslate"><span class="pre">Thread.interrupt</span></code> in Java, ends the wait with an error. The stream or event runs
 on.</p>
 </dd>
@@ -700,81 +699,81 @@ on.</p>
 </section>
 <section id="callbacks-and-conditions">
 <h2>Callbacks and Conditions<a class="headerlink" href="#callbacks-and-conditions" title="Link to this heading">#</a></h2>
-<dl class="simple" id="spec-threading-remove-callback-while-holding">
-<dt><code class="docutils literal notranslate"><span class="pre">threading-remove-callback-while-holding</span> <span class="pre">[streams,</span> <span class="pre">callbacks,</span> <span class="pre">conditions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A thread holding the condition of a stream removes a callback of the stream,
+<dl class="simple" id="spec-concurrency-remove-callback-while-holding">
+<dt><code class="docutils literal notranslate"><span class="pre">concurrency-remove-callback-while-holding</span> <span class="pre">[streams,</span> <span class="pre">callbacks,</span> <span class="pre">conditions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A thread holding the condition of a stream removes a callback of the stream,
 while updates for the stream arrive. The remove returns, and a later wait returns for
 the next update.</p>
 </dd>
 </dl>
-<dl class="simple" id="spec-threading-close-while-callback-waits">
-<dt><code class="docutils literal notranslate"><span class="pre">threading-close-while-callback-waits</span> <span class="pre">[streams,</span> <span class="pre">callbacks,</span> <span class="pre">conditions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A thread holding the condition of a stream closes the connection, while a
+<dl class="simple" id="spec-concurrency-close-while-callback-waits">
+<dt><code class="docutils literal notranslate"><span class="pre">concurrency-close-while-callback-waits</span> <span class="pre">[streams,</span> <span class="pre">callbacks,</span> <span class="pre">conditions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A thread holding the condition of a stream closes the connection, while a
 callback of another stream waits to take that condition. The stream held can be one
 the client removed. The close returns, and the connection is closed.</p>
 </dd>
 </dl>
-<dl class="simple" id="spec-threading-add-callback-while-callback-waits">
-<dt><code class="docutils literal notranslate"><span class="pre">threading-add-callback-while-callback-waits</span> <span class="pre">[streams,</span> <span class="pre">callbacks,</span> <span class="pre">conditions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A thread holding the condition of a stream adds a callback to another stream,
+<dl class="simple" id="spec-concurrency-add-callback-while-callback-waits">
+<dt><code class="docutils literal notranslate"><span class="pre">concurrency-add-callback-while-callback-waits</span> <span class="pre">[streams,</span> <span class="pre">callbacks,</span> <span class="pre">conditions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A thread holding the condition of a stream adds a callback to another stream,
 while a callback of that stream waits to take the condition. The add returns.</p>
 </dd>
 </dl>
 </section>
 <section id="callback-threads">
 <h2>Callback Threads<a class="headerlink" href="#callback-threads" title="Link to this heading">#</a></h2>
-<dl class="simple" id="spec-threading-callbacks-run-off-the-caller">
-<dt><code class="docutils literal notranslate"><span class="pre">threading-callbacks-run-off-the-caller</span> <span class="pre">[streams,</span> <span class="pre">callbacks,</span> <span class="pre">threads]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Callbacks for stream updates run on a thread of the client, and never on a thread
+<dl class="simple" id="spec-concurrency-callbacks-run-off-the-caller">
+<dt><code class="docutils literal notranslate"><span class="pre">concurrency-callbacks-run-off-the-caller</span> <span class="pre">[streams,</span> <span class="pre">callbacks,</span> <span class="pre">concurrency]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Callbacks for stream updates run on a thread of the client, and never on a thread
 that makes calls. The first call of a callback, with the value the stream already
 has, may run on the thread that adds it.</p>
 </dd>
 </dl>
-<dl class="simple" id="spec-threading-first-call-waits">
-<dt><code class="docutils literal notranslate"><span class="pre">threading-first-call-waits</span> <span class="pre">[streams,</span> <span class="pre">callbacks]</span> <span class="pre">[MUST]</span></code></dt><dd><p>The first call of a callback can wait for a later update of its stream. The wait
+<dl class="simple" id="spec-concurrency-first-call-waits">
+<dt><code class="docutils literal notranslate"><span class="pre">concurrency-first-call-waits</span> <span class="pre">[streams,</span> <span class="pre">callbacks]</span> <span class="pre">[MUST]</span></code></dt><dd><p>The first call of a callback can wait for a later update of its stream. The wait
 returns, whether the call runs on the thread that adds the callback or on a thread of
 the client.</p>
 </dd>
 </dl>
-<dl class="simple" id="spec-threading-blocked-callback">
-<dt><code class="docutils literal notranslate"><span class="pre">threading-blocked-callback</span> <span class="pre">[streams,</span> <span class="pre">callbacks,</span> <span class="pre">threads]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Calls return, and reads of a stream return its latest value, while a callback
+<dl class="simple" id="spec-concurrency-blocked-callback">
+<dt><code class="docutils literal notranslate"><span class="pre">concurrency-blocked-callback</span> <span class="pre">[streams,</span> <span class="pre">callbacks,</span> <span class="pre">concurrency]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Calls return, and reads of a stream return its latest value, while a callback
 blocks. Waits and other callbacks can stall. The callback is passed the latest value
 once it returns.</p>
 </dd>
 </dl>
-<dl class="simple" id="spec-threading-callback-one-thread-at-a-time">
-<dt><code class="docutils literal notranslate"><span class="pre">threading-callback-one-thread-at-a-time</span> <span class="pre">[streams,</span> <span class="pre">callbacks]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A callback never runs on two threads at once.</p>
+<dl class="simple" id="spec-concurrency-callback-one-call-at-a-time">
+<dt><code class="docutils literal notranslate"><span class="pre">concurrency-callback-one-call-at-a-time</span> <span class="pre">[streams,</span> <span class="pre">callbacks]</span> <span class="pre">[MUST]</span></code></dt><dd><p>The calls of a callback never overlap.</p>
 </dd>
 </dl>
-<dl class="simple" id="spec-threading-close-during-first-call">
-<dt><code class="docutils literal notranslate"><span class="pre">threading-close-during-first-call</span> <span class="pre">[streams,</span> <span class="pre">callbacks,</span> <span class="pre">threads,</span> <span class="pre">races]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Closing the connection returns while an update of a stream waits for the first
+<dl class="simple" id="spec-concurrency-close-during-first-call">
+<dt><code class="docutils literal notranslate"><span class="pre">concurrency-close-during-first-call</span> <span class="pre">[streams,</span> <span class="pre">callbacks,</span> <span class="pre">concurrency,</span> <span class="pre">races]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Closing the connection returns while an update of a stream waits for the first
 call of a callback to finish.</p>
 </dd>
 </dl>
-<dl class="simple" id="spec-threading-update-callback-after-close">
-<dt><code class="docutils literal notranslate"><span class="pre">threading-update-callback-after-close</span> <span class="pre">[streams,</span> <span class="pre">callbacks,</span> <span class="pre">threads,</span> <span class="pre">races]</span> <span class="pre">[MUST]</span></code></dt><dd><p>An update callback is not called once the connection is closed, though the update
+<dl class="simple" id="spec-concurrency-update-callback-after-close">
+<dt><code class="docutils literal notranslate"><span class="pre">concurrency-update-callback-after-close</span> <span class="pre">[streams,</span> <span class="pre">callbacks,</span> <span class="pre">concurrency,</span> <span class="pre">races]</span> <span class="pre">[MUST]</span></code></dt><dd><p>An update callback is not called once the connection is closed, though the update
 arrived before the close.</p>
 </dd>
 </dl>
 </section>
 <section id="calls-from-callbacks">
 <h2>Calls From Callbacks<a class="headerlink" href="#calls-from-callbacks" title="Link to this heading">#</a></h2>
-<dl class="simple" id="spec-threading-call-from-a-callback">
-<dt><code class="docutils literal notranslate"><span class="pre">threading-call-from-a-callback</span> <span class="pre">[streams,</span> <span class="pre">callbacks]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A callback makes a call, which returns its result.</p>
+<dl class="simple" id="spec-concurrency-call-from-a-callback">
+<dt><code class="docutils literal notranslate"><span class="pre">concurrency-call-from-a-callback</span> <span class="pre">[streams,</span> <span class="pre">callbacks]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A callback makes a call, which returns its result.</p>
 </dd>
 </dl>
-<dl class="simple" id="spec-threading-remove-stream-from-callback">
-<dt><code class="docutils literal notranslate"><span class="pre">threading-remove-stream-from-callback</span> <span class="pre">[streams,</span> <span class="pre">callbacks]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A callback removes the stream it is called for. The remove returns, and a read of
+<dl class="simple" id="spec-concurrency-remove-stream-from-callback">
+<dt><code class="docutils literal notranslate"><span class="pre">concurrency-remove-stream-from-callback</span> <span class="pre">[streams,</span> <span class="pre">callbacks]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A callback removes the stream it is called for. The remove returns, and a read of
 the stream then raises the error for a removed stream.</p>
 </dd>
 </dl>
-<dl class="simple" id="spec-threading-remove-callback-from-itself">
-<dt><code class="docutils literal notranslate"><span class="pre">threading-remove-callback-from-itself</span> <span class="pre">[streams,</span> <span class="pre">callbacks]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A callback removes itself, and is not called again.</p>
+<dl class="simple" id="spec-concurrency-remove-callback-from-itself">
+<dt><code class="docutils literal notranslate"><span class="pre">concurrency-remove-callback-from-itself</span> <span class="pre">[streams,</span> <span class="pre">callbacks]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A callback removes itself, and is not called again.</p>
 </dd>
 </dl>
-<dl class="simple" id="spec-threading-close-from-a-callback">
-<dt><code class="docutils literal notranslate"><span class="pre">threading-close-from-a-callback</span> <span class="pre">[streams,</span> <span class="pre">callbacks]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A callback closes the connection, from its first call or a later one. The end
+<dl class="simple" id="spec-concurrency-close-from-a-callback">
+<dt><code class="docutils literal notranslate"><span class="pre">concurrency-close-from-a-callback</span> <span class="pre">[streams,</span> <span class="pre">callbacks]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A callback closes the connection, from its first call or a later one. The end
 callbacks of the stream are called.</p>
 </dd>
 </dl>
-<dl class="simple" id="spec-threading-close-from-an-end-callback">
-<dt><code class="docutils literal notranslate"><span class="pre">threading-close-from-an-end-callback</span> <span class="pre">[streams,</span> <span class="pre">callbacks]</span> <span class="pre">[MUST]</span></code></dt><dd><p>An end callback closes the connection, whether the stream was removed or ended
+<dl class="simple" id="spec-concurrency-close-from-an-end-callback">
+<dt><code class="docutils literal notranslate"><span class="pre">concurrency-close-from-an-end-callback</span> <span class="pre">[streams,</span> <span class="pre">callbacks]</span> <span class="pre">[MUST]</span></code></dt><dd><p>An end callback closes the connection, whether the stream was removed or ended
 with an error. The end callbacks of the other streams are called.</p>
 </dd>
 </dl>
@@ -841,7 +840,7 @@ with an error. The end callbacks of the other streams are called.</p>
   <div class="sidebar-secondary-item">
 
   <div class="tocsection sourcelink">
-    <a href="../_sources/client-spec/threading.rst.txt">
+    <a href="../_sources/client-spec/concurrency.rst.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>
