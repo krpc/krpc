@@ -23,12 +23,14 @@ py_console_script_binary(
 
 # Produces a :requirements.update run target that resolves requirements.in
 # into requirements_lock.txt, and a :requirements_test diff test that checks
-# the lock file is up to date.
+# the lock file is up to date. The lock file is resolved on Linux, as some
+# packages depend on others only on Windows.
 compile_pip_requirements(
     name = "requirements",
     src = "requirements.in",
     requirements_txt = "requirements_lock.txt",
     tags = ["requires-network"],
+    target_compatible_with = ["@platforms//os:linux"],
 )
 
 py_ruff_test(
