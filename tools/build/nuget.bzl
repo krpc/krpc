@@ -4,8 +4,7 @@
 load("@rules_dotnet//dotnet/private:providers.bzl", "DotnetAssemblyRuntimeInfo")  # buildifier: disable=bzl-visibility
 
 _NUGET_FRAMEWORK_NAMES = {
-    "net45": ".NETFramework4.5",
-    "net472": ".NETFramework4.7.2",
+    "netstandard2.0": ".NETStandard2.0",
 }
 
 def _nuget_package_out(id, version):
@@ -39,11 +38,6 @@ def _nuget_package_impl(ctx):
         nuspec_contents.append('  <license type="expression">%s</license>' % ctx.attr.license)
         nuspec_contents.append("  <licenseUrl>https://licenses.nuget.org/%s</licenseUrl>" % ctx.attr.license)
     nuspec_contents.extend([
-        "  <frameworkAssemblies>",
-    ])
-    nuspec_contents.extend(['    <frameworkAssembly assemblyName="%s" targetFramework="%s"/>' % (x, ctx.attr.framework) for x in ctx.attr.framework_deps])
-    nuspec_contents.extend([
-        "  </frameworkAssemblies>",
         "  <dependencies>",
         '    <group targetFramework="%s">' % _NUGET_FRAMEWORK_NAMES[ctx.attr.framework],
     ])
@@ -134,14 +128,13 @@ nuget_package = rule(
     attrs = {
         "id": attr.string(mandatory = True),
         "assembly": attr.label(providers = [DotnetAssemblyRuntimeInfo]),
-        "framework": attr.string(default = "net45", values = _NUGET_FRAMEWORK_NAMES.keys()),
+        "framework": attr.string(default = "netstandard2.0", values = _NUGET_FRAMEWORK_NAMES.keys()),
         "version": attr.string(mandatory = True),
         "author": attr.string(mandatory = True),
         "project_url": attr.string(),
         "license": attr.string(),
         "readme": attr.label(allow_single_file = [".md"]),
         "description": attr.string(mandatory = True),
-        "framework_deps": attr.string_list(),
         "deps": attr.string_dict(),
         "_write_zip": attr.label(
             default = Label("//tools/build:write_zip"),

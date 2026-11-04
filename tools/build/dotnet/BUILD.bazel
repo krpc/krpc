@@ -3,14 +3,15 @@ load("@rules_dotnet//dotnet:defs.bzl", "import_dll", "import_library")
 package(default_visibility = ["//visibility:public"])
 
 # NuGet library DLLs, pinned as http_archives in MODULE.bazel. Targets built
-# for modern .NET (net10.0) use the plain-named imports; net472 builds of the
-# client use the netstandard2.0/net462 assets below. The mod itself uses the
-# assets in //tools/build/ksp, which are pinned to versions compatible with
-# KSP's version of Unity.
+# for modern .NET (net10.0) use the plain-named imports. The client library,
+# built for netstandard2.0, uses Google.Protobuf.netstandard2.0. The mod itself
+# uses the assets in //tools/build/ksp, which are pinned to versions compatible
+# with KSP's version of Unity.
 
 import_dll(
     name = "Google.Protobuf",
     dll = "@csharp_protobuf//:lib/net8.0/Google.Protobuf.dll",
+    version = "3.36.2",
 )
 
 import_dll(
@@ -33,21 +34,19 @@ import_dll(
     dll = "@csharp_options//:lib/NDesk.Options.dll",
 )
 
-# Assets for the net472 build of the client library
-
-import_dll(
+# Google.Protobuf for the netstandard2.0 client library. It compiles against the
+# netstandard2.0 asset, with the System.Memory and Unsafe references that asset
+# needs. It runs on the net8.0 asset, the one NuGet gives a .NET 10 program.
+import_library(
     name = "Google.Protobuf.netstandard2.0",
-    dll = "@csharp_protobuf//:lib/netstandard2.0/Google.Protobuf.dll",
-)
-
-import_dll(
-    name = "System.Memory",
-    dll = "@csharp_system_memory//:lib/net462/System.Memory.dll",
-)
-
-import_dll(
-    name = "System.Runtime.CompilerServices.Unsafe",
-    dll = "@csharp_system_runtime_compilerservices_unsafe//:lib/net462/System.Runtime.CompilerServices.Unsafe.dll",
+    library_name = "Google.Protobuf",
+    libs = ["@csharp_protobuf//:lib/net8.0/Google.Protobuf.dll"],
+    refs = [
+        "@csharp_protobuf//:lib/netstandard2.0/Google.Protobuf.dll",
+        "@csharp_system_memory//:lib/netstandard2.0/System.Memory.dll",
+        "@csharp_system_runtime_compilerservices_unsafe//:lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll",
+    ],
+    version = "3.36.2",
 )
 
 # The runtime assembly of System.IO.Ports is the build for the target RID, and on Linux needs

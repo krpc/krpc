@@ -243,7 +243,7 @@ http_archive(
 
 http_archive(
     name = "csharp_system_memory",
-    build_file_content = "exports_files(['lib/net462/System.Memory.dll'])",
+    build_file_content = "exports_files(['lib/netstandard2.0/System.Memory.dll'])",
     sha256 = "26078aeb758c9ae985e8bf851f973026061da6a5eb4837204d0c2d2204c72955",
     type = "zip",
     url = "https://www.nuget.org/api/v2/package/System.Memory/4.6.3",
@@ -259,7 +259,7 @@ http_archive(
 
 http_archive(
     name = "csharp_system_runtime_compilerservices_unsafe",
-    build_file_content = "exports_files(['lib/net462/System.Runtime.CompilerServices.Unsafe.dll'])",
+    build_file_content = "exports_files(['lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll'])",
     sha256 = "5f6a7f53af3465f92beb6da873ebe0e496206c313313b98badee4355a6b25937",
     type = "zip",
     url = "https://www.nuget.org/api/v2/package/System.Runtime.CompilerServices.Unsafe/6.1.2",
