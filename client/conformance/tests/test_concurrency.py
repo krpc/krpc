@@ -2,7 +2,7 @@
 
 Each command runs on a named task of the testee, a thread or an async task, and Client.start
 sends one without waiting for its reply. A test can have one task wait or call while another
-removes or closes.
+removes or closes. In an async client, each thread in these requirements is an async task.
 """
 
 import threading
@@ -58,9 +58,8 @@ section("Calls")
 
 
 @profile("concurrency")
-def test_calls_on_several_threads(connected):
-    """Calls made from several threads on one connection each return their own
-    result."""
+def test_concurrent_calls(connected):
+    """Concurrent calls on one connection each return their own result."""
     calls = [
         (i, connected.start("caller%d" % (i % 4), invoke=to_string(i)))
         for i in range(40)
@@ -71,9 +70,8 @@ def test_calls_on_several_threads(connected):
 
 @profile("concurrency")
 def test_interleaved_calls(client, server, scripted_server):
-    """A call on one thread writes its request while a call on another thread waits for
-    its response. Each call returns its own result, in whichever order the responses
-    arrive."""
+    """One call writes its request while another call waits for its response. Each call
+    returns its own result, in whichever order the responses arrive."""
     # The server answers a client's requests in order, so a scripted server holds both
     # requests, then answers the second call before the first
     requests = []
@@ -110,8 +108,8 @@ def test_interleaved_calls(client, server, scripted_server):
 
 
 @profile("streams", "concurrency")
-def test_streams_added_on_several_threads(connected, control, request):
-    """Streams added from several threads at once are each registered."""
+def test_concurrent_stream_adds(connected, control, request):
+    """Streams added concurrently are each registered."""
     names = ["%s%d" % (name(request), i) for i in range(4)]
     adds = [
         connected.start(
@@ -132,8 +130,8 @@ def test_streams_added_on_several_threads(connected, control, request):
 
 @profile("concurrency")
 def test_close_with_a_call_in_flight(connected):
-    """A thread closes the connection while another thread waits for a response. The
-    waiting call raises the connection error."""
+    """The program closes the connection while a call waits for a response. The waiting
+    call raises the connection error."""
     slow = connected.start("slow", invoke=block(5000))
     time.sleep(SETTLE)
     start = time.perf_counter()
@@ -569,10 +567,10 @@ def test_wait_holding_another(connected, control, request):
 @profile("streams", "conditions", "concurrency")
 @pytest.mark.parametrize("end", ["close", "connection-failure"])
 def test_wake_waiter_holding_another(connected, control, request, end):
-    """A close or a failure of the connection wakes two threads: one waiting on a stream
-    while it holds the condition of a second stream, and one waiting on that second
-    stream. Both waits raise the connection error. The wait on the second stream raises
-    once the first thread lets go of its condition."""
+    """A close or a failure of the connection wakes two waits: one on a stream, made while
+    holding the condition of a second stream, and one on that second stream. Both waits
+    raise the connection error. The wait on the second stream raises once the task holding
+    its condition lets go of it."""
     held = watched(connected, name(request) + "held")
     waited = watched(connected, name(request) + "waited")
     held.get()
@@ -789,8 +787,8 @@ def test_blocked_callback(connected, control, request):
 
 @profile("streams", "callbacks")
 @timing
-def test_callback_one_thread_at_a_time(connected, request):
-    """A callback never runs on two threads at once."""
+def test_callback_one_call_at_a_time(connected, request):
+    """The calls of a callback never overlap."""
     stream = counter(connected, name(request))
     callback = stream.add_callback(pb.Behavior(sleep=0.05, report_return=True))
     notifications = callback.wait_for(lambda xs: len(xs) >= 10)

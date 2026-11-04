@@ -801,7 +801,7 @@ def test_wait_timeout_values(connected, control, request, timeout):
 
 @profile("streams", "concurrency")
 def test_two_waiters(connected, control, request):
-    """Two threads waiting on one stream both return on its next update."""
+    """Two waits on one stream both return on its next update."""
     stream = watched(connected, name(request))
     stream.get()
     first = connected.start("first", wait=pb.Wait(stream=stream.handle))
@@ -815,8 +815,8 @@ def test_two_waiters(connected, control, request):
 @profile("streams", "concurrency")
 @pytest.mark.parametrize("end", ["remove", "close", "connection-failure"])
 def test_wake_waiter(connected, control, request, end):
-    """A thread waiting on a stream wakes when the stream is removed, the connection closes
-    or the connection fails. The wait raises the error for a removed stream, or the
+    """A wait on a stream ends when the stream is removed, the connection closes or the
+    connection fails. The wait raises the error for a removed stream, or the
     connection error, with the reason for a failure."""
     stream = watched(connected, name(request))
     stream.get()
@@ -1075,7 +1075,7 @@ def test_callback_error(connected, control, request):
 @profile("streams", "callbacks", "concurrency")
 def test_callback_fatal_error(connected, control, request):
     """An error of the kind the language keeps apart from its ordinary exceptions, such as
-    an ``Error`` in Java, raised by a callback running on a thread of the client, leaves the
+    an ``Error`` in Java, raised by a callback the client runs in the background, leaves the
     other callbacks and streams running."""
     raising = watched(connected, name(request) + "raising")
     # The first call can run on the thread that adds the callback

@@ -418,7 +418,7 @@ def start_wait(fixture, task):
 
 @profile("events", "concurrency")
 def test_two_waiters(fixture):
-    """Two threads waiting on one event both return when it fires."""
+    """Two waits on one event both return when it fires."""
     first = start_wait(fixture, "first")
     second = start_wait(fixture, "second")
     time.sleep(SETTLE)
@@ -430,8 +430,8 @@ def test_two_waiters(fixture):
 @profile("events", "concurrency")
 @pytest.mark.parametrize("end", ["remove", "close", "connection-failure"])
 def test_wake_waiter(fixture, request, end):
-    """A thread waiting on an event wakes when the event is removed, the connection closes
-    or the connection fails. The wait raises the error for a removed stream, or the
+    """A wait on an event ends when the event is removed, the connection closes or the
+    connection fails. The wait raises the error for a removed stream, or the
     connection error, with the reason for a failure."""
     waiting = start_wait(fixture, "waiter")
     time.sleep(SETTLE)
