@@ -2102,6 +2102,13 @@ the number of parameters, or if a parameter cannot take its argument.</p>
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Connection.compile(KRPC.Expression)">
+<a class="reference internal" href="java/api/krpc/krpc.html#krpc.client.services.KRPC.KRPC" title="krpc.client.services.KRPC.KRPC"><span class="pre">KRPC</span></a><span class="pre">.</span><a class="reference internal" href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression" title="krpc.client.services.KRPC.Expression"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">compile</span></span><span class="sig-paren">(</span><a class="reference internal" href="java/api/krpc/krpc.html#krpc.client.services.KRPC.KRPC" title="krpc.client.services.KRPC.KRPC"><span class="pre">KRPC</span></a><span class="pre">.</span><a class="reference internal" href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression" title="krpc.client.services.KRPC.Expression"><span class="pre">Expression</span></a><em> <span class="pre">function</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Connection.compile(KRPC.Expression)" title="Link to this definition">#</a></dt>
+<dd><p>Compiles a server side function on the server, so that its first run is as fast as later
+ones, and returns the function.</p>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.Connection.addEvent(KRPC.Expression)">
 <a class="reference internal" href="#krpc.client.Event" title="krpc.client.Event"><span class="pre">Event</span></a> <span class="sig-name descname"><span class="pre">addEvent</span></span><span class="sig-paren">(</span><a class="reference internal" href="java/api/krpc/krpc.html#krpc.client.services.KRPC.KRPC" title="krpc.client.services.KRPC.KRPC"><span class="pre">KRPC</span></a><span class="pre">.</span><a class="reference internal" href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression" title="krpc.client.services.KRPC.Expression"><span class="pre">Expression</span></a><em> <span class="pre">function</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Connection.addEvent(KRPC.Expression)" title="Link to this definition">#</a></dt>
 <dd><p>Creates an event from a server side function that evaluates to a boolean value, and returns

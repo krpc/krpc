@@ -62,6 +62,9 @@ Core
 
 * :breaking:`Breaking` Encode a stream or an event as the ``uint64`` id of its stream (:issue:`1266`)
 * :breaking:`Breaking` Remove the ``Stream`` and ``Event`` messages (:issue:`1266`)
+* Add ``internal`` to the ``Procedure`` message (:issue:`1269`)
+* Mark the stream, event and server side function procedures of the ``KRPC`` service as internal (:issue:`1269`)
+* :breaking:`Breaking` Reject a service that holds a stream or an event anywhere but a return value, or a stream returned by a procedure that is not internal (:issue:`1269`)
 
 
 Server
@@ -142,6 +145,8 @@ C-nano client
 * :breaking:`Breaking` Return ``krpc_KRPC_GetStatus`` as ``krpc_KRPC_ServerStatus_t``, whose ``version`` is allocated on the heap (:issue:`1244`)
 * :breaking:`Breaking` Call procedures by the hashed ids, which needs a server of the same version (:issue:`1265`)
 * :breaking:`Breaking` Return a stream or an event as the ``uint64_t`` id of its stream (:issue:`1266`)
+* :breaking:`Breaking` Leave internal procedures out of the services, such as ``krpc_KRPC_AddStream`` (:issue:`1269`)
+* :breaking:`Breaking` Remove server side functions, such as ``krpc_KRPC_RunFunction`` (:issue:`1269`)
 
 
 C# client
@@ -175,6 +180,9 @@ C# client
   * :breaking:`Breaking` Remove the trailing space after ``Server stack trace:`` in an exception's message, and separate its lines with ``\n`` on every platform (:issue:`1172`)
 
 * :breaking:`Breaking` Return ``KRPC.GetStatus`` as the struct ``ServerStatus``, with the settings and statistics under ``Settings`` and ``Statistics`` (:issue:`1244`)
+* :breaking:`Breaking` Leave internal procedures out of the services, such as ``KRPC.AddStream`` (:issue:`1269`)
+* Add ``Connection.Compile`` for a server side function built with the expression API (:issue:`1269`)
+* Add ``EncodingException``, thrown when the server returns null for a value that cannot be null (:issue:`1269`)
 
 
 C++ client
@@ -206,6 +214,9 @@ C++ client
   * :breaking:`Breaking` Add the server stack trace to an exception's message (:issue:`1172`)
 
 * :breaking:`Breaking` Return ``KRPC::get_status`` as the struct ``KRPC::ServerStatus``, whose fields are members, with the settings and statistics under ``settings`` and ``statistics`` (:issue:`1244`)
+* :breaking:`Breaking` Leave internal procedures out of the services, such as ``KRPC::add_stream`` (:issue:`1269`)
+* Add ``krpc::compile`` for a server side function built with the expression API (:issue:`1269`)
+* Raise the exception types of the ``KRPC`` service, such as ``KRPC::InvalidOperationException``, without first creating a ``KRPC`` service object (:issue:`1269`)
 
 
 Java client
@@ -235,6 +246,8 @@ Java client
   * :breaking:`Breaking` Throw ``InvalidOperationException`` as ``IllegalStateException``, and ``ArgumentOutOfRangeException`` as ``IllegalArgumentException`` (:issue:`1172`)
 
 * :breaking:`Breaking` Return ``KRPC.getStatus`` as the struct ``KRPC.ServerStatus``, with the settings and statistics under ``getSettings`` and ``getStatistics`` (:issue:`1244`)
+* :breaking:`Breaking` Leave internal procedures out of the services, such as ``KRPC.addStream`` (:issue:`1269`)
+* Add ``Connection.compile`` for a server side function built with the expression API (:issue:`1269`)
 
 
 Lua client
@@ -245,6 +258,8 @@ Lua client
 * Tell the server when the connection closes (:issue:`1219`)
 * :breaking:`Breaking` Return ``get_status`` as a struct, with the settings and statistics under ``settings`` and ``statistics`` (:issue:`1244`)
 * :breaking:`Breaking` Return a stream or an event as the id of its stream (:issue:`1266`)
+* :breaking:`Breaking` Leave internal procedures out of the services, such as ``KRPC.add_stream`` (:issue:`1269`)
+* :breaking:`Breaking` Remove server side functions, such as ``KRPC.run_function`` (:issue:`1269`)
 
 
 Python client
@@ -278,6 +293,8 @@ Python client
   * Raise a ``KRPC`` exception as its own class, derived from the builtin it was raised as before, so ``except conn.krpc.ArgumentException`` catches it (:issue:`1172`)
 
 * :breaking:`Breaking` Return ``KRPC.get_status`` as the named tuple ``ServerStatus``, with the settings and statistics under ``settings`` and ``statistics`` (:issue:`1244`)
+* :breaking:`Breaking` Leave internal procedures out of the services, such as ``KRPC.add_stream`` (:issue:`1269`)
+* Accept a server side function built with the expression API in ``Client.compile`` (:issue:`1269`)
 
 
 krpctools
@@ -298,6 +315,7 @@ krpctools
 * :breaking:`Breaking` Replace the ``SOURCE`` and ``OUTPUT`` arguments of ``krpc-docgen`` with ``--page`` (:issue:`1252`)
 * Fix ``krpc-docgen`` Java links to a service's own procedures and properties, and to enumeration values (:issue:`1252`)
 * :breaking:`Breaking` Write the Lua API documentation from ``krpc-docgen`` for ``sphinx-lua-ls``, in place of ``sphinxcontrib-luadomain``, with typed signatures (:issue:`1202`)
+* Leave internal procedures out of generated services and API documentation (:issue:`1269`)
 
 
 v0.7.0

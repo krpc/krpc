@@ -583,10 +583,10 @@ deprecated member.</p>
 <p>These requirements apply to a client that builds its stubs from the server’s definitions when it connects.</p>
 <dl class="simple" id="spec-calls-exposed-members">
 <dt><code class="docutils literal notranslate"><span class="pre">calls-exposed-members</span> <span class="pre">[dynamic]</span> <span class="pre">[MUST]</span></code></dt><dd><p>The client exposes exactly the services the server defines, and for each service its
-procedures, properties, classes, enumerations and structures. A client in a language with
-exception types also exposes the service’s exceptions. Each class exposes its methods,
-static methods and properties, including those another service adds, and each enumeration
-its values.</p>
+procedures other than internal ones, properties, classes, enumerations and structures. A
+client in a language with exception types also exposes the service’s exceptions. Each class
+exposes its methods, static methods and properties, including those another service adds,
+and each enumeration its values.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-calls-member-name-case">
@@ -594,6 +594,11 @@ its values.</p>
 underscore goes before each capital that starts a word, where a word starts after a lower
 case letter or a digit, or before the last capital of a run followed by a lower case
 letter. An underscore in the name is doubled.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-calls-internal-procedure">
+<dt><code class="docutils literal notranslate"><span class="pre">calls-internal-procedure</span> <span class="pre">[dynamic]</span> <span class="pre">[MUST]</span></code></dt><dd><p>The client leaves out a procedure the server marks internal. The client library calls
+an internal procedure itself, to implement streams, events and server side functions.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-calls-unknown-type">

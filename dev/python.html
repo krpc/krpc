@@ -2151,7 +2151,9 @@ raises <code class="docutils literal notranslate"><span class="pre">TypeError</s
 <dd><p>Compiles a Python function or lambda into a server side function, a <code class="docutils literal notranslate"><span class="pre">KRPC.Expression</span></code>
 object. A <code class="docutils literal notranslate"><span class="pre">def</span></code> can take parameters, each with a type annotation. Can be used as a
 decorator. Raises <a class="reference internal" href="#krpc.error.FunctionCompilationError" title="krpc.error.FunctionCompilationError"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.error.FunctionCompilationError</span></code></a> for a construct with no
-server side equivalent. See <a class="reference internal" href="#python-client-compiling-functions"><span class="std std-ref">Writing Server Side Functions</span></a>.</p>
+server side equivalent. See <a class="reference internal" href="#python-client-compiling-functions"><span class="std std-ref">Writing Server Side Functions</span></a>. Given a
+<code class="docutils literal notranslate"><span class="pre">KRPC.Expression</span></code> object built with the expression API, compiles it on the server and
+returns it.</p>
 </dd></dl>
 
 <dl class="py method">

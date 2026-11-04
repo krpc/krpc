@@ -2113,6 +2113,13 @@ up to four parameters, with or without a value.</p>
 </dd></dl>
 
 <dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Connection.Compile(KRPC.Client.Services.KRPC.Expression)">
+<a class="reference internal" href="csharp/api/krpc/expressions.html#class-KRPC.Client.Services.KRPC.Expression" title="class: KRPC.Client.Services.KRPC.Expression"><span class="pre">KRPC.Client.Services.KRPC.Expression</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Compile</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference internal" href="csharp/api/krpc/expressions.html#class-KRPC.Client.Services.KRPC.Expression" title="class: KRPC.Client.Services.KRPC.Expression"><span class="pre">KRPC.Client.Services.KRPC.Expression</span></a><span class="w"> </span><span class="n"><span class="pre">function</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Connection.Compile(KRPC.Client.Services.KRPC.Expression)" title="Link to this definition">#</a></dt>
+<dd><p>Compiles a server side function built with the expression API on the server, so that its
+first run is as fast as later ones, and returns the function.</p>
+</dd></dl>
+
+<dl class="cs function">
 <dt class="sig sig-object cs" id="function-KRPC.Client.Connection.GetCall">
 <span id="function-KRPC.Client.Connection.GetCall<TResult>(Expression<Func<TResult>>)"></span><span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="pre">KRPC.Schema.KRPC.ProcedureCall</span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetCall</span></span><span class="p"><span class="pre">&lt;</span></span><span class="pre">TResult</span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Linq.Expressions.Expression-1" title="type: msdn ~&gt; System.Linq.Expressions.Expression"><span class="pre">Expression</span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Func-1" title="type: msdn ~&gt; System.Func"><span class="pre">Func</span></a><span class="p"><span class="pre">&lt;</span></span><span class="pre">TResult</span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n"><span class="pre">expression</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Connection.GetCall" title="Link to this definition">#</a></dt>
 <dd><p>Converts a lambda expression that makes one remote procedure call into a
@@ -2309,6 +2316,12 @@ connection has closed or failed.</p>
 <dt class="sig sig-object cs" id="class-KRPC.Client.RPCException">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">RPCException</span></span><a class="headerlink" href="#class-KRPC.Client.RPCException" title="Link to this definition">#</a></dt>
 <dd><p>Thrown for an error from the server that the client has no exception class for.</p>
+</dd></dl>
+
+<dl class="cs class">
+<dt class="sig sig-object cs" id="class-KRPC.Client.EncodingException">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">EncodingException</span></span><a class="headerlink" href="#class-KRPC.Client.EncodingException" title="Link to this definition">#</a></dt>
+<dd><p>Thrown when the server returns null for a value that cannot be null.</p>
 </dd></dl>
 
 <dl class="cs class">

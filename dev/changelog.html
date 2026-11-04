@@ -540,6 +540,9 @@
 </li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Encode a stream or an event as the <code class="docutils literal notranslate"><span class="pre">uint64</span></code> id of its stream (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1266">#1266</a>)</p></li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Remove the <code class="docutils literal notranslate"><span class="pre">Stream</span></code> and <code class="docutils literal notranslate"><span class="pre">Event</span></code> messages (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1266">#1266</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">internal</span></code> to the <code class="docutils literal notranslate"><span class="pre">Procedure</span></code> message (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1269">#1269</a>)</p></li>
+<li><p>Mark the stream, event and server side function procedures of the <code class="docutils literal notranslate"><span class="pre">KRPC</span></code> service as internal (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1269">#1269</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Reject a service that holds a stream or an event anywhere but a return value, or a stream returned by a procedure that is not internal (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1269">#1269</a>)</p></li>
 </ul>
 </section>
 <section id="server">
@@ -621,6 +624,8 @@
 <li><p><span class="changelog-marker breaking">Breaking</span> Return <code class="docutils literal notranslate"><span class="pre">krpc_KRPC_GetStatus</span></code> as <code class="docutils literal notranslate"><span class="pre">krpc_KRPC_ServerStatus_t</span></code>, whose <code class="docutils literal notranslate"><span class="pre">version</span></code> is allocated on the heap (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1244">#1244</a>)</p></li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Call procedures by the hashed ids, which needs a server of the same version (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1265">#1265</a>)</p></li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Return a stream or an event as the <code class="docutils literal notranslate"><span class="pre">uint64_t</span></code> id of its stream (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1266">#1266</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Leave internal procedures out of the services, such as <code class="docutils literal notranslate"><span class="pre">krpc_KRPC_AddStream</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1269">#1269</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Remove server side functions, such as <code class="docutils literal notranslate"><span class="pre">krpc_KRPC_RunFunction</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1269">#1269</a>)</p></li>
 </ul>
 </section>
 <section id="c-client">
@@ -657,6 +662,9 @@
 </ul>
 </li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Return <code class="docutils literal notranslate"><span class="pre">KRPC.GetStatus</span></code> as the struct <code class="docutils literal notranslate"><span class="pre">ServerStatus</span></code>, with the settings and statistics under <code class="docutils literal notranslate"><span class="pre">Settings</span></code> and <code class="docutils literal notranslate"><span class="pre">Statistics</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1244">#1244</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Leave internal procedures out of the services, such as <code class="docutils literal notranslate"><span class="pre">KRPC.AddStream</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1269">#1269</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Connection.Compile</span></code> for a server side function built with the expression API (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1269">#1269</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">EncodingException</span></code>, thrown when the server returns null for a value that cannot be null (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1269">#1269</a>)</p></li>
 </ul>
 </section>
 <section id="id1">
@@ -691,6 +699,9 @@
 </ul>
 </li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Return <code class="docutils literal notranslate"><span class="pre">KRPC::get_status</span></code> as the struct <code class="docutils literal notranslate"><span class="pre">KRPC::ServerStatus</span></code>, whose fields are members, with the settings and statistics under <code class="docutils literal notranslate"><span class="pre">settings</span></code> and <code class="docutils literal notranslate"><span class="pre">statistics</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1244">#1244</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Leave internal procedures out of the services, such as <code class="docutils literal notranslate"><span class="pre">KRPC::add_stream</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1269">#1269</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">krpc::compile</span></code> for a server side function built with the expression API (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1269">#1269</a>)</p></li>
+<li><p>Raise the exception types of the <code class="docutils literal notranslate"><span class="pre">KRPC</span></code> service, such as <code class="docutils literal notranslate"><span class="pre">KRPC::InvalidOperationException</span></code>, without first creating a <code class="docutils literal notranslate"><span class="pre">KRPC</span></code> service object (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1269">#1269</a>)</p></li>
 </ul>
 </section>
 <section id="java-client">
@@ -723,6 +734,8 @@
 </ul>
 </li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Return <code class="docutils literal notranslate"><span class="pre">KRPC.getStatus</span></code> as the struct <code class="docutils literal notranslate"><span class="pre">KRPC.ServerStatus</span></code>, with the settings and statistics under <code class="docutils literal notranslate"><span class="pre">getSettings</span></code> and <code class="docutils literal notranslate"><span class="pre">getStatistics</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1244">#1244</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Leave internal procedures out of the services, such as <code class="docutils literal notranslate"><span class="pre">KRPC.addStream</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1269">#1269</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Connection.compile</span></code> for a server side function built with the expression API (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1269">#1269</a>)</p></li>
 </ul>
 </section>
 <section id="lua-client">
@@ -733,6 +746,8 @@
 <li><p>Tell the server when the connection closes (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1219">#1219</a>)</p></li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Return <code class="docutils literal notranslate"><span class="pre">get_status</span></code> as a struct, with the settings and statistics under <code class="docutils literal notranslate"><span class="pre">settings</span></code> and <code class="docutils literal notranslate"><span class="pre">statistics</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1244">#1244</a>)</p></li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Return a stream or an event as the id of its stream (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1266">#1266</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Leave internal procedures out of the services, such as <code class="docutils literal notranslate"><span class="pre">KRPC.add_stream</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1269">#1269</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Remove server side functions, such as <code class="docutils literal notranslate"><span class="pre">KRPC.run_function</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1269">#1269</a>)</p></li>
 </ul>
 </section>
 <section id="python-client">
@@ -769,6 +784,8 @@
 </ul>
 </li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Return <code class="docutils literal notranslate"><span class="pre">KRPC.get_status</span></code> as the named tuple <code class="docutils literal notranslate"><span class="pre">ServerStatus</span></code>, with the settings and statistics under <code class="docutils literal notranslate"><span class="pre">settings</span></code> and <code class="docutils literal notranslate"><span class="pre">statistics</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1244">#1244</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Leave internal procedures out of the services, such as <code class="docutils literal notranslate"><span class="pre">KRPC.add_stream</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1269">#1269</a>)</p></li>
+<li><p>Accept a server side function built with the expression API in <code class="docutils literal notranslate"><span class="pre">Client.compile</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1269">#1269</a>)</p></li>
 </ul>
 </section>
 <section id="krpctools">
@@ -789,6 +806,7 @@
 <li><p><span class="changelog-marker breaking">Breaking</span> Replace the <code class="docutils literal notranslate"><span class="pre">SOURCE</span></code> and <code class="docutils literal notranslate"><span class="pre">OUTPUT</span></code> arguments of <code class="docutils literal notranslate"><span class="pre">krpc-docgen</span></code> with <code class="docutils literal notranslate"><span class="pre">--page</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1252">#1252</a>)</p></li>
 <li><p>Fix <code class="docutils literal notranslate"><span class="pre">krpc-docgen</span></code> Java links to a service’s own procedures and properties, and to enumeration values (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1252">#1252</a>)</p></li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Write the Lua API documentation from <code class="docutils literal notranslate"><span class="pre">krpc-docgen</span></code> for <code class="docutils literal notranslate"><span class="pre">sphinx-lua-ls</span></code>, in place of <code class="docutils literal notranslate"><span class="pre">sphinxcontrib-luadomain</span></code>, with typed signatures (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1202">#1202</a>)</p></li>
+<li><p>Leave internal procedures out of generated services and API documentation (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1269">#1269</a>)</p></li>
 </ul>
 </section>
 </section>

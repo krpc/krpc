@@ -1204,7 +1204,7 @@ different values, give it parameters, as in <a class="reference internal" href="
 <code class="docutils literal notranslate"><span class="pre">Run</span></code> is compiled there on every call, on the game’s main thread, so a large one can make the game
 stutter.</p>
 <p>Compile a function before it is needed, such as before launch, and every run is fast. For a
-function built with the expression API, <code class="docutils literal notranslate"><span class="pre">KRPC.CompileFunction</span></code> compiles it on the
+function built with the expression API, the client’s <code class="docutils literal notranslate"><span class="pre">compile</span></code> function compiles it on the
 server.</p>
 </section>
 </section>
@@ -1220,15 +1220,14 @@ static methods of the <a class="reference internal" href="../python/api/krpc/exp
 evaluations are fast.</p>
 <p>Each node is a constant, an embedded remote procedure call, an operator, a statement or a nested
 function. Statements are assignments, loops and if statements.</p>
-<p>Three RPCs consume these trees:</p>
+<p>You use a tree in one of three ways:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">AddEvent</span></code> takes a function that evaluates to a boolean, and returns an event. The server
-evaluates the function on each stream update, and triggers the event when it returns true.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">AddFunctionStream</span></code> takes a function whose value can be sent to a client, such as a number,
-a string, a collection or an object. It returns a stream of the value, recomputed on each
-stream update.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">RunFunction</span></code> evaluates a function once, within a single physics tick, and returns its
-value. Use it for a function with side effects.</p></li>
+<li><p>An event, from a function that evaluates to a boolean. The server evaluates the function on
+each stream update, and triggers the event when it returns true.</p></li>
+<li><p>A stream, from a function whose value can be sent to a client, such as a number, a string, a
+collection or an object. The value is recomputed on each stream update.</p></li>
+<li><p>A run, which evaluates a function once, within a single physics tick, and returns its value.
+Use it for a function with side effects.</p></li>
 </ul>
 <p>Two rules hold for every server side function:</p>
 <ul class="simple">

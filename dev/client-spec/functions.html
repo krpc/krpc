@@ -555,6 +555,16 @@ other, and reading the removed one raises the error for a removed stream.</p>
 </section>
 <section id="events">
 <h2>Events<a class="headerlink" href="#events" title="Link to this heading">#</a></h2>
+<dl class="simple" id="spec-functions-null-stream-id">
+<dt><code class="docutils literal notranslate"><span class="pre">functions-null-stream-id</span> <span class="pre">[functions,</span> <span class="pre">streams]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A null result for the call that adds a stream of a function raises the encoding
+error. The next call succeeds.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-functions-null-event">
+<dt><code class="docutils literal notranslate"><span class="pre">functions-null-event</span> <span class="pre">[events,</span> <span class="pre">functions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A null result for the call that adds an event over a function raises the encoding
+error. The next call succeeds.</p>
+</dd>
+</dl>
 <dl class="simple" id="spec-functions-add-event">
 <dt><code class="docutils literal notranslate"><span class="pre">functions-add-event</span> <span class="pre">[events,</span> <span class="pre">functions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>An event added with <code class="docutils literal notranslate"><span class="pre">KRPC.AddEvent</span></code>, over a server side function, fires.</p>
 </dd>
@@ -567,6 +577,11 @@ other.</p>
 </section>
 <section id="running">
 <h2>Running<a class="headerlink" href="#running" title="Link to this heading">#</a></h2>
+<dl class="simple" id="spec-functions-compile">
+<dt><code class="docutils literal notranslate"><span class="pre">functions-compile</span> <span class="pre">[functions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Compiling a function built with the expression API calls <code class="docutils literal notranslate"><span class="pre">KRPC.CompileFunction</span></code> with
+it.</p>
+</dd>
+</dl>
 <dl class="simple" id="spec-functions-run">
 <dt><code class="docutils literal notranslate"><span class="pre">functions-run</span> <span class="pre">[functions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Running a function passes the arguments to its parameters in order, and returns
 its value.</p>
@@ -582,6 +597,23 @@ arrive intact.</p>
 <dt><code class="docutils literal notranslate"><span class="pre">functions-run-a-call</span> <span class="pre">[functions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>The client builds a function that makes a call with <code class="docutils literal notranslate"><span class="pre">KRPC.Expression.Call</span></code>, from
 the same call it builds for a stream of the procedure. Running the function returns the
 call’s result.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-functions-call-member-kinds">
+<dt><code class="docutils literal notranslate"><span class="pre">functions-call-member-kinds</span> <span class="pre">[functions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>The client builds the call for a stream of each kind of member: a procedure, a
+property, a class method, a class property and a static method. A function that makes
+the call with <code class="docutils literal notranslate"><span class="pre">KRPC.Expression.Call</span></code> returns the member’s value.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-functions-call-with-arguments">
+<dt><code class="docutils literal notranslate"><span class="pre">functions-call-with-arguments</span> <span class="pre">[functions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>The client passes the call it builds for a stream to
+<code class="docutils literal notranslate"><span class="pre">KRPC.Expression.CallWithArguments</span></code>. A position with a function takes the function’s
+value, and a position without one takes the argument encoded in the call.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-functions-call-with-a-call-argument">
+<dt><code class="docutils literal notranslate"><span class="pre">functions-call-with-a-call-argument</span> <span class="pre">[functions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A function the client builds over one call computes an argument of another call. Here
+the instance of a class method is computed by a call that creates the object.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-functions-run-error">

@@ -544,6 +544,11 @@ service property, a method, a static method, a class property, and a member anot
 service adds to a class.</p>
 </dd>
 </dl>
+<dl class="simple" id="spec-streams-null-stream-id">
+<dt><code class="docutils literal notranslate"><span class="pre">streams-null-stream-id</span> <span class="pre">[streams]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A null result for the call that adds a stream raises the encoding error. The next
+call succeeds.</p>
+</dd>
+</dl>
 <dl class="simple" id="spec-streams-procedure-without-a-value">
 <dt><code class="docutils literal notranslate"><span class="pre">streams-procedure-without-a-value</span> <span class="pre">[streams,</span> <span class="pre">dynamic]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Streaming a procedure that returns no value, such as a property setter, raises the
 stream error.</p>
