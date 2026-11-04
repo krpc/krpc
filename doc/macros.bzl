@@ -35,6 +35,7 @@ def cc_binary_multiple(name, srcs, deps, target_compatible_with = None):
         srcs = names,
         target_compatible_with = target_compatible_with,
     )
+    return [":" + subname for subname in names]
 
 # buildifier: disable=function-docstring
 def java_binary_multiple(name, srcs, deps, copts):

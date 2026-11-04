@@ -6,28 +6,25 @@
 #include <unistd.h>
 #endif
 #include <krpc_cnano.h>
-#include <krpc_cnano/services/space_center.h>
 #include <krpc_cnano/services/infernal_robotics.h>
+#include <krpc_cnano/services/space_center.h>
 
 int main() {
   krpc_connection_t conn;
-  if (krpc_open_serial(&conn, "COM0") != KRPC_OK)
-    return 1;
-  if (krpc_connect(conn, "InfernalRobotics Example") != KRPC_OK)
-    return 1;
+  if (krpc_open_serial(&conn, "COM0") != KRPC_OK) return 1;
+  if (krpc_connect(conn, "InfernalRobotics Example") != KRPC_OK) return 1;
   krpc_SpaceCenter_Vessel_t vessel;
   krpc_SpaceCenter_ActiveVessel(conn, &vessel);
 
   krpc_InfernalRobotics_ServoGroup_t group;
   krpc_InfernalRobotics_ServoGroupWithName(conn, &group, vessel, "MyGroup");
-  if (!group)
-    printf("Group not found\n");
+  if (!group) printf("Group not found\n");
 
   krpc_list_object_t servos = KRPC_NULL_LIST;
   krpc_InfernalRobotics_ServoGroup_Servos(conn, &servos, group);
   for (size_t i = 0; i < servos.size; i++) {
     krpc_InfernalRobotics_Servo_t servo = servos.items[i];
-    char * name = NULL;
+    char* name = NULL;
     krpc_InfernalRobotics_Servo_Name(conn, &name, servo);
     float position;
     krpc_InfernalRobotics_Servo_Position(conn, &position, servo);

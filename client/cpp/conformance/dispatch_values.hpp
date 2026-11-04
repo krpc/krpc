@@ -176,6 +176,7 @@ inline const Value& not_null(const Value& value) {
   if (value.value_case() == Value::kNull) throw Unsupported("The client's type cannot hold null");
   return value;
 }
+const Value& not_null(Value&&) = delete;
 
 // The conversion of each kind of value, as a tag type: the client's type for the value, and
 // an arg and a result function. The generated dispatch composes them for a collection, and
@@ -370,16 +371,16 @@ StreamHandle result_stream(krpc::Stream<T> stream, F convert) {
     const auto* other_stream = std::any_cast<std::shared_ptr<krpc::Stream<T>>>(&other);
     return other_stream != nullptr && *shared == **other_stream;
   };
-  handle.add_callback = [shared, convert](std::function<void(const Value&)> callback) {
+  handle.add_callback = [shared, convert](const std::function<void(const Value&)>& callback) {
     if constexpr (std::is_void_v<T>) {
       (void)convert;
       return shared->add_callback([callback]() { callback(result_none()); });
     } else {
-      return shared->add_callback([convert, callback](T x) { callback(convert(x)); });
+      return shared->add_callback([convert, callback](const T& x) { callback(convert(x)); });
     }
   };
   handle.remove_callback = [shared](int tag) { shared->remove_callback(tag); };
-  handle.add_end_callback = [shared](std::function<void(std::exception_ptr)> callback) {
+  handle.add_end_callback = [shared](const std::function<void(std::exception_ptr)>& callback) {
     return shared->add_end_callback(callback);
   };
   handle.remove_end_callback = [shared](int tag) { shared->remove_end_callback(tag); };

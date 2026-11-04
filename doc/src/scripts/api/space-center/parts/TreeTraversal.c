@@ -3,10 +3,8 @@
 
 int main() {
   krpc_connection_t conn;
-  if (krpc_open_serial(&conn, "COM0") != KRPC_OK)
-    return 1;
-  if (krpc_connect(conn, "") != KRPC_OK)
-    return 1;
+  if (krpc_open_serial(&conn, "COM0") != KRPC_OK) return 1;
+  if (krpc_connect(conn, "") != KRPC_OK) return 1;
   krpc_SpaceCenter_Vessel_t vessel;
   krpc_SpaceCenter_ActiveVessel(conn, &vessel);
 
@@ -28,10 +26,9 @@ int main() {
     krpc_SpaceCenter_Part_t part = stack[stackPtr].part;
     int depth = stack[stackPtr].depth;
     stackPtr--;  // Pop the stack
-    char * title = NULL;
+    char* title = NULL;
     krpc_SpaceCenter_Part_Title(conn, &title, part);
-    for (int i = 0; i < depth; i++)
-      printf(" ");
+    for (int i = 0; i < depth; i++) printf(" ");
     printf("%s\n", title);
 
     krpc_list_object_t children = KRPC_NULL_LIST;
@@ -40,7 +37,7 @@ int main() {
       // Push onto the stack
       stackPtr++;
       stack[stackPtr].part = children.items[i];
-      stack[stackPtr].depth = depth+1;
+      stack[stackPtr].depth = depth + 1;
     }
   }
 }

@@ -96,7 +96,7 @@ class Testee {
       *reply.mutable_error() = to_error(exn);
     }
     Output message;
-    *message.mutable_reply() = reply;
+    *message.mutable_reply() = std::move(reply);
     write(message);
   }
 
@@ -140,12 +140,10 @@ class Testee {
       case Command::kDecode:
         *reply->mutable_value() = codec(command.decode().type()).decode(command.decode().data());
         break;
+      // The stubs are compiled from the service definitions
       case Command::kMembers:
-        // The stubs are compiled from the service definitions
-        reply->mutable_value()->set_null(true);
-        break;
+      // C has no hash
       case Command::kHash:
-        // C has no hash
         reply->mutable_value()->set_null(true);
         break;
       case Command::kObjectId:

@@ -1,5 +1,4 @@
 #include <iostream>
-
 #include <krpc.hpp>
 #include <krpc/services/krpc.hpp>
 
@@ -11,13 +10,13 @@ int main() {
     krpc::connect("consumer test", "127.0.0.1", 1);
     std::cout << "opened a connection to a port nothing should be listening on" << std::endl;
     return 1;
-  } catch (const std::exception&) {
+  } catch (const std::exception&) {  // NOLINT(bugprone-empty-catch)
   }
   try {
     krpc::connect_local("consumer test", "/nonexistent/krpc-consumer-test.sock");
     std::cout << "opened a connection to a socket nothing should be listening on" << std::endl;
     return 1;
-  } catch (const std::exception&) {
+  } catch (const std::exception&) {  // NOLINT(bugprone-empty-catch)
   }
   std::cout << "krpc library linked OK" << std::endl;
   return 0;

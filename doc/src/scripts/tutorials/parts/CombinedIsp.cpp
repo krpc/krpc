@@ -1,7 +1,7 @@
 #include <iostream>
-#include <vector>
 #include <krpc.hpp>
 #include <krpc/services/space_center.hpp>
+#include <vector>
 
 using SpaceCenter = krpc::services::SpaceCenter;
 
@@ -14,8 +14,7 @@ int main() {
 
   std::vector<SpaceCenter::Engine> active_engines;
   for (auto engine : engines)
-    if (engine.active() && engine.has_fuel())
-      active_engines.push_back(engine);
+    if (engine.active() && engine.has_fuel()) active_engines.push_back(engine);
 
   std::cout << "Active engines:" << std::endl;
   for (auto engine : active_engines)

@@ -166,6 +166,14 @@ cc_binary(
     deps = [":krpc"],
 )
 
+# The program the CMake and vcpkg CI scripts build against the installed package, built here
+# so that it is linted
+cc_binary(
+    name = "test-consumer",
+    srcs = ["test-consumer/main.cpp"],
+    deps = [":krpc"],
+)
+
 # The conformance tests, driving the client through its testee
 cc_binary(
     name = "conformance-testee",
@@ -229,22 +237,28 @@ conformance_test(
 clang_tidy_test(
     name = "clangtidy",
     size = "large",
-    srcs = srcs,
-    copts = [
-        "-std=c++17",
-        "-stdlib=libc++",
-        "-Wno-unused-command-line-argument",
+    programs = [
+        ":benchmark",
+        ":conformance-testee",
+        ":cpptest",
+        ":test-consumer",
+        ":unit",
     ],
-    deps = [":krpc"],
+    targets = [
+        ":krpc",
+        ":krpc-race-points",
+    ],
 )
 
 clang_format_test(
     name = "clangformat",
     size = "small",
     srcs = glob([
+        "benchmark/*.cpp",
         "conformance/*.cpp",
         "conformance/*.hpp",
         "src/*.cpp",
+        "test-consumer/*.cpp",
         "include/**/*.hpp",
         "test/**/*.cpp",
         "test/**/*.hpp",

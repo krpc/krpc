@@ -1,10 +1,10 @@
 #include <iostream>
-#include <optional>
-#include <vector>
-#include <thread>
 #include <krpc.hpp>
-#include <krpc/services/space_center.hpp>
 #include <krpc/services/infernal_robotics.hpp>
+#include <krpc/services/space_center.hpp>
+#include <optional>
+#include <thread>
+#include <vector>
 
 using SpaceCenter = krpc::services::SpaceCenter;
 using InfernalRobotics = krpc::services::InfernalRobotics;
@@ -15,7 +15,8 @@ int main() {
   InfernalRobotics infernal_robotics(&conn);
 
   std::optional<InfernalRobotics::ServoGroup> group =
-    infernal_robotics.servo_group_with_name(space_center.active_vessel().value(), "MyGroup");
+      infernal_robotics.servo_group_with_name(
+          space_center.active_vessel().value(), "MyGroup");
   if (!group.has_value()) {
     std::cout << "Group not found" << std::endl;
     return 1;

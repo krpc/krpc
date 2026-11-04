@@ -5,18 +5,16 @@
 #else
 #include <unistd.h>
 #endif
-#include <math.h>
 #include <krpc_cnano.h>
 #include <krpc_cnano/services/space_center.h>
+#include <math.h>
 
 typedef krpc_tuple_double_double_double_t vector3;
 
 int main() {
   krpc_connection_t conn;
-  if (krpc_open_serial(&conn, "COM0") != KRPC_OK)
-    return 1;
-  if (krpc_connect(conn, "Orbital directions") != KRPC_OK)
-    return 1;
+  if (krpc_open_serial(&conn, "COM0") != KRPC_OK) return 1;
+  if (krpc_connect(conn, "Orbital directions") != KRPC_OK) return 1;
 
   krpc_SpaceCenter_Vessel_t vessel;
   krpc_SpaceCenter_ActiveVessel(conn, &vessel);
@@ -30,21 +28,21 @@ int main() {
 
   // Point the vessel in the prograde direction
   {
-    krpc_tuple_double_double_double_t direction = { 0, 1, 0 };
+    krpc_tuple_double_double_double_t direction = {0, 1, 0};
     krpc_SpaceCenter_AutoPilot_set_TargetDirection(conn, ap, &direction);
     krpc_SpaceCenter_AutoPilot_Wait(conn, ap, -1);
   }
 
   // Point the vessel in the orbit normal direction
   {
-    krpc_tuple_double_double_double_t direction = { 0, 0, 1 };
+    krpc_tuple_double_double_double_t direction = {0, 0, 1};
     krpc_SpaceCenter_AutoPilot_set_TargetDirection(conn, ap, &direction);
     krpc_SpaceCenter_AutoPilot_Wait(conn, ap, -1);
   }
 
   // Point the vessel in the orbit radial direction
   {
-    krpc_tuple_double_double_double_t direction = { -1, 0, 0 };
+    krpc_tuple_double_double_double_t direction = {-1, 0, 0};
     krpc_SpaceCenter_AutoPilot_set_TargetDirection(conn, ap, &direction);
     krpc_SpaceCenter_AutoPilot_Wait(conn, ap, -1);
   }

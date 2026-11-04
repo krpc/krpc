@@ -1,8 +1,8 @@
 #include <chrono>
 #include <iostream>
-#include <thread>
 #include <krpc.hpp>
 #include <krpc/services/space_center.hpp>
+#include <thread>
 
 void check_abort1(bool x) {
   std::cout << "Abort 1 called with a value of " << x << std::endl;
@@ -22,6 +22,5 @@ int main() {
   abort.add_callback(check_abort2);
 
   // Keep the program running, while the callbacks are called
-  while (true)
-    std::this_thread::sleep_for(std::chrono::seconds(1));
+  while (true) std::this_thread::sleep_for(std::chrono::seconds(1));
 }

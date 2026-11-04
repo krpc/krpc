@@ -504,7 +504,7 @@ vertical speed reaches zero when it lands:
 
       .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cpp
          :language: cpp
-         :start-at: while (vessel.flight(vessel.orbit().body().reference_frame()).vertical_speed() < -0.1) {
+         :start-at: auto body_frame = vessel.orbit().body().reference_frame();
          :end-at: std::cout << "Landed!" << std::endl;
 
    .. group-tab:: C

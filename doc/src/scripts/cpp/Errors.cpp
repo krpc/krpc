@@ -1,8 +1,8 @@
 #include <iostream>
-#include <stdexcept>
 #include <krpc.hpp>
 #include <krpc/services/krpc.hpp>
 #include <krpc/services/space_center.hpp>
+#include <stdexcept>
 
 int main() {
   auto conn = krpc::connect();

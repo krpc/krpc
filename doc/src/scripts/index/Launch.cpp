@@ -17,8 +17,9 @@ int main() {
   std::cout << vessel.name() << " has launched" << std::endl;
 
   typedef krpc::services::KRPC::Expression Expr;
-  auto expr = Expr::greater_than(
-    conn, Expr::call(conn, flight.mean_altitude_call()), Expr::constant_double(conn, 10000));
+  auto expr =
+      Expr::greater_than(conn, Expr::call(conn, flight.mean_altitude_call()),
+                         Expr::constant_double(conn, 10000));
   auto event = krpc::add_event(expr);
   event.acquire();
   event.wait();

@@ -3,10 +3,8 @@
 
 int main() {
   krpc_connection_t conn;
-  if (krpc_open_serial(&conn, "COM0") != KRPC_OK)
-    return 1;
-  if (krpc_connect(conn, "") != KRPC_OK)
-    return 1;
+  if (krpc_open_serial(&conn, "COM0") != KRPC_OK) return 1;
+  if (krpc_connect(conn, "") != KRPC_OK) return 1;
   krpc_SpaceCenter_Vessel_t vessel;
   krpc_SpaceCenter_ActiveVessel(conn, &vessel);
   krpc_SpaceCenter_Flight_t flight;

@@ -1,8 +1,8 @@
-#include <iostream>
 #include <iomanip>
-#include <thread>
+#include <iostream>
 #include <krpc.hpp>
 #include <krpc/services/space_center.hpp>
+#include <thread>
 
 int main() {
   krpc::Client conn = krpc::connect("Vessel speed");
