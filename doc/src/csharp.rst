@@ -13,7 +13,8 @@ Installing the Library
 
 The library is a NuGet package, available from `nuget.org
 <https://www.nuget.org/packages/KRPC.Client>`_ or `downloaded from GitHub
-<https://github.com/krpc/krpc/releases>`_. It requires .NET Framework 4.7.2 or later.
+<https://github.com/krpc/krpc/releases>`_. It targets .NET Standard 2.0, and runs on .NET 5 or
+later, .NET Core 2.0 or later, .NET Framework 4.7.2 or later, and Mono.
 
 To install using the .NET CLI:
 

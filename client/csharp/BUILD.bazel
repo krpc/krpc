@@ -29,7 +29,7 @@ nuget_package(
     assembly = ":KRPC.Client",
     author = author,
     description = "C# client for kRPC",
-    framework = "net472",
+    framework = "netstandard2.0",
     id = "KRPC.Client",
     license = "LGPL-3.0-or-later",
     project_url = "https://github.com/krpc/krpc",
@@ -57,12 +57,6 @@ srcs = glob(["src/**/*.cs"]) + [
     "//protobuf:csharp",
 ] + services
 
-deps = [
-    "//tools/build/dotnet:Google.Protobuf.netstandard2.0",
-    "//tools/build/dotnet:System.Memory",
-    "//tools/build/dotnet:System.Runtime.CompilerServices.Unsafe",
-]
-
 # The test assemblies, which reach the internals of the client: the function compiler, the
 # type specs and the endpoint a unix domain socket is named by are not part of its public API.
 test_assemblies = [
@@ -74,40 +68,11 @@ csharp_library(
     name = "KRPC.Client",
     srcs = srcs,
     internals_visible_to = test_assemblies,
-    # CS1702: Google.Protobuf references an older System.Memory than the one
-    # supplied; assembly unification handles this at runtime (MSBuild
-    # suppresses this warning by default)
-    nowarn = [
-        "CS1685",
-        "CS1702",
-    ],
-    target_frameworks = ["net472"],
+    target_frameworks = ["netstandard2.0"],
     treat_warnings_as_errors = True,
     visibility = ["//visibility:public"],
     warning_level = 4,
-    deps = deps,
-)
-
-# net10.0 build of the client, for the unit tests. A separate target rather
-# than a multi-targeted KRPC.Client so that the default build flavor staged
-# into the nupkg stays net472.
-csharp_library(
-    name = "KRPC.Client.net10",
-    srcs = srcs,
-    out = "KRPC.Client",
-    internals_visible_to = test_assemblies,
-    # CS1701: Google.Protobuf's net5.0 build references net5-era framework
-    # assemblies; unification handles this at runtime (MSBuild suppresses
-    # this warning by default)
-    nowarn = [
-        "CS1685",
-        "CS1701",
-    ],
-    target_frameworks = ["net10.0"],
-    treat_warnings_as_errors = True,
-    visibility = ["//visibility:public"],
-    warning_level = 4,
-    deps = ["//tools/build/dotnet:Google.Protobuf"],
+    deps = ["//tools/build/dotnet:Google.Protobuf.netstandard2.0"],
 )
 
 test_suite(
@@ -168,7 +133,7 @@ test_nowarn = [
 ]
 
 test_deps = [
-    ":KRPC.Client.net10",
+    ":KRPC.Client",
     "//tools/build/dotnet:Google.Protobuf",
 ]
 
@@ -229,7 +194,7 @@ csharp_binary(
     target_frameworks = ["net10.0"],
     visibility = ["//tools/benchmarks:__pkg__"],
     deps = [
-        ":KRPC.Client.net10",
+        ":KRPC.Client",
         "//tools/build/dotnet:Google.Protobuf",
     ],
 )
@@ -253,7 +218,7 @@ csharp_binary(
     ],
     target_frameworks = ["net10.0"],
     deps = [
-        ":KRPC.Client.net10",
+        ":KRPC.Client",
         "//tools/build/dotnet:Google.Protobuf",
     ],
 )
