@@ -150,7 +150,7 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
 
 
-.. staticmethod:: add_stream(call: krpc.schema.ProcedureCall): krpc.schema.Stream
+.. staticmethod:: add_stream(call: krpc.schema.ProcedureCall): number
 
    Add a streaming request and return its identifier.
 
@@ -164,7 +164,7 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
 
 
-.. staticmethod:: add_function_stream(function: KRPC.Expression): krpc.schema.Stream
+.. staticmethod:: add_function_stream(function: KRPC.Expression): number
 
    Add a stream of the value a server side function computes on each update.
 
@@ -178,7 +178,7 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
 
 
-.. staticmethod:: add_event(function: KRPC.Expression): krpc.schema.Event
+.. staticmethod:: add_event(function: KRPC.Expression): number
 
    Create an event from a server side function that evaluates to a boolean value.
 

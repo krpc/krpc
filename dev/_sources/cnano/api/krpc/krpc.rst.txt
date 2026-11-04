@@ -164,7 +164,7 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
 
 
-.. function:: krpc_error_t krpc_KRPC_AddStream(krpc_connection_t connection, krpc_schema_Stream * returnValue, const krpc_schema_ProcedureCall * call)
+.. function:: krpc_error_t krpc_KRPC_AddStream(krpc_connection_t connection, uint64_t * returnValue, const krpc_schema_ProcedureCall * call)
 
    Add a streaming request and return its identifier.
 
@@ -183,7 +183,7 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
 
 
-.. function:: krpc_error_t krpc_KRPC_AddFunctionStream(krpc_connection_t connection, krpc_schema_Stream * returnValue, krpc_KRPC_Expression_t function)
+.. function:: krpc_error_t krpc_KRPC_AddFunctionStream(krpc_connection_t connection, uint64_t * returnValue, krpc_KRPC_Expression_t function)
 
    Add a stream of the value a server side function computes on each update.
 
@@ -202,7 +202,7 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
 
 
-.. function:: krpc_error_t krpc_KRPC_AddEvent(krpc_connection_t connection, krpc_schema_Event * returnValue, krpc_KRPC_Expression_t function)
+.. function:: krpc_error_t krpc_KRPC_AddEvent(krpc_connection_t connection, uint64_t * returnValue, krpc_KRPC_Expression_t function)
 
    Create an event from a server side function that evaluates to a boolean value.
 

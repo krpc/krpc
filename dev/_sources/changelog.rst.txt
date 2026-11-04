@@ -60,6 +60,8 @@ Core
   * Add ``KRPCProcedureId`` to set the id of a procedure a class inherits (:issue:`1265`)
   * Add ``id`` to the ``Service`` and ``Procedure`` messages that ``KRPC.GetServices`` returns (:issue:`1265`)
 
+* :breaking:`Breaking` Encode a stream or an event as the ``uint64`` id of its stream (:issue:`1266`)
+* :breaking:`Breaking` Remove the ``Stream`` and ``Event`` messages (:issue:`1266`)
 
 
 Server
@@ -139,6 +141,7 @@ C-nano client
 * Fix the documentation of the services that Doxygen warns about, such as code holding an ``@`` (:issue:`1185`)
 * :breaking:`Breaking` Return ``krpc_KRPC_GetStatus`` as ``krpc_KRPC_ServerStatus_t``, whose ``version`` is allocated on the heap (:issue:`1244`)
 * :breaking:`Breaking` Call procedures by the hashed ids, which needs a server of the same version (:issue:`1265`)
+* :breaking:`Breaking` Return a stream or an event as the ``uint64_t`` id of its stream (:issue:`1266`)
 
 
 C# client
@@ -161,6 +164,8 @@ C# client
   * :breaking:`Breaking` Throw ``StreamRemovedException`` when reading or waiting on a removed stream or event (:issue:`1219`)
   * :breaking:`Breaking` Wait with no deadline in ``Stream.Wait`` and ``Event.Wait`` by default, or for an infinite timeout, and throw ``ArgumentOutOfRangeException`` for a negative or NaN one (:issue:`1219`)
   * Keep a stream running when a value fails to decode, dropping the value (:issue:`1219`)
+  * :breaking:`Breaking` Return the stream id from ``KRPC.AddStream`` and ``KRPC.AddFunctionStream`` (:issue:`1266`)
+  * :breaking:`Breaking` Take the type code of the return value in ``IConnection.Invoke`` (:issue:`1266`)
 
 * :breaking:`Breaking` Regenerate service stubs generated before 0.7.0, which can miss the first update of a stream or event they return (:issue:`1219`)
 * Fix the links in service documentation, which named no type or member (:issue:`1185`)
@@ -190,6 +195,8 @@ C++ client
   * :breaking:`Breaking` Remove a stream or event from the server when its last copy is destroyed (:issue:`1219`)
   * :breaking:`Breaking` Remove ``Client::remove_stream`` and the ``Stream`` constructor taking a stream id. Remove a stream through its stream object (:issue:`1219`)
   * :breaking:`Breaking` Wait with no deadline in ``Stream::wait`` and ``Event::wait`` by default, or for an infinite timeout, and throw ``std::invalid_argument`` for a negative or NaN one (:issue:`1219`)
+  * :breaking:`Breaking` Return the stream id from ``KRPC::add_stream`` and ``KRPC::add_function_stream`` (:issue:`1266`)
+  * :breaking:`Breaking` Remove ``Client::Returns::event``, as a call that returns an event uses ``Returns::stream`` (:issue:`1266`)
 
 * Fix the documentation of the services that Doxygen warns about, such as parameter names that do not match (:issue:`1185`)
 * Throw ``EncodingError`` when decoding a tuple of the wrong length, which crashed (:issue:`1194`)
@@ -219,6 +226,7 @@ Java client
 
   * :breaking:`Breaking` Throw ``IllegalArgumentException`` from ``waitForUpdateWithTimeout`` and ``waitForWithTimeout`` for a negative or NaN timeout, and wait with no deadline for an infinite one (:issue:`1219`)
   * Keep a stream running when a value fails to decode, dropping the value (:issue:`1219`)
+  * :breaking:`Breaking` Return the stream id from ``KRPC.addStream`` and ``KRPC.addFunctionStream`` (:issue:`1266`)
 
 * Fix the links to members in the javadoc of the services, which named no method (:issue:`1185`)
 * Fix the javadoc of the services that ``javadoc`` rejects, such as lists and setters with a ``@return`` tag (:issue:`1185`)
@@ -236,6 +244,7 @@ Lua client
 * Add a ``handshake_timeout`` parameter to ``connect`` and ``connect_local`` (:issue:`1219`)
 * Tell the server when the connection closes (:issue:`1219`)
 * :breaking:`Breaking` Return ``get_status`` as a struct, with the settings and statistics under ``settings`` and ``statistics`` (:issue:`1244`)
+* :breaking:`Breaking` Return a stream or an event as the id of its stream (:issue:`1266`)
 
 
 Python client
@@ -258,6 +267,7 @@ Python client
   * :breaking:`Breaking` Raise ``ValueError`` from ``Stream.wait`` and ``Event.wait`` for a negative or NaN timeout, and wait with no deadline for an infinite one (:issue:`1219`)
   * Keep a stream running when a value fails to decode, dropping the value (:issue:`1219`)
   * Fix ``Stream.wait`` and ``Event.wait`` returning before the timeout on Windows (:issue:`1220`)
+  * :breaking:`Breaking` Return the stream id from ``KRPC.add_stream`` and ``KRPC.add_function_stream`` (:issue:`1266`)
 
 * Link the references in service docstrings with Sphinx roles (:issue:`1185`)
 * Fix the lists and parameter references in service docstrings, which were invalid reStructuredText (:issue:`1185`)

@@ -129,7 +129,7 @@ KRPC
 
          Increases once a game load, quickload, revert or scene change has finished.
 
-   .. method:: krpc.schema.KRPC.Stream addStream(krpc.schema.KRPC.ProcedureCall call)
+   .. method:: long addStream(krpc.schema.KRPC.ProcedureCall call)
 
       Add a streaming request and return its identifier.
 
@@ -142,7 +142,7 @@ KRPC
          client library instead. Calling this directly while using a client library has
          undefined behavior.
 
-   .. method:: krpc.schema.KRPC.Stream addFunctionStream(Expression function)
+   .. method:: long addFunctionStream(Expression function)
 
       Add a stream of the value a server side function computes on each update.
 

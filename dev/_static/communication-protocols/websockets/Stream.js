@@ -6,7 +6,6 @@ const protobuf = require('protobufjs');
 const root = protobuf.loadSync('krpc.proto');
 const Message = root.lookupType('krpc.schema.Message');
 const ProcedureCall = root.lookupType('krpc.schema.ProcedureCall');
-const Stream = root.lookupType('krpc.schema.Stream');
 const Tuple = root.lookupType('krpc.schema.Tuple');
 
 function send(conn, message) {
@@ -27,7 +26,7 @@ conn.onopen = () => {
   send(conn, {connectionRequest: {clientName: 'Example', protocolVersion: 2}});
 };
 
-let stream = null;
+let streamId = null;
 
 conn.onmessage = (event) => {
   const message = receive(event);
@@ -54,12 +53,14 @@ conn.onmessage = (event) => {
     if (response.results[0].error)
       throw new Error('ERROR: ' + response.results[0].error.description);
 
-    // Decode the return value as a Stream message. The stream's first update follows it.
-    stream = Stream.toObject(Stream.decode(response.results[0].value), {longs: Number});
+    // Decode the return value, which is the stream id as a uint64. The stream's first update
+    // follows it.
+    const id = protobuf.Reader.create(response.results[0].value).uint64();
+    streamId = protobuf.util.longToNumber(id, true);
   } else if (message.streamUpdate) {
     // Decode and print the return value of each stream update
     for (const result of message.streamUpdate.results) {
-      if (result.id === stream.id) {
+      if (result.id === streamId) {
         // The value is a ServerStatus structure sent as a Tuple of its fields. Its fourth field
         // is the server statistics, another structure, whose second field is the number of
         // bytes the server has written.

@@ -174,7 +174,7 @@ Main kRPC service, used by clients to interact with basic server functionality.
    Add a streaming request and return its identifier.
 
    :param krpc.schema.KRPC.ProcedureCall call:
-   :rtype: :class:`krpc.schema.KRPC.Stream`
+   :rtype: int
    
 
    .. note::
@@ -191,7 +191,7 @@ Main kRPC service, used by clients to interact with basic server functionality.
    Add a stream of the value a server side function computes on each update.
 
    :param Expression function:
-   :rtype: :class:`krpc.schema.KRPC.Stream`
+   :rtype: int
    
 
    .. note::

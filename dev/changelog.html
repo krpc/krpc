@@ -539,6 +539,8 @@
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">id</span></code> to the <code class="docutils literal notranslate"><span class="pre">Service</span></code> and <code class="docutils literal notranslate"><span class="pre">Procedure</span></code> messages that <code class="docutils literal notranslate"><span class="pre">KRPC.GetServices</span></code> returns (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1265">#1265</a>)</p></li>
 </ul>
 </li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Encode a stream or an event as the <code class="docutils literal notranslate"><span class="pre">uint64</span></code> id of its stream (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1266">#1266</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Remove the <code class="docutils literal notranslate"><span class="pre">Stream</span></code> and <code class="docutils literal notranslate"><span class="pre">Event</span></code> messages (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1266">#1266</a>)</p></li>
 </ul>
 </section>
 <section id="server">
@@ -619,6 +621,7 @@
 <li><p>Fix the documentation of the services that Doxygen warns about, such as code holding an <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1185">#1185</a>)</p></li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Return <code class="docutils literal notranslate"><span class="pre">krpc_KRPC_GetStatus</span></code> as <code class="docutils literal notranslate"><span class="pre">krpc_KRPC_ServerStatus_t</span></code>, whose <code class="docutils literal notranslate"><span class="pre">version</span></code> is allocated on the heap (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1244">#1244</a>)</p></li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Call procedures by the hashed ids, which needs a server of the same version (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1265">#1265</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Return a stream or an event as the <code class="docutils literal notranslate"><span class="pre">uint64_t</span></code> id of its stream (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1266">#1266</a>)</p></li>
 </ul>
 </section>
 <section id="c-client">
@@ -642,6 +645,8 @@
 <li><p><span class="changelog-marker breaking">Breaking</span> Throw <code class="docutils literal notranslate"><span class="pre">StreamRemovedException</span></code> when reading or waiting on a removed stream or event (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1219">#1219</a>)</p></li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Wait with no deadline in <code class="docutils literal notranslate"><span class="pre">Stream.Wait</span></code> and <code class="docutils literal notranslate"><span class="pre">Event.Wait</span></code> by default, or for an infinite timeout, and throw <code class="docutils literal notranslate"><span class="pre">ArgumentOutOfRangeException</span></code> for a negative or NaN one (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1219">#1219</a>)</p></li>
 <li><p>Keep a stream running when a value fails to decode, dropping the value (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1219">#1219</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Return the stream id from <code class="docutils literal notranslate"><span class="pre">KRPC.AddStream</span></code> and <code class="docutils literal notranslate"><span class="pre">KRPC.AddFunctionStream</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1266">#1266</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Take the type code of the return value in <code class="docutils literal notranslate"><span class="pre">IConnection.Invoke</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1266">#1266</a>)</p></li>
 </ul>
 </li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Regenerate service stubs generated before 0.7.0, which can miss the first update of a stream or event they return (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1219">#1219</a>)</p></li>
@@ -674,6 +679,8 @@
 <li><p><span class="changelog-marker breaking">Breaking</span> Remove a stream or event from the server when its last copy is destroyed (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1219">#1219</a>)</p></li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Remove <code class="docutils literal notranslate"><span class="pre">Client::remove_stream</span></code> and the <code class="docutils literal notranslate"><span class="pre">Stream</span></code> constructor taking a stream id. Remove a stream through its stream object (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1219">#1219</a>)</p></li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Wait with no deadline in <code class="docutils literal notranslate"><span class="pre">Stream::wait</span></code> and <code class="docutils literal notranslate"><span class="pre">Event::wait</span></code> by default, or for an infinite timeout, and throw <code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code> for a negative or NaN one (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1219">#1219</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Return the stream id from <code class="docutils literal notranslate"><span class="pre">KRPC::add_stream</span></code> and <code class="docutils literal notranslate"><span class="pre">KRPC::add_function_stream</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1266">#1266</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Remove <code class="docutils literal notranslate"><span class="pre">Client::Returns::event</span></code>, as a call that returns an event uses <code class="docutils literal notranslate"><span class="pre">Returns::stream</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1266">#1266</a>)</p></li>
 </ul>
 </li>
 <li><p>Fix the documentation of the services that Doxygen warns about, such as parameter names that do not match (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1185">#1185</a>)</p></li>
@@ -706,6 +713,7 @@
 <ul>
 <li><p><span class="changelog-marker breaking">Breaking</span> Throw <code class="docutils literal notranslate"><span class="pre">IllegalArgumentException</span></code> from <code class="docutils literal notranslate"><span class="pre">waitForUpdateWithTimeout</span></code> and <code class="docutils literal notranslate"><span class="pre">waitForWithTimeout</span></code> for a negative or NaN timeout, and wait with no deadline for an infinite one (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1219">#1219</a>)</p></li>
 <li><p>Keep a stream running when a value fails to decode, dropping the value (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1219">#1219</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Return the stream id from <code class="docutils literal notranslate"><span class="pre">KRPC.addStream</span></code> and <code class="docutils literal notranslate"><span class="pre">KRPC.addFunctionStream</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1266">#1266</a>)</p></li>
 </ul>
 </li>
 <li><p>Fix the links to members in the javadoc of the services, which named no method (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1185">#1185</a>)</p></li>
@@ -725,6 +733,7 @@
 <li><p>Add a <code class="docutils literal notranslate"><span class="pre">handshake_timeout</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">connect</span></code> and <code class="docutils literal notranslate"><span class="pre">connect_local</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1219">#1219</a>)</p></li>
 <li><p>Tell the server when the connection closes (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1219">#1219</a>)</p></li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Return <code class="docutils literal notranslate"><span class="pre">get_status</span></code> as a struct, with the settings and statistics under <code class="docutils literal notranslate"><span class="pre">settings</span></code> and <code class="docutils literal notranslate"><span class="pre">statistics</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1244">#1244</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Return a stream or an event as the id of its stream (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1266">#1266</a>)</p></li>
 </ul>
 </section>
 <section id="python-client">
@@ -748,6 +757,7 @@
 <li><p><span class="changelog-marker breaking">Breaking</span> Raise <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> from <code class="docutils literal notranslate"><span class="pre">Stream.wait</span></code> and <code class="docutils literal notranslate"><span class="pre">Event.wait</span></code> for a negative or NaN timeout, and wait with no deadline for an infinite one (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1219">#1219</a>)</p></li>
 <li><p>Keep a stream running when a value fails to decode, dropping the value (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1219">#1219</a>)</p></li>
 <li><p>Fix <code class="docutils literal notranslate"><span class="pre">Stream.wait</span></code> and <code class="docutils literal notranslate"><span class="pre">Event.wait</span></code> returning before the timeout on Windows (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1220">#1220</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Return the stream id from <code class="docutils literal notranslate"><span class="pre">KRPC.add_stream</span></code> and <code class="docutils literal notranslate"><span class="pre">KRPC.add_function_stream</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1266">#1266</a>)</p></li>
 </ul>
 </li>
 <li><p>Link the references in service docstrings with Sphinx roles (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1185">#1185</a>)</p></li>

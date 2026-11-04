@@ -876,14 +876,17 @@ the script, shown under <a class="reference internal" href="tcpip.html"><span cl
 <td><p>The object’s identifier, encoded as a <code class="docutils literal notranslate"><span class="pre">UINT64</span></code>. See
 <a class="reference internal" href="#communication-protocol-proxy-objects"><span class="std std-ref">Proxy Objects</span></a>.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">STRUCT</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">STREAM</span></code>, <code class="docutils literal notranslate"><span class="pre">EVENT</span></code></p></td>
+<td><p>The stream’s identifier, encoded as a <code class="docutils literal notranslate"><span class="pre">UINT64</span></code>. See <a class="reference internal" href="#communication-protocol-streams"><span class="std std-ref">Streams</span></a>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">STRUCT</span></code></p></td>
 <td><p>A <code class="docutils literal notranslate"><span class="pre">Tuple</span></code> message. See <a class="reference internal" href="#communication-protocol-structures"><span class="std std-ref">Structures</span></a>.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TUPLE</span></code>, <code class="docutils literal notranslate"><span class="pre">LIST</span></code>, <code class="docutils literal notranslate"><span class="pre">SET</span></code>, <code class="docutils literal notranslate"><span class="pre">DICTIONARY</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TUPLE</span></code>, <code class="docutils literal notranslate"><span class="pre">LIST</span></code>, <code class="docutils literal notranslate"><span class="pre">SET</span></code>, <code class="docutils literal notranslate"><span class="pre">DICTIONARY</span></code></p></td>
 <td><p>The <code class="docutils literal notranslate"><span class="pre">Tuple</span></code>, <code class="docutils literal notranslate"><span class="pre">List</span></code>, <code class="docutils literal notranslate"><span class="pre">Set</span></code> or <code class="docutils literal notranslate"><span class="pre">Dictionary</span></code> message, with each item encoded according
 to its own type.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">EVENT</span></code>, <code class="docutils literal notranslate"><span class="pre">PROCEDURE_CALL</span></code>, <code class="docutils literal notranslate"><span class="pre">STREAM</span></code>, <code class="docutils literal notranslate"><span class="pre">SERVICES</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PROCEDURE_CALL</span></code>, <code class="docutils literal notranslate"><span class="pre">SERVICES</span></code></p></td>
 <td><p>The serialized message of the same name.</p></td>
 </tr>
 </tbody>
@@ -914,13 +917,8 @@ true. A position that is not nullable is encoded as its value alone, and a null 
 receives the values without a call for each one.</p>
 <p><a class="reference internal" href="#communication-protocol-add-stream"><span class="std std-ref">AddStream</span></a> adds a stream of a remote procedure, and
 <a class="reference internal" href="#communication-protocol-add-function-stream"><span class="std std-ref">AddFunctionStream</span></a> adds a stream of a server side function. Both
-return a <code class="docutils literal notranslate"><span class="pre">Stream</span></code> message, holding the stream’s identifier:</p>
-<div class="highlight-protobuf notranslate"><div class="highlight"><pre><span></span><span class="kd">message</span><span class="w"> </span><span class="nc">Stream</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="kt">uint64</span><span class="w"> </span><span class="na">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-<p>An <a class="reference internal" href="#communication-protocol-events"><span class="std std-ref">event</span></a> is also a stream.</p>
+return a <code class="docutils literal notranslate"><span class="pre">STREAM</span></code> value, which is the stream’s identifier as a <code class="docutils literal notranslate"><span class="pre">UINT64</span></code>. An
+<a class="reference internal" href="#communication-protocol-events"><span class="std std-ref">event</span></a> is also a stream.</p>
 <p>Each stream belongs to the client that created it. <a class="reference internal" href="#communication-protocol-remove-stream"><span class="std std-ref">RemoveStream</span></a>
 removes a stream, and the server removes a client’s streams when the client disconnects.
 Removing a stream, or setting its rate, does nothing once the stream has ended. An identifier the
@@ -949,7 +947,7 @@ changed:</p>
 </div>
 <p>The fields are:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">id</span></code> - The identifier of the stream, from the <code class="docutils literal notranslate"><span class="pre">Stream</span></code> message that added it.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">id</span></code> - The identifier of the stream, from the <code class="docutils literal notranslate"><span class="pre">STREAM</span></code> or <code class="docutils literal notranslate"><span class="pre">EVENT</span></code> value that added it.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">result</span></code> - The result of the stream’s procedure, as the same <code class="docutils literal notranslate"><span class="pre">ProcedureResult</span></code> a call to it
 returns. See <a class="reference internal" href="#communication-protocol-anatomy-of-a-response"><span class="std std-ref">Anatomy of a Response</span></a>.</p></li>
 </ul>
@@ -962,13 +960,9 @@ specification.</p>
 <span id="communication-protocol-events"></span><h2>Events<a class="headerlink" href="#events" title="Link to this heading">#</a></h2>
 <p>An event is a stream of a <code class="docutils literal notranslate"><span class="pre">bool</span></code>, and fires when the stream’s value is true. An event is created
 by <a class="reference internal" href="#communication-protocol-add-event"><span class="std std-ref">AddEvent</span></a>, or by another procedure with an event return type. The
-procedure returns an <code class="docutils literal notranslate"><span class="pre">Event</span></code> message, holding the <code class="docutils literal notranslate"><span class="pre">Stream</span></code> of the event. After its first
-value, the stream holds only firings, as the server sends a value only when the event fires:</p>
-<div class="highlight-protobuf notranslate"><div class="highlight"><pre><span></span><span class="kd">message</span><span class="w"> </span><span class="nc">Event</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="n">Stream</span><span class="w"> </span><span class="na">stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-<span class="p">}</span>
-</pre></div>
-</div>
+procedure returns an <code class="docutils literal notranslate"><span class="pre">EVENT</span></code> value, which is the identifier of the event’s stream as a
+<code class="docutils literal notranslate"><span class="pre">UINT64</span></code>. After its first value, the stream holds only firings, as the server sends a value only
+when the event fires.</p>
 </section>
 <section id="krpc-service">
 <span id="communication-protocol-krpc-service"></span><h2>KRPC Service<a class="headerlink" href="#krpc-service" title="Link to this heading">#</a></h2>
@@ -990,14 +984,14 @@ returns a <code class="docutils literal notranslate"><span class="pre">Services<
 <section id="addstream">
 <span id="communication-protocol-add-stream"></span><h3>AddStream<a class="headerlink" href="#addstream" title="Link to this heading">#</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">AddStream</span></code> procedure adds a stream of a remote procedure. Its argument is the call, as a
-<code class="docutils literal notranslate"><span class="pre">ProcedureCall</span></code> message. See <a class="reference internal" href="#communication-protocol-anatomy-of-a-request"><span class="std std-ref">Anatomy of a Request</span></a>. It returns a
-<code class="docutils literal notranslate"><span class="pre">Stream</span></code> message, described under <a class="reference internal" href="#communication-protocol-streams"><span class="std std-ref">Streams</span></a>.</p>
+<code class="docutils literal notranslate"><span class="pre">ProcedureCall</span></code> message. See <a class="reference internal" href="#communication-protocol-anatomy-of-a-request"><span class="std std-ref">Anatomy of a Request</span></a>. It returns the
+stream’s identifier, described under <a class="reference internal" href="#communication-protocol-streams"><span class="std std-ref">Streams</span></a>.</p>
 </section>
 <section id="addfunctionstream">
 <span id="communication-protocol-add-function-stream"></span><h3>AddFunctionStream<a class="headerlink" href="#addfunctionstream" title="Link to this heading">#</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">AddFunctionStream</span></code> procedure adds a stream that evaluates a server side function on
 each update. Its argument is the function, built using the <code class="docutils literal notranslate"><span class="pre">KRPC.Expression</span></code> class.</p>
-<p>The procedure returns a <code class="docutils literal notranslate"><span class="pre">Stream</span></code> message. The stream’s values have the type given by the
+<p>The procedure returns the stream’s identifier. The stream’s values have the type given by the
 function’s <code class="docutils literal notranslate"><span class="pre">ReturnType</span></code> property. The function must take no parameters. Any exception from the
 function ends the stream with that error.</p>
 </section>
@@ -1006,9 +1000,9 @@ function ends the stream with that error.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">AddEvent</span></code> procedure adds an event that fires when a server side function evaluates to true.
 Its argument is the function, built using the <code class="docutils literal notranslate"><span class="pre">KRPC.Expression</span></code> class. The function must take no
 parameters and return a <code class="docutils literal notranslate"><span class="pre">bool</span></code>.</p>
-<p>The procedure returns an <code class="docutils literal notranslate"><span class="pre">Event</span></code> message. The function is evaluated on each stream update, and
-the event fires on every update it returns true. Any exception from the function ends the event’s
-stream with that error.</p>
+<p>The procedure returns the identifier of the event’s stream. The function is evaluated on each
+stream update, and the event fires on every update it returns true. Any exception from the
+function ends the event’s stream with that error.</p>
 </section>
 <section id="runfunction">
 <span id="communication-protocol-run-function"></span><h3>RunFunction<a class="headerlink" href="#runfunction" title="Link to this heading">#</a></h3>
@@ -1039,7 +1033,7 @@ the stream on every physics tick.</p>
 <span id="communication-protocol-remove-stream"></span><h3>RemoveStream<a class="headerlink" href="#removestream" title="Link to this heading">#</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">RemoveStream</span></code> procedure removes a stream. Its argument is the stream’s identifier, from
 <a class="reference internal" href="#communication-protocol-add-stream"><span class="std std-ref">AddStream</span></a>, <a class="reference internal" href="#communication-protocol-add-function-stream"><span class="std std-ref">AddFunctionStream</span></a> or an
-<code class="docutils literal notranslate"><span class="pre">Event</span></code> message.</p>
+<code class="docutils literal notranslate"><span class="pre">EVENT</span></code> value.</p>
 </section>
 </section>
 <section id="service-description-message">
@@ -1348,7 +1342,7 @@ therefore be used to split the name into its constituent parts.</p>
 <span class="w">    </span><span class="na">ENUMERATION</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">101</span><span class="p">;</span>
 <span class="w">    </span><span class="na">STRUCT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">102</span><span class="p">;</span>
 
-<span class="w">    </span><span class="c1">// Messages</span>
+<span class="w">    </span><span class="c1">// Messages, except an EVENT or STREAM value, which is the uint64 id of its stream</span>
 <span class="w">    </span><span class="na">EVENT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">200</span><span class="p">;</span>
 <span class="w">    </span><span class="na">PROCEDURE_CALL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">201</span><span class="p">;</span>
 <span class="w">    </span><span class="na">STREAM</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">202</span><span class="p">;</span>

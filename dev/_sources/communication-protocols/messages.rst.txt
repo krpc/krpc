@@ -254,12 +254,14 @@ An argument or a return value is encoded according to its
    * - ``CLASS``
      - The object's identifier, encoded as a ``UINT64``. See
        :ref:`communication-protocol-proxy-objects`.
+   * - ``STREAM``, ``EVENT``
+     - The stream's identifier, encoded as a ``UINT64``. See :ref:`communication-protocol-streams`.
    * - ``STRUCT``
      - A ``Tuple`` message. See :ref:`communication-protocol-structures`.
    * - ``TUPLE``, ``LIST``, ``SET``, ``DICTIONARY``
      - The ``Tuple``, ``List``, ``Set`` or ``Dictionary`` message, with each item encoded according
        to its own type.
-   * - ``EVENT``, ``PROCEDURE_CALL``, ``STREAM``, ``SERVICES``
+   * - ``PROCEDURE_CALL``, ``SERVICES``
      - The serialized message of the same name.
 
 .. _communication-protocol-null-values:
@@ -294,14 +296,8 @@ receives the values without a call for each one.
 
 :ref:`communication-protocol-add-stream` adds a stream of a remote procedure, and
 :ref:`communication-protocol-add-function-stream` adds a stream of a server side function. Both
-return a ``Stream`` message, holding the stream's identifier:
-
-.. literalinclude:: /communication-protocols/krpc.proto
-   :language: protobuf
-   :start-at: message Stream {
-   :end-before: message Event {
-
-An :ref:`event <communication-protocol-events>` is also a stream.
+return a ``STREAM`` value, which is the stream's identifier as a ``UINT64``. An
+:ref:`event <communication-protocol-events>` is also a stream.
 
 Each stream belongs to the client that created it. :ref:`communication-protocol-remove-stream`
 removes a stream, and the server removes a client's streams when the client disconnects.
@@ -336,7 +332,7 @@ changed:
 
 The fields are:
 
-* ``id`` - The identifier of the stream, from the ``Stream`` message that added it.
+* ``id`` - The identifier of the stream, from the ``STREAM`` or ``EVENT`` value that added it.
 
 * ``result`` - The result of the stream's procedure, as the same ``ProcedureResult`` a call to it
   returns. See :ref:`communication-protocol-anatomy-of-a-response`.
@@ -352,13 +348,9 @@ Events
 
 An event is a stream of a ``bool``, and fires when the stream's value is true. An event is created
 by :ref:`communication-protocol-add-event`, or by another procedure with an event return type. The
-procedure returns an ``Event`` message, holding the ``Stream`` of the event. After its first
-value, the stream holds only firings, as the server sends a value only when the event fires:
-
-.. literalinclude:: /communication-protocols/krpc.proto
-   :language: protobuf
-   :start-at: message Event {
-   :end-at: }
+procedure returns an ``EVENT`` value, which is the identifier of the event's stream as a
+``UINT64``. After its first value, the stream holds only firings, as the server sends a value only
+when the event fires.
 
 .. _communication-protocol-krpc-service:
 
@@ -391,8 +383,8 @@ AddStream
 ^^^^^^^^^
 
 The ``AddStream`` procedure adds a stream of a remote procedure. Its argument is the call, as a
-``ProcedureCall`` message. See :ref:`communication-protocol-anatomy-of-a-request`. It returns a
-``Stream`` message, described under :ref:`communication-protocol-streams`.
+``ProcedureCall`` message. See :ref:`communication-protocol-anatomy-of-a-request`. It returns the
+stream's identifier, described under :ref:`communication-protocol-streams`.
 
 .. _communication-protocol-add-function-stream:
 
@@ -402,7 +394,7 @@ AddFunctionStream
 The ``AddFunctionStream`` procedure adds a stream that evaluates a server side function on
 each update. Its argument is the function, built using the ``KRPC.Expression`` class.
 
-The procedure returns a ``Stream`` message. The stream's values have the type given by the
+The procedure returns the stream's identifier. The stream's values have the type given by the
 function's ``ReturnType`` property. The function must take no parameters. Any exception from the
 function ends the stream with that error.
 
@@ -415,9 +407,9 @@ The ``AddEvent`` procedure adds an event that fires when a server side function 
 Its argument is the function, built using the ``KRPC.Expression`` class. The function must take no
 parameters and return a ``bool``.
 
-The procedure returns an ``Event`` message. The function is evaluated on each stream update, and
-the event fires on every update it returns true. Any exception from the function ends the event's
-stream with that error.
+The procedure returns the identifier of the event's stream. The function is evaluated on each
+stream update, and the event fires on every update it returns true. Any exception from the
+function ends the event's stream with that error.
 
 .. _communication-protocol-run-function:
 
@@ -463,7 +455,7 @@ RemoveStream
 
 The ``RemoveStream`` procedure removes a stream. Its argument is the stream's identifier, from
 :ref:`communication-protocol-add-stream`, :ref:`communication-protocol-add-function-stream` or an
-``Event`` message.
+``EVENT`` value.
 
 .. _communication-protocol-service-description-message:
 
