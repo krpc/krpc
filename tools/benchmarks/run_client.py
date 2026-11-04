@@ -24,8 +24,7 @@ Every transport the machine has is measured, against a server started for it, an
 block apiece: which one carries a call is part of what the call costs. Where the server is
 listening arrives in the program's environment, as ``KRPC_TEST_TCPIP_PORT`` for TCP/IP or
 ``KRPC_TEST_LOCALSOCKET_PATH`` for a local socket, and which one is set is also what picks the
-transport in a client that chooses one when it connects. The cnano client chooses when it is
-compiled, so it comes as a program per transport and ``--client-localsocket`` names the second.
+transport the client connects over.
 
 The server it is measured against runs unpaced. A round trip is served over and over inside one
 update for as long as the client answers within the receive timeout, so paced it is the client's
@@ -48,37 +47,23 @@ SCENARIO = "round trips"
 def main():
     args = arguments()
     suite = "client, %s" % args.name
-    results, environment = measure(
-        args.server, suite, args.client, args.client_localsocket
-    )
+    results, environment = measure(args.server, suite, args.client)
     runner.report(results, suite, environment, args.json)
     return 0
 
 
-def measure(server, suite, client, client_localsocket=None):
+def measure(server, suite, client):
     """Measure one client over every transport, and say what it was measured against."""
     results = []
     environment = {}
     for transport in testserver.transports():
-        program = program_for(transport, client, client_localsocket)
-        cases, version, settings = run(server, program, transport)
+        cases, version, settings = run(server, client, transport)
         results += [record(suite, scenario(transport), case) for case in cases]
         environment.setdefault("server", version)
         # The server settings are the same whichever transport it serves, so the first one
         # measured records them for the run.
         environment.setdefault("measured against", settings)
     return results, environment
-
-
-def program_for(transport, client, client_localsocket):
-    """The benchmark program to run for one transport.
-
-    Most clients choose their transport when they connect, and one program measures every
-    transport. The cnano client chooses when it is compiled, so it arrives as a program each.
-    """
-    if transport == testserver.LOCAL_SOCKET and client_localsocket:
-        return client_localsocket
-    return client
 
 
 def scenario(transport):
@@ -125,14 +110,6 @@ def arguments():
         metavar="PATH",
         required=True,
         help="the client's benchmark program (the bazel target supplies this)",
-    )
-    parser.add_argument(
-        "--client-localsocket",
-        metavar="PATH",
-        default=None,
-        help="the same program built for the local socket transport, for a client that "
-        "chooses its transport when it is built rather than when it runs; defaults to "
-        "--client (the bazel target supplies this)",
     )
     return parser.parse_args()
 

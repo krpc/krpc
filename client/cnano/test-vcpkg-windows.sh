@@ -1,6 +1,5 @@
 #!/bin/bash
-# Test installing the kRPC C-nano client via vcpkg overlay port on Windows, once per
-# transport it offers.
+# Test installing the kRPC C-nano client via vcpkg overlay port on Windows.
 # Expects the release archive (krpc-cnano-*.zip) in the current directory.
 # Usage: test-vcpkg-windows.sh
 set -eo pipefail
@@ -32,24 +31,15 @@ sed -i \
   "$tmpport/portfile.cmake"
 sed -i "s/\"version\": \"[^\"]*\"/\"version\": \"$version_semver\"/" "$tmpport/vcpkg.json"
 
-# Install via the overlay port and build the consumer project against it, once per transport the
-# port offers. Where the library is built for a socket the consumer opens a connection, which is
-# what proves the transport, and the winsock library it needs, reach a program through the
+# Install via the overlay port and build the consumer project against it. The consumer opens
+# each transport, which proves the winsock library the sockets need reaches a program through the
 # package vcpkg installed.
-function run_scenario {
-  local name=$1
-  local package=$2
-  mkdir -p "$name"
-  "$vcpkg_bin" install "$package" --overlay-ports="$tmpport" \
-    --x-install-root="$name/vcpkg_installed"
-  cmake -S "$scriptroot/test-consumer" -B "$name/consumer" \
-    "-DCMAKE_TOOLCHAIN_FILE=$toolchain" \
-    "-DVCPKG_INSTALLED_DIR=$(pwd)/$name/vcpkg_installed" \
-    -DVCPKG_TARGET_TRIPLET=x64-windows \
-    -DCMAKE_BUILD_TYPE=Release
-  cmake --build "$name/consumer" --config Release --parallel
-}
-
-run_scenario serialio "krpc-cnano:x64-windows"
-run_scenario tcpip "krpc-cnano[tcp]:x64-windows"
-run_scenario localsocket "krpc-cnano[localsocket]:x64-windows"
+mkdir -p vcpkg-test
+"$vcpkg_bin" install "krpc-cnano:x64-windows" --overlay-ports="$tmpport" \
+  --x-install-root="vcpkg-test/vcpkg_installed"
+cmake -S "$scriptroot/test-consumer" -B "vcpkg-test/consumer" \
+  "-DCMAKE_TOOLCHAIN_FILE=$toolchain" \
+  "-DVCPKG_INSTALLED_DIR=$(pwd)/vcpkg-test/vcpkg_installed" \
+  -DVCPKG_TARGET_TRIPLET=x64-windows \
+  -DCMAKE_BUILD_TYPE=Release
+cmake --build "vcpkg-test/consumer" --config Release --parallel

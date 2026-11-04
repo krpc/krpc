@@ -1,5 +1,5 @@
 #!/bin/bash
-# Test installing the kRPC C-nano client via vcpkg overlay port, once per transport it offers.
+# Test installing the kRPC C-nano client via vcpkg overlay port.
 # Builds the release archive with Bazel, or uses a provided archive.
 # Usage: test-vcpkg.sh [/path/to/krpc-cnano-VERSION.zip]
 # Requires: VCPKG_ROOT environment variable pointing to a vcpkg installation.
@@ -47,27 +47,14 @@ sed -i \
   "$tmpport/portfile.cmake"
 sed -i "s/\"version\": \"[^\"]*\"/\"version\": \"$version_semver\"/" "$tmpport/vcpkg.json"
 
-# Install via the overlay port and build the consumer project against it, once per transport the
-# port offers. Where the library is built for a socket the consumer opens a connection, which is
-# what proves the transport reaches a program through the package vcpkg installed.
-out=$(pwd)/bazel-bin/client/cnano/test-vcpkg
-rm -rf "$out"
-mkdir -p "$out"
-
-function run_scenario {
-  local name=$1
-  local package=$2
-  local dir="$out/$name"
-  mkdir -p "$dir"
-  "$vcpkg_bin" install "$package" --overlay-ports="$tmpport" \
-    --x-install-root="$dir/vcpkg_installed"
-  cmake -S "$scriptroot/test-consumer" -B "$dir/consumer" \
-    "-DCMAKE_TOOLCHAIN_FILE=$toolchain" \
-    "-DVCPKG_INSTALLED_DIR=$dir/vcpkg_installed" \
-    -DCMAKE_BUILD_TYPE=Release
-  cmake --build "$dir/consumer" --parallel "$(nproc)"
-}
-
-run_scenario serialio "krpc-cnano"
-run_scenario tcpip "krpc-cnano[tcp]"
-run_scenario localsocket "krpc-cnano[localsocket]"
+# Install via the overlay port and build the consumer project against it
+dir=$(pwd)/bazel-bin/client/cnano/test-vcpkg
+rm -rf "$dir"
+mkdir -p "$dir"
+"$vcpkg_bin" install krpc-cnano --overlay-ports="$tmpport" \
+  --x-install-root="$dir/vcpkg_installed"
+cmake -S "$scriptroot/test-consumer" -B "$dir/consumer" \
+  "-DCMAKE_TOOLCHAIN_FILE=$toolchain" \
+  "-DVCPKG_INSTALLED_DIR=$dir/vcpkg_installed" \
+  -DCMAKE_BUILD_TYPE=Release
+cmake --build "$dir/consumer" --parallel "$(nproc)"

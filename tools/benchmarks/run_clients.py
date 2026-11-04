@@ -48,10 +48,7 @@ def measure(args, name, client):
         results, environment = run_python.measure(args.server)
     else:
         results, environment = run_client.measure(
-            args.server,
-            "client, %s" % name,
-            client,
-            dict(args.client_localsocket).get(name),
+            args.server, "client, %s" % name, client
         )
     return results, environment["server"], environment["measured against"]
 
@@ -66,16 +63,6 @@ def arguments():
         default=[],
         type=_client,
         help="a client's benchmark program (the bazel target supplies these)",
-    )
-    parser.add_argument(
-        "--client-localsocket",
-        metavar="LANGUAGE=PATH",
-        action="append",
-        default=[],
-        type=_client,
-        help="the same program built for the local socket transport, for a client that "
-        "chooses its transport when it is built rather than when it runs (the bazel "
-        "target supplies these)",
     )
     return parser.parse_args()
 

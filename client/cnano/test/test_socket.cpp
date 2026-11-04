@@ -5,7 +5,7 @@
 // The socket transports read and write through the same calls, so these cover both of them. They
 // run over a socket pair, which behaves as a connected socket does without needing a server to
 // connect to. Winsock has no equivalent, so these are POSIX only.
-#if (defined(KRPC_COMMUNICATION_TCP) || defined(KRPC_COMMUNICATION_LOCALSOCKET)) && !defined(_WIN32)
+#if defined(KRPC_PLATFORM_POSIX)
 
 #include <pthread.h>
 #include <signal.h>
@@ -23,6 +23,13 @@ volatile sig_atomic_t alarms = 0;
 
 void count_alarm(int) { alarms++; }
 
+krpc_connection_t socket_connection(int fd) {
+  krpc_connection_t connection;
+  connection.transport = &krpc_transport_socket;
+  connection.handle = static_cast<uintptr_t>(fd);
+  return connection;
+}
+
 }  // namespace
 
 // Writing to a socket whose peer has gone must report the failure. Left to itself it raises
@@ -34,7 +41,7 @@ TEST(test_socket, test_write_peer_closed) {
   ASSERT_EQ(0, close(fds[1]));
 
   const uint8_t data[] = {1, 2, 3, 4};
-  krpc_error_t error = krpc_write(fds[0], data, sizeof(data));
+  krpc_error_t error = krpc_write(socket_connection(fds[0]), data, sizeof(data));
   close(fds[0]);
 
   ASSERT_EQ(KRPC_ERROR_IO, error);
@@ -81,7 +88,7 @@ TEST(test_socket, test_read_interrupted) {
   ASSERT_EQ(0, setitimer(ITIMER_REAL, &timer, nullptr));
 
   uint8_t buf[8] = {0};
-  krpc_error_t error = krpc_read(fds[0], buf, sizeof(buf));
+  krpc_error_t error = krpc_read(socket_connection(fds[0]), buf, sizeof(buf));
   writer.join();
   sigaction(SIGALRM, &previous_action, nullptr);
   close(fds[0]);
@@ -90,6 +97,19 @@ TEST(test_socket, test_read_interrupted) {
   ASSERT_EQ(KRPC_OK, error);
   ASSERT_GT(alarms, 0);
   for (size_t i = 0; i < sizeof(buf); i++) ASSERT_EQ(data[i], buf[i]);
+}
+
+// Each opener fails on an endpoint with no server, and leaves the connection with no transport
+TEST(test_socket, test_open_no_server) {
+  krpc_connection_t connection = {&krpc_transport_socket, 1};
+  ASSERT_EQ(KRPC_ERROR_IO, krpc_open_tcp(&connection, "127.0.0.1", 1));
+  ASSERT_EQ(nullptr, connection.transport);
+  connection.transport = &krpc_transport_socket;
+  ASSERT_EQ(KRPC_ERROR_IO, krpc_open_localsocket(&connection, "/nonexistent/krpc-cnano-test.sock"));
+  ASSERT_EQ(nullptr, connection.transport);
+  connection.transport = &krpc_transport_socket;
+  ASSERT_EQ(KRPC_ERROR_IO, krpc_open_serial(&connection, "/nonexistent/krpc-cnano-test-port"));
+  ASSERT_EQ(nullptr, connection.transport);
 }
 
 #endif

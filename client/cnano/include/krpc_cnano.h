@@ -15,7 +15,7 @@
  * call a program makes. The default is small on Arduino, where a kilobyte is a large share of
  * the memory there is, and where calls tend to be small ones. */
 #ifndef KRPC_BUFFER_SIZE
-#ifdef KRPC_COMMUNICATION_ARDUINO
+#ifdef KRPC_PLATFORM_ARDUINO
 #define KRPC_BUFFER_SIZE 128
 #else
 #define KRPC_BUFFER_SIZE 1024
@@ -32,14 +32,15 @@
 extern "C" {
 #endif
 
-/* Connect to a kRPC server using the given communication handle. Waits for the server to
- * accept the connection. Returns KRPC_ERROR_CONNECTION_REFUSED, and closes the connection, if
- * the server denies it or does not support the client's protocol version. Over TCP/IP or a
- * local socket, any other failed connect also closes the connection. Over a serial port or a
- * custom transport, a partial message from an earlier session on the line can garble the
- * connection request or its response. In that case this returns KRPC_ERROR_CONNECTION_FAILED
- * with the connection left open, and the program calls this again to retry. One connection is
- * open at a time. */
+/* Connect to a kRPC server over an open connection. Waits for the server to accept the
+ * connection. Returns KRPC_ERROR_IO for a connection whose open failed. Returns
+ * KRPC_ERROR_CONNECTION_REFUSED, and closes the connection, if the server denies it or does not
+ * support the client's protocol version. Over a socket, or any transport with resumable false,
+ * any other failed connect also closes the connection. Over a resumable transport, such as a
+ * serial port, a partial message from an earlier session on the line
+ * can garble the connection request or its response. In that case this returns
+ * KRPC_ERROR_CONNECTION_FAILED with the connection left open, and the program calls this again
+ * to retry. One connection is open at a time. */
 krpc_error_t krpc_connect(krpc_connection_t connection, const char* clientName);
 
 /* Tell the server the connection is ending, then close it. On a serial port this is how the

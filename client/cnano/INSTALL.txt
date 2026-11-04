@@ -2,7 +2,7 @@ Installing the kRPC C-nano client library
 =========================================
 
 The C-nano client documentation describes how to install the library with vcpkg
-or CMake, how to choose its transport, and how to compile a program against it:
+or CMake, and how to compile a program against it:
 
 https://krpc.github.io/krpc/latest/cnano/client.html#installing-the-library
 

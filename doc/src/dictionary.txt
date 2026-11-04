@@ -168,6 +168,7 @@ reflow
 rect
 reStructuredText
 respawn
+resumable
 rethrow
 reverser
 reversers
