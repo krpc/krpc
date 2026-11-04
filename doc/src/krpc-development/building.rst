@@ -18,11 +18,11 @@ Bazel version the repository pins. On Ubuntu:
    chmod +x bazelisk-linux-amd64
    sudo mv bazelisk-linux-amd64 /usr/local/bin/bazel
 
-The documentation needs Graphviz and Enchant, and the serial IO tests need ``socat``:
+The documentation's spelling check needs Enchant, and the serial IO tests need ``socat``:
 
 .. code-block:: bash
 
-   sudo apt-get install socat graphviz libenchant-2-2
+   sudo apt-get install socat libenchant-2-2
 
 The C and C++ clients build with an LLVM toolchain that Bazel downloads. Pass
 ``--config=system-llvm`` to build them with the system LLVM install named by

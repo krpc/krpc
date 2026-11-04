@@ -9,7 +9,6 @@ Config
 Ferram
 GameData
 Goliath
-Graphviz
 IDisposable
 Javascript
 Jeb

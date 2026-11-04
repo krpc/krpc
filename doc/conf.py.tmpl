@@ -16,7 +16,6 @@ master_doc = 'index'
 source_suffix = '.rst'
 extensions = [
     'sphinx.ext.mathjax',
-    'sphinx.ext.graphviz',
     'sphinx.ext.todo',
     'sphinx.ext.extlinks',
     'sphinx_design',
@@ -37,9 +36,6 @@ if tags.has('spelling'):  # noqa: F821  -- sphinx supplies tags to conf.py
 lua_ls_backend = 'disable'
 # Resolve Types.none in signatures against the krpc module, where lua.rst declares it
 lua_ls_default_options = {'using': 'krpc'}
-
-# Render Graphviz diagrams as SVG in HTML so they stay crisp when scaled.
-graphviz_output_format = 'svg'
 
 html_theme = 'pydata_sphinx_theme'
 htmlhelp_basename = 'krpc-doc'
