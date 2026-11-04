@@ -669,6 +669,8 @@
 <li><p><span class="changelog-marker breaking">Breaking</span> Leave internal procedures out of the services, such as <code class="docutils literal notranslate"><span class="pre">KRPC.AddStream</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1269">#1269</a>)</p></li>
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">Connection.Compile</span></code> for a server side function built with the expression API (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1269">#1269</a>)</p></li>
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">EncodingException</span></code>, thrown when the server returns null for a value that cannot be null (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1269">#1269</a>)</p></li>
+<li><p>Target .NET Standard 2.0 in place of .NET Framework 4.7.2, so a .NET 5 or later project uses the package without a compatibility warning (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1274">#1274</a>)</p></li>
+<li><p>Fix .NET Framework programs failing to load <code class="docutils literal notranslate"><span class="pre">System.Memory</span></code> when decoding a nullable value in a collection or structure (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1274">#1274</a>)</p></li>
 </ul>
 </section>
 <section id="id1">

@@ -187,6 +187,8 @@ C# client
 * :breaking:`Breaking` Leave internal procedures out of the services, such as ``KRPC.AddStream`` (:issue:`1269`)
 * Add ``Connection.Compile`` for a server side function built with the expression API (:issue:`1269`)
 * Add ``EncodingException``, thrown when the server returns null for a value that cannot be null (:issue:`1269`)
+* Target .NET Standard 2.0 in place of .NET Framework 4.7.2, so a .NET 5 or later project uses the package without a compatibility warning (:issue:`1274`)
+* Fix .NET Framework programs failing to load ``System.Memory`` when decoding a nullable value in a collection or structure (:issue:`1274`)
 
 
 C++ client
