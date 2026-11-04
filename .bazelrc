@@ -132,4 +132,6 @@ common:ci-linux --config=ci --config=system-llvm
 build:ci-linux --features=-parse_headers --host_features=-parse_headers
 
 # The Windows CI jobs. D: is the workspace disk of a GitHub Windows runner.
+# The bazel-fetch-windows action sets the output root, as a config cannot hold
+# a startup option.
 common:ci-windows --config=ci --repository_cache=D:/bazel-repo

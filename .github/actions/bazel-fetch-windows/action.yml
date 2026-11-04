@@ -2,10 +2,11 @@ runs:
   using: composite
   steps:
     # Turn on the ci-windows config for every later bazel command in the job,
-    # from the system-wide rc file Bazel reads on Windows
+    # from the system-wide rc file Bazel reads on Windows. The short output root
+    # keeps runfiles paths, such as the sphinx-build DLLs, under MAX_PATH.
     - name: bazel-config
       shell: pwsh
-      run: Set-Content -Path "$env:ProgramData\bazel.bazelrc" -Value "common --config=ci-windows"
+      run: Set-Content -Path "$env:ProgramData\bazel.bazelrc" -Value "startup --output_user_root=D:/b", "common --config=ci-windows"
     - name: get-bazel-version
       shell: bash
       run: |

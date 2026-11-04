@@ -76,8 +76,10 @@ packages the `vcpkg-linux` action installs.
 ### Windows
 
 The Windows jobs use the tools the runner image ships: MSVC, Bazelisk and Git Bash. The
-`bazel-fetch-windows` action writes the CI config to the system-wide `bazel.bazelrc`. It also
-sets `MSYS2_ARG_CONV_EXCL=*`, as Git Bash otherwise rewrites `//pkg:target` patterns as paths.
+`bazel-fetch-windows` action writes the CI config to the system-wide `bazel.bazelrc`, with the
+output root at `D:/b`. The default root, under the runner's profile, puts DLLs in the
+sphinx-build runfiles past `MAX_PATH`. The action also sets `MSYS2_ARG_CONV_EXCL=*`, as Git
+Bash otherwise rewrites `//pkg:target` patterns as paths.
 The jobs build in `dbg` mode, whose `/DEBUG:FULL` link flag avoids the LNK4315 warning rules_cc
 causes in fastbuild.
 
