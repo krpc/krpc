@@ -6,6 +6,7 @@ Bitwise
 CMake
 Cnano
 Config
+ephemeron
 Ferram
 GameData
 Goliath

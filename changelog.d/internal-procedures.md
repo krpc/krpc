@@ -32,7 +32,6 @@
 ## client/lua
 
 - **Breaking:** Leave internal procedures out of the services, such as `KRPC.add_stream` (#1269)
-- **Breaking:** Remove server side functions, such as `KRPC.run_function` (#1269)
 
 ## client/python
 

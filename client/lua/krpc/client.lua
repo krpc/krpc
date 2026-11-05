@@ -18,6 +18,10 @@ function Client:_init(connection)
   self._connection = connection
   -- The id of the next request, which starts at 1
   self._next_id = 1
+  -- The types of each server side function's parameters and value, by object id
+  self._function_type_cache = {}
+  -- The types of each procedure's parameters, and which have no default, by qualified name
+  self._procedure_parameters = {}
 
   -- Set up the main KRPC service
   local services = self:_invoke('KRPC', 'GetServices', nil, nil, self._types:services_type()).services
@@ -172,8 +176,9 @@ local function type_name(typ)
   return (typ._string:gsub('%?$', ''))
 end
 
---- Build the bytes of the request carrying a procedure call, ready to send
-function Client:_build_request(id, service, procedure, args, param_types, param_required)
+--- Encode the arguments of a procedure call, coerced to the types of their parameters, with
+--- Types.none for a null argument and nil for an argument left out
+function Client:_encode_arguments(service, procedure, args, param_types, param_required)
   local arguments = {}
 
   for i,typ in ipairs(param_types) do
@@ -210,7 +215,141 @@ function Client:_build_request(id, service, procedure, args, param_types, param_
     end
   end
 
+  return arguments
+end
+
+--- Build the bytes of the request carrying a procedure call, ready to send
+function Client:_build_request(id, service, procedure, args, param_types, param_required)
+  local arguments = self:_encode_arguments(service, procedure, args, param_types, param_required)
   return encoder.encode_request(id, service, procedure, arguments, #param_types)
+end
+
+--- The call a procedure of a service or a class makes when called with the given arguments, as
+--- a KRPC.ProcedureCall message to pass to KRPC.Expression.call. A property is read through its
+--- getter, get_<name>, and set through its setter, set_<name>, each given the object or the
+--- service as its first argument.
+function Client:get_call(procedure, ...)
+  local info = Service.procedures[procedure]
+  if info == nil then
+    error('get_call expects a procedure of a service or a class', 2)
+  end
+  local parameters = self._procedure_parameters[info.service .. '.' .. info.procedure]
+  if parameters == nil then
+    error('The server has no procedure ' .. info.service .. '.' .. info.procedure, 2)
+  end
+  local given = {...}
+  if info.skip > 0 and not Service.is_service(given[1], info.service) then
+    error('get_call expects the service ' .. info.service .. ' as the first argument of ' .. info.procedure, 2)
+  end
+  local args = {}
+  for i = info.skip + 1, select('#', ...) do
+    args[i - info.skip] = given[i]
+  end
+  local encoded = self:_encode_arguments(info.service, info.procedure, args, parameters.types,
+                                         parameters.required)
+  local arguments = {}
+  for i = 1, #parameters.types do
+    local value = encoded[i]
+    if rawequal(value, Types.none) then
+      arguments[#arguments+1] = { position = i-1, is_null = true }
+    elseif value ~= nil then
+      arguments[#arguments+1] = { position = i-1, value = value }
+    end
+  end
+  return { service = info.service, procedure = info.procedure, arguments = arguments }
+end
+
+--- The type of a server side function, a KRPC.Expression object
+function Client:_expression_type()
+  return self._types:class_type('KRPC', 'Expression')
+end
+
+--- Raise an error for a value that is not a KRPC.Expression object
+function Client:_check_function(func)
+  if not (Types.ClassBase:class_of(func) and func._service_name == 'KRPC' and
+          func._class_name == 'Expression') then
+    error('Expected a KRPC.Expression object, got ' .. tostring(func), 3)
+  end
+end
+
+-- The type codes of the types that a service defines, and of those that hold other types
+local _DEFINED_TYPES = { [Types.CLASS] = true, [Types.ENUMERATION] = true, [Types.STRUCT] = true }
+local _COLLECTION_TYPES = { [Types.TUPLE] = true, [Types.LIST] = true, [Types.SET] = true,
+                            [Types.DICTIONARY] = true }
+
+--- The protocol buffer type described by a KRPC.Type object. Each property is a call, so only
+--- those the type code needs are read.
+local function _type_message(remote_type)
+  local code = remote_type.code.value
+  local service, name, types = '', '', {}
+  if _DEFINED_TYPES[code] then
+    service = remote_type.service
+    name = remote_type.name
+  elseif _COLLECTION_TYPES[code] then
+    for i, typ in ipairs(remote_type.types) do
+      types[i] = _type_message(typ)
+    end
+  end
+  return { code = code, service = service, name = name, types = types,
+           nullable = remote_type.nullable }
+end
+
+--- The types of a server side function's parameters, which of them are required, and the type of
+--- its value or false for a function with no value. Each is introspected on the server once per
+--- function.
+function Client:_function_types(func)
+  local cached = self._function_type_cache[func._object_id]
+  if cached ~= nil then
+    return cached.param_types, cached.param_required, cached.return_type
+  end
+  local param_types = List{}
+  local param_required = {}
+  for i, typ in ipairs(func.parameter_types) do
+    param_types:append(self._types:as_type(_type_message(typ)))
+    -- A function's parameter has no default
+    param_required[i] = true
+  end
+  local return_type = false
+  if func.has_return_type then
+    return_type = self._types:as_type(_type_message(func.return_type))
+  end
+  self._function_type_cache[func._object_id] = {
+    param_types = param_types, param_required = param_required, return_type = return_type
+  }
+  return param_types, param_required, return_type
+end
+
+--- Compile a server side function built with the expression API, a KRPC.Expression object, on
+--- the server, so that its first run does not compile it, and return it.
+function Client:compile(func)
+  self:_check_function(func)
+  self:_invoke('KRPC', 'CompileFunction', List{func}, List{self:_expression_type()})
+  return func
+end
+
+--- Run a server side function, a KRPC.Expression object, within a single physics tick, and
+--- return its value. The arguments are passed to the function's parameters, in order. The
+--- value is nil when the function has no value or its value is null.
+function Client:run(func, ...)
+  self:_check_function(func)
+  -- A function from another connection reads its types through this one
+  func = self._types:coerce_to(func, self:_expression_type())
+  local param_types, param_required, return_type = self:_function_types(func)
+  local count = select('#', ...)
+  if count ~= #param_types then
+    error(string.format('The function takes %d argument%s, got %d', #param_types,
+                        #param_types == 1 and '' or 's', count), 2)
+  end
+  local arguments = List(self:_encode_arguments('Client', 'run', {...}, param_types, param_required))
+  local bytes = self._types:bytes_type()
+  local data = self:_invoke('KRPC', 'RunFunction', List{func, arguments},
+                            List{self:_expression_type(), self._types:list_type(self._types:nullable(bytes))},
+                            self._types:nullable(bytes))
+  -- A null value has no data
+  if data == nil or not return_type then
+    return nil
+  end
+  return decoder.decode(data, return_type)
 end
 
 --- Construct an error description from a KRPC.Error object

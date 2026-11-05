@@ -97,3 +97,6 @@ test_calls.py::test_undefined_type[enumeration]  # As above
 test_calls.py::test_undefined_type[wrong-kind]  # As above
 test_calls.py::test_undefined_type[enumeration-default]  # Connecting raises the connection error
 test_values.py::test_null_result_with_a_value  # A result with is_null set reads as null, whatever its value
+test_functions.py::test_argument_types[uint64-max]  # As test_default_values[uint64-extremes]
+test_functions.py::test_run_argument_errors[out-of-range]  # As test_values.py::test_out_of_range[sint32-above]
+test_functions.py::test_run_argument_errors[out-of-range-list-item]  # As test_values.py::test_out_of_range[sint32-above]
