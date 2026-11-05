@@ -223,6 +223,18 @@ class TestWrappedClass(unittest.TestCase):
         instance = wrapped(None, 1)
         self.assertIsInstance(instance, _MyClass)
 
+    def test_isinstance(self) -> None:
+        class Derived(_MyClass):
+            pass
+
+        wrapped = WrappedClass(lambda x: x, _MyClass)  # pyright: ignore[reportArgumentType]
+        wrapped_derived = WrappedClass(lambda x: x, Derived)  # pyright: ignore[reportArgumentType]
+        self.assertIsInstance(_MyClass(None, 1), wrapped)  # pyright: ignore[reportArgumentType]
+        self.assertIsInstance(Derived(None, 1), wrapped)  # pyright: ignore[reportArgumentType]
+        self.assertNotIsInstance(_MyClass(None, 1), wrapped_derived)  # pyright: ignore[reportArgumentType]
+        self.assertTrue(issubclass(Derived, wrapped))  # pyright: ignore[reportArgumentType]
+        self.assertFalse(issubclass(_MyClass, wrapped_derived))  # pyright: ignore[reportArgumentType]
+
 
 if __name__ == "__main__":
     unittest.main()
