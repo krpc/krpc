@@ -40,6 +40,9 @@ replaces.
    * - An argument
      - The caller, borrowed for the call
      - The caller
+   * - The encoded arguments of a ``_call`` function
+     - ``krpc_calloc`` and ``krpc_malloc``
+     - The caller, with ``krpc_free_procedure_call``
 
 The caller's variable selects the allocation, so the caller resets it before each call. A struct or
 tuple has no reset macro, so the caller zeroes it. ``KRPC_FREE_*`` frees one level.
@@ -113,9 +116,9 @@ connection. The platform decides at compile time which tables exist:
 Errors
 ------
 
-Library functions return a ``krpc_error_t``. ``KRPC_CHECK`` applies only in the stubs, where
-``KRPC_ERROR_CHECK_ASSERT``, ``KRPC_ERROR_CHECK_EXIT`` and ``KRPC_ERROR_CHECK_FN`` replace its
-``return``.
+Library functions return a ``krpc_error_t``. ``KRPC_CHECK`` applies only in the stubs and
+``functions.h``, where ``KRPC_ERROR_CHECK_ASSERT``, ``KRPC_ERROR_CHECK_EXIT`` and
+``KRPC_ERROR_CHECK_FN`` replace its ``return``.
 
 A session ends on a failed read or write, a ``disconnect``, an unexpected message and a message that
 fails to parse. It survives a server error and a return value that fails to decode, as those
@@ -139,6 +142,29 @@ is ``static inline``, so a header can be included from several translation units
 A stub calls by service and procedure id, and ``src/krpc.options`` removes the name fields. This
 keeps names out of flash and off the wire.
 
+Each procedure also has a ``_call`` function, for server side functions. An unused one adds compile
+time and no code.
+
+Server Side Functions
+---------------------
+
+The stubs leave out internal procedures, so ``krpc_compile_function`` and ``krpc_run_function`` are
+written by hand in ``include/krpc_cnano/functions.h``. They hold the ids of ``KRPC.CompileFunction``
+and ``KRPC.RunFunction``. ``clientgen`` adds ``krpc_list_nullable_bytes_t`` to the ``KRPC`` header,
+as no public procedure uses that type.
+
+* **A run passes encoded bytes.** C has no generics, so ``krpc_run_function`` takes no type. The
+  program encodes the arguments and decodes the value at the types it knows.
+* **A null value has no bytes.** Decoding it fails at most types. It succeeds at a list or a tuple,
+  which leaves the list empty and the tuple's items unset, so the program checks ``isNull`` there.
+* **A call message copies its arguments.** A stub's ``krpc_call_t`` borrows its arguments for
+  the call. A ``krpc_schema_ProcedureCall`` outlives the ``_call`` function that fills it in, so
+  each argument is encoded onto the heap, tag and length included. Encoding the message then writes
+  those bytes as they are.
+* **That code has its own file**, ``src/procedure_call.c``, so a static link without functions
+  leaves it out.
+* **There are no function streams or events**, as the client has no streams.
+
 Mapping the Spec to C
 ---------------------
 
@@ -161,6 +187,10 @@ Mapping the Spec to C
      - ``const T*``, where ``NULL`` is null; a ``bool* returnValueIsNull``
    * - Nullable position in a value
      - A generated ``krpc_nullable_*_t``, the value beside ``has_value``
+   * - Getting a call as a value
+     - A generated ``_call`` function
+   * - Value type of a server side function
+     - The program decodes encoded bytes
    * - Handshake and stall timeouts
      - None, as the client sets no timeout of its own
    * - Resuming a serial session

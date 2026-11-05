@@ -47,6 +47,60 @@ CodecEntry codec_entry(Encode encode, Decode decode) {
   [](pb_ostream_t* stream, const auto& x) { return krpc_encode_##name(stream, &x); }, \
       [](pb_istream_t* stream, auto* x) { return krpc_decode_##name(stream, x); }
 
+// A tuple(sint32), which no service uses, so the generated headers have no C type for it. A
+// program that needs one writes it as the generated types are written.
+struct krpc_tuple_int32_t {
+  int32_t e0;
+};
+
+inline bool encode_callback_items_tuple_int32(pb_ostream_t* stream, const pb_field_t* field,
+                                              void* const* arg) {
+  const auto* value = static_cast<const krpc_tuple_int32_t*>(*arg);
+  size_t size;
+  return pb_encode_tag_for_field(stream, field) &&
+         krpc_encode_size_int32(&size, value->e0) == KRPC_OK && pb_encode_varint(stream, size) &&
+         krpc_encode_int32(stream, value->e0) == KRPC_OK;
+}
+
+inline krpc_error_t encode_tuple_int32(pb_ostream_t* stream, const krpc_tuple_int32_t* value) {
+  krpc_schema_Tuple message = krpc_schema_Tuple_init_default;
+  message.items.funcs.encode = &encode_callback_items_tuple_int32;
+  message.items.arg = const_cast<krpc_tuple_int32_t*>(value);
+  return krpc_encode_message_Tuple(stream, &message);
+}
+
+struct TupleInt32State {
+  size_t pos;
+  krpc_tuple_int32_t* value;
+};
+
+inline bool decode_callback_item_tuple_int32(pb_istream_t* stream, const pb_field_t* /*field*/,
+                                             void** arg) {
+  auto* state = static_cast<TupleInt32State*>(*arg);
+  if (state->pos++ != 0) return false;
+  return krpc_decode_int32(stream, &state->value->e0) == KRPC_OK;
+}
+
+inline krpc_error_t decode_tuple_int32(pb_istream_t* stream, krpc_tuple_int32_t* value) {
+  krpc_schema_Tuple message = krpc_schema_Tuple_init_default;
+  TupleInt32State state = {0, value};
+  message.items.funcs.decode = &decode_callback_item_tuple_int32;
+  message.items.arg = &state;
+  return krpc_decode_message_Tuple(stream, &message);
+}
+
+struct tuple_int32 {
+  using type = krpc_tuple_int32_t;
+  static type arg(const Value& value) {
+    return {Sint32::arg(not_null(value).tuple().items().Get(0))};
+  }
+  static Value result(const type& x) {
+    Value value;
+    *value.mutable_tuple()->add_items() = Sint32::result(x.e0);
+    return value;
+  }
+};
+
 inline const CodecEntry& codec(const std::string& type) {
   using NullableObject = Nullable<krpc_nullable_object_t, Object>;
   using ListOfNullableObjects = List<krpc_list_nullable_object_t, NullableObject>;
@@ -87,6 +141,16 @@ inline const CodecEntry& codec(const std::string& type) {
        codec_entry<ListOfNullableObjects>(KRPC_CONFORMANCE_BY_POINTER(list_nullable_object))},
       {"tuple(sint32,sint64)",
        codec_entry<tuple_int32_int64>(KRPC_CONFORMANCE_BY_POINTER(tuple_int32_int64))},
+      {"list(sint64)",
+       codec_entry<List<krpc_list_int64_t, Sint64>>(KRPC_CONFORMANCE_BY_POINTER(list_int64))},
+      {"dictionary(string,list(sint32))",
+       codec_entry<Dictionary<krpc_dictionary_string_list_int32_t, String,
+                              List<krpc_list_int32_t, Sint32>>>(
+           KRPC_CONFORMANCE_BY_POINTER(dictionary_string_list_int32))},
+      {"tuple(sint32)",
+       codec_entry<tuple_int32>(
+           [](pb_ostream_t* stream, const auto& x) { return encode_tuple_int32(stream, &x); },
+           [](pb_istream_t* stream, auto* x) { return decode_tuple_int32(stream, x); })},
       {"list(string)", codec_entry<List<krpc_list_string_t, NotNull<String>>>(
                            KRPC_CONFORMANCE_BY_POINTER(list_string))},
       {"TestStruct",

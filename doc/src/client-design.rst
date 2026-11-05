@@ -234,8 +234,9 @@ it gets a call as a value, such as to use in an expression. The clients do this 
 
 * Python, C# and Java have one method for each purpose, ``add_stream`` and ``get_call`` or their
   equivalents. It takes any property or method, and works out the procedure at run time.
-* C++ cannot look up a method at run time. Its generated stubs instead have two extra methods for
-  each procedure, ending in ``_stream`` and ``_call``.
+* C++ and C-nano cannot look up a method at run time. Their generated stubs instead have extra
+  functions for each procedure. C++ adds ones ending in ``_stream`` and ``_call``. C-nano has no
+  streams, so it adds only ``_call``.
 
 For the ``MeanAltitude`` property of a ``Flight`` object:
 
@@ -254,6 +255,9 @@ For the ``MeanAltitude`` property of a ``Flight`` object:
    * - C++
      - ``flight.mean_altitude_stream()``
      - ``flight.mean_altitude_call()``
+   * - C-nano
+     - None
+     - ``krpc_SpaceCenter_Flight_MeanAltitude_call(&call, flight)``
    * - Java
      - ``connection.addStream(flight, "getMeanAltitude")``
      - ``connection.getCall(flight, "getMeanAltitude")``
