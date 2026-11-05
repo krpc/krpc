@@ -850,11 +850,19 @@ class WrappedClass:
 
     def __init__(self, client: Client, class_type: type) -> None:
         self._client = client
+        self._shared_type = class_type
         self._class_type = _wrapped_subclass(client, class_type)
         self.__doc__ = class_type.__doc__
 
     def __call__(self, *args: object, **kwargs: object) -> Any:
         return self._class_type(*args, **kwargs)
+
+    # A decoded object is an instance of the shared class, not the per-client subclass
+    def __instancecheck__(self, instance: object) -> bool:
+        return isinstance(instance, self._shared_type)
+
+    def __subclasscheck__(self, subclass: type) -> bool:
+        return issubclass(subclass, self._shared_type)
 
     def __getattr__(self, name: str) -> Any:
         return getattr(self._class_type, name)
