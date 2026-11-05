@@ -10,14 +10,35 @@ This guide describes how to install the Java client, and the features it provide
 Installing the Library
 ----------------------
 
-The library is a jar containing the ``krpc.client`` package, which can be `downloaded from GitHub
-<https://github.com/krpc/krpc/releases>`_. It requires Java 17 or later.
+The library is the ``krpc.client`` package, published to `Maven Central
+<https://central.sonatype.com/artifact/io.github.krpc/krpc-java>`_ as ``io.github.krpc:krpc-java``.
+It requires Java 17 or later.
 
-The library depends on the `protobuf <https://github.com/protocolbuffers/protobuf/tree/main/java>`_
-and `javatuples <https://github.com/arxila/javatuples>`_ libraries. A prebuilt jar for protobuf is
-available from `Maven <https://central.sonatype.com/artifact/com.google.protobuf/protobuf-java>`_.
+To add it to a Gradle project, in ``build.gradle.kts``:
 
-To compile a program with javac, add the three jars to the class path:
+.. parsed-literal::
+
+   dependencies {
+       implementation("io.github.krpc:krpc-java:|package_version|")
+   }
+
+To add it to a Maven project, in ``pom.xml``:
+
+.. parsed-literal::
+
+   <dependency>
+     <groupId>io.github.krpc</groupId>
+     <artifactId>krpc-java</artifactId>
+     <version>\ |package_version|\ </version>
+   </dependency>
+
+Gradle and Maven also fetch the library's dependencies, `protobuf
+<https://central.sonatype.com/artifact/com.google.protobuf/protobuf-java>`_ and `javatuples
+<https://central.sonatype.com/artifact/org.javatuples/javatuples>`_.
+
+Without a build tool, download the jar from `GitHub <https://github.com/krpc/krpc/releases>`_, along
+with the jars of its two dependencies at the versions its Maven Central page lists. To compile a
+program with javac, add the three jars to the class path:
 
 .. code-block:: bash
 

@@ -1,8 +1,10 @@
 load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test")
+load("@rules_jvm_external//:defs.bzl", "java_export")
 load("//:config.bzl", "version")
 load("//tools/build:client_test.bzl", "client_test")
 load("//tools/build:conformance.bzl", "conformance_test")
 load("//tools/build:java.bzl", "java_checkstyle_test", "javadoc_test")
+load("//tools/build:pkg.bzl", "pkg_zip")
 load("//tools/krpctools:clientgen.bzl", "clientgen_dispatch", "clientgen_services")
 
 exports_files([
@@ -12,6 +14,8 @@ exports_files([
 ])
 
 services = clientgen_services("java")
+
+srcs = glob(["src/krpc/**/*.java"]) + services + ["//protobuf:java"]
 
 copts = [
     "-Werror",
@@ -26,17 +30,22 @@ filegroup(
 
 genrule(
     name = "krpc-jar",
-    srcs = [":krpc"],
+    srcs = [":krpc-maven-artifact"],
     outs = ["krpc-java-%s.jar" % version],
     cmd = 'cp "$<" "$@"',
     output_to_bindir = True,
     visibility = ["//visibility:public"],
 )
 
-java_library(
+# The library as published to Maven Central, with its POM, sources jar and javadoc jar.
+# tools/release/65-release-maven.py signs and uploads them.
+java_export(
     name = "krpc",
-    srcs = glob(["src/krpc/**/*.java"]) + services + ["//protobuf:java"],
+    srcs = srcs,
+    classifier_artifacts = {"sources": ":krpc-sources"},
     javacopts = copts,
+    maven_coordinates = "io.github.krpc:krpc-java:%s" % version,
+    pom_template = "pom.xml.tpl",
     resources = [
         "CHANGELOG.md",
         "LICENSE",
@@ -46,10 +55,27 @@ java_library(
         "//:version",
     ],
     visibility = ["//visibility:public"],
+    # Exported, as the API uses their types, so the POM gives them compile scope
+    exports = [
+        "@maven//:com_google_protobuf_protobuf_java",
+        "@maven//:org_javatuples_javatuples",
+    ],
     deps = [
         "@maven//:com_google_protobuf_protobuf_java",
         "@maven//:org_javatuples_javatuples",
     ],
+)
+
+# The sources jar, laid out by package
+pkg_zip(
+    name = "krpc-sources",
+    out = "krpc-java-%s-sources.jar" % version,
+    files = srcs,
+    path_map = {
+        "client/java/src/": "",
+        "client/java/services/": "krpc/client/services/",
+        "protobuf/": "krpc/schema/",
+    },
 )
 
 java_library(

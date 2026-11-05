@@ -8,13 +8,18 @@ tools of the step being run.
 
 All the credentials live in one git-ignored TOML file at the root of the repository. Copy
 `tools/release/release-credentials.toml.template` to `release-credentials.toml`, fill in every value, and `chmod 600` it; the template says what each one is and where to get it. The scripts pass these to `gh`, `twine`,
-`dotnet`, `luarocks` and `aws` explicitly, so none of those tools needs to be configured
+`dotnet`, `luarocks`, `aws` and `gpg` explicitly, so none of those tools needs to be configured
 or logged in beforehand, and whatever account they are already set up with is ignored. Git is the
 exception: pushes to `krpc/krpc`, `krpc-arduino` and your vcpkg fork use your normal git setup.
 
 The two vcpkg steps also need a git checkout of vcpkg pointed to by `VCPKG_ROOT` (the same one the
 client vcpkg test scripts use) and a fork of `microsoft/vcpkg` on the release account; `gh` creates
 the fork the first time if it does not exist.
+
+The Maven Central step signs the Java client with the project's GPG key. The credentials file holds
+the armored secret key and its passphrase, and the step imports them into a throwaway keyring. The
+public key must be on `keys.openpgp.org` or `keyserver.ubuntu.com`, where the Central Portal looks
+it up. Publish a new key with `gpg --send-keys --keyserver keyserver.ubuntu.com <fingerprint>`.
 
 ## 1. Prepare
 
@@ -47,25 +52,30 @@ A release preparation pull request takes `main` from the version being released 
 
 ## 3. Release on GitHub
 
-9. `tools/release/40-build-assets.py` — builds all the release archives and collects them in
+9. `tools/release/40-build-assets.py` - builds all the release archives and collects them in
    `assets/`, along with a SHA256 checksum file.
-10. `tools/release/50-release-github.py` — creates a **draft** GitHub release for the tag with the
+10. `tools/release/50-release-github.py` - creates a **draft** GitHub release for the tag with the
    changelog as release notes and the assets attached. Review the draft on GitHub and publish it
    from there.
 
 ## 4. Release the clients and tools
 
 Each of these publishes one package, and they can be run in any order. Each builds and re-tests
-the component first, and prompts before uploading.
+the component first, and prompts before publishing.
 
-11. `tools/release/60-release-python.py` — Python client to PyPI.
-12. `tools/release/61-release-krpctools.py` — krpctools to PyPI.
-13. `tools/release/62-release-nuget.py` — C# client to nuget.org.
-14. `tools/release/63-release-arduino.py` — updates and tags the `krpc-arduino` repository.
-15. `tools/release/64-release-lua.py` — Lua client archive to S3 and the rockspec to luarocks.org.
-16. `tools/release/66-release-vcpkg-cpp.py` — C++ client port to `microsoft/vcpkg`.
-17. `tools/release/67-release-vcpkg-cnano.py` — C-nano client port to `microsoft/vcpkg`.
-18. `tools/release/68-release-ckan.py` — confirms the mod reached CKAN.
+11. `tools/release/60-release-python.py` - Python client to PyPI.
+12. `tools/release/61-release-krpctools.py` - krpctools to PyPI.
+13. `tools/release/62-release-nuget.py` - C# client to nuget.org.
+14. `tools/release/63-release-arduino.py` - updates and tags the `krpc-arduino` repository.
+15. `tools/release/64-release-lua.py` - Lua client archive to S3 and the rockspec to luarocks.org.
+16. `tools/release/65-release-maven.py` - Java client to Maven Central.
+17. `tools/release/66-release-vcpkg-cpp.py` - C++ client port to `microsoft/vcpkg`.
+18. `tools/release/67-release-vcpkg-cnano.py` - C-nano client port to `microsoft/vcpkg`.
+19. `tools/release/68-release-ckan.py` - confirms the mod reached CKAN.
+
+The Maven Central step uploads the signed bundle to the Central Portal, which validates it without
+publishing. The step publishes it only once validation passes and you confirm. A version on Maven
+Central cannot be removed or replaced. Declining drops the upload, so the step can be re-run.
 
 The two vcpkg steps hash the archive attached to the published GitHub release and open a pull
 request to `microsoft/vcpkg` from your fork, so run them after step 10's release has been published,
@@ -79,7 +89,7 @@ not landed within the wait (inflation can lag by a few hours), re-run the step l
 
 ## 5. Publish the mod and announce
 
-19. `tools/release/70-announcements.py` — prints the checklist of remaining manual steps:
+20. `tools/release/70-announcements.py` - prints the checklist of remaining manual steps:
     * Upload `assets/krpc-x.x.x.zip` to CurseForge and SpaceDock, linking the changelog at
       `https://krpc.github.io/krpc/<version>/changelog.html`.
     * Bump the version number on [KSP-AVC online](https://ksp-avc.cybutek.net/).

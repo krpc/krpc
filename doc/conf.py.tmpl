@@ -82,6 +82,10 @@ if tags.has('spelling'):  # noqa: F821  -- sphinx supplies tags to conf.py
     enchant.DictWithPWL = HunspellDictWithPWL
     extensions.append('sphinxcontrib.spelling')
 
+# The release a package manager installs, for the dependency declarations in
+# the client guides. A dev build names the release it leads up to.
+rst_epilog = '.. |package_version| replace:: %PACKAGE_VERSION%'
+
 # The Lua API is written with the domain's directives, so sphinx-lua-ls needs no
 # language server to analyze Lua sources
 lua_ls_backend = 'disable'
