@@ -225,8 +225,8 @@ namespace KRPC.Client.Conformance
                 Stream (command.SetRate.Stream).Rate = command.SetRate.Rate;
                 reply.Value = Result.None ();
                 break;
-            case Command.CommandOneofCase.Rate:
-                reply.Value = Result.Float (Stream (command.Rate.Stream).Rate);
+            case Command.CommandOneofCase.GetRate:
+                reply.Value = Result.Float (Stream (command.GetRate.Stream).Rate);
                 break;
             case Command.CommandOneofCase.Remove:
                 var removed = Handles.Get (command.Remove.Stream);

@@ -61,7 +61,7 @@ message Command {
     Encode encode = 21;
     Decode decode = 22;
     SetRate set_rate = 23;
-    Rate rate = 24;
+    GetRate get_rate = 24;
     Remove remove = 25;
     CopyStream copy_stream = 26;
     RemoveCallback remove_callback = 27;
@@ -419,7 +419,7 @@ message SetRate {
 }
 
 // Reads the rate of a stream. Replies with a float Value.
-message Rate {
+message GetRate {
   uint64 stream = 1;
 }
 

@@ -56,7 +56,7 @@ STREAM_COMMANDS = {
     "copy_stream",
     "drop_handle",
     "set_rate",
-    "rate",
+    "get_rate",
     "remove",
     "get",
     "wait",
@@ -339,8 +339,8 @@ class Testee:
         elif case == "set_rate":
             self._stream(command.set_rate.stream).rate = command.set_rate.rate
             reply.value.SetInParent()
-        elif case == "rate":
-            reply.value.float = self._stream(command.rate.stream).rate
+        elif case == "get_rate":
+            reply.value.float = self._stream(command.get_rate.stream).rate
         elif case == "remove":
             self._stream(command.remove.stream).remove()
             reply.value.SetInParent()
