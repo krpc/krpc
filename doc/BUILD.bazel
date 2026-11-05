@@ -93,6 +93,7 @@ changeloggen(
         "//service/RemoteTech:CHANGELOG.md",
         "//service/LiDAR:CHANGELOG.md",
         "//service/DockingCamera:CHANGELOG.md",
+        "//service/Trajectories:CHANGELOG.md",
         "//service/Debug:CHANGELOG.md",
         "//client/cnano:CHANGELOG.md",
         "//client/csharp:CHANGELOG.md",
@@ -195,6 +196,7 @@ defs = [
     "//service/UI:ServiceDefinitions",
     "//service/LiDAR:ServiceDefinitions",
     "//service/DockingCamera:ServiceDefinitions",
+    "//service/Trajectories:ServiceDefinitions",
     "//service/Debug:ServiceDefinitions",
 ]
 

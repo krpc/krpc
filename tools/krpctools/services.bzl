@@ -15,6 +15,7 @@ SERVICES = [
     struct(name = "RemoteTech", defs = "//service/RemoteTech:ServiceDefinitions", deps = ["SpaceCenter"], test = False),
     struct(name = "LIDAR", defs = "//service/LiDAR:ServiceDefinitions", deps = ["SpaceCenter"], test = False),
     struct(name = "DockingCamera", defs = "//service/DockingCamera:ServiceDefinitions", deps = ["SpaceCenter"], test = False),
+    struct(name = "Trajectories", defs = "//service/Trajectories:ServiceDefinitions", deps = ["SpaceCenter"], test = False),
     struct(name = "Debug", defs = "//service/Debug:ServiceDefinitions", deps = ["SpaceCenter"], test = False),
 ]
 

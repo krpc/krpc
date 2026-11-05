@@ -89,6 +89,9 @@
     <Compile Include="$(bazel-bin)\client\csharp\Services\DockingCamera.cs">
       <Link>Services\DockingCamera.cs</Link>
     </Compile>
+    <Compile Include="$(bazel-bin)\client\csharp\Services\Trajectories.cs">
+      <Link>Services\Trajectories.cs</Link>
+    </Compile>
     <Compile Include="$(bazel-bin)\client\csharp\Services\Debug.cs">
       <Link>Services\Debug.cs</Link>
     </Compile>

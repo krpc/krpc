@@ -624,4 +624,5 @@ API Reference
    cnano/api/remote-tech
    cnano/api/lidar
    cnano/api/docking-camera
+   cnano/api/trajectories
    cnano/api/debug

@@ -35,6 +35,8 @@
 #   KSPCommunityPartModules-0.4 -> GameData/KSPCommunityPartModules (0.4.0)
 #                                  + GameData/000_Harmony (dep)
 #   kOS                         -> GameData/kOS
+#
+#   Trajectories                -> GameData/Trajectories
 # tools/krpctest mirrors this registry on the Python side.
 
 filegroup(
@@ -64,6 +66,12 @@ filegroup(
 filegroup(
     name = "realchute",
     srcs = ["@realchute//:gamedata"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "trajectories",
+    srcs = ["@trajectories//:gamedata"],
     visibility = ["//visibility:public"],
 )
 
