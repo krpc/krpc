@@ -60,6 +60,9 @@ class JavaDomain(Domain[JavaLanguage]):
             return "%s_" % name
         return name
 
+    def accessor_name(self, prefix, name):
+        return self.language.accessor_name(prefix, name)
+
     def type(self, typ):
         return self._type(typ)
 
@@ -150,9 +153,12 @@ class JavaDomain(Domain[JavaLanguage]):
         elif isinstance(obj, (Property, ClassProperty)):
             name = name.split(".")
             if obj.getter is not None:
-                name[-1] = "get" + name[-1] + "()"
+                name[-1] = self.language.accessor_name("get", name[-1]) + "()"
             else:
-                name[-1] = "set" + name[-1] + "(" + self.type(obj.type) + ")"
+                name[-1] = "%s(%s)" % (
+                    self.language.accessor_name("set", name[-1]),
+                    self.type(obj.type),
+                )
             name = ".".join(name)
         elif isinstance(obj, EnumerationValue):
             name = name.split(".")
@@ -160,7 +166,7 @@ class JavaDomain(Domain[JavaLanguage]):
             name = ".".join(name)
         elif isinstance(obj, StructField):
             name = name.split(".")
-            name[-1] = "get" + name[-1] + "()"
+            name[-1] = self.language.accessor_name("get", name[-1]) + "()"
             name = ".".join(name)
         return self.shorten_ref(name)
 

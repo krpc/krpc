@@ -566,6 +566,8 @@ class JavaDispatchGenerator(DispatchGenerator):
 
     def struct(self, typ, struct):
         name = "%s%s" % (self._service, struct["name"])
+        for field in struct["fields"]:
+            field["getter"] = self._accessor("get", field["remote_name"])
         return {
             "arg": "Values.argNullable(%sDispatch::arg%s)" % (self._service, name),
             "result": "Values.resultNullable(%sDispatch::result%s)"
@@ -609,14 +611,17 @@ class JavaDispatchGenerator(DispatchGenerator):
     def _name(self, name):
         return self.language.parse_name(name)
 
+    def _accessor(self, prefix, name):
+        return self.language.accessor_name(prefix, name)
+
     def call(self, kind, cls, name, parameters):
         service = "%s.newInstance(connection)" % self._service
         if kind == PROCEDURE:
             return "%s.%s(%s)" % (service, self._name(name), _arguments(parameters))
         if kind == GETTER:
-            return "%s.get%s()" % (service, name)
+            return "%s.%s()" % (service, self._accessor("get", name))
         if kind == SETTER:
-            return "%s.set%s(a0)" % (service, name)
+            return "%s.%s(a0)" % (service, self._accessor("set", name))
         if kind == STATIC_METHOD:
             args = ", ".join(["connection"] + [x["name"] for x in parameters])
             return "%s.%s(%s)" % (
@@ -627,8 +632,8 @@ class JavaDispatchGenerator(DispatchGenerator):
         if kind == METHOD:
             return "a0.%s(%s)" % (self._name(name), _arguments(parameters, 1))
         if kind == CLASS_GETTER:
-            return "a0.get%s()" % name
-        return "a0.set%s(a1)" % name
+            return "a0.%s()" % self._accessor("get", name)
+        return "a0.%s(a1)" % self._accessor("set", name)
 
     def stream(self, kind, cls, name, parameters):
         if kind == PROCEDURE:
@@ -638,7 +643,10 @@ class JavaDispatchGenerator(DispatchGenerator):
                 "".join(", " + x["name"] for x in parameters),
             )
         if kind == GETTER:
-            return 'connection.addStream(%s.class, "get%s")' % (self._service, name)
+            return 'connection.addStream(%s.class, "%s")' % (
+                self._service,
+                self._accessor("get", name),
+            )
         if kind == STATIC_METHOD:
             return 'connection.addStream(%s.class, "%s"%s)' % (
                 self.class_type(self._service, cls),
@@ -650,7 +658,7 @@ class JavaDispatchGenerator(DispatchGenerator):
                 self._name(name),
                 "".join(", " + x["name"] for x in parameters[1:]),
             )
-        return 'connection.addStream(a0, "get%s")' % name
+        return 'connection.addStream(a0, "%s")' % self._accessor("get", name)
 
     def procedure_call(self, kind, cls, name, parameters):
         return self.stream(kind, cls, name, parameters).replace(
@@ -663,9 +671,9 @@ class JavaDispatchGenerator(DispatchGenerator):
         else:
             owner = self.class_type(self._service, cls)
         if kind in (GETTER, CLASS_GETTER):
-            method = "get" + name
+            method = self._accessor("get", name)
         elif kind in (SETTER, CLASS_SETTER):
-            method = "set" + name
+            method = self._accessor("set", name)
         else:
             method = self._name(name)
         return 'connection.getCallTemplate(%s.class, "%s")' % (owner, method)

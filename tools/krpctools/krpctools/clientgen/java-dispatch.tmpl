@@ -137,7 +137,7 @@ final class {{ service_name }}Dispatch {
   static Value result{{ service_name }}{{ struct.name }}({{ struct.class }} x) {
     var value = krpc.conformance.Testee.Struct.newBuilder().setName("{{ struct.name }}");
     {% for field in struct.fields %}
-    value.addFields(Values.<{{ field.boxed }}>result({{ field.result }}, x.get{{ field.remote_name }}()));
+    value.addFields(Values.<{{ field.boxed }}>result({{ field.result }}, x.{{ field.getter }}()));
     {% endfor %}
     return Value.newBuilder().setStruct(value).build();
   }

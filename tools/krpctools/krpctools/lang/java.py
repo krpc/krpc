@@ -70,9 +70,37 @@ class JavaLanguage(Language):
             "native",
             "super",
             "while",
+            # The literals, which are reserved as the keywords are
+            "false",
+            "null",
+            "true",
+        ]
+    ) | set(
+        [
+            # The methods of java.lang.Object and of the client's base classes, which a
+            # generated method of the same name would override or hide
+            "clone",
+            "compareTo",
+            "equals",
+            "finalize",
+            "getClass",
+            "getObjectId",
+            "hashCode",
+            "notify",
+            "notifyAll",
+            "toString",
             "wait",
+            # The packages the generated code names types in, which a variable of the same
+            # name would obscure
+            "com",
+            "java",
+            "krpc",
+            "org",
         ]
     )
+
+    # The locals of a generated method, and the connection a static method takes
+    parameter_reserved = frozenset(["_args", "_data", "connection"])
 
     tuple_types = [
         "Unit",
@@ -130,6 +158,18 @@ class JavaLanguage(Language):
         "System.OverflowException": "java.lang.ArithmeticException",
     }
 
+    def __init__(self, qualified=False):
+        """With qualified, a class from java.lang is named in full, so that no name a service
+        declares can shadow it in the generated code"""
+        super().__init__()
+        self.qualified = qualified
+
+    def accessor_name(self, prefix, name):
+        """The name of a getter or setter, such as getName, with a trailing underscore where it
+        is the name of a method of java.lang.Object"""
+        name = prefix + name
+        return name + "_" if name in self.keywords else name
+
     def native_exception(self, mapped_type: str) -> str | None:
         return self.native_exceptions.get(mapped_type)
 
@@ -141,6 +181,11 @@ class JavaLanguage(Language):
 
     def parse_name(self, name):
         return super().parse_name(lower_camel_case(name))
+
+    def _class_name(self, name):
+        if self.qualified and name[0].isupper():
+            return "java.lang." + name
+        return name
 
     @staticmethod
     def parse_const_name(name):
@@ -164,11 +209,11 @@ class JavaLanguage(Language):
         if isinstance(typ, ValueType):
             # A primitive takes its boxed form at a position that can hold null
             if in_collection or typ.nullable:
-                return self.type_map_classes[typ.protobuf_type.code]
-            return self.type_map[typ.protobuf_type.code]
+                return self._class_name(self.type_map_classes[typ.protobuf_type.code])
+            return self._class_name(self.type_map[typ.protobuf_type.code])
         if isinstance(typ, StreamType):
             if in_collection or typ.nullable:
-                return self.type_map_classes[Type.UINT64]
+                return self._class_name(self.type_map_classes[Type.UINT64])
             return self.type_map[Type.UINT64]
         if isinstance(typ, EventType):
             return "krpc.client.Event"

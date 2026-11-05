@@ -67,11 +67,11 @@
 
 {% macro property(x) %}{{ mark_documented(x) }}
 {% if x.getter != None %}
-.. method:: {{ domain.return_type(x.type) }} get{{ domain.method_name(x.name) }}()
+.. method:: {{ domain.return_type(x.type) }} {{ domain.accessor_name("get", x.name) }}()
 {% endif %}
 
 {% if x.setter != None %}
-.. method:: void set{{ domain.method_name(x.name) }}({{ domain.parameter_type(x.type) }} value)
+.. method:: void {{ domain.accessor_name("set", x.name) }}({{ domain.parameter_type(x.type) }} value)
 {% endif %}
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
@@ -180,7 +180,7 @@
       Construct a {{ x.name }} from the values of its fields.
 
 {% for field in x.fields.values() %}{{ mark_documented(field) }}
-   .. method:: {{ domain.field_type(field) }} get{{ domain.method_name(field.name) }}()
+   .. method:: {{ domain.field_type(field) }} {{ domain.accessor_name("get", field.name) }}()
 
 {% if field.deprecated %}{{ deprecated(field) | indent(width=6) }}
 
