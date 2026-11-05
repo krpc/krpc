@@ -62,7 +62,11 @@ class LuaDomain(Domain[LuaLanguage]):
             )
         ):
             name = name.split(".")
-            name[-1] = snake_case(name[-1])
+            # The client escapes a member, and names a structure field in plain snake case
+            if isinstance(obj, StructField):
+                name[-1] = snake_case(name[-1])
+            else:
+                name[-1] = self.language.parse_name(name[-1])
             name = ".".join(name)
         return self.shorten_ref(name)
 
@@ -84,6 +88,9 @@ class LuaDomain(Domain[LuaLanguage]):
         else:
             raise RuntimeError(str(obj))
         return ":%s:`%s`" % (prefix, self.ref(obj))
+
+    def method_name(self, name):
+        return self.language.parse_name(name)
 
     @staticmethod
     def paramref(name):

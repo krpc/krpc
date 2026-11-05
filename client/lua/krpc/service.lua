@@ -116,6 +116,19 @@ local KEYWORDS = Set{
   'local', 'nil', 'not', 'or', 'repeat', 'return', 'then', 'true', 'until', 'while', 'goto'
 }
 
+-- The methods of a Penlight class that the library calls, which a member of the same name
+-- would replace on the class
+local RESERVED_MEMBER_NAMES = Set{'class_of', 'is_a'}
+
+--- The name of a member of a service, class or enumeration
+function service.member_name(name)
+  name = service.to_snake_case(name)
+  if RESERVED_MEMBER_NAMES[name] then
+    name = name .. '_'
+  end
+  return name
+end
+
 -- Given a list of parameter names, append underscores to reserved keywords
 -- without causing parameter names to clash
 local function update_param_names(names)
@@ -176,7 +189,7 @@ local function _parse_deprecation_reason(reason, service_name)
     end
     if kind == 'M' then
       local path, member = name:match('^(.*%.)([^.]*)$')
-      return (path or '') .. service.to_snake_case(member or name)
+      return (path or '') .. service.member_name(member or name)
     end
     return name
   end
@@ -301,7 +314,7 @@ function service.register_definitions(types, svc)
     local values = {}
     local deprecated = {}
     for _,value in ipairs(enum.values) do
-      local name = service.to_snake_case(value.name)
+      local name = service.member_name(value.name)
       values[name] = value.value
       if value.deprecated then
         deprecated[name] = service.deprecation_warning(value, svc.name, svc.name .. '.' .. enum.name .. '.' .. name)
@@ -360,12 +373,12 @@ function RemoteService:_add_service_procedure(procedure)
   local param_names, param_types, param_required, return_type = self:_parse_procedure(procedure)
   local func = _construct_func(self, procedure.name, List{}, param_names, param_types, param_required, return_type)
   --build_request = ...
-  local name = service.to_snake_case(procedure.name)
+  local name = service.member_name(procedure.name)
   return self:_add_static_method(name, self:_deprecating(procedure, name, func))
 end
 
 function RemoteService:_add_service_property(name, getter, setter)
-  name = service.to_snake_case(name)
+  name = service.member_name(name)
   if getter then
     local getter_name = getter.name
     local _,_,_,return_type = self:_parse_procedure(getter)
@@ -390,7 +403,7 @@ function RemoteService:_add_service_class_method(class_name, method_name, proced
   --    param_names[0] = 'self'
   local func = _construct_func(self, procedure.name, nil, param_names, param_types, param_required, return_type)
   --build_request = ...
-  local name = service.to_snake_case(method_name)
+  local name = service.member_name(method_name)
   class_cls:_add_method(name, self:_deprecating(procedure, class_name .. '.' .. name, func))
 end
 
@@ -400,14 +413,14 @@ function RemoteService:_add_service_class_static_method(class_name, method_name,
   local param_names, param_types, param_required, return_type = self:_parse_procedure(procedure)
   local func = _construct_func(self, procedure.name, nil, param_names, param_types, param_required, return_type)
   --local build_request = ...
-  local name = service.to_snake_case(method_name)
+  local name = service.member_name(method_name)
   class_cls:_add_static_method(name, self:_deprecating(procedure, class_name .. '.' .. name, func))
 end
 
 --- Add a property to a class
 function RemoteService:_add_service_class_property(class_name, property_name, getter, setter)
   local class_cls = self._connection._types:class_type(self._name, class_name).lua_type
-  local qualified_name = class_name .. '.' .. service.to_snake_case(property_name)
+  local qualified_name = class_name .. '.' .. service.member_name(property_name)
   if getter then
     local getter_name = getter.name
     local param_names, param_types, param_required, return_type = self:_parse_procedure(getter)
@@ -423,7 +436,7 @@ function RemoteService:_add_service_class_property(class_name, property_name, ge
     setter = self:_deprecating(setter, qualified_name,
       _construct_func(self, setter.name, nil, param_names, param_types, param_required, nil))
   end
-  property_name = service.to_snake_case(property_name)
+  property_name = service.member_name(property_name)
   return class_cls:_add_property(property_name, getter, setter)
 end
 
