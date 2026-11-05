@@ -17,6 +17,7 @@ namespace KRPC.Service
         public ProcedureCallContinuation (ProcedureCall procedureCall)
         {
             call = procedureCall;
+            exception = procedureCall.DecodeException;
             try {
                 Procedure = procedureCall.CachedSignature ?? Services.Instance.GetProcedureSignature (call);
             } catch (RPCException e) {

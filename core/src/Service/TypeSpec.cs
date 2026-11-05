@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using KRPC.Service.Attributes;
+using KRPC.Utils;
 
 namespace KRPC.Service
 {
@@ -21,6 +22,8 @@ namespace KRPC.Service
             Nullable = nullable;
             types = containedTypes;
             Kind = KindOf (type);
+            if (Kind == TypeKind.Enum)
+                EnumValues = EnumValuesOf (type);
         }
 
         /// <summary>
@@ -45,6 +48,27 @@ namespace KRPC.Service
         /// reflection and every value encoded or decoded needs it.
         /// </summary>
         public TypeKind Kind { get; private set; }
+
+        /// <summary>
+        /// The boxed value of an enumeration for each number it declares, or null for any other
+        /// kind of type. Decoding looks a value up here, which costs no reflection or allocation.
+        /// </summary>
+        internal IDictionary<int,object> EnumValues { get; private set; }
+
+        static readonly IDictionary<Type,IDictionary<int,object>> enumValues =
+            new Dictionary<Type,IDictionary<int,object>> ();
+
+        static IDictionary<int,object> EnumValuesOf (Type type)
+        {
+            lock (enumValues) {
+                return enumValues.GetOrAdd (type, t => {
+                    var values = new Dictionary<int,object> ();
+                    foreach (var value in Enum.GetValues (t))
+                        values [(int)value] = value;
+                    return values;
+                });
+            }
+        }
 
         /// <summary>
         /// The values this one contains, in the order the wire type names them: the element of

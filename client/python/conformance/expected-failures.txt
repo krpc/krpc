@@ -31,7 +31,7 @@ test_values.py::test_null_in_non_nullable_slot[object-element]  # A null object 
 test_values.py::test_null_result_for_non_nullable  # A null result decodes as None
 test_values.py::test_out_of_range[float-above]  # A double beyond the largest float raises OverflowError
 test_values.py::test_out_of_range[float-below]  # As test_out_of_range[float-above]
-test_values.py::test_out_of_range[sint32-above]  # Calls check only for negatives, so the value wraps
+test_values.py::test_out_of_range[sint32-above]  # The encoder checks only that an unsigned number is not negative
 test_values.py::test_out_of_range[sint32-below]  # As test_out_of_range[sint32-above]
 test_values.py::test_out_of_range[sint64-above]  # As test_out_of_range[sint32-above]
 test_values.py::test_out_of_range[uint32-above]  # As test_out_of_range[sint32-above]

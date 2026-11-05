@@ -6,7 +6,7 @@ import time
 
 import pytest
 import testee_pb2 as pb
-from driver import profile, section, should, untested, values
+from driver import profile, raw, section, should, untested, values
 from driver.errors import assert_argument_error
 from driver.framing import encode_sint32, encode_size
 from driver.helpers import create
@@ -725,6 +725,40 @@ def test_too_many_arguments(connected, kind):
 
 
 section("Responses")
+
+
+# A procedure, and an encoded argument that is not a value of its parameter's type
+UNDECODABLE_ARGUMENTS = {
+    "left-over-bytes": ("Int32ToString", b"\x02\x00"),
+    "truncated": ("DoubleToString", b"\x00\x00\x00\x00"),
+    "sint32-out-of-range": ("Int32ToString", b"\x80\x80\x80\x80\x10"),
+    "uint32-out-of-range": ("UInt32ToString", b"\x80\x80\x80\x80\x10"),
+    "undeclared-enum": ("EnumToString", b"\xc6\x01"),
+    "bool-out-of-range": ("BoolToString", b"\x02"),
+    "unknown-field": ("IncrementList", b"\x10\x01"),
+    "wrong-sized-tuple": (
+        "IncrementTuple",
+        KRPC.Tuple(items=[b"\x02"]).SerializeToString(),
+    ),
+}
+
+
+@pytest.mark.parametrize("case", list(UNDECODABLE_ARGUMENTS))
+def test_undecodable_argument_fails_its_call(server, case):
+    """A call with an argument the server cannot decode fails with the server's
+    ``ArgumentException``, in the ``error`` field of its result. The other calls in the
+    request run, and their results stay in order."""
+    procedure, argument = UNDECODABLE_ARGUMENTS[case]
+    valid = raw.procedure_call("TestService", "Int32ToString", b"\x02")
+    first, failed, last = raw.request(
+        server,
+        valid,
+        raw.procedure_call("TestService", procedure, argument),
+        valid,
+    )
+    assert (failed.error.service, failed.error.name) == ("KRPC", "ArgumentException")
+    assert not first.HasField("error") and first.value == b"\x011"
+    assert not last.HasField("error") and last.value == b"\x011"
 
 
 @profile("concurrency")

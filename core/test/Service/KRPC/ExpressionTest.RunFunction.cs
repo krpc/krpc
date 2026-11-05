@@ -239,6 +239,19 @@ namespace KRPC.Test.Service.KRPC
         }
 
         [Test]
+        public void RunFunctionWithAnArgumentThatDoesNotDecodeInFull ()
+        {
+            var param = Expression.Parameter ("x", Type.Int ());
+            var function = Expression.Lambda (new List<Expression> { param }, param);
+            // A value followed by a byte it does not use, and a value out of range
+            foreach (var argument in new [] { new byte [] { 2, 0 }, new byte [] { 0x80, 0x80, 0x80, 0x80, 0x10 } }) {
+                var exn = Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                    () => global::KRPC.Service.KRPC.KRPC.RunFunction (function, new List<byte[]> { argument }));
+                StringAssert.Contains ("parameter x is not a value of type", exn.Message);
+            }
+        }
+
+        [Test]
         public void RunFunctionWithAnObjectOfTheWrongClass ()
         {
             var param = Expression.Parameter ("p", Type.ClassType ("TestService", "TestClass"));

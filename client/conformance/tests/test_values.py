@@ -815,36 +815,53 @@ def test_integer_to_float(connected, typ, integer):
     assert result == "6"
 
 
+# A procedure, and the arguments that pass a value of the wrong type
+WRONG_TYPES = {
+    "first": ("FloatToString", values.string("foo")),
+    "later": (
+        "AddMultipleValues",
+        values.float32(0.5),
+        values.string("foo"),
+        values.sint64(2),
+    ),
+    "numeric-string": ("Int32ToString", values.string("42")),
+    "bool": ("FloatToString", values.boolean(True)),
+    "list-item": (
+        "IncrementList",
+        values.list_of([values.sint32(1), values.string("foo")]),
+    ),
+    "tuple-item": (
+        "IncrementTuple",
+        values.tuple_of(values.sint32(1), values.string("foo")),
+    ),
+}
+
+
 @profile("dynamic")
-@pytest.mark.parametrize(
-    "position", ["first", "later", "numeric-string", "bool", "list-item", "tuple-item"]
-)
-def test_wrong_type(connected, position):
+@pytest.mark.parametrize("position", list(WRONG_TYPES))
+def test_wrong_type(client, server, scripted_server, position):
     """A value of the wrong type for its parameter, or for an item of a collection,
-    raises the encoding or argument error. A string that holds a number is not
-    converted to the number, and a bool is not converted to a number."""
-    with pytest.raises(TesteeError) as info:
-        if position == "first":
-            connected.invoke("TestService", "FloatToString", values.string("foo"))
-        elif position == "numeric-string":
-            connected.invoke("TestService", "Int32ToString", values.string("42"))
-        elif position == "bool":
-            connected.invoke("TestService", "FloatToString", values.boolean(True))
-        elif position == "list-item":
-            argument = values.list_of([values.sint32(1), values.string("foo")])
-            connected.invoke("TestService", "IncrementList", argument)
-        elif position == "tuple-item":
-            argument = values.tuple_of(values.sint32(1), values.string("foo"))
-            connected.invoke("TestService", "IncrementTuple", argument)
-        else:
-            connected.invoke(
-                "TestService",
-                "AddMultipleValues",
-                values.float32(0.5),
-                values.string("foo"),
-                values.sint64(2),
-            )
-    assert_value_error(connected, info.value.error)
+    raises the encoding or argument error, before the request is sent. A string that
+    holds a number is not converted to the number, and a bool is not converted to a
+    number."""
+    procedure, *arguments = WRONG_TYPES[position]
+    refused_before_sending(client, server, scripted_server, procedure, *arguments)
+
+
+# Arguments for a parameter that is a tuple of two items
+WRONG_SIZED_TUPLES = {
+    "too-few": values.tuple_of(values.sint32(1)),
+    "too-many": values.tuple_of(values.sint32(1), values.sint64(2), values.sint32(3)),
+}
+
+
+@profile("dynamic")
+@pytest.mark.parametrize("case", list(WRONG_SIZED_TUPLES))
+def test_wrong_sized_tuple(client, server, scripted_server, case):
+    """A tuple with the wrong number of items for its parameter raises the encoding or
+    argument error, before the request is sent."""
+    argument = WRONG_SIZED_TUPLES[case]
+    refused_before_sending(client, server, scripted_server, "IncrementTuple", argument)
 
 
 # A procedure, and a number outside the range of its parameter's type
@@ -862,23 +879,21 @@ OUT_OF_RANGE = {
 
 @profile("dynamic")
 @pytest.mark.parametrize("case", list(OUT_OF_RANGE))
-def test_out_of_range(connected, case):
+def test_out_of_range(client, server, scripted_server, case):
     """A number outside the range of its parameter's type raises the encoding or
-    argument error. This includes a finite ``double`` beyond the largest ``float``,
-    passed for a ``float`` parameter."""
+    argument error, before the request is sent. This includes a finite ``double`` beyond
+    the largest ``float``, passed for a ``float`` parameter."""
     procedure, value = OUT_OF_RANGE[case]
-    with pytest.raises(TesteeError) as info:
-        connected.invoke("TestService", procedure, value)
-    assert_value_error(connected, info.value.error)
+    refused_before_sending(client, server, scripted_server, procedure, value)
 
 
 @profile("dynamic")
-def test_undeclared_enum_value(connected):
+def test_undeclared_enum_value(client, server, scripted_server):
     """An enumeration value that the enumeration does not declare raises the encoding or
-    argument error."""
-    with pytest.raises(TesteeError) as info:
-        connected.invoke("TestService", "EnumToString", enum_value(99))
-    assert_value_error(connected, info.value.error)
+    argument error, before the request is sent."""
+    refused_before_sending(
+        client, server, scripted_server, "EnumToString", enum_value(99)
+    )
 
 
 # A procedure, and a string, bytes or dictionary for its list, set or tuple parameter
@@ -897,10 +912,8 @@ WRONG_COLLECTIONS = {
 @should
 @profile("dynamic")
 @pytest.mark.parametrize("case", list(WRONG_COLLECTIONS))
-def test_wrong_collection(connected, case):
+def test_wrong_collection(client, server, scripted_server, case):
     """A string, bytes or a dictionary passed for a list, set or tuple raises the
-    encoding or argument error."""
+    encoding or argument error, before the request is sent."""
     procedure, value = WRONG_COLLECTIONS[case]
-    with pytest.raises(TesteeError) as info:
-        connected.invoke("TestService", procedure, value)
-    assert_value_error(connected, info.value.error)
+    refused_before_sending(client, server, scripted_server, procedure, value)

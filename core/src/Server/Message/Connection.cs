@@ -250,12 +250,7 @@ namespace KRPC.Server.Message
                 }
                 switch (message.ContentCase) {
                 case ContentCase.Request:
-                    var request = message.Request;
-                    try {
-                        bufferedRequest = request.ToMessage ();
-                    } catch (System.Exception e) {
-                        throw new RequestDecodeException (request.Id, e);
-                    }
+                    bufferedRequest = message.Request.ToMessage ();
                     return true;
                 case ContentCase.Disconnect:
                     ReceivedDisconnect (message.Disconnect);

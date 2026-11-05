@@ -18,6 +18,11 @@ namespace KRPC.Service.Messages
 
         internal ProcedureSignature CachedSignature { get; set; }
 
+        /// <summary>
+        /// The exception from decoding the arguments, or null if they decoded.
+        /// </summary>
+        internal System.Exception DecodeException { get; set; }
+
         public ProcedureCall (string service, string procedure)
         {
             Service = service;

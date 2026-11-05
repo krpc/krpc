@@ -284,8 +284,16 @@ namespace KRPC.Server.ProtocolBuffers
         {
             var result = new Request ();
             result.Id = request.Id;
-            foreach (var call in request.Calls)
-                result.Calls.Add (call.ToMessage ());
+            foreach (var call in request.Calls) {
+                try {
+                    result.Calls.Add (call.ToMessage ());
+                } catch (System.Exception e) {
+                    // Fails only this call when it runs
+                    result.Calls.Add (new ProcedureCall (call.Service, call.ServiceId, call.Procedure, call.ProcedureId) {
+                        DecodeException = e
+                    });
+                }
+            }
             return result;
         }
 

@@ -18,8 +18,7 @@ namespace KRPC.Server.Message
         }
 
         /// <summary>
-        /// Whether a request is waiting to be read. Throws a RequestDecodeException if a request
-        /// arrived that names something the server cannot decode.
+        /// Whether a request is waiting to be read.
         /// </summary>
         public bool DataAvailable {
             get { return connection.Poll (client); }

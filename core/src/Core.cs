@@ -939,18 +939,6 @@ namespace KRPC
         HashSet<IClient<Request,Response>> pollRequestsCurrentClients = new HashSet<IClient<Request, Response>> ();
 
         /// <summary>
-        /// Send a response carrying nothing but an error, for a request that could not be
-        /// turned into a call to make.
-        /// </summary>
-        static void SendErrorResponse (IClient<Request,Response> client, ulong id, Error error)
-        {
-            var response = new Response ();
-            response.Id = id;
-            response.Error = error;
-            client.Stream.Write (response);
-        }
-
-        /// <summary>
         /// Poll connected clients for new requests.
         /// Adds a continuation to the queue for any client with a new request,
         /// if a continuation is not already being processed for the client.
@@ -974,17 +962,6 @@ namespace KRPC
                         EventHandlerExtensions.Invoke (OnClientActivity, this, new ClientActivityEventArgs (client));
                         rpcContinuations.Add (new RequestContinuation (client, request));
                     }
-                } catch (KRPC.Server.Message.RequestDecodeException e) {
-                    // The request arrived intact but names something the server cannot give,
-                    // such as an object it has reclaimed. Report a failed call, and leave the
-                    // connection open
-                    var error = KRPC.Service.Services.Instance.HandleException (e.InnerException ?? e);
-                    if (Logger.ShouldLog (Logger.Severity.Debug)) {
-                        var text = new StringBuilder ("Client " + client.Label () + " sent a request that failed: " + Describe (error));
-                        AppendStackTrace (text, error);
-                        Logger.WriteLine (text.ToString (), Logger.Severity.Debug);
-                    }
-                    SendErrorResponse (client, e.Id, error);
                 } catch (System.Exception e) {
                     // No request exists to tie a response to, so the connection ends. The
                     // connection logs the end of the session
