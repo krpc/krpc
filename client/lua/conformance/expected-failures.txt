@@ -76,7 +76,6 @@ test_connection.py::test_stall_timeout_values[negative]  # As test_stall_timeout
 test_connection.py::test_stall_timeout_values[nan]  # As test_stall_timeout_values[zero]
 test_values.py::test_integer_to_float[double-uint64]  # As test_default_values[uint64-extremes]
 test_values.py::test_integer_to_float[float-uint64]  # As test_default_values[uint64-extremes]
-test_values.py::test_null_result_for_non_nullable  # A null result decodes as nil
 test_values.py::test_out_of_range[float-above]  # The encoder does not check a number against its type
 test_values.py::test_out_of_range[float-below]  # The encoder does not check a number against its type
 test_values.py::test_out_of_range[sint32-above]  # The encoder does not check a number against its type

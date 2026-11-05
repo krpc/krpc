@@ -138,6 +138,35 @@ itself reads normally, but a call on one of its parts raises an error naming
 .. seealso:: :doc:`/user-guide/object-lifetime` describes how each kind of object behaves in more
              detail.
 
+Null Values
+-----------
+
+A procedure that can return null returns ``nil``. The following prints the name of the target
+vessel, if there is one, then clears the target:
+
+.. literalinclude:: /scripts/lua/NullValues.lua
+
+A ``nil`` argument leaves the argument out, and the parameter takes its default. The arguments
+after it are still passed. The following launches a vessel with the default crew, and passes
+``false`` for the parameter after it:
+
+.. literalinclude:: /scripts/lua/OmittedArguments.lua
+
+At a parameter with no default, a ``nil`` argument is null if the parameter can be null. Otherwise
+it raises an error.
+
+A Lua table cannot hold ``nil``, so a null in a list, tuple, dictionary or structure is
+:data:`Types.none <krpc.Types.none>`:
+
+.. code-block:: lua
+
+   local Types = require 'krpc.types'
+   local values = {1, Types.none, 3}
+   print(values[2] == Types.none)
+
+Pass :data:`Types.none <krpc.Types.none>` as an argument for a null at a parameter whose default
+is not null.
+
 Streams and Events
 ------------------
 
@@ -221,9 +250,9 @@ Client API Reference
 
 .. data:: Types.none
 
-   The value that stands for null, in an argument or a result. Load it with
-   ``local Types = require 'krpc.types'``. A procedure whose result is null returns it, and ``==``
-   tests for it.
+   The value that stands for null in a list, tuple, dictionary or structure, where ``nil`` cannot
+   go, and in an argument whose default is not null. Load it with
+   ``local Types = require 'krpc.types'``, and test for it with ``==``.
 
 Numeric Limits
 ^^^^^^^^^^^^^^

@@ -157,7 +157,10 @@ function Client:_invoke(service, procedure, args, param_types, return_type, para
   if return_type then
     -- A null result is signaled out-of-band by is_null; the value field is unset
     if result.is_null then
-      return Types.none
+      if not return_type.nullable then
+        error(string.format('%s.%s() returned null, for a result that cannot be null', service, procedure))
+      end
+      return nil
     end
     return value
   end
