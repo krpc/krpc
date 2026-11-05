@@ -849,7 +849,9 @@ class CnanoDispatchGenerator(DispatchGenerator, CnanoGenerator):
         return _kind(typ).capitalize()
 
     def _struct_tag(self, struct):
-        struct["field_names"] = [snake_case(x["remote_name"]) for x in struct["fields"]]
+        struct["field_names"] = [
+            self.parse_name(snake_case(x["remote_name"])) for x in struct["fields"]
+        ]
         struct["ctype"] = self.class_type(self._service, struct["name"])
         return "%s_%s" % (self._service, struct["name"])
 

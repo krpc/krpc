@@ -134,6 +134,28 @@ class CnanoLanguage(Language):
 
     value_map = {"null": "nullptr"}
 
+    # The locals of a generated function, the parameters it adds, and the standard names
+    # its signature and body use
+    parameter_reserved = frozenset(
+        [
+            "_call",
+            "_arguments",
+            "_result",
+            "_stream",
+            "connection",
+            "instance",
+            "procedureCall",
+            "returnValue",
+            "returnValueIsNull",
+            "NULL",
+            "size_t",
+            "int32_t",
+            "int64_t",
+            "uint32_t",
+            "uint64_t",
+        ]
+    )
+
     def add_collection_type(self, typ):
         if isinstance(typ, TupleType):
             for value_type in typ.value_types:

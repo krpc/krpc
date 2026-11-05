@@ -427,6 +427,8 @@ class CnanoGenerator(Generator[CnanoLanguage]):
 
 
 class CNanoDocParser(DocParser):
+    language = CnanoLanguage()
+
     def parse_summary(self, node):
         return self.parse_node(node).strip()
 
@@ -434,15 +436,15 @@ class CNanoDocParser(DocParser):
         return "\n\n" + self.parse_node(node).strip()
 
     def parse_param(self, node):
-        return "\n@param %s %s" % (node.attrib["name"], self.parse_node(node).strip())
+        name = self.language.parse_parameter_name(node.attrib["name"])
+        return "\n@param %s %s" % (name, self.parse_node(node).strip())
 
     def parse_returns(self, node):
         # A function returns an error code, and the value through its returnValue parameter
         return "\n@param returnValue %s" % self.parse_node(node).strip()
 
-    @staticmethod
-    def parse_paramref(node):
-        return node.attrib["name"]
+    def parse_paramref(self, node):
+        return self.language.parse_parameter_name(node.attrib["name"])
 
     @staticmethod
     def parse_a(node):
