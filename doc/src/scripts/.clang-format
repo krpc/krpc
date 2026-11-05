@@ -1,0 +1,8 @@
+---
+# Formatting for the C and C++ documentation examples. The client style, with
+# the 80-column line length the rendered code blocks fit.
+BasedOnStyle: Google
+ColumnLimit: 80
+# Pointers and references follow the alignment each file already uses
+DerivePointerAlignment: true
+...

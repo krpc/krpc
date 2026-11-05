@@ -3,10 +3,8 @@
 
 int main() {
   krpc_connection_t conn;
-  if (krpc_open_tcp(&conn, "127.0.0.1", 50000) != KRPC_OK)
-    return 1;
-  if (krpc_connect(conn, "My Example Program") != KRPC_OK)
-    return 1;
+  if (krpc_open_tcp(&conn, "127.0.0.1", 50000) != KRPC_OK) return 1;
+  if (krpc_connect(conn, "My Example Program") != KRPC_OK) return 1;
   krpc_KRPC_ServerStatus_t status = {0};
   krpc_KRPC_GetStatus(conn, &status);
   printf("%s\n", status.version);

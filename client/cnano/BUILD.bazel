@@ -259,6 +259,14 @@ cc_binary(
     deps = [":krpc_cnano_error_messages"],
 )
 
+# The program the CMake and vcpkg CI scripts build against the installed package, built here
+# so that it is linted
+cc_binary(
+    name = "test-consumer",
+    srcs = ["test-consumer/main.c"],
+    deps = [":krpc_cnano"],
+)
+
 test_suite(
     name = "lint",
     tests = [
@@ -267,12 +275,24 @@ test_suite(
     ],
 )
 
+# The Windows serial transport test builds on Windows alone, where clang-tidy does not run
 clang_tidy_test(
     name = "clangtidy",
     size = "large",
-    srcs = srcs,
-    copts = ["-std=c99"],
-    deps = [":krpc_cnano"],
+    conlyopts = ["-std=c99"],
+    programs = [
+        ":benchmark",
+        ":cnanotest-tcpip",
+        ":communication-arduino",
+        ":communication-socket",
+        ":communication-transport",
+        ":conformance-testee",
+        ":test-consumer",
+    ],
+    targets = [
+        ":krpc_cnano",
+        ":krpc_cnano_error_messages",
+    ],
 )
 
 clang_format_test(
@@ -283,6 +303,7 @@ clang_format_test(
         "conformance/*.hpp",
         "benchmark/*.c",
         "src/*.c",
+        "test-consumer/*.c",
         "include/**/*.h",
         "test/*.cpp",
         "test/*.h",

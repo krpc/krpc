@@ -8,17 +8,15 @@
 #include <unistd.h>
 #endif
 #include <krpc_cnano.h>
+#include <krpc_cnano/services/drawing.h>
 #include <krpc_cnano/services/space_center.h>
 #include <krpc_cnano/services/std_lib.h>
 #include <krpc_cnano/services/ui.h>
-#include <krpc_cnano/services/drawing.h>
 
 int main() {
   krpc_connection_t conn;
-  if (krpc_open_serial(&conn, "COM0") != KRPC_OK)
-    return 1;
-  if (krpc_connect(conn, "Drawing Example") != KRPC_OK)
-    return 1;
+  if (krpc_open_serial(&conn, "COM0") != KRPC_OK) return 1;
+  if (krpc_connect(conn, "Drawing Example") != KRPC_OK) return 1;
 
   krpc_SpaceCenter_Vessel_t vessel;
   krpc_SpaceCenter_ActiveVessel(conn, &vessel);
@@ -39,7 +37,7 @@ int main() {
   krpc_SpaceCenter_UT(conn, &ut);
   krpc_SpaceCenter_Orbit_t orbit;
   krpc_SpaceCenter_Orbit_CreateFromOrbitalElements(
-    conn, &orbit, kerbin, radius + 250000, 0, 0, 0, 0, 0, ut);
+      conn, &orbit, kerbin, radius + 250000, 0, 0, 0, 0, 0, ut);
   krpc_Drawing_OrbitPath_t path;
   krpc_Drawing_AddOrbit(conn, &path, orbit, true);
   krpc_StdLib_ColorRGB_t green = {0, 1, 0};
@@ -49,18 +47,19 @@ int main() {
 
   // Mark the north pole in the map view, with the game's flag icon
   krpc_tuple_double_double_double_t site;
-  krpc_SpaceCenter_CelestialBody_SurfacePosition(
-    conn, &site, kerbin, 90, 0, kerbin_ref);
-  krpc_Drawing_AddMapMarker(
-    conn, NULL, &site, kerbin_ref, KRPC_DRAWING_MAPMARKERICON_FLAG,
-    "North pole", true);
+  krpc_SpaceCenter_CelestialBody_SurfacePosition(conn, &site, kerbin, 90, 0,
+                                                 kerbin_ref);
+  krpc_Drawing_AddMapMarker(conn, NULL, &site, kerbin_ref,
+                            KRPC_DRAWING_MAPMARKERICON_FLAG, "North pole",
+                            true);
 
   // Draw a yellow arrow from the vessel, pointing prograde
   krpc_SpaceCenter_ReferenceFrame_t orbital_ref;
   krpc_SpaceCenter_Vessel_OrbitalReferenceFrame(conn, &orbital_ref, vessel);
   krpc_tuple_double_double_double_t prograde = {0, 1, 0};
   krpc_Drawing_Line_t arrow;
-  krpc_Drawing_AddDirectionFromCom(conn, &arrow, &prograde, orbital_ref, 10, true);
+  krpc_Drawing_AddDirectionFromCom(conn, &arrow, &prograde, orbital_ref, 10,
+                                   true);
   krpc_StdLib_ColorRGB_t yellow = {1, 1, 0};
   krpc_Drawing_Line_set_Color(conn, arrow, &yellow);
   krpc_Drawing_Line_set_EndArrow(conn, arrow, true);

@@ -1,6 +1,6 @@
 #include "krpc.hpp"
 
-#include <chrono>  // NOLINT(build/c++11)
+#include <chrono>
 #include <cstdlib>
 #include <memory>
 #include <string>

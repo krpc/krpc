@@ -1,7 +1,7 @@
 #include <iostream>
 #include <krpc.hpp>
-#include <krpc/services/space_center.hpp>
 #include <krpc/services/remote_tech.hpp>
+#include <krpc/services/space_center.hpp>
 
 int main() {
   krpc::Client conn = krpc::connect("RemoteTech Example");

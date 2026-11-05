@@ -1,7 +1,7 @@
 ---
 # clang-tidy configuration for the C++ (client/cpp) and C (client/cnano)
-# clients. Covers non-formatting style and correctness checks; formatting is
-# handled separately by clang-format.
+# clients and their documentation examples. Covers non-formatting style and
+# correctness checks; formatting is handled separately by clang-format.
 Checks: >
   bugprone-*,
   performance-*,
@@ -13,6 +13,7 @@ Checks: >
 WarningsAsErrors: '*'
 CheckOptions:
   bugprone-signed-bitwise.IgnorePositiveIntegerLiterals: true
+  bugprone-reserved-identifier.AllowedIdentifiers: '_POSIX_C_SOURCE;_DARWIN_C_SOURCE'
 # Disabled checks and why:
 #  * bugprone-crtp-constructor-accessibility — Object<T>'s public constructor is
 #    deliberate (the encoder/decoder need access; see object.hpp).
@@ -26,10 +27,12 @@ CheckOptions:
 #    nanopb's void* stream arg via the correct (void*)(intptr_t) idiom.
 # bugprone-signed-bitwise skips positive literals, so masks and shift counts
 # such as `x >> 32 & 0x7ff` stay as written.
+# bugprone-reserved-identifier allows the feature test macros that expose the
+# sockets API to strict C.
 # Only diagnose our own hand-written sources, not third-party headers (asio,
 # protobuf, nanopb). The exclude drops generated code — the protobuf stubs
 # (*.pb.hpp) and the generated service stubs (include/krpc/services/, all under
 # a bazel-out/ path) — which live under a client/cpp/include/ path substring.
-HeaderFilterRegex: 'client/c(pp|nano)/(include|src|test)/'
+HeaderFilterRegex: 'client/c(pp|nano)/(include|src|test|conformance)/'
 ExcludeHeaderFilterRegex: 'bazel-out|/services/|\.pb\.'
 ...

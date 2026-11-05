@@ -1,7 +1,7 @@
 #include <iostream>
-#include <thread>
 #include <krpc.hpp>
 #include <krpc/services/space_center.hpp>
+#include <thread>
 
 int main() {
   auto conn = krpc::connect();

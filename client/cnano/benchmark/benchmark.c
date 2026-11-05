@@ -217,7 +217,8 @@ static krpc_error_t open_connection(void) {
   const char *path = getenv("KRPC_TEST_LOCALSOCKET_PATH");
   const char *port = getenv("KRPC_TEST_TCPIP_PORT");
   if (path != NULL) return krpc_open_localsocket(&connection, path);
-  return krpc_open_tcp(&connection, "127.0.0.1", port == NULL ? 50000 : (uint16_t)atoi(port));
+  return krpc_open_tcp(&connection, "127.0.0.1",
+                       port == NULL ? 50000 : (uint16_t)strtol(port, NULL, 10));
 }
 
 int main(void) {

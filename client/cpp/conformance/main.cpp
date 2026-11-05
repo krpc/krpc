@@ -63,7 +63,7 @@ class Writer {
 class Worker {
  public:
   explicit Worker(std::function<void(const Command&)> run)
-      : thread([this, run]() {
+      : thread([this, run = std::move(run)]() {
           while (true) {
             std::unique_lock<std::mutex> lock(mutex);
             ready.wait(lock, [this]() { return stopping || !queue.empty(); });

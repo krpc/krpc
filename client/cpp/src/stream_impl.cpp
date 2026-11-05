@@ -2,13 +2,13 @@
 
 #include <algorithm>
 #include <atomic>
-#include <chrono>  // NOLINT(build/c++11)
+#include <chrono>
 #include <cmath>
 #include <exception>
 #include <iostream>
 #include <memory>
 #include <string>
-#include <thread>  // NOLINT(build/c++11)
+#include <thread>
 #include <utility>
 
 #include "krpc/client.hpp"

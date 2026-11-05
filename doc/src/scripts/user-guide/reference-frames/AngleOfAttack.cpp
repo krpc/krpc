@@ -1,10 +1,10 @@
-#include <iostream>
-#include <iomanip>
-#include <cmath>
 #include <chrono>
-#include <thread>
+#include <cmath>
+#include <iomanip>
+#include <iostream>
 #include <krpc.hpp>
 #include <krpc/services/space_center.hpp>
+#include <thread>
 
 static const double pi = 3.1415926535897;
 
@@ -18,25 +18,21 @@ int main() {
     auto v = vessel.velocity(vessel.orbit().body().reference_frame());
 
     // Compute the dot product of d and v
-    double dotProd =
-      std::get<0>(d)*std::get<0>(v) +
-      std::get<1>(d)*std::get<1>(v) +
-      std::get<2>(d)*std::get<2>(v);
+    double dotProd = std::get<0>(d) * std::get<0>(v) +
+                     std::get<1>(d) * std::get<1>(v) +
+                     std::get<2>(d) * std::get<2>(v);
 
     // Compute the magnitude of v
-    double vMag = sqrt(
-      std::get<0>(v)*std::get<0>(v) +
-      std::get<1>(v)*std::get<1>(v) +
-      std::get<2>(v)*std::get<2>(v));
+    double vMag =
+        sqrt(std::get<0>(v) * std::get<0>(v) + std::get<1>(v) * std::get<1>(v) +
+             std::get<2>(v) * std::get<2>(v));
     // Note: don't need to magnitude of d as it is a unit vector
 
     // Compute the angle between the vectors
     double angle = 0;
-    if (vMag > 0)
-      angle = acos(dotProd / vMag) * (180.0 / pi);
+    if (vMag > 0) angle = acos(dotProd / vMag) * (180.0 / pi);
 
-    std::cout << "Angle of attack = "
-              << std::fixed << std::setprecision(1)
+    std::cout << "Angle of attack = " << std::fixed << std::setprecision(1)
               << angle << " degrees" << std::endl;
 
     std::this_thread::sleep_for(std::chrono::seconds(1));

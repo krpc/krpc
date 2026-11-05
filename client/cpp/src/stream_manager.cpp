@@ -2,8 +2,8 @@
 
 #include <algorithm>
 #include <atomic>
-#include <chrono>              // NOLINT(build/c++11)
-#include <condition_variable>  // NOLINT(build/c++11)
+#include <chrono>
+#include <condition_variable>
 #include <exception>
 #include <functional>
 #include <iostream>

@@ -3,10 +3,8 @@
 
 int main() {
   krpc_connection_t conn;
-  if (krpc_open_serial(&conn, "COM0") != KRPC_OK)
-    return 1;
-  if (krpc_connect(conn, "Errors example") != KRPC_OK)
-    return 1;
+  if (krpc_open_serial(&conn, "COM0") != KRPC_OK) return 1;
+  if (krpc_connect(conn, "Errors example") != KRPC_OK) return 1;
 
   krpc_error_t error = krpc_SpaceCenter_Load(conn, "missing");
   if (error != KRPC_OK)

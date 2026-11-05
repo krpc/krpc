@@ -128,7 +128,7 @@ struct Value {
   std::string value;
   bool is_null;
   // Implicit so a plain encoded value (the common, non-null case) becomes a Value.
-  Value(std::string value) : value(std::move(value)), is_null(false) {}  // NOLINT(runtime/explicit)
+  Value(std::string value) : value(std::move(value)), is_null(false) {}
   static Value null() {
     Value value("");
     value.is_null = true;

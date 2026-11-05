@@ -6,7 +6,7 @@
 #include <limits>
 #include <map>
 #include <memory>
-#include <mutex>  // NOLINT(build/c++11)
+#include <mutex>
 #include <stdexcept>
 #include <string>
 #include <type_traits>
@@ -213,8 +213,9 @@ inline T Stream<T>::decode_value(const std::string& data, bool is_null, bool nul
     return;
   } else {
     // A null value is signaled out-of-band by is_null, and leaves the value default
-    // constructed, which for a nullable stream is an empty optional.
-    T value{};
+    // constructed, which for a nullable stream is an empty optional. The server sends null
+    // only for a nullable type, so an enumeration value is always decoded.
+    T value{};  // NOLINT(bugprone-invalid-enum-default-initialization)
     if (is_null) {
       if (null_is_an_error)
         throw std::runtime_error(
@@ -280,12 +281,13 @@ inline int Stream<T>::add_callback(const Callback& callback) {
       (void)null_is_an_error;
       callback();
     } else {
-      T value{};
-      try {
-        value = decode_value(data, is_null, null_is_an_error, client);
-      } catch (const std::exception& exn) {
-        throw CallbackDecodeError(exn.what());
-      }
+      auto value = [&]() {
+        try {
+          return decode_value(data, is_null, null_is_an_error, client);
+        } catch (const std::exception& exn) {
+          throw CallbackDecodeError(exn.what());
+        }
+      }();
       callback(std::move(value));
     }
   };

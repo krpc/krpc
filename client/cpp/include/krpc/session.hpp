@@ -1,17 +1,17 @@
 #pragma once
 
 #include <atomic>
-#include <chrono>              // NOLINT(build/c++11)
-#include <condition_variable>  // NOLINT(build/c++11)
+#include <chrono>
+#include <condition_variable>
 #include <cstdint>
 #include <deque>
 #include <exception>
 #include <functional>
 #include <map>
 #include <memory>
-#include <mutex>  // NOLINT(build/c++11)
+#include <mutex>
 #include <string>
-#include <thread>  // NOLINT(build/c++11)
+#include <thread>
 #include <utility>
 #include <vector>
 

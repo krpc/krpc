@@ -1,8 +1,8 @@
 #include <cmath>
 #include <iostream>
-#include <tuple>
 #include <krpc.hpp>
 #include <krpc/services/space_center.hpp>
+#include <tuple>
 
 static const double pi = 3.1415926535897;
 

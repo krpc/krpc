@@ -102,6 +102,7 @@ inline const Value& not_null(const Value& value) {
   if (is_null(value)) throw Unsupported("The C type cannot hold null");
   return value;
 }
+const Value& not_null(Value&&) = delete;
 
 // The conversion of each kind of value, as a tag type: the C type of the value, and an arg and
 // a result function. The generated dispatch composes them for a collection, and generates a

@@ -1,9 +1,9 @@
 #include <chrono>
-#include <thread>
 #include <krpc.hpp>
 #include <krpc/services/space_center.hpp>
 #include <krpc/services/std_lib.hpp>
 #include <krpc/services/ui.hpp>
+#include <thread>
 
 int main() {
   krpc::Client conn = krpc::connect("User Interface Example");
@@ -22,7 +22,7 @@ int main() {
   // Position the panel on the left of the screen
   auto rect = panel.rect_transform();
   rect.set_size(std::make_tuple(200, 120));
-  rect.set_position(std::make_tuple(110-(std::get<0>(screen_size)/2), 0));
+  rect.set_position(std::make_tuple(110 - (std::get<0>(screen_size) / 2), 0));
 
   // Lay the contents of the panel out in a column
   auto layout = panel.add_vertical_layout();
@@ -64,7 +64,8 @@ int main() {
     }
 
     // Update the thrust text
-    text.set_content("Thrust: " + std::to_string((int)(vessel.thrust()/1000)) + " kN");
+    text.set_content(
+        "Thrust: " + std::to_string((int)(vessel.thrust() / 1000)) + " kN");
 
     std::this_thread::sleep_for(std::chrono::seconds(1));
   }

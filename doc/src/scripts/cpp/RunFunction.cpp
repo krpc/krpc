@@ -1,10 +1,9 @@
 #include <iostream>
-#include <tuple>
-
 #include <krpc.hpp>
 #include <krpc/function_stream.hpp>
 #include <krpc/services/krpc.hpp>
 #include <krpc/services/space_center.hpp>
+#include <tuple>
 
 int main() {
   auto conn = krpc::connect();
@@ -19,11 +18,11 @@ int main() {
 
   // Build a function that reads the altitude and the speed
   typedef krpc::services::KRPC::Expression Expr;
-  auto expr = Expr::create_tuple(conn, {
-    Expr::call(conn, mean_altitude_call),
-    Expr::call(conn, speed_call)});
+  auto expr = Expr::create_tuple(conn, {Expr::call(conn, mean_altitude_call),
+                                        Expr::call(conn, speed_call)});
 
   // Run the function once, so both values come from the same physics tick
   auto [altitude, speed] = krpc::run<std::tuple<double, double>>(expr);
-  std::cout << "Altitude: " << altitude << " m, speed: " << speed << " m/s" << std::endl;
+  std::cout << "Altitude: " << altitude << " m, speed: " << speed << " m/s"
+            << std::endl;
 }

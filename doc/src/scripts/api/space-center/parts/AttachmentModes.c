@@ -3,10 +3,8 @@
 
 int main() {
   krpc_connection_t conn;
-  if (krpc_open_serial(&conn, "COM0") != KRPC_OK)
-    return 1;
-  if (krpc_connect(conn, "InfernalRobotics Example") != KRPC_OK)
-    return 1;
+  if (krpc_open_serial(&conn, "COM0") != KRPC_OK) return 1;
+  if (krpc_connect(conn, "InfernalRobotics Example") != KRPC_OK) return 1;
 
   krpc_SpaceCenter_Vessel_t vessel;
   krpc_SpaceCenter_ActiveVessel(conn, &vessel);
@@ -31,11 +29,10 @@ int main() {
     stackPtr--;  // Pop the stack
     bool axially_attached;
     krpc_SpaceCenter_Part_AxiallyAttached(conn, &axially_attached, part);
-    const char * attach_mode = axially_attached ? "axial" : "radial";
-    char * title = NULL;
+    const char* attach_mode = axially_attached ? "axial" : "radial";
+    char* title = NULL;
     krpc_SpaceCenter_Part_Title(conn, &title, part);
-    for (int i = 0; i < depth; i++)
-      printf(" ");
+    for (int i = 0; i < depth; i++) printf(" ");
     printf("%s - %s\n", title, attach_mode);
 
     krpc_list_object_t children = KRPC_NULL_LIST;
@@ -44,7 +41,7 @@ int main() {
       // Push onto the stack
       stackPtr++;
       stack[stackPtr].part = children.items[i];
-      stack[stackPtr].depth = depth+1;
+      stack[stackPtr].depth = depth + 1;
     }
   }
 }

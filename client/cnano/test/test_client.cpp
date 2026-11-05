@@ -10,7 +10,7 @@
 // The port the test harness passes in, or the server's default when the binary is run directly
 static uint16_t server_port() {
   const char* port = std::getenv("KRPC_TEST_TCPIP_PORT");
-  return port == nullptr ? 50000 : static_cast<uint16_t>(std::atoi(port));
+  return port == nullptr ? 50000 : static_cast<uint16_t>(std::strtol(port, nullptr, 10));
 }
 
 class test_client : public ::testing::Test {

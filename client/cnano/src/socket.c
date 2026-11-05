@@ -2,11 +2,11 @@
  * file says which POSIX it expects. A feature test macro only has any effect before the first
  * header is included, which is why this comes ahead of them. */
 #if !defined(ARDUINO) && !defined(_WIN32) && !defined(_POSIX_C_SOURCE)
-#define _POSIX_C_SOURCE 200112L  // NOLINT(bugprone-reserved-identifier)
+#define _POSIX_C_SOURCE 200112L
 #endif
 /* macOS hides SO_NOSIGPIPE under a strict POSIX unless asked for its own extensions too */
 #if defined(__APPLE__) && !defined(_DARWIN_C_SOURCE)
-#define _DARWIN_C_SOURCE  // NOLINT(bugprone-reserved-identifier)
+#define _DARWIN_C_SOURCE
 #endif
 
 #include <krpc_cnano/communication.h>

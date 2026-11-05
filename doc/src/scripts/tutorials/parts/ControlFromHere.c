@@ -3,10 +3,8 @@
 
 int main() {
   krpc_connection_t conn;
-  if (krpc_open_serial(&conn, "COM0") != KRPC_OK)
-    return 1;
-  if (krpc_connect(conn, "ControlFromHere") != KRPC_OK)
-    return 1;
+  if (krpc_open_serial(&conn, "COM0") != KRPC_OK) return 1;
+  if (krpc_connect(conn, "ControlFromHere") != KRPC_OK) return 1;
 
   krpc_SpaceCenter_Vessel_t vessel;
   krpc_SpaceCenter_ActiveVessel(conn, &vessel);
@@ -15,7 +13,8 @@ int main() {
   krpc_SpaceCenter_Vessel_Parts(conn, &parts, vessel);
 
   krpc_list_object_t docking_port_parts;
-  krpc_SpaceCenter_Parts_WithTitle(conn, &docking_port_parts, parts, "Clamp-O-Tron Docking Port");
+  krpc_SpaceCenter_Parts_WithTitle(conn, &docking_port_parts, parts,
+                                   "Clamp-O-Tron Docking Port");
   krpc_object_t part = docking_port_parts.items[0];
   krpc_SpaceCenter_Parts_set_Controlling(conn, parts, part);
 }

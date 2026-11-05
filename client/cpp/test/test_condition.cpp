@@ -1,13 +1,13 @@
 #include <gtest/gtest-message.h>
 #include <gtest/gtest-test-part.h>
 
-#include <chrono>              // NOLINT(build/c++11)
-#include <condition_variable>  // NOLINT(build/c++11)
+#include <chrono>
+#include <condition_variable>
 #include <future>
-#include <mutex>  // NOLINT(build/c++11)
+#include <mutex>
 #include <stdexcept>
 #include <system_error>
-#include <thread>  // NOLINT(build/c++11)
+#include <thread>
 
 #include "gtest/gtest.h"
 #include "krpc/condition.hpp"
