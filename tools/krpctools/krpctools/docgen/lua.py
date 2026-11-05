@@ -35,6 +35,12 @@ class LuaDomain(Domain[LuaLanguage]):
         name = self.type(typ)
         return "%s | Types.none" % name if typ.nullable else name
 
+    def return_type(self, typ):
+        # A null result is nil
+        if typ is not None and typ.nullable:
+            return "%s | nil" % self.type(typ)
+        return super().return_type(typ)
+
     def ref(self, obj):
         name = obj.fullname
         if any(

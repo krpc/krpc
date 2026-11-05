@@ -22,9 +22,8 @@ function Client:_init(connection)
   -- Set up the main KRPC service
   local services = self:_invoke('KRPC', 'GetServices', nil, nil, self._types:services_type()).services
 
-  -- Register the types of every service before creating any of them: a service's procedures
-  -- are built from types that any service may define, and a default value cannot be decoded
-  -- before the values of the enumeration it belongs to are known
+  -- Register the types of every service before creating any of them, as a service's procedures
+  -- are built from types that any service may define
   for _, service in ipairs(services) do
     register_definitions(self._types, service)
   end
@@ -124,8 +123,10 @@ function Client:_receive_response(id, return_type)
   end
 end
 
---- Execute an RPC
-function Client:_invoke(service, procedure, args, param_types, return_type)
+--- Execute an RPC. A nil argument is left out, so that the parameter takes its default. At a
+--- parameter with no default, a nil argument is a null if the parameter can be null, and an error
+--- otherwise.
+function Client:_invoke(service, procedure, args, param_types, return_type, param_required)
   args = args or List{}
   param_types = param_types or List{}
 
@@ -136,7 +137,7 @@ function Client:_invoke(service, procedure, args, param_types, return_type)
   -- Build the request
   local id = self._next_id
   self._next_id = id + 1
-  local request = self:_build_request(id, service, procedure, args, param_types)
+  local request = self:_build_request(id, service, procedure, args, param_types, param_required)
 
   -- Send the request, which is already the bytes to send
   self:_transport(self._connection.send, request)
@@ -156,23 +157,40 @@ function Client:_invoke(service, procedure, args, param_types, return_type)
   if return_type then
     -- A null result is signaled out-of-band by is_null; the value field is unset
     if result.is_null then
-      return Types.none
+      if not return_type.nullable then
+        error(string.format('%s.%s() returned null, for a result that cannot be null', service, procedure))
+      end
+      return nil
     end
     return value
   end
   return nil
 end
 
+-- The name of a type in an error message, without the ? that marks a nullable type
+local function type_name(typ)
+  return (typ._string:gsub('%?$', ''))
+end
+
 --- Build the bytes of the request carrying a procedure call, ready to send
-function Client:_build_request(id, service, procedure, args, param_types)
+function Client:_build_request(id, service, procedure, args, param_types, param_required)
   local arguments = {}
 
-  for i,value in ipairs(args) do
-    local typ = param_types[i]
+  for i,typ in ipairs(param_types) do
+    local value = args[i]
+    -- A nil argument with no default is a null
+    if value == nil and param_required and param_required[i] then
+      value = Types.none
+    end
+    if rawequal(value, Types.none) and not typ.nullable then
+      local given = args[i] == nil and 'nil' or 'null'
+      error(string.format('%s.%s() argument %d must be a %s, got %s', service, procedure, i, type_name(typ), given))
+    end
+    -- A nil argument stays out of arguments, so the server uses the parameter's default
     if rawequal(value, Types.none) then
       -- A null argument is signaled out-of-band by is_null; the value field is left unset
       arguments[i] = Types.none
-    else
+    elseif value ~= nil then
       local valid = false
       if type(typ.lua_type) == 'string' then
         valid = typ.lua_type == type(value)
@@ -180,19 +198,19 @@ function Client:_build_request(id, service, procedure, args, param_types)
         valid = typ.lua_type:class_of(value)
       end
       if not valid then
-        -- Only ok is declared here; value is the loop variable and must stay so, as the
-        -- coerced value is read below, outside this block
+        local given = type(value)
+        -- Only ok is declared here, as the coerced value is read below, outside this block
         local ok
         ok,value = pcall(self._types.coerce_to, self._types, value, typ)
         if not ok then
-          error(string.format('%s.%s() argument %d must be a %s, got a %s', service, procedure, i, typ.lua_type, type(value)))
+          error(string.format('%s.%s() argument %d must be a %s, got a %s', service, procedure, i, type_name(typ), given))
         end
       end
       arguments[i] = encoder.encode(value, typ)
     end
   end
 
-  return encoder.encode_request(id, service, procedure, arguments)
+  return encoder.encode_request(id, service, procedure, arguments, #param_types)
 end
 
 --- Construct an error description from a KRPC.Error object

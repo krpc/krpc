@@ -689,6 +689,23 @@ def test_named_arguments(connected, kind):
     assert_argument_error(connected, error.value.error)
 
 
+@profile("defaults", "skipped-arguments")
+@pytest.mark.parametrize("kind", ["procedure", "method", "static-method"])
+def test_skipped_arguments(connected, kind):
+    """The client skips an argument that has a default, by position, and passes the
+    arguments after it. Skipping an argument with no default, at a parameter that cannot
+    hold null, raises the argument error."""
+    a, b, c = values.string("a"), values.string("b"), values.string("c")
+    skip = values.skipped()
+    assert optional_arguments(connected, kind, a, skip, c) == "afoocnull"
+    obj = connected.invoke("TestService", "CreateTestObject", values.string("beta"))
+    result = optional_arguments(connected, kind, a, skip, skip, values.obj(obj))
+    assert result == "afoobarbeta"
+    with pytest.raises(TesteeError) as error:
+        optional_arguments(connected, kind, skip, b)
+    assert_argument_error(connected, error.value.error)
+
+
 @profile("dynamic")
 @pytest.mark.parametrize("kind", ["procedure", "method"])
 def test_too_few_arguments(connected, kind):

@@ -550,6 +550,9 @@ message Value {
     uint64 event = 18;
     // A protobuf message a call returns, serialized by the protobuf library
     bytes message = 19;
+    // An argument of an Invoke skipped by position, for a testee with the skipped-arguments
+    // profile
+    bool skipped = 20;
   }
 }
 

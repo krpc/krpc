@@ -8,6 +8,7 @@ PROFILES = frozenset(
         "dynamic",
         "defaults",
         "named-arguments",
+        "skipped-arguments",
         "streams",
         "callbacks",
         "conditions",

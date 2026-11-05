@@ -149,6 +149,7 @@ conformance_test(
         "core",
         "dynamic",
         "defaults",
+        "skipped-arguments",
         "connections",
         "ordering",
     ],

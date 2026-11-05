@@ -37,4 +37,30 @@ function TestClient:test_plain_table_for_a_collection_or_structure()
   luaunit.assertEquals(obj, result.nullable_object_field)
 end
 
+function TestClient:test_nil_for_a_null()
+  -- A null result is nil. A nil argument is a null at a nullable parameter with no default.
+  local service = self.conn.test_service
+  luaunit.assertNil(service.echo_nullable_int(nil))
+  luaunit.assertNil(service.echo_test_object(Types.none))
+  local obj = service.create_test_object('alpha')
+  service.object_property = obj
+  luaunit.assertEquals(obj, service.object_property)
+  service.object_property = nil
+  luaunit.assertNil(service.object_property)
+  luaunit.assertNil(obj:echo_nullable_object(nil))
+end
+
+function TestClient:test_argument_error_names_the_types()
+  local service = self.conn.test_service
+  luaunit.assertErrorMsgContains('TestService.CreateTestObject() argument 1 must be a string, got nil',
+                                 service.create_test_object, nil)
+  luaunit.assertErrorMsgContains('TestService.CreateTestObject() argument 1 must be a string, got null',
+                                 service.create_test_object, Types.none)
+  luaunit.assertErrorMsgContains('TestService.CreateTestObject() argument 1 must be a string, got a table',
+                                 service.create_test_object, {})
+  luaunit.assertErrorMsgContains(
+    'TestService.EchoTestObject() argument 1 must be a Class(TestService.TestClass), got a number',
+    service.echo_test_object, 42)
+end
+
 os.exit(luaunit.LuaUnit:run())

@@ -212,7 +212,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: echo_nullable_bool(value: boolean | Types.none): boolean | Types.none
+.. staticmethod:: echo_nullable_bool(value: boolean | Types.none): boolean | nil
 
 
 
@@ -220,7 +220,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: echo_nullable_bytes(value: string | Types.none): string | Types.none
+.. staticmethod:: echo_nullable_bytes(value: string | Types.none): string | nil
 
 
 
@@ -228,7 +228,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: echo_nullable_dictionary(d: Map | Types.none): Map | Types.none
+.. staticmethod:: echo_nullable_dictionary(d: Map | Types.none): Map | nil
 
 
 
@@ -236,7 +236,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: echo_nullable_double(value: number | Types.none): number | Types.none
+.. staticmethod:: echo_nullable_double(value: number | Types.none): number | nil
 
 
 
@@ -244,7 +244,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: echo_nullable_enum(x: TestService.TestEnum | Types.none): TestService.TestEnum | Types.none
+.. staticmethod:: echo_nullable_enum(x: TestService.TestEnum | Types.none): TestService.TestEnum | nil
 
 
 
@@ -252,7 +252,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: echo_nullable_float(value: number | Types.none): number | Types.none
+.. staticmethod:: echo_nullable_float(value: number | Types.none): number | nil
 
 
 
@@ -260,7 +260,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: echo_nullable_int(value: number | Types.none): number | Types.none
+.. staticmethod:: echo_nullable_int(value: number | Types.none): number | nil
 
    Returns the given value.
 
@@ -270,7 +270,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: echo_nullable_list(l: List | Types.none): List | Types.none
+.. staticmethod:: echo_nullable_list(l: List | Types.none): List | nil
 
 
 
@@ -278,7 +278,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: echo_nullable_long(value: number | Types.none): number | Types.none
+.. staticmethod:: echo_nullable_long(value: number | Types.none): number | nil
 
 
 
@@ -286,7 +286,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: echo_nullable_set(h: Set | Types.none): Set | Types.none
+.. staticmethod:: echo_nullable_set(h: Set | Types.none): Set | nil
 
 
 
@@ -294,7 +294,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: echo_nullable_string(value: string | Types.none): string | Types.none
+.. staticmethod:: echo_nullable_string(value: string | Types.none): string | nil
 
 
 
@@ -302,7 +302,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: echo_nullable_tuple(t: Tuple | Types.none): Tuple | Types.none
+.. staticmethod:: echo_nullable_tuple(t: Tuple | Types.none): Tuple | nil
 
 
 
@@ -310,7 +310,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: echo_nullable_u_int(value: number | Types.none): number | Types.none
+.. staticmethod:: echo_nullable_u_int(value: number | Types.none): number | nil
 
 
 
@@ -318,7 +318,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: echo_nullable_u_long(value: number | Types.none): number | Types.none
+.. staticmethod:: echo_nullable_u_long(value: number | Types.none): number | nil
 
 
 
@@ -334,7 +334,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: echo_test_object(value: TestService.TestClass | Types.none): TestService.TestClass | Types.none
+.. staticmethod:: echo_test_object(value: TestService.TestClass | Types.none): TestService.TestClass | nil
 
 
 
@@ -556,7 +556,7 @@ Service documentation string.
 
 
 
-.. attribute:: nullable_object: TestService.TestClass | Types.none
+.. attribute:: nullable_object: TestService.TestClass | nil
 
 
 
@@ -573,7 +573,7 @@ Service documentation string.
 
 
 
-.. attribute:: object_property: TestService.TestClass | Types.none
+.. attribute:: object_property: TestService.TestClass | nil
 
    A property holding an object.
 
@@ -778,7 +778,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: struct_echo_nullable(x: TestService.TestStruct | Types.none): TestService.TestStruct | Types.none
+.. staticmethod:: struct_echo_nullable(x: TestService.TestStruct | Types.none): TestService.TestStruct | nil
 
 
 
@@ -917,7 +917,7 @@ Service documentation string.
 
    Class documentation string.
 
-   .. method:: echo_nullable_object(value: TestService.TestClass | Types.none): TestService.TestClass | Types.none
+   .. method:: echo_nullable_object(value: TestService.TestClass | Types.none): TestService.TestClass | nil
 
    .. method:: float_to_string(x: number): string
 
@@ -931,7 +931,7 @@ Service documentation string.
 
       :Attribute: Can be read or written
 
-   .. attribute:: object_property: TestService.TestClass | Types.none
+   .. attribute:: object_property: TestService.TestClass | nil
 
       A property of the object, holding another object.
 
@@ -956,7 +956,7 @@ Service documentation string.
       :param b: The second string. Defaults to ``''``.
       :returns: The strings joined.
 
-   .. staticmethod:: static_nullable_object(value: TestService.TestClass | Types.none): TestService.TestClass | Types.none
+   .. staticmethod:: static_nullable_object(value: TestService.TestClass | Types.none): TestService.TestClass | nil
 
    .. staticmethod:: static_optional_arguments(x: string, y?: string, z?: string, obj?: TestService.TestClass | Types.none): string
 
