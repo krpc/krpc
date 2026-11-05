@@ -224,22 +224,24 @@ end
 --- Encode a Message holding the request with the given id, which carries one procedure call,
 -- prefixed by its size, ready to send.
 --
--- The arguments are the already encoded value of each, in order, with Types.none where a call
--- passes nothing. Written here and not encoded from tables of the four messages a call needs,
--- which would be built for every call.
-function encoder.encode_request(id, service, procedure, arguments)
+-- The arguments are the already encoded value of each of the count positions, with Types.none
+-- for a null and nil for an argument left out. Written here and not encoded from tables of the
+-- four messages a call needs, which would be built for every call.
+function encoder.encode_request(id, service, procedure, arguments, count)
   local parts = { _delimited(_CALL_SERVICE, service), _delimited(_CALL_PROCEDURE, procedure) }
-  local count = 2
-  for i = 1, #arguments do
+  local n = 2
+  for i = 1, count do
     local value = arguments[i]
-    local argument
-    if rawequal(value, Types.none) then
-      argument = _ARGUMENT_POSITION .. _encode_varint(i-1) .. _ARGUMENT_IS_NULL .. '\1'
-    else
-      argument = _ARGUMENT_POSITION .. _encode_varint(i-1) .. _delimited(_ARGUMENT_VALUE, value)
+    if value ~= nil then
+      local argument
+      if rawequal(value, Types.none) then
+        argument = _ARGUMENT_POSITION .. _encode_varint(i-1) .. _ARGUMENT_IS_NULL .. '\1'
+      else
+        argument = _ARGUMENT_POSITION .. _encode_varint(i-1) .. _delimited(_ARGUMENT_VALUE, value)
+      end
+      n = n + 1
+      parts[n] = _delimited(_CALL_ARGUMENTS, argument)
     end
-    count = count + 1
-    parts[count] = _delimited(_CALL_ARGUMENTS, argument)
   end
   local call = _concat(parts)
   local call_length = _encode_varint(call:len())

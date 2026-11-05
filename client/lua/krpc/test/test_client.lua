@@ -37,4 +37,30 @@ function TestClient:test_plain_table_for_a_collection_or_structure()
   luaunit.assertEquals(obj, result.nullable_object_field)
 end
 
+function TestClient:test_argument_error_names_the_types()
+  local service = self.conn.test_service
+  luaunit.assertErrorMsgContains('TestService.CreateTestObject() argument 1 must be a string, got nil',
+                                 service.create_test_object, nil)
+  luaunit.assertErrorMsgContains('TestService.CreateTestObject() argument 1 must be a string, got null',
+                                 service.create_test_object, Types.none)
+  luaunit.assertErrorMsgContains('TestService.CreateTestObject() argument 1 must be a string, got a table',
+                                 service.create_test_object, {})
+  luaunit.assertErrorMsgContains(
+    'TestService.EchoTestObject() argument 1 must be a Class(TestService.TestClass), got a number',
+    service.echo_test_object, 42)
+end
+
+function TestClient:test_argument_error_names_the_types()
+  local service = self.conn.test_service
+  luaunit.assertErrorMsgContains('TestService.CreateTestObject() argument 1 must be a string, got nil',
+                                 service.create_test_object, nil)
+  luaunit.assertErrorMsgContains('TestService.CreateTestObject() argument 1 must be a string, got null',
+                                 service.create_test_object, Types.none)
+  luaunit.assertErrorMsgContains('TestService.CreateTestObject() argument 1 must be a string, got a table',
+                                 service.create_test_object, {})
+  luaunit.assertErrorMsgContains(
+    'TestService.EchoTestObject() argument 1 must be a Class(TestService.TestClass), got a number',
+    service.echo_test_object, 42)
+end
+
 os.exit(luaunit.LuaUnit:run())

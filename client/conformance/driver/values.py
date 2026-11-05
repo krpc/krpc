@@ -97,6 +97,10 @@ def null() -> pb.Value:
     return pb.Value(null=True)
 
 
+def skipped() -> pb.Value:
+    return pb.Value(skipped=True)
+
+
 def obj(value: Object) -> pb.Value:
     return pb.Value(object=pb.Object(handle=value.handle, id=value.id))
 

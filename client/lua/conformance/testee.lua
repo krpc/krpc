@@ -58,6 +58,9 @@ local function from_value(value)
   if case == nil or case == 'null' then
     return Types.none
   end
+  if case == 'skipped' then
+    return nil
+  end
   if case == 'object' then
     if (value.object.handle or 0) == 0 then
       return service_type(value.object)(value.object.id)
@@ -262,6 +265,7 @@ local function invoke(command)
   end
   local name = command.procedure
   local args = {}
+  local count = #(command.arguments or {})
   for i, arg in ipairs(command.arguments or {}) do
     args[i] = from_value(arg)
   end
@@ -269,9 +273,9 @@ local function invoke(command)
     local member = to_snake_case(Attributes.get_class_member_name(name))
     if Attributes.is_a_class_static_method(name) then
       if command.through ~= nil then
-        return from_value(command.through)[member](table.unpack(args))
+        return from_value(command.through)[member](table.unpack(args, 1, count))
       end
-      return service()[Attributes.get_class_name(name)][member](table.unpack(args))
+      return service()[Attributes.get_class_name(name)][member](table.unpack(args, 1, count))
     elseif Attributes.is_a_class_property_getter(name) then
       return args[1][member]
     elseif Attributes.is_a_class_property_setter(name) then
@@ -279,14 +283,14 @@ local function invoke(command)
       return nil
     end
     local obj = args[1]
-    return obj[member](obj, table.unpack(args, 2))
+    return obj[member](obj, table.unpack(args, 2, count))
   elseif Attributes.is_a_property_getter(name) then
     return service()[to_snake_case(Attributes.get_property_name(name))]
   elseif Attributes.is_a_property_setter(name) then
     service()[to_snake_case(Attributes.get_property_name(name))] = args[1]
     return nil
   end
-  return service()[to_snake_case(name)](table.unpack(args))
+  return service()[to_snake_case(name)](table.unpack(args, 1, count))
 end
 
 -- Connecting the default connection closes every connection, and connecting a named one
@@ -431,7 +435,7 @@ end
 
 write({ hello = {
   client = 'lua',
-  profiles = { 'core', 'dynamic', 'defaults', 'connections', 'ordering' },
+  profiles = { 'core', 'dynamic', 'defaults', 'skipped-arguments', 'connections', 'ordering' },
   protocols = { 'tcpip', 'localsocket' },
 } })
 
