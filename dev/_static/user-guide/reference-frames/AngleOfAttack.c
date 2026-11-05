@@ -15,7 +15,7 @@ static double pi = 3.1415926535897;
 
 int main() {
   krpc_connection_t conn;
-  if (krpc_open(&conn, "COM0") != KRPC_OK)
+  if (krpc_open_serial(&conn, "COM0") != KRPC_OK)
     return 1;
   if (krpc_connect(conn, "Angle of attack") != KRPC_OK)
     return 1;

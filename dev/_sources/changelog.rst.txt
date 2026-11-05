@@ -143,6 +143,13 @@ C-nano client
 * Name the references in service documentation by their C names (:issue:`1185`)
 * Document every parameter of a service function, with the value returned under ``returnValue`` (:issue:`1185`)
 * Fix the documentation of the services that Doxygen warns about, such as code holding an ``@`` (:issue:`1185`)
+* Transports
+
+  * :breaking:`Breaking` Build every transport into the library, and choose one when opening a connection with ``krpc_open_serial``, ``krpc_open_tcp`` or ``krpc_open_localsocket``, in place of ``krpc_open`` (:issue:`1176`)
+  * :breaking:`Breaking` Remove ``KRPC_COMMUNICATION_TCP``, ``KRPC_COMMUNICATION_LOCALSOCKET`` and ``krpc_connection_config_t``, and the ``tcp`` and ``localsocket`` vcpkg features (:issue:`1176`)
+  * :breaking:`Breaking` Replace ``KRPC_COMMUNICATION_CUSTOM`` with a ``krpc_transport_t`` that a program fills in (:issue:`1176`)
+  * :breaking:`Breaking` On Arduino, open any ``Stream``, such as ``SoftwareSerial`` or a USB port, with ``krpc_open_stream``, or start a serial port with ``krpc_open_serial`` (:issue:`1176`)
+
 * :breaking:`Breaking` Return ``krpc_KRPC_GetStatus`` as ``krpc_KRPC_ServerStatus_t``, whose ``version`` is allocated on the heap (:issue:`1244`)
 * :breaking:`Breaking` Call procedures by the hashed ids, which needs a server of the same version (:issue:`1265`)
 * :breaking:`Breaking` Return a stream or an event as the ``uint64_t`` id of its stream (:issue:`1266`)

@@ -1,15 +1,14 @@
 #include <krpc_cnano.h>
 #include <krpc_cnano/services/krpc.h>
 
-HardwareSerial * conn;
+krpc_connection_t conn;
 
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, LOW);
 
-  conn = &Serial;
   // Open the serial port connection
-  if (krpc_open(&conn, NULL) != KRPC_OK)
+  if (krpc_open_serial(&conn, &Serial, 9600) != KRPC_OK)
     return;
   // Set up communication with the server, retrying while part of an earlier session's message
   // is on the line

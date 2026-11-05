@@ -1117,7 +1117,7 @@ source files are in <code class="docutils literal notranslate"><span class="pre"
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The Arduino Library Manager installs the source files with names ending in <code class="docutils literal notranslate"><span class="pre">.cpp</span></code>, so that
-they are built with the C++ compiler. The library uses the C++ <code class="docutils literal notranslate"><span class="pre">HardwareSerial</span></code> class to
+they are built with the C++ compiler. The library uses the C++ <code class="docutils literal notranslate"><span class="pre">Stream</span></code> class to
 communicate.</p>
 </div>
 </section>
@@ -1132,27 +1132,10 @@ communicate.</p>
 </pre></div>
 </div>
 </div></div>
-<p>This builds the library to communicate over a serial port. The <code class="docutils literal notranslate"><span class="pre">tcp</span></code> feature builds it to
-communicate over TCP/IP instead:</p>
-<div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-1-1-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-1-1-0" name="1-0" role="tab" tabindex="0">Linux</button><button aria-controls="panel-1-1-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-1-1-1" name="1-1" role="tab" tabindex="-1">Windows</button></div><div aria-labelledby="tab-1-1-0" class="sphinx-tabs-panel" id="panel-1-1-0" name="1-0" role="tabpanel" tabindex="0"><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>vcpkg<span class="w"> </span>install<span class="w"> </span><span class="s2">"krpc-cnano[tcp]"</span>
-</pre></div>
-</div>
-</div><div aria-labelledby="tab-1-1-1" class="sphinx-tabs-panel" hidden="true" id="panel-1-1-1" name="1-1" role="tabpanel" tabindex="0"><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>vcpkg<span class="w"> </span>install<span class="w"> </span><span class="s2">"krpc-cnano[tcp]:x64-windows"</span>
-</pre></div>
-</div>
-</div></div>
-<p>The <code class="docutils literal notranslate"><span class="pre">localsocket</span></code> feature builds it to communicate over a local socket:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>vcpkg<span class="w"> </span>install<span class="w"> </span><span class="s2">"krpc-cnano[localsocket]"</span>
-</pre></div>
-</div>
-<p>A project in manifest mode lists the client in its <code class="docutils literal notranslate"><span class="pre">vcpkg.json</span></code> instead, with any feature it
-needs, and vcpkg installs it when you configure the project. The following asks for the TCP/IP
-build:</p>
+<p>A project in manifest mode lists the client in its <code class="docutils literal notranslate"><span class="pre">vcpkg.json</span></code> instead, and vcpkg installs it
+when you configure the project:</p>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-<span class="w">  </span><span class="nt">"dependencies"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"krpc-cnano"</span><span class="p">,</span><span class="w"> </span><span class="nt">"features"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"tcp"</span><span class="p">]</span><span class="w"> </span><span class="p">}</span>
-<span class="w">  </span><span class="p">]</span>
+<span class="w">  </span><span class="nt">"dependencies"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"krpc-cnano"</span><span class="p">]</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -1168,9 +1151,6 @@ cmake<span class="w"> </span>--install<span class="w"> </span>build
 </div>
 <p>By default, CMake looks for a system-installed nanopb. Pass <code class="docutils literal notranslate"><span class="pre">-DKRPC_FETCH_DEPS=ON</span></code> or
 <code class="docutils literal notranslate"><span class="pre">-DKRPC_FETCH_NANOPB=ON</span></code> to the configure step to download nanopb at build time instead.</p>
-<p>Pass <code class="docutils literal notranslate"><span class="pre">-DKRPC_COMMUNICATION_TCP=ON</span></code> or <code class="docutils literal notranslate"><span class="pre">-DKRPC_COMMUNICATION_LOCALSOCKET=ON</span></code> to build the
-library to communicate over TCP/IP or a local socket. A program that links the library is then
-built for the same protocol.</p>
 <p>To install the client in a directory of your choice, pass <code class="docutils literal notranslate"><span class="pre">CMAKE_INSTALL_PREFIX</span></code> when you
 configure it:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span>-DCMAKE_INSTALL_PREFIX<span class="o">=</span>/path/to/install
@@ -1189,8 +1169,6 @@ cmake<span class="w"> </span>--install<span class="w"> </span>build
 <span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">my_app</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="s">krpc_cnano::krpc_cnano</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The library’s target carries the protocol it was built for, so your program is built for the
-same one.</p>
 <p>For a client installed with vcpkg, pass the vcpkg toolchain file when you configure your project:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span>-DCMAKE_TOOLCHAIN_FILE<span class="o">=</span>/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake
 </pre></div>
@@ -1206,15 +1184,15 @@ same one.</p>
 <p>Link your program against <code class="docutils literal notranslate"><span class="pre">libkrpc_cnano</span></code> and nanopb’s <code class="docutils literal notranslate"><span class="pre">libprotobuf-nanopb</span></code>. For a program
 saved as <code class="docutils literal notranslate"><span class="pre">main.c</span></code>:</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-2-2-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-2-2-0" name="2-0" role="tab" tabindex="0">GCC</button><button aria-controls="panel-2-2-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-2-2-1" name="2-1" role="tab" tabindex="-1">Clang</button></div><div aria-labelledby="tab-2-2-0" class="sphinx-tabs-panel" id="panel-2-2-0" name="2-0" role="tabpanel" tabindex="0"><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gcc<span class="w"> </span>main.c<span class="w"> </span>-lkrpc_cnano<span class="w"> </span>-lprotobuf-nanopb
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-1-1-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-1-1-0" name="1-0" role="tab" tabindex="0">GCC</button><button aria-controls="panel-1-1-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-1-1-1" name="1-1" role="tab" tabindex="-1">Clang</button></div><div aria-labelledby="tab-1-1-0" class="sphinx-tabs-panel" id="panel-1-1-0" name="1-0" role="tabpanel" tabindex="0"><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gcc<span class="w"> </span>main.c<span class="w"> </span>-lkrpc_cnano<span class="w"> </span>-lprotobuf-nanopb
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-2-2-1" class="sphinx-tabs-panel" hidden="true" id="panel-2-2-1" name="2-1" role="tabpanel" tabindex="0"><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>clang<span class="w"> </span>main.c<span class="w"> </span>-lkrpc_cnano<span class="w"> </span>-lprotobuf-nanopb
+</div><div aria-labelledby="tab-1-1-1" class="sphinx-tabs-panel" hidden="true" id="panel-1-1-1" name="1-1" role="tabpanel" tabindex="0"><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>clang<span class="w"> </span>main.c<span class="w"> </span>-lkrpc_cnano<span class="w"> </span>-lprotobuf-nanopb
 </pre></div>
 </div>
 </div></div>
-<p>For a library built for TCP/IP or a local socket, also pass <code class="docutils literal notranslate"><span class="pre">-DKRPC_COMMUNICATION_TCP</span></code> or
-<code class="docutils literal notranslate"><span class="pre">-DKRPC_COMMUNICATION_LOCALSOCKET</span></code>, so that your program is built for the same protocol.</p>
+<p>On Windows, also link <code class="docutils literal notranslate"><span class="pre">ws2_32</span></code>, the winsock library the TCP/IP and local socket transports
+use.</p>
 </section>
 <section id="compilation-options">
 <span id="cnano-client-compilation-options"></span><h3>Compilation Options<a class="headerlink" href="#compilation-options" title="Link to this heading">#</a></h3>
@@ -1237,22 +1215,6 @@ storage.</p></li>
 default.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">PB_NO_ERRMSG</span></code> disables the error messages of the nanopb library, which kRPC uses to encode
 and decode messages. The Arduino version of the library defines it by default.</p></li>
-</ul>
-</li>
-<li><p>Communication</p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_POSIX</span></code> communicates over a serial port with the POSIX <code class="docutils literal notranslate"><span class="pre">read</span></code> and
-<code class="docutils literal notranslate"><span class="pre">write</span></code> functions. This is the default when no other platform is detected.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_WINDOWS</span></code> communicates over a serial port with the Windows API. It is
-detected on Windows.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_ARDUINO</span></code> communicates over an Arduino <code class="docutils literal notranslate"><span class="pre">HardwareSerial</span></code>. It is
-detected on Arduino.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_TCP</span></code> communicates over TCP/IP. On Windows, a program that links the
-library also links winsock.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_LOCALSOCKET</span></code> communicates over a local socket, with a server on the same
-machine.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_CUSTOM</span></code> lets you provide your own implementation of
-<a class="reference internal" href="#c.krpc_open" title="krpc_open"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_open()</span></code></a>, <a class="reference internal" href="#c.krpc_close" title="krpc_close"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_close()</span></code></a>, <a class="reference internal" href="#c.krpc_read" title="krpc_read"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_read()</span></code></a> and <a class="reference internal" href="#c.krpc_write" title="krpc_write"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_write()</span></code></a>.</p></li>
 </ul>
 </li>
 <li><p>Memory allocation</p>
@@ -1281,10 +1243,13 @@ your own.</p></li>
 <h2>Connecting to the Server<a class="headerlink" href="#connecting-to-the-server" title="Link to this heading">#</a></h2>
 <p>The game must be running with the server started. <a class="reference internal" href="getting-started.html#getting-started-server"><span class="std std-ref">The Server Plugin</span></a> in the
 getting started guide shows how to install and start it.</p>
-<p>The client connects over a serial port, TCP/IP or a local socket. The library is built for one of
-them, chosen by the <a class="reference internal" href="#cnano-client-compilation-options"><span class="std std-ref">compilation options</span></a>. Each server in
-the server window uses one protocol, and accepts connections over that protocol only. Pick the
-protocol when you add the server, and build the library for the matching one.</p>
+<p>The client connects over a serial port, TCP/IP, a local socket or a transport of your own. Each
+transport has a function that opens a connection over it. Each server in the server window uses
+one protocol, and accepts connections over that protocol only. Pick the protocol when you add the
+server, and open the matching transport.</p>
+<p>The library includes the serial port, TCP/IP and local socket transports on Windows, Linux and
+macOS, and a serial port transport on Arduino. On any other platform, such as a microcontroller
+outside Arduino, it includes none, and you supply your own.</p>
 <section id="over-a-serial-port">
 <h3>Over a Serial Port<a class="headerlink" href="#over-a-serial-port" title="Link to this heading">#</a></h3>
 <p>Select “Protobuf over SerialIO” as the server’s protocol. The server window also sets the port
@@ -1294,7 +1259,7 @@ name and the baud rate. The following connects to a server, and prints its versi
 
 <span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">krpc_connection_t</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span>
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_open</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"COM0"</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_open_serial</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"COM0"</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 <span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_connect</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"My Example Program"</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
@@ -1306,24 +1271,24 @@ name and the baud rate. The following connects to a server, and prints its versi
 <span class="p">}</span>
 </pre></div>
 </div>
-<p><a class="reference internal" href="#c.krpc_open" title="krpc_open"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_open()</span></code></a> opens the serial port named by its second argument, such as <code class="docutils literal notranslate"><span class="pre">COM3</span></code> on Windows
-or <code class="docutils literal notranslate"><span class="pre">/dev/ttyS0</span></code> on Linux. It writes the connection into its first argument. You pass the
+<p><a class="reference internal" href="#c.krpc_open_serial" title="krpc_open_serial"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_open_serial()</span></code></a> opens the serial port named by its second argument, such as <code class="docutils literal notranslate"><span class="pre">COM3</span></code> on
+Windows or <code class="docutils literal notranslate"><span class="pre">/dev/ttyS0</span></code> on Linux. It writes the connection into its first argument. You pass the
 connection to every call. <a class="reference internal" href="#c.krpc_connect" title="krpc_connect"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_connect()</span></code></a> then starts a session, with a name for the
 connection that appears in the server window in the game. Both return an error code, and the
 example ends on a failure.</p>
-<p>On an Arduino, <a class="reference internal" href="#c.krpc_open" title="krpc_open"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_open()</span></code></a> takes a pointer to a <code class="docutils literal notranslate"><span class="pre">HardwareSerial</span></code>:</p>
+<p>On an Arduino, <a class="reference internal" href="#c.krpc_open_serial" title="krpc_open_serial"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_open_serial()</span></code></a> takes a serial port, such as <code class="docutils literal notranslate"><span class="pre">&amp;Serial</span></code>, and its baud
+rate:</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano.h&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/krpc.h&gt;</span>
 
-<span class="n">HardwareSerial</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span>
+<span class="n">krpc_connection_t</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span>
 
 <span class="kt">void</span><span class="w"> </span><span class="nf">setup</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">pinMode</span><span class="p">(</span><span class="n">LED_BUILTIN</span><span class="p">,</span><span class="w"> </span><span class="n">OUTPUT</span><span class="p">);</span>
 <span class="w">  </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">LED_BUILTIN</span><span class="p">,</span><span class="w"> </span><span class="n">LOW</span><span class="p">);</span>
 
-<span class="w">  </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">Serial</span><span class="p">;</span>
 <span class="w">  </span><span class="c1">// Open the serial port connection</span>
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_open</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_open_serial</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">Serial</span><span class="p">,</span><span class="w"> </span><span class="mi">9600</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span>
 <span class="w">    </span><span class="k">return</span><span class="p">;</span>
 <span class="w">  </span><span class="c1">// Set up communication with the server, retrying while part of an earlier session's message</span>
 <span class="w">  </span><span class="c1">// is on the line</span>
@@ -1343,6 +1308,12 @@ example ends on a failure.</p>
 </div>
 <p>A client that resets can find part of a message from its earlier session on the line. The
 example retries <a class="reference internal" href="#c.krpc_connect" title="krpc_connect"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_connect()</span></code></a> until the server drops the partial message.</p>
+<p>For framing other than 8 data bits, no parity and 1 stop bit, start the port in your sketch, then
+open the connection with <a class="reference internal" href="#c.krpc_open_stream" title="krpc_open_stream"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_open_stream()</span></code></a>:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">Serial1</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">115200</span><span class="p">,</span><span class="w"> </span><span class="n">SERIAL_8E1</span><span class="p">);</span>
+<span class="n">krpc_open_stream</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">Serial1</span><span class="p">);</span>
+</pre></div>
+</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>A serial port carries data far more slowly than the game produces it. The server drops a
@@ -1352,19 +1323,15 @@ connection that sends more data than the port can carry.
 </section>
 <section id="over-tcp-ip">
 <h3>Over TCP/IP<a class="headerlink" href="#over-tcp-ip" title="Link to this heading">#</a></h3>
-<p>Select “Protobuf over TCP/IP” as the server’s protocol, and build the library with
-<code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_TCP</span></code>. <a class="reference internal" href="#c.krpc_open" title="krpc_open"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_open()</span></code></a> then takes a <a class="reference internal" href="#c.krpc_connection_config_t" title="krpc_connection_config_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_connection_config_t</span></code></a> with
-the address and port of the server. The following connects to a server with the default settings,
-address <code class="docutils literal notranslate"><span class="pre">127.0.0.1</span></code> and port 50000, and prints its version:</p>
+<p>Select “Protobuf over TCP/IP” as the server’s protocol. <a class="reference internal" href="#c.krpc_open_tcp" title="krpc_open_tcp"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_open_tcp()</span></code></a> takes the address
+and port of the server. The following connects to a server with the default settings, address
+<code class="docutils literal notranslate"><span class="pre">127.0.0.1</span></code> and port 50000, and prints its version:</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano.h&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/krpc.h&gt;</span>
 
 <span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">krpc_connection_t</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_connection_config_t</span><span class="w"> </span><span class="n">config</span><span class="p">;</span>
-<span class="w">  </span><span class="n">config</span><span class="p">.</span><span class="n">address</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"127.0.0.1"</span><span class="p">;</span>
-<span class="w">  </span><span class="n">config</span><span class="p">.</span><span class="n">port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">50000</span><span class="p">;</span>
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_open</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">config</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_open_tcp</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"127.0.0.1"</span><span class="p">,</span><span class="w"> </span><span class="mi">50000</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 <span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_connect</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"My Example Program"</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
@@ -1381,15 +1348,15 @@ your program can run on a different machine from the game.</p>
 </section>
 <section id="over-a-local-socket">
 <h3>Over a Local Socket<a class="headerlink" href="#over-a-local-socket" title="Link to this heading">#</a></h3>
-<p>Select “Protobuf over local socket” as the server’s protocol, and build the library with
-<code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_LOCALSOCKET</span></code>. <a class="reference internal" href="#c.krpc_open" title="krpc_open"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_open()</span></code></a> then takes the path of the server’s socket,
-shown in the server window. The following connects to a server, and prints its version:</p>
+<p>Select “Protobuf over local socket” as the server’s protocol. <a class="reference internal" href="#c.krpc_open_localsocket" title="krpc_open_localsocket"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_open_localsocket()</span></code></a> takes
+the path of the server’s socket, shown in the server window. The following connects to a server,
+and prints its version:</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano.h&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/krpc.h&gt;</span>
 
 <span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">krpc_connection_t</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span>
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_open</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"/run/user/1000/krpc.sock"</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_open_localsocket</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"/run/user/1000/krpc.sock"</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 <span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_connect</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"My Example Program"</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
@@ -1403,6 +1370,63 @@ shown in the server window. The following connects to a server, and prints its v
 </div>
 <p>A local socket works only on the machine running the game. It has lower overhead than TCP/IP, so
 it is faster.</p>
+</section>
+<section id="over-a-custom-transport">
+<h3>Over a Custom Transport<a class="headerlink" href="#over-a-custom-transport" title="Link to this heading">#</a></h3>
+<p>A <a class="reference internal" href="#c.krpc_transport_t" title="krpc_transport_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_transport_t</span></code></a> holds the functions that read, write and close a connection. Fill one
+in to connect over a link the library has no transport for, such as a UART on a microcontroller.
+The following connects over the program’s standard input and output:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/krpc.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#ifdef _WIN32</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fcntl.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;io.h&gt;</span>
+<span class="cp">#endif</span>
+
+<span class="cm">/* The program's own state for the link: here, a pair of files */</span>
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">FILE</span><span class="w"> </span><span class="o">*</span><span class="n">in</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">FILE</span><span class="w"> </span><span class="o">*</span><span class="n">out</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span><span class="n">link_t</span><span class="p">;</span>
+
+<span class="k">static</span><span class="w"> </span><span class="n">krpc_error_t</span><span class="w"> </span><span class="nf">link_read</span><span class="p">(</span><span class="kt">uintptr_t</span><span class="w"> </span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="o">*</span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">count</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">link_t</span><span class="w"> </span><span class="o">*</span><span class="n">link</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">link_t</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">handle</span><span class="p">;</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">fread</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">count</span><span class="p">,</span><span class="w"> </span><span class="n">link</span><span class="o">-&gt;</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">count</span><span class="p">)</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">KRPC_ERROR_EOF</span><span class="p">;</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span><span class="w"> </span><span class="n">krpc_error_t</span><span class="w"> </span><span class="nf">link_write</span><span class="p">(</span><span class="kt">uintptr_t</span><span class="w"> </span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="o">*</span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">count</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">link_t</span><span class="w"> </span><span class="o">*</span><span class="n">link</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">link_t</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">handle</span><span class="p">;</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">fwrite</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">count</span><span class="p">,</span><span class="w"> </span><span class="n">link</span><span class="o">-&gt;</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">count</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">fflush</span><span class="p">(</span><span class="n">link</span><span class="o">-&gt;</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">KRPC_ERROR_IO</span><span class="p">;</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">krpc_transport_t</span><span class="w"> </span><span class="n">link_transport</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">link_read</span><span class="p">,</span><span class="w"> </span><span class="n">link_write</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">};</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="cp">#ifdef _WIN32</span>
+<span class="w">  </span><span class="cm">/* Windows opens the standard streams in text mode, which rewrites newline bytes and stops</span>
+<span class="cm">     reading at 0x1A, so a message only gets through them in binary mode */</span>
+<span class="w">  </span><span class="n">_setmode</span><span class="p">(</span><span class="n">_fileno</span><span class="p">(</span><span class="n">stdin</span><span class="p">),</span><span class="w"> </span><span class="n">_O_BINARY</span><span class="p">);</span>
+<span class="w">  </span><span class="n">_setmode</span><span class="p">(</span><span class="n">_fileno</span><span class="p">(</span><span class="n">stdout</span><span class="p">),</span><span class="w"> </span><span class="n">_O_BINARY</span><span class="p">);</span>
+<span class="cp">#endif</span>
+<span class="w">  </span><span class="n">link_t</span><span class="w"> </span><span class="n">link</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">stdin</span><span class="p">,</span><span class="w"> </span><span class="n">stdout</span><span class="p">};</span>
+<span class="w">  </span><span class="n">krpc_connection_t</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="o">&amp;</span><span class="n">link_transport</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">uintptr_t</span><span class="p">)</span><span class="o">&amp;</span><span class="n">link</span><span class="p">};</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_connect</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"My Example Program"</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_KRPC_ServerStatus_t</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<span class="w">  </span><span class="n">krpc_KRPC_GetStatus</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">status</span><span class="p">);</span>
+<span class="w">  </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">"%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="p">.</span><span class="n">version</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_free</span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="n">version</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_disconnect</span><span class="p">(</span><span class="n">conn</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The connection holds the transport and a handle, which is passed to each of its functions. The
+handle is any integer or pointer, such as a pointer to your own state for the link.</p>
 </section>
 <section id="closing-the-connection">
 <h3>Closing the Connection<a class="headerlink" href="#closing-the-connection" title="Link to this heading">#</a></h3>
@@ -1420,7 +1444,7 @@ type <a class="reference internal" href="cnano/api/space-center/vessel.html#c.kr
 
 <span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">krpc_connection_t</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span>
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_open</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"COM0"</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_open_serial</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"COM0"</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 <span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_connect</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"Remote procedures example"</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
@@ -1458,7 +1482,7 @@ the error from loading a save that does not exist:</p>
 
 <span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">krpc_connection_t</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span>
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_open</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"COM0"</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_open_serial</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"COM0"</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 <span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_connect</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"Errors example"</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
@@ -1484,7 +1508,7 @@ which names the exception, such as <code class="docutils literal notranslate"><s
 disconnect, returns <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_CONNECTION_FAILED</span></code>.</p></li>
 </ul>
 <p>The <a class="reference internal" href="#cnano-client-compilation-options"><span class="std std-ref">compilation options</span></a> can instead exit, fail an
-assertion or call a handler on each error from a procedure. <a class="reference internal" href="#c.krpc_open" title="krpc_open"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_open()</span></code></a>,
+assertion or call a handler on each error from a procedure. The functions that open a connection,
 <a class="reference internal" href="#c.krpc_connect" title="krpc_connect"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_connect()</span></code></a> and <a class="reference internal" href="#c.krpc_disconnect" title="krpc_disconnect"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_disconnect()</span></code></a> always return the error code.</p>
 </section>
 <section id="remote-objects">
@@ -1504,7 +1528,7 @@ The object holds no copy of the game’s state. It is just a reference to it, an
 
 <span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">krpc_connection_t</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span>
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_open</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"COM0"</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_open_serial</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"COM0"</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 <span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_connect</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"Remote objects example"</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
@@ -1574,58 +1598,101 @@ no error.</p>
 <section id="client-api-reference">
 <span id="cnano-client-reference"></span><h2>Client API Reference<a class="headerlink" href="#client-api-reference" title="Link to this heading">#</a></h2>
 <dl class="c function">
-<dt class="sig sig-object c" id="c.krpc_open">
-<a class="reference internal" href="#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_open</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">connection</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#c.krpc_connection_config_t" title="krpc_connection_config_t"><span class="n"><span class="pre">krpc_connection_config_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">arg</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_open" title="Link to this definition">#</a><br /></dt>
-<dd><p>Opens a connection, and writes it into <em>connection</em>. What <em>arg</em> holds depends on the protocol
-the library is built for:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_POSIX</span></code> and <code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_WINDOWS</span></code>: the name of the serial port,
-as a <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">char</span> <span class="pre">*</span></code>. For example, <code class="docutils literal notranslate"><span class="pre">krpc_open(&amp;conn,</span> <span class="pre">&quot;/dev/ttyS0&quot;)</span></code> or
-<code class="docutils literal notranslate"><span class="pre">krpc_open(&amp;conn,</span> <span class="pre">&quot;COM3&quot;)</span></code>. The port keeps its baud rate and framing, so set them to match
-the server window, such as with <code class="docutils literal notranslate"><span class="pre">stty</span></code> on Linux.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_TCP</span></code>: a pointer to a <a class="reference internal" href="#c.krpc_connection_config_t" title="krpc_connection_config_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_connection_config_t</span></code></a> holding the
-address and port of the server. The address is a host name or an IP address, and each
-endpoint it resolves to is tried in turn.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_LOCALSOCKET</span></code>: the path of the server’s socket, as a <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">char</span> <span class="pre">*</span></code>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_ARDUINO</span></code>: <em>connection</em> points to a <code class="docutils literal notranslate"><span class="pre">HardwareSerial</span> <span class="pre">*</span></code>, such as
-<code class="docutils literal notranslate"><span class="pre">&amp;Serial</span></code>, set before the call. <em>arg</em> is a pointer to a <a class="reference internal" href="#c.krpc_connection_config_t" title="krpc_connection_config_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_connection_config_t</span></code></a>
-holding the baud rate and the data, parity and stop bits, or <code class="docutils literal notranslate"><span class="pre">NULL</span></code> for 9600 baud and
-<code class="docutils literal notranslate"><span class="pre">SERIAL_8N1</span></code>.</p></li>
-</ul>
-<p>Returns <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_IO</span></code> if the connection fails to open, such as for an address that
-does not resolve or a socket path that is too long. On Arduino it returns <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_OK</span></code>.</p>
+<dt class="sig sig-object c" id="c.krpc_open_serial">
+<a class="reference internal" href="#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_open_serial</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">connection</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">port</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_open_serial" title="Link to this definition">#</a><br /></dt>
+<dd><p>Opens the serial port named <em>port</em>, such as <code class="docutils literal notranslate"><span class="pre">/dev/ttyS0</span></code> or <code class="docutils literal notranslate"><span class="pre">COM3</span></code>, and writes the
+connection into <em>connection</em>. The port keeps its baud rate and framing, so set them to match
+the server window, such as with <code class="docutils literal notranslate"><span class="pre">stty</span></code> on Linux.</p>
+<p>On Arduino, it takes a serial port and a baud rate instead:
+<code class="docutils literal notranslate"><span class="pre">krpc_open_serial(&amp;conn,</span> <span class="pre">&amp;Serial,</span> <span class="pre">9600)</span></code>. It starts the port with 8 data bits, no parity and
+1 stop bit, waits for the port to be ready, then opens a connection over it with
+<a class="reference internal" href="#c.krpc_open_stream" title="krpc_open_stream"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_open_stream()</span></code></a>.</p>
+<p>Returns <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_IO</span></code> if the port fails to open.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_open_stream">
+<a class="reference internal" href="#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_open_stream</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">Stream</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">stream</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_open_stream" title="Link to this definition">#</a><br /></dt>
+<dd><p>Opens a connection over an Arduino <code class="docutils literal notranslate"><span class="pre">Stream</span></code> that the sketch has started, such as a serial
+port after <code class="docutils literal notranslate"><span class="pre">begin</span></code>. Closing the connection leaves the stream open. Arduino only.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>A serial port has no end-of-file, so on Arduino a read fails with <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_EOF</span></code>
-when the serial timeout elapses without a single byte arriving. The timeout is one second
-by default and applies to each byte. Raise it with <code class="docutils literal notranslate"><span class="pre">Serial.setTimeout</span></code> before calling
-<a class="reference internal" href="#c.krpc_open" title="krpc_open"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_open()</span></code></a> if the server can take longer to reply.</p>
+when the stream timeout elapses without a single byte arriving. The timeout is one second
+by default and applies to each byte. Raise it with <code class="docutils literal notranslate"><span class="pre">setTimeout</span></code> on the port if the server
+can take longer to reply.</p>
 </div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_open_tcp">
+<a class="reference internal" href="#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_open_tcp</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">connection</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">address</span></span>, <span class="n"><span class="pre">uint16_t</span></span><span class="w"> </span><span class="n"><span class="pre">port</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_open_tcp" title="Link to this definition">#</a><br /></dt>
+<dd><p>Opens a TCP/IP connection to the server at <em>address</em> and <em>port</em>, and writes it into
+<em>connection</em>. The address is a host name or an IP address, and each endpoint it resolves to is
+tried in turn. Windows, Linux and macOS only.</p>
+<p>Returns <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_IO</span></code> if the address does not resolve or no endpoint accepts the
+connection.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_open_localsocket">
+<a class="reference internal" href="#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_open_localsocket</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">connection</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">path</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_open_localsocket" title="Link to this definition">#</a><br /></dt>
+<dd><p>Opens a connection to the server’s local socket at <em>path</em>, and writes it into <em>connection</em>.
+Windows, Linux and macOS only. On Windows, it needs Windows 10 version 1803 or later, and a
+Windows SDK with <code class="docutils literal notranslate"><span class="pre">afunix.h</span></code>, 10.0.17134 or later. With an older SDK the library leaves it
+out, and a call to it fails to compile.</p>
+<p>Returns <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_IO</span></code> if the path is too long or the connection fails.</p>
 </dd></dl>
 
 <dl class="c type">
 <dt class="sig sig-object c" id="c.krpc_connection_t">
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_connection_t</span></span></span><a class="headerlink" href="#c.krpc_connection_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>The connection that <a class="reference internal" href="#c.krpc_open" title="krpc_open"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_open()</span></code></a> opens and every call takes. It is a file descriptor on
-POSIX, a <code class="docutils literal notranslate"><span class="pre">HANDLE</span></code> on Windows, a <code class="docutils literal notranslate"><span class="pre">HardwareSerial</span> <span class="pre">*</span></code> on Arduino, and a socket over TCP/IP or
-a local socket. A <code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_CUSTOM</span></code> build defines it, and
-<a class="reference internal" href="#c.krpc_connection_config_t" title="krpc_connection_config_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_connection_config_t</span></code></a>, before it includes <code class="docutils literal notranslate"><span class="pre">krpc_cnano.h</span></code>.</p>
+<dd><p>A connection, which every call takes. A structure with the fields
+<code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">krpc_transport_t</span> <span class="pre">*</span> <span class="pre">transport</span></code> and <code class="docutils literal notranslate"><span class="pre">uintptr_t</span> <span class="pre">handle</span></code>. The handle is passed to each
+of the transport’s functions.</p>
 </dd></dl>
 
 <dl class="c type">
-<dt class="sig sig-object c" id="c.krpc_connection_config_t">
-<span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_connection_config_t</span></span></span><a class="headerlink" href="#c.krpc_connection_config_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>The configuration <a class="reference internal" href="#c.krpc_open" title="krpc_open"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_open()</span></code></a> takes. For <code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_TCP</span></code>, a structure with the
-fields <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">char</span> <span class="pre">*</span> <span class="pre">address</span></code> and <code class="docutils literal notranslate"><span class="pre">uint16_t</span> <span class="pre">port</span></code>. For <code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_ARDUINO</span></code>, a
-structure with the fields <code class="docutils literal notranslate"><span class="pre">uint32_t</span> <span class="pre">speed</span></code>, the baud rate, and <code class="docutils literal notranslate"><span class="pre">uint8_t</span> <span class="pre">config</span></code>, such as
-<code class="docutils literal notranslate"><span class="pre">SERIAL_8N1</span></code>. For a serial port or a local socket, <code class="docutils literal notranslate"><span class="pre">char</span></code>, so <em>arg</em> is a string.</p>
+<dt class="sig sig-object c" id="c.krpc_transport_t">
+<span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_transport_t</span></span></span><a class="headerlink" href="#c.krpc_transport_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>A transport, as the functions that carry a connection’s bytes. A structure with the fields:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">krpc_error_t</span> <span class="pre">(*read)(uintptr_t</span> <span class="pre">handle,</span> <span class="pre">uint8_t</span> <span class="pre">*</span> <span class="pre">buf,</span> <span class="pre">size_t</span> <span class="pre">count)</span></code> reads exactly <em>count</em>
+bytes into <em>buf</em>. It returns <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_EOF</span></code> once the connection has ended.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">krpc_error_t</span> <span class="pre">(*write)(uintptr_t</span> <span class="pre">handle,</span> <span class="pre">const</span> <span class="pre">uint8_t</span> <span class="pre">*</span> <span class="pre">buf,</span> <span class="pre">size_t</span> <span class="pre">count)</span></code> writes all
+<em>count</em> bytes from <em>buf</em>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">krpc_error_t</span> <span class="pre">(*close)(uintptr_t</span> <span class="pre">handle)</span></code> closes the connection. <code class="docutils literal notranslate"><span class="pre">NULL</span></code> for a transport
+with nothing to close.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bool</span> <span class="pre">resumable</span></code> is whether the link outlives a session, as a serial line does. A client
+that resets can then find part of a message from its earlier session on the link, and
+<a class="reference internal" href="#c.krpc_connect" title="krpc_connect"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_connect()</span></code></a> leaves the connection open after such a failure.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="c var">
+<dt class="sig sig-object c" id="c.krpc_transport_serial">
+<span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#c.krpc_transport_t" title="krpc_transport_t"><span class="n"><span class="pre">krpc_transport_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_transport_serial</span></span></span><a class="headerlink" href="#c.krpc_transport_serial" title="Link to this definition">#</a><br /></dt>
+<dd><p>The serial port transport. Its handle is a file descriptor, or a <code class="docutils literal notranslate"><span class="pre">HANDLE</span></code> on Windows.</p>
+</dd></dl>
+
+<dl class="c var">
+<dt class="sig sig-object c" id="c.krpc_transport_socket">
+<span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#c.krpc_transport_t" title="krpc_transport_t"><span class="n"><span class="pre">krpc_transport_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_transport_socket</span></span></span><a class="headerlink" href="#c.krpc_transport_socket" title="Link to this definition">#</a><br /></dt>
+<dd><p>The TCP/IP and local socket transport. Its handle is a file descriptor, or a <code class="docutils literal notranslate"><span class="pre">SOCKET</span></code> on
+Windows.</p>
+</dd></dl>
+
+<dl class="c var">
+<dt class="sig sig-object c" id="c.krpc_transport_stream">
+<span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#c.krpc_transport_t" title="krpc_transport_t"><span class="n"><span class="pre">krpc_transport_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_transport_stream</span></span></span><a class="headerlink" href="#c.krpc_transport_stream" title="Link to this definition">#</a><br /></dt>
+<dd><p>The Arduino <code class="docutils literal notranslate"><span class="pre">Stream</span></code> transport. Its handle is a <code class="docutils literal notranslate"><span class="pre">Stream</span> <span class="pre">*</span></code>.</p>
 </dd></dl>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_connect">
 <a class="reference internal" href="#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_connect</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">name</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_connect" title="Link to this definition">#</a><br /></dt>
-<dd><p>Starts a session on a connection opened with <a class="reference internal" href="#c.krpc_open" title="krpc_open"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_open()</span></code></a>, and waits for the server to
-accept it. The client supports one session at a time.</p>
+<dd><p>Starts a session on an open connection, and waits for the server to accept it. The client
+supports one session at a time.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1634,11 +1701,12 @@ accept it. The client supports one session at a time.</p>
 </ul>
 </dd>
 </dl>
-<p>Returns <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_CONNECTION_REFUSED</span></code>, and closes the connection, if the server
-denies it or does not support the client’s protocol version. Over TCP/IP or a local socket,
-any other failure closes the connection too.</p>
-<p>On a serial port or a custom transport, part of a message from an earlier session can garble
-the connection request or its response. This then returns
+<p>Returns <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_IO</span></code> for a connection whose open failed. Returns
+<code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_CONNECTION_REFUSED</span></code>, and closes the connection, if the server denies it or
+does not support the client’s protocol version. Over TCP/IP, a local socket, or any transport
+with <code class="docutils literal notranslate"><span class="pre">resumable</span></code> false, any other failure closes the connection too.</p>
+<p>On a resumable transport, such as a serial port, part of a message from an earlier session can
+garble the connection request or its response. This then returns
 <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_CONNECTION_FAILED</span></code> and leaves the port open. Wait more than 3 seconds, so
 that the server drops the partial message, then call this again.</p>
 </dd></dl>
@@ -1652,8 +1720,7 @@ that the server drops the partial message, then call this again.</p>
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_close">
 <a class="reference internal" href="#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_close</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_close" title="Link to this definition">#</a><br /></dt>
-<dd><p>Closes the connection, without sending the server a disconnect. A
-<code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_CUSTOM</span></code> build provides it, as it does <a class="reference internal" href="#c.krpc_open" title="krpc_open"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_open()</span></code></a>.</p>
+<dd><p>Closes the connection, without sending the server a disconnect.</p>
 </dd></dl>
 
 <dl class="c type">
@@ -1842,14 +1909,14 @@ elements. <em>inc</em> must be greater than zero.</p>
 <a class="reference internal" href="#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_read</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">uint8_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">buf</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n"><span class="pre">count</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_read" title="Link to this definition">#</a><br /></dt>
 <dd><p>Reads exactly <em>count</em> bytes from the connection into <em>buf</em>, waiting until they arrive. Returns
 <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_EOF</span></code> if the connection ends first, or <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_IO</span></code> if the read
-fails. A <code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_CUSTOM</span></code> build provides it.</p>
+fails.</p>
 </dd></dl>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_write">
 <a class="reference internal" href="#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_write</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">uint8_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">buf</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n"><span class="pre">count</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_write" title="Link to this definition">#</a><br /></dt>
 <dd><p>Writes all <em>count</em> bytes from <em>buf</em> to the connection. Returns <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_IO</span></code> if the
-write fails. A <code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_CUSTOM</span></code> build provides it.</p>
+write fails.</p>
 </dd></dl>
 
 </section>
@@ -1937,6 +2004,7 @@ write fails. A <code class="docutils literal notranslate"><span class="pre">KRPC
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#over-a-serial-port">Over a Serial Port</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#over-tcp-ip">Over TCP/IP</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#over-a-local-socket">Over a Local Socket</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#over-a-custom-transport">Over a Custom Transport</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#closing-the-connection">Closing the Connection</a></li>
 </ul>
 </li>

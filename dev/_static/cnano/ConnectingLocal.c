@@ -3,7 +3,7 @@
 
 int main() {
   krpc_connection_t conn;
-  if (krpc_open(&conn, "/run/user/1000/krpc.sock") != KRPC_OK)
+  if (krpc_open_localsocket(&conn, "/run/user/1000/krpc.sock") != KRPC_OK)
     return 1;
   if (krpc_connect(conn, "My Example Program") != KRPC_OK)
     return 1;

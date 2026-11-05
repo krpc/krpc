@@ -569,9 +569,7 @@ change to <code class="docutils literal notranslate"><span class="pre">core/</sp
 collections. Each client is timed from inside itself, so each target is a program in its own
 language. The report has one block per transport, TCP/IP and local socket.</p>
 <p>The C-nano target uses a socket, not a serial port. The server polls a serial port at an interval
-longer than every measured case, so a serial port would measure the poll. The transport is a
-compile-time choice, so there is one program per transport, <code class="docutils literal notranslate"><span class="pre">//client/cnano:benchmark</span></code> and
-<code class="docutils literal notranslate"><span class="pre">//client/cnano:benchmark-localsocket</span></code>.</p>
+longer than every measured case, so a serial port would measure the poll.</p>
 <p>The client targets run the server with <code class="docutils literal notranslate"><span class="pre">--no-frame-pacing</span></code>, so its update loop runs as fast as
 it can. A paced server adds the rest of each update to a round trip. It also serves a client that
 is slower than its receive timeout once per update, which measures 16.7 ms and not the client.</p>

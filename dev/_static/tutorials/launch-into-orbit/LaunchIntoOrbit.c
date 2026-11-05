@@ -11,7 +11,7 @@
 
 int main() {
   krpc_connection_t conn;
-  if (krpc_open(&conn, "COM0") != KRPC_OK)
+  if (krpc_open_serial(&conn, "COM0") != KRPC_OK)
     return 1;
   if (krpc_connect(conn, "Launch into orbit") != KRPC_OK)
     return 1;
