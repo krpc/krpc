@@ -92,7 +92,7 @@ ServoGroup
 
       :Attribute: Read-only, cannot be set
 
-   .. method:: servo_with_name(name: string): InfernalRobotics.Servo | Types.none
+   .. method:: servo_with_name(name: string): InfernalRobotics.Servo | nil
 
       Returns the servo with the given *name* from this group,
       or ``nil`` if none exists.

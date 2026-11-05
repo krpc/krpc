@@ -104,7 +104,7 @@ Camera
 
       :Attribute: Read-only, cannot be set
 
-   .. attribute:: focussed_body: SpaceCenter.CelestialBody | Types.none
+   .. attribute:: focussed_body: SpaceCenter.CelestialBody | nil
 
       In map mode, the celestial body that the camera is focussed on.
       Returns ``nil`` if the camera is not focussed on a celestial body.
@@ -112,7 +112,7 @@ Camera
 
       :Attribute: Can be read or written
 
-   .. attribute:: focussed_vessel: SpaceCenter.Vessel | Types.none
+   .. attribute:: focussed_vessel: SpaceCenter.Vessel | nil
 
       In map mode, the vessel that the camera is focussed on.
       Returns ``nil`` if the camera is not focussed on a vessel.
@@ -120,7 +120,7 @@ Camera
 
       :Attribute: Can be read or written
 
-   .. attribute:: focussed_node: SpaceCenter.Node | Types.none
+   .. attribute:: focussed_node: SpaceCenter.Node | nil
 
       In map mode, the maneuver node that the camera is focussed on.
       Returns ``nil`` if the camera is not focussed on a maneuver node.
@@ -128,7 +128,7 @@ Camera
 
       :Attribute: Can be read or written
 
-   .. attribute:: focussed_crew_member: SpaceCenter.CrewMember | Types.none
+   .. attribute:: focussed_crew_member: SpaceCenter.CrewMember | nil
 
       In IVA mode, the crew member whose view the camera is showing.
       Returns ``nil`` if no crew member is in view.

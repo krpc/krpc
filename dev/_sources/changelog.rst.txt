@@ -276,6 +276,12 @@ Lua client
 * :breaking:`Breaking` Return a stream or an event as the id of its stream (:issue:`1266`)
 * :breaking:`Breaking` Leave internal procedures out of the services, such as ``KRPC.add_stream`` (:issue:`1269`)
 * :breaking:`Breaking` Remove server side functions, such as ``KRPC.run_function`` (:issue:`1269`)
+* Null values
+
+  * :breaking:`Breaking` Return ``nil`` for a null result, in place of ``Types.none`` (:issue:`1278`)
+  * Pass a ``nil`` argument as null, for a parameter that can be null and has no default (:issue:`1278`)
+  * Fix a ``nil`` argument dropping the arguments after it (:issue:`1278`)
+
 
 
 Python client

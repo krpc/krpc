@@ -536,7 +536,7 @@ Orbit
 
       :Attribute: Read-only, cannot be set
 
-   .. attribute:: next_orbit: SpaceCenter.Orbit | Types.none
+   .. attribute:: next_orbit: SpaceCenter.Orbit | nil
 
       If the object is going to change sphere of influence in the future, returns the new
       orbit after the change. Otherwise returns ``nil``.

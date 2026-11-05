@@ -548,7 +548,7 @@ Control
 
       Remove all maneuver nodes.
 
-   .. attribute:: airlock: SpaceCenter.Part | Types.none
+   .. attribute:: airlock: SpaceCenter.Part | nil
 
       The part whose hatch the kerbal is standing at, and so the one
       :meth:`SpaceCenter.Control.board` would put it in. ``nil`` if it is not at a hatch or the
@@ -572,7 +572,7 @@ Control
          carrying science data that the part cannot store, as the game asks what to do
          with it in that case.
 
-   .. attribute:: ladder: SpaceCenter.Part | Types.none
+   .. attribute:: ladder: SpaceCenter.Part | nil
 
       The ladder the kerbal is holding on to, or ``nil`` if it is not holding one
       or the vessel is not a kerbal on EVA.

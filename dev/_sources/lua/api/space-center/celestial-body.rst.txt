@@ -23,7 +23,7 @@ CelestialBody
 
       :Attribute: Read-only, cannot be set
 
-   .. attribute:: orbit: SpaceCenter.Orbit | Types.none
+   .. attribute:: orbit: SpaceCenter.Orbit | nil
 
       The orbit of the body.
 

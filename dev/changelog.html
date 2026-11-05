@@ -765,6 +765,13 @@
 <li><p><span class="changelog-marker breaking">Breaking</span> Return a stream or an event as the id of its stream (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1266">#1266</a>)</p></li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Leave internal procedures out of the services, such as <code class="docutils literal notranslate"><span class="pre">KRPC.add_stream</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1269">#1269</a>)</p></li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Remove server side functions, such as <code class="docutils literal notranslate"><span class="pre">KRPC.run_function</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1269">#1269</a>)</p></li>
+<li><p>Null values</p>
+<ul>
+<li><p><span class="changelog-marker breaking">Breaking</span> Return <code class="docutils literal notranslate"><span class="pre">nil</span></code> for a null result, in place of <code class="docutils literal notranslate"><span class="pre">Types.none</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1278">#1278</a>)</p></li>
+<li><p>Pass a <code class="docutils literal notranslate"><span class="pre">nil</span></code> argument as null, for a parameter that can be null and has no default (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1278">#1278</a>)</p></li>
+<li><p>Fix a <code class="docutils literal notranslate"><span class="pre">nil</span></code> argument dropping the arguments after it (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1278">#1278</a>)</p></li>
+</ul>
+</li>
 </ul>
 </section>
 <section id="python-client">

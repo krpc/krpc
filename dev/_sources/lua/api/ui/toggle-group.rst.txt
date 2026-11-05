@@ -48,7 +48,7 @@ Toggle Group
          be built with its parts visible, inside a panel that is not, and shown all at
          once by making that panel visible.
 
-   .. attribute:: selected: UI.Toggle | Types.none
+   .. attribute:: selected: UI.Toggle | nil
 
       The toggle in the group that is checked, or ``nil`` if none of them are.
 

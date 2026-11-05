@@ -23,7 +23,7 @@ Alarms
 
       :param type: The type of alarm to return.
 
-   .. method:: alarm_with_name(name: string): SpaceCenter.Alarm | Types.none
+   .. method:: alarm_with_name(name: string): SpaceCenter.Alarm | nil
 
       Returns the first alarm with the given title, or ``nil`` if no such
       alarm exists. Alarm titles are not guaranteed to be unique; if more than
@@ -158,7 +158,7 @@ Alarms
          For a maneuver alarm that includes the burn time, setting this sets the margin
          before the start of the burn, and the value read back includes half the burn time.
 
-   .. attribute:: vessel: SpaceCenter.Vessel | Types.none
+   .. attribute:: vessel: SpaceCenter.Vessel | nil
 
       Vessel the alarm references. ``nil`` if it does not reference a vessel.
 

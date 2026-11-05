@@ -30,7 +30,7 @@ This service provides functionality to interact with
 
 
 
-.. staticmethod:: alarm_with_name(name: string): KerbalAlarmClock.Alarm | Types.none
+.. staticmethod:: alarm_with_name(name: string): KerbalAlarmClock.Alarm | nil
 
    Get the alarm with the given *name*, or ``nil``
    if no alarms have that name. If more than one alarm has the name,

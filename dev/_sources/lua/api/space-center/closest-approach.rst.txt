@@ -51,26 +51,26 @@ Closest Approach
 
       :Attribute: Read-only, cannot be set
 
-   .. attribute:: vessel: SpaceCenter.Vessel | Types.none
+   .. attribute:: vessel: SpaceCenter.Vessel | nil
 
       The vessel doing the approaching, or ``nil`` if it is not a vessel.
 
       :Attribute: Read-only, cannot be set
 
-   .. attribute:: body: SpaceCenter.CelestialBody | Types.none
+   .. attribute:: body: SpaceCenter.CelestialBody | nil
 
       The celestial body doing the approaching, or ``nil`` if it is not a
       celestial body.
 
       :Attribute: Read-only, cannot be set
 
-   .. attribute:: target_vessel: SpaceCenter.Vessel | Types.none
+   .. attribute:: target_vessel: SpaceCenter.Vessel | nil
 
       The vessel being approached, or ``nil`` if the target is not a vessel.
 
       :Attribute: Read-only, cannot be set
 
-   .. attribute:: target_body: SpaceCenter.CelestialBody | Types.none
+   .. attribute:: target_body: SpaceCenter.CelestialBody | nil
 
       The celestial body being approached, or ``nil`` if the target is not a
       celestial body.

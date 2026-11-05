@@ -45,7 +45,7 @@ NavballMarker
 
       :Attribute: Can be read or written
 
-   .. attribute:: image: Drawing.Image | Types.none
+   .. attribute:: image: Drawing.Image | nil
 
       The image that the marker is drawn with in place of its icon, or null to draw the
       icon.

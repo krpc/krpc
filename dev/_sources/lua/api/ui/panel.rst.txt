@@ -142,7 +142,7 @@ Panel
 
       :param visible: Whether the scroll view is visible. Defaults to ``true``.
 
-   .. attribute:: layout: UI.Layout | Types.none
+   .. attribute:: layout: UI.Layout | nil
 
       The layout that arranges the elements of the panel, or ``nil`` if they are
       positioned by hand.

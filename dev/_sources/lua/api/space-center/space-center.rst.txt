@@ -49,7 +49,7 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
 
 
-.. attribute:: active_vessel: SpaceCenter.Vessel | Types.none
+.. attribute:: active_vessel: SpaceCenter.Vessel | nil
 
    The currently active vessel.
 
@@ -86,7 +86,7 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
 
 
-.. attribute:: target_body: SpaceCenter.CelestialBody | Types.none
+.. attribute:: target_body: SpaceCenter.CelestialBody | nil
 
    The currently targeted celestial body.
 
@@ -95,7 +95,7 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
 
 
-.. attribute:: target_vessel: SpaceCenter.Vessel | Types.none
+.. attribute:: target_vessel: SpaceCenter.Vessel | nil
 
    The currently targeted vessel.
 
@@ -104,7 +104,7 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
 
 
-.. attribute:: target_docking_port: SpaceCenter.DockingPort | Types.none
+.. attribute:: target_docking_port: SpaceCenter.DockingPort | nil
 
    The currently targeted docking port.
 
@@ -520,7 +520,7 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
 
 
-.. staticmethod:: raycast_part(position: Tuple, direction: Tuple, reference_frame: SpaceCenter.ReferenceFrame): SpaceCenter.Part | Types.none
+.. staticmethod:: raycast_part(position: Tuple, direction: Tuple, reference_frame: SpaceCenter.ReferenceFrame): SpaceCenter.Part | nil
 
    Cast a ray from a given position in a given direction, and return the part that it hits.
    If no hit occurs, returns ``nil``.
@@ -559,7 +559,7 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
 
 
-.. staticmethod:: get_kerbal(name: string): SpaceCenter.CrewMember | Types.none
+.. staticmethod:: get_kerbal(name: string): SpaceCenter.CrewMember | nil
 
    Find a Kerbal by name.
 

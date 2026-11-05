@@ -464,7 +464,7 @@ Editor
 
       :Attribute: Read-only, cannot be set
 
-   .. attribute:: fully_submerged_center_of_buoyancy: Tuple | Types.none
+   .. attribute:: fully_submerged_center_of_buoyancy: Tuple | nil
 
       The point the buoyant force acts through with the vessel fully submerged, in
       reference frame :class:`SpaceCenter.ReferenceFrame`. Returns ``nil`` if no part of

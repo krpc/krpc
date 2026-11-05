@@ -64,7 +64,7 @@ Toggle
          Checking a toggle that belongs to a :class:`UI.ToggleGroup` unchecks the rest
          of that group, whether or not it is on the screen.
 
-   .. attribute:: group: UI.ToggleGroup | Types.none
+   .. attribute:: group: UI.ToggleGroup | nil
 
       The group that the toggle belongs to, or ``nil`` if it does not belong to one.
 

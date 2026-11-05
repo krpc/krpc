@@ -89,6 +89,8 @@ A client implements the ``core`` profile, and any of the others:
      - Omitting arguments that have defaults
    * - ``named-arguments``
      - Passing arguments by name at run time
+   * - ``skipped-arguments``
+     - Skipping an argument by position, so that it takes its default
    * - ``streams``
      - Adding streams, reading and waiting on their values, and removing them
    * - ``callbacks``

@@ -656,6 +656,12 @@ the extremes of each numeric type arrive intact.</p>
 duplicate or unknown name raises the argument error.</p>
 </dd>
 </dl>
+<dl class="simple" id="spec-calls-skipped-arguments">
+<dt><code class="docutils literal notranslate"><span class="pre">calls-skipped-arguments</span> <span class="pre">[defaults,</span> <span class="pre">skipped-arguments]</span> <span class="pre">[MUST]</span></code></dt><dd><p>The client skips an argument that has a default, by position, and passes the
+arguments after it. Skipping an argument with no default, at a parameter that cannot
+hold null, raises the argument error.</p>
+</dd>
+</dl>
 <dl class="simple" id="spec-calls-too-few-arguments">
 <dt><code class="docutils literal notranslate"><span class="pre">calls-too-few-arguments</span> <span class="pre">[dynamic]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Omitting an argument with no default raises the argument error.</p>
 </dd>

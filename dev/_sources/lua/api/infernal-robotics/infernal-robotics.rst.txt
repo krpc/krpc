@@ -44,7 +44,7 @@ This service provides functionality to interact with
 
 
 
-.. staticmethod:: servo_group_with_name(vessel: SpaceCenter.Vessel, name: string): InfernalRobotics.ServoGroup | Types.none
+.. staticmethod:: servo_group_with_name(vessel: SpaceCenter.Vessel, name: string): InfernalRobotics.ServoGroup | nil
 
    Returns the servo group in the given *vessel* with the given *name*,
    or ``nil`` if none exists. If multiple servo groups have the same name, only one of them is returned.
@@ -55,7 +55,7 @@ This service provides functionality to interact with
 
 
 
-.. staticmethod:: servo_with_name(vessel: SpaceCenter.Vessel, name: string): InfernalRobotics.Servo | Types.none
+.. staticmethod:: servo_with_name(vessel: SpaceCenter.Vessel, name: string): InfernalRobotics.Servo | nil
 
    Returns the servo in the given *vessel* with the given *name* or
    ``nil`` if none exists. If multiple servos have the same name, only one of them is returned.
