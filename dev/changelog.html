@@ -544,6 +544,9 @@
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">internal</span></code> to the <code class="docutils literal notranslate"><span class="pre">Procedure</span></code> message (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1269">#1269</a>)</p></li>
 <li><p>Mark the stream, event and server side function procedures of the <code class="docutils literal notranslate"><span class="pre">KRPC</span></code> service as internal (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1269">#1269</a>)</p></li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Reject a service that holds a stream or an event anywhere but a return value, or a stream returned by a procedure that is not internal (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1269">#1269</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Reject an argument with bytes left over or an unknown field (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1280">#1280</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Reject a 32-bit number out of range, a tuple with the wrong number of items, an undeclared enum value, or a bool other than 0 or 1 (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1280">#1280</a>)</p></li>
+<li><p>Fail only the call whose argument the server cannot decode, and run the other calls in the request (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1280">#1280</a>)</p></li>
 </ul>
 </section>
 <section id="server">
@@ -581,6 +584,7 @@
 <li><p><span class="changelog-marker breaking">Breaking</span> Rename <code class="docutils literal notranslate"><span class="pre">ConfigNode.GetValues</span></code> and <code class="docutils literal notranslate"><span class="pre">ConfigNode.GetNodes</span></code> to <code class="docutils literal notranslate"><span class="pre">ConfigNode.FindValues</span></code> and <code class="docutils literal notranslate"><span class="pre">ConfigNode.FindNodes</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1261">#1261</a>)</p></li>
 </ul>
 </li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Reject a combination of <code class="docutils literal notranslate"><span class="pre">MapFilterType</span></code> values in <code class="docutils literal notranslate"><span class="pre">SpaceCenter.MapFilter</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1280">#1280</a>)</p></li>
 </ul>
 </section>
 <section id="infernalrobotics-service">

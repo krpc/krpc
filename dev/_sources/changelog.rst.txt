@@ -66,6 +66,9 @@ Core
 * Add ``internal`` to the ``Procedure`` message (:issue:`1269`)
 * Mark the stream, event and server side function procedures of the ``KRPC`` service as internal (:issue:`1269`)
 * :breaking:`Breaking` Reject a service that holds a stream or an event anywhere but a return value, or a stream returned by a procedure that is not internal (:issue:`1269`)
+* :breaking:`Breaking` Reject an argument with bytes left over or an unknown field (:issue:`1280`)
+* :breaking:`Breaking` Reject a 32-bit number out of range, a tuple with the wrong number of items, an undeclared enum value, or a bool other than 0 or 1 (:issue:`1280`)
+* Fail only the call whose argument the server cannot decode, and run the other calls in the request (:issue:`1280`)
 
 
 Server
@@ -102,6 +105,7 @@ SpaceCenter service
 
   * :breaking:`Breaking` Rename ``ConfigNode.GetValues`` and ``ConfigNode.GetNodes`` to ``ConfigNode.FindValues`` and ``ConfigNode.FindNodes`` (:issue:`1261`)
 
+* :breaking:`Breaking` Reject a combination of ``MapFilterType`` values in ``SpaceCenter.MapFilter`` (:issue:`1280`)
 
 
 InfernalRobotics service

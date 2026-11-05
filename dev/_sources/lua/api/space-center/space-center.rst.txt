@@ -737,7 +737,6 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 .. class:: MapFilterType
 
    The set of things that are visible in map mode.
-   These may be combined with bitwise logic.
 
 
    .. data:: all

@@ -694,24 +694,30 @@ largest <code class="docutils literal notranslate"><span class="pre">uint64</spa
 </dl>
 <dl class="simple" id="spec-values-wrong-type">
 <dt><code class="docutils literal notranslate"><span class="pre">values-wrong-type</span> <span class="pre">[dynamic]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A value of the wrong type for its parameter, or for an item of a collection,
-raises the encoding or argument error. A string that holds a number is not
-converted to the number, and a bool is not converted to a number.</p>
+raises the encoding or argument error, before the request is sent. A string that
+holds a number is not converted to the number, and a bool is not converted to a
+number.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-values-wrong-sized-tuple">
+<dt><code class="docutils literal notranslate"><span class="pre">values-wrong-sized-tuple</span> <span class="pre">[dynamic]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A tuple with the wrong number of items for its parameter raises the encoding or
+argument error, before the request is sent.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-values-out-of-range">
 <dt><code class="docutils literal notranslate"><span class="pre">values-out-of-range</span> <span class="pre">[dynamic]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A number outside the range of its parameter’s type raises the encoding or
-argument error. This includes a finite <code class="docutils literal notranslate"><span class="pre">double</span></code> beyond the largest <code class="docutils literal notranslate"><span class="pre">float</span></code>,
-passed for a <code class="docutils literal notranslate"><span class="pre">float</span></code> parameter.</p>
+argument error, before the request is sent. This includes a finite <code class="docutils literal notranslate"><span class="pre">double</span></code> beyond
+the largest <code class="docutils literal notranslate"><span class="pre">float</span></code>, passed for a <code class="docutils literal notranslate"><span class="pre">float</span></code> parameter.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-values-undeclared-enum-value">
 <dt><code class="docutils literal notranslate"><span class="pre">values-undeclared-enum-value</span> <span class="pre">[dynamic]</span> <span class="pre">[MUST]</span></code></dt><dd><p>An enumeration value that the enumeration does not declare raises the encoding or
-argument error.</p>
+argument error, before the request is sent.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-values-wrong-collection">
 <dt><code class="docutils literal notranslate"><span class="pre">values-wrong-collection</span> <span class="pre">[dynamic]</span> <span class="pre">[SHOULD]</span></code></dt><dd><p>A string, bytes or a dictionary passed for a list, set or tuple raises the
-encoding or argument error.</p>
+encoding or argument error, before the request is sent.</p>
 </dd>
 </dl>
 </section>

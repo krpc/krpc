@@ -673,6 +673,12 @@ hold null, raises the argument error.</p>
 </section>
 <section id="responses">
 <h2>Responses<a class="headerlink" href="#responses" title="Link to this heading">#</a></h2>
+<dl class="simple" id="spec-calls-undecodable-argument-fails-its-call">
+<dt><code class="docutils literal notranslate"><span class="pre">calls-undecodable-argument-fails-its-call</span> <span class="pre">[core]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A call with an argument the server cannot decode fails with the server’s
+<code class="docutils literal notranslate"><span class="pre">ArgumentException</span></code>, in the <code class="docutils literal notranslate"><span class="pre">error</span></code> field of its result. The other calls in the
+request run, and their results stay in order.</p>
+</dd>
+</dl>
 <dl class="simple" id="spec-calls-unique-ids">
 <dt><code class="docutils literal notranslate"><span class="pre">calls-unique-ids</span> <span class="pre">[concurrency]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Each request has an id that no other waiting request has.</p>
 </dd>

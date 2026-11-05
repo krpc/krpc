@@ -853,7 +853,6 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 .. type:: krpc_SpaceCenter_MapFilterType_t
 
    The set of things that are visible in map mode.
-   These may be combined with bitwise logic.
 
 
    .. macro:: KRPC_SPACECENTER_MAPFILTERTYPE_ALL

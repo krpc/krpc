@@ -666,7 +666,6 @@ SpaceCenter
 .. enum:: MapFilterType
 
    The set of things that are visible in map mode.
-   These may be combined with bitwise logic.
 
 
    .. enumerator:: All

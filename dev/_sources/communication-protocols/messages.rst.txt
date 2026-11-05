@@ -197,8 +197,9 @@ The ``is_null`` field marks a null return value. When it is set, ``value`` is un
 set for procedures whose return value is nullable. See :ref:`null values
 <communication-protocol-null-values>`.
 
-A call that fails sets the ``error`` field of its result. A request that fails as a whole sets the
-``error`` field of the response, and the response holds no results.
+A call that fails sets the ``error`` field of its result. This includes a call with an argument
+the server cannot decode, and the other calls in the request still run. A request that fails as a
+whole sets the ``error`` field of the response, and the response holds no results.
 
 The fields of an error are:
 
@@ -263,6 +264,15 @@ An argument or a return value is encoded according to its
        to its own type.
    * - ``PROCEDURE_CALL``, ``SERVICES``
      - The serialized message of the same name.
+
+An argument's encoding fills its bytes exactly. The call fails with an error if:
+
+* Bytes are left over after a value, or a value is cut short.
+* A ``TUPLE``, ``LIST``, ``SET``, ``DICTIONARY`` or ``STRUCT`` message holds an unknown field.
+* A ``SINT32``, ``UINT32`` or ``ENUMERATION`` value is out of its 32-bit range.
+* An ``ENUMERATION`` value is one the enumeration does not declare.
+* A ``BOOL`` value is not 0 or 1.
+* A ``TUPLE`` has the wrong number of items.
 
 .. _communication-protocol-null-values:
 

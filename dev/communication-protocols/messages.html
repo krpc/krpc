@@ -798,8 +798,9 @@ a result holds the procedure’s return value,
 <a class="reference internal" href="#communication-protocol-protobuf-encoding"><span class="std std-ref">encoded</span></a> according to its return type.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">is_null</span></code> field marks a null return value. When it is set, <code class="docutils literal notranslate"><span class="pre">value</span></code> is unset. It is only
 set for procedures whose return value is nullable. See <a class="reference internal" href="#communication-protocol-null-values"><span class="std std-ref">null values</span></a>.</p>
-<p>A call that fails sets the <code class="docutils literal notranslate"><span class="pre">error</span></code> field of its result. A request that fails as a whole sets the
-<code class="docutils literal notranslate"><span class="pre">error</span></code> field of the response, and the response holds no results.</p>
+<p>A call that fails sets the <code class="docutils literal notranslate"><span class="pre">error</span></code> field of its result. This includes a call with an argument
+the server cannot decode, and the other calls in the request still run. A request that fails as a
+whole sets the <code class="docutils literal notranslate"><span class="pre">error</span></code> field of the response, and the response holds no results.</p>
 <p>The fields of an error are:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">service</span></code> - The service that defines the exception type, when the error is one of the
@@ -894,6 +895,15 @@ to its own type.</p></td>
 </tbody>
 </table>
 </div>
+<p>An argument’s encoding fills its bytes exactly. The call fails with an error if:</p>
+<ul class="simple">
+<li><p>Bytes are left over after a value, or a value is cut short.</p></li>
+<li><p>A <code class="docutils literal notranslate"><span class="pre">TUPLE</span></code>, <code class="docutils literal notranslate"><span class="pre">LIST</span></code>, <code class="docutils literal notranslate"><span class="pre">SET</span></code>, <code class="docutils literal notranslate"><span class="pre">DICTIONARY</span></code> or <code class="docutils literal notranslate"><span class="pre">STRUCT</span></code> message holds an unknown field.</p></li>
+<li><p>A <code class="docutils literal notranslate"><span class="pre">SINT32</span></code>, <code class="docutils literal notranslate"><span class="pre">UINT32</span></code> or <code class="docutils literal notranslate"><span class="pre">ENUMERATION</span></code> value is out of its 32-bit range.</p></li>
+<li><p>An <code class="docutils literal notranslate"><span class="pre">ENUMERATION</span></code> value is one the enumeration does not declare.</p></li>
+<li><p>A <code class="docutils literal notranslate"><span class="pre">BOOL</span></code> value is not 0 or 1.</p></li>
+<li><p>A <code class="docutils literal notranslate"><span class="pre">TUPLE</span></code> has the wrong number of items.</p></li>
+</ul>
 </section>
 <section id="null-values">
 <span id="communication-protocol-null-values"></span><h3>Null Values<a class="headerlink" href="#null-values" title="Link to this heading">#</a></h3>
