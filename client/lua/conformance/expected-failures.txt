@@ -84,6 +84,7 @@ test_values.py::test_out_of_range[sint64-above]  # The encoder does not check a 
 test_values.py::test_out_of_range[uint32-above]  # The encoder does not check a number against its type
 test_values.py::test_out_of_range[uint64-negative]  # The encoder does not check a number against its type
 test_values.py::test_wrong_collection[dictionary-for-list]  # A dictionary passes as a list
+test_values.py::test_wrong_sized_tuple[too-many]  # The encoder drops items past the size of the tuple type
 test_codec.py::test_out_of_range[uint32]  # As test_values.py::test_out_of_range[uint32-above]
 test_codec.py::test_out_of_range[uint64]  # As test_values.py::test_out_of_range[uint64-negative]
 test_codec.py::test_out_of_range[sint32]  # As test_values.py::test_out_of_range[sint32-above]
