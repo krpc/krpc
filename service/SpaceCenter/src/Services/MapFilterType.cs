@@ -5,7 +5,6 @@ namespace KRPC.SpaceCenter
 {
     /// <summary>
     /// The set of things that are visible in map mode.
-    /// These may be combined with bitwise logic.
     /// </summary>
     [Serializable]
     [KRPCEnum(Service = "SpaceCenter")]

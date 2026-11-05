@@ -21,11 +21,29 @@ def _open(endpoint: Endpoint) -> socket.socket:
     )
 
 
+def procedure_call(
+    service: str, procedure: str, *arguments: bytes
+) -> KRPC.ProcedureCall:
+    """A call of a procedure. The arguments are encoded values."""
+    return KRPC.ProcedureCall(
+        service=service,
+        procedure=procedure,
+        arguments=[KRPC.Argument(position=i, value=x) for i, x in enumerate(arguments)],
+    )
+
+
 def call(
     endpoint: Endpoint, service: str, procedure: str, *arguments: bytes
 ) -> KRPC.ProcedureResult:
     """Call a procedure on a server, and return its result. The arguments are encoded
     values."""
+    return request(endpoint, procedure_call(service, procedure, *arguments))[0]
+
+
+def request(
+    endpoint: Endpoint, *calls: KRPC.ProcedureCall
+) -> list[KRPC.ProcedureResult]:
+    """Send one request holding the calls to a server, and return their results."""
     with _open(endpoint) as sock:
         _send(
             sock,
@@ -37,15 +55,7 @@ def call(
         )
         response = _receive(sock)
         assert response.connection_response.status == KRPC.ConnectionResponse.OK
-        request = KRPC.Request(id=1)
-        request.calls.add(
-            service=service,
-            procedure=procedure,
-            arguments=[
-                KRPC.Argument(position=i, value=x) for i, x in enumerate(arguments)
-            ],
-        )
-        _send(sock, KRPC.Message(request=request))
+        _send(sock, KRPC.Message(request=KRPC.Request(id=1, calls=calls)))
         while True:
             message = _receive(sock)
             if message.WhichOneof("content") == "response":
@@ -55,7 +65,7 @@ def call(
             KRPC.Message(disconnect=KRPC.Disconnect(reason=KRPC.Disconnect.CLOSED)),
         )
         assert not message.response.HasField("error"), message.response.error
-        return message.response.results[0]
+        return list(message.response.results)
 
 
 def _send(sock: socket.socket, message: KRPC.Message) -> None:

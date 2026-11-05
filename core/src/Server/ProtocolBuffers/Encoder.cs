@@ -286,11 +286,27 @@ namespace KRPC.Server.ProtocolBuffers
 
         /// <summary>
         /// Decode a value of the type the given spec describes, which says which of the
-        /// positions inside it can hold null.
+        /// positions inside it can hold null. Throws an exception if bytes are left over, as
+        /// from a value encoded at another type.
         /// </summary>
         public static object Decode (ByteString value, TypeSpec spec)
         {
-            return DecodeValue (value.CreateCodedInput (), spec);
+            var stream = value.CreateCodedInput ();
+            try {
+                var result = DecodeValue (stream, spec);
+                CheckAtEnd (stream, spec);
+                return result;
+            } catch (InvalidProtocolBufferException e) {
+                throw new ArgumentException (
+                    "The value of type " + spec.Type + " cannot be decoded: " + e.Message, e);
+            }
+        }
+
+        static void CheckAtEnd (CodedInputStream stream, TypeSpec spec)
+        {
+            if (!stream.IsAtEnd)
+                throw new ArgumentException (
+                    "The value of type " + spec.Type + " is followed by bytes it does not use");
         }
 
         /// <summary>
@@ -300,7 +316,9 @@ namespace KRPC.Server.ProtocolBuffers
         static object DecodeNullable (ByteString value, TypeSpec spec)
         {
             var stream = value.CreateCodedInput ();
-            return stream.ReadBool () ? DecodeValue (stream, spec) : null;
+            var result = ReadBool (stream) ? DecodeValue (stream, spec) : null;
+            CheckAtEnd (stream, spec);
+            return result;
         }
 
         /// <summary>
@@ -311,7 +329,45 @@ namespace KRPC.Server.ProtocolBuffers
         {
             if (spec.Nullable)
                 return DecodeNullable (value, spec);
-            return DecodeValue (value.CreateCodedInput (), spec);
+            return Decode (value, spec);
+        }
+
+        // A 32-bit value is read as a 64-bit varint, as protobuf drops the upper bits of a
+        // 32-bit read
+        static int ReadSInt32 (CodedInputStream stream, TypeSpec spec)
+        {
+            var value = stream.ReadSInt64 ();
+            if (value < int.MinValue || value > int.MaxValue)
+                throw new ArgumentException (
+                    "The value " + value + " is out of the range of " + spec.Type);
+            return (int)value;
+        }
+
+        static uint ReadUInt32 (CodedInputStream stream, TypeSpec spec)
+        {
+            var value = stream.ReadUInt64 ();
+            if (value > uint.MaxValue)
+                throw new ArgumentException (
+                    "The value " + value + " is out of the range of " + spec.Type);
+            return (uint)value;
+        }
+
+        static object ReadEnum (CodedInputStream stream, TypeSpec spec)
+        {
+            var number = ReadSInt32 (stream, spec);
+            object value;
+            if (!spec.EnumValues.TryGetValue (number, out value))
+                throw new ArgumentException (
+                    "The value " + number + " is not declared by " + spec.Type);
+            return value;
+        }
+
+        static bool ReadBool (CodedInputStream stream)
+        {
+            var value = stream.ReadUInt64 ();
+            if (value > 1)
+                throw new ArgumentException ("The value " + value + " is not a bool");
+            return value == 1;
         }
 
         static object DecodeValue (CodedInputStream stream, TypeSpec spec)
@@ -322,21 +378,21 @@ namespace KRPC.Server.ProtocolBuffers
             var type = spec.Type;
             switch (spec.Kind) {
             case TypeKind.Enum:
-                return Enum.ToObject (type, stream.ReadSInt32 ());
+                return ReadEnum (stream, spec);
             case TypeKind.Double:
                 return stream.ReadDouble ();
             case TypeKind.Single:
                 return stream.ReadFloat ();
             case TypeKind.Int32:
-                return stream.ReadSInt32 ();
+                return ReadSInt32 (stream, spec);
             case TypeKind.Int64:
                 return stream.ReadSInt64 ();
             case TypeKind.UInt32:
-                return stream.ReadUInt32 ();
+                return ReadUInt32 (stream, spec);
             case TypeKind.UInt64:
                 return stream.ReadUInt64 ();
             case TypeKind.Boolean:
-                return stream.ReadBool ();
+                return ReadBool (stream);
             case TypeKind.String:
                 return stream.ReadString ();
             case TypeKind.Bytes:
@@ -359,14 +415,43 @@ namespace KRPC.Server.ProtocolBuffers
             throw new ArgumentException (type + " is not a serializable type");
         }
 
+        // The tags of the bytes fields of a Tuple, List, Set, Dictionary or DictionaryEntry
+        // message. The fields are read by hand, as a generated parser skips unknown fields.
+        const uint Field1Tag = (1 << 3) | 2;
+        const uint Field2Tag = (2 << 3) | 2;
+
+        static ArgumentException UnknownField (uint tag, Type type)
+        {
+            return new ArgumentException (
+                "The value of type " + type + " holds an unknown field with tag " + tag);
+        }
+
+        /// <summary>
+        /// Read the items of a Tuple, List or Set message, or the entries of a Dictionary message.
+        /// </summary>
+        static System.Collections.Generic.List<ByteString> ReadItems (CodedInputStream stream, Type type)
+        {
+            var items = new System.Collections.Generic.List<ByteString> ();
+            uint tag;
+            while ((tag = stream.ReadTag ()) != 0) {
+                if (tag != Field1Tag)
+                    throw UnknownField (tag, type);
+                items.Add (stream.ReadBytes ());
+            }
+            return items;
+        }
+
         static object DecodeTuple (CodedInputStream stream, TypeSpec spec)
         {
-            var encodedTuple = Schema.KRPC.Tuple.Parser.ParseFrom (stream);
+            var items = ReadItems (stream, spec.Type);
             var valueTypes = spec.Types.Select (x => x.DeclaredType).ToArray ();
+            if (items.Count != valueTypes.Length)
+                throw new ArgumentException (
+                    "A tuple of " + items.Count + " items is not a value of type " + spec.Type);
             var genericType = Type.GetType ("System.Tuple`" + valueTypes.Length);
             var values = new object[valueTypes.Length];
             for (int i = 0; i < valueTypes.Length; i++)
-                values [i] = DecodeItem (encodedTuple.Items [i], spec.Types [i]);
+                values [i] = DecodeItem (items [i], spec.Types [i]);
             var tuple = genericType
                 .MakeGenericType (valueTypes)
                 .GetConstructor (valueTypes)
@@ -382,19 +467,19 @@ namespace KRPC.Server.ProtocolBuffers
         /// </summary>
         static object DecodeStruct (CodedInputStream stream, Type type)
         {
-            var encodedStruct = Schema.KRPC.Tuple.Parser.ParseFrom (stream);
+            var items = ReadItems (stream, type);
             System.Collections.Generic.IList<PropertyInfo> fields;
             System.Collections.Generic.IList<TypeSpec> specs;
             TypeUtils.GetStructFieldsAndSpecs (type, out fields, out specs);
-            if (encodedStruct.Items.Count < fields.Count)
+            if (items.Count < fields.Count)
                 throw new ArgumentException (
-                    "Value for " + type.Name + " has " + encodedStruct.Items.Count +
+                    "Value for " + type.Name + " has " + items.Count +
                     " fields; expected at least " + fields.Count);
             var value = Activator.CreateInstance (type);
             for (int i = 0; i < fields.Count; i++) {
                 var field = fields [i];
                 var spec = specs [i];
-                var item = DecodeItem (encodedStruct.Items [i], spec);
+                var item = DecodeItem (items [i], spec);
                 field.GetSetMethod ().Invoke (value, new [] { item });
             }
             return value;
@@ -402,28 +487,28 @@ namespace KRPC.Server.ProtocolBuffers
 
         static object DecodeList (CodedInputStream stream, TypeSpec spec)
         {
-            var encodedList = Schema.KRPC.List.Parser.ParseFrom (stream);
+            var items = ReadItems (stream, spec.Type);
             var itemSpec = spec.Types [0];
             var list = (IList)(typeof(System.Collections.Generic.List<>)
                 .MakeGenericType (itemSpec.DeclaredType)
                 .GetConstructor (Type.EmptyTypes)
                 .Invoke (null));
-            foreach (var item in encodedList.Items)
+            foreach (var item in items)
                 list.Add (DecodeItem (item, itemSpec));
             return list;
         }
 
         static object DecodeSet (CodedInputStream stream, TypeSpec spec)
         {
-            var encodedSet = Schema.KRPC.Set.Parser.ParseFrom (stream);
+            var items = ReadItems (stream, spec.Type);
             var itemSpec = spec.Types [0];
             var set = (IEnumerable)(typeof(System.Collections.Generic.HashSet<>)
                 .MakeGenericType (itemSpec.DeclaredType)
                 .GetConstructor (Type.EmptyTypes)
                 .Invoke (null));
             MethodInfo methodInfo = spec.Type.GetMethod ("Add");
-            foreach (var item in encodedSet.Items) {
-                var decodedItem = DecodeValue (item.CreateCodedInput (), itemSpec);
+            foreach (var item in items) {
+                var decodedItem = Decode (item, itemSpec);
                 methodInfo.Invoke (set, new [] { decodedItem });
             }
             return set;
@@ -431,16 +516,28 @@ namespace KRPC.Server.ProtocolBuffers
 
         static object DecodeDictionary (CodedInputStream stream, TypeSpec spec)
         {
-            var encodedDictionary = Schema.KRPC.Dictionary.Parser.ParseFrom (stream);
+            var entries = ReadItems (stream, spec.Type);
             var keySpec = spec.Types [0];
             var valueSpec = spec.Types [1];
             var dictionary = (IDictionary)(typeof(System.Collections.Generic.Dictionary<,>)
                 .MakeGenericType (keySpec.DeclaredType, valueSpec.DeclaredType)
                 .GetConstructor (Type.EmptyTypes)
                 .Invoke (null));
-            foreach (var entry in encodedDictionary.Entries) {
-                var key = DecodeValue (entry.Key.CreateCodedInput (), keySpec);
-                dictionary [key] = DecodeItem (entry.Value, valueSpec);
+            foreach (var entry in entries) {
+                var entryStream = entry.CreateCodedInput ();
+                var encodedKey = ByteString.Empty;
+                var encodedValue = ByteString.Empty;
+                uint tag;
+                while ((tag = entryStream.ReadTag ()) != 0) {
+                    if (tag == Field1Tag)
+                        encodedKey = entryStream.ReadBytes ();
+                    else if (tag == Field2Tag)
+                        encodedValue = entryStream.ReadBytes ();
+                    else
+                        throw UnknownField (tag, spec.Type);
+                }
+                var key = Decode (encodedKey, keySpec);
+                dictionary [key] = DecodeItem (encodedValue, valueSpec);
             }
             return dictionary;
         }

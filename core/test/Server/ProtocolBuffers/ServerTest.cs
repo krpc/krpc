@@ -366,7 +366,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
         }
 
         [Test]
-        public void RequestThatCannotBeDecoded ()
+        public void RequestWithAnArgumentThatCannotBeDecoded ()
         {
             var harness = Harness ();
             var client = harness.Handshake ();
@@ -378,11 +378,10 @@ namespace KRPC.Test.Server.ProtocolBuffers
             });
             harness.Send (undecodable);
             harness.Send (MessageHarness.Request (6));
-            var exn = Assert.Throws<KRPC.Server.Message.RequestDecodeException> (() => {
-                var available = client.Stream.DataAvailable;
-            });
-            Assert.AreEqual (5, exn.Id);
-            Assert.IsInstanceOf<ArgumentException> (exn.InnerException);
+            Assert.IsTrue (client.Stream.DataAvailable);
+            var request = client.Stream.Read ();
+            Assert.AreEqual (5, request.Id);
+            Assert.IsInstanceOf<ArgumentException> (request.Calls [0].DecodeException);
             Assert.IsTrue (client.Stream.DataAvailable);
             Assert.AreEqual (6, client.Stream.Read ().Id);
             Assert.IsTrue (client.Connected);

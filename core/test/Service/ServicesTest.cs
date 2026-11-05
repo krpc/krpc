@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using Google.Protobuf;
+using KRPC.Server.ProtocolBuffers;
 using KRPC.Service;
 using KRPC.Service.Messages;
 using Moq;
@@ -690,6 +692,54 @@ namespace KRPC.Test.Service
             if (n == 0)
                 return sum;
             throw new YieldException<Func<int>> (() => BlockingProcedureReturnsFn(n - 1, sum + n));
+        }
+
+        // A string followed by a byte it does not use
+        static Schema.KRPC.ProcedureCall UndecodableCall ()
+        {
+            var call = new Schema.KRPC.ProcedureCall { Service = "TestService", Procedure = "ProcedureSingleArgReturns" };
+            call.Arguments.Add (new Schema.KRPC.Argument {
+                Position = 0,
+                Value = ByteString.CopyFrom (new byte [] { 1, 0x61, 0 })
+            });
+            return call;
+        }
+
+        [Test]
+        public void HandleRequestWithAnUndecodableArgumentFailsOnlyThatCall ()
+        {
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.ProcedureNoArgsReturns ()).Returns ("foo");
+            TestService.Service = mock.Object;
+            var valid = new Schema.KRPC.ProcedureCall { Service = "TestService", Procedure = "ProcedureNoArgsReturns" };
+            var request = new Schema.KRPC.Request { Id = 7 };
+            request.Calls.Add (valid);
+            request.Calls.Add (UndecodableCall ());
+            request.Calls.Add (valid);
+            var response = new RequestContinuation (null, request.ToMessage ()).Run ();
+            mock.Verify (x => x.ProcedureNoArgsReturns (), Times.Exactly (2));
+            Assert.AreEqual (7, response.Id);
+            Assert.IsFalse (response.HasError);
+            Assert.AreEqual (3, response.Results.Count);
+            Assert.AreEqual ("foo", response.Results [0].Value);
+            Assert.IsTrue (response.Results [1].HasError);
+            Assert.AreEqual ("ArgumentException", response.Results [1].Error.Name);
+            Assert.AreEqual ("foo", response.Results [2].Value);
+        }
+
+        [Test]
+        public void HandleRequestWithAnUndecodableCallToStream ()
+        {
+            var addStream = new Schema.KRPC.ProcedureCall { Service = "KRPC", Procedure = "AddStream" };
+            addStream.Arguments.Add (new Schema.KRPC.Argument {
+                Position = 0,
+                Value = UndecodableCall ().ToByteString ()
+            });
+            var request = new Schema.KRPC.Request ();
+            request.Calls.Add (addStream);
+            var response = new RequestContinuation (null, request.ToMessage ()).Run ();
+            Assert.IsFalse (response.HasError);
+            Assert.AreEqual ("ArgumentException", response.Results [0].Error.Name);
         }
 
         [Test]

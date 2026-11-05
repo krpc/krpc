@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Google.Protobuf;
 using KRPC.Server.ProtocolBuffers;
 using KRPC.Service;
 using KRPC.Service.Attributes;
@@ -118,6 +119,171 @@ namespace KRPC.Test.Server.ProtocolBuffers
             // the position holding the value, never by the value itself
             Assert.Throws<ArgumentException> (
                 () => Encoder.Decode ("00".ToByteString (), TypeSpec.Create (typeof(TestService.TestClass))));
+        }
+
+        [Test]
+        public void DecodeLeftOverBytes ()
+        {
+            // A string encoded at the wrong type reads as its length, followed by its bytes
+            var spec = TypeSpec.Create (typeof(int));
+            Assert.Throws<ArgumentException> (
+                () => Encoder.Decode (Encode ("foo"), spec));
+        }
+
+        [Test]
+        public void DecodeLeftOverBytesInAnItem ()
+        {
+            var data = Encode (new List<string> { "foo" });
+            Assert.Throws<ArgumentException> (
+                () => Encoder.Decode (data, TypeSpec.Create (typeof(IList<int>))));
+            data = Encoder.Encode (
+                new List<int?> { 1, null }, TypeSpec.Create (typeof(IList<int?>), false, null, "test"));
+            Assert.Throws<ArgumentException> (
+                () => Encoder.Decode (data, TypeSpec.Create (typeof(IList<int>))));
+        }
+
+        [Test]
+        public void DecodeLeftOverBytesInASetItem ()
+        {
+            Assert.Throws<ArgumentException> (
+                () => Encoder.Decode (Encode (new HashSet<string> { "foo" }), TypeSpec.Create (typeof(HashSet<int>))));
+        }
+
+        [Test]
+        public void DecodeLeftOverBytesInADictionaryKey ()
+        {
+            Assert.Throws<ArgumentException> (
+                () => Encoder.Decode (
+                    Encode (new Dictionary<string,int> { { "foo", 1 } }),
+                    TypeSpec.Create (typeof(IDictionary<int,int>))));
+        }
+
+        [Test]
+        public void DecodeLeftOverBytesInANullableItem ()
+        {
+            var spec = TypeSpec.Create (typeof(IList<int?>), false, null, "test");
+            var list = new Schema.KRPC.List ();
+            // Present, then the value 1
+            list.Items.Add (ByteString.CopyFrom (new byte [] { 1, 2 }));
+            Assert.AreEqual (new int? [] { 1 }, Encoder.Decode (list.ToByteString (), spec));
+            list.Items [0] = ByteString.CopyFrom (new byte [] { 1, 2, 0 });
+            Assert.Throws<ArgumentException> (() => Encoder.Decode (list.ToByteString (), spec));
+        }
+
+        [TestCase (typeof(int), "8080808010")]
+        [TestCase (typeof(int), "8180808010")]
+        [TestCase (typeof(uint), "8080808010")]
+        [TestCase (typeof(TestService.TestEnum), "8080808010")]
+        public void DecodeOutOfRange (Type type, string data)
+        {
+            Assert.Throws<ArgumentException> (
+                () => Encoder.Decode (data.ToByteString (), TypeSpec.Create (type)));
+        }
+
+        [TestCase (typeof(double), "00000000")]
+        [TestCase (typeof(float), "0000")]
+        [TestCase (typeof(int), "")]
+        [TestCase (typeof(int), "80")]
+        [TestCase (typeof(string), "03")]
+        public void DecodeTruncatedValue (Type type, string data)
+        {
+            Assert.Throws<ArgumentException> (
+                () => Encoder.Decode (data.ToByteString (), TypeSpec.Create (type)));
+        }
+
+        // A field other than the items, an item as a varint, and an entry with a third field
+        [TestCase (typeof(IList<int>), "1001")]
+        [TestCase (typeof(IList<int>), "0801")]
+        [TestCase (typeof(HashSet<int>), "1001")]
+        [TestCase (typeof(IDictionary<int,int>), "1001")]
+        [TestCase (typeof(IDictionary<int,int>), "0a080a01021201021801")]
+        [TestCase (typeof(Tuple<int,int>), "0a01020a01021001")]
+        public void DecodeUnknownField (Type type, string data)
+        {
+            Assert.Throws<ArgumentException> (
+                () => Encoder.Decode (data.ToByteString (), TypeSpec.Create (type)));
+        }
+
+        [Test]
+        public void DecodeUnknownFieldInAStruct ()
+        {
+            var value = new TestService.TestStruct {
+                IntField = 1,
+                StringField = "abc",
+                EnumField = TestService.TestEnum.X,
+                ListField = new List<string> (),
+                ObjectField = new TestService.TestClass ("foo")
+            };
+            var data = Encode (value).ToHexString () + "1001";
+            Assert.Throws<ArgumentException> (
+                () => Encoder.Decode (data.ToByteString (), TypeSpec.Create (typeof(TestService.TestStruct))));
+        }
+
+        [Test]
+        public void DecodeEmptyDictionaryValueWrittenExplicitly ()
+        {
+            // An entry holding the key "a", and an empty list as a field of no bytes
+            var result = (IDictionary<string,IList<int>>)Encoder.Decode (
+                "0a060a0201611200".ToByteString (), TypeSpec.Create (typeof(IDictionary<string,IList<int>>)));
+            CollectionAssert.IsEmpty (result ["a"]);
+        }
+
+        [Test]
+        public void DecodeTruncatedValueInAnItem ()
+        {
+            var list = new Schema.KRPC.List ();
+            list.Items.Add (ByteString.CopyFrom (new byte [] { 0x80 }));
+            Assert.Throws<ArgumentException> (
+                () => Encoder.Decode (list.ToByteString (), TypeSpec.Create (typeof(IList<int>))));
+        }
+
+        [Test]
+        public void EnumValuesAreSharedBetweenSpecs ()
+        {
+            Assert.AreSame (
+                TypeSpec.Create (typeof(TestService.TestEnum)).EnumValues,
+                TypeSpec.Create (typeof(TestService.TestEnum?)).EnumValues);
+        }
+
+        [Test]
+        public void DecodeUndeclaredEnumValue ()
+        {
+            Assert.Throws<ArgumentException> (
+                () => Encoder.Decode ("0e".ToByteString (), TypeSpec.Create (typeof(TestService.TestEnum))));
+        }
+
+        [Test]
+        public void DecodeBoolOutOfRange ()
+        {
+            Assert.Throws<ArgumentException> (
+                () => Encoder.Decode ("02".ToByteString (), TypeSpec.Create (typeof(bool))));
+        }
+
+        [Test]
+        public void DecodePresenceBoolOutOfRange ()
+        {
+            var spec = TypeSpec.Create (typeof(IList<int?>), false, null, "test");
+            var list = new Schema.KRPC.List ();
+            list.Items.Add (ByteString.CopyFrom (new byte [] { 2, 2 }));
+            Assert.Throws<ArgumentException> (() => Encoder.Decode (list.ToByteString (), spec));
+        }
+
+        [Test]
+        public void DecodeTupleOfAnotherSize ()
+        {
+            var spec = TypeSpec.Create (typeof(Tuple<int,int>));
+            Assert.Throws<ArgumentException> (
+                () => Encoder.Decode (Encode (Tuple.Create (1, 2, 3)), spec));
+            Assert.Throws<ArgumentException> (
+                () => Encoder.Decode (Encode (Tuple.Create (1)), spec));
+        }
+
+        [TestCase (typeof(int), "feffffff0f", int.MaxValue)]
+        [TestCase (typeof(int), "ffffffff0f", int.MinValue)]
+        [TestCase (typeof(uint), "ffffffff0f", uint.MaxValue)]
+        public void DecodeExtremes (Type type, string data, object expected)
+        {
+            Assert.AreEqual (expected, Encoder.Decode (data.ToByteString (), TypeSpec.Create (type)));
         }
 
         [TestCase (3.14159265359f, "db0f4940")]

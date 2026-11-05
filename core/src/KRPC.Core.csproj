@@ -53,7 +53,6 @@
     <Compile Include="Server\IStream.cs" />
     <Compile Include="Server\Message\MalformedRequestException.cs" />
     <Compile Include="Server\Message\NoRequestException.cs" />
-    <Compile Include="Server\Message\RequestDecodeException.cs" />
     <Compile Include="Server\Message\Client.cs" />
     <Compile Include="Server\Message\Server.cs" />
     <Compile Include="Server\Message\Stream.cs" />
