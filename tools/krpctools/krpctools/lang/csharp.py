@@ -120,7 +120,26 @@ class CsharpLanguage(Language):
             "volatile",
             "while",
         ]
+    ) | set(
+        [
+            # The members of object, of the client's base classes and of a generated
+            # structure or service, which a generated member of the same name would hide
+            "AddExceptionTypes",
+            "CompareTo",
+            "Equals",
+            "Finalize",
+            "GetHashCode",
+            "GetObjectId",
+            "GetType",
+            "MemberwiseClone",
+            "ReferenceEquals",
+            "ToString",
+        ]
     )
+
+    # The locals of a generated method, the connection a static method takes, and the
+    # operator its null check uses
+    parameter_reserved = frozenset(["_args", "_result", "connection", "nameof"])
 
     type_map = {
         Type.DOUBLE: "double",

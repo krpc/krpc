@@ -1,7 +1,3 @@
-using Google.Protobuf;
-using System;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
 
 #if NET35
 using systemAlias = global::KRPC.Client.Compatibility;
@@ -33,7 +29,7 @@ namespace KRPC.Client.Services.ServiceA
 
     // The types the stubs encode and decode values of, built once each. A spec names the
     // positions inside a value that can hold null, which a C# type cannot always say.
-    static class TypeSpecs
+    static class _TypeSpecs
     {
         internal static readonly global::KRPC.Client.TypeSpec Spec0 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.ServiceB.Mode));
         internal static readonly global::KRPC.Client.TypeSpec Spec1 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<global::KRPC.Client.Services.ServiceB.Mode>));
@@ -73,11 +69,11 @@ namespace KRPC.Client.Services.ServiceA
         /// <summary>
         /// Defaults to a member of another service's enumeration.
         /// </summary>
-        [global::KRPC.Client.Attributes.RPCAttribute ("ServiceA", "Frob", typeof(TypeSpecs))]
+        [global::KRPC.Client.Attributes.RPCAttribute ("ServiceA", "Frob", typeof(_TypeSpecs))]
         public void Frob (global::KRPC.Client.Services.ServiceB.Mode mode = global::KRPC.Client.Services.ServiceB.Mode.Fast)
         {
-            var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (mode, TypeSpecs.Spec0)
+            var _args = new global::Google.Protobuf.ByteString[] {
+                global::KRPC.Client.Encoder.Encode (mode, _TypeSpecs.Spec0)
             };
             connection.Invoke ("ServiceA", "Frob", _args);
         }
@@ -85,11 +81,11 @@ namespace KRPC.Client.Services.ServiceA
         /// <summary>
         /// Defaults to a collection containing a member of another service's enumeration.
         /// </summary>
-        [global::KRPC.Client.Attributes.RPCAttribute ("ServiceA", "FrobAll", typeof(TypeSpecs))]
+        [global::KRPC.Client.Attributes.RPCAttribute ("ServiceA", "FrobAll", typeof(_TypeSpecs))]
         public void FrobAll (global::System.Collections.Generic.IList<global::KRPC.Client.Services.ServiceB.Mode> modes = null)
         {
-            var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (modes ?? new global::System.Collections.Generic.List<global::KRPC.Client.Services.ServiceB.Mode> { global::KRPC.Client.Services.ServiceB.Mode.Fast }, TypeSpecs.Spec1)
+            var _args = new global::Google.Protobuf.ByteString[] {
+                global::KRPC.Client.Encoder.Encode (modes ?? new global::System.Collections.Generic.List<global::KRPC.Client.Services.ServiceB.Mode> { global::KRPC.Client.Services.ServiceB.Mode.Fast }, _TypeSpecs.Spec1)
             };
             connection.Invoke ("ServiceA", "FrobAll", _args);
         }

@@ -398,6 +398,8 @@ class CsharpDispatchGenerator(DispatchGenerator):
 
     def struct(self, typ, struct):
         name = "%s_%s" % (self._service, struct["name"])
+        for field in struct["fields"]:
+            field["name"] = self._name(field["remote_name"], struct["name"])
         conversion = {
             "arg": "Arg_%s" % name,
             "result": "Result_%s" % name,
@@ -437,8 +439,15 @@ class CsharpDispatchGenerator(DispatchGenerator):
             "type": "systemAlias::Tuple<%s>" % types,
         }
 
+    def _name(self, name, owner):
+        """The name of a member as the stubs declare it, where one named as the type that
+        holds it takes a trailing underscore"""
+        name = self.language.parse_name(name)
+        return name + "_" if name == owner else name
+
     def call(self, kind, cls, name, parameters):
         service = "connection.%s ()" % self._service
+        name = self._name(name, cls or "Service")
         if kind == PROCEDURE:
             return "%s.%s (%s)" % (service, name, _arguments(parameters))
         if kind == GETTER:
@@ -465,6 +474,7 @@ class CsharpDispatchGenerator(DispatchGenerator):
     def call_template(self, kind, cls, name, parameters):
         service = "connection.%s ()" % self._service
         service_class = "global::KRPC.Client.Services.%s.Service" % self._service
+        name = self._name(name, cls or "Service")
         if kind == PROCEDURE:
             defaults = ", ".join("default" for _ in parameters)
             body = "%s.%s (%s)" % (service, name, defaults)
@@ -499,7 +509,7 @@ class CsharpDispatchGenerator(DispatchGenerator):
     def bound_call(self, cls, name, parameters):
         return "%s.Bind (connection).%s (%s)" % (
             self.class_type(self._service, cls),
-            name,
+            self._name(name, cls),
             _arguments(parameters),
         )
 

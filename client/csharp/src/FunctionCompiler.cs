@@ -566,7 +566,7 @@ namespace KRPC.Client
                         connection, instance, RemoteType (node.Type, node)));
             }
             if (IsAStruct (node.Expression.Type))
-                return Result.FromExpression (ServerExpression.GetField (connection, instance, name));
+                return Result.FromExpression (ServerExpression.GetField (connection, instance, RemoteFieldName (name)));
             if (name == "Length" && node.Expression.Type == typeof(string))
                 return Result.FromExpression (ServerExpression.StringLength (connection, instance));
             if (IsATuple (node.Expression.Type) && name.StartsWith ("Item", StringComparison.Ordinal)) {
@@ -2530,6 +2530,16 @@ namespace KRPC.Client
         {
             var name = type.Namespace ?? string.Empty;
             return name.Substring (name.LastIndexOf ('.') + 1);
+        }
+
+        /// <summary>
+        /// The name the server gives a structure field, from the name of its generated
+        /// property. An escaped property, such as ToString_, ends in an underscore, which no
+        /// name on the server does.
+        /// </summary>
+        static string RemoteFieldName (string name)
+        {
+            return name.EndsWith ("_", StringComparison.Ordinal) ? name.Substring (0, name.Length - 1) : name;
         }
 
         /// <summary>

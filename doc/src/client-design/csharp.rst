@@ -34,7 +34,7 @@ Streams from Expressions
 A C# type cannot say that a reference-typed parameter, or a reference-typed position inside a
 collection, is nullable. The stubs name each in a ``TypeSpec``, and the encoder throws
 ``ArgumentNullException`` for a null where the spec says the position cannot hold one. ``GetCall``
-reads the spec from ``RPCAttribute.Types``, the service's generated ``TypeSpecs`` class. A compiled
+reads the spec from ``RPCAttribute.Types``, the service's generated ``_TypeSpecs`` class. A compiled
 lambda holding a reference inside a collection or tuple asks the server for its return type.
 
 Connections carried by the lambda's objects, its services, a static method's argument and a

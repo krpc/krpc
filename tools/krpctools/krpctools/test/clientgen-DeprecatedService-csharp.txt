@@ -1,7 +1,3 @@
-using Google.Protobuf;
-using System;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
 
 #if NET35
 using systemAlias = global::KRPC.Client.Compatibility;
@@ -34,7 +30,7 @@ namespace KRPC.Client.Services.DeprecatedService
 
     // The types the stubs encode and decode values of, built once each. A spec names the
     // positions inside a value that can hold null, which a C# type cannot always say.
-    static class TypeSpecs
+    static class _TypeSpecs
     {
         internal static readonly global::KRPC.Client.TypeSpec Spec0 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.DeprecatedService.ServiceClass));
         internal static readonly global::KRPC.Client.TypeSpec Spec1 = global::KRPC.Client.TypeSpec.For (typeof(string));
@@ -84,38 +80,38 @@ namespace KRPC.Client.Services.DeprecatedService
         /// A procedure.
         /// </summary>
         [global::System.Obsolete ("Use TestService instead.")]
-        [global::KRPC.Client.Attributes.RPCAttribute ("DeprecatedService", "Procedure", typeof(TypeSpecs))]
+        [global::KRPC.Client.Attributes.RPCAttribute ("DeprecatedService", "Procedure", typeof(_TypeSpecs))]
         public string Procedure ()
         {
             var _result = connection.Invoke ("DeprecatedService", "Procedure");
-            return (string)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec1, connection);
+            return (string)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec1, connection);
         }
 
         /// <summary>
         /// A procedure returning a structure.
         /// </summary>
         [global::System.Obsolete ("Use TestService instead.")]
-        [global::KRPC.Client.Attributes.RPCAttribute ("DeprecatedService", "StructProcedure", typeof(TypeSpecs))]
+        [global::KRPC.Client.Attributes.RPCAttribute ("DeprecatedService", "StructProcedure", typeof(_TypeSpecs))]
         public global::KRPC.Client.Services.DeprecatedService.ServiceStruct StructProcedure ()
         {
             var _result = connection.Invoke ("DeprecatedService", "StructProcedure");
-            return (global::KRPC.Client.Services.DeprecatedService.ServiceStruct)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec2, connection);
+            return (global::KRPC.Client.Services.DeprecatedService.ServiceStruct)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec2, connection);
         }
 
         /// <summary>
         /// A property.
         /// </summary>
         [global::System.Obsolete ("Use TestService instead.")]
-        [global::KRPC.Client.Attributes.RPCAttribute ("DeprecatedService", "get_Property", typeof(TypeSpecs))]
+        [global::KRPC.Client.Attributes.RPCAttribute ("DeprecatedService", "get_Property", typeof(_TypeSpecs))]
         [global::KRPC.Client.Attributes.RPCSetterAttribute ("DeprecatedService", "set_Property")]
         public string Property {
             get {
                 var _result = connection.Invoke ("DeprecatedService", "get_Property");
-                return (string)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec1, connection);
+                return (string)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec1, connection);
             }
             set {
-                var _args = new ByteString[] {
-                    global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec1)
+                var _args = new global::Google.Protobuf.ByteString[] {
+                    global::KRPC.Client.Encoder.Encode (value, _TypeSpecs.Spec1)
                 };
                 connection.Invoke ("DeprecatedService", "set_Property", _args);
             }
@@ -125,7 +121,7 @@ namespace KRPC.Client.Services.DeprecatedService
     /// <summary>
     /// An enumeration.
     /// </summary>
-    [Serializable]
+    [global::System.Serializable]
     [global::System.Obsolete ("Use TestService instead.")]
     public enum ServiceEnum
     {
@@ -139,10 +135,10 @@ namespace KRPC.Client.Services.DeprecatedService
     /// <summary>
     /// A structure.
     /// </summary>
-    [Serializable]
+    [global::System.Serializable]
     [global::KRPC.Client.Attributes.KRPCStruct]
     [global::System.Obsolete ("Use TestService instead.")]
-    public struct ServiceStruct : IEquatable<ServiceStruct>, IComparable<ServiceStruct>
+    public struct ServiceStruct : global::System.IEquatable<ServiceStruct>, global::System.IComparable<ServiceStruct>
     {
         /// <summary>
         /// Construct a ServiceStruct from the values of its fields.
@@ -251,7 +247,7 @@ namespace KRPC.Client.Services.DeprecatedService
     /// <summary>
     /// An exception.
     /// </summary>
-    [Serializable]
+    [global::System.Serializable]
     [global::System.Obsolete ("Use TestService instead.")]
     public class ServiceException : global::KRPC.Client.ServerException
     {
@@ -272,7 +268,7 @@ namespace KRPC.Client.Services.DeprecatedService
         /// <summary>
         /// Construct an ServiceException with the given message and inner exception.
         /// </summary>
-        public ServiceException (string message, Exception inner) : base (message, inner)
+        public ServiceException (string message, global::System.Exception inner) : base (message, inner)
         {
         }
 
@@ -280,7 +276,7 @@ namespace KRPC.Client.Services.DeprecatedService
         /// <summary>
         /// Construct an ServiceException with the given serialization info and streaming context.
         /// </summary>
-        protected ServiceException (SerializationInfo info, StreamingContext context) : base (info, context)
+        protected ServiceException (global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : base (info, context)
         {
         }
 #endif
@@ -295,7 +291,7 @@ namespace KRPC.Client.Services.DeprecatedService
         /// <summary>
         /// Construct an instance of this remote object. Should not be called directly. This interface is intended for internal decoding.
         /// </summary>
-        public ReasonedClass (global::KRPC.Client.IConnection connection, UInt64 id) : base (connection, id)
+        public ReasonedClass (global::KRPC.Client.IConnection connection, ulong id) : base (connection, id)
         {
         }
 
@@ -304,13 +300,13 @@ namespace KRPC.Client.Services.DeprecatedService
         /// </summary>
         /// <param name="connection">A connection object.</param>
         [global::System.Obsolete ("Use \"TestService.TestClass\" instead.")]
-        [global::KRPC.Client.Attributes.RPCAttribute ("DeprecatedService", "ReasonedClass_static_StaticMethod", typeof(TypeSpecs))]
-        public static string StaticMethod (IConnection connection)
+        [global::KRPC.Client.Attributes.RPCAttribute ("DeprecatedService", "ReasonedClass_static_StaticMethod", typeof(_TypeSpecs))]
+        public static string StaticMethod (global::KRPC.Client.IConnection connection)
         {
             if (connection == null)
-                throw new ArgumentNullException (nameof (connection));
+                throw new global::System.ArgumentNullException (nameof (connection));
             var _result = connection.Invoke ("DeprecatedService", "ReasonedClass_static_StaticMethod");
-            return (string)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec1, connection);
+            return (string)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec1, connection);
         }
 
         /// <summary>
@@ -321,7 +317,7 @@ namespace KRPC.Client.Services.DeprecatedService
         public static Bound Bind (global::KRPC.Client.IConnection connection)
         {
             if (connection == null)
-                throw new ArgumentNullException (nameof (connection));
+                throw new global::System.ArgumentNullException (nameof (connection));
             return new Bound (connection);
         }
 
@@ -341,7 +337,7 @@ namespace KRPC.Client.Services.DeprecatedService
             /// A static method.
             /// </summary>
             [global::System.Obsolete ("Use \"TestService.TestClass\" instead.")]
-            [global::KRPC.Client.Attributes.RPCAttribute ("DeprecatedService", "ReasonedClass_static_StaticMethod", typeof(TypeSpecs))]
+            [global::KRPC.Client.Attributes.RPCAttribute ("DeprecatedService", "ReasonedClass_static_StaticMethod", typeof(_TypeSpecs))]
             public string StaticMethod ()
             {
                 return global::KRPC.Client.Services.DeprecatedService.ReasonedClass.StaticMethod (connection);
@@ -358,7 +354,7 @@ namespace KRPC.Client.Services.DeprecatedService
         /// <summary>
         /// Construct an instance of this remote object. Should not be called directly. This interface is intended for internal decoding.
         /// </summary>
-        public ServiceClass (global::KRPC.Client.IConnection connection, UInt64 id) : base (connection, id)
+        public ServiceClass (global::KRPC.Client.IConnection connection, ulong id) : base (connection, id)
         {
         }
 
@@ -366,14 +362,14 @@ namespace KRPC.Client.Services.DeprecatedService
         /// A method.
         /// </summary>
         [global::System.Obsolete ("Use TestService instead.")]
-        [global::KRPC.Client.Attributes.RPCAttribute ("DeprecatedService", "ServiceClass_Method", typeof(TypeSpecs))]
+        [global::KRPC.Client.Attributes.RPCAttribute ("DeprecatedService", "ServiceClass_Method", typeof(_TypeSpecs))]
         public string Method ()
         {
-            var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (this, TypeSpecs.Spec0)
+            var _args = new global::Google.Protobuf.ByteString[] {
+                global::KRPC.Client.Encoder.Encode (this, _TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("DeprecatedService", "ServiceClass_Method", _args);
-            return (string)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec1, connection);
+            return (string)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec1, connection);
         }
 
         /// <summary>
@@ -381,13 +377,13 @@ namespace KRPC.Client.Services.DeprecatedService
         /// </summary>
         /// <param name="connection">A connection object.</param>
         [global::System.Obsolete ("Use TestService instead.")]
-        [global::KRPC.Client.Attributes.RPCAttribute ("DeprecatedService", "ServiceClass_static_StaticMethod", typeof(TypeSpecs))]
-        public static string StaticMethod (IConnection connection)
+        [global::KRPC.Client.Attributes.RPCAttribute ("DeprecatedService", "ServiceClass_static_StaticMethod", typeof(_TypeSpecs))]
+        public static string StaticMethod (global::KRPC.Client.IConnection connection)
         {
             if (connection == null)
-                throw new ArgumentNullException (nameof (connection));
+                throw new global::System.ArgumentNullException (nameof (connection));
             var _result = connection.Invoke ("DeprecatedService", "ServiceClass_static_StaticMethod");
-            return (string)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec1, connection);
+            return (string)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec1, connection);
         }
 
         /// <summary>
@@ -398,7 +394,7 @@ namespace KRPC.Client.Services.DeprecatedService
         public static Bound Bind (global::KRPC.Client.IConnection connection)
         {
             if (connection == null)
-                throw new ArgumentNullException (nameof (connection));
+                throw new global::System.ArgumentNullException (nameof (connection));
             return new Bound (connection);
         }
 
@@ -418,7 +414,7 @@ namespace KRPC.Client.Services.DeprecatedService
             /// A static method.
             /// </summary>
             [global::System.Obsolete ("Use TestService instead.")]
-            [global::KRPC.Client.Attributes.RPCAttribute ("DeprecatedService", "ServiceClass_static_StaticMethod", typeof(TypeSpecs))]
+            [global::KRPC.Client.Attributes.RPCAttribute ("DeprecatedService", "ServiceClass_static_StaticMethod", typeof(_TypeSpecs))]
             public string StaticMethod ()
             {
                 return global::KRPC.Client.Services.DeprecatedService.ServiceClass.StaticMethod (connection);

@@ -1,9 +1,5 @@
-using Google.Protobuf;
-using System;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
 {% macro args(parameters) %}
-var _args = new ByteString[] {
+var _args = new global::Google.Protobuf.ByteString[] {
 {% for x in parameters %}
     global::KRPC.Client.Encoder.Encode ({{x.name_value}}, {{x.spec}}){% if not loop.last %},{% endif %}
 
@@ -56,7 +52,7 @@ namespace KRPC.Client.Services.{{ service_name }}
 
     // The types the stubs encode and decode values of, built once each. A spec names the
     // positions inside a value that can hold null, which a C# type cannot always say.
-    static class TypeSpecs
+    static class _TypeSpecs
     {
         {% if type_specs | length > 0 %}
         {% for typ in type_specs %}
@@ -124,7 +120,7 @@ namespace KRPC.Client.Services.{{ service_name }}
 {% endif %}
 {% if procedure.deprecated %}        [global::System.Obsolete{% if procedure.deprecated_reason %} ("{{ procedure.deprecated_reason | string_literal }}"){% endif %}]
 {% endif %}
-        [global::KRPC.Client.Attributes.RPCAttribute ("{{ service_name }}", "{{ procedure_name }}", typeof(TypeSpecs))]
+        [global::KRPC.Client.Attributes.RPCAttribute ("{{ service_name }}", "{{ procedure.remote_name }}", typeof(_TypeSpecs))]
         public {{ procedure.return_type }} {{ procedure_name }} ({{ sig_parameters(procedure.parameters) }})
         {
 {% if procedure.parameters | length > 0 %}{{ args(procedure.parameters) | indent(width=12) }}
@@ -141,7 +137,7 @@ namespace KRPC.Client.Services.{{ service_name }}
 {% if property.deprecated %}        [global::System.Obsolete{% if property.deprecated_reason %} ("{{ property.deprecated_reason | string_literal }}"){% endif %}]
 {% endif %}
         {% if property.getter %}
-        [global::KRPC.Client.Attributes.RPCAttribute ("{{ service_name }}", "{{ property.getter.remote_name }}", typeof(TypeSpecs))]
+        [global::KRPC.Client.Attributes.RPCAttribute ("{{ service_name }}", "{{ property.getter.remote_name }}", typeof(_TypeSpecs))]
         {% endif %}
         {% if property.setter %}
         [global::KRPC.Client.Attributes.RPCSetterAttribute ("{{ service_name }}", "{{ property.setter.remote_name }}")]
@@ -166,7 +162,7 @@ namespace KRPC.Client.Services.{{ service_name }}
 
 {% if enm.documentation %}{{ enm.documentation | indent(width=4) }}
 {% endif %}
-    [Serializable]
+    [global::System.Serializable]
 {% if enm.flags %}    [global::System.Flags]
 {% endif %}
 {% if enm.deprecated %}    [global::System.Obsolete{% if enm.deprecated_reason %} ("{{ enm.deprecated_reason | string_literal }}"){% endif %}]
@@ -187,19 +183,19 @@ namespace KRPC.Client.Services.{{ service_name }}
 
 {% if struct.documentation %}{{ struct.documentation | indent(width=4) }}
 {% endif %}
-    [Serializable]
+    [global::System.Serializable]
     [global::KRPC.Client.Attributes.KRPCStruct]
 {% if struct.deprecated %}    [global::System.Obsolete{% if struct.deprecated_reason %} ("{{ struct.deprecated_reason | string_literal }}"){% endif %}]
 {% endif %}
-    public struct {{ struct_name }} : IEquatable<{{ struct_name }}>, IComparable<{{ struct_name }}>
+    public struct {{ struct_name }} : global::System.IEquatable<{{ struct_name }}>, global::System.IComparable<{{ struct_name }}>
     {
         /// <summary>
         /// Construct a {{ struct_name }} from the values of its fields.
         /// </summary>
-        public {{ struct_name }} ({% for field in struct['fields'] %}{{ field.type }} {{ field.name | lower_camel_case }}{% if not loop.last %}, {% endif %}{% endfor %}) : this ()
+        public {{ struct_name }} ({% for field in struct['fields'] %}{{ field.type }} {{ field.parameter_name }}{% if not loop.last %}, {% endif %}{% endfor %}) : this ()
         {
             {% for field in struct['fields'] %}
-            {{ field.name }} = {{ field.name | lower_camel_case }};
+            {{ field.name }} = {{ field.parameter_name }};
             {% endfor %}
         }
         {% for field in struct['fields'] %}
@@ -311,7 +307,7 @@ namespace KRPC.Client.Services.{{ service_name }}
 
 {% if exception.documentation %}{{ exception.documentation | indent(width=4) }}
 {% endif %}
-    [Serializable]
+    [global::System.Serializable]
 {% if exception.deprecated %}    [global::System.Obsolete{% if exception.deprecated_reason %} ("{{ exception.deprecated_reason | string_literal }}"){% endif %}]
 {% endif %}
     public class {{ exception_name }} : global::KRPC.Client.ServerException
@@ -333,7 +329,7 @@ namespace KRPC.Client.Services.{{ service_name }}
         /// <summary>
         /// Construct an {{ exception_name }} with the given message and inner exception.
         /// </summary>
-        public {{ exception_name }} (string message, Exception inner) : base (message, inner)
+        public {{ exception_name }} (string message, global::System.Exception inner) : base (message, inner)
         {
         }
 
@@ -341,7 +337,7 @@ namespace KRPC.Client.Services.{{ service_name }}
         /// <summary>
         /// Construct an {{ exception_name }} with the given serialization info and streaming context.
         /// </summary>
-        protected {{ exception_name }} (SerializationInfo info, StreamingContext context) : base (info, context)
+        protected {{ exception_name }} (global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : base (info, context)
         {
         }
 #endif
@@ -358,7 +354,7 @@ namespace KRPC.Client.Services.{{ service_name }}
         /// <summary>
         /// Construct an instance of this remote object. Should not be called directly. This interface is intended for internal decoding.
         /// </summary>
-        public {{ class_name }} (global::KRPC.Client.IConnection connection, UInt64 id) : base (connection, id)
+        public {{ class_name }} (global::KRPC.Client.IConnection connection, ulong id) : base (connection, id)
         {
         }
         {% for method_name,method in cls.methods.items() %}
@@ -367,7 +363,7 @@ namespace KRPC.Client.Services.{{ service_name }}
 {% endif %}
 {% if method.deprecated %}        [global::System.Obsolete{% if method.deprecated_reason %} ("{{ method.deprecated_reason | string_literal }}"){% endif %}]
 {% endif %}
-        [global::KRPC.Client.Attributes.RPCAttribute ("{{ service_name }}", "{{ method.remote_name }}", typeof(TypeSpecs))]
+        [global::KRPC.Client.Attributes.RPCAttribute ("{{ service_name }}", "{{ method.remote_name }}", typeof(_TypeSpecs))]
         public {{ method.return_type }} {{ method_name }} ({{ sig_parameters(method.parameters) }})
         {
 {{ args([{'name': 'this', 'name_value': 'this', 'type': service_name+'.'+class_name, 'spec': cls.spec}] + method.parameters) | indent(width=12) }}
@@ -383,11 +379,11 @@ namespace KRPC.Client.Services.{{ service_name }}
         /// <param name="connection">A connection object.</param>
 {% if method.deprecated %}        [global::System.Obsolete{% if method.deprecated_reason %} ("{{ method.deprecated_reason | string_literal }}"){% endif %}]
 {% endif %}
-        [global::KRPC.Client.Attributes.RPCAttribute ("{{ service_name }}", "{{ method.remote_name }}", typeof(TypeSpecs))]
-        public static {{ method.return_type }} {{ method_name }} ({{ sig_parameters([{'type': 'IConnection', 'name': 'connection'}] + method.parameters) }})
+        [global::KRPC.Client.Attributes.RPCAttribute ("{{ service_name }}", "{{ method.remote_name }}", typeof(_TypeSpecs))]
+        public static {{ method.return_type }} {{ method_name }} ({{ sig_parameters([{'type': 'global::KRPC.Client.IConnection', 'name': 'connection'}] + method.parameters) }})
         {
             if (connection == null)
-                throw new ArgumentNullException (nameof (connection));
+                throw new global::System.ArgumentNullException (nameof (connection));
 {% if method.parameters | length > 0 %}{{ args(method.parameters) | indent(width=12) }}
 {% endif %}
 {{ call(service_name, method.remote_name, method.return_type != 'void', method.parameters | length > 0, true, method.returns) | indent(width=12) }}
@@ -405,7 +401,7 @@ namespace KRPC.Client.Services.{{ service_name }}
         public static Bound Bind (global::KRPC.Client.IConnection connection)
         {
             if (connection == null)
-                throw new ArgumentNullException (nameof (connection));
+                throw new global::System.ArgumentNullException (nameof (connection));
             return new Bound (connection);
         }
 
@@ -426,7 +422,7 @@ namespace KRPC.Client.Services.{{ service_name }}
 {% endif %}
 {% if method.deprecated %}            [global::System.Obsolete{% if method.deprecated_reason %} ("{{ method.deprecated_reason | string_literal }}"){% endif %}]
 {% endif %}
-            [global::KRPC.Client.Attributes.RPCAttribute ("{{ service_name }}", "{{ method.remote_name }}", typeof(TypeSpecs))]
+            [global::KRPC.Client.Attributes.RPCAttribute ("{{ service_name }}", "{{ method.remote_name }}", typeof(_TypeSpecs))]
             public {{ method.return_type }} {{ method_name }} ({{ sig_parameters(method.parameters) }})
             {
                 {{ 'return ' if method.return_type != 'void' else '' }}global::KRPC.Client.Services.{{ service_name }}.{{ class_name }}.{{ method_name }} ({{ (['connection'] + method.parameters | map(attribute='name') | list) | join(', ') }});
@@ -441,7 +437,7 @@ namespace KRPC.Client.Services.{{ service_name }}
 {% if property.deprecated %}        [global::System.Obsolete{% if property.deprecated_reason %} ("{{ property.deprecated_reason | string_literal }}"){% endif %}]
 {% endif %}
         {% if property.getter %}
-        [global::KRPC.Client.Attributes.RPCAttribute ("{{ service_name }}", "{{ property.getter.remote_name }}", typeof(TypeSpecs))]
+        [global::KRPC.Client.Attributes.RPCAttribute ("{{ service_name }}", "{{ property.getter.remote_name }}", typeof(_TypeSpecs))]
         {% endif %}
         {% if property.setter %}
         [global::KRPC.Client.Attributes.RPCSetterAttribute ("{{ service_name }}", "{{ property.setter.remote_name }}")]

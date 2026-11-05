@@ -1,7 +1,3 @@
-using Google.Protobuf;
-using System;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
 
 #if NET35
 using systemAlias = global::KRPC.Client.Compatibility;
@@ -33,7 +29,7 @@ namespace KRPC.Client.Services.EmptyService
 
     // The types the stubs encode and decode values of, built once each. A spec names the
     // positions inside a value that can hold null, which a C# type cannot always say.
-    static class TypeSpecs
+    static class _TypeSpecs
     {
         // The procedures whose values a C# type cannot describe on its own, which a call
         // built from an expression looks up by name
