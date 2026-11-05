@@ -260,6 +260,7 @@ Java client
 
   * :breaking:`Breaking` Throw ``InvalidOperationException`` as ``IllegalStateException``, and ``ArgumentOutOfRangeException`` as ``IllegalArgumentException`` (:issue:`1172`)
 
+* Publish the client to Maven Central as ``io.github.krpc:krpc-java`` (:issue:`1231`)
 * :breaking:`Breaking` Return ``KRPC.getStatus`` as the struct ``KRPC.ServerStatus``, with the settings and statistics under ``getSettings`` and ``getStatistics`` (:issue:`1244`)
 * :breaking:`Breaking` Leave internal procedures out of the services, such as ``KRPC.addStream`` (:issue:`1269`)
 * Add ``Connection.compile`` for a server side function built with the expression API (:issue:`1269`)

@@ -1100,11 +1100,22 @@
 <a class="reference internal" href="#java-client-reference"><span class="std std-ref">Client API Reference</span></a> describes each class and method.</p>
 <section id="installing-the-library">
 <h2>Installing the Library<a class="headerlink" href="#installing-the-library" title="Link to this heading">#</a></h2>
-<p>The library is a jar containing the <code class="docutils literal notranslate"><span class="pre">krpc.client</span></code> package, which can be <a class="reference external" href="https://github.com/krpc/krpc/releases">downloaded from GitHub</a>. It requires Java 17 or later.</p>
-<p>The library depends on the <a class="reference external" href="https://github.com/protocolbuffers/protobuf/tree/main/java">protobuf</a>
-and <a class="reference external" href="https://github.com/arxila/javatuples">javatuples</a> libraries. A prebuilt jar for protobuf is
-available from <a class="reference external" href="https://central.sonatype.com/artifact/com.google.protobuf/protobuf-java">Maven</a>.</p>
-<p>To compile a program with javac, add the three jars to the class path:</p>
+<p>The library is the <code class="docutils literal notranslate"><span class="pre">krpc.client</span></code> package, published to <a class="reference external" href="https://central.sonatype.com/artifact/io.github.krpc/krpc-java">Maven Central</a> as <code class="docutils literal notranslate"><span class="pre">io.github.krpc:krpc-java</span></code>.
+It requires Java 17 or later.</p>
+<p>To add it to a Gradle project, in <code class="docutils literal notranslate"><span class="pre">build.gradle.kts</span></code>:</p>
+<pre class="literal-block">dependencies {
+    implementation(&quot;io.github.krpc:krpc-java:0.8.0&quot;)
+}</pre>
+<p>To add it to a Maven project, in <code class="docutils literal notranslate"><span class="pre">pom.xml</span></code>:</p>
+<pre class="literal-block">&lt;dependency&gt;
+  &lt;groupId&gt;io.github.krpc&lt;/groupId&gt;
+  &lt;artifactId&gt;krpc-java&lt;/artifactId&gt;
+  &lt;version&gt;0.8.0&lt;/version&gt;
+&lt;/dependency&gt;</pre>
+<p>Gradle and Maven also fetch the library’s dependencies, <a class="reference external" href="https://central.sonatype.com/artifact/com.google.protobuf/protobuf-java">protobuf</a> and <a class="reference external" href="https://central.sonatype.com/artifact/org.javatuples/javatuples">javatuples</a>.</p>
+<p>Without a build tool, download the jar from <a class="reference external" href="https://github.com/krpc/krpc/releases">GitHub</a>, along
+with the jars of its two dependencies at the versions its Maven Central page lists. To compile a
+program with javac, add the three jars to the class path:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>javac<span class="w"> </span>-cp<span class="w"> </span>krpc-java.jar:protobuf-java.jar:javatuples.jar<span class="w"> </span>Example.java
 </pre></div>
 </div>
