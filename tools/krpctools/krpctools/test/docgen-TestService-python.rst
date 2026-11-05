@@ -978,6 +978,16 @@ Service documentation string.
 
 
 
+.. staticmethod:: service()
+
+   A procedure named Service, as the C# client names the class of a service.
+
+   :rtype: int
+   
+
+
+
+
 .. staticmethod:: set_default([x = {1, 2, 3}])
 
 
@@ -1315,6 +1325,30 @@ Service documentation string.
 
 
 
+.. class:: ByteString
+
+   A class named ByteString.
+
+
+
+.. class:: ClassBase
+
+   A class named ClassBase.
+
+
+
+.. class:: Client
+
+   A class named Client.
+
+
+
+.. class:: Connection
+
+   A class named Connection.
+
+
+
 .. class:: DeprecatedClass
 
    .. warning:: Deprecated. Use :class:`TestClass` instead.
@@ -1354,6 +1388,171 @@ Service documentation string.
 
 
 
+.. class:: DocEnum
+
+   A class named DocEnum.
+
+
+
+.. class:: Encoder
+
+   A class named Encoder.
+
+
+
+.. class:: Event
+
+   A class named Event.
+
+
+
+.. class:: Exception
+
+   A class named Exception.
+
+
+
+.. class:: IConnection
+
+   A class named IConnection.
+
+
+
+.. class:: IEquatable
+
+   A class named IEquatable.
+
+
+
+.. class:: List
+
+   A class named List.
+
+
+
+.. class:: NamedTuple
+
+   A class named NamedTuple.
+
+
+
+.. class:: Names
+
+   A class whose members are named after names in the generated code.
+
+   .. method:: class_of()
+
+      A method named after a method of a Penlight class.
+
+      :rtype: int
+   
+
+   .. method:: float()
+
+      A method named after a Python builtin.
+
+      :rtype: int
+   
+
+   .. method:: hash_code()
+
+      A method named after a method of java.lang.Object.
+
+      :rtype: int
+   
+
+   .. method:: instance_parameters(client, connection, instance, return_value, return_value_is_null, null, krpc, java, com, org, nameof, self, cls, invoke)
+
+      A method with parameters named after names in the generated code.
+
+      :param int client:
+      :param int connection:
+      :param int instance:
+      :param int return_value:
+      :param int return_value_is_null:
+      :param int null:
+      :param int krpc:
+      :param int java:
+      :param int com:
+      :param int org:
+      :param int nameof:
+      :param int self:
+      :param int cls:
+      :param int invoke:
+      :rtype: int
+   
+
+   .. method:: krpc()
+
+      A method named after the Python client package.
+
+      :rtype: int
+   
+
+   .. staticmethod:: parameters(client, connection, instance, return_value, return_value_is_null, null, krpc, java, com, org, nameof, self, cls, invoke)
+
+      A static method with parameters named after names in the generated code.
+
+      :param int client:
+      :param int connection:
+      :param int instance:
+      :param int return_value:
+      :param int return_value_is_null:
+      :param int null:
+      :param int krpc:
+      :param int java:
+      :param int com:
+      :param int org:
+      :param int nameof:
+      :param int self:
+      :param int cls:
+      :param int invoke:
+      :rtype: int
+   
+
+   .. attribute:: property
+
+      A property named after a Python builtin.
+
+      :Attribute: Can be read or written
+      :rtype: int
+   
+
+   .. method:: to_string(value)
+
+      A method named after a method of java.lang.Object.
+
+      :param int value:
+      :rtype: str
+   
+
+   .. staticmethod:: uint_64t()
+
+      A method named after a C++ integer type.
+
+      :rtype: int
+   
+
+   .. attribute:: value
+
+      A property declared after the property named Property.
+
+      :Attribute: Can be read or written
+      :rtype: int
+   
+
+   .. method:: with_defaults([x = float("nan")], [y = krpc.limits.SINT32_MAX])
+
+      A method declared after methods named after Python builtins, with defaults that
+      name them.
+
+      :param float x:
+      :param int y:
+      :rtype: float
+   
+
+
+
 .. class:: Object
 
    A class named Object.
@@ -1365,6 +1564,48 @@ Service documentation string.
       :Attribute: Read-only, cannot be set
       :rtype: str
    
+
+
+
+.. class:: Optional
+
+   A class named Optional.
+
+
+
+.. class:: Override
+
+   A class named Override.
+
+
+
+.. class:: RPCException
+
+   A class named RPCException.
+
+
+
+.. class:: RemoteObject
+
+   A class named RemoteObject.
+
+
+
+.. class:: Serializable
+
+   A class named Serializable.
+
+
+
+.. class:: Stream
+
+   A class named Stream.
+
+
+
+.. class:: String
+
+   A class named String.
 
 
 
@@ -1475,6 +1716,24 @@ Service documentation string.
       :Attribute: Read-only, cannot be set
       :rtype: str
    
+
+
+
+.. class:: Tuple
+
+   A class named Tuple.
+
+
+
+.. class:: TypeSpecs
+
+   A class named TypeSpecs.
+
+
+
+.. class:: UInt64
+
+   A class named UInt64.
 
 
 
@@ -1589,6 +1848,42 @@ Service documentation string.
       .. warning:: Deprecated. Use :attr:`DeprecatedStruct.value` instead.
 
       Deprecated struct OldValue documentation string.
+
+      :rtype: int
+
+
+.. class:: NamesStruct(other, result, java, krpc, class)
+
+   A structure whose fields are named after names in the generated code.
+
+
+   .. attribute:: other
+
+      A value.
+
+      :rtype: int
+
+   .. attribute:: result
+
+      A value.
+
+      :rtype: int
+
+   .. attribute:: java
+
+      A value.
+
+      :rtype: int
+
+   .. attribute:: krpc
+
+      A value.
+
+      :rtype: int
+
+   .. attribute:: class
+
+      A value.
 
       :rtype: int
 
@@ -1746,5 +2041,13 @@ Service documentation string.
    .. warning:: Deprecated. Use :class:`CustomException` instead.
 
    Deprecated exception documentation string.
+
+   A subclass of :class:`krpc.error.ServerError`.
+
+
+
+.. class:: RuntimeError
+
+   An exception named RuntimeError.
 
    A subclass of :class:`krpc.error.ServerError`.

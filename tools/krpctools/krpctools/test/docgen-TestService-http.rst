@@ -1048,6 +1048,17 @@ Service documentation string.
 
 
 
+.. http:post:: /test-service/service
+
+   A procedure named Service, as the C# client names the class of a service.
+
+
+   :resjson int32 value:
+
+
+
+
+
 .. http:post:: /test-service/set-default
 
 
@@ -1416,6 +1427,50 @@ Service documentation string.
 
 
 
+.. _http-TestService.ByteString:
+
+.. rubric:: ByteString
+
+A class named ByteString.
+
+A ``ByteString`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+
+.. _http-TestService.ClassBase:
+
+.. rubric:: ClassBase
+
+A class named ClassBase.
+
+A ``ClassBase`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+
+.. _http-TestService.Client:
+
+.. rubric:: Client
+
+A class named Client.
+
+A ``Client`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+
+.. _http-TestService.Connection:
+
+.. rubric:: Connection
+
+A class named Connection.
+
+A ``Connection`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+
 .. _http-TestService.DeprecatedClass:
 
 .. rubric:: DeprecatedClass
@@ -1489,6 +1544,292 @@ an object takes it as ``(id)``.
 
 
 
+.. _http-TestService.DocEnum:
+
+.. rubric:: DocEnum
+
+A class named DocEnum.
+
+A ``DocEnum`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+
+.. _http-TestService.Encoder:
+
+.. rubric:: Encoder
+
+A class named Encoder.
+
+A ``Encoder`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+
+.. _http-TestService.Event:
+
+.. rubric:: Event
+
+A class named Event.
+
+A ``Event`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+
+.. _http-TestService.Exception:
+
+.. rubric:: Exception
+
+A class named Exception.
+
+A ``Exception`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+
+.. _http-TestService.IConnection:
+
+.. rubric:: IConnection
+
+A class named IConnection.
+
+A ``IConnection`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+
+.. _http-TestService.IEquatable:
+
+.. rubric:: IEquatable
+
+A class named IEquatable.
+
+A ``IEquatable`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+
+.. _http-TestService.List:
+
+.. rubric:: List
+
+A class named List.
+
+A ``List`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+
+.. _http-TestService.NamedTuple:
+
+.. rubric:: NamedTuple
+
+A class named NamedTuple.
+
+A ``NamedTuple`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+
+.. _http-TestService.Names:
+
+.. rubric:: Names
+
+A class whose members are named after names in the generated code.
+
+A ``Names`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:post:: /test-service/names/(id)/class-of
+
+   A method named after a method of a Penlight class.
+
+
+   :param id: The identifier of the :ref:`Names <http-TestService.Names>` object.
+
+   :resjson int32 value:
+
+
+
+
+
+.. http:post:: /test-service/names/(id)/float
+
+   A method named after a Python builtin.
+
+
+   :param id: The identifier of the :ref:`Names <http-TestService.Names>` object.
+
+   :resjson int32 value:
+
+
+
+
+
+.. http:post:: /test-service/names/(id)/hash-code
+
+   A method named after a method of java.lang.Object.
+
+
+   :param id: The identifier of the :ref:`Names <http-TestService.Names>` object.
+
+   :resjson int32 value:
+
+
+
+
+
+.. http:post:: /test-service/names/(id)/instance-parameters
+
+   A method with parameters named after names in the generated code.
+
+
+   :param id: The identifier of the :ref:`Names <http-TestService.Names>` object.
+
+   :reqjson int32 client:
+   :reqjson int32 connection:
+   :reqjson int32 instance:
+   :reqjson int32 return_value:
+   :reqjson int32 return_value_is_null:
+   :reqjson int32 null:
+   :reqjson int32 krpc:
+   :reqjson int32 java:
+   :reqjson int32 com:
+   :reqjson int32 org:
+   :reqjson int32 nameof:
+   :reqjson int32 self:
+   :reqjson int32 cls:
+   :reqjson int32 invoke:
+   :resjson int32 value:
+
+
+
+
+
+.. http:post:: /test-service/names/(id)/krpc
+
+   A method named after the Python client package.
+
+
+   :param id: The identifier of the :ref:`Names <http-TestService.Names>` object.
+
+   :resjson int32 value:
+
+
+
+
+
+.. http:post:: /test-service/names/parameters
+
+   A static method with parameters named after names in the generated code.
+
+
+   :reqjson int32 client:
+   :reqjson int32 connection:
+   :reqjson int32 instance:
+   :reqjson int32 return_value:
+   :reqjson int32 return_value_is_null:
+   :reqjson int32 null:
+   :reqjson int32 krpc:
+   :reqjson int32 java:
+   :reqjson int32 com:
+   :reqjson int32 org:
+   :reqjson int32 nameof:
+   :reqjson int32 self:
+   :reqjson int32 cls:
+   :reqjson int32 invoke:
+   :resjson int32 value:
+
+
+
+
+
+.. http:get:: /test-service/names/(id)/property
+
+   A property named after a Python builtin.
+
+
+   :param id: The identifier of the :ref:`Names <http-TestService.Names>` object.
+
+   :resjson int32 value:
+
+.. http:put:: /test-service/names/(id)/property
+
+   A property named after a Python builtin.
+
+
+   :param id: The identifier of the :ref:`Names <http-TestService.Names>` object.
+
+   :reqjson int32 value: The new value.
+
+
+
+
+.. http:post:: /test-service/names/(id)/to-string
+
+   A method named after a method of java.lang.Object.
+
+
+   :param id: The identifier of the :ref:`Names <http-TestService.Names>` object.
+
+   :reqjson int32 value:
+   :resjson string value:
+
+
+
+
+
+.. http:post:: /test-service/names/uint-64t
+
+   A method named after a C++ integer type.
+
+
+   :resjson int32 value:
+
+
+
+
+
+.. http:get:: /test-service/names/(id)/value
+
+   A property declared after the property named Property.
+
+
+   :param id: The identifier of the :ref:`Names <http-TestService.Names>` object.
+
+   :resjson int32 value:
+
+.. http:put:: /test-service/names/(id)/value
+
+   A property declared after the property named Property.
+
+
+   :param id: The identifier of the :ref:`Names <http-TestService.Names>` object.
+
+   :reqjson int32 value: The new value.
+
+
+
+
+.. http:post:: /test-service/names/(id)/with-defaults
+
+   A method declared after methods named after Python builtins, with defaults that
+   name them.
+
+
+   :param id: The identifier of the :ref:`Names <http-TestService.Names>` object.
+
+   :reqjson double x: Optional, defaults to ``"NaN"``.
+   :reqjson int32 y: Optional, defaults to ``2147483647``.
+   :resjson double value:
+
+
+
+
+
+
 .. _http-TestService.Object:
 
 .. rubric:: Object
@@ -1509,6 +1850,83 @@ an object takes it as ``(id)``.
    :resjson string value:
 
 
+
+
+
+.. _http-TestService.Optional:
+
+.. rubric:: Optional
+
+A class named Optional.
+
+A ``Optional`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+
+.. _http-TestService.Override:
+
+.. rubric:: Override
+
+A class named Override.
+
+A ``Override`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+
+.. _http-TestService.RPCException:
+
+.. rubric:: RPCException
+
+A class named RPCException.
+
+A ``RPCException`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+
+.. _http-TestService.RemoteObject:
+
+.. rubric:: RemoteObject
+
+A class named RemoteObject.
+
+A ``RemoteObject`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+
+.. _http-TestService.Serializable:
+
+.. rubric:: Serializable
+
+A class named Serializable.
+
+A ``Serializable`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+
+.. _http-TestService.Stream:
+
+.. rubric:: Stream
+
+A class named Stream.
+
+A ``Stream`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+
+.. _http-TestService.String:
+
+.. rubric:: String
+
+A class named String.
+
+A ``String`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
 
 
 
@@ -1701,6 +2119,39 @@ an object takes it as ``(id)``.
 
 
 
+.. _http-TestService.Tuple:
+
+.. rubric:: Tuple
+
+A class named Tuple.
+
+A ``Tuple`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+
+.. _http-TestService.TypeSpecs:
+
+.. rubric:: TypeSpecs
+
+A class named TypeSpecs.
+
+A ``TypeSpecs`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+
+.. _http-TestService.UInt64:
+
+.. rubric:: UInt64
+
+A class named UInt64.
+
+A ``UInt64`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+
 .. _http-TestService.DeprecatedEnum:
 
 .. rubric:: DeprecatedEnum
@@ -1815,6 +2266,36 @@ Passed and returned as an object with these fields:
    .. warning:: Deprecated. Use ``value`` instead.
 
    Deprecated struct OldValue documentation string.
+
+
+
+.. _http-TestService.NamesStruct:
+
+.. rubric:: NamesStruct
+
+A structure whose fields are named after names in the generated code.
+
+Passed and returned as an object with these fields:
+
+
+``other`` (int32)
+   A value.
+
+
+``result`` (int32)
+   A value.
+
+
+``java`` (int32)
+   A value.
+
+
+``krpc`` (int32)
+   A value.
+
+
+``class`` (int32)
+   A value.
 
 
 
@@ -1967,3 +2448,13 @@ Returned as an error whose ``service`` and ``name`` are ``"TestService"`` and ``
 Deprecated exception documentation string.
 
 Returned as an error whose ``service`` and ``name`` are ``"TestService"`` and ``"DeprecatedException"``.
+
+
+
+.. _http-TestService.RuntimeError:
+
+.. rubric:: RuntimeError
+
+An exception named RuntimeError.
+
+Returned as an error whose ``service`` and ``name`` are ``"TestService"`` and ``"RuntimeError"``.

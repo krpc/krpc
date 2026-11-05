@@ -747,6 +747,14 @@ Service documentation string.
 
 
 
+.. staticmethod:: service(): number
+
+   A procedure named Service, as the C# client names the class of a service.
+
+
+
+
+
 .. staticmethod:: set_default(x?: Set): Set
 
 
@@ -1008,6 +1016,30 @@ Service documentation string.
 
 
 
+.. class:: ByteString
+
+   A class named ByteString.
+
+
+
+.. class:: ClassBase
+
+   A class named ClassBase.
+
+
+
+.. class:: Client
+
+   A class named Client.
+
+
+
+.. class:: Connection
+
+   A class named Connection.
+
+
+
 .. class:: DeprecatedClass
 
    .. warning:: Deprecated. Use :class:`TestService.TestClass` instead.
@@ -1036,6 +1068,112 @@ Service documentation string.
 
 
 
+.. class:: DocEnum
+
+   A class named DocEnum.
+
+
+
+.. class:: Encoder
+
+   A class named Encoder.
+
+
+
+.. class:: Event
+
+   A class named Event.
+
+
+
+.. class:: Exception
+
+   A class named Exception.
+
+
+
+.. class:: IConnection
+
+   A class named IConnection.
+
+
+
+.. class:: IEquatable
+
+   A class named IEquatable.
+
+
+
+.. class:: List
+
+   A class named List.
+
+
+
+.. class:: NamedTuple
+
+   A class named NamedTuple.
+
+
+
+.. class:: Names
+
+   A class whose members are named after names in the generated code.
+
+   .. method:: class_of_(): number
+
+      A method named after a method of a Penlight class.
+
+   .. method:: float(): number
+
+      A method named after a Python builtin.
+
+   .. method:: hash_code(): number
+
+      A method named after a method of java.lang.Object.
+
+   .. method:: instance_parameters(client: number, connection: number, instance: number, return_value: number, return_value_is_null: number, null: number, krpc: number, java: number, com: number, org: number, nameof: number, self: number, cls: number, invoke: number): number
+
+      A method with parameters named after names in the generated code.
+
+   .. method:: krpc(): number
+
+      A method named after the Python client package.
+
+   .. staticmethod:: parameters(client: number, connection: number, instance: number, return_value: number, return_value_is_null: number, null: number, krpc: number, java: number, com: number, org: number, nameof: number, self: number, cls: number, invoke: number): number
+
+      A static method with parameters named after names in the generated code.
+
+   .. attribute:: property: number
+
+      A property named after a Python builtin.
+
+      :Attribute: Can be read or written
+
+   .. method:: to_string(value: number): string
+
+      A method named after a method of java.lang.Object.
+
+   .. staticmethod:: uint_64t(): number
+
+      A method named after a C++ integer type.
+
+   .. attribute:: value: number
+
+      A property declared after the property named Property.
+
+      :Attribute: Can be read or written
+
+   .. method:: with_defaults(x?: number, y?: number): number
+
+      A method declared after methods named after Python builtins, with defaults that
+      name them.
+
+      :param x: Defaults to ``0/0``.
+      :param y: Defaults to ``krpc.limits.SINT32_MAX``.
+
+
+
 .. class:: Object
 
    A class named Object.
@@ -1045,6 +1183,48 @@ Service documentation string.
       The name of the object.
 
       :Attribute: Read-only, cannot be set
+
+
+
+.. class:: Optional
+
+   A class named Optional.
+
+
+
+.. class:: Override
+
+   A class named Override.
+
+
+
+.. class:: RPCException
+
+   A class named RPCException.
+
+
+
+.. class:: RemoteObject
+
+   A class named RemoteObject.
+
+
+
+.. class:: Serializable
+
+   A class named Serializable.
+
+
+
+.. class:: Stream
+
+   A class named Stream.
+
+
+
+.. class:: String
+
+   A class named String.
 
 
 
@@ -1111,6 +1291,24 @@ Service documentation string.
 
 
       :Attribute: Read-only, cannot be set
+
+
+
+.. class:: Tuple
+
+   A class named Tuple.
+
+
+
+.. class:: TypeSpecs
+
+   A class named TypeSpecs.
+
+
+
+.. class:: UInt64
+
+   A class named UInt64.
 
 
 
@@ -1224,6 +1422,37 @@ Service documentation string.
       .. warning:: Deprecated. Use :attr:`TestService.DeprecatedStruct.value` instead.
 
       Deprecated struct OldValue documentation string.
+
+
+
+.. class:: NamesStruct
+
+   A structure whose fields are named after names in the generated code.
+
+
+   .. attribute:: other: number
+
+      A value.
+
+
+   .. attribute:: result: number
+
+      A value.
+
+
+   .. attribute:: java: number
+
+      A value.
+
+
+   .. attribute:: krpc: number
+
+      A value.
+
+
+   .. attribute:: class: number
+
+      A value.
 
 
 
@@ -1365,3 +1594,11 @@ Service documentation string.
    Deprecated exception documentation string.
 
    Raised as a :class:`krpc.ServerError` whose ``service`` and ``name`` are ``'TestService'`` and ``'DeprecatedException'``.
+
+
+
+.. class:: RuntimeError
+
+   An exception named RuntimeError.
+
+   Raised as a :class:`krpc.ServerError` whose ``service`` and ``name`` are ``'TestService'`` and ``'RuntimeError'``.

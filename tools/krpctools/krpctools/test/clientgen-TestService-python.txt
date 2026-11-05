@@ -108,6 +108,32 @@ _deprecate_attribute(DeprecatedStruct, "value", "TestService.DeprecatedStruct.va
 _deprecate_attribute(DeprecatedStruct, "old_value", "TestService.DeprecatedStruct.old_value is deprecated: Use DeprecatedStruct.value instead.")
 
 
+class NamesStruct(_NamedTuple):
+    """
+    A structure whose fields are named after names in the generated code.
+    """
+    other: _builtins.int
+    """
+    A value.
+    """
+    result: _builtins.int
+    """
+    A value.
+    """
+    java: _builtins.int
+    """
+    A value.
+    """
+    krpc: _builtins.int
+    """
+    A value.
+    """
+    class_: _builtins.int
+    """
+    A value.
+    """
+
+
 class PartlyDeprecatedStruct(_NamedTuple):
     """
     Partly deprecated struct documentation string.
@@ -188,6 +214,48 @@ class DeprecatedException(krpc.error.ServerError):
     """
 
 
+class RuntimeError(krpc.error.ServerError):
+    """
+    An exception named RuntimeError.
+    """
+
+
+class ByteString(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named ByteString.
+    """
+    _service_name = "TestService"
+    _class_name = "ByteString"
+
+
+
+class ClassBase(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named ClassBase.
+    """
+    _service_name = "TestService"
+    _class_name = "ClassBase"
+
+
+
+class Client(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named Client.
+    """
+    _service_name = "TestService"
+    _class_name = "Client"
+
+
+
+class Connection(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named Connection.
+    """
+    _service_name = "TestService"
+    _class_name = "Connection"
+
+
+
 @_deprecated("Use TestClass instead.")
 class DeprecatedClass(_DeclaredObject, metaclass=_DeclaredClass):
     """
@@ -243,6 +311,166 @@ class DeprecatedClass(_DeclaredObject, metaclass=_DeclaredClass):
 
 
 
+class DocEnum(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named DocEnum.
+    """
+    _service_name = "TestService"
+    _class_name = "DocEnum"
+
+
+
+class Encoder(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named Encoder.
+    """
+    _service_name = "TestService"
+    _class_name = "Encoder"
+
+
+
+class Event(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named Event.
+    """
+    _service_name = "TestService"
+    _class_name = "Event"
+
+
+
+class Exception(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named Exception.
+    """
+    _service_name = "TestService"
+    _class_name = "Exception"
+
+
+
+class IConnection(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named IConnection.
+    """
+    _service_name = "TestService"
+    _class_name = "IConnection"
+
+
+
+class IEquatable(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named IEquatable.
+    """
+    _service_name = "TestService"
+    _class_name = "IEquatable"
+
+
+
+class List(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named List.
+    """
+    _service_name = "TestService"
+    _class_name = "List"
+
+
+
+class NamedTuple(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named NamedTuple.
+    """
+    _service_name = "TestService"
+    _class_name = "NamedTuple"
+
+
+
+class Names(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class whose members are named after names in the generated code.
+    """
+    _service_name = "TestService"
+    _class_name = "Names"
+
+    @_builtins.property
+    def property(self) -> _builtins.int:
+        """
+        A property named after a Python builtin.
+        """
+        raise _declaration("TestService", "Names")
+
+    @property.setter
+    def property(self, value: _builtins.int) -> None:
+        raise _declaration("TestService", "Names")
+
+    @_builtins.property
+    def value(self) -> _builtins.int:
+        """
+        A property declared after the property named Property.
+        """
+        raise _declaration("TestService", "Names")
+
+    @value.setter
+    def value(self, value: _builtins.int) -> None:
+        raise _declaration("TestService", "Names")
+
+    def class_of(self) -> _builtins.int:
+        """
+        A method named after a method of a Penlight class.
+        """
+        raise _declaration("TestService", "Names")
+
+    def float(self) -> _builtins.int:
+        """
+        A method named after a Python builtin.
+        """
+        raise _declaration("TestService", "Names")
+
+    def hash_code(self) -> _builtins.int:
+        """
+        A method named after a method of java.lang.Object.
+        """
+        raise _declaration("TestService", "Names")
+
+    def instance_parameters(self, client: _builtins.int, connection: _builtins.int, instance: _builtins.int, return_value: _builtins.int, return_value_is_null: _builtins.int, null: _builtins.int, krpc: _builtins.int, java: _builtins.int, com: _builtins.int, org: _builtins.int, nameof: _builtins.int, self_: _builtins.int, cls_: _builtins.int, invoke: _builtins.int) -> _builtins.int:
+        """
+        A method with parameters named after names in the generated code.
+        """
+        raise _declaration("TestService", "Names")
+
+    def krpc(self) -> _builtins.int:
+        """
+        A method named after the Python client package.
+        """
+        raise _declaration("TestService", "Names")
+
+    def to_string(self, value: _builtins.int) -> _builtins.str:
+        """
+        A method named after a method of java.lang.Object.
+        """
+        raise _declaration("TestService", "Names")
+
+    def with_defaults(self, x: _builtins.float = _builtins.float("nan"), y: _builtins.int = _limits.SINT32_MAX) -> _builtins.float:
+        """
+        A method declared after methods named after Python builtins, with defaults that
+        name them.
+        """
+        raise _declaration("TestService", "Names")
+
+    @_builtins.staticmethod
+    def parameters(client: _builtins.int, connection: _builtins.int, instance: _builtins.int, return_value: _builtins.int, return_value_is_null: _builtins.int, null: _builtins.int, krpc: _builtins.int, java: _builtins.int, com: _builtins.int, org: _builtins.int, nameof: _builtins.int, self_: _builtins.int, cls_: _builtins.int, invoke: _builtins.int) -> _builtins.int:
+        """
+        A static method with parameters named after names in the generated code.
+        """
+        raise _declaration("TestService", "Names")
+
+    @_builtins.staticmethod
+    def uint_64t() -> _builtins.int:
+        """
+        A method named after a C++ integer type.
+        """
+        raise _declaration("TestService", "Names")
+
+
+
 class Object(_DeclaredObject, metaclass=_DeclaredClass):
     """
     A class named Object.
@@ -256,6 +484,69 @@ class Object(_DeclaredObject, metaclass=_DeclaredClass):
         The name of the object.
         """
         raise _declaration("TestService", "Object")
+
+
+
+class Optional(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named Optional.
+    """
+    _service_name = "TestService"
+    _class_name = "Optional"
+
+
+
+class Override(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named Override.
+    """
+    _service_name = "TestService"
+    _class_name = "Override"
+
+
+
+class RPCException(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named RPCException.
+    """
+    _service_name = "TestService"
+    _class_name = "RPCException"
+
+
+
+class RemoteObject(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named RemoteObject.
+    """
+    _service_name = "TestService"
+    _class_name = "RemoteObject"
+
+
+
+class Serializable(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named Serializable.
+    """
+    _service_name = "TestService"
+    _class_name = "Serializable"
+
+
+
+class Stream(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named Stream.
+    """
+    _service_name = "TestService"
+    _class_name = "Stream"
+
+
+
+class String(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named String.
+    """
+    _service_name = "TestService"
+    _class_name = "String"
 
 
 
@@ -343,17 +634,68 @@ class TestClass(_DeclaredObject, metaclass=_DeclaredClass):
 
 
 
+class Tuple(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named Tuple.
+    """
+    _service_name = "TestService"
+    _class_name = "Tuple"
+
+
+
+class TypeSpecs(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named TypeSpecs.
+    """
+    _service_name = "TestService"
+    _class_name = "TypeSpecs"
+
+
+
+class UInt64(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named UInt64.
+    """
+    _service_name = "TestService"
+    _class_name = "UInt64"
+
+
+
 # Aliases for the types the service declares as its attributes, as an annotation in the body of
 # the service would otherwise name the attribute itself
 if TYPE_CHECKING:
+    _type_ByteString = ByteString
+    _type_ClassBase = ClassBase
+    _type_Client = Client
+    _type_Connection = Connection
     _type_DeprecatedClass = DeprecatedClass
+    _type_DocEnum = DocEnum
+    _type_Encoder = Encoder
+    _type_Event = Event
+    _type_Exception = Exception
+    _type_IConnection = IConnection
+    _type_IEquatable = IEquatable
+    _type_List = List
+    _type_NamedTuple = NamedTuple
+    _type_Names = Names
     _type_Object = Object
+    _type_Optional = Optional
+    _type_Override = Override
+    _type_RPCException = RPCException
+    _type_RemoteObject = RemoteObject
+    _type_Serializable = Serializable
+    _type_Stream = Stream
+    _type_String = String
     _type_TestClass = TestClass
+    _type_Tuple = Tuple
+    _type_TypeSpecs = TypeSpecs
+    _type_UInt64 = UInt64
     _type_DeprecatedEnum = DeprecatedEnum
     _type_PartlyDeprecatedEnum = PartlyDeprecatedEnum
     _type_TestEnum = TestEnum
     _type_TestFlags = TestFlags
     _type_DeprecatedStruct = DeprecatedStruct
+    _type_NamesStruct = NamesStruct
     _type_PartlyDeprecatedStruct = PartlyDeprecatedStruct
     _type_TestFlagsStruct = TestFlagsStruct
     _type_TestNestedNullableStruct = TestNestedNullableStruct
@@ -362,6 +704,7 @@ if TYPE_CHECKING:
     _type_TestNullableStruct = TestNullableStruct
     _type_CustomException = CustomException
     _type_DeprecatedException = DeprecatedException
+    _type_RuntimeError = RuntimeError
 
 
 class TestService(metaclass=_DeclaredClass):
@@ -371,14 +714,38 @@ class TestService(metaclass=_DeclaredClass):
     _service_name = "TestService"
     _class_name = None
 
+    ByteString: type[_type_ByteString] = ByteString
+    ClassBase: type[_type_ClassBase] = ClassBase
+    Client: type[_type_Client] = Client
+    Connection: type[_type_Connection] = Connection
     DeprecatedClass: type[_type_DeprecatedClass] = DeprecatedClass
+    DocEnum: type[_type_DocEnum] = DocEnum
+    Encoder: type[_type_Encoder] = Encoder
+    Event: type[_type_Event] = Event
+    Exception: type[_type_Exception] = Exception
+    IConnection: type[_type_IConnection] = IConnection
+    IEquatable: type[_type_IEquatable] = IEquatable
+    List: type[_type_List] = List
+    NamedTuple: type[_type_NamedTuple] = NamedTuple
+    Names: type[_type_Names] = Names
     Object: type[_type_Object] = Object
+    Optional: type[_type_Optional] = Optional
+    Override: type[_type_Override] = Override
+    RPCException: type[_type_RPCException] = RPCException
+    RemoteObject: type[_type_RemoteObject] = RemoteObject
+    Serializable: type[_type_Serializable] = Serializable
+    Stream: type[_type_Stream] = Stream
+    String: type[_type_String] = String
     TestClass: type[_type_TestClass] = TestClass
+    Tuple: type[_type_Tuple] = Tuple
+    TypeSpecs: type[_type_TypeSpecs] = TypeSpecs
+    UInt64: type[_type_UInt64] = UInt64
     DeprecatedEnum: type[_type_DeprecatedEnum] = DeprecatedEnum
     PartlyDeprecatedEnum: type[_type_PartlyDeprecatedEnum] = PartlyDeprecatedEnum
     TestEnum: type[_type_TestEnum] = TestEnum
     TestFlags: type[_type_TestFlags] = TestFlags
     DeprecatedStruct: type[_type_DeprecatedStruct] = DeprecatedStruct
+    NamesStruct: type[_type_NamesStruct] = NamesStruct
     PartlyDeprecatedStruct: type[_type_PartlyDeprecatedStruct] = PartlyDeprecatedStruct
     TestFlagsStruct: type[_type_TestFlagsStruct] = TestFlagsStruct
     TestNestedNullableStruct: type[_type_TestNestedNullableStruct] = TestNestedNullableStruct
@@ -387,6 +754,7 @@ class TestService(metaclass=_DeclaredClass):
     TestNullableStruct: type[_type_TestNullableStruct] = TestNullableStruct
     CustomException: type[_type_CustomException] = CustomException
     DeprecatedException: type[_type_DeprecatedException] = DeprecatedException
+    RuntimeError: type[_type_RuntimeError] = RuntimeError
 
     @_builtins.property
     @_deprecated("Use string_property instead.")
@@ -770,6 +1138,12 @@ class TestService(metaclass=_DeclaredClass):
     def scalar_default(self, x: _builtins.int = 42) -> _builtins.int:
         raise _declaration("TestService", None)
 
+    def service(self) -> _builtins.int:
+        """
+        A procedure named Service, as the C# client names the class of a service.
+        """
+        raise _declaration("TestService", None)
+
     def set_default(self, x: _Set[_builtins.int] = {1, 2, 3}) -> _Set[_builtins.int]:
         raise _declaration("TestService", None)
 
@@ -891,6 +1265,7 @@ _register(
     TestEnum,
     TestFlags,
     DeprecatedStruct,
+    NamesStruct,
     PartlyDeprecatedStruct,
     TestFlagsStruct,
     TestNestedNullableStruct,
@@ -899,4 +1274,5 @@ _register(
     TestNullableStruct,
     CustomException,
     DeprecatedException,
+    RuntimeError,
 )

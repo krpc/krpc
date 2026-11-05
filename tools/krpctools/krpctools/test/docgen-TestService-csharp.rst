@@ -871,6 +871,13 @@
 
       :Game Scenes: All
 
+   .. function:: int Service()
+
+      A procedure named Service, as the C# client names the class of a service.
+
+
+      :Game Scenes: All
+
    .. function:: System.Collections.Generic.ISet<int> SetDefault(System.Collections.Generic.ISet<int> x = null)
 
 
@@ -1158,6 +1165,30 @@
 
 
 
+.. class:: ByteString
+
+   A class named ByteString.
+
+
+
+.. class:: ClassBase
+
+   A class named ClassBase.
+
+
+
+.. class:: Client
+
+   A class named Client.
+
+
+
+.. class:: Connection
+
+   A class named Connection.
+
+
+
 .. class:: DeprecatedClass
 
    .. warning:: Deprecated. Use :type:`TestClass` instead.
@@ -1195,6 +1226,175 @@
 
 
 
+.. class:: DocEnum
+
+   A class named DocEnum.
+
+
+
+.. class:: Encoder
+
+   A class named Encoder.
+
+
+
+.. class:: Event
+
+   A class named Event.
+
+
+
+.. class:: Exception
+
+   A class named Exception.
+
+
+
+.. class:: IConnection
+
+   A class named IConnection.
+
+
+
+.. class:: IEquatable
+
+   A class named IEquatable.
+
+
+
+.. class:: List
+
+   A class named List.
+
+
+
+.. class:: NamedTuple
+
+   A class named NamedTuple.
+
+
+
+.. class:: Names
+
+   A class whose members are named after names in the generated code.
+
+   .. function:: int ClassOf()
+
+      A method named after a method of a Penlight class.
+
+
+      :Game Scenes: All
+
+   .. function:: int Float()
+
+      A method named after a Python builtin.
+
+
+      :Game Scenes: All
+
+   .. function:: int HashCode()
+
+      A method named after a method of java.lang.Object.
+
+
+      :Game Scenes: All
+
+   .. function:: int InstanceParameters(int client, int connection, int instance, int returnValue, int returnValueIsNull, int NULL, int krpc, int java, int com, int org, int nameof, int self, int cls, int invoke)
+
+      A method with parameters named after names in the generated code.
+
+      :parameters:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      :Game Scenes: All
+
+   .. function:: int Krpc()
+
+      A method named after the Python client package.
+
+
+      :Game Scenes: All
+
+   .. function:: static int Parameters(IConnection connection, int client, int connection, int instance, int returnValue, int returnValueIsNull, int NULL, int krpc, int java, int com, int org, int nameof, int self, int cls, int invoke)
+
+      A static method with parameters named after names in the generated code.
+
+      :parameters:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      :Game Scenes: All
+
+   .. property:: int Property { get; set; }
+
+      A property named after a Python builtin.
+
+      :Game Scenes: All
+
+   .. function:: string ToString(int value)
+
+      A method named after a method of java.lang.Object.
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. function:: static int Uint64T(IConnection connection)
+
+      A method named after a C++ integer type.
+
+
+      :Game Scenes: All
+
+   .. property:: int Value { get; set; }
+
+      A property declared after the property named Property.
+
+      :Game Scenes: All
+
+   .. function:: double WithDefaults(double x = double.NaN, int y = int.MaxValue)
+
+      A method declared after methods named after Python builtins, with defaults that
+      name them.
+
+      :parameters:
+
+
+
+
+      :Game Scenes: All
+
+
+
 .. class:: Object
 
    A class named Object.
@@ -1204,6 +1404,48 @@
       The name of the object.
 
       :Game Scenes: All
+
+
+
+.. class:: Optional
+
+   A class named Optional.
+
+
+
+.. class:: Override
+
+   A class named Override.
+
+
+
+.. class:: RPCException
+
+   A class named RPCException.
+
+
+
+.. class:: RemoteObject
+
+   A class named RemoteObject.
+
+
+
+.. class:: Serializable
+
+   A class named Serializable.
+
+
+
+.. class:: Stream
+
+   A class named Stream.
+
+
+
+.. class:: String
+
+   A class named String.
 
 
 
@@ -1323,6 +1565,24 @@
 
 
 
+.. class:: Tuple
+
+   A class named Tuple.
+
+
+
+.. class:: TypeSpecs
+
+   A class named TypeSpecs.
+
+
+
+.. class:: UInt64
+
+   A class named UInt64.
+
+
+
 .. enum:: DeprecatedEnum
 
    .. warning:: Deprecated. Use :type:`TestEnum` instead.
@@ -1436,6 +1696,36 @@
       .. warning:: Deprecated. Use :prop:`DeprecatedStruct.Value` instead.
 
       Deprecated struct OldValue documentation string.
+
+
+.. struct:: NamesStruct
+
+   A structure whose fields are named after names in the generated code.
+
+   .. function:: NamesStruct(int other, int result, int java, int krpc, int class)
+
+      Construct a NamesStruct from the values of its fields.
+
+
+   .. property:: int Other { get; }
+
+      A value.
+
+   .. property:: int Result { get; }
+
+      A value.
+
+   .. property:: int Java { get; }
+
+      A value.
+
+   .. property:: int Krpc { get; }
+
+      A value.
+
+   .. property:: int Class { get; }
+
+      A value.
 
 
 .. struct:: PartlyDeprecatedStruct
@@ -1581,5 +1871,13 @@
    .. warning:: Deprecated. Use :type:`CustomException` instead.
 
    Deprecated exception documentation string.
+
+   A subclass of :type:`KRPC.Client.ServerException`.
+
+
+
+.. class:: RuntimeError
+
+   An exception named RuntimeError.
 
    A subclass of :type:`KRPC.Client.ServerException`.

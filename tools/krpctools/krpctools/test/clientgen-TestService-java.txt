@@ -44,9 +44,25 @@ public class TestService extends krpc.client.RemoteService {
         }
     }
 
+    /**
+     * An exception named RuntimeError.
+     */
+    public static class RuntimeError extends krpc.client.ServerException {
+        private static final long serialVersionUID = 940990290306656203L;
+
+        public RuntimeError(java.lang.String message) {
+            super(message);
+        }
+
+        public RuntimeError(java.lang.String message, java.lang.Exception innerException) {
+            super(message, innerException);
+        }
+    }
+
     private void addExceptionTypes(krpc.client.Connection connection) {
         connection.addExceptionType("TestService", "CustomException", CustomException.class);
         connection.addExceptionType("TestService", "DeprecatedException", DeprecatedException.class);
+        connection.addExceptionType("TestService", "RuntimeError", RuntimeError.class);
     }
 
     @java.lang.SuppressWarnings({ "unchecked" })
@@ -988,6 +1004,16 @@ public class TestService extends krpc.client.RemoteService {
         return (int) krpc.client.Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
     }
 
+    /**
+     * A procedure named Service, as the C# client names the class of a service.
+     */
+    @java.lang.SuppressWarnings({ "unchecked" })
+    @krpc.client.RPCInfo(service = "TestService", procedure = "Service", types = _Types.class)
+    public int service() {
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "Service");
+        return (int) krpc.client.Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
+    }
+
     @java.lang.SuppressWarnings({ "unchecked" })
     @krpc.client.RPCInfo(service = "TestService", procedure = "SetDefault", types = _Types.class)
     public java.util.Set<java.lang.Integer> setDefault(java.util.Set<java.lang.Integer> x) {
@@ -1665,6 +1691,141 @@ public class TestService extends krpc.client.RemoteService {
     }
 
     /**
+     * A structure whose fields are named after names in the generated code.
+     */
+    public static class NamesStruct implements krpc.client.RemoteStruct, java.lang.Comparable<NamesStruct> {
+        private final int other;
+        private final int result;
+        private final int java_;
+        private final int krpc_;
+        private final int class_;
+
+        public NamesStruct(int other, int result, int java_, int krpc_, int class_) {
+            this.other = other;
+            this.result = result;
+            this.java_ = java_;
+            this.krpc_ = krpc_;
+            this.class_ = class_;
+        }
+
+        /**
+         * A value.
+         */
+        public int getOther() {
+            return other;
+        }
+
+        /**
+         * A value.
+         */
+        public int getResult() {
+            return result;
+        }
+
+        /**
+         * A value.
+         */
+        public int getJava() {
+            return java_;
+        }
+
+        /**
+         * A value.
+         */
+        public int getKrpc() {
+            return krpc_;
+        }
+
+        /**
+         * A value.
+         */
+        public int getClass_() {
+            return class_;
+        }
+
+        private static final java.util.List<krpc.schema.KRPC.Type> FIELD_TYPES =
+            java.util.Collections.unmodifiableList(java.util.Arrays.asList(
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)
+            ));
+
+        /** The types of the fields, in the order they are encoded in. */
+        public static java.util.List<krpc.schema.KRPC.Type> fieldTypes() {
+            return FIELD_TYPES;
+        }
+
+        /** Build a NamesStruct from the values of its fields. */
+        @java.lang.SuppressWarnings("unchecked")
+        public static NamesStruct fromFieldValues(java.lang.Object[] values) {
+            return new NamesStruct(
+                (int) values[0],
+                (int) values[1],
+                (int) values[2],
+                (int) values[3],
+                (int) values[4]
+            );
+        }
+
+        @java.lang.Override
+        public java.lang.Object[] fieldValues() {
+            return new java.lang.Object[] {
+                other,
+                result,
+                java_,
+                krpc_,
+                class_
+            };
+        }
+
+        @java.lang.Override
+        public boolean equals(java.lang.Object obj) {
+            if (!(obj instanceof NamesStruct)) {
+                return false;
+            }
+            NamesStruct other = (NamesStruct) obj;
+            return java.util.Objects.deepEquals(this.other, other.other)                && java.util.Objects.deepEquals(this.result, other.result)                && java.util.Objects.deepEquals(this.java_, other.java_)                && java.util.Objects.deepEquals(this.krpc_, other.krpc_)                && java.util.Objects.deepEquals(this.class_, other.class_);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return java.util.Arrays.deepHashCode(new java.lang.Object[] {other, result, java_, krpc_, class_});
+        }
+
+        /**
+         * Compares this NamesStruct with the given one, by its fields in turn, which is
+         * how a tuple of the same values compares.
+         */
+        @java.lang.Override
+        public int compareTo(NamesStruct other) {
+            int result;
+            result = krpc.client.RemoteStruct.compareFields(this.other, other.other);
+            if (result != 0) {
+                return result;
+            }
+            result = krpc.client.RemoteStruct.compareFields(this.result, other.result);
+            if (result != 0) {
+                return result;
+            }
+            result = krpc.client.RemoteStruct.compareFields(this.java_, other.java_);
+            if (result != 0) {
+                return result;
+            }
+            result = krpc.client.RemoteStruct.compareFields(this.krpc_, other.krpc_);
+            if (result != 0) {
+                return result;
+            }
+            result = krpc.client.RemoteStruct.compareFields(this.class_, other.class_);
+            if (result != 0) {
+                return result;
+            }
+            return 0;
+        }
+    }
+
+    /**
      * Partly deprecated struct documentation string.
      */
     public static class PartlyDeprecatedStruct implements krpc.client.RemoteStruct, java.lang.Comparable<PartlyDeprecatedStruct> {
@@ -2228,6 +2389,54 @@ public class TestService extends krpc.client.RemoteService {
     }
 
     /**
+     * A class named ByteString.
+     */
+    public static class ByteString extends krpc.client.RemoteObject {
+
+        private static final long serialVersionUID = 163274957271651746L;
+
+        public ByteString(krpc.client.Connection connection, long id) {
+            super(connection, id);
+        }
+    }
+
+    /**
+     * A class named ClassBase.
+     */
+    public static class ClassBase extends krpc.client.RemoteObject {
+
+        private static final long serialVersionUID = 799852188760973854L;
+
+        public ClassBase(krpc.client.Connection connection, long id) {
+            super(connection, id);
+        }
+    }
+
+    /**
+     * A class named Client.
+     */
+    public static class Client extends krpc.client.RemoteObject {
+
+        private static final long serialVersionUID = 897030789620644108L;
+
+        public Client(krpc.client.Connection connection, long id) {
+            super(connection, id);
+        }
+    }
+
+    /**
+     * A class named Connection.
+     */
+    public static class Connection extends krpc.client.RemoteObject {
+
+        private static final long serialVersionUID = 726238143755585178L;
+
+        public Connection(krpc.client.Connection connection, long id) {
+            super(connection, id);
+        }
+    }
+
+    /**
      * Deprecated class documentation string.
      *
      * @deprecated Use TestClass instead.
@@ -2360,6 +2569,365 @@ public class TestService extends krpc.client.RemoteService {
     }
 
     /**
+     * A class named DocEnum.
+     */
+    public static class DocEnum extends krpc.client.RemoteObject {
+
+        private static final long serialVersionUID = 129292613863073569L;
+
+        public DocEnum(krpc.client.Connection connection, long id) {
+            super(connection, id);
+        }
+    }
+
+    /**
+     * A class named Encoder.
+     */
+    public static class Encoder extends krpc.client.RemoteObject {
+
+        private static final long serialVersionUID = 33197609546398829L;
+
+        public Encoder(krpc.client.Connection connection, long id) {
+            super(connection, id);
+        }
+    }
+
+    /**
+     * A class named Event.
+     */
+    public static class Event extends krpc.client.RemoteObject {
+
+        private static final long serialVersionUID = 726814437035462036L;
+
+        public Event(krpc.client.Connection connection, long id) {
+            super(connection, id);
+        }
+    }
+
+    /**
+     * A class named Exception.
+     */
+    public static class Exception extends krpc.client.RemoteObject {
+
+        private static final long serialVersionUID = 844089447036162519L;
+
+        public Exception(krpc.client.Connection connection, long id) {
+            super(connection, id);
+        }
+    }
+
+    /**
+     * A class named IConnection.
+     */
+    public static class IConnection extends krpc.client.RemoteObject {
+
+        private static final long serialVersionUID = 34686607263521070L;
+
+        public IConnection(krpc.client.Connection connection, long id) {
+            super(connection, id);
+        }
+    }
+
+    /**
+     * A class named IEquatable.
+     */
+    public static class IEquatable extends krpc.client.RemoteObject {
+
+        private static final long serialVersionUID = 65730452393706875L;
+
+        public IEquatable(krpc.client.Connection connection, long id) {
+            super(connection, id);
+        }
+    }
+
+    /**
+     * A class named List.
+     */
+    public static class List extends krpc.client.RemoteObject {
+
+        private static final long serialVersionUID = 709073193739093794L;
+
+        public List(krpc.client.Connection connection, long id) {
+            super(connection, id);
+        }
+    }
+
+    /**
+     * A class named NamedTuple.
+     */
+    public static class NamedTuple extends krpc.client.RemoteObject {
+
+        private static final long serialVersionUID = 19182731624276853L;
+
+        public NamedTuple(krpc.client.Connection connection, long id) {
+            super(connection, id);
+        }
+    }
+
+    /**
+     * A class whose members are named after names in the generated code.
+     */
+    public static class Names extends krpc.client.RemoteObject {
+
+        private static final long serialVersionUID = 630731650147798172L;
+
+        public Names(krpc.client.Connection connection, long id) {
+            super(connection, id);
+        }
+
+        /**
+         * A method named after a method of a Penlight class.
+         */
+        @java.lang.SuppressWarnings({ "unchecked" })
+        @krpc.client.RPCInfo(service = "TestService", procedure = "Names_ClassOf", types = _Types.class)
+        public int classOf()
+        {
+            com.google.protobuf.ByteString[] _args = new com.google.protobuf.ByteString[] {
+                krpc.client.Encoder.encode(this, krpc.client.Types.createClass("TestService", "Names"))
+            };
+            krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "Names_ClassOf", _args);
+            return (int) krpc.client.Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
+        }
+
+        /**
+         * A method named after a Python builtin.
+         */
+        @java.lang.SuppressWarnings({ "unchecked" })
+        @krpc.client.RPCInfo(service = "TestService", procedure = "Names_Float", types = _Types.class)
+        public int float_()
+        {
+            com.google.protobuf.ByteString[] _args = new com.google.protobuf.ByteString[] {
+                krpc.client.Encoder.encode(this, krpc.client.Types.createClass("TestService", "Names"))
+            };
+            krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "Names_Float", _args);
+            return (int) krpc.client.Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
+        }
+
+        /**
+         * A method named after a method of java.lang.Object.
+         */
+        @java.lang.SuppressWarnings({ "unchecked" })
+        @krpc.client.RPCInfo(service = "TestService", procedure = "Names_HashCode", types = _Types.class)
+        public int hashCode_()
+        {
+            com.google.protobuf.ByteString[] _args = new com.google.protobuf.ByteString[] {
+                krpc.client.Encoder.encode(this, krpc.client.Types.createClass("TestService", "Names"))
+            };
+            krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "Names_HashCode", _args);
+            return (int) krpc.client.Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
+        }
+
+        /**
+         * A method with parameters named after names in the generated code.
+         */
+        @java.lang.SuppressWarnings({ "unchecked" })
+        @krpc.client.RPCInfo(service = "TestService", procedure = "Names_InstanceParameters", types = _Types.class)
+        public int instanceParameters(int client, int connection_, int instance, int returnValue, int returnValueIsNull, int null_, int krpc_, int java_, int com_, int org_, int nameof, int self, int cls, int invoke)
+        {
+            com.google.protobuf.ByteString[] _args = new com.google.protobuf.ByteString[] {
+                krpc.client.Encoder.encode(this, krpc.client.Types.createClass("TestService", "Names")),
+                krpc.client.Encoder.encode(client, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)),
+                krpc.client.Encoder.encode(connection_, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)),
+                krpc.client.Encoder.encode(instance, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)),
+                krpc.client.Encoder.encode(returnValue, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)),
+                krpc.client.Encoder.encode(returnValueIsNull, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)),
+                krpc.client.Encoder.encode(null_, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)),
+                krpc.client.Encoder.encode(krpc_, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)),
+                krpc.client.Encoder.encode(java_, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)),
+                krpc.client.Encoder.encode(com_, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)),
+                krpc.client.Encoder.encode(org_, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)),
+                krpc.client.Encoder.encode(nameof, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)),
+                krpc.client.Encoder.encode(self, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)),
+                krpc.client.Encoder.encode(cls, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)),
+                krpc.client.Encoder.encode(invoke, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))
+            };
+            krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "Names_InstanceParameters", _args);
+            return (int) krpc.client.Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
+        }
+
+        /**
+         * A method named after the Python client package.
+         */
+        @java.lang.SuppressWarnings({ "unchecked" })
+        @krpc.client.RPCInfo(service = "TestService", procedure = "Names_Krpc", types = _Types.class)
+        public int krpc_()
+        {
+            com.google.protobuf.ByteString[] _args = new com.google.protobuf.ByteString[] {
+                krpc.client.Encoder.encode(this, krpc.client.Types.createClass("TestService", "Names"))
+            };
+            krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "Names_Krpc", _args);
+            return (int) krpc.client.Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
+        }
+
+        /**
+         * A method named after a method of java.lang.Object.
+         */
+        @java.lang.SuppressWarnings({ "unchecked" })
+        @krpc.client.RPCInfo(service = "TestService", procedure = "Names_ToString", types = _Types.class)
+        public java.lang.String toString_(int value)
+        {
+            com.google.protobuf.ByteString[] _args = new com.google.protobuf.ByteString[] {
+                krpc.client.Encoder.encode(this, krpc.client.Types.createClass("TestService", "Names")),
+                krpc.client.Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))
+            };
+            krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "Names_ToString", _args);
+            return (java.lang.String) krpc.client.Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
+        }
+
+        /**
+         * A method declared after methods named after Python builtins, with defaults that
+         * name them.
+         */
+        @java.lang.SuppressWarnings({ "unchecked" })
+        @krpc.client.RPCInfo(service = "TestService", procedure = "Names_WithDefaults", types = _Types.class)
+        public double withDefaults(double x, int y)
+        {
+            com.google.protobuf.ByteString[] _args = new com.google.protobuf.ByteString[] {
+                krpc.client.Encoder.encode(this, krpc.client.Types.createClass("TestService", "Names")),
+                krpc.client.Encoder.encode(x, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.DOUBLE)),
+                krpc.client.Encoder.encode(y, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))
+            };
+            krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "Names_WithDefaults", _args);
+            return (double) krpc.client.Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.DOUBLE), this.connection);
+        }
+
+        /**
+         * A property named after a Python builtin.
+         */
+        @java.lang.SuppressWarnings({ "unchecked" })
+        @krpc.client.RPCInfo(service = "TestService", procedure = "Names_get_Property", types = _Types.class)
+        public int getProperty()
+        {
+            com.google.protobuf.ByteString[] _args = new com.google.protobuf.ByteString[] {
+                krpc.client.Encoder.encode(this, krpc.client.Types.createClass("TestService", "Names"))
+            };
+            krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "Names_get_Property", _args);
+            return (int) krpc.client.Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
+        }
+
+        /**
+         * A property named after a Python builtin.
+         */
+        @java.lang.SuppressWarnings({ "unchecked" })
+        @krpc.client.RPCInfo(service = "TestService", procedure = "Names_set_Property", types = _Types.class)
+        public void setProperty(int value)
+        {
+            com.google.protobuf.ByteString[] _args = new com.google.protobuf.ByteString[] {
+                krpc.client.Encoder.encode(this, krpc.client.Types.createClass("TestService", "Names")),
+                krpc.client.Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))
+            };
+            this.connection.invoke("TestService", "Names_set_Property", _args);
+        }
+
+        /**
+         * A property declared after the property named Property.
+         */
+        @java.lang.SuppressWarnings({ "unchecked" })
+        @krpc.client.RPCInfo(service = "TestService", procedure = "Names_get_Value", types = _Types.class)
+        public int getValue()
+        {
+            com.google.protobuf.ByteString[] _args = new com.google.protobuf.ByteString[] {
+                krpc.client.Encoder.encode(this, krpc.client.Types.createClass("TestService", "Names"))
+            };
+            krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "Names_get_Value", _args);
+            return (int) krpc.client.Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
+        }
+
+        /**
+         * A property declared after the property named Property.
+         */
+        @java.lang.SuppressWarnings({ "unchecked" })
+        @krpc.client.RPCInfo(service = "TestService", procedure = "Names_set_Value", types = _Types.class)
+        public void setValue(int value)
+        {
+            com.google.protobuf.ByteString[] _args = new com.google.protobuf.ByteString[] {
+                krpc.client.Encoder.encode(this, krpc.client.Types.createClass("TestService", "Names")),
+                krpc.client.Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))
+            };
+            this.connection.invoke("TestService", "Names_set_Value", _args);
+        }
+
+        /**
+         * A static method with parameters named after names in the generated code.
+         */
+        @java.lang.SuppressWarnings({ "unchecked" })
+        @krpc.client.RPCInfo(service = "TestService", procedure = "Names_static_Parameters", types = _Types.class)
+        public static int parameters(krpc.client.Connection connection, int client, int connection_, int instance, int returnValue, int returnValueIsNull, int null_, int krpc_, int java_, int com_, int org_, int nameof, int self, int cls, int invoke)
+        {
+            com.google.protobuf.ByteString[] _args = new com.google.protobuf.ByteString[] {
+                krpc.client.Encoder.encode(client, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)),
+                krpc.client.Encoder.encode(connection_, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)),
+                krpc.client.Encoder.encode(instance, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)),
+                krpc.client.Encoder.encode(returnValue, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)),
+                krpc.client.Encoder.encode(returnValueIsNull, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)),
+                krpc.client.Encoder.encode(null_, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)),
+                krpc.client.Encoder.encode(krpc_, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)),
+                krpc.client.Encoder.encode(java_, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)),
+                krpc.client.Encoder.encode(com_, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)),
+                krpc.client.Encoder.encode(org_, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)),
+                krpc.client.Encoder.encode(nameof, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)),
+                krpc.client.Encoder.encode(self, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)),
+                krpc.client.Encoder.encode(cls, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)),
+                krpc.client.Encoder.encode(invoke, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))
+            };
+            krpc.schema.KRPC.ProcedureResult _data = connection.invoke("TestService", "Names_static_Parameters", _args);
+            return (int) krpc.client.Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), connection);
+        }
+
+        /**
+         * A method named after a C++ integer type.
+         */
+        @java.lang.SuppressWarnings({ "unchecked" })
+        @krpc.client.RPCInfo(service = "TestService", procedure = "Names_static_Uint64T", types = _Types.class)
+        public static int uint64T(krpc.client.Connection connection)
+        {
+            krpc.schema.KRPC.ProcedureResult _data = connection.invoke("TestService", "Names_static_Uint64T");
+            return (int) krpc.client.Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), connection);
+        }
+
+        /**
+         * Binds the static methods of {@link Names} to a connection.
+         * @param connection The connection the methods are called on.
+         * @return The bound methods.
+         */
+        public static Bound bind(krpc.client.Connection connection) {
+            if (connection == null) {
+                throw new java.lang.NullPointerException("connection");
+            }
+            return new Bound(connection);
+        }
+
+        /**
+         * The static methods of {@link Names}, bound to a connection.
+         */
+        public static final class Bound {
+            private final krpc.client.Connection connection;
+
+            private Bound(krpc.client.Connection connection) {
+                this.connection = connection;
+            }
+
+            /**
+             * A static method with parameters named after names in the generated code.
+             */
+            @krpc.client.RPCInfo(service = "TestService", procedure = "Names_static_Parameters", types = _Types.class)
+            public int parameters(int client, int connection_, int instance, int returnValue, int returnValueIsNull, int null_, int krpc_, int java_, int com_, int org_, int nameof, int self, int cls, int invoke)
+            {
+                return krpc.client.services.TestService.Names.parameters(connection, client, connection_, instance, returnValue, returnValueIsNull, null_, krpc_, java_, com_, org_, nameof, self, cls, invoke);
+            }
+
+            /**
+             * A method named after a C++ integer type.
+             */
+            @krpc.client.RPCInfo(service = "TestService", procedure = "Names_static_Uint64T", types = _Types.class)
+            public int uint64T()
+            {
+                return krpc.client.services.TestService.Names.uint64T(connection);
+            }
+        }
+    }
+
+    /**
      * A class named Object.
      */
     public static class Object extends krpc.client.RemoteObject {
@@ -2382,6 +2950,90 @@ public class TestService extends krpc.client.RemoteService {
             };
             krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "Object_get_Name", _args);
             return (java.lang.String) krpc.client.Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
+        }
+    }
+
+    /**
+     * A class named Optional.
+     */
+    public static class Optional extends krpc.client.RemoteObject {
+
+        private static final long serialVersionUID = 831668949091165233L;
+
+        public Optional(krpc.client.Connection connection, long id) {
+            super(connection, id);
+        }
+    }
+
+    /**
+     * A class named Override.
+     */
+    public static class Override extends krpc.client.RemoteObject {
+
+        private static final long serialVersionUID = 546026264946822632L;
+
+        public Override(krpc.client.Connection connection, long id) {
+            super(connection, id);
+        }
+    }
+
+    /**
+     * A class named RPCException.
+     */
+    public static class RPCException extends krpc.client.RemoteObject {
+
+        private static final long serialVersionUID = 154615538769652195L;
+
+        public RPCException(krpc.client.Connection connection, long id) {
+            super(connection, id);
+        }
+    }
+
+    /**
+     * A class named RemoteObject.
+     */
+    public static class RemoteObject extends krpc.client.RemoteObject {
+
+        private static final long serialVersionUID = 991428240692964865L;
+
+        public RemoteObject(krpc.client.Connection connection, long id) {
+            super(connection, id);
+        }
+    }
+
+    /**
+     * A class named Serializable.
+     */
+    public static class Serializable extends krpc.client.RemoteObject {
+
+        private static final long serialVersionUID = 454789973920506007L;
+
+        public Serializable(krpc.client.Connection connection, long id) {
+            super(connection, id);
+        }
+    }
+
+    /**
+     * A class named Stream.
+     */
+    public static class Stream extends krpc.client.RemoteObject {
+
+        private static final long serialVersionUID = 645081181561019712L;
+
+        public Stream(krpc.client.Connection connection, long id) {
+            super(connection, id);
+        }
+    }
+
+    /**
+     * A class named String.
+     */
+    public static class String extends krpc.client.RemoteObject {
+
+        private static final long serialVersionUID = 402367831314824099L;
+
+        public String(krpc.client.Connection connection, long id) {
+            super(connection, id);
         }
     }
 
@@ -2640,6 +3292,42 @@ public class TestService extends krpc.client.RemoteService {
         }
     }
 
+    /**
+     * A class named Tuple.
+     */
+    public static class Tuple extends krpc.client.RemoteObject {
+
+        private static final long serialVersionUID = 555565457215730733L;
+
+        public Tuple(krpc.client.Connection connection, long id) {
+            super(connection, id);
+        }
+    }
+
+    /**
+     * A class named TypeSpecs.
+     */
+    public static class TypeSpecs extends krpc.client.RemoteObject {
+
+        private static final long serialVersionUID = 641090950200249063L;
+
+        public TypeSpecs(krpc.client.Connection connection, long id) {
+            super(connection, id);
+        }
+    }
+
+    /**
+     * A class named UInt64.
+     */
+    public static class UInt64 extends krpc.client.RemoteObject {
+
+        private static final long serialVersionUID = 674167456300802211L;
+
+        public UInt64(krpc.client.Connection connection, long id) {
+            super(connection, id);
+        }
+    }
+
     public static class _Types {
         // Procedure return and parameter types are held in lookup maps that are
         // populated by chunked initializer methods. Emitting them this way keeps
@@ -2654,6 +3342,7 @@ public class TestService extends krpc.client.RemoteService {
             initTypes0();
             initTypes1();
             initTypes2();
+            initTypes3();
         }
 
         private static void initTypes0() {
@@ -2824,6 +3513,8 @@ public class TestService extends krpc.client.RemoteService {
             PARAMETER_TYPES.put("ReturnNullWhenNotAllowed", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("ScalarDefault", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
             PARAMETER_TYPES.put("ScalarDefault", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32) });
+            RETURN_TYPES.put("Service", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
+            PARAMETER_TYPES.put("Service", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("SetDefault", krpc.client.Types.createSet(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)));
             PARAMETER_TYPES.put("SetDefault", new krpc.schema.KRPC.Type[] { krpc.client.Types.createSet(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)) });
             RETURN_TYPES.put("StringDefault", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
@@ -2858,11 +3549,11 @@ public class TestService extends krpc.client.RemoteService {
             PARAMETER_TYPES.put("ThrowArgumentNullException", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
             RETURN_TYPES.put("ThrowArgumentOutOfRangeException", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
             PARAMETER_TYPES.put("ThrowArgumentOutOfRangeException", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32) });
-            RETURN_TYPES.put("ThrowCustomException", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
-            PARAMETER_TYPES.put("ThrowCustomException", new krpc.schema.KRPC.Type[] {  });
         }
 
         private static void initTypes2() {
+            RETURN_TYPES.put("ThrowCustomException", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
+            PARAMETER_TYPES.put("ThrowCustomException", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("ThrowCustomExceptionLater", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
             PARAMETER_TYPES.put("ThrowCustomExceptionLater", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("ThrowInvalidOperationException", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
@@ -2911,6 +3602,32 @@ public class TestService extends krpc.client.RemoteService {
             PARAMETER_TYPES.put("DeprecatedClass_set_InheritedProperty", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "DeprecatedClass"), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
             RETURN_TYPES.put("DeprecatedClass_static_InheritedStaticMethod", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
             PARAMETER_TYPES.put("DeprecatedClass_static_InheritedStaticMethod", new krpc.schema.KRPC.Type[] {  });
+            RETURN_TYPES.put("Names_ClassOf", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
+            PARAMETER_TYPES.put("Names_ClassOf", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "Names") });
+            RETURN_TYPES.put("Names_Float", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
+            PARAMETER_TYPES.put("Names_Float", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "Names") });
+            RETURN_TYPES.put("Names_HashCode", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
+            PARAMETER_TYPES.put("Names_HashCode", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "Names") });
+            RETURN_TYPES.put("Names_InstanceParameters", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
+            PARAMETER_TYPES.put("Names_InstanceParameters", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "Names"), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32) });
+            RETURN_TYPES.put("Names_Krpc", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
+            PARAMETER_TYPES.put("Names_Krpc", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "Names") });
+            RETURN_TYPES.put("Names_ToString", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
+            PARAMETER_TYPES.put("Names_ToString", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "Names"), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32) });
+            RETURN_TYPES.put("Names_WithDefaults", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.DOUBLE));
+            PARAMETER_TYPES.put("Names_WithDefaults", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "Names"), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.DOUBLE), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32) });
+            RETURN_TYPES.put("Names_get_Property", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
+            PARAMETER_TYPES.put("Names_get_Property", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "Names") });
+            RETURN_TYPES.put("Names_set_Property", null);
+            PARAMETER_TYPES.put("Names_set_Property", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "Names"), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32) });
+            RETURN_TYPES.put("Names_get_Value", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
+            PARAMETER_TYPES.put("Names_get_Value", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "Names") });
+            RETURN_TYPES.put("Names_set_Value", null);
+            PARAMETER_TYPES.put("Names_set_Value", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "Names"), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32) });
+            RETURN_TYPES.put("Names_static_Parameters", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
+            PARAMETER_TYPES.put("Names_static_Parameters", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32) });
+            RETURN_TYPES.put("Names_static_Uint64T", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
+            PARAMETER_TYPES.put("Names_static_Uint64T", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("Object_get_Name", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
             PARAMETER_TYPES.put("Object_get_Name", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "Object") });
             RETURN_TYPES.put("TestClass_EchoNullableObject", krpc.client.Types.createClass("TestService", "TestClass"));
@@ -2935,6 +3652,9 @@ public class TestService extends krpc.client.RemoteService {
             PARAMETER_TYPES.put("TestClass_set_StringPropertyPrivateGet", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "TestClass"), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
             RETURN_TYPES.put("TestClass_get_StringPropertyPrivateSet", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
             PARAMETER_TYPES.put("TestClass_get_StringPropertyPrivateSet", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "TestClass") });
+        }
+
+        private static void initTypes3() {
             RETURN_TYPES.put("TestClass_static_StaticMethod", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
             PARAMETER_TYPES.put("TestClass_static_StaticMethod", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
             RETURN_TYPES.put("TestClass_static_StaticNullableObject", krpc.client.Types.createClass("TestService", "TestClass"));

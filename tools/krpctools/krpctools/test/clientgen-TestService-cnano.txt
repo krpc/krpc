@@ -20,18 +20,110 @@ extern "C" {
 KRPC_DEPRECATED_USES_BEGIN
 
 /**
+ * A class named ByteString.
+ */
+typedef krpc_object_t krpc_TestService_ByteString_t;
+/**
+ * A class named ClassBase.
+ */
+typedef krpc_object_t krpc_TestService_ClassBase_t;
+/**
+ * A class named Client.
+ */
+typedef krpc_object_t krpc_TestService_Client_t;
+/**
+ * A class named Connection.
+ */
+typedef krpc_object_t krpc_TestService_Connection_t;
+/**
  * Deprecated class documentation string.
  */
 KRPC_DEPRECATED("Use TestClass instead.")
 typedef krpc_object_t krpc_TestService_DeprecatedClass_t;
 /**
+ * A class named DocEnum.
+ */
+typedef krpc_object_t krpc_TestService_DocEnum_t;
+/**
+ * A class named Encoder.
+ */
+typedef krpc_object_t krpc_TestService_Encoder_t;
+/**
+ * A class named Event.
+ */
+typedef krpc_object_t krpc_TestService_Event_t;
+/**
+ * A class named Exception.
+ */
+typedef krpc_object_t krpc_TestService_Exception_t;
+/**
+ * A class named IConnection.
+ */
+typedef krpc_object_t krpc_TestService_IConnection_t;
+/**
+ * A class named IEquatable.
+ */
+typedef krpc_object_t krpc_TestService_IEquatable_t;
+/**
+ * A class named List.
+ */
+typedef krpc_object_t krpc_TestService_List_t;
+/**
+ * A class named NamedTuple.
+ */
+typedef krpc_object_t krpc_TestService_NamedTuple_t;
+/**
+ * A class whose members are named after names in the generated code.
+ */
+typedef krpc_object_t krpc_TestService_Names_t;
+/**
  * A class named Object.
  */
 typedef krpc_object_t krpc_TestService_Object_t;
 /**
+ * A class named Optional.
+ */
+typedef krpc_object_t krpc_TestService_Optional_t;
+/**
+ * A class named Override.
+ */
+typedef krpc_object_t krpc_TestService_Override_t;
+/**
+ * A class named RPCException.
+ */
+typedef krpc_object_t krpc_TestService_RPCException_t;
+/**
+ * A class named RemoteObject.
+ */
+typedef krpc_object_t krpc_TestService_RemoteObject_t;
+/**
+ * A class named Serializable.
+ */
+typedef krpc_object_t krpc_TestService_Serializable_t;
+/**
+ * A class named Stream.
+ */
+typedef krpc_object_t krpc_TestService_Stream_t;
+/**
+ * A class named String.
+ */
+typedef krpc_object_t krpc_TestService_String_t;
+/**
  * Class documentation string.
  */
 typedef krpc_object_t krpc_TestService_TestClass_t;
+/**
+ * A class named Tuple.
+ */
+typedef krpc_object_t krpc_TestService_Tuple_t;
+/**
+ * A class named TypeSpecs.
+ */
+typedef krpc_object_t krpc_TestService_TypeSpecs_t;
+/**
+ * A class named UInt64.
+ */
+typedef krpc_object_t krpc_TestService_UInt64_t;
 
 #ifndef KRPC_TYPE_TESTSERVICE_DEPRECATEDSTRUCT
 #define KRPC_TYPE_TESTSERVICE_DEPRECATEDSTRUCT
@@ -866,9 +958,32 @@ typedef enum {
   KRPC_TESTSERVICE_TESTFLAGS_VALUEAB = 3
 } krpc_TestService_TestFlags_t;
 
+#define KRPC_CLASS_TESTSERVICE_BYTESTRING 857051661u, 2372919582u
+#define KRPC_CLASS_TESTSERVICE_CLASSBASE 857051661u, 2776890368u
+#define KRPC_CLASS_TESTSERVICE_CLIENT 857051661u, 167671564u
+#define KRPC_CLASS_TESTSERVICE_CONNECTION 857051661u, 3896547939u
 #define KRPC_CLASS_TESTSERVICE_DEPRECATEDCLASS 857051661u, 3568109615u
+#define KRPC_CLASS_TESTSERVICE_DOCENUM 857051661u, 603411414u
+#define KRPC_CLASS_TESTSERVICE_ENCODER 857051661u, 2447872822u
+#define KRPC_CLASS_TESTSERVICE_EVENT 857051661u, 2840141646u
+#define KRPC_CLASS_TESTSERVICE_EXCEPTION 857051661u, 1379794612u
+#define KRPC_CLASS_TESTSERVICE_ICONNECTION 857051661u, 4163684883u
+#define KRPC_CLASS_TESTSERVICE_IEQUATABLE 857051661u, 2374556513u
+#define KRPC_CLASS_TESTSERVICE_LIST 857051661u, 1412374639u
+#define KRPC_CLASS_TESTSERVICE_NAMEDTUPLE 857051661u, 1250749133u
+#define KRPC_CLASS_TESTSERVICE_NAMES 857051661u, 1855894211u
 #define KRPC_CLASS_TESTSERVICE_OBJECT 857051661u, 2279253602u
+#define KRPC_CLASS_TESTSERVICE_OPTIONAL 857051661u, 863092313u
+#define KRPC_CLASS_TESTSERVICE_OVERRIDE 857051661u, 1594866755u
+#define KRPC_CLASS_TESTSERVICE_RPCEXCEPTION 857051661u, 2519724906u
+#define KRPC_CLASS_TESTSERVICE_REMOTEOBJECT 857051661u, 2137501331u
+#define KRPC_CLASS_TESTSERVICE_SERIALIZABLE 857051661u, 1563656598u
+#define KRPC_CLASS_TESTSERVICE_STREAM 857051661u, 1899031582u
+#define KRPC_CLASS_TESTSERVICE_STRING 857051661u, 237236146u
 #define KRPC_CLASS_TESTSERVICE_TESTCLASS 857051661u, 3511177853u
+#define KRPC_CLASS_TESTSERVICE_TUPLE 857051661u, 2028877553u
+#define KRPC_CLASS_TESTSERVICE_TYPESPECS 857051661u, 3545358241u
+#define KRPC_CLASS_TESTSERVICE_UINT64 857051661u, 827421619u
 #define KRPC_ENUMERATION_TESTSERVICE_DEPRECATEDENUM 857051661u, 698911118u
 #define KRPC_ENUMERATION_TESTSERVICE_PARTLYDEPRECATEDENUM 857051661u, 210444072u
 #define KRPC_ENUMERATION_TESTSERVICE_TESTENUM 857051661u, 1281753798u
@@ -876,6 +991,12 @@ typedef enum {
 #define KRPC_STRUCT_TESTSERVICE_DEPRECATEDSTRUCT 857051661u, 3811447275u
 #define KRPC_FIELD_TESTSERVICE_DEPRECATEDSTRUCT_VALUE 0
 #define KRPC_FIELD_TESTSERVICE_DEPRECATEDSTRUCT_OLDVALUE 1
+#define KRPC_STRUCT_TESTSERVICE_NAMESSTRUCT 857051661u, 2157117765u
+#define KRPC_FIELD_TESTSERVICE_NAMESSTRUCT_OTHER 0
+#define KRPC_FIELD_TESTSERVICE_NAMESSTRUCT_RESULT 1
+#define KRPC_FIELD_TESTSERVICE_NAMESSTRUCT_JAVA 2
+#define KRPC_FIELD_TESTSERVICE_NAMESSTRUCT_KRPC 3
+#define KRPC_FIELD_TESTSERVICE_NAMESSTRUCT_CLASS 4
 #define KRPC_STRUCT_TESTSERVICE_PARTLYDEPRECATEDSTRUCT 857051661u, 218837123u
 #define KRPC_FIELD_TESTSERVICE_PARTLYDEPRECATEDSTRUCT_VALUE 0
 #define KRPC_FIELD_TESTSERVICE_PARTLYDEPRECATEDSTRUCT_OLDVALUE 1
@@ -906,6 +1027,11 @@ typedef enum {
  * Deprecated exception documentation string.
  */
 #define KRPC_EXCEPTION_TESTSERVICE_DEPRECATEDEXCEPTION 857051661u, 2666844656u
+
+/**
+ * An exception named RuntimeError.
+ */
+#define KRPC_EXCEPTION_TESTSERVICE_RUNTIMEERROR 857051661u, 1998430742u
 
 static inline krpc_error_t krpc_TestService_AddMultipleValues(krpc_connection_t connection, char * * returnValue, float x, int32_t y, int64_t z);
 
@@ -2211,6 +2337,24 @@ static inline krpc_error_t krpc_TestService_ScalarDefault_call(krpc_schema_Proce
  */
 static inline krpc_error_t krpc_TestService_ScalarDefault_call_template(krpc_schema_ProcedureCall * procedureCall);
 
+/**
+ * A procedure named Service, as the C# client names the class of a service.
+ */
+static inline krpc_error_t krpc_TestService_Service(krpc_connection_t connection, int32_t * returnValue);
+
+/**
+ * Fills in the call krpc_TestService_Service() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_TestService_Service_call(krpc_schema_ProcedureCall * procedureCall);
+
+/**
+ * Fills in the call template of krpc_TestService_Service(), which names the procedure and carries no
+ * arguments, to pass to krpc_KRPC_Expression_CallWithArguments(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_TestService_Service_call_template(krpc_schema_ProcedureCall * procedureCall);
+
 static inline krpc_error_t krpc_TestService_SetDefault(krpc_connection_t connection, krpc_set_int32_t * returnValue, const krpc_set_int32_t * x);
 
 /**
@@ -2917,6 +3061,241 @@ static inline krpc_error_t krpc_TestService_DeprecatedClass_set_InheritedPropert
  */
 KRPC_DEPRECATED("Use TestClass instead.")
 static inline krpc_error_t krpc_TestService_DeprecatedClass_set_InheritedProperty_call_template(krpc_schema_ProcedureCall * procedureCall);
+
+/**
+ * A method named after a method of a Penlight class.
+ */
+static inline krpc_error_t krpc_TestService_Names_ClassOf(krpc_connection_t connection, int32_t * returnValue, krpc_TestService_Names_t instance);
+
+/**
+ * Fills in the call krpc_TestService_Names_ClassOf() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_TestService_Names_ClassOf_call(krpc_schema_ProcedureCall * procedureCall, krpc_TestService_Names_t instance);
+
+/**
+ * Fills in the call template of krpc_TestService_Names_ClassOf(), which names the procedure and carries no
+ * arguments, to pass to krpc_KRPC_Expression_CallWithArguments(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_TestService_Names_ClassOf_call_template(krpc_schema_ProcedureCall * procedureCall);
+
+/**
+ * A method named after a Python builtin.
+ */
+static inline krpc_error_t krpc_TestService_Names_Float(krpc_connection_t connection, int32_t * returnValue, krpc_TestService_Names_t instance);
+
+/**
+ * Fills in the call krpc_TestService_Names_Float() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_TestService_Names_Float_call(krpc_schema_ProcedureCall * procedureCall, krpc_TestService_Names_t instance);
+
+/**
+ * Fills in the call template of krpc_TestService_Names_Float(), which names the procedure and carries no
+ * arguments, to pass to krpc_KRPC_Expression_CallWithArguments(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_TestService_Names_Float_call_template(krpc_schema_ProcedureCall * procedureCall);
+
+/**
+ * A method named after a method of java.lang.Object.
+ */
+static inline krpc_error_t krpc_TestService_Names_HashCode(krpc_connection_t connection, int32_t * returnValue, krpc_TestService_Names_t instance);
+
+/**
+ * Fills in the call krpc_TestService_Names_HashCode() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_TestService_Names_HashCode_call(krpc_schema_ProcedureCall * procedureCall, krpc_TestService_Names_t instance);
+
+/**
+ * Fills in the call template of krpc_TestService_Names_HashCode(), which names the procedure and carries no
+ * arguments, to pass to krpc_KRPC_Expression_CallWithArguments(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_TestService_Names_HashCode_call_template(krpc_schema_ProcedureCall * procedureCall);
+
+/**
+ * A method with parameters named after names in the generated code.
+ */
+static inline krpc_error_t krpc_TestService_Names_InstanceParameters(krpc_connection_t connection, int32_t * returnValue, krpc_TestService_Names_t instance, int32_t client, int32_t connection_, int32_t instance_, int32_t returnValue_, int32_t returnValueIsNull_, int32_t NULL_, int32_t krpc, int32_t java, int32_t com, int32_t org, int32_t nameof, int32_t self, int32_t cls, int32_t invoke);
+
+/**
+ * Fills in the call krpc_TestService_Names_InstanceParameters() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_TestService_Names_InstanceParameters_call(krpc_schema_ProcedureCall * procedureCall, krpc_TestService_Names_t instance, int32_t client, int32_t connection_, int32_t instance_, int32_t returnValue_, int32_t returnValueIsNull_, int32_t NULL_, int32_t krpc, int32_t java, int32_t com, int32_t org, int32_t nameof, int32_t self, int32_t cls, int32_t invoke);
+
+/**
+ * Fills in the call template of krpc_TestService_Names_InstanceParameters(), which names the procedure and carries no
+ * arguments, to pass to krpc_KRPC_Expression_CallWithArguments(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_TestService_Names_InstanceParameters_call_template(krpc_schema_ProcedureCall * procedureCall);
+
+/**
+ * A method named after the Python client package.
+ */
+static inline krpc_error_t krpc_TestService_Names_Krpc(krpc_connection_t connection, int32_t * returnValue, krpc_TestService_Names_t instance);
+
+/**
+ * Fills in the call krpc_TestService_Names_Krpc() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_TestService_Names_Krpc_call(krpc_schema_ProcedureCall * procedureCall, krpc_TestService_Names_t instance);
+
+/**
+ * Fills in the call template of krpc_TestService_Names_Krpc(), which names the procedure and carries no
+ * arguments, to pass to krpc_KRPC_Expression_CallWithArguments(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_TestService_Names_Krpc_call_template(krpc_schema_ProcedureCall * procedureCall);
+
+/**
+ * A method named after a method of java.lang.Object.
+ */
+static inline krpc_error_t krpc_TestService_Names_ToString(krpc_connection_t connection, char * * returnValue, krpc_TestService_Names_t instance, int32_t value);
+
+/**
+ * Fills in the call krpc_TestService_Names_ToString() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_TestService_Names_ToString_call(krpc_schema_ProcedureCall * procedureCall, krpc_TestService_Names_t instance, int32_t value);
+
+/**
+ * Fills in the call template of krpc_TestService_Names_ToString(), which names the procedure and carries no
+ * arguments, to pass to krpc_KRPC_Expression_CallWithArguments(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_TestService_Names_ToString_call_template(krpc_schema_ProcedureCall * procedureCall);
+
+/**
+ * A method declared after methods named after Python builtins, with defaults that
+ * name them.
+ */
+static inline krpc_error_t krpc_TestService_Names_WithDefaults(krpc_connection_t connection, double * returnValue, krpc_TestService_Names_t instance, double x, int32_t y);
+
+/**
+ * Fills in the call krpc_TestService_Names_WithDefaults() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_TestService_Names_WithDefaults_call(krpc_schema_ProcedureCall * procedureCall, krpc_TestService_Names_t instance, double x, int32_t y);
+
+/**
+ * Fills in the call template of krpc_TestService_Names_WithDefaults(), which names the procedure and carries no
+ * arguments, to pass to krpc_KRPC_Expression_CallWithArguments(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_TestService_Names_WithDefaults_call_template(krpc_schema_ProcedureCall * procedureCall);
+
+/**
+ * A static method with parameters named after names in the generated code.
+ */
+static inline krpc_error_t krpc_TestService_Names_Parameters(krpc_connection_t connection, int32_t * returnValue, int32_t client, int32_t connection_, int32_t instance_, int32_t returnValue_, int32_t returnValueIsNull_, int32_t NULL_, int32_t krpc, int32_t java, int32_t com, int32_t org, int32_t nameof, int32_t self, int32_t cls, int32_t invoke);
+
+/**
+ * Fills in the call krpc_TestService_Names_Parameters() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_TestService_Names_Parameters_call(krpc_schema_ProcedureCall * procedureCall, int32_t client, int32_t connection_, int32_t instance_, int32_t returnValue_, int32_t returnValueIsNull_, int32_t NULL_, int32_t krpc, int32_t java, int32_t com, int32_t org, int32_t nameof, int32_t self, int32_t cls, int32_t invoke);
+
+/**
+ * Fills in the call template of krpc_TestService_Names_Parameters(), which names the procedure and carries no
+ * arguments, to pass to krpc_KRPC_Expression_CallWithArguments(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_TestService_Names_Parameters_call_template(krpc_schema_ProcedureCall * procedureCall);
+
+/**
+ * A method named after a C++ integer type.
+ */
+static inline krpc_error_t krpc_TestService_Names_Uint64T(krpc_connection_t connection, int32_t * returnValue);
+
+/**
+ * Fills in the call krpc_TestService_Names_Uint64T() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_TestService_Names_Uint64T_call(krpc_schema_ProcedureCall * procedureCall);
+
+/**
+ * Fills in the call template of krpc_TestService_Names_Uint64T(), which names the procedure and carries no
+ * arguments, to pass to krpc_KRPC_Expression_CallWithArguments(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_TestService_Names_Uint64T_call_template(krpc_schema_ProcedureCall * procedureCall);
+
+/**
+ * A property named after a Python builtin.
+ */
+static inline krpc_error_t krpc_TestService_Names_Property(krpc_connection_t connection, int32_t * returnValue, krpc_TestService_Names_t instance);
+
+/**
+ * Fills in the call krpc_TestService_Names_Property() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_TestService_Names_Property_call(krpc_schema_ProcedureCall * procedureCall, krpc_TestService_Names_t instance);
+
+/**
+ * Fills in the call template of krpc_TestService_Names_Property(), which names the procedure and carries no
+ * arguments, to pass to krpc_KRPC_Expression_CallWithArguments(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_TestService_Names_Property_call_template(krpc_schema_ProcedureCall * procedureCall);
+
+/**
+ * A property named after a Python builtin.
+ */
+static inline krpc_error_t krpc_TestService_Names_set_Property(krpc_connection_t connection, krpc_TestService_Names_t instance, int32_t value);
+
+/**
+ * Fills in the call krpc_TestService_Names_set_Property() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_TestService_Names_set_Property_call(krpc_schema_ProcedureCall * procedureCall, krpc_TestService_Names_t instance, int32_t value);
+
+/**
+ * Fills in the call template of krpc_TestService_Names_set_Property(), which names the procedure and carries no
+ * arguments, to pass to krpc_KRPC_Expression_CallWithArguments(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_TestService_Names_set_Property_call_template(krpc_schema_ProcedureCall * procedureCall);
+
+/**
+ * A property declared after the property named Property.
+ */
+static inline krpc_error_t krpc_TestService_Names_Value(krpc_connection_t connection, int32_t * returnValue, krpc_TestService_Names_t instance);
+
+/**
+ * Fills in the call krpc_TestService_Names_Value() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_TestService_Names_Value_call(krpc_schema_ProcedureCall * procedureCall, krpc_TestService_Names_t instance);
+
+/**
+ * Fills in the call template of krpc_TestService_Names_Value(), which names the procedure and carries no
+ * arguments, to pass to krpc_KRPC_Expression_CallWithArguments(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_TestService_Names_Value_call_template(krpc_schema_ProcedureCall * procedureCall);
+
+/**
+ * A property declared after the property named Property.
+ */
+static inline krpc_error_t krpc_TestService_Names_set_Value(krpc_connection_t connection, krpc_TestService_Names_t instance, int32_t value);
+
+/**
+ * Fills in the call krpc_TestService_Names_set_Value() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_TestService_Names_set_Value_call(krpc_schema_ProcedureCall * procedureCall, krpc_TestService_Names_t instance, int32_t value);
+
+/**
+ * Fills in the call template of krpc_TestService_Names_set_Value(), which names the procedure and carries no
+ * arguments, to pass to krpc_KRPC_Expression_CallWithArguments(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_TestService_Names_set_Value_call_template(krpc_schema_ProcedureCall * procedureCall);
 
 /**
  * The name of the object.
@@ -8934,6 +9313,30 @@ static inline krpc_error_t krpc_TestService_ScalarDefault_call_template(krpc_sch
   return krpc_procedure_call(procedureCall, 857051661, 1473123334, 0);
 }
 
+static inline krpc_error_t krpc_TestService_Service(krpc_connection_t connection, int32_t * returnValue) {
+  krpc_call_t _call;
+  KRPC_CHECK(krpc_call(&_call, 857051661, 236550102, 0, NULL));
+  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
+  KRPC_CHECK(krpc_init_result(&_result));
+  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
+  if (returnValue) {
+    pb_istream_t _stream;
+    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+    KRPC_CHECK(krpc_decode_int32(&_stream, returnValue));
+  }
+  KRPC_CHECK(krpc_free_result(&_result));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_Service_call(krpc_schema_ProcedureCall * procedureCall) {
+  KRPC_CHECK(krpc_procedure_call(procedureCall, 857051661, 236550102, 0));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_Service_call_template(krpc_schema_ProcedureCall * procedureCall) {
+  return krpc_procedure_call(procedureCall, 857051661, 236550102, 0);
+}
+
 static inline krpc_error_t krpc_TestService_SetDefault(krpc_connection_t connection, krpc_set_int32_t * returnValue, const krpc_set_int32_t * x) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
@@ -10044,6 +10447,408 @@ static inline krpc_error_t krpc_TestService_DeprecatedClass_InheritedStaticMetho
 
 static inline krpc_error_t krpc_TestService_DeprecatedClass_InheritedStaticMethod_call_template(krpc_schema_ProcedureCall * procedureCall) {
   return krpc_procedure_call(procedureCall, 857051661, 313918032, 0);
+}
+
+static inline krpc_error_t krpc_TestService_Names_ClassOf(krpc_connection_t connection, int32_t * returnValue, krpc_TestService_Names_t instance) {
+  krpc_call_t _call;
+  krpc_argument_t _arguments[1];
+  KRPC_CHECK(krpc_call(&_call, 857051661, 4169648877, 1, _arguments));
+  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_uint64, &instance));
+  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
+  KRPC_CHECK(krpc_init_result(&_result));
+  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
+  if (returnValue) {
+    pb_istream_t _stream;
+    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+    KRPC_CHECK(krpc_decode_int32(&_stream, returnValue));
+  }
+  KRPC_CHECK(krpc_free_result(&_result));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_Names_ClassOf_call(krpc_schema_ProcedureCall * procedureCall, krpc_TestService_Names_t instance) {
+  KRPC_CHECK(krpc_procedure_call(procedureCall, 857051661, 4169648877, 1));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_uint64, &instance));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_Names_ClassOf_call_template(krpc_schema_ProcedureCall * procedureCall) {
+  return krpc_procedure_call(procedureCall, 857051661, 4169648877, 0);
+}
+
+static inline krpc_error_t krpc_TestService_Names_Float(krpc_connection_t connection, int32_t * returnValue, krpc_TestService_Names_t instance) {
+  krpc_call_t _call;
+  krpc_argument_t _arguments[1];
+  KRPC_CHECK(krpc_call(&_call, 857051661, 1234243003, 1, _arguments));
+  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_uint64, &instance));
+  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
+  KRPC_CHECK(krpc_init_result(&_result));
+  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
+  if (returnValue) {
+    pb_istream_t _stream;
+    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+    KRPC_CHECK(krpc_decode_int32(&_stream, returnValue));
+  }
+  KRPC_CHECK(krpc_free_result(&_result));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_Names_Float_call(krpc_schema_ProcedureCall * procedureCall, krpc_TestService_Names_t instance) {
+  KRPC_CHECK(krpc_procedure_call(procedureCall, 857051661, 1234243003, 1));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_uint64, &instance));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_Names_Float_call_template(krpc_schema_ProcedureCall * procedureCall) {
+  return krpc_procedure_call(procedureCall, 857051661, 1234243003, 0);
+}
+
+static inline krpc_error_t krpc_TestService_Names_HashCode(krpc_connection_t connection, int32_t * returnValue, krpc_TestService_Names_t instance) {
+  krpc_call_t _call;
+  krpc_argument_t _arguments[1];
+  KRPC_CHECK(krpc_call(&_call, 857051661, 1831153647, 1, _arguments));
+  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_uint64, &instance));
+  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
+  KRPC_CHECK(krpc_init_result(&_result));
+  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
+  if (returnValue) {
+    pb_istream_t _stream;
+    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+    KRPC_CHECK(krpc_decode_int32(&_stream, returnValue));
+  }
+  KRPC_CHECK(krpc_free_result(&_result));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_Names_HashCode_call(krpc_schema_ProcedureCall * procedureCall, krpc_TestService_Names_t instance) {
+  KRPC_CHECK(krpc_procedure_call(procedureCall, 857051661, 1831153647, 1));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_uint64, &instance));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_Names_HashCode_call_template(krpc_schema_ProcedureCall * procedureCall) {
+  return krpc_procedure_call(procedureCall, 857051661, 1831153647, 0);
+}
+
+static inline krpc_error_t krpc_TestService_Names_InstanceParameters(krpc_connection_t connection, int32_t * returnValue, krpc_TestService_Names_t instance, int32_t client, int32_t connection_, int32_t instance_, int32_t returnValue_, int32_t returnValueIsNull_, int32_t NULL_, int32_t krpc, int32_t java, int32_t com, int32_t org, int32_t nameof, int32_t self, int32_t cls, int32_t invoke) {
+  krpc_call_t _call;
+  krpc_argument_t _arguments[15];
+  KRPC_CHECK(krpc_call(&_call, 857051661, 3861633928, 15, _arguments));
+  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_uint64, &instance));
+  KRPC_CHECK(krpc_add_argument(&_call, 1, &krpc_encode_callback_int32, &client));
+  KRPC_CHECK(krpc_add_argument(&_call, 2, &krpc_encode_callback_int32, &connection_));
+  KRPC_CHECK(krpc_add_argument(&_call, 3, &krpc_encode_callback_int32, &instance_));
+  KRPC_CHECK(krpc_add_argument(&_call, 4, &krpc_encode_callback_int32, &returnValue_));
+  KRPC_CHECK(krpc_add_argument(&_call, 5, &krpc_encode_callback_int32, &returnValueIsNull_));
+  KRPC_CHECK(krpc_add_argument(&_call, 6, &krpc_encode_callback_int32, &NULL_));
+  KRPC_CHECK(krpc_add_argument(&_call, 7, &krpc_encode_callback_int32, &krpc));
+  KRPC_CHECK(krpc_add_argument(&_call, 8, &krpc_encode_callback_int32, &java));
+  KRPC_CHECK(krpc_add_argument(&_call, 9, &krpc_encode_callback_int32, &com));
+  KRPC_CHECK(krpc_add_argument(&_call, 10, &krpc_encode_callback_int32, &org));
+  KRPC_CHECK(krpc_add_argument(&_call, 11, &krpc_encode_callback_int32, &nameof));
+  KRPC_CHECK(krpc_add_argument(&_call, 12, &krpc_encode_callback_int32, &self));
+  KRPC_CHECK(krpc_add_argument(&_call, 13, &krpc_encode_callback_int32, &cls));
+  KRPC_CHECK(krpc_add_argument(&_call, 14, &krpc_encode_callback_int32, &invoke));
+  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
+  KRPC_CHECK(krpc_init_result(&_result));
+  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
+  if (returnValue) {
+    pb_istream_t _stream;
+    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+    KRPC_CHECK(krpc_decode_int32(&_stream, returnValue));
+  }
+  KRPC_CHECK(krpc_free_result(&_result));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_Names_InstanceParameters_call(krpc_schema_ProcedureCall * procedureCall, krpc_TestService_Names_t instance, int32_t client, int32_t connection_, int32_t instance_, int32_t returnValue_, int32_t returnValueIsNull_, int32_t NULL_, int32_t krpc, int32_t java, int32_t com, int32_t org, int32_t nameof, int32_t self, int32_t cls, int32_t invoke) {
+  KRPC_CHECK(krpc_procedure_call(procedureCall, 857051661, 3861633928, 15));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_uint64, &instance));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 1, &krpc_encode_callback_int32, &client));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 2, &krpc_encode_callback_int32, &connection_));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 3, &krpc_encode_callback_int32, &instance_));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 4, &krpc_encode_callback_int32, &returnValue_));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 5, &krpc_encode_callback_int32, &returnValueIsNull_));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 6, &krpc_encode_callback_int32, &NULL_));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 7, &krpc_encode_callback_int32, &krpc));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 8, &krpc_encode_callback_int32, &java));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 9, &krpc_encode_callback_int32, &com));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 10, &krpc_encode_callback_int32, &org));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 11, &krpc_encode_callback_int32, &nameof));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 12, &krpc_encode_callback_int32, &self));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 13, &krpc_encode_callback_int32, &cls));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 14, &krpc_encode_callback_int32, &invoke));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_Names_InstanceParameters_call_template(krpc_schema_ProcedureCall * procedureCall) {
+  return krpc_procedure_call(procedureCall, 857051661, 3861633928, 0);
+}
+
+static inline krpc_error_t krpc_TestService_Names_Krpc(krpc_connection_t connection, int32_t * returnValue, krpc_TestService_Names_t instance) {
+  krpc_call_t _call;
+  krpc_argument_t _arguments[1];
+  KRPC_CHECK(krpc_call(&_call, 857051661, 2616905409, 1, _arguments));
+  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_uint64, &instance));
+  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
+  KRPC_CHECK(krpc_init_result(&_result));
+  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
+  if (returnValue) {
+    pb_istream_t _stream;
+    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+    KRPC_CHECK(krpc_decode_int32(&_stream, returnValue));
+  }
+  KRPC_CHECK(krpc_free_result(&_result));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_Names_Krpc_call(krpc_schema_ProcedureCall * procedureCall, krpc_TestService_Names_t instance) {
+  KRPC_CHECK(krpc_procedure_call(procedureCall, 857051661, 2616905409, 1));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_uint64, &instance));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_Names_Krpc_call_template(krpc_schema_ProcedureCall * procedureCall) {
+  return krpc_procedure_call(procedureCall, 857051661, 2616905409, 0);
+}
+
+static inline krpc_error_t krpc_TestService_Names_ToString(krpc_connection_t connection, char * * returnValue, krpc_TestService_Names_t instance, int32_t value) {
+  krpc_call_t _call;
+  krpc_argument_t _arguments[2];
+  KRPC_CHECK(krpc_call(&_call, 857051661, 116714755, 2, _arguments));
+  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_uint64, &instance));
+  KRPC_CHECK(krpc_add_argument(&_call, 1, &krpc_encode_callback_int32, &value));
+  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
+  KRPC_CHECK(krpc_init_result(&_result));
+  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
+  if (returnValue) {
+    pb_istream_t _stream;
+    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+    KRPC_CHECK(krpc_decode_string(&_stream, returnValue));
+  }
+  KRPC_CHECK(krpc_free_result(&_result));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_Names_ToString_call(krpc_schema_ProcedureCall * procedureCall, krpc_TestService_Names_t instance, int32_t value) {
+  KRPC_CHECK(krpc_procedure_call(procedureCall, 857051661, 116714755, 2));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_uint64, &instance));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 1, &krpc_encode_callback_int32, &value));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_Names_ToString_call_template(krpc_schema_ProcedureCall * procedureCall) {
+  return krpc_procedure_call(procedureCall, 857051661, 116714755, 0);
+}
+
+static inline krpc_error_t krpc_TestService_Names_WithDefaults(krpc_connection_t connection, double * returnValue, krpc_TestService_Names_t instance, double x, int32_t y) {
+  krpc_call_t _call;
+  krpc_argument_t _arguments[3];
+  KRPC_CHECK(krpc_call(&_call, 857051661, 1018927614, 3, _arguments));
+  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_uint64, &instance));
+  KRPC_CHECK(krpc_add_argument(&_call, 1, &krpc_encode_callback_double, &x));
+  KRPC_CHECK(krpc_add_argument(&_call, 2, &krpc_encode_callback_int32, &y));
+  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
+  KRPC_CHECK(krpc_init_result(&_result));
+  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
+  if (returnValue) {
+    pb_istream_t _stream;
+    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+    KRPC_CHECK(krpc_decode_double(&_stream, returnValue));
+  }
+  KRPC_CHECK(krpc_free_result(&_result));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_Names_WithDefaults_call(krpc_schema_ProcedureCall * procedureCall, krpc_TestService_Names_t instance, double x, int32_t y) {
+  KRPC_CHECK(krpc_procedure_call(procedureCall, 857051661, 1018927614, 3));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_uint64, &instance));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 1, &krpc_encode_callback_double, &x));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 2, &krpc_encode_callback_int32, &y));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_Names_WithDefaults_call_template(krpc_schema_ProcedureCall * procedureCall) {
+  return krpc_procedure_call(procedureCall, 857051661, 1018927614, 0);
+}
+
+static inline krpc_error_t krpc_TestService_Names_Property(krpc_connection_t connection, int32_t * returnValue, krpc_TestService_Names_t instance) {
+  krpc_call_t _call;
+  krpc_argument_t _arguments[1];
+  KRPC_CHECK(krpc_call(&_call, 857051661, 2534237108, 1, _arguments));
+  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_uint64, &instance));
+  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
+  KRPC_CHECK(krpc_init_result(&_result));
+  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
+  if (returnValue) {
+    pb_istream_t _stream;
+    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+    KRPC_CHECK(krpc_decode_int32(&_stream, returnValue));
+  }
+  KRPC_CHECK(krpc_free_result(&_result));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_Names_Property_call(krpc_schema_ProcedureCall * procedureCall, krpc_TestService_Names_t instance) {
+  KRPC_CHECK(krpc_procedure_call(procedureCall, 857051661, 2534237108, 1));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_uint64, &instance));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_Names_Property_call_template(krpc_schema_ProcedureCall * procedureCall) {
+  return krpc_procedure_call(procedureCall, 857051661, 2534237108, 0);
+}
+
+static inline krpc_error_t krpc_TestService_Names_set_Property(krpc_connection_t connection, krpc_TestService_Names_t instance, int32_t value) {
+  krpc_call_t _call;
+  krpc_argument_t _arguments[2];
+  KRPC_CHECK(krpc_call(&_call, 857051661, 2372384690, 2, _arguments));
+  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_uint64, &instance));
+  KRPC_CHECK(krpc_add_argument(&_call, 1, &krpc_encode_callback_int32, &value));
+  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
+  KRPC_CHECK(krpc_init_result(&_result));
+  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
+  KRPC_CHECK(krpc_free_result(&_result));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_Names_set_Property_call(krpc_schema_ProcedureCall * procedureCall, krpc_TestService_Names_t instance, int32_t value) {
+  KRPC_CHECK(krpc_procedure_call(procedureCall, 857051661, 2372384690, 2));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_uint64, &instance));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 1, &krpc_encode_callback_int32, &value));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_Names_set_Property_call_template(krpc_schema_ProcedureCall * procedureCall) {
+  return krpc_procedure_call(procedureCall, 857051661, 2372384690, 0);
+}
+
+static inline krpc_error_t krpc_TestService_Names_Value(krpc_connection_t connection, int32_t * returnValue, krpc_TestService_Names_t instance) {
+  krpc_call_t _call;
+  krpc_argument_t _arguments[1];
+  KRPC_CHECK(krpc_call(&_call, 857051661, 3328184427, 1, _arguments));
+  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_uint64, &instance));
+  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
+  KRPC_CHECK(krpc_init_result(&_result));
+  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
+  if (returnValue) {
+    pb_istream_t _stream;
+    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+    KRPC_CHECK(krpc_decode_int32(&_stream, returnValue));
+  }
+  KRPC_CHECK(krpc_free_result(&_result));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_Names_Value_call(krpc_schema_ProcedureCall * procedureCall, krpc_TestService_Names_t instance) {
+  KRPC_CHECK(krpc_procedure_call(procedureCall, 857051661, 3328184427, 1));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_uint64, &instance));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_Names_Value_call_template(krpc_schema_ProcedureCall * procedureCall) {
+  return krpc_procedure_call(procedureCall, 857051661, 3328184427, 0);
+}
+
+static inline krpc_error_t krpc_TestService_Names_set_Value(krpc_connection_t connection, krpc_TestService_Names_t instance, int32_t value) {
+  krpc_call_t _call;
+  krpc_argument_t _arguments[2];
+  KRPC_CHECK(krpc_call(&_call, 857051661, 2983680919, 2, _arguments));
+  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_uint64, &instance));
+  KRPC_CHECK(krpc_add_argument(&_call, 1, &krpc_encode_callback_int32, &value));
+  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
+  KRPC_CHECK(krpc_init_result(&_result));
+  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
+  KRPC_CHECK(krpc_free_result(&_result));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_Names_set_Value_call(krpc_schema_ProcedureCall * procedureCall, krpc_TestService_Names_t instance, int32_t value) {
+  KRPC_CHECK(krpc_procedure_call(procedureCall, 857051661, 2983680919, 2));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_uint64, &instance));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 1, &krpc_encode_callback_int32, &value));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_Names_set_Value_call_template(krpc_schema_ProcedureCall * procedureCall) {
+  return krpc_procedure_call(procedureCall, 857051661, 2983680919, 0);
+}
+
+static inline krpc_error_t krpc_TestService_Names_Parameters(krpc_connection_t connection, int32_t * returnValue, int32_t client, int32_t connection_, int32_t instance_, int32_t returnValue_, int32_t returnValueIsNull_, int32_t NULL_, int32_t krpc, int32_t java, int32_t com, int32_t org, int32_t nameof, int32_t self, int32_t cls, int32_t invoke) {
+  krpc_call_t _call;
+  krpc_argument_t _arguments[14];
+  KRPC_CHECK(krpc_call(&_call, 857051661, 2628292344, 14, _arguments));
+  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_int32, &client));
+  KRPC_CHECK(krpc_add_argument(&_call, 1, &krpc_encode_callback_int32, &connection_));
+  KRPC_CHECK(krpc_add_argument(&_call, 2, &krpc_encode_callback_int32, &instance_));
+  KRPC_CHECK(krpc_add_argument(&_call, 3, &krpc_encode_callback_int32, &returnValue_));
+  KRPC_CHECK(krpc_add_argument(&_call, 4, &krpc_encode_callback_int32, &returnValueIsNull_));
+  KRPC_CHECK(krpc_add_argument(&_call, 5, &krpc_encode_callback_int32, &NULL_));
+  KRPC_CHECK(krpc_add_argument(&_call, 6, &krpc_encode_callback_int32, &krpc));
+  KRPC_CHECK(krpc_add_argument(&_call, 7, &krpc_encode_callback_int32, &java));
+  KRPC_CHECK(krpc_add_argument(&_call, 8, &krpc_encode_callback_int32, &com));
+  KRPC_CHECK(krpc_add_argument(&_call, 9, &krpc_encode_callback_int32, &org));
+  KRPC_CHECK(krpc_add_argument(&_call, 10, &krpc_encode_callback_int32, &nameof));
+  KRPC_CHECK(krpc_add_argument(&_call, 11, &krpc_encode_callback_int32, &self));
+  KRPC_CHECK(krpc_add_argument(&_call, 12, &krpc_encode_callback_int32, &cls));
+  KRPC_CHECK(krpc_add_argument(&_call, 13, &krpc_encode_callback_int32, &invoke));
+  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
+  KRPC_CHECK(krpc_init_result(&_result));
+  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
+  if (returnValue) {
+    pb_istream_t _stream;
+    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+    KRPC_CHECK(krpc_decode_int32(&_stream, returnValue));
+  }
+  KRPC_CHECK(krpc_free_result(&_result));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_Names_Parameters_call(krpc_schema_ProcedureCall * procedureCall, int32_t client, int32_t connection_, int32_t instance_, int32_t returnValue_, int32_t returnValueIsNull_, int32_t NULL_, int32_t krpc, int32_t java, int32_t com, int32_t org, int32_t nameof, int32_t self, int32_t cls, int32_t invoke) {
+  KRPC_CHECK(krpc_procedure_call(procedureCall, 857051661, 2628292344, 14));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_int32, &client));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 1, &krpc_encode_callback_int32, &connection_));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 2, &krpc_encode_callback_int32, &instance_));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 3, &krpc_encode_callback_int32, &returnValue_));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 4, &krpc_encode_callback_int32, &returnValueIsNull_));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 5, &krpc_encode_callback_int32, &NULL_));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 6, &krpc_encode_callback_int32, &krpc));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 7, &krpc_encode_callback_int32, &java));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 8, &krpc_encode_callback_int32, &com));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 9, &krpc_encode_callback_int32, &org));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 10, &krpc_encode_callback_int32, &nameof));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 11, &krpc_encode_callback_int32, &self));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 12, &krpc_encode_callback_int32, &cls));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 13, &krpc_encode_callback_int32, &invoke));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_Names_Parameters_call_template(krpc_schema_ProcedureCall * procedureCall) {
+  return krpc_procedure_call(procedureCall, 857051661, 2628292344, 0);
+}
+
+static inline krpc_error_t krpc_TestService_Names_Uint64T(krpc_connection_t connection, int32_t * returnValue) {
+  krpc_call_t _call;
+  KRPC_CHECK(krpc_call(&_call, 857051661, 1533709509, 0, NULL));
+  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
+  KRPC_CHECK(krpc_init_result(&_result));
+  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
+  if (returnValue) {
+    pb_istream_t _stream;
+    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+    KRPC_CHECK(krpc_decode_int32(&_stream, returnValue));
+  }
+  KRPC_CHECK(krpc_free_result(&_result));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_Names_Uint64T_call(krpc_schema_ProcedureCall * procedureCall) {
+  KRPC_CHECK(krpc_procedure_call(procedureCall, 857051661, 1533709509, 0));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_Names_Uint64T_call_template(krpc_schema_ProcedureCall * procedureCall) {
+  return krpc_procedure_call(procedureCall, 857051661, 1533709509, 0);
 }
 
 static inline krpc_error_t krpc_TestService_Object_Name(krpc_connection_t connection, char * * returnValue, krpc_TestService_Object_t instance) {

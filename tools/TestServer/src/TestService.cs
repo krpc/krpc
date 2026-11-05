@@ -1429,6 +1429,15 @@ namespace TestServer
         }
 
         /// <summary>
+        /// A procedure named Service, as the C# client names the class of a service.
+        /// </summary>
+        [KRPCProcedure]
+        public static int Service ()
+        {
+            return 0;
+        }
+
+        /// <summary>
         /// A new object of the class named Object.
         /// </summary>
         /// <param name="name">The name of the object.</param>

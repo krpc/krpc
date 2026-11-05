@@ -643,6 +643,12 @@
       :param int x:
    
 
+   .. method:: int service()
+
+      A procedure named Service, as the C# client names the class of a service.
+
+   
+
    .. method:: java.util.Set<Integer> setDefault(java.util.Set<Integer> x)
 
 
@@ -861,6 +867,30 @@
 
 
 
+.. type:: public class ByteString
+
+   A class named ByteString.
+
+
+
+.. type:: public class ClassBase
+
+   A class named ClassBase.
+
+
+
+.. type:: public class Client
+
+   A class named Client.
+
+
+
+.. type:: public class Connection
+
+   A class named Connection.
+
+
+
 .. type:: public class DeprecatedClass
 
    .. warning:: Deprecated. Use :type:`TestClass` instead.
@@ -897,6 +927,162 @@
 
 
 
+.. type:: public class DocEnum
+
+   A class named DocEnum.
+
+
+
+.. type:: public class Encoder
+
+   A class named Encoder.
+
+
+
+.. type:: public class Event
+
+   A class named Event.
+
+
+
+.. type:: public class Exception
+
+   A class named Exception.
+
+
+
+.. type:: public class IConnection
+
+   A class named IConnection.
+
+
+
+.. type:: public class IEquatable
+
+   A class named IEquatable.
+
+
+
+.. type:: public class List
+
+   A class named List.
+
+
+
+.. type:: public class NamedTuple
+
+   A class named NamedTuple.
+
+
+
+.. type:: public class Names
+
+   A class whose members are named after names in the generated code.
+
+   .. method:: int classOf()
+
+      A method named after a method of a Penlight class.
+
+   
+
+   .. method:: int float_()
+
+      A method named after a Python builtin.
+
+   
+
+   .. method:: int hashCode_()
+
+      A method named after a method of java.lang.Object.
+
+   
+
+   .. method:: int instanceParameters(int client, int connection, int instance, int returnValue, int returnValueIsNull, int NULL, int krpc, int java, int com, int org, int nameof, int self, int cls, int invoke)
+
+      A method with parameters named after names in the generated code.
+
+      :param int client:
+      :param int connection:
+      :param int instance:
+      :param int returnValue:
+      :param int returnValueIsNull:
+      :param int NULL:
+      :param int krpc:
+      :param int java:
+      :param int com:
+      :param int org:
+      :param int nameof:
+      :param int self:
+      :param int cls:
+      :param int invoke:
+   
+
+   .. method:: int krpc_()
+
+      A method named after the Python client package.
+
+   
+
+   .. method:: static int parameters(Connection connection, int client, int connection, int instance, int returnValue, int returnValueIsNull, int NULL, int krpc, int java, int com, int org, int nameof, int self, int cls, int invoke)
+
+      A static method with parameters named after names in the generated code.
+
+      :param int client:
+      :param int connection:
+      :param int instance:
+      :param int returnValue:
+      :param int returnValueIsNull:
+      :param int NULL:
+      :param int krpc:
+      :param int java:
+      :param int com:
+      :param int org:
+      :param int nameof:
+      :param int self:
+      :param int cls:
+      :param int invoke:
+   
+
+   .. method:: int getProperty()
+
+   .. method:: void setProperty(int value)
+
+      A property named after a Python builtin.
+
+   
+
+   .. method:: String toString_(int value)
+
+      A method named after a method of java.lang.Object.
+
+      :param int value:
+   
+
+   .. method:: static int uint64T(Connection connection)
+
+      A method named after a C++ integer type.
+
+   
+
+   .. method:: int getValue()
+
+   .. method:: void setValue(int value)
+
+      A property declared after the property named Property.
+
+   
+
+   .. method:: double withDefaults(double x, int y)
+
+      A method declared after methods named after Python builtins, with defaults that
+      name them.
+
+      :param double x:
+      :param int y:
+   
+
+
+
 .. type:: public class Object
 
    A class named Object.
@@ -907,6 +1093,48 @@
       The name of the object.
 
    
+
+
+
+.. type:: public class Optional
+
+   A class named Optional.
+
+
+
+.. type:: public class Override
+
+   A class named Override.
+
+
+
+.. type:: public class RPCException
+
+   A class named RPCException.
+
+
+
+.. type:: public class RemoteObject
+
+   A class named RemoteObject.
+
+
+
+.. type:: public class Serializable
+
+   A class named Serializable.
+
+
+
+.. type:: public class Stream
+
+   A class named Stream.
+
+
+
+.. type:: public class String
+
+   A class named String.
 
 
 
@@ -1006,6 +1234,24 @@
 
 
    
+
+
+
+.. type:: public class Tuple
+
+   A class named Tuple.
+
+
+
+.. type:: public class TypeSpecs
+
+   A class named TypeSpecs.
+
+
+
+.. type:: public class UInt64
+
+   A class named UInt64.
 
 
 
@@ -1122,6 +1368,36 @@
       .. warning:: Deprecated. Use :meth:`DeprecatedStruct.getValue()` instead.
 
       Deprecated struct OldValue documentation string.
+
+
+.. type:: public class NamesStruct
+
+   A structure whose fields are named after names in the generated code.
+
+   .. constructor:: public NamesStruct(int other, int result, int java, int krpc, int class)
+
+      Construct a NamesStruct from the values of its fields.
+
+
+   .. method:: int getOther()
+
+      A value.
+
+   .. method:: int getResult()
+
+      A value.
+
+   .. method:: int getJava()
+
+      A value.
+
+   .. method:: int getKrpc()
+
+      A value.
+
+   .. method:: int getClass_()
+
+      A value.
 
 
 .. type:: public class PartlyDeprecatedStruct
@@ -1267,5 +1543,13 @@
    .. warning:: Deprecated. Use :type:`CustomException` instead.
 
    Deprecated exception documentation string.
+
+   A subclass of :type:`krpc.client.ServerException`.
+
+
+
+.. type:: public class RuntimeError
+
+   An exception named RuntimeError.
 
    A subclass of :type:`krpc.client.ServerException`.

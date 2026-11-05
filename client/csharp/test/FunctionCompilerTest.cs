@@ -8,6 +8,8 @@ using NUnit.Framework;
 
 using Expr = KRPC.Client.Services.KRPC.Expression;
 using KType = KRPC.Client.Services.KRPC.Type;
+// TestService has a class named Tuple
+using Tuple = System.Tuple;
 
 namespace KRPC.Client.Test
 {

@@ -879,6 +879,13 @@
 
    
 
+   .. function:: int32_t service()
+
+      A procedure named Service, as the C# client names the class of a service.
+
+
+   
+
    .. function:: std::set<int32_t> set_default(std::set<int32_t> x = std::set<int32_t>{1, 2, 3})
 
 
@@ -1166,6 +1173,30 @@
 
 
 
+.. class:: ByteString
+
+   A class named ByteString.
+
+
+
+.. class:: ClassBase
+
+   A class named ClassBase.
+
+
+
+.. class:: Client
+
+   A class named Client.
+
+
+
+.. class:: Connection
+
+   A class named Connection.
+
+
+
 .. class:: DeprecatedClass
 
    .. warning:: Deprecated. Use :class:`TestClass` instead.
@@ -1204,6 +1235,177 @@
 
 
 
+.. class:: DocEnum
+
+   A class named DocEnum.
+
+
+
+.. class:: Encoder
+
+   A class named Encoder.
+
+
+
+.. class:: Event
+
+   A class named Event.
+
+
+
+.. class:: Exception
+
+   A class named Exception.
+
+
+
+.. class:: IConnection
+
+   A class named IConnection.
+
+
+
+.. class:: IEquatable
+
+   A class named IEquatable.
+
+
+
+.. class:: List
+
+   A class named List.
+
+
+
+.. class:: NamedTuple
+
+   A class named NamedTuple.
+
+
+
+.. class:: Names
+
+   A class whose members are named after names in the generated code.
+
+   .. function:: int32_t class_of()
+
+      A method named after a method of a Penlight class.
+
+
+   
+
+   .. function:: int32_t float_()
+
+      A method named after a Python builtin.
+
+
+   
+
+   .. function:: int32_t hash_code()
+
+      A method named after a method of java.lang.Object.
+
+
+   
+
+   .. function:: int32_t instance_parameters(int32_t client, int32_t connection, int32_t instance, int32_t return_value, int32_t return_value_is_null, int32_t null, int32_t krpc, int32_t java, int32_t com, int32_t org, int32_t nameof, int32_t self, int32_t cls, int32_t invoke)
+
+      A method with parameters named after names in the generated code.
+
+      :Parameters:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   
+
+   .. function:: int32_t krpc()
+
+      A method named after the Python client package.
+
+
+   
+
+   .. function:: static int32_t parameters(krpc::Connection& connection, int32_t client, int32_t connection, int32_t instance, int32_t return_value, int32_t return_value_is_null, int32_t null, int32_t krpc, int32_t java, int32_t com, int32_t org, int32_t nameof, int32_t self, int32_t cls, int32_t invoke)
+
+      A static method with parameters named after names in the generated code.
+
+      :Parameters:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   
+
+   .. function:: int32_t property()
+   .. function:: void set_property(int32_t value)
+
+      A property named after a Python builtin.
+
+   
+
+   .. function:: std::string to_string(int32_t value)
+
+      A method named after a method of java.lang.Object.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: static int32_t uint_64t(krpc::Connection& connection)
+
+      A method named after a C++ integer type.
+
+
+   
+
+   .. function:: int32_t value()
+   .. function:: void set_value(int32_t value)
+
+      A property declared after the property named Property.
+
+   
+
+   .. function:: double with_defaults(double x = std::numeric_limits<double>::quiet_NaN(), int32_t y = (std::numeric_limits<int32_t>::max)())
+
+      A method declared after methods named after Python builtins, with defaults that
+      name them.
+
+      :Parameters:
+
+
+
+
+   
+
+
+
 .. class:: Object
 
    A class named Object.
@@ -1213,6 +1415,48 @@
       The name of the object.
 
    
+
+
+
+.. class:: Optional
+
+   A class named Optional.
+
+
+
+.. class:: Override
+
+   A class named Override.
+
+
+
+.. class:: RPCException
+
+   A class named RPCException.
+
+
+
+.. class:: RemoteObject
+
+   A class named RemoteObject.
+
+
+
+.. class:: Serializable
+
+   A class named Serializable.
+
+
+
+.. class:: Stream
+
+   A class named Stream.
+
+
+
+.. class:: String
+
+   A class named String.
 
 
 
@@ -1334,6 +1578,24 @@
 
 
 
+.. class:: Tuple
+
+   A class named Tuple.
+
+
+
+.. class:: TypeSpecs
+
+   A class named TypeSpecs.
+
+
+
+.. class:: UInt64
+
+   A class named UInt64.
+
+
+
 .. namespace:: krpc::services::TestService
 .. enum-struct:: DeprecatedEnum
 
@@ -1448,6 +1710,33 @@
       .. warning:: Deprecated. Use :member:`DeprecatedStruct::value` instead.
 
       Deprecated struct OldValue documentation string.
+
+
+.. namespace:: krpc::services::TestService
+.. struct:: NamesStruct
+
+   A structure whose fields are named after names in the generated code.
+
+
+   .. member:: int32_t other
+
+      A value.
+
+   .. member:: int32_t result
+
+      A value.
+
+   .. member:: int32_t java
+
+      A value.
+
+   .. member:: int32_t krpc
+
+      A value.
+
+   .. member:: int32_t class
+
+      A value.
 
 
 .. namespace:: krpc::services::TestService
@@ -1577,5 +1866,14 @@
    .. warning:: Deprecated. Use :class:`CustomException` instead.
 
    Deprecated exception documentation string.
+
+   A subclass of :class:`krpc::ServerError`.
+
+
+
+.. namespace:: krpc::services::TestService
+.. class:: RuntimeError
+
+   An exception named RuntimeError.
 
    A subclass of :class:`krpc::ServerError`.
