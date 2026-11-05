@@ -14,8 +14,7 @@ int main() {
   auto mean_altitude = flight.mean_altitude_call();
   // [docs]
   // Truncate the altitude to a whole number of meters
-  auto expr = Expr::cast(conn,
-    Expr::call(conn, mean_altitude),
-    KType::int_(conn));
+  auto expr =
+      Expr::cast(conn, Expr::call(conn, mean_altitude), KType::int_(conn));
   // [/docs]
 }

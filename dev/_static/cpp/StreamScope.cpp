@@ -9,8 +9,7 @@ int main() {
   auto flight_info = vessel.flight();
   {
     auto altitude = flight_info.mean_altitude_stream();
-    for (int i = 0; i < 10; i++)
-      std::cout << altitude() << std::endl;
+    for (int i = 0; i < 10; i++) std::cout << altitude() << std::endl;
   }
   // The stream was removed at the end of the block
 }

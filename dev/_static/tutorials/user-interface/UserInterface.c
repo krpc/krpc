@@ -13,10 +13,8 @@
 
 int main() {
   krpc_connection_t conn;
-  if (krpc_open_serial(&conn, "COM0") != KRPC_OK)
-    return 1;
-  if (krpc_connect(conn, "User Interface Example") != KRPC_OK)
-    return 1;
+  if (krpc_open_serial(&conn, "COM0") != KRPC_OK) return 1;
+  if (krpc_connect(conn, "User Interface Example") != KRPC_OK) return 1;
 
   krpc_UI_Canvas_t canvas;
   krpc_UI_StockCanvas(conn, &canvas);

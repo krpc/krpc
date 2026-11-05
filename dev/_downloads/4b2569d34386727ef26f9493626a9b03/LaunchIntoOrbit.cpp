@@ -1,11 +1,11 @@
-#include <iostream>
 #include <chrono>
 #include <cmath>
-#include <thread>
+#include <iostream>
 #include <krpc.hpp>
 #include <krpc/function_stream.hpp>
 #include <krpc/services/krpc.hpp>
 #include <krpc/services/space_center.hpp>
+#include <thread>
 
 int main() {
   krpc::Client conn = krpc::connect("Launch into orbit");
@@ -48,8 +48,8 @@ int main() {
   while (true) {
     // Gravity turn
     if (altitude() > turn_start_altitude && altitude() < turn_end_altitude) {
-      double frac = (altitude() - turn_start_altitude)
-                    / (turn_end_altitude - turn_start_altitude);
+      double frac = (altitude() - turn_start_altitude) /
+                    (turn_end_altitude - turn_start_altitude);
       double new_turn_angle = frac * 90.0;
       if (std::abs(new_turn_angle - turn_angle) > 0.5) {
         turn_angle = new_turn_angle;
@@ -78,8 +78,8 @@ int main() {
   typedef krpc::services::KRPC::Expression Expr;
   {
     auto expr = Expr::greater_than_or_equal(
-      conn, Expr::call(conn, vessel.orbit().apoapsis_altitude_call()),
-      Expr::constant_double(conn, target_altitude));
+        conn, Expr::call(conn, vessel.orbit().apoapsis_altitude_call()),
+        Expr::constant_double(conn, target_altitude));
     auto event = krpc::add_event(expr);
     event.acquire();
     event.wait();
@@ -92,8 +92,8 @@ int main() {
   std::cout << "Coasting out of atmosphere" << std::endl;
   {
     auto expr = Expr::greater_than_or_equal(
-      conn, Expr::call(conn, vessel.flight().mean_altitude_call()),
-      Expr::constant_double(conn, 70500));
+        conn, Expr::call(conn, vessel.flight().mean_altitude_call()),
+        Expr::constant_double(conn, 70500));
     auto event = krpc::add_event(expr);
     event.acquire();
     event.wait();
@@ -110,7 +110,7 @@ int main() {
   double v2 = std::sqrt(mu * ((2.0 / r) - (1.0 / a2)));
   double delta_v = v2 - v1;
   auto node = vessel.control().add_node(
-    ut() + vessel.orbit().time_to_apoapsis(), delta_v);
+      ut() + vessel.orbit().time_to_apoapsis(), delta_v);
 
   // Calculate burn time (using rocket equation)
   double F = vessel.available_thrust();
@@ -136,8 +136,8 @@ int main() {
   std::cout << "Ready to execute burn" << std::endl;
   {
     auto expr = Expr::less_than_or_equal(
-      conn, Expr::call(conn, vessel.orbit().time_to_apoapsis_call()),
-      Expr::constant_double(conn, burn_time / 2.0));
+        conn, Expr::call(conn, vessel.orbit().time_to_apoapsis_call()),
+        Expr::constant_double(conn, burn_time / 2.0));
     auto event = krpc::add_event(expr);
     event.acquire();
     event.wait();
@@ -146,15 +146,15 @@ int main() {
   std::cout << "Executing burn" << std::endl;
   vessel.control().set_throttle(1);
   std::this_thread::sleep_for(
-    std::chrono::milliseconds(static_cast<int>((burn_time - 0.1) * 1000)));
+      std::chrono::milliseconds(static_cast<int>((burn_time - 0.1) * 1000)));
   std::cout << "Fine tuning" << std::endl;
   vessel.control().set_throttle(0.05);
   {
     auto remaining_burn = Expr::call(
-      conn, node.remaining_burn_vector_call(node.reference_frame()));
+        conn, node.remaining_burn_vector_call(node.reference_frame()));
     auto expr = Expr::less_than_or_equal(
-      conn, Expr::get(conn, remaining_burn, Expr::constant_int(conn, 1)),
-      Expr::constant_double(conn, 0));
+        conn, Expr::get(conn, remaining_burn, Expr::constant_int(conn, 1)),
+        Expr::constant_double(conn, 0));
     auto event = krpc::add_event(expr);
     event.acquire();
     event.wait();

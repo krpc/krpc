@@ -1,10 +1,10 @@
 #include <iostream>
-#include <map>
-#include <vector>
 #include <krpc.hpp>
 #include <krpc/function_stream.hpp>
 #include <krpc/services/krpc.hpp>
 #include <krpc/services/space_center.hpp>
+#include <map>
+#include <vector>
 
 int main() {
   auto conn = krpc::connect();
@@ -15,13 +15,14 @@ int main() {
   typedef krpc::services::KRPC::Type KType;
 
   // A function taking an engine, returning true if it is out of fuel
-  auto engine = Expr::parameter(conn, "engine",
-    KType::class_type(conn, "SpaceCenter", "Engine"));
+  auto engine = Expr::parameter(
+      conn, "engine", KType::class_type(conn, "SpaceCenter", "Engine"));
   auto has_fuel = vessel.parts().engines()[0].has_fuel_call();
-  auto out_of_fuel = Expr::lambda(conn,
-    std::vector<Expr>({engine}),
-    Expr::not_(conn, Expr::call_with_arguments(
-      conn, has_fuel, std::map<int32_t, Expr>({{0, engine}}))));
+  auto out_of_fuel = Expr::lambda(
+      conn, std::vector<Expr>({engine}),
+      Expr::not_(conn,
+                 Expr::call_with_arguments(
+                     conn, has_fuel, std::map<int32_t, Expr>({{0, engine}}))));
 
   // Whether any engine satisfies it
   auto engines = vessel.parts().engines_call();

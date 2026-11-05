@@ -1,14 +1,12 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include <krpc_cnano.h>
 #include <krpc_cnano/services/space_center.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 int main() {
   krpc_connection_t conn;
-  if (krpc_open_serial(&conn, "COM0") != KRPC_OK)
-    return 1;
-  if (krpc_connect(conn, "Launch") != KRPC_OK)
-    return 1;
+  if (krpc_open_serial(&conn, "COM0") != KRPC_OK) return 1;
+  if (krpc_connect(conn, "Launch") != KRPC_OK) return 1;
 
   krpc_SpaceCenter_Vessel_t vessel;
   krpc_SpaceCenter_ActiveVessel(conn, &vessel);
@@ -18,7 +16,7 @@ int main() {
   krpc_SpaceCenter_Vessel_Control(conn, &control, vessel);
   krpc_SpaceCenter_Flight_t flight;
   krpc_SpaceCenter_Vessel_Flight(conn, &flight, vessel, KRPC_NULL);
-  char * name = NULL;
+  char* name = NULL;
   krpc_SpaceCenter_Vessel_Name(conn, &name, vessel);
 
   krpc_SpaceCenter_AutoPilot_TargetPitchAndHeading(conn, auto_pilot, 90, 90);

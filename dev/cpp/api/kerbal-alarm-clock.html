@@ -1115,8 +1115,8 @@ following classes:</p>
 set to trigger after 10 seconds have passed, and display a message.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc.hpp&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc/services/space_center.hpp&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc/services/kerbal_alarm_clock.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc/services/space_center.hpp&gt;</span>
 
 <span class="k">using</span><span class="w"> </span><span class="n">KerbalAlarmClock</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="o">::</span><span class="n">services</span><span class="o">::</span><span class="n">KerbalAlarmClock</span><span class="p">;</span>
 
@@ -1126,8 +1126,7 @@ set to trigger after 10 seconds have passed, and display a message.</p>
 <span class="w">  </span><span class="n">KerbalAlarmClock</span><span class="w"> </span><span class="n">kac</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">);</span>
 
 <span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">alarm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">kac</span><span class="p">.</span><span class="n">create_alarm</span><span class="p">(</span><span class="n">KerbalAlarmClock</span><span class="o">::</span><span class="n">AlarmType</span><span class="o">::</span><span class="n">raw</span><span class="p">,</span>
-<span class="w">                                </span><span class="s">"My New Alarm"</span><span class="p">,</span>
-<span class="w">                                </span><span class="n">sc</span><span class="p">.</span><span class="n">ut</span><span class="p">()</span><span class="o">+</span><span class="mi">10</span><span class="p">);</span>
+<span class="w">                                </span><span class="s">"My New Alarm"</span><span class="p">,</span><span class="w"> </span><span class="n">sc</span><span class="p">.</span><span class="n">ut</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">10</span><span class="p">);</span>
 
 <span class="w">  </span><span class="n">alarm</span><span class="p">.</span><span class="n">set_notes</span><span class="p">(</span><span class="s">"10 seconds have now passed since the alarm was created."</span><span class="p">);</span>
 <span class="w">  </span><span class="n">alarm</span><span class="p">.</span><span class="n">set_action</span><span class="p">(</span><span class="n">KerbalAlarmClock</span><span class="o">::</span><span class="n">AlarmAction</span><span class="o">::</span><span class="n">message_only</span><span class="p">);</span>

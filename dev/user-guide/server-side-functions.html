@@ -1077,12 +1077,12 @@ running, catch the exception in the function:</p>
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-14-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-14-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &lt;iostream&gt;</span>
-<span class="c1">#include &lt;optional&gt;</span>
-<span class="c1">#include &lt;vector&gt;</span>
 <span class="c1">#include &lt;krpc.hpp&gt;</span>
 <span class="c1">#include &lt;krpc/function_stream.hpp&gt;</span>
 <span class="c1">#include &lt;krpc/services/krpc.hpp&gt;</span>
 <span class="c1">#include &lt;krpc/services/space_center.hpp&gt;</span>
+<span class="c1">#include &lt;optional&gt;</span>
+<span class="c1">#include &lt;vector&gt;</span>
 
 <span class="nb">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
   <span class="n">auto</span> <span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="p">::</span><span class="n">connect</span><span class="p">();</span>
@@ -1095,17 +1095,18 @@ running, catch the exception in the function:</p>
   <span class="o">//</span> <span class="n">above</span> <span class="o">=</span> <span class="n">mean_altitude</span> <span class="o">&gt;</span> <span class="mi">1000</span><span class="p">,</span> <span class="ow">or</span> <span class="n">false</span> <span class="k">if</span> <span class="n">the</span> <span class="n">vessel</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">loaded</span>
   <span class="n">auto</span> <span class="n">above</span> <span class="o">=</span> <span class="n">Expr</span><span class="p">::</span><span class="n">variable</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="s2">"above"</span><span class="p">,</span> <span class="n">KType</span><span class="p">::</span><span class="n">bool_</span><span class="p">(</span><span class="n">conn</span><span class="p">));</span>
   <span class="n">auto</span> <span class="n">above_1000m</span> <span class="o">=</span> <span class="n">Expr</span><span class="p">::</span><span class="n">block_with_variables</span><span class="p">(</span>
-    <span class="n">conn</span><span class="p">,</span>
-    <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Expr</span><span class="o">&gt;</span><span class="p">({</span><span class="n">above</span><span class="p">}),</span>
-    <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Expr</span><span class="o">&gt;</span><span class="p">({</span>
-      <span class="n">Expr</span><span class="p">::</span><span class="n">try_catch</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span>
-        <span class="n">Expr</span><span class="p">::</span><span class="n">assign</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">above</span><span class="p">,</span>
-          <span class="n">Expr</span><span class="p">::</span><span class="n">greater_than</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span>
-            <span class="n">Expr</span><span class="p">::</span><span class="n">call</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">flight</span><span class="o">.</span><span class="n">mean_altitude_call</span><span class="p">()),</span>
-            <span class="n">Expr</span><span class="p">::</span><span class="n">constant_double</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="mi">1000</span><span class="p">))),</span>
-        <span class="s2">"KRPC"</span><span class="p">,</span> <span class="s2">"ObjectNotLoadedException"</span><span class="p">,</span> <span class="n">std</span><span class="p">::</span><span class="n">nullopt</span><span class="p">,</span>
-        <span class="n">Expr</span><span class="p">::</span><span class="n">assign</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">above</span><span class="p">,</span> <span class="n">Expr</span><span class="p">::</span><span class="n">constant_bool</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">false</span><span class="p">))),</span>
-      <span class="n">above</span><span class="p">}));</span>
+      <span class="n">conn</span><span class="p">,</span> <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Expr</span><span class="o">&gt;</span><span class="p">({</span><span class="n">above</span><span class="p">}),</span>
+      <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Expr</span><span class="o">&gt;</span><span class="p">(</span>
+          <span class="p">{</span><span class="n">Expr</span><span class="p">::</span><span class="n">try_catch</span><span class="p">(</span>
+               <span class="n">conn</span><span class="p">,</span>
+               <span class="n">Expr</span><span class="p">::</span><span class="n">assign</span><span class="p">(</span>
+                   <span class="n">conn</span><span class="p">,</span> <span class="n">above</span><span class="p">,</span>
+                   <span class="n">Expr</span><span class="p">::</span><span class="n">greater_than</span><span class="p">(</span>
+                       <span class="n">conn</span><span class="p">,</span> <span class="n">Expr</span><span class="p">::</span><span class="n">call</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">flight</span><span class="o">.</span><span class="n">mean_altitude_call</span><span class="p">()),</span>
+                       <span class="n">Expr</span><span class="p">::</span><span class="n">constant_double</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="mi">1000</span><span class="p">))),</span>
+               <span class="s2">"KRPC"</span><span class="p">,</span> <span class="s2">"ObjectNotLoadedException"</span><span class="p">,</span> <span class="n">std</span><span class="p">::</span><span class="n">nullopt</span><span class="p">,</span>
+               <span class="n">Expr</span><span class="p">::</span><span class="n">assign</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">above</span><span class="p">,</span> <span class="n">Expr</span><span class="p">::</span><span class="n">constant_bool</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">false</span><span class="p">))),</span>
+           <span class="n">above</span><span class="p">}));</span>
 
   <span class="n">auto</span> <span class="n">event</span> <span class="o">=</span> <span class="n">krpc</span><span class="p">::</span><span class="n">add_event</span><span class="p">(</span><span class="n">above_1000m</span><span class="p">);</span>
   <span class="n">event</span><span class="o">.</span><span class="n">acquire</span><span class="p">();</span>
@@ -1334,9 +1335,8 @@ and a comparison:</p>
 
   <span class="o">//</span> <span class="n">Build</span> <span class="n">the</span> <span class="n">function</span> <span class="n">on</span> <span class="n">the</span> <span class="n">server</span>
   <span class="n">typedef</span> <span class="n">krpc</span><span class="p">::</span><span class="n">services</span><span class="p">::</span><span class="n">KRPC</span><span class="p">::</span><span class="n">Expression</span> <span class="n">Expr</span><span class="p">;</span>
-  <span class="n">auto</span> <span class="n">expr</span> <span class="o">=</span> <span class="n">Expr</span><span class="p">::</span><span class="n">greater_than</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span>
-    <span class="n">Expr</span><span class="p">::</span><span class="n">call</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">mean_altitude</span><span class="p">),</span>
-    <span class="n">Expr</span><span class="p">::</span><span class="n">constant_double</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="mi">1000</span><span class="p">));</span>
+  <span class="n">auto</span> <span class="n">expr</span> <span class="o">=</span> <span class="n">Expr</span><span class="p">::</span><span class="n">greater_than</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">Expr</span><span class="p">::</span><span class="n">call</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">mean_altitude</span><span class="p">),</span>
+                                 <span class="n">Expr</span><span class="p">::</span><span class="n">constant_double</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="mi">1000</span><span class="p">));</span>
 
   <span class="n">auto</span> <span class="n">event</span> <span class="o">=</span> <span class="n">krpc</span><span class="p">::</span><span class="n">add_event</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
   <span class="n">event</span><span class="o">.</span><span class="n">acquire</span><span class="p">();</span>
@@ -1411,9 +1411,8 @@ Building a function costs one RPC per node, paid once.</p>
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-18-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-18-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// Truncate the altitude to a whole number of meters</span>
-<span class="k">auto</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expr</span><span class="o">::</span><span class="n">cast</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span>
-<span class="w">  </span><span class="n">Expr</span><span class="o">::</span><span class="n">call</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">mean_altitude</span><span class="p">),</span>
-<span class="w">  </span><span class="n">KType</span><span class="o">::</span><span class="n">int_</span><span class="p">(</span><span class="n">conn</span><span class="p">));</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span>
+<span class="w">    </span><span class="n">Expr</span><span class="o">::</span><span class="n">cast</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">Expr</span><span class="o">::</span><span class="n">call</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">mean_altitude</span><span class="p">),</span><span class="w"> </span><span class="n">KType</span><span class="o">::</span><span class="n">int_</span><span class="p">(</span><span class="n">conn</span><span class="p">));</span>
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-18-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-18-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="c1">// Truncate the altitude to a whole number of meters</span>
@@ -1496,12 +1495,11 @@ streamed too, and runs for its effects, as in <a class="reference internal" href
 </div>
 </div><div aria-labelledby="tab-19-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-19-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &lt;chrono&gt;</span>
 <span class="c1">#include &lt;iostream&gt;</span>
-<span class="c1">#include &lt;thread&gt;</span>
-
 <span class="c1">#include &lt;krpc.hpp&gt;</span>
 <span class="c1">#include &lt;krpc/function_stream.hpp&gt;</span>
 <span class="c1">#include &lt;krpc/services/krpc.hpp&gt;</span>
 <span class="c1">#include &lt;krpc/services/space_center.hpp&gt;</span>
+<span class="c1">#include &lt;thread&gt;</span>
 
 <span class="nb">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
   <span class="n">auto</span> <span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="p">::</span><span class="n">connect</span><span class="p">();</span>
@@ -1511,9 +1509,8 @@ streamed too, and runs for its effects, as in <a class="reference internal" href
   <span class="o">//</span> <span class="n">Build</span> <span class="n">a</span> <span class="n">function</span> <span class="n">that</span> <span class="n">computes</span>
   <span class="o">//</span> <span class="n">the</span> <span class="n">vessel</span><span class="s1">'s altitude in kilometers</span>
   <span class="n">typedef</span> <span class="n">krpc</span><span class="p">::</span><span class="n">services</span><span class="p">::</span><span class="n">KRPC</span><span class="p">::</span><span class="n">Expression</span> <span class="n">Expr</span><span class="p">;</span>
-  <span class="n">auto</span> <span class="n">expr</span> <span class="o">=</span> <span class="n">Expr</span><span class="p">::</span><span class="n">divide</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span>
-    <span class="n">Expr</span><span class="p">::</span><span class="n">call</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">flight</span><span class="o">.</span><span class="n">mean_altitude_call</span><span class="p">()),</span>
-    <span class="n">Expr</span><span class="p">::</span><span class="n">constant_double</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="mi">1000</span><span class="p">));</span>
+  <span class="n">auto</span> <span class="n">expr</span> <span class="o">=</span> <span class="n">Expr</span><span class="p">::</span><span class="n">divide</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">Expr</span><span class="p">::</span><span class="n">call</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">flight</span><span class="o">.</span><span class="n">mean_altitude_call</span><span class="p">()),</span>
+                           <span class="n">Expr</span><span class="p">::</span><span class="n">constant_double</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="mi">1000</span><span class="p">));</span>
 
   <span class="o">//</span> <span class="n">Stream</span> <span class="n">the</span> <span class="n">value</span> <span class="n">of</span> <span class="n">the</span> <span class="n">function</span>
   <span class="n">auto</span> <span class="n">stream</span> <span class="o">=</span> <span class="n">krpc</span><span class="p">::</span><span class="n">add_stream</span><span class="o">&lt;</span><span class="n">double</span><span class="o">&gt;</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
@@ -1630,12 +1627,12 @@ the procedure, so any engine can supply it:</p>
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-20-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-20-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &lt;iostream&gt;</span>
-<span class="c1">#include &lt;map&gt;</span>
-<span class="c1">#include &lt;vector&gt;</span>
 <span class="c1">#include &lt;krpc.hpp&gt;</span>
 <span class="c1">#include &lt;krpc/function_stream.hpp&gt;</span>
 <span class="c1">#include &lt;krpc/services/krpc.hpp&gt;</span>
 <span class="c1">#include &lt;krpc/services/space_center.hpp&gt;</span>
+<span class="c1">#include &lt;map&gt;</span>
+<span class="c1">#include &lt;vector&gt;</span>
 
 <span class="nb">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
   <span class="n">auto</span> <span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="p">::</span><span class="n">connect</span><span class="p">();</span>
@@ -1646,13 +1643,14 @@ the procedure, so any engine can supply it:</p>
   <span class="n">typedef</span> <span class="n">krpc</span><span class="p">::</span><span class="n">services</span><span class="p">::</span><span class="n">KRPC</span><span class="p">::</span><span class="n">Type</span> <span class="n">KType</span><span class="p">;</span>
 
   <span class="o">//</span> <span class="n">A</span> <span class="n">function</span> <span class="n">taking</span> <span class="n">an</span> <span class="n">engine</span><span class="p">,</span> <span class="n">returning</span> <span class="n">true</span> <span class="k">if</span> <span class="n">it</span> <span class="ow">is</span> <span class="n">out</span> <span class="n">of</span> <span class="n">fuel</span>
-  <span class="n">auto</span> <span class="n">engine</span> <span class="o">=</span> <span class="n">Expr</span><span class="p">::</span><span class="n">parameter</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="s2">"engine"</span><span class="p">,</span>
-    <span class="n">KType</span><span class="p">::</span><span class="n">class_type</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="s2">"SpaceCenter"</span><span class="p">,</span> <span class="s2">"Engine"</span><span class="p">));</span>
+  <span class="n">auto</span> <span class="n">engine</span> <span class="o">=</span> <span class="n">Expr</span><span class="p">::</span><span class="n">parameter</span><span class="p">(</span>
+      <span class="n">conn</span><span class="p">,</span> <span class="s2">"engine"</span><span class="p">,</span> <span class="n">KType</span><span class="p">::</span><span class="n">class_type</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="s2">"SpaceCenter"</span><span class="p">,</span> <span class="s2">"Engine"</span><span class="p">));</span>
   <span class="n">auto</span> <span class="n">has_fuel</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">parts</span><span class="p">()</span><span class="o">.</span><span class="n">engines</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">has_fuel_call</span><span class="p">();</span>
-  <span class="n">auto</span> <span class="n">out_of_fuel</span> <span class="o">=</span> <span class="n">Expr</span><span class="p">::</span><span class="k">lambda</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span>
-    <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Expr</span><span class="o">&gt;</span><span class="p">({</span><span class="n">engine</span><span class="p">}),</span>
-    <span class="n">Expr</span><span class="p">::</span><span class="n">not_</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">Expr</span><span class="p">::</span><span class="n">call_with_arguments</span><span class="p">(</span>
-      <span class="n">conn</span><span class="p">,</span> <span class="n">has_fuel</span><span class="p">,</span> <span class="n">std</span><span class="p">::</span><span class="nb">map</span><span class="o">&lt;</span><span class="n">int32_t</span><span class="p">,</span> <span class="n">Expr</span><span class="o">&gt;</span><span class="p">({{</span><span class="mi">0</span><span class="p">,</span> <span class="n">engine</span><span class="p">}}))));</span>
+  <span class="n">auto</span> <span class="n">out_of_fuel</span> <span class="o">=</span> <span class="n">Expr</span><span class="p">::</span><span class="k">lambda</span><span class="p">(</span>
+      <span class="n">conn</span><span class="p">,</span> <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Expr</span><span class="o">&gt;</span><span class="p">({</span><span class="n">engine</span><span class="p">}),</span>
+      <span class="n">Expr</span><span class="p">::</span><span class="n">not_</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span>
+                 <span class="n">Expr</span><span class="p">::</span><span class="n">call_with_arguments</span><span class="p">(</span>
+                     <span class="n">conn</span><span class="p">,</span> <span class="n">has_fuel</span><span class="p">,</span> <span class="n">std</span><span class="p">::</span><span class="nb">map</span><span class="o">&lt;</span><span class="n">int32_t</span><span class="p">,</span> <span class="n">Expr</span><span class="o">&gt;</span><span class="p">({{</span><span class="mi">0</span><span class="p">,</span> <span class="n">engine</span><span class="p">}}))));</span>
 
   <span class="o">//</span> <span class="n">Whether</span> <span class="nb">any</span> <span class="n">engine</span> <span class="n">satisfies</span> <span class="n">it</span>
   <span class="n">auto</span> <span class="n">engines</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">parts</span><span class="p">()</span><span class="o">.</span><span class="n">engines_call</span><span class="p">();</span>
@@ -1840,10 +1838,10 @@ to <a class="reference internal" href="../python/api/krpc/expressions.html#KRPC.
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-22-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-22-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &lt;iostream&gt;</span>
-<span class="c1">#include &lt;vector&gt;</span>
 <span class="c1">#include &lt;krpc.hpp&gt;</span>
 <span class="c1">#include &lt;krpc/function_stream.hpp&gt;</span>
 <span class="c1">#include &lt;krpc/services/krpc.hpp&gt;</span>
+<span class="c1">#include &lt;vector&gt;</span>
 
 <span class="nb">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
   <span class="n">auto</span> <span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="p">::</span><span class="n">connect</span><span class="p">();</span>
@@ -1854,18 +1852,17 @@ to <a class="reference internal" href="../python/api/krpc/expressions.html#KRPC.
   <span class="o">//</span> <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="k">for</span> <span class="p">(</span><span class="n">auto</span> <span class="n">x</span> <span class="p">:</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">})</span> <span class="n">total</span> <span class="o">+=</span> <span class="n">x</span><span class="p">;</span>
   <span class="n">auto</span> <span class="n">total</span> <span class="o">=</span> <span class="n">Expr</span><span class="p">::</span><span class="n">variable</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="s2">"total"</span><span class="p">,</span> <span class="n">KType</span><span class="p">::</span><span class="n">int_</span><span class="p">(</span><span class="n">conn</span><span class="p">));</span>
   <span class="n">auto</span> <span class="n">x</span> <span class="o">=</span> <span class="n">Expr</span><span class="p">::</span><span class="n">variable</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="s2">"x"</span><span class="p">,</span> <span class="n">KType</span><span class="p">::</span><span class="n">int_</span><span class="p">(</span><span class="n">conn</span><span class="p">));</span>
-  <span class="n">auto</span> <span class="n">values</span> <span class="o">=</span> <span class="n">Expr</span><span class="p">::</span><span class="n">create_list</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Expr</span><span class="o">&gt;</span><span class="p">({</span>
-    <span class="n">Expr</span><span class="p">::</span><span class="n">constant_int</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-    <span class="n">Expr</span><span class="p">::</span><span class="n">constant_int</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
-    <span class="n">Expr</span><span class="p">::</span><span class="n">constant_int</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="mi">3</span><span class="p">)}));</span>
+  <span class="n">auto</span> <span class="n">values</span> <span class="o">=</span>
+      <span class="n">Expr</span><span class="p">::</span><span class="n">create_list</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Expr</span><span class="o">&gt;</span><span class="p">({</span><span class="n">Expr</span><span class="p">::</span><span class="n">constant_int</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                                                 <span class="n">Expr</span><span class="p">::</span><span class="n">constant_int</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+                                                 <span class="n">Expr</span><span class="p">::</span><span class="n">constant_int</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="mi">3</span><span class="p">)}));</span>
   <span class="n">auto</span> <span class="n">program</span> <span class="o">=</span> <span class="n">Expr</span><span class="p">::</span><span class="n">block_with_variables</span><span class="p">(</span>
-    <span class="n">conn</span><span class="p">,</span>
-    <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Expr</span><span class="o">&gt;</span><span class="p">({</span><span class="n">total</span><span class="p">,</span> <span class="n">x</span><span class="p">}),</span>
-    <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Expr</span><span class="o">&gt;</span><span class="p">({</span>
-      <span class="n">Expr</span><span class="p">::</span><span class="n">assign</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">total</span><span class="p">,</span> <span class="n">Expr</span><span class="p">::</span><span class="n">constant_int</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span>
-      <span class="n">Expr</span><span class="p">::</span><span class="n">for_each</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span>
-        <span class="n">Expr</span><span class="p">::</span><span class="n">assign</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">total</span><span class="p">,</span> <span class="n">Expr</span><span class="p">::</span><span class="n">add</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">total</span><span class="p">,</span> <span class="n">x</span><span class="p">))),</span>
-      <span class="n">total</span><span class="p">}));</span>
+      <span class="n">conn</span><span class="p">,</span> <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Expr</span><span class="o">&gt;</span><span class="p">({</span><span class="n">total</span><span class="p">,</span> <span class="n">x</span><span class="p">}),</span>
+      <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Expr</span><span class="o">&gt;</span><span class="p">(</span>
+          <span class="p">{</span><span class="n">Expr</span><span class="p">::</span><span class="n">assign</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">total</span><span class="p">,</span> <span class="n">Expr</span><span class="p">::</span><span class="n">constant_int</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span>
+           <span class="n">Expr</span><span class="p">::</span><span class="n">for_each</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span>
+                          <span class="n">Expr</span><span class="p">::</span><span class="n">assign</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">total</span><span class="p">,</span> <span class="n">Expr</span><span class="p">::</span><span class="n">add</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">total</span><span class="p">,</span> <span class="n">x</span><span class="p">))),</span>
+           <span class="n">total</span><span class="p">}));</span>
 
   <span class="n">std</span><span class="p">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">krpc</span><span class="p">::</span><span class="n">run</span><span class="o">&lt;</span><span class="n">int32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">program</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="p">::</span><span class="n">endl</span><span class="p">;</span>
 <span class="p">}</span>
@@ -1938,9 +1935,9 @@ particular vessel:</p>
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-23-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-23-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">target</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sc</span><span class="p">.</span><span class="n">target_vessel_call</span><span class="p">();</span>
-<span class="k">auto</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expr</span><span class="o">::</span><span class="n">equal</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span>
-<span class="w">  </span><span class="n">Expr</span><span class="o">::</span><span class="n">call</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">target</span><span class="p">),</span>
-<span class="w">  </span><span class="n">Expr</span><span class="o">::</span><span class="n">constant_object</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">krpc</span><span class="o">::</span><span class="n">get_object_id</span><span class="p">(</span><span class="n">some_vessel</span><span class="p">)));</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expr</span><span class="o">::</span><span class="n">equal</span><span class="p">(</span>
+<span class="w">    </span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">Expr</span><span class="o">::</span><span class="n">call</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">target</span><span class="p">),</span>
+<span class="w">    </span><span class="n">Expr</span><span class="o">::</span><span class="n">constant_object</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">krpc</span><span class="o">::</span><span class="n">get_object_id</span><span class="p">(</span><span class="n">some_vessel</span><span class="p">)));</span>
 <span class="k">auto</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="o">::</span><span class="n">add_event</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
 </pre></div>
 </div>
@@ -1985,11 +1982,12 @@ fuel check from <a class="reference internal" href="#server-side-functions-excep
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-24-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-24-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">amount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">resources</span><span class="p">().</span><span class="n">amount_call</span><span class="p">(</span><span class="s">"LiquidFuel"</span><span class="p">);</span>
-<span class="k">auto</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expr</span><span class="o">::</span><span class="n">if_then</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span>
-<span class="w">  </span><span class="n">Expr</span><span class="o">::</span><span class="n">less_than</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span>
-<span class="w">    </span><span class="n">Expr</span><span class="o">::</span><span class="n">call</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span><span class="p">),</span><span class="w"> </span><span class="n">Expr</span><span class="o">::</span><span class="n">constant_double</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">)),</span>
-<span class="w">  </span><span class="n">Expr</span><span class="o">::</span><span class="n">throw_</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"KRPC"</span><span class="p">,</span><span class="w"> </span><span class="s">"InvalidOperationException"</span><span class="p">,</span>
-<span class="w">    </span><span class="n">Expr</span><span class="o">::</span><span class="n">constant_string</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"not enough fuel"</span><span class="p">)));</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expr</span><span class="o">::</span><span class="n">if_then</span><span class="p">(</span>
+<span class="w">    </span><span class="n">conn</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Expr</span><span class="o">::</span><span class="n">less_than</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">Expr</span><span class="o">::</span><span class="n">call</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span><span class="p">),</span>
+<span class="w">                    </span><span class="n">Expr</span><span class="o">::</span><span class="n">constant_double</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">)),</span>
+<span class="w">    </span><span class="n">Expr</span><span class="o">::</span><span class="n">throw_</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"KRPC"</span><span class="p">,</span><span class="w"> </span><span class="s">"InvalidOperationException"</span><span class="p">,</span>
+<span class="w">                 </span><span class="n">Expr</span><span class="o">::</span><span class="n">constant_string</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"not enough fuel"</span><span class="p">)));</span>
 <span class="n">krpc</span><span class="o">::</span><span class="n">run</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
 </pre></div>
 </div>

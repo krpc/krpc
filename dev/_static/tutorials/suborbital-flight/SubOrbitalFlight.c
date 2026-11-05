@@ -11,10 +11,8 @@
 
 int main() {
   krpc_connection_t conn;
-  if (krpc_open_serial(&conn, "COM0") != KRPC_OK)
-    return 1;
-  if (krpc_connect(conn, "Sub-orbital flight") != KRPC_OK)
-    return 1;
+  if (krpc_open_serial(&conn, "COM0") != KRPC_OK) return 1;
+  if (krpc_connect(conn, "Sub-orbital flight") != KRPC_OK) return 1;
 
   krpc_SpaceCenter_Vessel_t vessel;
   krpc_SpaceCenter_ActiveVessel(conn, &vessel);
@@ -37,9 +35,9 @@ int main() {
   krpc_SpaceCenter_Vessel_Resources(conn, &resources, vessel);
   while (true) {
     float solid_fuel;
-    krpc_SpaceCenter_Resources_Amount(conn, &solid_fuel, resources, "SolidFuel");
-    if (solid_fuel < 0.1)
-      break;
+    krpc_SpaceCenter_Resources_Amount(conn, &solid_fuel, resources,
+                                      "SolidFuel");
+    if (solid_fuel < 0.1) break;
   }
 
   printf("Booster separation\n");
@@ -50,8 +48,7 @@ int main() {
   while (true) {
     double mean_altitude;
     krpc_SpaceCenter_Flight_MeanAltitude(conn, &mean_altitude, flight);
-    if (mean_altitude > 10000)
-      break;
+    if (mean_altitude > 10000) break;
   }
 
   printf("Gravity turn\n");
@@ -62,8 +59,7 @@ int main() {
   while (true) {
     double apoapsis_altitude;
     krpc_SpaceCenter_Orbit_ApoapsisAltitude(conn, &apoapsis_altitude, orbit);
-    if (apoapsis_altitude > 100000)
-      break;
+    if (apoapsis_altitude > 100000) break;
   }
 
   printf("Launch stage separation\n");
@@ -75,8 +71,7 @@ int main() {
   while (true) {
     double srf_altitude;
     krpc_SpaceCenter_Flight_SurfaceAltitude(conn, &srf_altitude, flight);
-    if (srf_altitude < 1000)
-      break;
+    if (srf_altitude < 1000) break;
   }
 
   krpc_SpaceCenter_Control_ActivateNextStage(conn, NULL, control);
@@ -91,8 +86,7 @@ int main() {
   while (true) {
     double vertical_speed;
     krpc_SpaceCenter_Flight_VerticalSpeed(conn, &vertical_speed, body_flight);
-    if (vertical_speed > -0.1)
-      break;
+    if (vertical_speed > -0.1) break;
     double altitude;
     krpc_SpaceCenter_Flight_SurfaceAltitude(conn, &altitude, flight);
     printf("Altitude = %.1f meters\n", altitude);

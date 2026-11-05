@@ -1,15 +1,15 @@
 #include <chrono>
 #include <exception>
 #include <iostream>
-#include <thread>
 #include <krpc.hpp>
 #include <krpc/services/space_center.hpp>
+#include <thread>
 
 void print_temperature(double value) {
   std::cout << "Temperature " << value << std::endl;
 }
 
-void print_ending(std::exception_ptr error) {
+void print_ending(const std::exception_ptr& error) {
   try {
     std::rethrow_exception(error);
   } catch (const std::exception& exn) {
@@ -27,6 +27,5 @@ int main() {
   temperature.add_end_callback(print_ending);
 
   // Keep the program running, while the callbacks are called
-  while (true)
-    std::this_thread::sleep_for(std::chrono::seconds(1));
+  while (true) std::this_thread::sleep_for(std::chrono::seconds(1));
 }

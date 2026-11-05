@@ -8,7 +8,6 @@ int main() {
   auto control = sc.active_vessel().value().control();
   auto abort = control.abort_stream();
   abort.acquire();
-  while (!abort())
-    abort.wait();
+  while (!abort()) abort.wait();
   abort.release();
 }

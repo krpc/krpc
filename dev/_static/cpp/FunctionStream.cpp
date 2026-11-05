@@ -1,11 +1,10 @@
 #include <chrono>
 #include <iostream>
-#include <thread>
-
 #include <krpc.hpp>
 #include <krpc/function_stream.hpp>
 #include <krpc/services/krpc.hpp>
 #include <krpc/services/space_center.hpp>
+#include <thread>
 
 int main() {
   auto conn = krpc::connect();
@@ -15,9 +14,8 @@ int main() {
   // Build a function that computes
   // the vessel's altitude in kilometers
   typedef krpc::services::KRPC::Expression Expr;
-  auto expr = Expr::divide(conn,
-    Expr::call(conn, flight.mean_altitude_call()),
-    Expr::constant_double(conn, 1000));
+  auto expr = Expr::divide(conn, Expr::call(conn, flight.mean_altitude_call()),
+                           Expr::constant_double(conn, 1000));
 
   // Stream the value of the function
   auto stream = krpc::add_stream<double>(expr);

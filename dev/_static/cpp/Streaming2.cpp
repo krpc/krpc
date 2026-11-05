@@ -1,8 +1,8 @@
-#include <iostream>
 #include <iomanip>
-#include <tuple>
+#include <iostream>
 #include <krpc.hpp>
 #include <krpc/services/space_center.hpp>
+#include <tuple>
 
 int main() {
   auto conn = krpc::connect();
@@ -13,8 +13,7 @@ int main() {
   while (true) {
     auto pos = pos_stream();
     std::cout << std::fixed << std::setprecision(1);
-    std::cout << std::get<0>(pos) << ", "
-              << std::get<1>(pos) << ", "
+    std::cout << std::get<0>(pos) << ", " << std::get<1>(pos) << ", "
               << std::get<2>(pos) << std::endl;
   }
 }

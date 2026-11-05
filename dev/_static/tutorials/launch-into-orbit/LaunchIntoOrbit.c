@@ -11,10 +11,8 @@
 
 int main() {
   krpc_connection_t conn;
-  if (krpc_open_serial(&conn, "COM0") != KRPC_OK)
-    return 1;
-  if (krpc_connect(conn, "Launch into orbit") != KRPC_OK)
-    return 1;
+  if (krpc_open_serial(&conn, "COM0") != KRPC_OK) return 1;
+  if (krpc_connect(conn, "Launch into orbit") != KRPC_OK) return 1;
 
   krpc_SpaceCenter_Vessel_t vessel;
   krpc_SpaceCenter_ActiveVessel(conn, &vessel);
@@ -62,17 +60,20 @@ int main() {
     krpc_SpaceCenter_Orbit_ApoapsisAltitude(conn, &apoapsis, orbit);
 
     if (altitude > turn_start_altitude && altitude < turn_end_altitude) {
-      double frac = (altitude - turn_start_altitude) / (turn_end_altitude - turn_start_altitude);
+      double frac = (altitude - turn_start_altitude) /
+                    (turn_end_altitude - turn_start_altitude);
       double new_turn_angle = frac * 90.0;
       if (fabs(new_turn_angle - turn_angle) > 0.5) {
         turn_angle = new_turn_angle;
-        krpc_SpaceCenter_AutoPilot_TargetPitchAndHeading(conn, auto_pilot, 90 - turn_angle, 90);
+        krpc_SpaceCenter_AutoPilot_TargetPitchAndHeading(conn, auto_pilot,
+                                                         90 - turn_angle, 90);
       }
     }
 
     if (!srbs_separated) {
       float srb_fuel;
-      krpc_SpaceCenter_Resources_Amount(conn, &srb_fuel, stage_2_resources, "SolidFuel");
+      krpc_SpaceCenter_Resources_Amount(conn, &srb_fuel, stage_2_resources,
+                                        "SolidFuel");
       if (srb_fuel < 0.1) {
         krpc_SpaceCenter_Control_ActivateNextStage(conn, NULL, control);
         srbs_separated = true;
@@ -90,8 +91,7 @@ int main() {
   while (true) {
     double apoapsis;
     krpc_SpaceCenter_Orbit_ApoapsisAltitude(conn, &apoapsis, orbit);
-    if (apoapsis >= target_altitude)
-      break;
+    if (apoapsis >= target_altitude) break;
   }
   printf("Target apoapsis reached\n");
   krpc_SpaceCenter_Control_set_Throttle(conn, control, 0);
@@ -100,8 +100,7 @@ int main() {
   while (true) {
     double altitude;
     krpc_SpaceCenter_Flight_MeanAltitude(conn, &altitude, flight);
-    if (altitude >= 70500)
-      break;
+    if (altitude >= 70500) break;
   }
 
   printf("Planning circularization burn\n");
@@ -122,7 +121,8 @@ int main() {
   double time_to_apoapsis;
   krpc_SpaceCenter_Orbit_TimeToApoapsis(conn, &time_to_apoapsis, orbit);
   krpc_SpaceCenter_Node_t node;
-  krpc_SpaceCenter_Control_AddNode(conn, &node, control, ut + time_to_apoapsis, delta_v, 0, 0);
+  krpc_SpaceCenter_Control_AddNode(conn, &node, control, ut + time_to_apoapsis,
+                                   delta_v, 0, 0);
 
   float F;
   krpc_SpaceCenter_Vessel_AvailableThrust(conn, &F, vessel);
@@ -140,7 +140,8 @@ int main() {
   krpc_SpaceCenter_Node_ReferenceFrame(conn, &node_ref, node);
   krpc_SpaceCenter_AutoPilot_set_ReferenceFrame(conn, auto_pilot, node_ref);
   krpc_tuple_double_double_double_t burn_direction = {0, 1, 0};
-  krpc_SpaceCenter_AutoPilot_set_TargetDirection(conn, auto_pilot, &burn_direction);
+  krpc_SpaceCenter_AutoPilot_set_TargetDirection(conn, auto_pilot,
+                                                 &burn_direction);
   krpc_SpaceCenter_AutoPilot_Wait(conn, auto_pilot, -1);
 
   printf("Waiting until circularization burn\n");
@@ -154,8 +155,7 @@ int main() {
   while (true) {
     krpc_SpaceCenter_UT(conn, &ut);
     krpc_SpaceCenter_Orbit_TimeToApoapsis(conn, &time_to_apoapsis, orbit);
-    if (time_to_apoapsis - (burn_time / 2.0) <= 0)
-      break;
+    if (time_to_apoapsis - (burn_time / 2.0) <= 0) break;
   }
   printf("Executing burn\n");
   krpc_SpaceCenter_Control_set_Throttle(conn, control, 1);
@@ -164,9 +164,9 @@ int main() {
   krpc_SpaceCenter_Control_set_Throttle(conn, control, 0.05);
   while (true) {
     krpc_tuple_double_double_double_t remaining_burn;
-    krpc_SpaceCenter_Node_RemainingBurnVector(conn, &remaining_burn, node, node_ref);
-    if (remaining_burn.e1 <= 0)
-      break;
+    krpc_SpaceCenter_Node_RemainingBurnVector(conn, &remaining_burn, node,
+                                              node_ref);
+    if (remaining_burn.e1 <= 0) break;
   }
   krpc_SpaceCenter_Control_set_Throttle(conn, control, 0);
   krpc_SpaceCenter_Node_Remove(conn, node);

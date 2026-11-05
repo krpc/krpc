@@ -1,13 +1,11 @@
 #include <krpc_cnano.h>
-#include <krpc_cnano/services/space_center.h>
 #include <krpc_cnano/services/remote_tech.h>
+#include <krpc_cnano/services/space_center.h>
 
 int main() {
   krpc_connection_t conn;
-  if (krpc_open_serial(&conn, "COM0") != KRPC_OK)
-    return 1;
-  if (krpc_connect(conn, "RemoteTech Example") != KRPC_OK)
-    return 1;
+  if (krpc_open_serial(&conn, "COM0") != KRPC_OK) return 1;
+  if (krpc_connect(conn, "RemoteTech Example") != KRPC_OK) return 1;
   krpc_SpaceCenter_Vessel_t vessel;
   krpc_SpaceCenter_ActiveVessel(conn, &vessel);
 
@@ -15,7 +13,8 @@ int main() {
   krpc_SpaceCenter_Parts_t parts;
   krpc_SpaceCenter_Vessel_Parts(conn, &parts, vessel);
   krpc_list_object_t parts_with_title;
-  krpc_SpaceCenter_Parts_WithTitle(conn, &parts_with_title, parts, "Reflectron KR-7");
+  krpc_SpaceCenter_Parts_WithTitle(conn, &parts_with_title, parts,
+                                   "Reflectron KR-7");
   krpc_SpaceCenter_Part_t part = parts_with_title.items[0];
 
   krpc_RemoteTech_Antenna_t antenna;
@@ -25,8 +24,7 @@ int main() {
   krpc_SpaceCenter_Bodies(conn, &bodies);
   krpc_SpaceCenter_CelestialBody_t jool;
   for (size_t i = 0; i < bodies.size; i++)
-    if (!strcmp(bodies.entries[i].key, "Jool"))
-      jool = bodies.entries[i].value;
+    if (!strcmp(bodies.entries[i].key, "Jool")) jool = bodies.entries[i].value;
 
   krpc_RemoteTech_Antenna_set_TargetBody(conn, antenna, jool);
 

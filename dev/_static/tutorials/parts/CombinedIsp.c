@@ -3,10 +3,8 @@
 
 int main() {
   krpc_connection_t conn;
-  if (krpc_open_serial(&conn, "COM0") != KRPC_OK)
-    return 1;
-  if (krpc_connect(conn, "CombinedISP") != KRPC_OK)
-    return 1;
+  if (krpc_open_serial(&conn, "COM0") != KRPC_OK) return 1;
+  if (krpc_connect(conn, "CombinedISP") != KRPC_OK) return 1;
 
   krpc_SpaceCenter_Vessel_t vessel;
   krpc_SpaceCenter_ActiveVessel(conn, &vessel);
@@ -38,7 +36,7 @@ int main() {
     krpc_SpaceCenter_Engine_t engine = active_engines.items[i];
     krpc_SpaceCenter_Part_t part;
     krpc_SpaceCenter_Engine_Part(conn, &part, engine);
-    char * title = NULL;
+    char* title = NULL;
     int stage;
     krpc_SpaceCenter_Part_Title(conn, &title, part);
     krpc_SpaceCenter_Part_Stage(conn, &stage, part);
