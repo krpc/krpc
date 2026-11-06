@@ -355,6 +355,7 @@ krpctools
 * Fix ``krpc-docgen`` Java links to a service's own procedures and properties, and to enumeration values (:issue:`1252`)
 * :breaking:`Breaking` Write the Lua API documentation from ``krpc-docgen`` for ``sphinx-lua-ls``, in place of ``sphinxcontrib-luadomain``, with typed signatures (:issue:`1202`)
 * Leave internal procedures out of generated services and API documentation (:issue:`1269`)
+* Ship the ``TestService2`` and ``ConformanceService`` definitions beside ``TestService.json``, for a conformance testee whose client generates its stubs ahead of time (:issue:`1284`)
 
 
 v0.7.0
