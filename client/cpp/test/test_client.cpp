@@ -86,6 +86,19 @@ TEST_F(test_client, test_a_default_constructed_object_throws) {
   ASSERT_THROW(object.get_value(), krpc::ConnectionError);
 }
 
+TEST_F(test_client, test_a_service_constructed_from_a_temporary_client_holds_it) {
+  krpc::services::TestService service(krpc::Client("", "localhost", get_port()));
+  ASSERT_EQ("value=jeb", service.create_test_object("jeb").get_value());
+}
+
+TEST_F(test_client, test_an_object_constructed_from_a_client_and_an_id_uses_them) {
+  auto client = connect_client();
+  krpc::services::TestService service(*client);
+  auto object = service.create_test_object("jeb");
+  krpc::services::TestService::TestClass same(*client, krpc::get_object_id(object));
+  ASSERT_EQ("value=jeb", same.get_value());
+}
+
 TEST_F(test_client, test_the_last_release_closes_the_connection) {
   auto client = connect_client();
   auto released = track(*client);

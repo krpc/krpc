@@ -12,7 +12,8 @@ namespace krpc {
 template <typename T>
 class Object {
  public:
-  Object(Client* client, const std::string& name, uint64_t id = 0);
+  explicit Object(const std::string& name);
+  Object(const Client& client, const std::string& name, uint64_t id);
   template <typename U>
   friend std::ostream& operator<<(std::ostream&, const Object<U>&);
   template <typename U>
@@ -40,8 +41,11 @@ template <typename T>
 uint64_t get_object_id(const Object<T>& object);
 
 template <typename T>
-inline Object<T>::Object(Client* client, const std::string& name, uint64_t id)
-    : _client(client != nullptr ? *client : Client()), _id(id), _name(name) {}
+inline Object<T>::Object(const std::string& name) : _id(0), _name(name) {}
+
+template <typename T>
+inline Object<T>::Object(const Client& client, const std::string& name, uint64_t id)
+    : _client(client), _id(id), _name(name) {}
 
 template <typename T>
 inline uint64_t get_object_id(const Object<T>& object) {

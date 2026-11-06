@@ -16,7 +16,7 @@ if (!_data.is_null())
 return _result;
 {% endmacro %}
 {% macro stream(service, procedure, type, has_args, is_static=False) %}
-return ::krpc::Stream<{{ type }}>(&{% if is_static %}_client{% else %}this->_client{% endif %}, {% if is_static %}_client.{% else %}this->_client.{% endif %}build_call("{{service}}", "{{procedure}}"{% if has_args %}, _args{% endif %}));
+return ::krpc::Stream<{{ type }}>({% if is_static %}_client{% else %}this->_client{% endif %}, {% if is_static %}_client.{% else %}this->_client.{% endif %}build_call("{{service}}", "{{procedure}}"{% if has_args %}, _args{% endif %}));
 {% endmacro %}
 {% macro procedure_call(service, procedure, type, has_args, is_static=False) %}
 return {% if is_static %}_client.{% else %}this->_client.{% endif %}build_call("{{service}}", "{{procedure}}"{% if has_args %}, _args{% endif %});
@@ -58,7 +58,7 @@ namespace services {
 
 class {{ service_name }} : public Service {
  public:
-  explicit {{ service_name }}(Client& client);
+  explicit {{ service_name }}(const Client& client);
   {% if classes | length > 0 %}
 
   // Class forward declarations
@@ -137,7 +137,8 @@ class {{ service_name }} : public Service {
 {% endif %}
   class {% if cls.deprecated %}[[deprecated{% if cls.deprecated_reason %}("{{ cls.deprecated_reason }}"){% endif %}]] {% endif %}{{ class_name }} : public krpc::Object<{{ class_name }}> {
    public:
-    explicit {{ class_name }}(Client* client = nullptr, uint64_t id = 0);
+    {{ class_name }}();
+    {{ class_name }}(const Client& client, uint64_t id);
     {% for method_name,method in cls.methods.items() %}
 
 {% if method.documentation %}{{ method.documentation | indent(width=4) }}
@@ -378,7 +379,7 @@ namespace services {
 
 namespace services {
 
-inline {{ service_name }}::{{ service_name }}(Client& client):
+inline {{ service_name }}::{{ service_name }}(const Client& client):
   Service(client) {
   {% for exception_name,exception in exceptions.items() %}
   {% if exception.deprecated %}
@@ -387,7 +388,7 @@ inline {{ service_name }}::{{ service_name }}(Client& client):
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
   {% endif %}
-  client.add_exception_thrower(
+  _client.add_exception_thrower(
     "{{ service_name }}", "{{ exception_name }}",
     [] (const std::string& msg) { throw {{ exception_name }}(msg); });
   {% if exception.deprecated %}
@@ -427,7 +428,10 @@ inline ::krpc::schema::ProcedureCall {{ service_name }}::{{ procedure_name }}_ca
 {% endfor %}
 {% for class_name,cls in classes.items() %}
 
-inline {{ service_name }}::{{ class_name }}::{{ class_name }}(Client* client, uint64_t id):
+inline {{ service_name }}::{{ class_name }}::{{ class_name }}():
+  Object("{{ service_name }}::{{ class_name }}") {}
+
+inline {{ service_name }}::{{ class_name }}::{{ class_name }}(const Client& client, uint64_t id):
   Object(client, "{{ service_name }}::{{ class_name }}", id) {}
 {% for method_name,method in cls.methods.items()|list + cls.properties.items()|list %}
 

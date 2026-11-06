@@ -24,7 +24,7 @@ namespace services {
 
 class KRPC : public Service {
  public:
-  explicit KRPC(Client& client);
+  explicit KRPC(const Client& client);
 
   // Class forward declarations
   class Expression;
@@ -464,7 +464,8 @@ class KRPC : public Service {
    */
   class Expression : public krpc::Object<Expression> {
    public:
-    explicit Expression(Client* client = nullptr, uint64_t id = 0);
+    Expression();
+    Expression(const Client& client, uint64_t id);
 
     /**
      * Numerical addition.
@@ -2207,7 +2208,8 @@ class KRPC : public Service {
    */
   class Type : public krpc::Object<Type> {
    public:
-    explicit Type(Client* client = nullptr, uint64_t id = 0);
+    Type();
+    Type(const Client& client, uint64_t id);
 
     /**
      * A boolean type.
@@ -3037,54 +3039,54 @@ namespace services {
 
 namespace services {
 
-inline KRPC::KRPC(Client& client):
+inline KRPC::KRPC(const Client& client):
   Service(client) {
-  client.add_exception_thrower(
+  _client.add_exception_thrower(
     "KRPC", "ArgumentException",
     [] (const std::string& msg) { throw ArgumentException(msg); });
-  client.add_exception_thrower(
+  _client.add_exception_thrower(
     "KRPC", "ArgumentNullException",
     [] (const std::string& msg) { throw ArgumentNullException(msg); });
-  client.add_exception_thrower(
+  _client.add_exception_thrower(
     "KRPC", "ArgumentOutOfRangeException",
     [] (const std::string& msg) { throw ArgumentOutOfRangeException(msg); });
-  client.add_exception_thrower(
+  _client.add_exception_thrower(
     "KRPC", "DivideByZeroException",
     [] (const std::string& msg) { throw DivideByZeroException(msg); });
-  client.add_exception_thrower(
+  _client.add_exception_thrower(
     "KRPC", "Error",
     [] (const std::string& msg) { throw Error(msg); });
-  client.add_exception_thrower(
+  _client.add_exception_thrower(
     "KRPC", "IndexOutOfRangeException",
     [] (const std::string& msg) { throw IndexOutOfRangeException(msg); });
-  client.add_exception_thrower(
+  _client.add_exception_thrower(
     "KRPC", "InvalidOperationException",
     [] (const std::string& msg) { throw InvalidOperationException(msg); });
-  client.add_exception_thrower(
+  _client.add_exception_thrower(
     "KRPC", "KeyNotFoundException",
     [] (const std::string& msg) { throw KeyNotFoundException(msg); });
-  client.add_exception_thrower(
+  _client.add_exception_thrower(
     "KRPC", "NotSupportedException",
     [] (const std::string& msg) { throw NotSupportedException(msg); });
-  client.add_exception_thrower(
+  _client.add_exception_thrower(
     "KRPC", "NullReferenceException",
     [] (const std::string& msg) { throw NullReferenceException(msg); });
-  client.add_exception_thrower(
+  _client.add_exception_thrower(
     "KRPC", "ObjectDestroyedException",
     [] (const std::string& msg) { throw ObjectDestroyedException(msg); });
-  client.add_exception_thrower(
+  _client.add_exception_thrower(
     "KRPC", "ObjectNotLoadedException",
     [] (const std::string& msg) { throw ObjectNotLoadedException(msg); });
-  client.add_exception_thrower(
+  _client.add_exception_thrower(
     "KRPC", "OverflowException",
     [] (const std::string& msg) { throw OverflowException(msg); });
-  client.add_exception_thrower(
+  _client.add_exception_thrower(
     "KRPC", "StreamRemovedException",
     [] (const std::string& msg) { throw StreamRemovedException(msg); });
-  client.add_exception_thrower(
+  _client.add_exception_thrower(
     "KRPC", "TimeoutException",
     [] (const std::string& msg) { throw TimeoutException(msg); });
-  client.add_exception_thrower(
+  _client.add_exception_thrower(
     "KRPC", "UnsupportedSceneException",
     [] (const std::string& msg) { throw UnsupportedSceneException(msg); });
 }
@@ -3180,47 +3182,47 @@ inline void KRPC::set_paused(bool value) {
 }
 
 inline ::krpc::Stream<std::string> KRPC::get_client_id_stream() {
-  return ::krpc::Stream<std::string>(&this->_client, this->_client.build_call("KRPC", "GetClientID"));
+  return ::krpc::Stream<std::string>(this->_client, this->_client.build_call("KRPC", "GetClientID"));
 }
 
 inline ::krpc::Stream<std::string> KRPC::get_client_name_stream() {
-  return ::krpc::Stream<std::string>(&this->_client, this->_client.build_call("KRPC", "GetClientName"));
+  return ::krpc::Stream<std::string>(this->_client, this->_client.build_call("KRPC", "GetClientName"));
 }
 
 inline ::krpc::Stream<krpc::schema::Services> KRPC::get_services_stream() {
-  return ::krpc::Stream<krpc::schema::Services>(&this->_client, this->_client.build_call("KRPC", "GetServices"));
+  return ::krpc::Stream<krpc::schema::Services>(this->_client, this->_client.build_call("KRPC", "GetServices"));
 }
 
 inline ::krpc::Stream<KRPC::ServerStatus> KRPC::get_status_stream() {
-  return ::krpc::Stream<KRPC::ServerStatus>(&this->_client, this->_client.build_call("KRPC", "GetStatus"));
+  return ::krpc::Stream<KRPC::ServerStatus>(this->_client, this->_client.build_call("KRPC", "GetStatus"));
 }
 
 inline ::krpc::Stream<void> KRPC::hold_tick_stream() {
-  return ::krpc::Stream<void>(&this->_client, this->_client.build_call("KRPC", "HoldTick"));
+  return ::krpc::Stream<void>(this->_client, this->_client.build_call("KRPC", "HoldTick"));
 }
 
 inline ::krpc::Stream<void> KRPC::next_tick_stream() {
-  return ::krpc::Stream<void>(&this->_client, this->_client.build_call("KRPC", "NextTick"));
+  return ::krpc::Stream<void>(this->_client, this->_client.build_call("KRPC", "NextTick"));
 }
 
 inline ::krpc::Stream<void> KRPC::release_tick_stream() {
-  return ::krpc::Stream<void>(&this->_client, this->_client.build_call("KRPC", "ReleaseTick"));
+  return ::krpc::Stream<void>(this->_client, this->_client.build_call("KRPC", "ReleaseTick"));
 }
 
 inline ::krpc::Stream<std::vector<KRPC::ClientInfo>> KRPC::clients_stream() {
-  return ::krpc::Stream<std::vector<KRPC::ClientInfo>>(&this->_client, this->_client.build_call("KRPC", "get_Clients"));
+  return ::krpc::Stream<std::vector<KRPC::ClientInfo>>(this->_client, this->_client.build_call("KRPC", "get_Clients"));
 }
 
 inline ::krpc::Stream<KRPC::GameScene> KRPC::game_scene_stream() {
-  return ::krpc::Stream<KRPC::GameScene>(&this->_client, this->_client.build_call("KRPC", "get_GameScene"));
+  return ::krpc::Stream<KRPC::GameScene>(this->_client, this->_client.build_call("KRPC", "get_GameScene"));
 }
 
 inline ::krpc::Stream<uint32_t> KRPC::game_state_loads_stream() {
-  return ::krpc::Stream<uint32_t>(&this->_client, this->_client.build_call("KRPC", "get_GameStateLoads"));
+  return ::krpc::Stream<uint32_t>(this->_client, this->_client.build_call("KRPC", "get_GameStateLoads"));
 }
 
 inline ::krpc::Stream<bool> KRPC::paused_stream() {
-  return ::krpc::Stream<bool>(&this->_client, this->_client.build_call("KRPC", "get_Paused"));
+  return ::krpc::Stream<bool>(this->_client, this->_client.build_call("KRPC", "get_Paused"));
 }
 
 inline ::krpc::schema::ProcedureCall KRPC::get_client_id_call() {
@@ -3281,7 +3283,10 @@ inline ::krpc::schema::ProcedureCall KRPC::set_paused_call(bool value) {
   return this->_client.build_call("KRPC", "set_Paused", _args);
 }
 
-inline KRPC::Expression::Expression(Client* client, uint64_t id):
+inline KRPC::Expression::Expression():
+  Object("KRPC::Expression") {}
+
+inline KRPC::Expression::Expression(const Client& client, uint64_t id):
   Object(client, "KRPC::Expression", id) {}
 
 inline bool KRPC::Expression::has_return_type() {
@@ -4780,21 +4785,21 @@ inline ::krpc::Stream<bool> KRPC::Expression::has_return_type_stream() {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(*this));
-  return ::krpc::Stream<bool>(&this->_client, this->_client.build_call("KRPC", "Expression_get_HasReturnType", _args));
+  return ::krpc::Stream<bool>(this->_client, this->_client.build_call("KRPC", "Expression_get_HasReturnType", _args));
 }
 
 inline ::krpc::Stream<std::vector<KRPC::Type>> KRPC::Expression::parameter_types_stream() {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(*this));
-  return ::krpc::Stream<std::vector<KRPC::Type>>(&this->_client, this->_client.build_call("KRPC", "Expression_get_ParameterTypes", _args));
+  return ::krpc::Stream<std::vector<KRPC::Type>>(this->_client, this->_client.build_call("KRPC", "Expression_get_ParameterTypes", _args));
 }
 
 inline ::krpc::Stream<KRPC::Type> KRPC::Expression::return_type_stream() {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(*this));
-  return ::krpc::Stream<KRPC::Type>(&this->_client, this->_client.build_call("KRPC", "Expression_get_ReturnType", _args));
+  return ::krpc::Stream<KRPC::Type>(this->_client, this->_client.build_call("KRPC", "Expression_get_ReturnType", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::add_stream(Client& _client, KRPC::Expression arg0, KRPC::Expression arg1) {
@@ -4802,7 +4807,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::add_stream(Client& _cl
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg0));
   _args.push_back(encoder::encode_arg(arg1));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Add", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Add", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::aggregate_stream(Client& _client, KRPC::Expression arg, KRPC::Expression func) {
@@ -4810,7 +4815,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::aggregate_stream(Clien
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg));
   _args.push_back(encoder::encode_arg(func));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Aggregate", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Aggregate", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::aggregate_with_seed_stream(Client& _client, KRPC::Expression arg, KRPC::Expression seed, KRPC::Expression func) {
@@ -4819,7 +4824,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::aggregate_with_seed_st
   _args.push_back(encoder::encode_arg(arg));
   _args.push_back(encoder::encode_arg(seed));
   _args.push_back(encoder::encode_arg(func));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_AggregateWithSeed", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_AggregateWithSeed", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::all_stream(Client& _client, KRPC::Expression arg, KRPC::Expression predicate) {
@@ -4827,7 +4832,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::all_stream(Client& _cl
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg));
   _args.push_back(encoder::encode_arg(predicate));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_All", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_All", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::and__stream(Client& _client, KRPC::Expression arg0, KRPC::Expression arg1) {
@@ -4835,7 +4840,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::and__stream(Client& _c
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg0));
   _args.push_back(encoder::encode_arg(arg1));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_And", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_And", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::any_stream(Client& _client, KRPC::Expression arg, KRPC::Expression predicate) {
@@ -4843,7 +4848,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::any_stream(Client& _cl
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg));
   _args.push_back(encoder::encode_arg(predicate));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Any", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Any", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::append_stream(Client& _client, KRPC::Expression collection, KRPC::Expression value) {
@@ -4851,7 +4856,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::append_stream(Client& 
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(collection));
   _args.push_back(encoder::encode_arg(value));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Append", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Append", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::assign_stream(Client& _client, KRPC::Expression variable, KRPC::Expression value) {
@@ -4859,21 +4864,21 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::assign_stream(Client& 
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(variable));
   _args.push_back(encoder::encode_arg(value));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Assign", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Assign", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::average_stream(Client& _client, KRPC::Expression arg) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(arg));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Average", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Average", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::block_stream(Client& _client, std::vector<KRPC::Expression> statements) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(statements));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Block", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Block", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::block_with_variables_stream(Client& _client, std::vector<KRPC::Expression> variables, std::vector<KRPC::Expression> statements) {
@@ -4881,11 +4886,11 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::block_with_variables_s
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(variables));
   _args.push_back(encoder::encode_arg(statements));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_BlockWithVariables", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_BlockWithVariables", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::break__stream(Client& _client) {
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Break"));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Break"));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::build_dictionary_stream(Client& _client, KRPC::Expression arg, KRPC::Expression key_func, KRPC::Expression value_func) {
@@ -4894,14 +4899,14 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::build_dictionary_strea
   _args.push_back(encoder::encode_arg(arg));
   _args.push_back(encoder::encode_arg(key_func));
   _args.push_back(encoder::encode_arg(value_func));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_BuildDictionary", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_BuildDictionary", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::call_stream(Client& _client, krpc::schema::ProcedureCall call) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(call));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Call", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Call", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::call_with_arguments_stream(Client& _client, krpc::schema::ProcedureCall call, std::map<int32_t, KRPC::Expression> args) {
@@ -4909,7 +4914,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::call_with_arguments_st
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(call));
   _args.push_back(encoder::encode_arg(args));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_CallWithArguments", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_CallWithArguments", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::cast_stream(Client& _client, KRPC::Expression arg, KRPC::Type type) {
@@ -4917,14 +4922,14 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::cast_stream(Client& _c
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg));
   _args.push_back(encoder::encode_arg(type));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Cast", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Cast", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::clear_stream(Client& _client, KRPC::Expression collection) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(collection));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Clear", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Clear", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::concat_stream(Client& _client, KRPC::Expression arg1, KRPC::Expression arg2) {
@@ -4932,7 +4937,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::concat_stream(Client& 
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg1));
   _args.push_back(encoder::encode_arg(arg2));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Concat", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Concat", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::conditional_stream(Client& _client, KRPC::Expression condition, KRPC::Expression if_true, KRPC::Expression if_false) {
@@ -4941,7 +4946,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::conditional_stream(Cli
   _args.push_back(encoder::encode_arg(condition));
   _args.push_back(encoder::encode_arg(if_true));
   _args.push_back(encoder::encode_arg(if_false));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Conditional", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Conditional", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::conditional_and_stream(Client& _client, KRPC::Expression arg0, KRPC::Expression arg1) {
@@ -4949,7 +4954,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::conditional_and_stream
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg0));
   _args.push_back(encoder::encode_arg(arg1));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_ConditionalAnd", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_ConditionalAnd", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::conditional_or_stream(Client& _client, KRPC::Expression arg0, KRPC::Expression arg1) {
@@ -4957,28 +4962,28 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::conditional_or_stream(
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg0));
   _args.push_back(encoder::encode_arg(arg1));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_ConditionalOr", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_ConditionalOr", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::constant_bool_stream(Client& _client, bool value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_ConstantBool", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_ConstantBool", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::constant_bytes_stream(Client& _client, std::string value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_ConstantBytes", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_ConstantBytes", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::constant_double_stream(Client& _client, double value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_ConstantDouble", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_ConstantDouble", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::constant_enum_stream(Client& _client, std::string service, std::string name, int32_t value) {
@@ -4987,63 +4992,63 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::constant_enum_stream(C
   _args.push_back(encoder::encode_arg(service));
   _args.push_back(encoder::encode_arg(name));
   _args.push_back(encoder::encode_arg(value));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_ConstantEnum", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_ConstantEnum", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::constant_float_stream(Client& _client, float value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_ConstantFloat", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_ConstantFloat", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::constant_int_stream(Client& _client, int32_t value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_ConstantInt", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_ConstantInt", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::constant_long_stream(Client& _client, int64_t value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_ConstantLong", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_ConstantLong", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::constant_null_stream(Client& _client, KRPC::Type type) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(type));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_ConstantNull", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_ConstantNull", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::constant_object_stream(Client& _client, uint64_t value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_ConstantObject", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_ConstantObject", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::constant_string_stream(Client& _client, std::string value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_ConstantString", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_ConstantString", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::constant_u_int_stream(Client& _client, uint32_t value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_ConstantUInt", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_ConstantUInt", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::constant_u_long_stream(Client& _client, uint64_t value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_ConstantULong", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_ConstantULong", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::contains_stream(Client& _client, KRPC::Expression arg, KRPC::Expression value) {
@@ -5051,7 +5056,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::contains_stream(Client
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg));
   _args.push_back(encoder::encode_arg(value));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Contains", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Contains", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::contains_key_stream(Client& _client, KRPC::Expression dictionary, KRPC::Expression key) {
@@ -5059,25 +5064,25 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::contains_key_stream(Cl
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(dictionary));
   _args.push_back(encoder::encode_arg(key));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_ContainsKey", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_ContainsKey", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::continue__stream(Client& _client) {
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Continue"));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Continue"));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::convert_to_string_stream(Client& _client, KRPC::Expression arg) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(arg));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_ConvertToString", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_ConvertToString", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::count_stream(Client& _client, KRPC::Expression arg) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(arg));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Count", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Count", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::create_dictionary_stream(Client& _client, std::vector<KRPC::Expression> keys, std::vector<KRPC::Expression> values) {
@@ -5085,7 +5090,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::create_dictionary_stre
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(keys));
   _args.push_back(encoder::encode_arg(values));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_CreateDictionary", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_CreateDictionary", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::create_empty_dictionary_stream(Client& _client, KRPC::Type key_type, KRPC::Type value_type) {
@@ -5093,35 +5098,35 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::create_empty_dictionar
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(key_type));
   _args.push_back(encoder::encode_arg(value_type));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_CreateEmptyDictionary", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_CreateEmptyDictionary", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::create_empty_list_stream(Client& _client, KRPC::Type value_type) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value_type));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_CreateEmptyList", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_CreateEmptyList", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::create_empty_set_stream(Client& _client, KRPC::Type value_type) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value_type));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_CreateEmptySet", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_CreateEmptySet", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::create_list_stream(Client& _client, std::vector<KRPC::Expression> values) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(values));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_CreateList", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_CreateList", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::create_set_stream(Client& _client, std::set<KRPC::Expression> values) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(values));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_CreateSet", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_CreateSet", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::create_struct_stream(Client& _client, KRPC::Type type, std::vector<KRPC::Expression> field_values) {
@@ -5129,35 +5134,35 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::create_struct_stream(C
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(type));
   _args.push_back(encoder::encode_arg(field_values));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_CreateStruct", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_CreateStruct", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::create_tuple_stream(Client& _client, std::vector<KRPC::Expression> elements) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(elements));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_CreateTuple", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_CreateTuple", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::dictionary_keys_stream(Client& _client, KRPC::Expression dictionary) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(dictionary));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_DictionaryKeys", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_DictionaryKeys", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::dictionary_values_stream(Client& _client, KRPC::Expression dictionary) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(dictionary));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_DictionaryValues", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_DictionaryValues", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::distinct_stream(Client& _client, KRPC::Expression arg) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(arg));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Distinct", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Distinct", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::divide_stream(Client& _client, KRPC::Expression arg0, KRPC::Expression arg1) {
@@ -5165,7 +5170,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::divide_stream(Client& 
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg0));
   _args.push_back(encoder::encode_arg(arg1));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Divide", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Divide", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::element_at_stream(Client& _client, KRPC::Expression arg, KRPC::Expression index) {
@@ -5173,7 +5178,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::element_at_stream(Clie
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg));
   _args.push_back(encoder::encode_arg(index));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_ElementAt", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_ElementAt", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::equal_stream(Client& _client, KRPC::Expression arg0, KRPC::Expression arg1) {
@@ -5181,7 +5186,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::equal_stream(Client& _
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg0));
   _args.push_back(encoder::encode_arg(arg1));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Equal", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Equal", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::except_stream(Client& _client, KRPC::Expression arg1, KRPC::Expression arg2) {
@@ -5189,7 +5194,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::except_stream(Client& 
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg1));
   _args.push_back(encoder::encode_arg(arg2));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Except", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Except", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::exclusive_or_stream(Client& _client, KRPC::Expression arg0, KRPC::Expression arg1) {
@@ -5197,14 +5202,14 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::exclusive_or_stream(Cl
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg0));
   _args.push_back(encoder::encode_arg(arg1));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_ExclusiveOr", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_ExclusiveOr", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::first_stream(Client& _client, KRPC::Expression arg) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(arg));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_First", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_First", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::for_each_stream(Client& _client, KRPC::Expression variable, KRPC::Expression collection, KRPC::Expression body) {
@@ -5213,7 +5218,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::for_each_stream(Client
   _args.push_back(encoder::encode_arg(variable));
   _args.push_back(encoder::encode_arg(collection));
   _args.push_back(encoder::encode_arg(body));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_ForEach", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_ForEach", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::get_stream(Client& _client, KRPC::Expression arg, KRPC::Expression index) {
@@ -5221,7 +5226,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::get_stream(Client& _cl
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg));
   _args.push_back(encoder::encode_arg(index));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Get", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Get", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::get_field_stream(Client& _client, KRPC::Expression arg, std::string name) {
@@ -5229,7 +5234,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::get_field_stream(Clien
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg));
   _args.push_back(encoder::encode_arg(name));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_GetField", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_GetField", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::greater_than_stream(Client& _client, KRPC::Expression arg0, KRPC::Expression arg1) {
@@ -5237,7 +5242,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::greater_than_stream(Cl
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg0));
   _args.push_back(encoder::encode_arg(arg1));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_GreaterThan", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_GreaterThan", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::greater_than_or_equal_stream(Client& _client, KRPC::Expression arg0, KRPC::Expression arg1) {
@@ -5245,7 +5250,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::greater_than_or_equal_
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg0));
   _args.push_back(encoder::encode_arg(arg1));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_GreaterThanOrEqual", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_GreaterThanOrEqual", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::group_by_stream(Client& _client, KRPC::Expression arg, KRPC::Expression key) {
@@ -5253,7 +5258,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::group_by_stream(Client
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg));
   _args.push_back(encoder::encode_arg(key));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_GroupBy", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_GroupBy", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::if_then_stream(Client& _client, KRPC::Expression condition, KRPC::Expression body) {
@@ -5261,7 +5266,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::if_then_stream(Client&
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(condition));
   _args.push_back(encoder::encode_arg(body));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_IfThen", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_IfThen", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::if_then_else_stream(Client& _client, KRPC::Expression condition, KRPC::Expression body, KRPC::Expression else_body) {
@@ -5270,7 +5275,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::if_then_else_stream(Cl
   _args.push_back(encoder::encode_arg(condition));
   _args.push_back(encoder::encode_arg(body));
   _args.push_back(encoder::encode_arg(else_body));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_IfThenElse", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_IfThenElse", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::intersect_stream(Client& _client, KRPC::Expression arg1, KRPC::Expression arg2) {
@@ -5278,7 +5283,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::intersect_stream(Clien
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg1));
   _args.push_back(encoder::encode_arg(arg2));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Intersect", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Intersect", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::invoke_stream(Client& _client, KRPC::Expression function, std::map<std::string, KRPC::Expression> args) {
@@ -5286,14 +5291,14 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::invoke_stream(Client& 
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(function));
   _args.push_back(encoder::encode_arg(args));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Invoke", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Invoke", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::is_null_stream(Client& _client, KRPC::Expression value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_IsNull", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_IsNull", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::lambda_stream(Client& _client, std::vector<KRPC::Expression> parameters, KRPC::Expression body) {
@@ -5301,14 +5306,14 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::lambda_stream(Client& 
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(parameters));
   _args.push_back(encoder::encode_arg(body));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Lambda", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Lambda", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::last_stream(Client& _client, KRPC::Expression arg) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(arg));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Last", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Last", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::left_shift_stream(Client& _client, KRPC::Expression arg0, KRPC::Expression arg1) {
@@ -5316,7 +5321,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::left_shift_stream(Clie
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg0));
   _args.push_back(encoder::encode_arg(arg1));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_LeftShift", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_LeftShift", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::less_than_stream(Client& _client, KRPC::Expression arg0, KRPC::Expression arg1) {
@@ -5324,7 +5329,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::less_than_stream(Clien
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg0));
   _args.push_back(encoder::encode_arg(arg1));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_LessThan", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_LessThan", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::less_than_or_equal_stream(Client& _client, KRPC::Expression arg0, KRPC::Expression arg1) {
@@ -5332,14 +5337,14 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::less_than_or_equal_str
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg0));
   _args.push_back(encoder::encode_arg(arg1));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_LessThanOrEqual", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_LessThanOrEqual", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::max_stream(Client& _client, KRPC::Expression arg) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(arg));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Max", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Max", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::max_by_stream(Client& _client, KRPC::Expression arg, KRPC::Expression key) {
@@ -5347,14 +5352,14 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::max_by_stream(Client& 
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg));
   _args.push_back(encoder::encode_arg(key));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_MaxBy", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_MaxBy", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::min_stream(Client& _client, KRPC::Expression arg) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(arg));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Min", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Min", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::min_by_stream(Client& _client, KRPC::Expression arg, KRPC::Expression key) {
@@ -5362,7 +5367,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::min_by_stream(Client& 
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg));
   _args.push_back(encoder::encode_arg(key));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_MinBy", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_MinBy", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::modulo_stream(Client& _client, KRPC::Expression arg0, KRPC::Expression arg1) {
@@ -5370,7 +5375,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::modulo_stream(Client& 
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg0));
   _args.push_back(encoder::encode_arg(arg1));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Modulo", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Modulo", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::multiply_stream(Client& _client, KRPC::Expression arg0, KRPC::Expression arg1) {
@@ -5378,21 +5383,21 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::multiply_stream(Client
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg0));
   _args.push_back(encoder::encode_arg(arg1));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Multiply", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Multiply", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::negate_stream(Client& _client, KRPC::Expression arg) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(arg));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Negate", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Negate", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::not__stream(Client& _client, KRPC::Expression arg) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(arg));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Not", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Not", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::not_equal_stream(Client& _client, KRPC::Expression arg0, KRPC::Expression arg1) {
@@ -5400,7 +5405,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::not_equal_stream(Clien
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg0));
   _args.push_back(encoder::encode_arg(arg1));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_NotEqual", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_NotEqual", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::or__stream(Client& _client, KRPC::Expression arg0, KRPC::Expression arg1) {
@@ -5408,7 +5413,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::or__stream(Client& _cl
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg0));
   _args.push_back(encoder::encode_arg(arg1));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Or", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Or", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::order_by_stream(Client& _client, KRPC::Expression arg, KRPC::Expression key) {
@@ -5416,7 +5421,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::order_by_stream(Client
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg));
   _args.push_back(encoder::encode_arg(key));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_OrderBy", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_OrderBy", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::parameter_stream(Client& _client, std::string name, KRPC::Type type) {
@@ -5424,7 +5429,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::parameter_stream(Clien
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(name));
   _args.push_back(encoder::encode_arg(type));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Parameter", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Parameter", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::power_stream(Client& _client, KRPC::Expression arg0, KRPC::Expression arg1) {
@@ -5432,7 +5437,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::power_stream(Client& _
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg0));
   _args.push_back(encoder::encode_arg(arg1));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Power", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Power", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::remove_stream(Client& _client, KRPC::Expression collection, KRPC::Expression value) {
@@ -5440,7 +5445,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::remove_stream(Client& 
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(collection));
   _args.push_back(encoder::encode_arg(value));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Remove", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Remove", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::remove_at_stream(Client& _client, KRPC::Expression list, KRPC::Expression index) {
@@ -5448,25 +5453,25 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::remove_at_stream(Clien
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(list));
   _args.push_back(encoder::encode_arg(index));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_RemoveAt", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_RemoveAt", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::return__stream(Client& _client, KRPC::Expression value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Return", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Return", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::return_nothing_stream(Client& _client) {
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_ReturnNothing"));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_ReturnNothing"));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::reverse_stream(Client& _client, KRPC::Expression arg) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(arg));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Reverse", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Reverse", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::right_shift_stream(Client& _client, KRPC::Expression arg0, KRPC::Expression arg1) {
@@ -5474,7 +5479,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::right_shift_stream(Cli
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg0));
   _args.push_back(encoder::encode_arg(arg1));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_RightShift", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_RightShift", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::select_stream(Client& _client, KRPC::Expression arg, KRPC::Expression func) {
@@ -5482,7 +5487,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::select_stream(Client& 
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg));
   _args.push_back(encoder::encode_arg(func));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Select", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Select", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::select_many_stream(Client& _client, KRPC::Expression arg, KRPC::Expression func) {
@@ -5490,7 +5495,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::select_many_stream(Cli
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg));
   _args.push_back(encoder::encode_arg(func));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_SelectMany", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_SelectMany", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::set_stream(Client& _client, KRPC::Expression collection, KRPC::Expression index, KRPC::Expression value) {
@@ -5499,7 +5504,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::set_stream(Client& _cl
   _args.push_back(encoder::encode_arg(collection));
   _args.push_back(encoder::encode_arg(index));
   _args.push_back(encoder::encode_arg(value));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Set", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Set", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::skip_stream(Client& _client, KRPC::Expression arg, KRPC::Expression count) {
@@ -5507,7 +5512,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::skip_stream(Client& _c
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg));
   _args.push_back(encoder::encode_arg(count));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Skip", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Skip", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::state_variable_stream(Client& _client, std::string name, KRPC::Expression initial_value) {
@@ -5515,14 +5520,14 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::state_variable_stream(
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(name));
   _args.push_back(encoder::encode_arg(initial_value));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_StateVariable", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_StateVariable", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::string_concat_stream(Client& _client, std::vector<KRPC::Expression> args) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(args));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_StringConcat", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_StringConcat", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::string_contains_stream(Client& _client, KRPC::Expression arg, KRPC::Expression value) {
@@ -5530,7 +5535,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::string_contains_stream
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg));
   _args.push_back(encoder::encode_arg(value));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_StringContains", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_StringContains", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::string_ends_with_stream(Client& _client, KRPC::Expression arg, KRPC::Expression value) {
@@ -5538,7 +5543,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::string_ends_with_strea
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg));
   _args.push_back(encoder::encode_arg(value));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_StringEndsWith", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_StringEndsWith", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::string_get_stream(Client& _client, KRPC::Expression arg, KRPC::Expression index) {
@@ -5546,7 +5551,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::string_get_stream(Clie
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg));
   _args.push_back(encoder::encode_arg(index));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_StringGet", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_StringGet", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::string_index_of_stream(Client& _client, KRPC::Expression arg, KRPC::Expression value) {
@@ -5554,7 +5559,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::string_index_of_stream
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg));
   _args.push_back(encoder::encode_arg(value));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_StringIndexOf", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_StringIndexOf", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::string_join_stream(Client& _client, KRPC::Expression separator, KRPC::Expression values) {
@@ -5562,14 +5567,14 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::string_join_stream(Cli
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(separator));
   _args.push_back(encoder::encode_arg(values));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_StringJoin", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_StringJoin", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::string_length_stream(Client& _client, KRPC::Expression arg) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(arg));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_StringLength", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_StringLength", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::string_replace_stream(Client& _client, KRPC::Expression arg, KRPC::Expression old_value, KRPC::Expression new_value) {
@@ -5578,7 +5583,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::string_replace_stream(
   _args.push_back(encoder::encode_arg(arg));
   _args.push_back(encoder::encode_arg(old_value));
   _args.push_back(encoder::encode_arg(new_value));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_StringReplace", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_StringReplace", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::string_split_stream(Client& _client, KRPC::Expression arg, KRPC::Expression separator) {
@@ -5586,7 +5591,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::string_split_stream(Cl
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg));
   _args.push_back(encoder::encode_arg(separator));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_StringSplit", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_StringSplit", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::string_starts_with_stream(Client& _client, KRPC::Expression arg, KRPC::Expression value) {
@@ -5594,7 +5599,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::string_starts_with_str
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg));
   _args.push_back(encoder::encode_arg(value));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_StringStartsWith", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_StringStartsWith", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::string_substring_stream(Client& _client, KRPC::Expression arg, KRPC::Expression start, KRPC::Expression length) {
@@ -5603,42 +5608,42 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::string_substring_strea
   _args.push_back(encoder::encode_arg(arg));
   _args.push_back(encoder::encode_arg(start));
   _args.push_back(encoder::encode_arg(length));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_StringSubstring", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_StringSubstring", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::string_to_lower_stream(Client& _client, KRPC::Expression arg) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(arg));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_StringToLower", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_StringToLower", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::string_to_upper_stream(Client& _client, KRPC::Expression arg) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(arg));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_StringToUpper", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_StringToUpper", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::string_trim_stream(Client& _client, KRPC::Expression arg) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(arg));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_StringTrim", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_StringTrim", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::string_trim_end_stream(Client& _client, KRPC::Expression arg) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(arg));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_StringTrimEnd", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_StringTrimEnd", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::string_trim_start_stream(Client& _client, KRPC::Expression arg) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(arg));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_StringTrimStart", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_StringTrimStart", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::subtract_stream(Client& _client, KRPC::Expression arg0, KRPC::Expression arg1) {
@@ -5646,14 +5651,14 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::subtract_stream(Client
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg0));
   _args.push_back(encoder::encode_arg(arg1));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Subtract", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Subtract", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::sum_stream(Client& _client, KRPC::Expression arg) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(arg));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Sum", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Sum", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::take_stream(Client& _client, KRPC::Expression arg, KRPC::Expression count) {
@@ -5661,7 +5666,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::take_stream(Client& _c
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg));
   _args.push_back(encoder::encode_arg(count));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Take", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Take", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::throw__stream(Client& _client, std::string service, std::string name, KRPC::Expression message) {
@@ -5670,21 +5675,21 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::throw__stream(Client& 
   _args.push_back(encoder::encode_arg(service));
   _args.push_back(encoder::encode_arg(name));
   _args.push_back(encoder::encode_arg(message));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Throw", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Throw", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::to_list_stream(Client& _client, KRPC::Expression arg) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(arg));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_ToList", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_ToList", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::to_set_stream(Client& _client, KRPC::Expression arg) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(arg));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_ToSet", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_ToSet", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::try_catch_stream(Client& _client, KRPC::Expression body, std::string service, std::string name, std::optional<KRPC::Expression> message, KRPC::Expression handler) {
@@ -5695,7 +5700,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::try_catch_stream(Clien
   _args.push_back(encoder::encode_arg(name));
   _args.push_back(encoder::encode_arg(message));
   _args.push_back(encoder::encode_arg(handler));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_TryCatch", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_TryCatch", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::try_catch_all_stream(Client& _client, KRPC::Expression body, std::optional<KRPC::Expression> message, KRPC::Expression handler) {
@@ -5704,7 +5709,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::try_catch_all_stream(C
   _args.push_back(encoder::encode_arg(body));
   _args.push_back(encoder::encode_arg(message));
   _args.push_back(encoder::encode_arg(handler));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_TryCatchAll", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_TryCatchAll", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::try_finally_stream(Client& _client, KRPC::Expression body, KRPC::Expression finalizer) {
@@ -5712,7 +5717,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::try_finally_stream(Cli
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(body));
   _args.push_back(encoder::encode_arg(finalizer));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_TryFinally", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_TryFinally", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::union__stream(Client& _client, KRPC::Expression arg1, KRPC::Expression arg2) {
@@ -5720,7 +5725,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::union__stream(Client& 
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg1));
   _args.push_back(encoder::encode_arg(arg2));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Union", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Union", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::variable_stream(Client& _client, std::string name, KRPC::Type type) {
@@ -5728,7 +5733,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::variable_stream(Client
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(name));
   _args.push_back(encoder::encode_arg(type));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Variable", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Variable", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::where_stream(Client& _client, KRPC::Expression arg, KRPC::Expression func) {
@@ -5736,7 +5741,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::where_stream(Client& _
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(arg));
   _args.push_back(encoder::encode_arg(func));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Where", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Where", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::while__stream(Client& _client, KRPC::Expression condition, KRPC::Expression body) {
@@ -5744,7 +5749,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::while__stream(Client& 
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(condition));
   _args.push_back(encoder::encode_arg(body));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_While", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_While", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::zip_stream(Client& _client, KRPC::Expression arg1, KRPC::Expression arg2, KRPC::Expression func) {
@@ -5753,7 +5758,7 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::zip_stream(Client& _cl
   _args.push_back(encoder::encode_arg(arg1));
   _args.push_back(encoder::encode_arg(arg2));
   _args.push_back(encoder::encode_arg(func));
-  return ::krpc::Stream<KRPC::Expression>(&_client, _client.build_call("KRPC", "Expression_static_Zip", _args));
+  return ::krpc::Stream<KRPC::Expression>(_client, _client.build_call("KRPC", "Expression_static_Zip", _args));
 }
 
 inline ::krpc::schema::ProcedureCall KRPC::Expression::has_return_type_call() {
@@ -6736,7 +6741,10 @@ inline ::krpc::schema::ProcedureCall KRPC::Expression::zip_call(Client& _client,
   return _client.build_call("KRPC", "Expression_static_Zip", _args);
 }
 
-inline KRPC::Type::Type(Client* client, uint64_t id):
+inline KRPC::Type::Type():
+  Object("KRPC::Type") {}
+
+inline KRPC::Type::Type(const Client& client, uint64_t id):
   Object(client, "KRPC::Type", id) {}
 
 inline KRPC::TypeCode KRPC::Type::code() {
@@ -6962,43 +6970,43 @@ inline ::krpc::Stream<KRPC::TypeCode> KRPC::Type::code_stream() {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(*this));
-  return ::krpc::Stream<KRPC::TypeCode>(&this->_client, this->_client.build_call("KRPC", "Type_get_Code", _args));
+  return ::krpc::Stream<KRPC::TypeCode>(this->_client, this->_client.build_call("KRPC", "Type_get_Code", _args));
 }
 
 inline ::krpc::Stream<std::string> KRPC::Type::name_stream() {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(*this));
-  return ::krpc::Stream<std::string>(&this->_client, this->_client.build_call("KRPC", "Type_get_Name", _args));
+  return ::krpc::Stream<std::string>(this->_client, this->_client.build_call("KRPC", "Type_get_Name", _args));
 }
 
 inline ::krpc::Stream<bool> KRPC::Type::nullable_stream() {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(*this));
-  return ::krpc::Stream<bool>(&this->_client, this->_client.build_call("KRPC", "Type_get_Nullable", _args));
+  return ::krpc::Stream<bool>(this->_client, this->_client.build_call("KRPC", "Type_get_Nullable", _args));
 }
 
 inline ::krpc::Stream<std::string> KRPC::Type::service_stream() {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(*this));
-  return ::krpc::Stream<std::string>(&this->_client, this->_client.build_call("KRPC", "Type_get_Service", _args));
+  return ::krpc::Stream<std::string>(this->_client, this->_client.build_call("KRPC", "Type_get_Service", _args));
 }
 
 inline ::krpc::Stream<std::vector<KRPC::Type>> KRPC::Type::types_stream() {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(*this));
-  return ::krpc::Stream<std::vector<KRPC::Type>>(&this->_client, this->_client.build_call("KRPC", "Type_get_Types", _args));
+  return ::krpc::Stream<std::vector<KRPC::Type>>(this->_client, this->_client.build_call("KRPC", "Type_get_Types", _args));
 }
 
 inline ::krpc::Stream<KRPC::Type> KRPC::Type::bool__stream(Client& _client) {
-  return ::krpc::Stream<KRPC::Type>(&_client, _client.build_call("KRPC", "Type_static_Bool"));
+  return ::krpc::Stream<KRPC::Type>(_client, _client.build_call("KRPC", "Type_static_Bool"));
 }
 
 inline ::krpc::Stream<KRPC::Type> KRPC::Type::bytes_stream(Client& _client) {
-  return ::krpc::Stream<KRPC::Type>(&_client, _client.build_call("KRPC", "Type_static_Bytes"));
+  return ::krpc::Stream<KRPC::Type>(_client, _client.build_call("KRPC", "Type_static_Bytes"));
 }
 
 inline ::krpc::Stream<KRPC::Type> KRPC::Type::class_type_stream(Client& _client, std::string service, std::string name) {
@@ -7006,7 +7014,7 @@ inline ::krpc::Stream<KRPC::Type> KRPC::Type::class_type_stream(Client& _client,
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(service));
   _args.push_back(encoder::encode_arg(name));
-  return ::krpc::Stream<KRPC::Type>(&_client, _client.build_call("KRPC", "Type_static_ClassType", _args));
+  return ::krpc::Stream<KRPC::Type>(_client, _client.build_call("KRPC", "Type_static_ClassType", _args));
 }
 
 inline ::krpc::Stream<KRPC::Type> KRPC::Type::dictionary_type_stream(Client& _client, KRPC::Type key_type, KRPC::Type value_type) {
@@ -7014,11 +7022,11 @@ inline ::krpc::Stream<KRPC::Type> KRPC::Type::dictionary_type_stream(Client& _cl
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(key_type));
   _args.push_back(encoder::encode_arg(value_type));
-  return ::krpc::Stream<KRPC::Type>(&_client, _client.build_call("KRPC", "Type_static_DictionaryType", _args));
+  return ::krpc::Stream<KRPC::Type>(_client, _client.build_call("KRPC", "Type_static_DictionaryType", _args));
 }
 
 inline ::krpc::Stream<KRPC::Type> KRPC::Type::double__stream(Client& _client) {
-  return ::krpc::Stream<KRPC::Type>(&_client, _client.build_call("KRPC", "Type_static_Double"));
+  return ::krpc::Stream<KRPC::Type>(_client, _client.build_call("KRPC", "Type_static_Double"));
 }
 
 inline ::krpc::Stream<KRPC::Type> KRPC::Type::enumeration_type_stream(Client& _client, std::string service, std::string name) {
@@ -7026,44 +7034,44 @@ inline ::krpc::Stream<KRPC::Type> KRPC::Type::enumeration_type_stream(Client& _c
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(service));
   _args.push_back(encoder::encode_arg(name));
-  return ::krpc::Stream<KRPC::Type>(&_client, _client.build_call("KRPC", "Type_static_EnumerationType", _args));
+  return ::krpc::Stream<KRPC::Type>(_client, _client.build_call("KRPC", "Type_static_EnumerationType", _args));
 }
 
 inline ::krpc::Stream<KRPC::Type> KRPC::Type::float__stream(Client& _client) {
-  return ::krpc::Stream<KRPC::Type>(&_client, _client.build_call("KRPC", "Type_static_Float"));
+  return ::krpc::Stream<KRPC::Type>(_client, _client.build_call("KRPC", "Type_static_Float"));
 }
 
 inline ::krpc::Stream<KRPC::Type> KRPC::Type::int__stream(Client& _client) {
-  return ::krpc::Stream<KRPC::Type>(&_client, _client.build_call("KRPC", "Type_static_Int"));
+  return ::krpc::Stream<KRPC::Type>(_client, _client.build_call("KRPC", "Type_static_Int"));
 }
 
 inline ::krpc::Stream<KRPC::Type> KRPC::Type::list_type_stream(Client& _client, KRPC::Type value_type) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value_type));
-  return ::krpc::Stream<KRPC::Type>(&_client, _client.build_call("KRPC", "Type_static_ListType", _args));
+  return ::krpc::Stream<KRPC::Type>(_client, _client.build_call("KRPC", "Type_static_ListType", _args));
 }
 
 inline ::krpc::Stream<KRPC::Type> KRPC::Type::long__stream(Client& _client) {
-  return ::krpc::Stream<KRPC::Type>(&_client, _client.build_call("KRPC", "Type_static_Long"));
+  return ::krpc::Stream<KRPC::Type>(_client, _client.build_call("KRPC", "Type_static_Long"));
 }
 
 inline ::krpc::Stream<KRPC::Type> KRPC::Type::nullable_type_stream(Client& _client, KRPC::Type value_type) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value_type));
-  return ::krpc::Stream<KRPC::Type>(&_client, _client.build_call("KRPC", "Type_static_NullableType", _args));
+  return ::krpc::Stream<KRPC::Type>(_client, _client.build_call("KRPC", "Type_static_NullableType", _args));
 }
 
 inline ::krpc::Stream<KRPC::Type> KRPC::Type::set_type_stream(Client& _client, KRPC::Type value_type) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value_type));
-  return ::krpc::Stream<KRPC::Type>(&_client, _client.build_call("KRPC", "Type_static_SetType", _args));
+  return ::krpc::Stream<KRPC::Type>(_client, _client.build_call("KRPC", "Type_static_SetType", _args));
 }
 
 inline ::krpc::Stream<KRPC::Type> KRPC::Type::string_stream(Client& _client) {
-  return ::krpc::Stream<KRPC::Type>(&_client, _client.build_call("KRPC", "Type_static_String"));
+  return ::krpc::Stream<KRPC::Type>(_client, _client.build_call("KRPC", "Type_static_String"));
 }
 
 inline ::krpc::Stream<KRPC::Type> KRPC::Type::struct_type_stream(Client& _client, std::string service, std::string name) {
@@ -7071,22 +7079,22 @@ inline ::krpc::Stream<KRPC::Type> KRPC::Type::struct_type_stream(Client& _client
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(service));
   _args.push_back(encoder::encode_arg(name));
-  return ::krpc::Stream<KRPC::Type>(&_client, _client.build_call("KRPC", "Type_static_StructType", _args));
+  return ::krpc::Stream<KRPC::Type>(_client, _client.build_call("KRPC", "Type_static_StructType", _args));
 }
 
 inline ::krpc::Stream<KRPC::Type> KRPC::Type::tuple_type_stream(Client& _client, std::vector<KRPC::Type> value_types) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value_types));
-  return ::krpc::Stream<KRPC::Type>(&_client, _client.build_call("KRPC", "Type_static_TupleType", _args));
+  return ::krpc::Stream<KRPC::Type>(_client, _client.build_call("KRPC", "Type_static_TupleType", _args));
 }
 
 inline ::krpc::Stream<KRPC::Type> KRPC::Type::u_int_stream(Client& _client) {
-  return ::krpc::Stream<KRPC::Type>(&_client, _client.build_call("KRPC", "Type_static_UInt"));
+  return ::krpc::Stream<KRPC::Type>(_client, _client.build_call("KRPC", "Type_static_UInt"));
 }
 
 inline ::krpc::Stream<KRPC::Type> KRPC::Type::u_long_stream(Client& _client) {
-  return ::krpc::Stream<KRPC::Type>(&_client, _client.build_call("KRPC", "Type_static_ULong"));
+  return ::krpc::Stream<KRPC::Type>(_client, _client.build_call("KRPC", "Type_static_ULong"));
 }
 
 inline ::krpc::schema::ProcedureCall KRPC::Type::code_call() {

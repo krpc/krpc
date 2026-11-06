@@ -387,7 +387,7 @@ void check_return_type(const services::KRPC::Expression& function, const char* n
 // Constructs a function stream, whose constructor is private to Stream
 struct function_streams {
   template <typename T>
-  static Stream<T> create(Client* client, uint64_t id, bool null_is_an_error) {
+  static Stream<T> create(Client& client, uint64_t id, bool null_is_an_error) {
     return Stream<T>(client, id, null_is_an_error);
   }
 };
@@ -409,7 +409,7 @@ inline Stream<T> add_stream(const services::KRPC::Expression& function) {
   function_stream_detail::check_return_type<T>(function, "add_stream");
   uint64_t stream_id = internal_procedures::add_function_stream(function);
   return function_stream_detail::function_streams::create<T>(
-      &function._client, stream_id, !function_stream_detail::is_optional<T>::value);
+      function._client, stream_id, !function_stream_detail::is_optional<T>::value);
 }
 
 /**

@@ -14,7 +14,7 @@ class Client;
 
 Event::Event() {}
 
-Event::Event(Client* client, uint64_t stream_id) : _stream(client, stream_id) {}
+Event::Event(Client& client, uint64_t stream_id) : _stream(client, stream_id) {}
 
 Condition& Event::get_condition() const { return _stream.get_condition(); }
 

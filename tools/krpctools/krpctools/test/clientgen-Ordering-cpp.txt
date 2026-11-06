@@ -26,7 +26,7 @@ namespace services {
 
 class ServiceA : public Service {
  public:
-  explicit ServiceA(Client& client);
+  explicit ServiceA(const Client& client);
 
   /**
    * Defaults to a member of another service's enumeration.
@@ -51,7 +51,7 @@ class ServiceA : public Service {
 
 namespace services {
 
-inline ServiceA::ServiceA(Client& client):
+inline ServiceA::ServiceA(const Client& client):
   Service(client) {
 }
 
@@ -73,14 +73,14 @@ inline ::krpc::Stream<void> ServiceA::frob_stream(ServiceB::Mode mode = ServiceB
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(mode));
-  return ::krpc::Stream<void>(&this->_client, this->_client.build_call("ServiceA", "Frob", _args));
+  return ::krpc::Stream<void>(this->_client, this->_client.build_call("ServiceA", "Frob", _args));
 }
 
 inline ::krpc::Stream<void> ServiceA::frob_all_stream(std::vector<ServiceB::Mode> modes = std::vector<ServiceB::Mode>{ServiceB::Mode::fast}) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(modes));
-  return ::krpc::Stream<void>(&this->_client, this->_client.build_call("ServiceA", "FrobAll", _args));
+  return ::krpc::Stream<void>(this->_client, this->_client.build_call("ServiceA", "FrobAll", _args));
 }
 
 inline ::krpc::schema::ProcedureCall ServiceA::frob_call(ServiceB::Mode mode = ServiceB::Mode::fast) {
