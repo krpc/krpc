@@ -110,7 +110,7 @@ void decode(std::string& value, const std::string& data, Client* client) {
 void decode(Event& event, const std::string& data, Client* client) {
   uint64_t stream_id = 0;
   decode(stream_id, data, client);
-  event = Event(client, stream_id);
+  event = Event(*client, stream_id);
 }
 
 void decode(google::protobuf::MessageLite& message, const std::string& data, Client* client) {

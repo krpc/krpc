@@ -211,7 +211,7 @@ struct Object {
   static type arg(krpc::Client& client, const Value& value) {
     if (value.value_case() != Value::kObject) return T();
     // A handle of 0 asks for an object of the class with the given id
-    if (value.object().handle() == 0) return T(&client, value.object().id());
+    if (value.object().handle() == 0) return T(client, value.object().id());
     return std::any_cast<T>(Handles::instance().object(value.object().handle()).value);
   }
   static Value result(const type& x) { return result_object(x); }

@@ -12,7 +12,8 @@ namespace krpc {
 template <typename T>
 class Object {
  public:
-  Object(Client* client, const std::string& name, uint64_t id = 0);
+  explicit Object(const std::string& name);
+  Object(const Client& client, const std::string& name, uint64_t id);
   template <typename U>
   friend std::ostream& operator<<(std::ostream&, const Object<U>&);
   template <typename U>
@@ -20,8 +21,9 @@ class Object {
   template <typename U>
   friend bool operator<(const Object<U>&, const Object<U>&);
   // Public because the encoder and decoder need them. Granting access with 'friend' would
-  // introduce a circular dependency between this header and theirs.
-  Client* _client;
+  // introduce a circular dependency between this header and theirs. Mutable as a client is a
+  // handle, which a const object calls through.
+  mutable Client _client;
   uint64_t _id;
 
  private:
@@ -39,7 +41,10 @@ template <typename T>
 uint64_t get_object_id(const Object<T>& object);
 
 template <typename T>
-inline Object<T>::Object(Client* client, const std::string& name, uint64_t id)
+inline Object<T>::Object(const std::string& name) : _id(0), _name(name) {}
+
+template <typename T>
+inline Object<T>::Object(const Client& client, const std::string& name, uint64_t id)
     : _client(client), _id(id), _name(name) {}
 
 template <typename T>

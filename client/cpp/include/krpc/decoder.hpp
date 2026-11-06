@@ -10,6 +10,7 @@
 #include <utility>
 #include <vector>
 
+#include "krpc/client.hpp"
 #include "krpc/error.hpp"
 #include "krpc/krpc.pb.hpp"
 
@@ -70,7 +71,7 @@ template <typename T>
 inline void decode(Object<T>& object, const std::string& data, Client* client) {
   uint64_t id;
   decode(id, data, client);
-  object._client = client;
+  object._client = client != nullptr ? *client : Client();
   object._id = id;
 }
 

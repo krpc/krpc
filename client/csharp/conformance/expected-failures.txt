@@ -1,5 +1,6 @@
 # The conformance tests the C# client fails, one per line, with the reason as a comment
 test_connection.py::test_call_after_end[close]  # A call after close raises ObjectDisposedException
+test_objects.py::test_call_after_close  # As test_connection.py::test_call_after_end[close]
 test_calls.py::test_class_extension_members  # The testee dispatch covers KRPC and TestService only
 test_streams.py::test_members[extension-member]  # The testee dispatch covers KRPC and TestService only
 test_codec.py::test_malformed_data[bytes]  # A decoding error is a plain ArgumentException, IOException or InvalidProtocolBufferException, as the client has no encoding error type

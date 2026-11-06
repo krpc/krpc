@@ -26,7 +26,7 @@ bool is_firing(const std::string& data, bool is_null) { return !is_null && data 
 
 }  // namespace
 
-StreamImpl::StreamImpl(Client* client, uint64_t id,
+StreamImpl::StreamImpl(const Client& client, uint64_t id,
                        std::shared_ptr<std::recursive_mutex> update_lock,
                        std::weak_ptr<StreamManager> manager)
     : client(client),
@@ -45,16 +45,40 @@ StreamImpl::StreamImpl(Client* client, uint64_t id,
       next_end_callback_tag(0),
       _rate(0) {}
 
-StreamImpl::~StreamImpl() {
-  if (ending) return;
+std::shared_ptr<StreamImpl> StreamImpl::handle(const std::shared_ptr<StreamImpl>& stream) {
+  std::lock_guard<std::recursive_mutex> guard(*stream->update_lock);
+  auto existing = stream->handles.lock();
+  if (existing) return existing;
+  std::shared_ptr<StreamImpl> created(stream.get(), [held = stream](StreamImpl*) mutable {
+    held->release();
+    held.reset();
+  });
+  stream->handles = created;
+  return created;
+}
+
+void StreamImpl::release() {
+  {
+    std::lock_guard<std::recursive_mutex> guard(*update_lock);
+    if (!handles.expired()) return;
+    released = true;
+    if (ending) return;
+  }
   try {
-    if (auto held_manager = manager.lock()) held_manager->drop_stream(id);
+    if (auto held_manager = manager.lock()) held_manager->drop_stream(this);
   } catch (...) {  // NOLINT(bugprone-empty-catch)
     // The connection closing also removes the stream
   }
 }
 
-Client* StreamImpl::get_client() const { return client; }
+bool StreamImpl::is_released() const {
+  std::lock_guard<std::recursive_mutex> guard(*update_lock);
+  return released;
+}
+
+void StreamImpl::claim(const Client& claiming_client) { client = claiming_client; }
+
+Client* StreamImpl::get_client() { return &client; }
 
 uint64_t StreamImpl::get_id() const { return id; }
 
@@ -62,10 +86,8 @@ float StreamImpl::rate() const { return _rate; }
 
 void StreamImpl::set_rate(float value) {
   _rate = value;
-  // Holding the manager keeps its client alive for the call
-  auto held_manager = manager.lock();
-  if (!held_manager || has_ended()) return;
-  internal_procedures::set_stream_rate(client, id, value);
+  if (has_ended()) return;
+  internal_procedures::set_stream_rate(&client, id, value);
 }
 
 std::string StreamImpl::get_data(bool* is_null) {
@@ -218,7 +240,7 @@ void StreamImpl::call(const std::shared_ptr<CallbackEntry>& callback, uint64_t v
     std::lock_guard<std::recursive_mutex> guard(*update_lock);
     // A late event callback is passed an unseen firing after a server ending
     bool ended = ending && (!added || ended_by_client);
-    if (ended || !note_passed(callback.get(), version)) return;
+    if (released || ended || !note_passed(callback.get(), version)) return;
     callback->adding = added;
   }
   // invoke reports what a callback throws, so the adding thread always passes on the queue
@@ -268,7 +290,10 @@ void StreamImpl::call_missed(CallbackEntry* callback) {
     deferred = callback->ending;
     callback->ending = nullptr;
   }
-  if (deferred) call_end_callbacks(end_callbacks, deferred);
+  if (deferred) {
+    call_end_callbacks(end_callbacks, deferred);
+    drop_callbacks();
+  }
 }
 
 bool StreamImpl::defer_ending(const EndCallbacks& callbacks, const std::exception_ptr& ending) {
@@ -330,6 +355,8 @@ int StreamImpl::add_callback(const Callback& callback) {
     detail::reach_race_point(RacePoint::first_call, entry->tag);
     call(entry, value_version, value, value_is_null, true);
   }
+  // An ended stream has no update to come, and a close has dropped its callbacks
+  if (has_ended()) remove_callback(entry->tag);
   return entry->tag;
 }
 
@@ -346,6 +373,7 @@ int StreamImpl::add_event_callback(const Callback& callback, uint64_t seen) {
     detail::reach_race_point(RacePoint::replay, entry->tag);
     replay(entry, replay_fired);
   }
+  if (has_ended()) remove_callback(entry->tag);
   return entry->tag;
 }
 
@@ -372,6 +400,13 @@ void StreamImpl::remove_callback(int tag) {
   if (it == callbacks.end()) return;
   removed = std::move(it->second);
   callbacks.erase(it);
+}
+
+// Destroyed once the lock is released, as a callback can hold the last copy of the client
+void StreamImpl::drop_callbacks() {
+  std::map<int, std::shared_ptr<CallbackEntry>> dropped;
+  std::lock_guard<std::recursive_mutex> guard(*update_lock);
+  dropped.swap(callbacks);
 }
 
 int StreamImpl::add_end_callback(const EndCallback& callback) {

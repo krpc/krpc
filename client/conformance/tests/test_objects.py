@@ -1,6 +1,7 @@
 """Object requirements: object handles and their identity."""
 
 import pytest
+import testee_pb2 as pb
 from driver import profile, section, values
 from driver.errors import assert_argument_error, assert_native_error
 from driver.helpers import create
@@ -270,3 +271,16 @@ def test_hash_across_connections(connected, server):
     language that hashes values."""
     alpha, same = from_both_connections(connected, server)
     assert connected.hash(alpha) == connected.hash(same)
+
+
+section("Closed Connections")
+
+
+def test_call_after_close(connected):
+    """A call through an object after its connection is closed raises the connection
+    error."""
+    obj = create(connected)
+    connected.close()
+    with pytest.raises(TesteeError) as info:
+        connected.invoke("TestService", "TestClass_GetValue", values.obj(obj))
+    assert info.value.error.kind == pb.Error.CONNECTION

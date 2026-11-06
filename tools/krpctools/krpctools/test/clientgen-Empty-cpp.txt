@@ -24,14 +24,14 @@ namespace services {
 
 class EmptyService : public Service {
  public:
-  explicit EmptyService(Client& client);
+  explicit EmptyService(const Client& client);
 };
 
 }  // namespace services
 
 namespace services {
 
-inline EmptyService::EmptyService(Client& client):
+inline EmptyService::EmptyService(const Client& client):
   Service(client) {
 }
 }  // namespace services

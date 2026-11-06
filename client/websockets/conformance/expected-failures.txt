@@ -18,6 +18,7 @@ test_errors.py::test_setter_error  # No values of type ClassType
 test_objects.py::test_equality  # No values of type ClassType
 test_objects.py::test_get_object_id  # No values of type ClassType
 test_objects.py::test_hash  # No values of type ClassType
+test_objects.py::test_call_after_close  # No values of type ClassType
 test_objects.py::test_object_id_range  # No object_id command
 test_objects.py::test_unknown_object_id  # No values of type ClassType
 test_codec.py::test_bool  # No encode command

@@ -16,7 +16,7 @@ class server_test : public ::testing::Test {
   server_test();
   /** Connect to the server the harness started, on the port it passes. */
   krpc::Client connect(const std::string& name = "C++ClientTest");
-  /** A client of the test's own, which the test closes by destroying it. */
+  /** A client of the test's own, which the test can destroy. */
   std::unique_ptr<krpc::Client> connect_client();
   /** Whether condition becomes true within ten seconds. */
   static bool eventually(const std::function<bool()>& condition);

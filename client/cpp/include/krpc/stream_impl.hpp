@@ -14,6 +14,7 @@
 #include <utility>
 #include <vector>
 
+#include "krpc/client.hpp"
 #include "krpc/condition.hpp"
 
 namespace krpc {
@@ -31,15 +32,22 @@ class CallbackDecodeError : public std::runtime_error {
     and then the update lock. */
 class StreamImpl {
  public:
-  StreamImpl(Client* client, uint64_t id, std::shared_ptr<std::recursive_mutex> update_lock,
+  StreamImpl(const Client& client, uint64_t id, std::shared_ptr<std::recursive_mutex> update_lock,
              std::weak_ptr<StreamManager> manager = std::weak_ptr<StreamManager>());
-  /** Remove the stream from the server, as its last handle is gone, unless it has ended. */
-  ~StreamImpl();
+  ~StreamImpl() = default;
   StreamImpl(const StreamImpl&) = delete;
   StreamImpl& operator=(const StreamImpl&) = delete;
   StreamImpl(StreamImpl&&) = delete;
   StreamImpl& operator=(StreamImpl&&) = delete;
-  Client* get_client() const;
+  /** The pointer a Stream holds. Work on the dispatcher queue holds the stream itself, so the
+      release of this pointer's last copy stops the stream's callbacks and removes it from the
+      server, whatever is queued. */
+  static std::shared_ptr<StreamImpl> handle(const std::shared_ptr<StreamImpl>& stream);
+  /** Set the client of a stream the reader registered, as its first handle claims it. */
+  void claim(const Client& claiming_client);
+  /** Whether the last handle is gone. */
+  bool is_released() const;
+  Client* get_client();
   uint64_t get_id() const;
   float rate() const;
   void set_rate(float value);
@@ -122,6 +130,9 @@ class StreamImpl {
   bool defer_ending(const EndCallbacks& callbacks, const std::exception_ptr& ending);
   Condition& get_condition();
   RecursiveMutex& get_condition_mutex();
+  /** Destroy the value callbacks, once the stream has ended, as they can hold the stream and
+      with it the client. */
+  void drop_callbacks();
   /** The callbacks, read under the update lock. */
   Callbacks get_callbacks() const;
   /** Call a callback with a value, unless it has been passed a newer one, has been removed, or
@@ -172,10 +183,18 @@ class StreamImpl {
       held. */
   bool note_passed(CallbackEntry* callback, uint64_t version);
   void invoke(const CallbackEntry& callback, const std::string& data, bool is_null);
-  Client* client;
+  /** Stop the callbacks and remove the stream from the server, as its last handle is gone, unless
+      a new handle has been made. */
+  void release();
+  // Declared first, so that it is released last. It can be the last copy of the client.
+  Client client;
   uint64_t id;
   std::shared_ptr<std::recursive_mutex> update_lock;
   std::weak_ptr<StreamManager> manager;
+  // The pointer the handles share. Changed under the update lock.
+  std::weak_ptr<StreamImpl> handles;
+  // Whether the last handle is gone. Changed under the update lock.
+  bool released = false;
   // Whether a value has been stored. Changed under the update lock.
   std::atomic<bool> updated;
   std::string data;

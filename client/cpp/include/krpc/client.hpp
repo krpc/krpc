@@ -24,9 +24,31 @@ namespace function_stream_detail {
 struct function_type_cache;
 }  // namespace function_stream_detail
 
+namespace detail {
+
+/** The exception types services register, keyed by service and name. Shared by a client's state
+    and its stream manager. Services register their throwers as they are constructed, on any
+    thread, while errors are thrown on the calling threads and the reader. */
+class ExceptionThrowers {
+ public:
+  void add(const std::string& service, const std::string& name,
+           const std::function<void(std::string)>& thrower);
+  /** Throw an error as the exception type registered for it, or as an RPCError. */
+  void throw_exception(const schema::Error& error) const;
+
+ private:
+  mutable std::mutex lock;
+  std::map<std::pair<std::string, std::string>, std::function<void(std::string)>> throwers;
+};
+
+}  // namespace detail
+
+/** A connection to the server. Every copy shares the connection, as does every service, object,
+    stream and event made from one. The connection closes on close(), or when the last of them is
+    destroyed. A default-constructed client is not connected. */
 class Client {
  public:
-  Client();
+  Client() = default;
   Client(const std::string& name, const std::string& address, unsigned int port = 50000,
          std::chrono::milliseconds timeout = std::chrono::milliseconds::zero(),
          std::chrono::milliseconds handshake_timeout = std::chrono::seconds(5),
@@ -59,10 +81,15 @@ class Client {
   schema::ProcedureResult invoke(std::string_view service, std::string_view procedure,
                                  const std::vector<encoder::Value>& args, Returns returns);
 
-  schema::Request build_request(
+  /** Close the connection. Calls in progress and later calls through any copy, service or object
+      throw ConnectionError, and streams and events end. Does nothing if already closed or not
+      connected. */
+  void close();
+
+  static schema::Request build_request(
       std::string_view service, std::string_view procedure,
       const std::vector<encoder::Value>& args = std::vector<encoder::Value>());
-  schema::ProcedureCall build_call(
+  static schema::ProcedureCall build_call(
       std::string_view service, std::string_view procedure,
       const std::vector<encoder::Value>& args = std::vector<encoder::Value>());
   void add_exception_thrower(const std::string& service, const std::string& name,
@@ -72,7 +99,7 @@ class Client {
   friend class StreamManager;
   friend class StreamImpl;
   friend struct function_stream_detail::function_type_cache;
-  void throw_exception(const schema::Error& error) const;
+  struct State;
   /** Send a request, whose first call returns what returns says, or whose calls are looked up
       in the server's list of services if returns is null. */
   schema::ProcedureResult send_request(schema::Request request, const Returns* returns = nullptr);
@@ -85,15 +112,15 @@ class Client {
   /** The return type of a server side function, if stored. A code of NONE is no value. */
   bool get_function_return_type(uint64_t id, schema::Type* type) const;
   /** Store the return type of a server side function. */
-  void set_function_return_type(uint64_t id, const schema::Type& type);
+  void set_function_return_type(uint64_t id, const schema::Type& type) const;
   /** The parameter types of a server side function, if stored. */
   bool get_function_parameter_types(uint64_t id, std::vector<schema::Type>* types) const;
   /** Store the parameter types of a server side function. */
-  void set_function_parameter_types(uint64_t id, const std::vector<schema::Type>& types);
+  void set_function_parameter_types(uint64_t id, const std::vector<schema::Type>& types) const;
 
  public:
-  /** Throw a StreamError if the client is not connected to a server. */
-  void check_stream_connection() const;
+  /** Throw a ConnectionError if the client is not connected to a server. */
+  void check_connected() const;
   std::shared_ptr<StreamImpl> add_stream(const schema::ProcedureCall& call);
   std::shared_ptr<StreamImpl> get_stream(uint64_t id);
 
@@ -124,31 +151,7 @@ class Client {
   void remove_stream_update_callback(int tag);
 
  private:
-  // Guards listed_returns
-  std::shared_ptr<std::mutex> lock;
-  // The procedures that return a new stream or event, from the server's list of services,
-  // keyed by service and procedure name. Shared by every copy of the client and guarded by
-  // lock.
-  struct ListedReturns {
-    bool listed = false;
-    ReturnsByProcedure returns;
-  };
-  std::shared_ptr<ListedReturns> listed_returns;
-  // Shared by every copy of the client, including the stream manager's own
-  std::shared_ptr<std::map<std::pair<std::string, std::string>, std::function<void(std::string)>>>
-      exception_throwers;
-  // Guards exception_throwers. Services register their throwers as they are constructed,
-  // which can happen on any thread and at any time, while errors are turned into exceptions
-  // on both the calling thread and the reader. Held by shared pointer as the
-  // client is copyable and a mutex is not.
-  std::shared_ptr<std::mutex> exception_throwers_lock;
-  std::map<uint64_t, schema::Type> function_return_types;
-  std::map<uint64_t, std::vector<schema::Type>> function_parameter_types;
-  // Guards function_return_types and function_parameter_types
-  std::shared_ptr<std::mutex> function_types_lock;
-  // Declared last, so that it is destroyed first. Ending the streams calls end callbacks,
-  // which can use the rest of the client.
-  std::shared_ptr<StreamManager> stream_manager;
+  std::shared_ptr<State> state;
 };
 
 }  // namespace krpc

@@ -148,20 +148,20 @@ struct function_type_cache {
  */
 inline schema::Type return_type(const services::KRPC::Expression& function) {
   schema::Type type;
-  if (function_type_cache::get(*function._client, function._id, &type)) return type;
+  if (function_type_cache::get(function._client, function._id, &type)) return type;
   services::KRPC::Expression expression = function;
   if (expression.has_return_type()) build_type(expression.return_type(), &type);
-  function_type_cache::set(function._client, function._id, type);
+  function_type_cache::set(&function._client, function._id, type);
   return type;
 }
 
 /** The types of a server side function's parameters. Cached, as for the return type. */
 inline std::vector<schema::Type> parameter_types(const services::KRPC::Expression& function) {
   std::vector<schema::Type> types;
-  if (function_type_cache::get(*function._client, function._id, &types)) return types;
+  if (function_type_cache::get(function._client, function._id, &types)) return types;
   services::KRPC::Expression expression = function;
   for (const auto& remote : expression.parameter_types()) build_type(remote, &types.emplace_back());
-  function_type_cache::set(function._client, function._id, types);
+  function_type_cache::set(&function._client, function._id, types);
   return types;
 }
 
@@ -387,7 +387,7 @@ void check_return_type(const services::KRPC::Expression& function, const char* n
 // Constructs a function stream, whose constructor is private to Stream
 struct function_streams {
   template <typename T>
-  static Stream<T> create(Client* client, uint64_t id, bool null_is_an_error) {
+  static Stream<T> create(Client& client, uint64_t id, bool null_is_an_error) {
     return Stream<T>(client, id, null_is_an_error);
   }
 };
@@ -397,14 +397,15 @@ struct function_streams {
 /**
  * Create a stream from a server side function, evaluated on each update. Each call creates a new
  * stream. A Stream<void> runs a function with no value for its effects. Throws
- * std::invalid_argument if the template type does not describe the function's value, StreamError if
- * the client is not connected to a server, and services::KRPC::ArgumentException if the function
- * has parameters. Reading a null value throws std::runtime_error unless the template type is a
- * std::optional. In a callback, that error is written to stderr and the callback does not run.
+ * std::invalid_argument if the template type does not describe the function's value,
+ * ConnectionError if the client is not connected to a server, and services::KRPC::ArgumentException
+ * if the function has parameters. Reading a null value throws std::runtime_error unless the
+ * template type is a std::optional. In a callback, that error is written to stderr and the callback
+ * does not run.
  */
 template <typename T>
 inline Stream<T> add_stream(const services::KRPC::Expression& function) {
-  function._client->check_stream_connection();
+  function._client.check_connected();
   function_stream_detail::check_return_type<T>(function, "add_stream");
   uint64_t stream_id = internal_procedures::add_function_stream(function);
   return function_stream_detail::function_streams::create<T>(
@@ -422,12 +423,12 @@ inline services::KRPC::Expression compile(const services::KRPC::Expression& func
 
 /**
  * Create an event from a server side function that evaluates to a boolean value. Each call
- * creates a new event. Throws StreamError if the client is not connected to a server, and
+ * creates a new event. Throws ConnectionError if the client is not connected to a server, and
  * services::KRPC::ArgumentException if the function does not evaluate to a boolean value or has
  * parameters.
  */
 inline Event add_event(const services::KRPC::Expression& function) {
-  function._client->check_stream_connection();
+  function._client.check_connected();
   return internal_procedures::add_event(function);
 }
 
@@ -457,7 +458,7 @@ inline T run(const services::KRPC::Expression& function, const Args&... args) {
       // Unqualified, so that argument dependent lookup finds the overload for a type a
       // service defines at the point this template is used
       using decoder::decode;
-      decode(result, *data, function._client);
+      decode(result, *data, &function._client);
     }
     return result;
   }

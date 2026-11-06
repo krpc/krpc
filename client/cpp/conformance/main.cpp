@@ -452,10 +452,7 @@ class Testee {
         break;
       case Command::kClose:
         if (command.close().interrupted()) throw Unsupported("A C++ thread cannot be interrupted");
-        // A client closes when its last copy is destroyed
-        connected();
-        held_clients.back().reset();
-        destroy(current_connection);
+        connected().close();
         *reply->mutable_value() = result_none();
         break;
       case Command::kInvoke:
@@ -862,7 +859,7 @@ class Testee {
     removal();
   }
 
-  /** Destroys the client of a connection, which closes it. */
+  /** Destroys the client of a connection, which closes it unless a handle holds it. */
   void destroy(const std::string& name) {
     std::shared_ptr<krpc::Client> client;
     {

@@ -148,8 +148,8 @@ class Session {
   std::condition_variable queue_condition;
   std::deque<std::function<void()>> queue;
   bool queue_stopped = false;
-  // Work dispatched once the queue has stopped, destroyed with the session. It can hold the last
-  // copy of a callback, and so of the client.
+  // Work dispatched once the queue has stopped, destroyed by the join or with the session. It can
+  // hold the last copy of a callback, and so of the client.
   std::vector<std::function<void()>> discarded;
   std::thread reader;
   std::thread dispatcher;
