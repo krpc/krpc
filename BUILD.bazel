@@ -147,7 +147,7 @@ pkg_zip(
     path_map = {
         "kRPC.version": "GameData/kRPC/kRPC.version",
         # Server
-        "core/KRPC.Core/net472/": "GameData/kRPC/",
+        "core/KRPC.Core.net472/net472/": "GameData/kRPC/",
         "core/": "GameData/kRPC/",
         "server/KRPC/net472/": "GameData/kRPC/",
         "server/": "GameData/kRPC/",
@@ -320,7 +320,7 @@ filegroup(
         "//tools/ServiceDefinitions",
         "//tools/TestServer",
         "//tools/TestingTools",
-        "//tools/benchmarks:KRPC.Benchmark",
+        "//tools/benchmarks:KRPC.Benchmark.net472",
         "//tools/build/ksp:Google.Protobuf.dll",
         "//tools/build/ksp:KRPC.IO.Ports.dll",
     ],

@@ -416,7 +416,7 @@ csharp_library_multiple(
     srcs = glob(["src/scripts/**/*.lib.cs"]),
     target_framework = "net472",
     deps = [
-        "//core:KRPC.Core",
+        "//core:KRPC.Core.net472",
         "//service/SpaceCenter:KRPC.SpaceCenter",
         "//tools/build/ksp:Assembly-CSharp",
         "//tools/build/ksp:Assembly-CSharp-firstpass",
