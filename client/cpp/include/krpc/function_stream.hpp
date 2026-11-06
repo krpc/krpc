@@ -148,20 +148,20 @@ struct function_type_cache {
  */
 inline schema::Type return_type(const services::KRPC::Expression& function) {
   schema::Type type;
-  if (function_type_cache::get(*function._client, function._id, &type)) return type;
+  if (function_type_cache::get(function._client, function._id, &type)) return type;
   services::KRPC::Expression expression = function;
   if (expression.has_return_type()) build_type(expression.return_type(), &type);
-  function_type_cache::set(function._client, function._id, type);
+  function_type_cache::set(&function._client, function._id, type);
   return type;
 }
 
 /** The types of a server side function's parameters. Cached, as for the return type. */
 inline std::vector<schema::Type> parameter_types(const services::KRPC::Expression& function) {
   std::vector<schema::Type> types;
-  if (function_type_cache::get(*function._client, function._id, &types)) return types;
+  if (function_type_cache::get(function._client, function._id, &types)) return types;
   services::KRPC::Expression expression = function;
   for (const auto& remote : expression.parameter_types()) build_type(remote, &types.emplace_back());
-  function_type_cache::set(function._client, function._id, types);
+  function_type_cache::set(&function._client, function._id, types);
   return types;
 }
 
@@ -404,11 +404,11 @@ struct function_streams {
  */
 template <typename T>
 inline Stream<T> add_stream(const services::KRPC::Expression& function) {
-  function._client->check_stream_connection();
+  function._client.check_stream_connection();
   function_stream_detail::check_return_type<T>(function, "add_stream");
   uint64_t stream_id = internal_procedures::add_function_stream(function);
   return function_stream_detail::function_streams::create<T>(
-      function._client, stream_id, !function_stream_detail::is_optional<T>::value);
+      &function._client, stream_id, !function_stream_detail::is_optional<T>::value);
 }
 
 /**
@@ -427,7 +427,7 @@ inline services::KRPC::Expression compile(const services::KRPC::Expression& func
  * parameters.
  */
 inline Event add_event(const services::KRPC::Expression& function) {
-  function._client->check_stream_connection();
+  function._client.check_stream_connection();
   return internal_procedures::add_event(function);
 }
 
@@ -457,7 +457,7 @@ inline T run(const services::KRPC::Expression& function, const Args&... args) {
       // Unqualified, so that argument dependent lookup finds the overload for a type a
       // service defines at the point this template is used
       using decoder::decode;
-      decode(result, *data, function._client);
+      decode(result, *data, &function._client);
     }
     return result;
   }

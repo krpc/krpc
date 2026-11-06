@@ -50,33 +50,32 @@ std::exception_ptr closed_error(const std::exception_ptr& cause) {
 
 }  // namespace
 
-StreamManager::StreamManager(Client* client, const std::shared_ptr<Connection>& connection,
+StreamManager::StreamManager(std::shared_ptr<detail::ExceptionThrowers> throwers,
+                             const std::shared_ptr<Connection>& connection,
                              std::chrono::milliseconds stall_timeout)
-    : client(std::make_unique<Client>(*client)),
+    : throwers(std::move(throwers)),
       update_lock(new std::recursive_mutex),
       condition(condition_mutex),
       condition_lock(condition_mutex, std::defer_lock),
       next_callback_tag(0),
       closed(false),
       close_requested(false) {
-  this->client->stream_manager =
-      std::shared_ptr<StreamManager>(std::shared_ptr<StreamManager>(), this);
-  auto* manager_client = this->client.get();
   session = std::make_unique<Session>(
       connection,
-      [manager_client](uint64_t id) {
-        return manager_client->build_request("KRPC", "RemoveStream", {encoder::encode(id)});
+      [](uint64_t id) {
+        return Client::build_request("KRPC", "RemoveStream", {encoder::encode(id)});
       },
       stall_timeout);
 }
 
-std::shared_ptr<StreamManager> StreamManager::create(Client* client,
-                                                     const std::shared_ptr<Connection>& connection,
-                                                     std::chrono::milliseconds stall_timeout) {
-  std::shared_ptr<StreamManager> manager(new StreamManager(client, connection, stall_timeout));
+std::shared_ptr<StreamManager> StreamManager::create(
+    std::shared_ptr<detail::ExceptionThrowers> throwers,
+    const std::shared_ptr<Connection>& connection, std::chrono::milliseconds stall_timeout) {
+  std::shared_ptr<StreamManager> manager(
+      new StreamManager(std::move(throwers), connection, stall_timeout));
   manager->self = manager;
   manager->session->start(manager.get(), manager);
-  // The clients' pointer, whose last copy closes the manager
+  // The client state's pointer, whose release closes the manager
   return std::shared_ptr<StreamManager>(manager.get(), [manager](StreamManager*) mutable {
     manager->close();
     manager.reset();
@@ -101,17 +100,13 @@ void StreamManager::close() {
   session->join(!holds_a_condition());
 }
 
-std::shared_ptr<StreamImpl> StreamManager::add_stream(const schema::ProcedureCall& call) {
-  uint64_t id = internal_procedures::add_stream(client.get(), call);
-  return get_stream(id);
-}
-
 void StreamManager::register_stream(uint64_t id) {
   std::lock_guard<std::recursive_mutex> guard(*update_lock);
   if (closed) return;
   auto it = streams.find(id);
   if (it != streams.end() && !it->second.expired()) return;
-  auto stream = std::make_shared<StreamImpl>(client.get(), id, update_lock, self);
+  // Holds no client until a handle claims it, as the manager keeps it alive until then
+  auto stream = std::make_shared<StreamImpl>(Client(), id, update_lock, self);
   streams[id] = stream;
   unclaimed[id] = stream;
   open_streams = true;
@@ -127,22 +122,26 @@ bool StreamManager::is_registered(uint64_t id) {
   return it != streams.end() && !it->second.expired();
 }
 
-std::shared_ptr<StreamImpl> StreamManager::get_stream(uint64_t id) {
+std::shared_ptr<StreamImpl> StreamManager::get_stream(const Client& client, uint64_t id) {
   std::lock_guard<std::recursive_mutex> guard(*update_lock);
   auto it = streams.find(id);
   if (it != streams.end()) {
-    if (auto existing = it->second.lock()) {
+    auto existing = it->second.lock();
+    if (existing && !existing->is_released()) {
       // The first handle claims a stream the reader registered. One the server has already
       // ended leaves the registry with it.
-      if (unclaimed.erase(id) > 0 && existing->has_ended()) streams.erase(it);
+      if (unclaimed.erase(id) > 0) {
+        existing->claim(client);
+        if (existing->has_ended()) streams.erase(it);
+      }
       open_streams = !streams.empty();
-      return existing;
+      return StreamImpl::handle(existing);
     }
   }
-  auto stream = std::make_shared<StreamImpl>(client.get(), id, update_lock, self);
+  auto stream = std::make_shared<StreamImpl>(client, id, update_lock, self);
   if (closed) {
     stream->set_ending(closed_error(nullptr));
-    return stream;
+    return StreamImpl::handle(stream);
   }
   streams[id] = stream;
   open_streams = true;
@@ -151,24 +150,29 @@ std::shared_ptr<StreamImpl> StreamManager::get_stream(uint64_t id) {
                    registered.end());
   registered.push_back(stream);
   session->stream_added();
-  return stream;
+  return StreamImpl::handle(stream);
 }
 
 std::exception_ptr StreamManager::error_ptr(const schema::Error& error) const {
   try {
-    client->throw_exception(error);
+    throwers->throw_exception(error);
   } catch (...) {
     return std::current_exception();
   }
   return nullptr;
 }
 
-void StreamManager::drop_stream(uint64_t id) {
+void StreamManager::drop_stream(StreamImpl* stream) {
+  auto id = stream->get_id();
+  // Released with no lock held, as it can be the last copy of another stream
+  std::shared_ptr<StreamImpl> entry;
   {
     std::lock_guard<std::recursive_mutex> guard(*update_lock);
     auto it = streams.find(id);
-    // A live entry is another stream, given the id once the server removed this one
-    if (it == streams.end() || !it->second.expired()) return;
+    if (it == streams.end()) return;
+    entry = it->second.lock();
+    // Another stream, given the id once the server removed this one
+    if (entry.get() != stream) return;
     streams.erase(it);
     open_streams = !streams.empty();
     if (closed || close_requested) return;
@@ -191,7 +195,8 @@ void StreamManager::remove_stream(StreamImpl* stream) {
   // ending holds whether or not the call succeeds
   auto ending = std::make_exception_ptr(StreamError("Stream does not exist"));
   call_end_callbacks(stream->end(ending), ending);
-  internal_procedures::remove_stream(client.get(), id);
+  stream->drop_callbacks();
+  internal_procedures::remove_stream(stream->get_client(), id);
 }
 
 Condition& StreamManager::get_update_condition() { return condition; }
@@ -208,7 +213,8 @@ int StreamManager::add_update_callback(const Callback& callback) {
   std::lock_guard<std::recursive_mutex> guard(*update_lock);
   auto tag = next_callback_tag;
   next_callback_tag++;
-  callbacks[tag] = callback;
+  // The end of the connection has dropped the callbacks, or drops this one under the lock
+  if (!closed) callbacks[tag] = callback;
   return tag;
 }
 
@@ -243,9 +249,13 @@ bool StreamManager::holds_a_condition() {
 void StreamManager::notify_closed(const std::exception_ptr& cause) {
   std::vector<std::pair<StreamImpl::EndCallbacks, std::exception_ptr>> endings;
   std::vector<std::shared_ptr<StreamImpl>> to_wake;
+  // A callback can hold an object, and so the client's state, which holds this manager. Dropped
+  // with no lock held, as a callback can hold the last copy of the client.
+  Callbacks dropped;
   {
     std::lock_guard<std::recursive_mutex> guard(*update_lock);
     closed = true;
+    dropped.swap(callbacks);
     auto ending = closed_error(cause);
     for (const auto& entry : streams)
       if (auto stream = entry.second.lock())
@@ -262,6 +272,7 @@ void StreamManager::notify_closed(const std::exception_ptr& cause) {
   // A thread holding a stream condition can be waiting for a stream update
   condition.notify_all_when_free();
   for (const auto& entry : endings) call_end_callbacks(entry.first, entry.second);
+  for (const auto& stream : to_wake) stream->drop_callbacks();
 }
 
 void StreamManager::notify_update(bool on_dispatcher) {
@@ -296,8 +307,10 @@ void StreamManager::apply(const std::vector<Change>& changes, const Callbacks& u
     }
     // The ending is already stored, so the end callbacks run even once closing
     if (change.ending) {
-      if (!stream->defer_ending(change.end_callbacks, change.ending))
+      if (!stream->defer_ending(change.end_callbacks, change.ending)) {
         call_end_callbacks(change.end_callbacks, change.ending);
+        stream->drop_callbacks();
+      }
       continue;
     }
     if (!locked) continue;
@@ -333,7 +346,6 @@ void StreamManager::update(const schema::StreamUpdate& message) {
       // A result for a stream not in the registry is dropped, as the client has removed it
       if (it == streams.end()) continue;
       auto stream = it->second.lock();
-      // The stream's handles are all gone
       if (!stream) {
         streams.erase(it);
         continue;

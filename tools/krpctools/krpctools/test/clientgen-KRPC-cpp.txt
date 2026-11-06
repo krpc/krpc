@@ -3090,62 +3090,62 @@ inline KRPC::KRPC(Client& client):
 }
 
 inline std::string KRPC::get_client_id() {
-  auto _data = this->_client->invoke("KRPC", "GetClientID", {}, ::krpc::Client::Returns::value);
+  auto _data = this->_client.invoke("KRPC", "GetClientID", {}, ::krpc::Client::Returns::value);
   std::string _result{};
   if (!_data.is_null())
-    decoder::decode(_result, _data.value(), this->_client);
+    decoder::decode(_result, _data.value(), &this->_client);
   return _result;
 }
 
 inline std::string KRPC::get_client_name() {
-  auto _data = this->_client->invoke("KRPC", "GetClientName", {}, ::krpc::Client::Returns::value);
+  auto _data = this->_client.invoke("KRPC", "GetClientName", {}, ::krpc::Client::Returns::value);
   std::string _result{};
   if (!_data.is_null())
-    decoder::decode(_result, _data.value(), this->_client);
+    decoder::decode(_result, _data.value(), &this->_client);
   return _result;
 }
 
 inline krpc::schema::Services KRPC::get_services() {
-  auto _data = this->_client->invoke("KRPC", "GetServices", {}, ::krpc::Client::Returns::value);
+  auto _data = this->_client.invoke("KRPC", "GetServices", {}, ::krpc::Client::Returns::value);
   krpc::schema::Services _result{};
   if (!_data.is_null())
-    decoder::decode(_result, _data.value(), this->_client);
+    decoder::decode(_result, _data.value(), &this->_client);
   return _result;
 }
 
 inline KRPC::ServerStatus KRPC::get_status() {
-  auto _data = this->_client->invoke("KRPC", "GetStatus", {}, ::krpc::Client::Returns::value);
+  auto _data = this->_client.invoke("KRPC", "GetStatus", {}, ::krpc::Client::Returns::value);
   KRPC::ServerStatus _result{};
   if (!_data.is_null())
-    decoder::decode(_result, _data.value(), this->_client);
+    decoder::decode(_result, _data.value(), &this->_client);
   return _result;
 }
 
 inline void KRPC::hold_tick() {
-  this->_client->invoke("KRPC", "HoldTick", {}, ::krpc::Client::Returns::value);
+  this->_client.invoke("KRPC", "HoldTick", {}, ::krpc::Client::Returns::value);
 }
 
 inline void KRPC::next_tick() {
-  this->_client->invoke("KRPC", "NextTick", {}, ::krpc::Client::Returns::value);
+  this->_client.invoke("KRPC", "NextTick", {}, ::krpc::Client::Returns::value);
 }
 
 inline void KRPC::release_tick() {
-  this->_client->invoke("KRPC", "ReleaseTick", {}, ::krpc::Client::Returns::value);
+  this->_client.invoke("KRPC", "ReleaseTick", {}, ::krpc::Client::Returns::value);
 }
 
 inline std::vector<KRPC::ClientInfo> KRPC::clients() {
-  auto _data = this->_client->invoke("KRPC", "get_Clients", {}, ::krpc::Client::Returns::value);
+  auto _data = this->_client.invoke("KRPC", "get_Clients", {}, ::krpc::Client::Returns::value);
   std::vector<KRPC::ClientInfo> _result{};
   if (!_data.is_null())
-    decoder::decode(_result, _data.value(), this->_client);
+    decoder::decode(_result, _data.value(), &this->_client);
   return _result;
 }
 
 inline KRPC::GameScene KRPC::game_scene() {
-  auto _data = this->_client->invoke("KRPC", "get_GameScene", {}, ::krpc::Client::Returns::value);
+  auto _data = this->_client.invoke("KRPC", "get_GameScene", {}, ::krpc::Client::Returns::value);
   KRPC::GameScene _result{};
   if (!_data.is_null())
-    decoder::decode(_result, _data.value(), this->_client);
+    decoder::decode(_result, _data.value(), &this->_client);
   return _result;
 }
 
@@ -3153,22 +3153,22 @@ inline void KRPC::set_game_scene(KRPC::GameScene value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
-  this->_client->invoke("KRPC", "set_GameScene", _args, ::krpc::Client::Returns::value);
+  this->_client.invoke("KRPC", "set_GameScene", _args, ::krpc::Client::Returns::value);
 }
 
 inline uint32_t KRPC::game_state_loads() {
-  auto _data = this->_client->invoke("KRPC", "get_GameStateLoads", {}, ::krpc::Client::Returns::value);
+  auto _data = this->_client.invoke("KRPC", "get_GameStateLoads", {}, ::krpc::Client::Returns::value);
   uint32_t _result{};
   if (!_data.is_null())
-    decoder::decode(_result, _data.value(), this->_client);
+    decoder::decode(_result, _data.value(), &this->_client);
   return _result;
 }
 
 inline bool KRPC::paused() {
-  auto _data = this->_client->invoke("KRPC", "get_Paused", {}, ::krpc::Client::Returns::value);
+  auto _data = this->_client.invoke("KRPC", "get_Paused", {}, ::krpc::Client::Returns::value);
   bool _result{};
   if (!_data.is_null())
-    decoder::decode(_result, _data.value(), this->_client);
+    decoder::decode(_result, _data.value(), &this->_client);
   return _result;
 }
 
@@ -3176,109 +3176,109 @@ inline void KRPC::set_paused(bool value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
-  this->_client->invoke("KRPC", "set_Paused", _args, ::krpc::Client::Returns::value);
+  this->_client.invoke("KRPC", "set_Paused", _args, ::krpc::Client::Returns::value);
 }
 
 inline ::krpc::Stream<std::string> KRPC::get_client_id_stream() {
-  return ::krpc::Stream<std::string>(this->_client, this->_client->build_call("KRPC", "GetClientID"));
+  return ::krpc::Stream<std::string>(&this->_client, this->_client.build_call("KRPC", "GetClientID"));
 }
 
 inline ::krpc::Stream<std::string> KRPC::get_client_name_stream() {
-  return ::krpc::Stream<std::string>(this->_client, this->_client->build_call("KRPC", "GetClientName"));
+  return ::krpc::Stream<std::string>(&this->_client, this->_client.build_call("KRPC", "GetClientName"));
 }
 
 inline ::krpc::Stream<krpc::schema::Services> KRPC::get_services_stream() {
-  return ::krpc::Stream<krpc::schema::Services>(this->_client, this->_client->build_call("KRPC", "GetServices"));
+  return ::krpc::Stream<krpc::schema::Services>(&this->_client, this->_client.build_call("KRPC", "GetServices"));
 }
 
 inline ::krpc::Stream<KRPC::ServerStatus> KRPC::get_status_stream() {
-  return ::krpc::Stream<KRPC::ServerStatus>(this->_client, this->_client->build_call("KRPC", "GetStatus"));
+  return ::krpc::Stream<KRPC::ServerStatus>(&this->_client, this->_client.build_call("KRPC", "GetStatus"));
 }
 
 inline ::krpc::Stream<void> KRPC::hold_tick_stream() {
-  return ::krpc::Stream<void>(this->_client, this->_client->build_call("KRPC", "HoldTick"));
+  return ::krpc::Stream<void>(&this->_client, this->_client.build_call("KRPC", "HoldTick"));
 }
 
 inline ::krpc::Stream<void> KRPC::next_tick_stream() {
-  return ::krpc::Stream<void>(this->_client, this->_client->build_call("KRPC", "NextTick"));
+  return ::krpc::Stream<void>(&this->_client, this->_client.build_call("KRPC", "NextTick"));
 }
 
 inline ::krpc::Stream<void> KRPC::release_tick_stream() {
-  return ::krpc::Stream<void>(this->_client, this->_client->build_call("KRPC", "ReleaseTick"));
+  return ::krpc::Stream<void>(&this->_client, this->_client.build_call("KRPC", "ReleaseTick"));
 }
 
 inline ::krpc::Stream<std::vector<KRPC::ClientInfo>> KRPC::clients_stream() {
-  return ::krpc::Stream<std::vector<KRPC::ClientInfo>>(this->_client, this->_client->build_call("KRPC", "get_Clients"));
+  return ::krpc::Stream<std::vector<KRPC::ClientInfo>>(&this->_client, this->_client.build_call("KRPC", "get_Clients"));
 }
 
 inline ::krpc::Stream<KRPC::GameScene> KRPC::game_scene_stream() {
-  return ::krpc::Stream<KRPC::GameScene>(this->_client, this->_client->build_call("KRPC", "get_GameScene"));
+  return ::krpc::Stream<KRPC::GameScene>(&this->_client, this->_client.build_call("KRPC", "get_GameScene"));
 }
 
 inline ::krpc::Stream<uint32_t> KRPC::game_state_loads_stream() {
-  return ::krpc::Stream<uint32_t>(this->_client, this->_client->build_call("KRPC", "get_GameStateLoads"));
+  return ::krpc::Stream<uint32_t>(&this->_client, this->_client.build_call("KRPC", "get_GameStateLoads"));
 }
 
 inline ::krpc::Stream<bool> KRPC::paused_stream() {
-  return ::krpc::Stream<bool>(this->_client, this->_client->build_call("KRPC", "get_Paused"));
+  return ::krpc::Stream<bool>(&this->_client, this->_client.build_call("KRPC", "get_Paused"));
 }
 
 inline ::krpc::schema::ProcedureCall KRPC::get_client_id_call() {
-  return this->_client->build_call("KRPC", "GetClientID");
+  return this->_client.build_call("KRPC", "GetClientID");
 }
 
 inline ::krpc::schema::ProcedureCall KRPC::get_client_name_call() {
-  return this->_client->build_call("KRPC", "GetClientName");
+  return this->_client.build_call("KRPC", "GetClientName");
 }
 
 inline ::krpc::schema::ProcedureCall KRPC::get_services_call() {
-  return this->_client->build_call("KRPC", "GetServices");
+  return this->_client.build_call("KRPC", "GetServices");
 }
 
 inline ::krpc::schema::ProcedureCall KRPC::get_status_call() {
-  return this->_client->build_call("KRPC", "GetStatus");
+  return this->_client.build_call("KRPC", "GetStatus");
 }
 
 inline ::krpc::schema::ProcedureCall KRPC::hold_tick_call() {
-  return this->_client->build_call("KRPC", "HoldTick");
+  return this->_client.build_call("KRPC", "HoldTick");
 }
 
 inline ::krpc::schema::ProcedureCall KRPC::next_tick_call() {
-  return this->_client->build_call("KRPC", "NextTick");
+  return this->_client.build_call("KRPC", "NextTick");
 }
 
 inline ::krpc::schema::ProcedureCall KRPC::release_tick_call() {
-  return this->_client->build_call("KRPC", "ReleaseTick");
+  return this->_client.build_call("KRPC", "ReleaseTick");
 }
 
 inline ::krpc::schema::ProcedureCall KRPC::clients_call() {
-  return this->_client->build_call("KRPC", "get_Clients");
+  return this->_client.build_call("KRPC", "get_Clients");
 }
 
 inline ::krpc::schema::ProcedureCall KRPC::game_scene_call() {
-  return this->_client->build_call("KRPC", "get_GameScene");
+  return this->_client.build_call("KRPC", "get_GameScene");
 }
 
 inline ::krpc::schema::ProcedureCall KRPC::set_game_scene_call(KRPC::GameScene value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
-  return this->_client->build_call("KRPC", "set_GameScene", _args);
+  return this->_client.build_call("KRPC", "set_GameScene", _args);
 }
 
 inline ::krpc::schema::ProcedureCall KRPC::game_state_loads_call() {
-  return this->_client->build_call("KRPC", "get_GameStateLoads");
+  return this->_client.build_call("KRPC", "get_GameStateLoads");
 }
 
 inline ::krpc::schema::ProcedureCall KRPC::paused_call() {
-  return this->_client->build_call("KRPC", "get_Paused");
+  return this->_client.build_call("KRPC", "get_Paused");
 }
 
 inline ::krpc::schema::ProcedureCall KRPC::set_paused_call(bool value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
-  return this->_client->build_call("KRPC", "set_Paused", _args);
+  return this->_client.build_call("KRPC", "set_Paused", _args);
 }
 
 inline KRPC::Expression::Expression(Client* client, uint64_t id):
@@ -3288,10 +3288,10 @@ inline bool KRPC::Expression::has_return_type() {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(*this));
-  auto _data = this->_client->invoke("KRPC", "Expression_get_HasReturnType", _args, ::krpc::Client::Returns::value);
+  auto _data = this->_client.invoke("KRPC", "Expression_get_HasReturnType", _args, ::krpc::Client::Returns::value);
   bool _result{};
   if (!_data.is_null())
-    decoder::decode(_result, _data.value(), this->_client);
+    decoder::decode(_result, _data.value(), &this->_client);
   return _result;
 }
 
@@ -3299,10 +3299,10 @@ inline std::vector<KRPC::Type> KRPC::Expression::parameter_types() {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(*this));
-  auto _data = this->_client->invoke("KRPC", "Expression_get_ParameterTypes", _args, ::krpc::Client::Returns::value);
+  auto _data = this->_client.invoke("KRPC", "Expression_get_ParameterTypes", _args, ::krpc::Client::Returns::value);
   std::vector<KRPC::Type> _result{};
   if (!_data.is_null())
-    decoder::decode(_result, _data.value(), this->_client);
+    decoder::decode(_result, _data.value(), &this->_client);
   return _result;
 }
 
@@ -3310,10 +3310,10 @@ inline KRPC::Type KRPC::Expression::return_type() {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(*this));
-  auto _data = this->_client->invoke("KRPC", "Expression_get_ReturnType", _args, ::krpc::Client::Returns::value);
+  auto _data = this->_client.invoke("KRPC", "Expression_get_ReturnType", _args, ::krpc::Client::Returns::value);
   KRPC::Type _result{};
   if (!_data.is_null())
-    decoder::decode(_result, _data.value(), this->_client);
+    decoder::decode(_result, _data.value(), &this->_client);
   return _result;
 }
 
@@ -4780,21 +4780,21 @@ inline ::krpc::Stream<bool> KRPC::Expression::has_return_type_stream() {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(*this));
-  return ::krpc::Stream<bool>(this->_client, this->_client->build_call("KRPC", "Expression_get_HasReturnType", _args));
+  return ::krpc::Stream<bool>(&this->_client, this->_client.build_call("KRPC", "Expression_get_HasReturnType", _args));
 }
 
 inline ::krpc::Stream<std::vector<KRPC::Type>> KRPC::Expression::parameter_types_stream() {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(*this));
-  return ::krpc::Stream<std::vector<KRPC::Type>>(this->_client, this->_client->build_call("KRPC", "Expression_get_ParameterTypes", _args));
+  return ::krpc::Stream<std::vector<KRPC::Type>>(&this->_client, this->_client.build_call("KRPC", "Expression_get_ParameterTypes", _args));
 }
 
 inline ::krpc::Stream<KRPC::Type> KRPC::Expression::return_type_stream() {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(*this));
-  return ::krpc::Stream<KRPC::Type>(this->_client, this->_client->build_call("KRPC", "Expression_get_ReturnType", _args));
+  return ::krpc::Stream<KRPC::Type>(&this->_client, this->_client.build_call("KRPC", "Expression_get_ReturnType", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::add_stream(Client& _client, KRPC::Expression arg0, KRPC::Expression arg1) {
@@ -5760,21 +5760,21 @@ inline ::krpc::schema::ProcedureCall KRPC::Expression::has_return_type_call() {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(*this));
-  return this->_client->build_call("KRPC", "Expression_get_HasReturnType", _args);
+  return this->_client.build_call("KRPC", "Expression_get_HasReturnType", _args);
 }
 
 inline ::krpc::schema::ProcedureCall KRPC::Expression::parameter_types_call() {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(*this));
-  return this->_client->build_call("KRPC", "Expression_get_ParameterTypes", _args);
+  return this->_client.build_call("KRPC", "Expression_get_ParameterTypes", _args);
 }
 
 inline ::krpc::schema::ProcedureCall KRPC::Expression::return_type_call() {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(*this));
-  return this->_client->build_call("KRPC", "Expression_get_ReturnType", _args);
+  return this->_client.build_call("KRPC", "Expression_get_ReturnType", _args);
 }
 
 inline ::krpc::schema::ProcedureCall KRPC::Expression::add_call(Client& _client, KRPC::Expression arg0, KRPC::Expression arg1) {
@@ -6743,10 +6743,10 @@ inline KRPC::TypeCode KRPC::Type::code() {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(*this));
-  auto _data = this->_client->invoke("KRPC", "Type_get_Code", _args, ::krpc::Client::Returns::value);
+  auto _data = this->_client.invoke("KRPC", "Type_get_Code", _args, ::krpc::Client::Returns::value);
   KRPC::TypeCode _result{};
   if (!_data.is_null())
-    decoder::decode(_result, _data.value(), this->_client);
+    decoder::decode(_result, _data.value(), &this->_client);
   return _result;
 }
 
@@ -6754,10 +6754,10 @@ inline std::string KRPC::Type::name() {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(*this));
-  auto _data = this->_client->invoke("KRPC", "Type_get_Name", _args, ::krpc::Client::Returns::value);
+  auto _data = this->_client.invoke("KRPC", "Type_get_Name", _args, ::krpc::Client::Returns::value);
   std::string _result{};
   if (!_data.is_null())
-    decoder::decode(_result, _data.value(), this->_client);
+    decoder::decode(_result, _data.value(), &this->_client);
   return _result;
 }
 
@@ -6765,10 +6765,10 @@ inline bool KRPC::Type::nullable() {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(*this));
-  auto _data = this->_client->invoke("KRPC", "Type_get_Nullable", _args, ::krpc::Client::Returns::value);
+  auto _data = this->_client.invoke("KRPC", "Type_get_Nullable", _args, ::krpc::Client::Returns::value);
   bool _result{};
   if (!_data.is_null())
-    decoder::decode(_result, _data.value(), this->_client);
+    decoder::decode(_result, _data.value(), &this->_client);
   return _result;
 }
 
@@ -6776,10 +6776,10 @@ inline std::string KRPC::Type::service() {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(*this));
-  auto _data = this->_client->invoke("KRPC", "Type_get_Service", _args, ::krpc::Client::Returns::value);
+  auto _data = this->_client.invoke("KRPC", "Type_get_Service", _args, ::krpc::Client::Returns::value);
   std::string _result{};
   if (!_data.is_null())
-    decoder::decode(_result, _data.value(), this->_client);
+    decoder::decode(_result, _data.value(), &this->_client);
   return _result;
 }
 
@@ -6787,10 +6787,10 @@ inline std::vector<KRPC::Type> KRPC::Type::types() {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(*this));
-  auto _data = this->_client->invoke("KRPC", "Type_get_Types", _args, ::krpc::Client::Returns::value);
+  auto _data = this->_client.invoke("KRPC", "Type_get_Types", _args, ::krpc::Client::Returns::value);
   std::vector<KRPC::Type> _result{};
   if (!_data.is_null())
-    decoder::decode(_result, _data.value(), this->_client);
+    decoder::decode(_result, _data.value(), &this->_client);
   return _result;
 }
 
@@ -6962,35 +6962,35 @@ inline ::krpc::Stream<KRPC::TypeCode> KRPC::Type::code_stream() {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(*this));
-  return ::krpc::Stream<KRPC::TypeCode>(this->_client, this->_client->build_call("KRPC", "Type_get_Code", _args));
+  return ::krpc::Stream<KRPC::TypeCode>(&this->_client, this->_client.build_call("KRPC", "Type_get_Code", _args));
 }
 
 inline ::krpc::Stream<std::string> KRPC::Type::name_stream() {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(*this));
-  return ::krpc::Stream<std::string>(this->_client, this->_client->build_call("KRPC", "Type_get_Name", _args));
+  return ::krpc::Stream<std::string>(&this->_client, this->_client.build_call("KRPC", "Type_get_Name", _args));
 }
 
 inline ::krpc::Stream<bool> KRPC::Type::nullable_stream() {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(*this));
-  return ::krpc::Stream<bool>(this->_client, this->_client->build_call("KRPC", "Type_get_Nullable", _args));
+  return ::krpc::Stream<bool>(&this->_client, this->_client.build_call("KRPC", "Type_get_Nullable", _args));
 }
 
 inline ::krpc::Stream<std::string> KRPC::Type::service_stream() {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(*this));
-  return ::krpc::Stream<std::string>(this->_client, this->_client->build_call("KRPC", "Type_get_Service", _args));
+  return ::krpc::Stream<std::string>(&this->_client, this->_client.build_call("KRPC", "Type_get_Service", _args));
 }
 
 inline ::krpc::Stream<std::vector<KRPC::Type>> KRPC::Type::types_stream() {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(*this));
-  return ::krpc::Stream<std::vector<KRPC::Type>>(this->_client, this->_client->build_call("KRPC", "Type_get_Types", _args));
+  return ::krpc::Stream<std::vector<KRPC::Type>>(&this->_client, this->_client.build_call("KRPC", "Type_get_Types", _args));
 }
 
 inline ::krpc::Stream<KRPC::Type> KRPC::Type::bool__stream(Client& _client) {
@@ -7093,35 +7093,35 @@ inline ::krpc::schema::ProcedureCall KRPC::Type::code_call() {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(*this));
-  return this->_client->build_call("KRPC", "Type_get_Code", _args);
+  return this->_client.build_call("KRPC", "Type_get_Code", _args);
 }
 
 inline ::krpc::schema::ProcedureCall KRPC::Type::name_call() {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(*this));
-  return this->_client->build_call("KRPC", "Type_get_Name", _args);
+  return this->_client.build_call("KRPC", "Type_get_Name", _args);
 }
 
 inline ::krpc::schema::ProcedureCall KRPC::Type::nullable_call() {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(*this));
-  return this->_client->build_call("KRPC", "Type_get_Nullable", _args);
+  return this->_client.build_call("KRPC", "Type_get_Nullable", _args);
 }
 
 inline ::krpc::schema::ProcedureCall KRPC::Type::service_call() {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(*this));
-  return this->_client->build_call("KRPC", "Type_get_Service", _args);
+  return this->_client.build_call("KRPC", "Type_get_Service", _args);
 }
 
 inline ::krpc::schema::ProcedureCall KRPC::Type::types_call() {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(*this));
-  return this->_client->build_call("KRPC", "Type_get_Types", _args);
+  return this->_client.build_call("KRPC", "Type_get_Types", _args);
 }
 
 inline ::krpc::schema::ProcedureCall KRPC::Type::bool__call(Client& _client) {

@@ -14,6 +14,7 @@
 #include "krpc/decoder.hpp"
 #include "krpc/encoder.hpp"
 #include "krpc/error.hpp"
+#include "krpc/internal_procedures.hpp"
 #include "krpc/services/krpc.hpp"
 #include "krpc/session.hpp"
 #include "krpc/stream_manager.hpp"
@@ -80,12 +81,22 @@ void handshake(Connection* connection, const std::string& name, std::chrono::mil
 
 }  // namespace
 
-Client::Client()
-    : lock(new std::mutex),
-      listed_returns(std::make_shared<ListedReturns>()),
-      exception_throwers(std::make_shared<decltype(exception_throwers)::element_type>()),
-      exception_throwers_lock(new std::mutex),
-      function_types_lock(new std::mutex) {}
+struct Client::State {
+  // Guards listed
+  std::mutex lock;
+  // The procedures that return a new stream or event, from the server's list of services, keyed
+  // by service and procedure name
+  bool has_listed = false;
+  ReturnsByProcedure listed;
+  std::shared_ptr<detail::ExceptionThrowers> throwers =
+      std::make_shared<detail::ExceptionThrowers>();
+  // Guards function_return_types and function_parameter_types
+  std::mutex function_types_lock;
+  std::map<uint64_t, schema::Type> function_return_types;
+  std::map<uint64_t, std::vector<schema::Type>> function_parameter_types;
+  // Declared last, so that it is destroyed first. The last release closes the connection.
+  std::shared_ptr<StreamManager> stream_manager;
+};
 
 Client::Client(const std::string& name, const std::string& address, unsigned int port,
                std::chrono::milliseconds timeout, std::chrono::milliseconds handshake_timeout,
@@ -95,7 +106,7 @@ Client::Client(const std::string& name, const std::string& address, unsigned int
 
 Client::Client(const std::string& name, const std::shared_ptr<Connection>& connection,
                std::chrono::milliseconds handshake_timeout, std::chrono::milliseconds stall_timeout)
-    : Client() {
+    : state(std::make_shared<State>()) {
   if (handshake_timeout.count() < 0)
     throw std::invalid_argument("The handshake timeout must not be negative");
   if (stall_timeout.count() < 0)
@@ -114,13 +125,13 @@ Client::Client(const std::string& name, const std::shared_ptr<Connection>& conne
     connection->close();
     throw;
   }
-  stream_manager = StreamManager::create(this, connection, stall_timeout);
+  state->stream_manager = StreamManager::create(state->throwers, connection, stall_timeout);
   // Constructing the KRPC service registers its exception types
   services::KRPC krpc_service(*this);
 }
 
 void Client::close() {
-  if (stream_manager) stream_manager->close();
+  if (state) state->stream_manager->close();
 }
 
 schema::ProcedureResult Client::invoke(const schema::Request& request) {
@@ -160,13 +171,13 @@ schema::ProcedureResult Client::send_request(schema::Request request, const Retu
     for (const auto& call : request.calls())
       adds.push_back(to_adds(lookup_returns(call.service(), call.procedure())));
   }
-  auto response = stream_manager->get_session().call(std::move(request), std::move(adds));
+  auto response = state->stream_manager->get_session().call(std::move(request), std::move(adds));
 
-  if (response.has_error()) throw_exception(response.error());
+  if (response.has_error()) state->throwers->throw_exception(response.error());
 
   schema::ProcedureResult result = std::move(*response.mutable_results(0));
 
-  if (result.has_error()) throw_exception(result.error());
+  if (result.has_error()) state->throwers->throw_exception(result.error());
 
   return result;
 }
@@ -176,20 +187,20 @@ schema::ProcedureResult Client::send_request(schema::Request request, const Retu
 Client::Returns Client::lookup_returns(const std::string& service, const std::string& procedure) {
   bool listed;
   {
-    std::lock_guard<std::mutex> lock_guard(*lock);
-    listed = listed_returns->listed;
+    std::lock_guard<std::mutex> lock_guard(state->lock);
+    listed = state->has_listed;
   }
   // Fetched without the lock held, so threads racing on the first call each fetch the list
   ReturnsByProcedure fetched;
   if (!listed) fetched = list_returns();
-  std::lock_guard<std::mutex> lock_guard(*lock);
+  std::lock_guard<std::mutex> lock_guard(state->lock);
   // Listed once, even if the listing fails
-  if (!listed_returns->listed) {
-    listed_returns->listed = true;
-    listed_returns->returns = std::move(fetched);
+  if (!state->has_listed) {
+    state->has_listed = true;
+    state->listed = std::move(fetched);
   }
-  auto returns = listed_returns->returns.find(std::make_pair(service, procedure));
-  return returns == listed_returns->returns.end() ? Returns::value : returns->second;
+  auto returns = state->listed.find(std::make_pair(service, procedure));
+  return returns == state->listed.end() ? Returns::value : returns->second;
 }
 
 // The procedures the server lists that return a new stream or event
@@ -197,7 +208,7 @@ Client::ReturnsByProcedure Client::list_returns() {
   ReturnsByProcedure result;
   schema::Response response;
   try {
-    response = stream_manager->get_session().call(build_request("KRPC", "GetServices"), {});
+    response = state->stream_manager->get_session().call(build_request("KRPC", "GetServices"), {});
   } catch (const ConnectionError&) {
     return result;
   }
@@ -248,44 +259,50 @@ schema::ProcedureCall Client::build_call(std::string_view service, std::string_v
 
 void Client::add_exception_thrower(const std::string& service, const std::string& name,
                                    const std::function<void(std::string)>& thrower) {
-  std::lock_guard<std::mutex> guard(*exception_throwers_lock);
-  (*exception_throwers)[std::make_pair(service, name)] = thrower;
+  if (state) state->throwers->add(service, name, thrower);
 }
 
 bool Client::get_function_return_type(uint64_t id, schema::Type* type) const {
-  std::lock_guard<std::mutex> guard(*function_types_lock);
-  auto entry = function_return_types.find(id);
-  if (entry == function_return_types.end()) return false;
+  std::lock_guard<std::mutex> guard(state->function_types_lock);
+  auto entry = state->function_return_types.find(id);
+  if (entry == state->function_return_types.end()) return false;
   *type = entry->second;
   return true;
 }
 
-void Client::set_function_return_type(uint64_t id, const schema::Type& type) {
-  std::lock_guard<std::mutex> guard(*function_types_lock);
-  function_return_types[id] = type;
+void Client::set_function_return_type(uint64_t id, const schema::Type& type) const {
+  std::lock_guard<std::mutex> guard(state->function_types_lock);
+  state->function_return_types[id] = type;
 }
 
 bool Client::get_function_parameter_types(uint64_t id, std::vector<schema::Type>* types) const {
-  std::lock_guard<std::mutex> guard(*function_types_lock);
-  auto entry = function_parameter_types.find(id);
-  if (entry == function_parameter_types.end()) return false;
+  std::lock_guard<std::mutex> guard(state->function_types_lock);
+  auto entry = state->function_parameter_types.find(id);
+  if (entry == state->function_parameter_types.end()) return false;
   *types = entry->second;
   return true;
 }
 
-void Client::set_function_parameter_types(uint64_t id, const std::vector<schema::Type>& types) {
-  std::lock_guard<std::mutex> guard(*function_types_lock);
-  function_parameter_types[id] = types;
+void Client::set_function_parameter_types(uint64_t id,
+                                          const std::vector<schema::Type>& types) const {
+  std::lock_guard<std::mutex> guard(state->function_types_lock);
+  state->function_parameter_types[id] = types;
 }
 
-void Client::throw_exception(const schema::Error& error) const {
+void detail::ExceptionThrowers::add(const std::string& service, const std::string& name,
+                                    const std::function<void(std::string)>& thrower) {
+  std::lock_guard<std::mutex> guard(lock);
+  throwers[std::make_pair(service, name)] = thrower;
+}
+
+void detail::ExceptionThrowers::throw_exception(const schema::Error& error) const {
   std::string message = error.description();
   if (!error.stack_trace().empty()) message += "\nServer stack trace:\n" + error.stack_trace();
   if (!error.service().empty() && !error.name().empty()) {
     auto key = std::make_pair(error.service(), error.name());
-    std::unique_lock<std::mutex> guard(*exception_throwers_lock);
-    auto thrower = exception_throwers->find(key);
-    if (thrower == exception_throwers->end()) {
+    std::unique_lock<std::mutex> guard(lock);
+    auto thrower = throwers.find(key);
+    if (thrower == throwers.end()) {
       // The type is unknown here if the generated header for its service was never
       // instantiated in this translation unit, so nothing registered a thrower for it.
       // Report the error itself, named by its type on the server.
@@ -302,19 +319,23 @@ void Client::throw_exception(const schema::Error& error) const {
 }
 
 void Client::check_stream_connection() const {
-  if (!stream_manager) throw StreamError("Not connected to a server");
+  if (!state) throw StreamError("Not connected to a server");
 }
 
 StreamManager& Client::streams() const {
   check_stream_connection();
-  return *stream_manager;
+  return *state->stream_manager;
 }
 
 std::shared_ptr<StreamImpl> Client::add_stream(const schema::ProcedureCall& call) {
-  return streams().add_stream(call);
+  check_stream_connection();
+  uint64_t id = internal_procedures::add_stream(this, call);
+  return streams().get_stream(*this, id);
 }
 
-std::shared_ptr<StreamImpl> Client::get_stream(uint64_t id) { return streams().get_stream(id); }
+std::shared_ptr<StreamImpl> Client::get_stream(uint64_t id) {
+  return streams().get_stream(*this, id);
+}
 
 Condition& Client::get_stream_update_condition() const { return streams().get_update_condition(); }
 

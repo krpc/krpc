@@ -859,7 +859,7 @@ class Testee {
     removal();
   }
 
-  /** Destroys the client of a connection, which closes it. */
+  /** Destroys the client of a connection, which closes it unless a handle holds it. */
   void destroy(const std::string& name) {
     std::shared_ptr<krpc::Client> client;
     {

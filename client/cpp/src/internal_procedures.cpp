@@ -49,20 +49,20 @@ void remove_stream(Client* client, uint64_t id) {
 }
 
 uint64_t add_function_stream(const services::KRPC::Expression& function) {
-  Client* client = function._client;
+  Client* client = &function._client;
   auto result = client->invoke("KRPC", "AddFunctionStream", {encoder::encode_arg(function)},
                                Client::Returns::stream);
   return decode_non_null_result<uint64_t>(client, result);
 }
 
 void compile_function(const services::KRPC::Expression& function) {
-  function._client->invoke("KRPC", "CompileFunction", {encoder::encode_arg(function)},
-                           Client::Returns::value);
+  function._client.invoke("KRPC", "CompileFunction", {encoder::encode_arg(function)},
+                          Client::Returns::value);
 }
 
 std::optional<std::string> run_function(const services::KRPC::Expression& function,
                                         const std::vector<std::optional<std::string>>& arguments) {
-  Client* client = function._client;
+  Client* client = &function._client;
   auto result = client->invoke("KRPC", "RunFunction",
                                {encoder::encode_arg(function), encoder::encode_arg(arguments)},
                                Client::Returns::value);
@@ -70,7 +70,7 @@ std::optional<std::string> run_function(const services::KRPC::Expression& functi
 }
 
 Event add_event(const services::KRPC::Expression& function) {
-  Client* client = function._client;
+  Client* client = &function._client;
   auto result =
       client->invoke("KRPC", "AddEvent", {encoder::encode_arg(function)}, Client::Returns::stream);
   return decode_non_null_result<Event>(client, result);

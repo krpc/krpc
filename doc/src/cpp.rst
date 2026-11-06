@@ -174,13 +174,24 @@ it is faster.
 Closing the Connection
 ^^^^^^^^^^^^^^^^^^^^^^
 
-A :class:`~krpc::Client` can be copied, and every copy shares the connection. Call
-:func:`~krpc::Client::close` to close the connection:
+A :class:`~krpc::Client` can be copied, and every copy shares the connection. So does each service,
+object, stream and event you make from it. Call :func:`~krpc::Client::close` to close the connection:
 
 .. literalinclude:: /scripts/cpp/Connecting3.cpp
 
-Calls through any copy then throw :class:`~krpc::ConnectionError`, and streams and events end.
-Without the call, the connection closes when the last copy is destroyed.
+Calls through any of them then throw :class:`~krpc::ConnectionError`, and streams and events end.
+Without the call, the connection closes when the last of them is destroyed. An object you return
+from a function keeps the connection open.
+
+.. note::
+
+   A callback that holds its own stream or event keeps the connection open until the stream ends. An
+   update callback that holds an object keeps it open until you call :func:`~krpc::Client::close`.
+
+.. note::
+
+   Destroying the last copy of a stream or event stops new runs of its callbacks, but a run in
+   progress carries on. Call :func:`~krpc::Client::close` to wait for it.
 
 Calling Remote Procedures
 -------------------------
@@ -547,14 +558,16 @@ Client API Reference
    constructed with a reference to it, such as ``krpc::services::SpaceCenter sc(conn)``.
 
    Client objects are copy constructible and assignable, and every copy shares the connection.
-   Destroying the last copy closes the connection. A default-constructed client is not
+   The connection closes on :func:`close`, or when the last copy, and every service, object, stream
+   and event made from one, is destroyed. A default-constructed client is not
    connected. Its calls and its stream update members throw :class:`~krpc::StreamError`.
 
    .. function:: void close()
 
       Closes the connection. Calls in progress and later calls through any copy, service or object
-      throw :class:`~krpc::ConnectionError`, and streams and events end. Does nothing if the
-      connection is already closed, or the client is not connected.
+      throw :class:`~krpc::ConnectionError`, and streams and events end. Destroys the stream and
+      update callbacks, and waits for a callback in progress unless called from a callback. Does nothing if the connection is already closed, or the client is not
+      connected.
 
    .. function:: void wait_for_stream_update(double timeout = -1)
 

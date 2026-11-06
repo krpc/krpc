@@ -28,18 +28,18 @@ class StreamUpdate;
 class StreamManager {
  public:
   /** Create a manager and start the connection's reader and dispatcher threads, once the
-      handshake has been made on the connection. The clients share the pointer returned.
-      Releasing its last copy closes the connection. Uses a copy of the client, so that the
-      manager outlives the client it is built by. */
-  static std::shared_ptr<StreamManager> create(Client* client,
+      handshake has been made on the connection. A client's state holds the pointer returned,
+      and releasing it closes the connection. */
+  static std::shared_ptr<StreamManager> create(std::shared_ptr<detail::ExceptionThrowers> throwers,
                                                const std::shared_ptr<Connection>& connection,
                                                std::chrono::milliseconds stall_timeout);
   ~StreamManager();
   StreamManager(const StreamManager&) = delete;
   StreamManager& operator=(const StreamManager&) = delete;
   Session& get_session() { return *session; }
-  std::shared_ptr<StreamImpl> add_stream(const schema::ProcedureCall& call);
-  std::shared_ptr<StreamImpl> get_stream(uint64_t id);
+  /** The stream with an id, for a handle made through a client. The stream holds the client, so
+      a handle keeps the connection open. */
+  std::shared_ptr<StreamImpl> get_stream(const Client& client, uint64_t id);
   /** Close the connection and end every stream. Does nothing if already closed. */
   void close();
   /** Register a stream the server has added for this client. Called by the reader, before it
@@ -50,9 +50,8 @@ class StreamManager {
   bool has_streams() const { return open_streams; }
   /** Whether a stream is registered for the id. */
   bool is_registered(uint64_t id);
-  /** Remove a stream from the server once its last handle is gone. Called by the stream as it
-      is destroyed. */
-  void drop_stream(uint64_t id);
+  /** Remove a stream from the server once its last handle is gone. */
+  void drop_stream(StreamImpl* stream);
   /** Remove a stream from the server, and end it for every handle. Does nothing if the
       stream has already ended. */
   void remove_stream(StreamImpl* stream);
@@ -87,7 +86,8 @@ class StreamManager {
   void notify_closed(const std::exception_ptr& cause = nullptr);
 
  private:
-  StreamManager(Client* client, const std::shared_ptr<Connection>& connection,
+  StreamManager(std::shared_ptr<detail::ExceptionThrowers> throwers,
+                const std::shared_ptr<Connection>& connection,
                 std::chrono::milliseconds stall_timeout);
   /** A change for the dispatcher to apply to a stream: a new value, or an ending. */
   struct Change {
@@ -111,9 +111,7 @@ class StreamManager {
   bool lock(RecursiveMutex* mutex);
   /** The exception an error is thrown as. */
   std::exception_ptr error_ptr(const schema::Error& error) const;
-  // A copy of the client that built the manager, which streams and the values they decode
-  // use. Its stream manager is this one, not owned.
-  std::unique_ptr<Client> client;
+  std::shared_ptr<detail::ExceptionThrowers> throwers;
   std::weak_ptr<StreamManager> self;
   std::unique_ptr<Session> session;
   std::shared_ptr<std::recursive_mutex> update_lock;
