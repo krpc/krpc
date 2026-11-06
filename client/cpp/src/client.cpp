@@ -159,7 +159,7 @@ schema::ProcedureResult Client::invoke(std::string_view service, std::string_vie
 // Send a request and return the result it is answered by. The reader registers a stream or an
 // event a call adds before it reads the stream's first update.
 schema::ProcedureResult Client::send_request(schema::Request request, const Returns* returns) {
-  check_stream_connection();
+  check_connected();
   std::vector<Session::Adds> adds;
   auto to_adds = [](Returns value) {
     return value == Returns::value ? Session::Adds::nothing : Session::Adds::stream;
@@ -263,6 +263,7 @@ void Client::add_exception_thrower(const std::string& service, const std::string
 }
 
 bool Client::get_function_return_type(uint64_t id, schema::Type* type) const {
+  check_connected();
   std::lock_guard<std::mutex> guard(state->function_types_lock);
   auto entry = state->function_return_types.find(id);
   if (entry == state->function_return_types.end()) return false;
@@ -276,6 +277,7 @@ void Client::set_function_return_type(uint64_t id, const schema::Type& type) con
 }
 
 bool Client::get_function_parameter_types(uint64_t id, std::vector<schema::Type>* types) const {
+  check_connected();
   std::lock_guard<std::mutex> guard(state->function_types_lock);
   auto entry = state->function_parameter_types.find(id);
   if (entry == state->function_parameter_types.end()) return false;
@@ -318,17 +320,17 @@ void detail::ExceptionThrowers::throw_exception(const schema::Error& error) cons
   }
 }
 
-void Client::check_stream_connection() const {
-  if (!state) throw StreamError("Not connected to a server");
+void Client::check_connected() const {
+  if (!state) throw ConnectionError("Not connected to a server");
 }
 
 StreamManager& Client::streams() const {
-  check_stream_connection();
+  check_connected();
   return *state->stream_manager;
 }
 
 std::shared_ptr<StreamImpl> Client::add_stream(const schema::ProcedureCall& call) {
-  check_stream_connection();
+  check_connected();
   uint64_t id = internal_procedures::add_stream(this, call);
   return streams().get_stream(*this, id);
 }

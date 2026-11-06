@@ -560,7 +560,7 @@ Client API Reference
    Client objects are copy constructible and assignable, and every copy shares the connection.
    The connection closes on :func:`close`, or when the last copy, and every service, object, stream
    and event made from one, is destroyed. A default-constructed client is not
-   connected. Its calls and its stream update members throw :class:`~krpc::StreamError`.
+   connected. Its calls and its stream update members throw :class:`~krpc::ConnectionError`.
 
    .. function:: void close()
 
@@ -740,13 +740,13 @@ Client API Reference
    update for its effects.
 
    Throws ``std::invalid_argument`` if the template type does not describe the function's value,
-   :class:`~krpc::StreamError` if the client is not connected to a server, and
+   :class:`~krpc::ConnectionError` if the client is not connected to a server, and
    :class:`~krpc::services::KRPC::ArgumentException` if the function has parameters.
 
 .. function:: Event add_event(const services::KRPC::Expression& function)
 
    Creates an event from a server side function that evaluates to a boolean value. Each call creates
-   a new event. Throws :class:`~krpc::StreamError` if the client is not connected to a server, and
+   a new event. Throws :class:`~krpc::ConnectionError` if the client is not connected to a server, and
    :class:`~krpc::services::KRPC::ArgumentException` if the function does not evaluate to a boolean
    value or has parameters.
 
@@ -831,8 +831,8 @@ Client API Reference
 
 .. class:: ConnectionError
 
-   Thrown when connecting fails, and by each call once the connection has failed. A subclass of
-   ``std::runtime_error``.
+   Thrown when connecting fails, by each call once the connection has failed, and by each call
+   on a client that is not connected. A subclass of ``std::runtime_error``.
 
    .. function:: const std::string& status() const
 

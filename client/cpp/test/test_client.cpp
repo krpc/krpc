@@ -83,7 +83,7 @@ TEST_F(test_client, test_an_object_from_a_client_in_a_vector_that_grows) {
 
 TEST_F(test_client, test_a_default_constructed_object_throws) {
   krpc::services::TestService::TestClass object;
-  ASSERT_THROW(object.get_value(), krpc::StreamError);
+  ASSERT_THROW(object.get_value(), krpc::ConnectionError);
 }
 
 TEST_F(test_client, test_the_last_release_closes_the_connection) {

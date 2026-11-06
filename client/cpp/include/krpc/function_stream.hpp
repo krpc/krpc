@@ -397,14 +397,15 @@ struct function_streams {
 /**
  * Create a stream from a server side function, evaluated on each update. Each call creates a new
  * stream. A Stream<void> runs a function with no value for its effects. Throws
- * std::invalid_argument if the template type does not describe the function's value, StreamError if
- * the client is not connected to a server, and services::KRPC::ArgumentException if the function
- * has parameters. Reading a null value throws std::runtime_error unless the template type is a
- * std::optional. In a callback, that error is written to stderr and the callback does not run.
+ * std::invalid_argument if the template type does not describe the function's value,
+ * ConnectionError if the client is not connected to a server, and services::KRPC::ArgumentException
+ * if the function has parameters. Reading a null value throws std::runtime_error unless the
+ * template type is a std::optional. In a callback, that error is written to stderr and the callback
+ * does not run.
  */
 template <typename T>
 inline Stream<T> add_stream(const services::KRPC::Expression& function) {
-  function._client.check_stream_connection();
+  function._client.check_connected();
   function_stream_detail::check_return_type<T>(function, "add_stream");
   uint64_t stream_id = internal_procedures::add_function_stream(function);
   return function_stream_detail::function_streams::create<T>(
@@ -422,12 +423,12 @@ inline services::KRPC::Expression compile(const services::KRPC::Expression& func
 
 /**
  * Create an event from a server side function that evaluates to a boolean value. Each call
- * creates a new event. Throws StreamError if the client is not connected to a server, and
+ * creates a new event. Throws ConnectionError if the client is not connected to a server, and
  * services::KRPC::ArgumentException if the function does not evaluate to a boolean value or has
  * parameters.
  */
 inline Event add_event(const services::KRPC::Expression& function) {
-  function._client.check_stream_connection();
+  function._client.check_connected();
   return internal_procedures::add_event(function);
 }
 

@@ -119,8 +119,8 @@ class Client {
   void set_function_parameter_types(uint64_t id, const std::vector<schema::Type>& types) const;
 
  public:
-  /** Throw a StreamError if the client is not connected to a server. */
-  void check_stream_connection() const;
+  /** Throw a ConnectionError if the client is not connected to a server. */
+  void check_connected() const;
   std::shared_ptr<StreamImpl> add_stream(const schema::ProcedureCall& call);
   std::shared_ptr<StreamImpl> get_stream(uint64_t id);
 

@@ -105,6 +105,14 @@ TEST_F(test_function_stream, test_an_optional_item_type_needs_a_nullable_item_pa
                std::invalid_argument);
 }
 
+TEST_F(test_function_stream, test_a_function_with_no_client_throws) {
+  krpc::services::KRPC::Expression function;
+  ASSERT_THROW(krpc::run<bool>(function), krpc::ConnectionError);
+  ASSERT_THROW(krpc::run<void>(function), krpc::ConnectionError);
+  ASSERT_THROW(krpc::add_stream<bool>(function), krpc::ConnectionError);
+  ASSERT_THROW(krpc::add_event(function), krpc::ConnectionError);
+}
+
 TEST_F(test_function_stream, test_a_null_argument_is_nullptr_or_nullopt) {
   auto label = Expr::parameter(conn, "label", KType::nullable_type(conn, KType::string(conn)));
   auto is_null = Expr::lambda(conn, {label}, Expr::is_null(conn, label));
