@@ -111,6 +111,30 @@ service_definitions(
     visibility = ["//visibility:public"],
 )
 
+csharp_library(
+    name = "TestService2",
+    srcs = ["src/TestService2.cs"],
+    nowarn = [
+        "CS1591",
+        "CS1701",
+    ],
+    target_frameworks = ["net10.0"],
+    treat_warnings_as_errors = True,
+    warning_level = 4,
+    deps = [
+        "//core:KRPC.Core.net10",
+        "//tools/build/dotnet:Google.Protobuf",
+    ],
+)
+
+service_definitions(
+    name = "TestService2ServiceDefinitions",
+    out = "TestService2.json",
+    assemblies = [":TestService2"],
+    service = "TestService2",
+    visibility = ["//visibility:public"],
+)
+
 # Sources for //:csproj-test, which checks them against the .csproj file lists.
 filegroup(
     name = "csproj-srcs",
