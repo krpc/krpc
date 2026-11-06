@@ -86,6 +86,11 @@ MODS = {
         ("harmony", "000_Harmony"),
     ],
     "kOS": [("kos", "kOS")],
+    "Trajectories": [
+        ("clickthroughblocker", "000_ClickThroughBlocker"),
+        ("toolbarcontrol", "001_ToolbarControl"),
+        ("spacetuxlibrary", "SpaceTuxLibrary"),
+    ],
 }
 
 # All managed GameData subdirs, every one a candidate for removal during reconcile.

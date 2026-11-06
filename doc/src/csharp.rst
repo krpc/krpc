@@ -937,4 +937,5 @@ API Reference
    csharp/api/remote-tech
    csharp/api/lidar
    csharp/api/docking-camera
+   csharp/api/trajectories
    csharp/api/debug

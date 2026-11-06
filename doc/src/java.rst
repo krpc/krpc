@@ -737,4 +737,5 @@ API Reference
    java/api/remote-tech
    java/api/lidar
    java/api/docking-camera
+   java/api/trajectories
    java/api/debug

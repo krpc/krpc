@@ -752,3 +752,11 @@ http_archive(
     sha256 = "d61eb36652ff94e793e280d5afb49b22abe70451638ed0ac6d2850483d8a3574",
     url = "https://github.com/KSP-KOS/KOS/releases/download/1.6.0.1/KOS-1.6.0.1.zip",
 )
+
+# Trajectories
+http_archive(
+    name = "trajectories",
+    build_file_content = "filegroup(name = 'gamedata', srcs = glob(['GameData/Trajectories/**']), visibility = ['//visibility:public'])",
+    sha256 = "92d9670da884e40608193200a876bafcf70ea59869b5bc1b3fbf31d541313b16",
+    url = "https://github.com/linuxgurugamer/KSPTrajectories/releases/download/2.4.5.5/Trajectories-1.12.5-2.4.5.5.zip",
+)

@@ -38,6 +38,7 @@ _MOD_SERVICES = {
     "InfernalRobotics": "infernal_robotics",
     "KerbalAlarmClock": "kerbal_alarm_clock",
     "DockingCamera": "docking_camera",
+    "Trajectories": "trajectories",
 }
 
 # Some mods add parts but no dedicated service (RealChute is wrapped by the SpaceCenter

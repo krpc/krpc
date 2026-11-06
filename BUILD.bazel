@@ -138,6 +138,7 @@ pkg_zip(
         "//service/UI",
         "//service/LiDAR",
         "//service/DockingCamera",
+        "//service/Trajectories",
         # Module Manager
         "@module_manager//file",
         # Schema
@@ -178,6 +179,9 @@ pkg_zip(
         "service/RemoteTech/KRPC.RemoteTech/net472/": "GameData/kRPC/",
         "service/RemoteTech/": "GameData/kRPC/",
         "service/RemoteTech/CHANGELOG.md": "GameData/kRPC/CHANGELOG.RemoteTech.md",
+        "service/Trajectories/KRPC.Trajectories/net472/": "GameData/kRPC/",
+        "service/Trajectories/": "GameData/kRPC/",
+        "service/Trajectories/CHANGELOG.md": "GameData/kRPC/CHANGELOG.Trajectories.md",
         "service/UI/KRPC.UI/net472/": "GameData/kRPC/",
         "service/UI/": "GameData/kRPC/",
         "service/UI/CHANGELOG.md": "GameData/kRPC/CHANGELOG.UI.md",
@@ -236,6 +240,7 @@ py_test(
         "//service/LiDAR:csproj-srcs",
         "//service/RemoteTech:csproj-srcs",
         "//service/SpaceCenter:csproj-srcs",
+        "//service/Trajectories:csproj-srcs",
         "//service/UI:csproj-srcs",
         "//tools/ServiceDefinitions:csproj-srcs",
         "//tools/TestServer:csproj-srcs",

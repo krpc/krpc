@@ -1009,4 +1009,5 @@ API Reference
    python/api/remote-tech
    python/api/lidar
    python/api/docking-camera
+   python/api/trajectories
    python/api/debug

@@ -1,0 +1,65 @@
+load("//:config.bzl", "assembly_version", "author")
+load("//service:build.bzl", "service_deps")
+load("//tools/build:assembly_info.bzl", "csharp_assembly_info")
+load("//tools/build:csharp.bzl", "csharp_library")
+load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
+
+exports_files(["CHANGELOG.md"])
+
+filegroup(
+    name = "Trajectories",
+    srcs = [
+        "CHANGELOG.md",
+        ":KRPC.Trajectories",
+        ":ServiceDefinitions",
+    ],
+    visibility = ["//:__pkg__"],
+)
+
+csharp_assembly_info(
+    name = "AssemblyInfo",
+    cls_compliant = False,
+    copyright = author,
+    description = "Trajectories API for kRPC",
+    title = "KRPC.Trajectories",
+    version = assembly_version,
+    visibility = [
+        "//:__pkg__",  # Make visible to //:csproj-deps so it can copy AssemblyInfo.cs to generated_deps
+    ],
+)
+
+srcs = [":AssemblyInfo"] + glob(["src/**/*.cs"])
+
+deps = service_deps + ["//service/SpaceCenter:KRPC.SpaceCenter"]
+
+csharp_library(
+    name = "KRPC.Trajectories",
+    srcs = srcs,
+    target_frameworks = ["net472"],
+    treat_warnings_as_errors = True,
+    visibility = ["//visibility:public"],
+    warning_level = 4,
+    deps = deps,
+)
+
+service_definitions(
+    name = "ServiceDefinitions",
+    out = "KRPC.Trajectories.json",
+    assemblies = [
+        ":KRPC.Trajectories",
+        "//service/SpaceCenter:KRPC.SpaceCenter",
+        "//server:KRPC",
+    ],
+    service = "Trajectories",
+    visibility = ["//visibility:public"],
+)
+
+# Sources for //:csproj-test, which checks them against the .csproj file lists.
+filegroup(
+    name = "csproj-srcs",
+    srcs = glob([
+        "**/*.cs",
+        "**/*.csproj",
+    ]),
+    visibility = ["//:__pkg__"],
+)
