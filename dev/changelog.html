@@ -698,6 +698,9 @@
 <li><p>Tell the server when the last client is released (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1219">#1219</a>)</p></li>
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">status</span></code> and <code class="docutils literal notranslate"><span class="pre">reason</span></code> to <code class="docutils literal notranslate"><span class="pre">ConnectionError</span></code> for a refused or ended connection (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1219">#1219</a>)</p></li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Throw <code class="docutils literal notranslate"><span class="pre">ConnectionError</span></code> when the server cannot be reached, nesting the error from the socket (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1219">#1219</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Client::close</span></code>, which closes the connection for every copy of the client (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1286">#1286</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Services, objects, streams and events hold the connection open, so they stay valid once the client is destroyed (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1286">#1286</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> A client that is not connected throws <code class="docutils literal notranslate"><span class="pre">ConnectionError</span></code>, as does a default-constructed object (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1286">#1286</a>)</p></li>
 </ul>
 </li>
 <li><p>Streams and events</p>
@@ -724,6 +727,8 @@
 <li><p>Raise the exception types of the <code class="docutils literal notranslate"><span class="pre">KRPC</span></code> service, such as <code class="docutils literal notranslate"><span class="pre">KRPC::InvalidOperationException</span></code>, without first creating a <code class="docutils literal notranslate"><span class="pre">KRPC</span></code> service object (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1269">#1269</a>)</p></li>
 <li><p>Relicense the C++ client under the MIT license (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1281">#1281</a>)</p></li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Service constructors take the client by reference, as in <code class="docutils literal notranslate"><span class="pre">SpaceCenter</span> <span class="pre">sc(conn)</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1285">#1285</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Object, stream and event constructors take the client by reference, as in <code class="docutils literal notranslate"><span class="pre">Vessel(conn,</span> <span class="pre">id)</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1286">#1286</a>)</p></li>
+<li><p>Service constructors accept a temporary client, as in <code class="docutils literal notranslate"><span class="pre">SpaceCenter</span> <span class="pre">sc(krpc::connect())</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1286">#1286</a>)</p></li>
 </ul>
 </section>
 <section id="java-client">

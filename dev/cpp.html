@@ -1253,21 +1253,32 @@ it is faster.</p>
 </section>
 <section id="closing-the-connection">
 <h3>Closing the Connection<a class="headerlink" href="#closing-the-connection" title="Link to this heading">#</a></h3>
-<p>A <a class="reference internal" href="#_CPPv4N4krpc6ClientE" title="krpc::Client"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">Client</span></code></a> can be copied, and every copy shares the connection. The connection
-closes when the last copy is destroyed, such as at the end of the block that declares it:</p>
+<p>A <a class="reference internal" href="#_CPPv4N4krpc6ClientE" title="krpc::Client"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">Client</span></code></a> can be copied, and every copy shares the connection. So does each service,
+object, stream and event you make from it. Call <a class="reference internal" href="#_CPPv4N4krpc6Client5closeEv" title="krpc::Client::close"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">close()</span></code></a> to close the connection:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc.hpp&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc/services/krpc.hpp&gt;</span>
 
 <span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="p">{</span>
-<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="o">::</span><span class="n">connect</span><span class="p">(</span><span class="s">"My Example Program"</span><span class="p">);</span>
-<span class="w">    </span><span class="n">krpc</span><span class="o">::</span><span class="n">services</span><span class="o">::</span><span class="n">KRPC</span><span class="w"> </span><span class="n">krpc</span><span class="p">(</span><span class="n">conn</span><span class="p">);</span>
-<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">krpc</span><span class="p">.</span><span class="n">get_status</span><span class="p">().</span><span class="n">version</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-<span class="w">  </span><span class="p">}</span>
-<span class="w">  </span><span class="c1">// The connection closed at the end of the block</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="o">::</span><span class="n">connect</span><span class="p">(</span><span class="s">"My Example Program"</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc</span><span class="o">::</span><span class="n">services</span><span class="o">::</span><span class="n">KRPC</span><span class="w"> </span><span class="n">krpc</span><span class="p">(</span><span class="n">conn</span><span class="p">);</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">krpc</span><span class="p">.</span><span class="n">get_status</span><span class="p">().</span><span class="n">version</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">  </span><span class="n">conn</span><span class="p">.</span><span class="n">close</span><span class="p">();</span>
 <span class="p">}</span>
 </pre></div>
+</div>
+<p>Calls through any of them then throw <a class="reference internal" href="#_CPPv4N4krpc15ConnectionErrorE" title="krpc::ConnectionError"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">ConnectionError</span></code></a>, and streams and events end.
+Without the call, the connection closes when the last of them is destroyed. An object you return
+from a function keeps the connection open.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A callback that holds its own stream or event keeps the connection open until the stream ends. An
+update callback that holds an object keeps it open until you call <a class="reference internal" href="#_CPPv4N4krpc6Client5closeEv" title="krpc::Client::close"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">close()</span></code></a>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Destroying the last copy of a stream or event stops new runs of its callbacks, but a run in
+progress carries on. Call <a class="reference internal" href="#_CPPv4N4krpc6Client5closeEv" title="krpc::Client::close"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">close()</span></code></a> to wait for it.</p>
 </div>
 </section>
 </section>
@@ -1944,8 +1955,18 @@ does.</p>
 <dd><p>A connection to the server. Obtain one by calling <a class="reference internal" href="#_CPPv4N4krpc7connectERKNSt6stringERKNSt6stringEjNSt6chrono12millisecondsENSt6chrono12millisecondsENSt6chrono12millisecondsE" title="krpc::connect"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">connect()</span></code></a>. A service is
 constructed with a reference to it, such as <code class="docutils literal notranslate"><span class="pre">krpc::services::SpaceCenter</span> <span class="pre">sc(conn)</span></code>.</p>
 <p>Client objects are copy constructible and assignable, and every copy shares the connection.
-Destroying the last copy closes the connection. A default-constructed client is not
-connected. Its calls and its stream update members throw <a class="reference internal" href="#_CPPv4N4krpc11StreamErrorE" title="krpc::StreamError"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">StreamError</span></code></a>.</p>
+The connection closes on <a class="reference internal" href="#_CPPv4N4krpc6Client5closeEv" title="krpc::Client::close"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">close()</span></code></a>, or when the last copy, and every service, object, stream
+and event made from one, is destroyed. A default-constructed client is not
+connected. Its calls and its stream update members throw <a class="reference internal" href="#_CPPv4N4krpc15ConnectionErrorE" title="krpc::ConnectionError"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">ConnectionError</span></code></a>.</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc6Client5closeEv">
+<span id="_CPPv3N4krpc6Client5closeEv"></span><span id="_CPPv2N4krpc6Client5closeEv"></span><span id="krpc::Client::close"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">close</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc6Client5closeEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Closes the connection. Calls in progress and later calls through any copy, service or object
+throw <a class="reference internal" href="#_CPPv4N4krpc15ConnectionErrorE" title="krpc::ConnectionError"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">ConnectionError</span></code></a>, and streams and events end. Destroys the stream and
+update callbacks, and waits for a callback in progress unless called from a callback. Does nothing if the connection is already closed, or the client is not
+connected.</p>
+</dd></dl>
+
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc6Client22wait_for_stream_updateEd">
 <span id="_CPPv3N4krpc6Client22wait_for_stream_updateEd"></span><span id="_CPPv2N4krpc6Client22wait_for_stream_updateEd"></span><span id="krpc::Client::wait_for_stream_update__double"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wait_for_stream_update</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">timeout</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="o"><span class="pre">-</span></span><span class="m"><span class="pre">1</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc6Client22wait_for_stream_updateEd" title="Link to this definition">#</a><br /></dt>
@@ -2167,7 +2188,7 @@ reading a null without one throws <a class="reference internal" href="#_CPPv4N4k
 a null value. A function with no value takes <code class="docutils literal notranslate"><span class="pre">void</span></code> as the template type, and runs on each
 update for its effects.</p>
 <p>Throws <code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code> if the template type does not describe the function’s value,
-<a class="reference internal" href="#_CPPv4N4krpc11StreamErrorE" title="krpc::StreamError"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">StreamError</span></code></a> if the client is not connected to a server, and
+<a class="reference internal" href="#_CPPv4N4krpc15ConnectionErrorE" title="krpc::ConnectionError"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">ConnectionError</span></code></a> if the client is not connected to a server, and
 <a class="reference internal" href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC17ArgumentExceptionE" title="krpc::services::KRPC::ArgumentException"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">ArgumentException</span></code></a> if the function has parameters.</p>
 </dd></dl>
 
@@ -2175,7 +2196,7 @@ update for its effects.</p>
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc9add_eventERKN8services4KRPC10ExpressionE">
 <span id="_CPPv3N4krpc9add_eventERKN8services4KRPC10ExpressionE"></span><span id="_CPPv2N4krpc9add_eventERKN8services4KRPC10ExpressionE"></span><span id="krpc::add_event__services::KRPC::ExpressionCR"></span><a class="reference internal" href="#_CPPv4N4krpc5EventE" title="krpc::Event"><span class="n"><span class="pre">Event</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_event</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">services</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPCE" title="krpc::services::KRPC"><span class="n"><span class="pre">KRPC</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10ExpressionE" title="krpc::services::KRPC::Expression"><span class="n"><span class="pre">Expression</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">function</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc9add_eventERKN8services4KRPC10ExpressionE" title="Link to this definition">#</a><br /></dt>
 <dd><p>Creates an event from a server side function that evaluates to a boolean value. Each call creates
-a new event. Throws <a class="reference internal" href="#_CPPv4N4krpc11StreamErrorE" title="krpc::StreamError"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">StreamError</span></code></a> if the client is not connected to a server, and
+a new event. Throws <a class="reference internal" href="#_CPPv4N4krpc15ConnectionErrorE" title="krpc::ConnectionError"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">ConnectionError</span></code></a> if the client is not connected to a server, and
 <a class="reference internal" href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC17ArgumentExceptionE" title="krpc::services::KRPC::ArgumentException"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">ArgumentException</span></code></a> if the function does not evaluate to a boolean
 value or has parameters.</p>
 </dd></dl>
@@ -2289,8 +2310,8 @@ callback.</p>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc15ConnectionErrorE">
 <span id="_CPPv3N4krpc15ConnectionErrorE"></span><span id="_CPPv2N4krpc15ConnectionErrorE"></span><span id="krpc::ConnectionError"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ConnectionError</span></span></span><a class="headerlink" href="#_CPPv4N4krpc15ConnectionErrorE" title="Link to this definition">#</a><br /></dt>
-<dd><p>Thrown when connecting fails, and by each call once the connection has failed. A subclass of
-<code class="docutils literal notranslate"><span class="pre">std::runtime_error</span></code>.</p>
+<dd><p>Thrown when connecting fails, by each call once the connection has failed, and by each call
+on a client that is not connected. A subclass of <code class="docutils literal notranslate"><span class="pre">std::runtime_error</span></code>.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK4krpc15ConnectionError6statusEv">
 <span id="_CPPv3NK4krpc15ConnectionError6statusEv"></span><span id="_CPPv2NK4krpc15ConnectionError6statusEv"></span><span id="krpc::ConnectionError::statusC"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">status</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4krpc15ConnectionError6statusEv" title="Link to this definition">#</a><br /></dt>

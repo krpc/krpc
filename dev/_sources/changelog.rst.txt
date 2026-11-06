@@ -215,6 +215,9 @@ C++ client
   * Tell the server when the last client is released (:issue:`1219`)
   * Add ``status`` and ``reason`` to ``ConnectionError`` for a refused or ended connection (:issue:`1219`)
   * :breaking:`Breaking` Throw ``ConnectionError`` when the server cannot be reached, nesting the error from the socket (:issue:`1219`)
+  * Add ``Client::close``, which closes the connection for every copy of the client (:issue:`1286`)
+  * :breaking:`Breaking` Services, objects, streams and events hold the connection open, so they stay valid once the client is destroyed (:issue:`1286`)
+  * :breaking:`Breaking` A client that is not connected throws ``ConnectionError``, as does a default-constructed object (:issue:`1286`)
 
 * Streams and events
 
@@ -238,6 +241,8 @@ C++ client
 * Raise the exception types of the ``KRPC`` service, such as ``KRPC::InvalidOperationException``, without first creating a ``KRPC`` service object (:issue:`1269`)
 * Relicense the C++ client under the MIT license (:issue:`1281`)
 * :breaking:`Breaking` Service constructors take the client by reference, as in ``SpaceCenter sc(conn)`` (:issue:`1285`)
+* :breaking:`Breaking` Object, stream and event constructors take the client by reference, as in ``Vessel(conn, id)`` (:issue:`1286`)
+* Service constructors accept a temporary client, as in ``SpaceCenter sc(krpc::connect())`` (:issue:`1286`)
 
 
 Java client
