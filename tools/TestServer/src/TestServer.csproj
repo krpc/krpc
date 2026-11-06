@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <OutputType>Exe</OutputType>
     <AssemblyName>TestServer</AssemblyName>
     <RootNamespace>TestServer</RootNamespace>
@@ -11,21 +11,8 @@
     <DocumentationFile>bin\$(Configuration)\TestServer.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
-  </ItemGroup>
   <Import Project="$(SolutionDir)tools\build\msbuild\bazeldirs.props" />
   <ItemGroup>
-    <Reference Include="mscorlib" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml" />
-    <Reference Include="Google.Protobuf">
-      <HintPath>$(bazel-bin)\tools\build\ksp\Google.Protobuf.dll</HintPath>
-    </Reference>
-    <Reference Include="KRPC.IO.Ports">
-      <HintPath>$(bazel-bin)\tools\build\ksp\KRPC.IO.Ports.dll</HintPath>
-    </Reference>
     <Reference Include="NDesk.Options">
       <HintPath>$(bazel-external)\+http_archive+csharp_options\lib\NDesk.Options.dll</HintPath>
     </Reference>

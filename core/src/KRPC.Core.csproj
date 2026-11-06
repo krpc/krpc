@@ -1,25 +1,33 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFrameworks>net472;net10.0</TargetFrameworks>
     <AssemblyName>KRPC.Core</AssemblyName>
     <RootNamespace>KRPC</RootNamespace>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <Deterministic>true</Deterministic>
-    <DocumentationFile>bin\$(Configuration)\KRPC.Core.xml</DocumentationFile>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
-  <ItemGroup>
+  <Import Project="$(SolutionDir)tools\build\msbuild\bazeldirs.props" />
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
-  </ItemGroup>
-  <Import Project="$(SolutionDir)tools\build\msbuild\ksplibs.props" />
-  <ItemGroup>
+    <Reference Include="System.Xml" />
     <Reference Include="Google.Protobuf">
       <HintPath>$(bazel-bin)\tools\build\ksp\Google.Protobuf.dll</HintPath>
     </Reference>
     <Reference Include="KRPC.IO.Ports">
       <HintPath>$(bazel-bin)\tools\build\ksp\KRPC.IO.Ports.dll</HintPath>
     </Reference>
+    <Compile Include="$(bazel-bin)/protobuf/KRPC_unity.cs">
+      <Link>KRPC.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+    <PackageReference Include="Google.Protobuf" Version="3.36.2" />
+    <PackageReference Include="System.IO.Ports" Version="10.0.14" />
+    <Compile Include="$(bazel-bin)/protobuf/KRPC.cs">
+      <Link>KRPC.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(bazel-bin)\core\AssemblyInfo.cs">
@@ -27,9 +35,6 @@
     </Compile>
     <Compile Include="..\InternalsVisibleTo.cs">
       <Link>InternalsVisibleTo.cs</Link>
-    </Compile>
-    <Compile Include="$(bazel-bin)/protobuf/KRPC_unity.cs">
-      <Link>KRPC.cs</Link>
     </Compile>
     <Compile Include="Configuration.cs" />
     <Compile Include="Core.cs" />

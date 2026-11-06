@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <AssemblyName>KRPC.Core.Test</AssemblyName>
     <RootNamespace>KRPC.Test</RootNamespace>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
@@ -9,30 +9,16 @@
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+    <PackageReference Include="Moq" Version="4.21.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="NUnit" Version="3.14.0" />
   </ItemGroup>
-  <Import Project="$(SolutionDir)tools\build\msbuild\ksplibs.props" />
+  <Import Project="$(SolutionDir)tools\build\msbuild\bazeldirs.props" />
   <ItemGroup>
     <ProjectReference Include="..\src\KRPC.Core.csproj">
       <Project>{2ABFAF25-93F4-4AD2-A85B-6B92786E26E9}</Project>
       <Name>KRPC.Core</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Google.Protobuf">
-      <HintPath>$(bazel-bin)\tools\build\ksp\Google.Protobuf.dll</HintPath>
-    </Reference>
-    <Reference Include="KRPC.IO.Ports">
-      <HintPath>$(bazel-bin)\tools\build\ksp\KRPC.IO.Ports.dll</HintPath>
-    </Reference>
-    <Reference Include="Moq">
-      <HintPath>$(bazel-external)\+http_archive+csharp_moq\lib\net462\Moq.dll</HintPath>
-      <Package>Moq</Package>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>$(bazel-external)\+http_archive+csharp_json\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(bazel-bin)\core\TestAssemblyInfo.cs">
