@@ -93,6 +93,17 @@ def rebuild_source(arduino, archive_path, nanopb):
     )
 
 
+def update_license(arduino, archive_path, nanopb):
+    """Replace the Arduino library's license files with the C-nano client's
+    license, and the license of the vendored nanopb runtime."""
+    with zipfile.ZipFile(archive_path) as archive:
+        license_text = archive.read(f"krpc-cnano-{lib.VERSION}/LICENSE")
+    (arduino / "LICENSE").write_bytes(license_text)
+    shutil.copy(nanopb["pb.h"].parent / "LICENSE.txt", arduino / "LICENSE.nanopb")
+    for name in ("COPYING", "COPYING.LESSER"):
+        (arduino / name).unlink(missing_ok=True)
+
+
 def set_version(arduino):
     """Set the version in the library's library.properties to the release."""
     properties = arduino / "library.properties"
@@ -123,6 +134,7 @@ def main():
 
     lib.banner("Rebuilding the Arduino library source")
     rebuild_source(arduino, archive_path, nanopb)
+    update_license(arduino, archive_path, nanopb)
     set_version(arduino)
     print(f"Arduino library source in {arduino}")
 

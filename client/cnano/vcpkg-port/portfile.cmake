@@ -24,6 +24,6 @@ file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/debug/include")
 file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/debug/share")
 file(INSTALL "${CMAKE_CURRENT_LIST_DIR}/usage" DESTINATION "${CURRENT_PACKAGES_DIR}/share/${PORT}")
 vcpkg_install_copyright(FILE_LIST
-    "${SOURCE_PATH}/COPYING.LESSER"
+    "${SOURCE_PATH}/LICENSE"
     "${CURRENT_INSTALLED_DIR}/share/nanopb/copyright"
 )
