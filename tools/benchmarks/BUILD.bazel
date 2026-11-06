@@ -10,19 +10,19 @@ load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
 # against a real service. It does not ship with the mod - nothing lists it in //:krpc - and
 # the in-game install adds it beside TestingTools (see tools/krpctest/krpctest/install.py).
 csharp_library(
-    name = "KRPC.Benchmark",
+    name = "KRPC.Benchmark.net472",
     srcs = glob(["src/**/*.cs"]) + [":AssemblyInfo"],
+    out = "KRPC.Benchmark",
     target_frameworks = ["net472"],
     treat_warnings_as_errors = True,
     visibility = ["//visibility:public"],
     warning_level = 4,
     deps = [
-        "//core:KRPC.Core",
+        "//core:KRPC.Core.net472",
         "//tools/build/ksp:Google.Protobuf",
     ],
 )
 
-# net10.0 build of the same service, for TestServer, matching //core:KRPC.Core.net10.
 csharp_library(
     name = "KRPC.Benchmark.net10",
     srcs = glob(["src/**/*.cs"]) + [":AssemblyInfo"],

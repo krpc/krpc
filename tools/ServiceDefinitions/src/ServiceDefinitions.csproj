@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <OutputType>Exe</OutputType>
     <AssemblyName>ServiceDefinitions</AssemblyName>
     <RootNamespace>ServiceDefinitions</RootNamespace>
@@ -10,9 +10,9 @@
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
   </ItemGroup>
-  <Import Project="$(SolutionDir)tools\build\msbuild\ksplibs.props" />
+  <Import Project="$(SolutionDir)tools\build\msbuild\bazeldirs.props" />
   <ItemGroup>
     <ProjectReference Include="..\..\..\core\src\KRPC.Core.csproj">
       <Project>{2ABFAF25-93F4-4AD2-A85B-6B92786E26E9}</Project>
@@ -20,15 +20,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Google.Protobuf">
-      <HintPath>$(bazel-bin)\tools\build\ksp\Google.Protobuf.dll</HintPath>
-    </Reference>
-    <Reference Include="KRPC.IO.Ports">
-      <HintPath>$(bazel-bin)\tools\build\ksp\KRPC.IO.Ports.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>$(bazel-external)\+http_archive+csharp_json\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="NDesk.Options">
       <HintPath>$(bazel-external)\+http_archive+csharp_options\lib\NDesk.Options.dll</HintPath>
     </Reference>

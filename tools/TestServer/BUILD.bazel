@@ -22,14 +22,6 @@ srcs = [
     ":AssemblyInfo",
 ]
 
-# net472 build of TestService, matching the game-facing build of services
-# that the ServiceDefinitions tool reflects over
-lib_deps = [
-    "//core:KRPC.Core",
-    "//tools/build/ksp:Google.Protobuf",
-    "//tools/build/ksp:KRPC.IO.Ports",
-]
-
 # The extension members, and the service whose class one of them returns, are built into
 # the server but not into the assembly the service definitions are generated from. The
 # bundled stubs therefore lack them, and a client has to pick them up from the definitions
@@ -90,11 +82,17 @@ genrule(
 csharp_library(
     name = "TestService",
     srcs = srcs,
-    nowarn = ["CS1591"],
-    target_frameworks = ["net472"],
+    nowarn = [
+        "CS1591",
+        "CS1701",
+    ],
+    target_frameworks = ["net10.0"],
     treat_warnings_as_errors = True,
     warning_level = 4,
-    deps = lib_deps,
+    deps = [
+        "//core:KRPC.Core.net10",
+        "//tools/build/dotnet:Google.Protobuf",
+    ],
 )
 
 service_definitions(

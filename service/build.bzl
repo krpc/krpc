@@ -4,7 +4,7 @@ load("//tools/build/ksp:build.bzl", "ksp_unity_libs")
 
 # Default dependencies for service assemblies
 service_deps = [
-    "//core:KRPC.Core",
+    "//core:KRPC.Core.net472",
     "//server:KRPC",
     "//tools/build/ksp:Google.Protobuf",
 ] + ksp_unity_libs

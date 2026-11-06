@@ -284,7 +284,7 @@ http_file(
 
 http_archive(
     name = "csharp_moq",
-    build_file_content = "exports_files(['lib/net462/Moq.dll', 'lib/net6.0/Moq.dll'])",
+    build_file_content = "exports_files(['lib/net6.0/Moq.dll'])",
     sha256 = "266d99204031191b849685facaa6bfaad28cb9a483f79e9b999f7a18855b9a6b",
     type = "zip",
     url = "https://www.nuget.org/api/v2/package/Moq/4.21.0",
@@ -292,7 +292,7 @@ http_archive(
 
 http_archive(
     name = "csharp_castle_core",
-    build_file_content = "exports_files(['lib/net462/Castle.Core.dll', 'lib/net6.0/Castle.Core.dll'])",
+    build_file_content = "exports_files(['lib/net6.0/Castle.Core.dll'])",
     sha256 = "b8d7bffcf0a76062e1c714292c3c9342ea081f9bbb7460e5ca3736c2a010e03e",
     type = "zip",
     url = "https://www.nuget.org/api/v2/package/Castle.Core/5.2.1",
@@ -300,7 +300,7 @@ http_archive(
 
 http_archive(
     name = "csharp_json",
-    build_file_content = "exports_files(['lib/net45/Newtonsoft.Json.dll', 'lib/net6.0/Newtonsoft.Json.dll'])",
+    build_file_content = "exports_files(['lib/net6.0/Newtonsoft.Json.dll'])",
     sha256 = "f09081d457405baf35a973fa0c50d6bf272ed683f2568c5a620a49da952f6529",
     type = "zip",
     url = "https://www.nuget.org/api/v2/package/Newtonsoft.Json/13.0.4",

@@ -5,10 +5,10 @@ load("//tools/build:csharp.bzl", "csharp_library")
 srcs = glob(["src/**/*.cs"]) + [":AssemblyInfo"]
 
 deps = [
-    "//core:KRPC.Core",
+    "//core:KRPC.Core.net472",
     # The object-access benchmarks below time their cases with the same machinery the
     # Benchmark service uses, so their numbers are in the same units as its.
-    "//tools/benchmarks:KRPC.Benchmark",
+    "//tools/benchmarks:KRPC.Benchmark.net472",
     "//server:KRPC",
     "//service/Debug:KRPC.Debug",
     "//service/SpaceCenter:KRPC.SpaceCenter",

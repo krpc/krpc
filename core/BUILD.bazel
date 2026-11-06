@@ -8,7 +8,7 @@ exports_files(["CHANGELOG.md"])
 filegroup(
     name = "core",
     srcs = [
-        ":KRPC.Core",
+        ":KRPC.Core.net472",
         ":ServiceDefinitions",
         ":StdLibServiceDefinitions",
     ],
@@ -34,39 +34,35 @@ csharp_assembly_info(
     ],
 )
 
-srcs = glob(["src/**/*.cs"]) + [
-    ":AssemblyInfo",
-    "//protobuf:csharp_unity",
-]
-
-deps = [
-    "//tools/build/ksp:Google.Protobuf",
-    "//tools/build/ksp:KRPC.IO.Ports",
+internals_visible_to = [
+    "KRPC.Core.Test",
+    "TestingTools",
+    # TestServer exposes the expression tree printer as a test-only RPC
+    "TestServer",
+    "TestService",
+    "DynamicProxyGenAssembly2",
+    # The Benchmark service runs a call through Services, the server's own dispatch path
+    "KRPC.Benchmark",
 ]
 
 csharp_library(
-    name = "KRPC.Core",
-    srcs = srcs,
-    internals_visible_to = [
-        "KRPC.Core.Test",
-        "TestingTools",
-        # TestServer exposes the expression tree printer as a test-only RPC
-        "TestServer",
-        "TestService",
-        "DynamicProxyGenAssembly2",
-        # The Benchmark service runs a call through Services, the server's own dispatch path
-        "KRPC.Benchmark",
+    name = "KRPC.Core.net472",
+    srcs = glob(["src/**/*.cs"]) + [
+        ":AssemblyInfo",
+        "//protobuf:csharp_unity",
     ],
+    out = "KRPC.Core",
+    internals_visible_to = internals_visible_to,
     target_frameworks = ["net472"],
     treat_warnings_as_errors = True,
     visibility = ["//visibility:public"],
     warning_level = 4,
-    deps = deps,
+    deps = [
+        "//tools/build/ksp:Google.Protobuf",
+        "//tools/build/ksp:KRPC.IO.Ports",
+    ],
 )
 
-# net10.0 build of KRPC.Core, for TestServer and the unit tests. This is a
-# separate target rather than a multi-targeted KRPC.Core so that the default
-# build flavor staged into the mod release archive stays net472.
 csharp_library(
     name = "KRPC.Core.net10",
     srcs = glob(["src/**/*.cs"]) + [
@@ -74,16 +70,7 @@ csharp_library(
         "//protobuf:csharp",
     ],
     out = "KRPC.Core",
-    internals_visible_to = [
-        "KRPC.Core.Test",
-        "TestingTools",
-        # TestServer exposes the expression tree printer as a test-only RPC
-        "TestServer",
-        "TestService",
-        "DynamicProxyGenAssembly2",
-        # The Benchmark service runs a call through Services, the server's own dispatch path
-        "KRPC.Benchmark",
-    ],
+    internals_visible_to = internals_visible_to,
     # CS1701: Google.Protobuf's net5.0 build references net5-era framework
     # assemblies; unification handles this at runtime (MSBuild suppresses
     # this warning by default)
@@ -101,7 +88,7 @@ csharp_library(
 service_definitions(
     name = "ServiceDefinitions",
     out = "KRPC.Core.json",
-    assemblies = [":KRPC.Core"],
+    assemblies = [":KRPC.Core.net10"],
     service = "KRPC",
     visibility = ["//visibility:public"],
 )
@@ -120,7 +107,7 @@ genrule(
 service_definitions(
     name = "StdLibServiceDefinitions",
     out = "KRPC.StdLib.json",
-    assemblies = [":KRPC.Core"],
+    assemblies = [":KRPC.Core.net10"],
     service = "StdLib",
     visibility = ["//visibility:public"],
 )

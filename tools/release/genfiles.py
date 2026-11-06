@@ -24,8 +24,6 @@ CONTENTS = (
     "bazel-bin/client/csharp/Services/",
     "bazel-bin/service/*/AssemblyInfo.cs",
     "bazel-bin/tools/*/AssemblyInfo.cs",
-    "bazel-krpc/external/+http_archive+csharp_json",
-    "bazel-krpc/external/+http_archive+csharp_moq",
     "bazel-krpc/external/+http_archive+csharp_options",
     "bazel-krpc/external/+http_archive+ksp/KSP_Data/Managed",
     "bazel-bin/tools/build/ksp/Google.Protobuf.dll",

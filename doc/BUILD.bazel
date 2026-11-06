@@ -404,6 +404,7 @@ csharp_library_multiple(
         ["src/scripts/**/*.cs"],
         exclude = ["src/scripts/**/*.lib.cs"],
     ),
+    target_framework = "net10.0",
     deps = [
         "//client/csharp:KRPC.Client",
         "//tools/build/dotnet:Google.Protobuf.netstandard2.0",
@@ -413,8 +414,9 @@ csharp_library_multiple(
 csharp_library_multiple(
     name = "compile-scripts-csharp-libs",
     srcs = glob(["src/scripts/**/*.lib.cs"]),
+    target_framework = "net472",
     deps = [
-        "//core:KRPC.Core",
+        "//core:KRPC.Core.net472",
         "//service/SpaceCenter:KRPC.SpaceCenter",
         "//tools/build/ksp:Assembly-CSharp",
         "//tools/build/ksp:Assembly-CSharp-firstpass",

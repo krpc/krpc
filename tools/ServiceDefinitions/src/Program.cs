@@ -4,10 +4,8 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
-using System.Security;
-#if NET
 using System.Runtime.Loader;
-#endif
+using System.Security;
 using KRPC.Utils;
 using NDesk.Options;
 using Newtonsoft.Json;
@@ -27,7 +25,6 @@ namespace ServiceDefinitions
             Console.Error.WriteLine ("  assembly...                Path(s) to assembly DLL(s) to load");
         }
 
-#if NET
         static readonly List<string> searchDirs = new List<string> ();
 
         /// <summary>
@@ -47,7 +44,6 @@ namespace ServiceDefinitions
             }
             return null;
         }
-#endif
 
         public static int Main (string [] args)
         {
@@ -91,23 +87,16 @@ namespace ServiceDefinitions
             Logger.Enabled = true;
             Logger.Level = Logger.Severity.Warning;
             var service = positionalArgs [0];
-#if NET
             searchDirs.AddRange (referenceDirs);
             for (var i = 1; i < positionalArgs.Count; i++)
                 searchDirs.Add (Path.GetDirectoryName (Path.GetFullPath (positionalArgs [i])));
             searchDirs.Add (AppContext.BaseDirectory);
             AssemblyLoadContext.Default.Resolving += ResolveAssembly;
-#endif
             for (var i = 1; i < positionalArgs.Count; i++) {
                 var path = positionalArgs [i];
 
                 try {
-#if NET
                     AssemblyLoadContext.Default.LoadFromAssemblyPath (Path.GetFullPath (path));
-#else
-                    AssemblyName name = AssemblyName.GetAssemblyName (path);
-                    Assembly.Load (name);
-#endif
                 } catch (FileNotFoundException) {
                     Console.Error.WriteLine ("Assembly '" + path + "' not found.");
                     return 1;

@@ -12,11 +12,7 @@ using KRPC.Server.TCP;
 using KRPC.Service;
 using KRPC.Utils;
 using NDesk.Options;
-#if NET
 using SerialPorts = System.IO.Ports;
-#else
-using SerialPorts = KRPC.IO.Ports;
-#endif
 
 namespace TestServer
 {

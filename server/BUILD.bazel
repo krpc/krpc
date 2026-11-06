@@ -44,7 +44,7 @@ srcs = [
 ]
 
 deps = [
-    "//core:KRPC.Core",
+    "//core:KRPC.Core.net472",
     "//tools/build/ksp:Google.Protobuf",
     "//tools/build/ksp:KRPC.IO.Ports",
 ] + ksp_unity_libs

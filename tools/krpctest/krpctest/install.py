@@ -154,7 +154,10 @@ def _release_zip(root):
 # TestingTools is the add-on the tests drive the game with; KRPC.Benchmark is the benchmark
 # service, which TestServer also loads, so an in-game measurement and a game-less one are the
 # same measurement.
-_TEST_ONLY_TARGETS = ["//tools/TestingTools", "//tools/benchmarks:KRPC.Benchmark"]
+_TEST_ONLY_TARGETS = [
+    "//tools/TestingTools",
+    "//tools/benchmarks:KRPC.Benchmark.net472",
+]
 
 
 def _target_files(root, target):
