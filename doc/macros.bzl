@@ -5,7 +5,7 @@ load("@rules_dotnet//dotnet:defs.bzl", "csharp_library")
 load("@rules_java//java:java_binary.bzl", "java_binary")
 
 # buildifier: disable=function-docstring
-def csharp_library_multiple(name, srcs, deps):
+def csharp_library_multiple(name, srcs, target_framework, deps):
     names = []
     for src in srcs:
         subname = name + "/" + src
@@ -13,7 +13,7 @@ def csharp_library_multiple(name, srcs, deps):
         csharp_library(
             name = subname,
             srcs = [src],
-            target_frameworks = ["net472"],
+            target_frameworks = [target_framework],
             deps = deps,
         )
     native.filegroup(name = name, srcs = names)
