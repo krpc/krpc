@@ -260,8 +260,8 @@ final class Testee {
         stream(command.getSetRate().getStream()).setRate(command.getSetRate().getRate());
         reply.setValue(Values.resultNone());
         break;
-      case RATE:
-        reply.setValue(Values.resultFloat(stream(command.getRate().getStream()).getRate()));
+      case GET_RATE:
+        reply.setValue(Values.resultFloat(stream(command.getGetRate().getStream()).getRate()));
         break;
       case REMOVE:
         Object removed = Values.getHandle(command.getRemove().getStream());

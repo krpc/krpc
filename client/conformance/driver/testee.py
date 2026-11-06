@@ -659,7 +659,7 @@ class Stream(_Handle):
 
     @property
     def rate(self) -> float:
-        reply = self._client.testee.run(rate=pb.Rate(stream=self.handle))
+        reply = self._client.testee.run(get_rate=pb.GetRate(stream=self.handle))
         return reply.value.float
 
     @rate.setter

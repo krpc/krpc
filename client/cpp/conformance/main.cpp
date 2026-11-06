@@ -578,9 +578,9 @@ class Testee {
             ->set_rate(command.set_rate().rate());
         *reply->mutable_value() = result_none();
         break;
-      case Command::kRate:
+      case Command::kGetRate:
         reply->mutable_value()->set_float_(
-            Handles::instance().stream(command.rate().stream())->rate());
+            Handles::instance().stream(command.get_rate().stream())->rate());
         break;
       case Command::kRemove:
         if (auto event = Handles::instance().event(command.remove().stream())) {
