@@ -9,6 +9,6 @@
 
 
 
-   .. function:: EmptyService(krpc::Client* client)
+   .. function:: EmptyService(krpc::Client& client)
 
       Construct an instance of this service.

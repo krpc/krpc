@@ -24,7 +24,7 @@ namespace services {
 
 class KRPC : public Service {
  public:
-  explicit KRPC(Client* client);
+  explicit KRPC(Client& client);
 
   // Class forward declarations
   class Expression;
@@ -3037,54 +3037,54 @@ namespace services {
 
 namespace services {
 
-inline KRPC::KRPC(Client* client):
+inline KRPC::KRPC(Client& client):
   Service(client) {
-  client->add_exception_thrower(
+  client.add_exception_thrower(
     "KRPC", "ArgumentException",
     [] (const std::string& msg) { throw ArgumentException(msg); });
-  client->add_exception_thrower(
+  client.add_exception_thrower(
     "KRPC", "ArgumentNullException",
     [] (const std::string& msg) { throw ArgumentNullException(msg); });
-  client->add_exception_thrower(
+  client.add_exception_thrower(
     "KRPC", "ArgumentOutOfRangeException",
     [] (const std::string& msg) { throw ArgumentOutOfRangeException(msg); });
-  client->add_exception_thrower(
+  client.add_exception_thrower(
     "KRPC", "DivideByZeroException",
     [] (const std::string& msg) { throw DivideByZeroException(msg); });
-  client->add_exception_thrower(
+  client.add_exception_thrower(
     "KRPC", "Error",
     [] (const std::string& msg) { throw Error(msg); });
-  client->add_exception_thrower(
+  client.add_exception_thrower(
     "KRPC", "IndexOutOfRangeException",
     [] (const std::string& msg) { throw IndexOutOfRangeException(msg); });
-  client->add_exception_thrower(
+  client.add_exception_thrower(
     "KRPC", "InvalidOperationException",
     [] (const std::string& msg) { throw InvalidOperationException(msg); });
-  client->add_exception_thrower(
+  client.add_exception_thrower(
     "KRPC", "KeyNotFoundException",
     [] (const std::string& msg) { throw KeyNotFoundException(msg); });
-  client->add_exception_thrower(
+  client.add_exception_thrower(
     "KRPC", "NotSupportedException",
     [] (const std::string& msg) { throw NotSupportedException(msg); });
-  client->add_exception_thrower(
+  client.add_exception_thrower(
     "KRPC", "NullReferenceException",
     [] (const std::string& msg) { throw NullReferenceException(msg); });
-  client->add_exception_thrower(
+  client.add_exception_thrower(
     "KRPC", "ObjectDestroyedException",
     [] (const std::string& msg) { throw ObjectDestroyedException(msg); });
-  client->add_exception_thrower(
+  client.add_exception_thrower(
     "KRPC", "ObjectNotLoadedException",
     [] (const std::string& msg) { throw ObjectNotLoadedException(msg); });
-  client->add_exception_thrower(
+  client.add_exception_thrower(
     "KRPC", "OverflowException",
     [] (const std::string& msg) { throw OverflowException(msg); });
-  client->add_exception_thrower(
+  client.add_exception_thrower(
     "KRPC", "StreamRemovedException",
     [] (const std::string& msg) { throw StreamRemovedException(msg); });
-  client->add_exception_thrower(
+  client.add_exception_thrower(
     "KRPC", "TimeoutException",
     [] (const std::string& msg) { throw TimeoutException(msg); });
-  client->add_exception_thrower(
+  client.add_exception_thrower(
     "KRPC", "UnsupportedSceneException",
     [] (const std::string& msg) { throw UnsupportedSceneException(msg); });
 }

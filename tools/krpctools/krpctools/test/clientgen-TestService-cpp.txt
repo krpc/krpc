@@ -26,7 +26,7 @@ namespace services {
 
 class TestService : public Service {
  public:
-  explicit TestService(Client* client);
+  explicit TestService(Client& client);
 
   // Class forward declarations
   class DeprecatedClass;
@@ -1459,16 +1459,16 @@ namespace services {
 
 namespace services {
 
-inline TestService::TestService(Client* client):
+inline TestService::TestService(Client& client):
   Service(client) {
-  client->add_exception_thrower(
+  client.add_exception_thrower(
     "TestService", "CustomException",
     [] (const std::string& msg) { throw CustomException(msg); });
 #if defined(__GNUC__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
-  client->add_exception_thrower(
+  client.add_exception_thrower(
     "TestService", "DeprecatedException",
     [] (const std::string& msg) { throw DeprecatedException(msg); });
 #if defined(__GNUC__)

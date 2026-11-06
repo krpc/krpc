@@ -26,7 +26,7 @@ class server_test : public ::testing::Test {
   krpc::services::TestService test_service;
 };
 
-inline server_test::server_test() : conn(connect()), krpc(&conn), test_service(&conn) {}
+inline server_test::server_test() : conn(connect()), krpc(conn), test_service(conn) {}
 
 inline krpc::Client server_test::connect(const std::string& name) {
   return krpc::connect(name, "localhost", get_port());

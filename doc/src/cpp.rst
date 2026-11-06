@@ -192,7 +192,7 @@ its altitude:
 
 Each service is a class in the ``krpc::services`` namespace, declared in a header of its own, such
 as ``krpc/services/space_center.hpp`` for the :class:`~krpc::services::SpaceCenter` service. Include
-the header, and construct the service with a pointer to the connection.
+the header, and construct the service with a reference to the connection.
 
 Handling Errors
 ---------------
@@ -541,7 +541,7 @@ Client API Reference
 .. class:: Client
 
    A connection to the server. Obtain one by calling :func:`~krpc::connect`. A service is
-   constructed with a pointer to it, such as ``krpc::services::SpaceCenter sc(&conn)``.
+   constructed with a reference to it, such as ``krpc::services::SpaceCenter sc(conn)``.
 
    Client objects are copy constructible and assignable, and every copy shares the connection.
    Destroying the last copy closes the connection. A default-constructed client is not

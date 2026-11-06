@@ -9,7 +9,7 @@
 
    A service whose procedures use another service's enumeration.
 
-   .. function:: ServiceA(krpc::Client* client)
+   .. function:: ServiceA(krpc::Client& client)
 
       Construct an instance of this service.
 

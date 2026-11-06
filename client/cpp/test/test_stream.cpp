@@ -35,7 +35,7 @@ TEST_F(test_stream, test_a_copy_of_the_client_keeps_its_streams_once_the_origina
   auto client = connect_client();
   auto copy = std::make_unique<krpc::Client>(*client);
   client.reset();
-  krpc::services::TestService service(copy.get());
+  krpc::services::TestService service(*copy);
   auto x = service.counter_stream("test_stream.test_a_copy_of_the_client_keeps_its_streams");
   auto value = x();
   ASSERT_TRUE(eventually([&x, value] { return x() > value; }));

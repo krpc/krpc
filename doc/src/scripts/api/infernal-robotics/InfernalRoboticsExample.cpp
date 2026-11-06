@@ -11,8 +11,8 @@ using InfernalRobotics = krpc::services::InfernalRobotics;
 
 int main() {
   auto conn = krpc::connect("InfernalRobotics Example");
-  SpaceCenter space_center(&conn);
-  InfernalRobotics infernal_robotics(&conn);
+  SpaceCenter space_center(conn);
+  InfernalRobotics infernal_robotics(conn);
 
   std::optional<InfernalRobotics::ServoGroup> group =
       infernal_robotics.servo_group_with_name(

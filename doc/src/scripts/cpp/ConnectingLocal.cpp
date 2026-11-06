@@ -4,6 +4,6 @@
 
 int main() {
   auto conn = krpc::connect_local("My Example Program");
-  krpc::services::KRPC krpc(&conn);
+  krpc::services::KRPC krpc(conn);
   std::cout << krpc.get_status().version << std::endl;
 }

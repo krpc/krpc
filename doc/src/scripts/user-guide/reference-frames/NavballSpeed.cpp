@@ -6,7 +6,7 @@
 
 int main() {
   krpc::Client conn = krpc::connect("Navball speed");
-  krpc::services::SpaceCenter spaceCenter(&conn);
+  krpc::services::SpaceCenter spaceCenter(conn);
   auto vessel = spaceCenter.active_vessel().value();
   auto obt_frame = vessel.orbit_speed_reference_frame();
   auto srf_frame = vessel.surface_speed_reference_frame();

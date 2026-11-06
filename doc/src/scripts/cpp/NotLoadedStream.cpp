@@ -7,7 +7,7 @@
 
 int main() {
   auto conn = krpc::connect();
-  krpc::services::SpaceCenter sc(&conn);
+  krpc::services::SpaceCenter sc(conn);
   auto flight = sc.active_vessel().value().flight();
 
   typedef krpc::services::KRPC::Expression Expr;

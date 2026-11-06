@@ -5,8 +5,8 @@
 
 int main() {
   auto conn = krpc::connect();
-  krpc::services::KRPC krpc(&conn);
-  krpc::services::SpaceCenter sc(&conn);
+  krpc::services::KRPC krpc(conn);
+  krpc::services::SpaceCenter sc(conn);
   auto vessel = sc.active_vessel().value();
   auto temperature = vessel.parts().root().temperature_stream();
 

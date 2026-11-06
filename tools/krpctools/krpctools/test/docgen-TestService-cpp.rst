@@ -9,7 +9,7 @@
 
    Service documentation string.
 
-   .. function:: TestService(krpc::Client* client)
+   .. function:: TestService(krpc::Client& client)
 
       Construct an instance of this service.
 

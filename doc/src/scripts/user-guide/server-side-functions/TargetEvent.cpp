@@ -6,7 +6,7 @@
 
 int main() {
   auto conn = krpc::connect();
-  krpc::services::SpaceCenter sc(&conn);
+  krpc::services::SpaceCenter sc(conn);
   typedef krpc::services::KRPC::Expression Expr;
   auto some_vessel = sc.vessels()[0];
   // [docs]

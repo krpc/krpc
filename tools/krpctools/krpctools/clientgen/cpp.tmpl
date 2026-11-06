@@ -58,7 +58,7 @@ namespace services {
 
 class {{ service_name }} : public Service {
  public:
-  explicit {{ service_name }}(Client* client);
+  explicit {{ service_name }}(Client& client);
   {% if classes | length > 0 %}
 
   // Class forward declarations
@@ -378,7 +378,7 @@ namespace services {
 
 namespace services {
 
-inline {{ service_name }}::{{ service_name }}(Client* client):
+inline {{ service_name }}::{{ service_name }}(Client& client):
   Service(client) {
   {% for exception_name,exception in exceptions.items() %}
   {% if exception.deprecated %}
@@ -387,7 +387,7 @@ inline {{ service_name }}::{{ service_name }}(Client* client):
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
   {% endif %}
-  client->add_exception_thrower(
+  client.add_exception_thrower(
     "{{ service_name }}", "{{ exception_name }}",
     [] (const std::string& msg) { throw {{ exception_name }}(msg); });
   {% if exception.deprecated %}

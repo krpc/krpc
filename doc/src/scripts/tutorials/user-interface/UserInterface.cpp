@@ -7,8 +7,8 @@
 
 int main() {
   krpc::Client conn = krpc::connect("User Interface Example");
-  krpc::services::SpaceCenter space_center(&conn);
-  krpc::services::UI ui(&conn);
+  krpc::services::SpaceCenter space_center(conn);
+  krpc::services::UI ui(conn);
   auto canvas = ui.stock_canvas();
 
   // Get the size of the game window in pixels

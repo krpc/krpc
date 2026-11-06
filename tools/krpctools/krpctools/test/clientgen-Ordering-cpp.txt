@@ -26,7 +26,7 @@ namespace services {
 
 class ServiceA : public Service {
  public:
-  explicit ServiceA(Client* client);
+  explicit ServiceA(Client& client);
 
   /**
    * Defaults to a member of another service's enumeration.
@@ -51,7 +51,7 @@ class ServiceA : public Service {
 
 namespace services {
 
-inline ServiceA::ServiceA(Client* client):
+inline ServiceA::ServiceA(Client& client):
   Service(client) {
 }
 
