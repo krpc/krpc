@@ -101,7 +101,7 @@ csharp_library(
 service_definitions(
     name = "ServiceDefinitions",
     out = "KRPC.Core.json",
-    assemblies = [":KRPC.Core"],
+    assemblies = [":KRPC.Core.net10"],
     service = "KRPC",
     visibility = ["//visibility:public"],
 )
@@ -120,7 +120,7 @@ genrule(
 service_definitions(
     name = "StdLibServiceDefinitions",
     out = "KRPC.StdLib.json",
-    assemblies = [":KRPC.Core"],
+    assemblies = [":KRPC.Core.net10"],
     service = "StdLib",
     visibility = ["//visibility:public"],
 )
