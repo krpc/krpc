@@ -159,6 +159,7 @@ C-nano client
 * :breaking:`Breaking` Return a stream or an event as the ``uint64_t`` id of its stream (:issue:`1266`)
 * :breaking:`Breaking` Leave internal procedures out of the services, such as ``krpc_KRPC_AddStream`` (:issue:`1269`)
 * :breaking:`Breaking` Remove server side functions, such as ``krpc_KRPC_RunFunction`` (:issue:`1269`)
+* Relicense the C-nano client and the Arduino library under the MIT license (:issue:`1281`)
 
 
 C# client
@@ -235,6 +236,7 @@ C++ client
 * :breaking:`Breaking` Leave internal procedures out of the services, such as ``KRPC::add_stream`` (:issue:`1269`)
 * Add ``krpc::compile`` for a server side function built with the expression API (:issue:`1269`)
 * Raise the exception types of the ``KRPC`` service, such as ``KRPC::InvalidOperationException``, without first creating a ``KRPC`` service object (:issue:`1269`)
+* Relicense the C++ client under the MIT license (:issue:`1281`)
 
 
 Java client
