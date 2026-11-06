@@ -4,7 +4,7 @@
 
 int main() {
   auto conn = krpc::connect();
-  krpc::services::SpaceCenter sc(&conn);
+  krpc::services::SpaceCenter sc(conn);
   auto vessel = sc.active_vessel().value();
   auto flight_info = vessel.flight();
   {

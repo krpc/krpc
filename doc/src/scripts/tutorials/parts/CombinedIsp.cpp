@@ -7,7 +7,7 @@ using SpaceCenter = krpc::services::SpaceCenter;
 
 int main() {
   auto conn = krpc::connect();
-  SpaceCenter sc(&conn);
+  SpaceCenter sc(conn);
   auto vessel = sc.active_vessel().value();
 
   auto engines = vessel.parts().engines();

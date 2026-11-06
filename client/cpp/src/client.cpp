@@ -116,7 +116,7 @@ Client::Client(const std::string& name, const std::shared_ptr<Connection>& conne
   }
   stream_manager = StreamManager::create(this, connection, stall_timeout);
   // Constructing the KRPC service registers its exception types
-  services::KRPC krpc_service(this);
+  services::KRPC krpc_service(*this);
 }
 
 schema::ProcedureResult Client::invoke(const schema::Request& request) {

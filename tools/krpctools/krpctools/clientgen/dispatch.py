@@ -617,7 +617,7 @@ class CppDispatchGenerator(DispatchGenerator):
         return self.language.parse_name(name)
 
     def call(self, kind, cls, name, parameters, suffix=""):
-        service = "::krpc::services::%s(&client)" % self._service
+        service = "::krpc::services::%s(client)" % self._service
         if kind == PROCEDURE:
             return "%s.%s%s(%s)" % (
                 service,

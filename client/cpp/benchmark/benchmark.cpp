@@ -160,7 +160,7 @@ void emit(const std::vector<Case>& cases) {
 
 int main() {
   krpc::Client conn = connect_to_server();
-  krpc::services::TestService test_service(&conn);
+  krpc::services::TestService test_service(conn);
 
   std::vector<int32_t> values;
   values.reserve(kListValues);
