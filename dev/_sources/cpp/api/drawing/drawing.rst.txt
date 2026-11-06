@@ -17,7 +17,7 @@ Drawing
       For drawing and interacting with the user interface, see the UI service.
       Objects drawn by a client are removed when that client disconnects.
 
-   .. function:: Drawing(krpc::Client* client)
+   .. function:: Drawing(krpc::Client& client)
 
       Construct an instance of this service.
 

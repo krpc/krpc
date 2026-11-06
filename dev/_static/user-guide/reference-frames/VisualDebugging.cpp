@@ -5,8 +5,8 @@
 
 int main() {
   krpc::Client conn = krpc::connect("Visual Debugging");
-  krpc::services::SpaceCenter space_center(&conn);
-  krpc::services::Drawing drawing(&conn);
+  krpc::services::SpaceCenter space_center(conn);
+  krpc::services::Drawing drawing(conn);
   auto vessel = space_center.active_vessel().value();
 
   // Draw the axes of the surface reference frame

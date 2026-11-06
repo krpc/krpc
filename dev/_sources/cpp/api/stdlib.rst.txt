@@ -18,7 +18,7 @@ Standard Library
       in the order x, y, z, w the SpaceCenter service uses. Angles are in radians unless
       stated otherwise.
 
-   .. function:: StdLib(krpc::Client* client)
+   .. function:: StdLib(krpc::Client& client)
 
       Construct an instance of this service.
 

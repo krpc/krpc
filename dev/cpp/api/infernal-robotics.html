@@ -1125,8 +1125,8 @@ servos to the right for 1 second.</p>
 
 <span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="o">::</span><span class="n">connect</span><span class="p">(</span><span class="s">"InfernalRobotics Example"</span><span class="p">);</span>
-<span class="w">  </span><span class="n">SpaceCenter</span><span class="w"> </span><span class="n">space_center</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">);</span>
-<span class="w">  </span><span class="n">InfernalRobotics</span><span class="w"> </span><span class="n">infernal_robotics</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">);</span>
+<span class="w">  </span><span class="n">SpaceCenter</span><span class="w"> </span><span class="n">space_center</span><span class="p">(</span><span class="n">conn</span><span class="p">);</span>
+<span class="w">  </span><span class="n">InfernalRobotics</span><span class="w"> </span><span class="n">infernal_robotics</span><span class="p">(</span><span class="n">conn</span><span class="p">);</span>
 
 <span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">InfernalRobotics</span><span class="o">::</span><span class="n">ServoGroup</span><span class="o">&gt;</span><span class="w"> </span><span class="n">group</span><span class="w"> </span><span class="o">=</span>
 <span class="w">      </span><span class="n">infernal_robotics</span><span class="p">.</span><span class="n">servo_group_with_name</span><span class="p">(</span>

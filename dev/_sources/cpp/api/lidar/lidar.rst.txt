@@ -14,7 +14,7 @@ LIDAR
    Provides RPCs to interact with the
    `LiDAR <https://github.com/nullprofile/LaserDist>`_ mod.
 
-   .. function:: LIDAR(krpc::Client* client)
+   .. function:: LIDAR(krpc::Client& client)
 
       Construct an instance of this service.
 

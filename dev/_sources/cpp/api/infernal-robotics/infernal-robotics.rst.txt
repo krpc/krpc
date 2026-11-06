@@ -12,7 +12,7 @@ InfernalRobotics
    This service provides functionality to interact with
    `Infernal Robotics <https://forum.kerbalspaceprogram.com/topic/184787-infernal-robotics-next/>`_.
 
-   .. function:: InfernalRobotics(krpc::Client* client)
+   .. function:: InfernalRobotics(krpc::Client& client)
 
       Construct an instance of this service.
 

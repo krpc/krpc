@@ -21,7 +21,7 @@ Debug
       career progress made with it are not earned. It is intended for setting up a
       scenario to fly or a script to test, without flying there first.
 
-   .. function:: Debug(krpc::Client* client)
+   .. function:: Debug(krpc::Client& client)
 
       Construct an instance of this service.
 

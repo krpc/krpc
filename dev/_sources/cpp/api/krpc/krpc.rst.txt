@@ -11,7 +11,7 @@ KRPC
 
    Main kRPC service, used by clients to interact with basic server functionality.
 
-   .. function:: KRPC(krpc::Client* client)
+   .. function:: KRPC(krpc::Client& client)
 
       Construct an instance of this service.
 

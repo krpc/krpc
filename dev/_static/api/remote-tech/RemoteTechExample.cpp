@@ -5,8 +5,8 @@
 
 int main() {
   krpc::Client conn = krpc::connect("RemoteTech Example");
-  krpc::services::SpaceCenter space_center(&conn);
-  krpc::services::RemoteTech remote_tech(&conn);
+  krpc::services::SpaceCenter space_center(conn);
+  krpc::services::RemoteTech remote_tech(conn);
   auto vessel = space_center.active_vessel().value();
 
   // Set a dish target

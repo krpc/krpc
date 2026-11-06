@@ -18,7 +18,7 @@ UI
       disconnects, and when the game scene changes. A client that needs its
       interface in more than one scene must create it again in each of them.
 
-   .. function:: UI(krpc::Client* client)
+   .. function:: UI(krpc::Client& client)
 
       Construct an instance of this service.
 

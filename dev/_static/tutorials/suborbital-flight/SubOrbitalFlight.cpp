@@ -8,7 +8,7 @@
 
 int main() {
   krpc::Client conn = krpc::connect("Sub-orbital flight");
-  krpc::services::SpaceCenter space_center(&conn);
+  krpc::services::SpaceCenter space_center(conn);
 
   auto vessel = space_center.active_vessel().value();
 

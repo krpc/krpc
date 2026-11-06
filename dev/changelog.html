@@ -723,6 +723,7 @@
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">krpc::compile</span></code> for a server side function built with the expression API (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1269">#1269</a>)</p></li>
 <li><p>Raise the exception types of the <code class="docutils literal notranslate"><span class="pre">KRPC</span></code> service, such as <code class="docutils literal notranslate"><span class="pre">KRPC::InvalidOperationException</span></code>, without first creating a <code class="docutils literal notranslate"><span class="pre">KRPC</span></code> service object (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1269">#1269</a>)</p></li>
 <li><p>Relicense the C++ client under the MIT license (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1281">#1281</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Service constructors take the client by reference, as in <code class="docutils literal notranslate"><span class="pre">SpaceCenter</span> <span class="pre">sc(conn)</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1285">#1285</a>)</p></li>
 </ul>
 </section>
 <section id="java-client">

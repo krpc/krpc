@@ -12,8 +12,8 @@ using Drawing = krpc::services::Drawing;
 
 int main() {
   krpc::Client conn = krpc::connect("Drawing Example");
-  SpaceCenter space_center(&conn);
-  Drawing drawing(&conn);
+  SpaceCenter space_center(conn);
+  Drawing drawing(conn);
   auto vessel = space_center.active_vessel().value();
   auto kerbin = space_center.bodies()["Kerbin"];
 

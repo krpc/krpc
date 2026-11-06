@@ -9,7 +9,7 @@
 
 int main() {
   krpc::Client conn = krpc::connect("Launch into orbit");
-  krpc::services::SpaceCenter space_center(&conn);
+  krpc::services::SpaceCenter space_center(conn);
   auto vessel = space_center.active_vessel().value();
 
   float turn_start_altitude = 250;

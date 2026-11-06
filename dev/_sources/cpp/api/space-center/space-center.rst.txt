@@ -12,7 +12,7 @@ SpaceCenter
    Provides functionality to interact with Kerbal Space Program. This includes controlling
    the active vessel, managing its resources, planning maneuver nodes and auto-piloting.
 
-   .. function:: SpaceCenter(krpc::Client* client)
+   .. function:: SpaceCenter(krpc::Client& client)
 
       Construct an instance of this service.
 

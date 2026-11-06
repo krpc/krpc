@@ -599,8 +599,8 @@ The script updates the label on the arrow with the vessel’s orbital speed.</p>
 
 <span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">krpc</span><span class="o">::</span><span class="n">Client</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="o">::</span><span class="n">connect</span><span class="p">(</span><span class="s">"Drawing Example"</span><span class="p">);</span>
-<span class="w">  </span><span class="n">SpaceCenter</span><span class="w"> </span><span class="n">space_center</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">);</span>
-<span class="w">  </span><span class="n">Drawing</span><span class="w"> </span><span class="n">drawing</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">);</span>
+<span class="w">  </span><span class="n">SpaceCenter</span><span class="w"> </span><span class="n">space_center</span><span class="p">(</span><span class="n">conn</span><span class="p">);</span>
+<span class="w">  </span><span class="n">Drawing</span><span class="w"> </span><span class="n">drawing</span><span class="p">(</span><span class="n">conn</span><span class="p">);</span>
 <span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">space_center</span><span class="p">.</span><span class="n">active_vessel</span><span class="p">().</span><span class="n">value</span><span class="p">();</span>
 <span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">kerbin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">space_center</span><span class="p">.</span><span class="n">bodies</span><span class="p">()[</span><span class="s">"Kerbin"</span><span class="p">];</span>
 

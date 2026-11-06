@@ -3,7 +3,7 @@
 
 int main() {
   krpc::Client conn = krpc::connect("Navball directions");
-  krpc::services::SpaceCenter space_center(&conn);
+  krpc::services::SpaceCenter space_center(conn);
   auto vessel = space_center.active_vessel().value();
   auto ap = vessel.auto_pilot();
   ap.set_reference_frame(vessel.surface_reference_frame());

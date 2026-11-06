@@ -1086,7 +1086,7 @@ running, catch the exception in the function:</p>
 
 <span class="nb">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
   <span class="n">auto</span> <span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="p">::</span><span class="n">connect</span><span class="p">();</span>
-  <span class="n">krpc</span><span class="p">::</span><span class="n">services</span><span class="p">::</span><span class="n">SpaceCenter</span> <span class="n">sc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">);</span>
+  <span class="n">krpc</span><span class="p">::</span><span class="n">services</span><span class="p">::</span><span class="n">SpaceCenter</span> <span class="n">sc</span><span class="p">(</span><span class="n">conn</span><span class="p">);</span>
   <span class="n">auto</span> <span class="n">flight</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">active_vessel</span><span class="p">()</span><span class="o">.</span><span class="n">value</span><span class="p">()</span><span class="o">.</span><span class="n">flight</span><span class="p">();</span>
 
   <span class="n">typedef</span> <span class="n">krpc</span><span class="p">::</span><span class="n">services</span><span class="p">::</span><span class="n">KRPC</span><span class="p">::</span><span class="n">Expression</span> <span class="n">Expr</span><span class="p">;</span>
@@ -1326,7 +1326,7 @@ and a comparison:</p>
 
 <span class="nb">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
   <span class="n">auto</span> <span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="p">::</span><span class="n">connect</span><span class="p">();</span>
-  <span class="n">krpc</span><span class="p">::</span><span class="n">services</span><span class="p">::</span><span class="n">SpaceCenter</span> <span class="n">sc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">);</span>
+  <span class="n">krpc</span><span class="p">::</span><span class="n">services</span><span class="p">::</span><span class="n">SpaceCenter</span> <span class="n">sc</span><span class="p">(</span><span class="n">conn</span><span class="p">);</span>
   <span class="n">auto</span> <span class="n">flight</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">active_vessel</span><span class="p">()</span><span class="o">.</span><span class="n">value</span><span class="p">()</span><span class="o">.</span><span class="n">flight</span><span class="p">();</span>
 
   <span class="o">//</span> <span class="n">Get</span> <span class="n">the</span> <span class="n">remote</span> <span class="n">procedure</span> <span class="n">call</span> <span class="k">as</span> <span class="n">a</span> <span class="n">message</span> <span class="nb">object</span><span class="p">,</span>
@@ -1503,7 +1503,7 @@ streamed too, and runs for its effects, as in <a class="reference internal" href
 
 <span class="nb">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
   <span class="n">auto</span> <span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="p">::</span><span class="n">connect</span><span class="p">();</span>
-  <span class="n">krpc</span><span class="p">::</span><span class="n">services</span><span class="p">::</span><span class="n">SpaceCenter</span> <span class="n">sc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">);</span>
+  <span class="n">krpc</span><span class="p">::</span><span class="n">services</span><span class="p">::</span><span class="n">SpaceCenter</span> <span class="n">sc</span><span class="p">(</span><span class="n">conn</span><span class="p">);</span>
   <span class="n">auto</span> <span class="n">flight</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">active_vessel</span><span class="p">()</span><span class="o">.</span><span class="n">value</span><span class="p">()</span><span class="o">.</span><span class="n">flight</span><span class="p">();</span>
 
   <span class="o">//</span> <span class="n">Build</span> <span class="n">a</span> <span class="n">function</span> <span class="n">that</span> <span class="n">computes</span>
@@ -1636,7 +1636,7 @@ the procedure, so any engine can supply it:</p>
 
 <span class="nb">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
   <span class="n">auto</span> <span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="p">::</span><span class="n">connect</span><span class="p">();</span>
-  <span class="n">krpc</span><span class="p">::</span><span class="n">services</span><span class="p">::</span><span class="n">SpaceCenter</span> <span class="n">sc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">);</span>
+  <span class="n">krpc</span><span class="p">::</span><span class="n">services</span><span class="p">::</span><span class="n">SpaceCenter</span> <span class="n">sc</span><span class="p">(</span><span class="n">conn</span><span class="p">);</span>
   <span class="n">auto</span> <span class="n">vessel</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">active_vessel</span><span class="p">()</span><span class="o">.</span><span class="n">value</span><span class="p">();</span>
 
   <span class="n">typedef</span> <span class="n">krpc</span><span class="p">::</span><span class="n">services</span><span class="p">::</span><span class="n">KRPC</span><span class="p">::</span><span class="n">Expression</span> <span class="n">Expr</span><span class="p">;</span>

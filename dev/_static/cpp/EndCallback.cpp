@@ -19,7 +19,7 @@ void print_ending(const std::exception_ptr& error) {
 
 int main() {
   auto conn = krpc::connect();
-  krpc::services::SpaceCenter sc(&conn);
+  krpc::services::SpaceCenter sc(conn);
   auto vessel = sc.active_vessel().value();
   auto temperature = vessel.parts().root().temperature_stream();
 

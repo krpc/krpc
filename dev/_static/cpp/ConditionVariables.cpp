@@ -4,7 +4,7 @@
 
 int main() {
   auto conn = krpc::connect();
-  krpc::services::SpaceCenter sc(&conn);
+  krpc::services::SpaceCenter sc(conn);
   auto control = sc.active_vessel().value().control();
   auto abort = control.abort_stream();
   abort.acquire();
