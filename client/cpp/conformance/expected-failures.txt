@@ -1,5 +1,4 @@
 # The conformance tests the C++ client fails, one per line, with the reason as a comment
-test_connection.py::test_call_after_end[close]  # No close: a Client closes when it is destroyed
 test_errors.py::test_mapped_exceptions[ArgumentException]  # The testee names std::logic_error before std::invalid_argument
 test_errors.py::test_mapped_exceptions[ArgumentNullException]  # As above
 test_errors.py::test_mapped_exceptions[NotSupportedException]  # The conventions file has no native type for the exception
@@ -8,7 +7,6 @@ test_errors.py::test_mapped_exceptions[TimeoutException]  # As above
 test_calls.py::test_class_extension_members  # The testee dispatch covers KRPC and TestService only
 test_streams.py::test_members[extension-member]  # The testee dispatch covers KRPC and TestService only
 test_streams.py::test_undecodable_value  # A stream value is decoded when it is read, so a read after a value that fails to decode raises
-test_connection.py::test_close_twice  # As test_call_after_end[close]
 test_connection.py::test_handshake_timeout_values[zero]  # A zero timeout waits indefinitely
 test_connection.py::test_stall_timeout_values[zero]  # As test_handshake_timeout_values[zero]
 test_connection.py::test_handshake_failed_write  # The write's error escapes the handshake as a std::runtime_error
@@ -21,8 +19,6 @@ test_codec.py::test_invalid_utf8  # A string that is not valid UTF-8 decodes
 test_streams.py::test_scoped_removal  # A stream has no scope idiom
 test_streams.py::test_procedure_returning_an_event  # The testee cannot stream a procedure that returns an event
 test_codec.py::test_object  # An object with the id 0 is the null object
-test_concurrency.py::test_close_while_holding[updates]  # No close: a Client closes when its last copy is destroyed, and the thread waiting for an update holds one
-test_concurrency.py::test_wake_update_waiter[close]  # As test_close_while_holding[updates]
 test_codec.py::test_malformed_data[list(nullable sint32)]  # A presence bool other than 0 or 1, or data after a null, decodes
 test_values.py::test_null_result_with_a_value  # A result with is_null set reads as null, whatever its value
 test_objects.py::test_object_id_range[zero]  # As test_codec.py::test_object
@@ -30,7 +26,5 @@ test_functions.py::test_null_for_non_nullable_type[double]  # Raises std::runtim
 test_functions.py::test_stream_null_for_non_nullable_type[double]  # As test_null_for_non_nullable_type[double]
 test_functions.py::test_null_for_non_nullable_type[TestClass]  # As test_null_for_non_nullable_type[double]
 test_functions.py::test_stream_null_for_non_nullable_type[TestClass]  # As test_null_for_non_nullable_type[TestClass]
-test_concurrency.py::test_close_with_a_call_in_flight  # No close: a Client closes when its last copy is destroyed, and the calling thread holds one
-test_concurrency.py::test_response_after_close  # As test_concurrency.py::test_close_with_a_call_in_flight
 test_concurrency.py::test_wait_holding_another @skip  # The dispatcher thread waits for the condition held, so the update of the stream waited on is never announced
 test_concurrency.py::test_held_stream_ending_before_value  # A read on the thread holding the condition raises "Stream has no value", as the ending is announced only once the condition is free

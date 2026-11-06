@@ -119,6 +119,10 @@ Client::Client(const std::string& name, const std::shared_ptr<Connection>& conne
   services::KRPC krpc_service(*this);
 }
 
+void Client::close() {
+  if (stream_manager) stream_manager->close();
+}
+
 schema::ProcedureResult Client::invoke(const schema::Request& request) {
   return this->send_request(request);
 }

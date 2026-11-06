@@ -87,6 +87,7 @@ StreamManager::~StreamManager() { detail::release_if_held_elsewhere(&condition_l
 
 // Streams end before the join, so a thread waiting on one is woken
 void StreamManager::close() {
+  if (close_started.exchange(true)) return;
   request_close();
   session->close();
   try {

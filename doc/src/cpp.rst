@@ -174,10 +174,13 @@ it is faster.
 Closing the Connection
 ^^^^^^^^^^^^^^^^^^^^^^
 
-A :class:`~krpc::Client` can be copied, and every copy shares the connection. The connection
-closes when the last copy is destroyed, such as at the end of the block that declares it:
+A :class:`~krpc::Client` can be copied, and every copy shares the connection. Call
+:func:`~krpc::Client::close` to close the connection:
 
 .. literalinclude:: /scripts/cpp/Connecting3.cpp
+
+Calls through any copy then throw :class:`~krpc::ConnectionError`, and streams and events end.
+Without the call, the connection closes when the last copy is destroyed.
 
 Calling Remote Procedures
 -------------------------
@@ -546,6 +549,12 @@ Client API Reference
    Client objects are copy constructible and assignable, and every copy shares the connection.
    Destroying the last copy closes the connection. A default-constructed client is not
    connected. Its calls and its stream update members throw :class:`~krpc::StreamError`.
+
+   .. function:: void close()
+
+      Closes the connection. Calls in progress and later calls through any copy, service or object
+      throw :class:`~krpc::ConnectionError`, and streams and events end. Does nothing if the
+      connection is already closed, or the client is not connected.
 
    .. function:: void wait_for_stream_update(double timeout = -1)
 

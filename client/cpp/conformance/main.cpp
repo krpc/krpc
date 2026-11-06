@@ -452,10 +452,7 @@ class Testee {
         break;
       case Command::kClose:
         if (command.close().interrupted()) throw Unsupported("A C++ thread cannot be interrupted");
-        // A client closes when its last copy is destroyed
-        connected();
-        held_clients.back().reset();
-        destroy(current_connection);
+        connected().close();
         *reply->mutable_value() = result_none();
         break;
       case Command::kInvoke:

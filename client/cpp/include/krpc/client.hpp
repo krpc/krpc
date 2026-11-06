@@ -59,6 +59,11 @@ class Client {
   schema::ProcedureResult invoke(std::string_view service, std::string_view procedure,
                                  const std::vector<encoder::Value>& args, Returns returns);
 
+  /** Close the connection. Calls in progress and later calls through any copy, service or object
+      throw ConnectionError, and streams and events end. Does nothing if already closed or not
+      connected. */
+  void close();
+
   schema::Request build_request(
       std::string_view service, std::string_view procedure,
       const std::vector<encoder::Value>& args = std::vector<encoder::Value>());

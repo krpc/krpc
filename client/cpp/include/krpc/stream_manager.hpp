@@ -40,6 +40,8 @@ class StreamManager {
   Session& get_session() { return *session; }
   std::shared_ptr<StreamImpl> add_stream(const schema::ProcedureCall& call);
   std::shared_ptr<StreamImpl> get_stream(uint64_t id);
+  /** Close the connection and end every stream. Does nothing if already closed. */
+  void close();
   /** Register a stream the server has added for this client. Called by the reader, before it
       reads the stream's first update. */
   void register_stream(uint64_t id);
@@ -87,8 +89,6 @@ class StreamManager {
  private:
   StreamManager(Client* client, const std::shared_ptr<Connection>& connection,
                 std::chrono::milliseconds stall_timeout);
-  /** Close the connection and end every stream, on the thread releasing the last client. */
-  void close();
   /** A change for the dispatcher to apply to a stream: a new value, or an ending. */
   struct Change {
     std::shared_ptr<StreamImpl> stream;
@@ -133,6 +133,8 @@ class StreamManager {
   std::atomic_bool closed;
   // Whether a thread is closing the connection
   std::atomic_bool close_requested;
+  // Whether a thread has started closing, which a later close leaves to it
+  std::atomic_bool close_started{false};
   // Every registered stream, to find one whose condition the closing thread holds
   std::vector<std::weak_ptr<StreamImpl>> registered;
 };

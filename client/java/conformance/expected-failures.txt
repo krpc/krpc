@@ -1,5 +1,6 @@
 # The conformance tests the Java client fails, one per line, with the reason as a comment
 test_connection.py::test_call_after_end[close]  # A call after close raises RPCException, with the connection error as its cause
+test_objects.py::test_call_after_close  # As test_connection.py::test_call_after_end[close]
 test_calls.py::test_class_extension_members  # The testee dispatch covers KRPC and TestService only
 test_streams.py::test_members[extension-member]  # The testee dispatch covers KRPC and TestService only
 test_events.py::test_end_callback[connection-failure]  # The end callback is passed a StreamException, not the connection error with its reason
