@@ -167,9 +167,9 @@ Each call to :meth:`~krpc.client.Client.add_stream` creates another stream. A st
 procedure with no return value, or of a property setter passed with ``setattr``, runs the call on
 each update for its effects. Its value is ``None``.
 
-A stream runs until you remove it with :meth:`~krpc.stream.Stream.remove`, your program drops its
-last reference to it, or the connection closes. Keep a reference to a stream for as long as you
-need its values or its callbacks. :meth:`~krpc.client.Client.stream` creates a stream in a
+A stream runs until you remove it with :meth:`~krpc.stream.Stream.remove`, or the connection
+closes. It keeps running after your program drops its last reference to it, so remove a stream you
+no longer need. :meth:`~krpc.client.Client.stream` creates a stream in a
 ``with`` statement, which removes it at the end of the block:
 
 .. literalinclude:: /scripts/python/Streaming3.py
@@ -324,8 +324,7 @@ An event ends in the same ways as a :ref:`stream <python-client-stream-endings>`
 event that has ended raises the exception that ended it.
 
 When the event fires just before the server ends it, your next wait returns for that firing first.
-Removing the event, dropping your program's last reference to it, or closing the connection, ends
-it at once.
+Removing the event or closing the connection ends it at once.
 
 :meth:`~krpc.event.Event.add_end_callback` adds a callback that is called once when the event ends,
 with the exception, just like an ordinary stream.

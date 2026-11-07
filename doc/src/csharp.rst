@@ -179,9 +179,9 @@ Each call to :meth:`~KRPC.Client.Connection.AddStream` creates another stream. A
 value, such as a call to a procedure with no return value, streams as a
 :type:`~KRPC.Client.Stream` with no type parameter. It runs on each update for its effects.
 
-A stream runs until you remove it with :meth:`~KRPC.Client.Stream.Remove`, your program drops its
-last reference to it, or the connection closes. Keep a reference to a stream for as long as you
-need its values or its callbacks.
+A stream runs until you remove it with :meth:`~KRPC.Client.Stream.Remove`, or the connection
+closes. It keeps running after your program drops its last reference to it, so remove a stream you
+no longer need.
 
 By default, the server sends a stream's value each time it changes. Set
 :prop:`~KRPC.Client.Stream.Rate` to limit how many times a second the stream updates:
@@ -343,8 +343,7 @@ An event ends in the same ways as a :ref:`stream <csharp-client-stream-endings>`
 event that has ended throws the exception that ended it.
 
 When the event fires just before the server ends it, your next wait returns for that firing first.
-Removing the event, dropping your program's last reference to it, or closing the connection, ends
-it at once.
+Removing the event or closing the connection ends it at once.
 
 :meth:`~KRPC.Client.Event.AddEndCallback` adds a callback that is called once when the event ends,
 with the exception, just like an ordinary stream.

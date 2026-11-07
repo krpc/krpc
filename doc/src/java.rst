@@ -207,9 +207,8 @@ Each call to :meth:`~Connection.addStream` creates another stream. A stream of a
 return value runs the call on each update for its effects. Its value is ``null``, as a
 ``Stream<Void>``.
 
-A stream runs until you remove it with :meth:`~Stream.remove`, your program drops its last
-reference to it, or the connection closes. Keep a reference to a stream for as long as you need its
-values or its callbacks.
+A stream runs until you remove it with :meth:`~Stream.remove`, or the connection closes. It keeps
+running after your program drops its last reference to it, so remove a stream you no longer need.
 
 By default, the server sends a stream's value each time it changes. Call :meth:`~Stream.setRate` to
 limit how many times a second the stream updates:
@@ -369,8 +368,7 @@ An event ends in the same ways as a :std:ref:`stream <java-client-stream-endings
 event that has ended throws the exception that ended it.
 
 When the event fires just before the server ends it, your next wait returns for that firing first.
-Removing the event, dropping your program's last reference to it, or closing the connection, ends
-it at once.
+Removing the event or closing the connection ends it at once.
 
 :meth:`~Event.addEndCallback` adds a callback that is called once when the event ends, with the
 exception, just like an ordinary stream.
