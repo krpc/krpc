@@ -743,22 +743,49 @@ UNDECODABLE_ARGUMENTS = {
 }
 
 
+def argument_error_of(server, call):
+    """Send the call between two valid calls, and return the ``ArgumentException`` it fails
+    with, having checked the other two ran."""
+    valid = raw.procedure_call("TestService", "Int32ToString", b"\x02")
+    first, failed, last = raw.request(server, valid, call, valid)
+    assert (failed.error.service, failed.error.name) == ("KRPC", "ArgumentException")
+    assert not first.HasField("error") and first.value == b"\x011"
+    assert not last.HasField("error") and last.value == b"\x011"
+    return failed.error
+
+
 @pytest.mark.parametrize("case", list(UNDECODABLE_ARGUMENTS))
 def test_undecodable_argument_fails_its_call(server, case):
     """A call with an argument the server cannot decode fails with the server's
     ``ArgumentException``, in the ``error`` field of its result. The other calls in the
     request run, and their results stay in order."""
     procedure, argument = UNDECODABLE_ARGUMENTS[case]
-    valid = raw.procedure_call("TestService", "Int32ToString", b"\x02")
-    first, failed, last = raw.request(
-        server,
-        valid,
-        raw.procedure_call("TestService", procedure, argument),
-        valid,
-    )
-    assert (failed.error.service, failed.error.name) == ("KRPC", "ArgumentException")
-    assert not first.HasField("error") and first.value == b"\x011"
-    assert not last.HasField("error") and last.value == b"\x011"
+    argument_error_of(server, raw.procedure_call("TestService", procedure, argument))
+
+
+@pytest.mark.parametrize("position", [1, 2**32 - 1])
+def test_argument_position_out_of_range_fails_its_call(server, position):
+    """A call with an argument position past the procedure's last parameter fails with the
+    server's ``ArgumentException``, in the ``error`` field of its result. The description
+    names the position and the procedure. The other calls in the request run, and their
+    results stay in order."""
+    call = raw.procedure_call("TestService", "Int32ToString", b"\x02")
+    call.arguments.add(position=position, value=b"\x02")
+    error = argument_error_of(server, call)
+    assert str(position) in error.description
+    assert "TestService.Int32ToString" in error.description
+
+
+def test_duplicate_argument_position_fails_its_call(server):
+    """A call with two arguments at one position fails with the server's
+    ``ArgumentException``, in the ``error`` field of its result. The description names the
+    position and the procedure. The other calls in the request run, and their results stay
+    in order."""
+    call = raw.procedure_call("TestService", "Int32ToString", b"\x02")
+    call.arguments.add(position=0, value=b"\x04")
+    error = argument_error_of(server, call)
+    assert "position 0" in error.description
+    assert "TestService.Int32ToString" in error.description
 
 
 @profile("concurrency")
