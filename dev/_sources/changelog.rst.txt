@@ -332,6 +332,7 @@ Python client
 * :breaking:`Breaking` Leave internal procedures out of the services, such as ``KRPC.add_stream`` (:issue:`1269`)
 * Accept a server side function built with the expression API in ``Client.compile`` (:issue:`1269`)
 * Support ``isinstance`` with a class accessed through a connection, such as ``isinstance(vessel, conn.space_center.Vessel)`` (:issue:`1279`)
+* Publish a wheel in place of an sdist (:issue:`1289`)
 
 
 krpctools
@@ -362,6 +363,7 @@ krpctools
 * :breaking:`Breaking` Write the Lua API documentation from ``krpc-docgen`` for ``sphinx-lua-ls``, in place of ``sphinxcontrib-luadomain``, with typed signatures (:issue:`1202`)
 * Leave internal procedures out of generated services and API documentation (:issue:`1269`)
 * Ship the ``TestService2`` and ``ConformanceService`` definitions beside ``TestService.json``, for a conformance testee whose client generates its stubs ahead of time (:issue:`1284`)
+* Publish a wheel in place of an sdist (:issue:`1289`)
 
 
 v0.7.0
