@@ -1,0 +1,11 @@
+--- a/dotnet/private/rules/nuget/nuget_archive.bzl
++++ b/dotnet/private/rules/nuget/nuget_archive.bzl
+@@ -76,7 +76,7 @@ def _create_rid_native_select(name, group):
+         result.append(' "')
+         result.append(rid)
+         result.append('": [')
+-        result.append(",".join(["\n   \"{}\"".format(item) for item in items]))
++        result.append(",".join(["\n   \"{}\"".format(item) for item in items if not item.endswith("_._")]))
+         result.append("],\n")
+ 
+     result.append("})")

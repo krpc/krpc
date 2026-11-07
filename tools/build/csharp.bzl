@@ -8,7 +8,7 @@ load(
 )
 
 def _with_analyzers(kwargs):
-    kwargs["deps"] = kwargs.get("deps", []) + ["//tools/build/dotnet:NetAnalyzers"]
+    kwargs["deps"] = kwargs.get("deps", []) + ["@paket.main//microsoft.codeanalysis.netanalyzers"]
     kwargs["analyzer_configs"] = ["//tools/build/dotnet:analyzers.globalconfig"]
     return kwargs
 

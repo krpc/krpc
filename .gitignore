@@ -13,4 +13,5 @@ obj
 packages
 assets
 /release-credentials.toml
+/tools/build/dotnet/paket-files/
 /media/build/

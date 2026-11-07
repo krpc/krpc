@@ -22,6 +22,9 @@ Current version: `tools/krpc-version.sh`. Full setup: `doc/src/krpc-development/
 Bazel, from the repo root. Hermetic — all toolchains and the KSP assemblies are downloaded; nothing
 to install before or after. Deps in `MODULE.bazel`; Python deps locked in
 `tools/build/python/requirements_lock.txt` (`bazel run //tools/build/python:requirements.update`).
+NuGet packages locked in `tools/build/dotnet/paket.lock` (edit `paket.dependencies`, then
+`bazel run //tools/build/dotnet:update`, then fix the hand-written versions
+`//tools/build/dotnet:versions-test` reports).
 Outputs in `bazel-bin`, test logs in `bazel-testlogs`.
 
  * `//:krpc` — mod release zip. `//server`, `//service/SpaceCenter`, `//client/python`, … — one component.
