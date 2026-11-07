@@ -641,6 +641,20 @@ protobuf code for each language.</p></li>
 <p><code class="docutils literal notranslate"><span class="pre">bazel</span> <span class="pre">fetch</span> <span class="pre">//...</span></code> downloads every dependency up front, for working offline. <code class="docutils literal notranslate"><span class="pre">bazel</span> <span class="pre">clean</span></code>
 deletes the build outputs, and <code class="docutils literal notranslate"><span class="pre">bazel</span> <span class="pre">clean</span> <span class="pre">--expunge</span></code> also deletes the downloaded dependencies.</p>
 </section>
+<section id="nuget-packages">
+<h2>NuGet Packages<a class="headerlink" href="#nuget-packages" title="Link to this heading">#</a></h2>
+<p>The NuGet packages used by the C# targets are listed in <code class="docutils literal notranslate"><span class="pre">tools/build/dotnet/paket.dependencies</span></code>.
+After editing that file, regenerate the lock file and the package lists with:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bazel<span class="w"> </span>run<span class="w"> </span>//tools/build/dotnet:update
+</pre></div>
+</div>
+<p>A target depends on a package through its lowercase name, such as <code class="docutils literal notranslate"><span class="pre">&#64;paket.main//google.protobuf</span></code>.
+The target framework of the target selects the package’s assets and dependencies.</p>
+<p>A few versions are written by hand, and an update must change them too. Google.Protobuf’s
+version appears in a repository name in <code class="docutils literal notranslate"><span class="pre">MODULE.bazel</span></code>, in the <code class="docutils literal notranslate"><span class="pre">Google.Protobuf.netstandard2.0</span></code>
+import in <code class="docutils literal notranslate"><span class="pre">tools/build/dotnet/BUILD.bazel</span></code>, and in the dependencies of the <code class="docutils literal notranslate"><span class="pre">KRPC.Client</span></code>
+NuGet package. <code class="docutils literal notranslate"><span class="pre">//tools/build/dotnet:versions-test</span></code> checks each of them against the lock file.</p>
+</section>
 <section id="c-ides">
 <h2>C# IDEs<a class="headerlink" href="#c-ides" title="Link to this heading">#</a></h2>
 <p>The repository root has a solution file, <code class="docutils literal notranslate"><span class="pre">kRPC.sln</span></code>, for Visual Studio, Rider or a similar IDE.
@@ -722,6 +736,7 @@ bazel<span class="w"> </span><span class="nb">test</span><span class="w"> </span
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building">Building</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#nuget-packages">NuGet Packages</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#c-ides">C# IDEs</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#docker">Docker</a></li>
 </ul>

@@ -120,6 +120,24 @@ Useful options for ``bazel build`` and ``bazel test`` are:
 ``bazel fetch //...`` downloads every dependency up front, for working offline. ``bazel clean``
 deletes the build outputs, and ``bazel clean --expunge`` also deletes the downloaded dependencies.
 
+NuGet Packages
+--------------
+
+The NuGet packages used by the C# targets are listed in ``tools/build/dotnet/paket.dependencies``.
+After editing that file, regenerate the lock file and the package lists with:
+
+.. code-block:: bash
+
+   bazel run //tools/build/dotnet:update
+
+A target depends on a package through its lowercase name, such as ``@paket.main//google.protobuf``.
+The target framework of the target selects the package's assets and dependencies.
+
+A few versions are written by hand, and an update must change them too. Google.Protobuf's
+version appears in a repository name in ``MODULE.bazel``, in the ``Google.Protobuf.netstandard2.0``
+import in ``tools/build/dotnet/BUILD.bazel``, and in the dependencies of the ``KRPC.Client``
+NuGet package. ``//tools/build/dotnet:versions-test`` checks each of them against the lock file.
+
 C# IDEs
 -------
 
