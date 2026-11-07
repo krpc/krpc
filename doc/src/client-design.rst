@@ -30,7 +30,7 @@ Clients
      - Threaded
      - Yes
      - Pre-generated
-   * - C++
+   * - :doc:`C++ <client-design/cpp>`
      - Threaded
      - Yes
      - Pre-generated
@@ -267,3 +267,4 @@ client passed to it.
 
    client-design/python
    client-design/csharp
+   client-design/cpp
