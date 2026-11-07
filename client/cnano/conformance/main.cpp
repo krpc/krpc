@@ -3,6 +3,7 @@
 // output. See conformance/testee.proto for the protocol.
 
 #include <krpc_cnano.h>
+#include <krpc_cnano/functions.h>
 #include <krpc_cnano/services/krpc.h>
 
 #include <cstdint>
@@ -11,6 +12,7 @@
 #include <optional>
 #include <stdexcept>
 #include <string>
+#include <vector>
 
 #include "dispatch_values.hpp"
 #include "framing.hpp"
@@ -133,6 +135,21 @@ class Testee {
         }
         break;
       }
+      case Command::kCall:
+        *reply->mutable_value() = call_function(command.call().invoke(), nullptr);
+        break;
+      case Command::kCallWithArguments:
+        *reply->mutable_value() = call_function(command.call_with_arguments().invoke(),
+                                                &command.call_with_arguments().arguments());
+        break;
+      case Command::kCompileFunction:
+        check(
+            krpc_compile_function(connected(), arg_object(command.compile_function().function())));
+        *reply->mutable_value() = result_none();
+        break;
+      case Command::kRunFunction:
+        *reply->mutable_value() = run_function(command.run_function());
+        break;
       case Command::kEncode:
         reply->mutable_value()->set_bytes(
             codec(command.encode().type()).encode(command.encode().value()));
@@ -174,6 +191,72 @@ class Testee {
       default:
         throw std::invalid_argument("Unknown command");
     }
+  }
+
+  /** Fill in the call an invoke command makes. */
+  static void fill_call(krpc_schema_ProcedureCall* call, const krpc::conformance::Invoke& invoke) {
+    if (invoke.service() == "KRPC") {
+      call_krpc(call, invoke.procedure(), invoke.arguments());
+    } else if (invoke.service() == "TestService") {
+      call_test_service(call, invoke.procedure(), invoke.arguments());
+    } else if (invoke.service() == "ConformanceService") {
+      call_conformance_service(call, invoke.procedure(), invoke.arguments());
+    } else {
+      throw std::invalid_argument("The testee cannot call service " + invoke.service());
+    }
+  }
+
+  /** A server side function that makes the call an invoke command makes, with the arguments at
+      the given positions computed by functions. */
+  Value call_function(const krpc::conformance::Invoke& invoke,
+                      const google::protobuf::Map<uint32_t, Value>* arguments) {
+    krpc_schema_ProcedureCall call = krpc_schema_ProcedureCall_init_default;
+    krpc_KRPC_Expression_t function = KRPC_NULL;
+    try {
+      fill_call(&call, invoke);
+      if (arguments == nullptr) {
+        check(krpc_KRPC_Expression_Call(connected(), &function, &call));
+      } else {
+        std::vector<krpc_dictionary_entry_int32_object_t> entries;
+        for (const auto& [position, value] : *arguments)
+          entries.push_back({static_cast<int32_t>(position), arg_object(value)});
+        krpc_dictionary_int32_object_t computed{entries.size(), entries.data()};
+        check(krpc_KRPC_Expression_CallWithArguments(connected(), &function, &call, &computed));
+      }
+    } catch (...) {
+      krpc_free_procedure_call(&call);
+      throw;
+    }
+    krpc_free_procedure_call(&call);
+    return Object::result(function);
+  }
+
+  /** Run a server side function, encoding the arguments and decoding the value with the codec
+      of each type. The value is in a slot, so a nullable type decodes as the type it holds. */
+  Value run_function(const krpc::conformance::RunFunction& command) {
+    auto slot_type = [](const std::string& type) {
+      const std::string prefix = "nullable ";
+      return type.rfind(prefix, 0) == 0 ? type.substr(prefix.size()) : type;
+    };
+    std::vector<std::string> encoded(command.arguments_size());
+    std::vector<krpc_nullable_bytes_t> items(command.arguments_size());
+    for (int i = 0; i < command.arguments_size(); i++) {
+      if (command.arguments(i).value_case() == Value::kNull) continue;
+      encoded[i] = codec(slot_type(command.argument_types(i))).encode(command.arguments(i));
+      items[i].value = {encoded[i].size(), reinterpret_cast<uint8_t*>(encoded[i].data())};
+      items[i].has_value = true;
+    }
+    krpc_list_nullable_bytes_t arguments{items.size(), items.data()};
+    krpc_bytes_t data = KRPC_BYTES_NULL;
+    bool is_null = false;
+    check(krpc_run_function(connected(), &data, &is_null, arg_object(command.function()),
+                            &arguments));
+    std::string value(reinterpret_cast<const char*>(data.data), data.size);
+    KRPC_FREE_BYTES(data);
+    if (command.type().empty()) return result_null();
+    if (is_null && command.type().rfind("nullable ", 0) == 0) return result_null();
+    // A null value has no bytes, which fail to decode at a type that cannot hold null
+    return codec(slot_type(command.type())).decode(value);
   }
 
   void connect(const krpc::conformance::Connect& command) {
@@ -223,6 +306,7 @@ int main() {
   krpc::conformance::Output hello;
   hello.mutable_hello()->set_client("cnano");
   hello.mutable_hello()->add_profiles("core");
+  hello.mutable_hello()->add_profiles("functions");
   hello.mutable_hello()->add_protocols("tcpip");
   hello.mutable_hello()->add_protocols("localsocket");
   hello.mutable_hello()->add_protocols("serialio");

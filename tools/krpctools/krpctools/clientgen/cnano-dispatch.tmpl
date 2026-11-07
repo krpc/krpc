@@ -85,4 +85,24 @@ inline Value invoke_{{ service_name | snake_case }}(krpc_connection_t connection
                               std::to_string(args.size()) + " arguments");
 }
 
+/** Fill in the call a member makes, for a server side function. */
+inline void call_{{ service_name | snake_case }}(krpc_schema_ProcedureCall* call, const std::string& procedure,
+                       const Arguments& args) {
+  {% for member in members if member.variants[-1].procedure_call %}
+  if (procedure == "{{ member.remote_name }}" && args.size() == {{ member.parameters | length }}) {
+    {% for p in member.parameters %}
+    {% if p.optional %}
+    auto {{ p.name }} = optional_arg<{{ p.tag }}>(args.Get({{ p.index }}));
+    {% else %}
+    auto {{ p.name }} = {{ p.tag }}::arg(args.Get({{ p.index }}));
+    {% endif %}
+    {% endfor %}
+    check({{ member.variants[-1].procedure_call }}(call{% for p in member.parameters %}, {{ pass(p) }}{% endfor %}));
+    return;
+  }
+  {% endfor %}
+  throw std::invalid_argument("The testee cannot build a call of {{ service_name }}." + procedure +
+                              " with " + std::to_string(args.size()) + " arguments");
+}
+
 }  // namespace krpc_conformance

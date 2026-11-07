@@ -43,9 +43,21 @@ static inline krpc_error_t krpc_decode_list_enum(
 static inline krpc_error_t krpc_ServiceA_Frob(krpc_connection_t connection, krpc_ServiceB_Mode_t mode);
 
 /**
+ * Fills in the call krpc_ServiceA_Frob() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_ServiceA_Frob_call(krpc_schema_ProcedureCall * procedureCall, krpc_ServiceB_Mode_t mode);
+
+/**
  * Defaults to a collection containing a member of another service's enumeration.
  */
 static inline krpc_error_t krpc_ServiceA_FrobAll(krpc_connection_t connection, const krpc_list_enum_t * modes);
+
+/**
+ * Fills in the call krpc_ServiceA_FrobAll() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_ServiceA_FrobAll_call(krpc_schema_ProcedureCall * procedureCall, const krpc_list_enum_t * modes);
 
 // Implementation
 
@@ -142,6 +154,12 @@ static inline krpc_error_t krpc_ServiceA_Frob(krpc_connection_t connection, krpc
   return KRPC_OK;
 }
 
+static inline krpc_error_t krpc_ServiceA_Frob_call(krpc_schema_ProcedureCall * procedureCall, krpc_ServiceB_Mode_t mode) {
+  KRPC_CHECK(krpc_procedure_call(procedureCall, 1, 1, 1));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_enum, &mode));
+  return KRPC_OK;
+}
+
 static inline krpc_error_t krpc_ServiceA_FrobAll(krpc_connection_t connection, const krpc_list_enum_t * modes) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
@@ -151,6 +169,12 @@ static inline krpc_error_t krpc_ServiceA_FrobAll(krpc_connection_t connection, c
   KRPC_CHECK(krpc_init_result(&_result));
   KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
   KRPC_CHECK(krpc_free_result(&_result));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_ServiceA_FrobAll_call(krpc_schema_ProcedureCall * procedureCall, const krpc_list_enum_t * modes) {
+  KRPC_CHECK(krpc_procedure_call(procedureCall, 1, 2, 1));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_list_enum, modes));
   return KRPC_OK;
 }
 

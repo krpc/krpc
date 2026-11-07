@@ -9,7 +9,6 @@
 ## client/cnano
 
 - **Breaking:** Leave internal procedures out of the services, such as `krpc_KRPC_AddStream` (#1269)
-- **Breaking:** Remove server side functions, such as `krpc_KRPC_RunFunction` (#1269)
 
 ## client/csharp
 

@@ -35,6 +35,27 @@ krpc_error_t krpc_add_argument(krpc_call_t* call, uint32_t position,
 /* Add a null argument, signaled by is_null with the value left unset */
 krpc_error_t krpc_add_null_argument(krpc_call_t* call, uint32_t position);
 
+/* Fill in a procedure call to pass to KRPC.Expression.Call, as the _call function of a
+ * procedure does. The call holds the encoding of each argument on the heap until
+ * krpc_free_procedure_call frees it. Free a call before filling it in again. Encoding the call
+ * fails until each argument is filled in. */
+krpc_error_t krpc_procedure_call(krpc_schema_ProcedureCall* call, uint32_t serviceId,
+                                 uint32_t procedureId, size_t numArguments);
+
+/* Encode an argument of a procedure call that krpc_procedure_call fills in, with the encode
+ * callback of the argument's type */
+krpc_error_t krpc_procedure_call_argument(krpc_schema_ProcedureCall* call, uint32_t position,
+                                          bool (*encode)(pb_ostream_t* stream,
+                                                         const pb_field_t* field, void* const* arg),
+                                          const void* arg);
+
+/* Add a null argument to a procedure call that krpc_procedure_call fills in */
+krpc_error_t krpc_procedure_call_null_argument(krpc_schema_ProcedureCall* call, uint32_t position);
+
+/* Free the encoded arguments of a procedure call that krpc_procedure_call filled in, including
+ * one that a _call function failed part way through */
+krpc_error_t krpc_free_procedure_call(krpc_schema_ProcedureCall* call);
+
 /*[[[cog
 types = [
   ('double', 'double'),

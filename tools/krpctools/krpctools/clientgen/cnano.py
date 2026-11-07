@@ -384,6 +384,13 @@ class CnanoGenerator(Generator[CnanoLanguage]):
                     value="The value of the property.",
                 )
 
+        # The type of the arguments of a server side function, which krpc_run_function in
+        # krpc_cnano/functions.h passes to the internal KRPC.RunFunction
+        if self._service == "KRPC":
+            self._collection_types.add(
+                self.types.list_type(self.types.nullable(self.types.bytes_type))
+            )
+
         # C requires a struct to be declared before it is used, so a collection type has to
         # follow the collection types it contains. Several kRPC types share one C type, as
         # every class is a krpc_object_t and every enumeration a krpc_enum_t, so collections

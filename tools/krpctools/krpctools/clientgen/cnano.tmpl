@@ -36,6 +36,21 @@ KRPC_CHECK(krpc_add_argument(&_call, {{ loop.index0 }}, &krpc_encode_callback_{{
 {% endif %}
 {% endfor %}
 {% endmacro %}
+{% macro procedure_call(service_id, procedure_id, parameters) %}
+KRPC_CHECK(krpc_procedure_call(procedureCall, {{ service_id }}, {{ procedure_id }}, {{ parameters | length }}));
+{% for x in parameters %}
+{% if x.type.nullable %}
+if ({{ x.null_check }}) {
+  KRPC_CHECK(krpc_procedure_call_null_argument(procedureCall, {{ loop.index0 }}));
+} else {
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, {{ loop.index0 }}, &krpc_encode_callback_{{ x.type.name }}, {{ x.type.getptr }}{{ x.name }}));
+}
+{% else %}
+KRPC_CHECK(krpc_procedure_call_argument(procedureCall, {{ loop.index0 }}, &krpc_encode_callback_{{ x.type.name }}, {{ x.type.getptr }}{{ x.name }}));
+{% endif %}
+{% endfor %}
+return KRPC_OK;
+{% endmacro %}
 {% macro return(return_type) %}
 krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
 KRPC_CHECK(krpc_init_result(&_result));
@@ -77,6 +92,15 @@ return KRPC_OK;
 {% endmacro %}
 {% macro parameters(return_type, parameters) %}
 {% if return_type.ctype != 'void' %}{% if return_type.nullable and not return_type.is_class %}{{ _parameters([{'type': return_type, 'name': 'returnValue'}, {'type': {'ccvtype': 'bool *'}, 'name': 'returnValueIsNull'}] + parameters) }}{% else %}{{ _parameters([{'type': return_type, 'name': 'returnValue'}] + parameters) }}{% endif %}{% else %}{{ _parameters(parameters) }}{% endif %}
+{% endmacro %}
+{% macro call_parameters(parameters) %}
+{% for x in [{'type': {'ccvtype': 'krpc_schema_ProcedureCall *'}, 'name': 'procedureCall'}] + parameters %}{{x.type.ccvtype}} {{x.name}}{% if not loop.last %}, {% endif %}{% endfor %}
+{% endmacro %}
+{% macro call_documentation(function) %}
+/**
+ * Fills in the call {{ function }}() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
+ * krpc_free_procedure_call().
+ */
 {% endmacro %}
 {% macro procedure_parameters(procedure) %}
 {{ parameters(procedure.return_type, procedure.parameters) }}{% endmacro %}
@@ -165,6 +189,8 @@ typedef enum {
 {% if procedure.deprecated %}KRPC_DEPRECATED("{{ procedure.deprecated_reason }}")
 {% endif %}
 static inline krpc_error_t krpc_{{ service_name }}_{{ procedure_name }}({{ procedure_parameters(procedure) }});
+
+{{ call_documentation('krpc_' + service_name + '_' + procedure_name) }}static inline krpc_error_t krpc_{{ service_name }}_{{ procedure_name }}_call({{ call_parameters(procedure.parameters) }});
 {% endfor %}
 {% for property_name,property in properties.items() %}
 
@@ -173,6 +199,8 @@ static inline krpc_error_t krpc_{{ service_name }}_{{ procedure_name }}({{ proce
 {% if property.deprecated %}KRPC_DEPRECATED("{{ property.deprecated_reason }}")
 {% endif %}
 static inline krpc_error_t krpc_{{ service_name }}_{{ property_name }}({{ procedure_parameters(property) }});
+
+{{ call_documentation('krpc_' + service_name + '_' + property_name) }}static inline krpc_error_t krpc_{{ service_name }}_{{ property_name }}_call({{ call_parameters(property.parameters) }});
 {% endfor %}
 {% for class_name,cls in classes.items() %}
 {% for method_name,method in cls.methods.items() %}
@@ -182,6 +210,8 @@ static inline krpc_error_t krpc_{{ service_name }}_{{ property_name }}({{ proced
 {% if method.deprecated %}KRPC_DEPRECATED("{{ method.deprecated_reason }}")
 {% endif %}
 static inline krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ method_name }}({{ method_parameters(service_name, class_name, method) }});
+
+{{ call_documentation('krpc_' + service_name + '_' + class_name + '_' + method_name) }}static inline krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ method_name }}_call({{ call_parameters([{'type': {'ccvtype': 'krpc_'+service_name+'_'+class_name+'_t'}, 'name': 'instance'}] + method.parameters) }});
 {% endfor %}
 {% for method_name,method in cls.static_methods.items() %}
 
@@ -190,6 +220,8 @@ static inline krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ method_na
 {% if method.deprecated %}KRPC_DEPRECATED("{{ method.deprecated_reason }}")
 {% endif %}
 static inline krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ method_name }}({{ static_method_parameters(method) }});
+
+{{ call_documentation('krpc_' + service_name + '_' + class_name + '_' + method_name) }}static inline krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ method_name }}_call({{ call_parameters(method.parameters) }});
 {% endfor %}
 {% for property_name,property in cls.properties.items() %}
 
@@ -198,6 +230,8 @@ static inline krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ method_na
 {% if property.deprecated %}KRPC_DEPRECATED("{{ property.deprecated_reason }}")
 {% endif %}
 static inline krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ property_name }}({{ method_parameters(service_name, class_name, property) }});
+
+{{ call_documentation('krpc_' + service_name + '_' + class_name + '_' + property_name) }}static inline krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ property_name }}_call({{ call_parameters([{'type': {'ccvtype': 'krpc_'+service_name+'_'+class_name+'_t'}, 'name': 'instance'}] + property.parameters) }});
 {% endfor %}
 {% endfor %}
 
@@ -496,6 +530,10 @@ static inline krpc_error_t krpc_{{ service_name }}_{{ procedure_name }}({{ proce
 {{ call(service_id, procedure.remote_id, procedure.parameters) | indent(2) }}
 {{ return(procedure.return_type) | indent(2) }}
 }
+
+static inline krpc_error_t krpc_{{ service_name }}_{{ procedure_name }}_call({{ call_parameters(procedure.parameters) }}) {
+{{ procedure_call(service_id, procedure.remote_id, procedure.parameters) | indent(2) }}
+}
 {% endfor %}
 {% for class_name,cls in classes.items() %}
 {% for method_name,method in cls.methods.items()|list + cls.properties.items()|list %}
@@ -504,12 +542,20 @@ static inline krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ method_na
 {{ call(service_id, method.remote_id, [{'type': {'ccvtype': 'krpc_'+service_name+'_'+class_name+'_t', 'name': 'uint64', 'getptr': '&', 'nullable': False}, 'name': 'instance'}] + method.parameters) | indent(2) }}
 {{ return(method.return_type) | indent(2) }}
 }
+
+static inline krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ method_name }}_call({{ call_parameters([{'type': {'ccvtype': 'krpc_'+service_name+'_'+class_name+'_t'}, 'name': 'instance'}] + method.parameters) }}) {
+{{ procedure_call(service_id, method.remote_id, [{'type': {'name': 'uint64', 'getptr': '&', 'nullable': False}, 'name': 'instance'}] + method.parameters) | indent(2) }}
+}
 {% endfor %}
 {% for method_name,method in cls.static_methods.items() %}
 
 static inline krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ method_name }}({{ static_method_parameters(method) }}) {
 {{ call(service_id, method.remote_id, method.parameters) | indent(2) }}
 {{ return(method.return_type) | indent(2) }}
+}
+
+static inline krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ method_name }}_call({{ call_parameters(method.parameters) }}) {
+{{ procedure_call(service_id, method.remote_id, method.parameters) | indent(2) }}
 }
 {% endfor %}
 {% endfor %}

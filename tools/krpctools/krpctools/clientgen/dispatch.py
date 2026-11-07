@@ -750,3 +750,8 @@ class CnanoDispatchGenerator(DispatchGenerator, CnanoGenerator):
         if kind in (SETTER, CLASS_SETTER):
             function += "set_"
         return function + name
+
+    def procedure_call(self, kind, cls, name, parameters):
+        """The function that fills in the call a member makes. It takes the call to fill in,
+        then the arguments."""
+        return self.call(kind, cls, name, parameters) + "_call"

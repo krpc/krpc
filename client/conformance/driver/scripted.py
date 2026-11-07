@@ -112,8 +112,9 @@ def functions_script(
         call = request.calls[0]
         if any(_is_service_call(call, "KRPC", x) for x in null):
             return KRPC.ProcedureResult(is_null=True)
-        if call.service == "KRPC" and call.procedure in returns:
-            return KRPC.ProcedureResult(value=returns[call.procedure])
+        for name, value in returns.items():
+            if _is_service_call(call, "KRPC", name):
+                return KRPC.ProcedureResult(value=value)
         return KRPC.ProcedureResult(value=b"\x00")
 
     def script(scripted: ScriptedServer) -> None:

@@ -25,8 +25,8 @@ compiled code translates into, which every client can build directly.
 
 .. note::
 
-   Compiled functions need the Python or C# client. Events, function streams and ``Run`` need the
-   Python, C#, C++ or Java client.
+   Compiled functions need the Python or C# client. Events and function streams need the Python,
+   C#, C++ or Java client. ``Run`` needs one of those or the C-nano client.
 
 .. _server-side-functions-compiled:
 
@@ -570,6 +570,11 @@ running, catch the exception in the function:
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/NotLoadedEvent.cpp
 
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/NotLoadedEvent.c
+         :language: c
+
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/NotLoadedEvent.java
@@ -666,9 +671,14 @@ server.
 The Expression API
 ------------------
 
-The expression API builds a server side function node by node. It is how the C++ and Java
-clients write functions, and how C# writes the statements a lambda cannot hold. The compilers
-produce the same functions.
+The expression API builds a server side function node by node. It is how the C++, Java and
+C-nano clients write functions, and how C# writes the statements a lambda cannot hold. The
+compilers produce the same functions.
+
+.. note::
+
+   The C-nano client has no events or streams, so its examples run each function with
+   ``krpc_run_function``.
 
 Expression Trees
 ^^^^^^^^^^^^^^^^
@@ -718,6 +728,11 @@ and a comparison:
 
       .. literalinclude:: /scripts/cpp/Event.cpp
 
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/Event.c
+         :language: c
+
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/java/CustomEvent.java
@@ -760,6 +775,14 @@ This truncates the altitude to a whole number of meters:
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/TruncateAltitude.cpp
          :language: cpp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/TruncateAltitude.c
+         :language: c
          :start-after: [docs]
          :end-before: [/docs]
          :dedent:
@@ -808,6 +831,11 @@ streamed too, and runs for its effects, as in :ref:`server-side-functions-contro
 
       .. literalinclude:: /scripts/cpp/FunctionStream.cpp
 
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/FunctionStream.c
+         :language: c
+
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/java/FunctionStream.java
@@ -835,6 +863,11 @@ the procedure, so any engine can supply it:
    .. group-tab:: C++
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/CollectionEvent.cpp
+
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/CollectionEvent.c
+         :language: c
 
    .. group-tab:: Java
 
@@ -911,6 +944,14 @@ and build one. :meth:`Expression.get_field` reads a field by name:
          :end-before: [/docs]
          :dedent:
 
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/StructureField.c
+         :language: c
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/StructureField.java
@@ -945,6 +986,11 @@ This builds and runs ``total = 0; for x in [1, 2, 3]: total += x``, which return
    .. group-tab:: C++
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/FunctionStatements.cpp
+
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/FunctionStatements.c
+         :language: c
 
    .. group-tab:: Java
 
@@ -990,6 +1036,14 @@ particular vessel:
          :end-before: [/docs]
          :dedent:
 
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/TargetEvent.c
+         :language: c
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/TargetEvent.java
@@ -1000,8 +1054,8 @@ particular vessel:
 
 :meth:`Expression.constant_object` takes the object's identifier in the communication protocol.
 Each client has a function that returns it: ``krpc.get_object_id`` in Python and Lua, ``RemoteObject.GetObjectId`` in
-C#, ``krpc::get_object_id`` in C++ and ``RemoteObject.getObjectId`` in Java. The compilers embed a
-captured remote object this way.
+C#, ``krpc::get_object_id`` in C++ and ``RemoteObject.getObjectId`` in Java. In C, an object's
+handle is its identifier. The compilers embed a captured remote object this way.
 
 Exceptions in the Expression API
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1030,6 +1084,14 @@ fuel check from :ref:`Exceptions <server-side-functions-exceptions>`:
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/ThrowException.cpp
          :language: cpp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/ThrowException.c
+         :language: c
          :start-after: [docs]
          :end-before: [/docs]
          :dedent:

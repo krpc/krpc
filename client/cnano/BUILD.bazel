@@ -93,6 +93,7 @@ test_suite(
         ":conformance",
         ":doxygen",
         ":lint",
+        ":memory",
     ],
 )
 
@@ -142,6 +143,32 @@ cc_test(
     srcs = ["test/test_transport.cpp"],
     deps = [
         ":krpc_cnano_error_messages",
+        "@cpp_googletest//:gtest",
+    ],
+)
+
+# The library with an allocator a test supplies
+cc_library(
+    name = "krpc_cnano_custom_memory",
+    srcs = srcs + [":protobuf"],
+    hdrs = hdrs + [":protobuf"],
+    defines = ["KRPC_CUSTOM_MEMORY_ALLOC"],
+    includes = ["include"],
+    linkopts = ws2_32,
+    deps = ["@c_nanopb//:nanopb"],
+)
+
+# Heap use, with an allocator that counts blocks and can fail an allocation
+cc_test(
+    name = "memory",
+    size = "small",
+    srcs = [
+        "test/memory.cpp",
+        "test/memory.h",
+        "test/test_procedure_call.cpp",
+    ],
+    deps = [
+        ":krpc_cnano_custom_memory",
         "@cpp_googletest//:gtest",
     ],
 )
@@ -208,7 +235,10 @@ conformance_test(
     name = "conformance",
     size = "medium",
     expected_failures = "conformance/expected-failures.txt",
-    profiles = ["core"],
+    profiles = [
+        "core",
+        "functions",
+    ],
     protocols = [
         "tcpip",
         "localsocket",
@@ -283,6 +313,7 @@ clang_tidy_test(
         ":communication-socket",
         ":communication-transport",
         ":conformance-testee",
+        ":memory",
         ":test-consumer",
     ],
     targets = [
@@ -331,6 +362,7 @@ doxygen_test(
     srcs = hdrs + [":services-testservice"],
     c = True,
     unlinked = [
+        "krpc_KRPC_Expression_Call()",
         "krpc_KRPC_GameScene()",
         "krpc_SpaceCenter_Vessel_Position()",
         "krpc_SpaceCenter_Vessel_Velocity()",
