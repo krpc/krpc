@@ -81,7 +81,8 @@ Use the connection in a ``using`` statement to close it at the end of the block:
 
 .. literalinclude:: /scripts/csharp/Connecting3.cs
 
-:meth:`~KRPC.Client.Connection.Dispose` closes a connection explicitly.
+:meth:`~KRPC.Client.Connection.Dispose` closes a connection explicitly. A connection you do not close
+stays open until your program exits, even when your program no longer holds it.
 
 Calling Remote Procedures
 -------------------------

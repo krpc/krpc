@@ -76,7 +76,8 @@ Use the connection in a ``with`` statement to close it at the end of the block:
 
 .. literalinclude:: /scripts/python/Connecting3.py
 
-:meth:`~krpc.client.Client.close` closes a connection explicitly.
+:meth:`~krpc.client.Client.close` closes a connection explicitly. A connection you do not close stays
+open until your program exits, even when your program no longer holds it.
 
 Calling Remote Procedures
 -------------------------

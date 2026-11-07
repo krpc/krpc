@@ -105,6 +105,9 @@ try-with-resources statement, as the examples in this guide do, to close it at t
 
 .. literalinclude:: /scripts/java/Connecting3.java
 
+A connection you do not close stays open until your program exits, even when your program no longer
+holds it.
+
 Calling Remote Procedures
 -------------------------
 
