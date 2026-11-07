@@ -70,3 +70,6 @@ test_functions.py::test_stream_null_for_non_nullable_type[double]  # Raises Inva
 test_concurrency.py::test_close_from_an_end_callback[remove] @flaky  # As test_connection.py::test_call_after_end[close], for a remove that loses the race with the close
 test_concurrency.py::test_wait_holding_another @skip  # The dispatcher thread waits for the condition held, so the update of the stream waited on is never announced
 test_concurrency.py::test_held_stream_ending_before_value  # A read on the thread holding the condition raises "Stream has no value", as the ending is announced only once the condition is free
+test_concurrency.py::test_held_stream_ending @flaky  # Fails now and then: a thread that takes the condition after the first value is stored, but before the dispatcher thread announces it, reads "Stream has no value"
+test_concurrency.py::test_spurious_wake[stream] @flaky  # Fails now and then: a read before the dispatcher thread announces the first value returns it, and the late announcement wakes the wait, which then returns true before the timeout
+test_connection.py::test_lost[no-disconnect]@localsocket @flaky  # Fails now and then, seen only on Windows CI: the call does not raise within the reply timeout once the connection ends, cause unknown

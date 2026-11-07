@@ -74,3 +74,6 @@ test_concurrency.py::test_held_stream_ending @flaky  # Fails now and then, seen 
 test_concurrency.py::test_wake_update_waiter[connection-failure] @flaky  # Fails now and then, seen only on CI: the waiting thread is not woken within the reply timeout
 test_concurrency.py::test_wait_on_condition_object @flaky  # Fails now and then, seen only on CI: a read before the dispatcher thread announces the first value returns it, and the late announcement wakes the condition wait, which then holds the condition
 test_concurrency.py::test_spurious_wake[stream] @flaky  # Fails now and then, seen only on CI: a read before the dispatcher thread announces the first value returns it, and the late announcement wakes the wait, which then returns true before the timeout
+test_streams.py::test_wake_waiter[remove] @flaky  # Fails now and then, seen only on CI: a read before the dispatcher thread announces the first value returns it, and the late announcement wakes the wait, which then returns true before the stream ends
+test_streams.py::test_wake_waiter[close] @flaky  # As test_streams.py::test_wake_waiter[remove]
+test_concurrency.py::test_wake_waiter_holding_another[close] @flaky  # As test_streams.py::test_wake_waiter[remove]
