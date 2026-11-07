@@ -38,7 +38,7 @@ Clients
      - Single
      - No
      - Pre-generated
-   * - Java
+   * - :doc:`Java <client-design/java>`
      - Threaded
      - Yes
      - Pre-generated
@@ -269,3 +269,4 @@ client passed to it.
    client-design/csharp
    client-design/cpp
    client-design/cnano
+   client-design/java
