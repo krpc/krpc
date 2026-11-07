@@ -793,7 +793,8 @@ C-nano treat any other message as a protocol error, including a <code class="doc
 it gets a call as a value, such as to use in an expression. The clients do this in two ways:</p>
 <ul class="simple">
 <li><p>Python, C# and Java have one method for each purpose, <code class="docutils literal notranslate"><span class="pre">add_stream</span></code> and <code class="docutils literal notranslate"><span class="pre">get_call</span></code> or their
-equivalents. It takes any property or method, and works out the procedure at run time.</p></li>
+equivalents. It takes any property or method, and works out the procedure at run time. Lua has
+only <code class="docutils literal notranslate"><span class="pre">get_call</span></code>, as it has no streams.</p></li>
 <li><p>C++ and C-nano cannot look up a method at run time. Their generated stubs instead have extra
 functions for each procedure. C++ adds ones ending in <code class="docutils literal notranslate"><span class="pre">_stream</span></code> and <code class="docutils literal notranslate"><span class="pre">_call</span></code>. C-nano has no
 streams, so it adds only <code class="docutils literal notranslate"><span class="pre">_call</span></code>.</p></li>
@@ -826,6 +827,10 @@ streams, so it adds only <code class="docutils literal notranslate"><span class=
 <tr class="row-even"><td><p>Java</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">connection.addStream(flight,</span> <span class="pre">&quot;getMeanAltitude&quot;)</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">connection.getCall(flight,</span> <span class="pre">&quot;getMeanAltitude&quot;)</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Lua</p></td>
+<td><p>None</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">conn:get_call(flight.get_mean_altitude,</span> <span class="pre">flight)</span></code></p></td>
 </tr>
 </tbody>
 </table>

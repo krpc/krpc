@@ -170,6 +170,36 @@ A Lua table cannot hold ``nil``, so a null in a list, tuple, dictionary or struc
 Pass :data:`Types.none <krpc.Types.none>` as an argument for a null at a parameter whose default
 is not null.
 
+Server Side Functions
+---------------------
+
+A server side function runs inside the game. You build it in your program with the expression
+API, and the client sends it to the server, which runs it there. The following reads the vessel's
+altitude and speed together:
+
+.. literalinclude:: /scripts/lua/RunFunction.lua
+
+:meth:`~krpc.Client.get_call` returns the call a procedure makes, as a message for
+:meth:`~KRPC.Expression.call` to embed in the function. A property is read through its getter,
+such as ``flight.get_speed``, with the object as the first argument.
+:ref:`server-side-functions-api` in the :ref:`server side functions guide
+<server-side-functions>` describes how to build functions.
+
+Running a Function
+^^^^^^^^^^^^^^^^^^
+
+:meth:`~krpc.Client.run` runs a function once, and returns its value. The server runs the whole
+function within one physics tick, so every value it reads comes from the same moment in the game.
+In the example, the altitude and the speed are consistent with each other, which two separate calls
+cannot guarantee.
+
+A function takes arguments through its parameters. The following compiles a function ahead of its
+first run, then passes it an argument:
+
+.. literalinclude:: /scripts/lua/RunFunctionArguments.lua
+
+:meth:`~krpc.Client.compile` makes the first run as fast as later ones.
+
 Streams and Events
 ------------------
 
@@ -245,6 +275,30 @@ Client API Reference
    .. method:: close()
 
       Closes the connection. Closing a connection that is already closed does nothing.
+
+   .. method:: get_call(procedure: function, ...): table
+
+      The call a procedure of a service or a class makes with the given arguments, as a
+      ``KRPC.ProcedureCall`` message for :meth:`~KRPC.Expression.call`. A property is read
+      through its getter, ``get_<name>``, and set through its setter, ``set_<name>``, each with
+      the object or the service as the first argument.
+
+      Raises an error if a service's property is not given the service.
+
+   .. method:: compile(func: KRPC.Expression): KRPC.Expression
+
+      Compiles a server side function on the server, so that its first run is as fast as later
+      ones, and returns the function.
+
+   .. method:: run(func: KRPC.Expression, ...): any
+
+      Runs a server side function within a single physics tick, and returns its value. The
+      arguments are passed to the function's parameters, with ``nil`` or :data:`Types.none
+      <krpc.Types.none>` for a null. Returns ``nil`` for a function with no value, and for a null
+      value.
+
+      Raises an error if the number of arguments differs from the number of parameters, or an
+      argument does not match its parameter.
 
    .. attribute:: krpc: KRPC
 

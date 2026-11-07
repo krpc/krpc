@@ -633,9 +633,30 @@ a newer server still connects.</p></li>
 <tr class="row-even"><td><p>Inside a list, tuple, dictionary or structure</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">Types.none</span></code>, as a table cannot hold <code class="docutils literal notranslate"><span class="pre">nil</span></code></p></td>
 </tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">nil</span></code> at an argument of <code class="docutils literal notranslate"><span class="pre">run</span></code></p></td>
+<td><p>Null, as a function’s parameter has no default</p></td>
+</tr>
 </tbody>
 </table>
 </div>
+</section>
+<section id="server-side-functions">
+<h2>Server Side Functions<a class="headerlink" href="#server-side-functions" title="Link to this heading">#</a></h2>
+<p>The client has no function compiler, so a program builds a function with the expression API. There
+are no function streams or events, as the client has no streams.</p>
+<ul class="simple">
+<li><p><strong>The stub names the call.</strong> A Lua function has no name or parameter list to read, so
+<code class="docutils literal notranslate"><span class="pre">_construct_func</span></code> records each stub’s procedure in <code class="docutils literal notranslate"><span class="pre">service.procedures</span></code>. This covers a
+property’s <code class="docutils literal notranslate"><span class="pre">get_x</span></code> and <code class="docutils literal notranslate"><span class="pre">set_x</span></code>. <code class="docutils literal notranslate"><span class="pre">get_call</span></code> checks that one of a service’s properties is
+given the service, as a value in that position would otherwise be taken for it.</p></li>
+<li><p><strong>The procedure table holds no types.</strong> The keys of <code class="docutils literal notranslate"><span class="pre">service.procedures</span></code> are weak, and Lua 5.1
+and LuaJIT have no ephemeron tables, so a value reaching a class table would keep the client
+alive. The types are on the client, by qualified name, so a stub from another connection encodes
+with this connection’s types.</p></li>
+<li><p><strong>The function supplies its types.</strong> <code class="docutils literal notranslate"><span class="pre">run</span></code> reads the types of the parameters and the value from
+the <code class="docutils literal notranslate"><span class="pre">KRPC.Expression</span></code>, through the connection running it, once per function. It caches them by
+object id. A null value is <code class="docutils literal notranslate"><span class="pre">nil</span></code> at any type.</p></li>
+</ul>
 </section>
 <section id="lua-versions">
 <h2>Lua Versions<a class="headerlink" href="#lua-versions" title="Link to this heading">#</a></h2>
@@ -690,6 +711,12 @@ error.</p></li>
 </tr>
 <tr class="row-odd"><td><p>Protobuf message result</p></td>
 <td><p>A plain table</p></td>
+</tr>
+<tr class="row-even"><td><p>Getting a call as a value</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Client:get_call</span></code>, given a stub</p></td>
+</tr>
+<tr class="row-odd"><td><p>Value type of a server side function</p></td>
+<td><p>The function’s own type, read from the server</p></td>
 </tr>
 <tr class="row-even"><td><p>Enumeration value</p></td>
 <td><p>An instance of the connection’s class, with the number in <code class="docutils literal notranslate"><span class="pre">.value</span></code></p></td>
@@ -755,6 +782,7 @@ error.</p></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#single-thread">Single Thread</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dynamic-stubs">Dynamic Stubs</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#null-values">Null Values</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#server-side-functions">Server Side Functions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lua-versions">Lua Versions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lua-protobuf">lua-protobuf</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#transports">Transports</a></li>

@@ -581,7 +581,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><code class="docutils literal notranslate"><span class="pre">callbacks</span></code>, <code class="docutils literal notranslate"><span class="pre">concurrency</span></code>, <code class="docutils literal notranslate"><span class="pre">conditions</span></code>, <code class="docutils literal notranslate"><span class="pre">connections</span></code>, <code class="docutils literal notranslate"><span class="pre">core</span></code>, <code class="docutils literal notranslate"><span class="pre">error-types</span></code>, <code class="docutils literal notranslate"><span class="pre">events</span></code>, <code class="docutils literal notranslate"><span class="pre">functions</span></code>, <code class="docutils literal notranslate"><span class="pre">localsocket</span></code>, <code class="docutils literal notranslate"><span class="pre">ordering</span></code>, <code class="docutils literal notranslate"><span class="pre">races</span></code>, <code class="docutils literal notranslate"><span class="pre">streams</span></code>, <code class="docutils literal notranslate"><span class="pre">tcpip</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p>Lua</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">connections</span></code>, <code class="docutils literal notranslate"><span class="pre">core</span></code>, <code class="docutils literal notranslate"><span class="pre">defaults</span></code>, <code class="docutils literal notranslate"><span class="pre">dynamic</span></code>, <code class="docutils literal notranslate"><span class="pre">localsocket</span></code>, <code class="docutils literal notranslate"><span class="pre">ordering</span></code>, <code class="docutils literal notranslate"><span class="pre">skipped-arguments</span></code>, <code class="docutils literal notranslate"><span class="pre">tcpip</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">connections</span></code>, <code class="docutils literal notranslate"><span class="pre">core</span></code>, <code class="docutils literal notranslate"><span class="pre">defaults</span></code>, <code class="docutils literal notranslate"><span class="pre">dynamic</span></code>, <code class="docutils literal notranslate"><span class="pre">functions</span></code>, <code class="docutils literal notranslate"><span class="pre">localsocket</span></code>, <code class="docutils literal notranslate"><span class="pre">ordering</span></code>, <code class="docutils literal notranslate"><span class="pre">skipped-arguments</span></code>, <code class="docutils literal notranslate"><span class="pre">tcpip</span></code></p></td>
 </tr>
 </tbody>
 </table>
@@ -3053,7 +3053,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
-<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-run"><span class="std std-ref">functions-run</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3061,7 +3061,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
-<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-argument-types"><span class="std std-ref">functions-argument-types</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3069,7 +3069,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
-<td></td>
+<td><p><span class="coverage-partial">!</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-run-a-call"><span class="std std-ref">functions-run-a-call</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3077,7 +3077,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
-<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-call-member-kinds"><span class="std std-ref">functions-call-member-kinds</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3085,7 +3085,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
-<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-call-with-arguments"><span class="std std-ref">functions-call-with-arguments</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3093,7 +3093,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
-<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-call-with-a-call-argument"><span class="std std-ref">functions-call-with-a-call-argument</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3101,7 +3101,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
-<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-run-without-a-value"><span class="std std-ref">functions-run-without-a-value</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3109,7 +3109,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
-<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-run-error"><span class="std std-ref">functions-run-error</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3117,7 +3117,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
-<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-run-argument-errors"><span class="std std-ref">functions-run-argument-errors</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3125,7 +3125,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
-<td></td>
+<td><p><span class="coverage-partial">!</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-stream-with-parameters"><span class="std std-ref">functions-stream-with-parameters</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3149,7 +3149,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
-<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-stream-value-types"><span class="std std-ref">functions-stream-value-types</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3181,7 +3181,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-partial">!</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
-<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-stream-null-for-non-nullable-type"><span class="std std-ref">functions-stream-null-for-non-nullable-type</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>

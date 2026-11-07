@@ -290,8 +290,9 @@ Lua client
 * Tell the server when the connection closes (:issue:`1219`)
 * :breaking:`Breaking` Return ``get_status`` as a struct, with the settings and statistics under ``settings`` and ``statistics`` (:issue:`1244`)
 * :breaking:`Breaking` Return a stream or an event as the id of its stream (:issue:`1266`)
+* :breaking:`Breaking` Replace ``KRPC.compile_function`` and ``KRPC.run_function`` with ``Client:compile`` and ``Client:run`` (:issue:`1267`)
+* Add ``Client:get_call``, for ``KRPC.Expression.call`` (:issue:`1267`)
 * :breaking:`Breaking` Leave internal procedures out of the services, such as ``KRPC.add_stream`` (:issue:`1269`)
-* :breaking:`Breaking` Remove server side functions, such as ``KRPC.run_function`` (:issue:`1269`)
 * Null values
 
   * :breaking:`Breaking` Return ``nil`` for a null result, in place of ``Types.none`` (:issue:`1278`)
