@@ -9,6 +9,7 @@ Current version: `tools/krpc-version.sh`. Full setup: `doc/src/krpc-development/
  * `server/` — server plugin; `core/` — shared C# library; `protobuf/` — wire protocol.
  * `service/` — service DLLs (SpaceCenter, Drawing, UI, InfernalRobotics, RemoteTech, …).
  * `client/` — one dir per language; `websockets` is a minimal testee for the websockets protocol.
+   See *Client pages* under *Keeping the docs current* before changing one.
  * `client/conformance/` — client conformance tests; the client spec (`doc/src/client-spec/`) is generated from them.
  * `tools/krpctools/` — `clientgen` (stubs), `docgen` (API docs), `servicedefs`.
  * `tools/krpctest/` — in-game test framework; `tools/TestServer/` — game-less server.
@@ -43,8 +44,8 @@ Outputs in `bazel-bin`, test logs in `bazel-testlogs`.
  * `//doc:spelling` — American-English gate; `//doc:check-documented` — every RPC documented.
  * `//:csproj-test` — `.csproj` file-list check.
  * Game tests are **not** in `//:test` — see below.
- * Deprecating a member switches its tests to the replacement. Deprecated members are unsupported
-   and get no tests.
+ * Deprecating a member switches its tests, doc examples and tutorials to the replacement.
+   Deprecated members are unsupported and get no tests.
  * Client comms tests use a local `TestServer` (no KSP needed); SerialIO ones need `socat`.
  * Flags: `--test_output=streamed`, `--cache_test_results=false`, `--subcommands`,
    `--config=system-llvm` (C/C++ as CI). Bazel applies the `windows` config on a Windows host.
@@ -158,6 +159,45 @@ bazel run //:test-ingame -- --no-launch service/RemoteTech/test/test_remotetech.
  * Run *killed* rather than interrupted → cleanup hook skipped → `pkill -f KSP.x86_64`,
    `taskkill /f /im KSP_x64.exe` on Windows.
  * Trace from in-game with `KRPC.Utils.Logger.WriteLine("…")`, then grep `$KSP_DIR/KSP.log`.
+
+## Keeping the docs current
+
+No check catches a sentence that a change made false, so this depends on the author and the reviewer.
+
+| Change | Pages to check, under `doc/src/` |
+| --- | --- |
+| A client | `<client>.rst`, `client-design/<client>.rst`, `client-design.rst`. For Python, also `getting-started.rst` |
+| Protocol or transport | `communication-protocols/`, `client-design.rst`, each client guide that mentions it |
+| Server or service behavior | The matching `user-guide/` page. For the server window or install steps, `getting-started.rst` |
+| Service API features, `krpctools` | `extending/`, `krpctools.rst` |
+| Build, tests, repo layout | `krpc-development/` |
+
+The API reference is generated from the XML comments, which change with the code.
+
+ * **A change updates every page it makes false, in the same commit.** Read the pages against the
+   change: a page goes untouched only because it was read and still holds.
+ * **A review reports a page the change made false as a finding.**
+ * **Each fact has one page.** Link to it in place of repeating it.
+
+### Client pages
+
+| Page | Holds |
+| --- | --- |
+| `doc/src/<client>.rst` | The usage guide: how to use the client |
+| `doc/src/client-design/<client>.rst` | The client's own decisions and reasons, and where it departs from the shared page |
+| `doc/src/client-design.rst` | The design the clients share, and the table comparing them |
+| `doc/src/client-spec/` | The required behavior, generated from the conformance tests |
+
+ * **Before changing a client**, read its design page and the shared page.
+ * **A change to `clientgen`, the protocol or the server that alters what a client does** takes the
+   client row above, for each client it affects.
+ * **A shared change covers every client.** Check each client's guide and design page. A client
+   left behind records that on its design page.
+ * **A new user-facing feature goes in the guide** of each client that has it, with an example.
+ * **A finding that disputes a decision on a design page** is a proposed change to that page.
+ * **Usage goes in the guide, and the reason in the design page.**
+ * **Behavior a client must have goes in a conformance test.** The design page gives the reason.
+ * **Design pages record decisions.** Detail that changes with the code stays in the code.
 
 ## Writing
 
@@ -284,6 +324,9 @@ code itself cannot.
  * Pull requests merge through the merge queue, which runs CI on the combined tree. A push to
    `main` runs only the cache refresh, so a direct push is only for files no build or test reads,
    such as `README.md` and `CLAUDE.md`.
+ * **Before pushing, check the docs against the whole branch.** Read `git diff main...HEAD`, then
+   the pages *Keeping the docs current* lists for what it changes. Commits made late in a branch
+   often invalidate pages written early in it. Fix what the diff made false before pushing.
  * Concise technical prose, proportional to the diff; bullets only for discrete items. Multi-part
    change → lead paragraphs with a short bold phrase (`**Root cause.**`, `**Fix.**`, `**Testing.**`).
  * State the problem, the change, and for a fix how it was verified.
