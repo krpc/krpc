@@ -233,7 +233,8 @@ A program adding a stream needs to name a remote procedure without calling it. T
 it gets a call as a value, such as to use in an expression. The clients do this in two ways:
 
 * Python, C# and Java have one method for each purpose, ``add_stream`` and ``get_call`` or their
-  equivalents. It takes any property or method, and works out the procedure at run time.
+  equivalents. It takes any property or method, and works out the procedure at run time. Lua has
+  only ``get_call``, as it has no streams.
 * C++ and C-nano cannot look up a method at run time. Their generated stubs instead have extra
   functions for each procedure. C++ adds ones ending in ``_stream`` and ``_call``. C-nano has no
   streams, so it adds only ``_call``.
@@ -261,6 +262,9 @@ For the ``MeanAltitude`` property of a ``Flight`` object:
    * - Java
      - ``connection.addStream(flight, "getMeanAltitude")``
      - ``connection.getCall(flight, "getMeanAltitude")``
+   * - Lua
+     - None
+     - ``conn:get_call(flight.get_mean_altitude, flight)``
 
 In Python, C# and Java, the stream runs on the connection the method is called on, whichever
 connection the object came from. In C++, it runs on the object's client, or for a static method the

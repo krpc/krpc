@@ -10,6 +10,11 @@ local Attributes = require 'krpc.attributes'
 
 local service = {}
 
+-- The service and procedure each function a service or class is built with calls, and the number
+-- of leading parameters it does not send, by function. Client:get_call reads it. The keys are weak
+-- and the values hold no types, as Lua 5.1 and LuaJIT have no ephemeron tables.
+service.procedures = setmetatable({}, { __mode = 'k' })
+
 local regex_multi_uppercase = '([A-Z]+)([A-Z][a-z0-9])'
 local regex_single_uppercase = '([a-z0-9])([A-Z])'
 local regex_underscores = '(.)_'
@@ -52,10 +57,12 @@ local function update_param_names(names)
   return newnames
 end
 
-local function _construct_func(invoke, service_name, procedure_name, prefix_param_names, param_names,
+local function _construct_func(svc, procedure_name, prefix_param_names, param_names,
                                param_types, param_required, return_type)
+  local invoke, service_name = svc._invoke, svc._name
   prefix_param_names = prefix_param_names or List{}
   param_names = param_names or List{}
+  param_types = param_types or List{}
   prefix_param_names = update_param_names(prefix_param_names)
   param_names = update_param_names(param_names)
   local body =
@@ -74,10 +81,22 @@ local function _construct_func(invoke, service_name, procedure_name, prefix_para
   local wrapper =
     'return function (invoke,service_name,procedure_name,param_types,return_type,param_required) ' .. func .. ' end'
   local callable = assert(compat.load(wrapper, '_construct_func('..service_name..','..procedure_name..')'))()
-  return callable(invoke,service_name,procedure_name,param_types,return_type,param_required)
+  local result = callable(invoke,service_name,procedure_name,param_types,return_type,param_required)
+  service.procedures[result] = {
+    service = service_name, procedure = procedure_name, skip = #prefix_param_names
+  }
+  svc._client._procedure_parameters[service_name .. '.' .. procedure_name] = {
+    types = param_types, required = param_required
+  }
+  return result
 end
 
 local ServiceBase = class(Types.DynamicType)
+
+--- Whether a value is the service of the given name, from any connection
+function service.is_service(value, name)
+  return ServiceBase:class_of(value) and value._name == name
+end
 
 function ServiceBase:_parse_procedure(procedure)
 
@@ -153,7 +172,7 @@ end
 --- Add a procedure
 function ServiceBase:_add_service_procedure(procedure)
   local param_names, param_types, param_required, return_type = self:_parse_procedure(procedure)
-  local func = _construct_func(self._invoke, self._name, procedure.name, List{}, param_names, param_types, param_required, return_type)
+  local func = _construct_func(self, procedure.name, List{}, param_names, param_types, param_required, return_type)
   --build_request = ...
   local name = service.to_snake_case(procedure.name)
   return self:_add_static_method(name, func)
@@ -163,12 +182,12 @@ function ServiceBase:_add_service_property(name, getter, setter)
   if getter then
     local getter_name = getter.name
     local _,_,_,return_type = self:_parse_procedure(getter)
-    getter = _construct_func(self._invoke, self._name, getter_name, List{'self'}, nil, nil, nil, return_type)
+    getter = _construct_func(self, getter_name, List{'self'}, nil, nil, nil, return_type)
   end
   if setter then
     local setter_name = setter.name
     local param_names, param_types, param_required = self:_parse_procedure(setter)
-    setter = _construct_func(self._invoke, self._name, setter_name, List{'self'}, param_names, param_types, param_required, nil)
+    setter = _construct_func(self, setter_name, List{'self'}, param_names, param_types, param_required, nil)
   end
   name = service.to_snake_case(name)
   return self:_add_property(name, getter, setter)
@@ -181,7 +200,7 @@ function ServiceBase:_add_service_class_method(class_name, method_name, procedur
   -- Rename this to self if it doesn't cause a name clash
   --if 'self' not in param_names:
   --    param_names[0] = 'self'
-  local func = _construct_func(self._invoke, self._name, procedure.name, nil, param_names, param_types, param_required, return_type)
+  local func = _construct_func(self, procedure.name, nil, param_names, param_types, param_required, return_type)
   --build_request = ...
   local name = service.to_snake_case(method_name)
   class_cls:_add_method(name, func)
@@ -191,7 +210,7 @@ end
 function ServiceBase:_add_service_class_static_method(class_name, method_name, procedure)
   local class_cls = self._client._types:class_type(self._name, class_name).lua_type
   local param_names, param_types, param_required, return_type = self:_parse_procedure(procedure)
-  local func = _construct_func(self._invoke, self._name, procedure.name, nil, param_names, param_types, param_required, return_type)
+  local func = _construct_func(self, procedure.name, nil, param_names, param_types, param_required, return_type)
   --local build_request = ...
   local name = service.to_snake_case(method_name)
   class_cls:_add_static_method(name, func)
@@ -206,12 +225,12 @@ function ServiceBase:_add_service_class_property(class_name, property_name, gett
     -- Rename this to self if it doesn't cause a name clash
     --if 'self' not in param_names:
     --  param_names[0] = 'self'
-    getter = _construct_func(self._invoke, self._name, getter_name, nil, param_names, param_types, param_required, return_type)
+    getter = _construct_func(self, getter_name, nil, param_names, param_types, param_required, return_type)
     --local build_request = ...
   end
   if setter then
     local param_names, param_types, param_required = self:_parse_procedure(setter)
-    setter = _construct_func(self._invoke, self._name, setter.name, nil, param_names, param_types, param_required, nil)
+    setter = _construct_func(self, setter.name, nil, param_names, param_types, param_required, nil)
   end
   property_name = service.to_snake_case(property_name)
   return class_cls:_add_property(property_name, getter, setter)

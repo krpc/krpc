@@ -252,8 +252,10 @@ local function members(command)
   return { list = { items = items } }
 end
 
--- Call a procedure, given the name the server gives it
-local function invoke(command)
+-- The function the client builds for a procedure, given the name the server gives it, then the
+-- arguments to call it with and their number, as an argument can be nil. A property's getter or
+-- setter takes the object or the service as its first argument.
+local function resolve(command)
   -- An instance member is called through its instance, so only the other members need the
   -- service object
   local function service()
@@ -273,24 +275,29 @@ local function invoke(command)
     local member = to_snake_case(Attributes.get_class_member_name(name))
     if Attributes.is_a_class_static_method(name) then
       if command.through ~= nil then
-        return from_value(command.through)[member](table.unpack(args, 1, count))
+        return from_value(command.through)[member], args, count
       end
-      return service()[Attributes.get_class_name(name)][member](table.unpack(args, 1, count))
+      return service()[Attributes.get_class_name(name)][member], args, count
     elseif Attributes.is_a_class_property_getter(name) then
-      return args[1][member]
+      return args[1]['get_' .. member], args, count
     elseif Attributes.is_a_class_property_setter(name) then
-      args[1][member] = args[2]
-      return nil
+      return args[1]['set_' .. member], args, count
     end
-    local obj = args[1]
-    return obj[member](obj, table.unpack(args, 2, count))
+    return args[1][member], args, count
   elseif Attributes.is_a_property_getter(name) then
-    return service()[to_snake_case(Attributes.get_property_name(name))]
+    local svc = service()
+    return svc['get_' .. to_snake_case(Attributes.get_property_name(name))], { svc }, 1
   elseif Attributes.is_a_property_setter(name) then
-    service()[to_snake_case(Attributes.get_property_name(name))] = args[1]
-    return nil
+    local svc = service()
+    return svc['set_' .. to_snake_case(Attributes.get_property_name(name))], { svc, args[1] }, 2
   end
-  return service()[to_snake_case(name)](table.unpack(args, 1, count))
+  return service()[to_snake_case(name)], args, count
+end
+
+-- Call a procedure, given the name the server gives it
+local function invoke(command)
+  local func, args, count = resolve(command)
+  return func(table.unpack(args, 1, count))
 end
 
 -- Connecting the default connection closes every connection, and connecting a named one
@@ -386,6 +393,41 @@ local function dispatch(command)
       end
     end
     return to_value(result)
+  elseif case == 'call' then
+    connected()
+    local func, args, count = resolve(command.call.invoke)
+    return to_value(conn.krpc.Expression.call(conn:get_call(func, table.unpack(args, 1, count))))
+  elseif case == 'call_with_arguments' then
+    connected()
+    local func, args, count = resolve(command.call_with_arguments.invoke)
+    local arguments = Map{}
+    for position, value in pairs(command.call_with_arguments.arguments or {}) do
+      arguments[position] = from_value(value)
+    end
+    local call = conn:get_call(func, table.unpack(args, 1, count))
+    return to_value(conn.krpc.Expression.call_with_arguments(call, arguments))
+  elseif case == 'compile_function' then
+    connected():compile(from_value(command.compile_function['function']))
+    return {}
+  elseif case == 'run_function' then
+    connected()
+    local run_function = command.run_function
+    local args = {}
+    for i, x in ipairs(run_function.arguments or {}) do
+      args[i] = from_value(x)
+    end
+    local value = conn:run(from_value(run_function['function']),
+                           table.unpack(args, 1, #(run_function.arguments or {})))
+    local typ = run_function.type or ''
+    if value == nil and typ ~= '' and typ:sub(1, 9) ~= 'nullable ' then
+      error({ unsupported = 'A Lua value can be nil' })
+    end
+    -- A tuple is a List, so the type tells it from a list
+    local result = to_value(value)
+    if typ:sub(1, 6) == 'tuple(' then
+      return { tuple = result.list }
+    end
+    return result
   elseif case == 'hash' then
     -- Lua has no hash of a table's value
     return { null = true }
@@ -422,6 +464,8 @@ local function run(command)
   local reply = { id = command.id }
   if ok then
     reply.value = result
+  elseif type(result) == 'table' and result.unsupported ~= nil then
+    reply.error = { kind = 'UNSUPPORTED', message = result.unsupported }
   else
     -- A failed connect, and a call once the connection has ended, fail with the connection
     local kind = 'RPC'
@@ -435,7 +479,7 @@ end
 
 write({ hello = {
   client = 'lua',
-  profiles = { 'core', 'dynamic', 'defaults', 'skipped-arguments', 'connections', 'ordering' },
+  profiles = { 'core', 'dynamic', 'defaults', 'skipped-arguments', 'functions', 'connections', 'ordering' },
   protocols = { 'tcpip', 'localsocket' },
 } })
 

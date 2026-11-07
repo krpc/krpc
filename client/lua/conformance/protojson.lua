@@ -273,7 +273,17 @@ function read_message(typ, object)
       error('Unknown field ' .. key .. ' in ' .. typ, 0)
     end
     local kind = type_kind(field.type)
-    if field.repeated then
+    if kind == 'map' then
+      -- A map is a JSON object, and a table from key to value for lua-protobuf
+      local _, _, key_type = pb.field(field.type, 'key')
+      local _, _, value_type = pb.field(field.type, 'value')
+      local entries = {}
+      for k, v in pairs(value) do
+        entries[read_value(type_kind(key_type), key_type, k)] =
+          read_value(type_kind(value_type), value_type, v)
+      end
+      message[field.name] = entries
+    elseif field.repeated then
       local items = {}
       for i, item in ipairs(value) do
         items[i] = read_value(kind, field.type, item)

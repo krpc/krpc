@@ -2,3 +2,5 @@
 test_objects.py::test_hash  # The language has no hash of an object
 test_objects.py::test_hash_across_connections  # As test_hash
 test_values.py::test_structure_hash  # The language has no hash of a value
+test_functions.py::test_null_for_non_nullable_type[double]  # A Lua value can be nil
+test_functions.py::test_null_for_non_nullable_type[TestClass]  # As test_null_for_non_nullable_type[double]

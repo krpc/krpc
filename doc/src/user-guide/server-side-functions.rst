@@ -26,7 +26,7 @@ compiled code translates into, which every client can build directly.
 .. note::
 
    Compiled functions need the Python or C# client. Events and function streams need the Python,
-   C#, C++ or Java client. ``Run`` needs one of those or the C-nano client.
+   C#, C++ or Java client. ``Run`` needs one of those, the C-nano client or the Lua client.
 
 .. _server-side-functions-compiled:
 
@@ -579,6 +579,10 @@ running, catch the exception in the function:
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/NotLoadedEvent.java
 
+   .. group-tab:: Lua
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/NotLoadedCheck.lua
+
 The event's handler gives ``False``, so the event does not fire. A stream's handler can give a
 last good value, kept in a state variable. With the expression API, :meth:`Expression.try_catch`
 names the exception as ``"KRPC", "ObjectNotLoadedException"``.
@@ -671,14 +675,14 @@ server.
 The Expression API
 ------------------
 
-The expression API builds a server side function node by node. It is how the C++, Java and
-C-nano clients write functions, and how C# writes the statements a lambda cannot hold. The
+The expression API builds a server side function node by node. It is how the C++, Java, C-nano
+and Lua clients write functions, and how C# writes the statements a lambda cannot hold. The
 compilers produce the same functions.
 
 .. note::
 
-   The C-nano client has no events or streams, so its examples run each function with
-   ``krpc_run_function``.
+   The C-nano and Lua clients have no events or streams, so their examples run each function
+   once, with ``krpc_run_function`` in C and ``conn:run`` in Lua.
 
 Expression Trees
 ^^^^^^^^^^^^^^^^
@@ -736,6 +740,10 @@ and a comparison:
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/java/CustomEvent.java
+
+   .. group-tab:: Lua
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/AltitudeCheck.lua
 
 Two kinds of object appear here:
 
@@ -795,6 +803,13 @@ This truncates the altitude to a whole number of meters:
          :end-before: [/docs]
          :dedent:
 
+   .. group-tab:: Lua
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/TruncateAltitude.lua
+         :language: lua
+         :start-after: [docs]
+         :end-before: [/docs]
+
 Expressions are statically typed, with the types of the server's procedures. Numbers of
 different types convert to a common type, so an integer multiplies a double directly.
 
@@ -840,6 +855,10 @@ streamed too, and runs for its effects, as in :ref:`server-side-functions-contro
 
       .. literalinclude:: /scripts/java/FunctionStream.java
 
+   .. group-tab:: Lua
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/FunctionStream.lua
+
 Some clients take the type of the stream's values as a type argument, and others read the
 function's return type from the server. A function stream behaves like any other stream, and its
 rate can be limited in the usual way.
@@ -872,6 +891,10 @@ the procedure, so any engine can supply it:
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/CollectionEvent.java
+
+   .. group-tab:: Lua
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/OutOfFuelCheck.lua
 
 A function passed to a collection operation is built from two pieces:
 
@@ -960,6 +983,13 @@ and build one. :meth:`Expression.get_field` reads a field by name:
          :end-before: [/docs]
          :dedent:
 
+   .. group-tab:: Lua
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/StructureField.lua
+         :language: lua
+         :start-after: [docs]
+         :end-before: [/docs]
+
 :meth:`Expression.create_struct` builds a structure from its type and its field values, in the
 order the structure declares them. A field's name is the one the service declares, as shown in
 the API documentation.
@@ -995,6 +1025,10 @@ This builds and runs ``total = 0; for x in [1, 2, 3]: total += x``, which return
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/FunctionStatements.java
+
+   .. group-tab:: Lua
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/FunctionStatements.lua
 
 Statements are ordinary expression nodes. :meth:`Expression.block_with_variables` sequences
 statements and declares local variables, and its value is the value of its last statement.
@@ -1052,6 +1086,13 @@ particular vessel:
          :end-before: [/docs]
          :dedent:
 
+   .. group-tab:: Lua
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/TargetCheck.lua
+         :language: lua
+         :start-after: [docs]
+         :end-before: [/docs]
+
 :meth:`Expression.constant_object` takes the object's identifier in the communication protocol.
 Each client has a function that returns it: ``krpc.get_object_id`` in Python and Lua, ``RemoteObject.GetObjectId`` in
 C#, ``krpc::get_object_id`` in C++ and ``RemoteObject.getObjectId`` in Java. In C, an object's
@@ -1103,6 +1144,13 @@ fuel check from :ref:`Exceptions <server-side-functions-exceptions>`:
          :start-after: [docs]
          :end-before: [/docs]
          :dedent:
+
+   .. group-tab:: Lua
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/ThrowException.lua
+         :language: lua
+         :start-after: [docs]
+         :end-before: [/docs]
 
 :meth:`Expression.try_catch`, :meth:`Expression.try_catch_all` and :meth:`Expression.try_finally`
 handle exceptions.

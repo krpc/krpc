@@ -89,6 +89,26 @@ Null Values
      - ``Types.none``
    * - Inside a list, tuple, dictionary or structure
      - ``Types.none``, as a table cannot hold ``nil``
+   * - ``nil`` at an argument of ``run``
+     - Null, as a function's parameter has no default
+
+Server Side Functions
+---------------------
+
+The client has no function compiler, so a program builds a function with the expression API. There
+are no function streams or events, as the client has no streams.
+
+* **The stub names the call.** A Lua function has no name or parameter list to read, so
+  ``_construct_func`` records each stub's procedure in ``service.procedures``. This covers a
+  property's ``get_x`` and ``set_x``. ``get_call`` checks that one of a service's properties is
+  given the service, as a value in that position would otherwise be taken for it.
+* **The procedure table holds no types.** The keys of ``service.procedures`` are weak, and Lua 5.1
+  and LuaJIT have no ephemeron tables, so a value reaching a class table would keep the client
+  alive. The types are on the client, by qualified name, so a stub from another connection encodes
+  with this connection's types.
+* **The function supplies its types.** ``run`` reads the types of the parameters and the value from
+  the ``KRPC.Expression``, through the connection running it, once per function. It caches them by
+  object id. A null value is ``nil`` at any type.
 
 Lua Versions
 ------------
@@ -138,5 +158,9 @@ Mapping the Spec to Lua
      - ``pl.List``, ``pl.List``, ``pl.Set``, ``pl.Map``. A table key compares by identity
    * - Protobuf message result
      - A plain table
+   * - Getting a call as a value
+     - ``Client:get_call``, given a stub
+   * - Value type of a server side function
+     - The function's own type, read from the server
    * - Enumeration value
      - An instance of the connection's class, with the number in ``.value``
