@@ -1060,6 +1060,23 @@
 
 
 
+.. class:: DeprecatedClass
+
+   .. warning:: Deprecated. Use :class:`TestClass` instead.
+
+   Deprecated class documentation string.
+
+   .. function:: std::string deprecated_method()
+
+      .. warning:: Deprecated. Use :func:`TestClass::get_value` instead.
+
+      Deprecated method documentation string.
+
+
+   
+
+
+
 .. class:: TestClass
 
    Class documentation string.
@@ -1178,20 +1195,24 @@
 
 
 
-.. class:: DeprecatedClass
+.. namespace:: krpc::services::TestService
+.. enum-struct:: DeprecatedEnum
 
-   .. warning:: Deprecated. Use :class:`TestClass` instead.
+   .. warning:: Deprecated. Use :enum:`TestEnum` instead.
 
-   Deprecated class documentation string.
-
-   .. function:: std::string deprecated_method()
-
-      .. warning:: Deprecated. Use :func:`TestClass::get_value` instead.
-
-      Deprecated method documentation string.
+   Deprecated enum documentation string.
 
 
-   
+   .. enumerator:: value_a
+
+      Deprecated enum ValueA documentation string.
+
+
+   .. enumerator:: value_b
+
+      .. warning:: Deprecated. Use :enumerator:`DeprecatedEnum::value_a` instead.
+
+      Deprecated enum ValueB documentation string.
 
 
 
@@ -1219,45 +1240,35 @@
 
 
 .. namespace:: krpc::services::TestService
-.. enum-struct:: DeprecatedEnum
+.. struct:: DeprecatedStruct
 
-   .. warning:: Deprecated. Use :enum:`TestEnum` instead.
+   .. warning:: Deprecated. Use :struct:`TestStruct` instead.
 
-   Deprecated enum documentation string.
-
-
-   .. enumerator:: value_a
-
-      Deprecated enum ValueA documentation string.
+   Deprecated struct documentation string.
 
 
-   .. enumerator:: value_b
+   .. member:: int32_t value
 
-      .. warning:: Deprecated. Use :enumerator:`DeprecatedEnum::value_a` instead.
+      Deprecated struct Value documentation string.
 
-      Deprecated enum ValueB documentation string.
+   .. member:: int32_t old_value
 
+      .. warning:: Deprecated. Use :member:`DeprecatedStruct::value` instead.
+
+      Deprecated struct OldValue documentation string.
 
 
 .. namespace:: krpc::services::TestService
-.. struct:: TestStruct
+.. struct:: TestNestedNullableStruct
 
-   Struct documentation string.
+   Nested nullable struct documentation string.
 
 
-   .. member:: int32_t int_field
+   .. member:: std::vector<std::optional<TestClass>> list_field
 
-      Struct IntField documentation string.
+
 
    .. member:: std::string string_field
-
-
-
-   .. member:: TestEnum enum_field
-
-
-
-   .. member:: std::vector<int32_t> list_field
 
 
 
@@ -1309,37 +1320,26 @@
 
 
 .. namespace:: krpc::services::TestService
-.. struct:: TestNestedNullableStruct
+.. struct:: TestStruct
 
-   Nested nullable struct documentation string.
-
-
-   .. member:: std::vector<std::optional<TestClass>> list_field
+   Struct documentation string.
 
 
+   .. member:: int32_t int_field
+
+      Struct IntField documentation string.
 
    .. member:: std::string string_field
 
 
 
-
-.. namespace:: krpc::services::TestService
-.. struct:: DeprecatedStruct
-
-   .. warning:: Deprecated. Use :struct:`TestStruct` instead.
-
-   Deprecated struct documentation string.
+   .. member:: TestEnum enum_field
 
 
-   .. member:: int32_t value
 
-      Deprecated struct Value documentation string.
+   .. member:: std::vector<int32_t> list_field
 
-   .. member:: int32_t old_value
 
-      .. warning:: Deprecated. Use :member:`DeprecatedStruct::value` instead.
-
-      Deprecated struct OldValue documentation string.
 
 
 .. namespace:: krpc::services::TestService

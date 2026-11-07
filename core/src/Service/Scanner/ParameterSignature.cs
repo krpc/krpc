@@ -1,6 +1,6 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Globalization;
 
 namespace KRPC.Service.Scanner
@@ -89,9 +89,9 @@ namespace KRPC.Service.Scanner
         /// <summary>
         /// The values of the signature in a service definition.
         /// </summary>
-        public IDictionary<string, object> Serialize ()
+        public OrderedDictionary Serialize ()
         {
-            var result = new Dictionary<string, object> ();
+            var result = new OrderedDictionary ();
             result ["name"] = Name;
             result ["type"] = TypeUtils.SerializeType (Spec);
             if (HasDefaultValue) {

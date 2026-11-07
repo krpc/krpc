@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -1083,7 +1084,7 @@ namespace KRPC.Service
             var nullable = spec.Nullable;
             if (!IsAValidType (type))
                 throw new ArgumentException ("Type " + type + " is not a valid kRPC type");
-            var result = new Dictionary<string,object> ();
+            var result = new OrderedDictionary ();
             if (IsAValueType (type)) {
                 switch (Type.GetTypeCode (type)) {
                 case TypeCode.Double:
@@ -1152,7 +1153,7 @@ namespace KRPC.Service
                 snakeCase += camelCase[camelCase.Length-1];
                 result["code"] = snakeCase.ToUpperInvariant();
             }
-            if (!result.ContainsKey("code"))
+            if (!result.Contains ("code"))
                 throw new ArgumentException ("Type " + type + " is not a valid kRPC type");
             if (nullable)
                 result["nullable"] = true;

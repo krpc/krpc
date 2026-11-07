@@ -1192,6 +1192,23 @@ Service documentation string.
 
 
 
+.. class:: DeprecatedClass
+
+   .. warning:: Deprecated. Use :class:`TestClass` instead.
+
+   Deprecated class documentation string.
+
+   .. method:: deprecated_method()
+
+      .. warning:: Deprecated. Use :meth:`TestClass.get_value` instead.
+
+      Deprecated method documentation string.
+
+      :rtype: str
+   
+
+
+
 .. class:: TestClass
 
    Class documentation string.
@@ -1302,20 +1319,23 @@ Service documentation string.
 
 
 
-.. class:: DeprecatedClass
+.. class:: DeprecatedEnum
 
-   .. warning:: Deprecated. Use :class:`TestClass` instead.
+   .. warning:: Deprecated. Use :class:`TestEnum` instead.
 
-   Deprecated class documentation string.
+   Deprecated enum documentation string.
 
-   .. method:: deprecated_method()
 
-      .. warning:: Deprecated. Use :meth:`TestClass.get_value` instead.
+   .. data:: value_a
 
-      Deprecated method documentation string.
+      Deprecated enum ValueA documentation string.
 
-      :rtype: str
-   
+
+   .. data:: value_b
+
+      .. warning:: Deprecated. Use :attr:`DeprecatedEnum.value_a` instead.
+
+      Deprecated enum ValueB documentation string.
 
 
 
@@ -1341,54 +1361,44 @@ Service documentation string.
 
 
 
-.. class:: DeprecatedEnum
+.. class:: DeprecatedStruct(value, old_value)
 
-   .. warning:: Deprecated. Use :class:`TestEnum` instead.
+   .. warning:: Deprecated. Use :class:`TestStruct` instead.
 
-   Deprecated enum documentation string.
-
-
-   .. data:: value_a
-
-      Deprecated enum ValueA documentation string.
+   Deprecated struct documentation string.
 
 
-   .. data:: value_b
+   .. attribute:: value
 
-      .. warning:: Deprecated. Use :attr:`DeprecatedEnum.value_a` instead.
-
-      Deprecated enum ValueB documentation string.
-
-
-
-.. class:: TestStruct(int_field, string_field, enum_field, list_field)
-
-   Struct documentation string.
-
-
-   .. attribute:: int_field
-
-      Struct IntField documentation string.
+      Deprecated struct Value documentation string.
 
       :rtype: int
+
+   .. attribute:: old_value
+
+      .. warning:: Deprecated. Use :attr:`DeprecatedStruct.value` instead.
+
+      Deprecated struct OldValue documentation string.
+
+      :rtype: int
+
+
+.. class:: TestNestedNullableStruct(list_field, string_field)
+
+   Nested nullable struct documentation string.
+
+
+   .. attribute:: list_field
+
+
+
+      :rtype: list(:class:`TestClass` or None)
 
    .. attribute:: string_field
 
 
 
       :rtype: str
-
-   .. attribute:: enum_field
-
-
-
-      :rtype: :class:`TestEnum`
-
-   .. attribute:: list_field
-
-
-
-      :rtype: list(int)
 
 
 .. class:: TestNestedStruct(struct_field, object_field, string_field)
@@ -1451,16 +1461,16 @@ Service documentation string.
       :rtype: :class:`TestClass` or None
 
 
-.. class:: TestNestedNullableStruct(list_field, string_field)
+.. class:: TestStruct(int_field, string_field, enum_field, list_field)
 
-   Nested nullable struct documentation string.
-
-
-   .. attribute:: list_field
+   Struct documentation string.
 
 
+   .. attribute:: int_field
 
-      :rtype: list(:class:`TestClass` or None)
+      Struct IntField documentation string.
+
+      :rtype: int
 
    .. attribute:: string_field
 
@@ -1468,27 +1478,17 @@ Service documentation string.
 
       :rtype: str
 
-
-.. class:: DeprecatedStruct(value, old_value)
-
-   .. warning:: Deprecated. Use :class:`TestStruct` instead.
-
-   Deprecated struct documentation string.
+   .. attribute:: enum_field
 
 
-   .. attribute:: value
 
-      Deprecated struct Value documentation string.
+      :rtype: :class:`TestEnum`
 
-      :rtype: int
+   .. attribute:: list_field
 
-   .. attribute:: old_value
 
-      .. warning:: Deprecated. Use :attr:`DeprecatedStruct.value` instead.
 
-      Deprecated struct OldValue documentation string.
-
-      :rtype: int
+      :rtype: list(int)
 
 
 .. class:: CustomException

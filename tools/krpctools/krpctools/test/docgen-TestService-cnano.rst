@@ -1365,6 +1365,23 @@ Service documentation string.
 
 
 
+.. type:: krpc_TestService_DeprecatedClass_t
+
+   .. warning:: Deprecated. Use :type:`krpc_TestService_TestClass_t` instead.
+
+   Deprecated class documentation string.
+
+   .. function:: krpc_error_t krpc_TestService_DeprecatedClass_DeprecatedMethod(krpc_connection_t connection, char * * returnValue, krpc_TestService_DeprecatedClass_t instance)
+
+      .. warning:: Deprecated. Use :func:`krpc_TestService_TestClass_GetValue` instead.
+
+      Deprecated method documentation string.
+
+
+   
+
+
+
 .. type:: krpc_TestService_TestClass_t
 
    Class documentation string.
@@ -1483,20 +1500,23 @@ Service documentation string.
 
 
 
-.. type:: krpc_TestService_DeprecatedClass_t
+.. type:: krpc_TestService_DeprecatedEnum_t
 
-   .. warning:: Deprecated. Use :type:`krpc_TestService_TestClass_t` instead.
+   .. warning:: Deprecated. Use :type:`krpc_TestService_TestEnum_t` instead.
 
-   Deprecated class documentation string.
-
-   .. function:: krpc_error_t krpc_TestService_DeprecatedClass_DeprecatedMethod(krpc_connection_t connection, char * * returnValue, krpc_TestService_DeprecatedClass_t instance)
-
-      .. warning:: Deprecated. Use :func:`krpc_TestService_TestClass_GetValue` instead.
-
-      Deprecated method documentation string.
+   Deprecated enum documentation string.
 
 
-   
+   .. macro:: KRPC_TESTSERVICE_DEPRECATEDENUM_VALUEA
+
+      Deprecated enum ValueA documentation string.
+
+
+   .. macro:: KRPC_TESTSERVICE_DEPRECATEDENUM_VALUEB
+
+      .. warning:: Deprecated. Use :macro:`KRPC_TESTSERVICE_DEPRECATEDENUM_VALUEA` instead.
+
+      Deprecated enum ValueB documentation string.
 
 
 
@@ -1522,44 +1542,34 @@ Service documentation string.
 
 
 
-.. type:: krpc_TestService_DeprecatedEnum_t
+.. type:: krpc_TestService_DeprecatedStruct_t
 
-   .. warning:: Deprecated. Use :type:`krpc_TestService_TestEnum_t` instead.
+   .. warning:: Deprecated. Use :type:`krpc_TestService_TestStruct_t` instead.
 
-   Deprecated enum documentation string.
-
-
-   .. macro:: KRPC_TESTSERVICE_DEPRECATEDENUM_VALUEA
-
-      Deprecated enum ValueA documentation string.
+   Deprecated struct documentation string.
 
 
-   .. macro:: KRPC_TESTSERVICE_DEPRECATEDENUM_VALUEB
+   .. member:: int32_t value
 
-      .. warning:: Deprecated. Use :macro:`KRPC_TESTSERVICE_DEPRECATEDENUM_VALUEA` instead.
+      Deprecated struct Value documentation string.
 
-      Deprecated enum ValueB documentation string.
+   .. member:: int32_t old_value
 
+      .. warning:: Deprecated. Use :member:`krpc_TestService_DeprecatedStruct_t.value` instead.
 
-
-.. type:: krpc_TestService_TestStruct_t
-
-   Struct documentation string.
+      Deprecated struct OldValue documentation string.
 
 
-   .. member:: int32_t int_field
+.. type:: krpc_TestService_TestNestedNullableStruct_t
 
-      Struct IntField documentation string.
+   Nested nullable struct documentation string.
+
+
+   .. member:: krpc_list_nullable_object_t list_field
+
+
 
    .. member:: char * string_field
-
-
-
-   .. member:: krpc_TestService_TestEnum_t enum_field
-
-
-
-   .. member:: krpc_list_int32_t list_field
 
 
 
@@ -1608,36 +1618,26 @@ Service documentation string.
 
 
 
-.. type:: krpc_TestService_TestNestedNullableStruct_t
+.. type:: krpc_TestService_TestStruct_t
 
-   Nested nullable struct documentation string.
-
-
-   .. member:: krpc_list_nullable_object_t list_field
+   Struct documentation string.
 
 
+   .. member:: int32_t int_field
+
+      Struct IntField documentation string.
 
    .. member:: char * string_field
 
 
 
-
-.. type:: krpc_TestService_DeprecatedStruct_t
-
-   .. warning:: Deprecated. Use :type:`krpc_TestService_TestStruct_t` instead.
-
-   Deprecated struct documentation string.
+   .. member:: krpc_TestService_TestEnum_t enum_field
 
 
-   .. member:: int32_t value
 
-      Deprecated struct Value documentation string.
+   .. member:: krpc_list_int32_t list_field
 
-   .. member:: int32_t old_value
 
-      .. warning:: Deprecated. Use :member:`krpc_TestService_DeprecatedStruct_t.value` instead.
-
-      Deprecated struct OldValue documentation string.
 
 
 Exception class CustomException

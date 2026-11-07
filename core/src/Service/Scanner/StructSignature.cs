@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 
 namespace KRPC.Service.Scanner
@@ -62,9 +63,9 @@ namespace KRPC.Service.Scanner
         /// <summary>
         /// The values of the signature in a service definition.
         /// </summary>
-        public IDictionary<string, object> Serialize ()
+        public OrderedDictionary Serialize ()
         {
-            var result = new Dictionary<string, object> ();
+            var result = new OrderedDictionary ();
             result ["documentation"] = Documentation;
             result ["fields"] = Fields.Select (x => x.Serialize ()).ToList ();
             if (Deprecated) {

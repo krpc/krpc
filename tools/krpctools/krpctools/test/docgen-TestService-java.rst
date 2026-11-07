@@ -782,6 +782,22 @@
 
 
 
+.. type:: public class DeprecatedClass
+
+   .. warning:: Deprecated. Use :type:`TestClass` instead.
+
+   Deprecated class documentation string.
+
+   .. method:: String deprecatedMethod()
+
+      .. warning:: Deprecated. Use :meth:`TestClass.getValue()` instead.
+
+      Deprecated method documentation string.
+
+   
+
+
+
 .. type:: public class TestClass
 
    Class documentation string.
@@ -881,19 +897,23 @@
 
 
 
-.. type:: public class DeprecatedClass
+.. type:: public enum DeprecatedEnum
 
-   .. warning:: Deprecated. Use :type:`TestClass` instead.
+   .. warning:: Deprecated. Use :type:`TestEnum` instead.
 
-   Deprecated class documentation string.
+   Deprecated enum documentation string.
 
-   .. method:: String deprecatedMethod()
 
-      .. warning:: Deprecated. Use :meth:`TestClass.getValue()` instead.
+   .. field:: public DeprecatedEnum VALUE_A
 
-      Deprecated method documentation string.
+      Deprecated enum ValueA documentation string.
 
-   
+
+   .. field:: public DeprecatedEnum VALUE_B
+
+      .. warning:: Deprecated. Use :field:`DeprecatedEnum.VALUE_A` instead.
+
+      Deprecated enum ValueB documentation string.
 
 
 
@@ -919,48 +939,42 @@
 
 
 
-.. type:: public enum DeprecatedEnum
+.. type:: public class DeprecatedStruct
 
-   .. warning:: Deprecated. Use :type:`TestEnum` instead.
+   .. warning:: Deprecated. Use :type:`TestStruct` instead.
 
-   Deprecated enum documentation string.
+   Deprecated struct documentation string.
 
+   .. constructor:: public DeprecatedStruct(int value, int oldValue)
 
-   .. field:: public DeprecatedEnum VALUE_A
-
-      Deprecated enum ValueA documentation string.
-
-
-   .. field:: public DeprecatedEnum VALUE_B
-
-      .. warning:: Deprecated. Use :field:`DeprecatedEnum.VALUE_A` instead.
-
-      Deprecated enum ValueB documentation string.
+      Construct a DeprecatedStruct from the values of its fields.
 
 
+   .. method:: int getValue()
 
-.. type:: public class TestStruct
+      Deprecated struct Value documentation string.
 
-   Struct documentation string.
+   .. method:: int getOldValue()
 
-   .. constructor:: public TestStruct(int intField, String stringField, TestEnum enumField, java.util.List<Integer> listField)
+      .. warning:: Deprecated. Use :meth:`DeprecatedStruct.getValue()` instead.
 
-      Construct a TestStruct from the values of its fields.
+      Deprecated struct OldValue documentation string.
 
 
-   .. method:: int getIntField()
+.. type:: public class TestNestedNullableStruct
 
-      Struct IntField documentation string.
+   Nested nullable struct documentation string.
+
+   .. constructor:: public TestNestedNullableStruct(java.util.List<TestClass> listField, String stringField)
+
+      Construct a TestNestedNullableStruct from the values of its fields.
+
+
+   .. method:: java.util.List<TestClass> getListField()
+
+
 
    .. method:: String getStringField()
-
-
-
-   .. method:: TestEnum getEnumField()
-
-
-
-   .. method:: java.util.List<Integer> getListField()
 
 
 
@@ -1017,44 +1031,30 @@
 
 
 
-.. type:: public class TestNestedNullableStruct
+.. type:: public class TestStruct
 
-   Nested nullable struct documentation string.
+   Struct documentation string.
 
-   .. constructor:: public TestNestedNullableStruct(java.util.List<TestClass> listField, String stringField)
+   .. constructor:: public TestStruct(int intField, String stringField, TestEnum enumField, java.util.List<Integer> listField)
 
-      Construct a TestNestedNullableStruct from the values of its fields.
-
-
-   .. method:: java.util.List<TestClass> getListField()
+      Construct a TestStruct from the values of its fields.
 
 
+   .. method:: int getIntField()
+
+      Struct IntField documentation string.
 
    .. method:: String getStringField()
 
 
 
-
-.. type:: public class DeprecatedStruct
-
-   .. warning:: Deprecated. Use :type:`TestStruct` instead.
-
-   Deprecated struct documentation string.
-
-   .. constructor:: public DeprecatedStruct(int value, int oldValue)
-
-      Construct a DeprecatedStruct from the values of its fields.
+   .. method:: TestEnum getEnumField()
 
 
-   .. method:: int getValue()
 
-      Deprecated struct Value documentation string.
+   .. method:: java.util.List<Integer> getListField()
 
-   .. method:: int getOldValue()
 
-      .. warning:: Deprecated. Use :meth:`DeprecatedStruct.getValue()` instead.
-
-      Deprecated struct OldValue documentation string.
 
 
 .. type:: public class CustomException

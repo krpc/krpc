@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Reflection;
 using KRPC.Service.Attributes;
@@ -202,7 +203,7 @@ namespace KRPC.Service.Scanner
             if (Enumerations.ContainsKey (name))
                 throw new ServiceException ("Service " + Name + " contains duplicate enumerations " + name);
             var values = new List<EnumerationValueSignature> ();
-            foreach (FieldInfo field in enumType.GetFields(BindingFlags.Public | BindingFlags.Static)) {
+            foreach (FieldInfo field in enumType.GetFields(BindingFlags.Public | BindingFlags.Static).OrderBy (x => x.MetadataToken)) {
                 string valueDeprecatedReason;
                 var valueDeprecated = TypeUtils.GetDeprecated (field, out valueDeprecatedReason);
                 values.Add (new EnumerationValueSignature (Name, name, field.Name, (int)field.GetRawConstantValue (), field.GetDocumentation (), valueDeprecated, valueDeprecatedReason));
@@ -406,19 +407,29 @@ namespace KRPC.Service.Scanner
             extensionMembers [procedureName] = method.DeclaringType;
         }
 
+        // Sorted by name, as neither a Dictionary nor the reflection that fills it has a specified order
+        static SortedDictionary<string, OrderedDictionary> SerializeSorted<T> (
+            IDictionary<string, T> items, Func<T, OrderedDictionary> serialize)
+        {
+            var result = new SortedDictionary<string, OrderedDictionary> (StringComparer.Ordinal);
+            foreach (var item in items)
+                result [item.Key] = serialize (item.Value);
+            return result;
+        }
+
         /// <summary>
         /// The values of the signature in a service definition.
         /// </summary>
-        public IDictionary<string, object> Serialize ()
+        public OrderedDictionary Serialize ()
         {
-            var result = new Dictionary<string, object> ();
+            var result = new OrderedDictionary ();
             result ["id"] = Id;
             result ["documentation"] = Documentation;
-            result ["procedures"] = Procedures.ToDictionary (x => x.Key, x => x.Value.Serialize ());
-            result ["classes"] = Classes.ToDictionary (x => x.Key, x => x.Value.Serialize ());
-            result ["enumerations"] = Enumerations.ToDictionary (x => x.Key, x => x.Value.Serialize ());
-            result ["structs"] = Structs.ToDictionary (x => x.Key, x => x.Value.Serialize ());
-            result ["exceptions"] = Exceptions.ToDictionary (x => x.Key, x => x.Value.Serialize ());
+            result ["procedures"] = SerializeSorted (Procedures, x => x.Serialize ());
+            result ["classes"] = SerializeSorted (Classes, x => x.Serialize ());
+            result ["enumerations"] = SerializeSorted (Enumerations, x => x.Serialize ());
+            result ["structs"] = SerializeSorted (Structs, x => x.Serialize ());
+            result ["exceptions"] = SerializeSorted (Exceptions, x => x.Serialize ());
             if (Deprecated) {
                 result ["deprecated"] = true;
                 result ["deprecated_reason"] = DeprecatedReason;

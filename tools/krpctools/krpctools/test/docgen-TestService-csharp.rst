@@ -1052,6 +1052,23 @@
 
 
 
+.. class:: DeprecatedClass
+
+   .. warning:: Deprecated. Use :type:`TestClass` instead.
+
+   Deprecated class documentation string.
+
+   .. function:: string DeprecatedMethod()
+
+      .. warning:: Deprecated. Use :meth:`TestClass.GetValue` instead.
+
+      Deprecated method documentation string.
+
+
+      :Game Scenes: All
+
+
+
 .. class:: TestClass
 
    Class documentation string.
@@ -1168,20 +1185,23 @@
 
 
 
-.. class:: DeprecatedClass
+.. enum:: DeprecatedEnum
 
-   .. warning:: Deprecated. Use :type:`TestClass` instead.
+   .. warning:: Deprecated. Use :type:`TestEnum` instead.
 
-   Deprecated class documentation string.
-
-   .. function:: string DeprecatedMethod()
-
-      .. warning:: Deprecated. Use :meth:`TestClass.GetValue` instead.
-
-      Deprecated method documentation string.
+   Deprecated enum documentation string.
 
 
-      :Game Scenes: All
+   .. enumerator:: ValueA
+
+      Deprecated enum ValueA documentation string.
+
+
+   .. enumerator:: ValueB
+
+      .. warning:: Deprecated. Use :value:`DeprecatedEnum.ValueA` instead.
+
+      Deprecated enum ValueB documentation string.
 
 
 
@@ -1207,48 +1227,42 @@
 
 
 
-.. enum:: DeprecatedEnum
+.. struct:: DeprecatedStruct
 
-   .. warning:: Deprecated. Use :type:`TestEnum` instead.
+   .. warning:: Deprecated. Use :type:`TestStruct` instead.
 
-   Deprecated enum documentation string.
+   Deprecated struct documentation string.
 
+   .. function:: DeprecatedStruct(int value, int oldValue)
 
-   .. enumerator:: ValueA
-
-      Deprecated enum ValueA documentation string.
-
-
-   .. enumerator:: ValueB
-
-      .. warning:: Deprecated. Use :value:`DeprecatedEnum.ValueA` instead.
-
-      Deprecated enum ValueB documentation string.
+      Construct a DeprecatedStruct from the values of its fields.
 
 
+   .. property:: int Value { get; }
 
-.. struct:: TestStruct
+      Deprecated struct Value documentation string.
 
-   Struct documentation string.
+   .. property:: int OldValue { get; }
 
-   .. function:: TestStruct(int intField, string stringField, TestEnum enumField, System.Collections.Generic.IList<int> listField)
+      .. warning:: Deprecated. Use :prop:`DeprecatedStruct.Value` instead.
 
-      Construct a TestStruct from the values of its fields.
+      Deprecated struct OldValue documentation string.
 
 
-   .. property:: int IntField { get; }
+.. struct:: TestNestedNullableStruct
 
-      Struct IntField documentation string.
+   Nested nullable struct documentation string.
+
+   .. function:: TestNestedNullableStruct(System.Collections.Generic.IList<TestClass> listField, string stringField)
+
+      Construct a TestNestedNullableStruct from the values of its fields.
+
+
+   .. property:: System.Collections.Generic.IList<TestClass> ListField { get; }
+
+
 
    .. property:: string StringField { get; }
-
-
-
-   .. property:: TestEnum EnumField { get; }
-
-
-
-   .. property:: System.Collections.Generic.IList<int> ListField { get; }
 
 
 
@@ -1305,44 +1319,30 @@
 
 
 
-.. struct:: TestNestedNullableStruct
+.. struct:: TestStruct
 
-   Nested nullable struct documentation string.
+   Struct documentation string.
 
-   .. function:: TestNestedNullableStruct(System.Collections.Generic.IList<TestClass> listField, string stringField)
+   .. function:: TestStruct(int intField, string stringField, TestEnum enumField, System.Collections.Generic.IList<int> listField)
 
-      Construct a TestNestedNullableStruct from the values of its fields.
-
-
-   .. property:: System.Collections.Generic.IList<TestClass> ListField { get; }
+      Construct a TestStruct from the values of its fields.
 
 
+   .. property:: int IntField { get; }
+
+      Struct IntField documentation string.
 
    .. property:: string StringField { get; }
 
 
 
-
-.. struct:: DeprecatedStruct
-
-   .. warning:: Deprecated. Use :type:`TestStruct` instead.
-
-   Deprecated struct documentation string.
-
-   .. function:: DeprecatedStruct(int value, int oldValue)
-
-      Construct a DeprecatedStruct from the values of its fields.
+   .. property:: TestEnum EnumField { get; }
 
 
-   .. property:: int Value { get; }
 
-      Deprecated struct Value documentation string.
+   .. property:: System.Collections.Generic.IList<int> ListField { get; }
 
-   .. property:: int OldValue { get; }
 
-      .. warning:: Deprecated. Use :prop:`DeprecatedStruct.Value` instead.
-
-      Deprecated struct OldValue documentation string.
 
 
 .. class:: CustomException
