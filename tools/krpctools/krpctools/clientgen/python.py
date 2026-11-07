@@ -269,7 +269,7 @@ class PythonGenerator(Generator[StubLanguage]):
                     ):
                         dependencies.add(ptype["service"])
         dependencies |= self.struct_field_dependencies(context)
-        context["dependencies"] = dependencies
+        context["dependencies"] = sorted(dependencies)
 
         self.add_struct_field_specifications(context)
 
