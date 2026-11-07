@@ -213,7 +213,7 @@ way writing here goes wrong.
  * Headings are short Title Case noun phrases, not clauses with verbs.
  * `.. note::` in block form with a one or two sentence body for a caveat, `.. seealso::` for a
    cross-reference. Never hang a paragraph off an inline `.. note::`.
- * Say what something does. Why it is implemented that way belongs in the code.
+ * Say what something does. The docs site is the main place for why it is implemented that way.
  * The client design pages, `doc/src/client-design*`, are the exception to these
    rules. They name the internals and use short `.. code-block::` fragments.
 
@@ -246,8 +246,8 @@ comments* below.
 
 ### Code comments
 
-Comments in the source that are not `///` documentation. They carry the constraint the code itself
-cannot.
+Comments in the source that are not `///` documentation. They carry the constraint or reason the
+code itself cannot.
 
  * **Size the comment to the code it describes.** A line or two of code gets a fragment naming the
    step, a method a sentence, a file or a mechanism not recoverable from the code a paragraph. A
@@ -256,8 +256,9 @@ cannot.
    trailing period. A long method is often a run of these.
  * **Comment the surprise**: a game quirk, a workaround, an ordering constraint, a unit, a sign
    convention. Code that reads plainly gets no comment, and never one that restates the line below.
- * **State the constraint, do not argue the alternative.** A comment that proves a case, or names
-   what would break, is arguing.
+ * **Keep the why short.** The docs site is the main place for why the code works as it does. A
+   short comment gives the reason when no other place fits, such as what a line prevents. A longer
+   argument goes on a docs page.
  * **Never reference what a change replaced.** A comment explains the code as it stands, to someone
    who never saw the old version. How a value was arrived at belongs in the commit message and the
    PR, though a measurement that sizes a constant is part of what it means.
