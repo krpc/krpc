@@ -198,7 +198,8 @@ set for procedures whose return value is nullable. See :ref:`null values
 <communication-protocol-null-values>`.
 
 A call that fails sets the ``error`` field of its result. This includes a call with an argument
-the server cannot decode, and the other calls in the request still run. A request that fails as a
+the server cannot decode, an argument position past the procedure's last parameter, or two
+arguments at one position. The other calls in the request still run. A request that fails as a
 whole sets the ``error`` field of the response, and the response holds no results.
 
 The fields of an error are:

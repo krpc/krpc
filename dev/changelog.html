@@ -547,6 +547,7 @@
 <li><p><span class="changelog-marker breaking">Breaking</span> Reject an argument with bytes left over or an unknown field (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1280">#1280</a>)</p></li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Reject a 32-bit number out of range, a tuple with the wrong number of items, an undeclared enum value, or a bool other than 0 or 1 (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1280">#1280</a>)</p></li>
 <li><p>Fail only the call whose argument the server cannot decode, and run the other calls in the request (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1280">#1280</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Fail a call with an argument position past the procedure’s last parameter, or with two arguments at one position, in place of ignoring an argument (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1290">#1290</a>)</p></li>
 </ul>
 </section>
 <section id="server">

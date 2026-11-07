@@ -688,6 +688,20 @@ hold null, raises the argument error.</p>
 request run, and their results stay in order.</p>
 </dd>
 </dl>
+<dl class="simple" id="spec-calls-argument-position-out-of-range-fails-its-call">
+<dt><code class="docutils literal notranslate"><span class="pre">calls-argument-position-out-of-range-fails-its-call</span> <span class="pre">[core]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A call with an argument position past the procedure’s last parameter fails with the
+server’s <code class="docutils literal notranslate"><span class="pre">ArgumentException</span></code>, in the <code class="docutils literal notranslate"><span class="pre">error</span></code> field of its result. The description
+names the position and the procedure. The other calls in the request run, and their
+results stay in order.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-calls-duplicate-argument-position-fails-its-call">
+<dt><code class="docutils literal notranslate"><span class="pre">calls-duplicate-argument-position-fails-its-call</span> <span class="pre">[core]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A call with two arguments at one position fails with the server’s
+<code class="docutils literal notranslate"><span class="pre">ArgumentException</span></code>, in the <code class="docutils literal notranslate"><span class="pre">error</span></code> field of its result. The description names the
+position and the procedure. The other calls in the request run, and their results stay
+in order.</p>
+</dd>
+</dl>
 <dl class="simple" id="spec-calls-unique-ids">
 <dt><code class="docutils literal notranslate"><span class="pre">calls-unique-ids</span> <span class="pre">[concurrency]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Each request has an id that no other waiting request has.</p>
 </dd>

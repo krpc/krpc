@@ -808,7 +808,8 @@ a result holds the procedure’s return value,
 <p>The <code class="docutils literal notranslate"><span class="pre">is_null</span></code> field marks a null return value. When it is set, <code class="docutils literal notranslate"><span class="pre">value</span></code> is unset. It is only
 set for procedures whose return value is nullable. See <a class="reference internal" href="#communication-protocol-null-values"><span class="std std-ref">null values</span></a>.</p>
 <p>A call that fails sets the <code class="docutils literal notranslate"><span class="pre">error</span></code> field of its result. This includes a call with an argument
-the server cannot decode, and the other calls in the request still run. A request that fails as a
+the server cannot decode, an argument position past the procedure’s last parameter, or two
+arguments at one position. The other calls in the request still run. A request that fails as a
 whole sets the <code class="docutils literal notranslate"><span class="pre">error</span></code> field of the response, and the response holds no results.</p>
 <p>The fields of an error are:</p>
 <ul class="simple">
