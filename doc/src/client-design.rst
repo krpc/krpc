@@ -42,7 +42,7 @@ Clients
      - Threaded
      - Yes
      - Pre-generated
-   * - Lua
+   * - :doc:`Lua <client-design/lua>`
      - Single
      - No
      - Dynamic
@@ -270,3 +270,4 @@ client passed to it.
    client-design/cpp
    client-design/cnano
    client-design/java
+   client-design/lua
