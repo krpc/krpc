@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Python Client Design &#8212; kRPC vdev documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/lua.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=eadf7411" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="../_static/documentation_options.js?v=3ce10a4d"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'client-design/python';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.24.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://krpc.github.io/krpc/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../_static/external-links.js?v=e8892020"></script>
+    <script src="../_static/build-info.js?v=19ceb065"></script>
+    <link rel="canonical" href="https://krpc.github.io/krpc/dev/client-design/python.html" />
+    <link rel="icon" href="../_static/logo-mark.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="C# Client Design" href="csharp.html" />
+    <link rel="prev" title="Client Design" href="../client-design.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="dev" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo-on-light.svg" class="logo__image only-light" alt="kRPC"/>
+    <img src="../_static/logo-on-dark.svg" class="logo__image only-dark pst-js-only" alt="kRPC"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../clients.html">
+    Clients
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../developer-guide.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page" aria-expanded="false" aria-controls="pst-secondary-sidebar-modal">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../clients.html">
+    Clients
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../developer-guide.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../extending.html">Extending kRPC</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../extending/attributes.html">Attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/types.html">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/events.html">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/multi-tick.html">Multi-Tick RPCs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/game-scenes.html">Game Scenes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/deprecation.html">Deprecating Service Members</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/extending-other-services.html">Extending Other Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/documentation.html">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/clientgen.html">Generating Service Code for Static Clients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/docgen.html">API Reference Pages</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../communication-protocols.html">Communication Protocols</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../communication-protocols/tcpip.html">TCP/IP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../communication-protocols/localsocket.html">Local Socket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../communication-protocols/websockets.html">WebSockets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../communication-protocols/serialio.html">Serial IO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../communication-protocols/messages.html">Messaging</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../client-design.html">Client Design</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active"><a aria-current="page" class="current reference internal" href="#">Python Client Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="csharp.html">C# Client Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp.html">C++ Client Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cnano.html">C-nano Client Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="java.html">Java Client Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lua.html">Lua Client Design</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../client-spec.html">Client Specification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/conformance.html">Conformance Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/testserver.html">Test Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/connection.html">Connection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/calls.html">Calls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/values.html">Values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/codec.html">Codec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/errors.html">Errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/objects.html">Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/streams.html">Streams</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/events.html">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/concurrency.html">Concurrency</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/functions.html">Server Side Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/coverage.html">Client Coverage</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../krpctools.html">krpctools</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../krpc-development.html">kRPC Development</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../krpc-development/code-structure.html">Code Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../krpc-development/building.html">Building from Source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../krpc-development/testing.html">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../krpc-development/benchmarks.html">Benchmarks</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-house"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../developer-guide.html" class="nav-link">Developer Guide</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../client-design.html" class="nav-link">Client Design</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Python Client Design</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="python-client-design">
+<h1>Python Client Design<a class="headerlink" href="#python-client-design" title="Link to this heading">#</a></h1>
+<p>The internal design of the Python client. This page builds on the <a class="reference internal" href="../client-design.html"><span class="doc">shared client design</span></a> and the <a class="reference internal" href="../client-spec.html"><span class="doc">client specification</span></a>. Usage is in
+the <a class="reference internal" href="../python.html"><span class="doc">Python guide</span></a>. Paths are relative to <code class="docutils literal notranslate"><span class="pre">client/python/</span></code>.</p>
+<section id="ownership">
+<h2>Ownership<a class="headerlink" href="#ownership" title="Link to this heading">#</a></h2>
+<p>Services, objects and streams hold the <code class="docutils literal notranslate"><span class="pre">Client</span></code> strongly. Letting go of them closes nothing:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">active_vessel</span><span class="p">():</span>
+    <span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
+    <span class="c1"># The connection stays open after conn is dropped</span>
+</pre></div>
+</div>
+<section id="references">
+<h3>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h3>
+<p>The client holds its <code class="docutils literal notranslate"><span class="pre">Connection</span></code>, <code class="docutils literal notranslate"><span class="pre">Session</span></code>, <code class="docutils literal notranslate"><span class="pre">StreamManager</span></code>, <code class="docutils literal notranslate"><span class="pre">Types</span></code> registry and
+services.</p>
+<p>The objects the program keeps also hold the client. A <code class="docutils literal notranslate"><span class="pre">Service</span></code>, <code class="docutils literal notranslate"><span class="pre">Object</span></code> or <code class="docutils literal notranslate"><span class="pre">StreamImpl</span></code>
+holds the <code class="docutils literal notranslate"><span class="pre">Client</span></code>, and a <code class="docutils literal notranslate"><span class="pre">Stream</span></code> holds its <code class="docutils literal notranslate"><span class="pre">StreamImpl</span></code>.</p>
+<p>The threads keep the client alive. The reader and dispatcher threads hold the <code class="docutils literal notranslate"><span class="pre">Session</span></code>, which
+holds the <code class="docutils literal notranslate"><span class="pre">StreamManager</span></code>, which holds the <code class="docutils literal notranslate"><span class="pre">Client</span></code>. An unclosed client is therefore never
+collected. The threads end on a close or a connection failure.</p>
+<p>The stream manager holds each open <code class="docutils literal notranslate"><span class="pre">StreamImpl</span></code> strongly, so a stream outlives its handles and its
+callbacks keep running. It holds every registered <code class="docutils literal notranslate"><span class="pre">StreamImpl</span></code> weakly, which keeps nothing alive.
+Each <code class="docutils literal notranslate"><span class="pre">StreamImpl</span></code> also holds the <code class="docutils literal notranslate"><span class="pre">StreamManager</span></code>.</p>
+<p>The collector frees these cycles once the threads end, except that <code class="docutils literal notranslate"><span class="pre">types._wrapped_subclasses</span></code>
+keeps a client with stubs. A callback holding its own stream or the client needs no special
+handling.</p>
+</section>
+<section id="lifetime">
+<h3>Lifetime<a class="headerlink" href="#lifetime" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>The connection closes on <code class="docutils literal notranslate"><span class="pre">close()</span></code>, at the end of a <code class="docutils literal notranslate"><span class="pre">with</span></code> block, when the server or the
+socket fails, or at process exit. Process exit sends no <code class="docutils literal notranslate"><span class="pre">disconnect</span></code>, as the operating system
+closes the socket.</p></li>
+<li><p>After <code class="docutils literal notranslate"><span class="pre">close()</span></code>, the client and its objects stay valid. Calls raise <code class="docutils literal notranslate"><span class="pre">ConnectionError</span></code>, and
+streams and events end. A second <code class="docutils literal notranslate"><span class="pre">close()</span></code> has no further effect.</p></li>
+<li><p>Lifetime is explicit. <code class="docutils literal notranslate"><span class="pre">Client</span></code>, objects, <code class="docutils literal notranslate"><span class="pre">Stream</span></code> and <code class="docutils literal notranslate"><span class="pre">Event</span></code> have no finalizer. An object
+is an id and a client, and sends no release to the server.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Stream</span></code> and <code class="docutils literal notranslate"><span class="pre">Event</span></code> are handles to one <code class="docutils literal notranslate"><span class="pre">StreamImpl</span></code>, which runs until a <code class="docutils literal notranslate"><span class="pre">remove()</span></code>
+through any handle, a server ending or the close. <code class="docutils literal notranslate"><span class="pre">Client.stream()</span></code> is the <code class="docutils literal notranslate"><span class="pre">with</span></code> form of
+<code class="docutils literal notranslate"><span class="pre">add_stream</span></code>, and removes the stream at the end of the block.</p></li>
+</ul>
+</section>
+</section>
+<section id="threads">
+<h2>Threads<a class="headerlink" href="#threads" title="Link to this heading">#</a></h2>
+<p>The threads follow the <a class="reference internal" href="../client-design.html"><span class="doc">shared design</span></a>, and are named
+<code class="docutils literal notranslate"><span class="pre">krpc-reader</span></code> and <code class="docutils literal notranslate"><span class="pre">krpc-dispatcher</span></code>.</p>
+<ul class="simple">
+<li><p>Calls and waits block the calling thread.</p></li>
+<li><p>A <code class="docutils literal notranslate"><span class="pre">KeyboardInterrupt</span></code> in a call abandons its slot.</p></li>
+<li><p>A value is decoded once, and every read and callback shares that object.</p></li>
+<li><p>A <code class="docutils literal notranslate"><span class="pre">BaseException</span></code> from an end callback, such as <code class="docutils literal notranslate"><span class="pre">KeyboardInterrupt</span></code>, is raised once the close
+finishes.</p></li>
+<li><p>On the dispatcher thread, every callback exception goes to <code class="docutils literal notranslate"><span class="pre">threading.excepthook</span></code>.</p></li>
+<li><p>During a close, another thread can hold a stream’s condition. A <code class="docutils literal notranslate"><span class="pre">krpc-waker</span></code> thread then wakes
+the threads waiting on it, once the condition is free.</p></li>
+</ul>
+</section>
+<section id="pre-generated-and-dynamic-services">
+<h2>Pre-Generated and Dynamic Services<a class="headerlink" href="#pre-generated-and-dynamic-services" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>Pre-generated</p></th>
+<th class="head"><p>Dynamic</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Source</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">krpc/services/</span></code>, from <code class="docutils literal notranslate"><span class="pre">clientgen</span></code> and <code class="docutils literal notranslate"><span class="pre">python.tmpl</span></code> in <code class="docutils literal notranslate"><span class="pre">krpctools</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">create_service</span></code>, from <code class="docutils literal notranslate"><span class="pre">GetServices</span></code> at connect</p></td>
+</tr>
+<tr class="row-odd"><td><p>Used for</p></td>
+<td><p>Every service with a stub, by default</p></td>
+<td><p>Other services, or all with <code class="docutils literal notranslate"><span class="pre">use_pregenerated_stubs=False</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Class</p></td>
+<td><p>One per process, shared by every client</p></td>
+<td><p>One per client, in its <code class="docutils literal notranslate"><span class="pre">Types</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Static method</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">WrappedClass</span></code>, a per-client subclass</p></td>
+<td><p>Closure over the client</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul class="simple">
+<li><p>The stubs are optional. Without them, every service the server has is dynamic.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">clientgen</span></code> uses the Python client without pre-generated stubs.</p></li>
+<li><p>A connect registers the types of every service, then builds the services. The types come first as
+a procedure can use a type from any service. A parameter’s default value can also be an
+enumeration value, which cannot be decoded until that enumeration is registered.</p></li>
+<li><p>A structure decodes using the field types the server declares, with or without stubs. A stub only
+sets the Python class of the decoded value.</p></li>
+<li><p>Fields are only ever appended to a structure, so a server declaring fewer fields than the stub is
+older. The client then warns, and decodes the structure as a plain named tuple of the fields that
+server declares.</p></li>
+<li><p>A class member only the server declares goes on a per-client subclass of the stub class, as every
+client in the process shares the stub class.</p></li>
+</ul>
+</section>
+<section id="server-side-functions">
+<h2>Server Side Functions<a class="headerlink" href="#server-side-functions" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">compile</span></code>, <code class="docutils literal notranslate"><span class="pre">run</span></code>, <code class="docutils literal notranslate"><span class="pre">add_stream</span></code> and <code class="docutils literal notranslate"><span class="pre">add_event</span></code> take a Python function.
+<code class="docutils literal notranslate"><span class="pre">krpc/functioncompiler.py</span></code> and <code class="docutils literal notranslate"><span class="pre">krpc/functionstatements.py</span></code> compile its source, read with
+<code class="docutils literal notranslate"><span class="pre">inspect</span></code> and <code class="docutils literal notranslate"><span class="pre">ast</span></code>, into a <code class="docutils literal notranslate"><span class="pre">KRPC.Expression</span></code>.</p>
+<p>A function passed directly to <code class="docutils literal notranslate"><span class="pre">run</span></code> or <code class="docutils literal notranslate"><span class="pre">add_stream</span></code> compiles on every call, as a cached function
+would keep the values it first captured.</p>
+</section>
+<section id="transports">
+<h2>Transports<a class="headerlink" href="#transports" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">Connection</span></code> is TCP/IP, and <code class="docutils literal notranslate"><span class="pre">LocalConnection</span></code> is a unix domain socket. They differ only in
+<code class="docutils literal notranslate"><span class="pre">_open</span></code>, and there are no WebSockets or serial transports. Windows CPython has no
+<code class="docutils literal notranslate"><span class="pre">socket.AF_UNIX</span></code>, so <code class="docutils literal notranslate"><span class="pre">krpc/winsock.py</span></code> opens that socket through Winsock directly.</p>
+<p><code class="docutils literal notranslate"><span class="pre">timeout</span></code> bounds a TCP/IP connect only. <code class="docutils literal notranslate"><span class="pre">handshake_timeout</span></code> covers the whole handshake response.
+<code class="docutils literal notranslate"><span class="pre">stall_timeout</span></code> runs from the last byte received, while a message is part way through arriving.</p>
+</section>
+<section id="mapping-the-spec-to-python">
+<h2>Mapping the Spec to Python<a class="headerlink" href="#mapping-the-spec-to-python" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Spec</p></th>
+<th class="head"><p>Python</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Closing a connection</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Client.close()</span></code>, or the end of a <code class="docutils literal notranslate"><span class="pre">with</span></code> block</p></td>
+</tr>
+<tr class="row-odd"><td><p>Connection, stream, encoding error</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ConnectionError</span></code>, <code class="docutils literal notranslate"><span class="pre">StreamError</span></code>, <code class="docutils literal notranslate"><span class="pre">EncodingError</span></code> in <code class="docutils literal notranslate"><span class="pre">krpc.error</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Server error with no mapped type</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">krpc.error.RPCError</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Server exception with a mapped type</p></td>
+<td><p>A class on the service, deriving from the builtin in <code class="docutils literal notranslate"><span class="pre">types.NATIVE_EXCEPTIONS</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Null object, nullable value</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Member names</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">snake_case</span></code>, with <code class="docutils literal notranslate"><span class="pre">_</span></code> appended to a Python keyword</p></td>
+</tr>
+<tr class="row-even"><td><p>Waiting</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">threading.Condition</span></code>, held by the caller of <code class="docutils literal notranslate"><span class="pre">wait</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Interrupting a blocked thread</p></td>
+<td><p>Unsupported, as only the main thread can be interrupted, by <code class="docutils literal notranslate"><span class="pre">KeyboardInterrupt</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../client-design.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Client Design</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="csharp.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">C# Client Design</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal" tabindex="-1"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ownership">Ownership</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lifetime">Lifetime</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#threads">Threads</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pre-generated-and-dynamic-services">Pre-Generated and Dynamic Services</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#server-side-functions">Server Side Functions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#transports">Transports</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mapping-the-spec-to-python">Mapping the Spec to Python</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/client-design/python.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2015-2026, kRPC Org.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.1.
+  </p>
+</div>
+      
+    </div>
+  
+  
+    <div class="footer-items__center">
+      
+        <div class="footer-item">
+<p class="build-info" data-build-info-url="../build-info.json"></p></div>
+      
+    </div>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

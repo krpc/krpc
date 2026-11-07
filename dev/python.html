@@ -1169,7 +1169,8 @@ it is faster.</p>
     <span class="nb">print</span><span class="p">(</span><span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">get_status</span><span class="p">()</span><span class="o">.</span><span class="n">version</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><a class="reference internal" href="#krpc.client.Client.close" title="krpc.client.Client.close"><code class="xref py py-meth docutils literal notranslate"><span class="pre">close()</span></code></a> closes a connection explicitly.</p>
+<p><a class="reference internal" href="#krpc.client.Client.close" title="krpc.client.Client.close"><code class="xref py py-meth docutils literal notranslate"><span class="pre">close()</span></code></a> closes a connection explicitly. A connection you do not close stays
+open until your program exits, even when your program no longer holds it.</p>
 </section>
 </section>
 <section id="calling-remote-procedures">
@@ -1298,9 +1299,9 @@ returns a <a class="reference internal" href="#krpc.stream.Stream" title="krpc.s
 <p>Each call to <a class="reference internal" href="#krpc.client.Client.add_stream" title="krpc.client.Client.add_stream"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_stream()</span></code></a> creates another stream. A stream of a
 procedure with no return value, or of a property setter passed with <code class="docutils literal notranslate"><span class="pre">setattr</span></code>, runs the call on
 each update for its effects. Its value is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
-<p>A stream runs until you remove it with <a class="reference internal" href="#krpc.stream.Stream.remove" title="krpc.stream.Stream.remove"><code class="xref py py-meth docutils literal notranslate"><span class="pre">remove()</span></code></a>, your program drops its
-last reference to it, or the connection closes. Keep a reference to a stream for as long as you
-need its values or its callbacks. <a class="reference internal" href="#krpc.client.Client.stream" title="krpc.client.Client.stream"><code class="xref py py-meth docutils literal notranslate"><span class="pre">stream()</span></code></a> creates a stream in a
+<p>A stream runs until you remove it with <a class="reference internal" href="#krpc.stream.Stream.remove" title="krpc.stream.Stream.remove"><code class="xref py py-meth docutils literal notranslate"><span class="pre">remove()</span></code></a>, or the connection
+closes. It keeps running after your program drops its last reference to it, so remove a stream you
+no longer need. <a class="reference internal" href="#krpc.client.Client.stream" title="krpc.client.Client.stream"><code class="xref py py-meth docutils literal notranslate"><span class="pre">stream()</span></code></a> creates a stream in a
 <code class="docutils literal notranslate"><span class="pre">with</span></code> statement, which removes it at the end of the block:</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
 
@@ -1573,8 +1574,7 @@ not missed.</p>
 <p>An event ends in the same ways as a <a class="reference internal" href="#python-client-stream-endings"><span class="std std-ref">stream</span></a>. Waiting on an
 event that has ended raises the exception that ended it.</p>
 <p>When the event fires just before the server ends it, your next wait returns for that firing first.
-Removing the event, dropping your program’s last reference to it, or closing the connection, ends
-it at once.</p>
+Removing the event or closing the connection ends it at once.</p>
 <p><a class="reference internal" href="#krpc.event.Event.add_end_callback" title="krpc.event.Event.add_end_callback"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_end_callback()</span></code></a> adds a callback that is called once when the event ends,
 with the exception, just like an ordinary stream.</p>
 </section>

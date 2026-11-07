@@ -1198,7 +1198,8 @@ it is faster.</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p><a class="reference internal" href="#function-KRPC.Client.Connection.Dispose" title="function: KRPC.Client.Connection.Dispose"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Dispose</span></code></a> closes a connection explicitly.</p>
+<p><a class="reference internal" href="#function-KRPC.Client.Connection.Dispose" title="function: KRPC.Client.Connection.Dispose"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Dispose</span></code></a> closes a connection explicitly. A connection you do not close
+stays open until your program exits, even when your program no longer holds it.</p>
 </section>
 </section>
 <section id="calling-remote-procedures">
@@ -1356,9 +1357,9 @@ update.</p>
 <p>Each call to <a class="reference internal" href="#function-KRPC.Client.Connection.AddStream" title="function: KRPC.Client.Connection.AddStream"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">AddStream</span></code></a> creates another stream. A lambda with no
 value, such as a call to a procedure with no return value, streams as a
 <a class="reference internal" href="#class-KRPC.Client.Stream" title="class: KRPC.Client.Stream"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">Stream</span></code></a> with no type parameter. It runs on each update for its effects.</p>
-<p>A stream runs until you remove it with <a class="reference internal" href="#function-KRPC.Client.Stream.Remove" title="function: KRPC.Client.Stream.Remove"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Remove</span></code></a>, your program drops its
-last reference to it, or the connection closes. Keep a reference to a stream for as long as you
-need its values or its callbacks.</p>
+<p>A stream runs until you remove it with <a class="reference internal" href="#function-KRPC.Client.Stream.Remove" title="function: KRPC.Client.Stream.Remove"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Remove</span></code></a>, or the connection
+closes. It keeps running after your program drops its last reference to it, so remove a stream you
+no longer need.</p>
 <p>By default, the server sends a stream’s value each time it changes. Set
 <a class="reference internal" href="#property-KRPC.Client.Stream.Rate" title="property: KRPC.Client.Stream.Rate"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Rate</span></code></a> to limit how many times a second the stream updates:</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client</span><span class="p">;</span>
@@ -1674,8 +1675,7 @@ firing between two waits is not missed.</p>
 <p>An event ends in the same ways as a <a class="reference internal" href="#csharp-client-stream-endings"><span class="std std-ref">stream</span></a>. Waiting on an
 event that has ended throws the exception that ended it.</p>
 <p>When the event fires just before the server ends it, your next wait returns for that firing first.
-Removing the event, dropping your program’s last reference to it, or closing the connection, ends
-it at once.</p>
+Removing the event or closing the connection ends it at once.</p>
 <p><a class="reference internal" href="#function-KRPC.Client.Event.AddEndCallback" title="function: KRPC.Client.Event.AddEndCallback"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">AddEndCallback</span></code></a> adds a callback that is called once when the event ends,
 with the exception, just like an ordinary stream.</p>
 </section>

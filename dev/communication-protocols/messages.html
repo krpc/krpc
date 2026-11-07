@@ -59,7 +59,7 @@
     <link rel="icon" href="../_static/logo-mark.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Client Specification" href="../client-spec.html" />
+    <link rel="next" title="Client Design" href="../client-design.html" />
     <link rel="prev" title="Serial IO" href="serialio.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
@@ -446,6 +446,15 @@
 <li class="toctree-l2"><a class="reference internal" href="websockets.html">WebSockets</a></li>
 <li class="toctree-l2"><a class="reference internal" href="serialio.html">Serial IO</a></li>
 <li class="toctree-l2 current active"><a aria-current="page" class="current reference internal" href="#">Messaging</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../client-design.html">Client Design</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../client-design/python.html">Python Client Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-design/csharp.html">C# Client Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-design/cpp.html">C++ Client Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-design/cnano.html">C-nano Client Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-design/java.html">Java Client Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-design/lua.html">Lua Client Design</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../client-spec.html">Client Specification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -1428,6 +1437,9 @@ properties make remote procedure calls to the server. Object identifiers have ty
 <p>The <code class="docutils literal notranslate"><span class="pre">is_null</span></code> field of the <code class="docutils literal notranslate"><span class="pre">ProcedureResult</span></code> or <code class="docutils literal notranslate"><span class="pre">Argument</span></code> message signals a null object
 reference, as it does a null value of any other type. The object identifier is never used to
 represent null on the wire.</p>
+<p>The server never issues the object identifier 0, and clients can rely on this. The C++ and C-nano
+clients represent an object that refers to nothing in their own APIs as an object with identifier
+0, so 0 must never become a valid identifier.</p>
 </section>
 </section>
 
@@ -1451,11 +1463,11 @@ represent null on the wire.</p>
       </div>
     </a>
     <a class="right-next"
-       href="../client-spec.html"
+       href="../client-design.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Client Specification</p>
+        <p class="prev-next-title">Client Design</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

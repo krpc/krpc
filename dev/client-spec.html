@@ -60,7 +60,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Conformance Tests" href="client-spec/conformance.html" />
-    <link rel="prev" title="Messaging" href="communication-protocols/messages.html" />
+    <link rel="prev" title="Lua Client Design" href="client-design/lua.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
@@ -448,6 +448,15 @@
 <li class="toctree-l2"><a class="reference internal" href="communication-protocols/messages.html">Messaging</a></li>
 </ul>
 </details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="client-design.html">Client Design</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="client-design/python.html">Python Client Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client-design/csharp.html">C# Client Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client-design/cpp.html">C++ Client Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client-design/cnano.html">C-nano Client Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client-design/java.html">Java Client Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client-design/lua.html">Lua Client Design</a></li>
+</ul>
+</details></li>
 <li class="toctree-l1 current active has-children"><a aria-current="page" class="current reference internal" href="#">Client Specification</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="client-spec/conformance.html">Conformance Tests</a></li>
 <li class="toctree-l2"><a class="reference internal" href="client-spec/testserver.html">Test Server</a></li>
@@ -544,6 +553,11 @@ requirement is a change to its test, so the two cannot drift apart. The tests ru
 <a class="reference internal" href="client-spec/testserver.html"><span class="doc">TestServer</span></a>, a server that runs without the game.</p>
 <p>This specification is versioned with kRPC. The conformance tests in the <code class="docutils literal notranslate"><span class="pre">krpctools</span></code> package of
 a release check the specification of that release.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="client-design.html"><span class="doc">Client Design</span></a> covers how the kRPC clients are built, for
+ideas when designing your own.</p>
+</div>
 <section id="requirements">
 <h2>Requirements<a class="headerlink" href="#requirements" title="Link to this heading">#</a></h2>
 <p>Each requirement has an id of the form <code class="docutils literal notranslate"><span class="pre">&lt;area&gt;-&lt;name&gt;</span></code>, such as <code class="docutils literal notranslate"><span class="pre">streams-wait</span></code>. The area is one
@@ -683,12 +697,12 @@ reason recorded in its documentation.</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="communication-protocols/messages.html"
+       href="client-design/lua.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Messaging</p>
+        <p class="prev-next-title">Lua Client Design</p>
       </div>
     </a>
     <a class="right-next"
