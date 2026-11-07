@@ -81,6 +81,9 @@ Closing the Connection
 
 .. literalinclude:: /scripts/lua/Connecting3.lua
 
+A connection you do not close stays open until the garbage collector collects it, or your program
+exits.
+
 Calling Remote Procedures
 -------------------------
 

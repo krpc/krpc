@@ -22,11 +22,18 @@ import subprocess
 import sys
 import threading
 import time
+import traceback
 import urllib.error
 import urllib.request
 import webbrowser
 
-from watchdog.events import FileSystemEventHandler
+from watchdog.events import (
+    EVENT_TYPE_CREATED,
+    EVENT_TYPE_DELETED,
+    EVENT_TYPE_MODIFIED,
+    EVENT_TYPE_MOVED,
+    FileSystemEventHandler,
+)
 from watchdog.observers import Observer
 
 # Kept out of bazel-bin/doc/serve* so they don't collide with the `serve` binary
@@ -34,6 +41,17 @@ from watchdog.observers import Observer
 SRC = os.path.join("bazel-bin", "doc", "srcs")
 STAGE = os.path.join("bazel-bin", "doc", "srcs-stage")
 OUT = os.path.join("bazel-bin", "doc", "srcs-serve-out")
+
+# How long the sources must stay unchanged before a stage update
+QUIET_SECONDS = 0.5
+
+# Reading a file also raises events, so we select the types that change one
+CHANGE_EVENT_TYPES = {
+    EVENT_TYPE_CREATED,
+    EVENT_TYPE_DELETED,
+    EVENT_TYPE_MODIFIED,
+    EVENT_TYPE_MOVED,
+}
 
 
 def targets_to_paths(targets):
@@ -88,9 +106,8 @@ def update_stage(strict=False):
 
     A failed rebuild (e.g. a source file saved mid-edit) is not fatal while
     watching: keep serving the previous build and try again on the next change.
-    An exception here would otherwise kill the watchdog emitter thread and
-    silently stop all future rebuilds. The initial build is strict so a broken
-    checkout doesn't silently serve empty or stale docs.
+    The initial build is strict so a broken checkout doesn't silently serve empty
+    or stale docs.
     """
     try:
         subprocess.check_call(["bazel", "build", "//doc:srcs"])
@@ -131,10 +148,28 @@ def update_stage(strict=False):
 
 
 class UpdateStagedFiles(FileSystemEventHandler):
-    """Rebuilds via bazel then updates the stage directory on any change"""
+    """Runs one stage update for each batch of file changes"""
 
-    def on_modified(self, event):
-        update_stage()
+    def __init__(self):
+        self.changed = threading.Event()
+        threading.Thread(target=self.update_on_change, daemon=True).start()
+
+    def on_any_event(self, event):
+        if event.event_type in CHANGE_EVENT_TYPES:
+            self.changed.set()
+
+    def update_on_change(self):
+        while True:
+            self.changed.wait()
+            # Wait for the changes to stop
+            while self.changed.is_set():
+                self.changed.clear()
+                time.sleep(QUIET_SECONDS)
+            # Keep the update thread alive, so the next change tries again
+            try:
+                update_stage()
+            except Exception:
+                traceback.print_exc()
 
 
 def watch_roots(dependencies):

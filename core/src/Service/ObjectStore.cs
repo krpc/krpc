@@ -8,6 +8,7 @@ namespace KRPC.Service
     {
         readonly IDictionary<object, ulong> instances = new Dictionary<object, ulong> ();
         readonly IDictionary<ulong, object> objectIds = new Dictionary<ulong, object> ();
+        // Must never issue 0. The C++ and C-nano clients use it for an object that refers to nothing
         ulong nextObjectId = 1;
         static ObjectStore instance;
 

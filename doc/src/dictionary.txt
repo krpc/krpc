@@ -229,3 +229,12 @@ waypoint
 waypoints
 websockets
 winsock
+undecoded
+malloc
+unclosed
+coroutine
+luacheck
+schemas
+protoc
+CPython
+waker

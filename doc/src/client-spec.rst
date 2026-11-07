@@ -14,6 +14,11 @@ requirement is a change to its test, so the two cannot drift apart. The tests ru
 This specification is versioned with kRPC. The conformance tests in the ``krpctools`` package of
 a release check the specification of that release.
 
+.. seealso::
+
+   :doc:`Client Design <client-design>` covers how the kRPC clients are built, for
+   ideas when designing your own.
+
 Requirements
 ------------
 
