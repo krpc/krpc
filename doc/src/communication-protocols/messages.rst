@@ -815,3 +815,7 @@ When a procedure returns a proxy object or takes one as a parameter, the type co
 The ``is_null`` field of the ``ProcedureResult`` or ``Argument`` message signals a null object
 reference, as it does a null value of any other type. The object identifier is never used to
 represent null on the wire.
+
+The server never issues the object identifier 0, and clients can rely on this. The C++ and C-nano
+clients represent an object that refers to nothing in their own APIs as an object with identifier
+0, so 0 must never become a valid identifier.

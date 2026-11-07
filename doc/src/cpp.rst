@@ -616,7 +616,7 @@ Client API Reference
 
    The identifier of a remote object on the server, e.g. to pass to
    :func:`~krpc::services::KRPC::Expression::constant_object`. Throws ``std::invalid_argument`` for
-   a null object, whose identifier is 0.
+   a default-constructed object, whose identifier is 0.
 
 .. class:: template <typename T> Stream
 
