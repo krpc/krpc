@@ -46,6 +46,7 @@ NUGET
     runtime.osx-arm64.runtime.native.System.IO.Ports (10.0.14) - restriction: == net10.0
     runtime.osx-x64.runtime.native.System.IO.Ports (10.0.14) - restriction: == net10.0
     System.Buffers (4.4) - restriction: || (&& (== net10.0) (>= monotouch)) (&& (== net10.0) (>= net461)) (&& (== net10.0) (< net8.0) (>= xamarinios)) (&& (== net10.0) (< net8.0) (>= xamarinmac)) (&& (== net10.0) (< net8.0) (>= xamarintvos)) (&& (== net10.0) (< net8.0) (>= xamarinwatchos)) (&& (== net10.0) (< netcoreapp2.0)) (&& (== net10.0) (< netstandard1.1)) (&& (== net10.0) (< netstandard2.0)) (== netstandard2.0)
+    System.CommandLine (2.0.14) - restriction: == net10.0
     System.Diagnostics.EventLog (6.0) - restriction: == net10.0
     System.IO.Ports (10.0.14) - restriction: == net10.0
       runtime.native.System.IO.Ports (>= 10.0.14)

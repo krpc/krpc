@@ -8,6 +8,7 @@ nuget Microsoft.CodeAnalysis.NetAnalyzers 10.0.403
 nuget Newtonsoft.Json 13.0.4
 
 nuget Moq 4.21.0 framework: net10.0
+nuget System.CommandLine 2.0.14 framework: net10.0
 nuget System.IO.Ports 10.0.14 framework: net10.0
 
 group tools

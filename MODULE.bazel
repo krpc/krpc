@@ -255,15 +255,6 @@ http_archive(
     url = "https://www.nuget.org/api/v2/package/Google.Protobuf/3.10.1",
 )
 
-# Note: this package holds its assembly directly under lib/, a location nuget_repo skips
-http_archive(
-    name = "csharp_options",
-    build_file_content = "exports_files(['lib/NDesk.Options.dll'])",
-    sha256 = "0fa76d0ed1eb9fba757b0aa677903e1b8873735eec136a51dde24eda57d10c61",
-    type = "zip",
-    url = "https://www.nuget.org/api/v2/package/NDesk.Options/0.2.1",
-)
-
 http_file(
     name = "csharp_krpc_io_ports",
     downloaded_file_path = "KRPC.IO.Ports.dll",

@@ -11,8 +11,8 @@ license_text = """This license (LGPL v3) applies to all parts of krpctools excep
   - Newtonsoft.Json.dll, in krpctools/bin/, is under the MIT license.
     See https://www.nuget.org/packages/Newtonsoft.Json/
 
-  - NDesk.Options.dll, in krpctools/bin/, is under the MIT license.
-    See https://www.nuget.org/packages/NDesk.Options/
+  - System.CommandLine.dll, in krpctools/bin/, is under the MIT license.
+    See https://www.nuget.org/packages/System.CommandLine/
 
   - Google.Protobuf.dll, in krpctools/bin/, is from Google's protobuf project.
     See LICENSE.protobuf
@@ -120,6 +120,8 @@ py_wheel(
     exclude = [
         "*.pdb",
         "*.repo_mapping",
+        # The translations of System.CommandLine's messages. The tools fall back to English.
+        "*.resources.dll",
         "*.runfiles_manifest",
     ] + [
         # An apphost takes the .exe extension when built on Windows

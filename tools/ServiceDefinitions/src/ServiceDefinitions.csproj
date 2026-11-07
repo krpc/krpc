@@ -20,13 +20,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="NDesk.Options">
-      <HintPath>$(bazel-external)\+http_archive+csharp_options\lib\NDesk.Options.dll</HintPath>
-    </Reference>
+    <PackageReference Include="System.CommandLine" Version="2.0.14" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(bazel-bin)\tools\ServiceDefinitions\AssemblyInfo.cs">
       <Link>AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\CommandLine\ToolCommandLine.cs">
+      <Link>ToolCommandLine.cs</Link>
     </Compile>
     <Compile Include="Program.cs" />
   </ItemGroup>

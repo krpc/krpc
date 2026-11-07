@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.CommandLine;
 using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -10,121 +10,108 @@ using KRPC;
 using KRPC.Server;
 using KRPC.Server.TCP;
 using KRPC.Service;
+using KRPC.Tools;
 using KRPC.Utils;
-using NDesk.Options;
 using SerialPorts = System.IO.Ports;
 
 namespace TestServer
 {
     static class MainClass
     {
-        static void Help (OptionSet options)
+        static readonly Option<string> typeOption = new Option<string> ("--type") {
+            Description = "Type of server to run. Either protobuf, websockets, websockets-echo, serialio or localsocket, or several separated by commas, each of a different transport.",
+            DefaultValueFactory = _ => "protobuf"
+        };
+        static readonly Option<string> bindOption = new Option<string> ("--bind") {
+            Description = "For TCP based protocols, the address to bind the server to. If unspecified, the loopback address is used (127.0.0.1).",
+            DefaultValueFactory = _ => "127.0.0.1"
+        };
+        static readonly Option<ushort> tcpipPortOption = new Option<ushort> ("--tcpip-port") {
+            Description = "For the protobuf protocol, the port number to use. If unspecified, use an ephemeral port."
+        };
+        static readonly Option<ushort> websocketsPortOption = new Option<ushort> ("--websockets-port") {
+            Description = "For the websockets protocols, the port number to use. If unspecified, use an ephemeral port."
+        };
+        static readonly Option<string> localsocketPathOption = new Option<string> ("--localsocket-path") {
+            Description = "For local socket protocols, the path of the socket to use.",
+            DefaultValueFactory = _ => string.Empty
+        };
+        static readonly Option<string> serialioPortOption = new Option<string> ("--serialio-port") {
+            Description = "For SerialIO based protocols, the port name to communicate on.",
+            DefaultValueFactory = _ => string.Empty
+        };
+        static readonly Option<uint> baudRateOption = new Option<uint> ("--baud-rate") {
+            Description = "For SerialIO based protocols, the baud rate.",
+            DefaultValueFactory = _ => 9600
+        };
+        static readonly Option<ushort> dataBitsOption = new Option<ushort> ("--data-bits") {
+            Description = "For SerialIO based protocols, the number of data bits.",
+            DefaultValueFactory = _ => 8
+        };
+        static readonly Option<SerialPorts.Parity> parityOption = new Option<SerialPorts.Parity> ("--parity") {
+            Description = "For SerialIO based protocols, the parity.",
+            DefaultValueFactory = _ => SerialPorts.Parity.None
+        };
+        static readonly Option<SerialPorts.StopBits> stopBitsOption = new Option<SerialPorts.StopBits> ("--stop-bits") {
+            Description = "For SerialIO based protocols, the number of stop bits.",
+            DefaultValueFactory = _ => SerialPorts.StopBits.One
+        };
+        static readonly Option<bool> debugOption = new Option<bool> ("--debug") {
+            Description = "Set log level to 'debug', defaults to 'info'"
+        };
+        static readonly Option<bool> quietOption = new Option<bool> ("--quiet") {
+            Description = "Set log level to 'warning'"
+        };
+        static readonly Option<bool> serverDebugOption = new Option<bool> ("--server-debug") {
+            Description = "Output debug information about the server"
+        };
+        static readonly Option<bool> noFramePacingOption = new Option<bool> ("--no-frame-pacing") {
+            Description = "Run the update loop as fast as it will go, rather than pacing it to 60 updates a second, and turn adaptive rate control off with it. For timing a client: paced, a call whose client takes longer than the receive timeout to send the next one is served once per update, so the round trip measures the update rate rather than the client."
+        };
+
+        public static int Main (string[] args)
         {
-            Console.WriteLine ("usage: TestServer.exe [-h] [-v] [--type=TYPE]");
-            Console.WriteLine ("                      [--bind=ADDRESS] [--tcpip-port=VALUE]");
-            Console.WriteLine ("                      [--localsocket-path=PATH] [--serialio-port=NAME]");
-            Console.WriteLine ("                      [--no-frame-pacing]");
-            Console.WriteLine ("                      [--debug] [--quiet] [--server-debug]");
-            Console.WriteLine ();
-            Console.WriteLine ("A kRPC test server for the client library unit tests");
-            Console.WriteLine ();
-            options.WriteOptionDescriptions (Console.Out);
+            var root = new RootCommand ("A kRPC test server for the client library unit tests") {
+                typeOption,
+                bindOption,
+                tcpipPortOption,
+                websocketsPortOption,
+                localsocketPathOption,
+                serialioPortOption,
+                baudRateOption,
+                dataBitsOption,
+                parityOption,
+                stopBitsOption,
+                debugOption,
+                quietOption,
+                serverDebugOption,
+                noFramePacingOption
+            };
+            root.SetAction (Run);
+            return ToolCommandLine.Invoke (root, args);
         }
 
-        public static void Main (string[] args)
+        static void Run (ParseResult result)
         {
-            bool showHelp = false;
-            bool showVersion = false;
-
             Logger.Format = "{0:G} - {1} - {2}";
             Logger.Enabled = true;
             Logger.Level = Logger.Severity.Info;
-            bool serverDebug = false;
-            bool framePacing = true;
-            string type = "protobuf";
-            string bind = "127.0.0.1";
-            ushort tcpipPort = 0;
-            ushort websocketsPort = 0;
-            string serialioPort = string.Empty;
-            string localsocketPath = string.Empty;
-            uint baudRate = 9600;
-            ushort dataBits = 8;
-            SerialPorts.Parity parity = SerialPorts.Parity.None;
-            SerialPorts.StopBits stopBits = SerialPorts.StopBits.One;
-
-            var options = new OptionSet { {
-                    "h|help", "show this help message and exit",
-                    v => showHelp = v != null
-                }, {
-                    "v|version", "show program's version number and exit",
-                    v => showVersion = v != null
-                }, {
-                    "type=", "Type of server to run. Either protobuf, websockets, websockets-echo, serialio or localsocket, or several separated by commas, each of a different transport.",
-                    v => type = v
-                }, {
-                    "bind=", "For TCP based protocols, the address to bind the server to. If unspecified, the loopback address is used (127.0.0.1).",
-                    v => bind = v
-                }, {
-                    "tcpip-port=", "For the protobuf protocol, the port number to use. If unspecified, use an ephemeral port.",
-                    (ushort v) => tcpipPort = v
-                }, {
-                    "websockets-port=", "For the websockets protocols, the port number to use. If unspecified, use an ephemeral port.",
-                    (ushort v) => websocketsPort = v
-                }, {
-                    "localsocket-path=", "For local socket protocols, the path of the socket to use.",
-                    v => localsocketPath = v
-                }, {
-                    "serialio-port=", "For SerialIO based protocols, the port name to communicate on.",
-                    v => serialioPort = v
-                }, {
-                    "baud-rate=", "For SerialIO based protocols, the baud rate.",
-                    (uint v) => baudRate = v
-                }, {
-                    "data-bits=", "For SerialIO based protocols, the number of data bits.",
-                    (ushort v) => dataBits = v
-                }, {
-                    "parity=", "For SerialIO based protocols, the parity.",
-                    (SerialPorts.Parity v) => parity = v
-                }, {
-                    "stop-bits=", "For SerialIO based protocols, the number of stop bits.",
-                    (SerialPorts.StopBits v) => stopBits = v
-                }, {
-                    "debug", "Set log level to 'debug', defaults to 'info'",
-                    v => {
-                        if (v != null) {
-                            Logger.Enabled = true;
-                            Logger.Level = Logger.Severity.Debug;
-                        }
-                    }
-                }, { "quiet", "Set log level to 'warning'",
-                    v => {
-                        if (v != null) {
-                            Logger.Enabled = true;
-                            Logger.Level = Logger.Severity.Warning;
-                        }
-                    }
-                }, {
-                    "server-debug", "Output debug information about the server",
-                    v => serverDebug = v != null
-                }, {
-                    "no-frame-pacing", "Run the update loop as fast as it will go, rather than pacing it to 60 updates a second, and turn adaptive rate control off with it. For timing a client: paced, a call whose client takes longer than the receive timeout to send the next one is served once per update, so the round trip measures the update rate rather than the client.",
-                    v => framePacing = v == null
-                }
-            };
-            options.Parse (args);
-
-            if (showHelp) {
-                Help (options);
-                return;
-            }
-
-            if (showVersion) {
-                var assembly = Assembly.GetEntryAssembly ();
-                var info = FileVersionInfo.GetVersionInfo (assembly.Location);
-                var version = string.Format (CultureInfo.InvariantCulture, "{0}.{1}.{2}", info.FileMajorPart, info.FileMinorPart, info.FileBuildPart);
-                Console.WriteLine ("TestServer.exe version " + version);
-                return;
-            }
+            if (result.GetValue (debugOption))
+                Logger.Level = Logger.Severity.Debug;
+            if (result.GetValue (quietOption))
+                Logger.Level = Logger.Severity.Warning;
+            bool serverDebug = result.GetValue (serverDebugOption);
+            bool framePacing = !result.GetValue (noFramePacingOption);
+            string type = result.GetValue (typeOption);
+            string bind = result.GetValue (bindOption);
+            ushort tcpipPort = result.GetValue (tcpipPortOption);
+            ushort websocketsPort = result.GetValue (websocketsPortOption);
+            string serialioPort = result.GetValue (serialioPortOption);
+            string localsocketPath = result.GetValue (localsocketPathOption);
+            uint baudRate = result.GetValue (baudRateOption);
+            ushort dataBits = result.GetValue (dataBitsOption);
+            SerialPorts.Parity parity = result.GetValue (parityOption);
+            SerialPorts.StopBits stopBits = result.GetValue (stopBitsOption);
 
             // Services are found by scanning the assemblies that are loaded, and the runtime
             // does not load one until something in it is used. Nothing in this program calls

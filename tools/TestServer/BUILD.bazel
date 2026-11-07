@@ -27,6 +27,7 @@ srcs = [
 # bundled stubs therefore lack them, and a client has to pick them up from the definitions
 # the server sends at connect
 exe_srcs = srcs + [
+    "//tools/CommandLine:ToolCommandLine.cs",
     "src/Program.cs",
     "src/TestService2.cs",
     "src/TestServiceExtensions.cs",
@@ -37,8 +38,8 @@ exe_deps = [
     # The benchmark service, which the server exposes alongside TestService
     "//tools/benchmarks:KRPC.Benchmark.net10",
     "@paket.main//google.protobuf",
+    "@paket.main//system.commandline",
     "@paket.main//system.io.ports",
-    "//tools/build/dotnet:NDesk.Options",
 ]
 
 csharp_binary(
