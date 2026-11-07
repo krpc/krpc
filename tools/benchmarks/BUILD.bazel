@@ -36,7 +36,7 @@ csharp_library(
     warning_level = 4,
     deps = [
         "//core:KRPC.Core.net10",
-        "//tools/build/dotnet:Google.Protobuf",
+        "@paket.main//google.protobuf",
     ],
 )
 

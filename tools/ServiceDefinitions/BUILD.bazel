@@ -17,7 +17,7 @@ csharp_binary(
     deps = [
         "//core:KRPC.Core.net10",
         "//tools/build/dotnet:NDesk.Options",
-        "//tools/build/dotnet:Newtonsoft.Json",
+        "@paket.main//newtonsoft.json",
     ],
 )
 

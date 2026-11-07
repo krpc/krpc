@@ -1,32 +1,29 @@
 load("@rules_dotnet//dotnet:defs.bzl", "import_dll", "import_library")
+load("@rules_python//python:defs.bzl", "py_binary", "py_test")
+load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
 
 package(default_visibility = ["//visibility:public"])
 
-# NuGet library DLLs, pinned as http_archives in MODULE.bazel. Targets built
-# for modern .NET (net10.0) use the plain-named imports. The client library,
-# built for netstandard2.0, uses Google.Protobuf.netstandard2.0. The mod itself
-# uses the assets in //tools/build/ksp, which are pinned to versions compatible
-# with KSP's version of Unity.
+# The NuGet packages are the targets of @paket.main, for example @paket.main//google.protobuf.
+# They are listed in paket.dependencies. The mod itself uses the assets in //tools/build/ksp,
+# which are pinned to versions compatible with KSP's version of Unity.
 
-import_dll(
-    name = "Google.Protobuf",
-    dll = "@csharp_protobuf//:lib/net8.0/Google.Protobuf.dll",
+exports_files(["analyzers.globalconfig"])
+
+# Google.Protobuf for the netstandard2.0 client library. It compiles against the
+# netstandard2.0 asset, with the System.Memory and Unsafe references that asset
+# needs. It runs on the net8.0 asset, the one NuGet gives a .NET 10 program.
+# The target framework of a @paket.main target applies to both compiling and running.
+import_library(
+    name = "Google.Protobuf.netstandard2.0",
+    library_name = "Google.Protobuf",
+    libs = ["@nuget.google.protobuf.v3.36.2//:lib/net8.0/Google.Protobuf.dll"],
+    refs = [
+        "@nuget.google.protobuf.v3.36.2//:lib/netstandard2.0/Google.Protobuf.dll",
+        "@nuget.system.memory.v4.5.3//:lib/netstandard2.0/System.Memory.dll",
+        "@nuget.system.runtime.compilerservices.unsafe.v4.5.2//:lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll",
+    ],
     version = "3.36.2",
-)
-
-import_dll(
-    name = "Newtonsoft.Json",
-    dll = "@csharp_json//:lib/net6.0/Newtonsoft.Json.dll",
-)
-
-import_dll(
-    name = "Moq",
-    dll = "@csharp_moq//:lib/net6.0/Moq.dll",
-)
-
-import_dll(
-    name = "Castle.Core",
-    dll = "@csharp_castle_core//:lib/net6.0/Castle.Core.dll",
 )
 
 import_dll(
@@ -34,49 +31,58 @@ import_dll(
     dll = "@csharp_options//:lib/NDesk.Options.dll",
 )
 
-# Google.Protobuf for the netstandard2.0 client library. It compiles against the
-# netstandard2.0 asset, with the System.Memory and Unsafe references that asset
-# needs. It runs on the net8.0 asset, the one NuGet gives a .NET 10 program.
-import_library(
-    name = "Google.Protobuf.netstandard2.0",
-    library_name = "Google.Protobuf",
-    libs = ["@csharp_protobuf//:lib/net8.0/Google.Protobuf.dll"],
-    refs = [
-        "@csharp_protobuf//:lib/netstandard2.0/Google.Protobuf.dll",
-        "@csharp_system_memory//:lib/netstandard2.0/System.Memory.dll",
-        "@csharp_system_runtime_compilerservices_unsafe//:lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll",
+# Run after editing paket.dependencies, to regenerate paket.lock and the paket.*.bzl files
+py_binary(
+    name = "update",
+    srcs = ["update.py"],
+    args = [
+        "--paket=$(rlocationpath @paket.tools//paket/tools:paket)",
+        "--paket2bazel=$(rlocationpath @rules_dotnet//tools/paket2bazel)",
     ],
-    version = "3.36.2",
-)
-
-# The runtime assembly of System.IO.Ports is the build for the target RID, and on Linux needs
-# the native shim. The lib/ assembly throws on every call, and is only compiled against.
-import_library(
-    name = "System.IO.Ports",
-    library_name = "System.IO.Ports",
-    libs = select({
-        "@rules_dotnet//dotnet:rid_unix": ["@csharp_system_io_ports//:runtimes/unix/lib/net10.0/System.IO.Ports.dll"],
-        "@rules_dotnet//dotnet:rid_win": ["@csharp_system_io_ports//:runtimes/win/lib/net10.0/System.IO.Ports.dll"],
-        "//conditions:default": ["@csharp_system_io_ports//:lib/net10.0/System.IO.Ports.dll"],
-    }),
-    native = select({
-        "@rules_dotnet//dotnet:rid_linux-x64": ["@csharp_system_io_ports_native_linux_x64//:runtimes/linux-x64/native/libSystem.IO.Ports.Native.so"],
-        "//conditions:default": [],
-    }),
-    refs = ["@csharp_system_io_ports//:lib/net10.0/System.IO.Ports.dll"],
-    version = "10.0.14",
-)
-
-# The .NET code analyzers, run on every C# target through //tools/build:csharp.bzl.
-# The rules they report are set in analyzers.globalconfig.
-import_library(
-    name = "NetAnalyzers",
-    analyzers_csharp = [
-        "@csharp_netanalyzers//:analyzers/dotnet/cs/Microsoft.CodeAnalysis.NetAnalyzers.dll",
-        "@csharp_netanalyzers//:analyzers/dotnet/cs/Microsoft.CodeAnalysis.CSharp.NetAnalyzers.dll",
+    data = [
+        "@paket.tools//paket/tools:paket",
+        "@rules_dotnet//tools/paket2bazel",
     ],
-    library_name = "Microsoft.CodeAnalysis.NetAnalyzers",
-    version = "10.0.403",
+    deps = ["@rules_python//python/runfiles"],
 )
 
-exports_files(["analyzers.globalconfig"])
+# Checks the NuGet versions written by hand against paket.lock, as a stale version in an
+# import_library or a nuget_package still builds
+py_test(
+    name = "versions-test",
+    size = "small",
+    srcs = ["check_versions.py"],
+    args = [
+        "$(rootpath paket.main.bzl)",
+        "$(rootpath BUILD.bazel)",
+        "$(rootpath //:MODULE.bazel)",
+        "$(rootpath //client/csharp:BUILD.bazel)",
+    ],
+    data = [
+        "BUILD.bazel",
+        "paket.main.bzl",
+        "//:MODULE.bazel",
+        "//client/csharp:BUILD.bazel",
+    ],
+    main = "check_versions.py",
+)
+
+py_ruff_test(
+    name = "ruff",
+    size = "small",
+    srcs = [
+        "check_versions.py",
+        "update.py",
+    ],
+)
+
+py_pyright_test(
+    name = "pyright",
+    size = "medium",
+    srcs = [
+        "check_versions.py",
+        "update.py",
+    ],
+    python_version = "3.12",
+    deps = ["@rules_python//python/runfiles"],
+)

@@ -36,8 +36,8 @@ exe_deps = [
     "//core:KRPC.Core.net10",
     # The benchmark service, which the server exposes alongside TestService
     "//tools/benchmarks:KRPC.Benchmark.net10",
-    "//tools/build/dotnet:Google.Protobuf",
-    "//tools/build/dotnet:System.IO.Ports",
+    "@paket.main//google.protobuf",
+    "@paket.main//system.io.ports",
     "//tools/build/dotnet:NDesk.Options",
 ]
 
@@ -91,7 +91,7 @@ csharp_library(
     warning_level = 4,
     deps = [
         "//core:KRPC.Core.net10",
-        "//tools/build/dotnet:Google.Protobuf",
+        "@paket.main//google.protobuf",
     ],
 )
 
@@ -123,7 +123,7 @@ csharp_library(
     warning_level = 4,
     deps = [
         "//core:KRPC.Core.net10",
-        "//tools/build/dotnet:Google.Protobuf",
+        "@paket.main//google.protobuf",
     ],
 )
 

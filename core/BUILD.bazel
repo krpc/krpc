@@ -80,8 +80,8 @@ csharp_library(
     visibility = ["//visibility:public"],
     warning_level = 4,
     deps = [
-        "//tools/build/dotnet:Google.Protobuf",
-        "//tools/build/dotnet:System.IO.Ports",
+        "@paket.main//google.protobuf",
+        "@paket.main//system.io.ports",
     ],
 )
 
@@ -140,11 +140,10 @@ csharp_nunit_test(
     visibility = ["//:__pkg__"],
     deps = [
         ":KRPC.Core.net10",
-        "//tools/build/dotnet:Castle.Core",
-        "//tools/build/dotnet:Google.Protobuf",
-        "//tools/build/dotnet:Moq",
-        "//tools/build/dotnet:Newtonsoft.Json",
-        "//tools/build/dotnet:System.IO.Ports",
+        "@paket.main//google.protobuf",
+        "@paket.main//moq",
+        "@paket.main//newtonsoft.json",
+        "@paket.main//system.io.ports",
     ],
 )
 

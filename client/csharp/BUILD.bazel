@@ -9,6 +9,7 @@ load("//tools/krpctools:clientgen.bzl", "clientgen_dispatch", "clientgen_service
 load("//tools/krpctools:services.bzl", "SERVICES")
 
 exports_files([
+    "BUILD.bazel",
     "CHANGELOG.md",
     "conformance/expected-failures.txt",
     "conformance/unsupported.txt",
@@ -134,7 +135,7 @@ test_nowarn = [
 
 test_deps = [
     ":KRPC.Client",
-    "//tools/build/dotnet:Google.Protobuf",
+    "@paket.main//google.protobuf",
 ]
 
 # The tests that need no server: type specs, structure ordering and the endpoint a unix
@@ -195,7 +196,7 @@ csharp_binary(
     visibility = ["//tools/benchmarks:__pkg__"],
     deps = [
         ":KRPC.Client",
-        "//tools/build/dotnet:Google.Protobuf",
+        "@paket.main//google.protobuf",
     ],
 )
 
@@ -219,7 +220,7 @@ csharp_binary(
     target_frameworks = ["net10.0"],
     deps = [
         ":KRPC.Client",
-        "//tools/build/dotnet:Google.Protobuf",
+        "@paket.main//google.protobuf",
     ],
 )
 
