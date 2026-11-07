@@ -107,10 +107,11 @@ def optional_arguments(connected, kind, *args, named=None):
     )
 
 
-def held_calls(services, count, order, held):
+def held_calls(endpoint, count, order, held):
     """A script that answers every call but Int32ToString, holds count calls of that, then
     answers them in the order the order function gives, each with its own argument as text.
     It ends early if the client closes."""
+    services = definitions(endpoint, "KRPC", "TestService")
 
     def script(server: ScriptedServer) -> None:
         server.services = services
@@ -792,7 +793,7 @@ def test_duplicate_argument_position_fails_its_call(server):
 def test_unique_ids(client, server, scripted_server):
     """Each request has an id that no other waiting request has."""
     held = []
-    scripted = scripted_server(held_calls(definitions(server, "KRPC"), 3, list, held))
+    scripted = scripted_server(held_calls(server, 3, list, held))
     client.connect(scripted.endpoint())
     try:
         calls = [client.start("caller%d" % i, invoke=to_string(i)) for i in range(3)]
@@ -809,7 +810,7 @@ def test_match_by_id(client, server, scripted_server):
     arrive."""
     held = []
     scripted = scripted_server(
-        held_calls(definitions(server, "KRPC"), 3, lambda xs: list(reversed(xs)), held)
+        held_calls(server, 3, lambda xs: list(reversed(xs)), held)
     )
     client.connect(scripted.endpoint())
     try:
@@ -826,7 +827,7 @@ def test_abandoned_id(client, server, scripted_server):
     """A call interrupted while waiting abandons its id. The client discards the
     response to that id."""
     held = []
-    scripted = scripted_server(held_calls(definitions(server, "KRPC"), 2, list, held))
+    scripted = scripted_server(held_calls(server, 2, list, held))
     client.connect(scripted.endpoint())
     try:
         abandoned = client.start("abandoned", invoke=to_string(1))
