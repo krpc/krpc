@@ -1,3 +1,6 @@
+using System;
+using System.Collections;
+using System.Linq;
 using KRPC.Service;
 using KRPC.Service.Scanner;
 using NUnit.Framework;
@@ -12,6 +15,19 @@ namespace KRPC.Test.Service
             var service = new ServiceSignature (typeof(TestService), 1);
             cls = service.AddClass (typeof(TestService.TestClass));
             return service;
+        }
+
+        [Test]
+        public void SerializeKeepsFieldOrderAndSortsMembers ()
+        {
+            var definition = global::KRPC.Service.Scanner.Scanner.GetServices () ["TestService"].Serialize ();
+            CollectionAssert.AreEqual (
+                new [] { "id", "documentation", "procedures", "classes", "enumerations", "structs", "exceptions" },
+                definition.Keys);
+            foreach (var member in new [] { "procedures", "classes", "enumerations", "structs", "exceptions" }) {
+                var names = ((IDictionary)definition [member]).Keys.Cast<string> ().ToList ();
+                CollectionAssert.AreEqual (names.OrderBy (x => x, StringComparer.Ordinal), names);
+            }
         }
 
         [Test]

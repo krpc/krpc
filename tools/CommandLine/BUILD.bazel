@@ -1,0 +1,8 @@
+# Source compiled into each C# tool, as it uses no shared library
+exports_files(
+    ["ToolCommandLine.cs"],
+    visibility = [
+        "//tools/ServiceDefinitions:__pkg__",
+        "//tools/TestServer:__pkg__",
+    ],
+)

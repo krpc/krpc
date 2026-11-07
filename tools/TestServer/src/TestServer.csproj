@@ -13,9 +13,7 @@
   </PropertyGroup>
   <Import Project="$(SolutionDir)tools\build\msbuild\bazeldirs.props" />
   <ItemGroup>
-    <Reference Include="NDesk.Options">
-      <HintPath>$(bazel-external)\+http_archive+csharp_options\lib\NDesk.Options.dll</HintPath>
-    </Reference>
+    <PackageReference Include="System.CommandLine" Version="2.0.14" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\core\src\KRPC.Core.csproj">
@@ -30,6 +28,9 @@
   <ItemGroup>
     <Compile Include="$(bazel-bin)\tools\TestServer\AssemblyInfo.cs">
       <Link>AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\CommandLine\ToolCommandLine.cs">
+      <Link>ToolCommandLine.cs</Link>
     </Compile>
     <Compile Include="ConformanceService.cs" />
     <Compile Include="Program.cs" />

@@ -1,13 +1,12 @@
 using System;
-using System.Runtime.Serialization;
+using System.Collections.Specialized;
 
 namespace KRPC.Service.Scanner
 {
     /// <summary>
     /// Signature information for a class, including class name and documentation.
     /// </summary>
-    [Serializable]
-    public sealed class ClassSignature : ISerializable
+    public sealed class ClassSignature
     {
         /// <summary>
         /// Name of the class, not including the service it is in.
@@ -54,15 +53,17 @@ namespace KRPC.Service.Scanner
         }
 
         /// <summary>
-        /// Serialize the signature.
+        /// The values of the signature in a service definition.
         /// </summary>
-        public void GetObjectData (SerializationInfo info, StreamingContext context)
+        public OrderedDictionary Serialize ()
         {
-            info.AddValue ("documentation", Documentation);
+            var result = new OrderedDictionary ();
+            result ["documentation"] = Documentation;
             if (Deprecated) {
-                info.AddValue ("deprecated", true);
-                info.AddValue ("deprecated_reason", DeprecatedReason);
+                result ["deprecated"] = true;
+                result ["deprecated_reason"] = DeprecatedReason;
             }
+            return result;
         }
     }
 }

@@ -5,7 +5,10 @@ load("//tools/build:csharp.bzl", "csharp_binary")
 
 csharp_binary(
     name = "ServiceDefinitions",
-    srcs = glob(["**/*.cs"]) + [":AssemblyInfo"],
+    srcs = glob(["**/*.cs"]) + [
+        ":AssemblyInfo",
+        "//tools/CommandLine:ToolCommandLine.cs",
+    ],
     nowarn = [
         "CS1591",
         "CS1701",
@@ -16,8 +19,7 @@ csharp_binary(
     warning_level = 4,
     deps = [
         "//core:KRPC.Core.net10",
-        "//tools/build/dotnet:NDesk.Options",
-        "@paket.main//newtonsoft.json",
+        "@paket.main//system.commandline",
     ],
 )
 

@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
+using System.Collections.Specialized;
+using System.Linq;
 
 namespace KRPC.Service.Scanner
 {
     /// <summary>
     /// Signature information for an enumeration type, including name, values and documentation.
     /// </summary>
-    [Serializable]
-    public sealed class EnumerationSignature : ISerializable
+    public sealed class EnumerationSignature
     {
         /// <summary>
         /// Name of the enumeration, not including the service it is in.
@@ -60,16 +60,18 @@ namespace KRPC.Service.Scanner
         }
 
         /// <summary>
-        /// Serialize the signature.
+        /// The values of the signature in a service definition.
         /// </summary>
-        public void GetObjectData (SerializationInfo info, StreamingContext context)
+        public OrderedDictionary Serialize ()
         {
-            info.AddValue ("documentation", Documentation);
-            info.AddValue ("values", Values);
+            var result = new OrderedDictionary ();
+            result ["documentation"] = Documentation;
+            result ["values"] = Values.Select (x => x.Serialize ()).ToList ();
             if (Deprecated) {
-                info.AddValue ("deprecated", true);
-                info.AddValue ("deprecated_reason", DeprecatedReason);
+                result ["deprecated"] = true;
+                result ["deprecated_reason"] = DeprecatedReason;
             }
+            return result;
         }
     }
 }

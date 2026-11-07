@@ -913,6 +913,20 @@ Service documentation string.
 
 
 
+.. class:: DeprecatedClass
+
+   .. warning:: Deprecated. Use :class:`TestService.TestClass` instead.
+
+   Deprecated class documentation string.
+
+   .. method:: deprecated_method(): string
+
+      .. warning:: Deprecated. Use :meth:`TestService.TestClass.get_value` instead.
+
+      Deprecated method documentation string.
+
+
+
 .. class:: TestClass
 
    Class documentation string.
@@ -979,17 +993,23 @@ Service documentation string.
 
 
 
-.. class:: DeprecatedClass
+.. class:: DeprecatedEnum
 
-   .. warning:: Deprecated. Use :class:`TestService.TestClass` instead.
+   .. warning:: Deprecated. Use :class:`TestService.TestEnum` instead.
 
-   Deprecated class documentation string.
+   Deprecated enum documentation string.
 
-   .. method:: deprecated_method(): string
 
-      .. warning:: Deprecated. Use :meth:`TestService.TestClass.get_value` instead.
+   .. data:: value_a
 
-      Deprecated method documentation string.
+      Deprecated enum ValueA documentation string.
+
+
+   .. data:: value_b
+
+      .. warning:: Deprecated. Use :data:`TestService.DeprecatedEnum.value_a` instead.
+
+      Deprecated enum ValueB documentation string.
 
 
 
@@ -1015,47 +1035,37 @@ Service documentation string.
 
 
 
-.. class:: DeprecatedEnum
+.. class:: DeprecatedStruct
 
-   .. warning:: Deprecated. Use :class:`TestService.TestEnum` instead.
+   .. warning:: Deprecated. Use :class:`TestService.TestStruct` instead.
 
-   Deprecated enum documentation string.
-
-
-   .. data:: value_a
-
-      Deprecated enum ValueA documentation string.
+   Deprecated struct documentation string.
 
 
-   .. data:: value_b
+   .. attribute:: value: number
 
-      .. warning:: Deprecated. Use :data:`TestService.DeprecatedEnum.value_a` instead.
-
-      Deprecated enum ValueB documentation string.
+      Deprecated struct Value documentation string.
 
 
+   .. attribute:: old_value: number
 
-.. class:: TestStruct
+      .. warning:: Deprecated. Use :attr:`TestService.DeprecatedStruct.value` instead.
 
-   Struct documentation string.
-
-
-   .. attribute:: int_field: number
-
-      Struct IntField documentation string.
-
-
-   .. attribute:: string_field: string
+      Deprecated struct OldValue documentation string.
 
 
 
+.. class:: TestNestedNullableStruct
 
-   .. attribute:: enum_field: TestService.TestEnum
-
-
+   Nested nullable struct documentation string.
 
 
    .. attribute:: list_field: List
+
+
+
+
+   .. attribute:: string_field: string
 
 
 
@@ -1113,14 +1123,14 @@ Service documentation string.
 
 
 
-.. class:: TestNestedNullableStruct
+.. class:: TestStruct
 
-   Nested nullable struct documentation string.
-
-
-   .. attribute:: list_field: List
+   Struct documentation string.
 
 
+   .. attribute:: int_field: number
+
+      Struct IntField documentation string.
 
 
    .. attribute:: string_field: string
@@ -1128,24 +1138,14 @@ Service documentation string.
 
 
 
-
-.. class:: DeprecatedStruct
-
-   .. warning:: Deprecated. Use :class:`TestService.TestStruct` instead.
-
-   Deprecated struct documentation string.
+   .. attribute:: enum_field: TestService.TestEnum
 
 
-   .. attribute:: value: number
-
-      Deprecated struct Value documentation string.
 
 
-   .. attribute:: old_value: number
+   .. attribute:: list_field: List
 
-      .. warning:: Deprecated. Use :attr:`TestService.DeprecatedStruct.value` instead.
 
-      Deprecated struct OldValue documentation string.
 
 
 

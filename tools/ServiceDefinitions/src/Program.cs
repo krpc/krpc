@@ -1,29 +1,33 @@
 using System;
 using System.Collections.Generic;
+using System.CommandLine;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Runtime.Loader;
 using System.Security;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using KRPC.Tools;
 using KRPC.Utils;
-using NDesk.Options;
-using Newtonsoft.Json;
 
 namespace ServiceDefinitions
 {
     static class MainClass
     {
-        static void Help (OptionSet options)
-        {
-            Console.Error.WriteLine ("usage: ServiceDefinitions.exe [-h] [-v] [--output=PATH] [--reference-dir=PATH]... service assembly...");
-            Console.Error.WriteLine ();
-            Console.Error.WriteLine ("Generate service definitions JSON file for a kRPC service");
-            Console.Error.WriteLine ();
-            options.WriteOptionDescriptions (Console.Error);
-            Console.Error.WriteLine ("  service                    Name of service to generate");
-            Console.Error.WriteLine ("  assembly...                Path(s) to assembly DLL(s) to load");
-        }
+        static readonly Option<string> outputOption = new Option<string> ("--output", "-o") {
+            Description = "Path to write the service definitions to. If unspecified, the output is written to standard output."
+        };
+        static readonly Option<string []> referenceDirOption = new Option<string []> ("--reference-dir") {
+            Description = "Additional directory to search for referenced assemblies."
+        };
+        static readonly Argument<string> serviceArgument = new Argument<string> ("service") {
+            Description = "Name of service to generate"
+        };
+        static readonly Argument<string []> assemblyArgument = new Argument<string []> ("assembly") {
+            Arity = ArgumentArity.OneOrMore,
+            Description = "Path(s) to assembly DLL(s) to load"
+        };
 
         static readonly List<string> searchDirs = new List<string> ();
 
@@ -47,54 +51,30 @@ namespace ServiceDefinitions
 
         public static int Main (string [] args)
         {
-            bool showHelp = false;
-            bool showVersion = false;
-            string outputPath = null;
-            var referenceDirs = new List<string> ();
-
-            var options = new OptionSet { {
-                    "h|help", "show this help message and exit",
-                    v => showHelp = v != null
-                }, {
-                    "v|version", "show program's version number and exit",
-                    v => showVersion = v != null
-                }, {
-                    "o|output=", "{PATH} to write the service definitions to. If unspecified, the output is written to stanadard output.",
-                    (string v) => outputPath = v
-                }, {
-                    "reference-dir=", "Additional directory {PATH} to search for referenced assemblies.",
-                    (string v) => referenceDirs.Add (v)
-                }
+            var root = new RootCommand ("Generate service definitions JSON file for a kRPC service") {
+                outputOption,
+                referenceDirOption,
+                serviceArgument,
+                assemblyArgument
             };
-            List<string> positionalArgs = options.Parse (args);
+            root.SetAction (Run);
+            return ToolCommandLine.Invoke (root, args);
+        }
 
-            if (showHelp) {
-                Help (options);
-                return 0;
-            }
-
-            if (showVersion) {
-                var version = Assembly.GetEntryAssembly ().GetName().Version;
-                Console.Error.WriteLine ("ServiceDefinitions.exe version " + version);
-                return 0;
-            }
-
-            if (positionalArgs.Count < 2) {
-                Console.Error.WriteLine ("Not enough arguments");
-                return 1;
-            }
+        static int Run (ParseResult result)
+        {
+            var outputPath = result.GetValue (outputOption);
+            var assemblies = result.GetValue (assemblyArgument);
 
             Logger.Enabled = true;
             Logger.Level = Logger.Severity.Warning;
-            var service = positionalArgs [0];
-            searchDirs.AddRange (referenceDirs);
-            for (var i = 1; i < positionalArgs.Count; i++)
-                searchDirs.Add (Path.GetDirectoryName (Path.GetFullPath (positionalArgs [i])));
+            var service = result.GetValue (serviceArgument);
+            searchDirs.AddRange (result.GetValue (referenceDirOption));
+            foreach (var path in assemblies)
+                searchDirs.Add (Path.GetDirectoryName (Path.GetFullPath (path)));
             searchDirs.Add (AppContext.BaseDirectory);
             AssemblyLoadContext.Default.Resolving += ResolveAssembly;
-            for (var i = 1; i < positionalArgs.Count; i++) {
-                var path = positionalArgs [i];
-
+            foreach (var path in assemblies) {
                 try {
                     AssemblyLoadContext.Default.LoadFromAssemblyPath (Path.GetFullPath (path));
                 } catch (FileNotFoundException) {
@@ -122,8 +102,13 @@ namespace ServiceDefinitions
                 Console.Error.WriteLine ("Service " + service + " not found");
                 return 1;
             }
-            services = new Dictionary<string, KRPC.Service.Scanner.ServiceSignature> { { service, services [service] } };
-            string output = JsonConvert.SerializeObject (services, Formatting.Indented);
+            var definitions = new Dictionary<string, object> { { service, services [service].Serialize () } };
+            var jsonOptions = new JsonSerializerOptions {
+                // The documentation holds XML, and is read as JSON rather than embedded in HTML
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                WriteIndented = true
+            };
+            string output = JsonSerializer.Serialize (definitions, jsonOptions);
             if (outputPath != null)
                 File.WriteAllText (outputPath, output);
             else

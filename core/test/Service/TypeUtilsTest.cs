@@ -6,7 +6,7 @@ using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.Service.Messages;
 using NUnit.Framework;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace KRPC.Test.Service
 {
@@ -658,7 +658,7 @@ namespace KRPC.Test.Service
                    "]}", typeof(IList<TestService.TestStruct>))]
         public void SerializeType (string name, Type type)
         {
-            Assert.AreEqual (name, JsonConvert.SerializeObject (TypeUtils.SerializeType (TypeSpec.Create (type))));
+            Assert.AreEqual (name, JsonSerializer.Serialize (TypeUtils.SerializeType (TypeSpec.Create (type))));
         }
 
         [TestCase (typeof(TestService.TestEnumWithoutAttribute))]
