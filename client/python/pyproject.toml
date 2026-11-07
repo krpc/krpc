@@ -32,17 +32,5 @@ Homepage = "https://krpc.github.io/krpc"
 path = "krpc/version.py"
 pattern = '__version__ = "(?P<version>[^"]+)"'
 
-[tool.hatch.build.targets.sdist]
-include = [
-    "krpc/",
-    "README.md",
-    "CHANGELOG.md",
-    "LICENSE",
-    "COPYING",
-    "COPYING.LESSER",
-    "LICENSE.protobuf",
-    "VERSION.txt",
-]
-
 [tool.hatch.build.targets.wheel]
 packages = ["krpc"]

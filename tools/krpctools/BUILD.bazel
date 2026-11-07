@@ -1,7 +1,7 @@
 load("@bazel_skylib//rules:copy_file.bzl", "copy_file")
 load("@rules_python//python:defs.bzl", "py_binary", "py_library", native_py_test = "py_test")
-load("//:config.bzl", "python_version", "version")
-load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test", "py_sdist", "py_test")
+load("//:config.bzl", "python_version")
+load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test", "py_test", "py_wheel")
 load("//tools/TestServer:rids.bzl", "RIDS")
 
 exports_files(["CHANGELOG.md"])
@@ -114,9 +114,9 @@ genrule(
     ]),
 )
 
-py_sdist(
+py_wheel(
     name = "krpctools",
-    out = "krpctools-%s.tar.gz" % version,
+    out = "krpctools-%s-py3-none-any.whl" % python_version,
     exclude = [
         "*.pdb",
         "*.repo_mapping",
@@ -131,14 +131,12 @@ py_sdist(
         ]
     ],
     files = [
-        "CHANGELOG.md",
         "README.md",
         ":license",
         ":pyproject",
         "//:COPYING",
         "//:COPYING.LESSER",
         "//:python_version",
-        "//:version",
         "//client/conformance:dist",
         "//core:ServiceDefinitions",
         "//tools/TestServer:ConformanceServiceDefinitions",
@@ -227,7 +225,6 @@ py_test(
     name = "krpctoolstest",
     size = "medium",
     src = ":krpctools",
-    pkg = "krpctools-" + python_version,
     tests = ["krpctools/test"],
     deps = deps,
 )
@@ -239,7 +236,6 @@ native_py_test(
     srcs = ["conformance_test.py"],
     args = [
         "$(rootpath :krpctools)",
-        "krpctools-" + python_version,
         "$(DOTNET_BIN)",
         "$(rootpath //client/python:conformance-testee)",
         "$(rootpath //client/python:conformance/expected-failures.txt)",
