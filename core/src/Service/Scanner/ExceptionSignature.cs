@@ -1,5 +1,5 @@
 using System;
-using System.Runtime.Serialization;
+using System.Collections.Generic;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 
@@ -8,8 +8,7 @@ namespace KRPC.Service.Scanner
     /// <summary>
     /// Signature information for an exception, including class name and documentation.
     /// </summary>
-    [Serializable]
-    public sealed class ExceptionSignature : ISerializable
+    public sealed class ExceptionSignature
     {
         /// <summary>
         /// Name of the exception, not including the service it is in.
@@ -63,17 +62,19 @@ namespace KRPC.Service.Scanner
         }
 
         /// <summary>
-        /// Serialize the signature.
+        /// The values of the signature in a service definition.
         /// </summary>
-        public void GetObjectData (SerializationInfo info, StreamingContext context)
+        public IDictionary<string, object> Serialize ()
         {
-            info.AddValue ("documentation", Documentation);
+            var result = new Dictionary<string, object> ();
+            result ["documentation"] = Documentation;
             if (Deprecated) {
-                info.AddValue ("deprecated", true);
-                info.AddValue ("deprecated_reason", DeprecatedReason);
+                result ["deprecated"] = true;
+                result ["deprecated_reason"] = DeprecatedReason;
             }
             if (MappedType.Length > 0)
-                info.AddValue ("mapped_type", MappedType);
+                result ["mapped_type"] = MappedType;
+            return result;
         }
     }
 }

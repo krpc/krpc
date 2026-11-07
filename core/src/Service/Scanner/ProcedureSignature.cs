@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 
 namespace KRPC.Service.Scanner
 {
@@ -9,8 +7,7 @@ namespace KRPC.Service.Scanner
     /// Signature information for a procedure, including procedure name,
     /// parameter types and return types.
     /// </summary>
-    [Serializable]
-    public sealed class ProcedureSignature : ISerializable
+    public sealed class ProcedureSignature
     {
         /// <summary>
         /// Name of the procedure, not including the service it is in.
@@ -111,23 +108,25 @@ namespace KRPC.Service.Scanner
         }
 
         /// <summary>
-        /// Serialize the signature.
+        /// The values of the signature in a service definition.
         /// </summary>
-        public void GetObjectData (SerializationInfo info, StreamingContext context)
+        public IDictionary<string, object> Serialize ()
         {
-            info.AddValue ("id", Id);
-            info.AddValue ("parameters", Parameters);
+            var result = new Dictionary<string, object> ();
+            result ["id"] = Id;
+            result ["parameters"] = Parameters.Select (x => x.Serialize ()).ToList ();
             if (HasReturnType)
-                info.AddValue("return_type", TypeUtils.SerializeType(ReturnSpec));
+                result ["return_type"] = TypeUtils.SerializeType (ReturnSpec);
             if (GameScene != GameScene.All)
-                info.AddValue ("game_scenes", GameSceneUtils.Serialize(GameScene));
-            info.AddValue ("documentation", Documentation);
+                result ["game_scenes"] = GameSceneUtils.Serialize(GameScene);
+            result ["documentation"] = Documentation;
             if (Deprecated) {
-                info.AddValue ("deprecated", true);
-                info.AddValue ("deprecated_reason", DeprecatedReason);
+                result ["deprecated"] = true;
+                result ["deprecated_reason"] = DeprecatedReason;
             }
             if (Internal)
-                info.AddValue ("internal", true);
+                result ["internal"] = true;
+            return result;
         }
     }
 }

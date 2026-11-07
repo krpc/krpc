@@ -19,7 +19,6 @@ csharp_binary(
     warning_level = 4,
     deps = [
         "//core:KRPC.Core.net10",
-        "@paket.main//newtonsoft.json",
         "@paket.main//system.commandline",
     ],
 )

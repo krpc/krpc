@@ -8,9 +8,6 @@ exports_files(["CHANGELOG.md"])
 
 license_text = """This license (LGPL v3) applies to all parts of krpctools except for the following:
 
-  - Newtonsoft.Json.dll, in krpctools/bin/, is under the MIT license.
-    See https://www.nuget.org/packages/Newtonsoft.Json/
-
   - System.CommandLine.dll, in krpctools/bin/, is under the MIT license.
     See https://www.nuget.org/packages/System.CommandLine/
 

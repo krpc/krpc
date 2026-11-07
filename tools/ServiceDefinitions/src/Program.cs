@@ -6,9 +6,10 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.Loader;
 using System.Security;
+using System.Text.Encodings.Web;
+using System.Text.Json;
 using KRPC.Tools;
 using KRPC.Utils;
-using Newtonsoft.Json;
 
 namespace ServiceDefinitions
 {
@@ -101,8 +102,13 @@ namespace ServiceDefinitions
                 Console.Error.WriteLine ("Service " + service + " not found");
                 return 1;
             }
-            services = new Dictionary<string, KRPC.Service.Scanner.ServiceSignature> { { service, services [service] } };
-            string output = JsonConvert.SerializeObject (services, Formatting.Indented);
+            var definitions = new Dictionary<string, object> { { service, services [service].Serialize () } };
+            var jsonOptions = new JsonSerializerOptions {
+                // The documentation holds XML, and is read as JSON rather than embedded in HTML
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                WriteIndented = true
+            };
+            string output = JsonSerializer.Serialize (definitions, jsonOptions);
             if (outputPath != null)
                 File.WriteAllText (outputPath, output);
             else

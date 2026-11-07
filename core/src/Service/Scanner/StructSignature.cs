@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
+using System.Linq;
 
 namespace KRPC.Service.Scanner
 {
     /// <summary>
     /// Signature information for a structure type, including name, fields and documentation.
     /// </summary>
-    [Serializable]
-    public sealed class StructSignature : ISerializable
+    public sealed class StructSignature
     {
         /// <summary>
         /// Name of the structure, not including the service it is in.
@@ -61,16 +60,18 @@ namespace KRPC.Service.Scanner
         }
 
         /// <summary>
-        /// Serialize the signature.
+        /// The values of the signature in a service definition.
         /// </summary>
-        public void GetObjectData (SerializationInfo info, StreamingContext context)
+        public IDictionary<string, object> Serialize ()
         {
-            info.AddValue ("documentation", Documentation);
-            info.AddValue ("fields", Fields);
+            var result = new Dictionary<string, object> ();
+            result ["documentation"] = Documentation;
+            result ["fields"] = Fields.Select (x => x.Serialize ()).ToList ();
             if (Deprecated) {
-                info.AddValue ("deprecated", true);
-                info.AddValue ("deprecated_reason", DeprecatedReason);
+                result ["deprecated"] = true;
+                result ["deprecated_reason"] = DeprecatedReason;
             }
+            return result;
         }
     }
 }

@@ -1,15 +1,14 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
-using System.Runtime.Serialization;
 
 namespace KRPC.Service.Scanner
 {
     /// <summary>
     /// Signature information for a parameter.
     /// </summary>
-    [Serializable]
-    public sealed class ParameterSignature : ISerializable
+    public sealed class ParameterSignature
     {
         /// <summary>
         /// Name of the parameter.
@@ -88,18 +87,20 @@ namespace KRPC.Service.Scanner
         }
 
         /// <summary>
-        /// Serialize the signature.
+        /// The values of the signature in a service definition.
         /// </summary>
-        public void GetObjectData (SerializationInfo info, StreamingContext context)
+        public IDictionary<string, object> Serialize ()
         {
-            info.AddValue ("name", Name);
-            info.AddValue ("type", TypeUtils.SerializeType (Spec));
+            var result = new Dictionary<string, object> ();
+            result ["name"] = Name;
+            result ["type"] = TypeUtils.SerializeType (Spec);
             if (HasDefaultValue) {
                 if (DefaultValue == null)
-                    info.AddValue ("default_value", (object)null);
+                    result ["default_value"] = null;
                 else
-                    info.AddValue ("default_value", Server.ProtocolBuffers.Encoder.Encode (DefaultValue, Spec).ToByteArray ());
+                    result ["default_value"] = Server.ProtocolBuffers.Encoder.Encode (DefaultValue, Spec).ToByteArray ();
             }
+            return result;
         }
     }
 }

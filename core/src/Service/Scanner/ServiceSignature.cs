@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Serialization;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 
@@ -11,8 +10,7 @@ namespace KRPC.Service.Scanner
     /// <summary>
     /// Signature of a kRPC service
     /// </summary>
-    [Serializable]
-    public sealed class ServiceSignature : ISerializable
+    public sealed class ServiceSignature
     {
         /// <summary>
         /// The name of the service
@@ -409,21 +407,23 @@ namespace KRPC.Service.Scanner
         }
 
         /// <summary>
-        /// Serialize the signature.
+        /// The values of the signature in a service definition.
         /// </summary>
-        public void GetObjectData (SerializationInfo info, StreamingContext context)
+        public IDictionary<string, object> Serialize ()
         {
-            info.AddValue ("id", Id);
-            info.AddValue ("documentation", Documentation);
-            info.AddValue ("procedures", Procedures);
-            info.AddValue ("classes", Classes);
-            info.AddValue ("enumerations", Enumerations);
-            info.AddValue ("structs", Structs);
-            info.AddValue ("exceptions", Exceptions);
+            var result = new Dictionary<string, object> ();
+            result ["id"] = Id;
+            result ["documentation"] = Documentation;
+            result ["procedures"] = Procedures.ToDictionary (x => x.Key, x => x.Value.Serialize ());
+            result ["classes"] = Classes.ToDictionary (x => x.Key, x => x.Value.Serialize ());
+            result ["enumerations"] = Enumerations.ToDictionary (x => x.Key, x => x.Value.Serialize ());
+            result ["structs"] = Structs.ToDictionary (x => x.Key, x => x.Value.Serialize ());
+            result ["exceptions"] = Exceptions.ToDictionary (x => x.Key, x => x.Value.Serialize ());
             if (Deprecated) {
-                info.AddValue ("deprecated", true);
-                info.AddValue ("deprecated_reason", DeprecatedReason);
+                result ["deprecated"] = true;
+                result ["deprecated_reason"] = DeprecatedReason;
             }
+            return result;
         }
     }
 }

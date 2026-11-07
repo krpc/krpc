@@ -1,5 +1,5 @@
 ﻿using KRPC.Service;
-using Newtonsoft.Json;
+using System.Text.Json;
 using NUnit.Framework;
 
 namespace KRPC.Test.Service
@@ -26,7 +26,7 @@ namespace KRPC.Test.Service
         [TestCase ("[\"SPACE_CENTER\",\"TRACKING_STATION\",\"EDITOR_VAB\",\"EDITOR_SPH\"]", GameScene.TrackingStation | GameScene.Editor | GameScene.SpaceCenter)]
         public void SerializeGameScene (string serialized, GameScene gameScene)
         {
-            Assert.AreEqual (serialized, JsonConvert.SerializeObject (GameSceneUtils.Serialize (gameScene)));
+            Assert.AreEqual (serialized, JsonSerializer.Serialize (GameSceneUtils.Serialize (gameScene)));
         }
     }
 }
