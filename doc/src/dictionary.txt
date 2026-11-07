@@ -230,6 +230,8 @@ waypoints
 websockets
 winsock
 undecoded
+malloc
 unclosed
+protoc
 CPython
 waker

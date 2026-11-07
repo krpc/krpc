@@ -34,7 +34,7 @@ Clients
      - Threaded
      - Yes
      - Pre-generated
-   * - C-nano
+   * - :doc:`C-nano <client-design/cnano>`
      - Single
      - No
      - Pre-generated
@@ -268,3 +268,4 @@ client passed to it.
    client-design/python
    client-design/csharp
    client-design/cpp
+   client-design/cnano
