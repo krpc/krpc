@@ -10,7 +10,7 @@ from krpc.test.servertestcase import ServerTestCase
 class TestFunction(ServerTestCase, unittest.TestCase):
     def test_function_stream_error(self) -> None:
         obj = self.conn.test_service.create_test_object("streamerror")
-        with self.conn.stream(lambda: {"a": obj.int_property}["b"]) as missing:
+        with self.conn.add_stream(lambda: {"a": obj.int_property}["b"]) as missing:
             with self.assertRaises(KeyError):
                 missing()
 
@@ -35,7 +35,7 @@ class TestFunction(ServerTestCase, unittest.TestCase):
             {1: obj, 2: obj},
             self.conn.run(lambda: {1: obj, 2: service.echo_test_object(obj)}),
         )
-        with self.conn.stream(
+        with self.conn.add_stream(
             lambda: {service.echo_nullable_string("key"): service.echo_test_object(obj)}
         ) as stream:
             self.assertEqual({"key": obj}, stream())
@@ -68,7 +68,7 @@ class TestFunction(ServerTestCase, unittest.TestCase):
             ["a", None],
             self.conn.run(lambda: ["a", service.echo_nullable_string(None)]),
         )
-        with self.conn.stream(
+        with self.conn.add_stream(
             lambda: [
                 (x, x is None)
                 for x in service.echo_list_of_nullable_objects([null(None), obj])
@@ -95,7 +95,7 @@ class TestFunction(ServerTestCase, unittest.TestCase):
         # track, and treat the function as valueless only when it has no value
         with mock.patch("krpc.client.compile_function_with_type", without_type):
             self.assertEqual([4], self.conn.run(lambda: [obj.int_property]))
-            with self.conn.stream(lambda: [obj.int_property]) as stream:
+            with self.conn.add_stream(lambda: [obj.int_property]) as stream:
                 self.assertEqual([4], stream())
 
     def test_compiled_valueless_function_caches_no_type(self) -> None:

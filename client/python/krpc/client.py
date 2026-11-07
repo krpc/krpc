@@ -4,7 +4,6 @@ import reprlib
 import threading
 import warnings
 from collections.abc import Callable, Iterable, Iterator
-from contextlib import contextmanager
 from types import TracebackType
 from typing import Any, cast
 
@@ -339,14 +338,14 @@ class Client(krpc.services.Client):
             and hasattr(owner, "_build_call__" + name)
         )
 
-    @contextmanager
-    def stream(self, func: Any, *args: object, **kwargs: object) -> Iterator[Stream]:
-        """'with' support for add_stream"""
-        stream = self.add_stream(func, *args, **kwargs)
-        try:
-            yield stream
-        finally:
-            stream.remove()
+    def stream(self, func: Any, *args: object, **kwargs: object) -> Stream:
+        """Deprecated. Use add_stream in a with statement."""
+        warnings.warn(
+            "Client.stream is deprecated: use add_stream in a with statement",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return self.add_stream(func, *args, **kwargs)
 
     def compile(self, func: Any) -> Any:
         """Compile a Python function or lambda into a server side function, a

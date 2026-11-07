@@ -424,7 +424,10 @@ The server checks the condition every physics tick, so the event catches a condi
 for only a moment, which a loop of calls can miss.
 
 The event fires again each time the condition becomes true after being false. Call
-:func:`~krpc::Event::remove` to stop it.
+:func:`~krpc::Event::remove` to stop it. Destroying the last copy of an event also removes it, so an
+event declared in a block is removed at the end of the block:
+
+.. literalinclude:: /scripts/cpp/EventScope.cpp
 
 As with a stream, hold the event's condition when you call :func:`~krpc::Event::wait`. A wait
 returns straight away if the event has fired since the last wait on the same event object, so a

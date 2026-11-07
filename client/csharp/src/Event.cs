@@ -8,7 +8,7 @@ namespace KRPC.Client
     /// <summary>
     /// Object representing an event.
     /// </summary>
-    public class Event : IEquatable<Event>
+    public class Event : IEquatable<Event>, IDisposable
     {
         readonly Stream<bool> stream;
         long seen;
@@ -154,6 +154,15 @@ namespace KRPC.Client
         public void Remove ()
         {
             stream.Remove ();
+        }
+
+        /// <summary>
+        /// Remove the event from the server, as <see cref="Remove"/> does, at the end of a
+        /// <c>using</c> block. A failed connection throws no exception.
+        /// </summary>
+        public void Dispose ()
+        {
+            stream.Dispose ();
         }
     }
 }

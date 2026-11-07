@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading;
 using KRPC.Client.Services.TestService;
 using NUnit.Framework;
@@ -12,6 +13,36 @@ namespace KRPC.Client.Test
         static void Wait ()
         {
             Thread.Sleep (50);
+        }
+
+        /// <summary>
+        /// Fail the next write to the connection, as a failed socket write does.
+        /// </summary>
+        static void FailNextWrite ()
+        {
+            var failed = 0;
+            Func<string> reach = () => Interlocked.Exchange (ref failed, 1) == 0 ? "write failed" : null;
+            SetWriteFault (reach);
+        }
+
+        static void SetWriteFault (Func<string> reach)
+        {
+            typeof(Connection).Assembly.GetType ("KRPC.Client.WriteFault", true)
+                .GetField ("hook", BindingFlags.NonPublic | BindingFlags.Static)
+                .SetValue (null, reach);
+        }
+
+        [Test]
+        public void DisposeIgnoresAFailedConnection ()
+        {
+            var obj = Connection.TestService ().CreateTestObject ("alpha");
+            var x = Connection.AddStream (() => obj.IntProperty);
+            FailNextWrite ();
+            try {
+                Assert.DoesNotThrow (x.Dispose);
+            } finally {
+                SetWriteFault (null);
+            }
         }
 
         [Test]

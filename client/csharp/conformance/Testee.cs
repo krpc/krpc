@@ -174,8 +174,12 @@ namespace KRPC.Client.Conformance
                 reply.Value = Conformance.Dispatch.Invoke (Connected (), command.Invoke);
                 break;
             case Command.CommandOneofCase.AddStream:
-                if (command.AddStream.Scoped)
-                    throw new UnsupportedException ("A stream has no scope idiom");
+                if (command.AddStream.Scoped) {
+                    using (var scoped = Conformance.Dispatch.AddStream (Connected (), command.AddStream.Invoke))
+                        scoped.Get ();
+                    reply.Value = Result.None ();
+                    break;
+                }
                 reply.Stream = Handles.Add (Conformance.Dispatch.AddStream (Connected (), command.AddStream.Invoke));
                 break;
             case Command.CommandOneofCase.Call:
@@ -249,6 +253,11 @@ namespace KRPC.Client.Conformance
                 break;
             case Command.CommandOneofCase.EventStream:
                 reply.Stream = Handles.Add (Result.Stream (GetEvent (command.EventStream.Event).Stream, Result.Bool));
+                break;
+            case Command.CommandOneofCase.ScopeEvent:
+                using (var scoped = GetEvent (Conformance.Dispatch.Invoke (Connected (), command.ScopeEvent.Invoke).Event))
+                    scoped.Stream.Get ();
+                reply.Value = Result.None ();
                 break;
             case Command.CommandOneofCase.Get:
                 reply.Value = Stream (command.Get.Stream).Get ();

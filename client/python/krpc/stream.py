@@ -10,6 +10,8 @@ import krpc.schema.KRPC_pb2 as KRPC
 from krpc.types import TypeBase
 
 if TYPE_CHECKING:
+    from types import TracebackType
+
     from krpc.client import Client
     from krpc.streammanager import StreamImpl
 
@@ -26,7 +28,8 @@ def wait_deadline(timeout: float | None) -> float | None:
 
 class Stream:
     """A streamed remote procedure call. When called, returns the
-    most recently received result of the call."""
+    most recently received result of the call. Leaving a with statement on
+    the stream removes it."""
 
     def __init__(self, stream: StreamImpl) -> None:
         self._stream = stream
@@ -124,3 +127,19 @@ class Stream:
     def remove(self) -> None:
         """Remove the stream"""
         self._stream.remove()
+
+    def __enter__(self) -> Stream:
+        return self
+
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc: BaseException | None,
+        tb: TracebackType | None,
+    ) -> None:
+        try:
+            self.remove()
+        except Exception:
+            # The exception the block raised is the one to report
+            if exc is None:
+                raise

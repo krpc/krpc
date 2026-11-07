@@ -27,14 +27,19 @@ class Fixture:
     """An event the control connection fires, and a stream on the control connection of
     the number of times it has fired."""
 
-    def __init__(self, client, control, name):
+    def __init__(self, client, control, name, scoped=False):
         self.client = client
         self.control = control
         self.service = control.conformance_service
         self.name = name
-        self.event = client.event(
-            "ConformanceService", "CreateEvent", values.string(name)
-        )
+        if scoped:
+            client.scoped_event(
+                "ConformanceService", "CreateEvent", values.string(name)
+            )
+        else:
+            self.event = client.event(
+                "ConformanceService", "CreateEvent", values.string(name)
+            )
         self.firings = control.add_stream(self.service.event_firings, name)
         self.triggered = 0
 
@@ -50,6 +55,17 @@ class Fixture:
 
     def end(self):
         self.service.remove_event(self.name)
+
+    def assert_removed(self):
+        """Check that the server sends no more firings."""
+        round_trip(self.client)
+        # The server counts a firing only once it sends it
+        fired = self.firings()
+        self.service.trigger_event(self.name)
+        # A later pass of the server, then a round trip that follows its control updates
+        update_barrier(self.client, self.control, self.name + "barrier")
+        self.service.value(self.name + "barrier")
+        assert self.firings() == fired
 
 
 @pytest.fixture
@@ -314,15 +330,18 @@ def test_drop_last_handle(fixture):
     fixture.trigger()
     assert len(callback.wait_for_calls(1)) == 1
     fixture.event.drop()
-    round_trip(fixture.client)
-    # The server counts a firing only once it sends it
-    fired = fixture.firings()
-    fixture.service.trigger_event(fixture.name)
-    # A later pass of the server, then a round trip that follows its control updates
-    update_barrier(fixture.client, fixture.control, fixture.name + "barrier")
-    fixture.service.value(fixture.name + "barrier")
-    assert fixture.firings() == fired
+    fixture.assert_removed()
     assert len(callback.calls) == 1
+
+
+@should
+@profile("events")
+def test_scoped_removal(connected, control, request):
+    """An event can be scoped to a block of code, using the scoping construct of the
+    language. Leaving the block removes the event: the server stops sending its firings."""
+    fixture = Fixture(connected, control, request.node.nodeid, scoped=True)
+    fixture.assert_removed()
+    fixture.firings.remove()
 
 
 @profile("events")

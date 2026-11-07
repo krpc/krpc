@@ -309,7 +309,7 @@ namespace KRPC.Client.Conformance
     /// <summary>
     /// A stream, with its values converted to conformance Values.
     /// </summary>
-    interface IStreamHandle
+    interface IStreamHandle : IDisposable
     {
         Value Get ();
 
@@ -376,6 +376,11 @@ namespace KRPC.Client.Conformance
         public void Remove ()
         {
             stream.Remove ();
+        }
+
+        public void Dispose ()
+        {
+            stream.Dispose ();
         }
 
         public virtual int AddCallback (Action<Value> callback)

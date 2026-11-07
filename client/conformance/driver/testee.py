@@ -349,17 +349,28 @@ class Client:
         reply = self.testee.run(invoke=invoke, connection=connection)
         return values.native(reply.value)
 
-    def add_stream(
-        self, service: str, procedure: str, *args: pb.Value, scoped: bool = False
-    ) -> Stream:
-        """Add a stream. A scoped stream is added with the language's scope idiom, read once,
-        and removed by leaving the scope."""
+    def add_stream(self, service: str, procedure: str, *args: pb.Value) -> Stream:
+        """Add a stream."""
         reply = self.testee.run(
-            add_stream=pb.AddStream(
-                invoke=_invoke(service, procedure, args), scoped=scoped
-            )
+            add_stream=pb.AddStream(invoke=_invoke(service, procedure, args))
         )
         return Stream(self, reply.stream)
+
+    def scoped_stream(self, service: str, procedure: str, *args: pb.Value) -> None:
+        """Add a stream in the language's scoping construct, read it once, and leave the
+        construct."""
+        self.testee.run(
+            add_stream=pb.AddStream(
+                invoke=_invoke(service, procedure, args), scoped=True
+            )
+        )
+
+    def scoped_event(self, service: str, procedure: str, *args: pb.Value) -> None:
+        """Call a procedure that returns an event in the language's scoping construct, read
+        the event's stream once, and leave the construct."""
+        self.testee.run(
+            scope_event=pb.ScopeEvent(invoke=_invoke(service, procedure, args))
+        )
 
     def event(self, service: str, procedure: str, *args: pb.Value) -> Event:
         """Call a procedure that returns an event."""

@@ -115,7 +115,7 @@ class TestVessel(krpctest.TestCase):
                 self.wait(0.5)
                 samples = []
                 setattr(control, name, 1)
-                with conn.stream(function) as stream:
+                with conn.add_stream(function) as stream:
                     start = stream()[0]
                     while True:
                         ut, rate = stream()

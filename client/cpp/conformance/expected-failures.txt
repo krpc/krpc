@@ -16,7 +16,6 @@ test_values.py::test_null_in_non_nullable_slot[object-element]  # As test_null_f
 test_values.py::test_null_result_for_non_nullable  # A null result decodes as the default value
 test_codec.py::test_extra_items[tuple]  # A tuple with extra items fails to decode
 test_codec.py::test_invalid_utf8  # A string that is not valid UTF-8 decodes
-test_streams.py::test_scoped_removal  # A stream has no scope idiom
 test_streams.py::test_procedure_returning_an_event  # The testee cannot stream a procedure that returns an event
 test_codec.py::test_object  # An object with the id 0 is the null object
 test_codec.py::test_malformed_data[list(nullable sint32)]  # A presence bool other than 0 or 1, or data after a null, decodes

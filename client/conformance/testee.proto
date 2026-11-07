@@ -93,6 +93,7 @@ message Command {
     FailWrite fail_write = 53;
     CallWithArguments call_with_arguments = 54;
     CompileFunction compile_function = 55;
+    ScopeEvent scope_event = 56;
   }
 }
 
@@ -218,9 +219,9 @@ message NamedArgument {
   Value value = 2;
 }
 
-// Adds a stream of a call. When scoped, the testee adds the stream with the language's scope
-// idiom, reads its value, and leaves the scope, which removes the stream. A testee with no scope
-// idiom replies with an UNSUPPORTED error.
+// Adds a stream of a call. When scoped, the testee adds the stream in the language's scoping
+// construct, reads its value, and leaves the construct, which removes the stream. It then replies
+// with a none Value in place of a stream handle.
 message AddStream {
   Invoke invoke = 1;
   bool scoped = 2;
@@ -439,6 +440,12 @@ message AddEventCallback {
   uint64 event = 1;
   uint64 callback = 2;
   Behavior behavior = 3;
+}
+
+// Calls a procedure that returns an event in the language's scoping construct, reads the event's
+// stream, and leaves the construct, which removes the event. It then replies with a none Value.
+message ScopeEvent {
+  Invoke invoke = 1;
 }
 
 // Gets the stream of an event, and replies with a new stream handle for it.

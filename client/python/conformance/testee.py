@@ -69,6 +69,7 @@ STREAM_COMMANDS = {
     "wait_event",
     "add_event_callback",
     "event_stream",
+    "scope_event",
     "compare_handles",
     "wait_on_condition",
 }
@@ -315,15 +316,19 @@ class Testee:
             with conn.stream_update_condition:
                 conn.wait_for_stream_update(timeout)
 
+    def _add_stream(self, command: pb.AddStream, reply: pb.Reply) -> None:
+        func, args = self._resolve(command.invoke)
+        if command.scoped:
+            with self._connection().add_stream(func, *args) as stream:
+                stream()
+            reply.value.SetInParent()
+        else:
+            stream = self._connection().add_stream(func, *args)
+            reply.stream = self._add_handle(self._streams, stream)
+
     def _dispatch_stream(self, case: str, command: pb.Command, reply: pb.Reply) -> None:
         if case == "add_stream":
-            func, args = self._resolve(command.add_stream.invoke)
-            if command.add_stream.scoped:
-                with self._connection().stream(func, *args) as stream:
-                    stream()
-            else:
-                stream = self._connection().add_stream(func, *args)
-            reply.stream = self._add_handle(self._streams, stream)
+            self._add_stream(command.add_stream, reply)
         elif case == "copy_stream":
             stream = self._stream(command.copy_stream.stream)
             reply.stream = self._add_handle(self._streams, stream)
@@ -375,6 +380,11 @@ class Testee:
         elif case == "event_stream":
             stream = self._stream(command.event_stream.event).stream
             reply.stream = self._add_handle(self._streams, stream)
+        elif case == "scope_event":
+            func, args = self._resolve(command.scope_event.invoke)
+            with func(*args) as event:
+                event.stream()
+            reply.value.SetInParent()
         else:
             with self._lock:
                 remove = self._callbacks.pop(getattr(command, case).callback)

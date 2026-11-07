@@ -209,6 +209,9 @@ return value runs the call on each update for its effects. Its value is ``null``
 
 A stream runs until you remove it with :meth:`~Stream.remove`, or the connection closes. It keeps
 running after your program drops its last reference to it, so remove a stream you no longer need.
+A try-with-resources statement removes a stream at the end of the block:
+
+.. literalinclude:: /scripts/java/StreamScope.java
 
 By default, the server sends a stream's value each time it changes. Call :meth:`~Stream.setRate` to
 limit how many times a second the stream updates:
@@ -346,7 +349,10 @@ server checks the condition every physics tick, so the event catches a condition
 a moment, which a loop of calls can miss.
 
 The event fires again each time the condition becomes true after being false. Call
-:meth:`~Event.remove` to stop it.
+:meth:`~Event.remove` to stop it. A try-with-resources statement removes an event at the end of the
+block:
+
+.. literalinclude:: /scripts/java/EventScope.java
 
 As with a stream, hold the event's condition when you call :meth:`~Event.waitFor`. A wait returns
 straight away if the event has fired since your last wait, so a firing between two waits is not
@@ -625,6 +631,10 @@ Client API Reference
 
       Removes the stream from the server. Other streams of the same call are not affected.
 
+   .. method:: void close()
+
+      Removes the stream, as :meth:`~Stream.remove` does, at the end of a try-with-resources block.
+
 .. type:: class Event
 
    An event, made from a stream of :type:`~java.lang.Boolean` that is true when the event fires. See
@@ -678,6 +688,10 @@ Client API Reference
    .. method:: void remove()
 
       Removes the event from the server.
+
+   .. method:: void close()
+
+      Removes the event, as :meth:`~Event.remove` does, at the end of a try-with-resources block.
 
    .. method:: Stream<Boolean> getStream()
 

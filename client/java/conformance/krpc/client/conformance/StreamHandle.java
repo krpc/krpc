@@ -2,11 +2,12 @@ package krpc.client.conformance;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
+import krpc.client.RPCException;
 import krpc.client.Stream;
 import krpc.conformance.Testee.Value;
 
 /** A stream, with its values converted to conformance Values. */
-final class StreamHandle {
+final class StreamHandle implements AutoCloseable {
   private final Stream<Object> stream;
   private final Function<Object, Value> convert;
 
@@ -50,6 +51,11 @@ final class StreamHandle {
 
   void remove() throws Exception {
     stream.remove();
+  }
+
+  @Override
+  public void close() throws RPCException {
+    stream.close();
   }
 
   int addCallback(Consumer<Value> callback) {

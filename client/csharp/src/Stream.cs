@@ -8,7 +8,7 @@ namespace KRPC.Client
     /// Object representing a stream. A stream of a call or function with no value runs on each
     /// update for its effects.
     /// </summary>
-    public class Stream : IEquatable<Stream>
+    public class Stream : IEquatable<Stream>, IDisposable
     {
         internal static readonly TypeSpec NoValue = TypeSpec.For (typeof (void));
 
@@ -179,6 +179,20 @@ namespace KRPC.Client
         public void Remove ()
         {
             stream.Remove ();
+        }
+
+        /// <summary>
+        /// Remove the stream from the server, as <see cref="Remove"/> does, at the end of a
+        /// <c>using</c> block. A failed connection throws no exception.
+        /// </summary>
+        public void Dispose ()
+        {
+            try {
+                Remove ();
+            } catch (System.Exception exn) when (exn is ConnectionException || exn is ObjectDisposedException) {
+                // The server removes the stream with the connection, and an exception here would
+                // replace the one leaving the block
+            }
         }
     }
 
