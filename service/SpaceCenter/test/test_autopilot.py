@@ -1979,7 +1979,7 @@ def _make_autopilot_flight_test_class(  # noqa: PLR0913
             targets = [0.0, 0.0, 0.0]
             targets[axis] = target
             samples = []
-            with conn.stream(conn.compile(attitude)) as stream:
+            with conn.add_stream(conn.compile(attitude)) as stream:
                 start = stream()[0]
                 self.ap.target_pitch_and_heading(targets[0], heading + targets[1])
                 self.ap.target_roll = targets[2]

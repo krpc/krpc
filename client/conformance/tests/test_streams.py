@@ -657,15 +657,27 @@ def test_remove_twice(connected, control, request):
     assert wait_until(lambda: later.get() == 1)
 
 
+def evaluated(connected, counter_name):
+    """Whether the server evaluates a stream of a counter between two calls of the counter."""
+    first = connected.invoke(
+        "TestService", "Counter", values.string(counter_name), values.sint32(1)
+    )
+    time.sleep(SETTLE)
+    second = connected.invoke(
+        "TestService", "Counter", values.string(counter_name), values.sint32(1)
+    )
+    return second != first + 1
+
+
 @should
 @profile("streams")
 def test_scoped_removal(connected, request):
     """A stream can be scoped to a block of code, using the scoping construct of the
-    language. Leaving the block removes the stream."""
-    stream = connected.add_stream(
-        "ConformanceService", "Value", values.string(name(request)), scoped=True
+    language. Leaving the block removes the stream: the server stops evaluating it."""
+    connected.scoped_stream(
+        "TestService", "Counter", values.string(name(request)), values.sint32(1)
     )
-    assert is_removed_error(connected, raised(stream.get))
+    assert not evaluated(connected, name(request))
 
 
 @profile("streams", "callbacks")
@@ -682,20 +694,8 @@ def test_drop_last_handle(connected, control, request):
     count = len(callback.wait_for_calls(1))
     assert len(callback.wait_for_calls(count + 1)) > count
     stream.drop()
-
-    def evaluated():
-        """Whether the server evaluates the stream between two calls of the counter."""
-        first = connected.invoke(
-            "TestService", "Counter", values.string(name(request)), values.sint32(1)
-        )
-        time.sleep(SETTLE)
-        second = connected.invoke(
-            "TestService", "Counter", values.string(name(request)), values.sint32(1)
-        )
-        return second != first + 1
-
     # A client that drops a handle by a garbage collection removes the stream later
-    assert wait_until(lambda: not evaluated())
+    assert wait_until(lambda: not evaluated(connected, name(request)))
     update_barrier(connected, control, name(request) + "barrier")
     count = len(callback.calls)
     update_barrier(connected, control, name(request) + "barrier")

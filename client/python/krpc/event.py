@@ -8,11 +8,13 @@ from typing import TYPE_CHECKING
 from krpc.stream import Stream, wait_deadline
 
 if TYPE_CHECKING:
+    from types import TracebackType
+
     from krpc.client import Client
 
 
 class Event:
-    """An event."""
+    """An event. Leaving a with statement on the event removes it."""
 
     def __init__(self, client: Client, stream_id: int) -> None:
         self._stream = Stream.from_stream_id(client, stream_id, client._types.bool_type)
@@ -83,3 +85,14 @@ class Event:
     def remove(self) -> None:
         """Remove the event from the server"""
         self._stream.remove()
+
+    def __enter__(self) -> Event:
+        return self
+
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc: BaseException | None,
+        tb: TracebackType | None,
+    ) -> None:
+        self._stream.__exit__(exc_type, exc, tb)

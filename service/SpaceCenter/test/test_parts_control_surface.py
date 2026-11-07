@@ -276,7 +276,7 @@ class TestPartsControlSurfaceFlight(krpctest.TestCase):
             )
 
         function = self.conn.compile(sample)
-        with self.conn.stream(function) as stream:
+        with self.conn.add_stream(function) as stream:
             start = stream()[0]
             control.pitch = pitch
             while True:

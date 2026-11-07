@@ -39,7 +39,7 @@ class TestStreamsAcrossLoads(krpctest.TestCase):
 
     def test_stream_over_a_surviving_vessel(self):
         vessel = self.space_center.active_vessel
-        with self.conn.stream(getattr, vessel, "name") as name:
+        with self.conn.add_stream(getattr, vessel, "name") as name:
             self.assertEqual("Basic", name())
             self.space_center.quicksave()
             self.wait(1)
@@ -53,7 +53,7 @@ class TestStreamsAcrossLoads(krpctest.TestCase):
     def test_stream_over_a_vessel_while_in_the_editor(self):
         vessel = self.space_center.active_vessel
         ended = []
-        with self.conn.stream(getattr, vessel, "name") as name:
+        with self.conn.add_stream(getattr, vessel, "name") as name:
             name.add_end_callback(ended.append)
             self.assertEqual("Basic", name())
             self.enter_editor()
@@ -70,7 +70,7 @@ class TestStreamsAcrossLoads(krpctest.TestCase):
     def test_stream_over_a_flight_property_outside_flight(self):
         control = self.space_center.active_vessel.control
         ended = []
-        with self.conn.stream(getattr, control, "throttle") as throttle:
+        with self.conn.add_stream(getattr, control, "throttle") as throttle:
             throttle.add_end_callback(ended.append)
             throttle()
             self.enter_editor()
@@ -90,7 +90,7 @@ class TestStreamsAcrossLoads(krpctest.TestCase):
         self.wait(1)
         kerbal = send_on_eva(self, self.space_center)
         ended = []
-        with self.conn.stream(getattr, kerbal, "name") as name:
+        with self.conn.add_stream(getattr, kerbal, "name") as name:
             name.add_end_callback(ended.append)
             name()
             self.quickload()
@@ -101,7 +101,7 @@ class TestStreamsAcrossLoads(krpctest.TestCase):
     def test_stream_over_a_part_of_an_unloaded_vessel(self):
         pod = self.space_center.active_vessel
         part = pod.parts.root
-        with self.conn.stream(getattr, part, "temperature") as temperature:
+        with self.conn.add_stream(getattr, part, "temperature") as temperature:
             temperature()
             kerbal = send_on_eva(self, self.space_center)
             # Far enough from the pod for the game to unload it
@@ -153,7 +153,7 @@ class TestStreamsAcrossCareerLoads(krpctest.TestCase):
     def test_stream_over_a_contract_across_a_load(self):
         contract = self.space_center.contract_manager.active_contracts[0]
         ended = []
-        with self.conn.stream(getattr, contract, "title") as title:
+        with self.conn.add_stream(getattr, contract, "title") as title:
             title.add_end_callback(ended.append)
             self.assertEqual("Orbit Kerbin!", title())
             self.space_center.save("contract_stream")

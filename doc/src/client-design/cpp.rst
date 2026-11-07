@@ -127,5 +127,7 @@ Mapping the Spec to C++
        as an argument
    * - Interrupting a blocked thread
      - Unsupported, as a C++ thread cannot be interrupted
+   * - Scoped stream or event
+     - A block holding the last copy. A copy kept past the block keeps the stream running
 
 A stream value is decoded when it is read, and for each callback.

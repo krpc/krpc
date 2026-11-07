@@ -27,7 +27,6 @@ test_values.py::test_null_for_non_nullable[string]  # As test_null_for_non_nulla
 test_values.py::test_null_for_non_nullable[struct]  # As test_null_for_non_nullable[bytes]
 test_values.py::test_null_for_non_nullable[tuple]  # As test_null_for_non_nullable[bytes]
 test_values.py::test_null_result_for_non_nullable  # A null result for a string fails to parse, as an RPC error
-test_streams.py::test_scoped_removal  # A stream has no scope idiom
 test_streams.py::test_update_callback  # A connection has no stream update callback
 test_concurrency.py::test_wait_for_update  # A connection has no stream update condition
 test_codec.py::test_malformed_data[dictionary(string,sint32)]  # As test_malformed_data[bytes]

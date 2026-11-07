@@ -206,7 +206,12 @@ final class Testee {
         break;
       case ADD_STREAM:
         if (command.getAddStream().getScoped()) {
-          throw new UnsupportedException("A stream has no scope idiom");
+          try (StreamHandle scoped =
+              Dispatch.addStream(connected(), command.getAddStream().getInvoke())) {
+            scoped.get();
+          }
+          reply.setValue(Values.resultNone());
+          break;
         }
         reply.setStream(
             Values.addHandle(Dispatch.addStream(connected(), command.getAddStream().getInvoke())));
@@ -284,6 +289,13 @@ final class Testee {
         reply.setStream(Values.addHandle(new StreamHandle(
             event(command.getEventStream().getEvent()).getStream(),
             x -> Values.resultBool((Boolean) x))));
+        break;
+      case SCOPE_EVENT:
+        try (Event scoped =
+            event(Dispatch.invoke(connected(), command.getScopeEvent().getInvoke()).getEvent())) {
+          scoped.getStream().get();
+        }
+        reply.setValue(Values.resultNone());
         break;
       case GET:
         reply.setValue(stream(command.getGet().getStream()).get());

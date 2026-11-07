@@ -5,7 +5,7 @@ import krpc.schema.KRPC.ProcedureCall;
 import krpc.schema.KRPC.Type;
 
 /** A stream that receives live updates from the server. */
-public class Stream<T> implements Comparable<Stream<T>> {
+public class Stream<T> implements Comparable<Stream<T>>, AutoCloseable {
   /** The type of a stream of a call or function with no value. */
   static final Type NO_VALUE = Type.newBuilder().setCode(Type.TypeCode.NONE).build();
 
@@ -198,5 +198,13 @@ public class Stream<T> implements Comparable<Stream<T>> {
    */
   public void remove() throws RPCException {
     stream.remove();
+  }
+
+  /**
+   * Remove the stream from the server, as remove() does, at the end of a try-with-resources block.
+   */
+  @Override
+  public void close() throws RPCException {
+    remove();
   }
 }

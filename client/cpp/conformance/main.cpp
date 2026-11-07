@@ -461,7 +461,14 @@ class Testee {
         *reply->mutable_value() = invoke(command.invoke());
         break;
       case Command::kAddStream:
-        if (command.add_stream().scoped()) throw Unsupported("A stream has no scope idiom");
+        if (command.add_stream().scoped()) {
+          {
+            auto scoped = add_stream(command.add_stream().invoke());
+            scoped.get();
+          }
+          *reply->mutable_value() = result_none();
+          break;
+        }
         reply->set_stream(
             Handles::instance().add_stream(add_stream(command.add_stream().invoke())));
         break;
@@ -617,6 +624,17 @@ class Testee {
         reply->set_stream(Handles::instance().add_stream(
             result_stream(event(command.event_stream().event())->stream(), Bool::result)));
         break;
+      case Command::kScopeEvent: {
+        const auto handle = invoke(command.scope_event().invoke()).event();
+        {
+          // The copy in the block is the last one left
+          auto scoped = *event(handle);
+          Handles::instance().drop(handle);
+          scoped.stream()();
+        }
+        *reply->mutable_value() = result_none();
+        break;
+      }
       case Command::kGet:
         *reply->mutable_value() = Handles::instance().stream(command.get().stream())->get();
         break;

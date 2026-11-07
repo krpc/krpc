@@ -20,7 +20,7 @@ SERVICE_CLASS: Any = None
 
 class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
     def evaluate(self, func: Callable[[], Any]) -> Any:
-        with self.conn.stream(func) as stream:
+        with self.conn.add_stream(func) as stream:
             return stream()
 
     def test_constant_folding(self) -> None:
@@ -397,7 +397,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
     def test_lambda_written_inside_a_with_statement(self) -> None:
         obj = self.conn.test_service.create_test_object("with")
         obj.int_property = 7
-        with self.conn.stream(lambda: obj.int_property * 2) as stream:
+        with self.conn.add_stream(lambda: obj.int_property * 2) as stream:
             self.assertEqual(14, stream())
 
     def test_lambda_on_its_own_line_before_the_closing_bracket(self) -> None:
@@ -436,7 +436,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         self.assertEqual(6, self.conn.run(
             lambda: obj.int_property
             + 1))
-        with self.conn.stream(
+        with self.conn.add_stream(
                 lambda: obj.int_property
                 - other.int_property) as stream:
             self.assertEqual(3, stream())
@@ -577,7 +577,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         self.assertEqual(4, self.conn.run(lambda: limit + 1))
         service = self.conn.test_service
         service.string_property = "stream"
-        with self.conn.stream(getattr, service, "string_property") as stream:
+        with self.conn.add_stream(getattr, service, "string_property") as stream:
             with self.assertRaisesRegex(FunctionCompilationError, "stream"):
                 self.conn.add_event(lambda: stream() == "stream")
             with self.assertRaisesRegex(FunctionCompilationError, "stream"):
@@ -623,7 +623,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
 
     def test_stream_calling_a_procedure_that_pauses(self) -> None:
         blocking = self.conn.test_service.blocking_procedure
-        with self.conn.stream(lambda: blocking(2) + 1) as stream:
+        with self.conn.add_stream(lambda: blocking(2) + 1) as stream:
             with self.assertRaisesRegex(
                 RuntimeError, "A function is evaluated within a single tick"
             ):
@@ -1067,7 +1067,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         obj = self.conn.test_service.create_test_object("nullresult")
         # The property is nullable and unset, so the function's value is null
         self.assertIsNone(self.conn.run(lambda: obj.object_property))
-        with self.conn.stream(lambda: obj.object_property) as stream:
+        with self.conn.add_stream(lambda: obj.object_property) as stream:
             self.assertIsNone(stream())
         other = self.conn.test_service.create_test_object("nullresult2")
         obj.object_property = other
@@ -1391,7 +1391,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
                 value += obj.int_property
             return value
 
-        with self.conn.stream(total) as stream:
+        with self.conn.add_stream(total) as stream:
             self.assertEqual(6, stream())
 
     def test_true_division(self) -> None:
@@ -3907,8 +3907,8 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         function = self.conn.compile(step)
         first: list = []
         second: list = []
-        with self.conn.stream(function) as stream1:
-            with self.conn.stream(function) as stream2:
+        with self.conn.add_stream(function) as stream1:
+            with self.conn.add_stream(function) as stream2:
                 stream1.add_callback(first.append)
                 stream2.add_callback(second.append)
                 deadline = time.monotonic() + 10
@@ -3950,7 +3950,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             ticks += obj.int_property
             return ticks
 
-        with self.conn.stream(step) as stream:
+        with self.conn.add_stream(step) as stream:
             first = stream()
             deadline = time.monotonic() + 10
             while stream() <= first + 1 and time.monotonic() < deadline:
@@ -3965,7 +3965,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             ticks += 1
             return ticks
 
-        with self.conn.stream(step) as stream:
+        with self.conn.add_stream(step) as stream:
             first = stream()
             deadline = time.monotonic() + 10
             while stream() <= first + 1 and time.monotonic() < deadline:

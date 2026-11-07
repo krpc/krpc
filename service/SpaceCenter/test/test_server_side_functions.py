@@ -137,7 +137,7 @@ class TestServerSideFunctions(krpctest.TestCase):
     def test_a_function_stream_follows_the_game(self):
         sc = self.sc
         start = sc.ut
-        with self.conn.stream(lambda: sc.ut - start) as stream:
+        with self.conn.add_stream(lambda: sc.ut - start) as stream:
             first = stream()
             self.wait_until(
                 lambda: stream() > first, timeout=10, message="the stream to update"
@@ -167,7 +167,7 @@ class TestServerSideFunctions(krpctest.TestCase):
                 updates += 1
             return updates
 
-        with self.conn.stream(count) as stream:
+        with self.conn.add_stream(count) as stream:
             first = stream()
             self.wait_until(
                 lambda: stream() > first + 2, timeout=10, message="the count to rise"
@@ -251,7 +251,7 @@ class TestServerSideFunctionsOverUnloadedObjects(krpctest.TestCase):
                 return -1.0
 
         ended = []
-        with self.conn.stream(temperature) as stream:
+        with self.conn.add_stream(temperature) as stream:
             stream.add_end_callback(ended.append)
             self.assertGreater(stream(), 0)
             self.unload(pod)
@@ -264,7 +264,7 @@ class TestServerSideFunctionsOverUnloadedObjects(krpctest.TestCase):
         pod = self.sc.active_vessel
         part = pod.parts.root
         ended = []
-        with self.conn.stream(lambda: part.temperature) as stream:
+        with self.conn.add_stream(lambda: part.temperature) as stream:
             stream.add_end_callback(ended.append)
             self.assertGreater(stream(), 0)
             self.unload(pod)

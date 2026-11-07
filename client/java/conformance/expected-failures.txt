@@ -36,7 +36,6 @@ test_codec.py::test_too_few_items[tuple]  # A short tuple raises ClassCastExcept
 test_calls.py::test_unknown_id  # The call raises RPCException, not the connection error
 test_objects.py::test_get_object_id  # A null raises NullPointerException, from Objects.requireNonNull
 test_events.py::test_wait_after_close  # As test_streams.py::test_wake_waiter[close]
-test_streams.py::test_scoped_removal  # A stream has no scope idiom
 test_streams.py::test_update_callback  # A connection has no stream update callback
 test_concurrency.py::test_wait_for_update  # A connection has no stream update condition
 test_streams.py::test_end_callback[close]  # As test_events.py::test_end_callback[connection-failure]

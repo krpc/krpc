@@ -123,5 +123,7 @@ Mapping the Spec to C#
      - ``lock (stream.Condition)``. ``Wait`` without it throws ``SynchronizationLockException``
    * - Interrupting a blocked thread
      - ``Thread.Interrupt``. A call in a socket read is not interrupted
-   * - Dropping the last handle, scoped stream
-     - None. ``Stream`` and ``Event`` are not ``IDisposable``
+   * - Dropping the last handle
+     - None. ``Stream`` and ``Event`` have no finalizer, so dropping every handle leaves them running
+   * - Scoped stream or event
+     - A ``using`` block. ``Dispose`` calls ``Remove``, and ignores a failed connection, as the server removes the stream with the connection and ``using`` keeps no second exception

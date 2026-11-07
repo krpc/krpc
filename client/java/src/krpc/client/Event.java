@@ -7,7 +7,7 @@ import krpc.schema.KRPC.Type;
 import krpc.schema.KRPC.Type.TypeCode;
 
 /** Represents a server-side event that can be waited on. */
-public class Event implements Comparable<Event> {
+public class Event implements Comparable<Event>, AutoCloseable {
   private Stream<Boolean> stream;
   // The number of firings when a wait on this handle last returned
   private volatile long seen = 0;
@@ -139,5 +139,13 @@ public class Event implements Comparable<Event> {
    */
   public void remove() throws RPCException {
     stream.remove();
+  }
+
+  /**
+   * Remove the event from the server, as remove() does, at the end of a try-with-resources block.
+   */
+  @Override
+  public void close() throws RPCException {
+    remove();
   }
 }
