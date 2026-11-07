@@ -318,6 +318,8 @@ code itself cannot.
  * One logical thing per commit.
  * Concise message, sized to the diff. Tiny commits just need a single-line summary, larger commits needs
    a single-line summary then short paragraph(s).
+ * Wrap the body at 72 columns, with a blank line after the summary. The one-line-per-paragraph
+   rule under *Pull requests* is for PR descriptions only.
 
 ## Pull requests
 
