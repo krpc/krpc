@@ -705,8 +705,21 @@ namespace KRPC.Test.Service
             return call;
         }
 
-        [Test]
-        public void HandleRequestWithAnUndecodableArgumentFailsOnlyThatCall ()
+        // A call to ProcedureSingleArgReturns with a string argument at each position
+        static Schema.KRPC.ProcedureCall CallWithPositions (params uint [] positions)
+        {
+            var call = new Schema.KRPC.ProcedureCall { Service = "TestService", Procedure = "ProcedureSingleArgReturns" };
+            foreach (var position in positions) {
+                call.Arguments.Add (new Schema.KRPC.Argument {
+                    Position = position,
+                    Value = ByteString.CopyFrom (new byte [] { 1, 0x61 })
+                });
+            }
+            return call;
+        }
+
+        // Runs the call between two valid calls, and returns the error it fails with
+        static Error RunFailingCall (Schema.KRPC.ProcedureCall call)
         {
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.ProcedureNoArgsReturns ()).Returns ("foo");
@@ -714,7 +727,7 @@ namespace KRPC.Test.Service
             var valid = new Schema.KRPC.ProcedureCall { Service = "TestService", Procedure = "ProcedureNoArgsReturns" };
             var request = new Schema.KRPC.Request { Id = 7 };
             request.Calls.Add (valid);
-            request.Calls.Add (UndecodableCall ());
+            request.Calls.Add (call);
             request.Calls.Add (valid);
             var response = new RequestContinuation (null, request.ToMessage ()).Run ();
             mock.Verify (x => x.ProcedureNoArgsReturns (), Times.Exactly (2));
@@ -723,8 +736,54 @@ namespace KRPC.Test.Service
             Assert.AreEqual (3, response.Results.Count);
             Assert.AreEqual ("foo", response.Results [0].Value);
             Assert.IsTrue (response.Results [1].HasError);
-            Assert.AreEqual ("ArgumentException", response.Results [1].Error.Name);
             Assert.AreEqual ("foo", response.Results [2].Value);
+            return response.Results [1].Error;
+        }
+
+        [Test]
+        public void HandleRequestWithAnUndecodableArgumentFailsOnlyThatCall ()
+        {
+            Assert.AreEqual ("ArgumentException", RunFailingCall (UndecodableCall ()).Name);
+        }
+
+        [TestCase (1u)]
+        [TestCase (uint.MaxValue)]
+        public void HandleRequestWithAnArgumentPositionOutOfRangeFailsOnlyThatCall (uint position)
+        {
+            var error = RunFailingCall (CallWithPositions (position));
+            Assert.AreEqual ("ArgumentException", error.Name);
+            Assert.AreEqual (
+                "Argument position " + position + " out of range for TestService.ProcedureSingleArgReturns",
+                error.Description);
+        }
+
+        [Test]
+        public void HandleRequestWithADuplicateArgumentPositionFailsOnlyThatCall ()
+        {
+            var error = RunFailingCall (CallWithPositions (0, 0));
+            Assert.AreEqual ("ArgumentException", error.Name);
+            Assert.AreEqual (
+                "Duplicate argument position 0 for TestService.ProcedureSingleArgReturns",
+                error.Description);
+        }
+
+        [TestCase ("AddStream")]
+        [TestCase ("Expression_static_Call")]
+        public void HandleRequestWithAnArgumentPositionOutOfRangeInANestedCall (string procedure)
+        {
+            var outer = new Schema.KRPC.ProcedureCall { Service = "KRPC", Procedure = procedure };
+            outer.Arguments.Add (new Schema.KRPC.Argument {
+                Position = 0,
+                Value = CallWithPositions (5).ToByteString ()
+            });
+            var request = new Schema.KRPC.Request ();
+            request.Calls.Add (outer);
+            var response = new RequestContinuation (null, request.ToMessage ()).Run ();
+            Assert.IsFalse (response.HasError);
+            Assert.AreEqual ("ArgumentException", response.Results [0].Error.Name);
+            Assert.AreEqual (
+                "Argument position 5 out of range for TestService.ProcedureSingleArgReturns",
+                response.Results [0].Error.Description);
         }
 
         [Test]

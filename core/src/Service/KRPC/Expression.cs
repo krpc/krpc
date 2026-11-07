@@ -998,10 +998,6 @@ namespace KRPC.Service.KRPC
             var suppliedValues = new object [numParameters];
             var isSupplied = new bool [numParameters];
             foreach (var argument in call.Arguments) {
-                if (argument.Position >= numParameters)
-                    throw new ArgumentException (
-                        "Argument position " + argument.Position + " out of range" +
-                        " for " + procedure.FullyQualifiedName);
                 suppliedValues [argument.Position] = argument.Value;
                 isSupplied [argument.Position] = true;
             }

@@ -299,24 +299,36 @@ namespace KRPC.Server.ProtocolBuffers
 
         public static ProcedureCall ToMessage (this Schema.KRPC.ProcedureCall call)
         {
-            // Note: this method must not throw an exception, if the call is to an invalid
-            // procedure. If the ProcedureSignature cannot be obtained, returns a
-            // ProcedureCall with no decoded arguments
+            // Note: a call to an invalid procedure returns with no decoded arguments, and an invalid argument throws
             var result = new ProcedureCall (call.Service, call.ServiceId, call.Procedure, call.ProcedureId);
             try {
                 var procedureSignature = Service.Services.Instance.GetProcedureSignature (result);
                 result.CachedSignature = procedureSignature;
                 foreach (var argument in call.Arguments) {
-                    var position = (int)argument.Position;
-                    // Ignore the argument if its position is not valid
-                    if (position >= procedureSignature.Parameters.Count)
-                        continue;
-                    var spec = procedureSignature.Parameters [position].Spec;
+                    if (argument.Position >= (uint)procedureSignature.Parameters.Count)
+                        throw new ArgumentException (
+                            "Argument position " + argument.Position + " out of range" +
+                            " for " + procedureSignature.FullyQualifiedName);
+                    if (HasArgument (result, argument.Position))
+                        throw new ArgumentException (
+                            "Duplicate argument position " + argument.Position +
+                            " for " + procedureSignature.FullyQualifiedName);
+                    var spec = procedureSignature.Parameters [(int)argument.Position].Spec;
                     result.Arguments.Add (argument.ToMessage (spec));
                 }
             } catch (RPCException) {
             }
             return result;
+        }
+
+        static bool HasArgument (ProcedureCall call, uint position)
+        {
+            var arguments = call.Arguments;
+            for (var i = 0; i < arguments.Count; i++) {
+                if (arguments [i].Position == position)
+                    return true;
+            }
+            return false;
         }
 
         public static Argument ToMessage (this Schema.KRPC.Argument argument, TypeSpec spec)
