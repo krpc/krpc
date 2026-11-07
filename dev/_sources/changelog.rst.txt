@@ -158,8 +158,9 @@ C-nano client
 * :breaking:`Breaking` Return ``krpc_KRPC_GetStatus`` as ``krpc_KRPC_ServerStatus_t``, whose ``version`` is allocated on the heap (:issue:`1244`)
 * :breaking:`Breaking` Call procedures by the hashed ids, which needs a server of the same version (:issue:`1265`)
 * :breaking:`Breaking` Return a stream or an event as the ``uint64_t`` id of its stream (:issue:`1266`)
+* :breaking:`Breaking` Replace ``krpc_KRPC_CompileFunction`` and ``krpc_KRPC_RunFunction`` with ``krpc_compile_function`` and ``krpc_run_function``, in ``krpc_cnano/functions.h`` (:issue:`1267`)
+* Add a ``_call`` function for each procedure, such as ``krpc_SpaceCenter_Flight_Speed_call``, for ``krpc_KRPC_Expression_Call`` (:issue:`1267`)
 * :breaking:`Breaking` Leave internal procedures out of the services, such as ``krpc_KRPC_AddStream`` (:issue:`1269`)
-* :breaking:`Breaking` Remove server side functions, such as ``krpc_KRPC_RunFunction`` (:issue:`1269`)
 * Relicense the C-nano client and the Arduino library under the MIT license (:issue:`1281`)
 
 
@@ -366,6 +367,7 @@ krpctools
 * :breaking:`Breaking` Replace the ``SOURCE`` and ``OUTPUT`` arguments of ``krpc-docgen`` with ``--page`` (:issue:`1252`)
 * Fix ``krpc-docgen`` Java links to a service's own procedures and properties, and to enumeration values (:issue:`1252`)
 * :breaking:`Breaking` Write the Lua API documentation from ``krpc-docgen`` for ``sphinx-lua-ls``, in place of ``sphinxcontrib-luadomain``, with typed signatures (:issue:`1202`)
+* Generate a ``_call`` function for each procedure of a C-nano service (:issue:`1267`)
 * Leave internal procedures out of generated services and API documentation (:issue:`1269`)
 * Ship the ``TestService2`` and ``ConformanceService`` definitions beside ``TestService.json``, for a conformance testee whose client generates its stubs ahead of time (:issue:`1284`)
 * Publish a wheel in place of an sdist (:issue:`1289`)

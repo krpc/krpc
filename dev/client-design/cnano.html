@@ -590,6 +590,10 @@ replaces.</p>
 <td><p>The caller, borrowed for the call</p></td>
 <td><p>The caller</p></td>
 </tr>
+<tr class="row-odd"><td><p>The encoded arguments of a <code class="docutils literal notranslate"><span class="pre">_call</span></code> function</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">krpc_calloc</span></code> and <code class="docutils literal notranslate"><span class="pre">krpc_malloc</span></code></p></td>
+<td><p>The caller, with <code class="docutils literal notranslate"><span class="pre">krpc_free_procedure_call</span></code></p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -666,9 +670,9 @@ and USB ports.</p></li>
 </section>
 <section id="errors">
 <h2>Errors<a class="headerlink" href="#errors" title="Link to this heading">#</a></h2>
-<p>Library functions return a <code class="docutils literal notranslate"><span class="pre">krpc_error_t</span></code>. <code class="docutils literal notranslate"><span class="pre">KRPC_CHECK</span></code> applies only in the stubs, where
-<code class="docutils literal notranslate"><span class="pre">KRPC_ERROR_CHECK_ASSERT</span></code>, <code class="docutils literal notranslate"><span class="pre">KRPC_ERROR_CHECK_EXIT</span></code> and <code class="docutils literal notranslate"><span class="pre">KRPC_ERROR_CHECK_FN</span></code> replace its
-<code class="docutils literal notranslate"><span class="pre">return</span></code>.</p>
+<p>Library functions return a <code class="docutils literal notranslate"><span class="pre">krpc_error_t</span></code>. <code class="docutils literal notranslate"><span class="pre">KRPC_CHECK</span></code> applies only in the stubs and
+<code class="docutils literal notranslate"><span class="pre">functions.h</span></code>, where <code class="docutils literal notranslate"><span class="pre">KRPC_ERROR_CHECK_ASSERT</span></code>, <code class="docutils literal notranslate"><span class="pre">KRPC_ERROR_CHECK_EXIT</span></code> and
+<code class="docutils literal notranslate"><span class="pre">KRPC_ERROR_CHECK_FN</span></code> replace its <code class="docutils literal notranslate"><span class="pre">return</span></code>.</p>
 <p>A session ends on a failed read or write, a <code class="docutils literal notranslate"><span class="pre">disconnect</span></code>, an unexpected message and a message that
 fails to parse. It survives a server error and a return value that fails to decode, as those
 responses have been read in full. A transport failing partway through a message reaches
@@ -686,6 +690,28 @@ its buffer costs static memory on a small target.</p>
 is <code class="docutils literal notranslate"><span class="pre">static</span> <span class="pre">inline</span></code>, so a header can be included from several translation units.</p>
 <p>A stub calls by service and procedure id, and <code class="docutils literal notranslate"><span class="pre">src/krpc.options</span></code> removes the name fields. This
 keeps names out of flash and off the wire.</p>
+<p>Each procedure also has a <code class="docutils literal notranslate"><span class="pre">_call</span></code> function, for server side functions. An unused one adds compile
+time and no code.</p>
+</section>
+<section id="server-side-functions">
+<h2>Server Side Functions<a class="headerlink" href="#server-side-functions" title="Link to this heading">#</a></h2>
+<p>The stubs leave out internal procedures, so <code class="docutils literal notranslate"><span class="pre">krpc_compile_function</span></code> and <code class="docutils literal notranslate"><span class="pre">krpc_run_function</span></code> are
+written by hand in <code class="docutils literal notranslate"><span class="pre">include/krpc_cnano/functions.h</span></code>. They hold the ids of <code class="docutils literal notranslate"><span class="pre">KRPC.CompileFunction</span></code>
+and <code class="docutils literal notranslate"><span class="pre">KRPC.RunFunction</span></code>. <code class="docutils literal notranslate"><span class="pre">clientgen</span></code> adds <code class="docutils literal notranslate"><span class="pre">krpc_list_nullable_bytes_t</span></code> to the <code class="docutils literal notranslate"><span class="pre">KRPC</span></code> header,
+as no public procedure uses that type.</p>
+<ul class="simple">
+<li><p><strong>A run passes encoded bytes.</strong> C has no generics, so <code class="docutils literal notranslate"><span class="pre">krpc_run_function</span></code> takes no type. The
+program encodes the arguments and decodes the value at the types it knows.</p></li>
+<li><p><strong>A null value has no bytes.</strong> Decoding it fails at most types. It succeeds at a list or a tuple,
+which leaves the list empty and the tuple’s items unset, so the program checks <code class="docutils literal notranslate"><span class="pre">isNull</span></code> there.</p></li>
+<li><p><strong>A call message copies its arguments.</strong> A stub’s <code class="docutils literal notranslate"><span class="pre">krpc_call_t</span></code> borrows its arguments for
+the call. A <code class="docutils literal notranslate"><span class="pre">krpc_schema_ProcedureCall</span></code> outlives the <code class="docutils literal notranslate"><span class="pre">_call</span></code> function that fills it in, so
+each argument is encoded onto the heap, tag and length included. Encoding the message then writes
+those bytes as they are.</p></li>
+<li><p><strong>That code has its own file</strong>, <code class="docutils literal notranslate"><span class="pre">src/procedure_call.c</span></code>, so a static link without functions
+leaves it out.</p></li>
+<li><p><strong>There are no function streams or events</strong>, as the client has no streams.</p></li>
+</ul>
 </section>
 <section id="mapping-the-spec-to-c">
 <h2>Mapping the Spec to C<a class="headerlink" href="#mapping-the-spec-to-c" title="Link to this heading">#</a></h2>
@@ -716,6 +742,12 @@ keeps names out of flash and off the wire.</p>
 </tr>
 <tr class="row-even"><td><p>Nullable position in a value</p></td>
 <td><p>A generated <code class="docutils literal notranslate"><span class="pre">krpc_nullable_*_t</span></code>, the value beside <code class="docutils literal notranslate"><span class="pre">has_value</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Getting a call as a value</p></td>
+<td><p>A generated <code class="docutils literal notranslate"><span class="pre">_call</span></code> function</p></td>
+</tr>
+<tr class="row-even"><td><p>Value type of a server side function</p></td>
+<td><p>The program decodes encoded bytes</p></td>
 </tr>
 <tr class="row-odd"><td><p>Handshake and stall timeouts</p></td>
 <td><p>None, as the client sets no timeout of its own</p></td>
@@ -785,6 +817,7 @@ keeps names out of flash and off the wire.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#transports">Transports</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#errors">Errors</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#service-stubs">Service Stubs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#server-side-functions">Server Side Functions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mapping-the-spec-to-c">Mapping the Spec to C</a></li>
 </ul>
   </nav></div>

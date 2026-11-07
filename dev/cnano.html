@@ -1561,6 +1561,120 @@ itself reads normally, but a call on one of its parts fails with
 detail.</p>
 </div>
 </section>
+<section id="server-side-functions">
+<h2>Server Side Functions<a class="headerlink" href="#server-side-functions" title="Link to this heading">#</a></h2>
+<p>A server side function runs inside the game. You build it in your program with the expression
+API, and the client sends it to the server, which runs it there. The following reads the vessel’s
+altitude, speed and vertical speed together:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/functions.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/krpc.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/space_center.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">krpc_connection_t</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_open_serial</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"COM0"</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_connect</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"Server side function example"</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_t</span><span class="w"> </span><span class="n">vessel</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_ActiveVessel</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">vessel</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Flight_t</span><span class="w"> </span><span class="n">flight</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_Flight</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">flight</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">,</span><span class="w"> </span><span class="n">KRPC_NULL</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Fill in the remote procedure calls as messages, so they can be passed to</span>
+<span class="w">  </span><span class="c1">// the server</span>
+<span class="w">  </span><span class="n">krpc_schema_ProcedureCall</span><span class="w"> </span><span class="n">calls</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Flight_MeanAltitude_call</span><span class="p">(</span><span class="o">&amp;</span><span class="n">calls</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">flight</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Flight_Speed_call</span><span class="p">(</span><span class="o">&amp;</span><span class="n">calls</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">flight</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Flight_VerticalSpeed_call</span><span class="p">(</span><span class="o">&amp;</span><span class="n">calls</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="w"> </span><span class="n">flight</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Build a function that reads the three values</span>
+<span class="w">  </span><span class="n">krpc_KRPC_Expression_t</span><span class="w"> </span><span class="n">items</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">krpc_KRPC_Expression_Call</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">items</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="w"> </span><span class="o">&amp;</span><span class="n">calls</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<span class="w">    </span><span class="n">krpc_free_procedure_call</span><span class="p">(</span><span class="o">&amp;</span><span class="n">calls</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="n">krpc_list_object_t</span><span class="w"> </span><span class="n">elements</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="n">items</span><span class="p">};</span>
+<span class="w">  </span><span class="n">krpc_KRPC_Expression_t</span><span class="w"> </span><span class="n">function</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_KRPC_Expression_CreateTuple</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">function</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">elements</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Run the function once, so the values come from the same physics tick</span>
+<span class="w">  </span><span class="n">krpc_bytes_t</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">KRPC_BYTES_NULL</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_null</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_run_function</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">is_null</span><span class="p">,</span><span class="w"> </span><span class="n">function</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Decode the value at the function's type</span>
+<span class="w">  </span><span class="n">krpc_tuple_double_double_double_t</span><span class="w"> </span><span class="n">value</span><span class="p">;</span>
+<span class="w">  </span><span class="n">pb_istream_t</span><span class="w"> </span><span class="n">stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pb_istream_from_buffer</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">.</span><span class="n">size</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_decode_tuple_double_double_double</span><span class="p">(</span><span class="o">&amp;</span><span class="n">stream</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">value</span><span class="p">);</span>
+<span class="w">  </span><span class="n">KRPC_FREE_BYTES</span><span class="p">(</span><span class="n">data</span><span class="p">);</span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"Altitude: %.1f m, speed: %.1f m/s, vertical speed: %.1f m/s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
+<span class="w">         </span><span class="n">value</span><span class="p">.</span><span class="n">e0</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p">.</span><span class="n">e1</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p">.</span><span class="n">e2</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">krpc_disconnect</span><span class="p">(</span><span class="n">conn</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Each procedure has a function with <code class="docutils literal notranslate"><span class="pre">_call</span></code> added to its name, such as
+<code class="docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Flight_Speed_call</span></code>. It fills in the call as a message, for
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_Call()</span></code> to embed in the function. The message holds the encoded
+arguments on the heap, so free it with <a class="reference internal" href="#c.krpc_free_procedure_call" title="krpc_free_procedure_call"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_free_procedure_call()</span></code></a>.
+<a class="reference internal" href="user-guide/server-side-functions.html#server-side-functions-api"><span class="std std-ref">The Expression API</span></a> in the <a class="reference internal" href="user-guide/server-side-functions.html#server-side-functions"><span class="std std-ref">server side functions guide</span></a> describes how to build functions.</p>
+<p><a class="reference internal" href="#c.krpc_run_function" title="krpc_run_function"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_run_function()</span></code></a> runs a function once, within one physics tick. Its arguments and its
+value are encoded bytes. Encode each argument at the type of its parameter with the
+<code class="docutils literal notranslate"><span class="pre">krpc_encode_</span></code> functions, and decode the value at the function’s type with the
+<code class="docutils literal notranslate"><span class="pre">krpc_decode_</span></code> functions.</p>
+<p>A function takes arguments through its parameters. The following compiles a function ahead of its
+first run, then passes it an argument:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/functions.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/krpc.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">krpc_connection_t</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_open_serial</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"COM0"</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_connect</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"Function arguments example"</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// Build a function that doubles its parameter</span>
+<span class="w">  </span><span class="n">krpc_KRPC_Type_t</span><span class="w"> </span><span class="n">type</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_KRPC_Type_Double</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">type</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_KRPC_Expression_t</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">two</span><span class="p">,</span><span class="w"> </span><span class="n">body</span><span class="p">,</span><span class="w"> </span><span class="n">function</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_KRPC_Expression_Parameter</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="s">"x"</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_KRPC_Expression_ConstantDouble</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">two</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_KRPC_Expression_Multiply</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">body</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">two</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_list_object_t</span><span class="w"> </span><span class="n">parameters</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">x</span><span class="p">};</span>
+<span class="w">  </span><span class="n">krpc_KRPC_Expression_Lambda</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">function</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">parameters</span><span class="p">,</span><span class="w"> </span><span class="n">body</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_compile_function</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">function</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Encode the argument at the type of its parameter</span>
+<span class="w">  </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">buffer</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span>
+<span class="w">  </span><span class="n">pb_ostream_t</span><span class="w"> </span><span class="n">output</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pb_ostream_from_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">buffer</span><span class="p">));</span>
+<span class="w">  </span><span class="n">krpc_encode_double</span><span class="p">(</span><span class="o">&amp;</span><span class="n">output</span><span class="p">,</span><span class="w"> </span><span class="mi">21</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_nullable_bytes_t</span><span class="w"> </span><span class="n">items</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+<span class="w">  </span><span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">value</span><span class="p">.</span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">output</span><span class="p">.</span><span class="n">bytes_written</span><span class="p">;</span>
+<span class="w">  </span><span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">value</span><span class="p">.</span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">buffer</span><span class="p">;</span>
+<span class="w">  </span><span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">has_value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_list_nullable_bytes_t</span><span class="w"> </span><span class="n">arguments</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">items</span><span class="p">};</span>
+
+<span class="w">  </span><span class="n">krpc_bytes_t</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">KRPC_BYTES_NULL</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_null</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_run_function</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">is_null</span><span class="p">,</span><span class="w"> </span><span class="n">function</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">arguments</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Decode the value at the function's type</span>
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">value</span><span class="p">;</span>
+<span class="w">  </span><span class="n">pb_istream_t</span><span class="w"> </span><span class="n">input</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pb_istream_from_buffer</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">.</span><span class="n">size</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_decode_double</span><span class="p">(</span><span class="o">&amp;</span><span class="n">input</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">value</span><span class="p">);</span>
+<span class="w">  </span><span class="n">KRPC_FREE_BYTES</span><span class="p">(</span><span class="n">data</span><span class="p">);</span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"Result: %.1f</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">krpc_disconnect</span><span class="p">(</span><span class="n">conn</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="#c.krpc_compile_function" title="krpc_compile_function"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_compile_function()</span></code></a> makes the first run as fast as later ones.</p>
+</section>
 <section id="streams-and-events">
 <h2>Streams and Events<a class="headerlink" href="#streams-and-events" title="Link to this heading">#</a></h2>
 <p>The C-nano client has no streams or events. Read a value by calling its procedure in a loop
@@ -1909,6 +2023,42 @@ fails.</p>
 write fails.</p>
 </dd></dl>
 
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_compile_function">
+<a class="reference internal" href="#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_compile_function</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t" title="krpc_KRPC_Expression_t"><span class="n"><span class="pre">krpc_KRPC_Expression_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">function</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_compile_function" title="Link to this definition">#</a><br /></dt>
+<dd><p>Compiles a server side function on the server, so that its first run is as fast as later ones.
+Declared in <code class="docutils literal notranslate"><span class="pre">krpc_cnano/functions.h</span></code>.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_run_function">
+<a class="reference internal" href="#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_run_function</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_bytes_t" title="krpc_bytes_t"><span class="n"><span class="pre">krpc_bytes_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">isNull</span></span>, <a class="reference internal" href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t" title="krpc_KRPC_Expression_t"><span class="n"><span class="pre">krpc_KRPC_Expression_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">function</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_list_nullable_bytes_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">arguments</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_run_function" title="Link to this definition">#</a><br /></dt>
+<dd><p>Runs a server side function within a single physics tick. Declared in
+<code class="docutils literal notranslate"><span class="pre">krpc_cnano/functions.h</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>connection</strong> – The connection.</p></li>
+<li><p><strong>result</strong> – The encoded value of the function, allocated on the heap. No bytes for a
+function with no value. Pass it empty, from <a class="reference internal" href="#c.KRPC_BYTES_NULL" title="KRPC_BYTES_NULL"><code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_BYTES_NULL</span></code></a> or
+<a class="reference internal" href="#c.KRPC_FREE_BYTES" title="KRPC_FREE_BYTES"><code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_FREE_BYTES</span></code></a>, as a null value or a shorter value leaves bytes it
+already holds in place.</p></li>
+<li><p><strong>isNull</strong> – Set to whether the value is null.</p></li>
+<li><p><strong>function</strong> – The function to run.</p></li>
+<li><p><strong>arguments</strong> – The encoded arguments, one per parameter, with <code class="docutils literal notranslate"><span class="pre">has_value</span></code> false for a
+null. <code class="docutils literal notranslate"><span class="pre">NULL</span></code> for a function with no parameters.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_free_procedure_call">
+<a class="reference internal" href="#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_free_procedure_call</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_schema_ProcedureCall</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">call</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_free_procedure_call" title="Link to this definition">#</a><br /></dt>
+<dd><p>Frees the encoded arguments of a call that a <code class="docutils literal notranslate"><span class="pre">_call</span></code> function filled in. Free a call that
+failed to fill in too, and free a call before filling it in again.</p>
+</dd></dl>
+
 </section>
 <section id="api-reference">
 <h2>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading">#</a></h2>
@@ -2001,6 +2151,7 @@ write fails.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calling-remote-procedures">Calling Remote Procedures</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#handling-errors">Handling Errors</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#remote-objects">Remote Objects</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#server-side-functions">Server Side Functions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#streams-and-events">Streams and Events</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deprecated-members">Deprecated Members</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#service-stubs">Service Stubs</a></li>

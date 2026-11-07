@@ -342,6 +342,34 @@ itself reads normally, but a call on one of its parts fails with
 .. seealso:: :doc:`/user-guide/object-lifetime` describes how each kind of object behaves in more
              detail.
 
+Server Side Functions
+---------------------
+
+A server side function runs inside the game. You build it in your program with the expression
+API, and the client sends it to the server, which runs it there. The following reads the vessel's
+altitude, speed and vertical speed together:
+
+.. literalinclude:: /scripts/cnano/RunFunction.c
+
+Each procedure has a function with ``_call`` added to its name, such as
+``krpc_SpaceCenter_Flight_Speed_call``. It fills in the call as a message, for
+:func:`krpc_KRPC_Expression_Call` to embed in the function. The message holds the encoded
+arguments on the heap, so free it with :func:`krpc_free_procedure_call`.
+:ref:`server-side-functions-api` in the :ref:`server side functions guide
+<server-side-functions>` describes how to build functions.
+
+:func:`krpc_run_function` runs a function once, within one physics tick. Its arguments and its
+value are encoded bytes. Encode each argument at the type of its parameter with the
+``krpc_encode_`` functions, and decode the value at the function's type with the
+``krpc_decode_`` functions.
+
+A function takes arguments through its parameters. The following compiles a function ahead of its
+first run, then passes it an argument:
+
+.. literalinclude:: /scripts/cnano/RunFunctionArguments.c
+
+:func:`krpc_compile_function` makes the first run as fast as later ones.
+
 Streams and Events
 ------------------
 
@@ -617,6 +645,31 @@ Client API Reference
 
    Writes all *count* bytes from *buf* to the connection. Returns :macro:`KRPC_ERROR_IO` if the
    write fails.
+
+.. function:: krpc_error_t krpc_compile_function(krpc_connection_t connection, krpc_KRPC_Expression_t function)
+
+   Compiles a server side function on the server, so that its first run is as fast as later ones.
+   Declared in ``krpc_cnano/functions.h``.
+
+.. function:: krpc_error_t krpc_run_function(krpc_connection_t connection, krpc_bytes_t * result, bool * isNull, krpc_KRPC_Expression_t function, const krpc_list_nullable_bytes_t * arguments)
+
+   Runs a server side function within a single physics tick. Declared in
+   ``krpc_cnano/functions.h``.
+
+   :param connection: The connection.
+   :param result: The encoded value of the function, allocated on the heap. No bytes for a
+                  function with no value. Pass it empty, from :macro:`KRPC_BYTES_NULL` or
+                  :macro:`KRPC_FREE_BYTES`, as a null value or a shorter value leaves bytes it
+                  already holds in place.
+   :param isNull: Set to whether the value is null.
+   :param function: The function to run.
+   :param arguments: The encoded arguments, one per parameter, with ``has_value`` false for a
+                     null. ``NULL`` for a function with no parameters.
+
+.. function:: krpc_error_t krpc_free_procedure_call(krpc_schema_ProcedureCall * call)
+
+   Frees the encoded arguments of a call that a ``_call`` function filled in. Free a call that
+   failed to fill in too, and free a call before filling it in again.
 
 API Reference
 -------------

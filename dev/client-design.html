@@ -794,8 +794,9 @@ it gets a call as a value, such as to use in an expression. The clients do this 
 <ul class="simple">
 <li><p>Python, C# and Java have one method for each purpose, <code class="docutils literal notranslate"><span class="pre">add_stream</span></code> and <code class="docutils literal notranslate"><span class="pre">get_call</span></code> or their
 equivalents. It takes any property or method, and works out the procedure at run time.</p></li>
-<li><p>C++ cannot look up a method at run time. Its generated stubs instead have two extra methods for
-each procedure, ending in <code class="docutils literal notranslate"><span class="pre">_stream</span></code> and <code class="docutils literal notranslate"><span class="pre">_call</span></code>.</p></li>
+<li><p>C++ and C-nano cannot look up a method at run time. Their generated stubs instead have extra
+functions for each procedure. C++ adds ones ending in <code class="docutils literal notranslate"><span class="pre">_stream</span></code> and <code class="docutils literal notranslate"><span class="pre">_call</span></code>. C-nano has no
+streams, so it adds only <code class="docutils literal notranslate"><span class="pre">_call</span></code>.</p></li>
 </ul>
 <p>For the <code class="docutils literal notranslate"><span class="pre">MeanAltitude</span></code> property of a <code class="docutils literal notranslate"><span class="pre">Flight</span></code> object:</p>
 <div class="pst-scrollable-table-container"><table class="table">
@@ -818,7 +819,11 @@ each procedure, ending in <code class="docutils literal notranslate"><span class
 <td><p><code class="docutils literal notranslate"><span class="pre">flight.mean_altitude_stream()</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">flight.mean_altitude_call()</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><p>Java</p></td>
+<tr class="row-odd"><td><p>C-nano</p></td>
+<td><p>None</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Flight_MeanAltitude_call(&amp;call,</span> <span class="pre">flight)</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Java</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">connection.addStream(flight,</span> <span class="pre">&quot;getMeanAltitude&quot;)</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">connection.getCall(flight,</span> <span class="pre">&quot;getMeanAltitude&quot;)</span></code></p></td>
 </tr>
