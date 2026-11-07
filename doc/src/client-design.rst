@@ -26,7 +26,7 @@ Clients
      - Threaded
      - Yes
      - Pre-generated or dynamic
-   * - C#
+   * - :doc:`C# <client-design/csharp>`
      - Threaded
      - Yes
      - Pre-generated
@@ -266,3 +266,4 @@ client passed to it.
    :hidden:
 
    client-design/python
+   client-design/csharp
