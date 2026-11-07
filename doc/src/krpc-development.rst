@@ -3,7 +3,8 @@ kRPC Development
 
 These pages cover working on kRPC itself: the code structure, building from source, and running
 the tests and benchmarks. See also the `contributing guidelines
-<https://github.com/krpc/krpc/blob/main/CONTRIBUTING.md>`_.
+<https://github.com/krpc/krpc/blob/main/CONTRIBUTING.md>`_ and the :doc:`client design
+</client-design>`.
 
 .. toctree::
    :maxdepth: 1

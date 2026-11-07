@@ -214,6 +214,8 @@ way writing here goes wrong.
  * `.. note::` in block form with a one or two sentence body for a caveat, `.. seealso::` for a
    cross-reference. Never hang a paragraph off an inline `.. note::`.
  * Say what something does. Why it is implemented that way belongs in the code.
+ * The client design pages, `doc/src/client-design*`, are the exception to these
+   rules. They name the internals and use short `.. code-block::` fragments.
 
 ### XML documentation comments
 
