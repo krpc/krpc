@@ -32,8 +32,8 @@ def assets():
             "bazel-bin/client/csharp/KRPC.Client.{version}.nupkg",
             "bazel-bin/client/java/krpc-java-{version}.jar",
             "bazel-bin/client/lua/krpc-lua-{version}.zip",
-            "bazel-bin/client/python/krpc-python-{version}.tar.gz",
-            "bazel-bin/tools/krpctools/krpctools-{version}.tar.gz",
+            "bazel-bin/client/python/krpc-{version}-py3-none-any.whl",
+            "bazel-bin/tools/krpctools/krpctools-{version}-py3-none-any.whl",
             "bazel-bin/krpc-genfiles-{version}.zip",
         )
     ]

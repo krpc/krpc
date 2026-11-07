@@ -1,26 +1,23 @@
 """Runs the conformance driver as krpctools ships it, against the Python testee.
 
-  conformance_test.py SDIST PKG DOTNET TESTEE EXPECTED_FAILURES UNSUPPORTED CONVENTIONS
+  conformance_test.py WHEEL DOTNET TESTEE EXPECTED_FAILURES UNSUPPORTED CONVENTIONS
 
-This checks the package rather than a client: the layout of the sdist, the krpc-conformance
+This checks the package rather than a client: the layout of the wheel, the krpc-conformance
 entry point and the bundled TestServer. So it runs the connection tests alone.
 """
 
-import importlib
+import importlib.metadata
 import os
 import sys
-import tarfile
-
-import tomllib
+import zipfile
 
 
 def main() -> int:
-    sdist, pkg, dotnet, testee = sys.argv[1:5]
-    expected_failures, unsupported, conventions = sys.argv[5:]
-    extract_dir = os.path.join(os.environ.get("TEST_TMPDIR", "."), "sdist")
-    with tarfile.open(sdist) as tar:
-        tar.extractall(extract_dir, filter="data")
-    pkg_dir = os.path.join(extract_dir, pkg)
+    wheel, dotnet, testee = sys.argv[1:4]
+    expected_failures, unsupported, conventions = sys.argv[4:]
+    extract_dir = os.path.join(os.environ.get("TEST_TMPDIR", "."), "wheel")
+    with zipfile.ZipFile(wheel) as archive:
+        archive.extractall(extract_dir)
 
     # The bundled TestServer is framework dependent, and runs on the toolchain's dotnet host.
     # DOTNET is its exec path, which names an external repository beside the main one.
@@ -32,11 +29,9 @@ def main() -> int:
     os.environ["DOTNET_ROOT"] = dotnet_root
 
     # Call the entry point as pip would install it
-    with open(os.path.join(pkg_dir, "pyproject.toml"), "rb") as config_file:
-        scripts = tomllib.load(config_file)["project"]["scripts"]
-    module, function = scripts["krpc-conformance"].split(":")
-    sys.path.insert(0, pkg_dir)
-    entry_point = getattr(importlib.import_module(module), function)
+    sys.path.insert(0, extract_dir)
+    distribution = importlib.metadata.distribution("krpctools")
+    entry_point = distribution.entry_points["krpc-conformance"].load()
     sys.argv = [
         "krpc-conformance",
         "--testee=" + testee,

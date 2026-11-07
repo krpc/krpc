@@ -12,14 +12,14 @@ def main():
     credentials = lib.load_credentials()
 
     lib.banner("Building and testing the Python client")
-    lib.run("bazel", "build", "//client/python:python-pypi")
+    lib.run("bazel", "build", "//client/python")
     lib.run("bazel", "test", "//client/python:test", "--cache_test_results=no")
 
     lib.banner("Uploading to PyPI")
     lib.confirm(f"Upload krpc {lib.VERSION} to PyPI? (uploads cannot be replaced)")
     lib.twine_upload(
         credentials["PYPI_TOKEN_KRPC"],
-        f"bazel-bin/client/python/krpc-{lib.VERSION}.tar.gz",
+        f"bazel-bin/client/python/krpc-{lib.VERSION}-py3-none-any.whl",
     )
 
 

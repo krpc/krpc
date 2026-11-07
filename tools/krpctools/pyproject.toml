@@ -40,17 +40,5 @@ krpc-conformance = "krpctools.conformance.driver.main:main"
 path = "krpctools/version.py"
 pattern = '__version__ = "(?P<version>[^"]+)"'
 
-[tool.hatch.build.targets.sdist]
-include = [
-    "krpctools/",
-    "README.md",
-    "CHANGELOG.md",
-    "LICENSE",
-    "LICENSE.protobuf",
-    "COPYING",
-    "COPYING.LESSER",
-    "VERSION.txt",
-]
-
 [tool.hatch.build.targets.wheel]
 packages = ["krpctools"]

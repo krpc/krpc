@@ -3,27 +3,27 @@
 load("@rules_python//python:defs.bzl", _native_py_test = "py_test")
 load(":pkg.bzl", "apply_exclude", "apply_path_map")
 
-def _sdist_impl(ctx):
+def _wheel_impl(ctx):
     output = ctx.outputs.out
     inputs = ctx.files.files
     path_map = ctx.attr.path_map
 
     # Symlink all the files to a staging directory
     # to get the required directory structure in the archive
-    staging_dir = output.basename + ".py-sdist-tmp"
+    staging_dir = output.basename + ".py-wheel-tmp"
     staging_inputs = []
     for input in inputs:
         if apply_exclude(ctx.attr.exclude, input.short_path):
             continue
         staging_path = staging_dir + "/" + apply_path_map(path_map, input.short_path)
-        staging_file = ctx.actions.declare_file(staging_path)
+        staging_file = ctx.actions.declare_file(staging_path, sibling = output)
         ctx.actions.symlink(output = staging_file, target_file = input)
         staging_inputs.append(staging_file)
 
-    # Build the sdist from the staging directory. build_sdist dereferences the
+    # Build the wheel from the staging directory. build_wheel dereferences the
     # staged symlinks into the build dir, runs hatchling there and copies out the
-    # tarball -- cross-platform, no shell.
-    staging_dir_path = output.path + ".py-sdist-tmp"
+    # wheel. It is cross-platform and needs no shell.
+    staging_dir_path = output.path + ".py-wheel-tmp"
     build_dir_path = staging_dir_path + ".deref"
 
     hatchling = ctx.executable._hatchling
@@ -34,17 +34,17 @@ def _sdist_impl(ctx):
     args.add("--out", output.path)
 
     ctx.actions.run(
-        executable = ctx.executable._sdist_builder,
+        executable = ctx.executable._wheel_builder,
         arguments = [args],
         inputs = staging_inputs,
         outputs = [output],
         tools = [ctx.attr._hatchling[DefaultInfo].files_to_run],
         progress_message = "Packaging files into %s" % output.short_path,
-        mnemonic = "PySdist",
+        mnemonic = "PyWheel",
     )
 
-py_sdist = rule(
-    implementation = _sdist_impl,
+py_wheel = rule(
+    implementation = _wheel_impl,
     attrs = {
         "files": attr.label_list(allow_files = True, mandatory = True, allow_empty = True),
         "path_map": attr.string_dict(),
@@ -55,8 +55,8 @@ py_sdist = rule(
             executable = True,
             cfg = "exec",
         ),
-        "_sdist_builder": attr.label(
-            default = Label("//tools/build/python:build_sdist"),
+        "_wheel_builder": attr.label(
+            default = Label("//tools/build/python:build_wheel"),
             executable = True,
             cfg = "exec",
         ),
@@ -64,11 +64,11 @@ py_sdist = rule(
 )
 
 # buildifier: disable=function-docstring
-def py_test(name, src, pkg, tests = [], deps = [], **kwargs):
+def py_test(name, src, tests = [], deps = [], **kwargs):
     # The test parameters are baked into a generated test script, rather than
     # passed as arguments, as the test may be invoked via the client_test
     # harness which does not forward arguments. tests names the files to run,
-    # relative to the package directory in the sdist; empty runs all of them.
+    # relative to the root of the wheel; empty runs all of them.
     runner_template = Label("//tools/build/python:run_pytest.py.tmpl")
     native.genrule(
         name = name + "-main",
@@ -77,7 +77,7 @@ def py_test(name, src, pkg, tests = [], deps = [], **kwargs):
             runner_template,
         ],
         outs = [name + "_main.py"],
-        cmd = 'sed -e "s|@SDIST@|$(rootpath %s)|" -e "s|@PKG@|%s|" -e "s|@TESTS@|%s|" $(location %s) > $@' % (src, pkg, " ".join(tests), runner_template),
+        cmd = 'sed -e "s|@WHEEL@|$(rootpath %s)|" -e "s|@TESTS@|%s|" $(location %s) > $@' % (src, " ".join(tests), runner_template),
     )
     _native_py_test(
         name = name,

@@ -19,7 +19,7 @@ def main():
     lib.confirm(f"Upload krpctools {lib.VERSION} to PyPI? (uploads cannot be replaced)")
     lib.twine_upload(
         credentials["PYPI_TOKEN_KRPCTOOLS"],
-        f"bazel-bin/tools/krpctools/krpctools-{lib.VERSION}.tar.gz",
+        f"bazel-bin/tools/krpctools/krpctools-{lib.VERSION}-py3-none-any.whl",
     )
 
 

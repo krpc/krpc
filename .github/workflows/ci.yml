@@ -80,7 +80,7 @@ jobs:
             build: //client/python:python
             test: //client/python:test
             artifact: client-python
-            path: bazel-bin/client/python/krpc-python-*.tar.gz
+            path: bazel-bin/client/python/krpc-*.whl
           - name: test-client-lua
             build: //client/lua:lua
             test: //client/lua:test
@@ -284,7 +284,7 @@ jobs:
         uses: ./.github/actions/upload-artifact
         with:
           name: krpctools
-          path: bazel-bin/tools/krpctools/krpctools-*.tar.gz
+          path: bazel-bin/tools/krpctools/krpctools-*.whl
 
   # Installs the krpctools package as a user would, on a runner with Python and
   # .NET but no Bazel, and runs each tool once. The Python client's testee drives
@@ -324,7 +324,7 @@ jobs:
       - name: install
         shell: bash
         run: |
-          python -m pip install artifacts/client-python/krpc-python-[0-9]*.tar.gz artifacts/krpctools/*.tar.gz grpcio-tools
+          python -m pip install artifacts/client-python/*.whl artifacts/krpctools/*.whl grpcio-tools
           mkdir testee
           python -m grpc_tools.protoc -Iclient/conformance --python_out=testee client/conformance/testee.proto
       - name: test

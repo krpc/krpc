@@ -1,9 +1,9 @@
 load("@rules_python//python:defs.bzl", "py_binary", "py_library")
-load("//:config.bzl", "python_version", "version")
-load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test", "py_sdist", "py_test")
+load("//:config.bzl", "python_version")
+load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test", "py_test", "py_wheel")
 
 # The krpctest package as an importable python library, for use by other
-# python targets in this workspace (the sdist below is what is released)
+# python targets in this workspace
 py_library(
     name = "krpctest_lib",
     srcs = glob(["krpctest/**/*.py"]) + [":version-py"],
@@ -48,11 +48,10 @@ py_binary(
     deps = [":krpctest_lib"],
 )
 
-py_sdist(
+py_wheel(
     name = "krpctest",
-    out = "krpctest-%s.tar.gz" % version,
+    out = "krpctest-%s-py3-none-any.whl" % python_version,
     files = [
-        "CHANGELOG.md",
         "LICENSE",
         "README.md",
         "krpctest/krpctest.sfs",
@@ -61,7 +60,6 @@ py_sdist(
         "//:COPYING",
         "//:COPYING.LESSER",
         "//:python_version",
-        "//:version",
     ] + glob(["krpctest/**/*.py"]),
     path_map = {
         "version.py": "krpctest/version.py",
@@ -87,7 +85,6 @@ py_test(
     name = "krpctesttest",
     size = "medium",
     src = ":krpctest",
-    pkg = "krpctest-" + python_version,
     deps = deps,
 )
 

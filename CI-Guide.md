@@ -97,7 +97,7 @@ all-digit sha as a number.
 
 ### The Tool Packages
 
-`test-tool-packages` installs the krpctools sdist and the Python client with pip, on bare Linux
+`test-tool-packages` installs the krpctools and Python client wheels with pip, on bare Linux
 and Windows runners with Python and .NET but no Bazel. `tools/ci/smoke_test_tools.py` then runs
 each krpctools command once, as a user would. It checks what the Bazel tests cannot: the package
 installs, its entry points run, and the bundled .NET tools start on the runner's dotnet host.

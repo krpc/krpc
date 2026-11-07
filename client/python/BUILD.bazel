@@ -1,8 +1,8 @@
 load("@rules_python//python:defs.bzl", "py_binary", "py_library")
-load("//:config.bzl", "python_version", "version")
+load("//:config.bzl", "python_version")
 load("//tools/build:client_test.bzl", "client_test")
 load("//tools/build:conformance.bzl", "conformance_test")
-load("//tools/build:python.bzl", "py_autodoc_test", "py_pyright_test", "py_ruff_test", "py_sdist", "py_test")
+load("//tools/build:python.bzl", "py_autodoc_test", "py_pyright_test", "py_ruff_test", "py_test", "py_wheel")
 load("//tools/krpctools:clientgen.bzl", "clientgen_python_init", "clientgen_services")
 
 exports_files([
@@ -15,7 +15,7 @@ exports_files([
 services = clientgen_services("python")
 
 # The krpc package as an importable python library, for use by other python
-# targets in this workspace (the sdists below are what is released)
+# targets in this workspace (the wheel below is what is released)
 py_library(
     name = "krpc_lib",
     srcs = services + [":services-testservice"],
@@ -68,21 +68,12 @@ genrule(
     cmd = 'cp "$<" "$@"',
 )
 
-# Needed as clientgen depends on these files
-genrule(
+# The client without its generated service modules, for the tests. Its own directory keeps
+# the name of a wheel from clashing with the one below.
+py_wheel(
     name = "python_base",
-    srcs = [":python-without-services"],
-    outs = ["krpc-python-base-%s.tar.gz" % version],
-    cmd = 'cp "$<" "$@"',
-    output_to_bindir = True,
-    visibility = ["//visibility:public"],
-)
-
-py_sdist(
-    name = "python-without-services",
-    out = "krpc-base-%s.tar.gz" % version,
+    out = "base/krpc-%s-py3-none-any.whl" % python_version,
     files = [
-        "CHANGELOG.md",
         "LICENSE",
         "README.md",
         "pyproject.toml",
@@ -90,7 +81,6 @@ py_sdist(
         "//:COPYING",
         "//:COPYING.LESSER",
         "//:python_version",
-        "//:version",
         "//protobuf:python",
         "//tools/build/protobuf:LICENSE.Google.Protobuf",
     ] + glob(["krpc/**/*"]),
@@ -102,20 +92,10 @@ py_sdist(
     },
 )
 
-genrule(
+py_wheel(
     name = "python",
-    srcs = [":python-pypi"],
-    outs = ["krpc-python-%s.tar.gz" % version],
-    cmd = 'cp "$<" "$@"',
-    output_to_bindir = True,
-    visibility = ["//visibility:public"],
-)
-
-py_sdist(
-    name = "python-pypi",
-    out = "krpc-%s.tar.gz" % version,
+    out = "krpc-%s-py3-none-any.whl" % python_version,
     files = [
-        "CHANGELOG.md",
         "LICENSE",
         "README.md",
         "pyproject.toml",
@@ -124,7 +104,6 @@ py_sdist(
         "//:COPYING",
         "//:COPYING.LESSER",
         "//:python_version",
-        "//:version",
         "//protobuf:python",
         "//tools/build/protobuf:LICENSE.Google.Protobuf",
     ] + services + glob(["krpc/**/*"]),
@@ -178,7 +157,6 @@ py_test(
     name = "unit",
     size = "small",
     src = ":python",
-    pkg = "krpc-" + python_version,
     tests = unit_tests,
     deps = deps,
 )
@@ -193,7 +171,7 @@ client_test(
     test_executable = ":clienttest",
 )
 
-# And again against the sdist built without the pre-generated service stubs, so that the
+# And again against the wheel built without the pre-generated service stubs, so that the
 # services generated at runtime are covered as well.
 client_test(
     name = "client-base",
@@ -207,7 +185,6 @@ py_test(
     name = "clienttest",
     size = "small",
     src = ":python",
-    pkg = "krpc-" + python_version,
     tags = ["requires-network"],
     tests = client_tests,
     deps = deps,
@@ -217,7 +194,6 @@ py_test(
     name = "clienttest_base",
     size = "small",
     src = ":python_base",
-    pkg = "krpc-" + python_version,
     tags = ["requires-network"],
     tests = client_tests,
     deps = deps,

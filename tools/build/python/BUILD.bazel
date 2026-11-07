@@ -12,8 +12,8 @@ exports_files([
 ])
 
 py_binary(
-    name = "build_sdist",
-    srcs = ["build_sdist.py"],
+    name = "build_wheel",
+    srcs = ["build_wheel.py"],
 )
 
 py_console_script_binary(
