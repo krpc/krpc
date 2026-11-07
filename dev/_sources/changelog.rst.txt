@@ -371,6 +371,8 @@ krpctools
 * Leave internal procedures out of generated services and API documentation (:issue:`1269`)
 * Ship the ``TestService2`` and ``ConformanceService`` definitions beside ``TestService.json``, for a conformance testee whose client generates its stubs ahead of time (:issue:`1284`)
 * Publish a wheel in place of an sdist (:issue:`1289`)
+* Reject unknown options and invalid values in ``krpc-testserver`` and ``krpc-servicedefs`` (:issue:`1296`)
+* Write the members in ``krpc-servicedefs`` output in a fixed order (:issue:`1296`)
 
 
 v0.7.0
