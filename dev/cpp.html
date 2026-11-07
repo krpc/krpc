@@ -1784,7 +1784,32 @@ vessel’s altitude exceeds 1000 meters:</p>
 The server checks the condition every physics tick, so the event catches a condition that holds
 for only a moment, which a loop of calls can miss.</p>
 <p>The event fires again each time the condition becomes true after being false. Call
-<a class="reference internal" href="#_CPPv4N4krpc5Event6removeEv" title="krpc::Event::remove"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">remove()</span></code></a> to stop it.</p>
+<a class="reference internal" href="#_CPPv4N4krpc5Event6removeEv" title="krpc::Event::remove"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">remove()</span></code></a> to stop it. Destroying the last copy of an event also removes it, so an
+event declared in a block is removed at the end of the block:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc/function_stream.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc/services/krpc.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc/services/space_center.hpp&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="o">::</span><span class="n">connect</span><span class="p">();</span>
+<span class="w">  </span><span class="n">krpc</span><span class="o">::</span><span class="n">services</span><span class="o">::</span><span class="n">SpaceCenter</span><span class="w"> </span><span class="n">sc</span><span class="p">(</span><span class="n">conn</span><span class="p">);</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">flight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sc</span><span class="p">.</span><span class="n">active_vessel</span><span class="p">().</span><span class="n">value</span><span class="p">().</span><span class="n">flight</span><span class="p">();</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">mean_altitude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">flight</span><span class="p">.</span><span class="n">mean_altitude_call</span><span class="p">();</span>
+<span class="w">  </span><span class="k">typedef</span><span class="w"> </span><span class="n">krpc</span><span class="o">::</span><span class="n">services</span><span class="o">::</span><span class="n">KRPC</span><span class="o">::</span><span class="n">Expression</span><span class="w"> </span><span class="n">Expr</span><span class="p">;</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expr</span><span class="o">::</span><span class="n">greater_than</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">Expr</span><span class="o">::</span><span class="n">call</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">mean_altitude</span><span class="p">),</span>
+<span class="w">                                 </span><span class="n">Expr</span><span class="o">::</span><span class="n">constant_double</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">));</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="o">::</span><span class="n">add_event</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
+<span class="w">    </span><span class="n">event</span><span class="p">.</span><span class="n">get_condition_lock</span><span class="p">().</span><span class="n">lock</span><span class="p">();</span>
+<span class="w">    </span><span class="n">event</span><span class="p">.</span><span class="n">wait</span><span class="p">();</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Altitude reached 1000m"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="c1">// The end of the block released the lock and removed the event</span>
+<span class="p">}</span>
+</pre></div>
+</div>
 <p>As with a stream, hold the event’s condition when you call <a class="reference internal" href="#_CPPv4N4krpc5Event4waitEd" title="krpc::Event::wait"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">wait()</span></code></a>. A wait
 returns straight away if the event has fired since the last wait on the same event object, so a
 firing between two waits is not missed.</p>

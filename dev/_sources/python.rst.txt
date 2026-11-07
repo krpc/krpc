@@ -169,8 +169,7 @@ each update for its effects. Its value is ``None``.
 
 A stream runs until you remove it with :meth:`~krpc.stream.Stream.remove`, or the connection
 closes. It keeps running after your program drops its last reference to it, so remove a stream you
-no longer need. :meth:`~krpc.client.Client.stream` creates a stream in a
-``with`` statement, which removes it at the end of the block:
+no longer need. A ``with`` statement removes a stream at the end of the block:
 
 .. literalinclude:: /scripts/python/Streaming3.py
 
@@ -302,7 +301,10 @@ for it to fire. The server checks the condition every physics tick, so the event
 condition that holds for only a moment, which a loop of calls can miss.
 
 The event fires again each time the condition becomes true after being false. Call
-:meth:`~krpc.event.Event.remove` to stop it.
+:meth:`~krpc.event.Event.remove` to stop it. A ``with`` statement removes an event at the end of
+the block:
+
+.. literalinclude:: /scripts/python/EventScope.py
 
 As with a stream, hold the event's condition when you call :meth:`~krpc.event.Event.wait`. A wait
 returns straight away if the event has fired since your last wait, so a firing between two waits is
@@ -765,8 +767,7 @@ Client API Reference
 
    .. method:: stream(func, *args, **kwargs)
 
-      Creates a stream as :meth:`add_stream` does, for use in a ``with`` statement. The stream is
-      removed at the end of the block.
+      Deprecated. Use :meth:`add_stream` in a ``with`` statement.
 
    .. attribute:: stream_update_condition
 
@@ -875,7 +876,8 @@ Client API Reference
 
    .. method:: remove()
 
-      Removes the stream from the server. Other streams of the same call are not affected.
+      Removes the stream from the server. Other streams of the same call are not affected. Leaving
+      a ``with`` statement on the stream does the same.
 
 .. class:: krpc.event.Event
 
@@ -916,7 +918,7 @@ Client API Reference
 
    .. method:: remove()
 
-      Removes the event from the server.
+      Removes the event from the server. Leaving a ``with`` statement on the event does the same.
 
    .. attribute:: stream
 

@@ -584,8 +584,8 @@ streams and events end. A second <code class="docutils literal notranslate"><spa
 <li><p>Lifetime is explicit. <code class="docutils literal notranslate"><span class="pre">Client</span></code>, objects, <code class="docutils literal notranslate"><span class="pre">Stream</span></code> and <code class="docutils literal notranslate"><span class="pre">Event</span></code> have no finalizer. An object
 is an id and a client, and sends no release to the server.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">Stream</span></code> and <code class="docutils literal notranslate"><span class="pre">Event</span></code> are handles to one <code class="docutils literal notranslate"><span class="pre">StreamImpl</span></code>, which runs until a <code class="docutils literal notranslate"><span class="pre">remove()</span></code>
-through any handle, a server ending or the close. <code class="docutils literal notranslate"><span class="pre">Client.stream()</span></code> is the <code class="docutils literal notranslate"><span class="pre">with</span></code> form of
-<code class="docutils literal notranslate"><span class="pre">add_stream</span></code>, and removes the stream at the end of the block.</p></li>
+through any handle, a server ending or the close. Both are context managers, whose exit calls
+<code class="docutils literal notranslate"><span class="pre">remove()</span></code>. An exception from <code class="docutils literal notranslate"><span class="pre">remove()</span></code> is dropped when the block raised one.</p></li>
 </ul>
 </section>
 </section>

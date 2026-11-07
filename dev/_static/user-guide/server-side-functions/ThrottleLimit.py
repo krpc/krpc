@@ -15,6 +15,6 @@ def limit_throttle():
     control.throttle = max(0, min(1, (100 - flight.vertical_speed) / 20))
 
 
-with conn.stream(limit_throttle):
+with conn.add_stream(limit_throttle):
     time.sleep(60)
 # [/docs]

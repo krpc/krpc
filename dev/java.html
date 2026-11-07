@@ -1440,7 +1440,33 @@ method’s value. <a class="reference internal" href="#krpc.client.Stream.get()"
 return value runs the call on each update for its effects. Its value is <code class="docutils literal notranslate"><span class="pre">null</span></code>, as a
 <code class="docutils literal notranslate"><span class="pre">Stream&lt;Void&gt;</span></code>.</p>
 <p>A stream runs until you remove it with <a class="reference internal" href="#krpc.client.Stream.remove()" title="krpc.client.Stream.remove()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">remove</span></code></a>, or the connection closes. It keeps
-running after your program drops its last reference to it, so remove a stream you no longer need.</p>
+running after your program drops its last reference to it, so remove a stream you no longer need.
+A try-with-resources statement removes a stream at the end of the block:</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.RPCException</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Stream</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.StreamException</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter.Flight</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.io.IOException</span><span class="p">;</span>
+
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">StreamScope</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="p">,</span><span class="w"> </span><span class="n">RPCException</span><span class="p">,</span><span class="w"> </span><span class="n">StreamException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">(</span><span class="n">Connection</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="na">newInstance</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">SpaceCenter</span><span class="w"> </span><span class="n">spaceCenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SpaceCenter</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="n">connection</span><span class="p">);</span>
+<span class="w">      </span><span class="n">Flight</span><span class="w"> </span><span class="n">flight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spaceCenter</span><span class="p">.</span><span class="na">getActiveVessel</span><span class="p">().</span><span class="na">flight</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
+<span class="w">      </span><span class="k">try</span><span class="w"> </span><span class="p">(</span><span class="n">Stream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">altitude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">addStream</span><span class="p">(</span><span class="n">flight</span><span class="p">,</span><span class="w"> </span><span class="s">"getMeanAltitude"</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">altitude</span><span class="p">.</span><span class="na">get</span><span class="p">());</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">      </span><span class="c1">// The stream was removed at the end of the block</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
 <p>By default, the server sends a stream’s value each time it changes. Call <a class="reference internal" href="#krpc.client.Stream.setRate(float)" title="krpc.client.Stream.setRate(float)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">setRate</span></code></a> to
 limit how many times a second the stream updates:</p>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
@@ -1795,7 +1821,39 @@ vessel’s altitude exceeds 1000 meters:</p>
 server checks the condition every physics tick, so the event catches a condition that holds for only
 a moment, which a loop of calls can miss.</p>
 <p>The event fires again each time the condition becomes true after being false. Call
-<a class="reference internal" href="#krpc.client.Event.remove()" title="krpc.client.Event.remove()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">remove</span></code></a> to stop it.</p>
+<a class="reference internal" href="#krpc.client.Event.remove()" title="krpc.client.Event.remove()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">remove</span></code></a> to stop it. A try-with-resources statement removes an event at the end of the
+block:</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Event</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.RPCException</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.StreamException</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.KRPC.Expression</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter.Flight</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.io.IOException</span><span class="p">;</span>
+
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">EventScope</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="p">,</span><span class="w"> </span><span class="n">RPCException</span><span class="p">,</span><span class="w"> </span><span class="n">StreamException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">(</span><span class="n">Connection</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="na">newInstance</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">SpaceCenter</span><span class="w"> </span><span class="n">spaceCenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SpaceCenter</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="n">connection</span><span class="p">);</span>
+<span class="w">      </span><span class="n">Flight</span><span class="w"> </span><span class="n">flight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spaceCenter</span><span class="p">.</span><span class="na">getActiveVessel</span><span class="p">().</span><span class="na">flight</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
+<span class="w">      </span><span class="n">Expression</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="na">greaterThan</span><span class="p">(</span>
+<span class="w">        </span><span class="n">connection</span><span class="p">,</span>
+<span class="w">        </span><span class="n">Expression</span><span class="p">.</span><span class="na">call</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">getCall</span><span class="p">(</span><span class="n">flight</span><span class="p">,</span><span class="w"> </span><span class="s">"getMeanAltitude"</span><span class="p">)),</span>
+<span class="w">        </span><span class="n">Expression</span><span class="p">.</span><span class="na">constantDouble</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">));</span>
+<span class="w">      </span><span class="k">try</span><span class="w"> </span><span class="p">(</span><span class="n">Event</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">addEvent</span><span class="p">(</span><span class="n">expr</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="n">event</span><span class="p">.</span><span class="na">getCondition</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="n">event</span><span class="p">.</span><span class="na">waitFor</span><span class="p">();</span>
+<span class="w">          </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Altitude reached 1000m"</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">      </span><span class="c1">// The event was removed at the end of the block</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
 <p>As with a stream, hold the event’s condition when you call <a class="reference internal" href="#krpc.client.Event.waitFor()" title="krpc.client.Event.waitFor()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">waitFor</span></code></a>. A wait returns
 straight away if the event has fired since your last wait, so a firing between two waits is not
 missed.</p>
@@ -2236,6 +2294,12 @@ returns a tag for it. It is called straight away if the stream has already ended
 <dd><p>Removes the stream from the server. Other streams of the same call are not affected.</p>
 </dd></dl>
 
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Stream.close()">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Stream.close()" title="Link to this definition">#</a></dt>
+<dd><p>Removes the stream, as <a class="reference internal" href="#krpc.client.Stream.remove()" title="krpc.client.Stream.remove()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">remove</span></code></a> does, at the end of a try-with-resources block.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="java type">
@@ -2303,6 +2367,12 @@ returns a tag for it. It is called straight away if the event has already ended.
 <dt class="sig sig-object java" id="krpc.client.Event.remove()">
 <span class="pre">void</span> <span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Event.remove()" title="Link to this definition">#</a></dt>
 <dd><p>Removes the event from the server.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Event.close()">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Event.close()" title="Link to this definition">#</a></dt>
+<dd><p>Removes the event, as <a class="reference internal" href="#krpc.client.Event.remove()" title="krpc.client.Event.remove()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">remove</span></code></a> does, at the end of a try-with-resources block.</p>
 </dd></dl>
 
 <dl class="java method">

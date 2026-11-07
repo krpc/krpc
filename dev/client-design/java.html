@@ -685,6 +685,9 @@ one, or one <code class="docutils literal notranslate"><span class="pre">GetServ
 <tr class="row-odd"><td><p>Static method</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">Class.method(connection,</span> <span class="pre">...)</span></code>. <code class="docutils literal notranslate"><span class="pre">addStream</span></code> and <code class="docutils literal notranslate"><span class="pre">getCall</span></code> take the connection first, and drop it unchecked</p></td>
 </tr>
+<tr class="row-even"><td><p>Scoped stream or event</p></td>
+<td><p>Try-with-resources. <code class="docutils literal notranslate"><span class="pre">close()</span></code> calls <code class="docutils literal notranslate"><span class="pre">remove()</span></code>, and declares <code class="docutils literal notranslate"><span class="pre">RPCException</span></code>. The language keeps the block’s exception, with the exception from <code class="docutils literal notranslate"><span class="pre">close()</span></code> suppressed</p></td>
+</tr>
 </tbody>
 </table>
 </div>

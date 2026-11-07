@@ -188,6 +188,7 @@ C# client
   * :breaking:`Breaking` Derive ``Stream<T>`` from a new class ``Stream``, ambiguous with ``System.IO.Stream`` in a file that uses both namespaces (:issue:`1198`)
   * :breaking:`Breaking` Return the stream id from ``KRPC.AddStream`` and ``KRPC.AddFunctionStream`` (:issue:`1266`)
   * :breaking:`Breaking` Take the type code of the return value in ``IConnection.Invoke`` (:issue:`1266`)
+  * Make ``Stream`` and ``Event`` ``IDisposable``, to remove them at the end of a ``using`` block (:issue:`1291`)
 
 * :breaking:`Breaking` Regenerate service stubs generated before 0.7.0, which can miss the first update of a stream or event they return (:issue:`1219`)
 * Fix the links in service documentation, which named no type or member (:issue:`1185`)
@@ -266,6 +267,7 @@ Java client
   * Keep a stream running when a value fails to decode, dropping the value (:issue:`1219`)
   * Stream a procedure or server side function with no value as a ``Stream<Void>`` (:issue:`1198`)
   * :breaking:`Breaking` Return the stream id from ``KRPC.addStream`` and ``KRPC.addFunctionStream`` (:issue:`1266`)
+  * Make ``Stream`` and ``Event`` ``AutoCloseable``, to remove them at the end of a try-with-resources block (:issue:`1291`)
 
 * Fix the links to members in the javadoc of the services, which named no method (:issue:`1185`)
 * Fix the javadoc of the services that ``javadoc`` rejects, such as lists and setters with a ``@return`` tag (:issue:`1185`)
@@ -320,6 +322,8 @@ Python client
   * Stream a procedure, property setter or server side function with no value as a stream of ``None`` (:issue:`1198`)
   * Build the call of a property setter with ``get_call`` (:issue:`1198`)
   * :breaking:`Breaking` Return the stream id from ``KRPC.add_stream`` and ``KRPC.add_function_stream`` (:issue:`1266`)
+  * Remove a stream or an event at the end of a ``with`` statement on it (:issue:`1291`)
+  * :deprecated:`Deprecated` ``Client.stream``, superseded by ``add_stream`` in a ``with`` statement (:issue:`1291`)
 
 * Link the references in service docstrings with Sphinx roles (:issue:`1185`)
 * Fix the lists and parameter references in service docstrings, which were invalid reStructuredText (:issue:`1185`)

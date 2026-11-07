@@ -1359,7 +1359,25 @@ value, such as a call to a procedure with no return value, streams as a
 <a class="reference internal" href="#class-KRPC.Client.Stream" title="class: KRPC.Client.Stream"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">Stream</span></code></a> with no type parameter. It runs on each update for its effects.</p>
 <p>A stream runs until you remove it with <a class="reference internal" href="#function-KRPC.Client.Stream.Remove" title="function: KRPC.Client.Stream.Remove"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Remove</span></code></a>, or the connection
 closes. It keeps running after your program drops its last reference to it, so remove a stream you
-no longer need.</p>
+no longer need. A <code class="docutils literal notranslate"><span class="pre">using</span></code> statement removes a stream at the end of the block:</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client.Services.SpaceCenter</span><span class="p">;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Program</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Connection</span><span class="p">();</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">spaceCenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">SpaceCenter</span><span class="p">();</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">flight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spaceCenter</span><span class="p">.</span><span class="n">ActiveVessel</span><span class="p">.</span><span class="n">Flight</span><span class="p">();</span>
+<span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="p">(</span><span class="kt">var</span><span class="w"> </span><span class="n">altitude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">AddStream</span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">flight</span><span class="p">.</span><span class="n">MeanAltitude</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">var</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+<span class="w">                </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">altitude</span><span class="p">.</span><span class="n">Get</span><span class="p">());</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="c1">// The stream was removed at the end of the block</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
 <p>By default, the server sends a stream’s value each time it changes. Set
 <a class="reference internal" href="#property-KRPC.Client.Stream.Rate" title="property: KRPC.Client.Stream.Rate"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Rate</span></code></a> to limit how many times a second the stream updates:</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client</span><span class="p">;</span>
@@ -1638,7 +1656,32 @@ vessel’s altitude exceeds 1000 meters:</p>
 waits for it to fire. The server checks the condition every physics tick, so the event catches a
 condition that holds for only a moment, which a loop of calls can miss.</p>
 <p>The event fires again each time the condition becomes true after being false. Call
-<a class="reference internal" href="#function-KRPC.Client.Event.Remove" title="function: KRPC.Client.Event.Remove"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Remove</span></code></a> to stop it.</p>
+<a class="reference internal" href="#function-KRPC.Client.Event.Remove" title="function: KRPC.Client.Event.Remove"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Remove</span></code></a> to stop it. A <code class="docutils literal notranslate"><span class="pre">using</span></code> statement removes an event at the end of
+the block:</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client.Services.KRPC</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client.Services.SpaceCenter</span><span class="p">;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Program</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Connection</span><span class="p">();</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">spaceCenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">SpaceCenter</span><span class="p">();</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">flight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spaceCenter</span><span class="p">.</span><span class="n">ActiveVessel</span><span class="p">.</span><span class="n">Flight</span><span class="p">();</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="n">GreaterThan</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span>
+<span class="w">            </span><span class="n">Expression</span><span class="p">.</span><span class="n">Call</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="n">GetCall</span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">flight</span><span class="p">.</span><span class="n">MeanAltitude</span><span class="p">)),</span>
+<span class="w">            </span><span class="n">Expression</span><span class="p">.</span><span class="n">ConstantDouble</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">));</span>
+<span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="p">(</span><span class="kt">var</span><span class="w"> </span><span class="n">evnt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">AddEvent</span><span class="p">(</span><span class="n">expr</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">lock</span><span class="w"> </span><span class="p">(</span><span class="n">evnt</span><span class="p">.</span><span class="n">Condition</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">evnt</span><span class="p">.</span><span class="n">Wait</span><span class="p">();</span>
+<span class="w">                </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"Altitude reached 1000m"</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="c1">// The event was removed at the end of the block</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
 <p>As with a stream, lock the event’s condition when you call <a class="reference internal" href="#function-KRPC.Client.Event.Wait" title="function: KRPC.Client.Event.Wait"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Wait</span></code></a>. A wait
 returns straight away if the event has fired since the last wait on the same event object, so a
 firing between two waits is not missed.</p>
@@ -2253,6 +2296,13 @@ the stream has already ended.</p>
 <dd><p>Removes the stream from the server. Other streams of the same call are not affected.</p>
 </dd></dl>
 
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Stream.Dispose">
+<span id="function-KRPC.Client.Stream.Dispose()"></span><span class="pre">void</span><span class="w"> </span><span class="sig-name descname"><span class="pre">Dispose</span></span><span class="w"> </span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Stream.Dispose" title="Link to this definition">#</a></dt>
+<dd><p>Removes the stream, as <a class="reference internal" href="#function-KRPC.Client.Stream.Remove" title="function: KRPC.Client.Stream.Remove"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Remove</span></code></a> does, at the end of a <code class="docutils literal notranslate"><span class="pre">using</span></code> block.
+A failed connection throws no exception.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="cs class">
@@ -2333,6 +2383,13 @@ the event has already ended.</p>
 <dt class="sig sig-object cs" id="function-KRPC.Client.Event.Remove">
 <span id="function-KRPC.Client.Event.Remove()"></span><span class="pre">void</span><span class="w"> </span><span class="sig-name descname"><span class="pre">Remove</span></span><span class="w"> </span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Event.Remove" title="Link to this definition">#</a></dt>
 <dd><p>Removes the event from the server.</p>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Event.Dispose">
+<span id="function-KRPC.Client.Event.Dispose()"></span><span class="pre">void</span><span class="w"> </span><span class="sig-name descname"><span class="pre">Dispose</span></span><span class="w"> </span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Event.Dispose" title="Link to this definition">#</a></dt>
+<dd><p>Removes the event, as <a class="reference internal" href="#function-KRPC.Client.Event.Remove" title="function: KRPC.Client.Event.Remove"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Remove</span></code></a> does, at the end of a <code class="docutils literal notranslate"><span class="pre">using</span></code> block.
+A failed connection throws no exception.</p>
 </dd></dl>
 
 <dl class="cs property">

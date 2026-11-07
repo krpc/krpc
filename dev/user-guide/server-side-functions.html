@@ -803,7 +803,7 @@ throttles back as the vertical speed nears 100 m/s:</p>
     <span class="n">control</span><span class="o">.</span><span class="n">throttle</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">100</span> <span class="o">-</span> <span class="n">flight</span><span class="o">.</span><span class="n">vertical_speed</span><span class="p">)</span> <span class="o">/</span> <span class="mi">20</span><span class="p">))</span>
 
 
-<span class="k">with</span> <span class="n">conn</span><span class="o">.</span><span class="n">stream</span><span class="p">(</span><span class="n">limit_throttle</span><span class="p">):</span>
+<span class="k">with</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_stream</span><span class="p">(</span><span class="n">limit_throttle</span><span class="p">):</span>
     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span>
 </pre></div>
 </div>

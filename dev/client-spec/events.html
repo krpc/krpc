@@ -655,6 +655,11 @@ of the handle keep running after the copy is dropped. Dropping the last handle r
 the event: the server stops sending its firings, and its callbacks are not called again.</p>
 </dd>
 </dl>
+<dl class="simple" id="spec-events-scoped-removal">
+<dt><code class="docutils literal notranslate"><span class="pre">events-scoped-removal</span> <span class="pre">[events]</span> <span class="pre">[SHOULD]</span></code></dt><dd><p>An event can be scoped to a block of code, using the scoping construct of the
+language. Leaving the block removes the event: the server stops sending its firings.</p>
+</dd>
+</dl>
 <dl class="simple" id="spec-events-wait-after-close">
 <dt><code class="docutils literal notranslate"><span class="pre">events-wait-after-close</span> <span class="pre">[events]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Waiting on an event after the connection closes raises the connection error.</p>
 </dd>

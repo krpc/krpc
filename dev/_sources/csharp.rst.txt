@@ -181,7 +181,9 @@ value, such as a call to a procedure with no return value, streams as a
 
 A stream runs until you remove it with :meth:`~KRPC.Client.Stream.Remove`, or the connection
 closes. It keeps running after your program drops its last reference to it, so remove a stream you
-no longer need.
+no longer need. A ``using`` statement removes a stream at the end of the block:
+
+.. literalinclude:: /scripts/csharp/StreamScope.cs
 
 By default, the server sends a stream's value each time it changes. Set
 :prop:`~KRPC.Client.Stream.Rate` to limit how many times a second the stream updates:
@@ -321,7 +323,10 @@ waits for it to fire. The server checks the condition every physics tick, so the
 condition that holds for only a moment, which a loop of calls can miss.
 
 The event fires again each time the condition becomes true after being false. Call
-:meth:`~KRPC.Client.Event.Remove` to stop it.
+:meth:`~KRPC.Client.Event.Remove` to stop it. A ``using`` statement removes an event at the end of
+the block:
+
+.. literalinclude:: /scripts/csharp/EventScope.cs
 
 As with a stream, lock the event's condition when you call :meth:`~KRPC.Client.Event.Wait`. A wait
 returns straight away if the event has fired since the last wait on the same event object, so a
@@ -826,6 +831,11 @@ Client API Reference
 
       Removes the stream from the server. Other streams of the same call are not affected.
 
+   .. function:: void Dispose()
+
+      Removes the stream, as :meth:`~KRPC.Client.Stream.Remove` does, at the end of a ``using`` block.
+      A failed connection throws no exception.
+
 .. class:: Stream<TReturnType>
 
    A stream with a value, derived from :type:`~KRPC.Client.Stream`. The stream updates each time
@@ -886,6 +896,11 @@ Client API Reference
    .. function:: void Remove()
 
       Removes the event from the server.
+
+   .. function:: void Dispose()
+
+      Removes the event, as :meth:`~KRPC.Client.Event.Remove` does, at the end of a ``using`` block.
+      A failed connection throws no exception.
 
    .. property:: Stream<bool> Stream { get; }
 

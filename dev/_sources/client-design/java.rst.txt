@@ -138,6 +138,8 @@ Mapping the Spec to Java
      - ``Duration.ZERO`` to connect, ``Double.POSITIVE_INFINITY`` to wait
    * - Static method
      - ``Class.method(connection, ...)``. ``addStream`` and ``getCall`` take the connection first, and drop it unchecked
+   * - Scoped stream or event
+     - Try-with-resources. ``close()`` calls ``remove()``, and declares ``RPCException``. The language keeps the block's exception, with the exception from ``close()`` suppressed
 
 ``invoke`` declares only ``RPCException``, which is why a connection error is its cause. A server
 timeout throws its generated class, as ``TimeoutException`` is checked. ``Consumer`` and

@@ -49,8 +49,8 @@ Lifetime
 * Lifetime is explicit. ``Client``, objects, ``Stream`` and ``Event`` have no finalizer. An object
   is an id and a client, and sends no release to the server.
 * ``Stream`` and ``Event`` are handles to one ``StreamImpl``, which runs until a ``remove()``
-  through any handle, a server ending or the close. ``Client.stream()`` is the ``with`` form of
-  ``add_stream``, and removes the stream at the end of the block.
+  through any handle, a server ending or the close. Both are context managers, whose exit calls
+  ``remove()``. An exception from ``remove()`` is dropped when the block raised one.
 
 Threads
 -------

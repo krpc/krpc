@@ -1301,14 +1301,13 @@ procedure with no return value, or of a property setter passed with <code class=
 each update for its effects. Its value is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
 <p>A stream runs until you remove it with <a class="reference internal" href="#krpc.stream.Stream.remove" title="krpc.stream.Stream.remove"><code class="xref py py-meth docutils literal notranslate"><span class="pre">remove()</span></code></a>, or the connection
 closes. It keeps running after your program drops its last reference to it, so remove a stream you
-no longer need. <a class="reference internal" href="#krpc.client.Client.stream" title="krpc.client.Client.stream"><code class="xref py py-meth docutils literal notranslate"><span class="pre">stream()</span></code></a> creates a stream in a
-<code class="docutils literal notranslate"><span class="pre">with</span></code> statement, which removes it at the end of the block:</p>
+no longer need. A <code class="docutils literal notranslate"><span class="pre">with</span></code> statement removes a stream at the end of the block:</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
 
 <span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
 <span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
 <span class="n">refframe</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">orbit</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">reference_frame</span>
-<span class="k">with</span> <span class="n">conn</span><span class="o">.</span><span class="n">stream</span><span class="p">(</span><span class="n">vessel</span><span class="o">.</span><span class="n">position</span><span class="p">,</span> <span class="n">refframe</span><span class="p">)</span> <span class="k">as</span> <span class="n">position</span><span class="p">:</span>
+<span class="k">with</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_stream</span><span class="p">(</span><span class="n">vessel</span><span class="o">.</span><span class="n">position</span><span class="p">,</span> <span class="n">refframe</span><span class="p">)</span> <span class="k">as</span> <span class="n">position</span><span class="p">:</span>
     <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">position</span><span class="p">())</span>
 </pre></div>
@@ -1334,7 +1333,7 @@ the abort button to be pressed:</p>
 
 <span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
 <span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
-<span class="k">with</span> <span class="n">conn</span><span class="o">.</span><span class="n">stream</span><span class="p">(</span><span class="nb">getattr</span><span class="p">,</span> <span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="p">,</span> <span class="s2">"abort"</span><span class="p">)</span> <span class="k">as</span> <span class="n">abort</span><span class="p">:</span>
+<span class="k">with</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_stream</span><span class="p">(</span><span class="nb">getattr</span><span class="p">,</span> <span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="p">,</span> <span class="s2">"abort"</span><span class="p">)</span> <span class="k">as</span> <span class="n">abort</span><span class="p">:</span>
     <span class="k">with</span> <span class="n">abort</span><span class="o">.</span><span class="n">condition</span><span class="p">:</span>
         <span class="k">while</span> <span class="ow">not</span> <span class="n">abort</span><span class="p">():</span>
             <span class="n">abort</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
@@ -1538,7 +1537,23 @@ until the vessel’s altitude exceeds 1000 meters:</p>
 for it to fire. The server checks the condition every physics tick, so the event catches a
 condition that holds for only a moment, which a loop of calls can miss.</p>
 <p>The event fires again each time the condition becomes true after being false. Call
-<a class="reference internal" href="#krpc.event.Event.remove" title="krpc.event.Event.remove"><code class="xref py py-meth docutils literal notranslate"><span class="pre">remove()</span></code></a> to stop it.</p>
+<a class="reference internal" href="#krpc.event.Event.remove" title="krpc.event.Event.remove"><code class="xref py py-meth docutils literal notranslate"><span class="pre">remove()</span></code></a> to stop it. A <code class="docutils literal notranslate"><span class="pre">with</span></code> statement removes an event at the end of
+the block:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="n">flight</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span><span class="o">.</span><span class="n">flight</span><span class="p">()</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">Expression</span><span class="o">.</span><span class="n">greater_than</span><span class="p">(</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">Expression</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">conn</span><span class="o">.</span><span class="n">get_call</span><span class="p">(</span><span class="nb">getattr</span><span class="p">,</span> <span class="n">flight</span><span class="p">,</span> <span class="s2">"mean_altitude"</span><span class="p">)),</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">Expression</span><span class="o">.</span><span class="n">constant_double</span><span class="p">(</span><span class="mi">1000</span><span class="p">),</span>
+<span class="p">)</span>
+<span class="k">with</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_event</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span> <span class="k">as</span> <span class="n">event</span><span class="p">:</span>
+    <span class="k">with</span> <span class="n">event</span><span class="o">.</span><span class="n">condition</span><span class="p">:</span>
+        <span class="n">event</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Altitude reached 1000m"</span><span class="p">)</span>
+<span class="c1"># The event was removed at the end of the block</span>
+</pre></div>
+</div>
 <p>As with a stream, hold the event’s condition when you call <a class="reference internal" href="#krpc.event.Event.wait" title="krpc.event.Event.wait"><code class="xref py py-meth docutils literal notranslate"><span class="pre">wait()</span></code></a>. A wait
 returns straight away if the event has fired since your last wait, so a firing between two waits is
 not missed.</p>
@@ -2093,8 +2108,7 @@ and for a compiled function with parameters. Raises <code class="docutils litera
 <dl class="py method">
 <dt class="sig sig-object py" id="krpc.client.Client.stream">
 <span class="sig-name descname"><span class="pre">stream</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Client.stream" title="Link to this definition">#</a></dt>
-<dd><p>Creates a stream as <a class="reference internal" href="#krpc.client.Client.add_stream" title="krpc.client.Client.add_stream"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_stream()</span></code></a> does, for use in a <code class="docutils literal notranslate"><span class="pre">with</span></code> statement. The stream is
-removed at the end of the block.</p>
+<dd><p>Deprecated. Use <a class="reference internal" href="#krpc.client.Client.add_stream" title="krpc.client.Client.add_stream"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_stream()</span></code></a> in a <code class="docutils literal notranslate"><span class="pre">with</span></code> statement.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -2236,7 +2250,8 @@ called straight away if the stream has already ended.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="krpc.stream.Stream.remove">
 <span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.stream.Stream.remove" title="Link to this definition">#</a></dt>
-<dd><p>Removes the stream from the server. Other streams of the same call are not affected.</p>
+<dd><p>Removes the stream from the server. Other streams of the same call are not affected. Leaving
+a <code class="docutils literal notranslate"><span class="pre">with</span></code> statement on the stream does the same.</p>
 </dd></dl>
 
 </dd></dl>
@@ -2292,7 +2307,7 @@ called straight away if the event has already ended.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="krpc.event.Event.remove">
 <span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.event.Event.remove" title="Link to this definition">#</a></dt>
-<dd><p>Removes the event from the server.</p>
+<dd><p>Removes the event from the server. Leaving a <code class="docutils literal notranslate"><span class="pre">with</span></code> statement on the event does the same.</p>
 </dd></dl>
 
 <dl class="py attribute">
