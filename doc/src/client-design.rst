@@ -22,7 +22,7 @@ Clients
      - Concurrency
      - Streams and events
      - Service stubs
-   * - Python
+   * - :doc:`Python <client-design/python>`
      - Threaded
      - Yes
      - Pre-generated or dynamic
@@ -261,3 +261,8 @@ For the ``MeanAltitude`` property of a ``Flight`` object:
 In Python, C# and Java, the stream runs on the connection the method is called on, whichever
 connection the object came from. In C++, it runs on the object's client, or for a static method the
 client passed to it.
+
+.. toctree::
+   :hidden:
+
+   client-design/python
