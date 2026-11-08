@@ -1,13 +1,13 @@
 import math
 
-import krpctest
+from krpctools.game.ksp import TestCase
 
 
 def magnitude(vector):
     return math.sqrt(sum(x * x for x in vector))
 
 
-class TestVesselPhysicsRange(krpctest.TestCase):
+class TestVesselPhysicsRange(TestCase):
     """Tests Vessel.physics_range against a second vessel held at a controlled distance.
 
     Both halves of Multi.craft are undocked into two vessels sharing a circular orbit,
@@ -157,7 +157,7 @@ class TestVesselPhysicsRange(krpctest.TestCase):
         self.assert_state(True, False, "back inside a raised physics range")
 
 
-class TestVesselPhysicsRangeSceneChange(krpctest.TestCase):
+class TestVesselPhysicsRangeSceneChange(TestCase):
     """A scene change destroys the vessels and rebuilds them from their protovessels,
     and a rebuilt vessel re-copies the game's default ranges in Vessel.Awake. The range
     has to be re-applied for it to survive, which is what the addon is for. Uses the

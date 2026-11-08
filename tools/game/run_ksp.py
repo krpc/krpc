@@ -5,7 +5,7 @@
 import os
 import sys
 
-from krpctest import cli
+from krpctools.game import cli
 
 
 def main():

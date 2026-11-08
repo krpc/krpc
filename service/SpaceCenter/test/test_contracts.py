@@ -1,10 +1,10 @@
 import time
 import unittest
 
-import krpctest
+from krpctools.game.ksp import TestCase
 
 
-class TestContracts(krpctest.TestCase):
+class TestContracts(TestCase):
     # NOTE: contract titles, descriptions, and parameter titles below are
     # localized by KSP and there is no language-independent identifier for them
     # (unlike parts, which expose part.name). These assertions therefore assume
@@ -202,7 +202,7 @@ class TestContracts(krpctest.TestCase):
         self.assertCountEqual([], [x.title for x in self.cm.failed_contracts])
 
 
-class TestContractsVesselSwitch(krpctest.TestCase):
+class TestContractsVesselSwitch(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save("krpctest_career", always_load=True)

@@ -1,7 +1,7 @@
-import krpctest
+from krpctools.game.ksp import TestCase
 
 
-class TestGameState(krpctest.TestCase):
+class TestGameState(TestCase):
     """The game states that the server counts as loaded."""
 
     @classmethod
@@ -34,7 +34,7 @@ class TestGameState(krpctest.TestCase):
         self.assertEqual("Basic", vessel.name)
 
 
-class TestEmptyGame(krpctest.TestCase):
+class TestEmptyGame(TestCase):
     """A game with no vessels in it."""
 
     @classmethod

@@ -8,7 +8,7 @@ load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
 # The Benchmark service. A service like any other, loaded by whichever server it is installed
 # alongside: TestServer for a game-less measurement, and the game for the same measurement
 # against a real service. It does not ship with the mod - nothing lists it in //:krpc - and
-# the in-game install adds it beside TestingTools (see tools/krpctest/bazel_ksp.py).
+# the in-game install adds it beside TestingTools (see tools/game/bazel_ksp.py).
 csharp_library(
     name = "KRPC.Benchmark.net472",
     srcs = glob(["src/**/*.cs"]) + [":AssemblyInfo"],
@@ -98,7 +98,7 @@ py_binary(
     visibility = ["//visibility:public"],
     deps = [
         ":benchmarks_lib",
-        "//tools/krpctest:bazel_ksp",
+        "//tools/game:bazel_ksp",
         "@krpc_pypi//pytest",
     ],
 )
@@ -297,7 +297,7 @@ py_pyright_test(
     srcs = glob(["*.py"]) + glob(["server/*.py"]),
     deps = [
         "//client/python:krpc_lib",
-        "//tools/krpctest:krpctest_lib",
+        "//tools/krpctools:krpctools_lib",
         "@krpc_pypi//pytest",
     ],
 )

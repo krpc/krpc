@@ -12,7 +12,8 @@ Current version: `tools/krpc-version.sh`. Full setup: `doc/src/krpc-development/
    See *Client pages* under *Keeping the docs current* before changing one.
  * `client/conformance/` — client conformance tests; the client spec (`doc/src/client-spec/`) is generated from them.
  * `tools/krpctools/` — `clientgen` (stubs), `docgen` (API docs), `servicedefs`.
- * `tools/krpctest/` — in-game test framework; `tools/TestServer/` — game-less server.
+ * `tools/krpctools/krpctools/game/` — in-game test framework (`krpc-game`); `tools/game/` — its
+   runners for the repository; `tools/TestServer/` — game-less server.
  * `tools/build/` — Bazel rules/toolchains. KSP assemblies come from `@ksp` in `MODULE.bazel`; no `lib/`.
  * `.github/` — CI. `CI-Guide.md` says how it works and why; a CI change updates it.
  * `doc/` — documentation sources.
@@ -141,8 +142,9 @@ bazel run //:test-ingame -- -k test_camera_mode                           # by n
 ### Mods
 
  * Declared per test class: `mods = ["RemoteTech"]`.
- * Supported names, with their pinned archives: `tools/krpctest/krpctest/ksp/mods/`. Downloads are
-   cached in `~/.cache/krpctools`. `--mod NAME=PATH` installs a local build in place of the pin.
+ * Supported names, with their pinned archives: `tools/krpctools/krpctools/game/ksp/mods/`.
+   Downloads are cached in `~/.cache/krpctools`. `--mod NAME=PATH` installs a local build in
+   place of the pin.
  * Install reconciles GameData to **exactly** the requested set (plus kRPC) — required-but-missing and
    installed-but-unneeded are both wrong.
  * Pytest groups tests by mod set; game restarts at most once per set.
@@ -354,7 +356,7 @@ request takes the next open milestone of its train:
 
 | Pull request touches | Milestone |
 | --- | --- |
-| A client, `krpctools`, `krpctest`, `TestServer` | `clients-vX.Y.Z` |
+| A client, `krpctools`, `TestServer` | `clients-vX.Y.Z` |
 | KSP services, the KSP mod | `ksp-vX.Y.Z` |
 | KSA services, the KSA mod | `ksa-vX.Y.Z` |
 | `core`, CI, build rules, repo tooling | none |

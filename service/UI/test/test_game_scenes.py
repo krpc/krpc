@@ -1,10 +1,10 @@
 import time
 import unittest
 
-import krpctest
+from krpctools.game.ksp import TestCase
 
 
-class TestGameScenes(krpctest.TestCase):
+class TestGameScenes(TestCase):
     """The user interface is available in every game scene, not only in flight."""
 
     @classmethod

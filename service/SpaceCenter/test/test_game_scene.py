@@ -1,9 +1,9 @@
 import unittest
 
-import krpctest
+from krpctools.game.ksp import TestCase
 
 
-class TestGameScene(krpctest.TestCase):
+class TestGameScene(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -120,7 +120,7 @@ class TestGameScene(krpctest.TestCase):
         self.set_scene(self.scenes.space_center)
 
 
-class TestGameSceneFromLoadedSave(krpctest.TestCase):
+class TestGameSceneFromLoadedSave(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save(always_load=True)
@@ -138,7 +138,7 @@ class TestGameSceneFromLoadedSave(krpctest.TestCase):
         self.assertIsNotNone(self.connect().space_center.active_vessel)
 
 
-class TestGameSceneNotClearToSave(krpctest.TestCase):
+class TestGameSceneNotClearToSave(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save(always_load=True)

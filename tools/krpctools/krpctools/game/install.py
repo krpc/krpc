@@ -15,7 +15,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
-from .version import __version__
+from ..version import __version__
 
 
 def cache_dir():

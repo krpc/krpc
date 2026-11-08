@@ -2,7 +2,8 @@ krpctools
 =========
 
 `krpctools <https://pypi.org/project/krpctools>`_ is a Python package of command line tools for
-developing services and client libraries. Install it with pip:
+developing services and client libraries, and for testing them against the game. Install it with
+pip:
 
 .. code-block:: sh
 
@@ -37,3 +38,6 @@ Tools
    * - ``krpc-conformance``
      - Runs the conformance tests against a client library.
      - :doc:`client-spec/conformance`
+   * - ``krpc-game``
+     - Installs kRPC and the test add-on into KSP, and runs the game.
+     - :doc:`extending/testing`

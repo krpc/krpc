@@ -1,7 +1,7 @@
-import krpctest
+from krpctools.game.ksp import TestCase
 
 
-class TestObjectLifetime(krpctest.TestCase):
+class TestObjectLifetime(TestCase):
     """What a client's objects do when the game objects behind them go away.
 
     A client object names something in the game and looks it up on each access, so
@@ -424,7 +424,7 @@ class TestObjectLifetime(krpctest.TestCase):
         self.assertEqual("Kerbin", vessel_orbit.body.name)
 
 
-class TestObjectLifetimeUnloaded(krpctest.TestCase):
+class TestObjectLifetimeUnloaded(TestCase):
     """A part of a vessel the game has unloaded is not a destroyed part.
 
     The game keeps an unloaded vessel as a snapshot and builds its parts again when it
@@ -480,7 +480,7 @@ class TestObjectLifetimeUnloaded(krpctest.TestCase):
         self.assertEqual(name, part.name)
 
 
-class TestObjectLifetimeDestroyedVessel(krpctest.TestCase):
+class TestObjectLifetimeDestroyedVessel(TestCase):
     """A vessel the game destroys takes with it every object reached through it."""
 
     @classmethod

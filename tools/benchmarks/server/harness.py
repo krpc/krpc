@@ -21,7 +21,7 @@ This module decides how big a chunk is and how many of them to take, subtracts t
 loop itself where there is one to subtract, and records the result for ``conftest.py`` to
 report.
 
-A benchmark script subclasses ``BenchmarkTestCase`` and is otherwise an ordinary ``krpctest``
+A benchmark script subclasses ``BenchmarkTestCase`` and is otherwise an ordinary in-game
 test: it sets up its scene in ``setUpClass`` and measures in ``test_`` methods. Nothing here
 asserts on a measurement. A benchmark exists to produce a number for a run to be compared
 against, and a number that fails is a number that was not reported.
@@ -32,7 +32,7 @@ configured to pause with the game stops answering RPCs the moment the game is pa
 would leave the suite waiting for a reply that never comes.
 """
 
-import krpctest
+from krpctools.game.ksp import TestCase
 from tools.benchmarks import chunking
 from tools.benchmarks.report import Result
 
@@ -46,8 +46,8 @@ SUITE = "server, in-game"
 STREAM_SIZE = 100
 
 
-class BenchmarkTestCase(krpctest.TestCase):
-    """A krpctest.TestCase that can measure server-side cases.
+class BenchmarkTestCase(TestCase):
+    """A TestCase that can measure server-side cases.
 
     Subclasses set ``scenario`` to name the scene they set up, since a number only means
     something alongside the craft it was taken on.

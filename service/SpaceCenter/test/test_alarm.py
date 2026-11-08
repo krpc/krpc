@@ -1,9 +1,9 @@
 import unittest
 
-import krpctest
+from krpctools.game.ksp import TestCase
 
 
-class TestAlarm(krpctest.TestCase):
+class TestAlarm(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -85,7 +85,7 @@ class TestAlarm(krpctest.TestCase):
             _ = alarm.destination_body
 
 
-class TestAlarmEventOffset(krpctest.TestCase):
+class TestAlarmEventOffset(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()

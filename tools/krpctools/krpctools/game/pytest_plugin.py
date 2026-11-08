@@ -1,12 +1,12 @@
 """pytest plugin for tests against a live game.
 
-Opt-in: load it with ``pytest -p krpctest.pytest_plugin``. It adds the options that choose
+Opt-in: load it with ``pytest -p krpctools.game.pytest_plugin``. It adds the options that choose
 the game and override what it sets, and orders the collected tests by their required mods,
 so the game restarts at most once per mod set.
 
 The game comes from ``--game``, or from a suite's ``conftest.py``, which builds the game
-object and passes it to :func:`krpctest.game.register`. The test classes are
-``krpctest.testcase.TestCase`` subclasses, which launch the game from ``setUpClass``.
+object and passes it to :func:`krpctools.game.game.register`. The test classes are
+``krpctools.game.testcase.TestCase`` subclasses, which launch the game from ``setUpClass``.
 """
 
 import pytest
@@ -91,7 +91,7 @@ def options(get):
 
 
 def pytest_addoption(parser):
-    add_options(parser.getgroup("krpctest", "tests against a live game"))
+    add_options(parser.getgroup("krpctools.game", "tests against a live game"))
 
 
 def pytest_configure(config):
@@ -137,4 +137,4 @@ def pytest_report_collectionfinish(items):
     if not counts:
         return None
     summary = ", ".join("%s: %d" % (label, count) for label, count in counts.items())
-    return "krpctest: test plan - " + summary
+    return "krpctools.game: test plan - " + summary

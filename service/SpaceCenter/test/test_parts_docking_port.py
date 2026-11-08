@@ -1,10 +1,10 @@
 import unittest
 
-import krpctest
-from krpctest.geometry import norm
+from krpctools.game.geometry import norm
+from krpctools.game.ksp import TestCase
 
 
-class TestPartsDockingPort(krpctest.TestCase):
+class TestPartsDockingPort(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -151,7 +151,7 @@ class TestPartsDockingPort(krpctest.TestCase):
             )
 
 
-class TestPartsDockingPortInFlight(krpctest.TestCase):
+class TestPartsDockingPortInFlight(TestCase):
     """Test docking and undocking of ports that have been docked
     in flight (as opposed to pre-attached in the VAB)"""
 
@@ -248,7 +248,7 @@ class TestPartsDockingPortInFlight(krpctest.TestCase):
             vessel = self.sc.active_vessel
 
 
-class TestPartsDockingPortPreAttachedTo(krpctest.TestCase):
+class TestPartsDockingPortPreAttachedTo(TestCase):
     """Test ports that are pre-attached (connected in VAB)"""
 
     @classmethod

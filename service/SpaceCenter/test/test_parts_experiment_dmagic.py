@@ -1,9 +1,9 @@
 import unittest
 
-import krpctest
+from krpctools.game.ksp import TestCase
 
 
-class TestPartsExperimentDMagic(krpctest.TestCase):
+class TestPartsExperimentDMagic(TestCase):
     # Exercises kRPC's support for science experiments backed by DMagic's
     # DMModuleScienceAnimateGeneric, which subclasses ModuleScienceExperiment but stores its
     # results in its own IScienceDataContainer. The dmagicSensorTest part (a thermometer running

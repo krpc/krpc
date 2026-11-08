@@ -1,9 +1,9 @@
 import unittest
 
-import krpctest
+from krpctools.game.ksp import TestCase
 
 
-class TestControlRemoteTechConnected(krpctest.TestCase):
+class TestControlRemoteTechConnected(TestCase):
     """Control inputs are applied to a vessel that is controllable via RemoteTech."""
 
     mods = ["RemoteTech"]
@@ -43,7 +43,7 @@ class TestControlRemoteTechConnected(krpctest.TestCase):
         self.control.pitch = 0
 
 
-class TestControlRemoteTechNoConnection(krpctest.TestCase):
+class TestControlRemoteTechNoConnection(TestCase):
     """Throttle is applied to a vessel that RemoteTech cannot reach.
 
     The uncrewed probe is placed far from Kerbin so its antenna cannot reach any

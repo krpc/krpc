@@ -1,7 +1,7 @@
 import time
 
-import krpctest
-from krpctest.geometry import angle_between, norm
+from krpctools.game.geometry import angle_between, norm
+from krpctools.game.ksp import TestCase
 
 
 def wait_for(predicate, message, timeout=30):
@@ -30,7 +30,7 @@ def send_on_eva(space_center, let_go=True):
     return vessel
 
 
-class TestEVAOnFoot(krpctest.TestCase):
+class TestEVAOnFoot(TestCase):
     """A kerbal standing on open ground, driven by the translation and rotation
     controls."""
 
@@ -141,7 +141,7 @@ class TestEVAOnFoot(krpctest.TestCase):
         self.assertFalse(self.control.lights)
 
 
-class TestEVAJetpack(krpctest.TestCase):
+class TestEVAJetpack(TestCase):
     """A kerbal floating in orbit, flown by its jetpack. The kerbal climbs out on the
     ground and is then put into orbit on its own: climbing out in orbit leaves it
     holding the hatch ladder, which is a state it cannot use its jetpack from."""
@@ -217,7 +217,7 @@ class TestEVAJetpack(krpctest.TestCase):
             )
 
 
-class TestEVABoarding(krpctest.TestCase):
+class TestEVABoarding(TestCase):
     """Sending a kerbal out of a craft, on and off the ladder by the hatch, and back in."""
 
     @classmethod

@@ -1,11 +1,11 @@
 import math
 import unittest
 
-import krpctest
-from krpctest.geometry import norm
+from krpctools.game.geometry import norm
+from krpctools.game.ksp import TestCase
 
 
-class TestEditor(krpctest.TestCase):
+class TestEditor(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -164,7 +164,7 @@ class TestEditor(krpctest.TestCase):
         self.assertEqual("Staging", editor.vessel.name)
 
 
-class TestEditorSPH(krpctest.TestCase):
+class TestEditorSPH(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -195,7 +195,7 @@ class TestEditorSPH(krpctest.TestCase):
             self.enter_editor("SPH", craft="Aero")
 
 
-class TestEditorLaunchVessel(krpctest.TestCase):
+class TestEditorLaunchVessel(TestCase):
     """Test launching the vessel being constructed, which leaves the editor, so each
     test opens the editor for itself."""
 

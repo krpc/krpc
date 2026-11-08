@@ -4,8 +4,8 @@ import time
 import unittest
 from typing import TYPE_CHECKING
 
-import krpctest
-from krpctest.geometry import normalize
+from krpctools.game.geometry import normalize
+from krpctools.game.ksp import Mixin, TestCase
 
 if TYPE_CHECKING:
     from krpc.services.spacecenter import (
@@ -17,7 +17,7 @@ if TYPE_CHECKING:
     )
 
 
-class ControlMixin(krpctest.Mixin):
+class ControlMixin(Mixin):
     space_center: SpaceCenter
     vessel: Vessel | None
     control: Control
@@ -247,7 +247,7 @@ class ControlMixin(krpctest.Mixin):
         # covered by test_speed_mode_with_target on the active vessel.
 
 
-class TestControlActiveVessel(ControlMixin, krpctest.TestCase):
+class TestControlActiveVessel(ControlMixin, TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -306,7 +306,7 @@ class TestControlActiveVessel(ControlMixin, krpctest.TestCase):
         self.assertEqual(self.control.roll, 0)
 
 
-class TestControlNonActiveVessel(ControlMixin, krpctest.TestCase):
+class TestControlNonActiveVessel(ControlMixin, TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -344,7 +344,7 @@ class TestControlNonActiveVessel(ControlMixin, krpctest.TestCase):
         )
 
 
-class TestControlStaging(krpctest.TestCase):
+class TestControlStaging(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -394,7 +394,7 @@ class TestControlStaging(krpctest.TestCase):
         self.assertEqual(0, self.control.current_stage)
 
 
-class TestControlRover(krpctest.TestCase):
+class TestControlRover(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -551,7 +551,7 @@ class TestControlRover(krpctest.TestCase):
         )
 
 
-class TestControlProbe(krpctest.TestCase):
+class TestControlProbe(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -566,7 +566,7 @@ class TestControlProbe(krpctest.TestCase):
         self.assertEqual(self.space_center.ControlSource.probe, self.control.source)
 
 
-class TestControlProbePartialControl(krpctest.TestCase):
+class TestControlProbePartialControl(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -582,7 +582,7 @@ class TestControlProbePartialControl(krpctest.TestCase):
         self.assertEqual(self.space_center.ControlSource.probe, self.control.source)
 
 
-class TestActionGroupActions(krpctest.TestCase):
+class TestActionGroupActions(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -619,7 +619,7 @@ class TestActionGroupActions(krpctest.TestCase):
         self.assertRaises(ValueError, self.control.get_action_group_actions, 11)
 
 
-class TestControlCustomAxes(krpctest.TestCase):
+class TestControlCustomAxes(TestCase):
     """The custom axes are applied to the vessel they are set on, and read back
     the value that was set.
 

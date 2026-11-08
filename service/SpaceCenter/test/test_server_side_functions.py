@@ -1,8 +1,8 @@
 import unittest
 
 import krpc.error
-import krpctest
-from krpctest.geometry import norm
+from krpctools.game.geometry import norm
+from krpctools.game.ksp import TestCase
 
 
 def send_on_eva(test, space_center):
@@ -20,7 +20,7 @@ def send_on_eva(test, space_center):
     return kerbal
 
 
-class TestServerSideFunctions(krpctest.TestCase):
+class TestServerSideFunctions(TestCase):
     """Server side functions against a live game, where the calls a function embeds
     reach the real SpaceCenter service. The unit tests in core/test cover the expression
     algebra against mock procedures. These tests cover a function reading the vessel and
@@ -222,7 +222,7 @@ if __name__ == "__main__":
     unittest.main()
 
 
-class TestServerSideFunctionsOverUnloadedObjects(krpctest.TestCase):
+class TestServerSideFunctionsOverUnloadedObjects(TestCase):
     """Function streams over a part of a vessel the game unloads. A function stream is
     never held, so one that meets an object that is not loaded ends, unless the function
     catches it."""

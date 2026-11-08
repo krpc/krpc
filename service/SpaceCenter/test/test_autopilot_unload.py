@@ -7,10 +7,10 @@ loads it again, and a loop that runs anyway throws once per physics tick.
 
 import os
 
-import krpctest
+from krpctools.game.ksp import TestCase
 
 
-class TestAutoPilotUnload(krpctest.TestCase):
+class TestAutoPilotUnload(TestCase):
     """Both halves of Multi.craft are undocked into two vessels sharing an orbit, the
     auto-pilot is engaged on the one that is not active, and the active vessel is
     teleported onto a much higher orbit to take the other one out of range."""

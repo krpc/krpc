@@ -1,9 +1,9 @@
 import unittest
 
-import krpctest
+from krpctools.game.ksp import TestCase
 
 
-class TestPartsResourceConverter(krpctest.TestCase):
+class TestPartsResourceConverter(TestCase):
     @classmethod
     def setUpClass(cls):
         # Always reload the save and relaunch so the converter is tested on a

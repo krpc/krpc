@@ -1,6 +1,6 @@
 import unittest
 
-from krpctest.testcase import TestCase
+from krpctools.game.testcase import TestCase
 
 
 class TestTestCase(TestCase):

@@ -1,10 +1,10 @@
 import unittest
 
-import krpctest
 from krpc.services.stdlib import ColorRGB
+from krpctools.game.ksp import TestCase
 
 
-class TestPolygon(krpctest.TestCase):
+class TestPolygon(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()

@@ -17,8 +17,8 @@ import sys
 import time
 import zipfile
 
+from ..version import __version__
 from . import game, install, launch, pytest_plugin
-from .version import __version__
 
 
 class _Options:

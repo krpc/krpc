@@ -28,7 +28,6 @@ FRAGMENT_DIR = "changelog.d"
 # The components on the kRPC release version, by directory, with the name the
 # docs page and the release notes show them under, in the order shown. Each has
 # a CHANGELOG.md whose unreleased header takes the version from config.bzl.
-# krpctest takes fragments but is shown in neither.
 COMPONENTS = {
     "core": "Core",
     "server": "Server",
@@ -48,7 +47,6 @@ COMPONENTS = {
     "client/lua": "Lua client",
     "client/python": "Python client",
     "tools/krpctools": "krpctools",
-    "tools/krpctest": None,
 }
 
 

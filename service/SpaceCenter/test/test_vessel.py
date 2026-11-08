@@ -1,9 +1,9 @@
 import unittest
 
-import krpctest
+from krpctools.game.ksp import TestCase
 
 
-class TestVessel(krpctest.TestCase):
+class TestVessel(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -278,7 +278,7 @@ class TestVessel(krpctest.TestCase):
             self.assertIsInstance(entry.target, str)
 
 
-class TestVesselEngines(krpctest.TestCase):
+class TestVesselEngines(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()

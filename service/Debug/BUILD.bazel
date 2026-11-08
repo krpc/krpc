@@ -85,7 +85,7 @@ py_pyright_test(
     disable = ["reportOptionalMemberAccess"],
     deps = [
         "//client/python:krpc_lib",
-        "//tools/krpctest:krpctest_lib",
+        "//tools/krpctools:krpctools_lib",
     ],
 )
 

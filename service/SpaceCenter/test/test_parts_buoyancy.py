@@ -2,8 +2,8 @@ import math
 import time
 import unittest
 
-import krpctest
-from krpctest.geometry import cross, distance, norm, vector
+from krpctools.game.geometry import cross, distance, norm, vector
+from krpctools.game.ksp import TestCase
 
 # Points to try for a stretch of deep water, in order. The first with a sea bed well
 # below sea level is used, so a candidate that turns out to be land or shoreline is
@@ -18,7 +18,7 @@ OCEAN_CANDIDATES = [
 ]
 
 
-class TestPartsBuoyancy(krpctest.TestCase):
+class TestPartsBuoyancy(TestCase):
     settled = False
 
     @classmethod
@@ -279,7 +279,7 @@ class TestPartsBuoyancy(krpctest.TestCase):
         self.assertEqual(0, self.space_center.bodies["Mun"].pressure_at(-700))
 
 
-class TestEditorBuoyancy(krpctest.TestCase):
+class TestEditorBuoyancy(TestCase):
     """The buoyancy members that work in the editor, where a hull is trimmed before
     it is launched."""
 
@@ -408,7 +408,7 @@ class TestEditorBuoyancy(krpctest.TestCase):
         self.assertRaises(RuntimeError, part.buoyant_force, part.reference_frame)
 
 
-class TestEditorBuoyancyMatchesFlight(krpctest.TestCase):
+class TestEditorBuoyancyMatchesFlight(TestCase):
     """The displaced volume is recomputed from the drag cubes so that the editor and
     the flight scene agree on it."""
 

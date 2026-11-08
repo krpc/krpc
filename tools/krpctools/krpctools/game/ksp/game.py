@@ -50,7 +50,7 @@ def _is_module_manager_dll(entry):
 
 
 def _resource(*path):
-    return str(files("krpctest.ksp").joinpath(*path))
+    return str(files("krpctools.game.ksp").joinpath(*path))
 
 
 def normalize_permissions(path):
@@ -188,7 +188,7 @@ class KSP(game.Game):
         paths = sorted(glob.glob(os.path.join(addon, "*.dll")))
         paths += sorted(glob.glob(os.path.join(addon, "*.xml")))
         if not paths:
-            raise RuntimeError("This copy of krpctest has no TestingTools add-on")
+            raise RuntimeError("This copy of krpctools has no TestingTools add-on")
         return paths
 
     def settings_file(self):

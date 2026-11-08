@@ -1,11 +1,11 @@
 import math
 import unittest
 
-import krpctest
-from krpctest.geometry import angle_between, norm
+from krpctools.game.geometry import angle_between, norm
+from krpctools.game.ksp import TestCase
 
 
-class TestDebug(krpctest.TestCase):
+class TestDebug(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -229,7 +229,7 @@ class TestDebug(krpctest.TestCase):
         self.assertRaises(RuntimeError, getattr, self.debug_service, "reputation")
 
 
-class TestDebugCareer(krpctest.TestCase):
+class TestDebugCareer(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save("krpctest_career", always_load=True)

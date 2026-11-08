@@ -1,9 +1,9 @@
 import unittest
 
-import krpctest
+from krpctools.game.ksp import TestCase
 
 
-class TestSlider(krpctest.TestCase):
+class TestSlider(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()

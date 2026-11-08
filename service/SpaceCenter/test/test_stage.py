@@ -1,7 +1,7 @@
-import krpctest
+from krpctools.game.ksp import TestCase
 
 
-class TestStage(krpctest.TestCase):
+class TestStage(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -94,7 +94,7 @@ class TestStage(krpctest.TestCase):
         self.assertIsNotNone(dec_stage)
 
 
-class TestStageRevertToLaunch(krpctest.TestCase):
+class TestStageRevertToLaunch(TestCase):
     # Regression for stages breaking after a Revert to Launch. The revert destroys the
     # vessel and recreates it under the same id, so a stage that holds the vessel object
     # is left pointing at the destroyed one and reports that delta-v has not been
@@ -188,7 +188,7 @@ class TestStageRevertToLaunch(krpctest.TestCase):
         )
 
 
-class TestStageDeltaVJettisoned(krpctest.TestCase):
+class TestStageDeltaVJettisoned(TestCase):
     """The game calculates delta-v for the active vessel alone, so a vessel left behind by
     staging can never report figures and says so."""
 
@@ -221,7 +221,7 @@ class TestStageDeltaVJettisoned(krpctest.TestCase):
         self.assertTrue(self.vessel.delta_v_ready)
 
 
-class TestStageDeltaVWithoutEngines(krpctest.TestCase):
+class TestStageDeltaVWithoutEngines(TestCase):
     """CrewlessCommandPod carries no engine. The game runs its simulation but leaves the
     ready flag down, and the zeros it computed are what there is to report."""
 

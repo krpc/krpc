@@ -1,9 +1,9 @@
 import unittest
 
-import krpctest
+from krpctools.game.ksp import TestCase
 
 
-class TestInfernalRobotics(krpctest.TestCase):
+class TestInfernalRobotics(TestCase):
     mods = ["InfernalRobotics"]
 
     @classmethod

@@ -1,6 +1,6 @@
 import unittest
 
-import krpctest
+from krpctools.game.ksp import Mixin, TestCase
 
 # Part.Tag reads the name tag part module of whichever mod provides it: ModuleNameTag from
 # KSPCommunityPartModules 0.5 or later, or KOSNameTag from kOS. Each class covers one install.
@@ -8,7 +8,7 @@ import krpctest
 # of craft made with earlier versions of kRPC.
 
 
-class PartsTagTest(krpctest.Mixin):
+class PartsTagTest(Mixin):
     craft = "PartsTag"
     module: str | None = "ModuleNameTag"
 
@@ -59,32 +59,30 @@ class PartsTagUnavailableTest(PartsTagTest):
             self.pod.tag = "capsule"
 
 
-class TestPartsTagNoMods(PartsTagUnavailableTest, krpctest.TestCase):
+class TestPartsTagNoMods(PartsTagUnavailableTest, TestCase):
     pass
 
 
-class TestPartsTagOldCommunityPartModules(PartsTagUnavailableTest, krpctest.TestCase):
+class TestPartsTagOldCommunityPartModules(PartsTagUnavailableTest, TestCase):
     mods = ["KSPCommunityPartModules-0.4"]
 
 
-class TestPartsTagCommunityPartModules(PartsTagAvailableTest, krpctest.TestCase):
+class TestPartsTagCommunityPartModules(PartsTagAvailableTest, TestCase):
     mods = ["KSPCommunityPartModules"]
 
 
-class TestPartsTagCommunityPartModulesLegacyCraft(
-    PartsTagAvailableTest, krpctest.TestCase
-):
+class TestPartsTagCommunityPartModulesLegacyCraft(PartsTagAvailableTest, TestCase):
     mods = ["KSPCommunityPartModules"]
     craft = "PartsTagLegacy"
 
 
-class TestPartsTagKOSOldCommunityPartModules(PartsTagAvailableTest, krpctest.TestCase):
+class TestPartsTagKOSOldCommunityPartModules(PartsTagAvailableTest, TestCase):
     mods = ["KSPCommunityPartModules-0.4", "kOS"]
     craft = "PartsTagLegacy"
     module = "KOSNameTag"
 
 
-class TestPartsTagKOSCommunityPartModules(PartsTagAvailableTest, krpctest.TestCase):
+class TestPartsTagKOSCommunityPartModules(PartsTagAvailableTest, TestCase):
     mods = ["KSPCommunityPartModules", "kOS"]
     craft = "PartsTagLegacy"
     module = "KOSNameTag"

@@ -1,9 +1,9 @@
 import unittest
 
-import krpctest
+from krpctools.game.ksp import TestCase
 
 
-class TestPartsSolarPanel(krpctest.TestCase):
+class TestPartsSolarPanel(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -86,7 +86,7 @@ class TestPartsSolarPanel(krpctest.TestCase):
         self.assertFalse(self.control.solar_panels)
 
 
-class TestPartsSolarPanelBreak(krpctest.TestCase):
+class TestPartsSolarPanelBreak(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()

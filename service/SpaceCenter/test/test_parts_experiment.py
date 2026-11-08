@@ -1,9 +1,9 @@
 import unittest
 
-import krpctest
+from krpctools.game.ksp import TestCase
 
 
-class TestPartsExperiment(krpctest.TestCase):
+class TestPartsExperiment(TestCase):
     # NOTE: part lookups here use the language-independent with_name/part.name.
     # The Experiment.title and ScienceSubject.title assertions below are KSP's
     # localized science strings (a separate domain from parts, with no neutral

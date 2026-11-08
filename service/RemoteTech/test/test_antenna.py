@@ -1,9 +1,9 @@
 import unittest
 
-import krpctest
+from krpctools.game.ksp import TestCase
 
 
-class TestAntenna(krpctest.TestCase):
+class TestAntenna(TestCase):
     mods = ["RemoteTech"]
 
     @classmethod

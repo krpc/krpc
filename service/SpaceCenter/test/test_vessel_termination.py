@@ -1,6 +1,6 @@
 import unittest
 
-import krpctest
+from krpctools.game.ksp import TestCase
 
 # A stock craft small enough to launch from an unupgraded pad or runway, and built only
 # from parts a career game starts with, so the same craft serves both test cases. It has a
@@ -8,7 +8,7 @@ import krpctest
 CRAFT = "Jumping Flea"
 
 
-class TerminationTestCase(krpctest.TestCase):
+class TerminationTestCase(TestCase):
     """Launches a pair of vessels: one onto the pad and one onto the runway. The runway one
     is flown, which leaves the pad one as a vessel that is not the active one. Termination
     destroys a vessel, so the pair is launched again for every test."""

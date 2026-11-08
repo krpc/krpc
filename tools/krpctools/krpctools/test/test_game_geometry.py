@@ -1,7 +1,7 @@
 import math
 import unittest
 
-from krpctest.geometry import (
+from krpctools.game.geometry import (
     cross,
     dot,
     norm,
@@ -12,7 +12,7 @@ from krpctest.geometry import (
     quaternion_vector_mult,
     rad2deg,
 )
-from krpctest.testcase import TestCase
+from krpctools.game.testcase import TestCase
 
 
 class TestGeometry(TestCase):

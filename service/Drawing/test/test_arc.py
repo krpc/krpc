@@ -1,10 +1,10 @@
 import math
 import unittest
 
-import krpctest
+from krpctools.game.ksp import TestCase
 
 
-class TestArc(krpctest.TestCase):
+class TestArc(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -82,7 +82,7 @@ class TestArc(krpctest.TestCase):
         arc.remove()
 
 
-class TestCircle(krpctest.TestCase):
+class TestCircle(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()

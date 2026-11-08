@@ -80,8 +80,7 @@ CONTENT_PATHS = (
 # Unlike the API surfaces these are toolchain, not content: the current
 # checkout's files carry entries for versions released since, so trim_changelogs
 # prunes each to the version being built. Other CHANGELOG.md files in the tree
-# (the top-level one, tools/krpctest, tools/buildenv) do not feed the page and
-# are left alone.
+# (the top-level one, tools/buildenv) do not feed the page and are left alone.
 CHANGELOG_PATHS = tuple(
     f"{component}/CHANGELOG.md" for component, _ in changelog.shown_components()
 )

@@ -1,10 +1,10 @@
 import unittest
 
-import krpctest
 from krpc.services.stdlib import ColorRGBA
+from krpctools.game.ksp import TestCase
 
 
-class TestButton(krpctest.TestCase):
+class TestButton(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()

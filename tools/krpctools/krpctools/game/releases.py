@@ -8,8 +8,8 @@ import json
 import os
 import urllib.request
 
+from ..version import __version__
 from . import install
-from .version import __version__
 
 REPOSITORY = "krpc/krpc"
 

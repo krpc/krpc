@@ -1,9 +1,9 @@
 import unittest
 
-import krpctest
+from krpctools.game.ksp import TestCase
 
 
-class TestPartsWheel(krpctest.TestCase):
+class TestPartsWheel(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -210,7 +210,7 @@ class TestPartsWheel(krpctest.TestCase):
         self.assertTrue(wheel.repairable)
 
 
-class TestPartsWheelGrounded(krpctest.TestCase):
+class TestPartsWheelGrounded(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()

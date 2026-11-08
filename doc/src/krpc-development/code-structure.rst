@@ -20,8 +20,9 @@ is laid out as follows:
 * ``tools/ServiceDefinitions/`` - generates a service definition file, in JSON, from a service
   DLL.
 * ``tools/krpctools/`` - a Python package of tools for client libraries: ``clientgen`` generates
-  client stubs and ``docgen`` generates the API documentation.
-* ``tools/krpctest/`` - a Python package for testing RPCs in the game.
+  client stubs and ``docgen`` generates the API documentation. ``krpctools.game`` runs tests in
+  the game.
+* ``tools/game/`` - the runners for the tests in the game, which build kRPC from the sources.
 * ``tools/TestingTools/`` - a service for the tests, with RPCs such as teleporting a vessel into
   orbit.
 * ``tools/benchmarks/`` - the benchmark suite, described in :doc:`benchmarks`.

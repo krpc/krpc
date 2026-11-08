@@ -10,6 +10,7 @@ import subprocess
 import sys
 import tempfile
 import time
+import zipfile
 
 import krpc
 from krpctools import dotnet
@@ -116,11 +117,26 @@ def test_conformance():
     )
 
 
+def test_game(directory):
+    """Install the bundled KSP add-on into an empty install, from a stand-in kRPC archive."""
+    ksp = os.path.join(directory, "KSP")
+    os.makedirs(os.path.join(ksp, "GameData", "Squad"))
+    archive = os.path.join(directory, "krpc.zip")
+    with zipfile.ZipFile(archive, "w") as f:
+        f.writestr("GameData/kRPC/PluginData/settings.cfg", "")
+    run("krpc-game", "install", "--game-dir", ksp, "--krpc", archive)
+    for name in ("TestingTools.dll", "KRPC.Benchmark.dll", "PluginData/settings.cfg"):
+        if not os.path.isfile(os.path.join(ksp, "GameData", "kRPC", name)):
+            raise RuntimeError("krpc-game did not install " + name)
+
+
 def main():
     test_testserver()
     with tempfile.TemporaryDirectory() as directory:
         test_krpctools(directory)
     test_conformance()
+    with tempfile.TemporaryDirectory() as directory:
+        test_game(directory)
 
 
 if __name__ == "__main__":

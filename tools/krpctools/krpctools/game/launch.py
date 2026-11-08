@@ -16,7 +16,7 @@ import krpc
 
 # Progress messages (installing, launching, the mod set in use) go to this logger at INFO.
 # pytest shows them with log_cli; outside pytest, INFO is dropped by default.
-log = logging.getLogger("krpctest")
+log = logging.getLogger("krpctools.game")
 
 
 def connect(game, use_cached=True):

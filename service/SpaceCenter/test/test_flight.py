@@ -1,8 +1,7 @@
 import math
 import unittest
 
-import krpctest
-from krpctest.geometry import (
+from krpctools.game.geometry import (
     cross,
     dot,
     norm,
@@ -12,9 +11,10 @@ from krpctest.geometry import (
     rad2deg,
     vector,
 )
+from krpctools.game.ksp import TestCase
 
 
-class TestFlight(krpctest.TestCase):
+class TestFlight(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -228,7 +228,7 @@ class TestFlight(krpctest.TestCase):
             self.assertAlmostEqual(expected, accel, delta=1e-3)
 
 
-class TestFlightVerticalSpeed(krpctest.TestCase):
+class TestFlightVerticalSpeed(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -294,7 +294,7 @@ class TestFlightVerticalSpeed(krpctest.TestCase):
         self.assertAlmostEqual(0, flight.vertical_speed, delta=0.5)
 
 
-class TestFlightAtLaunchpad(krpctest.TestCase):
+class TestFlightAtLaunchpad(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -355,7 +355,7 @@ class TestFlightAtLaunchpad(krpctest.TestCase):
         self.assertGreater(norm(broadside - head_on), 0.1 * norm(head_on))
 
 
-class TestFlightAero(krpctest.TestCase):
+class TestFlightAero(TestCase):
     # Stock aerodynamic torque simulation (issue #914) for a craft with control
     # surfaces off the center of mass. The tests are self-consistent: they compare
     # simulated values against each other under a synthetic 300 m/s wind, so they
@@ -665,7 +665,7 @@ class TestFlightAeroFAR(TestFlightAero):
     mods = ["FAR"]
 
 
-class TestFlightAirbrake(krpctest.TestCase):
+class TestFlightAirbrake(TestCase):
     """Regression for issue #622: SimulateAerodynamicForceAt must account for
     the current physical deflection of ModuleAeroSurface airbrakes."""
 
@@ -754,7 +754,7 @@ class TestFlightAirbrake(krpctest.TestCase):
                 cs.deployed = False
 
 
-class TestFlightFAR(krpctest.TestCase):
+class TestFlightFAR(TestCase):
     """The live aerodynamic readouts with Ferram Aerospace Research installed, which
     replaces the stock aerodynamics model with its own (issue #498)."""
 

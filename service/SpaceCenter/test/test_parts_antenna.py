@@ -1,9 +1,9 @@
 import unittest
 
-import krpctest
+from krpctools.game.ksp import TestCase
 
 
-class TestPartsAntenna(krpctest.TestCase):
+class TestPartsAntenna(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -104,7 +104,7 @@ class TestPartsAntenna(krpctest.TestCase):
         self.assertFalse(self.fixed_antenna.allow_partial)
 
 
-class TestPartsAntennaBreak(krpctest.TestCase):
+class TestPartsAntennaBreak(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()

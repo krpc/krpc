@@ -1,10 +1,10 @@
 import unittest
 
-import krpctest
 from krpc.services.stdlib import ColorRGB
+from krpctools.game.ksp import TestCase
 
 
-class TestNavballMarker(krpctest.TestCase):
+class TestNavballMarker(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()

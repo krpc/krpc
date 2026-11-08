@@ -10,9 +10,9 @@ import urllib.error
 import zipfile
 from unittest import mock
 
-from krpctest import game, install
-from krpctest.ksp import KSP
-from krpctest.ksp.game import copy_folder
+from krpctools.game import game, install
+from krpctools.game.ksp import KSP
+from krpctools.game.ksp.game import copy_folder
 
 # A clean no-mod GameData: the stock game, kRPC, the ModuleManager assembly and its
 # runtime-generated cache files.
@@ -196,7 +196,7 @@ class TestGame(unittest.TestCase):
         self.assertIsInstance(game.load("ksp"), KSP)
 
     def test_load_by_reference(self):
-        self.assertIsInstance(game.load("krpctest.ksp:KSP"), KSP)
+        self.assertIsInstance(game.load("krpctools.game.ksp:KSP"), KSP)
 
     def test_load_unknown_raises(self):
         with self.assertRaises(ValueError):
@@ -228,6 +228,19 @@ class TestGame(unittest.TestCase):
         far = KSP().mods["FAR"]
         mod = type(far)("local/FAR.zip")
         self.assertIs(mod, KSP(mods=[mod]).mods["FAR"])
+
+
+class TestPackage(unittest.TestCase):
+    def test_addon_is_packaged(self):
+        names = [os.path.basename(path) for path in KSP().addon_files()]
+        self.assertIn("TestingTools.dll", names)
+        self.assertIn("KRPC.Benchmark.dll", names)
+
+    def test_blank_saves_are_packaged(self):
+        ksp = KSP()
+        self.assertIsNotNone(ksp.blank_save("krpctest"))
+        self.assertIsNotNone(ksp.blank_save("krpctest_career"))
+        self.assertTrue(os.path.isfile(ksp.settings_file()))
 
 
 def _http_error(code):

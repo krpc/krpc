@@ -1,10 +1,10 @@
 import unittest
 
-import krpctest
-from krpctest.geometry import norm
+from krpctools.game.geometry import norm
+from krpctools.game.ksp import TestCase
 
 
-class TestEditorParts(krpctest.TestCase):
+class TestEditorParts(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -177,7 +177,7 @@ class TestEditorParts(krpctest.TestCase):
             self.assertRaises(RuntimeError, getattr, engine, name)
 
 
-class TestEditorPartsMatchFlight(krpctest.TestCase):
+class TestEditorPartsMatchFlight(TestCase):
     """The same vessel, inspected in the editor and after launching it, must report the
     same parts tree."""
 

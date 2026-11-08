@@ -1,10 +1,10 @@
 import unittest
 
-import krpctest
-from krpctest.geometry import norm, normalize, vector
+from krpctools.game.geometry import norm, normalize, vector
+from krpctools.game.ksp import TestCase
 
 
-class TestNode(krpctest.TestCase):
+class TestNode(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()

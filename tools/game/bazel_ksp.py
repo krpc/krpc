@@ -7,7 +7,7 @@
 import os
 import subprocess
 
-from krpctest.ksp import KSP
+from krpctools.game.ksp import KSP
 
 # The test-only assemblies the release omits. TestingTools is the add-on the tests drive the
 # game with. KRPC.Benchmark is the benchmark service, which TestServer also loads, so an

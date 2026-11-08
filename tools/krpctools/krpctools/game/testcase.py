@@ -2,7 +2,7 @@
 
 A test class names the mods it requires in ``mods``. Before its ``setUpClass`` runs, the
 game the run tests against is running with exactly those mods. Tolerance-based assertions
-come from :class:`krpctest.assertions.AssertionsMixin`.
+come from :class:`krpctools.game.assertions.AssertionsMixin`.
 """
 
 import time
@@ -30,7 +30,7 @@ class TestCase(AssertionsMixin):
         if not cls.game_required:
             return
         setup = cls.__dict__.get("setUpClass")
-        if setup is None or getattr(setup.__func__, "_krpctest_wrapped", False):
+        if setup is None or getattr(setup.__func__, "_ensures_game", False):
             return
         raw = setup.__func__
 
@@ -39,7 +39,7 @@ class TestCase(AssertionsMixin):
             cls.ensure_game()
             _raw(cls)
 
-        setUpClass.__func__._krpctest_wrapped = True  # pyright: ignore[reportFunctionMemberAccess]
+        setUpClass.__func__._ensures_game = True  # pyright: ignore[reportFunctionMemberAccess]
         cls.setUpClass = setUpClass
 
     @classmethod

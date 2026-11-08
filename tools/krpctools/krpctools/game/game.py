@@ -3,8 +3,8 @@
 A ``Game`` installs kRPC, the game's test add-on and the requested mods, launches the game
 and connects to its server. A game subclass overrides the methods that differ between games:
 where mods install, the command that launches it, the log it writes and how to tell a mod is
-present in the running game. Launching and stopping are in :mod:`krpctest.launch`, and
-installing in :mod:`krpctest.install`.
+present in the running game. Launching and stopping are in :mod:`krpctools.game.launch`, and
+installing in :mod:`krpctools.game.install`.
 """
 
 import importlib
@@ -218,7 +218,7 @@ class Game:
 
 # Built-in games, by the name --game takes
 GAMES = {
-    "ksp": "krpctest.ksp:KSP",
+    "ksp": "krpctools.game.ksp:KSP",
 }
 
 # The game the tests run against, and the options that override what it sets

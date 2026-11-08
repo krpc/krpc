@@ -1,9 +1,9 @@
 import unittest
 
-import krpctest
+from krpctools.game.ksp import TestCase
 
 
-class TestPartsRobotic(krpctest.TestCase):
+class TestPartsRobotic(TestCase):
     # Breaking Ground stock robotic parts. The class is skipped if the expansion is
     # not installed (expansions cannot be installed by the test harness).
     expansions = ["Serenity"]

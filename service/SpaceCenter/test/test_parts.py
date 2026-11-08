@@ -1,10 +1,10 @@
 import unittest
 
-import krpctest
-from krpctest.geometry import dot
+from krpctools.game.geometry import dot
+from krpctools.game.ksp import TestCase
 
 
-class TestParts(krpctest.TestCase):
+class TestParts(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()

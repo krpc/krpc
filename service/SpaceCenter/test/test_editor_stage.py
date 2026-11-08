@@ -1,10 +1,10 @@
 import time
 import unittest
 
-import krpctest
+from krpctools.game.ksp import TestCase
 
 
-class TestEditorStage(krpctest.TestCase):
+class TestEditorStage(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -189,7 +189,7 @@ class TestEditorStage(krpctest.TestCase):
             self.wait_for_delta_v(self.vessel)
 
 
-class TestEditorStageMatchesFlight(krpctest.TestCase):
+class TestEditorStageMatchesFlight(TestCase):
     """The same vessel must report the same per-stage vacuum delta-v in the editor and
     once it has been launched."""
 

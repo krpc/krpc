@@ -30,9 +30,15 @@ def main():
         sys.exit("This tool must be run via `bazel run //:test-ingame`.")
     os.chdir(os.environ.get("BUILD_WORKING_DIRECTORY", workspace))
 
-    # The plugin is opt-in, so it stays out of other pytest runs where krpctest is installed
+    # The plugin is opt-in, so it stays out of other pytest runs where krpctools is installed
     return pytest.main(
-        ["-p", "krpctest.pytest_plugin", "--game", "bazel_ksp:BazelKSP", *sys.argv[1:]]
+        [
+            "-p",
+            "krpctools.game.pytest_plugin",
+            "--game",
+            "bazel_ksp:BazelKSP",
+            *sys.argv[1:],
+        ]
     )
 
 

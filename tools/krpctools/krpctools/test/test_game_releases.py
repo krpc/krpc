@@ -3,9 +3,9 @@ import tempfile
 import unittest
 from unittest import mock
 
-from krpctest import install, releases
-from krpctest.ksp import KSP
-from krpctest.ksp.krpc_version import KRPC_VERSION
+from krpctools.game import install, releases
+from krpctools.game.ksp import KSP
+from krpctools.game.ksp.krpc_version import KRPC_VERSION
 
 
 def _release(tag, *assets, prerelease=False):

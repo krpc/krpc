@@ -1,8 +1,8 @@
 import base64
 import unittest
 
-import krpctest
 from krpc.services.stdlib import ColorRGBA
+from krpctools.game.ksp import TestCase
 
 # A 2x2 PNG, small enough to keep in the test rather than on disk.
 PNG = base64.b64decode(
@@ -11,7 +11,7 @@ PNG = base64.b64decode(
 )
 
 
-class TestImage(krpctest.TestCase):
+class TestImage(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()

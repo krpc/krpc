@@ -284,7 +284,7 @@ test_suite(
         "//tools/build/python:pyright",
         "//tools/build/python:ruff",
         "//tools/ci:test",
-        "//tools/krpctest:test",
+        "//tools/game:test",
         "//tools/krpctools:test",
     ],
 )
@@ -295,12 +295,12 @@ test_suite(
 # restarting it each time.
 alias(
     name = "test-ingame",
-    actual = "//tools/krpctest:test-ingame",
+    actual = "//tools/game:test-ingame",
 )
 
 alias(
     name = "run-ksp",
-    actual = "//tools/krpctest:run-ksp",
+    actual = "//tools/game:run-ksp",
 )
 
 filegroup(
