@@ -247,7 +247,10 @@ py_pyright_test(
     srcs = glob([
         "conformance/*.py",
         "krpc/**/*.py",
-    ]) + [":services-ksp"],
+    ]) + services + [
+        ":services-ksp",
+        ":services-testservice",
+    ],
     deps = [
         ":krpc_lib",
         "//client/conformance:testee_py",
