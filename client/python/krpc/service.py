@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import functools
 import keyword
 import warnings
 from collections import defaultdict
@@ -150,6 +151,7 @@ def _wrap_deprecated(
     if reason:
         message += ": " + _parse_deprecation_reason(reason, service_name)
 
+    @functools.wraps(func)
     def wrapper(*args: object, **kwargs: object) -> object:
         warnings.warn(message, DeprecationWarning, stacklevel=2)
         return func(*args, **kwargs)
