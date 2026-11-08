@@ -405,6 +405,24 @@ namespace KRPC.Test.Service.KRPC
                     Expression.ConstantEnum ("TestService", "TestEnum", 2)));
         }
 
+        [TestCase (0, 7)]
+        [TestCase (1, 6)]
+        [TestCase (5, 2)]
+        [TestCase (7, 0)]
+        public void FlagsNot (int operand, int expected)
+        {
+            var value = Eval<global::KRPC.Test.Service.TestService.TestFlags> (
+                Expression.Not (Expression.ConstantEnum ("TestService", "TestFlags", operand)));
+            Assert.AreEqual ((global::KRPC.Test.Service.TestService.TestFlags)expected, value);
+        }
+
+        [Test]
+        public void NotNeedsFlags ()
+        {
+            Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                () => Expression.Not (Expression.ConstantEnum ("TestService", "TestEnum", 1)));
+        }
+
         [Test]
         public void ConstantFlagsCombination ()
         {

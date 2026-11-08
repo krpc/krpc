@@ -1204,6 +1204,8 @@ class KRPC : public Service {
 
     /**
      * Logical or bitwise negation.
+     *
+     * Also takes a value of a flags enumeration, and gives the declared values it does not hold.
      * @param client A client object.
      * @param arg The operand.
      */

@@ -3333,6 +3333,9 @@ namespace KRPC.Client.Services.KRPC
         /// <summary>
         /// Logical or bitwise negation.
         /// </summary>
+        /// <remarks>
+        /// Also takes a value of a flags enumeration, and gives the declared values it does not hold.
+        /// </remarks>
         /// <param name="arg">The operand.</param>
         /// <param name="connection">A connection object.</param>
         [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Not", typeof(TypeSpecs))]

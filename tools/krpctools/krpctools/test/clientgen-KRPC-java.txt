@@ -2876,6 +2876,8 @@ public class KRPC {
 
         /**
          * Logical or bitwise negation.
+         *
+         * Also takes a value of a flags enumeration, and gives the declared values it does not hold.
          * @param arg The operand.
          */
         @SuppressWarnings({ "unchecked" })
