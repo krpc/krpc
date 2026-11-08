@@ -1,5 +1,6 @@
 from __future__ import annotations
 from typing import Tuple, Set, Dict, List, NamedTuple, Optional, TYPE_CHECKING
+import krpc.client
 import krpc.limits
 from krpc.declarations import DeclaredClass, DeclaredObject, declaration_error as _declaration, register as _register
 from krpc.event import Event
@@ -17,6 +18,15 @@ class EmptyService(metaclass=DeclaredClass):
     _service_name = "EmptyService"
     _class_name = None
 
+
+
+class EmptyServiceClient(krpc.client.Client):
+    """
+    A client with the EmptyService service, as ``krpc.connect[EmptyServiceClient]()``
+    connects.
+    """
+
+    empty_service: EmptyService
 
 
 _register(

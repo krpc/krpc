@@ -690,9 +690,25 @@ A service another mod adds is built when you connect, like the others:
    conn = krpc.connect()
    conn.my_mod.get_mode()
 
-For importable types, generate a module for the service with :ref:`krpc-clientgen
-<service-api-clientgen>`. Import the module before connecting, as the client uses its
-enumerations, structures and exceptions only if they are registered by then.
+For type hints, generate a module for the service with :ref:`krpc-clientgen
+<service-api-clientgen>`, and connect with the client type it declares:
+
+.. code-block:: python
+
+   from mymod_services import MyModClient
+
+   conn = krpc.connect[MyModClient]()
+   conn.my_mod.get_mode()
+
+Import the module before connecting, as the client uses its enumerations, structures and exceptions
+only if they are registered by then. For several mods, combine their client types:
+
+.. code-block:: python
+
+   class Connection(MyModClient, OtherModClient):
+       pass
+
+   conn = krpc.connect[Connection]()
 
 .. _python-client-reference:
 
@@ -701,7 +717,9 @@ Client API Reference
 
 .. function:: krpc.connect([name=None], [address='127.0.0.1'], [port=50000], [timeout=None], [handshake_timeout=5], [stall_timeout=30])
 
-   Connects to a kRPC server, and returns a :class:`krpc.client.Client`.
+   Connects to a kRPC server, and returns a :class:`krpc.client.Client`. ``krpc.connect[T](...)``
+   returns a client of type ``T``, a subclass of :class:`krpc.client.Client` such as the client
+   type a generated module declares.
 
    :param str name: A name for the connection, shown in the server window in the game.
    :param str address: The address of the server, as a host name or an IP address. Defaults to
@@ -724,6 +742,7 @@ Client API Reference
 
    Connects to a kRPC server on the same machine over a local socket, and returns a
    :class:`krpc.client.Client`. The server must use the local socket protocol.
+   ``krpc.connect_local[T](...)`` returns a client of type ``T``, as for :func:`krpc.connect`.
 
    A script that makes many calls in quick succession completes more of them per physics update
    than over TCP/IP. A script that makes a call and then waits runs at the game's update rate

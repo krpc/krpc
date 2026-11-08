@@ -5,7 +5,7 @@ import threading
 import warnings
 from collections.abc import Callable, Iterable
 from types import TracebackType
-from typing import TYPE_CHECKING, Any, cast
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 import krpc.schema.KRPC_pb2 as KRPC
 import krpc.stream
@@ -35,6 +35,8 @@ from krpc.types import (
     Types,
 )
 from krpc.utils import snake_case
+
+_ClientT = TypeVar("_ClientT", bound="Client")
 
 
 def _type_message(remote_type: Any) -> KRPC.Type:
@@ -168,7 +170,7 @@ class Client(_Services):
         if deferred is not None:
             raise deferred
 
-    def __enter__(self) -> Client:
+    def __enter__(self: _ClientT) -> _ClientT:
         return self
 
     def __exit__(
