@@ -1,9 +1,9 @@
 import unittest
 
-import krpctest
+from krpctools.game.ksp import TestCase
 
 
-class TestResourceTransfer(krpctest.TestCase):
+class TestResourceTransfer(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -110,7 +110,7 @@ class TestResourceTransfer(krpctest.TestCase):
         self.assertTrue("Destination part cannot store" in str(cm.exception))
 
 
-class TestResourceTransferCancel(krpctest.TestCase):
+class TestResourceTransferCancel(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -170,7 +170,7 @@ class TestResourceTransferCancel(krpctest.TestCase):
         self.assertAlmostEqual(amount, transfer.amount)
 
 
-class TestResourceTransferRemove(krpctest.TestCase):
+class TestResourceTransferRemove(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -235,7 +235,7 @@ class TestResourceTransferRemove(krpctest.TestCase):
         )
 
 
-class TestResourceTransferDisconnect(krpctest.TestCase):
+class TestResourceTransferDisconnect(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()

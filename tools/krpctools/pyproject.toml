@@ -35,6 +35,7 @@ krpc-docgen = "krpctools.docgen:main"
 krpc-servicedefs = "krpctools.servicedefs:main"
 krpc-testserver = "krpctools.testserver:main"
 krpc-conformance = "krpctools.conformance.driver.main:main"
+krpc-game = "krpctools.game.cli:main"
 
 [tool.hatch.version]
 path = "krpctools/version.py"

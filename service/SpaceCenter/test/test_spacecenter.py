@@ -4,14 +4,14 @@ import math
 import unittest
 from typing import TYPE_CHECKING
 
-import krpctest
-from krpctest.geometry import norm, normalize
+from krpctools.game.geometry import norm, normalize
+from krpctools.game.ksp import Mixin, TestCase
 
 if TYPE_CHECKING:
     from krpc.services.spacecenter import SpaceCenter, Vessel
 
 
-class TestSpaceCenter(krpctest.TestCase):
+class TestSpaceCenter(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -383,7 +383,7 @@ class TestSpaceCenter(krpctest.TestCase):
         self.assertEqual("liquidEngine2", part.name)  # LV-T45 "Swivel"
 
 
-class RailsWarpTestBase(krpctest.Mixin):
+class RailsWarpTestBase(Mixin):
     sc: SpaceCenter
     maximum_rails_warp_factor: int
     rails_rates = [1, 5, 10, 50, 100, 1000, 10000, 100000]
@@ -518,7 +518,7 @@ class WarpTestBase(RailsWarpTestBase):
         self.assertEqual(self.sc.WarpMode.none, self.sc.warp_mode)
 
 
-class TestWarpOnLaunchpad(WarpTestBase, krpctest.TestCase):
+class TestWarpOnLaunchpad(WarpTestBase, TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -535,7 +535,7 @@ class TestWarpOnLaunchpad(WarpTestBase, krpctest.TestCase):
         self.assertAlmostEqual(ut, self.sc.ut, delta=2)
 
 
-class TestWarpInOrbit(WarpTestBase, krpctest.TestCase):
+class TestWarpInOrbit(WarpTestBase, TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -550,7 +550,7 @@ class TestWarpInOrbit(WarpTestBase, krpctest.TestCase):
         cls.landed = False
 
 
-class TestWarpInOrbitThroughAtmosphere(RailsWarpTestBase, krpctest.TestCase):
+class TestWarpInOrbitThroughAtmosphere(RailsWarpTestBase, TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -576,7 +576,7 @@ class TestWarpInOrbitThroughAtmosphere(RailsWarpTestBase, krpctest.TestCase):
         self.assertAlmostEqual(ut, self.sc.ut, delta=2)
 
 
-class TestWarpInSpace(WarpTestBase, krpctest.TestCase):
+class TestWarpInSpace(WarpTestBase, TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -626,15 +626,15 @@ class WarpOutsideFlightTestBase(RailsWarpTestBase):
         self.assertRaises(RuntimeError, setattr, self.sc, "physics_warp_factor", 1)
 
 
-class TestWarpInSpaceCenter(WarpOutsideFlightTestBase, krpctest.TestCase):
+class TestWarpInSpaceCenter(WarpOutsideFlightTestBase, TestCase):
     scene_name = "space_center"
 
 
-class TestWarpInTrackingStation(WarpOutsideFlightTestBase, krpctest.TestCase):
+class TestWarpInTrackingStation(WarpOutsideFlightTestBase, TestCase):
     scene_name = "tracking_station"
 
 
-class TestRevertToLaunch(krpctest.TestCase):
+class TestRevertToLaunch(TestCase):
     # Regression for RevertToLaunch returning before the scene reload had settled. A
     # client reading vessel data on its next call saw the vessel as it was before the
     # revert, and a placeholder mass for every part.
@@ -666,7 +666,7 @@ class TestRevertToLaunch(krpctest.TestCase):
         self.assertEqual(masses, sorted(round(part.mass) for part in vessel.parts.all))
 
 
-class TestSpaceCenterCareer(krpctest.TestCase):
+class TestSpaceCenterCareer(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save("krpctest_career", always_load=True)

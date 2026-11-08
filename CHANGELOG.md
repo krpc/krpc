@@ -36,5 +36,4 @@ component's unreleased section.
 ## Tools
 
 - [krpctools](tools/krpctools/CHANGELOG.md)
-- [krpctest](tools/krpctest/CHANGELOG.md)
 - [buildenv](tools/buildenv/CHANGELOG.md)

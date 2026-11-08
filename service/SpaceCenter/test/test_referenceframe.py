@@ -10,8 +10,7 @@
 import math
 import unittest
 
-import krpctest
-from krpctest.geometry import (
+from krpctools.game.geometry import (
     compute_position,
     cross,
     dot,
@@ -22,9 +21,10 @@ from krpctest.geometry import (
     quaternion_vector_mult,
     vector,
 )
+from krpctools.game.ksp import TestCase
 
 
-class TestReferenceFrame(krpctest.TestCase):
+class TestReferenceFrame(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -1354,7 +1354,7 @@ class TestReferenceFrame(krpctest.TestCase):
         )
 
 
-class TestOrbitReferenceFrame(krpctest.TestCase):
+class TestOrbitReferenceFrame(TestCase):
     """The frames centered on the point an orbit has reached.
 
     These are placed by evaluating the orbit rather than by reading a transform,

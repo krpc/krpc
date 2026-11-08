@@ -79,37 +79,42 @@ Tests in the Game
 -----------------
 
 These tests live in ``service/*/test/``, and need a copy of KSP. Set ``KSP_DIR`` to the install
-directory, or pass ``--ksp-dir``:
+directory, or pass ``--game-dir``:
 
 .. code-block:: bash
 
    export KSP_DIR="$HOME/.local/share/Steam/steamapps/common/Kerbal Space Program"
-   bazel run //:test-ingame
+   bazel run //tools/game:test-ksp
 
 The command builds and installs the mod and the mods the tests need, launches KSP and runs the
-tests. The test framework and the Python client come from the build, so a run picks up your
-changes. Arguments after ``--`` go to pytest, to select a subset:
+tests. The test framework, :doc:`krpctools.game </extending/testing>`, and the Python client come
+from the build, so a run picks up your changes. Arguments after ``--`` go to pytest, to select a
+subset:
 
 .. code-block:: bash
 
-   bazel run //:test-ingame -- service/SpaceCenter/test/test_camera.py -v
-   bazel run //:test-ingame -- -k test_camera_mode
+   bazel run //tools/game:test-ksp -- service/SpaceCenter/test/test_camera.py -v
+   bazel run //tools/game:test-ksp -- -k test_camera_mode
 
 To keep the game running between test runs, start it in another terminal:
 
 .. code-block:: bash
 
-   bazel run //:run-ksp -- --load-game=krpctest
+   bazel run //tools/game:run-ksp -- --load-game=krpctest
 
 Then pass ``--no-launch`` to run the tests against that game:
 
 .. code-block:: bash
 
-   bazel run //:test-ingame -- --no-launch service/SpaceCenter/test/test_camera.py -v
+   bazel run //tools/game:test-ksp -- --no-launch service/SpaceCenter/test/test_camera.py -v
 
 The tests leave a game they did not start unchanged, so it must already have the mods they need.
-``//:run-ksp`` installs the mods named by ``--mods``, and pipes the game log to the terminal. Pass
-``-- --help`` to list its other options, which load a save, switch vessel or launch a craft.
+``//tools/game:run-ksp`` installs the mods named by ``--mods``, and pipes the game log to the
+terminal. Pass ``-- --help`` to list its other options, which load a save, switch vessel or launch
+a craft.
+
+The third-party mods the tests install are pinned in ``tools/krpctools/krpctools/game/ksp/mods/``.
+To test against a local build of one, pass ``--mod NAME=PATH`` to either command.
 
 .. note::
 

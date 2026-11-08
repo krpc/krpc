@@ -1,10 +1,10 @@
 import unittest
 
-import krpctest
-from krpctest.geometry import norm
+from krpctools.game.geometry import norm
+from krpctools.game.ksp import TestCase
 
 
-class TestDebugForce(krpctest.TestCase):
+class TestDebugForce(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -24,7 +24,7 @@ class TestDebugForce(krpctest.TestCase):
         force.remove()
 
 
-class TestDebugForceInOrbit(krpctest.TestCase):
+class TestDebugForceInOrbit(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()

@@ -1,12 +1,12 @@
 import unittest
 
-import krpctest
+from krpctools.game.ksp import TestCase
 
 # The game's physics time step.
 TICK = 0.02
 
 
-class TestTickHold(krpctest.TestCase):
+class TestTickHold(TestCase):
     """Holding a physics tick, which is what lets a control loop read the game state,
     compute with it and write the result back without the game moving on in between.
 

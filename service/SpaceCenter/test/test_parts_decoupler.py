@@ -1,9 +1,9 @@
 import unittest
 
-import krpctest
+from krpctools.game.ksp import TestCase
 
 
-class TestPartsDecoupler(krpctest.TestCase):
+class TestPartsDecoupler(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -78,7 +78,7 @@ class TestPartsDecoupler(krpctest.TestCase):
         self.assertFalse(self.disabled_decoupler.staged)
 
 
-class TestPartsOmniDecoupler(krpctest.TestCase):
+class TestPartsOmniDecoupler(TestCase):
     """An omni-decoupler detaches at every node at once, so firing it produces two new
     vessels: the stack it separated, and the decoupler left on its own. Decouple returns
     the vessel that was separated. This needs a class of its own because firing the

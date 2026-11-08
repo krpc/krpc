@@ -278,6 +278,7 @@ py_test(
     main = "check_scripts_pyright.py",
     deps = [
         "//client/python:krpc_lib",
+        "//tools/krpctools:krpctools_lib",
         "@krpc_pypi//basedpyright",
     ],
 )

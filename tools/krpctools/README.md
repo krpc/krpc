@@ -9,6 +9,8 @@ Kerbal Space Program. Installs the command line tools for working with kRPC serv
  * `krpc-conformance` - run the conformance tests against a client library
  * `krpc-testserver` - run a kRPC server without the game, for testing clients. Pass `--help`
    for its options.
+ * `krpc-game` - install kRPC and its test add-on into KSP, and run the game. The pytest plugin
+   `krpctools.game.pytest_plugin` runs tests against it.
 
 `krpc-servicedefs`, `krpc-testserver` and `krpc-conformance` run on Linux and Windows, and need
 the [.NET 10 runtime](https://dotnet.microsoft.com/download/dotnet/10.0).

@@ -1,9 +1,9 @@
 import unittest
 
-import krpctest
+from krpctools.game.ksp import TestCase
 
 
-class TestEditorResources(krpctest.TestCase):
+class TestEditorResources(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -69,7 +69,7 @@ class TestEditorResources(krpctest.TestCase):
         self.assertIsNotNone(space_center.Resources.flow_mode("LiquidFuel"))
 
 
-class TestEditorResourcesMatchFlight(krpctest.TestCase):
+class TestEditorResourcesMatchFlight(TestCase):
     """The same vessel must report the same resources in the editor and once launched."""
 
     @classmethod

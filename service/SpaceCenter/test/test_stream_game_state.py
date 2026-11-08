@@ -1,4 +1,4 @@
-import krpctest
+from krpctools.game.ksp import TestCase
 
 
 def send_on_eva(test, space_center):
@@ -16,7 +16,7 @@ def send_on_eva(test, space_center):
     return kerbal
 
 
-class TestStreamsAcrossLoads(krpctest.TestCase):
+class TestStreamsAcrossLoads(TestCase):
     """Streams over game objects while the game loads a state or unloads a vessel."""
 
     @classmethod
@@ -120,7 +120,7 @@ class TestStreamsAcrossLoads(krpctest.TestCase):
             kerbal.recover()
 
 
-class TestStreamsInAnEmptyGame(krpctest.TestCase):
+class TestStreamsInAnEmptyGame(TestCase):
     """A stream over a vessel that leaves the game with nothing in it."""
 
     @classmethod
@@ -141,7 +141,7 @@ class TestStreamsInAnEmptyGame(krpctest.TestCase):
         self.assertIsInstance(ended[0], self.conn.krpc.ObjectDestroyedException)
 
 
-class TestStreamsAcrossCareerLoads(krpctest.TestCase):
+class TestStreamsAcrossCareerLoads(TestCase):
     """Streams over the contracts of a career game while the game loads."""
 
     @classmethod

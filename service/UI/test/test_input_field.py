@@ -1,9 +1,9 @@
 import unittest
 
-import krpctest
+from krpctools.game.ksp import TestCase
 
 
-class TestInputField(krpctest.TestCase):
+class TestInputField(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()

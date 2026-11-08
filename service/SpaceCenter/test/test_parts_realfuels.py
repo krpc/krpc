@@ -1,10 +1,10 @@
 import time
 import unittest
 
-import krpctest
+from krpctools.game.ksp import TestCase
 
 
-class TestPartsRealFuels(krpctest.TestCase):
+class TestPartsRealFuels(TestCase):
     """Exercise the RealFuels state on the SpaceCenter Engine and Part classes.
 
     RealFuels rewrites the fuels of the stock parts rather than adding parts of its
@@ -99,7 +99,7 @@ class TestPartsRealFuels(krpctest.TestCase):
         self.assertRaises(RuntimeError, getattr, engine_part, "boiloff_rate")
 
 
-class TestPartsRealFuelsEditor(krpctest.TestCase):
+class TestPartsRealFuelsEditor(TestCase):
     """Exercise the RealFuels state that can be read from the editor.
 
     RealFuels sets an engine's ignitions, ullage and pressure feeding from its config
@@ -157,7 +157,7 @@ class TestPartsRealFuelsEditor(krpctest.TestCase):
             self.assertEqual(0, tank.boiloff_rate)
 
 
-class TestPartsRealFuelsBoiloff(krpctest.TestCase):
+class TestPartsRealFuelsBoiloff(TestCase):
     """Exercise Part.BoiloffRate against a tank that is actually boiling off.
 
     The other craft fixtures were saved without RealFuels, so their tanks hold the

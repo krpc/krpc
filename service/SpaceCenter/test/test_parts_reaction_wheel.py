@@ -1,9 +1,9 @@
 import unittest
 
-import krpctest
+from krpctools.game.ksp import TestCase
 
 
-class TestPartsReactionWheel(krpctest.TestCase):
+class TestPartsReactionWheel(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()

@@ -1,10 +1,10 @@
 import unittest
 
-import krpctest
 from krpc.services.ui import Padding
+from krpctools.game.ksp import TestCase
 
 
-class TestLayout(krpctest.TestCase):
+class TestLayout(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()

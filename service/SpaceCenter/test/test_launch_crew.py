@@ -1,9 +1,9 @@
 import unittest
 
-import krpctest
+from krpctools.game.ksp import TestCase
 
 
-class TestLaunchCrew(krpctest.TestCase):
+class TestLaunchCrew(TestCase):
     """Test the crew parameter of SpaceCenter.LaunchVessel: default assignments
     when null, no crew when empty, and exactly the named Kerbals, in order, when
     populated."""

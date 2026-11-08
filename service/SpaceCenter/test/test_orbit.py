@@ -1,11 +1,11 @@
 import math
 import unittest
 
-import krpctest
-from krpctest.geometry import compute_position, cross, norm
+from krpctools.game.geometry import compute_position, cross, norm
+from krpctools.game.ksp import TestCase
 
 
-class TestOrbit(krpctest.TestCase):
+class TestOrbit(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -342,7 +342,7 @@ class TestOrbit(krpctest.TestCase):
         self.assertAlmostEqual((1, 0, 0), direction)
 
 
-class TestClosestApproach(krpctest.TestCase):
+class TestClosestApproach(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -474,7 +474,7 @@ class TestClosestApproach(krpctest.TestCase):
         self.assertGreaterEqual(approach.time_to, 0)
 
 
-class TestCreateFromPositionAndVelocity(krpctest.TestCase):
+class TestCreateFromPositionAndVelocity(TestCase):
     """Orbits built from state vectors rather than read off a game object.
 
     The checks that pin down the conversion into the game's state-vector
@@ -747,7 +747,7 @@ class TestCreateFromPositionAndVelocity(krpctest.TestCase):
             )
 
 
-class TestCreateFromOrbitalElements(krpctest.TestCase):
+class TestCreateFromOrbitalElements(TestCase):
     """Orbits built from orbital elements rather than from a position and velocity.
 
     The load-bearing check is against Orbit.CreateFromPositionAndVelocity, which

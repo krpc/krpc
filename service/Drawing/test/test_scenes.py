@@ -1,6 +1,6 @@
 import unittest
 
-import krpctest
+from krpctools.game.ksp import TestCase
 
 
 def draw_all(drawing, ref):
@@ -45,7 +45,7 @@ def add_map_markers(test, drawing, ref):
     marker.remove()
 
 
-class TestMapView(krpctest.TestCase):
+class TestMapView(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -105,7 +105,7 @@ class TestMapView(krpctest.TestCase):
         marker.remove()
 
 
-class TestEditor(krpctest.TestCase):
+class TestEditor(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -148,7 +148,7 @@ class TestEditor(krpctest.TestCase):
         self.assertRaises(self.destroyed, line.remove)
 
 
-class TestTrackingStation(krpctest.TestCase):
+class TestTrackingStation(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()

@@ -2,10 +2,10 @@ import math
 import time
 import unittest
 
-import krpctest
+from krpctools.game.ksp import TestCase
 
 
-class TestCommsSingleHop(krpctest.TestCase):
+class TestCommsSingleHop(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -66,7 +66,7 @@ class TestCommsSingleHop(krpctest.TestCase):
         self.assertIsNone(end.vessel)
 
 
-class TestCommsMultiHop(krpctest.TestCase):
+class TestCommsMultiHop(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()

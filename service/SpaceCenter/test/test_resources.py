@@ -1,6 +1,6 @@
 import unittest
 
-import krpctest
+from krpctools.game.ksp import TestCase
 from service.SpaceCenter.test.resources_equivalence import assert_resources_equivalent
 
 
@@ -40,7 +40,7 @@ class ResourcesTest:
     density = {"MonoPropellant": 4, "LiquidFuel": 5, "Oxidizer": 5, "SolidFuel": 7.5}
 
 
-class TestResources(krpctest.TestCase, ResourcesTest):
+class TestResources(TestCase, ResourcesTest):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -283,7 +283,7 @@ class TestResources(krpctest.TestCase, ResourcesTest):
         self.assertEqual("LiquidFuel", part_resources[0].name)
 
 
-class TestResourcesStaticMethods(krpctest.TestCase, ResourcesTest):
+class TestResourcesStaticMethods(TestCase, ResourcesTest):
     @classmethod
     def setUpClass(cls):
         cls.resources = cls.connect().space_center.Resources

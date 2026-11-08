@@ -1,9 +1,9 @@
 import unittest
 
-import krpctest
+from krpctools.game.ksp import TestCase
 
 
-class TestDropdown(krpctest.TestCase):
+class TestDropdown(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()

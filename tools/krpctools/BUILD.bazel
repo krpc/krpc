@@ -1,6 +1,6 @@
 load("@bazel_skylib//rules:copy_file.bzl", "copy_file")
 load("@rules_python//python:defs.bzl", "py_binary", "py_library", native_py_test = "py_test")
-load("//:config.bzl", "python_version")
+load("//:config.bzl", "python_version", "version_parts")
 load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test", "py_test", "py_wheel")
 load("//tools/TestServer:rids.bzl", "RIDS")
 
@@ -17,6 +17,9 @@ license_text = """This license (LGPL v3) applies to all parts of krpctools excep
   - System.IO.Ports.dll and libSystem.IO.Ports.Native.so, in krpctools/bin/, are from the
     .NET project.
     See https://github.com/dotnet/runtime
+
+  - TestingTools.dll, in krpctools/game/ksp/addon/, contains code adapted from the
+    AutoLoadGame plugin, released under the MIT License (MIT) by Allis Tauri.
 
   - As an additional permission under section 7 of the GNU GPL v3, code that krpctools
     generates for a client is under the license of that client, whatever the license of
@@ -111,6 +114,24 @@ genrule(
     ]),
 )
 
+# The blank saves, the test settings and the mod config overlays of the KSP game
+filegroup(
+    name = "game-data",
+    srcs = glob(
+        [
+            "krpctools/game/ksp/mods/**",
+            "krpctools/game/ksp/saves/*.sfs",
+        ],
+        exclude = ["**/*.py"],
+    ) + ["krpctools/game/ksp/settings.cfg"],
+)
+
+# The KSP test add-on: TestingTools, and the Benchmark service its benchmarks use
+ksp_addon = {
+    "//tools/TestingTools": "tools/TestingTools/TestingTools/net472/",
+    "//tools/benchmarks:KRPC.Benchmark.net472": "tools/benchmarks/KRPC.Benchmark.net472/net472/",
+}
+
 py_wheel(
     name = "krpctools",
     out = "krpctools-%s-py3-none-any.whl" % python_version,
@@ -131,6 +152,8 @@ py_wheel(
     ],
     files = [
         "README.md",
+        ":game-data",
+        ":ksp-krpc-version",
         ":license",
         ":pyproject",
         "//:COPYING",
@@ -142,7 +165,7 @@ py_wheel(
         "//tools/TestServer:ServiceDefinitions",
         "//tools/TestServer:TestService2ServiceDefinitions",
         "//tools/build/protobuf:LICENSE.Google.Protobuf",
-    ] + [tool["target"] for tool in dotnet_tools] + [":xmldoc-%d" % i for i in range(len(xmldocs))] + glob([
+    ] + list(ksp_addon) + [tool["target"] for tool in dotnet_tools] + [":xmldoc-%d" % i for i in range(len(xmldocs))] + glob([
         "krpctools/**/*.py",
         "krpctools/**/*.tmpl",
         "krpctools/test/*.json",
@@ -150,6 +173,9 @@ py_wheel(
         "krpctools/test/**/*.rst",
     ]),
     path_map = dotnet_publishes | dotnet_native_libs | {
+        path: "krpctools/game/ksp/addon/"
+        for path in ksp_addon.values()
+    } | {
         "version.py": "krpctools/version.py",
         "core/KRPC.Core.json": "krpctools/test/KRPC.json",
         "client/conformance/": "krpctools/conformance/",
@@ -167,18 +193,18 @@ py_wheel(
 # The krpctools package as an importable python library
 py_library(
     name = "krpctools_lib",
-    srcs = glob(["krpctools/**/*.py"]) + [":version-py"],
-    data = glob(["krpctools/**/*.tmpl"]),
-    imports = ["."],
-    # The conformance driver and the smoke test find the bundled tools through krpctools
-    visibility = [
-        "//client/conformance:__pkg__",
-        "//tools/ci:__pkg__",
+    srcs = glob(["krpctools/**/*.py"]) + [
+        ":ksp-krpc-version",
+        ":version-py",
     ],
+    data = glob(["krpctools/**/*.tmpl"]) + [":game-data"],
+    imports = ["."],
+    visibility = ["//visibility:public"],
     deps = [
         "//client/python:krpc_base_lib",
         "@krpc_pypi//jinja2",
         "@krpc_pypi//protobuf",
+        "@krpc_pypi//pytest",
     ],
 )
 
@@ -187,6 +213,14 @@ genrule(
     srcs = ["//:python_version"],
     outs = ["krpctools/version.py"],
     cmd = 'cp "$<" "$@"',
+)
+
+# The kRPC release the KSP game installs by default: the one built from this tree, which the
+# bundled TestingTools add-on is built against
+genrule(
+    name = "ksp-krpc-version",
+    outs = ["krpctools/game/ksp/krpc_version.py"],
+    cmd = "echo 'KRPC_VERSION = \"%s\"' > $@" % ".".join(version_parts[:3]),
 )
 
 py_binary(
@@ -286,5 +320,6 @@ py_pyright_test(
         ":krpctools_lib",
         "@krpc_pypi//jinja2",
         "@krpc_pypi//protobuf",
+        "@krpc_pypi//pytest",
     ],
 )

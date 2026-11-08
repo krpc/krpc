@@ -1,10 +1,10 @@
 import math
 import unittest
 
-import krpctest
+from krpctools.game.ksp import TestCase
 
 
-class TestOrbitPath(krpctest.TestCase):
+class TestOrbitPath(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()

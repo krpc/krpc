@@ -12,7 +12,8 @@ Current version: `tools/krpc-version.sh`. Full setup: `doc/src/krpc-development/
    See *Client pages* under *Keeping the docs current* before changing one.
  * `client/conformance/` — client conformance tests; the client spec (`doc/src/client-spec/`) is generated from them.
  * `tools/krpctools/` — `clientgen` (stubs), `docgen` (API docs), `servicedefs`.
- * `tools/krpctest/` — in-game test framework; `tools/TestServer/` — game-less server.
+ * `tools/krpctools/krpctools/game/` — in-game test framework (`krpc-game`); `tools/game/` — its
+   runners for the repository; `tools/TestServer/` — game-less server.
  * `tools/build/` — Bazel rules/toolchains. KSP assemblies come from `@ksp` in `MODULE.bazel`; no `lib/`.
  * `.github/` — CI. `CI-Guide.md` says how it works and why; a CI change updates it.
  * `doc/` — documentation sources.
@@ -120,13 +121,13 @@ compiles a typed delegate, so a call costs one delegate invocation, with no boxi
 ## Integration tests
 
 Python tests driving a live game, in `service/*/test/`. Need a real KSP install via `KSP_DIR` or
-`--ksp-dir`. Everything after `--` goes to pytest.
+`--game-dir`. Everything after `--` goes to pytest.
 
 ```bash
-bazel run //:test-ingame                                                  # whole suite
-bazel run //:test-ingame -- service/SpaceCenter/test/test_camera.py -v    # one file
-bazel run //:test-ingame -- "…::TestClass::test_method"                   # one test
-bazel run //:test-ingame -- -k test_camera_mode                           # by name
+bazel run //tools/game:test-ksp                                                 # whole suite
+bazel run //tools/game:test-ksp -- service/SpaceCenter/test/test_camera.py -v   # one file
+bazel run //tools/game:test-ksp -- "…::TestClass::test_method"                  # one test
+bazel run //tools/game:test-ksp -- -k test_camera_mode                          # by name
 ```
 
  * **Auto-launches KSP**: builds/installs DLLs and required mods, launches, loads a save, runs, stops.
@@ -135,14 +136,15 @@ bazel run //:test-ingame -- -k test_camera_mode                           # by n
    Never poll. The waiting rules under *Tests and lint* apply here too. `bazel run` passes pytest's
    output through, so ` passed`/`failed` does match, but only a Monitor watching the stage
    progress of a run in flight needs it.
- * Progress logged per stage (`building and installing kRPC`, `launching KSP`, `waiting for kRPC
-   server...`, `stopping KSP`).
+ * Progress logged per stage (`installing kRPC`, `launching KSP`, `waiting for kRPC server...`,
+   `stopping KSP`).
 
 ### Mods
 
  * Declared per test class: `mods = ["RemoteTech"]`.
- * Supported names: `MODS` in `tools/krpctest/krpctest/install.py`; archives pinned in `MODULE.bazel`,
-   exposed by `tools/mods/BUILD.bazel`.
+ * Supported names, with their pinned archives: `tools/krpctools/krpctools/game/ksp/mods/`.
+   Downloads are cached in `~/.cache/krpctools`. `--mod NAME=PATH` installs a local build in
+   place of the pin.
  * Install reconciles GameData to **exactly** the requested set (plus kRPC) — required-but-missing and
    installed-but-unneeded are both wrong.
  * Pytest groups tests by mod set; game restarts at most once per set.
@@ -150,15 +152,16 @@ bazel run //:test-ingame -- -k test_camera_mode                           # by n
 ### Iterating without reloading
 
 ```bash
-bazel run //:run-ksp -- --load-game=krpctest --mods=RemoteTech
-bazel run //:test-ingame -- --no-launch service/RemoteTech/test/test_remotetech.py -v
+bazel run //tools/game:run-ksp -- --load-game=krpctest --mods=RemoteTech
+bazel run //tools/game:test-ksp -- --no-launch service/RemoteTech/test/test_remotetech.py -v
 ```
 
- * `--no-launch` (`KRPC_TEST_AUTO_LAUNCH=0`) errors on a missing server instead of launching a second game.
+ * `--no-launch` errors on a missing server instead of launching a second game.
    Pass it whenever a game should already be up — a still-loading game looks like no game.
  * Only works for tests whose mod set the running game already has.
- * `//:run-ksp` builds, installs, launches, tails the kRPC log. `--load-game` brings the server up;
-   other `--load-*` switch vessel or launch a craft (`-- --help`). Re-run after any C# change.
+ * `//tools/game:run-ksp` builds, installs, launches, tails the kRPC log. `--load-game` brings the
+   server up; other `--load-*` switch vessel or launch a craft (`-- --help`). Re-run after any C#
+   change.
  * Run *killed* rather than interrupted → cleanup hook skipped → `pkill -f KSP.x86_64`,
    `taskkill /f /im KSP_x64.exe` on Windows.
  * Trace from in-game with `KRPC.Utils.Logger.WriteLine("…")`, then grep `$KSP_DIR/KSP.log`.
@@ -354,7 +357,7 @@ request takes the next open milestone of its train:
 
 | Pull request touches | Milestone |
 | --- | --- |
-| A client, `krpctools`, `krpctest`, `TestServer` | `clients-vX.Y.Z` |
+| A client, `krpctools`, `TestServer` | `clients-vX.Y.Z` |
 | KSP services, the KSP mod | `ksp-vX.Y.Z` |
 | KSA services, the KSA mod | `ksa-vX.Y.Z` |
 | `core`, CI, build rules, repo tooling | none |

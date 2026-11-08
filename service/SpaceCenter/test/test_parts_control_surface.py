@@ -1,9 +1,9 @@
 import unittest
 
-import krpctest
+from krpctools.game.ksp import TestCase
 
 
-class TestPartsControlSurface(krpctest.TestCase):
+class TestPartsControlSurface(TestCase):
     @classmethod
     def setUpClass(cls):
         active_vessel = cls.connect().space_center.active_vessel
@@ -242,7 +242,7 @@ class TestPartsControlSurface(krpctest.TestCase):
         self.assertAlmostEqual((0, 0, 0), self.winglet.available_torque[1], places=3)
 
 
-class TestPartsControlSurfaceFlight(krpctest.TestCase):
+class TestPartsControlSurfaceFlight(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()

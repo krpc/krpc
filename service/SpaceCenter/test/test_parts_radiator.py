@@ -1,9 +1,9 @@
 import unittest
 
-import krpctest
+from krpctools.game.ksp import TestCase
 
 
-class TestPartsRadiator(krpctest.TestCase):
+class TestPartsRadiator(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -64,7 +64,7 @@ class TestPartsRadiator(krpctest.TestCase):
         self.assertFalse(self.control.radiators)
 
 
-class TestPartsRadiatorBreak(krpctest.TestCase):
+class TestPartsRadiatorBreak(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()

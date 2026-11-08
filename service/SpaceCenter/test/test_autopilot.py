@@ -15,9 +15,9 @@ import math
 import time
 import unittest
 
-import krpctest
-from krpctest import diagnostics
-from krpctest.geometry import cross, dot, normalize, quaternion_vector_mult
+from krpctools.game import diagnostics
+from krpctools.game.geometry import cross, dot, normalize, quaternion_vector_mult
+from krpctools.game.ksp import TestCase
 
 
 def scale(v, factor: float) -> tuple[float, float, float]:
@@ -59,7 +59,7 @@ def _make_autopilot_test_class(  # noqa: PLR0913
     flexible=False,
     no_force_oscillation=False,
 ):
-    class TestAutoPilotBase(krpctest.TestCase):
+    class TestAutoPilotBase(TestCase):
         @classmethod
         def setUpClass(cls):
             cls.new_save()
@@ -1652,7 +1652,7 @@ def _make_autopilot_launch_test_class(  # noqa: PLR0913
     pitch_settle_delay=5,
     launch_settle_delay=3,
 ):
-    class TestAutoPilotLaunchBase(krpctest.TestCase):
+    class TestAutoPilotLaunchBase(TestCase):
         @classmethod
         def setUpClass(cls):
             cls.new_save()
@@ -1878,7 +1878,7 @@ def _make_autopilot_flight_test_class(  # noqa: PLR0913
     step_overshoot=15,
     step_settle_time=8,
 ):
-    class TestAutoPilotFlightBase(krpctest.TestCase):
+    class TestAutoPilotFlightBase(TestCase):
         @classmethod
         def setUpClass(cls):
             cls.new_save()
@@ -2089,7 +2089,7 @@ def _make_autopilot_reentry_test_class(  # noqa: PLR0913
     min_angle_of_attack=2,
     max_angle_of_attack=25,
 ):
-    class TestAutoPilotReentryBase(krpctest.TestCase):
+    class TestAutoPilotReentryBase(TestCase):
         @classmethod
         def setUpClass(cls):
             cls.new_save()
@@ -2183,7 +2183,7 @@ TestAutoPilotReentryAeris3A = _make_autopilot_reentry_test_class(
 )
 
 
-class TestAutoPilotSAS(krpctest.TestCase):
+class TestAutoPilotSAS(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -2262,7 +2262,7 @@ class TestAutoPilotSAS(krpctest.TestCase):
         self.check_sas_error(self.sas_mode.anti_radial, 90)
 
 
-class TestAutoPilotOtherVessel(krpctest.TestCase):
+class TestAutoPilotOtherVessel(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -2284,7 +2284,7 @@ class TestAutoPilotOtherVessel(krpctest.TestCase):
         ap.engaged = False
 
 
-class TestAutoPilotRevertToLaunch(krpctest.TestCase):
+class TestAutoPilotRevertToLaunch(TestCase):
     # Regression for the auto-pilot failing to engage after a Revert to Launch. A client
     # that keeps its auto-pilot handle across the revert, over a persistent connection or a
     # script re-run without reconnecting, must be able to re-engage and control the vessel.
@@ -2356,7 +2356,7 @@ class TestAutoPilotRevertToLaunch(krpctest.TestCase):
         auto_pilot.engaged = False
 
 
-class TestAutoPilotRemovedReferenceFrame(krpctest.TestCase):
+class TestAutoPilotRemovedReferenceFrame(TestCase):
     """What the control loop does when the frame it measures in is removed.
 
     The loop runs from the game's update rather than from a call, so there is nothing

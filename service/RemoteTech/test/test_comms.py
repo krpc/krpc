@@ -1,9 +1,9 @@
 import unittest
 
-import krpctest
+from krpctools.game.ksp import TestCase
 
 
-class TestComms(krpctest.TestCase):
+class TestComms(TestCase):
     mods = ["RemoteTech"]
 
     @classmethod

@@ -1,9 +1,9 @@
 import unittest
 
-import krpctest
+from krpctools.game.ksp import TestCase
 
 
-class TestPartsParachute(krpctest.TestCase):
+class TestPartsParachute(TestCase):
     def setUp(self):
         self.new_save()
         self.launch_vessel_from_vab("PartsParachute")

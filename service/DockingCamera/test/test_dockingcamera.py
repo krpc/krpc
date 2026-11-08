@@ -2,7 +2,7 @@ import functools
 import struct
 import unittest
 
-import krpctest
+from krpctools.game.ksp import TestCase
 
 PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
 
@@ -13,7 +13,7 @@ CAMERAS = [
 ]
 
 
-class TestDockingCamera(krpctest.TestCase):
+class TestDockingCamera(TestCase):
     mods = ["DockingCamera"]
 
     @classmethod

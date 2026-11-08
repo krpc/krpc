@@ -1,11 +1,11 @@
 import unittest
 
-import krpctest
 from krpc.services.stdlib import ColorRGB
-from krpctest.geometry import norm
+from krpctools.game.geometry import norm
+from krpctools.game.ksp import TestCase
 
 
-class TestPartsPart(krpctest.TestCase):
+class TestPartsPart(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -842,7 +842,7 @@ class TestPartsPart(krpctest.TestCase):
             )
 
 
-class TestPartsPartDecoupleStage(krpctest.TestCase):
+class TestPartsPartDecoupleStage(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -906,7 +906,7 @@ class TestPartsPartDecoupleStage(krpctest.TestCase):
         self.assertEqual(expected_stage_numbering, stage_numbering)
 
 
-class TestPartsPartForce(krpctest.TestCase):
+class TestPartsPartForce(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()

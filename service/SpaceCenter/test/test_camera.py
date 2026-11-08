@@ -3,7 +3,7 @@ from __future__ import annotations
 import unittest
 from typing import TYPE_CHECKING
 
-import krpctest
+from krpctools.game.ksp import Mixin, TestCase
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     from krpc.services.spacecenter import Camera
 
 
-class TestCamera(krpctest.TestCase):
+class TestCamera(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -65,7 +65,7 @@ class TestCamera(krpctest.TestCase):
         self.assertRaises(RuntimeError, getattr, self.camera, "focussed_crew_member")
 
 
-class CameraTestBase(krpctest.Mixin):
+class CameraTestBase(Mixin):
     camera: Camera
     pitches: Sequence[float]
     headings: Sequence[float]
@@ -92,7 +92,7 @@ class CameraTestBase(krpctest.Mixin):
             self.assertAlmostEqual(pitch, self.camera.pitch, places=1)
 
 
-class CameraDistanceTestBase(krpctest.Mixin):
+class CameraDistanceTestBase(Mixin):
     camera: Camera
     distances: Sequence[float]
 
@@ -107,7 +107,7 @@ class CameraDistanceTestBase(krpctest.Mixin):
             self.assertAlmostEqual(distance, self.camera.distance, places=3)
 
 
-class TestCameraFlight(CameraTestBase, CameraDistanceTestBase, krpctest.TestCase):
+class TestCameraFlight(CameraTestBase, CameraDistanceTestBase, TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -123,7 +123,7 @@ class TestCameraFlight(CameraTestBase, CameraDistanceTestBase, krpctest.TestCase
         cls.distances = (1, 5, 10, 20)
 
 
-class TestCameraIVA(CameraTestBase, krpctest.TestCase):
+class TestCameraIVA(CameraTestBase, TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -159,7 +159,7 @@ class TestCameraIVA(CameraTestBase, krpctest.TestCase):
             self.assertEqual(member, self.camera.focussed_crew_member)
 
 
-class TestCameraIVACrew(krpctest.TestCase):
+class TestCameraIVACrew(TestCase):
     """Moving the IVA view between the crew of the active vessel. Multi has two
     single-seat pods, so its two crew sit in separate interiors."""
 
@@ -236,7 +236,7 @@ class TestCameraIVACrew(krpctest.TestCase):
             self.assertEqual(expected, self.camera.focussed_crew_member)
 
 
-class TestCameraMap(CameraTestBase, CameraDistanceTestBase, krpctest.TestCase):
+class TestCameraMap(CameraTestBase, CameraDistanceTestBase, TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -257,7 +257,7 @@ class TestCameraMap(CameraTestBase, CameraDistanceTestBase, krpctest.TestCase):
         cls.wait(1)
 
 
-class TestCameraDistanceDuringSwitch(krpctest.TestCase):
+class TestCameraDistanceDuringSwitch(TestCase):
     # Runs last so its deliberately unsettled camera state does not leak into the
     # other camera test classes (new_save does not reload when already in flight).
     @classmethod

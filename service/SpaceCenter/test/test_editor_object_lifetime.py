@@ -1,7 +1,7 @@
-import krpctest
+from krpctools.game.ksp import TestCase
 
 
-class EditorObjectLifetimeTest(krpctest.TestCase):
+class EditorObjectLifetimeTest(TestCase):
     """Shared setup for the editor object lifetime tests.
 
     A vessel is launched before the editor is entered so that the tests that leave

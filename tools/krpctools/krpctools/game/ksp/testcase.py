@@ -1,10 +1,5 @@
-"""The ``TestCase`` base class that integration tests subclass.
-
-Provides the test-authoring surface: connecting to the running game, loading saves,
-staging and launching craft, placing a vessel in orbit / on the ground / in flight, and
-timed waiting. KSP process lifecycle lives in ``krpctest.game``; tolerance-based
-assertions come from ``krpctest.assertions.AssertionsMixin``.
-"""
+"""The KSP ``TestCase``: loading saves, staging and launching craft, and placing a vessel
+in orbit, on the ground or in flight."""
 
 import math
 import os
@@ -14,79 +9,48 @@ import time
 import unittest
 from typing import TYPE_CHECKING, Any, cast
 
-from krpctest import game
-from krpctest.assertions import AssertionsMixin
-from krpctest.env import get_ksp_dir
+from .. import testcase
 
 if TYPE_CHECKING:
     import krpc.client
+
+    from .game import KSP
 
     class Connection(krpc.client.Client):
         # Created by the client from the server's definitions, as it has no stubs
         testing_tools: Any
 
 
-class TestCase(AssertionsMixin):
+class TestCase(testcase.TestCase):
     # Location of the KSC launch sites, used as the default point for set_flight.
     KSC_LATITUDE = -0.0972
     KSC_LONGITUDE = -74.5577
 
-    # Third-party mods this test class requires (e.g. ["RemoteTech"]). The framework
-    # guarantees the running game has exactly this managed mod set before the class runs.
-    mods = []
-
     # KSP expansions this test class requires (e.g. ["Serenity"] for Breaking Ground).
-    # Unlike mods, expansions cannot be installed by the harness, so a class requiring one
-    # that is not present is skipped rather than relaunched.
+    # Expansions cannot be installed by the harness, so a class requiring one that is not
+    # present is skipped.
     expansions = []
 
-    # Whether the class needs a running game. The library's own unit tests (which only
-    # exercise TestCase's geometry/assertion helpers) set this False so they run headless
-    # without launching KSP.
-    game_required = True
-
-    def __init_subclass__(cls, **kwargs):
-        # Ensure ensure_game() runs before a subclass's setUpClass, even when that
-        # subclass overrides setUpClass without calling super() (as most tests do).
-        super().__init_subclass__(**kwargs)
-        if not cls.game_required:
-            return
-        setup = cls.__dict__.get("setUpClass")
-        if setup is None or getattr(setup.__func__, "_krpctest_wrapped", False):
-            return
-        raw = setup.__func__
-
-        @classmethod
-        def setUpClass(cls, _raw=raw):
-            cls.ensure_game(cls.mods, cls.expansions)
-            _raw(cls)
-
-        setUpClass.__func__._krpctest_wrapped = True  # pyright: ignore[reportFunctionMemberAccess]
-        cls.setUpClass = setUpClass
+    @classmethod
+    def game(cls) -> "KSP":
+        return cast("KSP", super().game())
 
     @classmethod
     def connect(cls, use_cached=True) -> "Connection":
-        return cast("Connection", game.connect(use_cached))
+        return cast("Connection", super().connect(use_cached))
 
     @classmethod
-    def ensure_game(cls, mods=None, expansions=None):
-        """Ensure a KSP server is running with exactly the required managed mods, then
-        skip the test class if any required KSP expansion is missing. Expansions can't be
-        installed by the harness, so they gate via unittest.SkipTest rather than relaunch.
-        """
-        game.ensure_game(mods)
-        if expansions:
+    def ensure_game(cls):
+        """Ensure KSP is running with exactly the required mods, then skip the test class
+        if a required expansion is missing."""
+        super().ensure_game()
+        if cls.expansions:
             installed = set(cls.connect().space_center.expansions)
-            missing = [e for e in expansions if e not in installed]
+            missing = [e for e in cls.expansions if e not in installed]
             if missing:
                 raise unittest.SkipTest(
                     "Required KSP expansion(s) not installed: " + ", ".join(missing)
                 )
-
-    @classmethod
-    def setUpClass(cls):
-        if cls.game_required:
-            cls.ensure_game(cls.mods, cls.expansions)
 
     @classmethod
     def new_save(cls, name="krpctest", always_load=False):
@@ -120,7 +84,7 @@ class TestCase(AssertionsMixin):
             return
 
         # Load a blank save with the given name
-        game.copy_blank_save(name)
+        cls.game().copy_blank_save(name)
         conn.testing_tools.load_save(name, "persistent")
 
     @classmethod
@@ -141,12 +105,13 @@ class TestCase(AssertionsMixin):
             directory = os.path.join(
                 os.path.dirname(os.path.abspath(test_file)), "craft"
             )
+        ksp_dir = cls.game().game_dir()
         fixtures_paths = [
             os.path.abspath(directory),
-            os.path.join(get_ksp_dir(), "Ships", editor),
+            os.path.join(ksp_dir, "Ships", editor),
         ]
         save_path = os.path.join(
-            get_ksp_dir(), "saves", cls.connect().testing_tools.current_save
+            ksp_dir, "saves", cls.connect().testing_tools.current_save
         )
         if not os.path.exists(save_path):
             os.makedirs(save_path)
@@ -346,10 +311,6 @@ class TestCase(AssertionsMixin):
         cls.connect().testing_tools.set_crew_to_pilot()
 
     @classmethod
-    def wait(cls, timeout=0.1):
-        time.sleep(timeout)
-
-    @classmethod
     def wait_for_rest(cls, part, duration=1):
         """Wait until part has had no airflow for duration seconds. A vessel sways
         on the launchpad after it spawns, and passes through rest at each swing."""
@@ -365,46 +326,6 @@ class TestCase(AssertionsMixin):
             return time.time() - rest_since >= duration
 
         cls.wait_until(at_rest, message="the vessel to come to rest")
-
-    @classmethod
-    def wait_for_frame(cls):
-        """Sleep for long enough that the game draws a frame at 10 fps or more, so its
-        rendering code runs on the state set before the call."""
-        cls.wait()
-
-    @classmethod
-    def wait_until(cls, predicate, timeout=30, message=None, interval=0.1):
-        """Repeatedly call wait() until predicate() returns a truthy value, and
-        return that value. Fail the test if timeout seconds elapse first.
-        interval is the poll period, in seconds, passed to wait().
-
-        Use this instead of an unbounded ``while not predicate(): self.wait()``
-        loop so a condition that never holds fails the test with a clear
-        message rather than hanging the suite forever."""
-        deadline = time.time() + timeout
-        while True:
-            value = predicate()
-            if value:
-                return value
-            if time.time() > deadline:
-                raise cls.failureException(
-                    "Timed out after %gs waiting for %s"
-                    % (timeout, message or "condition")
-                )
-            cls.wait(interval)
-
-    @classmethod
-    def wait_while(cls, predicate, timeout=30, message=None, interval=0.1):
-        """Repeatedly call wait() while predicate() returns a truthy value. Fail
-        the test if timeout seconds elapse first. interval is the poll period,
-        in seconds, passed to wait(). message should describe the state being
-        waited for (i.e. the condition that ends the wait)."""
-        return cls.wait_until(
-            lambda: not predicate(),
-            timeout=timeout,
-            message=message,
-            interval=interval,
-        )
 
 
 # The base of a mixin of tests. It type checks as a TestCase, and is a plain class at

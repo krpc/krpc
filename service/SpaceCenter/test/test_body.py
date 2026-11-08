@@ -1,8 +1,8 @@
 import math
 import unittest
 
-import krpctest
-from krpctest.geometry import dot, norm, normalize
+from krpctools.game.geometry import dot, norm, normalize
+from krpctools.game.ksp import TestCase
 
 # Latitude and longitude pairs to sample the surface at, including both poles
 # where the lines of longitude meet
@@ -12,7 +12,7 @@ SURFACE_COORDINATES = ((0, 0), (12, -34), (-56, 78), (0, 180), (90, 0), (-90, 45
 OCEAN_COORDINATE = (-60, -150)
 
 
-class TestBody(krpctest.TestCase):
+class TestBody(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()

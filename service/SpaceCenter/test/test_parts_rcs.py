@@ -3,14 +3,14 @@ from __future__ import annotations
 import unittest
 from typing import TYPE_CHECKING
 
-import krpctest
-from krpctest.geometry import cross, distance, dot, norm
+from krpctools.game.geometry import cross, distance, dot, norm
+from krpctools.game.ksp import Mixin, TestCase
 
 if TYPE_CHECKING:
     from krpc.services.spacecenter import Control, Parts, Vessel
 
 
-class RCSTestBase(krpctest.Mixin):
+class RCSTestBase(Mixin):
     vessel: Vessel | None
     control: Control
     parts: Parts
@@ -131,7 +131,7 @@ class RCSTest(RCSTestBase):
         self.check_properties(rcs)
 
 
-class TestPartsRCS(RCSTestBase, krpctest.TestCase):
+class TestPartsRCS(RCSTestBase, TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -528,7 +528,7 @@ class TestPartsRCS(RCSTestBase, krpctest.TestCase):
         self.set_fuel_enabled(True)
 
 
-class TestPartsRCSMSL(RCSTest, krpctest.TestCase):
+class TestPartsRCSMSL(RCSTest, TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -567,7 +567,7 @@ class TestPartsRCSMSL(RCSTest, krpctest.TestCase):
         )
 
 
-class TestPartsRCSVacuum(RCSTest, krpctest.TestCase):
+class TestPartsRCSVacuum(RCSTest, TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()

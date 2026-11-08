@@ -10,7 +10,7 @@ held tick commits exactly one row and that row is that tick's.
 
 import unittest
 
-import krpctest
+from krpctools.game.ksp import TestCase
 
 # The game's physics time step.
 TICK = 0.02
@@ -27,7 +27,7 @@ def parse(text):
     ]
 
 
-class TestAutoPilotUpdateMode(krpctest.TestCase):
+class TestAutoPilotUpdateMode(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()

@@ -1,9 +1,9 @@
 import unittest
 
-import krpctest
+from krpctools.game.ksp import TestCase
 
 
-class TestNonActiveVessel(krpctest.TestCase):
+class TestNonActiveVessel(TestCase):
     """Exercise the InfernalRobotics service against a loaded but *non-active* vessel.
 
     Infernal Robotics' own controller only ever tracks the active vessel, so kRPC enumerates

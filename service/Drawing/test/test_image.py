@@ -2,7 +2,7 @@ import struct
 import unittest
 import zlib
 
-import krpctest
+from krpctools.game.ksp import TestCase
 
 
 def png(width, height):
@@ -38,7 +38,7 @@ def png(width, height):
     )
 
 
-class TestImage(krpctest.TestCase):
+class TestImage(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()

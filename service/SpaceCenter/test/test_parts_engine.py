@@ -3,14 +3,14 @@ from __future__ import annotations
 import unittest
 from typing import TYPE_CHECKING
 
-import krpctest
-from krpctest.geometry import angle_between, dot, norm
+from krpctools.game.geometry import angle_between, dot, norm
+from krpctools.game.ksp import Mixin, TestCase
 
 if TYPE_CHECKING:
     from krpc.services.spacecenter import Parts, Vessel
 
 
-class EngineTestBase(krpctest.Mixin):
+class EngineTestBase(Mixin):
     vessel: Vessel | None
     parts: Parts
 
@@ -256,7 +256,7 @@ class EngineTest(EngineTestBase):
         self.set_idle(engine)
 
 
-class TestPartsEngine(EngineTestBase, krpctest.TestCase):
+class TestPartsEngine(EngineTestBase, TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -477,7 +477,7 @@ class TestPartsEngine(EngineTestBase, krpctest.TestCase):
         self.assertRaises(RuntimeError, engine.toggle_thrust_reversal)
 
 
-class TestPartsEngineMSL(EngineTest, krpctest.TestCase):
+class TestPartsEngineMSL(EngineTest, TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -524,7 +524,7 @@ class TestPartsEngineMSL(EngineTest, krpctest.TestCase):
         engine.active = False
 
 
-class TestPartsEngineVacuum(EngineTest, krpctest.TestCase):
+class TestPartsEngineVacuum(EngineTest, TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -578,7 +578,7 @@ class TestPartsEngineVacuum(EngineTest, krpctest.TestCase):
         self.set_idle(engine)
 
 
-class TestPartsEngineReverser(EngineTestBase, krpctest.TestCase):
+class TestPartsEngineReverser(EngineTestBase, TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -627,7 +627,7 @@ class TestPartsEngineReverser(EngineTestBase, krpctest.TestCase):
         self.assertFalse(control.thrust_reversers)
 
 
-class TestGimbalOverrideAttitude(krpctest.TestCase):
+class TestGimbalOverrideAttitude(TestCase):
     """The gimbal override actually flies the vessel. Uses the "Vessel" craft,
     whose single gimballed engine thrusts through the centre of mass, so a
     gimbal deflection produces a clean torque about the centre of mass."""
@@ -685,7 +685,7 @@ class TestGimbalOverrideAttitude(krpctest.TestCase):
         self.assertLess(dot(spin_positive, spin_negative), 0)
 
 
-class TestPartsEngineSupersonic(EngineTestBase, krpctest.TestCase):
+class TestPartsEngineSupersonic(EngineTestBase, TestCase):
     """The reported thrust of an air-breathing engine must apply KSP's fuel-flow
     multiplier cap (``flowMultCap``).
 

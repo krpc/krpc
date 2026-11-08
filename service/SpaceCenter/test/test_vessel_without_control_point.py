@@ -1,9 +1,9 @@
 import unittest
 
-import krpctest
+from krpctools.game.ksp import TestCase
 
 
-class TestVesselWithoutControlPoint(krpctest.TestCase):
+class TestVesselWithoutControlPoint(TestCase):
     """A vessel separated from another one gets a control point only if one of its parts
     is a command module with crew aboard. The lower stage of PartsDecoupler has neither,
     so the vessel the decoupler leaves behind has no control point at all: KSP orients it
@@ -56,7 +56,7 @@ class TestVesselWithoutControlPoint(krpctest.TestCase):
         self.assertEqual([], comms.control_path)
 
 
-class TestVesselWithCrewlessCommandPod(krpctest.TestCase):
+class TestVesselWithCrewlessCommandPod(TestCase):
     """CrewlessCommandPod is a command pod, a stack separator and a second command pod
     mounted upside down. Launched with a single crew member, who is seated in the first
     pod, separating leaves a vessel whose only command module has no crew aboard. That

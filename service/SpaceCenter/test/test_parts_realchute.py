@@ -1,9 +1,9 @@
 import unittest
 
-import krpctest
+from krpctools.game.ksp import TestCase
 
 
-class TestPartsRealChute(krpctest.TestCase):
+class TestPartsRealChute(TestCase):
     """Exercise the SpaceCenter Parachute wrapper against a RealChute parachute.
 
     The test craft carries a single RealChute stack chute (RC_stack). RealChute
