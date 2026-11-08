@@ -15,7 +15,7 @@ class PartsTagTest(krpctest.Mixin):
     @classmethod
     def setUpClass(cls):
         # Inherited by the test classes, so not wrapped by TestCase to ensure the game
-        cls.ensure_game(cls.mods, cls.expansions)
+        cls.ensure_game()
         cls.new_save()
         cls.launch_vessel_from_vab(cls.craft)
         cls.remove_other_vessels()

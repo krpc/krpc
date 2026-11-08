@@ -1,181 +1,41 @@
-"""Install the kRPC mod, launch KSP, and stream its kRPC log lines to the terminal.
+"""Install kRPC, launch the game, and stream its kRPC log lines to the terminal.
 
-This is the Python port of the former ``tools/run-ksp.sh``. It is a developer convenience
-for interactive runs: it installs the mod (reconciling any ``--mods``), starts KSP, follows
-``KSP.log`` printing lines that mention kRPC, and stops KSP when it exits.
-
-Run it from the repository root, either as the ``krpc-run-ksp`` console script or with
-``python -m krpctest.run_ksp``.
+A developer convenience for interactive runs: it installs the mod and the ``--mods``, starts
+the game, follows its log printing lines that mention kRPC, and stops the game when it exits.
+Run it as the ``krpc-run-ksp`` console script or with ``python -m krpctest.run_ksp``.
 """
 
 import argparse
-import os
 import subprocess
 import sys
-import time
-from importlib.resources import files
 
-from krpctest.env import get_ksp_dir, get_ksp_executable, kill_ksp
-from krpctest.game import copy_blank_save
-from krpctest.install import MODS, install
+from krpctest import game, install, launch
 from krpctest.version import __version__
 
-# The game writes its log beside itself, whatever platform it was built for.
-_KSP_LOG = "KSP.log"
 
-
-def _stage_blank_save(name, ksp_dir):
-    """Create the save --load-game asked for, when it is one of the saves bundled with the
-    package (krpctest, krpctest_career) and the KSP install does not have it yet. The test
-    framework stages these when it launches the game itself, so without this a manual run
-    against an install that has never run the tests reaches the main menu with nothing to
-    load. An existing save is left alone: it is the state being iterated on."""
-    if not files("krpctest").joinpath(name + ".sfs").is_file():
-        return
-    if os.path.exists(os.path.join(ksp_dir, "saves", name)):
-        return
-    copy_blank_save(name, ksp_dir)
-
-
-def _terminate(proc):
-    """Stop the launched KSP process, mirroring the bash `trap 'kill' EXIT`."""
-    if proc.poll() is not None:
-        return
-    try:
-        proc.terminate()
-        proc.wait(timeout=30)
-    except Exception:
-        try:
-            proc.kill()
-            proc.wait(timeout=10)
-        except Exception:
-            pass
-    if proc.poll() is None:
-        kill_ksp()
-
-
-def _stat(path):
-    """The stat of the file at path, or None if it does not exist."""
-    try:
-        return os.stat(path)
-    except FileNotFoundError:
-        return None
-
-
-def _open(path):
-    """The file at path opened for binary reading, or None if it does not exist."""
-    try:
-        return open(path, "rb")
-    except FileNotFoundError:
-        return None
-
-
-def _identity(stat):
-    return (stat.st_ino, stat.st_size, stat.st_mtime_ns)
-
-
-def _follow_log(path, needle, proc, previous):
-    """Print appended lines of the log at path that contain needle (case-insensitive),
-    a small stand-in for `tail -F path | grep -i needle`. previous is the stat of the
-    log before KSP was launched, or None. Returns when KSP exits."""
-    needle = needle.lower()
-
-    def emit(data):
-        # Windows builds of KSP end lines with CRLF
-        line = data.rstrip(b"\r").decode("utf-8", errors="replace")
-        if needle in line.lower():
-            sys.stdout.write(line + "\n")
-            sys.stdout.flush()
-
-    # Wait for KSP to start the log of this run
-    while True:
-        stat = _stat(path)
-        if stat is not None and (
-            previous is None or _identity(stat) != _identity(previous)
-        ):
-            break
-        if proc.poll() is not None:
-            return
-        time.sleep(0.5)
-
-    log = _open(path)
-    # An incomplete last line, held back until its newline is written
-    pending = b""
-    exited = False
-    try:
-        while True:
-            data = log.read() if log is not None else b""
-            if data:
-                *lines, pending = (pending + data).split(b"\n")
-                for line in lines:
-                    emit(line)
-                continue
-            if exited:
-                if pending:
-                    emit(pending)
-                return
-            if proc.poll() is not None:
-                # Read once more, for lines written just before KSP exited
-                exited = True
-                continue
-            # Reopen the log if KSP truncated or replaced it
-            stat = _stat(path)
-            if stat is not None and (
-                log is None
-                or stat.st_ino != os.fstat(log.fileno()).st_ino
-                or stat.st_size < log.tell()
-            ):
-                if log is not None:
-                    log.close()
-                log = _open(path)
-                pending = b""
-                continue
-            time.sleep(0.1)
-    finally:
-        if log is not None:
-            log.close()
-
-
-# Runner --load-* options mapped to the TestingTools --krpctest-load-* arguments they
-# are forwarded to. Every option shows up in --help and nothing is passed to KSP
-# blind. Order here is the order the arguments are forwarded in.
-_LOAD_OPTIONS = (
-    ("load_game", "--krpctest-load-game"),
-    ("load_save", "--krpctest-load-save"),
-    ("load_vessel", "--krpctest-load-vessel"),
-    ("load_craft", "--krpctest-load-craft"),
-    ("load_craft_directory", "--krpctest-load-craft-directory"),
-    ("load_craft_fixture_dir", "--krpctest-load-craft-fixture-dir"),
-    ("load_launch_site", "--krpctest-load-launch-site"),
-)
-
-
-def main():
-    parser = argparse.ArgumentParser(
-        prog="krpc-run-ksp",
-        description=(
-            "Install the kRPC mod, launch KSP, and stream its kRPC log lines. "
-            "Run from the repository root."
-        ),
-        epilog=(
-            "The --load-* options configure the TestingTools add-on; each is "
-            "forwarded to KSP as the matching --krpctest-load-* argument. Auto-load "
-            "happens only when at least one --load-* option is given; with none, "
-            "KSP stays at the main menu. See tools/krpctest/README.md for details."
-        ),
-    )
+def add_install_arguments(parser):
+    """Add the options krpc-run-ksp and krpc-install share."""
     parser.add_argument(
         "-v",
         "--version",
         action="version",
-        version="%s version %s" % ("krpc-run-ksp", __version__),
+        version="%s version %s" % (parser.prog, __version__),
+    )
+    parser.add_argument(
+        "--game",
+        default="ksp",
+        metavar="GAME",
+        help="the game: %s, or module:object for a game defined in Python code "
+        "(default: ksp)" % ", ".join(sorted(game.GAMES)),
+    )
+    parser.add_argument(
+        "--krpc", metavar="SOURCE", help="the kRPC archive to install, a path or a URL"
     )
     parser.add_argument(
         "--mods",
         default="",
         metavar="MOD,...",
-        help="comma-separated managed mods to install: %s "
-        "(default: none)" % ", ".join(sorted(MODS)),
+        help="comma-separated managed mods to install (default: none)",
     )
     parser.add_argument(
         "--ksp-dir",
@@ -194,86 +54,60 @@ def main():
         "--skip-mod-install",
         action="store_true",
         default=False,
-        help="leave the managed third-party mods in GameData untouched — neither "
-        "installing the requested ones nor removing others — to launch with a locally "
-        "built mod assembly",
+        help="leave the managed third-party mods in GameData untouched, to launch with "
+        "a locally built mod assembly",
     )
 
-    autoload = parser.add_argument_group(
-        "auto-load options",
-        "Configure the TestingTools auto-load. Passing any one of these makes KSP "
-        "load a save on reaching the main menu; with none, KSP stays at the main menu.",
-    )
-    autoload.add_argument(
-        "--load-game",
-        metavar="FOLDER",
-        help="save folder under saves/ to load (TestingTools default: default)",
-    )
-    autoload.add_argument(
-        "--load-save",
-        metavar="NAME",
-        help="save file name without .sfs (TestingTools default: persistent)",
-    )
-    autoload.add_argument(
-        "--load-vessel",
-        metavar="INDEX",
-        type=int,
-        help="vessel index to focus after loading the save",
-    )
-    autoload.add_argument(
-        "--load-craft",
-        metavar="NAME",
-        help="craft to launch after loading the save (e.g. Parts or Parts.craft)",
-    )
-    autoload.add_argument(
-        "--load-craft-directory",
-        metavar="VAB|SPH",
-        choices=["VAB", "SPH"],
-        help="KSP craft directory and launch facility (default: inferred)",
-    )
-    autoload.add_argument(
-        "--load-craft-fixture-dir",
-        metavar="PATH",
-        help="source directory of fixture .craft files to stage into the save",
-    )
-    autoload.add_argument(
-        "--load-launch-site",
-        metavar="SITE",
-        help="launch site, for example LaunchPad or Runway "
-        "(default: by craft directory)",
-    )
 
-    args = parser.parse_args()
-    mods = [m for m in args.mods.split(",") if m]
+def load_game(argv):
+    """The game --game names in argv. It adds options, so it is chosen first."""
+    chooser = argparse.ArgumentParser(add_help=False)
+    chooser.add_argument("--game", default="ksp")
+    return game.load(chooser.parse_known_args(argv)[0].game)
 
-    # Build the KSP argument list explicitly from the parsed options; only forward
-    # the auto-load arguments that were actually supplied, so an unspecified option
-    # never reaches KSP and never triggers auto-load on its own.
-    ksp_args = []
-    for dest, flag in _LOAD_OPTIONS:
-        value = getattr(args, dest)
-        if value is not None:
-            ksp_args.append("%s=%s" % (flag, value))
 
-    ksp_dir = get_ksp_dir(args.ksp_dir)
-    install(
-        mods=mods,
-        ksp_dir=ksp_dir,
-        validate_gamedata=not args.skip_gamedata_check,
-        skip_mod_install=args.skip_mod_install,
+def apply_install_arguments(the_game, args):
+    """Apply the shared options to the game, and return the mods to install."""
+    game.apply(
+        the_game,
+        {
+            "directory": args.ksp_dir,
+            "krpc": args.krpc,
+            "check_install": False if args.skip_gamedata_check else None,
+            "install_mods": False if args.skip_mod_install else None,
+        },
     )
-    if args.load_game is not None:
-        _stage_blank_save(args.load_game, ksp_dir)
+    return [mod for mod in args.mods.split(",") if mod]
 
-    log_path = os.path.join(ksp_dir, _KSP_LOG)
-    previous_log = _stat(log_path)
-    proc = subprocess.Popen([get_ksp_executable(ksp_dir), *ksp_args], cwd=ksp_dir)
+
+def main(argv=None):
+    argv = sys.argv[1:] if argv is None else argv
+    the_game = load_game(argv)
+    parser = argparse.ArgumentParser(
+        prog="krpc-run-ksp",
+        description="Install the kRPC mod, launch the game, and stream its kRPC log lines.",
+    )
+    add_install_arguments(parser)
+    the_game.add_run_arguments(parser)
+    args = parser.parse_args(argv)
     try:
-        _follow_log(log_path, "krpc", proc, previous_log)
+        mods = apply_install_arguments(the_game, args)
+        launch_args = the_game.run_arguments(args)
+        install.install(the_game, mods)
+    except (ValueError, RuntimeError) as ex:
+        sys.stderr.write("Error: %s\n" % ex)
+        return 1
+    log_path = the_game.log_path()
+    previous = launch.file_stat(log_path)
+    process = subprocess.Popen(
+        the_game.launch_command(launch_args), cwd=the_game.game_dir()
+    )
+    try:
+        launch.follow_log(log_path, the_game.log_filter, process, previous)
     except KeyboardInterrupt:
         pass
     finally:
-        _terminate(proc)
+        launch.terminate(the_game, process)
     return 0
 
 

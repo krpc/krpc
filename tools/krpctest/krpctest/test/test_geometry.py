@@ -1,7 +1,6 @@
 import math
 import unittest
 
-import krpctest
 from krpctest.geometry import (
     cross,
     dot,
@@ -13,9 +12,10 @@ from krpctest.geometry import (
     quaternion_vector_mult,
     rad2deg,
 )
+from krpctest.testcase import TestCase
 
 
-class TestGeometry(krpctest.TestCase):
+class TestGeometry(TestCase):
     game_required = False
 
     def test_rad2deg(self):

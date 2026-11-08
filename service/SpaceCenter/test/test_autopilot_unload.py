@@ -8,7 +8,6 @@ loads it again, and a loop that runs anyway throws once per physics tick.
 import os
 
 import krpctest
-from krpctest.env import get_ksp_dir
 
 
 class TestAutoPilotUnload(krpctest.TestCase):
@@ -28,16 +27,14 @@ class TestAutoPilotUnload(krpctest.TestCase):
         cls.vessel = cls.space_center.active_vessel
         cls.other = next(v for v in cls.space_center.vessels if v != cls.vessel)
 
-    @staticmethod
-    def log_position():
-        return os.path.getsize(os.path.join(get_ksp_dir(), "KSP.log"))
+    @classmethod
+    def log_position(cls):
+        return os.path.getsize(cls.game().log_path())
 
-    @staticmethod
-    def log_since(position):
+    @classmethod
+    def log_since(cls, position):
         """The text the game has logged since the given position in its log file."""
-        with open(
-            os.path.join(get_ksp_dir(), "KSP.log"), encoding="utf-8", errors="replace"
-        ) as log:
+        with open(cls.game().log_path(), encoding="utf-8", errors="replace") as log:
             log.seek(position)
             return log.read()
 

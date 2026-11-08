@@ -8,8 +8,8 @@ behaves like that pytest invocation. With no arguments the whole suite runs, as 
 points pytest at every service's test directory.
 
 The mod, the test framework and the generated client stubs are all dependencies of this
-binary, so each run tests the current sources with nothing to install first. KSP itself is
-installed into KSP_DIR, launched and stopped by the framework (see krpctest.game).
+binary, so each run tests the current sources with nothing to install first. The game is
+bazel_ksp.BazelKSP, which builds kRPC and installs it into KSP_DIR.
 """
 
 import os
@@ -31,7 +31,9 @@ def main():
     os.chdir(os.environ.get("BUILD_WORKING_DIRECTORY", workspace))
 
     # The plugin is opt-in, so it stays out of other pytest runs where krpctest is installed
-    return pytest.main(["-p", "krpctest.pytest_plugin", *sys.argv[1:]])
+    return pytest.main(
+        ["-p", "krpctest.pytest_plugin", "--game", "bazel_ksp:BazelKSP", *sys.argv[1:]]
+    )
 
 
 if __name__ == "__main__":

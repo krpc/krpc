@@ -1,17 +1,19 @@
-"""Automated integration-testing framework for kRPC services.
+"""Running kRPC's tests against a live game.
 
-The framework is split into focused submodules:
+The core is game-agnostic:
 
- * :mod:`krpctest.testcase` — the ``TestCase`` base class tests subclass, and ``Mixin``.
- * :mod:`krpctest.assertions` — tolerance-based assertion helpers.
- * :mod:`krpctest.game` — KSP process lifecycle and server-connection management.
- * :mod:`krpctest.env` — filesystem locations shared with the install/run entrypoints.
- * :mod:`krpctest.geometry` — vector/quaternion math used by the tests.
+ * :mod:`krpctest.game` - the ``Game`` and ``Mod`` base classes, and the game a run tests
+   against.
+ * :mod:`krpctest.launch` - launching a game, waiting for its server, and stopping it.
+ * :mod:`krpctest.install` - installing kRPC, the test add-on and the mods.
+ * :mod:`krpctest.testcase` - the ``TestCase`` base class.
+ * :mod:`krpctest.assertions`, :mod:`krpctest.geometry` - assertions and vector math.
 
-``TestCase`` is re-exported here so existing ``import krpctest; krpctest.TestCase`` usage
-keeps working.
+:mod:`krpctest.ksp` extends it for Kerbal Space Program. ``TestCase`` and ``Mixin`` here are
+the KSP ones.
 """
 
-from krpctest.testcase import Mixin, TestCase
+from .game import Game, Mod
+from .ksp import Mixin, TestCase
 
-__all__ = ["Mixin", "TestCase"]
+__all__ = ["Game", "Mixin", "Mod", "TestCase"]

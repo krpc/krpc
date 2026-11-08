@@ -1,357 +1,252 @@
-"""KSP process lifecycle and server-connection management for the test framework.
+"""The base classes a game and its mods extend, and the game a run tests against.
 
-Owns launching KSP with the required mods, connecting to the running kRPC server,
-validating the running game's managed mod set, and stopping the game at exit.
-``TestCase``'s game-management classmethods (``connect``, ``ensure_game``) delegate
-here.
-
-This module holds the process-global state — the connection cache, the owned KSP process
-handle, and the record of unsatisfiable mod sets — so that state is shared across every
-test class in a run.
+A ``Game`` installs kRPC, the game's test add-on and the requested mods, launches the game
+and connects to its server. A game subclass overrides the methods that differ between games:
+where mods install, the command that launches it, the log it writes and how to tell a mod is
+present in the running game. Launching and stopping are in :mod:`krpctest.launch`, and
+installing in :mod:`krpctest.install`.
 """
 
-import atexit
-import logging
+import importlib
 import os
-import shutil
-import subprocess
-import time
-from importlib.resources import files
 
-import krpc
-from krpctest.env import get_ksp_dir, get_ksp_executable, kill_ksp
-
-# Progress messages (game loading, mod set in use) go to this logger at INFO. The pytest
-# plugin surfaces them live via pytest's log_cli; outside pytest, INFO is dropped by
-# default. Named for the package (not __name__) so the logger identity is unchanged from
-# when these functions lived in krpctest/__init__.py.
-log = logging.getLogger("krpctest")
-
-# Third-party mods the integration tests can require, declared in a test's `mods` list and
-# passed to `krpc-install --mods`. The set of installable mods mirrors the registry in
-# krpctest/mods; here each mod also needs a way to tell
-# whether it actually loaded in the running game.
-#
-# Most mods are wrapped by a kRPC service, so their `.available` property reports presence.
-_MOD_SERVICES = {
-    "RemoteTech": "remote_tech",
-    "InfernalRobotics": "infernal_robotics",
-    "KerbalAlarmClock": "kerbal_alarm_clock",
-    "DockingCamera": "docking_camera",
-}
-
-# Some mods add parts but no dedicated service (RealChute is wrapped by the SpaceCenter
-# Parachute class). Detect these by probing the part catalog for a part they contribute,
-# via the test-only TestingTools helper. The probe name is the in-game part name, in which
-# KSP replaces underscores with periods (config `RC_stack` becomes `RC.stack`).
-_MOD_PARTS = {
-    "RealChute": "RC.stack",
-    "DMagic": "dmagicSensorTest",
-    "kOS": "kOSMachine1m",
-}
-
-# Some mods add no part and no service, but patch a part module onto existing parts (Action
-# Groups Extended adds a ModuleAGX module to every part via ModuleManager; it is wrapped by the
-# SpaceCenter Control class). Detect these by probing the loaded part prefabs for that module,
-# via the test-only TestingTools helper.
-_MOD_MODULES = {
-    "AGExt": "ModuleAGX",
-}
-
-# Some mods add no part of their own, but are reported by a flag on a service that wraps them
-# (Ferram Aerospace Research replaces the aerodynamics model and RealFuels rewrites the fuels
-# of existing parts; the SpaceCenter service reports whether each is installed and active).
-# Detect these by reading that flag, given as a (service, property) pair.
-_MOD_FLAGS = {
-    "FAR": ("space_center", "far_available"),
-    "RealFuels": ("space_center", "real_fuels_available"),
-}
-
-# Some mods are told apart only by the version of their plugin assembly (KSPCommunityPartModules
-# 0.4 predates the name tag module that 0.5 adds). Detect these by the "major.minor" version of
-# the loaded assembly, given as an (assembly, version) pair.
-_MOD_ASSEMBLIES = {
-    "KSPCommunityPartModules": ("KSPCommunityPartModules", "0.5"),
-    "KSPCommunityPartModules-0.4": ("KSPCommunityPartModules", "0.4"),
-}
-
-# The KSP process this test run launched, or None if KSP was started externally (a
-# manually-started game is never killed or reinstalled).
-_owned_ksp = None
-
-# The cached connection, cleared on restart
-_connection = None
-
-# Mod sets (as frozensets) that were installed and launched but did not become available
-# in-game, recorded so that ensure_game fails fast instead of relaunching KSP forever.
-_unsatisfiable = set()
+from . import install, launch
 
 
-def _address():
-    return os.environ.get("KRPC_TEST_ADDRESS", "127.0.0.1")
+class Mod:
+    """A mod a test can require, by name in its ``mods`` list.
 
-
-def connect(use_cached=True):
-    global _connection  # noqa: PLW0603
-    if _connection is not None and use_cached:
-        return _connection
-    connection = krpc.connect(name="krpctest", address=_address())
-    if use_cached:
-        _connection = connection
-    return connection
-
-
-def _auto_launch_enabled():
-    return os.environ.get("KRPC_TEST_AUTO_LAUNCH", "1") != "0"
-
-
-def _gamedata_check_enabled():
-    return os.environ.get("KRPC_TEST_SKIP_GAMEDATA_CHECK", "0") != "1"
-
-
-def _skip_mod_install_enabled():
-    return os.environ.get("KRPC_TEST_SKIP_MOD_INSTALL", "0") == "1"
-
-
-def copy_blank_save(name, ksp_dir=None):
-    """Copy the bundled blank save into the KSP install's saves/<name>/persistent.sfs."""
-    blank_save = str(files("krpctest").joinpath(name + ".sfs"))
-    save_path = os.path.join(get_ksp_dir(ksp_dir), "saves", name)
-    if not os.path.exists(save_path):
-        os.makedirs(save_path)
-    shutil.copy(blank_save, os.path.join(save_path, "persistent.sfs"))
-
-
-def _try_connect():
-    """Return a connection to a running server, or None if none is reachable. Reuses the
-    cached connection when present (cleared on restart), so repeated calls across test
-    classes share one connection as before."""
-    global _connection  # noqa: PLW0603
-    if _connection is not None:
-        return _connection
-    try:
-        connection = krpc.connect(name="krpctest", address=_address())
-    except Exception:
-        return None
-    _connection = connection
-    return connection
-
-
-def _installed_mods(conn):
-    """The set of managed mods currently loaded in the running game."""
-    installed = {
-        name
-        for name, service in _MOD_SERVICES.items()
-        if getattr(conn, service).available
-    }
-    installed |= {
-        name
-        for name, part in _MOD_PARTS.items()
-        if conn.testing_tools.part_available(part)
-    }
-    installed |= {
-        name
-        for name, module in _MOD_MODULES.items()
-        if conn.testing_tools.part_module_available(module)
-    }
-    installed |= {
-        name
-        for name, (service, flag) in _MOD_FLAGS.items()
-        if getattr(getattr(conn, service), flag)
-    }
-    installed |= {
-        name
-        for name, (assembly, version) in _MOD_ASSEMBLIES.items()
-        if conn.testing_tools.assembly_version(assembly) == version
-    }
-    return installed
-
-
-def _validate_mods(required):
-    known = (
-        set(_MOD_SERVICES)
-        | set(_MOD_PARTS)
-        | set(_MOD_MODULES)
-        | set(_MOD_FLAGS)
-        | set(_MOD_ASSEMBLIES)
-    )
-    unknown = set(required) - known
-    if unknown:
-        raise ValueError(
-            "Unknown mod(s) in `mods`: %s (known: %s)"
-            % (", ".join(sorted(unknown)), ", ".join(sorted(known)))
-        )
-
-
-def _install_mods(required):
-    """Build and install the mod, reconciling GameData to exactly `required` (plus kRPC).
-    Imported lazily to avoid a circular import (krpctest.install imports this module).
+    ``source`` is where the mod comes from: a directory, an archive, or the URL of an archive.
+    A subclass sets the pinned ``source`` and its ``sha256``, and an instance given a source
+    installs that one in their place. ``requires`` names the mods installed alongside it.
     """
-    from krpctest.install import install
 
-    log.info(
-        "building and installing kRPC (mods: %s)",
-        ", ".join(sorted(required)) or "none",
-    )
-    install(
-        mods=sorted(required),
-        validate_gamedata=_gamedata_check_enabled(),
-        skip_mod_install=_skip_mod_install_enabled(),
-    )
+    name = ""
+    source = None
+    sha256 = None
+    requires = ()
 
+    def __init__(self, source=None, sha256=None):
+        if source is not None:
+            self.source = source
+            self.sha256 = sha256
 
-def _launch_ksp(required):
-    """Install the required mods, launch KSP, and wait for the server to come up. Marks the
-    launched game as owned by this run so it may be restarted or stopped."""
-    global _owned_ksp  # noqa: PLW0603
-    _install_mods(required)
-    # Ensure the auto-loaded save exists, otherwise KSP stays at the main menu and the
-    # server never starts.
-    copy_blank_save("krpctest")
-    ksp_dir = get_ksp_dir()
-    log.info("launching KSP")
-    _owned_ksp = subprocess.Popen(
-        [get_ksp_executable(ksp_dir), "--krpctest-load-game=krpctest"],
-        cwd=ksp_dir,
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-    )
-    return _wait_for_server()
+    def install(self, game, path):
+        """Install the mod from its fetched source at path."""
+        game.install_mod(self, path)
+
+    def remove(self, game):
+        """Remove the mod from the game's install."""
+        game.remove_mod(self)
+
+    def present(self, game, conn):
+        """Whether the running game has the mod loaded, or None when that cannot be told."""
+        return game.mod_present(self, conn)
+
+    def __repr__(self):
+        return "%s(%r)" % (type(self).__name__, self.source)
 
 
-def _stop_ksp():
-    """Stop the KSP process this run launched (no-op if KSP was started externally)."""
-    global _owned_ksp, _connection  # noqa: PLW0603
-    if _owned_ksp is None:
-        return
-    proc = _owned_ksp
-    _owned_ksp = None
-    _connection = None
-    log.info("stopping KSP")
-    try:
-        proc.terminate()
-        proc.wait(timeout=30)
-    except Exception:
-        try:
-            proc.kill()
-            proc.wait(timeout=10)
-        except Exception:
-            pass
-    if proc.poll() is None:
-        # The handle didn't map to the live process; fall back to a name match.
-        kill_ksp()
+class Game:
+    """A game that kRPC runs in, and how to install, launch and stop it.
 
+    The constructor arguments override the defaults a subclass sets: the install directory,
+    the kRPC archive and the mods. Each mod replaces the game's mod of the same name.
+    """
 
-atexit.register(_stop_ksp)
+    # The name --game takes for this game
+    name = ""
 
+    # The environment variable naming the install directory
+    directory_variable = ""
 
-def _wait_for_server(timeout=300, interval=3):
-    """Poll until the server answers (refreshing the cached connection), or time out."""
-    log.info("waiting for kRPC server...")
-    deadline = time.time() + timeout
-    while True:
-        connection = _try_connect()
-        if connection is not None:
-            time.sleep(3)  # wait for game to stabilize
-            log.info("kRPC server ready")
-            return connection
-        if _owned_ksp is not None and _owned_ksp.poll() is not None:
-            raise RuntimeError("KSP exited before the kRPC server became available")
-        if time.time() > deadline:
+    # The name the tests connect with
+    client_name = "krpctest"
+
+    def __init__(self, directory=None, krpc=None, mods=(), address=None):
+        self.directory = directory
+        self.krpc = krpc
+        self.mods = {mod.name: mod for mod in self.default_mods()}
+        for mod in mods:
+            self.mods[mod.name] = mod
+        self.address = address or os.environ.get("KRPC_TEST_ADDRESS", "127.0.0.1")
+        # Whether ensure launches a game when no server is reachable
+        self.auto_launch = os.environ.get("KRPC_TEST_AUTO_LAUNCH", "1") != "0"
+        # Whether install checks that the install holds only the known set
+        self.check_install = os.environ.get("KRPC_TEST_SKIP_GAMEDATA_CHECK", "0") != "1"
+        # Whether install reconciles the mods, or leaves them as they are
+        self.install_mods = os.environ.get("KRPC_TEST_SKIP_MOD_INSTALL", "0") != "1"
+        # The process this run launched, or None when the game was started elsewhere
+        self.process = None
+        self.connection = None
+        # Mod sets that were launched but did not load, so ensure fails fast on a retry
+        self.unsatisfiable = set()
+        # Whether stop runs at exit
+        self.stops_at_exit = False
+
+    # Locations
+
+    def game_dir(self):
+        """The install directory, from the constructor or the game's environment variable."""
+        directory = self.directory or os.environ.get(self.directory_variable)
+        if not directory:
             raise RuntimeError(
-                "Timed out after %gs waiting for the kRPC server" % timeout
+                "No %s install specified. Set %s, or pass --ksp-dir, to the path of the "
+                "install." % (self.title(), self.directory_variable)
             )
-        time.sleep(interval)
+        if not os.path.isdir(directory):
+            raise RuntimeError("%s install not found at %s" % (self.title(), directory))
+        # The launch runs the game from here, so a relative path would resolve twice
+        return os.path.abspath(directory)
+
+    def title(self):
+        """The game's name in messages."""
+        return self.name.upper()
+
+    def log_path(self):
+        """The log the game writes, followed by krpc-run-ksp."""
+        raise NotImplementedError
+
+    # Installing
+
+    def default_mods(self):
+        """The mods a test can require without the suite defining them."""
+        return []
+
+    def krpc_source(self):
+        """The kRPC archive to install: a path or a URL."""
+        if self.krpc is None:
+            raise RuntimeError("No kRPC archive to install. Pass --krpc.")
+        return self.krpc
+
+    def install(self, mods=()):
+        """Install kRPC, the test add-on and exactly the given mods, by name."""
+        install.install(self, mods)
+
+    def install_krpc(self, path):
+        """Install the kRPC archive at path, replacing any earlier install."""
+        raise NotImplementedError
+
+    def install_addon(self):
+        """Install the game's test add-on, and the server settings the tests run with."""
+        raise NotImplementedError
+
+    def install_mod(self, mod, path):
+        """Install a mod from its fetched source at path. The default for Mod.install."""
+        raise NotImplementedError
+
+    def remove_mod(self, mod):
+        """Remove a mod from the install. The default for Mod.remove."""
+        raise NotImplementedError
+
+    def validate_install(self, mods):
+        """Check that the install holds nothing beyond the game, kRPC and the given mods."""
+
+    # Launching
+
+    def launch_command(self, args=()):
+        """The command that launches the game, with game-specific arguments."""
+        raise NotImplementedError
+
+    def test_arguments(self):
+        """The arguments a launch for the tests passes, after preparing what they need."""
+        return []
+
+    def run_command(self, mods):
+        """The command that starts a game for the tests, as messages give it."""
+        return "krpc-run-ksp --game %s%s" % (self.name, self._mods_option(mods))
+
+    @staticmethod
+    def _mods_option(mods):
+        return (" --mods=" + ",".join(sorted(mods))) if mods else ""
+
+    def kill_all(self):
+        """Kill every running copy of the game, by name."""
+
+    def add_run_arguments(self, parser):
+        """Add the game's own options to krpc-run-ksp."""
+
+    def run_arguments(self, args):
+        """The launch arguments for the parsed krpc-run-ksp options."""
+        return []
+
+    def log_filter(self, line) -> bool:
+        """Whether krpc-run-ksp prints the log line."""
+        return True
+
+    # The running game
+
+    def mod_present(self, mod, conn):
+        """Whether the running game has the mod loaded. The default for Mod.present."""
+        return None
+
+    def connect(self, use_cached=True):
+        """A connection to the running game's server."""
+        return launch.connect(self, use_cached)
+
+    def ensure(self, mods=()):
+        """Ensure a game is running with exactly the given mods, launching one if needed."""
+        launch.ensure(self, mods)
+
+    def stop(self):
+        """Stop the game this run launched."""
+        launch.stop(self)
 
 
-def _unsatisfiable_message(required, installed=None):
-    detail = ""
-    if installed is not None:
-        detail = " (the game reports these mods available: %s)" % (
-            ", ".join(sorted(installed)) or "none"
+# Built-in games, by the name --game takes
+GAMES = {
+    "ksp": "krpctest.ksp:KSP",
+}
+
+# The game the tests run against, and the options that override what it sets
+_game = None
+_options = {}
+
+
+def load(spec):
+    """The game named by spec: a built-in name, or module:object for a game in Python code.
+    An object that is a class is constructed with no arguments."""
+    spec = GAMES.get(spec) or spec
+    module, _, attribute = spec.partition(":")
+    if not attribute:
+        raise ValueError(
+            "Unknown game %r. Give one of %s, or module:object."
+            % (spec, ", ".join(sorted(GAMES)))
         )
-    return (
-        "Installed and launched KSP with mods %s, but the game does not report them "
-        "available%s. The mod may have failed to load — e.g. an incompatible version or a "
-        "missing dependency. Not retrying." % (sorted(required), detail)
-    )
+    game = getattr(importlib.import_module(module), attribute)
+    if isinstance(game, type):
+        game = game()
+    return game
 
 
-def _run_ksp_command(mods_arg):
-    """The command that starts a game to test against, written the way the reader runs it:
-    the bazel target from a checkout, the console script from an installed package."""
-    if os.environ.get("BUILD_WORKSPACE_DIRECTORY"):
-        prefix = "bazel run //:run-ksp -- "
-    else:
-        prefix = "krpc-run-ksp "
-    return (prefix + "--load-game=krpctest " + mods_arg).strip()
+def register(game):
+    """Make game the one the tests run against. A suite's conftest.py calls this."""
+    global _game  # noqa: PLW0603
+    _game = game
 
 
-def _run_tests_command():
-    """The command that runs the suite, written the way the reader runs it."""
-    if os.environ.get("BUILD_WORKSPACE_DIRECTORY"):
-        return "bazel run //:test-ingame"
-    return "pytest"
+def configure(**options):
+    """Set the options that override the registered game, applied on first use."""
+    _options.update(options)
 
 
-def _mismatch_message(required, installed):
-    parts = []
-    missing = sorted(required - installed)
-    extra = sorted(installed - required)
-    if missing:
-        parts.append("missing required mod(s): " + ", ".join(missing))
-    if extra:
-        parts.append("unexpected mod(s) installed: " + ", ".join(extra))
-    suffix = ("--mods=" + ",".join(sorted(required))) if required else "--mods="
-    return (
-        "The running KSP has the wrong mods (%s). It was not started by the tests, so it "
-        "will not be modified. Restart it with the correct mods, e.g. `%s`, or run the "
-        "suite with `%s` and let it manage the game."
-        % ("; ".join(parts), _run_ksp_command(suffix), _run_tests_command())
-    )
-
-
-def ensure_game(mods=None):
-    """Ensure a KSP server is running with exactly the required managed mods.
-
-    - Server up with the correct mods: return (the fast manual path, no restart).
-    - Server up with the wrong mods: if this run started KSP, restart it with the
-      correct mods; otherwise raise (never touch a manually-started game).
-    - No server: launch KSP with the required mods (unless KRPC_TEST_AUTO_LAUNCH=0).
-    """
-    required = set(mods or [])
-    _validate_mods(required)
-    # Fail fast if we already tried and failed to make this mod set available, rather
-    # than relaunching KSP on every test class forever.
-    if frozenset(required) in _unsatisfiable:
-        raise RuntimeError(_unsatisfiable_message(required))
-    conn = _try_connect()
-    if conn is not None:
-        installed = _installed_mods(conn)
-        if installed == required:
-            return
-        if _owned_ksp is None:
-            raise RuntimeError(_mismatch_message(required, installed))
-        # We own this game: stop it and relaunch with the correct mods.
-        log.info(
-            "required mods changed (%s -> %s), restarting KSP",
-            ", ".join(sorted(installed)) or "none",
-            ", ".join(sorted(required)) or "none",
-        )
-        _stop_ksp()
-    elif not _auto_launch_enabled():
+def current():
+    """The game the tests run against, with the options applied."""
+    global _game  # noqa: PLW0603
+    spec = _options.pop("game", None)
+    if spec is not None:
+        _game = load(spec)
+    if _game is None:
         raise RuntimeError(
-            "No kRPC server is reachable and auto-launch is disabled (--no-launch or "
-            "KRPC_TEST_AUTO_LAUNCH=0). Start KSP first, e.g. `%s`, and wait for it to load."
-            % _run_ksp_command(
-                ("--mods=" + ",".join(sorted(required))) if required else ""
-            )
+            "No game to test against. Pass --game, or register one from conftest.py."
         )
-    # Launch (from cold, or after stopping a wrong-state game we own) and confirm the
-    # required mods actually became available before running any tests against it.
-    conn = _launch_ksp(required)
-    installed = _installed_mods(conn)
-    if installed != required:
-        _unsatisfiable.add(frozenset(required))
-        _stop_ksp()
-        raise RuntimeError(_unsatisfiable_message(required, installed))
+    apply(_game, _options)
+    _options.clear()
+    return _game
+
+
+def apply(game, options):
+    """Override what game sets with the options that have a value."""
+    for name, value in options.items():
+        if value is not None:
+            setattr(game, name, value)

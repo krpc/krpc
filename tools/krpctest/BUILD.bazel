@@ -7,16 +7,34 @@ load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test", "py_test", "
 py_library(
     name = "krpctest_lib",
     srcs = glob(["krpctest/**/*.py"]) + [":version-py"],
-    data = glob(
-        ["krpctest/mods/**"],
-        exclude = ["**/*.py"],
-    ) + [
-        "krpctest/krpctest.sfs",
-        "krpctest/krpctest_career.sfs",
-    ],
+    data = [":data"],
     imports = ["."],
     visibility = ["//visibility:public"],
-    deps = ["//client/python:krpc_lib"],
+    deps = [
+        "//client/python:krpc_lib",
+        "@krpc_pypi//pytest",
+    ],
+)
+
+# The blank saves, the test settings and the mod config overlays
+filegroup(
+    name = "data",
+    srcs = glob(
+        [
+            "krpctest/ksp/mods/**",
+            "krpctest/ksp/saves/*.sfs",
+        ],
+        exclude = ["**/*.py"],
+    ) + ["krpctest/ksp/settings.cfg"],
+)
+
+# The game the repository's in-game tests run against: KSP, with kRPC built from the sources
+py_library(
+    name = "bazel_ksp",
+    srcs = ["bazel_ksp.py"],
+    imports = ["."],
+    visibility = ["//tools/benchmarks:__pkg__"],
+    deps = [":krpctest_lib"],
 )
 
 genrule(
@@ -35,20 +53,19 @@ py_binary(
     main = "run_tests.py",
     visibility = ["//visibility:public"],
     deps = [
-        ":krpctest_lib",
+        ":bazel_ksp",
         "@krpc_pypi//pytest",
     ],
 )
 
 # Install the mod and run the game: `bazel run //:run-ksp -- [--mods=... --load-*=...]`.
-# This is the module behind the krpc-run-ksp console script, run directly: it takes the
-# repository from BUILD_WORKSPACE_DIRECTORY and runs KSP in KSP_DIR, so it needs no wrapper.
+# This is `krpc-game run` against BazelKSP.
 py_binary(
     name = "run-ksp",
-    srcs = ["krpctest/run_ksp.py"],
-    main = "krpctest/run_ksp.py",
+    srcs = ["run_ksp.py"],
+    main = "run_ksp.py",
     visibility = ["//visibility:public"],
-    deps = [":krpctest_lib"],
+    deps = [":bazel_ksp"],
 )
 
 py_wheel(
@@ -57,13 +74,8 @@ py_wheel(
     files = [
         "LICENSE",
         "README.md",
-        "krpctest/krpctest.sfs",
-        "krpctest/krpctest_career.sfs",
         "pyproject.toml",
-    ] + glob(
-        ["krpctest/mods/**"],
-        exclude = ["**/*.py"],
-    ) + [
+        ":data",
         "//:COPYING",
         "//:COPYING.LESSER",
         "//:python_version",

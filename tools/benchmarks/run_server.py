@@ -40,7 +40,7 @@ def main():
     options, forwarded = arguments()
     # -s so the table reaches the terminal: pytest captures output by default, and the report
     # is the point of the run and not a detail of a failure.
-    args = ["-p", "krpctest.pytest_plugin", "-s"]
+    args = ["-p", "krpctest.pytest_plugin", "--game", "bazel_ksp:BazelKSP", "-s"]
     if options.json:
         args += ["--json", options.json]
     collect, named = _targets(forwarded, workspace, working)

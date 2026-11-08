@@ -1,8 +1,9 @@
-# Managed-mod config overlays
+# Mods
 
-Config files layered onto a managed test mod after it is installed into KSP's `GameData`
-(see `_mod_config_overlay` in `tools/krpctest/krpctest/install.py`). Two uses: suppressing a
-mod's first-run window so the unattended game the integration tests drive is not blocked, and
+`__init__.py` defines the supported mods: each one's pinned archive, its dependencies and its
+presence check. The subdirectories are config overlays, layered onto a mod after it is
+installed into KSP's `GameData` (see `KSP.install_mod` in `../game.py`). Overlays have two uses:
+suppressing a mod's first-run window, which blocks the unattended game the tests drive, and
 adding a test-only part config for a mod whose archive ships a part module but no parts.
 
 Each subdirectory mirrors a mod's `GameData/<subdir>` tree, and its files are copied over the

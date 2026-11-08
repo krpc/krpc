@@ -135,13 +135,13 @@ bazel run //:test-ingame -- -k test_camera_mode                           # by n
    Never poll. The waiting rules under *Tests and lint* apply here too. `bazel run` passes pytest's
    output through, so ` passed`/`failed` does match, but only a Monitor watching the stage
    progress of a run in flight needs it.
- * Progress logged per stage (`building and installing kRPC`, `launching KSP`, `waiting for kRPC
-   server...`, `stopping KSP`).
+ * Progress logged per stage (`installing kRPC`, `launching KSP`, `waiting for kRPC server...`,
+   `stopping KSP`).
 
 ### Mods
 
  * Declared per test class: `mods = ["RemoteTech"]`.
- * Supported names, with their pinned archives: `tools/krpctest/krpctest/mods/`. Downloads are
+ * Supported names, with their pinned archives: `tools/krpctest/krpctest/ksp/mods/`. Downloads are
    cached in `~/.cache/krpctools`.
  * Install reconciles GameData to **exactly** the requested set (plus kRPC) — required-but-missing and
    installed-but-unneeded are both wrong.
