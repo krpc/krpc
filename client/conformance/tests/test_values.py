@@ -10,7 +10,7 @@ from driver import profile, raw, section, should, values
 from driver.errors import assert_error_kind, error_types
 from driver.framing import encode_sint32
 from driver.helpers import enum_value, ids, struct_value
-from driver.scripted import ScriptedServer, definitions
+from driver.scripted import ScriptedServer, definitions, serve_definitions
 from driver.testee import TesteeError
 
 import krpc.schema.KRPC_pb2 as KRPC
@@ -917,3 +917,96 @@ def test_wrong_collection(client, server, scripted_server, case):
     encoding or argument error, before the request is sent."""
     procedure, value = WRONG_COLLECTIONS[case]
     refused_before_sending(client, server, scripted_server, procedure, value)
+
+
+section(
+    "Generated Types",
+    "These requirements apply to a client whose generated code holds a service's enumerations "
+    "and structures as types. A program uses them with no connection, while the client builds "
+    "its services from the server's definitions.",
+)
+
+
+def declared_enum(value: int) -> pb.Value:
+    """A TestService.TestEnum value, made from the generated code with no connection."""
+    return values.enum("TestService", "TestEnum", value, declared=True)
+
+
+def declared_struct() -> pb.Value:
+    """A TestService.TestStruct value, made from the generated code with no connection."""
+    return values.struct(
+        "TestService",
+        "TestStruct",
+        values.sint32(42),
+        values.string("alpha"),
+        declared_enum(1),
+        values.list_of([values.sint32(1)]),
+        declared=True,
+    )
+
+
+@profile("declarations", "definitions")
+def test_declared_values_as_arguments(connected):
+    """An enumeration or structure value made from the generated code, with no connection,
+    passes as an argument."""
+    result = connected.invoke("TestService", "EnumEcho", declared_enum(2))
+    assert result == values.Enum(2)
+    result = connected.invoke("TestService", "StructEcho", declared_struct())
+    assert result == values.Struct((42, "alpha", values.Enum(1), [1]))
+
+
+@profile("declarations", "definitions")
+@pytest.mark.parametrize("name", ["TestEnum", "TestStruct"])
+def test_matching_definitions_share_the_type(connected, name):
+    """Where the server's definition of an enumeration or structure matches the generated code,
+    the client's type for it is the generated one."""
+    assert connected.declared("TestService", name)
+
+
+def with_test_service(client, server, scripted_server, change):
+    """Connect the client to a scripted server whose TestService definition the change
+    function alters. Every call but GetServices gets a zero value."""
+    services = KRPC.Services.FromString(definitions(server, "KRPC", "TestService"))
+    change(next(x for x in services.services if x.name == "TestService"))
+    return serve_definitions(client, scripted_server, services)
+
+
+def add_struct_field(service: KRPC.Service) -> None:
+    """Give TestService.TestStruct a field the generated code lacks. The procedures whose
+    default value is a TestStruct go, as the default has the generated fields."""
+    struct = next(x for x in service.structs if x.name == "TestStruct")
+    struct.fields.add(name="Appended", type=KRPC.Type(code=KRPC.Type.SINT32))
+    kept = [
+        x
+        for x in service.procedures
+        if not any(
+            p.has_default_value and p.type.name == "TestStruct" for p in x.parameters
+        )
+    ]
+    del service.procedures[:]
+    service.procedures.extend(kept)
+
+
+@profile("declarations", "definitions")
+def test_differing_structure_definition(client, server, scripted_server):
+    """Where the server's definition of a structure differs from the generated code, a value
+    made from the generated code does not equal the client's value of the structure. Passing
+    it as an argument raises the encoding or argument error."""
+    with_test_service(client, server, scripted_server, add_struct_field)
+    try:
+        assert not client.declared("TestService", "TestStruct")
+        built = values.struct(
+            "TestService",
+            "TestStruct",
+            values.sint32(42),
+            values.string("alpha"),
+            enum_value(1),
+            values.list_of([values.sint32(1)]),
+            values.sint32(0),
+        )
+        assert not client.compare(declared_struct(), built)
+        with pytest.raises(TesteeError) as info:
+            client.invoke("TestService", "StructEcho", declared_struct())
+        assert_value_error(client, info.value.error)
+    finally:
+        client.close()

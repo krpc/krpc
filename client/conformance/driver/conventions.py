@@ -1,6 +1,7 @@
 """A client's conventions file: the native error type the client raises for each mapped server
-exception, and how a dynamically typed client names what it exposes. The file is kept apart from
-the client, as the listings are, so a change to the client's own mapping fails the suite.
+exception, and how a client that builds its services names what it exposes. The file is kept
+apart from the client, as the listings are, so a change to the client's own mapping fails the
+suite.
 
   {
     "native_types": {"System.ArgumentException": "ValueError", ...},
@@ -9,8 +10,8 @@ the client, as the listings are, so a change to the client's own mapping fails t
 
 A key of native_types is the mapped type of a KRPC exception, the .NET exception it stands for.
 A null value is an exception the client raises only as a type of its own.
-A client with the error-types profile needs native_types, and one with the dynamic profile
-needs naming.
+A client with the error-types profile needs native_types, and one with the definitions
+profile needs naming.
 """
 
 from __future__ import annotations
@@ -22,7 +23,7 @@ from dataclasses import dataclass
 from krpc.utils import snake_case
 
 # The profile each section of the file is for
-SECTIONS = {"native_types": "error-types", "naming": "dynamic"}
+SECTIONS = {"native_types": "error-types", "naming": "definitions"}
 
 # The function that converts a name to each case
 CASES: dict[str, Callable[[str], str]] = {"snake": snake_case}

@@ -505,6 +505,12 @@ class Client:
         assert isinstance(result, int)
         return result
 
+    def declared(self, service: str, name: str) -> bool:
+        """Whether the client's type for an enum or struct, reached through the connection,
+        is the one its generated module declares."""
+        reply = self.testee.run(declared=pb.Declared(service=service, name=name))
+        return bool(values.native(reply.value))
+
     def members(self, service: str = "", name: str = "") -> set[str] | None:
         """The names the client exposes for a service, class or enum, or None where the testee
         cannot list them."""

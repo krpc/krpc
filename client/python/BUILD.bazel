@@ -201,6 +201,8 @@ conformance_test(
         "core",
         "error-types",
         "dynamic",
+        "definitions",
+        "declarations",
         "defaults",
         "named-arguments",
         "streams",

@@ -63,7 +63,7 @@ def conformance_test(
         as the target <name>-profiles.
       unsupported: The file listing the tests the client's language has no way to carry out.
       conventions: The file of the client's native error types and naming, for a client with
-        the error-types or dynamic profile.
+        the error-types or definitions profile.
       protocols: The protocols to test over.
       **kwargs: Passed to each test.
     """

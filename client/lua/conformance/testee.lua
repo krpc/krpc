@@ -479,7 +479,7 @@ end
 
 write({ hello = {
   client = 'lua',
-  profiles = { 'core', 'dynamic', 'defaults', 'skipped-arguments', 'functions', 'connections', 'ordering' },
+  profiles = { 'core', 'dynamic', 'definitions', 'defaults', 'skipped-arguments', 'functions', 'connections', 'ordering' },
   protocols = { 'tcpip', 'localsocket' },
 } })
 

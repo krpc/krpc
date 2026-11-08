@@ -10,7 +10,7 @@ from driver import profile, raw, section, should, untested, values
 from driver.errors import assert_argument_error
 from driver.framing import encode_sint32, encode_size
 from driver.helpers import create
-from driver.scripted import ScriptedServer, definitions, is_call
+from driver.scripted import ScriptedServer, definitions, is_call, serve_definitions
 from driver.testee import TesteeError, invocation, wait_until
 
 import krpc.schema.KRPC_pb2 as KRPC
@@ -178,7 +178,7 @@ def member_name(procedure, style):
 
 
 def expected_members(services, service_name, name, style):
-    """The names a dynamically typed client exposes for a service, a class or an enum of it,
+    """The names a client that builds its services exposes for a service, a class or an enum of it,
     from the server's definitions. Members are in the client's case, and types keep their
     names."""
     service = next(x for x in services.services if x.name == service_name)
@@ -362,8 +362,8 @@ def test_deprecated_warning():
 
 section(
     "Service Definitions",
-    "These requirements apply to a client that builds its stubs from the server's definitions "
-    "when it connects.",
+    "These requirements apply to a client that builds its services from the server's "
+    "definitions when it connects.",
 )
 
 
@@ -372,18 +372,10 @@ def with_definitions(client, server, scripted_server, *added):
     the added services, in order. Every call but GetServices gets a zero value."""
     services = KRPC.Services.FromString(definitions(server, "KRPC"))
     services.services.extend(added)
-
-    def script(scripted: ScriptedServer) -> None:
-        scripted.accept()
-        scripted.serve()
-
-    scripted = scripted_server(script)
-    scripted.services = services.SerializeToString()
-    client.connect(scripted.endpoint())
-    return scripted
+    return serve_definitions(client, scripted_server, services)
 
 
-@profile("dynamic")
+@profile("definitions")
 @pytest.mark.parametrize("roster", list(ROSTERS))
 def test_exposed_members(connected, control, roster):
     """The client exposes exactly the services the server defines, and for each service its
@@ -407,7 +399,7 @@ def test_exposed_members(connected, control, roster):
     assert exposed == expected
 
 
-@profile("dynamic")
+@profile("definitions")
 def test_member_name_case(client, server, scripted_server):
     """Member names are in the case the language names its members in. In snake case, an
     underscore goes before each capital that starts a word, where a word starts after a lower
@@ -429,7 +421,7 @@ def test_member_name_case(client, server, scripted_server):
         client.close()
 
 
-@profile("dynamic")
+@profile("definitions")
 def test_internal_procedure(client, server, scripted_server):
     """The client leaves out a procedure the server marks internal. The client library calls
     an internal procedure itself, to implement streams, events and server side functions."""
@@ -457,7 +449,7 @@ def struct_type(service, name):
     return KRPC.Type(code=KRPC.Type.STRUCT, service=service, name=name)
 
 
-@profile("dynamic")
+@profile("definitions")
 def test_unknown_type(client, server, scripted_server):
     """The client leaves out a member or a structure whose type has a code the protocol
     does not define, as a later version of the server can send, and anything that uses
@@ -493,7 +485,7 @@ def test_unknown_type(client, server, scripted_server):
         client.close()
 
 
-@profile("dynamic")
+@profile("definitions")
 @pytest.mark.parametrize(
     "case",
     ["class", "enumeration", "structure", "enumeration-default", "wrong-kind"],
@@ -534,7 +526,7 @@ def test_undefined_type(client, server, scripted_server, case):
         client.close()
 
 
-@profile("dynamic")
+@profile("definitions")
 @pytest.mark.parametrize(
     "case", ["defined-before", "defined-after", "in-a-list", "same-service"]
 )
@@ -567,7 +559,7 @@ def test_enumeration_default(client, server, scripted_server, case):
         client.close()
 
 
-@profile("dynamic")
+@profile("definitions")
 @pytest.mark.parametrize("case", ["defined-before", "defined-after"])
 def test_structure_default(client, server, scripted_server, case):
     """A procedure's parameter defaults to a value of a structure, which holds a structure
@@ -613,7 +605,7 @@ def test_several_arguments(connected):
     assert result == "3.14159"
 
 
-@profile("dynamic")
+@profile("definitions")
 def test_long_request(client, server, scripted_server):
     """A call whose service name, procedure name and argument are longer than 127 bytes,
     with 200 arguments, arrives intact."""

@@ -111,8 +111,10 @@ def make_object(service: str, name: str, object_id: int) -> pb.Value:
     return pb.Value(object=pb.Object(id=object_id, service=service, name=name))
 
 
-def enum(service: str, name: str, value: int) -> pb.Value:
-    return pb.Value(enum=pb.Enum(service=service, name=name, value=value))
+def enum(service: str, name: str, value: int, declared: bool = False) -> pb.Value:
+    return pb.Value(
+        enum=pb.Enum(service=service, name=name, value=value, declared=declared)
+    )
 
 
 def list_of(items: Iterable[pb.Value]) -> pb.Value:
@@ -133,8 +135,12 @@ def dictionary(entries: Iterable[tuple[pb.Value, pb.Value]]) -> pb.Value:
     )
 
 
-def struct(service: str, name: str, *fields: pb.Value) -> pb.Value:
-    return pb.Value(struct=pb.Struct(service=service, name=name, fields=fields))
+def struct(
+    service: str, name: str, *fields: pb.Value, declared: bool = False
+) -> pb.Value:
+    return pb.Value(
+        struct=pb.Struct(service=service, name=name, fields=fields, declared=declared)
+    )
 
 
 def as_bytes(value: object) -> bytes:
