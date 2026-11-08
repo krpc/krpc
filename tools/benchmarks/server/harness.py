@@ -68,7 +68,7 @@ class BenchmarkTestCase(TestCase):
         overhead is single-digit nanoseconds against a call that costs hundreds, and there is
         no delegate shape to match it against.
         """
-        benchmark = self.connect().benchmark  # pyright: ignore[reportAttributeAccessIssue]
+        benchmark = self.connect().benchmark
         return self._measure(
             None, lambda case, count: benchmark.call(call, count), name
         )
@@ -76,7 +76,7 @@ class BenchmarkTestCase(TestCase):
     def measure_stream(self, name, call):
         """Measure what the server pays to update a stream of a remote procedure call whose
         value holds between updates. ``call`` is built as for ``measure_call``."""
-        benchmark = self.connect().benchmark  # pyright: ignore[reportAttributeAccessIssue]
+        benchmark = self.connect().benchmark
         return self._measure(
             None, lambda case, count: benchmark.stream_update(call, count), name
         )
@@ -86,7 +86,7 @@ class BenchmarkTestCase(TestCase):
         Benchmark service's collections. The set and dictionary are new on each call and
         alternate the order they are built in, so only their contents hold."""
         conn = self.connect()
-        benchmark = conn.benchmark  # pyright: ignore[reportAttributeAccessIssue]
+        benchmark = conn.benchmark
         self.measure_stream("stream of part.mass", conn.get_call(getattr, part, "mass"))
         self.measure_stream(
             "stream of vessel.parts.all", conn.get_call(getattr, parts, "all")

@@ -4,6 +4,8 @@ of one service for type checkers. Its enumerations, structures and exceptions ar
 
 from __future__ import annotations
 
+import sys
+from collections.abc import Callable
 from typing import TYPE_CHECKING, Any
 
 from krpc.types import ClassBase
@@ -90,3 +92,31 @@ def register(service_name: str, *classes: type) -> None:
 def registered(service_name: str, name: str) -> type | None:
     """The class registered for a service's enumeration, structure or exception"""
     return _registered.get((service_name, name))
+
+
+# A lookup of the generated class for a service's enumeration, structure or exception
+Lookup = Callable[[str, str], "type | None"]
+
+
+def client_lookup(client_type: type) -> Lookup:
+    """The lookup for a client of the given type. A service whose client type is a base of it
+    takes its classes from that client type's module, where the first base in the MRO wins.
+    Any other service takes them from the registry."""
+    modules: dict[str, dict[str, Any]] = {}
+    for cls in reversed(client_type.__mro__):
+        service_name = vars(cls).get("_declares_service")
+        module = sys.modules.get(cls.__module__)
+        # A module loaded outside sys.modules is found only through the registry
+        if service_name is not None and module is not None:
+            modules[service_name] = vars(module)
+
+    def lookup(service_name: str, name: str) -> type | None:
+        namespace = modules.get(service_name)
+        if namespace is None:
+            return registered(service_name, name)
+        cls = namespace.get(name)
+        if isinstance(cls, type) and _names(cls) == (service_name, name):
+            return cls
+        return None
+
+    return lookup

@@ -8,7 +8,7 @@ from krpctools.game.geometry import norm, normalize
 from krpctools.game.ksp import Mixin, TestCase
 
 if TYPE_CHECKING:
-    from krpc.services.spacecenter import SpaceCenter, Vessel
+    from krpc.ksp.spacecenter import SpaceCenter, Vessel
 
 
 class TestSpaceCenter(TestCase):

@@ -1,6 +1,6 @@
 import unittest
 
-from krpc.services.ui import Padding
+from krpc.ksp.ui import Padding
 from krpctools.game.ksp import TestCase
 
 

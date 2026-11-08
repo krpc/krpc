@@ -78,6 +78,9 @@ def bytes_default():
 class ClientGenTestCase(_Base):
     language: str
     generator: type[Generator]
+    # Whether a test includes each other service by its name, as the C++ and C nano
+    # generators need. The Python generator has a default module for each service instead
+    include_services = True
 
     def generate(self, service_name, defs, includes=None):
         macro_template = (
@@ -86,7 +89,11 @@ class ClientGenTestCase(_Base):
             .read_text(encoding="utf-8")
         )
         if includes is None:
-            includes = {name: name for name in _services(defs)}
+            includes = (
+                {name: name for name in _services(defs)}
+                if self.include_services
+                else {}
+            )
         g = self.generator(macro_template, service_name, Definitions(defs), includes)
         return g.generate()
 

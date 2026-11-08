@@ -11,6 +11,7 @@ import krpc.schema.KRPC_pb2 as KRPC
 import krpc.stream
 from krpc import limits
 from krpc.connection import Connection
+from krpc.declarations import client_lookup
 from krpc.decoder import Decoder
 from krpc.definitions import register_all
 from krpc.encoder import Encoder
@@ -89,21 +90,27 @@ def _check_argument(value: object, ptype: KRPC.Type) -> None:
             _check_argument(element, ptype.types[1])
 
 
-# The services a client has, declared for type checkers by the generated modules. The client
-# builds them at connect, so it needs none of the modules to run
 if TYPE_CHECKING:
-    from krpc.services import Client as _Services
-else:
-    _Services = object
+    from krpc.services.krpc import KRPC as _KRPCService
 
 
-class Client(_Services):
+class Client:
     """
     A kRPC client, through which all Remote Procedure Calls are made.
     Services provided by the server that the client connects
     to are automatically added. RPCs can be made using
     client.ServiceName.ProcedureName(parameter)
     """
+
+    if TYPE_CHECKING:
+        # A client type a generated module declares adds its service, and any other service
+        # is Any to type checkers
+        def __getattr__(self, name: str) -> Any: ...
+
+    @property
+    def _krpc(self) -> _KRPCService:
+        """The KRPC service, which every server has, typed for the client's own calls to it"""
+        return self.krpc
 
     def __init__(
         self,
@@ -148,8 +155,9 @@ class Client(_Services):
         # cannot be decoded before the definition of the enumeration it belongs to has been
         # registered
         definitions = []
+        lookup = client_lookup(type(self))
         for service_info in services:
-            definitions.extend(service_definitions(service_info))
+            definitions.extend(service_definitions(service_info, lookup))
         register_all(self._types, definitions)
         for service_info in services:
             setattr(

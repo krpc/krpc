@@ -644,11 +644,14 @@ Passing :meth:`~krpc.client.Client.add_event` or :meth:`~krpc.client.Client.add_
 with parameters raises :class:`krpc.error.FunctionCompilationError`, and a compiled function with
 parameters raises ``StreamError``.
 
+.. _python-type-checking:
+
 Type Checking
 -------------
 
-The client includes a module for each service that ships with kRPC, which gives your editor and
-type checker the classes, procedures and type hints of that service:
+:func:`krpc.connect` returns a ``krpc.ksp.KSPClient``, which declares every service the client
+ships with for Kerbal Space Program, including ``krpc``. A type checker then knows the type of each
+member:
 
 .. code-block:: python
 
@@ -658,13 +661,27 @@ type checker the classes, procedures and type hints of that service:
    vessel = conn.space_center.active_vessel  # Vessel | None
 
 The client builds each service from the definitions the server sends when you connect, so it has
-the procedures of that server.
+the procedures of that server. ``krpc.connect[T](...)`` connects with the client type ``T`` in
+place of ``KSPClient``.
+
+Each service's module, such as ``krpc.ksp.spacecenter``, declares a client type with only that
+service, such as ``SpaceCenterClient``. A function can take the client type of the services it
+uses:
+
+.. code-block:: python
+
+   from krpc.ksp.spacecenter import SpaceCenterClient
+
+   def stage(conn: SpaceCenterClient) -> None:
+       vessel = conn.space_center.active_vessel
+       if vessel is not None:
+           vessel.control.activate_next_stage()
 
 An enumeration, structure or exception from a module works with no connection:
 
 .. code-block:: python
 
-   from krpc.services.spacecenter import SASMode, Vessel
+   from krpc.ksp.spacecenter import SASMode, Vessel
 
    def set_sas_mode(vessel: Vessel, mode: SASMode = SASMode.prograde) -> None:
        vessel.auto_pilot.sas_mode = mode
@@ -683,32 +700,37 @@ is sent by its number.
 Services of Other Mods
 ^^^^^^^^^^^^^^^^^^^^^^
 
-A service another mod adds is built when you connect, like the others:
+A service another mod adds is built when you connect, like the others. For type hints, generate a
+module for the service with :ref:`krpc-clientgen <service-api-clientgen>`, and combine its client
+type with the others you use:
 
 .. code-block:: python
 
-   conn = krpc.connect()
-   conn.my_mod.get_mode()
-
-For type hints, generate a module for the service with :ref:`krpc-clientgen
-<service-api-clientgen>`, and connect with the client type it declares:
-
-.. code-block:: python
-
+   import krpc
+   from krpc.ksp import KSPClient
    from mymod_services import MyModClient
 
-   conn = krpc.connect[MyModClient]()
-   conn.my_mod.get_mode()
-
-Import the module before connecting, as the client uses its enumerations, structures and exceptions
-only if they are registered by then. For several mods, combine their client types:
-
-.. code-block:: python
-
-   class Connection(MyModClient, OtherModClient):
+   class Connection(KSPClient, MyModClient):
        pass
 
    conn = krpc.connect[Connection]()
+   conn.my_mod.get_mode()
+
+A module generated for a newer server replaces the shipped module of the same service. Combine its
+client type with those of the other services you use, as it cannot combine with ``KSPClient``,
+which has the shipped one:
+
+.. code-block:: python
+
+   from krpc.ksp.spacecenter import SpaceCenterClient
+   from newer_services.ui import UIClient
+
+   class Connection(UIClient, SpaceCenterClient):
+       pass
+
+A client uses the enumerations, structures and exceptions of the modules its client type names,
+where the server's definitions match them. For a service its client type does not name, it uses
+those of the module imported last.
 
 .. _python-client-reference:
 
@@ -717,9 +739,8 @@ Client API Reference
 
 .. function:: krpc.connect([name=None], [address='127.0.0.1'], [port=50000], [timeout=None], [handshake_timeout=5], [stall_timeout=30])
 
-   Connects to a kRPC server, and returns a :class:`krpc.client.Client`. ``krpc.connect[T](...)``
-   returns a client of type ``T``, a subclass of :class:`krpc.client.Client` such as the client
-   type a generated module declares.
+   Connects to a kRPC server, and returns a ``krpc.ksp.KSPClient``. ``krpc.connect[T](...)``
+   returns a client of the client type ``T``, as in :ref:`python-type-checking`.
 
    :param str name: A name for the connection, shown in the server window in the game.
    :param str address: The address of the server, as a host name or an IP address. Defaults to
@@ -741,7 +762,7 @@ Client API Reference
 .. function:: krpc.connect_local([name=None], [path], [handshake_timeout=5], [stall_timeout=30])
 
    Connects to a kRPC server on the same machine over a local socket, and returns a
-   :class:`krpc.client.Client`. The server must use the local socket protocol.
+   ``krpc.ksp.KSPClient``. The server must use the local socket protocol.
    ``krpc.connect_local[T](...)`` returns a client of type ``T``, as for :func:`krpc.connect`.
 
    A script that makes many calls in quick succession completes more of them per physics update

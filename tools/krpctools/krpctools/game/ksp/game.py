@@ -349,3 +349,10 @@ class KSP(game.Game):
 
     def log_filter(self, line):
         return "krpc" in line.lower()
+
+    # The running game
+
+    def client_type(self):
+        from krpc.ksp import KSPClient
+
+        return KSPClient

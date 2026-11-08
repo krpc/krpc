@@ -6,7 +6,7 @@ from krpc.declarations import DeclaredClass, DeclaredObject, declaration_error a
 from krpc.event import Event
 from krpc.schema import KRPC_pb2
 from krpc.types import DocEnum
-from krpc.services import krpc as _service_krpc
+import krpc.services.krpc as _service_krpc
 
 
 class DeprecatedEnum(DocEnum):
@@ -677,8 +677,10 @@ class TestService(metaclass=DeclaredClass):
 class TestServiceClient(krpc.client.Client):
     """
     A client with the TestService service, as ``krpc.connect[TestServiceClient]()``
-    connects.
+    connects. Combine it with the client types of other services in a subclass of them all.
     """
+
+    _declares_service = "TestService"
 
     test_service: TestService
 

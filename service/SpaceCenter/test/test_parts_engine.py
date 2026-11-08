@@ -7,7 +7,7 @@ from krpctools.game.geometry import angle_between, dot, norm
 from krpctools.game.ksp import Mixin, TestCase
 
 if TYPE_CHECKING:
-    from krpc.services.spacecenter import Parts, Vessel
+    from krpc.ksp.spacecenter import Parts, Vessel
 
 
 class EngineTestBase(Mixin):

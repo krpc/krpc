@@ -6,7 +6,7 @@ from krpc.declarations import DeclaredClass, DeclaredObject, declaration_error a
 from krpc.event import Event
 from krpc.schema import KRPC_pb2
 from krpc.types import DocEnum
-from krpc.services import serviceb as _service_serviceb
+import krpc.services.serviceb as _service_serviceb
 
 
 # Aliases for the types the service declares as its attributes, as an annotation in the body of
@@ -39,8 +39,10 @@ class ServiceA(metaclass=DeclaredClass):
 class ServiceAClient(krpc.client.Client):
     """
     A client with the ServiceA service, as ``krpc.connect[ServiceAClient]()``
-    connects.
+    connects. Combine it with the client types of other services in a subclass of them all.
     """
+
+    _declares_service = "ServiceA"
 
     service_a: ServiceA
 

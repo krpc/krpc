@@ -7,7 +7,7 @@ from krpctools.game.geometry import cross, distance, dot, norm
 from krpctools.game.ksp import Mixin, TestCase
 
 if TYPE_CHECKING:
-    from krpc.services.spacecenter import Control, Parts, Vessel
+    from krpc.ksp.spacecenter import Control, Parts, Vessel
 
 
 class RCSTestBase(Mixin):

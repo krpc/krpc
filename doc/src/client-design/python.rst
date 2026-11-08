@@ -76,17 +76,21 @@ Each client has its own classes, in its ``Types``, so a static method is a closu
 * A connect registers the types of every service, then builds the services. The types come first as
   a procedure can use a type from any service. A parameter's default value can also be an
   enumeration value, which cannot be decoded until that enumeration is registered.
-* ``krpc/services/`` has a module per service, from ``clientgen`` and ``python.tmpl`` in
-  ``krpctools``. Its enumerations, structures and exceptions are real classes, and its classes and
-  services are declarations whose members raise ``TypeError``. ``clientgen`` runs the client
-  without the modules.
+* ``clientgen`` and ``python.tmpl`` in ``krpctools`` generate a module per service. Its
+  enumerations, structures and exceptions are real classes, and its classes and services are
+  declarations whose members raise ``TypeError``. ``clientgen`` runs the client without the modules.
+* The modules of the core's services are in ``krpc/services/``, and those of the KSP services in
+  ``krpc/ksp/``. The paths match the planned split into a base package and a package per game, so
+  the split changes no import. ``import krpc`` imports no module.
 * A module registers its enumerations, structures and exceptions in ``krpc/declarations.py`` on
-  import. A later registration replaces an earlier one, and ``import krpc`` imports the shipped
-  modules first, so a module generated for a newer server takes their place.
-* At connect, a client uses the registered class where the server's definition matches: an
-  enumeration on its names and values, a structure on its field names in order, an exception on its
-  name and the builtin it derives from. These classes hold no client, so every client shares them.
-  A registered class is never changed to fit a server, as every client shares it.
+  import. A later registration replaces an earlier one.
+* At connect, a client uses a generated class where the server's definition matches: an enumeration
+  on its names and values, a structure on its field names in order, an exception on its name and
+  the builtin it derives from. These classes hold no client, so every client shares them. A
+  generated class is never changed to fit a server, as every client shares it.
+* The client type picks the module of each service it declares, from the ``<Service>Client`` bases
+  in its MRO, and the first wins. Any other service takes the registered classes. A module
+  generated for a newer server then applies only to the connections typed with it.
 * Otherwise the client builds its own class. A value of the module's enumeration converts to the
   built one by its number, as the other clients send it, since a client and a server of different
   releases are not supported. A structure decodes using the field types the server declares in
@@ -96,8 +100,18 @@ Each client has its own classes, in its ``Types``, so a static method is a closu
   ``DeclaredClass``, the metaclass of a declaration, compares the service and class names for
   ``isinstance`` and ``issubclass``.
 * Python has no declaration merging, so a module cannot add its service to ``Client``. It declares
-  a subclass of ``Client`` with the service as an attribute, and ``connect[T]`` builds the client as
-  ``T``.
+  ``<Service>Client``, a subclass of ``Client`` with the service as an attribute. A program combines
+  them, and ``connect[T]`` builds the client as ``T``. ``krpc.ksp.KSPClient`` combines the core
+  and KSP services.
+* ``Client`` declares no service, only a ``__getattr__`` returning ``Any`` for type checkers. The
+  core services, ``KRPC`` and ``StdLib``, have client types like the others, so a module generated
+  for a newer server replaces them the same way. A program with a client type that lacks a service
+  then type checks, and a misspelled service is not reported.
+* The client's own calls to ``KRPC`` go through ``Client._krpc``, a property typed with the shipped
+  declaration.
+* ``connect`` with no client type connects with ``KSPClient``, so a program written for KSP type
+  checks with no client type. It imports ``krpc.ksp`` on the first connect, which keeps
+  ``import krpc`` free of generated modules.
 
 Server Side Functions
 ---------------------

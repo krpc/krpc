@@ -15,7 +15,7 @@ from xml.etree import ElementTree
 
 import krpc.schema.KRPC_pb2 as KRPC
 from krpc.attributes import Attributes
-from krpc.declarations import registered
+from krpc.declarations import Lookup, registered
 from krpc.definitions import (
     CLASS,
     ENUMERATION,
@@ -263,10 +263,12 @@ def _same_values(generated: type | None, values: dict[str, dict[str, object]]) -
     }
 
 
-def service_definitions(service: KRPC.Service) -> Iterator[Definition]:
+def service_definitions(
+    service: KRPC.Service, lookup: Lookup = registered
+) -> Iterator[Definition]:
     """The types a service defines, as records that can be registered in a type registry. An
-    enumeration, structure or exception uses the class a generated module registered for it,
-    when the server's definition matches.
+    enumeration, structure or exception uses the generated class the lookup finds for it, when
+    the server's definition matches.
 
     A service's procedures are built from types that this or any other service defines, so
     every service's definitions are registered before any service is created."""
@@ -291,7 +293,7 @@ def service_definitions(service: KRPC.Service) -> Iterator[Definition]:
         )
 
         def register(types: Types) -> None:
-            generated = registered(name, enumeration.name)
+            generated = lookup(name, enumeration.name)
             if not _same_values(generated, values):
                 generated = None
             types.enumeration_type(name, enumeration.name, doc).set_values(
@@ -304,7 +306,7 @@ def service_definitions(service: KRPC.Service) -> Iterator[Definition]:
         doc = _documentation(exception, name)
 
         def register(types: Types) -> None:
-            generated = registered(name, exception.name)
+            generated = lookup(name, exception.name)
             if not (
                 isinstance(generated, type)
                 and generated.__bases__ == (native_exception(exception.mapped_type),)
@@ -336,7 +338,7 @@ def service_definitions(service: KRPC.Service) -> Iterator[Definition]:
                 (field_name, types.as_type(field.type))
                 for field_name, field in zip(field_names, struct.fields)
             ]
-            generated = registered(name, struct.name)
+            generated = lookup(name, struct.name)
             if getattr(generated, "_fields", None) != tuple(field_names):
                 generated = None
             types.struct_type(name, struct.name, doc).set_fields(fields, generated)

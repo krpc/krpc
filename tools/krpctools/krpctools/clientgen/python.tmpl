@@ -6,8 +6,8 @@ from krpc.declarations import DeclaredClass, DeclaredObject, declaration_error a
 from krpc.event import Event
 from krpc.schema import KRPC_pb2
 from krpc.types import DocEnum
-{% for service in dependencies %}
-from krpc.services import {{service|lower()}} as _service_{{service|lower()}}
+{% for dependency in dependencies %}
+import {{ dependency.module }} as {{ dependency.alias }}
 {% endfor %}
 
 {% macro arg_list(parameters) %}
@@ -121,8 +121,10 @@ class {{ service_name }}(metaclass=DeclaredClass):
 {{ "\n" }}class {{ service_name }}Client(krpc.client.Client):
     """
     A client with the {{ service_name }} service, as ``krpc.connect[{{ service_name }}Client]()``
-    connects.
+    connects. Combine it with the client types of other services in a subclass of them all.
     """
+
+    _declares_service = "{{ service_name }}"
 
     {{ service_name | snake_case }}: {{ service_name }}
 

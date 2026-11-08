@@ -52,7 +52,8 @@ You can then run the script from the command line:
                            Include the generated code of another service, whose
                            types the service uses, from the given path. Required
                            by the C++ and C nano generators for each such
-                           service.
+                           service. For Python, the path is the module of the
+                           service, which defaults to the module it ships in.
      --output-defs OUTPUT_DEFS
                            When generating client code from a DLL, output the
                            service definitions to the given JSON file
@@ -88,8 +89,8 @@ the same way:
 Example
 -------
 
-The following demonstrates how to generate code for the C++ and C# clients to interact with the
-LaunchControl service, given in an example previously.
+The following demonstrates how to generate code for the C++, Python and C# clients to interact
+with the LaunchControl service, given in an example previously.
 
 krpc-clientgen expects to be passed the directory of the game's managed assemblies, the name of
 the language to generate, the name of the service (from the :cs:attr:`KRPCService` attribute), a
@@ -103,6 +104,14 @@ To then use the LaunchControl service from C++, you need to link your code again
 library, and include `launch_control.hpp`. If the service uses types from another service, pass
 ``--include`` with the path of that service's header, so that `launch_control.hpp` includes it,
 e.g. ``--include=SpaceCenter=krpc/services/space_center.hpp``.
+
+For Python, run the following:
+
+``krpc-clientgen --reference-dir=/path/to/ksp/KSP_Data/Managed -o launch_control.py python LaunchControl LaunchControl.dll``
+
+Import ``LaunchControlClient`` from `launch_control.py`, and connect with it as in
+:ref:`python-other-mods`. If the service uses types from a service that does not ship with the
+client, pass ``--include`` with the module of that service, e.g. ``--include=Other=other_mod.other``.
 
 For C#, run the following:
 

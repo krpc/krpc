@@ -8,7 +8,7 @@ from krpctools.game.ksp import Mixin, TestCase
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    from krpc.services.spacecenter import Camera
+    from krpc.ksp.spacecenter import Camera
 
 
 class TestCamera(TestCase):
