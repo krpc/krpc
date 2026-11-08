@@ -549,7 +549,9 @@
 <span id="service-api-clientgen"></span><h1>Generating Service Code for Static Clients<a class="headerlink" href="#generating-service-code-for-static-clients" title="Link to this heading">#</a></h1>
 <p>Some of the client libraries dynamically construct the code necessary to interact with the server
 when they connect. This means that these libraries will automatically pick up changes to service
-code. Such client libraries include those for Python and Lua.</p>
+code. Such client libraries include those for Python and Lua.
+A generated Python module gives a service importable types, as described in
+<a class="reference internal" href="../python.html#python-other-mods"><span class="std std-ref">Services of Other Mods</span></a>.</p>
 <p>Other client libraries required code to be generated and compiled into them statically. They do not
 automatically pick up changes to service code. Such client libraries include those for C++ and C#.</p>
 <p>Code for these ‘static’ libraries is generated using the krpc-clientgen tool. This is provided as

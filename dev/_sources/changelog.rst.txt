@@ -344,6 +344,9 @@ Python client
 * Services
 
   * Keep the parameters of a deprecated procedure in its signature, for a service built from the server's definitions (:issue:`1301`)
+  * :breaking:`Breaking` Remove ``use_pregenerated_stubs`` (:issue:`1302`)
+  * :breaking:`Breaking` Raise an ``AttributeError`` for a service the server lacks (:issue:`1302`)
+  * :breaking:`Breaking` Raise a ``TypeError`` for a static method called on a class imported from a service's module (:issue:`1302`)
 
 
 

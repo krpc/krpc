@@ -1972,34 +1972,48 @@ with parameters raises <a class="reference internal" href="#krpc.error.FunctionC
 parameters raises <code class="docutils literal notranslate"><span class="pre">StreamError</span></code>.</p>
 </section>
 </section>
-<section id="service-stubs">
-<h2>Service Stubs<a class="headerlink" href="#service-stubs" title="Link to this heading">#</a></h2>
-<p>The client includes code for each service that ships with kRPC, generated from the services of
-one kRPC release. These <em>stubs</em> give your editor the classes, procedures and type hints of each
-service.</p>
-<p>The stubs match the server from the same release, so install the client version that matches your
-server. With another version, a procedure that was removed or renamed raises an error when you
-call it. A parameter or return type that changed is not checked, so a call can send or return a
-wrong value with no error.</p>
-<p>When you connect, the client fills in what the stubs lack from the service definitions the server
-sends:</p>
-<ul class="simple">
-<li><p>A service with no stub, such as one added by another mod, is generated at runtime.</p></li>
-<li><p>A class member that only the server declares is added to the stub’s class.</p></li>
-<li><p>A structure the server declares with fewer fields than the stub is read as a plain named tuple,
-with a warning.</p></li>
-</ul>
-<p>To generate every service at runtime instead, pass <code class="docutils literal notranslate"><span class="pre">use_pregenerated_stubs=False</span></code>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">use_pregenerated_stubs</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<section id="type-checking">
+<h2>Type Checking<a class="headerlink" href="#type-checking" title="Link to this heading">#</a></h2>
+<p>The client includes a module for each service that ships with kRPC, which gives your editor and
+type checker the classes, procedures and type hints of that service:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>  <span class="c1"># Vessel | None</span>
 </pre></div>
 </div>
-<p>The services then match the server you connect to, whatever its version, but have no type hints.</p>
+<p>The client builds each service from the definitions the server sends when you connect, so it has
+the procedures of that server.</p>
+<p>An enumeration, structure or exception from a module works with no connection:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">krpc.services.spacecenter</span><span class="w"> </span><span class="kn">import</span> <span class="n">SASMode</span><span class="p">,</span> <span class="n">Vessel</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">set_sas_mode</span><span class="p">(</span><span class="n">vessel</span><span class="p">:</span> <span class="n">Vessel</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">SASMode</span> <span class="o">=</span> <span class="n">SASMode</span><span class="o">.</span><span class="n">prograde</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span><span class="o">.</span><span class="n">sas_mode</span> <span class="o">=</span> <span class="n">mode</span>
+</pre></div>
+</div>
+<p>A class or service in a module is a declaration for type checkers. Use it in annotations and with
+<code class="docutils literal notranslate"><span class="pre">isinstance</span></code>, and call it through a connection, such as
+<code class="docutils literal notranslate"><span class="pre">conn.space_center.ReferenceFrame.create_relative</span></code>. Calling a declaration raises a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code>.</p>
+<p>The modules come from one kRPC release, and a server of another release is not supported. The
+services match the server, and the type hints are those of the client’s release. An enumeration or
+structure the server defines differently is built for the connection. A module’s enumeration value
+is sent by its number.</p>
+<section id="services-of-other-mods">
+<span id="python-other-mods"></span><h3>Services of Other Mods<a class="headerlink" href="#services-of-other-mods" title="Link to this heading">#</a></h3>
+<p>A service another mod adds is built when you connect, like the others:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">my_mod</span><span class="o">.</span><span class="n">get_mode</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>For importable types, generate a module for the service with <a class="reference internal" href="extending/clientgen.html#service-api-clientgen"><span class="std std-ref">krpc-clientgen</span></a>. Import the module before connecting, as the client uses its
+enumerations, structures and exceptions only if they are registered by then.</p>
+</section>
 </section>
 <section id="client-api-reference">
 <span id="python-client-reference"></span><h2>Client API Reference<a class="headerlink" href="#client-api-reference" title="Link to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="krpc.connect">
-<span class="sig-prename descclassname"><span class="pre">krpc.</span></span><span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">address</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'127.0.0.1'</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50000</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">use_pregenerated_stubs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">handshake_timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">stall_timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.connect" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">krpc.</span></span><span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">address</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'127.0.0.1'</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50000</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">handshake_timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">stall_timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.connect" title="Link to this definition">#</a></dt>
 <dd><p>Connects to a kRPC server, and returns a <a class="reference internal" href="#krpc.client.Client" title="krpc.client.Client"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.client.Client</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -2008,10 +2022,6 @@ with a warning.</p></li>
 <li><p><strong>address</strong> (<em>str</em>) – The address of the server, as a host name or an IP address. Defaults to
 <code class="docutils literal notranslate"><span class="pre">'127.0.0.1'</span></code>.</p></li>
 <li><p><strong>port</strong> (<em>int</em>) – The port of the server. Defaults to 50000.</p></li>
-<li><p><strong>use_pregenerated_stubs</strong> (<em>bool</em>) – Whether to use the service stubs bundled with the client,
-which include type hints. A service with no bundled stub, or every
-service when this is <code class="docutils literal notranslate"><span class="pre">False</span></code>, is generated at runtime. Defaults to
-<code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
 <li><p><strong>timeout</strong> (<em>float</em>) – How many seconds to wait for the connection to open. Defaults to
 <code class="docutils literal notranslate"><span class="pre">None</span></code>, which waits indefinitely. Without a timeout, a network that
 drops the connection attempt leaves the client waiting.</p></li>
@@ -2030,7 +2040,7 @@ and <code class="docutils literal notranslate"><span class="pre">ValueError</spa
 
 <dl class="py function">
 <dt class="sig sig-object py" id="krpc.connect_local">
-<span class="sig-prename descclassname"><span class="pre">krpc.</span></span><span class="sig-name descname"><span class="pre">connect_local</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">use_pregenerated_stubs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">handshake_timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">stall_timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.connect_local" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">krpc.</span></span><span class="sig-name descname"><span class="pre">connect_local</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">handshake_timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">stall_timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.connect_local" title="Link to this definition">#</a></dt>
 <dd><p>Connects to a kRPC server on the same machine over a local socket, and returns a
 <a class="reference internal" href="#krpc.client.Client" title="krpc.client.Client"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.client.Client</span></code></a>. The server must use the local socket protocol.</p>
 <p>A script that makes many calls in quick succession completes more of them per physics update
@@ -2044,7 +2054,6 @@ later.</p>
 <li><p><strong>name</strong> (<em>str</em>) – A name for the connection, shown in the server window in the game.</p></li>
 <li><p><strong>path</strong> (<em>str</em>) – The path of the server’s socket, shown in the server window in the game.
 Defaults to the path the server uses unless it was configured with another.</p></li>
-<li><p><strong>use_pregenerated_stubs</strong> (<em>bool</em>) – As for <a class="reference internal" href="#krpc.connect" title="krpc.connect"><code class="xref py py-func docutils literal notranslate"><span class="pre">krpc.connect()</span></code></a>.</p></li>
 <li><p><strong>handshake_timeout</strong> (<em>float</em>) – As for <a class="reference internal" href="#krpc.connect" title="krpc.connect"><code class="xref py py-func docutils literal notranslate"><span class="pre">krpc.connect()</span></code></a>.</p></li>
 <li><p><strong>stall_timeout</strong> (<em>float</em>) – As for <a class="reference internal" href="#krpc.connect" title="krpc.connect"><code class="xref py py-func docutils literal notranslate"><span class="pre">krpc.connect()</span></code></a>.</p></li>
 </ul>
@@ -2370,7 +2379,7 @@ message names the unsupported construct. See <a class="reference internal" href=
 <p>The <code class="docutils literal notranslate"><span class="pre">krpc.limits</span></code> module names the extremes of the numeric types kRPC carries over the wire.
 Python integers are unbounded, and Python floats are C doubles, so the standard library covers
 <code class="docutils literal notranslate"><span class="pre">DOUBLE</span></code> alone. A service can declare one of these limits as a parameter’s default value, and
-the generated stub then names the constant from this module.</p>
+the generated module then names the constant from this module.</p>
 <p>The minimum of an unsigned type is <code class="docutils literal notranslate"><span class="pre">0</span></code>, so it has no constant.</p>
 <dl class="py data">
 <dt class="sig sig-object py" id="krpc.limits.DOUBLE_MAX">
@@ -2530,7 +2539,10 @@ the generated stub then names the constant from this module.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parameters">Parameters</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#service-stubs">Service Stubs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-checking">Type Checking</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#services-of-other-mods">Services of Other Mods</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#client-api-reference">Client API Reference</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#numeric-limits">Numeric Limits</a></li>
 </ul>

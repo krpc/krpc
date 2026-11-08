@@ -570,9 +570,8 @@ collected. The threads end on a close or a connection failure.</p>
 <p>The stream manager holds each open <code class="docutils literal notranslate"><span class="pre">StreamImpl</span></code> strongly, so a stream outlives its handles and its
 callbacks keep running. It holds every registered <code class="docutils literal notranslate"><span class="pre">StreamImpl</span></code> weakly, which keeps nothing alive.
 Each <code class="docutils literal notranslate"><span class="pre">StreamImpl</span></code> also holds the <code class="docutils literal notranslate"><span class="pre">StreamManager</span></code>.</p>
-<p>The collector frees these cycles once the threads end, except that <code class="docutils literal notranslate"><span class="pre">types._wrapped_subclasses</span></code>
-keeps a client with stubs. A callback holding its own stream or the client needs no special
-handling.</p>
+<p>The collector frees these cycles once the threads end. A callback holding its own stream or the
+client needs no special handling.</p>
 </section>
 <section id="lifetime">
 <h3>Lifetime<a class="headerlink" href="#lifetime" title="Link to this heading">#</a></h3>
@@ -605,48 +604,34 @@ finishes.</p></li>
 the threads waiting on it, once the condition is free.</p></li>
 </ul>
 </section>
-<section id="pre-generated-and-dynamic-services">
-<h2>Pre-Generated and Dynamic Services<a class="headerlink" href="#pre-generated-and-dynamic-services" title="Link to this heading">#</a></h2>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"></th>
-<th class="head"><p>Pre-generated</p></th>
-<th class="head"><p>Dynamic</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>Source</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">krpc/services/</span></code>, from <code class="docutils literal notranslate"><span class="pre">clientgen</span></code> and <code class="docutils literal notranslate"><span class="pre">python.tmpl</span></code> in <code class="docutils literal notranslate"><span class="pre">krpctools</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">create_service</span></code>, from <code class="docutils literal notranslate"><span class="pre">GetServices</span></code> at connect</p></td>
-</tr>
-<tr class="row-odd"><td><p>Used for</p></td>
-<td><p>Every service with a stub, by default</p></td>
-<td><p>Other services, or all with <code class="docutils literal notranslate"><span class="pre">use_pregenerated_stubs=False</span></code></p></td>
-</tr>
-<tr class="row-even"><td><p>Class</p></td>
-<td><p>One per process, shared by every client</p></td>
-<td><p>One per client, in its <code class="docutils literal notranslate"><span class="pre">Types</span></code></p></td>
-</tr>
-<tr class="row-odd"><td><p>Static method</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">WrappedClass</span></code>, a per-client subclass</p></td>
-<td><p>Closure over the client</p></td>
-</tr>
-</tbody>
-</table>
-</div>
+<section id="services-and-declarations">
+<h2>Services and Declarations<a class="headerlink" href="#services-and-declarations" title="Link to this heading">#</a></h2>
+<p>Every service is built at connect from <code class="docutils literal notranslate"><span class="pre">GetServices</span></code>, by <code class="docutils literal notranslate"><span class="pre">create_service</span></code>. The client then has
+the members of the server it connects to, including those another mod adds to a shipped class.
+Each client has its own classes, in its <code class="docutils literal notranslate"><span class="pre">Types</span></code>, so a static method is a closure over its client.</p>
 <ul class="simple">
-<li><p>The stubs are optional. Without them, every service the server has is dynamic.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">clientgen</span></code> uses the Python client without pre-generated stubs.</p></li>
 <li><p>A connect registers the types of every service, then builds the services. The types come first as
 a procedure can use a type from any service. A parameter’s default value can also be an
 enumeration value, which cannot be decoded until that enumeration is registered.</p></li>
-<li><p>A structure decodes using the field types the server declares, with or without stubs. A stub only
-sets the Python class of the decoded value.</p></li>
-<li><p>Fields are only ever appended to a structure, so a server declaring fewer fields than the stub is
-older. The client then warns, and decodes the structure as a plain named tuple of the fields that
-server declares.</p></li>
-<li><p>A class member only the server declares goes on a per-client subclass of the stub class, as every
-client in the process shares the stub class.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">krpc/services/</span></code> has a module per service, from <code class="docutils literal notranslate"><span class="pre">clientgen</span></code> and <code class="docutils literal notranslate"><span class="pre">python.tmpl</span></code> in
+<code class="docutils literal notranslate"><span class="pre">krpctools</span></code>. Its enumerations, structures and exceptions are real classes, and its classes and
+services are declarations whose members raise <code class="docutils literal notranslate"><span class="pre">TypeError</span></code>. <code class="docutils literal notranslate"><span class="pre">clientgen</span></code> runs the client
+without the modules.</p></li>
+<li><p>A module registers its enumerations, structures and exceptions in <code class="docutils literal notranslate"><span class="pre">krpc/declarations.py</span></code> on
+import. A later registration replaces an earlier one, and <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">krpc</span></code> imports the shipped
+modules first, so a module generated for a newer server takes their place.</p></li>
+<li><p>At connect, a client uses the registered class where the server’s definition matches: an
+enumeration on its names and values, a structure on its field names in order, an exception on its
+name and the builtin it derives from. These classes hold no client, so every client shares them.
+A registered class is never changed to fit a server, as every client shares it.</p></li>
+<li><p>Otherwise the client builds its own class. A value of the module’s enumeration converts to the
+built one by its number, as the other clients send it, since a client and a server of different
+releases are not supported. A structure decodes using the field types the server declares in
+either case. <code class="docutils literal notranslate"><span class="pre">except</span></code> compares exception classes by identity, so only a shared exception class
+catches a server error.</p></li>
+<li><p>A built class does not derive from its declaration, which would show members a server lacks.
+<code class="docutils literal notranslate"><span class="pre">DeclaredClass</span></code>, the metaclass of a declaration, compares the service and class names for
+<code class="docutils literal notranslate"><span class="pre">isinstance</span></code> and <code class="docutils literal notranslate"><span class="pre">issubclass</span></code>.</p></li>
 </ul>
 </section>
 <section id="server-side-functions">
@@ -757,7 +742,7 @@ would keep the values it first captured.</p>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#threads">Threads</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pre-generated-and-dynamic-services">Pre-Generated and Dynamic Services</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#services-and-declarations">Services and Declarations</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#server-side-functions">Server Side Functions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#transports">Transports</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mapping-the-spec-to-python">Mapping the Spec to Python</a></li>
