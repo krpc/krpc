@@ -374,6 +374,11 @@ krpctools
 * Publish a wheel in place of an sdist (:issue:`1289`)
 * Reject unknown options and invalid values in ``krpc-testserver`` and ``krpc-servicedefs`` (:issue:`1296`)
 * Write the members in ``krpc-servicedefs`` output in a fixed order (:issue:`1296`)
+* Testing against a live game
+
+  * Add ``krpc-game``, which installs kRPC, its test add-on and the requested mods into KSP, and runs the game (:issue:`1299`)
+  * Add ``krpctools.game``, with a pytest plugin and test case classes for testing a mod against a running game (:issue:`1299`)
+
 
 
 v0.7.0

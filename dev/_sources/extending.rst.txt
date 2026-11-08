@@ -62,6 +62,8 @@ The following pages cover each part of the Service API:
 * :doc:`extending/clientgen`, the stubs for clients that need them.
 * :doc:`extending/docgen` for a service, in each client language.
 
+:doc:`extending/testing` covers testing a service against a live copy of the game.
+
 .. toctree::
    :hidden:
 
@@ -75,3 +77,4 @@ The following pages cover each part of the Service API:
    extending/documentation
    extending/clientgen
    extending/docgen
+   extending/testing

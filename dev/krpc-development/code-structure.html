@@ -438,6 +438,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../extending/documentation.html">Documentation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../extending/clientgen.html">Generating Service Code for Static Clients</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../extending/docgen.html">API Reference Pages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/testing.html">In-Game Tests</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../communication-protocols.html">Communication Protocols</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -565,12 +566,12 @@ by the <code class="docutils literal notranslate"><span class="pre">docgen</span
 <li><p><code class="docutils literal notranslate"><span class="pre">tools/ServiceDefinitions/</span></code> - generates a service definition file, in JSON, from a service
 DLL.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">tools/krpctools/</span></code> - a Python package of tools for client libraries: <code class="docutils literal notranslate"><span class="pre">clientgen</span></code> generates
-client stubs and <code class="docutils literal notranslate"><span class="pre">docgen</span></code> generates the API documentation.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">tools/krpctest/</span></code> - a Python package for testing RPCs in the game.</p></li>
+client stubs and <code class="docutils literal notranslate"><span class="pre">docgen</span></code> generates the API documentation. <code class="docutils literal notranslate"><span class="pre">krpctools.game</span></code> runs tests in
+the game.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tools/game/</span></code> - the runners for the tests in the game, which build kRPC from the sources.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">tools/TestingTools/</span></code> - a service for the tests, with RPCs such as teleporting a vessel into
 orbit.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">tools/benchmarks/</span></code> - the benchmark suite, described in <a class="reference internal" href="benchmarks.html"><span class="doc">Benchmarks</span></a>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">tools/mods/</span></code> - the third-party mods the tests install.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">tools/buildenv/</span></code> - the Docker image the CI builds run in.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">tools/release/</span></code> - the release scripts.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">tools/build/</span></code> - the Bazel rules and toolchains.</p></li>

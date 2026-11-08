@@ -438,6 +438,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../extending/documentation.html">Documentation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../extending/clientgen.html">Generating Service Code for Static Clients</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../extending/docgen.html">API Reference Pages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/testing.html">In-Game Tests</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../communication-protocols.html">Communication Protocols</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -612,29 +613,33 @@ the conformance tests.</p>
 <section id="tests-in-the-game">
 <h2>Tests in the Game<a class="headerlink" href="#tests-in-the-game" title="Link to this heading">#</a></h2>
 <p>These tests live in <code class="docutils literal notranslate"><span class="pre">service/*/test/</span></code>, and need a copy of KSP. Set <code class="docutils literal notranslate"><span class="pre">KSP_DIR</span></code> to the install
-directory, or pass <code class="docutils literal notranslate"><span class="pre">--ksp-dir</span></code>:</p>
+directory, or pass <code class="docutils literal notranslate"><span class="pre">--game-dir</span></code>:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">KSP_DIR</span><span class="o">=</span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/.local/share/Steam/steamapps/common/Kerbal Space Program"</span>
-bazel<span class="w"> </span>run<span class="w"> </span>//:test-ingame
+bazel<span class="w"> </span>run<span class="w"> </span>//tools/game:test-ksp
 </pre></div>
 </div>
 <p>The command builds and installs the mod and the mods the tests need, launches KSP and runs the
-tests. The test framework and the Python client come from the build, so a run picks up your
-changes. Arguments after <code class="docutils literal notranslate"><span class="pre">--</span></code> go to pytest, to select a subset:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bazel<span class="w"> </span>run<span class="w"> </span>//:test-ingame<span class="w"> </span>--<span class="w"> </span>service/SpaceCenter/test/test_camera.py<span class="w"> </span>-v
-bazel<span class="w"> </span>run<span class="w"> </span>//:test-ingame<span class="w"> </span>--<span class="w"> </span>-k<span class="w"> </span>test_camera_mode
+tests. The test framework, <a class="reference internal" href="../extending/testing.html"><span class="doc">krpctools.game</span></a>, and the Python client come
+from the build, so a run picks up your changes. Arguments after <code class="docutils literal notranslate"><span class="pre">--</span></code> go to pytest, to select a
+subset:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bazel<span class="w"> </span>run<span class="w"> </span>//tools/game:test-ksp<span class="w"> </span>--<span class="w"> </span>service/SpaceCenter/test/test_camera.py<span class="w"> </span>-v
+bazel<span class="w"> </span>run<span class="w"> </span>//tools/game:test-ksp<span class="w"> </span>--<span class="w"> </span>-k<span class="w"> </span>test_camera_mode
 </pre></div>
 </div>
 <p>To keep the game running between test runs, start it in another terminal:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bazel<span class="w"> </span>run<span class="w"> </span>//:run-ksp<span class="w"> </span>--<span class="w"> </span>--load-game<span class="o">=</span>krpctest
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bazel<span class="w"> </span>run<span class="w"> </span>//tools/game:run-ksp<span class="w"> </span>--<span class="w"> </span>--load-game<span class="o">=</span>krpctest
 </pre></div>
 </div>
 <p>Then pass <code class="docutils literal notranslate"><span class="pre">--no-launch</span></code> to run the tests against that game:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bazel<span class="w"> </span>run<span class="w"> </span>//:test-ingame<span class="w"> </span>--<span class="w"> </span>--no-launch<span class="w"> </span>service/SpaceCenter/test/test_camera.py<span class="w"> </span>-v
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bazel<span class="w"> </span>run<span class="w"> </span>//tools/game:test-ksp<span class="w"> </span>--<span class="w"> </span>--no-launch<span class="w"> </span>service/SpaceCenter/test/test_camera.py<span class="w"> </span>-v
 </pre></div>
 </div>
 <p>The tests leave a game they did not start unchanged, so it must already have the mods they need.
-<code class="docutils literal notranslate"><span class="pre">//:run-ksp</span></code> installs the mods named by <code class="docutils literal notranslate"><span class="pre">--mods</span></code>, and pipes the game log to the terminal. Pass
-<code class="docutils literal notranslate"><span class="pre">--</span> <span class="pre">--help</span></code> to list its other options, which load a save, switch vessel or launch a craft.</p>
+<code class="docutils literal notranslate"><span class="pre">//tools/game:run-ksp</span></code> installs the mods named by <code class="docutils literal notranslate"><span class="pre">--mods</span></code>, and pipes the game log to the
+terminal. Pass <code class="docutils literal notranslate"><span class="pre">--</span> <span class="pre">--help</span></code> to list its other options, which load a save, switch vessel or launch
+a craft.</p>
+<p>The third-party mods the tests install are pinned in <code class="docutils literal notranslate"><span class="pre">tools/krpctools/krpctools/game/ksp/mods/</span></code>.
+To test against a local build of one, pass <code class="docutils literal notranslate"><span class="pre">--mod</span> <span class="pre">NAME=PATH</span></code> to either command.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>A test run that is killed, not interrupted, leaves the game running. Stop it with

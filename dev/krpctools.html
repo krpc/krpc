@@ -438,6 +438,7 @@
 <li class="toctree-l2"><a class="reference internal" href="extending/documentation.html">Documentation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="extending/clientgen.html">Generating Service Code for Static Clients</a></li>
 <li class="toctree-l2"><a class="reference internal" href="extending/docgen.html">API Reference Pages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending/testing.html">In-Game Tests</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="communication-protocols.html">Communication Protocols</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -544,7 +545,8 @@
   <section id="krpctools">
 <h1>krpctools<a class="headerlink" href="#krpctools" title="Link to this heading">#</a></h1>
 <p><a class="reference external" href="https://pypi.org/project/krpctools">krpctools</a> is a Python package of command line tools for
-developing services and client libraries. Install it with pip:</p>
+developing services and client libraries, and for testing them against the game. Install it with
+pip:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>krpctools
 </pre></div>
 </div>
@@ -581,6 +583,10 @@ developing services and client libraries. Install it with pip:</p>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">krpc-conformance</span></code></p></td>
 <td><p>Runs the conformance tests against a client library.</p></td>
 <td><p><a class="reference internal" href="client-spec/conformance.html"><span class="doc">Conformance Tests</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">krpc-game</span></code></p></td>
+<td><p>Installs kRPC and the test add-on into KSP, and runs the game.</p></td>
+<td><p><a class="reference internal" href="extending/testing.html"><span class="doc">In-Game Tests</span></a></p></td>
 </tr>
 </tbody>
 </table>
