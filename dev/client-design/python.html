@@ -613,17 +613,21 @@ Each client has its own classes, in its <code class="docutils literal notranslat
 <li><p>A connect registers the types of every service, then builds the services. The types come first as
 a procedure can use a type from any service. A parameter’s default value can also be an
 enumeration value, which cannot be decoded until that enumeration is registered.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">krpc/services/</span></code> has a module per service, from <code class="docutils literal notranslate"><span class="pre">clientgen</span></code> and <code class="docutils literal notranslate"><span class="pre">python.tmpl</span></code> in
-<code class="docutils literal notranslate"><span class="pre">krpctools</span></code>. Its enumerations, structures and exceptions are real classes, and its classes and
-services are declarations whose members raise <code class="docutils literal notranslate"><span class="pre">TypeError</span></code>. <code class="docutils literal notranslate"><span class="pre">clientgen</span></code> runs the client
-without the modules.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">clientgen</span></code> and <code class="docutils literal notranslate"><span class="pre">python.tmpl</span></code> in <code class="docutils literal notranslate"><span class="pre">krpctools</span></code> generate a module per service. Its
+enumerations, structures and exceptions are real classes, and its classes and services are
+declarations whose members raise <code class="docutils literal notranslate"><span class="pre">TypeError</span></code>. <code class="docutils literal notranslate"><span class="pre">clientgen</span></code> runs the client without the modules.</p></li>
+<li><p>The modules of the core’s services are in <code class="docutils literal notranslate"><span class="pre">krpc/services/</span></code>, and those of the KSP services in
+<code class="docutils literal notranslate"><span class="pre">krpc/ksp/</span></code>. The paths match the planned split into a base package and a package per game, so
+the split changes no import. <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">krpc</span></code> imports no module.</p></li>
 <li><p>A module registers its enumerations, structures and exceptions in <code class="docutils literal notranslate"><span class="pre">krpc/declarations.py</span></code> on
-import. A later registration replaces an earlier one, and <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">krpc</span></code> imports the shipped
-modules first, so a module generated for a newer server takes their place.</p></li>
-<li><p>At connect, a client uses the registered class where the server’s definition matches: an
-enumeration on its names and values, a structure on its field names in order, an exception on its
-name and the builtin it derives from. These classes hold no client, so every client shares them.
-A registered class is never changed to fit a server, as every client shares it.</p></li>
+import. A later registration replaces an earlier one.</p></li>
+<li><p>At connect, a client uses a generated class where the server’s definition matches: an enumeration
+on its names and values, a structure on its field names in order, an exception on its name and
+the builtin it derives from. These classes hold no client, so every client shares them. A
+generated class is never changed to fit a server, as every client shares it.</p></li>
+<li><p>The client type picks the module of each service it declares, from the <code class="docutils literal notranslate"><span class="pre">&lt;Service&gt;Client</span></code> bases
+in its MRO, and the first wins. Any other service takes the registered classes. A module
+generated for a newer server then applies only to the connections typed with it.</p></li>
 <li><p>Otherwise the client builds its own class. A value of the module’s enumeration converts to the
 built one by its number, as the other clients send it, since a client and a server of different
 releases are not supported. A structure decodes using the field types the server declares in
@@ -633,8 +637,18 @@ catches a server error.</p></li>
 <code class="docutils literal notranslate"><span class="pre">DeclaredClass</span></code>, the metaclass of a declaration, compares the service and class names for
 <code class="docutils literal notranslate"><span class="pre">isinstance</span></code> and <code class="docutils literal notranslate"><span class="pre">issubclass</span></code>.</p></li>
 <li><p>Python has no declaration merging, so a module cannot add its service to <code class="docutils literal notranslate"><span class="pre">Client</span></code>. It declares
-a subclass of <code class="docutils literal notranslate"><span class="pre">Client</span></code> with the service as an attribute, and <code class="docutils literal notranslate"><span class="pre">connect[T]</span></code> builds the client as
-<code class="docutils literal notranslate"><span class="pre">T</span></code>.</p></li>
+<code class="docutils literal notranslate"><span class="pre">&lt;Service&gt;Client</span></code>, a subclass of <code class="docutils literal notranslate"><span class="pre">Client</span></code> with the service as an attribute. A program combines
+them, and <code class="docutils literal notranslate"><span class="pre">connect[T]</span></code> builds the client as <code class="docutils literal notranslate"><span class="pre">T</span></code>. <code class="docutils literal notranslate"><span class="pre">krpc.ksp.KSPClient</span></code> combines the core
+and KSP services.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Client</span></code> declares no service, only a <code class="docutils literal notranslate"><span class="pre">__getattr__</span></code> returning <code class="docutils literal notranslate"><span class="pre">Any</span></code> for type checkers. The
+core services, <code class="docutils literal notranslate"><span class="pre">KRPC</span></code> and <code class="docutils literal notranslate"><span class="pre">StdLib</span></code>, have client types like the others, so a module generated
+for a newer server replaces them the same way. A program with a client type that lacks a service
+then type checks, and a misspelled service is not reported.</p></li>
+<li><p>The client’s own calls to <code class="docutils literal notranslate"><span class="pre">KRPC</span></code> go through <code class="docutils literal notranslate"><span class="pre">Client._krpc</span></code>, a property typed with the shipped
+declaration.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">connect</span></code> with no client type connects with <code class="docutils literal notranslate"><span class="pre">KSPClient</span></code>, so a program written for KSP type
+checks with no client type. It imports <code class="docutils literal notranslate"><span class="pre">krpc.ksp</span></code> on the first connect, which keeps
+<code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">krpc</span></code> free of generated modules.</p></li>
 </ul>
 </section>
 <section id="server-side-functions">

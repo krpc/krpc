@@ -589,7 +589,8 @@ installed using pip:</p>
 <span class="go">                        Include the generated code of another service, whose</span>
 <span class="go">                        types the service uses, from the given path. Required</span>
 <span class="go">                        by the C++ and C nano generators for each such</span>
-<span class="go">                        service.</span>
+<span class="go">                        service. For Python, the path is the module of the</span>
+<span class="go">                        service, which defaults to the module it ships in.</span>
 <span class="go">  --output-defs OUTPUT_DEFS</span>
 <span class="go">                        When generating client code from a DLL, output the</span>
 <span class="go">                        service definitions to the given JSON file</span>
@@ -620,8 +621,8 @@ the same way:</p>
 </div>
 <section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Link to this heading">#</a></h2>
-<p>The following demonstrates how to generate code for the C++ and C# clients to interact with the
-LaunchControl service, given in an example previously.</p>
+<p>The following demonstrates how to generate code for the C++, Python and C# clients to interact
+with the LaunchControl service, given in an example previously.</p>
 <p>krpc-clientgen expects to be passed the directory of the game’s managed assemblies, the name of
 the language to generate, the name of the service (from the <a class="reference internal" href="attributes.html#attribute-KRPCService" title="attribute: KRPCService"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCService</span></code></a> attribute), a
 path to the assembly containing the service and the path to write the generated code to.</p>
@@ -631,6 +632,11 @@ path to the assembly containing the service and the path to write the generated 
 library, and include <cite>launch_control.hpp</cite>. If the service uses types from another service, pass
 <code class="docutils literal notranslate"><span class="pre">--include</span></code> with the path of that service’s header, so that <cite>launch_control.hpp</cite> includes it,
 e.g. <code class="docutils literal notranslate"><span class="pre">--include=SpaceCenter=krpc/services/space_center.hpp</span></code>.</p>
+<p>For Python, run the following:</p>
+<p><code class="docutils literal notranslate"><span class="pre">krpc-clientgen</span> <span class="pre">--reference-dir=/path/to/ksp/KSP_Data/Managed</span> <span class="pre">-o</span> <span class="pre">launch_control.py</span> <span class="pre">python</span> <span class="pre">LaunchControl</span> <span class="pre">LaunchControl.dll</span></code></p>
+<p>Import <code class="docutils literal notranslate"><span class="pre">LaunchControlClient</span></code> from <cite>launch_control.py</cite>, and connect with it as in
+<a class="reference internal" href="../python.html#python-other-mods"><span class="std std-ref">Services of Other Mods</span></a>. If the service uses types from a service that does not ship with the
+client, pass <code class="docutils literal notranslate"><span class="pre">--include</span></code> with the module of that service, e.g. <code class="docutils literal notranslate"><span class="pre">--include=Other=other_mod.other</span></code>.</p>
 <p>For C#, run the following:</p>
 <p><code class="docutils literal notranslate"><span class="pre">krpc-clientgen</span> <span class="pre">--reference-dir=/path/to/ksp/KSP_Data/Managed</span> <span class="pre">-o</span> <span class="pre">LaunchControl.cs</span> <span class="pre">csharp</span> <span class="pre">LaunchControl</span> <span class="pre">LaunchControl.dll</span></code></p>
 <p>To then use the LaunchControl service from a C# client, you need to reference the <cite>KRPC.Client.dll</cite>

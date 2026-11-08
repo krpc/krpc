@@ -842,6 +842,7 @@
 <li><p><span class="changelog-marker breaking">Breaking</span> Raise a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code> for a static method called on a class imported from a service’s module (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1302">#1302</a>)</p></li>
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">connect[T]</span></code> and <code class="docutils literal notranslate"><span class="pre">connect_local[T]</span></code>, which type the client as <code class="docutils literal notranslate"><span class="pre">T</span></code> for type hints, such as for a mod’s services (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1303">#1303</a>)</p></li>
 <li><p>Add a client type to each service’s module, such as <code class="docutils literal notranslate"><span class="pre">SpaceCenterClient</span></code>, to combine with others in a subclass (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1303">#1303</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Move the modules of the KSP services from <code class="docutils literal notranslate"><span class="pre">krpc.services</span></code> to <code class="docutils literal notranslate"><span class="pre">krpc.ksp</span></code>, such as <code class="docutils literal notranslate"><span class="pre">krpc.ksp.spacecenter</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1304">#1304</a>)</p></li>
 </ul>
 </li>
 </ul>
@@ -884,6 +885,7 @@
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">krpctools.game</span></code>, with a pytest plugin and test case classes for testing a mod against a running game (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1299">#1299</a>)</p></li>
 </ul>
 </li>
+<li><p>Name the module of another service a generated Python module imports with <code class="docutils literal notranslate"><span class="pre">--include</span></code>, for a mod whose service uses another mod’s types (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1304">#1304</a>)</p></li>
 </ul>
 </section>
 </section>

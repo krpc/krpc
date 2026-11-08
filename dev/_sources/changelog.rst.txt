@@ -349,6 +349,7 @@ Python client
   * :breaking:`Breaking` Raise a ``TypeError`` for a static method called on a class imported from a service's module (:issue:`1302`)
   * Add ``connect[T]`` and ``connect_local[T]``, which type the client as ``T`` for type hints, such as for a mod's services (:issue:`1303`)
   * Add a client type to each service's module, such as ``SpaceCenterClient``, to combine with others in a subclass (:issue:`1303`)
+  * :breaking:`Breaking` Move the modules of the KSP services from ``krpc.services`` to ``krpc.ksp``, such as ``krpc.ksp.spacecenter`` (:issue:`1304`)
 
 
 
@@ -389,6 +390,7 @@ krpctools
   * Add ``krpc-game``, which installs kRPC, its test add-on and the requested mods into KSP, and runs the game (:issue:`1299`)
   * Add ``krpctools.game``, with a pytest plugin and test case classes for testing a mod against a running game (:issue:`1299`)
 
+* Name the module of another service a generated Python module imports with ``--include``, for a mod whose service uses another mod's types (:issue:`1304`)
 
 
 v0.7.0

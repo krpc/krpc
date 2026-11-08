@@ -1973,9 +1973,10 @@ parameters raises <code class="docutils literal notranslate"><span class="pre">S
 </section>
 </section>
 <section id="type-checking">
-<h2>Type Checking<a class="headerlink" href="#type-checking" title="Link to this heading">#</a></h2>
-<p>The client includes a module for each service that ships with kRPC, which gives your editor and
-type checker the classes, procedures and type hints of that service:</p>
+<span id="python-type-checking"></span><h2>Type Checking<a class="headerlink" href="#type-checking" title="Link to this heading">#</a></h2>
+<p><a class="reference internal" href="#krpc.connect" title="krpc.connect"><code class="xref py py-func docutils literal notranslate"><span class="pre">krpc.connect()</span></code></a> returns a <code class="docutils literal notranslate"><span class="pre">krpc.ksp.KSPClient</span></code>, which declares every service the client
+ships with for Kerbal Space Program, including <code class="docutils literal notranslate"><span class="pre">krpc</span></code>. A type checker then knows the type of each
+member:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
 
 <span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
@@ -1983,9 +1984,21 @@ type checker the classes, procedures and type hints of that service:</p>
 </pre></div>
 </div>
 <p>The client builds each service from the definitions the server sends when you connect, so it has
-the procedures of that server.</p>
+the procedures of that server. <code class="docutils literal notranslate"><span class="pre">krpc.connect[T](...)</span></code> connects with the client type <code class="docutils literal notranslate"><span class="pre">T</span></code> in
+place of <code class="docutils literal notranslate"><span class="pre">KSPClient</span></code>.</p>
+<p>Each service’s module, such as <code class="docutils literal notranslate"><span class="pre">krpc.ksp.spacecenter</span></code>, declares a client type with only that
+service, such as <code class="docutils literal notranslate"><span class="pre">SpaceCenterClient</span></code>. A function can take the client type of the services it
+uses:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">krpc.ksp.spacecenter</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpaceCenterClient</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">stage</span><span class="p">(</span><span class="n">conn</span><span class="p">:</span> <span class="n">SpaceCenterClient</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
+    <span class="k">if</span> <span class="n">vessel</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">activate_next_stage</span><span class="p">()</span>
+</pre></div>
+</div>
 <p>An enumeration, structure or exception from a module works with no connection:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">krpc.services.spacecenter</span><span class="w"> </span><span class="kn">import</span> <span class="n">SASMode</span><span class="p">,</span> <span class="n">Vessel</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">krpc.ksp.spacecenter</span><span class="w"> </span><span class="kn">import</span> <span class="n">SASMode</span><span class="p">,</span> <span class="n">Vessel</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">set_sas_mode</span><span class="p">(</span><span class="n">vessel</span><span class="p">:</span> <span class="n">Vessel</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">SASMode</span> <span class="o">=</span> <span class="n">SASMode</span><span class="o">.</span><span class="n">prograde</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span><span class="o">.</span><span class="n">sas_mode</span> <span class="o">=</span> <span class="n">mode</span>
@@ -2000,26 +2013,33 @@ structure the server defines differently is built for the connection. A module�
 is sent by its number.</p>
 <section id="services-of-other-mods">
 <span id="python-other-mods"></span><h3>Services of Other Mods<a class="headerlink" href="#services-of-other-mods" title="Link to this heading">#</a></h3>
-<p>A service another mod adds is built when you connect, like the others:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
-<span class="n">conn</span><span class="o">.</span><span class="n">my_mod</span><span class="o">.</span><span class="n">get_mode</span><span class="p">()</span>
-</pre></div>
-</div>
-<p>For type hints, generate a module for the service with <a class="reference internal" href="extending/clientgen.html#service-api-clientgen"><span class="std std-ref">krpc-clientgen</span></a>, and connect with the client type it declares:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mymod_services</span><span class="w"> </span><span class="kn">import</span> <span class="n">MyModClient</span>
+<p>A service another mod adds is built when you connect, like the others. For type hints, generate a
+module for the service with <a class="reference internal" href="extending/clientgen.html#service-api-clientgen"><span class="std std-ref">krpc-clientgen</span></a>, and combine its client
+type with the others you use:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">krpc.ksp</span><span class="w"> </span><span class="kn">import</span> <span class="n">KSPClient</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mymod_services</span><span class="w"> </span><span class="kn">import</span> <span class="n">MyModClient</span>
 
-<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">[</span><span class="n">MyModClient</span><span class="p">]()</span>
-<span class="n">conn</span><span class="o">.</span><span class="n">my_mod</span><span class="o">.</span><span class="n">get_mode</span><span class="p">()</span>
-</pre></div>
-</div>
-<p>Import the module before connecting, as the client uses its enumerations, structures and exceptions
-only if they are registered by then. For several mods, combine their client types:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Connection</span><span class="p">(</span><span class="n">MyModClient</span><span class="p">,</span> <span class="n">OtherModClient</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Connection</span><span class="p">(</span><span class="n">KSPClient</span><span class="p">,</span> <span class="n">MyModClient</span><span class="p">):</span>
     <span class="k">pass</span>
 
 <span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">[</span><span class="n">Connection</span><span class="p">]()</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">my_mod</span><span class="o">.</span><span class="n">get_mode</span><span class="p">()</span>
 </pre></div>
 </div>
+<p>A module generated for a newer server replaces the shipped module of the same service. Combine its
+client type with those of the other services you use, as it cannot combine with <code class="docutils literal notranslate"><span class="pre">KSPClient</span></code>,
+which has the shipped one:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">krpc.ksp.spacecenter</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpaceCenterClient</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">newer_services.ui</span><span class="w"> </span><span class="kn">import</span> <span class="n">UIClient</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Connection</span><span class="p">(</span><span class="n">UIClient</span><span class="p">,</span> <span class="n">SpaceCenterClient</span><span class="p">):</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+<p>A client uses the enumerations, structures and exceptions of the modules its client type names,
+where the server’s definitions match them. For a service its client type does not name, it uses
+those of the module imported last.</p>
 </section>
 </section>
 <section id="client-api-reference">
@@ -2027,9 +2047,8 @@ only if they are registered by then. For several mods, combine their client type
 <dl class="py function">
 <dt class="sig sig-object py" id="krpc.connect">
 <span class="sig-prename descclassname"><span class="pre">krpc.</span></span><span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">address</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'127.0.0.1'</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50000</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">handshake_timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">stall_timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.connect" title="Link to this definition">#</a></dt>
-<dd><p>Connects to a kRPC server, and returns a <a class="reference internal" href="#krpc.client.Client" title="krpc.client.Client"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.client.Client</span></code></a>. <code class="docutils literal notranslate"><span class="pre">krpc.connect[T](...)</span></code>
-returns a client of type <code class="docutils literal notranslate"><span class="pre">T</span></code>, a subclass of <a class="reference internal" href="#krpc.client.Client" title="krpc.client.Client"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.client.Client</span></code></a> such as the client
-type a generated module declares.</p>
+<dd><p>Connects to a kRPC server, and returns a <code class="docutils literal notranslate"><span class="pre">krpc.ksp.KSPClient</span></code>. <code class="docutils literal notranslate"><span class="pre">krpc.connect[T](...)</span></code>
+returns a client of the client type <code class="docutils literal notranslate"><span class="pre">T</span></code>, as in <a class="reference internal" href="#python-type-checking"><span class="std std-ref">Type Checking</span></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -2057,7 +2076,7 @@ and <code class="docutils literal notranslate"><span class="pre">ValueError</spa
 <dt class="sig sig-object py" id="krpc.connect_local">
 <span class="sig-prename descclassname"><span class="pre">krpc.</span></span><span class="sig-name descname"><span class="pre">connect_local</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">handshake_timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">stall_timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.connect_local" title="Link to this definition">#</a></dt>
 <dd><p>Connects to a kRPC server on the same machine over a local socket, and returns a
-<a class="reference internal" href="#krpc.client.Client" title="krpc.client.Client"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.client.Client</span></code></a>. The server must use the local socket protocol.
+<code class="docutils literal notranslate"><span class="pre">krpc.ksp.KSPClient</span></code>. The server must use the local socket protocol.
 <code class="docutils literal notranslate"><span class="pre">krpc.connect_local[T](...)</span></code> returns a client of type <code class="docutils literal notranslate"><span class="pre">T</span></code>, as for <a class="reference internal" href="#krpc.connect" title="krpc.connect"><code class="xref py py-func docutils literal notranslate"><span class="pre">krpc.connect()</span></code></a>.</p>
 <p>A script that makes many calls in quick succession completes more of them per physics update
 than over TCP/IP. A script that makes a call and then waits runs at the game’s update rate
