@@ -4,6 +4,7 @@ using System.Linq;
 using Expression = KRPC.Client.Services.KRPC.Expression;
 using TestClass = KRPC.Client.Services.TestService.TestClass;
 using TestEnum = KRPC.Client.Services.TestService.TestEnum;
+using TestFlags = KRPC.Client.Services.TestService.TestFlags;
 using TestStruct = KRPC.Client.Services.TestService.TestStruct;
 using KRPC.Conformance;
 
@@ -43,6 +44,7 @@ namespace KRPC.Client.Conformance
             { "bytes", Make<byte[]> (Arg.Bytes, Result.Bytes) },
             { "TestClass", Make<TestClass> (Arg.Object<TestClass>, Result.Object) },
             { "TestEnum", Make<TestEnum> (Arg.Enum<TestEnum>, Result.Enum<TestEnum> ()) },
+            { "TestFlags", Make<TestFlags> (Arg.Enum<TestFlags>, Result.Enum<TestFlags> ()) },
             { "TestStruct", Make<TestStruct> (Dispatch.Arg_TestService_TestStruct, Dispatch.Result_TestService_TestStruct) },
             { "nullable sint32", Make<int?> (Arg.Nullable<int> (Arg.Sint32), Result.Nullable<int> (Result.Sint32)) },
             { "list(sint32)", Make<IList<int>> (Arg.List<int> (Arg.Sint32), Result.List<int> (Result.Sint32)) },

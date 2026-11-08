@@ -115,6 +115,7 @@ inline const CodecEntry& codec(const std::string& type) {
       {"string", codec_entry<String>(KRPC_CONFORMANCE_BY_VALUE(string))},
       {"bytes", codec_entry<Bytes>(KRPC_CONFORMANCE_BY_VALUE(bytes))},
       {"TestEnum", codec_entry<Enum<krpc_enum_t>>(KRPC_CONFORMANCE_BY_VALUE(enum))},
+      {"TestFlags", codec_entry<Enum<krpc_enum_t>>(KRPC_CONFORMANCE_BY_VALUE(enum))},
       {"TestClass", codec_entry<Object>(KRPC_CONFORMANCE_BY_VALUE(object))},
       {"list(sint32)",
        codec_entry<List<krpc_list_int32_t, Sint32>>(KRPC_CONFORMANCE_BY_POINTER(list_int32))},

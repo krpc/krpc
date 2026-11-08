@@ -7,6 +7,7 @@ import krpc.client.Connection;
 import krpc.client.services.KRPC.Expression;
 import krpc.client.services.TestService.TestClass;
 import krpc.client.services.TestService.TestEnum;
+import krpc.client.services.TestService.TestFlags;
 import krpc.conformance.Testee.AddFunctionEvent;
 import krpc.conformance.Testee.AddFunctionStream;
 import krpc.conformance.Testee.CallWithArguments;
@@ -103,6 +104,7 @@ final class Functions {
     TYPES.put("bytes", new Type(Values::argBytes, Values::resultBytes));
     TYPES.put("TestClass", new Type(Values.argObject(TestClass.class), Values::resultObject));
     TYPES.put("TestEnum", new Type(Values.argEnum(TestEnum::fromValue), Values::resultEnum));
+    TYPES.put("TestFlags", new Type(Values.argEnum(TestFlags::fromValue), Values::resultEnum));
     TYPES.put(
         "TestStruct",
         new Type(
