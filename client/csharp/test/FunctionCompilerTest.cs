@@ -133,6 +133,37 @@ namespace KRPC.Client.Test
         }
 
         [Test]
+        public void TestFlagsOperators ()
+        {
+            var testService = Connection.TestService ();
+            var obj = testService.CreateTestObject ("flags");
+            obj.IntProperty = 3;
+            var a = TestFlags.ValueA;
+            var c = TestFlags.ValueC;
+            Assert.AreEqual (
+                a | TestFlags.ValueB | c, Evaluate (() => testService.IntToFlags (obj.IntProperty) | c));
+            Assert.AreEqual (a, Evaluate (() => testService.IntToFlags (obj.IntProperty) & (a | c)));
+            Assert.AreEqual (
+                TestFlags.ValueB | c, Evaluate (() => testService.IntToFlags (obj.IntProperty) ^ (a | c)));
+            Assert.AreEqual (c, Evaluate (() => ~testService.IntToFlags (obj.IntProperty)));
+            Assert.AreEqual (
+                TestFlags.ValueB, Evaluate (() => testService.IntToFlags (obj.IntProperty) & ~a));
+            Assert.AreEqual (
+                TestFlags.ValueB, Evaluate (() => testService.IntToFlags (obj.IntProperty) & ~TestFlags.ValueA));
+            Assert.AreEqual (
+                TestFlags.ValueA | TestFlags.ValueB | c,
+                Evaluate (() => testService.IntToFlags (obj.IntProperty) | ~TestFlags.ValueA));
+            Assert.AreEqual (
+                TestFlags.ValueB | c,
+                Evaluate (() => testService.FlagsEcho (~TestFlags.ValueA)));
+            Assert.IsTrue (Evaluate (() => testService.IntToFlags (6) ==
+                ((TestFlags.ValueAB | TestFlags.ValueC) & ~TestFlags.ValueA)));
+            Assert.IsTrue (Evaluate (() => testService.IntToFlags (obj.IntProperty).HasFlag (a)));
+            Assert.IsFalse (Evaluate (() => testService.IntToFlags (obj.IntProperty).HasFlag (c)));
+            Assert.IsTrue (Evaluate (() => (a | TestFlags.ValueB | c).HasFlag (testService.IntToFlags (obj.IntProperty))));
+        }
+
+        [Test]
         public void TestTernary ()
         {
             var obj = Connection.TestService ().CreateTestObject ("ternary");
