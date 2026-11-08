@@ -6,6 +6,7 @@ PROFILES = frozenset(
         "core",
         "error-types",
         "dynamic",
+        "definitions",
         "defaults",
         "named-arguments",
         "skipped-arguments",

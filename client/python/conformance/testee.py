@@ -37,6 +37,7 @@ PROFILES = [
     "core",
     "error-types",
     "dynamic",
+    "definitions",
     "defaults",
     "named-arguments",
     "streams",

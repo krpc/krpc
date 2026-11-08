@@ -148,6 +148,7 @@ conformance_test(
     profiles = [
         "core",
         "dynamic",
+        "definitions",
         "defaults",
         "skipped-arguments",
         "functions",

@@ -111,7 +111,7 @@ of the testee belongs in the expected failures file.
 Conventions
 -----------
 
-A client with the ``error-types`` or ``dynamic`` profile describes its language's conventions in
+A client with the ``error-types`` or ``definitions`` profile describes its language's conventions in
 a JSON file, passed with ``--conventions``:
 
 .. code-block:: json
@@ -125,8 +125,8 @@ a JSON file, passed with ``--conventions``:
    }
 
 ``native_types`` is for the ``error-types`` profile. It gives the native error type the client
-raises for each mapped exception, by the exception's mapped type, and needs an entry for each
-one. A ``null`` entry is an exception the client raises only as a type of its own. ``naming`` is for the ``dynamic`` profile. It gives the case of member names, whether a
-property is a pair of ``get_`` and ``set_`` functions, and whether the client exposes exception
-types. The case is ``snake``, the one case the driver converts names to. The run stops if the
-file lacks a section a profile needs.
+raises for each mapped exception, by the exception's mapped type, and needs an entry for each one. A
+``null`` entry is an exception the client raises only as a type of its own. ``naming`` is for the
+``definitions`` profile. It gives the case of member names, whether a property is a pair of ``get_``
+and ``set_`` functions, and whether the client exposes exception types. The case is ``snake``, the
+one case the driver converts names to. The run stops if the file lacks a section a profile needs.
