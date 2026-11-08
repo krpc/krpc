@@ -351,6 +351,10 @@ Python client
   * Add a client type to each service's module, such as ``SpaceCenterClient``, to combine with others in a subclass (:issue:`1303`)
   * :breaking:`Breaking` Move the modules of the KSP services from ``krpc.services`` to ``krpc.ksp``, such as ``krpc.ksp.spacecenter`` (:issue:`1304`)
 
+* Server side functions
+
+  * Type the functions ``compile``, ``run``, ``add_stream`` and ``add_event`` take, and the ``KRPC.Expression`` object ``compile`` returns (:issue:`1306`)
+
 
 
 krpctools
