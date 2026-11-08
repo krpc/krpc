@@ -81,7 +81,7 @@ py_library(
     deps = [
         ":profiles",
         ":testee_py",
-        "//client/python:krpc_lib",
+        "//client/python:krpc_base_lib",
         "//tools/build:serverprocess",
         "@krpc_pypi//pytest",
     ],
