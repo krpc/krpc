@@ -210,18 +210,19 @@ class TestGame(unittest.TestCase):
                 "directory": "b",
                 "krpc": None,
                 "auto_launch": False,
+                "mod_sources": {"FAR": "FAR.zip"},
             },
         )
         self.assertEqual("b", ksp.directory)
         self.assertIsNone(ksp.krpc)
         self.assertFalse(ksp.auto_launch)
+        self.assertEqual("FAR.zip", ksp.mods["FAR"].source)
+        self.assertIsNone(ksp.mods["FAR"].sha256)
+        self.assertEqual(("FerramAerospaceResearch",), ksp.mods["FAR"].folders)
 
-    def test_environment_sets_the_defaults(self):
-        variables = {"KRPC_TEST_AUTO_LAUNCH": "0", "KRPC_TEST_ADDRESS": "10.0.0.1"}
-        with mock.patch.dict(os.environ, variables):
-            ksp = KSP()
-        self.assertFalse(ksp.auto_launch)
-        self.assertEqual("10.0.0.1", ksp.address)
+    def test_unknown_mod_source_raises(self):
+        with self.assertRaises(ValueError):
+            game.apply(KSP(), {"mod_sources": {"NoSuchMod": "x.zip"}})
 
     def test_suite_mod_replaces_the_game_mod(self):
         far = KSP().mods["FAR"]

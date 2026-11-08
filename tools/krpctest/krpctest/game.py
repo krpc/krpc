@@ -63,19 +63,19 @@ class Game:
     # The name the tests connect with
     client_name = "krpctest"
 
-    def __init__(self, directory=None, krpc=None, mods=(), address=None):
+    def __init__(self, directory=None, krpc=None, mods=(), address="127.0.0.1"):
         self.directory = directory
         self.krpc = krpc
         self.mods = {mod.name: mod for mod in self.default_mods()}
         for mod in mods:
             self.mods[mod.name] = mod
-        self.address = address or os.environ.get("KRPC_TEST_ADDRESS", "127.0.0.1")
+        self.address = address
         # Whether ensure launches a game when no server is reachable
-        self.auto_launch = os.environ.get("KRPC_TEST_AUTO_LAUNCH", "1") != "0"
+        self.auto_launch = True
         # Whether install checks that the install holds only the known set
-        self.check_install = os.environ.get("KRPC_TEST_SKIP_GAMEDATA_CHECK", "0") != "1"
+        self.check_install = True
         # Whether install reconciles the mods, or leaves them as they are
-        self.install_mods = os.environ.get("KRPC_TEST_SKIP_MOD_INSTALL", "0") != "1"
+        self.install_mods = True
         # The process this run launched, or None when the game was started elsewhere
         self.process = None
         self.connection = None
@@ -91,7 +91,7 @@ class Game:
         directory = self.directory or os.environ.get(self.directory_variable)
         if not directory:
             raise RuntimeError(
-                "No %s install specified. Set %s, or pass --ksp-dir, to the path of the "
+                "No %s install specified. Set %s, or pass --game-dir, to the path of the "
                 "install." % (self.title(), self.directory_variable)
             )
         if not os.path.isdir(directory):
@@ -104,7 +104,7 @@ class Game:
         return self.name.upper()
 
     def log_path(self):
-        """The log the game writes, followed by krpc-run-ksp."""
+        """The log the game writes, followed by krpc-game run."""
         raise NotImplementedError
 
     # Installing
@@ -118,6 +118,14 @@ class Game:
         if self.krpc is None:
             raise RuntimeError("No kRPC archive to install. Pass --krpc.")
         return self.krpc
+
+    def set_mod_source(self, name, source):
+        """Install the named mod from source, a path or a URL, in place of its own."""
+        if name not in self.mods:
+            raise ValueError(
+                "Unknown mod %s (known: %s)" % (name, ", ".join(sorted(self.mods)))
+            )
+        self.mods[name] = type(self.mods[name])(source)
 
     def install(self, mods=()):
         """Install kRPC, the test add-on and exactly the given mods, by name."""
@@ -154,7 +162,7 @@ class Game:
 
     def run_command(self, mods):
         """The command that starts a game for the tests, as messages give it."""
-        return "krpc-run-ksp --game %s%s" % (self.name, self._mods_option(mods))
+        return "krpc-game run --game %s%s" % (self.name, self._mods_option(mods))
 
     @staticmethod
     def _mods_option(mods):
@@ -164,14 +172,14 @@ class Game:
         """Kill every running copy of the game, by name."""
 
     def add_run_arguments(self, parser):
-        """Add the game's own options to krpc-run-ksp."""
+        """Add the game's own options to krpc-game run."""
 
     def run_arguments(self, args):
-        """The launch arguments for the parsed krpc-run-ksp options."""
+        """The launch arguments for the parsed krpc-game run options."""
         return []
 
     def log_filter(self, line) -> bool:
-        """Whether krpc-run-ksp prints the log line."""
+        """Whether krpc-game run prints the log line."""
         return True
 
     # The running game
@@ -247,6 +255,8 @@ def current():
 
 def apply(game, options):
     """Override what game sets with the options that have a value."""
+    for name, source in (options.pop("mod_sources", None) or {}).items():
+        game.set_mod_source(name, source)
     for name, value in options.items():
         if value is not None:
             setattr(game, name, value)

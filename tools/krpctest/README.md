@@ -5,13 +5,13 @@ RPCs against a running copy of Kerbal Space Program.
 
 Installing the package provides:
 
-- `krpc-install` — installs kRPC, the `TestingTools` add-on and the requested mods into a KSP
-  `GameData` directory (the install given by `KSP_DIR` / `--ksp-dir`). `--game` chooses the
-  game, and `--krpc` the kRPC archive.
-- `krpc-run-ksp` — installs the mod, launches KSP, and streams its kRPC log output to the
-  terminal. Its `--load-*` options drive the auto-load behaviour documented below.
+- `krpc-game install`, which installs kRPC, the `TestingTools` add-on and the requested mods
+  into a game, and removes any other mods it knows.
+- `krpc-game run`, which installs, launches the game, and streams its kRPC log output to the
+  terminal. For KSP, its `--load-*` options drive the auto-load behavior documented below.
+- `krpc-game stop`, which stops a game that `krpc-game run` launched.
 - a pytest plugin, loaded with `pytest -p krpctest.pytest_plugin`, that runs the
-  `krpctest.TestCase` tests and launches and manages KSP for them.
+  `krpctest.TestCase` tests and launches and manages the game for them.
 
 From a checkout of the kRPC repository there is no need to install the package: `bazel run
 //:test-ingame` runs the tests and `bazel run //:run-ksp` runs the game, taking this package and
@@ -20,7 +20,7 @@ of running the test suite.
 
 ## TestingTools
 
-`TestingTools` is a development-only kRPC add-on installed by `krpc-install`. It is used by the
+`TestingTools` is a development-only kRPC add-on installed by `krpc-game install`. It is used by the
 service tests and by local KSP runs; it is not included in the release zip.
 
 ### Auto-load CLI arguments
@@ -31,23 +31,23 @@ the main menu:
 
 ```sh
 # No auto-load arguments: KSP stays at the main menu.
-krpc-run-ksp
+krpc-game run
 ```
 
 To load `saves/default/persistent.sfs` into the Space Center, request it explicitly:
 
 ```sh
-krpc-run-ksp --load-game=default
+krpc-game run --load-game=default
 ```
 
 Loading a save does not focus a vessel on its own: add `--load-vessel` to switch to an existing
 vessel, or `--load-craft` to launch a craft. When a load is requested, any argument left out uses
 its default from the table below.
 
-The auto-load behavior can be configured through `krpc-run-ksp`:
+The auto-load behavior can be configured through `krpc-game run`:
 
 ```sh
-krpc-run-ksp \
+krpc-game run \
   --load-game=krpctest \
   --load-save=persistent \
   --load-craft=Parts \
@@ -56,10 +56,10 @@ krpc-run-ksp \
 ```
 
 The runner exposes each auto-load argument as an explicit `--load-*` option (run
-`krpc-run-ksp --help` to list them) and forwards it to KSP as the matching `--krpctest-load-*`
+`krpc-game run --help` to list them) and forwards it to KSP as the matching `--krpctest-load-*`
 argument below.
 
-Supported arguments (as parsed by the add-on; `krpc-run-ksp` exposes each as the matching
+Supported arguments (as parsed by the add-on; `krpc-game run` exposes each as the matching
 `--load-*` option):
 
 | Argument | Default | Description |
@@ -99,7 +99,7 @@ TestingTools quits KSP rather than loading into the Space Center without the req
 `--krpctest-load-craft-fixture-dir` is the source directory for fixture craft files. It is not the
 KSP craft directory. Use `--krpctest-load-craft-directory=VAB` or `SPH` to choose where the craft
 is staged and which editor facility KSP uses for launch checks. Relative fixture paths are resolved
-by the KSP process; with `krpc-run-ksp`, that means relative to `KSP_DIR`, not the repository root.
+by the KSP process; with `krpc-game run`, that means relative to `KSP_DIR`, not the repository root.
 
 Default inference:
 
@@ -114,7 +114,7 @@ Examples:
 
 ```sh
 # Stage the Parts fixture from the repo into the save, then launch it.
-krpc-run-ksp \
+krpc-game run \
   --load-game=krpctest \
   --load-save=persistent \
   --load-craft=Parts \
@@ -123,7 +123,7 @@ krpc-run-ksp \
 
 ```sh
 # Launch a craft already saved under saves/krpctest/Ships/VAB.
-krpc-run-ksp \
+krpc-game run \
   --load-game=krpctest \
   --load-save=persistent \
   --load-craft=Parts
@@ -131,7 +131,7 @@ krpc-run-ksp \
 
 ```sh
 # Stage a spaceplane fixture and launch it from the SPH/Runway.
-krpc-run-ksp \
+krpc-game run \
   --load-game=krpctest \
   --load-save=persistent \
   --load-craft=Spaceplane \
@@ -144,7 +144,7 @@ krpc-run-ksp \
 To load a save and switch to a specific existing vessel:
 
 ```sh
-krpc-run-ksp \
+krpc-game run \
   --load-game=krpctest \
   --load-save=persistent \
   --load-vessel=0
@@ -157,8 +157,8 @@ If the requested vessel index is out of range for the save, this is a fatal erro
 
 TestingTools fails loudly rather than silently doing something other than what was asked. If any
 `--krpctest-load-*` option cannot be honoured, it logs a prominent `FATAL` error (tagged
-`[kRPC testing tools]`, so it also shows in the `krpc-run-ksp` terminal output) and quits KSP, so
-the launch fails fast instead of leaving you at a stuck load screen with no idea why. `krpc-run-ksp`
+`[kRPC testing tools]`, so it also shows in the `krpc-game run` terminal output) and quits KSP, so
+the launch fails fast instead of leaving you at a stuck load screen with no idea why. `krpc-game run`
 returns when KSP exits, and the test framework reports `KSP exited before the kRPC server became
 available`.
 

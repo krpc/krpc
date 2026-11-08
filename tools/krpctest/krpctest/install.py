@@ -4,7 +4,6 @@ Sources are local paths or URLs. A download goes to a user cache keyed by its ha
 and each mod archive are downloaded once.
 """
 
-import argparse
 import hashlib
 import http.client
 import os
@@ -153,31 +152,9 @@ def install(game, mods=()):
         for name in names:
             mod = game.mods[name]
             if mod.source is None:
-                raise RuntimeError("No source for mod %s" % name)
+                raise RuntimeError(
+                    "No source for mod %s. Give one with --mod %s=PATH." % (name, name)
+                )
             mod.install(game, fetch(mod.source, mod.sha256))
     if game.check_install:
         game.validate_install(names)
-
-
-def main(argv=None):
-    """krpc-install: install kRPC, the test add-on and the given mods into the game."""
-    from krpctest import run_ksp
-
-    argv = sys.argv[1:] if argv is None else argv
-    the_game = run_ksp.load_game(argv)
-    parser = argparse.ArgumentParser(
-        prog="krpc-install",
-        description="Install kRPC, its test add-on and the given mods into the game.",
-    )
-    run_ksp.add_install_arguments(parser)
-    args = parser.parse_args(argv)
-    try:
-        install(the_game, run_ksp.apply_install_arguments(the_game, args))
-    except (ValueError, RuntimeError) as ex:
-        sys.stderr.write("Error: %s\n" % ex)
-        return 1
-    return 0
-
-
-if __name__ == "__main__":
-    sys.exit(main())

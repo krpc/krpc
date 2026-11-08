@@ -27,7 +27,7 @@ namespace TestingTools
         /// </summary>
         public static Exception Error(string message)
         {
-            // Every line carries the tag so it survives krpc-run-ksp's "krpc"-only log filter
+            // Every line carries the tag so it survives krpc-game run's "krpc"-only log filter
             // and shows up in the terminal, not just KSP.log.
             const string tag = "[kRPC testing tools]";
             const string rule = tag + ": ============================================================";

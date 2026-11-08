@@ -120,7 +120,7 @@ compiles a typed delegate, so a call costs one delegate invocation, with no boxi
 ## Integration tests
 
 Python tests driving a live game, in `service/*/test/`. Need a real KSP install via `KSP_DIR` or
-`--ksp-dir`. Everything after `--` goes to pytest.
+`--game-dir`. Everything after `--` goes to pytest.
 
 ```bash
 bazel run //:test-ingame                                                  # whole suite
@@ -142,7 +142,7 @@ bazel run //:test-ingame -- -k test_camera_mode                           # by n
 
  * Declared per test class: `mods = ["RemoteTech"]`.
  * Supported names, with their pinned archives: `tools/krpctest/krpctest/ksp/mods/`. Downloads are
-   cached in `~/.cache/krpctools`.
+   cached in `~/.cache/krpctools`. `--mod NAME=PATH` installs a local build in place of the pin.
  * Install reconciles GameData to **exactly** the requested set (plus kRPC) — required-but-missing and
    installed-but-unneeded are both wrong.
  * Pytest groups tests by mod set; game restarts at most once per set.
@@ -154,7 +154,7 @@ bazel run //:run-ksp -- --load-game=krpctest --mods=RemoteTech
 bazel run //:test-ingame -- --no-launch service/RemoteTech/test/test_remotetech.py -v
 ```
 
- * `--no-launch` (`KRPC_TEST_AUTO_LAUNCH=0`) errors on a missing server instead of launching a second game.
+ * `--no-launch` errors on a missing server instead of launching a second game.
    Pass it whenever a game should already be up — a still-loading game looks like no game.
  * Only works for tests whose mod set the running game already has.
  * `//:run-ksp` builds, installs, launches, tails the kRPC log. `--load-game` brings the server up;

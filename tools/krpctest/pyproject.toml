@@ -23,8 +23,7 @@ classifiers = [
 ]
 
 [project.scripts]
-krpc-run-ksp = "krpctest.run_ksp:main"
-krpc-install = "krpctest.install:main"
+krpc-game = "krpctest.cli:main"
 
 [project.urls]
 Homepage = "https://krpc.github.io/krpc"

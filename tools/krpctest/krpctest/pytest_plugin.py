@@ -1,21 +1,29 @@
 """pytest plugin for tests against a live game.
 
 Opt-in: load it with ``pytest -p krpctest.pytest_plugin``. It adds the options that choose
-the game and its install, and orders the collected tests by their required mods, so the game
-restarts at most once per mod set.
+the game and override what it sets, and orders the collected tests by their required mods,
+so the game restarts at most once per mod set.
 
 The game comes from ``--game``, or from a suite's ``conftest.py``, which builds the game
 object and passes it to :func:`krpctest.game.register`. The test classes are
 ``krpctest.testcase.TestCase`` subclasses, which launch the game from ``setUpClass``.
 """
 
-import os
+import pytest
 
 from . import game
 
 
-def pytest_addoption(parser):
-    group = parser.getgroup("krpctest", "tests against a live game")
+def _mod_source(value):
+    name, separator, source = value.partition("=")
+    if not separator or not name or not source:
+        raise ValueError("--mod takes NAME=SOURCE, got %r" % value)
+    return name, source
+
+
+def add_options(group, launching=True):
+    """Add the options that choose a game and override what it sets. launching adds those
+    for a run that launches the game itself."""
     group.addoption(
         "--game",
         metavar="GAME",
@@ -23,40 +31,88 @@ def pytest_addoption(parser):
         "Python code" % ", ".join(sorted(game.GAMES)),
     )
     group.addoption(
+        "--game-dir",
+        metavar="DIR",
+        help="the game's install directory, in place of its environment variable",
+    )
+    group.addoption(
         "--krpc",
         metavar="SOURCE",
         help="the kRPC archive to install, as a path or a URL",
     )
     group.addoption(
-        "--ksp-dir",
-        metavar="DIR",
-        help="path to the KSP install (defaults to $KSP_DIR)",
+        "--mod",
+        action="append",
+        default=[],
+        metavar="NAME=SOURCE",
+        help="install the named mod from a path or a URL, in place of its pinned archive",
     )
+    group.addoption(
+        "--skip-install-check",
+        action="store_true",
+        default=False,
+        help="skip the check that the install holds only the game, kRPC and the requested "
+        "mods, to launch with an unmanaged mod installed",
+    )
+    group.addoption(
+        "--skip-mod-install",
+        action="store_true",
+        default=False,
+        help="leave the installed mods as they are, to launch with a locally built mod",
+    )
+    if not launching:
+        return
     group.addoption(
         "--no-launch",
         action="store_true",
         default=False,
-        help="require an already-running game rather than launching one",
+        help="require an already-running game, in place of launching one",
     )
     group.addoption(
-        "--skip-gamedata-check",
-        action="store_true",
-        default=False,
-        help="skip the check that GameData holds only the known-valid set, to launch "
-        "with an unmanaged mod installed",
+        "--address",
+        metavar="ADDRESS",
+        help="the address of the game's server (default: 127.0.0.1)",
     )
+
+
+def options(get):
+    """The game options from the command line, given get(name) for each option."""
+    return {
+        "game": get("game"),
+        "directory": get("game_dir"),
+        "krpc": get("krpc"),
+        "mod_sources": dict(_mod_source(value) for value in get("mod") or []),
+        "auto_launch": False if get("no_launch") else None,
+        "check_install": False if get("skip_install_check") else None,
+        "install_mods": False if get("skip_mod_install") else None,
+        "address": get("address"),
+    }
+
+
+def pytest_addoption(parser):
+    add_options(parser.getgroup("krpctest", "tests against a live game"))
 
 
 def pytest_configure(config):
-    # The game reads these variables when it is built, which is on first use
-    ksp_dir = config.getoption("--ksp-dir")
-    if ksp_dir is not None:
-        os.environ["KSP_DIR"] = ksp_dir
-    if config.getoption("--no-launch"):
-        os.environ["KRPC_TEST_AUTO_LAUNCH"] = "0"
-    if config.getoption("--skip-gamedata-check"):
-        os.environ["KRPC_TEST_SKIP_GAMEDATA_CHECK"] = "1"
-    game.configure(game=config.getoption("--game"), krpc=config.getoption("--krpc"))
+    try:
+        game.configure(**options(config.getoption))
+    except ValueError as ex:
+        raise pytest.UsageError(str(ex)) from ex
+
+
+def pytest_collection_finish(session):
+    # Every conftest.py has registered its game by now. Resolving the game here reports a bad
+    # option once, in place of an error in each test class.
+    if not any(_needs_game(item) for item in session.items):
+        return
+    try:
+        game.current()
+    except (ValueError, RuntimeError, ImportError, AttributeError) as ex:
+        raise pytest.UsageError(str(ex)) from ex
+
+
+def _needs_game(item):
+    return getattr(getattr(item, "cls", None), "game_required", False)
 
 
 def _mods(item):

@@ -1,11 +1,11 @@
 """Install kRPC built from this repository, run KSP and follow its log:
-`bazel run //:run-ksp -- [krpc-run-ksp options]`.
+`bazel run //:run-ksp -- [krpc-game run options]`.
 """
 
 import os
 import sys
 
-from krpctest import run_ksp
+from krpctest import cli
 
 
 def main():
@@ -18,7 +18,7 @@ def main():
             "BUILD_WORKING_DIRECTORY", os.environ["BUILD_WORKSPACE_DIRECTORY"]
         )
     )
-    return run_ksp.main(["--game", "bazel_ksp:BazelKSP", *sys.argv[1:]])
+    return cli.main(["run", "--game", "bazel_ksp:BazelKSP", *sys.argv[1:]])
 
 
 if __name__ == "__main__":

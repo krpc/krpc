@@ -79,7 +79,7 @@ Tests in the Game
 -----------------
 
 These tests live in ``service/*/test/``, and need a copy of KSP. Set ``KSP_DIR`` to the install
-directory, or pass ``--ksp-dir``:
+directory, or pass ``--game-dir``:
 
 .. code-block:: bash
 

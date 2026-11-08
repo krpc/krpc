@@ -186,8 +186,7 @@ def ensure(game, mods=()):
         stop(game)
     elif not game.auto_launch:
         raise RuntimeError(
-            "No kRPC server is reachable and auto-launch is disabled (--no-launch or "
-            "KRPC_TEST_AUTO_LAUNCH=0). Start "
+            "No kRPC server is reachable and auto-launch is disabled (--no-launch). Start "
             "%s first, e.g. `%s`, and wait for it to load."
             % (game.title(), game.run_command(required))
         )

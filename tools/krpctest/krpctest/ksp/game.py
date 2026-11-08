@@ -14,7 +14,7 @@ from .. import game
 _EXECUTABLE = "KSP_x64.exe" if sys.platform == "win32" else "KSP.x86_64"
 
 # The TestingTools options that load a save, switch vessel or launch a craft, as the
-# krpc-run-ksp options they are given by. Each one shows up in --help. Only those given
+# krpc-game run options they are given by. Each one shows up in --help. Only those given
 # reach the game, as any one of them makes the add-on load a save.
 _LOAD_OPTIONS = (
     ("load_game", "--krpctest-load-game"),
@@ -125,7 +125,7 @@ class Mod(game.Mod):
 
 
 class KSP(game.Game):
-    """Kerbal Space Program, from the install named by KSP_DIR or --ksp-dir."""
+    """Kerbal Space Program, from the install named by KSP_DIR or --game-dir."""
 
     name = "ksp"
     directory_variable = "KSP_DIR"
@@ -248,7 +248,7 @@ class KSP(game.Game):
             raise RuntimeError(
                 "Unexpected entries in %s: %s. The tests need GameData to hold the stock "
                 "game plus kRPC, ModuleManager and only the mods a test requests. Remove "
-                "the listed entries and re-run, or pass --skip-gamedata-check."
+                "the listed entries and re-run, or pass --skip-install-check."
                 % (gamedata, ", ".join(unexpected))
             )
 
@@ -264,7 +264,7 @@ class KSP(game.Game):
         return ["--krpctest-load-game=krpctest"]
 
     def run_command(self, mods):
-        return "krpc-run-ksp --load-game=krpctest" + self._mods_option(mods)
+        return "krpc-game run --load-game=krpctest" + self._mods_option(mods)
 
     def kill_all(self):
         if sys.platform == "win32":
