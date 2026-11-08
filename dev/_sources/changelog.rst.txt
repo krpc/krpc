@@ -341,6 +341,10 @@ Python client
 * Accept a server side function built with the expression API in ``Client.compile`` (:issue:`1269`)
 * Support ``isinstance`` with a class accessed through a connection, such as ``isinstance(vessel, conn.space_center.Vessel)`` (:issue:`1279`)
 * Publish a wheel in place of an sdist (:issue:`1289`)
+* Services
+
+  * Keep the parameters of a deprecated procedure in its signature, for a service built from the server's definitions (:issue:`1301`)
+
 
 
 krpctools
