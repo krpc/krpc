@@ -98,7 +98,7 @@ Examples:
 
 ```sh
 # From the root of a kRPC checkout: stage the Parts fixture into the save, then launch it.
-bazel run //:run-ksp -- \
+bazel run //tools/game:run-ksp -- \
   --load-game=krpctest \
   --load-save=persistent \
   --load-craft=Parts \
@@ -115,7 +115,7 @@ krpc-game run \
 
 ```sh
 # From the root of a kRPC checkout: stage a spaceplane fixture and launch it from the SPH/Runway.
-bazel run //:run-ksp -- \
+bazel run //tools/game:run-ksp -- \
   --load-game=krpctest \
   --load-save=persistent \
   --load-craft=Spaceplane \

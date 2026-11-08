@@ -1,5 +1,5 @@
 """Install kRPC built from this repository, run KSP and follow its log:
-`bazel run //:run-ksp -- [krpc-game run options]`.
+`bazel run //tools/game:run-ksp -- [krpc-game run options]`.
 """
 
 import os
@@ -10,7 +10,7 @@ from krpctools.game import cli
 
 def main():
     if not os.environ.get("BUILD_WORKSPACE_DIRECTORY"):
-        sys.exit("This tool must be run via `bazel run //:run-ksp`.")
+        sys.exit("This tool must be run via `bazel run //tools/game:run-ksp`.")
     # Under `bazel run` the process starts in the runfiles tree. Paths given on the command
     # line mean what they would where bazel was run.
     os.chdir(

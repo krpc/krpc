@@ -1,8 +1,8 @@
-"""Run the kRPC integration tests that need the game: `bazel run //:test-ingame`.
+"""Run the kRPC integration tests against KSP: `bazel run //tools/game:test-ksp`.
 
 Arguments are passed straight through to pytest, so
 
-    bazel run //:test-ingame -- service/SpaceCenter/test/test_camera.py -v
+    bazel run //tools/game:test-ksp -- service/SpaceCenter/test/test_camera.py -v
 
 behaves like that pytest invocation. With no arguments the whole suite runs, as pytest.ini
 points pytest at every service's test directory.
@@ -27,7 +27,7 @@ def main():
     # finds pytest.ini by searching upwards, so its settings apply from any subdirectory.
     workspace = os.environ.get("BUILD_WORKSPACE_DIRECTORY")
     if not workspace:
-        sys.exit("This tool must be run via `bazel run //:test-ingame`.")
+        sys.exit("This tool must be run via `bazel run //tools/game:test-ksp`.")
     os.chdir(os.environ.get("BUILD_WORKING_DIRECTORY", workspace))
 
     # The plugin is opt-in, so it stays out of other pytest runs where krpctools is installed

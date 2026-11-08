@@ -13,11 +13,14 @@ py_library(
     ],
 )
 
-# Run the integration tests that need the game: `bazel run //:test-ingame -- [pytest args]`.
-# The tests themselves are read from the repository (the runner works there rather than in
-# the runfiles tree), so adding or editing one needs no change here.
+# The tests that need the game, which //:test does not cover. Per game, test-<game> runs
+# them and run-<game> runs the game on its own, to test against without a restart.
+
+# Run the tests against KSP: `bazel run //tools/game:test-ksp -- [pytest args]`. The tests
+# are read from the repository, as the runner works there, so adding or editing one needs no
+# change here.
 py_binary(
-    name = "test-ingame",
+    name = "test-ksp",
     srcs = ["run_tests.py"],
     main = "run_tests.py",
     visibility = ["//visibility:public"],
@@ -27,7 +30,7 @@ py_binary(
     ],
 )
 
-# Install the mod and run the game: `bazel run //:run-ksp -- [--mods=... --load-*=...]`.
+# Install the mod and run KSP: `bazel run //tools/game:run-ksp -- [--mods=... --load-*=...]`.
 # This is `krpc-game run` against BazelKSP.
 py_binary(
     name = "run-ksp",

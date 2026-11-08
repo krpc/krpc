@@ -124,10 +124,10 @@ Python tests driving a live game, in `service/*/test/`. Need a real KSP install 
 `--game-dir`. Everything after `--` goes to pytest.
 
 ```bash
-bazel run //:test-ingame                                                  # whole suite
-bazel run //:test-ingame -- service/SpaceCenter/test/test_camera.py -v    # one file
-bazel run //:test-ingame -- "…::TestClass::test_method"                   # one test
-bazel run //:test-ingame -- -k test_camera_mode                           # by name
+bazel run //tools/game:test-ksp                                                 # whole suite
+bazel run //tools/game:test-ksp -- service/SpaceCenter/test/test_camera.py -v   # one file
+bazel run //tools/game:test-ksp -- "…::TestClass::test_method"                  # one test
+bazel run //tools/game:test-ksp -- -k test_camera_mode                          # by name
 ```
 
  * **Auto-launches KSP**: builds/installs DLLs and required mods, launches, loads a save, runs, stops.
@@ -152,15 +152,16 @@ bazel run //:test-ingame -- -k test_camera_mode                           # by n
 ### Iterating without reloading
 
 ```bash
-bazel run //:run-ksp -- --load-game=krpctest --mods=RemoteTech
-bazel run //:test-ingame -- --no-launch service/RemoteTech/test/test_remotetech.py -v
+bazel run //tools/game:run-ksp -- --load-game=krpctest --mods=RemoteTech
+bazel run //tools/game:test-ksp -- --no-launch service/RemoteTech/test/test_remotetech.py -v
 ```
 
  * `--no-launch` errors on a missing server instead of launching a second game.
    Pass it whenever a game should already be up — a still-loading game looks like no game.
  * Only works for tests whose mod set the running game already has.
- * `//:run-ksp` builds, installs, launches, tails the kRPC log. `--load-game` brings the server up;
-   other `--load-*` switch vessel or launch a craft (`-- --help`). Re-run after any C# change.
+ * `//tools/game:run-ksp` builds, installs, launches, tails the kRPC log. `--load-game` brings the
+   server up; other `--load-*` switch vessel or launch a craft (`-- --help`). Re-run after any C#
+   change.
  * Run *killed* rather than interrupted → cleanup hook skipped → `pkill -f KSP.x86_64`,
    `taskkill /f /im KSP_x64.exe` on Windows.
  * Trace from in-game with `KRPC.Utils.Logger.WriteLine("…")`, then grep `$KSP_DIR/KSP.log`.

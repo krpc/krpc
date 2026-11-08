@@ -1,6 +1,6 @@
 """KSP with kRPC and its test add-on built from this repository with Bazel.
 
-`bazel run //:test-ingame` and `bazel run //:run-ksp` pass this game as
+`bazel run //tools/game:test-ksp` and `bazel run //tools/game:run-ksp` pass this game as
 `--game bazel_ksp:BazelKSP`, so each install builds and installs the current sources.
 """
 
@@ -69,4 +69,7 @@ class BazelKSP(KSP):
         return [path for target in _ADDON_TARGETS for path in self._outputs(target)]
 
     def run_command(self, mods):
-        return "bazel run //:run-ksp -- --load-game=krpctest" + self._mods_option(mods)
+        return (
+            "bazel run //tools/game:run-ksp -- --load-game=krpctest"
+            + self._mods_option(mods)
+        )
