@@ -10,10 +10,9 @@ from __future__ import annotations
 
 import ast
 import enum
-from collections.abc import Callable
+from collections.abc import Callable, Iterable
 from typing import (
     TYPE_CHECKING,
-    Any,
     NoReturn,
     cast,
 )
@@ -38,6 +37,14 @@ from krpc.types import NATIVE_EXCEPTIONS, ClassBase
 
 if TYPE_CHECKING:
     from krpc.functioncompiler import _Compiler
+    from krpc.services.krpc import Expression
+
+# A parameter of a function: its name, type and parameter expression
+Parameter = tuple[str, KRPC.Type, "Expression"]
+
+# A compiled local function: the function, its parameters' names and types, and
+# its return type
+LocalFunction = tuple["Expression", list[tuple[str, KRPC.Type]], "KRPC.Type | None"]
 
 
 # The value of a variable that has only been assigned None, so its type comes
@@ -58,7 +65,21 @@ class Recompile(Exception):
     function is compiled again."""
 
 
-_JUMP_NAMES = {ast.Return: "return", ast.Break: "break", ast.Continue: "continue"}
+_JUMP_NAMES: dict[type[ast.stmt], str] = {
+    ast.Return: "return",
+    ast.Break: "break",
+    ast.Continue: "continue",
+}
+
+
+def _block(node: ast.AST | None, field: str) -> list[ast.stmt]:
+    """A block of statements a node holds, or none when it has no such field"""
+    return cast(list[ast.stmt], getattr(node, field, []))
+
+
+def _handlers(statement: ast.stmt) -> list[ast.ExceptHandler]:
+    """The handlers of a try statement, or none for another statement"""
+    return cast(list[ast.ExceptHandler], getattr(statement, "handlers", []))
 
 
 def _jump_out_of(statements: list[ast.stmt], in_loop: bool = False) -> ast.stmt | None:
@@ -73,9 +94,9 @@ def _jump_out_of(statements: list[ast.stmt], in_loop: bool = False) -> ast.stmt 
         if isinstance(statement, ast.FunctionDef):
             continue
         looped = in_loop or isinstance(statement, (ast.For, ast.While))
-        nested = [getattr(statement, field, []) for field in ("body", "finalbody")]
-        nested += [handler.body for handler in getattr(statement, "handlers", [])]
-        for block in nested + [getattr(statement, "orelse", [])]:
+        nested = [_block(statement, field) for field in ("body", "finalbody")]
+        nested += [handler.body for handler in _handlers(statement)]
+        for block in nested + [_block(statement, "orelse")]:
             jump = _jump_out_of(block, looped)
             if jump is not None:
                 return jump
@@ -90,10 +111,8 @@ def _breaks_out_of(statements: list[ast.stmt]) -> bool:
             return True
         if isinstance(statement, (ast.For, ast.While, ast.FunctionDef)):
             continue
-        blocks = [
-            getattr(statement, field, []) for field in ("body", "orelse", "finalbody")
-        ]
-        blocks += [handler.body for handler in getattr(statement, "handlers", [])]
+        blocks = [_block(statement, field) for field in ("body", "orelse", "finalbody")]
+        blocks += [handler.body for handler in _handlers(statement)]
         if any(_breaks_out_of(block) for block in blocks):
             return True
     return False
@@ -116,6 +135,13 @@ def _raises_on_every_path(statements: list[ast.stmt]) -> bool:
             _raises_on_every_path(final.body) and handled
         )
     return False
+
+
+def _assigned(assignments: Iterable[Expression | None]) -> list[Expression]:
+    """The assignments of variables, leaving out those of a variable whose type
+    is not known yet. The function fails to compile when its type stays
+    unknown."""
+    return [assignment for assignment in assignments if assignment is not None]
 
 
 def _hidden(name: str) -> str:
@@ -161,7 +187,7 @@ class _StatementCompiler:
     def __init__(self, compiler: _Compiler):
         self._compiler = compiler
         self._scope: dict[str, _Result] = {}
-        self._declared: list[Any] = []
+        self._declared: list[Expression] = []
         self._return_ptype: KRPC.Type | None = None
         self._return_annotation: KRPC.Type | None = None
         self._saw_valued_return = False
@@ -180,7 +206,7 @@ class _StatementCompiler:
         # The assignments of None to variables whose type is not known yet
         self._untyped: dict[str, ast.AST] = {}
         # Identifies the function body to the types its variables are widened to
-        self._body: Any = None
+        self._body: tuple[int, int] | None = None
         # The local functions compiled at their first call, as they read
         # variables assigned after their definition
         self._deferred: set[ast.AST] = set()
@@ -189,7 +215,7 @@ class _StatementCompiler:
         self,
         statements: list[ast.stmt],
         returns: ast.expr | None = None,
-        parameters: list[Any] | None = None,
+        parameters: list[Parameter] | None = None,
     ) -> _Result:
         """Compile a function body of statements into a server side function
         with the given parameters. A function with no parameters is invoked
@@ -260,7 +286,7 @@ class _StatementCompiler:
         compiler = self._compiler
         casts: dict[str, tuple[KRPC.Type, ast.stmt]] = {}
         used: set[str] = set()
-        for statement in getattr(compiler._node, "body", []):
+        for statement in _block(compiler._node, "body"):
             name = self._state_cast(statement)
             if name is not None:
                 if name in used:
@@ -311,7 +337,7 @@ class _StatementCompiler:
 
     def _typed_initial_value(
         self, statement: ast.stmt, value: _Result, ptype: KRPC.Type
-    ) -> Any:
+    ) -> Expression:
         """The initial value of a state variable, converted to the type a cast
         gives it."""
         compiler = self._compiler
@@ -335,10 +361,10 @@ class _StatementCompiler:
     def compile_function(
         self,
         statements: list[ast.stmt],
-        parameters: list[Any],
+        parameters: list[Parameter],
         returns: ast.expr | None = None,
         state: dict[str, _Result] | None = None,
-    ) -> Any:
+    ) -> tuple[Expression, KRPC.Type | None]:
         """Compile statements into a server side function with the given
         parameters, each a (name, ptype, parameter expression) triple, return
         annotation and state variables. Returns the function expression and its
@@ -414,7 +440,7 @@ class _StatementCompiler:
             self._compiler._block_functions.clear()
             self._compiler._block_functions.update(block_functions)
 
-    def _unreachable_value(self, node: Any, ptype: KRPC.Type) -> Any:
+    def _unreachable_value(self, node: ast.AST | None, ptype: KRPC.Type) -> Expression:
         """A value of a type that ends a function whose every path raises. It is
         never computed, and gives the function the type of its annotation."""
         compiler = self._compiler
@@ -429,12 +455,12 @@ class _StatementCompiler:
         statements: list[ast.stmt],
         top_level: bool = False,
         as_value: bool = False,
-    ) -> list[Any]:
+    ) -> list[Expression]:
         """Compile a list of statements. When the list is the value of the
         function, or of a branch of the function's final if, its final return
         compiles to the value itself."""
         as_value = as_value or top_level
-        compiled: list[Any] = []
+        compiled: list[Expression] = []
         for position, statement in enumerate(statements):
             # An error converting a value names the statement, unless it is
             # within an expression of the statement
@@ -477,7 +503,9 @@ class _StatementCompiler:
         except FunctionCompilationError:
             return None
 
-    def _compile_statement(self, statement: ast.stmt, as_value: bool) -> list[Any]:
+    def _compile_statement(
+        self, statement: ast.stmt, as_value: bool
+    ) -> list[Expression]:
         """Compile a statement into the expressions it consists of. A final
         return of a function's value becomes the value."""
         compiler = self._compiler
@@ -512,20 +540,21 @@ class _StatementCompiler:
             return [] if compiled_if is None else [compiled_if]
         if isinstance(statement, ast.Delete):
             return self._compile_delete(statement)
-        compilers: dict[type, Callable[[Any], Any]] = {
-            ast.While: self._compile_while,
-            ast.For: self._compile_for,
-            ast.Raise: self._compile_raise,
-            ast.Try: self._compile_try,
-            ast.Break: lambda _: compiler._expr.break_(),
-            ast.Continue: lambda _: compiler._expr.continue_(),
-        }
-        compile_statement = compilers.get(type(statement))
-        if compile_statement is None:
-            raise compiler._error(
-                statement, "unsupported statement (%s)" % type(statement).__name__
-            )
-        return [compile_statement(statement)]
+        if isinstance(statement, ast.While):
+            return [self._compile_while(statement)]
+        if isinstance(statement, ast.For):
+            return [self._compile_for(statement)]
+        if isinstance(statement, ast.Raise):
+            return [self._compile_raise(statement)]
+        if isinstance(statement, ast.Try):
+            return [self._compile_try(statement)]
+        if isinstance(statement, ast.Break):
+            return [compiler._expr.break_()]
+        if isinstance(statement, ast.Continue):
+            return [compiler._expr.continue_()]
+        raise compiler._error(
+            statement, "unsupported statement (%s)" % type(statement).__name__
+        )
 
     @staticmethod
     def _nested_statements(statement: ast.stmt) -> list[list[ast.stmt]]:
@@ -608,7 +637,7 @@ class _StatementCompiler:
             ) and self._branches_give_values(final.orelse)
         return False
 
-    def _compile_if_value(self, statement: ast.If) -> Any:
+    def _compile_if_value(self, statement: ast.If) -> Expression:
         """Compile a final if and else that both return a value into a
         conditional value, each branch a block ending with its value."""
         condition = self._compiler._compile_condition(statement.test)
@@ -621,13 +650,13 @@ class _StatementCompiler:
             self._value_block(statement.orelse),
         )
 
-    def _value_block(self, statements: list[ast.stmt]) -> Any:
+    def _value_block(self, statements: list[ast.stmt]) -> Expression:
         compiled = self._compile_statements(statements, as_value=True)
         if len(compiled) == 1:
             return compiled[0]
         return self._compiler._expr.block(compiled)
 
-    def _compile_return(self, statement: ast.Return, as_value: bool) -> Any:
+    def _compile_return(self, statement: ast.Return, as_value: bool) -> Expression:
         compiler = self._compiler
         if not self._gives_a_value(statement):
             if self._returns_values:
@@ -688,7 +717,7 @@ class _StatementCompiler:
 
     def _compile_assignment(
         self, statement: ast.Assign | ast.AnnAssign | ast.AugAssign
-    ) -> list[Any]:
+    ) -> list[Expression]:
         annotation: KRPC.Type | None = None
         if isinstance(statement, ast.Assign):
             if len(statement.targets) != 1:
@@ -744,8 +773,10 @@ class _StatementCompiler:
             ast.fix_missing_locations(operator_node)
             value = self._compiler._compile(operator_node)
         if isinstance(target, ast.Name):
-            return [self._assign_variable(statement, target.id, value, annotation)]
-        held: list[Any] = []
+            return _assigned(
+                [self._assign_variable(statement, target.id, value, annotation)]
+            )
+        held: list[Expression] = []
         if not isinstance(statement, ast.AugAssign):
             held, value = self._value_before_target(statement, target, value)
         if isinstance(target, ast.Attribute):
@@ -756,7 +787,7 @@ class _StatementCompiler:
 
     def _value_before_target(
         self, statement: ast.stmt, target: ast.expr, value: _Result
-    ) -> tuple[list[Any], _Result]:
+    ) -> tuple[list[Expression], _Result]:
         """Hold a computed value in a variable when the target of its assignment
         is computed too, as Python evaluates the value before the target. Returns
         the assignment to the variable, if any, and the value to assign."""
@@ -778,7 +809,7 @@ class _StatementCompiler:
 
     def _compile_list_extend(
         self, statement: ast.AugAssign, target: ast.expr
-    ) -> Any | None:
+    ) -> Expression | None:
         """Compile += on a list, which appends each value to the list in place, as
         list.extend does. The list is evaluated once, before the values. The
         values are read into a list first, which copies a list extended by
@@ -821,11 +852,11 @@ class _StatementCompiler:
             ]
         )
 
-    def _compile_multiple_assignment(self, statement: ast.Assign) -> list[Any]:
+    def _compile_multiple_assignment(self, statement: ast.Assign) -> list[Expression]:
         """Compile an assignment with several targets, such as a = b = 0.
         The value is evaluated once, into a hidden variable, and assigned to
         each target in turn, which takes the type of the value."""
-        names = []
+        names: list[str] = []
         for target in statement.targets:
             if not isinstance(target, ast.Name):
                 raise self._compiler._error(
@@ -834,7 +865,7 @@ class _StatementCompiler:
                 )
             names.append(target.id)
         value = self._compiler._compile(statement.value)
-        statements = []
+        statements: list[Expression] = []
         if not value.is_value:
             value = self._compiler._to_expression(value)
             if value.ptype is None:
@@ -844,21 +875,23 @@ class _StatementCompiler:
             variable = self._hidden_variable(statement, "value", value.ptype)
             statements.append(self._compiler._expr.assign(variable, value.expression))
             value = _Result(expression=variable, ptype=value.ptype)
-        return statements + [
+        return statements + _assigned(
             self._assign_variable(statement, name, value) for name in names
-        ]
+        )
 
-    def _compile_unpacking(self, statement: ast.Assign, target: ast.expr) -> list[Any]:
+    def _compile_unpacking(
+        self, statement: ast.Assign, target: ast.expr
+    ) -> list[Expression]:
         """Compile an assignment that unpacks a tuple into several names, such as
         a, b = b, a. The whole value is evaluated before any name is assigned."""
         value = self._compiler._compile(statement.value)
         if value.is_value:
-            return [
+            return _assigned(
                 self._assign_variable(
                     statement, name, _Result(value=part, is_value=True)
                 )
                 for name, part in self._unpack_constant(statement, target, value.value)
-            ]
+            )
         value = self._compiler._to_expression(value)
         names = self._compiler._unpack(statement, target, value.ptype)
         variable = self._hidden_variable(statement, "unpacked", value.ptype)
@@ -867,7 +900,7 @@ class _StatementCompiler:
 
     def _unpack_constant(
         self, node: ast.stmt, target: ast.expr, value: object
-    ) -> list[tuple]:
+    ) -> list[tuple[str, object]]:
         """The names a target binds to the parts of a value known when compiling."""
         if isinstance(target, ast.Name):
             return [(target.id, value)]
@@ -885,7 +918,7 @@ class _StatementCompiler:
 
     def _hidden_variable(
         self, node: ast.stmt, name: str, ptype: KRPC.Type | None
-    ) -> Any:
+    ) -> Expression:
         """Declare a variable the function's own code cannot name."""
         variable = self._compiler._expr.variable(
             name, self._compiler._remote_type(node, ptype)
@@ -894,11 +927,14 @@ class _StatementCompiler:
         return variable
 
     def _assign_parts(
-        self, node: ast.stmt, variable: Any, names: list[tuple]
-    ) -> list[Any]:
+        self,
+        node: ast.stmt,
+        variable: Expression,
+        names: list[tuple[str, tuple[int, ...], KRPC.Type | None]],
+    ) -> list[Expression]:
         """Assign each part of the tuple a variable holds to the name _unpack
         found for it."""
-        return [
+        return _assigned(
             self._assign_variable(
                 node,
                 name,
@@ -907,7 +943,7 @@ class _StatementCompiler:
                 ),
             )
             for name, path, ptype in names
-        ]
+        )
 
     def _register_local_function(self, statement: ast.FunctionDef) -> None:
         """Compile a nested function definition into a server side function,
@@ -935,7 +971,7 @@ class _StatementCompiler:
                 "local function '%s' refers to itself; recursion is not supported"
                 % statement.name,
             )
-        parameters = []
+        parameters: list[Parameter] = []
         for argument in arguments.args:
             if argument.annotation is None:
                 raise self._compiler._error(
@@ -949,7 +985,7 @@ class _StatementCompiler:
             )
             parameters.append((argument.arg, ptype, parameter))
 
-        def compile_() -> tuple[Any, list[tuple[str, KRPC.Type]], Any]:
+        def compile_() -> LocalFunction:
             nested = _StatementCompiler(self._compiler)
             nested._deferred = self._deferred
             function, return_ptype = nested.compile_function(
@@ -982,7 +1018,7 @@ class _StatementCompiler:
                 "function definition with annotated parameters",
             )
 
-        def compile_() -> tuple[Any, list[tuple[str, KRPC.Type]], Any]:
+        def compile_() -> LocalFunction:
             body = compile_lambda_body(self._compiler, node)
             return self._compiler._expr.lambda_([], body.expression), [], body.ptype
 
@@ -992,12 +1028,14 @@ class _StatementCompiler:
         self,
         name: str,
         node: ast.AST,
-        compile_: Callable[[], tuple[Any, list[tuple[str, KRPC.Type]], Any]],
+        compile_: Callable[[], LocalFunction],
     ) -> None:
         """Register a local function, compiled now, or at its first call when
         it reads a variable assigned after its definition."""
         if node in self._deferred:
-            function: Any = _DeferredFunction(self._compiler, compile_)
+            function: LocalFunction | _DeferredFunction = _DeferredFunction(
+                self._compiler, compile_
+            )
         else:
             function = compile_()
         self._compiler._local_functions[name] = function
@@ -1020,7 +1058,7 @@ class _StatementCompiler:
         name: str,
         value: _Result,
         annotation: KRPC.Type | None = None,
-    ) -> Any:
+    ) -> Expression | None:
         """Assign a value to a variable, declaring it on its first assignment.
         None when the variable has only been assigned None, and its type is not
         known yet."""
@@ -1122,7 +1160,7 @@ class _StatementCompiler:
 
     def _assigned_expression(
         self, node: ast.AST, name: str, target: KRPC.Type | None, value: _Result
-    ) -> Any:
+    ) -> Expression:
         """The expression assigned to a variable, converted to the variable's
         type. A variable takes its type from its annotation or its first value,
         so every value assigned to it has to widen to that type."""
@@ -1184,7 +1222,7 @@ class _StatementCompiler:
 
     def _assign_attribute(
         self, node: ast.stmt, target: ast.Attribute, value: _Result
-    ) -> Any:
+    ) -> Expression:
         base = self._compiler._compile(target.value)
         if base.is_value and isinstance(base.value, ClassBase):
             protobuf_type = self._compiler._class_ptype(type(base.value))
@@ -1219,16 +1257,16 @@ class _StatementCompiler:
 
     def _compile_subscript_augassign(
         self, statement: ast.AugAssign, target: ast.Subscript
-    ) -> Any | None:
+    ) -> Expression | None:
         """Compile an augmented assignment to an element, such as d[k()] += 1.
         The collection and the key are assigned to temporaries, so each is
         evaluated once, as Python does. None when the type of either is
         unknown."""
         compiler = self._compiler
         expr = compiler._expr
-        variables = []
-        assignments = []
-        scope = {}
+        variables: list[Expression] = []
+        assignments: list[Expression] = []
+        scope: dict[str, _Result] = {}
         key = compiler._compile(target.slice)
         if key.is_value:
             # A constant key, such as a negative index, is kept as it is
@@ -1271,7 +1309,7 @@ class _StatementCompiler:
 
     def _compile_attribute_augassign(
         self, statement: ast.AugAssign, target: ast.Attribute
-    ) -> Any | None:
+    ) -> Expression | None:
         """Compile an augmented assignment to a property of a computed object,
         such as vessel.control.throttle += 0.1. The object is assigned to a
         temporary, so it is evaluated once, as Python does. None when the object
@@ -1322,7 +1360,7 @@ class _StatementCompiler:
 
     def _assign_subscript(
         self, node: ast.stmt, target: ast.Subscript, value: _Result
-    ) -> Any:
+    ) -> Expression:
         collection = self._server_collection(node, target, "assign to")
         ptype = collection.ptype
         index = self._compiler._compile(target.slice)
@@ -1356,8 +1394,8 @@ class _StatementCompiler:
         node: ast.AST,
         collection: _Result,
         index: _Result,
-        operation: Callable[[Any, Any], Any],
-    ) -> Any:
+        operation: Callable[[Expression, Expression], Expression],
+    ) -> Expression:
         """Apply an operation to a list and a position in it. A negative
         constant index counts from the end, as it does when reading, so the
         list is assigned to a temporary to be both measured and indexed."""
@@ -1380,7 +1418,7 @@ class _StatementCompiler:
             collection.expression, self._compiler._index_expression(node, index)
         )
 
-    def _compile_if(self, statement: ast.If) -> Any | None:
+    def _compile_if(self, statement: ast.If) -> Expression | None:
         condition = self._compiler._compile_condition(statement.test)
         if condition.is_value:
             branch = statement.body if condition.value else statement.orelse
@@ -1396,7 +1434,7 @@ class _StatementCompiler:
             self._statement_block(statement.orelse),
         )
 
-    def _compile_while(self, statement: ast.While) -> Any:
+    def _compile_while(self, statement: ast.While) -> Expression:
         if statement.orelse:
             raise self._compiler._error(
                 statement, "loop else clauses are not supported"
@@ -1408,7 +1446,7 @@ class _StatementCompiler:
             condition.expression, self._statement_block(statement.body)
         )
 
-    def _compile_for(self, statement: ast.For) -> Any:
+    def _compile_for(self, statement: ast.For) -> Expression:
         if statement.orelse:
             raise self._compiler._error(
                 statement, "loop else clauses are not supported"
@@ -1430,7 +1468,7 @@ class _StatementCompiler:
                 loop_variable,
                 collection.expression,
                 self._compiler._expr.block(
-                    [assignment, self._statement_block(statement.body)]
+                    _assigned([assignment]) + [self._statement_block(statement.body)]
                 ),
             )
         if name in scope:
@@ -1465,7 +1503,7 @@ class _StatementCompiler:
 
     def _compile_unpacking_for(
         self, statement: ast.For, collection: _Result, element: KRPC.Type
-    ) -> Any:
+    ) -> Expression:
         """Compile a for loop whose target unpacks each value, such as
         for key, value in d.items(). Each value is held in a hidden loop
         variable, and the names are assigned from it at the top of the body."""
@@ -1479,10 +1517,10 @@ class _StatementCompiler:
             self._compiler._expr.block(assignments + [body]),
         )
 
-    def _compile_delete(self, statement: ast.Delete) -> list[Any]:
+    def _compile_delete(self, statement: ast.Delete) -> list[Expression]:
         """Compile a del statement, which removes an element of a list by position
         or a key of a dictionary."""
-        compiled = []
+        compiled: list[Expression] = []
         for target in statement.targets:
             if not isinstance(target, ast.Subscript) or isinstance(
                 target.slice, ast.Slice
@@ -1520,7 +1558,7 @@ class _StatementCompiler:
 
     def _exception_names(
         self, node: ast.AST, target: _Result, raising: bool = False
-    ) -> list[tuple]:
+    ) -> list[tuple[str, str]]:
         """The service and name of each kRPC exception a Python exception type
         stands for, or a tuple of them. A raised builtin stands for one exception,
         and a caught one for every exception its subclasses stand for."""
@@ -1561,7 +1599,7 @@ class _StatementCompiler:
                     builtins.setdefault(builtin, []).append(name)
         return builtins
 
-    def _caught_names(self, value: type) -> list[tuple]:
+    def _caught_names(self, value: type) -> list[tuple[str, str]]:
         """The kRPC exceptions an except clause naming a builtin catches. The Python
         client raises an exception without a builtin as a subclass of RuntimeError, so
         catching RuntimeError catches every exception the services declare, apart
@@ -1583,7 +1621,7 @@ class _StatementCompiler:
                     names.append((service, name))
         return names
 
-    def _compile_raise(self, statement: ast.Raise) -> Any:
+    def _compile_raise(self, statement: ast.Raise) -> Expression:
         if statement.cause is not None:
             raise self._compiler._error(
                 statement, "raise ... from ... is not supported"
@@ -1616,7 +1654,7 @@ class _StatementCompiler:
             message = self._compiler._expr.constant_string("")
         return self._compiler._expr.throw(service, name, message)
 
-    def _compile_try(self, statement: ast.Try) -> Any:
+    def _compile_try(self, statement: ast.Try) -> Expression:
         if statement.orelse:
             raise self._compiler._error(statement, "try else clauses are not supported")
         if not statement.handlers and not statement.finalbody:
@@ -1644,8 +1682,8 @@ class _StatementCompiler:
         return body
 
     def _compile_handlers(
-        self, statement: ast.Try, names: list[list[tuple]], body: Any
-    ) -> Any:
+        self, statement: ast.Try, names: list[list[tuple[str, str]]], body: Expression
+    ) -> Expression:
         # Catches nest innermost first, so they are tried in the order written.
         # A catch only records which handler matched. The handlers run after the
         # nested catches, so the handlers after one do not catch its exception.
@@ -1656,7 +1694,7 @@ class _StatementCompiler:
             "handler", self._compiler._remote_type(statement, ptype)
         )
         self._declared.append(matched)
-        handlers = []
+        handlers: list[Expression] = []
         for index, (handler, handler_names) in enumerate(
             zip(statement.handlers, names), 1
         ):
@@ -1664,18 +1702,18 @@ class _StatementCompiler:
             message, shadowed = self._bind_message(handler)
             handlers.append(self._handler_body(handler, shadowed))
             body = self._compile_handler(handler_names, body, message, record)
-        dispatch = None
-        for index in reversed(range(len(handlers))):
+        # The last handler's test is innermost, and each earlier one wraps it
+        dispatch = expr.if_then(
+            expr.equal(matched, expr.constant_int(len(handlers))), handlers[-1]
+        )
+        for index in reversed(range(len(handlers) - 1)):
             condition = expr.equal(matched, expr.constant_int(index + 1))
-            if dispatch is None:
-                dispatch = expr.if_then(condition, handlers[index])
-            else:
-                dispatch = expr.if_then_else(condition, handlers[index], dispatch)
+            dispatch = expr.if_then_else(condition, handlers[index], dispatch)
         return expr.block([expr.assign(matched, expr.constant_int(0)), body, dispatch])
 
     def _handler_body(
         self, handler: ast.ExceptHandler, shadowed: _Result | None
-    ) -> Any:
+    ) -> Expression:
         """Compile a handler's statements. Its as name is bound only within
         them, so the binding of the name it shadows is restored after."""
         try:
@@ -1687,7 +1725,7 @@ class _StatementCompiler:
                 else:
                     self._scope[handler.name] = shadowed
 
-    def _handler_names(self, handler: ast.ExceptHandler) -> list[tuple]:
+    def _handler_names(self, handler: ast.ExceptHandler) -> list[tuple[str, str]]:
         """The kRPC exceptions a handler catches, or none for every exception."""
         if handler.type is None:
             return []
@@ -1699,7 +1737,9 @@ class _StatementCompiler:
             return []
         return self._exception_names(handler, target)
 
-    def _bind_message(self, handler: ast.ExceptHandler) -> tuple[Any, _Result | None]:
+    def _bind_message(
+        self, handler: ast.ExceptHandler
+    ) -> tuple[Expression | None, _Result | None]:
         """Declare the variable a handler's as name binds, and return it with
         the binding of the name it shadows. Only the message is bound, never
         the exception itself, so the name holds a string."""
@@ -1715,8 +1755,12 @@ class _StatementCompiler:
         return message, shadowed
 
     def _compile_handler(
-        self, names: list[tuple], body: Any, message: Any, compiled: Any
-    ) -> Any:
+        self,
+        names: list[tuple[str, str]],
+        body: Expression,
+        message: Expression | None,
+        compiled: Expression,
+    ) -> Expression:
         """Wrap the body in a catch for each of the handler's exceptions, or one
         for every exception when it names none. The catch binds the message
         variable, if any, and runs the compiled statement."""
@@ -1728,7 +1772,9 @@ class _StatementCompiler:
             )
         return body
 
-    def _statement_block(self, statements: list[ast.stmt], scoped: bool = True) -> Any:
+    def _statement_block(
+        self, statements: list[ast.stmt], scoped: bool = True
+    ) -> Expression:
         """Compile a nested block of statements. Which of a branch's local
         function definitions runs is only known at run time, so a function a
         scoped block defines or redefines is not callable after it."""
@@ -1759,7 +1805,9 @@ class _StatementCompiler:
     def _is_empty_collection(value: object) -> bool:
         return isinstance(value, (list, tuple, set, dict)) and len(value) == 0
 
-    def _empty_collection(self, node: ast.stmt, ptype: KRPC.Type, value: object) -> Any:
+    def _empty_collection(
+        self, node: ast.stmt, ptype: KRPC.Type, value: object
+    ) -> Expression:
         """An empty collection of the type an annotation or a cast names. The
         empty value must be of the same kind, as in [] for a list."""
         collection = _EMPTY_COLLECTIONS.get(ptype.code)
@@ -1787,22 +1835,22 @@ class _StatementCompiler:
 
 class _DeferredFunction:
     """A local function compiled at its first call, with the scopes of its
-    definition. It unpacks to the triple a compiled local function is: the
-    function, its parameters' names and types, and its return type."""
+    definition."""
 
     def __init__(
         self,
         compiler: _Compiler,
-        compile_: Callable[[], tuple[Any, list[tuple[str, KRPC.Type]], Any]],
+        compile_: Callable[[], LocalFunction],
     ):
         self._compiler = compiler
         self._compile = compile_
         # The scopes are the function's own, which gain the variables declared
         # after the definition
         self._scopes = list(compiler._scopes)
-        self._compiled: tuple[Any, list[tuple[str, KRPC.Type]], Any] | None = None
+        self._compiled: LocalFunction | None = None
 
-    def __iter__(self) -> Any:
+    def compiled(self) -> LocalFunction:
+        """The compiled function, compiled on the first call"""
         if self._compiled is None:
             compiler = self._compiler
             scopes, node = compiler._scopes, compiler._node
@@ -1811,7 +1859,7 @@ class _DeferredFunction:
                 self._compiled = self._compile()
             finally:
                 compiler._scopes, compiler._node = scopes, node
-        return iter(self._compiled)
+        return self._compiled
 
 
 def compile_lambda_body(compiler: _Compiler, node: ast.Lambda) -> _Result:

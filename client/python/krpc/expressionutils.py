@@ -5,7 +5,7 @@ for working with protocol buffer type messages."""
 from __future__ import annotations
 
 from collections.abc import Sequence
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 import krpc.schema.KRPC_pb2 as KRPC
 from krpc.attributes import Attributes
@@ -13,6 +13,8 @@ from krpc.service import _member_name
 
 if TYPE_CHECKING:
     from krpc.client import Client
+    from krpc.services.krpc import Expression
+    from krpc.services.krpc import Type as RemoteType
 
 
 NUMERIC_CODES = (
@@ -46,13 +48,21 @@ class Result:
         self,
         value: object = None,
         is_value: bool = False,
-        expression: Any = None,
+        expression: Expression | None = None,
         ptype: KRPC.Type | None = None,
     ):
         self.value = value
         self.is_value = is_value
-        self.expression = expression
+        self._expression = expression
         self.ptype = ptype
+
+    @property
+    def expression(self) -> Expression:
+        """The server side expression, which a value known at compile time
+        lacks."""
+        if self._expression is None:
+            raise TypeError("a value known at compile time has no expression")
+        return self._expression
 
 
 def build_ptype(code: int, types: list[KRPC.Type] | None = None) -> KRPC.Type:
@@ -124,10 +134,10 @@ class Metadata:
 
 
 def remote_type(
-    types: Any,
+    types: type[RemoteType],
     ptype: KRPC.Type | None,
-    cache: dict[bytes, Any] | None = None,
-) -> Any:
+    cache: dict[bytes, RemoteType] | None = None,
+) -> RemoteType:
     """Build a KRPC.Type remote object describing the given protocol buffer
     type, using the KRPC.Type factory methods. Raises ValueError for types
     that have no remote representation.
@@ -146,7 +156,9 @@ def remote_type(
     return remote
 
 
-def _build_remote_type(types: Any, ptype: KRPC.Type, cache: dict[bytes, Any]) -> Any:
+def _build_remote_type(
+    types: type[RemoteType], ptype: KRPC.Type, cache: dict[bytes, RemoteType]
+) -> RemoteType:
     code = ptype.code
     if ptype.nullable:
         return types.nullable_type(

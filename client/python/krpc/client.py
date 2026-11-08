@@ -5,7 +5,7 @@ import threading
 import warnings
 from collections.abc import Callable, Iterable
 from types import TracebackType
-from typing import TYPE_CHECKING, Any, TypeVar, cast
+from typing import TYPE_CHECKING, Any, TypeGuard, TypeVar, cast
 
 import krpc.schema.KRPC_pb2 as KRPC
 import krpc.stream
@@ -40,10 +40,10 @@ from krpc.utils import snake_case
 _ClientT = TypeVar("_ClientT", bound="Client")
 
 
-def _type_message(remote_type: Any) -> KRPC.Type:
+def _type_message(remote_type: RemoteType) -> KRPC.Type:
     """The protocol buffer type message describing a KRPC.Type object."""
     typ = KRPC.Type()
-    typ.code = remote_type.code.value
+    typ.code = cast(KRPC.Type.TypeCode, remote_type.code.value)
     service = remote_type.service
     if service:
         typ.service = service
@@ -91,7 +91,10 @@ def _check_argument(value: object, ptype: KRPC.Type) -> None:
 
 
 if TYPE_CHECKING:
+    from krpc.expressionutils import Metadata
     from krpc.services.krpc import KRPC as _KRPCService
+    from krpc.services.krpc import Expression
+    from krpc.services.krpc import Type as RemoteType
 
 
 class Client:
@@ -137,8 +140,8 @@ class Client:
         # compile, and the objects naming a type by their type message. Both cost
         # round trips to build, and every function compiled for this connection
         # shares them
-        self._expression_metadata: Any = None
-        self._expression_remote_types: dict[bytes, Any] = {}
+        self._expression_metadata: Metadata | None = None
+        self._expression_remote_types: dict[bytes, RemoteType] = {}
         try:
             self._load_services()
         except BaseException:
@@ -189,7 +192,9 @@ class Client:
     ) -> None:
         self.close()
 
-    def add_stream(self, func: Any, *args: object, **kwargs: object) -> Stream:
+    def add_stream(
+        self, func: Callable[..., object] | Expression, *args: object, **kwargs: object
+    ) -> Stream:
         """Add a stream to the server. Given a remote procedure and its arguments,
         the stream repeats that call. Given a server side function, a
         KRPC.Expression object, the stream evaluates it on each update. The
@@ -198,7 +203,7 @@ class Client:
         runs on each update for its effects, and the stream's value is None.
         Raises a StreamError for arguments to a function, and for a compiled
         function that takes parameters. Raises TypeError for any other value."""
-        if func == setattr or self._is_remote_procedure(func):
+        if self._is_remote_procedure(func):
             return_type = self._get_return_type(func, *args, **kwargs)
             call = self.get_call(func, *args, **kwargs)
             return krpc.stream.Stream.from_call(self, return_type, call)
@@ -218,20 +223,22 @@ class Client:
         return krpc.stream.Stream.from_stream_id(self, stream_id, typ)
 
     @staticmethod
-    def _is_remote_procedure(func: Any) -> bool:
-        """Whether a callable is a remote procedure, or getattr naming a property
-        of a service or an object."""
-        if func == getattr:
+    def _is_remote_procedure(func: object) -> TypeGuard[Callable[..., object]]:
+        """Whether a callable is a remote procedure, or getattr or setattr naming
+        a property of a service or an object."""
+        if func in (getattr, setattr):
             return True
-        owner = getattr(func, "__self__", None)
-        name = getattr(func, "__name__", None)
+        owner: object = getattr(func, "__self__", None)
+        name: object = getattr(func, "__name__", None)
         return (
             owner is not None
-            and name is not None
+            and isinstance(name, str)
             and hasattr(owner, "_build_call__" + name)
         )
 
-    def stream(self, func: Any, *args: object, **kwargs: object) -> Stream:
+    def stream(
+        self, func: Callable[..., object] | Expression, *args: object, **kwargs: object
+    ) -> Stream:
         """Deprecated. Use add_stream in a with statement."""
         warnings.warn(
             "Client.stream is deprecated: use add_stream in a with statement",
@@ -240,7 +247,7 @@ class Client:
         )
         return self.add_stream(func, *args, **kwargs)
 
-    def compile(self, func: Any) -> Any:
+    def compile(self, func: Callable[..., object] | Expression) -> Expression:
         """Compile a Python function or lambda into a server side function, a
         KRPC.Expression object. Each run makes the function's remote procedure
         calls again, and uses its other values as they were when it was
@@ -249,7 +256,7 @@ class Client:
         trip per node, so compile a function once to use it repeatedly. Can be
         used as a decorator. Given a KRPC.Expression object built with the
         expression API, compiles it on the server and returns it."""
-        if isinstance(func, self._internal.expression_type.python_type):
+        if self._internal.is_expression(func):
             self._internal.compile_function(func)
             return func
         function, return_type, parameters = compile_function_with_type(self, func)
@@ -263,8 +270,8 @@ class Client:
         return function
 
     def _function_and_type(
-        self, function: Any, streamed: bool = False
-    ) -> tuple[Any, KRPC.Type | None, Parameters | None]:
+        self, function: Callable[..., object] | Expression, streamed: bool = False
+    ) -> tuple[Expression, KRPC.Type | None, Parameters | None]:
         """The server side function for a KRPC.Expression object or a Python
         function, the type of the values it evaluates to, and its parameters.
         The compiler tracks the type of a Python function, so the server is
@@ -292,7 +299,7 @@ class Client:
             self._function_parameters.get(function._object_id),
         )
 
-    def add_event(self, function: Any) -> Event:
+    def add_event(self, function: Callable[..., object] | Expression) -> Event:
         """Create an event from a server side function that evaluates to a
         boolean value. The function may also be a Python function or lambda
         taking no arguments, compiled with compile on every call. Raises a
@@ -305,18 +312,17 @@ class Client:
         self._check_no_parameters(function)
         return self._internal.add_event(function)
 
-    def _check_function(self, function: Any, procedure: str = "") -> None:
+    def _check_function(self, function: object, procedure: str = "") -> None:
         """Raises TypeError for a value that is neither a Python function nor
         a KRPC.Expression object."""
-        expression = self._internal.expression_type.python_type
-        if callable(function) or isinstance(function, expression):
+        if callable(function) or self._internal.is_expression(function):
             return
         raise TypeError(
             "expected %sa KRPC.Expression object, or a Python function or lambda, "
             "got a value of type %s" % (procedure, type(function).__name__)
         )
 
-    def _check_no_parameters(self, function: Any) -> None:
+    def _check_no_parameters(self, function: Expression) -> None:
         """Raises a StreamError if a function compiled by compile takes
         parameters, as a stream or an event runs its function with no
         arguments."""
@@ -327,7 +333,12 @@ class Client:
                 "an event"
             )
 
-    def run(self, function: Any, *args: object, **kwargs: object) -> Any:
+    def run(
+        self,
+        function: Callable[..., object] | Expression,
+        *args: object,
+        **kwargs: object,
+    ) -> Any:
         """Run a function on the server, within a single physics tick, and
         return the value it produces. The value is None when the function has
         no result or its result is null. The function may be given as a
@@ -357,7 +368,7 @@ class Client:
         return Decoder.decode(self, data, self._types.as_type(return_type))
 
     def _expression_return_type(
-        self, expression: Any, cache: bool = True
+        self, expression: Expression, cache: bool = True
     ) -> KRPC.Type | None:
         """Build the protocol buffer type message describing the type of the
         values a server side function evaluates to, by introspecting its
@@ -374,7 +385,7 @@ class Client:
             self._expression_return_types[object_id] = return_type
         return return_type
 
-    def _parameter_types(self, expression: Any) -> list[KRPC.Type]:
+    def _parameter_types(self, expression: Expression) -> list[KRPC.Type]:
         """The protocol buffer type messages describing the types of a server
         side function's parameters, introspected on the server."""
         object_id = expression._object_id
