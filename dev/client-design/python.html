@@ -632,6 +632,9 @@ catches a server error.</p></li>
 <li><p>A built class does not derive from its declaration, which would show members a server lacks.
 <code class="docutils literal notranslate"><span class="pre">DeclaredClass</span></code>, the metaclass of a declaration, compares the service and class names for
 <code class="docutils literal notranslate"><span class="pre">isinstance</span></code> and <code class="docutils literal notranslate"><span class="pre">issubclass</span></code>.</p></li>
+<li><p>Python has no declaration merging, so a module cannot add its service to <code class="docutils literal notranslate"><span class="pre">Client</span></code>. It declares
+a subclass of <code class="docutils literal notranslate"><span class="pre">Client</span></code> with the service as an attribute, and <code class="docutils literal notranslate"><span class="pre">connect[T]</span></code> builds the client as
+<code class="docutils literal notranslate"><span class="pre">T</span></code>.</p></li>
 </ul>
 </section>
 <section id="server-side-functions">

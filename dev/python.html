@@ -2005,8 +2005,21 @@ is sent by its number.</p>
 <span class="n">conn</span><span class="o">.</span><span class="n">my_mod</span><span class="o">.</span><span class="n">get_mode</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>For importable types, generate a module for the service with <a class="reference internal" href="extending/clientgen.html#service-api-clientgen"><span class="std std-ref">krpc-clientgen</span></a>. Import the module before connecting, as the client uses its
-enumerations, structures and exceptions only if they are registered by then.</p>
+<p>For type hints, generate a module for the service with <a class="reference internal" href="extending/clientgen.html#service-api-clientgen"><span class="std std-ref">krpc-clientgen</span></a>, and connect with the client type it declares:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mymod_services</span><span class="w"> </span><span class="kn">import</span> <span class="n">MyModClient</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">[</span><span class="n">MyModClient</span><span class="p">]()</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">my_mod</span><span class="o">.</span><span class="n">get_mode</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Import the module before connecting, as the client uses its enumerations, structures and exceptions
+only if they are registered by then. For several mods, combine their client types:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Connection</span><span class="p">(</span><span class="n">MyModClient</span><span class="p">,</span> <span class="n">OtherModClient</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">[</span><span class="n">Connection</span><span class="p">]()</span>
+</pre></div>
+</div>
 </section>
 </section>
 <section id="client-api-reference">
@@ -2014,7 +2027,9 @@ enumerations, structures and exceptions only if they are registered by then.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="krpc.connect">
 <span class="sig-prename descclassname"><span class="pre">krpc.</span></span><span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">address</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'127.0.0.1'</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50000</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">handshake_timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">stall_timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.connect" title="Link to this definition">#</a></dt>
-<dd><p>Connects to a kRPC server, and returns a <a class="reference internal" href="#krpc.client.Client" title="krpc.client.Client"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.client.Client</span></code></a>.</p>
+<dd><p>Connects to a kRPC server, and returns a <a class="reference internal" href="#krpc.client.Client" title="krpc.client.Client"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.client.Client</span></code></a>. <code class="docutils literal notranslate"><span class="pre">krpc.connect[T](...)</span></code>
+returns a client of type <code class="docutils literal notranslate"><span class="pre">T</span></code>, a subclass of <a class="reference internal" href="#krpc.client.Client" title="krpc.client.Client"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.client.Client</span></code></a> such as the client
+type a generated module declares.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -2042,7 +2057,8 @@ and <code class="docutils literal notranslate"><span class="pre">ValueError</spa
 <dt class="sig sig-object py" id="krpc.connect_local">
 <span class="sig-prename descclassname"><span class="pre">krpc.</span></span><span class="sig-name descname"><span class="pre">connect_local</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">handshake_timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">stall_timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.connect_local" title="Link to this definition">#</a></dt>
 <dd><p>Connects to a kRPC server on the same machine over a local socket, and returns a
-<a class="reference internal" href="#krpc.client.Client" title="krpc.client.Client"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.client.Client</span></code></a>. The server must use the local socket protocol.</p>
+<a class="reference internal" href="#krpc.client.Client" title="krpc.client.Client"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.client.Client</span></code></a>. The server must use the local socket protocol.
+<code class="docutils literal notranslate"><span class="pre">krpc.connect_local[T](...)</span></code> returns a client of type <code class="docutils literal notranslate"><span class="pre">T</span></code>, as for <a class="reference internal" href="#krpc.connect" title="krpc.connect"><code class="xref py py-func docutils literal notranslate"><span class="pre">krpc.connect()</span></code></a>.</p>
 <p>A script that makes many calls in quick succession completes more of them per physics update
 than over TCP/IP. A script that makes a call and then waits runs at the game’s update rate
 either way.</p>

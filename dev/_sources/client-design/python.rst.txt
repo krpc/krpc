@@ -95,6 +95,9 @@ Each client has its own classes, in its ``Types``, so a static method is a closu
 * A built class does not derive from its declaration, which would show members a server lacks.
   ``DeclaredClass``, the metaclass of a declaration, compares the service and class names for
   ``isinstance`` and ``issubclass``.
+* Python has no declaration merging, so a module cannot add its service to ``Client``. It declares
+  a subclass of ``Client`` with the service as an attribute, and ``connect[T]`` builds the client as
+  ``T``.
 
 Server Side Functions
 ---------------------

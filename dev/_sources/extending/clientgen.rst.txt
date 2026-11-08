@@ -6,7 +6,7 @@ Generating Service Code for Static Clients
 Some of the client libraries dynamically construct the code necessary to interact with the server
 when they connect. This means that these libraries will automatically pick up changes to service
 code. Such client libraries include those for Python and Lua.
-A generated Python module gives a service importable types, as described in
+A generated Python module gives a service type hints and importable types, as described in
 :ref:`python-other-mods`.
 
 Other client libraries required code to be generated and compiled into them statically. They do not

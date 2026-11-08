@@ -347,6 +347,8 @@ Python client
   * :breaking:`Breaking` Remove ``use_pregenerated_stubs`` (:issue:`1302`)
   * :breaking:`Breaking` Raise an ``AttributeError`` for a service the server lacks (:issue:`1302`)
   * :breaking:`Breaking` Raise a ``TypeError`` for a static method called on a class imported from a service's module (:issue:`1302`)
+  * Add ``connect[T]`` and ``connect_local[T]``, which type the client as ``T`` for type hints, such as for a mod's services (:issue:`1303`)
+  * Add a client type to each service's module, such as ``SpaceCenterClient``, to combine with others in a subclass (:issue:`1303`)
 
 
 
