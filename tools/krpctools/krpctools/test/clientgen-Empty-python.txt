@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import Tuple, Set, Dict, List, NamedTuple, Optional, TYPE_CHECKING
 import krpc.limits
-from krpc.declarations import DeclaredClass, DeclaredObject, declaration_error as _declaration
+from krpc.declarations import DeclaredClass, DeclaredObject, declaration_error as _declaration, register as _register
 from krpc.event import Event
 from krpc.schema import KRPC_pb2
 from krpc.types import DocEnum
@@ -16,3 +16,9 @@ if TYPE_CHECKING:
 class EmptyService(metaclass=DeclaredClass):
     _service_name = "EmptyService"
     _class_name = None
+
+
+
+_register(
+    "EmptyService",
+)

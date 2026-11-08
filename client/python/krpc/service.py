@@ -5,6 +5,7 @@ import keyword
 import warnings
 from collections import defaultdict
 from collections.abc import Callable, Iterable, Iterator
+from enum import Enum
 from typing import (
     TYPE_CHECKING,
     Any,
@@ -14,6 +15,7 @@ from xml.etree import ElementTree
 
 import krpc.schema.KRPC_pb2 as KRPC
 from krpc.attributes import Attributes
+from krpc.declarations import registered
 from krpc.definitions import (
     CLASS,
     ENUMERATION,
@@ -32,6 +34,7 @@ from krpc.types import (
     UnknownTypeError,
     check_type_is_known,
     is_a_known_type,
+    native_exception,
 )
 from krpc.utils import snake_case
 
@@ -251,8 +254,19 @@ def _documentation(member: Any, service_name: str) -> str:
     return doc
 
 
+def _same_values(generated: type | None, values: dict[str, dict[str, object]]) -> bool:
+    """Whether a generated enumeration has the names and values of the server's definition"""
+    if not (isinstance(generated, type) and issubclass(generated, Enum)):
+        return False
+    return {name: member.value for name, member in generated.__members__.items()} == {
+        name: value["value"] for name, value in values.items()
+    }
+
+
 def service_definitions(service: KRPC.Service) -> Iterator[Definition]:
-    """The types a service defines, as records that can be registered in a type registry.
+    """The types a service defines, as records that can be registered in a type registry. An
+    enumeration, structure or exception uses the class a generated module registered for it,
+    when the server's definition matches.
 
     A service's procedures are built from types that this or any other service defines, so
     every service's definitions are registered before any service is created."""
@@ -277,7 +291,12 @@ def service_definitions(service: KRPC.Service) -> Iterator[Definition]:
         )
 
         def register(types: Types) -> None:
-            types.enumeration_type(name, enumeration.name, doc).set_values(values)
+            generated = registered(name, enumeration.name)
+            if not _same_values(generated, values):
+                generated = None
+            types.enumeration_type(name, enumeration.name, doc).set_values(
+                values, generated
+            )
 
         return register
 
@@ -285,7 +304,15 @@ def service_definitions(service: KRPC.Service) -> Iterator[Definition]:
         doc = _documentation(exception, name)
 
         def register(types: Types) -> None:
-            types.exception_type(name, exception.name, doc, exception.mapped_type)
+            generated = registered(name, exception.name)
+            if not (
+                isinstance(generated, type)
+                and generated.__bases__ == (native_exception(exception.mapped_type),)
+            ):
+                generated = None
+            types.exception_type(
+                name, exception.name, doc, exception.mapped_type, generated
+            )
 
         return register
 
@@ -309,7 +336,10 @@ def service_definitions(service: KRPC.Service) -> Iterator[Definition]:
                 (field_name, types.as_type(field.type))
                 for field_name, field in zip(field_names, struct.fields)
             ]
-            types.struct_type(name, struct.name, doc).set_fields(fields)
+            generated = registered(name, struct.name)
+            if getattr(generated, "_fields", None) != tuple(field_names):
+                generated = None
+            types.struct_type(name, struct.name, doc).set_fields(fields, generated)
 
         return register
 

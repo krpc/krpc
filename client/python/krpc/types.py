@@ -23,6 +23,11 @@ class UnknownTypeError(ValueError):
     """
 
 
+class EnumerationValueError(ValueError):
+    """Raised for an enumeration value whose number the server's definition of the enumeration
+    does not have."""
+
+
 VALUE_TYPES = {
     KRPC.Type.DOUBLE: float,
     KRPC.Type.FLOAT: float,
@@ -250,14 +255,19 @@ class Types:
         return cast(StructType, typ)
 
     def exception_type(
-        self, service: str, name: str, doc: str | None = None, mapped_type: str = ""
+        self,
+        service: str,
+        name: str,
+        doc: str | None = None,
+        mapped_type: str = "",
+        python_type: type[Exception] | None = None,
     ) -> type[Exception]:
-        """Get an exception type"""
+        """Get an exception type. Creates one, unless a python type to use instead is given."""
         key = (service, name)
         if key not in self._exception_types:
-            self._exception_types[key] = _create_exception_type(
-                service, name, doc, mapped_type
-            )
+            if python_type is None:
+                python_type = _create_exception_type(service, name, doc, mapped_type)
+            self._exception_types[key] = python_type
         return self._exception_types[key]
 
     def tuple_type(self, *value_types: TypeBase) -> TupleType:
@@ -331,6 +341,20 @@ class Types:
             return None
         if isinstance(value, typ.python_type):
             return value
+        # An enumeration value of the same service and name, from a definition that differs,
+        # converts by its number, as a value inside a collection is sent by its number too
+        if (
+            isinstance(typ, EnumerationType)
+            and isinstance(value, DocEnum)
+            and _enum_names(type(value)) == (typ._service_name, typ._enum_name)
+        ):
+            try:
+                return cast(type[Enum], typ.python_type)(value.value)
+            except ValueError as exn:
+                raise EnumerationValueError(
+                    "%s is numbered %d, which the server's definition of %s.%s does not have"
+                    % (value, value.value, typ._service_name, typ._enum_name)
+                ) from exn
         # Coerce identical class types from different client connections
         if isinstance(typ, ClassType) and isinstance(value, ClassBase):
             value_type = type(value)
@@ -363,6 +387,8 @@ class Types:
                         for i, x in enumerate(values)
                     ]
                 )
+        except EnumerationValueError:
+            raise
         except ValueError as exn:
             raise ValueError(
                 "Failed to coerce value "
@@ -487,11 +513,19 @@ class EnumerationType(TypeBase):
         only once its definition has been registered by calling set_values"""
         return self.python_type is not None
 
-    def set_values(self, values: Mapping[str, Mapping[str, object]]) -> None:
-        """Set the python type. Creates an Enum class
-        using the given values."""
+    def set_values(
+        self,
+        values: Mapping[str, Mapping[str, object]],
+        python_type: type | None = None,
+    ) -> None:
+        """Set the python type. Creates an Enum class using the given values, unless a python
+        type to use instead is given."""
         assert self.python_type is None
-        self.python_type = _create_enum_type(self._enum_name, values, self._doc)
+        if python_type is None:
+            python_type = _create_enum_type(
+                self._service_name, self._enum_name, values, self._doc
+            )
+        self.python_type = python_type
         if self._nullable_type is not None:
             self._nullable_type.python_type = self.python_type
 
@@ -760,13 +794,18 @@ def _create_class_type(service_name: str, class_name: str, doc: str | None) -> t
 
 
 def _create_enum_type(
-    enum_name: str, values: Mapping[str, Mapping[str, object]], doc: str | None
+    service_name: str,
+    enum_name: str,
+    values: Mapping[str, Mapping[str, object]],
+    doc: str | None,
 ) -> type[Enum]:
-    typ = Enum(
+    typ = DocEnum(
         enum_name,
         dict((name, x["value"]) for name, x in values.items()),
     )
     typ.__doc__ = doc
+    typ._service_name = service_name  # pyright: ignore[reportAttributeAccessIssue]
+    typ._class_name = enum_name  # pyright: ignore[reportAttributeAccessIssue]
     for name in values.keys():
         getattr(typ, name).__doc__ = values[name]["doc"]
     return typ  # pyright: ignore[reportReturnType]
@@ -806,7 +845,18 @@ class DefaultArgument:
 _DocEnumT = TypeVar("_DocEnumT", bound="DocEnum")
 
 
+def _enum_names(cls: type) -> tuple[object, object] | None:
+    """The service and name of an enumeration, which a generated one has once registered and a
+    built one has once created"""
+    service_name = getattr(cls, "_service_name", None)
+    if service_name is None:
+        return None
+    return service_name, getattr(cls, "_class_name", None)
+
+
 class DocEnum(Enum):
+    """The base of a service's enumerations."""
+
     def __new__(cls: type[_DocEnumT], value: int, doc: str | None = None) -> _DocEnumT:
         self = object.__new__(cls)
         self._value_ = value

@@ -32,7 +32,7 @@ class TestDefinitions(unittest.TestCase):
     def test_enumeration_values_are_registered(self):
         typ = self.definitions.types.enumeration_type("ServiceA", "Mode")
         # The enumeration type is created at run time
-        self.assertEqual(1, typ.python_type.Fast.value)  # pyright: ignore[reportAttributeAccessIssue]
+        self.assertEqual(1, typ.python_type.Fast.value)
 
     def test_class_is_registered(self):
         self.assertEqual(

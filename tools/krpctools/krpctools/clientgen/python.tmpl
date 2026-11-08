@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import Tuple, Set, Dict, List, NamedTuple, Optional, TYPE_CHECKING
 import krpc.limits
-from krpc.declarations import DeclaredClass, DeclaredObject, declaration_error as _declaration
+from krpc.declarations import DeclaredClass, DeclaredObject, declaration_error as _declaration, register as _register
 from krpc.event import Event
 from krpc.schema import KRPC_pb2
 from krpc.types import DocEnum
@@ -69,9 +69,9 @@ class {{struct_name}}(NamedTuple):
 {% for exception_name, exception in exceptions.items() %}
 class {{exception_name}}({{ exception.native or 'RuntimeError' }}):
 {% if exception.documentation %}{{ exception.documentation | indent(width=4) }}
+{% else %}
+    pass
 {% endif %}
-    _service_name = "{{ service_name }}"
-    _class_name = "{{ exception_name }}"
 
 
 {% endfor %}
@@ -82,8 +82,8 @@ class {{class_name}}(DeclaredObject, metaclass=DeclaredClass):
     _service_name = "{{ service_name }}"
     _class_name = "{{ class_name }}"
 
-{{ properties_of(class['properties'], '"' + service_name + '", "' + class_name + '"') }}
-{{ methods_of(class['methods'], '"' + service_name + '", "' + class_name + '"') }}
+{{ properties_of(class['properties'], '"' + service_name + '", "' + class_name + '"') -}}
+{{ methods_of(class['methods'], '"' + service_name + '", "' + class_name + '"') -}}
     {% for proc_name, procedure in class['static_methods'].items() %}
     @staticmethod
     def {{proc_name}}({{ static_arg_list(procedure.parameters) }}) -> {{ procedure.return_type.spec }}:
@@ -115,5 +115,11 @@ class {{ service_name }}(metaclass=DeclaredClass):
     {{ name }}: type[_{{ name }}] = {{ name }}
 {% endfor %}
 
-{{ properties_of(properties, '"' + service_name + '", None') }}
-{{ methods_of(procedures, '"' + service_name + '", None') }}
+{{ properties_of(properties, '"' + service_name + '", None') -}}
+{{ methods_of(procedures, '"' + service_name + '", None') -}}
+{{ "\n" }}_register(
+    "{{ service_name }}",
+{% for name in enumerations.keys() | list + structs.keys() | list + exceptions.keys() | list %}
+    {{ name }},
+{% endfor %}
+)

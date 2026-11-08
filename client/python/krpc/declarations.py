@@ -6,11 +6,12 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
+from krpc.types import ClassBase
 from krpc.utils import snake_case
 
 # The base of a declared class, which gives type checkers the members every remote object has
 if TYPE_CHECKING:
-    from krpc.types import ClassBase as DeclaredObject
+    DeclaredObject = ClassBase
 else:
     DeclaredObject = object
 
@@ -55,4 +56,37 @@ class DeclaredClass(type):
         if not isinstance(subclass, type):
             return False
         names = _names(cls)
+        # A program's subclass of a declaration names no class, and compares as an
+        # ordinary class
+        if names is None:
+            return type.__subclasscheck__(cls, subclass)
         return any(_names(base) == names for base in subclass.__mro__)
+
+
+def is_class_type(value: object) -> bool:
+    """Whether a value is a class a service defines: one built for a client, or a declaration
+    of one"""
+    if not isinstance(value, type):
+        return False
+    if issubclass(value, ClassBase):
+        return True
+    return isinstance(value, DeclaredClass) and value._class_name is not None
+
+
+# The enumerations, structures and exceptions of the generated modules, by service and name
+_registered: dict[tuple[str, str], type] = {}
+
+
+def register(service_name: str, *classes: type) -> None:
+    """Register the enumerations, structures and exceptions of a generated module. A client
+    uses a registered class in place of building its own when the server's definition of it
+    matches. A later registration replaces an earlier one."""
+    for cls in classes:
+        cls._service_name = service_name
+        cls._class_name = cls.__name__
+        _registered[(service_name, cls.__name__)] = cls
+
+
+def registered(service_name: str, name: str) -> type | None:
+    """The class registered for a service's enumeration, structure or exception"""
+    return _registered.get((service_name, name))

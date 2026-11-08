@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import Tuple, Set, Dict, List, NamedTuple, Optional, TYPE_CHECKING
 import krpc.limits
-from krpc.declarations import DeclaredClass, DeclaredObject, declaration_error as _declaration
+from krpc.declarations import DeclaredClass, DeclaredObject, declaration_error as _declaration, register as _register
 from krpc.event import Event
 from krpc.schema import KRPC_pb2
 from krpc.types import DocEnum
@@ -257,48 +257,36 @@ class ArgumentException(ValueError):
     A method was invoked where at least one of the passed arguments does not
     meet the parameter specification of the method.
     """
-    _service_name = "KRPC"
-    _class_name = "ArgumentException"
 
 
 class ArgumentNullException(ValueError):
     """
     A null reference was passed to a method that does not accept it as a valid argument.
     """
-    _service_name = "KRPC"
-    _class_name = "ArgumentNullException"
 
 
 class ArgumentOutOfRangeException(ValueError):
     """
     The value of an argument is outside the allowable range of values as defined by the invoked method.
     """
-    _service_name = "KRPC"
-    _class_name = "ArgumentOutOfRangeException"
 
 
 class DivideByZeroException(ZeroDivisionError):
     """
     An integer was divided by zero.
     """
-    _service_name = "KRPC"
-    _class_name = "DivideByZeroException"
 
 
 class Error(RuntimeError):
     """
     A general error, described by its message.
     """
-    _service_name = "KRPC"
-    _class_name = "Error"
 
 
 class IndexOutOfRangeException(IndexError):
     """
     An index was outside the bounds of a collection, string or array.
     """
-    _service_name = "KRPC"
-    _class_name = "IndexOutOfRangeException"
 
 
 class InvalidOperationException(RuntimeError):
@@ -306,32 +294,24 @@ class InvalidOperationException(RuntimeError):
     A method call was made to a method that is invalid
     given the current state of the object.
     """
-    _service_name = "KRPC"
-    _class_name = "InvalidOperationException"
 
 
 class KeyNotFoundException(KeyError):
     """
     A key was not found in a dictionary.
     """
-    _service_name = "KRPC"
-    _class_name = "KeyNotFoundException"
 
 
 class NotSupportedException(NotImplementedError):
     """
     A method was invoked that is not supported.
     """
-    _service_name = "KRPC"
-    _class_name = "NotSupportedException"
 
 
 class NullReferenceException(TypeError):
     """
     A value was null where its type does not allow one.
     """
-    _service_name = "KRPC"
-    _class_name = "NullReferenceException"
 
 
 class ObjectDestroyedException(RuntimeError):
@@ -343,8 +323,6 @@ class ObjectDestroyedException(RuntimeError):
     See :class:`krpc.services.krpc.ObjectNotLoadedException` for a game object that exists but is not
     loaded.
     """
-    _service_name = "KRPC"
-    _class_name = "ObjectDestroyedException"
 
 
 class ObjectNotLoadedException(RuntimeError):
@@ -354,40 +332,30 @@ class ObjectNotLoadedException(RuntimeError):
 
     See :class:`krpc.services.krpc.ObjectDestroyedException` for a game object that no longer exists.
     """
-    _service_name = "KRPC"
-    _class_name = "ObjectNotLoadedException"
 
 
 class OverflowException(OverflowError):
     """
     An arithmetic or conversion operation overflowed.
     """
-    _service_name = "KRPC"
-    _class_name = "OverflowException"
 
 
 class StreamRemovedException(RuntimeError):
     """
     A stream was removed by the server, e.g. an event that has finished.
     """
-    _service_name = "KRPC"
-    _class_name = "StreamRemovedException"
 
 
 class TimeoutException(TimeoutError):
     """
     An operation did not complete in the time allotted to it.
     """
-    _service_name = "KRPC"
-    _class_name = "TimeoutException"
 
 
 class UnsupportedSceneException(RuntimeError):
     """
     The procedure is not available in the current game scene.
     """
-    _service_name = "KRPC"
-    _class_name = "UnsupportedSceneException"
 
 
 class Expression(DeclaredObject, metaclass=DeclaredClass):
@@ -429,8 +397,6 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         converted by :meth:`krpc.services.krpc.Expression.to_list` or :meth:`krpc.services.krpc.Expression.to_set`.
         """
         raise _declaration("KRPC", "Expression")
-
-
 
     @staticmethod
     def add(arg0: Expression, arg1: Expression) -> Expression:
@@ -2093,8 +2059,6 @@ class Type(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Type")
 
-
-
     @staticmethod
     def bool() -> Type:
         """
@@ -2349,7 +2313,6 @@ class KRPC(metaclass=DeclaredClass):
     def paused(self, value: bool) -> None:
         raise _declaration("KRPC", None)
 
-
     def get_client_id(self) -> bytes:
         """
         Returns the identifier for the current client.
@@ -2421,3 +2384,30 @@ class KRPC(metaclass=DeclaredClass):
         nothing when no tick is held, which is the case once a hold has timed out.
         """
         raise _declaration("KRPC", None)
+
+
+_register(
+    "KRPC",
+    GameScene,
+    TypeCode,
+    ClientInfo,
+    ServerSettings,
+    ServerStatistics,
+    ServerStatus,
+    ArgumentException,
+    ArgumentNullException,
+    ArgumentOutOfRangeException,
+    DivideByZeroException,
+    Error,
+    IndexOutOfRangeException,
+    InvalidOperationException,
+    KeyNotFoundException,
+    NotSupportedException,
+    NullReferenceException,
+    ObjectDestroyedException,
+    ObjectNotLoadedException,
+    OverflowException,
+    StreamRemovedException,
+    TimeoutException,
+    UnsupportedSceneException,
+)

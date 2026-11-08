@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import Tuple, Set, Dict, List, NamedTuple, Optional, TYPE_CHECKING
 import krpc.limits
-from krpc.declarations import DeclaredClass, DeclaredObject, declaration_error as _declaration
+from krpc.declarations import DeclaredClass, DeclaredObject, declaration_error as _declaration, register as _register
 from krpc.event import Event
 from krpc.schema import KRPC_pb2
 from krpc.types import DocEnum
@@ -98,8 +98,7 @@ class TestNullableStruct(NamedTuple):
 
 
 class CustomException(RuntimeError):
-    _service_name = "TestService"
-    _class_name = "CustomException"
+    pass
 
 
 class DeprecatedException(RuntimeError):
@@ -108,8 +107,6 @@ class DeprecatedException(RuntimeError):
 
     Deprecated exception documentation string.
     """
-    _service_name = "TestService"
-    _class_name = "DeprecatedException"
 
 
 class DeprecatedClass(DeclaredObject, metaclass=DeclaredClass):
@@ -121,7 +118,6 @@ class DeprecatedClass(DeclaredObject, metaclass=DeclaredClass):
     _service_name = "TestService"
     _class_name = "DeprecatedClass"
 
-
     def deprecated_method(self) -> str:
         """
         Deprecated. Use TestClass.get_value instead.
@@ -129,7 +125,6 @@ class DeprecatedClass(DeclaredObject, metaclass=DeclaredClass):
         Deprecated method documentation string.
         """
         raise _declaration("TestService", "DeprecatedClass")
-
 
 
 
@@ -176,7 +171,6 @@ class TestClass(DeclaredObject, metaclass=DeclaredClass):
     def string_property_private_set(self) -> str:
         raise _declaration("TestService", "TestClass")
 
-
     def echo_nullable_object(self, value: Optional[TestClass]) -> Optional[TestClass]:
         raise _declaration("TestService", "TestClass")
 
@@ -194,7 +188,6 @@ class TestClass(DeclaredObject, metaclass=DeclaredClass):
 
     def optional_arguments(self, x: str, y: str = 'foo', z: str = 'bar', obj: Optional[TestClass] = None) -> str:
         raise _declaration("TestService", "TestClass")
-
 
     @staticmethod
     def static_method(a: str = '', b: str = '') -> str:
@@ -310,7 +303,6 @@ class TestService(metaclass=DeclaredClass):
     @property
     def string_property_private_set(self) -> str:
         raise _declaration("TestService", None)
-
 
     def add_multiple_values(self, x: float, y: int, z: int) -> str:
         raise _declaration("TestService", None)
@@ -679,3 +671,17 @@ class TestService(metaclass=DeclaredClass):
         Procedure whose default is the largest ulong.
         """
         raise _declaration("TestService", None)
+
+
+_register(
+    "TestService",
+    DeprecatedEnum,
+    TestEnum,
+    DeprecatedStruct,
+    TestNestedNullableStruct,
+    TestStruct,
+    TestNestedStruct,
+    TestNullableStruct,
+    CustomException,
+    DeprecatedException,
+)

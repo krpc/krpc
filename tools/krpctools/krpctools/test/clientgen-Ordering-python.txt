@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import Tuple, Set, Dict, List, NamedTuple, Optional, TYPE_CHECKING
 import krpc.limits
-from krpc.declarations import DeclaredClass, DeclaredObject, declaration_error as _declaration
+from krpc.declarations import DeclaredClass, DeclaredObject, declaration_error as _declaration, register as _register
 from krpc.event import Event
 from krpc.schema import KRPC_pb2
 from krpc.types import DocEnum
@@ -22,7 +22,6 @@ class ServiceA(metaclass=DeclaredClass):
     _class_name = None
 
 
-
     def frob(self, mode: _service_serviceb.Mode = _service_serviceb.Mode.fast) -> None:
         """
         Defaults to a member of another service's enumeration.
@@ -34,3 +33,8 @@ class ServiceA(metaclass=DeclaredClass):
         Defaults to a collection containing a member of another service's enumeration.
         """
         raise _declaration("ServiceA", None)
+
+
+_register(
+    "ServiceA",
+)

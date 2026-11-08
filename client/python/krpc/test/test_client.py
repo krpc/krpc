@@ -1,16 +1,21 @@
 import unittest
+from typing import Any
 
+import krpc
 import krpc.schema.KRPC_pb2 as KRPC
+from krpc.declarations import register
 from krpc.decoder import Decoder
 from krpc.encoder import Encoder
 from krpc.event import Event
+from krpc.services import testservice
 from krpc.test.servertestcase import ServerTestCase
+from krpc.types import DocEnum
 
 
 class TestClient(ServerTestCase, unittest.TestCase):
     def test_extension_members_are_per_connection(self) -> None:
-        # A pre-generated class is shared by every client in the process, so the members
-        # merged onto it go through the connection the object was reached through
+        # Each connection builds its own classes, so a member a mod adds goes through the
+        # connection the object was reached through
         other = self.connect()
         try:
             obj = other.test_service.create_test_object("alpha")
@@ -22,10 +27,55 @@ class TestClient(ServerTestCase, unittest.TestCase):
             other.close()
 
     def test_nullable_class_type_shares_one_python_type(self) -> None:
-        # A nullable class-typed value is the generated class of the non-nullable one, and
-        # not a second class minted for the nullable declaration
+        # A nullable class-typed value is the class of the non-nullable one, and not a second
+        # class minted for the nullable declaration
         obj = self.conn.test_service.create_test_object("alpha")
         self.assertIs(type(obj.echo_nullable_object(obj)), type(obj))
+
+    def test_matching_definitions_use_the_generated_classes(self) -> None:
+        # The server's definitions match the generated module, so the client uses its classes
+        service = self.conn.test_service
+        self.assertIs(testservice.TestEnum, service.TestEnum)
+        self.assertIs(testservice.TestStruct, service.TestStruct)
+        self.assertIs(testservice.CustomException, service.CustomException)
+        self.assertIs(
+            testservice.TestEnum.value_b,
+            service.enum_echo(testservice.TestEnum.value_b),
+        )
+        obj = service.create_test_object("alpha")
+        self.assertIsInstance(obj, testservice.TestClass)
+        self.assertIsInstance(service, testservice.TestService)
+        with self.assertRaises(testservice.CustomException):
+            service.throw_custom_exception()
+
+    def test_a_number_the_server_lacks_names_the_enumeration(self) -> None:
+        class TestEnum(DocEnum):
+            value_a = 0
+            value_z = 25
+
+        # A module whose enumeration differs from the server's, imported last
+        register("TestService", TestEnum)
+        try:
+            conn = krpc.connect(
+                name="python_client_test", address="localhost", port=self.tcpip_port()
+            )
+        finally:
+            register("TestService", testservice.TestEnum)
+        try:
+            # The module's enumeration differs from the one the service declares
+            service: Any = conn.test_service
+            self.assertEqual(
+                service.TestEnum.value_a, service.enum_echo(TestEnum.value_a)
+            )
+            with self.assertRaises(TypeError) as cm:
+                service.enum_echo(TestEnum.value_z)
+            self.assertIn(
+                "TestService.EnumEcho() argument 0: TestEnum.value_z is numbered 25, which "
+                "the server's definition of TestService.TestEnum does not have",
+                str(cm.exception),
+            )
+        finally:
+            conn.close()
 
     def test_class_static_methods_via_instance(self) -> None:
         obj = self.conn.test_service.create_test_object("alpha")

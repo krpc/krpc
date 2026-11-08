@@ -23,6 +23,7 @@ from typing import (
 )
 
 import krpc.schema.KRPC_pb2 as KRPC
+from krpc.declarations import is_class_type
 from krpc.definiteassignment import (
     assigned_names,
     local_function_nonlocal,
@@ -57,7 +58,7 @@ from krpc.functionstatements import (
 )
 from krpc.service import _member_name
 from krpc.stream import Stream
-from krpc.types import ClassBase, ClassType, EnumerationType, StructType
+from krpc.types import ClassBase, ClassType, EnumerationType, StructType, TypeBase
 
 if TYPE_CHECKING:
     from krpc.client import Client
@@ -4072,9 +4073,15 @@ class _Compiler:
             )
         if isinstance(value, Enum):
             ptype = self._enum_ptype(type(value))
+            # A generated value takes the server's number for its name
+            try:
+                types = self._client._types
+                number = cast(Enum, types.coerce_to(value, types.as_type(ptype))).value
+            except ValueError as exn:
+                raise self._error(self._node, str(exn)) from exn
             return _Result(
                 expression=expr.cast(
-                    expr.constant_int(value.value),
+                    expr.constant_int(number),
                     self._remote_type(None, ptype),
                 ),
                 ptype=ptype,
@@ -4480,12 +4487,31 @@ class _Compiler:
             )
         return base.ptype.service, base.ptype.name
 
+    def _named_type(self, kind: type[TypeBase], python_type: type) -> TypeBase | None:
+        """The type of the given kind with the service and name a python type carries, which
+        an imported declaration or generated class does whether the client uses it or not"""
+        service_name = getattr(python_type, "_service_name", None)
+        name = getattr(python_type, "_class_name", None)
+        if service_name is None or name is None:
+            return None
+        for typ in self._client._types._types.values():
+            if (
+                isinstance(typ, kind)
+                and typ.protobuf_type.service == service_name
+                and typ.protobuf_type.name == name
+            ):
+                return typ
+        return None
+
     def _class_ptype(self, python_type: type) -> KRPC.Type:
         # A class accessed through a service is a subclass of the registered one
         for base in python_type.__mro__:
             for typ in self._client._types._types.values():
                 if isinstance(typ, ClassType) and typ.python_type is base:
                     return typ.protobuf_type
+        typ = self._named_type(ClassType, python_type)
+        if typ is not None:
+            return typ.protobuf_type
         raise self._error(
             self._node, "cannot determine the remote class of %s" % python_type.__name__
         )
@@ -4494,6 +4520,9 @@ class _Compiler:
         for typ in self._client._types._types.values():
             if isinstance(typ, EnumerationType) and typ.python_type is python_type:
                 return typ.protobuf_type
+        typ = self._named_type(EnumerationType, python_type)
+        if typ is not None:
+            return typ.protobuf_type
         raise self._error(
             self._node,
             "cannot determine the remote enumeration of %s" % python_type.__name__,
@@ -4504,6 +4533,9 @@ class _Compiler:
         for typ in self._client._types._types.values():
             if isinstance(typ, StructType) and typ.python_type is python_type:
                 return self._known_struct_type(node, typ)
+        typ = self._named_type(StructType, python_type)
+        if isinstance(typ, StructType):
+            return self._known_struct_type(node, typ)
         raise self._error(
             node, "cannot determine the remote structure of %s" % python_type.__name__
         )
@@ -4530,13 +4562,16 @@ class _Compiler:
         return typ
 
     def _is_remote_struct(self, value: object) -> TypeGuard[type]:
-        return isinstance(value, type) and any(
-            isinstance(typ, StructType) and typ.python_type is value
-            for typ in self._client._types._types.values()
+        return isinstance(value, type) and (
+            any(
+                isinstance(typ, StructType) and typ.python_type is value
+                for typ in self._client._types._types.values()
+            )
+            or self._named_type(StructType, value) is not None
         )
 
     def _is_remote_class(self, value: object) -> bool:
-        return isinstance(value, type) and issubclass(value, ClassBase)
+        return is_class_type(value)
 
     @staticmethod
     def _is_service_object(value: object) -> bool:

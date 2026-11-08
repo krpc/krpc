@@ -120,6 +120,7 @@ py_wheel(
 # The tests that need no server, and those that run against one. Splitting them keeps the
 # ones that are the same whatever carries a call from being run once per transport.
 unit_tests = [
+    "krpc/test/test_declarations.py",
     "krpc/test/test_definitions.py",
     "krpc/test/test_docmath.py",
     "krpc/test/test_expressionutils.py",

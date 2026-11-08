@@ -26,7 +26,14 @@ from krpc.service import create_service, service_definitions
 from krpc.session import DEFAULT_STALL_TIMEOUT, Session
 from krpc.stream import Stream
 from krpc.streammanager import StreamManager
-from krpc.types import DefaultArgument, EventType, StreamType, TypeBase, Types
+from krpc.types import (
+    DefaultArgument,
+    EnumerationValueError,
+    EventType,
+    StreamType,
+    TypeBase,
+    Types,
+)
 from krpc.utils import snake_case
 
 
@@ -549,6 +556,10 @@ class Client(_Services):
             if not isinstance(value, typ.python_type):
                 try:
                     value = self._types.coerce_to(value, typ)
+                except EnumerationValueError as exc:
+                    raise TypeError(
+                        "%s.%s() argument %d: %s" % (service, procedure, i, exc)
+                    ) from exc
                 except ValueError as exc:
                     raise TypeError(
                         "%s.%s() argument %d must be a %s, got a %s"

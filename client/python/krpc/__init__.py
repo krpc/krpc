@@ -19,6 +19,15 @@ from krpc.session import DEFAULT_STALL_TIMEOUT, disconnect_reason_name
 from krpc.types import ClassBase
 from krpc.version import __version__
 
+# Registers the classes of the generated modules of the services the client ships with, before
+# any module a user generates for a newer server. The modules are missing only from the client
+# that clientgen generates them with
+try:
+    import krpc.services  # noqa: F401
+except ModuleNotFoundError as exn:
+    if exn.name != "krpc.services":
+        raise
+
 DEFAULT_ADDRESS = "127.0.0.1"
 DEFAULT_PORT = 50000
 # An empty path stands for the server's own default path, which is worked out when the
