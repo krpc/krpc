@@ -102,6 +102,7 @@ changeloggen(
         "//service/DockingCamera:CHANGELOG.md",
         "//service/Trajectories:CHANGELOG.md",
         "//service/MechJeb:CHANGELOG.md",
+        "//service/KerbalEngineerRedux:CHANGELOG.md",
         "//service/Debug:CHANGELOG.md",
         "//client/cnano:CHANGELOG.md",
         "//client/csharp:CHANGELOG.md",
@@ -206,6 +207,7 @@ defs = [
     "//service/DockingCamera:ServiceDefinitions",
     "//service/Trajectories:ServiceDefinitions",
     "//service/MechJeb:ServiceDefinitions",
+    "//service/KerbalEngineerRedux:ServiceDefinitions",
     "//service/Debug:ServiceDefinitions",
 ]
 

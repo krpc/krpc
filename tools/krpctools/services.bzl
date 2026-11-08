@@ -18,6 +18,7 @@ SERVICES = [
     struct(name = "DockingCamera", defs = "//service/DockingCamera:ServiceDefinitions", deps = ["SpaceCenter"], test = False, game = "ksp"),
     struct(name = "Trajectories", defs = "//service/Trajectories:ServiceDefinitions", deps = ["SpaceCenter"], test = False, game = "ksp"),
     struct(name = "MechJeb", defs = "//service/MechJeb:ServiceDefinitions", deps = ["SpaceCenter"], test = False, game = "ksp"),
+    struct(name = "KerbalEngineerRedux", defs = "//service/KerbalEngineerRedux:ServiceDefinitions", deps = ["SpaceCenter"], test = False, game = "ksp"),
     struct(name = "Debug", defs = "//service/Debug:ServiceDefinitions", deps = ["SpaceCenter"], test = False, game = "ksp"),
 ]
 

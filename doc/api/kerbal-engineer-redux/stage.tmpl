@@ -1,0 +1,9 @@
+.. default-domain:: {{ domain.sphinxname }}
+.. highlight:: {{ domain.highlight }}
+{{ domain.currentmodule('KerbalEngineerRedux') }}
+{% import domain.macros as macros with context %}
+
+Stage
+=====
+
+{{ macros.struct(services['KerbalEngineerRedux'].structs['Stage']) }}

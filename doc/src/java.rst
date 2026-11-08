@@ -818,4 +818,5 @@ API Reference
    java/api/docking-camera
    java/api/trajectories
    java/api/mechjeb
+   java/api/kerbal-engineer-redux
    java/api/debug

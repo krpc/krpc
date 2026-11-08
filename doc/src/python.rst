@@ -1133,4 +1133,5 @@ API Reference
    python/api/docking-camera
    python/api/trajectories
    python/api/mechjeb
+   python/api/kerbal-engineer-redux
    python/api/debug

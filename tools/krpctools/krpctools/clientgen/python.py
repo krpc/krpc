@@ -38,6 +38,7 @@ SHIPPED_MODULES = {
     "DockingCamera": "krpc.ksp.dockingcamera",
     "Trajectories": "krpc.ksp.trajectories",
     "MechJeb": "krpc.ksp.mechjeb",
+    "KerbalEngineerRedux": "krpc.ksp.kerbalengineerredux",
     "Debug": "krpc.ksp.debug",
 }
 

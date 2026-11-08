@@ -25,6 +25,7 @@ component's unreleased section.
 - [DockingCamera](service/DockingCamera/CHANGELOG.md)
 - [Trajectories](service/Trajectories/CHANGELOG.md)
 - [MechJeb](service/MechJeb/CHANGELOG.md)
+- [KerbalEngineerRedux](service/KerbalEngineerRedux/CHANGELOG.md)
 
 ## Clients
 

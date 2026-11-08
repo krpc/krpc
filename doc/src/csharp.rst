@@ -1022,4 +1022,5 @@ API Reference
    csharp/api/docking-camera
    csharp/api/trajectories
    csharp/api/mechjeb
+   csharp/api/kerbal-engineer-redux
    csharp/api/debug
