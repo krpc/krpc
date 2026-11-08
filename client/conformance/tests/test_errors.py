@@ -151,19 +151,23 @@ def test_setter_error(connected, control):
     assert_native_error(connected, control, error, "ArgumentNullException")
 
 
-@pytest.mark.parametrize("service", ["Unknown", "KRPC"])
-def test_unknown_exception(client, server, scripted_server, service):
+@pytest.mark.parametrize(
+    "service,name",
+    [("Unknown", "Thing"), ("KRPC", "Thing"), ("KRPC", "Expression")],
+)
+def test_unknown_exception(client, server, scripted_server, service, name):
     """A server error naming a service or exception absent from the client's definitions
     raises the RPC error. The message carries the description and the ``Service.Name`` of
-    the error. This includes an absent exception of a service the client has."""
-    sent = KRPC.Error(service=service, name="Thing", description="Oops")
+    the error. This includes an absent exception of a service the client has, and a name the
+    service gives to a class."""
+    sent = KRPC.Error(service=service, name=name, description="Oops")
     error = scripted_error(
         client, erroring_server(server, scripted_server, result_error=sent)
     )
     assert error.kind == pb.Error.RPC
-    assert "%s.Thing" % service in error.message
+    assert "%s.%s" % (service, name) in error.message
     assert "Oops" in error.message
-    assert error.name in ("", "Thing")
+    assert error.name in ("", name)
 
 
 def test_request_error(client, server, scripted_server):

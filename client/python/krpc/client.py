@@ -688,20 +688,20 @@ class Client(krpc.services.Client):
         if error.service and error.name:
             service_name = snake_case(error.service)
             type_name = error.name
-            # The service is missing here if it is not one this client knows about, and the
-            # type is missing if it is not one the service declares as an exception. Report
-            # the error itself, named by its type on the server, so that the failure to build
-            # an exception for it does not hide it.
-            if not hasattr(self, service_name):
+            # The service is missing if this client does not know it, and the member is an
+            # exception class only for an exception the service declares. Report the error
+            # itself, named by its type on the server, so that the failure to build an
+            # exception for it does not hide it.
+            service = getattr(self, service_name, None)
+            exception_type = getattr(service, type_name, None)
+            if not (
+                isinstance(exception_type, type)
+                and issubclass(exception_type, Exception)
+            ):
                 return RPCError(
                     "%s.%s: %s" % (error.service, type_name, self._error_message(error))
                 )
-            service = getattr(self, service_name)
-            if not hasattr(service, type_name):
-                return RPCError(
-                    "%s.%s: %s" % (error.service, type_name, self._error_message(error))
-                )
-            return getattr(service, type_name)(self._error_message(error))
+            return exception_type(self._error_message(error))
         return RPCError(self._error_message(error))
 
     @staticmethod
