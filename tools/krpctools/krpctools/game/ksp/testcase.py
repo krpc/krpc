@@ -7,18 +7,14 @@ import shutil
 import sys
 import time
 import unittest
-from typing import TYPE_CHECKING, Any, cast
+from typing import TYPE_CHECKING, cast
 
 from .. import testcase
 
 if TYPE_CHECKING:
-    import krpc.client
+    from krpc.ksp import KSPClient as Connection
 
     from .game import KSP
-
-    class Connection(krpc.client.Client):
-        # Created by the client from the server's definitions, as it has no stubs
-        testing_tools: Any
 
 
 class TestCase(testcase.TestCase):

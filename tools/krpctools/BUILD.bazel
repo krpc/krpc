@@ -316,8 +316,10 @@ py_pyright_test(
         "*.py",
         "krpctools/**/*.py",
     ]),
+    # The full client, as the KSP test case imports the KSP services' modules
     deps = [
         ":krpctools_lib",
+        "//client/python:krpc_lib",
         "@krpc_pypi//jinja2",
         "@krpc_pypi//protobuf",
         "@krpc_pypi//pytest",

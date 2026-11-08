@@ -215,25 +215,33 @@ def clientgen_dispatch(language, out, services_out = None):
         targets.append(":" + target)
     return targets
 
-def clientgen_python_init(name, template, out):
-    """Expands the template of the Python services module, which declares every service.
+def clientgen_python_bundle(name, game, template, out):
+    """Expands the template of a game's Python package.
+
+    The package combines the client type of each of the core's and the game's services.
 
     Args:
         name: the target name.
+        game: the game, as the services name it.
         template: the template, with placeholders for the generated lines.
         out: the output path.
     """
-    imports = ["from krpc.services.%s import %s" % (s.name.lower(), s.name) for s in SERVICES]
-    imports = sorted(imports, key = lambda x: x.split(" ")[1])
+
+    # The core's modules are in krpc.services, and the game's in krpc.<game>
+    services = [
+        (s, "services" if s.game == None else game)
+        for s in SERVICES
+        if (s.game == None and not s.test) or s.game == game
+    ]
     expand_template(
         name = name,
         template = template,
         out = out,
         substitutions = {
-            "{IMPORTS}": "\n".join(imports),
-            "{ATTRIBUTES}": "\n    ".join([
-                "%s: %s" % (_snake_case(s.name), s.name)
-                for s in SERVICES
-            ]),
+            "{IMPORTS}": "\n".join(sorted([
+                "from krpc.%s.%s import %sClient" % (package, s.name.lower(), s.name)
+                for s, package in services
+            ])),
+            "{BASES}": "\n    ".join(["%sClient," % s.name for s, _ in services]),
         },
     )

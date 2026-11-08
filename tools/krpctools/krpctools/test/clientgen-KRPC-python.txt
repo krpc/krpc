@@ -2390,8 +2390,10 @@ class KRPC(metaclass=DeclaredClass):
 class KRPCClient(krpc.client.Client):
     """
     A client with the KRPC service, as ``krpc.connect[KRPCClient]()``
-    connects.
+    connects. Combine it with the client types of other services in a subclass of them all.
     """
+
+    _declares_service = "KRPC"
 
     krpc: KRPC
 

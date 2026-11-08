@@ -8,6 +8,7 @@ import krpc.functioncompiler
 import krpc.schema.KRPC_pb2 as KRPC
 from krpc.client import Client
 from krpc.functioncompiler import NO_VALUE, Parameters
+from krpc.services.testservice import TestServiceClient
 
 _compile_function_with_type = krpc.functioncompiler.compile_function_with_type
 
@@ -43,7 +44,7 @@ def _checked_compile_function_with_type(
 
 
 class ServerTestCase:
-    conn: Client = None  # pyright: ignore[reportAssignmentType]
+    conn: TestServiceClient = None  # pyright: ignore[reportAssignmentType]
 
     @classmethod
     def setUpClass(cls) -> None:
@@ -53,8 +54,8 @@ class ServerTestCase:
         krpc.client.compile_function_with_type = _checked_compile_function_with_type
 
     @staticmethod
-    def connect() -> Client:
-        return krpc.connect(
+    def connect() -> TestServiceClient:
+        return krpc.connect[TestServiceClient](
             name="python_client_test",
             address="localhost",
             port=ServerTestCase.tcpip_port(),

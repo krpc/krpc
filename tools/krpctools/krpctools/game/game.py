@@ -10,6 +10,8 @@ installing in :mod:`krpctools.game.install`.
 import importlib
 import os
 
+import krpc
+
 from . import install, launch, releases
 
 
@@ -202,6 +204,11 @@ class Game:
     def mod_present(self, mod, conn):
         """Whether the running game has the mod loaded. The default for Mod.present."""
         return None
+
+    def client_type(self):
+        """The client type the tests connect with, which names the modules of the game's
+        services."""
+        return krpc.Client
 
     def connect(self, use_cached=True):
         """A connection to the running game's server."""

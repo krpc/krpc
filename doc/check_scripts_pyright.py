@@ -32,12 +32,6 @@ ALLOWED = {
     ("tutorials/docking-guidance/DockingGuidance.py", "reportArgumentType"),
 }
 
-# The extending examples call launch_control and eva, the fictional services
-# from the extending pages, which have no generated stubs
-FICTIONAL_SERVICE = re.compile(
-    r'^Cannot access attribute "(launch_control|eva)" for class "Client"'
-)
-
 OPTIONAL_ARG = re.compile(
     r'Argument of type "([\w.]+) \| None" cannot be assigned to parameter '
     r'"\w+" of type "\1"'
@@ -94,12 +88,6 @@ def main():
         path = diagnostic["file"].replace(os.sep, "/")
         name = path.split("doc/src/scripts/", 1)[-1]
         if (name, rule) in ALLOWED:
-            continue
-        if (
-            name.startswith("extending/")
-            and rule == "reportAttributeAccessIssue"
-            and FICTIONAL_SERVICE.search(message)
-        ):
             continue
         line = diagnostic["range"]["start"]["line"] + 1
         failures.append("%s:%d: %s (%s)" % (name, line, message, rule))

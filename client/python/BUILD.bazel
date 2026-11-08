@@ -3,7 +3,8 @@ load("//:config.bzl", "python_version")
 load("//tools/build:client_test.bzl", "client_test")
 load("//tools/build:conformance.bzl", "conformance_test")
 load("//tools/build:python.bzl", "py_autodoc_test", "py_pyright_test", "py_ruff_test", "py_test", "py_wheel")
-load("//tools/krpctools:clientgen.bzl", "clientgen_python_init", "clientgen_services")
+load("//tools/krpctools:clientgen.bzl", "clientgen_python_bundle", "clientgen_services")
+load("//tools/krpctools:services.bzl", "SERVICES")
 
 exports_files([
     "CHANGELOG.md",
@@ -12,14 +13,25 @@ exports_files([
     "conformance/unsupported.txt",
 ])
 
-services = clientgen_services("python")
+# The modules of a game's services go in the package of the game, as krpc-ksp will ship them
+services = clientgen_services(
+    "python",
+    outs = {
+        s.name: "krpc/%s/%s.py" % (
+            s.game,
+            s.name.lower(),
+        )
+        for s in SERVICES
+        if s.game
+    },
+)
 
 # The krpc package as an importable python library, for use by other python
 # targets in this workspace (the wheel below is what is released)
 py_library(
     name = "krpc_lib",
     srcs = services + [
-        ":services-init",
+        ":services-ksp",
         ":services-testservice",
     ],
     visibility = ["//visibility:public"],
@@ -57,10 +69,11 @@ genrule(
     cmd = "for f in $(execpaths //protobuf:python); do case $$f in *KRPC_pb2.pyi) cp $$f $@;; esac; done",
 )
 
-clientgen_python_init(
-    name = "services-init",
-    out = "krpc/services/__init__.py",
-    template = "services_init.py.tmpl",
+clientgen_python_bundle(
+    name = "services-ksp",
+    out = "krpc/ksp/__init__.py",
+    game = "ksp",
+    template = "ksp_init.py.tmpl",
 )
 
 genrule(
@@ -77,7 +90,7 @@ py_wheel(
         "LICENSE",
         "README.md",
         "pyproject.toml",
-        ":services-init",
+        ":services-ksp",
         ":services-testservice",
         "//:COPYING",
         "//:COPYING.LESSER",
@@ -223,7 +236,7 @@ py_ruff_test(
     srcs = glob([
         "conformance/*.py",
         "krpc/**/*.py",
-    ]) + [":services-init"],
+    ]) + [":services-ksp"],
 )
 
 py_pyright_test(
@@ -232,7 +245,7 @@ py_pyright_test(
     srcs = glob([
         "conformance/*.py",
         "krpc/**/*.py",
-    ]) + [":services-init"],
+    ]) + [":services-ksp"],
     deps = [
         ":krpc_lib",
         "//client/conformance:testee_py",

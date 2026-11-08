@@ -85,7 +85,7 @@ class Metadata:
         self.mapped_types: dict[tuple[str, str], str] = {}
         # (service, procedure name) -> procedure
         self.procedures: dict[tuple[str, str], KRPC.Procedure] = {}
-        for service in client.krpc.get_services().services:
+        for service in client._krpc.get_services().services:
             for exception in service.exceptions:
                 self.exceptions.append((service.name, exception.name))
                 if exception.mapped_type:

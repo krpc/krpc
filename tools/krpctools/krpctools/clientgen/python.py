@@ -22,6 +22,23 @@ from . import crefs
 from .docparser import DocParser
 from .generator import Generator
 
+# The module of each service whose module ships with the client, for a service that uses its
+# types and is generated without an --include for it
+SHIPPED_MODULES = {
+    "KRPC": "krpc.services.krpc",
+    "StdLib": "krpc.services.stdlib",
+    "TestService": "krpc.services.testservice",
+    "SpaceCenter": "krpc.ksp.spacecenter",
+    "Drawing": "krpc.ksp.drawing",
+    "UI": "krpc.ksp.ui",
+    "InfernalRobotics": "krpc.ksp.infernalrobotics",
+    "KerbalAlarmClock": "krpc.ksp.kerbalalarmclock",
+    "RemoteTech": "krpc.ksp.remotetech",
+    "LIDAR": "krpc.ksp.lidar",
+    "DockingCamera": "krpc.ksp.dockingcamera",
+    "Debug": "krpc.ksp.debug",
+}
+
 
 class StubLanguage(PythonLanguage):
     """How a generated stub module names the types it uses: another service's through the module
@@ -198,7 +215,10 @@ class PythonGenerator(Generator[StubLanguage]):
                     ):
                         dependencies.add(ptype["service"])
         dependencies |= self.struct_field_dependencies(context)
-        context["dependencies"] = sorted(dependencies)
+        context["dependencies"] = [
+            {"alias": "_service_" + name.lower(), "module": self.module(name)}
+            for name in sorted(dependencies)
+        ]
 
         self.add_struct_field_specifications(context)
 
@@ -322,10 +342,20 @@ class PythonGenerator(Generator[StubLanguage]):
         else:
             info["documentation"] = '"""\n' + line + '\n"""'
 
+    def module(self, service: str) -> str:
+        """The module a service's code is generated in. An include gives it as a module or as
+        the path of its file."""
+        include = self._includes.get(service)
+        if include is None:
+            return SHIPPED_MODULES.get(service, "krpc.services." + service.lower())
+        if include.endswith(".py"):
+            return include[: -len(".py")].replace("/", ".")
+        return include
+
     def format_cref(self, target):
-        # The module the stubs of the service are generated in, and in it the class of the
-        # service when the target is a member of the service itself
-        name = "krpc.services." + target.service.lower() + "."
+        # The module the service is generated in, and in it the class of the service when the
+        # target is a member of the service itself
+        name = self.module(target.service) + "."
         name += target.type or target.service
         if target.member is not None:
             name += "." + self.language.parse_name(target.member)

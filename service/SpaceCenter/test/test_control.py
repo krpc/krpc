@@ -8,7 +8,7 @@ from krpctools.game.geometry import normalize
 from krpctools.game.ksp import Mixin, TestCase
 
 if TYPE_CHECKING:
-    from krpc.services.spacecenter import (
+    from krpc.ksp.spacecenter import (
         AutoPilot,
         Control,
         Flight,

@@ -2,7 +2,7 @@ import unittest
 from typing import Any, NamedTuple
 
 import krpc.schema.KRPC_pb2 as KRPC
-from krpc.declarations import register
+from krpc.declarations import Lookup, client_lookup, register, registered
 from krpc.definitions import register_all
 from krpc.service import create_service, service_definitions
 from krpc.types import DocEnum, Types
@@ -35,6 +35,11 @@ class Failure(RuntimeError):
 register("Generated", Mode, Thing, Failure)
 
 
+# The client type of the generated module, which is this module
+class GeneratedClient:
+    _declares_service = "Generated"
+
+
 def generated_service(
     mode_values: dict[str, int], thing_fields: list[str], failure_mapped_type: str = ""
 ) -> KRPC.Service:
@@ -60,12 +65,14 @@ def generated_service(
     return service
 
 
-def create_services(services: list[KRPC.Service]) -> FakeClient:
+def create_services(
+    services: list[KRPC.Service], lookup: Lookup = registered
+) -> FakeClient:
     client = FakeClient()
     definitions = [
         definition
         for service in services
-        for definition in service_definitions(service)
+        for definition in service_definitions(service, lookup)
     ]
     register_all(client._types, definitions)
     for service in services:
@@ -159,8 +166,39 @@ class TestServiceDefinitions(unittest.TestCase):
                 [generated_service({"Slow": 0, "Fast": 1}, ["Value"])]
             )
             self.assertIs(Newer, client.Generated.Mode)
+            # A client type with the service takes the classes of its own module
+            client = create_services(
+                [generated_service({"Slow": 0, "Fast": 1}, ["Value"])],
+                client_lookup(GeneratedClient),
+            )
+            self.assertIs(Mode, client.Generated.Mode)
         finally:
             register("Generated", Mode)
+
+    def test_a_client_type_module_lacking_a_class_builds_it(self) -> None:
+        class Other(DocEnum):
+            first = 0
+
+        register("Generated", Other)
+        service = generated_service({"Slow": 0, "Fast": 1}, ["Value"])
+        enumeration = service.enumerations.add()
+        enumeration.name = "Other"
+        enumeration.values.add(name="First", value=0)
+        # The registry has Other, but the client type's module does not
+        client = create_services([service], client_lookup(GeneratedClient))
+        self.assertIsNot(Other, client.Generated.Other)
+        self.assertIs(Mode, client.Generated.Mode)
+
+    def test_a_client_type_module_outside_sys_modules_uses_the_registry(self) -> None:
+        class Unlisted:
+            _declares_service = "Generated"
+
+        Unlisted.__module__ = "not_in_sys_modules"
+        client = create_services(
+            [generated_service({"Slow": 0, "Fast": 1}, ["Value"])],
+            client_lookup(Unlisted),
+        )
+        self.assertIs(Mode, client.Generated.Mode)
 
 
 if __name__ == "__main__":

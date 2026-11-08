@@ -113,7 +113,8 @@ def main():
         metavar="SERVICE=PATH",
         help="Include the generated code of another service, whose types the service "
         + "uses, from the given path. Required by the C++ and C nano generators for "
-        + "each such service.",
+        + "each such service. For Python, the path is the module of the service, "
+        + "which defaults to the module it ships in.",
     )
     parser.add_argument(
         "--output-defs",

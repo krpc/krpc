@@ -504,10 +504,15 @@ def connected(
 @pytest.fixture(scope="session")
 def control(server: Endpoint) -> Iterator[Any]:
     """A Python client connection the driver uses to look at the server."""
+    # The driver's library has no generated modules, so it connects with the plain client
     if server.protocol == "localsocket":
-        conn = krpc.connect_local(name="conformance-control", path=server.path)
+        conn = krpc.connect_local[krpc.Client](
+            name="conformance-control", path=server.path
+        )
     else:
-        conn = krpc.connect(name="conformance-control", port=server.control_port)
+        conn = krpc.connect[krpc.Client](
+            name="conformance-control", port=server.control_port
+        )
     yield conn
     conn.close()
 

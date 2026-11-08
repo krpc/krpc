@@ -420,8 +420,8 @@ class _Compiler:
     ):
         self._client = client
         # Untyped, as the compiler checks the types of the values it builds expressions from
-        self._expr: Any = client.krpc.Expression
-        self._type: Any = client.krpc.Type
+        self._expr: Any = client._krpc.Expression
+        self._type: Any = client._krpc.Type
         self._func = func
         # The types the function's parameter and return annotations name, by
         # name, as Python evaluated them where the function is defined

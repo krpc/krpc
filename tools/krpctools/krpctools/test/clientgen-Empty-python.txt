@@ -23,8 +23,10 @@ class EmptyService(metaclass=DeclaredClass):
 class EmptyServiceClient(krpc.client.Client):
     """
     A client with the EmptyService service, as ``krpc.connect[EmptyServiceClient]()``
-    connects.
+    connects. Combine it with the client types of other services in a subclass of them all.
     """
+
+    _declares_service = "EmptyService"
 
     empty_service: EmptyService
 

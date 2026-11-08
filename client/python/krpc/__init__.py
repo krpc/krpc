@@ -6,7 +6,7 @@ import os
 import sys
 import tempfile
 from collections.abc import Callable
-from typing import Concatenate, Generic, ParamSpec, TypeVar, cast
+from typing import TYPE_CHECKING, Concatenate, Generic, ParamSpec, TypeVar, cast
 
 from krpc.client import Client
 from krpc.connection import Connection, LocalConnection, MalformedSize, ReadTimeout
@@ -22,14 +22,8 @@ from krpc.session import DEFAULT_STALL_TIMEOUT, disconnect_reason_name
 from krpc.types import ClassBase
 from krpc.version import __version__
 
-# Registers the classes of the generated modules of the services the client ships with, before
-# any module a user generates for a newer server. The modules are missing only from the client
-# that clientgen generates them with
-try:
-    import krpc.services  # noqa: F401
-except ModuleNotFoundError as exn:
-    if exn.name != "krpc.services":
-        raise
+if TYPE_CHECKING:
+    from krpc.ksp import KSPClient
 
 DEFAULT_ADDRESS = "127.0.0.1"
 DEFAULT_PORT = 50000
@@ -104,15 +98,24 @@ _OtherClientT = TypeVar("_OtherClientT", bound=Client)
 _P = ParamSpec("_P")
 
 
+def _default_client_type() -> type[Client]:
+    """The client type of a connect function that is not indexed. The KSP services' modules are
+    imported on the first connect, so that importing krpc imports no generated module."""
+    from krpc.ksp import KSPClient
+
+    return KSPClient
+
+
 class _Connector(Generic[_P, _ClientT]):
     """A connect function. Indexed with a subclass of Client, such as the client type a
-    generated module declares for its service, it connects with a client of that type."""
+    generated module declares for its service, it connects with a client of that type. Not
+    indexed, it connects with a KSPClient."""
 
     def __init__(
         self,
         name: str,
         connect: Callable[Concatenate[type[Client], _P], Client],
-        client_type: type[_ClientT],
+        client_type: type[_ClientT] | None,
     ) -> None:
         self._connect = connect
         self._client_type = client_type
@@ -127,7 +130,8 @@ class _Connector(Generic[_P, _ClientT]):
         )
 
     def __call__(self, *args: _P.args, **kwargs: _P.kwargs) -> _ClientT:
-        return cast(_ClientT, self._connect(self._client_type, *args, **kwargs))
+        client_type = self._client_type or _default_client_type()
+        return cast(_ClientT, self._connect(client_type, *args, **kwargs))
 
     def __getitem__(
         self, client_type: type[_OtherClientT]
@@ -138,8 +142,12 @@ class _Connector(Generic[_P, _ClientT]):
         return "<connect function %s.%s>" % (self.__module__, self.__name__)
 
 
-connect = _Connector("connect", _connect_tcpip, Client)
-connect_local = _Connector("connect_local", _connect_local, Client)
+if TYPE_CHECKING:
+    connect = _Connector("connect", _connect_tcpip, KSPClient)
+    connect_local = _Connector("connect_local", _connect_local, KSPClient)
+else:
+    connect = _Connector("connect", _connect_tcpip, None)
+    connect_local = _Connector("connect_local", _connect_local, None)
 
 
 def get_object_id(obj: ClassBase) -> int:
