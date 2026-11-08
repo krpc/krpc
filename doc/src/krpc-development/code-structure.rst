@@ -25,7 +25,6 @@ is laid out as follows:
 * ``tools/TestingTools/`` - a service for the tests, with RPCs such as teleporting a vessel into
   orbit.
 * ``tools/benchmarks/`` - the benchmark suite, described in :doc:`benchmarks`.
-* ``tools/mods/`` - the third-party mods the tests install.
 * ``tools/buildenv/`` - the Docker image the CI builds run in.
 * ``tools/release/`` - the release scripts.
 * ``tools/build/`` - the Bazel rules and toolchains.

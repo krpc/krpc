@@ -7,7 +7,10 @@ load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test", "py_test", "
 py_library(
     name = "krpctest_lib",
     srcs = glob(["krpctest/**/*.py"]) + [":version-py"],
-    data = [
+    data = glob(
+        ["krpctest/mods/**"],
+        exclude = ["**/*.py"],
+    ) + [
         "krpctest/krpctest.sfs",
         "krpctest/krpctest_career.sfs",
     ],
@@ -57,6 +60,10 @@ py_wheel(
         "krpctest/krpctest.sfs",
         "krpctest/krpctest_career.sfs",
         "pyproject.toml",
+    ] + glob(
+        ["krpctest/mods/**"],
+        exclude = ["**/*.py"],
+    ) + [
         "//:COPYING",
         "//:COPYING.LESSER",
         "//:python_version",

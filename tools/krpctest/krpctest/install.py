@@ -5,8 +5,8 @@ into the KSP install (from ``KSP_DIR`` or ``--ksp-dir``) - exactly as a user
 installs a release - then adds the test-only bits the public release omits (the
 ``TestingTools`` add-on, the ``KRPC.Benchmark`` service and the test ``settings.cfg``).
 The optional set of managed
-third-party mods (RemoteTech, InfernalRobotics, KerbalAlarmClock) used by some service
-tests is reconciled so GameData contains exactly the requested set. Finally GameData is
+third-party mods used by some service tests is downloaded from the archives pinned in
+``krpctest.mods`` and reconciled so GameData contains exactly the requested set. Finally GameData is
 validated against the known-valid set, so an unexpected mod left over from an earlier
 session is reported up front instead of silently stopping the server from starting; a dev
 deliberately running an unmanaged mod can opt out with ``--skip-gamedata-check``.
@@ -18,75 +18,23 @@ Run it from the repository root, either as the ``krpc-install`` console script o
 
 import argparse
 import glob
+import hashlib
+import http.client
 import os
 import shutil
 import subprocess
 import sys
+import tempfile
+import time
+import urllib.error
+import urllib.parse
+import urllib.request
 import zipfile
+from importlib.resources import files
 
 from krpctest.env import get_ksp_dir, get_repo_root
+from krpctest.mods import ARCHIVES, MODS
 from krpctest.version import __version__
-
-# Managed third-party mods: name accepted by --mods -> list of components it installs, each a
-# (Bazel target under //tools/mods, GameData subdir it installs as) pair. Most mods are a
-# single component; KerbalAlarmClock, RealChute and AGExt also pull in the shared
-# ClickThroughBlocker / ToolbarControl / Harmony dependencies, whose assemblies their plugins
-# hard-depend on, and FAR pulls in ModularFlightIntegrator and KSPBurst.
-MODS = {
-    "RemoteTech": [("remotetech", "RemoteTech")],
-    "InfernalRobotics": [("infernal_robotics", "MagicSmokeIndustries")],
-    "KerbalAlarmClock": [
-        ("kerbal_alarm_clock", "TriggerTech"),
-        ("harmony", "000_Harmony"),
-        ("clickthroughblocker", "000_ClickThroughBlocker"),
-        ("toolbarcontrol", "001_ToolbarControl"),
-    ],
-    "DockingCamera": [
-        ("docking_camera", "DockingCamKURS"),
-        ("harmony", "000_Harmony"),
-        ("clickthroughblocker", "000_ClickThroughBlocker"),
-        ("toolbarcontrol", "001_ToolbarControl"),
-    ],
-    "RealChute": [
-        ("realchute", "RealChute"),
-        ("harmony", "000_Harmony"),
-        ("clickthroughblocker", "000_ClickThroughBlocker"),
-        ("toolbarcontrol", "001_ToolbarControl"),
-    ],
-    "DMagic": [("dmagic_science_animate", "DMagicScienceAnimate")],
-    "AGExt": [
-        ("agext", "Diazo"),
-        ("harmony", "000_Harmony"),
-        ("clickthroughblocker", "000_ClickThroughBlocker"),
-        ("toolbarcontrol", "001_ToolbarControl"),
-        ("spacetuxlibrary", "SpaceTuxLibrary"),
-    ],
-    "FAR": [
-        ("far", "FerramAerospaceResearch"),
-        ("modular_flight_integrator", "ModularFlightIntegrator"),
-        ("kspburst", "000_KSPBurst"),
-        ("harmony", "000_Harmony"),
-    ],
-    "RealFuels": [
-        ("realfuels", "RealFuels"),
-        ("realfuels_stock", "RealFuels-Stock"),
-        ("solver_engines", "SolverEngines"),
-        ("routils", "ROUtils"),
-        ("serializationfix", "000_SerializationFix"),
-        ("kspcommunityfixes", "KSPCommunityFixes"),
-        ("harmony", "000_Harmony"),
-        ("community_resource_pack", "CommunityResourcePack"),
-    ],
-    "KSPCommunityPartModules": [
-        ("kspcommunitypartmodules", "KSPCommunityPartModules"),
-        ("harmony", "000_Harmony"),
-    ],
-    "KSPCommunityPartModules-0.4": [
-        ("kspcommunitypartmodules_0_4", "KSPCommunityPartModules"),
-        ("harmony", "000_Harmony"),
-    ],
-    "kOS": [("kos", "kOS")],
-}
 
 # All managed GameData subdirs, every one a candidate for removal during reconcile.
 _ALL_MOD_SUBDIRS = [subdir for comps in MODS.values() for _, subdir in comps]
@@ -119,25 +67,114 @@ def _requested_mod_subdirs(mods):
     return {subdir for mod in mods for _, subdir in MODS[mod]}
 
 
-def _mod_archive_src(target, subdir):
-    return os.path.join(
-        "bazel-krpc",
-        "external",
-        "+http_archive+" + target,
-        "GameData",
-        subdir,
+def cache_dir():
+    """The directory downloads are cached in."""
+    if sys.platform == "win32":
+        base = os.environ.get("LOCALAPPDATA") or os.path.expanduser("~")
+    elif sys.platform == "darwin":
+        base = os.path.expanduser("~/Library/Caches")
+    else:
+        base = os.environ.get("XDG_CACHE_HOME") or os.path.expanduser("~/.cache")
+    return os.path.join(base, "krpctools")
+
+
+def _sha256(path):
+    digest = hashlib.sha256()
+    with open(path, "rb") as f:
+        for block in iter(lambda: f.read(1 << 20), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+# The errors a read can fail with partway through, besides those urllib raises
+_DROPPED = (TimeoutError, ConnectionError, http.client.IncompleteRead)
+
+
+def with_retries(action, description, attempts=4):
+    """The result of action(), retried after a server error, a failed connection or a
+    dropped read. description names what action does, for the error raised after the last
+    attempt."""
+    for attempt in range(attempts):
+        try:
+            return action()
+        except (urllib.error.URLError, *_DROPPED) as ex:
+            transient = not isinstance(ex, urllib.error.HTTPError) or ex.code >= 500
+            if not transient or attempt == attempts - 1:
+                raise RuntimeError("Failed to %s: %s" % (description, ex)) from ex
+            time.sleep(2**attempt)
+    raise AssertionError("unreachable")
+
+
+def _copy_url(request, f):
+    """Copy the response to request into f."""
+
+    def copy():
+        f.seek(0)
+        f.truncate()
+        with urllib.request.urlopen(request, timeout=60) as response:
+            shutil.copyfileobj(response, f)
+
+    with_retries(copy, "download " + request.full_url)
+
+
+def download(url, sha256):
+    """The path of the file at url, downloaded into the cache unless it is there already.
+    The cache is keyed by the file's SHA-256, so each archive is downloaded once."""
+    name = os.path.basename(urllib.parse.urlparse(url).path) or "download"
+    directory = os.path.join(cache_dir(), sha256)
+    path = os.path.join(directory, urllib.parse.unquote(name))
+    if os.path.exists(path):
+        return path
+    os.makedirs(directory, exist_ok=True)
+    request = urllib.request.Request(
+        url, headers={"User-Agent": "krpctest/" + __version__}
     )
+    with tempfile.NamedTemporaryFile(dir=directory, delete=False) as f:
+        partial = f.name
+        try:
+            _copy_url(request, f)
+        except BaseException:
+            f.close()
+            os.remove(partial)
+            raise
+    if _sha256(partial) != sha256:
+        os.remove(partial)
+        raise RuntimeError(
+            "Downloaded %s does not match its SHA-256 %s" % (url, sha256)
+        )
+    os.replace(partial, path)
+    return path
 
 
-def _mod_config_overlay(root, subdir):
+def extract_folder(archive, folder, dst):
+    """Extract GameData/<folder>, at any depth in the zip archive, to dst."""
+    with zipfile.ZipFile(archive) as f:
+        found = False
+        for member in f.infolist():
+            parts = member.filename.split("/")
+            if ".." in parts or member.is_dir():
+                continue
+            for i in range(len(parts) - 2):
+                if parts[i] == "GameData" and parts[i + 1] == folder:
+                    target = os.path.join(dst, *parts[i + 2 :])
+                    os.makedirs(os.path.dirname(target), exist_ok=True)
+                    with f.open(member) as src, open(target, "wb") as out:
+                        shutil.copyfileobj(src, out)
+                    found = True
+                    break
+    if not found:
+        raise RuntimeError("%s has no GameData/%s" % (archive, folder))
+
+
+def _mod_config_overlay(subdir):
     """Directory of config files layered onto a freshly-installed mod's GameData subdir.
 
-    Mod archives ship no settings, so some mods pop a first-run window that blocks an
+    Mod archives ship no settings, so some mods open a first-run window that blocks an
     unattended launch (RealChute's ClickThroughBlocker and ToolbarControl dependencies both
-    do). tools/mods/config/<subdir>/ holds the minimal config that marks those windows
-    already-dismissed; it is copied over the subdir after install. Absent for mods that need
-    no overlay."""
-    return os.path.join(root, "tools", "mods", "config", subdir)
+    do). krpctest/mods/<subdir>/ holds the minimal config that marks those windows already
+    dismissed, and is copied over the subdir after install. Absent for mods that need no
+    overlay."""
+    return str(files("krpctest").joinpath("mods").joinpath(subdir))
 
 
 def _release_zip(root):
@@ -235,7 +272,7 @@ def install(mods=(), ksp_dir=None, validate_gamedata=True, skip_mod_install=Fals
         os.chmod(module_manager, 0o644)
 
     if not skip_mod_install:
-        _reconcile_mods(mods, root, gamedata_root)
+        _reconcile_mods(mods, gamedata_root)
     if validate_gamedata:
         _validate_gamedata(gamedata_root, _requested_mod_subdirs(mods))
 
@@ -264,7 +301,7 @@ def _validate_gamedata(gamedata_root, requested_subdirs):
         )
 
 
-def _reconcile_mods(mods, root, gamedata_root):
+def _reconcile_mods(mods, gamedata_root):
     """Make the managed mods in gamedata_root exactly the requested set."""
     requested = [comp for mod in mods for comp in MODS[mod]]
     requested_subdirs = _requested_mod_subdirs(mods)
@@ -274,15 +311,14 @@ def _reconcile_mods(mods, root, gamedata_root):
         if subdir not in requested_subdirs:
             shutil.rmtree(os.path.join(gamedata_root, subdir), ignore_errors=True)
 
-    # Install (or refresh) each requested mod (and its dependencies) from its Bazel-fetched
+    # Install (or refresh) each requested mod (and its dependencies) from its downloaded
     # archive, then lay any bundled config overlay on top (see _mod_config_overlay).
-    for target, subdir in requested:
-        subprocess.check_call(["bazel", "build", "//tools/mods:" + target], cwd=root)
+    for archive, subdir in requested:
         dst = os.path.join(gamedata_root, subdir)
         if os.path.exists(dst):
             shutil.rmtree(dst)
-        shutil.copytree(os.path.join(root, _mod_archive_src(target, subdir)), dst)
-        overlay = _mod_config_overlay(root, subdir)
+        extract_folder(download(*ARCHIVES[archive]), subdir, dst)
+        overlay = _mod_config_overlay(subdir)
         if os.path.isdir(overlay):
             shutil.copytree(overlay, dst, dirs_exist_ok=True)
         _normalize_permissions(dst)

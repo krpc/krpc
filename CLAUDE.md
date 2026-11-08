@@ -141,8 +141,8 @@ bazel run //:test-ingame -- -k test_camera_mode                           # by n
 ### Mods
 
  * Declared per test class: `mods = ["RemoteTech"]`.
- * Supported names: `MODS` in `tools/krpctest/krpctest/install.py`; archives pinned in `MODULE.bazel`,
-   exposed by `tools/mods/BUILD.bazel`.
+ * Supported names, with their pinned archives: `tools/krpctest/krpctest/mods/`. Downloads are
+   cached in `~/.cache/krpctools`.
  * Install reconciles GameData to **exactly** the requested set (plus kRPC) — required-but-missing and
    installed-but-unneeded are both wrong.
  * Pytest groups tests by mod set; game restarts at most once per set.

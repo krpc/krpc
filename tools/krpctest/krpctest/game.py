@@ -29,7 +29,7 @@ log = logging.getLogger("krpctest")
 
 # Third-party mods the integration tests can require, declared in a test's `mods` list and
 # passed to `krpc-install --mods`. The set of installable mods mirrors the registry in
-# tools/mods/BUILD.bazel and krpctest/install.py; here each mod also needs a way to tell
+# krpctest/mods; here each mod also needs a way to tell
 # whether it actually loaded in the running game.
 #
 # Most mods are wrapped by a kRPC service, so their `.available` property reports presence.

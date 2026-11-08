@@ -7,8 +7,8 @@ class TestPartsExperimentDMagic(krpctest.TestCase):
     # Exercises kRPC's support for science experiments backed by DMagic's
     # DMModuleScienceAnimateGeneric, which subclasses ModuleScienceExperiment but stores its
     # results in its own IScienceDataContainer. The dmagicSensorTest part (a thermometer running
-    # temperatureScan through that module) is added by tools/mods/config/DMagicScienceAnimate when
-    # the DMagic mod is installed. Part lookups use the language-independent with_name/part.name.
+    # temperatureScan through that module) is added by the DMagic mod's config overlay when
+    # the mod is installed. Part lookups use the language-independent with_name/part.name.
 
     mods = ["DMagic"]
 
