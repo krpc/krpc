@@ -1,9 +1,12 @@
 from __future__ import annotations
 
 import getpass
+import inspect
 import os
 import sys
 import tempfile
+from collections.abc import Callable
+from typing import Concatenate, Generic, ParamSpec, TypeVar, cast
 
 from krpc.client import Client
 from krpc.connection import Connection, LocalConnection, MalformedSize, ReadTimeout
@@ -50,7 +53,8 @@ def _default_path() -> str:
     return os.path.join(temporary, "krpc-" + getpass.getuser() + ".sock")
 
 
-def connect(
+def _connect_tcpip(
+    client_type: type[Client],
     name: str | None = None,
     address: str = DEFAULT_ADDRESS,
     port: int = DEFAULT_PORT,
@@ -71,10 +75,11 @@ def connect(
 
     _check_timeouts(handshake_timeout, stall_timeout)
     connection = Connection(address, port, timeout)
-    return _connect(name, connection, handshake_timeout, stall_timeout)
+    return _connect(client_type, name, connection, handshake_timeout, stall_timeout)
 
 
-def connect_local(
+def _connect_local(
+    client_type: type[Client],
     name: str | None = None,
     path: str = DEFAULT_PATH,
     handshake_timeout: float | None = DEFAULT_HANDSHAKE_TIMEOUT,
@@ -91,7 +96,50 @@ def connect_local(
 
     _check_timeouts(handshake_timeout, stall_timeout)
     connection = LocalConnection(path or _default_path())
-    return _connect(name, connection, handshake_timeout, stall_timeout)
+    return _connect(client_type, name, connection, handshake_timeout, stall_timeout)
+
+
+_ClientT = TypeVar("_ClientT", bound=Client)
+_OtherClientT = TypeVar("_OtherClientT", bound=Client)
+_P = ParamSpec("_P")
+
+
+class _Connector(Generic[_P, _ClientT]):
+    """A connect function. Indexed with a subclass of Client, such as the client type a
+    generated module declares for its service, it connects with a client of that type."""
+
+    def __init__(
+        self,
+        name: str,
+        connect: Callable[Concatenate[type[Client], _P], Client],
+        client_type: type[_ClientT],
+    ) -> None:
+        self._connect = connect
+        self._client_type = client_type
+        # The name, documentation and signature of the connect function, without its client
+        # type parameter, for help() and inspect
+        self.__name__ = self.__qualname__ = name
+        self.__module__ = __name__
+        self.__doc__ = connect.__doc__
+        signature = inspect.signature(connect)
+        self.__signature__ = signature.replace(
+            parameters=list(signature.parameters.values())[1:]
+        )
+
+    def __call__(self, *args: _P.args, **kwargs: _P.kwargs) -> _ClientT:
+        return cast(_ClientT, self._connect(self._client_type, *args, **kwargs))
+
+    def __getitem__(
+        self, client_type: type[_OtherClientT]
+    ) -> _Connector[_P, _OtherClientT]:
+        return _Connector(self.__name__, self._connect, client_type)
+
+    def __repr__(self) -> str:
+        return "<connect function %s.%s>" % (self.__module__, self.__name__)
+
+
+connect = _Connector("connect", _connect_tcpip, Client)
+connect_local = _Connector("connect_local", _connect_local, Client)
 
 
 def get_object_id(obj: ClassBase) -> int:
@@ -117,6 +165,7 @@ def _check_timeouts(
 
 
 def _connect(
+    client_type: type[Client],
     name: str | None,
     connection: Connection,
     handshake_timeout: float | None,
@@ -150,7 +199,7 @@ def _connect(
             "client from the same kRPC release as the server."
         )
     try:
-        return Client(connection, stall_timeout)
+        return client_type(connection, stall_timeout)
     except BaseException:
         connection.close()
         raise

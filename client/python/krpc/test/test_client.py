@@ -1,3 +1,4 @@
+import inspect
 import unittest
 from typing import Any
 
@@ -47,6 +48,25 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.assertIsInstance(service, testservice.TestService)
         with self.assertRaises(testservice.CustomException):
             service.throw_custom_exception()
+
+    def test_connect_with_the_client_type_of_a_service(self) -> None:
+        conn = krpc.connect[testservice.TestServiceClient](
+            name="python_client_test", address="localhost", port=self.tcpip_port()
+        )
+        try:
+            self.assertIsInstance(conn, testservice.TestServiceClient)
+            self.assertEqual("42", conn.test_service.int32_to_string(42))
+        finally:
+            conn.close()
+
+    def test_connect_functions_have_their_signatures(self) -> None:
+        for connect in (krpc.connect, krpc.connect[krpc.Client]):
+            parameters = list(inspect.signature(connect).parameters)
+            self.assertEqual(["name", "address", "port"], parameters[:3])
+            self.assertEqual("connect", connect.__name__)
+        self.assertEqual(
+            ["name", "path"], list(inspect.signature(krpc.connect_local).parameters)[:2]
+        )
 
     def test_a_number_the_server_lacks_names_the_enumeration(self) -> None:
         class TestEnum(DocEnum):

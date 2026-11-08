@@ -1,5 +1,6 @@
 from __future__ import annotations
 from typing import Tuple, Set, Dict, List, NamedTuple, Optional, TYPE_CHECKING
+import krpc.client
 import krpc.limits
 from krpc.declarations import DeclaredClass, DeclaredObject, declaration_error as _declaration, register as _register
 from krpc.event import Event
@@ -33,6 +34,15 @@ class ServiceA(metaclass=DeclaredClass):
         Defaults to a collection containing a member of another service's enumeration.
         """
         raise _declaration("ServiceA", None)
+
+
+class ServiceAClient(krpc.client.Client):
+    """
+    A client with the ServiceA service, as ``krpc.connect[ServiceAClient]()``
+    connects.
+    """
+
+    service_a: ServiceA
 
 
 _register(

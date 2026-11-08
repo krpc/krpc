@@ -1,5 +1,6 @@
 from __future__ import annotations
 from typing import Tuple, Set, Dict, List, NamedTuple, Optional, TYPE_CHECKING
+import krpc.client
 import krpc.limits
 from krpc.declarations import DeclaredClass, DeclaredObject, declaration_error as _declaration, register as _register
 from krpc.event import Event
@@ -2384,6 +2385,15 @@ class KRPC(metaclass=DeclaredClass):
         nothing when no tick is held, which is the case once a hold has timed out.
         """
         raise _declaration("KRPC", None)
+
+
+class KRPCClient(krpc.client.Client):
+    """
+    A client with the KRPC service, as ``krpc.connect[KRPCClient]()``
+    connects.
+    """
+
+    krpc: KRPC
 
 
 _register(

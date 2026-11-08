@@ -1,5 +1,6 @@
 from __future__ import annotations
 from typing import Tuple, Set, Dict, List, NamedTuple, Optional, TYPE_CHECKING
+import krpc.client
 import krpc.limits
 from krpc.declarations import DeclaredClass, DeclaredObject, declaration_error as _declaration, register as _register
 from krpc.event import Event
@@ -117,7 +118,16 @@ class {{ service_name }}(metaclass=DeclaredClass):
 
 {{ properties_of(properties, '"' + service_name + '", None') -}}
 {{ methods_of(procedures, '"' + service_name + '", None') -}}
-{{ "\n" }}_register(
+{{ "\n" }}class {{ service_name }}Client(krpc.client.Client):
+    """
+    A client with the {{ service_name }} service, as ``krpc.connect[{{ service_name }}Client]()``
+    connects.
+    """
+
+    {{ service_name | snake_case }}: {{ service_name }}
+
+
+_register(
     "{{ service_name }}",
 {% for name in enumerations.keys() | list + structs.keys() | list + exceptions.keys() | list %}
     {{ name }},
