@@ -108,6 +108,7 @@ unit_tests = [
 
 client_tests = [
     "krpc/test/test_client.py",
+    "krpc/test/test_declarations_drift.py",
     "krpc/test/test_documentation.py",
     "krpc/test/test_expressiontree.py",
     "krpc/test/test_function.py",
