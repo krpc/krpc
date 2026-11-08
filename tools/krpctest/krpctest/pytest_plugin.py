@@ -38,7 +38,8 @@ def add_options(group, launching=True):
     group.addoption(
         "--krpc",
         metavar="SOURCE",
-        help="the kRPC archive to install, as a path or a URL",
+        help="the kRPC archive to install, as a path or a URL, in place of the game's "
+        "(for ksp, the release this package was built with)",
     )
     group.addoption(
         "--mod",

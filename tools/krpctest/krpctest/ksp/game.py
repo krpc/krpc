@@ -9,6 +9,7 @@ import zipfile
 from importlib.resources import files
 
 from .. import game
+from .krpc_version import KRPC_VERSION
 
 # The executable's name differs per platform
 _EXECUTABLE = "KSP_x64.exe" if sys.platform == "win32" else "KSP.x86_64"
@@ -129,6 +130,10 @@ class KSP(game.Game):
 
     name = "ksp"
     directory_variable = "KSP_DIR"
+    # Releases before the trains split are tagged v<version>
+    release_prefixes = ("ksp-v", "v")
+    # The release built with this package, which the bundled add-on is built against
+    krpc_release = KRPC_VERSION
 
     def title(self):
         return "KSP"
@@ -172,6 +177,9 @@ class KSP(game.Game):
         shutil.copy(blank_save, os.path.join(save_path, "persistent.sfs"))
 
     # Installing
+
+    def release_assets(self, version):
+        return ["krpc-ksp-%s.zip" % version, "krpc-%s.zip" % version]
 
     def addon_files(self):
         """The TestingTools add-on's assemblies, and the XML documentation the server reads

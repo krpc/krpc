@@ -61,9 +61,9 @@ class BazelKSP(KSP):
 
     def krpc_source(self):
         if self.krpc is not None:
-            return self.krpc
+            return self.krpc, None
         # The archive's name embeds the version
-        return self._outputs("//:krpc")[-1]
+        return self._outputs("//:krpc")[-1], None
 
     def addon_files(self):
         return [path for target in _ADDON_TARGETS for path in self._outputs(target)]

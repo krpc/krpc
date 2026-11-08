@@ -143,7 +143,7 @@ def install(game, mods=()):
     """Install kRPC, the game's test add-on and exactly the given mods and those they
     require. The other mods the game knows are removed."""
     names = requirements(game, mods)
-    game.install_krpc(fetch(game.krpc_source()))
+    game.install_krpc(fetch(*game.krpc_source()))
     game.install_addon()
     if game.install_mods:
         for name, mod in game.mods.items():

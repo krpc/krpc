@@ -10,7 +10,7 @@ installing in :mod:`krpctest.install`.
 import importlib
 import os
 
-from . import install, launch
+from . import install, launch, releases
 
 
 class Mod:
@@ -51,7 +51,7 @@ class Game:
     """A game that kRPC runs in, and how to install, launch and stop it.
 
     The constructor arguments override the defaults a subclass sets: the install directory,
-    the kRPC archive and the mods. Each mod replaces the game's mod of the same name.
+    the kRPC archive, and the mods. Each mod replaces the game's mod of the same name.
     """
 
     # The name --game takes for this game
@@ -62,6 +62,12 @@ class Game:
 
     # The name the tests connect with
     client_name = "krpctest"
+
+    # The tag prefixes of the game's release train
+    release_prefixes = ()
+
+    # The kRPC release installed when no archive is given: the version on the release train
+    krpc_release = None
 
     def __init__(self, directory=None, krpc=None, mods=(), address="127.0.0.1"):
         self.directory = directory
@@ -113,11 +119,20 @@ class Game:
         """The mods a test can require without the suite defining them."""
         return []
 
+    def release_assets(self, version):
+        """The names the kRPC archive goes by in the game's release of the given version."""
+        return []
+
     def krpc_source(self):
-        """The kRPC archive to install: a path or a URL."""
-        if self.krpc is None:
+        """The kRPC archive to install, as a (source, sha256) pair: the archive given, else
+        the game's krpc_release."""
+        if self.krpc is not None:
+            return self.krpc, None
+        if self.krpc_release is None:
             raise RuntimeError("No kRPC archive to install. Pass --krpc.")
-        return self.krpc
+        return releases.release(
+            self.name, self.release_prefixes, self.release_assets, self.krpc_release
+        )
 
     def set_mod_source(self, name, source):
         """Install the named mod from source, a path or a URL, in place of its own."""

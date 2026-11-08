@@ -1,12 +1,15 @@
 load("@rules_python//python:defs.bzl", "py_binary", "py_library")
-load("//:config.bzl", "python_version")
+load("//:config.bzl", "python_version", "version_parts")
 load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test", "py_test", "py_wheel")
 
 # The krpctest package as an importable python library, for use by other
 # python targets in this workspace
 py_library(
     name = "krpctest_lib",
-    srcs = glob(["krpctest/**/*.py"]) + [":version-py"],
+    srcs = glob(["krpctest/**/*.py"]) + [
+        ":ksp-krpc-version",
+        ":version-py",
+    ],
     data = [":data"],
     imports = ["."],
     visibility = ["//visibility:public"],
@@ -35,6 +38,14 @@ py_library(
     imports = ["."],
     visibility = ["//tools/benchmarks:__pkg__"],
     deps = [":krpctest_lib"],
+)
+
+# The kRPC release the KSP game installs by default: the one built from this tree, which the
+# bundled TestingTools add-on is built against
+genrule(
+    name = "ksp-krpc-version",
+    outs = ["krpctest/ksp/krpc_version.py"],
+    cmd = "echo 'KRPC_VERSION = \"%s\"' > $@" % ".".join(version_parts[:3]),
 )
 
 genrule(
@@ -76,6 +87,7 @@ py_wheel(
         "README.md",
         "pyproject.toml",
         ":data",
+        ":ksp-krpc-version",
         "//:COPYING",
         "//:COPYING.LESSER",
         "//:python_version",
