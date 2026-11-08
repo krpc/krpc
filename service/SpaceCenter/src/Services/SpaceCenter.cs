@@ -1213,8 +1213,13 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty(GameScene = GameScene.All)]
         public static MapFilterType MapFilter
         {
-            get { return (MapFilterType)MapViewFiltering.GetFilterState(); }
-            set { MapViewFiltering.SetFilter((MapViewFiltering.VesselTypeFilter)value); }
+            // The game's All is -1
+            get { return (MapFilterType)(MapViewFiltering.GetFilterState() & (int)MapFilterType.All); }
+            set {
+                var filter = value == MapFilterType.All ?
+                    MapViewFiltering.VesselTypeFilter.All : (MapViewFiltering.VesselTypeFilter)value;
+                MapViewFiltering.SetFilter(filter);
+            }
         }
 
         /// <summary>

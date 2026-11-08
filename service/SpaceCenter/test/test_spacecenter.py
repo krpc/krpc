@@ -186,6 +186,14 @@ class TestSpaceCenter(TestCase):
         self.wait(1)
         self.assertTrue(self.sc.ui_visible)
 
+    def test_map_filter(self):
+        MapFilterType = self.sc.MapFilterType
+        # The game holds -1 for every filter, which reads as All
+        self.assertEqual(MapFilterType.all, self.sc.map_filter)
+        for value in (MapFilterType.none, MapFilterType.debris, MapFilterType.all):
+            self.sc.map_filter = value
+            self.assertEqual(value, self.sc.map_filter)
+
     def test_navball(self):
         self.assertTrue(self.sc.navball)
         self.sc.navball = False
