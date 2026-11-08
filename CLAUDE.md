@@ -80,7 +80,7 @@ the tests: a test's docstring is the requirement's text, its markers the level a
    either fails the run.
  * A client's profiles are listed in its `conformance_test` target.
  * Run every client in one command: `bazel test //client/{cnano,cpp,csharp,java,lua,python}:conformance
-   //client/python:conformance-base //client/websockets:conformance //client/conformance:test`.
+   //client/websockets:conformance //client/conformance:test`.
 
 ### C# sources
 
