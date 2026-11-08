@@ -25,7 +25,7 @@ Clients
    * - :doc:`Python <client-design/python>`
      - Threaded
      - Yes
-     - Pre-generated or dynamic
+     - Dynamic, with generated declarations
    * - :doc:`C# <client-design/csharp>`
      - Threaded
      - Yes
