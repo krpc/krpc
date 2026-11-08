@@ -731,6 +731,26 @@ encoding or argument error, before the request is sent.</p>
 </dd>
 </dl>
 </section>
+<section id="generated-types">
+<h2>Generated Types<a class="headerlink" href="#generated-types" title="Link to this heading">#</a></h2>
+<p>These requirements apply to a client whose generated code holds a service’s enumerations and structures as types. A program uses them with no connection, while the client builds its services from the server’s definitions.</p>
+<dl class="simple" id="spec-values-declared-values-as-arguments">
+<dt><code class="docutils literal notranslate"><span class="pre">values-declared-values-as-arguments</span> <span class="pre">[declarations,</span> <span class="pre">definitions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>An enumeration or structure value made from the generated code, with no connection,
+passes as an argument.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-values-matching-definitions-share-the-type">
+<dt><code class="docutils literal notranslate"><span class="pre">values-matching-definitions-share-the-type</span> <span class="pre">[declarations,</span> <span class="pre">definitions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Where the server’s definition of an enumeration or structure matches the generated code,
+the client’s type for it is the generated one.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-values-differing-structure-definition">
+<dt><code class="docutils literal notranslate"><span class="pre">values-differing-structure-definition</span> <span class="pre">[declarations,</span> <span class="pre">definitions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Where the server’s definition of a structure differs from the generated code, a value
+made from the generated code does not equal the client’s value of the structure. Passing
+it as an argument raises the encoding or argument error.</p>
+</dd>
+</dl>
+</section>
 </section>
 
 
@@ -787,6 +807,7 @@ encoding or argument error, before the request is sent.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#messages">Messages</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#null">Null</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#argument-types">Argument Types</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generated-types">Generated Types</a></li>
 </ul>
   </nav></div>
 

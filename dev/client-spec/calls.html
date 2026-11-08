@@ -593,9 +593,9 @@ deprecated member.</p>
 </section>
 <section id="service-definitions">
 <h2>Service Definitions<a class="headerlink" href="#service-definitions" title="Link to this heading">#</a></h2>
-<p>These requirements apply to a client that builds its stubs from the server’s definitions when it connects.</p>
+<p>These requirements apply to a client that builds its services from the server’s definitions when it connects.</p>
 <dl class="simple" id="spec-calls-exposed-members">
-<dt><code class="docutils literal notranslate"><span class="pre">calls-exposed-members</span> <span class="pre">[dynamic]</span> <span class="pre">[MUST]</span></code></dt><dd><p>The client exposes exactly the services the server defines, and for each service its
+<dt><code class="docutils literal notranslate"><span class="pre">calls-exposed-members</span> <span class="pre">[definitions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>The client exposes exactly the services the server defines, and for each service its
 procedures other than internal ones, properties, classes, enumerations and structures. A
 client in a language with exception types also exposes the service’s exceptions. Each class
 exposes its methods, static methods and properties, including those another service adds,
@@ -603,38 +603,38 @@ and each enumeration its values.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-calls-member-name-case">
-<dt><code class="docutils literal notranslate"><span class="pre">calls-member-name-case</span> <span class="pre">[dynamic]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Member names are in the case the language names its members in. In snake case, an
+<dt><code class="docutils literal notranslate"><span class="pre">calls-member-name-case</span> <span class="pre">[definitions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Member names are in the case the language names its members in. In snake case, an
 underscore goes before each capital that starts a word, where a word starts after a lower
 case letter or a digit, or before the last capital of a run followed by a lower case
 letter. An underscore in the name is doubled.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-calls-internal-procedure">
-<dt><code class="docutils literal notranslate"><span class="pre">calls-internal-procedure</span> <span class="pre">[dynamic]</span> <span class="pre">[MUST]</span></code></dt><dd><p>The client leaves out a procedure the server marks internal. The client library calls
+<dt><code class="docutils literal notranslate"><span class="pre">calls-internal-procedure</span> <span class="pre">[definitions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>The client leaves out a procedure the server marks internal. The client library calls
 an internal procedure itself, to implement streams, events and server side functions.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-calls-unknown-type">
-<dt><code class="docutils literal notranslate"><span class="pre">calls-unknown-type</span> <span class="pre">[dynamic]</span> <span class="pre">[MUST]</span></code></dt><dd><p>The client leaves out a member or a structure whose type has a code the protocol
+<dt><code class="docutils literal notranslate"><span class="pre">calls-unknown-type</span> <span class="pre">[definitions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>The client leaves out a member or a structure whose type has a code the protocol
 does not define, as a later version of the server can send, and anything that uses
 one. The rest of the service works.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-calls-undefined-type">
-<dt><code class="docutils literal notranslate"><span class="pre">calls-undefined-type</span> <span class="pre">[dynamic]</span> <span class="pre">[MUST]</span></code></dt><dd><p>The client leaves out a member whose type names a class, an enumeration or a
+<dt><code class="docutils literal notranslate"><span class="pre">calls-undefined-type</span> <span class="pre">[definitions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>The client leaves out a member whose type names a class, an enumeration or a
 structure that no service defines, including a parameter with a default value. A
 type of the same name but another kind does not define it. The rest of the service
 works.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-calls-enumeration-default">
-<dt><code class="docutils literal notranslate"><span class="pre">calls-enumeration-default</span> <span class="pre">[dynamic]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A procedure’s parameter defaults to a value of an enumeration, alone or in a
+<dt><code class="docutils literal notranslate"><span class="pre">calls-enumeration-default</span> <span class="pre">[definitions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A procedure’s parameter defaults to a value of an enumeration, alone or in a
 collection. The client calls the procedure without the argument, and sends none. The
 enumeration is of the same service or another, in either order in the definitions.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-calls-structure-default">
-<dt><code class="docutils literal notranslate"><span class="pre">calls-structure-default</span> <span class="pre">[dynamic]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A procedure’s parameter defaults to a value of a structure, which holds a structure
+<dt><code class="docutils literal notranslate"><span class="pre">calls-structure-default</span> <span class="pre">[definitions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A procedure’s parameter defaults to a value of a structure, which holds a structure
 of another service. The client calls the procedure without the argument, and sends none.
 The other service comes before or after in the definitions.</p>
 </dd>
@@ -647,7 +647,7 @@ The other service comes before or after in the definitions.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-calls-long-request">
-<dt><code class="docutils literal notranslate"><span class="pre">calls-long-request</span> <span class="pre">[dynamic]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A call whose service name, procedure name and argument are longer than 127 bytes,
+<dt><code class="docutils literal notranslate"><span class="pre">calls-long-request</span> <span class="pre">[definitions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A call whose service name, procedure name and argument are longer than 127 bytes,
 with 200 arguments, arrives intact.</p>
 </dd>
 </dl>
