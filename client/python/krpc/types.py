@@ -2,13 +2,10 @@ from __future__ import annotations
 
 import collections
 import copy
-import functools
-import weakref
 from collections.abc import Callable, Iterable, Mapping
 from enum import Enum
 from typing import (
     TYPE_CHECKING,
-    Any,
     TypeVar,
     cast,
 )
@@ -132,9 +129,7 @@ class Types:
         self._types: dict[bytes, TypeBase] = {}
         self._exception_types: dict[tuple[str, str], type[Exception]] = {}
         # Type objects keyed by the arguments they were asked for, rather than by
-        # the serialized protobuf type that keys _types. The generated service
-        # stubs name their parameter and return types on every call, so this is on
-        # the hot path of every remote procedure call; a lookup here costs a tuple
+        # the serialized protobuf type that keys _types. A lookup here costs a tuple
         # hash instead of building and serializing a protobuf message.
         self._type_cache: dict[tuple[object, ...], TypeBase] = {}
 
@@ -157,22 +152,6 @@ class Types:
 
     def _value_type(self, code: KRPC.Type.TypeCode) -> ValueType:
         return cast(ValueType, self.as_type(_protobuf_type(code)))
-
-    def register_class_type(self, service: str, name: str, python_type: type) -> None:
-        protobuf_type = _protobuf_type(KRPC.Type.CLASS, service, name)
-        key = protobuf_type.SerializeToString()
-        assert key not in self._types
-        typ = ClassType(protobuf_type, None, python_type)
-        self._types[key] = typ
-        self._type_cache[(KRPC.Type.CLASS, service, name)] = typ
-
-    def register_enum_type(self, service: str, name: str, python_type: type) -> None:
-        protobuf_type = _protobuf_type(KRPC.Type.ENUMERATION, service, name)
-        key = protobuf_type.SerializeToString()
-        assert key not in self._types
-        typ = EnumerationType(protobuf_type, None, python_type)
-        self._types[key] = typ
-        self._type_cache[(KRPC.Type.ENUMERATION, service, name)] = typ
 
     def as_type(self, protobuf_type: KRPC.Type, doc: str | None = None) -> TypeBase:
         """Return a type object given a protocol buffer type"""
@@ -822,78 +801,6 @@ class DefaultArgument:
 
     def __repr__(self) -> str:
         return self._value
-
-
-# Per-client subclasses of wrapped classes, keyed weakly by client then by the shared class. With
-# pre-generated stubs the class object is shared across every client, so binding a client to it must
-# not be done by writing _client onto the shared class (which multiple clients would overwrite for
-# each other). Each client gets its own subclass carrying its own _client instead.
-_wrapped_subclasses: weakref.WeakKeyDictionary[object, dict[type, type]] = (
-    weakref.WeakKeyDictionary()
-)
-
-
-def _wrapped_subclass(client: object, class_type: type) -> type:
-    """Return the given client's subclass of class_type, carrying that client as _client, creating
-    and caching it on first use."""
-    cache = _wrapped_subclasses.setdefault(client, {})
-    subclass = cache.get(class_type)
-    if subclass is None:
-        subclass = type(class_type.__name__, (class_type,), {"_client": client})
-        cache[class_type] = subclass
-    return subclass
-
-
-class WrappedClass:
-    """Wraps a class type accessed through a service, binding it to the client it was accessed
-    through so that its static methods use that client."""
-
-    def __init__(self, client: Client, class_type: type) -> None:
-        self._client = client
-        self._shared_type = class_type
-        self._class_type = _wrapped_subclass(client, class_type)
-        self.__doc__ = class_type.__doc__
-
-    def __call__(self, *args: object, **kwargs: object) -> Any:
-        return self._class_type(*args, **kwargs)
-
-    # A decoded object is an instance of the shared class, not the per-client subclass
-    def __instancecheck__(self, instance: object) -> bool:
-        return isinstance(instance, self._shared_type)
-
-    def __subclasscheck__(self, subclass: type) -> bool:
-        return issubclass(subclass, self._shared_type)
-
-    def __getattr__(self, name: str) -> Any:
-        return getattr(self._class_type, name)
-
-    def __dir__(self) -> list[str]:
-        return dir(self._class_type)
-
-
-class StaticMethod:
-    """Descriptor for static methods.
-
-    Like @classmethod, but also works when called on an instance: if the class does not already
-    have _client set, the instance's _client is injected onto it first. A class accessed through a
-    service is a per-client subclass (see WrappedClass) that already carries its own _client, so
-    this only applies to static methods called through an instance."""
-
-    def __init__(self, func: Callable) -> None:
-        self._func = func
-
-    def __get__(self, obj: object, objtype: type | None = None) -> Callable:
-        if objtype is None:
-            objtype = type(obj)
-        if obj is not None and not hasattr(objtype, "_client"):
-            objtype._client = obj._client  # pyright: ignore[reportAttributeAccessIssue]
-
-        @functools.wraps(self._func)
-        def bound(*args: object, **kwargs: object) -> object:
-            return self._func(objtype, *args, **kwargs)
-
-        bound.__self__ = objtype  # pyright: ignore[reportAttributeAccessIssue]
-        return bound
 
 
 _DocEnumT = TypeVar("_DocEnumT", bound="DocEnum")

@@ -230,15 +230,9 @@ def clientgen_python_init(name, template, out):
         template = template,
         out = out,
         substitutions = {
-            "{TYPE_CHECKING_IMPORTS}": "\n    ".join(imports),
-            "{IMPORTS}": "\n        ".join(imports),
-            "{UNAVAILABLE}": "\n        ".join(["%s = _unavailable" % s.name for s in SERVICES]),
-            "{ATTRIBUTES}": "\n        ".join([
-                "self.%s: %s = %s(self)" % (_snake_case(s.name), s.name, s.name)
-                for s in SERVICES
-            ]),
-            "{SERVICES}": "\n            ".join([
-                '"%s": self.%s,' % (s.name, _snake_case(s.name))
+            "{IMPORTS}": "\n".join(imports),
+            "{ATTRIBUTES}": "\n    ".join([
+                "%s: %s" % (_snake_case(s.name), s.name)
                 for s in SERVICES
             ]),
         },

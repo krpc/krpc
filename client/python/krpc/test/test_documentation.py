@@ -7,8 +7,8 @@ from krpc.test.servertestcase import ServerTestCase
 
 class TestDocumentation(ServerTestCase, unittest.TestCase):
     def check_doc(self, expected: str, obj: object) -> None:
-        # Normalize with cleandoc, as pre-generated stubs indent multi-line docstrings
-        # where dynamically-created services do not.
+        # Normalize with cleandoc, as the generated classes a client uses indent multi-line
+        # docstrings where the classes it builds do not
         doc = cast(str, obj.__doc__)
         self.assertEqual(expected, inspect.cleandoc(doc))
 
@@ -39,17 +39,10 @@ class TestDocumentation(ServerTestCase, unittest.TestCase):
             "Enum ValueC documentation string, in m/s\u00b2, equal to\n\u00bd \u03c1 v\u00b2.",
             self.conn.test_service.TestEnum.value_c,
         )
-        # Generated stubs link a cref with a role, where dynamically-created services name it
         doc = inspect.cleandoc(
             cast(str, self.conn.test_service.throw_custom_exception.__doc__)
         )
-        self.assertIn(
-            doc.split("\n\n")[0],
-            (
-                "Throws a TestService.CustomException.",
-                "Throws a :class:`krpc.services.testservice.CustomException`.",
-            ),
-        )
+        self.assertEqual("Throws a TestService.CustomException.", doc.split("\n\n")[0])
 
     def test_deprecated_signature(self) -> None:
         # A deprecated procedure's signature has the parameters of the call it wraps

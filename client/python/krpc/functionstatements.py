@@ -31,7 +31,6 @@ from krpc.expressionutils import (
     join_ptype,
     plain_ptype,
     same_shape,
-    unwrap_class,
     with_nullable,
 )
 from krpc.types import NATIVE_EXCEPTIONS, ClassBase
@@ -1900,7 +1899,6 @@ def _remote_annotation_ptype(
 ) -> KRPC.Type | None:
     """The type of a class, enumeration or structure a service defines,
     named by an annotation."""
-    value = unwrap_class(value)
     if not isinstance(value, type):
         return None
     if issubclass(value, ClassBase):

@@ -45,7 +45,6 @@ def connect(
     name: str | None = None,
     address: str = DEFAULT_ADDRESS,
     port: int = DEFAULT_PORT,
-    use_pregenerated_stubs: bool = True,
     timeout: float | None = None,
     handshake_timeout: float | None = DEFAULT_HANDSHAKE_TIMEOUT,
     stall_timeout: float | None = DEFAULT_STALL_TIMEOUT,
@@ -63,15 +62,12 @@ def connect(
 
     _check_timeouts(handshake_timeout, stall_timeout)
     connection = Connection(address, port, timeout)
-    return _connect(
-        name, connection, use_pregenerated_stubs, handshake_timeout, stall_timeout
-    )
+    return _connect(name, connection, handshake_timeout, stall_timeout)
 
 
 def connect_local(
     name: str | None = None,
     path: str = DEFAULT_PATH,
-    use_pregenerated_stubs: bool = True,
     handshake_timeout: float | None = DEFAULT_HANDSHAKE_TIMEOUT,
     stall_timeout: float | None = DEFAULT_STALL_TIMEOUT,
 ) -> Client:
@@ -86,9 +82,7 @@ def connect_local(
 
     _check_timeouts(handshake_timeout, stall_timeout)
     connection = LocalConnection(path or _default_path())
-    return _connect(
-        name, connection, use_pregenerated_stubs, handshake_timeout, stall_timeout
-    )
+    return _connect(name, connection, handshake_timeout, stall_timeout)
 
 
 def get_object_id(obj: ClassBase) -> int:
@@ -116,7 +110,6 @@ def _check_timeouts(
 def _connect(
     name: str | None,
     connection: Connection,
-    use_pregenerated_stubs: bool,
     handshake_timeout: float | None,
     stall_timeout: float | None,
 ) -> Client:
@@ -148,7 +141,7 @@ def _connect(
             "client from the same kRPC release as the server."
         )
     try:
-        return Client(connection, use_pregenerated_stubs, stall_timeout)
+        return Client(connection, stall_timeout)
     except BaseException:
         connection.close()
         raise

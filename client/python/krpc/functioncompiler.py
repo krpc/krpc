@@ -42,7 +42,6 @@ from krpc.expressionutils import (
     promote,
     remote_type,
     same_shape,
-    unwrap_class,
     with_nullable,
 )
 from krpc.expressionutils import (
@@ -181,7 +180,7 @@ def _annotation_types(func: Callable) -> dict[str, type]:
     types: dict[str, type] = {}
     pending = list(getattr(func, "__annotations__", {}).values())
     while pending:
-        annotation = unwrap_class(pending.pop())
+        annotation = pending.pop()
         if isinstance(annotation, type):
             types.setdefault(annotation.__name__, annotation)
         pending.extend(getattr(annotation, "__args__", ()))
@@ -419,8 +418,9 @@ class _Compiler:
         client_values: dict[tuple[int, ...], Any] | None = None,
     ):
         self._client = client
-        self._expr = client.krpc.Expression
-        self._type = client.krpc.Type
+        # Untyped, as the compiler checks the types of the values it builds expressions from
+        self._expr: Any = client.krpc.Expression
+        self._type: Any = client.krpc.Type
         self._func = func
         # The types the function's parameter and return annotations name, by
         # name, as Python evaluated them where the function is defined
@@ -767,9 +767,7 @@ class _Compiler:
                     member = getattr(value, node.attr, None)
                     # The class, enumeration and structure types a service defines
                     # are attributes of it alongside its remote members
-                    if self._is_service_object(value) and isinstance(
-                        unwrap_class(member), type
-                    ):
+                    if self._is_service_object(value) and isinstance(member, type):
                         return _Result(value=member, is_value=True)
                     raise self._error(
                         node,
@@ -783,8 +781,7 @@ class _Compiler:
                         node, "'%s' is a remote method, which needs a call" % node.attr
                     )
                 call = self._client.get_call(getattr, value, node.attr)
-                # The service definitions say where the value can be None, which
-                # the pre-generated stubs do not
+                # The service definitions say where the value can be None
                 procedure = self._metadata.procedures.get(
                     (call.service, call.procedure)
                 )
@@ -1400,7 +1397,7 @@ class _Compiler:
     ) -> _Result:
         if base.is_value and self._is_remote_class(base.value):
             # A static class method, called on the class itself
-            protobuf_type = self._class_ptype(cast(type, unwrap_class(base.value)))
+            protobuf_type = self._class_ptype(cast(type, base.value))
             service, procedure = self._member(
                 node, protobuf_type.service, protobuf_type.name, member, "static"
             )
@@ -4539,7 +4536,6 @@ class _Compiler:
         )
 
     def _is_remote_class(self, value: object) -> bool:
-        value = unwrap_class(value)
         return isinstance(value, type) and issubclass(value, ClassBase)
 
     @staticmethod

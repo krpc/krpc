@@ -18,7 +18,10 @@ services = clientgen_services("python")
 # targets in this workspace (the wheel below is what is released)
 py_library(
     name = "krpc_lib",
-    srcs = services + [":services-testservice"],
+    srcs = services + [
+        ":services-init",
+        ":services-testservice",
+    ],
     visibility = ["//visibility:public"],
     deps = [":krpc_base_lib"],
 )
@@ -31,7 +34,6 @@ py_library(
     srcs = glob(["krpc/**/*.py"]) + [
         ":krpc-version-py",
         ":schema-py",
-        ":services-init",
     ],
     # The type stub for the generated protobuf module, so type checkers see
     # the message classes (the module itself builds them dynamically)

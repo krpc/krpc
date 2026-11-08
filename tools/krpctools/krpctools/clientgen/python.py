@@ -1,7 +1,6 @@
 import collections
 import itertools
 
-import krpc.schema.KRPC_pb2 as KRPC
 from krpc.types import (
     ClassType,
     DictionaryType,
@@ -52,76 +51,6 @@ class PythonGenerator(Generator[StubLanguage]):
     def __init__(self, macro_template, service, definitions, includes=None):
         super().__init__(macro_template, service, definitions, includes)
         self.language = StubLanguage(service)
-
-    def parse_python_type(self, typ):
-        """The expression that builds the type of a slot. A slot carries a null out of band,
-        so its type is named without its nullability."""
-        if typ is None:
-            return "None"
-        return self._parse_python_type(typ)
-
-    def parse_python_type_at_position(self, typ):
-        """The expression that builds the type at a position inside a value. A position
-        carries a null in the value, so a nullable type is named as one."""
-        if typ.nullable:
-            return "self._client._types.nullable(%s)" % self._parse_python_type(typ)
-        return self._parse_python_type(typ)
-
-    def _parse_python_type(self, typ):
-        if isinstance(typ, ValueType):
-            mapping = {
-                KRPC.Type.DOUBLE: "double",
-                KRPC.Type.FLOAT: "float",
-                KRPC.Type.SINT32: "sint32",
-                KRPC.Type.SINT64: "sint64",
-                KRPC.Type.UINT32: "uint32",
-                KRPC.Type.UINT64: "uint64",
-                KRPC.Type.BOOL: "bool",
-                KRPC.Type.STRING: "string",
-                KRPC.Type.BYTES: "bytes",
-            }
-            return "self._client._types.%s_type" % mapping[typ.protobuf_type.code]
-        if isinstance(typ, StreamType):
-            return "self._client._types.stream_type"
-        if isinstance(typ, EventType):
-            return "self._client._types.event_type"
-        if isinstance(typ, MessageType):
-            return "self._client._types.%s_type" % snake_case(typ.python_type.__name__)
-        if isinstance(typ, ClassType):
-            return 'self._client._types.class_type("%s", "%s")' % (
-                typ.protobuf_type.service,
-                typ.protobuf_type.name,
-            )
-        if isinstance(typ, EnumerationType):
-            return 'self._client._types.enumeration_type("%s", "%s")' % (
-                typ.protobuf_type.service,
-                typ.protobuf_type.name,
-            )
-        if isinstance(typ, StructType):
-            return 'self._client._types.struct_type("%s", "%s")' % (
-                typ.protobuf_type.service,
-                typ.protobuf_type.name,
-            )
-        if isinstance(typ, TupleType):
-            return "self._client._types.tuple_type(%s)" % ", ".join(
-                self.parse_python_type_at_position(x) for x in typ.value_types
-            )
-        if isinstance(typ, ListType):
-            return (
-                "self._client._types.list_type(%s)"
-                % self.parse_python_type_at_position(typ.value_type)
-            )
-        if isinstance(typ, SetType):
-            return (
-                "self._client._types.set_type(%s)"
-                % self.parse_python_type_at_position(typ.value_type)
-            )
-        if isinstance(typ, DictionaryType):
-            return "self._client._types.dictionary_type(%s, %s)" % (
-                self.parse_python_type_at_position(typ.key_type),
-                self.parse_python_type_at_position(typ.value_type),
-            )
-        raise RuntimeError("Unknown type " + typ)
 
     def parse_type_specification(self, typ):
         if typ is None:
@@ -293,9 +222,6 @@ class PythonGenerator(Generator[StubLanguage]):
         for info in procedures:
             info["return_type"] = {
                 "name": info["return_type"],
-                "python_type": self.parse_python_type(
-                    self.get_return_type(info["procedure"])
-                ),
                 "spec": self.parse_type_specification(
                     self.get_return_type(info["procedure"])
                 ),
@@ -305,7 +231,6 @@ class PythonGenerator(Generator[StubLanguage]):
                 ptype = as_type(self.types, info["procedure"]["parameters"][i]["type"])
                 pinfo["type"] = {
                     "name": pinfo["type"],
-                    "python_type": self.parse_python_type(ptype),
                     "spec": self.parse_type_specification(ptype),
                 }
                 pos += 1
@@ -319,9 +244,6 @@ class PythonGenerator(Generator[StubLanguage]):
             for info in items:
                 info["return_type"] = {
                     "name": info["return_type"],
-                    "python_type": self.parse_python_type(
-                        self.get_return_type(info["procedure"])
-                    ),
                     "spec": self.parse_type_specification(
                         self.get_return_type(info["procedure"])
                     ),
@@ -333,7 +255,6 @@ class PythonGenerator(Generator[StubLanguage]):
                     )
                     pinfo["type"] = {
                         "name": pinfo["type"],
-                        "python_type": self.parse_python_type(ptype),
                         "spec": self.parse_type_specification(ptype),
                     }
                     pos += 1

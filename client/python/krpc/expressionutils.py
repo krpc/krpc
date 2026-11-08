@@ -10,19 +10,9 @@ from typing import TYPE_CHECKING, Any
 import krpc.schema.KRPC_pb2 as KRPC
 from krpc.attributes import Attributes
 from krpc.service import _member_name
-from krpc.types import WrappedClass
 
 if TYPE_CHECKING:
     from krpc.client import Client
-
-
-def unwrap_class(value: object) -> object:
-    """The value, with a wrapped class replaced by the class it wraps. A class
-    accessed through a service with the pre-generated stubs is a WrappedClass
-    around a subclass of the stub class."""
-    if isinstance(value, WrappedClass):
-        return value._class_type
-    return value
 
 
 NUMERIC_CODES = (

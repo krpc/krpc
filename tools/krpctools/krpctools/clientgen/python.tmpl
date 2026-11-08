@@ -1,13 +1,10 @@
 from __future__ import annotations
-import warnings
 from typing import Tuple, Set, Dict, List, NamedTuple, Optional, TYPE_CHECKING
 import krpc.limits
-import krpc.schema
-from krpc.schema import KRPC_pb2
-from krpc.types import TypeBase, ClassBase, WrappedClass, DocEnum, StaticMethod
+from krpc.declarations import DeclaredClass, DeclaredObject, declaration_error as _declaration
 from krpc.event import Event
-if TYPE_CHECKING:
-    from krpc.services import Client
+from krpc.schema import KRPC_pb2
+from krpc.types import DocEnum
 {% for service in dependencies %}
 from krpc.services import {{service|lower()}} as _service_{{service|lower()}}
 {% endfor %}
@@ -16,10 +13,35 @@ from krpc.services import {{service|lower()}} as _service_{{service|lower()}}
 self{% for x in parameters %}, {{x.name}}: {{ x.type.spec }}{%if 'default_value' in x %} = {{x.default_value}}{% endif %}{% endfor %}{% endmacro %}
 {% macro static_arg_list(parameters) %}
 {% for x in parameters %}{{x.name}}: {{ x.type.spec }}{%if 'default_value' in x %} = {{x.default_value}}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %}{% endmacro %}
-{% macro arg_values(parameters) %}
-{% for x in parameters %}{{x.name}}{% if not loop.last %}, {% endif %}{% endfor %}{% endmacro %}
-{% macro arg_types(parameters) %}
-{% for x in parameters %}{{x.type.python_type}}{% if not loop.last %}, {% endif %}{% endfor %}{% endmacro %}
+{% macro properties_of(properties, owner) %}
+    {% for prop_name, prop in properties.items() %}
+    @property
+    {% if 'getter' in prop %}
+    def {{prop_name}}(self) -> {{ prop.getter.return_type.spec }}:
+{% if prop.getter.documentation %}{{ prop.getter.documentation | indent(width=8) }}
+{% endif %}
+    {% else %}
+    def {{prop_name}}(self) -> {{ prop.setter.parameters[0].type.spec }}:
+    {% endif %}
+        raise _declaration({{ owner }})
+
+    {% if 'setter' in prop %}
+    @{{prop_name}}.setter
+    def {{prop_name}}({{ arg_list(prop.setter.parameters) }}) -> None:
+        raise _declaration({{ owner }})
+
+    {% endif %}
+    {% endfor %}
+{% endmacro %}
+{% macro methods_of(methods, owner) %}
+    {% for proc_name, procedure in methods.items() %}
+    def {{proc_name}}({{ arg_list(procedure.parameters) }}) -> {{ procedure.return_type.spec }}:
+{% if procedure.documentation %}{{ procedure.documentation | indent(width=8) }}
+{% endif %}
+        raise _declaration({{ owner }})
+
+    {% endfor %}
+{% endmacro %}
 
 {% for enum_name, enumeration in enumerations.items() %}
 class {{enum_name}}(DocEnum):
@@ -48,296 +70,50 @@ class {{struct_name}}(NamedTuple):
 class {{exception_name}}({{ exception.native or 'RuntimeError' }}):
 {% if exception.documentation %}{{ exception.documentation | indent(width=4) }}
 {% endif %}
-    _service_name = '{{ service_name }}'
-    _class_name = '{{ exception_name }}'
+    _service_name = "{{ service_name }}"
+    _class_name = "{{ exception_name }}"
 
 
 {% endfor %}
 {% for class_name, class in classes.items() %}
-class {{class_name}}(ClassBase):
+class {{class_name}}(DeclaredObject, metaclass=DeclaredClass):
 {% if class.documentation %}{{ class.documentation | indent(width=4) }}
 {% endif %}
-    {% for prop_name, prop in class['properties'].items() %}
-    {% if 'getter' in prop %}
-    @property
-    def {{prop_name}}(self) -> {{ prop.getter.return_type.spec }}:
-{% if prop.getter.documentation %}{{ prop.getter.documentation | indent(width=8) }}
-{% endif %}
-{% if prop.getter.deprecated %}        warnings.warn("{{ service_name }}.{{ class_name }}.{{ prop_name }} is deprecated{% if prop.getter.deprecated_reason %}: {{ prop.getter.deprecated_reason }}{% endif %}", DeprecationWarning, stacklevel=2)
-{% endif %}
-        return self._client._invoke(
-            "{{ service_name }}",
-            "{{ prop.getter.remote_name }}",
-            [self],
-            [self._client._types.class_type("{{ service_name }}", "{{ class_name }}")],
-            {{ prop.getter.return_type.python_type }}
-        )
+    _service_name = "{{ service_name }}"
+    _class_name = "{{ class_name }}"
 
-    {% else %}
-    @property
-    def {{prop_name}}(self) -> {{ prop.setter.parameters[0].type.spec }}:
-        raise NotImplementedError
-
-    {% endif %}
-    {% if 'setter' in prop %}
-    @{{prop_name}}.setter
-    def {{prop_name}}({{ arg_list(prop.setter.parameters) }}) -> None:
-{% if prop.setter.deprecated %}        warnings.warn("{{ service_name }}.{{ class_name }}.{{ prop_name }} is deprecated{% if prop.setter.deprecated_reason %}: {{ prop.setter.deprecated_reason }}{% endif %}", DeprecationWarning, stacklevel=2)
-{% endif %}
-        return self._client._invoke(
-            "{{ service_name }}",
-            "{{ prop.setter.remote_name }}",
-            [self, {{ arg_values(prop.setter.parameters) }}],
-            [self._client._types.class_type("{{ service_name }}", "{{ class_name }}"), {{ arg_types(prop.setter.parameters) }}],
-            None
-        )
-
-    def _build_call_set__{{prop_name}}({{ arg_list(prop.setter.parameters) }}) -> KRPC_pb2.ProcedureCall:
-        return self._client._build_call(
-            "{{ service_name }}",
-            "{{ prop.setter.remote_name }}",
-            [self, {{ arg_values(prop.setter.parameters) }}],
-            [self._client._types.class_type("{{ service_name }}", "{{ class_name }}"), {{ arg_types(prop.setter.parameters) }}],
-            None
-        )
-
-    {% endif %}
-    {% if 'getter' in prop %}
-    def _return_type__{{prop_name}}(self) -> TypeBase:
-        return {{ prop.getter.return_type.python_type }}
-
-    def _build_call__{{prop_name}}(self) -> KRPC_pb2.ProcedureCall:
-        return self._client._build_call(
-            "{{ service_name }}",
-            "{{ prop.getter.remote_name }}",
-            [self],
-            [self._client._types.class_type("{{ service_name }}", "{{ class_name }}")],
-            {{ prop.getter.return_type.python_type }}
-        )
-
-    {% endif %}
-    {% endfor %}
-    {% for proc_name, procedure in class['methods'].items() %}
-    def {{proc_name}}({{ arg_list(procedure.parameters) }}) -> {{ procedure.return_type.spec }}:
-{% if procedure.documentation %}{{ procedure.documentation | indent(width=8) }}
-{% endif %}
-{% if procedure.deprecated %}        warnings.warn("{{ service_name }}.{{ class_name }}.{{ proc_name }} is deprecated{% if procedure.deprecated_reason %}: {{ procedure.deprecated_reason }}{% endif %}", DeprecationWarning, stacklevel=2)
-{% endif %}
-        return self._client._invoke(
-            "{{ service_name }}",
-            "{{ procedure.remote_name }}",
-            [self, {{ arg_values(procedure.parameters) }}],
-            [self._client._types.class_type("{{ service_name }}", "{{ class_name }}"), {{ arg_types(procedure.parameters) }}],
-            {{ procedure.return_type.python_type }}
-        )
-
-    def _return_type__{{proc_name}}(self) -> {% if procedure.return_type.python_type == 'None' %}TypeBase | None{% else %}TypeBase{% endif %}:
-        return {{ procedure.return_type.python_type }}
-
-    def _build_call__{{proc_name}}({{ arg_list(procedure.parameters) }}) -> KRPC_pb2.ProcedureCall:
-        return self._client._build_call(
-            "{{ service_name }}",
-            "{{ procedure.remote_name }}",
-            [self, {{ arg_values(procedure.parameters) }}],
-            [self._client._types.class_type("{{ service_name }}", "{{ class_name }}"), {{ arg_types(procedure.parameters) }}],
-            {{ procedure.return_type.python_type }}
-        )
-
-    {% endfor %}
+{{ properties_of(class['properties'], '"' + service_name + '", "' + class_name + '"') }}
+{{ methods_of(class['methods'], '"' + service_name + '", "' + class_name + '"') }}
     {% for proc_name, procedure in class['static_methods'].items() %}
-    @StaticMethod
-    def {{proc_name}}(cls, {{ static_arg_list(procedure.parameters) }}) -> {{ procedure.return_type.spec }}:
+    @staticmethod
+    def {{proc_name}}({{ static_arg_list(procedure.parameters) }}) -> {{ procedure.return_type.spec }}:
 {% if procedure.documentation %}{{ procedure.documentation | indent(width=8) }}
 {% endif %}
-{% if procedure.deprecated %}        warnings.warn("{{ service_name }}.{{ class_name }}.{{ proc_name }} is deprecated{% if procedure.deprecated_reason %}: {{ procedure.deprecated_reason }}{% endif %}", DeprecationWarning, stacklevel=2)
-{% endif %}
-        self = cls
-        return cls._client._invoke(
-            "{{ service_name }}",
-            "{{ procedure.remote_name }}",
-            [{{ arg_values(procedure.parameters) }}],
-            [{{ arg_types(procedure.parameters) }}],
-            {{ procedure.return_type.python_type }}
-        )
-
-    @StaticMethod
-    def _return_type__{{proc_name}}(cls) -> {% if procedure.return_type.python_type == 'None' %}TypeBase | None{% else %}TypeBase{% endif %}:
-        self = cls
-        return {{ procedure.return_type.python_type }}
-
-    @StaticMethod
-    def _build_call__{{proc_name}}(cls, {{ static_arg_list(procedure.parameters) }}) -> KRPC_pb2.ProcedureCall:
-        self = cls
-        return self._client._build_call(
-            "{{ service_name }}",
-            "{{ procedure.remote_name }}",
-            [{{ arg_values(procedure.parameters) }}],
-            [{{ arg_types(procedure.parameters) }}],
-            {{ procedure.return_type.python_type }}
-        )
+        raise _declaration("{{ service_name }}", "{{ class_name }}")
 
     {% endfor %}
 
 
 {% endfor %}
-# The classes, enumerations, structures and exceptions put on the service in
-# __init__, declared for type checkers
+# Aliases for the types the service declares as its attributes, as an annotation in the body of
+# the service would otherwise name the attribute itself
 if TYPE_CHECKING:
 {% for name in classes.keys() | list + enumerations.keys() | list + structs.keys() | list + exceptions.keys() | list %}
     _{{ name }} = {{ name }}
-{% endfor %}
-
-    class _{{ service_name }}Definitions:
-{% for name in classes.keys() | list + enumerations.keys() | list + structs.keys() | list + exceptions.keys() | list %}
-        {{ name }}: type[_{{ name }}]
 {% else %}
-        pass
+    pass
 {% endfor %}
-else:
-    _{{ service_name }}Definitions = object
 
 
-class {{ service_name }}(_{{ service_name }}Definitions):
+class {{ service_name }}(metaclass=DeclaredClass):
 {% if service_documentation %}{{ service_documentation | indent(width=4) }}
 {% endif %}
+    _service_name = "{{ service_name }}"
+    _class_name = None
 
-    def __init__(self, client: Client) -> None:
-        self._client = client
-        # The classes, enumerations, structures and exceptions the service defines are
-        # put on the service here, so that reaching one is an ordinary attribute lookup
-        # and nothing has to intercept the lookups that do not name one - which is every
-        # call, as a call goes through a procedure or a property. A class is bound to the
-        # client it is reached through, so that its static methods use that client.
-        self.__dict__.update(self._enumerations)
-        self.__dict__.update(self._structs)
-        self.__dict__.update(self._exceptions)
-        for name, class_type in self._classes.items():
-            self.__dict__[name] = WrappedClass(client, class_type)
+{% for name in classes.keys() | list + enumerations.keys() | list + structs.keys() | list + exceptions.keys() | list %}
+    {{ name }}: type[_{{ name }}] = {{ name }}
+{% endfor %}
 
-    # Hidden from type checkers, so that they report a name the service does not define
-    if not TYPE_CHECKING:
-
-        def __getattr__(self, name):
-            # Reached only once the ordinary lookup has failed, which for a service means
-            # either a name it does not define, or one it does whose procedure or property
-            # raised an AttributeError of its own. Python discards that error before calling
-            # this, so it cannot be reported here; what can be done is to not report a member
-            # that does exist as missing, which would point at the wrong thing entirely.
-            cls = type(self)
-            if hasattr(cls, name):
-                raise AttributeError(
-                    "'%s' object attribute '%s' raised AttributeError"
-                    % (cls.__name__, name)
-                )
-            raise AttributeError(
-                "'%s' object has no attribute '%s'" % (cls.__name__, name)
-            )
-
-    _classes = {
-    {% for class_name in classes.keys() %}
-        "{{class_name}}": {{ class_name }},
-    {% endfor %}
-    }
-    _enumerations = {
-    {% for enum_name in enumerations.keys() %}
-        "{{ enum_name }}": {{ enum_name }},
-    {% endfor %}
-    }
-    _structs = {
-    {% for struct_name in structs.keys() %}
-        "{{ struct_name }}": {{ struct_name }},
-    {% endfor %}
-    }
-    _exceptions = {
-    {% for exception_name in exceptions.keys() %}
-        "{{ exception_name }}": {{ exception_name }},
-    {% endfor %}
-    }
-
-    {% for prop_name, prop in properties.items() %}
-    {% if 'getter' in prop %}
-    @property
-    def {{prop_name}}(self) -> {{ prop.getter.return_type.spec }}:
-{% if prop.getter.documentation %}{{ prop.getter.documentation | indent(width=8) }}
-{% endif %}
-{% if prop.getter.deprecated %}        warnings.warn("{{ service_name }}.{{ prop_name }} is deprecated{% if prop.getter.deprecated_reason %}: {{ prop.getter.deprecated_reason }}{% endif %}", DeprecationWarning, stacklevel=2)
-{% endif %}
-        return self._client._invoke(
-            "{{ service_name }}",
-            "{{ prop.getter.remote_name }}",
-            [],
-            [],
-            {{ prop.getter.return_type.python_type }}
-        )
-
-    {% else %}
-    @property
-    def {{prop_name}}(self) -> {{ prop.setter.parameters[0].type.spec }}:
-        raise NotImplementedError
-
-    {% endif %}
-    {% if 'setter' in prop %}
-    @{{prop_name}}.setter
-    def {{prop_name}}({{ arg_list(prop.setter.parameters) }}) -> None:
-{% if prop.setter.deprecated %}        warnings.warn("{{ service_name }}.{{ prop_name }} is deprecated{% if prop.setter.deprecated_reason %}: {{ prop.setter.deprecated_reason }}{% endif %}", DeprecationWarning, stacklevel=2)
-{% endif %}
-        return self._client._invoke(
-            "{{ service_name }}",
-            "{{ prop.setter.remote_name }}",
-            [{{ arg_values(prop.setter.parameters) }}],
-            [{{ arg_types(prop.setter.parameters) }}],
-            None
-        )
-
-    def _build_call_set__{{prop_name}}({{ arg_list(prop.setter.parameters) }}) -> KRPC_pb2.ProcedureCall:
-        return self._client._build_call(
-            "{{ service_name }}",
-            "{{ prop.setter.remote_name }}",
-            [{{ arg_values(prop.setter.parameters) }}],
-            [{{ arg_types(prop.setter.parameters) }}],
-            None
-        )
-
-    {% endif %}
-    {% if 'getter' in prop %}
-    def _return_type__{{prop_name}}(self) -> TypeBase:
-        return {{ prop.getter.return_type.python_type }}
-
-    def _build_call__{{prop_name}}(self) -> KRPC_pb2.ProcedureCall:
-        return self._client._build_call(
-            "{{ service_name }}",
-            "{{ prop.getter.remote_name }}",
-            [],
-            [],
-            {{ prop.getter.return_type.python_type }}
-        )
-
-    {% endif %}
-    {% endfor %}
-    {% for proc_name, procedure in procedures.items() %}
-    def {{proc_name}}({{ arg_list(procedure.parameters) }}) -> {{ procedure.return_type.spec }}:
-{% if procedure.documentation %}{{ procedure.documentation | indent(width=8) }}
-{% endif %}
-{% if procedure.deprecated %}        warnings.warn("{{ service_name }}.{{ proc_name }} is deprecated{% if procedure.deprecated_reason %}: {{ procedure.deprecated_reason }}{% endif %}", DeprecationWarning, stacklevel=2)
-{% endif %}
-        return self._client._invoke(
-            "{{ service_name }}",
-            "{{ procedure.remote_name }}",
-            [{{ arg_values(procedure.parameters) }}],
-            [{{ arg_types(procedure.parameters) }}],
-            {{ procedure.return_type.python_type }}
-        )
-
-    def _return_type__{{proc_name}}(self) -> {% if procedure.return_type.python_type == 'None' %}TypeBase | None{% else %}TypeBase{% endif %}:
-        return {{ procedure.return_type.python_type }}
-
-    def _build_call__{{proc_name}}({{ arg_list(procedure.parameters) }}) -> KRPC_pb2.ProcedureCall:
-        return self._client._build_call(
-            "{{ service_name }}",
-            "{{ procedure.remote_name }}",
-            [{{ arg_values(procedure.parameters) }}],
-            [{{ arg_types(procedure.parameters) }}],
-            {{ procedure.return_type.python_type }}
-        )
-
-    {% endfor %}
+{{ properties_of(properties, '"' + service_name + '", None') }}
+{{ methods_of(procedures, '"' + service_name + '", None') }}

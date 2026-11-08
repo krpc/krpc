@@ -1,13 +1,7 @@
 import unittest
 
 from krpc.schema.KRPC_pb2 import Type
-from krpc.types import (
-    ClassBase,
-    StaticMethod,
-    StructType,
-    Types,
-    WrappedClass,
-)
+from krpc.types import StructType, Types
 
 
 class TestTypes(unittest.TestCase):
@@ -170,70 +164,6 @@ class TestTypes(unittest.TestCase):
         self.assertRaises(
             ValueError, types.coerce_to, [1], types.tuple_type(types.string_type)
         )
-
-
-class _MyClass(ClassBase):
-    @StaticMethod
-    def my_static(cls, x: int) -> int:
-        return cls._client(x)  # pyright: ignore[reportCallIssue]
-
-
-class TestStaticMethod(unittest.TestCase):
-    def setUp(self) -> None:
-        if hasattr(_MyClass, "_client"):
-            del _MyClass._client  # pyright: ignore[reportAttributeAccessIssue]
-
-    def _make_instance(self, client_fn: object) -> _MyClass:
-        instance = object.__new__(_MyClass)
-        instance._client = client_fn  # pyright: ignore[reportAttributeAccessIssue]
-        instance._object_id = 1
-        return instance
-
-    def test_bound_has_dunder_self_and_name(self) -> None:
-        _MyClass._client = lambda x: x  # pyright: ignore[reportAttributeAccessIssue]
-        bound = _MyClass.my_static
-        self.assertIs(_MyClass, bound.__self__)  # pyright: ignore[reportFunctionMemberAccess]
-        self.assertEqual("my_static", bound.__name__)
-
-    def test_bound_via_instance_has_dunder_self(self) -> None:
-        instance = self._make_instance(lambda x: x)
-        bound = instance.my_static
-        self.assertIs(_MyClass, bound.__self__)  # pyright: ignore[reportFunctionMemberAccess]
-
-
-class TestWrappedClass(unittest.TestCase):
-    def setUp(self) -> None:
-        if hasattr(_MyClass, "_client"):
-            del _MyClass._client  # pyright: ignore[reportAttributeAccessIssue]
-
-    def test_static_methods_use_the_wrapping_client(self) -> None:
-        wrapped1 = WrappedClass(lambda x: x * 2, _MyClass)  # pyright: ignore[reportArgumentType]
-        wrapped2 = WrappedClass(lambda x: x + 100, _MyClass)  # pyright: ignore[reportArgumentType]
-        # Retrieve both static methods before calling either: a single _client slot shared on the
-        # class would let the second client's value leak into the first client's call.
-        method1 = wrapped1.my_static
-        method2 = wrapped2.my_static
-        self.assertEqual(6, method1(3))
-        self.assertEqual(103, method2(3))
-        # The shared base class is never mutated.
-        self.assertFalse(hasattr(_MyClass, "_client"))
-
-    def test_construction_through_wrapper(self) -> None:
-        wrapped = WrappedClass(lambda x: x, _MyClass)  # pyright: ignore[reportArgumentType]
-        instance = wrapped(None, 1)
-        self.assertIsInstance(instance, _MyClass)
-
-    def test_isinstance(self) -> None:
-        class Derived(_MyClass):
-            pass
-
-        wrapped = WrappedClass(lambda x: x, _MyClass)  # pyright: ignore[reportArgumentType]
-        wrapped_derived = WrappedClass(lambda x: x, Derived)  # pyright: ignore[reportArgumentType]
-        self.assertIsInstance(_MyClass(None, 1), wrapped)  # pyright: ignore[reportArgumentType]
-        self.assertIsInstance(Derived(None, 1), wrapped)  # pyright: ignore[reportArgumentType]
-        self.assertNotIsInstance(_MyClass(None, 1), wrapped_derived)  # pyright: ignore[reportArgumentType]
-        self.assertTrue(issubclass(Derived, wrapped))  # pyright: ignore[reportArgumentType]
-        self.assertFalse(issubclass(_MyClass, wrapped_derived))  # pyright: ignore[reportArgumentType]
 
 
 if __name__ == "__main__":
