@@ -1,7 +1,7 @@
 """pytest plugin for the kRPC integration tests.
 
-Registered via the ``pytest11`` entry point (see pyproject.toml), so it loads automatically
-whenever pytest runs with krpctest installed. It adds a few small pieces of behaviour:
+Opt-in: load it with ``pytest -p krpctest.pytest_plugin``. It adds a few small pieces of
+behaviour:
 
  * a ``--ksp-dir`` option that points the framework at a KSP install,
  * a ``--no-launch`` option for running against a game started separately,

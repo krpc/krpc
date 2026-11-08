@@ -9,8 +9,8 @@ Installing the package provides:
   installs them into a KSP `GameData` directory (the install given by `KSP_DIR` / `--ksp-dir`).
 - `krpc-run-ksp` — installs the mod, launches KSP, and streams its kRPC log output to the
   terminal. Its `--load-*` options drive the auto-load behaviour documented below.
-- a pytest plugin — so `pytest` discovers and runs the `krpctest.TestCase` tests natively,
-  launching and managing KSP automatically.
+- a pytest plugin, loaded with `pytest -p krpctest.pytest_plugin`, that runs the
+  `krpctest.TestCase` tests and launches and manages KSP for them.
 
 From a checkout of the kRPC repository there is no need to install the package: `bazel run
 //:test-ingame` runs the tests and `bazel run //:run-ksp` runs the game, taking this package and

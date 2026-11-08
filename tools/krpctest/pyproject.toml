@@ -26,9 +26,6 @@ classifiers = [
 krpc-run-ksp = "krpctest.run_ksp:main"
 krpc-install = "krpctest.install:main"
 
-[project.entry-points.pytest11]
-krpctest = "krpctest.pytest_plugin"
-
 [project.urls]
 Homepage = "https://krpc.github.io/krpc"
 

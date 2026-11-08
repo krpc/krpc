@@ -30,10 +30,7 @@ def main():
         sys.exit("This tool must be run via `bazel run //:test-ingame`.")
     os.chdir(os.environ.get("BUILD_WORKING_DIRECTORY", workspace))
 
-    # krpctest is a library here rather than an installed distribution, so it has no
-    # pytest11 entry point for pytest to discover the plugin through; name it explicitly.
-    # This belongs here and not in pytest.ini, which is also read when krpctest is
-    # installed, as pytest would then register the plugin twice and fail.
+    # The plugin is opt-in, so it stays out of other pytest runs where krpctest is installed
     return pytest.main(["-p", "krpctest.pytest_plugin", *sys.argv[1:]])
 
 
