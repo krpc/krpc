@@ -18,7 +18,10 @@ services = clientgen_services("python")
 # targets in this workspace (the wheel below is what is released)
 py_library(
     name = "krpc_lib",
-    srcs = services + [":services-testservice"],
+    srcs = services + [
+        ":services-init",
+        ":services-testservice",
+    ],
     visibility = ["//visibility:public"],
     deps = [":krpc_base_lib"],
 )
@@ -31,7 +34,6 @@ py_library(
     srcs = glob(["krpc/**/*.py"]) + [
         ":krpc-version-py",
         ":schema-py",
-        ":services-init",
     ],
     # The type stub for the generated protobuf module, so type checkers see
     # the message classes (the module itself builds them dynamically)
@@ -68,30 +70,6 @@ genrule(
     cmd = 'cp "$<" "$@"',
 )
 
-# The client without its generated service modules, for the tests. Its own directory keeps
-# the name of a wheel from clashing with the one below.
-py_wheel(
-    name = "python_base",
-    out = "base/krpc-%s-py3-none-any.whl" % python_version,
-    files = [
-        "LICENSE",
-        "README.md",
-        "pyproject.toml",
-        ":services-init",
-        "//:COPYING",
-        "//:COPYING.LESSER",
-        "//:python_version",
-        "//protobuf:python",
-        "//tools/build/protobuf:LICENSE.Google.Protobuf",
-    ] + glob(["krpc/**/*"]),
-    path_map = {
-        "version.py": "krpc/version.py",
-        "client/python/": "",
-        "protobuf/": "krpc/schema/",
-        "tools/build/protobuf/LICENSE.Google.Protobuf": "LICENSE.protobuf",
-    },
-)
-
 py_wheel(
     name = "python",
     out = "krpc-%s-py3-none-any.whl" % python_version,
@@ -118,6 +96,7 @@ py_wheel(
 # The tests that need no server, and those that run against one. Splitting them keeps the
 # ones that are the same whatever carries a call from being run once per transport.
 unit_tests = [
+    "krpc/test/test_declarations.py",
     "krpc/test/test_definitions.py",
     "krpc/test/test_docmath.py",
     "krpc/test/test_expressionutils.py",
@@ -129,6 +108,7 @@ unit_tests = [
 
 client_tests = [
     "krpc/test/test_client.py",
+    "krpc/test/test_declarations_drift.py",
     "krpc/test/test_documentation.py",
     "krpc/test/test_expressiontree.py",
     "krpc/test/test_function.py",
@@ -140,10 +120,8 @@ test_suite(
     name = "test",
     tests = [
         ":autodoc",
-        ":client-base",
         ":client-tcpip",
         ":conformance",
-        ":conformance-base",
         ":lint",
         ":unit",
     ],
@@ -171,29 +149,10 @@ client_test(
     test_executable = ":clienttest",
 )
 
-# And again against the wheel built without the pre-generated service stubs, so that the
-# services generated at runtime are covered as well.
-client_test(
-    name = "client-base",
-    size = "medium",
-    server_executable = "//tools/TestServer",
-    tags = ["requires-network"],
-    test_executable = ":clienttest_base",
-)
-
 py_test(
     name = "clienttest",
     size = "small",
     src = ":python",
-    tags = ["requires-network"],
-    tests = client_tests,
-    deps = deps,
-)
-
-py_test(
-    name = "clienttest_base",
-    size = "small",
-    src = ":python_base",
     tags = ["requires-network"],
     tests = client_tests,
     deps = deps,
@@ -247,44 +206,6 @@ conformance_test(
     ],
     tags = ["requires-network"],
     testee = ":conformance-testee",
-    unsupported = "conformance/unsupported.txt",
-)
-
-# And again without the generated service modules, so the services are built from the
-# server's definitions at run time
-py_binary(
-    name = "conformance-testee-base",
-    srcs = ["conformance/testee.py"],
-    main = "conformance/testee.py",
-    deps = [
-        ":krpc_base_lib",
-        "//client/conformance:testee_py",
-    ],
-)
-
-conformance_test(
-    name = "conformance-base",
-    size = "medium",
-    conventions = "conformance/conventions.json",
-    expected_failures = "conformance/expected-failures.txt",
-    profiles = [
-        "core",
-        "error-types",
-        "dynamic",
-        "defaults",
-        "named-arguments",
-        "streams",
-        "events",
-        "functions",
-        "connections",
-        "concurrency",
-        "callbacks",
-        "conditions",
-        "ordering",
-        "races",
-    ],
-    tags = ["requires-network"],
-    testee = ":conformance-testee-base",
     unsupported = "conformance/unsupported.txt",
 )
 

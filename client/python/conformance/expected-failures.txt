@@ -1,5 +1,4 @@
 # The conformance tests the Python client fails, one per line, with the reason as a comment
-test_calls.py::test_exposed_members[services]  # With stubs, every shipped service is attached whether or not the server has it. Without, is_service misses the built service instances
 test_codec.py::test_too_few_items[tuple]  # A short wire tuple decodes short
 test_codec.py::test_malformed_data[bytes]  # A length past the end of the data decodes short
 test_codec.py::test_malformed_data[string]  # A length past the end of the data decodes short

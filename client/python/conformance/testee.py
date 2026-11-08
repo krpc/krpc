@@ -754,11 +754,8 @@ def member_name(name: str) -> str:
 
 
 def is_service(value: object) -> bool:
-    """Whether a value is a service: one built from the server's definitions, or a
-    pre-generated stub."""
-    if isinstance(value, type) and issubclass(value, ServiceBase):
-        return True
-    return type(value).__module__.startswith("krpc.services.")
+    """Whether a value is a service, which the client builds from the server's definitions."""
+    return isinstance(value, ServiceBase)
 
 
 class Unsupported(Exception):

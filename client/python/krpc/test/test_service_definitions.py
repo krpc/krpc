@@ -1,76 +1,166 @@
 import unittest
-import warnings
 from typing import Any, NamedTuple
 
 import krpc.schema.KRPC_pb2 as KRPC
-from krpc.client import _stub_definitions
+from krpc.declarations import register
 from krpc.definitions import register_all
 from krpc.service import create_service, service_definitions
-from krpc.types import Types
+from krpc.types import DocEnum, Types
 
 
 class FakeClient:
     """As much of a client as creating a service needs, without a connection to a server"""
 
     # Set by create_services
-    ServiceA: Any
+    Generated: Any
 
     def __init__(self) -> None:
         self._types = Types()
 
 
-def struct_service(name: str, field_type: KRPC.Type) -> KRPC.Service:
-    """A service defining a structure with a single field of the given type"""
+# The classes of a generated module for the service Generated
+class Mode(DocEnum):
+    slow = 0
+    fast = 1
+
+
+class Thing(NamedTuple):
+    value: int
+
+
+class Failure(RuntimeError):
+    pass
+
+
+register("Generated", Mode, Thing, Failure)
+
+
+def generated_service(
+    mode_values: dict[str, int], thing_fields: list[str], failure_mapped_type: str = ""
+) -> KRPC.Service:
+    """The definition of the service Generated, with the given values of its enumeration and
+    the given fields of its structure"""
     service = KRPC.Service()
-    service.name = name
+    service.name = "Generated"
+    enumeration = service.enumerations.add()
+    enumeration.name = "Mode"
+    for name, value in mode_values.items():
+        enum_value = enumeration.values.add()
+        enum_value.name = name
+        enum_value.value = value
     struct = service.structs.add()
     struct.name = "Thing"
-    field = struct.fields.add()
-    field.name = "Value"
-    field.type.CopyFrom(field_type)
+    for name in thing_fields:
+        field = struct.fields.add()
+        field.name = name
+        field.type.code = KRPC.Type.SINT32
+    exception = service.exceptions.add()
+    exception.name = "Failure"
+    exception.mapped_type = failure_mapped_type
     return service
 
 
+def create_services(services: list[KRPC.Service]) -> FakeClient:
+    client = FakeClient()
+    definitions = [
+        definition
+        for service in services
+        for definition in service_definitions(service)
+    ]
+    register_all(client._types, definitions)
+    for service in services:
+        setattr(client, service.name, create_service(client, service))  # pyright: ignore[reportArgumentType]
+    return client
+
+
 class TestServiceDefinitions(unittest.TestCase):
-    @staticmethod
-    def create_services(services: list[KRPC.Service]) -> FakeClient:
-        client = FakeClient()
-        definitions = [
-            definition
-            for service in services
-            for definition in service_definitions(service)
-        ]
-        register_all(client._types, definitions)
-        for service in services:
-            setattr(client, service.name, create_service(client, service))  # pyright: ignore[reportArgumentType]
-        return client
+    def test_matching_definitions_use_the_generated_classes(self) -> None:
+        client = create_services([generated_service({"Slow": 0, "Fast": 1}, ["Value"])])
+        self.assertIs(Mode, client.Generated.Mode)
+        self.assertIs(Thing, client.Generated.Thing)
+        self.assertIs(Failure, client.Generated.Failure)
 
-    def test_stub_with_more_fields_than_the_server(self) -> None:
-        # An older server declares fewer fields than the stubs were generated against, so a
-        # value of the structure cannot be built as the type the stubs provide
-        class Thing(NamedTuple):
-            value: int
-            appended: str
-
-        class StubService:
-            _classes: dict[str, type] = {}
-            _enumerations: dict[str, type] = {}
-            _structs = {"Thing": Thing}
-
-        client = FakeClient()
-        service = struct_service("ServiceB", Types().sint32_type.protobuf_type)
-        with warnings.catch_warnings(record=True) as caught:
-            warnings.simplefilter("always")
-            register_all(
-                client._types,
-                _stub_definitions(client, service, StubService()),  # pyright: ignore[reportArgumentType]
-            )
-        self.assertTrue(
-            any("ServiceB.Thing" in str(warning.message) for warning in caught)
+    def test_differing_definitions_build_their_own_classes(self) -> None:
+        client = create_services(
+            [generated_service({"Slow": 0, "Medium": 1, "Fast": 2}, ["Value", "Other"])]
         )
-        struct_type = client._types.struct_type("ServiceB", "Thing")
-        self.assertEqual(["value"], struct_type.field_names)
-        self.assertIsNot(Thing, struct_type.python_type)
+        built_mode = client.Generated.Mode
+        self.assertIsNot(Mode, built_mode)
+        self.assertIsNot(Thing, client.Generated.Thing)
+        self.assertEqual(("value", "other"), client.Generated.Thing._fields)
+        # An exception matches on its name and the builtin it derives from
+        self.assertIs(Failure, client.Generated.Failure)
+
+        # A generated value is a value of its own enumeration, and coerces to the built one by
+        # its number
+        self.assertNotEqual(Mode.fast, built_mode.fast)
+        mode_type = client._types.enumeration_type("Generated", "Mode")
+        self.assertIs(built_mode.medium, client._types.coerce_to(Mode.fast, mode_type))
+
+    def test_an_exception_mapped_to_another_builtin_builds_its_own_class(self) -> None:
+        client = create_services(
+            [
+                generated_service(
+                    {"Slow": 0, "Fast": 1}, ["Value"], "System.ArgumentException"
+                )
+            ]
+        )
+        self.assertIsNot(Failure, client.Generated.Failure)
+        self.assertTrue(issubclass(client.Generated.Failure, ValueError))
+
+    def test_an_exception_with_a_narrower_builtin_builds_its_own_class(self) -> None:
+        class Narrower(NotImplementedError):
+            pass
+
+        Narrower.__name__ = "Failure"
+        register("Generated", Narrower)
+        try:
+            client = create_services(
+                [generated_service({"Slow": 0, "Fast": 1}, ["Value"])]
+            )
+            self.assertIsNot(Narrower, client.Generated.Failure)
+            self.assertIs(RuntimeError, client.Generated.Failure.__base__)
+        finally:
+            register("Generated", Failure)
+
+    def test_an_enumeration_with_an_alias_uses_the_generated_class(self) -> None:
+        class Aliased(DocEnum):
+            slow = 0
+            fast = 1
+            quick = 1
+
+        Aliased.__name__ = "Mode"
+        register("Generated", Aliased)
+        try:
+            client = create_services(
+                [generated_service({"Slow": 0, "Fast": 1, "Quick": 1}, ["Value"])]
+            )
+            self.assertIs(Aliased, client.Generated.Mode)
+        finally:
+            register("Generated", Mode)
+
+    def test_a_number_the_server_lacks_does_not_coerce(self) -> None:
+        client = create_services([generated_service({"Slow": 0}, ["Value"])])
+        mode_type = client._types.enumeration_type("Generated", "Mode")
+        self.assertIs(
+            client.Generated.Mode.slow, client._types.coerce_to(Mode.slow, mode_type)
+        )
+        self.assertRaises(ValueError, client._types.coerce_to, Mode.fast, mode_type)
+
+    def test_a_later_registration_replaces_an_earlier_one(self) -> None:
+        class Newer(DocEnum):
+            slow = 0
+            fast = 1
+
+        Newer.__name__ = "Mode"
+        register("Generated", Newer)
+        try:
+            client = create_services(
+                [generated_service({"Slow": 0, "Fast": 1}, ["Value"])]
+            )
+            self.assertIs(Newer, client.Generated.Mode)
+        finally:
+            register("Generated", Mode)
 
 
 if __name__ == "__main__":

@@ -126,7 +126,6 @@ def connect(server: ScriptedServer) -> krpc.Client:
     return krpc.connect(
         name="session_test",
         port=server.port,
-        use_pregenerated_stubs=False,
         handshake_timeout=5.0,
         stall_timeout=30.0,
     )

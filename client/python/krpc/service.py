@@ -5,6 +5,7 @@ import keyword
 import warnings
 from collections import defaultdict
 from collections.abc import Callable, Iterable, Iterator
+from enum import Enum
 from typing import (
     TYPE_CHECKING,
     Any,
@@ -14,6 +15,7 @@ from xml.etree import ElementTree
 
 import krpc.schema.KRPC_pb2 as KRPC
 from krpc.attributes import Attributes
+from krpc.declarations import registered
 from krpc.definitions import (
     CLASS,
     ENUMERATION,
@@ -30,9 +32,9 @@ from krpc.types import (
     TypeBase,
     Types,
     UnknownTypeError,
-    WrappedClass,
     check_type_is_known,
     is_a_known_type,
+    native_exception,
 )
 from krpc.utils import snake_case
 
@@ -117,7 +119,7 @@ def _parse_deprecation_reason(reason: str, service_name: str) -> str:
     """Flatten a deprecation reason to plain text. The reason may contain the
     same see-cref markup as documentation strings; references are converted to
     Python-cased dotted names, with the current service's prefix dropped to
-    match the pre-generated stubs."""
+    match the generated modules."""
     if "<" not in reason:
         return reason
 
@@ -252,8 +254,19 @@ def _documentation(member: Any, service_name: str) -> str:
     return doc
 
 
+def _same_values(generated: type | None, values: dict[str, dict[str, object]]) -> bool:
+    """Whether a generated enumeration has the names and values of the server's definition"""
+    if not (isinstance(generated, type) and issubclass(generated, Enum)):
+        return False
+    return {name: member.value for name, member in generated.__members__.items()} == {
+        name: value["value"] for name, value in values.items()
+    }
+
+
 def service_definitions(service: KRPC.Service) -> Iterator[Definition]:
-    """The types a service defines, as records that can be registered in a type registry.
+    """The types a service defines, as records that can be registered in a type registry. An
+    enumeration, structure or exception uses the class a generated module registered for it,
+    when the server's definition matches.
 
     A service's procedures are built from types that this or any other service defines, so
     every service's definitions are registered before any service is created."""
@@ -278,7 +291,12 @@ def service_definitions(service: KRPC.Service) -> Iterator[Definition]:
         )
 
         def register(types: Types) -> None:
-            types.enumeration_type(name, enumeration.name, doc).set_values(values)
+            generated = registered(name, enumeration.name)
+            if not _same_values(generated, values):
+                generated = None
+            types.enumeration_type(name, enumeration.name, doc).set_values(
+                values, generated
+            )
 
         return register
 
@@ -286,7 +304,15 @@ def service_definitions(service: KRPC.Service) -> Iterator[Definition]:
         doc = _documentation(exception, name)
 
         def register(types: Types) -> None:
-            types.exception_type(name, exception.name, doc, exception.mapped_type)
+            generated = registered(name, exception.name)
+            if not (
+                isinstance(generated, type)
+                and generated.__bases__ == (native_exception(exception.mapped_type),)
+            ):
+                generated = None
+            types.exception_type(
+                name, exception.name, doc, exception.mapped_type, generated
+            )
 
         return register
 
@@ -310,7 +336,10 @@ def service_definitions(service: KRPC.Service) -> Iterator[Definition]:
                 (field_name, types.as_type(field.type))
                 for field_name, field in zip(field_names, struct.fields)
             ]
-            types.struct_type(name, struct.name, doc).set_fields(fields)
+            generated = registered(name, struct.name)
+            if getattr(generated, "_fields", None) != tuple(field_names):
+                generated = None
+            types.struct_type(name, struct.name, doc).set_fields(fields, generated)
 
         return register
 
@@ -364,6 +393,8 @@ def create_service(client: Client, service: KRPC.Service) -> object:
             {
                 "_client": client,
                 "_name": service.name,
+                "_service_name": service.name,
+                "_class_name": None,
                 "__doc__": doc,
             },
         ),
@@ -421,15 +452,8 @@ def create_service(client: Client, service: KRPC.Service) -> object:
     return cls()  # pyright: ignore[reportCallIssue]
 
 
-def _add_class_members(
-    cls: ServiceBase,
-    service: KRPC.Service,
-    skip: Callable[[str, str], bool] | None = None,
-) -> None:
-    """Attach the members that a service declares for its classes to the class types.
-
-    skip takes a class and member name, and returns whether the member is already
-    present."""
+def _add_class_members(cls: ServiceBase, service: KRPC.Service) -> None:
+    """Attach the members that a service declares for its classes to the class types."""
 
     def attach(
         class_name: str,
@@ -437,8 +461,6 @@ def _add_class_members(
         add: Callable[..., None],
         *args: object,
     ) -> None:
-        if skip is not None and skip(class_name, member_name):
-            return
         _skipping_unknown_types(
             "%s.%s.%s" % (service.name, class_name, member_name),
             add,
@@ -489,64 +511,6 @@ def _add_class_members(
             procedures[0],
             procedures[1],
         )
-
-
-def _stub_is_missing(
-    classes: dict[str, type], class_name: str, member_name: str
-) -> bool:
-    """Whether the stubs lack a member that a service declares for one of its classes.
-
-    A class the stubs omit lacks nothing, as there is nothing to add a member to."""
-    python_type = classes.get(class_name)
-    return python_type is not None and not hasattr(
-        python_type, _member_name(member_name)
-    )
-
-
-def extended_stub_classes(service: KRPC.Service, stub: object) -> set[str]:
-    """The classes of a service whose members the stubs do not all have.
-
-    The stubs are generated from one version of a service. The server may declare more
-    members for its classes, either because another mod adds them or because the server
-    is newer."""
-    classes = stub._classes  # pyright: ignore[reportAttributeAccessIssue]
-    names: set[str] = set()
-    for procedure in service.procedures:
-        if not Attributes.is_a_class_member(procedure.name):
-            continue
-        class_name = Attributes.get_class_name(procedure.name)
-        member_name = Attributes.get_class_member_name(procedure.name)
-        if _stub_is_missing(classes, class_name, member_name):
-            names.add(class_name)
-    return names
-
-
-def merge_service(client: Client, service: KRPC.Service, stub: object) -> None:
-    """Attach the class members that only a service's definition declares.
-
-    The members go on this client's subclass of each pre-generated class, which the type
-    registry already holds (see extended_stub_classes). Members the stubs already have are
-    left alone, as are classes the stubs omit."""
-    classes = stub._classes  # pyright: ignore[reportAttributeAccessIssue]
-    cls = cast(
-        ServiceBase,
-        type(
-            str(service.name),
-            (ServiceBase,),
-            {"_client": client, "_name": service.name},
-        ),
-    )
-
-    def already_present(class_name: str, member_name: str) -> bool:
-        return not _stub_is_missing(classes, class_name, member_name)
-
-    _add_class_members(cls, service, already_present)
-
-    # The class reached through the service is the pre-generated one, so point it at the
-    # subclass the members went on
-    for class_name in extended_stub_classes(service, stub):
-        python_type = client._types.class_type(service.name, class_name).python_type
-        stub.__dict__[class_name] = WrappedClass(client, python_type)
 
 
 class ServiceBase(DynamicType):

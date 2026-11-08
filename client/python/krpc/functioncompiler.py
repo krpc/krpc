@@ -23,6 +23,7 @@ from typing import (
 )
 
 import krpc.schema.KRPC_pb2 as KRPC
+from krpc.declarations import is_class_type
 from krpc.definiteassignment import (
     assigned_names,
     local_function_nonlocal,
@@ -42,7 +43,6 @@ from krpc.expressionutils import (
     promote,
     remote_type,
     same_shape,
-    unwrap_class,
     with_nullable,
 )
 from krpc.expressionutils import (
@@ -58,7 +58,7 @@ from krpc.functionstatements import (
 )
 from krpc.service import _member_name
 from krpc.stream import Stream
-from krpc.types import ClassBase, ClassType, EnumerationType, StructType
+from krpc.types import ClassBase, ClassType, EnumerationType, StructType, TypeBase
 
 if TYPE_CHECKING:
     from krpc.client import Client
@@ -181,7 +181,7 @@ def _annotation_types(func: Callable) -> dict[str, type]:
     types: dict[str, type] = {}
     pending = list(getattr(func, "__annotations__", {}).values())
     while pending:
-        annotation = unwrap_class(pending.pop())
+        annotation = pending.pop()
         if isinstance(annotation, type):
             types.setdefault(annotation.__name__, annotation)
         pending.extend(getattr(annotation, "__args__", ()))
@@ -419,8 +419,9 @@ class _Compiler:
         client_values: dict[tuple[int, ...], Any] | None = None,
     ):
         self._client = client
-        self._expr = client.krpc.Expression
-        self._type = client.krpc.Type
+        # Untyped, as the compiler checks the types of the values it builds expressions from
+        self._expr: Any = client.krpc.Expression
+        self._type: Any = client.krpc.Type
         self._func = func
         # The types the function's parameter and return annotations name, by
         # name, as Python evaluated them where the function is defined
@@ -767,9 +768,7 @@ class _Compiler:
                     member = getattr(value, node.attr, None)
                     # The class, enumeration and structure types a service defines
                     # are attributes of it alongside its remote members
-                    if self._is_service_object(value) and isinstance(
-                        unwrap_class(member), type
-                    ):
+                    if self._is_service_object(value) and isinstance(member, type):
                         return _Result(value=member, is_value=True)
                     raise self._error(
                         node,
@@ -783,8 +782,7 @@ class _Compiler:
                         node, "'%s' is a remote method, which needs a call" % node.attr
                     )
                 call = self._client.get_call(getattr, value, node.attr)
-                # The service definitions say where the value can be None, which
-                # the pre-generated stubs do not
+                # The service definitions say where the value can be None
                 procedure = self._metadata.procedures.get(
                     (call.service, call.procedure)
                 )
@@ -1400,7 +1398,7 @@ class _Compiler:
     ) -> _Result:
         if base.is_value and self._is_remote_class(base.value):
             # A static class method, called on the class itself
-            protobuf_type = self._class_ptype(cast(type, unwrap_class(base.value)))
+            protobuf_type = self._class_ptype(cast(type, base.value))
             service, procedure = self._member(
                 node, protobuf_type.service, protobuf_type.name, member, "static"
             )
@@ -4075,9 +4073,15 @@ class _Compiler:
             )
         if isinstance(value, Enum):
             ptype = self._enum_ptype(type(value))
+            # A generated value takes the server's number for its name
+            try:
+                types = self._client._types
+                number = cast(Enum, types.coerce_to(value, types.as_type(ptype))).value
+            except ValueError as exn:
+                raise self._error(self._node, str(exn)) from exn
             return _Result(
                 expression=expr.cast(
-                    expr.constant_int(value.value),
+                    expr.constant_int(number),
                     self._remote_type(None, ptype),
                 ),
                 ptype=ptype,
@@ -4483,12 +4487,31 @@ class _Compiler:
             )
         return base.ptype.service, base.ptype.name
 
+    def _named_type(self, kind: type[TypeBase], python_type: type) -> TypeBase | None:
+        """The type of the given kind with the service and name a python type carries, which
+        an imported declaration or generated class does whether the client uses it or not"""
+        service_name = getattr(python_type, "_service_name", None)
+        name = getattr(python_type, "_class_name", None)
+        if service_name is None or name is None:
+            return None
+        for typ in self._client._types._types.values():
+            if (
+                isinstance(typ, kind)
+                and typ.protobuf_type.service == service_name
+                and typ.protobuf_type.name == name
+            ):
+                return typ
+        return None
+
     def _class_ptype(self, python_type: type) -> KRPC.Type:
         # A class accessed through a service is a subclass of the registered one
         for base in python_type.__mro__:
             for typ in self._client._types._types.values():
                 if isinstance(typ, ClassType) and typ.python_type is base:
                     return typ.protobuf_type
+        typ = self._named_type(ClassType, python_type)
+        if typ is not None:
+            return typ.protobuf_type
         raise self._error(
             self._node, "cannot determine the remote class of %s" % python_type.__name__
         )
@@ -4497,6 +4520,9 @@ class _Compiler:
         for typ in self._client._types._types.values():
             if isinstance(typ, EnumerationType) and typ.python_type is python_type:
                 return typ.protobuf_type
+        typ = self._named_type(EnumerationType, python_type)
+        if typ is not None:
+            return typ.protobuf_type
         raise self._error(
             self._node,
             "cannot determine the remote enumeration of %s" % python_type.__name__,
@@ -4507,6 +4533,9 @@ class _Compiler:
         for typ in self._client._types._types.values():
             if isinstance(typ, StructType) and typ.python_type is python_type:
                 return self._known_struct_type(node, typ)
+        typ = self._named_type(StructType, python_type)
+        if isinstance(typ, StructType):
+            return self._known_struct_type(node, typ)
         raise self._error(
             node, "cannot determine the remote structure of %s" % python_type.__name__
         )
@@ -4533,14 +4562,16 @@ class _Compiler:
         return typ
 
     def _is_remote_struct(self, value: object) -> TypeGuard[type]:
-        return isinstance(value, type) and any(
-            isinstance(typ, StructType) and typ.python_type is value
-            for typ in self._client._types._types.values()
+        return isinstance(value, type) and (
+            any(
+                isinstance(typ, StructType) and typ.python_type is value
+                for typ in self._client._types._types.values()
+            )
+            or self._named_type(StructType, value) is not None
         )
 
     def _is_remote_class(self, value: object) -> bool:
-        value = unwrap_class(value)
-        return isinstance(value, type) and issubclass(value, ClassBase)
+        return is_class_type(value)
 
     @staticmethod
     def _is_service_object(value: object) -> bool:

@@ -3,17 +3,16 @@ from __future__ import annotations
 import reprlib
 import threading
 import warnings
-from collections.abc import Callable, Iterable, Iterator
+from collections.abc import Callable, Iterable
 from types import TracebackType
-from typing import Any, cast
+from typing import TYPE_CHECKING, Any, cast
 
 import krpc.schema.KRPC_pb2 as KRPC
-import krpc.services
 import krpc.stream
 from krpc import limits
 from krpc.connection import Connection
 from krpc.decoder import Decoder
-from krpc.definitions import CLASS, ENUMERATION, STRUCT, Definition, register_all
+from krpc.definitions import register_all
 from krpc.encoder import Encoder
 from krpc.error import RPCError, StreamError
 from krpc.event import Event
@@ -23,39 +22,19 @@ from krpc.functioncompiler import (
     compile_function_with_type,
 )
 from krpc.internalprocedures import InternalProcedures
-from krpc.service import (
-    create_service,
-    extended_stub_classes,
-    merge_service,
-    service_definitions,
-)
+from krpc.service import create_service, service_definitions
 from krpc.session import DEFAULT_STALL_TIMEOUT, Session
 from krpc.stream import Stream
 from krpc.streammanager import StreamManager
-from krpc.types import DefaultArgument, EventType, StreamType, TypeBase, Types
+from krpc.types import (
+    DefaultArgument,
+    EnumerationValueError,
+    EventType,
+    StreamType,
+    TypeBase,
+    Types,
+)
 from krpc.utils import snake_case
-
-
-def _client_class(
-    client: Client, service_name: str, class_name: str, python_type: type
-) -> type:
-    """One client's subclass of a pre-generated class, for the members it adds to it.
-
-    The subclass names the class it stands for, which is what coerces an object between two
-    connections that each have a subclass of their own. It also carries the client, so a
-    static method reached through an object's class uses that object's connection."""
-    return type(
-        python_type.__name__,
-        (python_type,),
-        {
-            "_client": client,
-            "_service_name": service_name,
-            "_class_name": class_name,
-            "__doc__": python_type.__doc__,
-            "__module__": python_type.__module__,
-            "__qualname__": python_type.__qualname__,
-        },
-    )
 
 
 def _type_message(remote_type: Any) -> KRPC.Type:
@@ -108,93 +87,15 @@ def _check_argument(value: object, ptype: KRPC.Type) -> None:
             _check_argument(element, ptype.types[1])
 
 
-def _stub_definitions(
-    client: Client, service_info: KRPC.Service, service: object
-) -> Iterator[Definition]:
-    """The types of a service whose stubs were generated ahead of time, as records that can be
-    registered in a type registry. The stubs already provide the python types, so registering
-    them is what lets a dynamically created service use them."""
-    name = service_info.name
-
-    def register_class(class_name: str, python_type: type) -> Callable[[Types], None]:
-        def register(types: Types) -> None:
-            types.register_class_type(name, class_name, python_type)
-
-        return register
-
-    def register_enumeration(
-        enum_name: str, python_type: type
-    ) -> Callable[[Types], None]:
-        def register(types: Types) -> None:
-            types.register_enum_type(name, enum_name, python_type)
-
-        return register
-
-    def register_struct(
-        struct: KRPC.Struct, python_type: type
-    ) -> Callable[[Types], None]:
-        field_names = python_type._fields
-        build_as: type | None = python_type
-        if len(struct.fields) < len(field_names):
-            # Fields are only ever appended to a structure, so a server that declares fewer
-            # of them than the stubs is an older one. Its values cannot be built as the stub
-            # type, so use a plain named tuple of the fields it does declare
-            warnings.warn(
-                "Reading the struct %s.%s as a plain named tuple, as the server declares "
-                "fewer fields for it than this client was generated against"
-                % (name, struct.name),
-                stacklevel=2,
-            )
-            field_names = field_names[: len(struct.fields)]
-            build_as = None
-
-        def register(types: Types) -> None:
-            fields = [
-                (field_name, types.as_type(field.type))
-                for field_name, field in zip(field_names, struct.fields)
-            ]
-            types.struct_type(name, struct.name).set_fields(fields, build_as)
-
-        return register
-
-    # A pre-generated class is shared by every client in the process, so a member built for
-    # one client cannot go on it. The client's own subclass is what carries the members that
-    # only the server's definition declares
-    extended = extended_stub_classes(service_info, service)
-    classes = service._classes  # pyright: ignore[reportAttributeAccessIssue]
-    for class_name, python_type in classes.items():
-        if class_name in extended:
-            python_type = _client_class(client, name, class_name, python_type)
-        yield Definition(
-            CLASS, name, class_name, [], register_class(class_name, python_type)
-        )
-    enumerations = service._enumerations  # pyright: ignore[reportAttributeAccessIssue]
-    for enum_name, python_type in enumerations.items():
-        yield Definition(
-            ENUMERATION,
-            name,
-            enum_name,
-            [],
-            register_enumeration(enum_name, python_type),
-        )
-    # The field types of a structure come from the service definition, so that the same code
-    # decodes a structure whether its stubs were generated ahead of time or not. Only the
-    # type a value is built as comes from the stubs
-    structs = service._structs  # pyright: ignore[reportAttributeAccessIssue]
-    for struct in service_info.structs:
-        python_type = structs.get(struct.name)
-        if python_type is None:
-            continue
-        yield Definition(
-            STRUCT,
-            name,
-            struct.name,
-            [field.type for field in struct.fields],
-            register_struct(struct, python_type),
-        )
+# The services a client has, declared for type checkers by the generated modules. The client
+# builds them at connect, so it needs none of the modules to run
+if TYPE_CHECKING:
+    from krpc.services import Client as _Services
+else:
+    _Services = object
 
 
-class Client(krpc.services.Client):
+class Client(_Services):
     """
     A kRPC client, through which all Remote Procedure Calls are made.
     Services provided by the server that the client connects
@@ -205,10 +106,8 @@ class Client(krpc.services.Client):
     def __init__(
         self,
         connection: Connection,
-        use_pregenerated_stubs: bool = True,
         stall_timeout: float | None = DEFAULT_STALL_TIMEOUT,
     ) -> None:
-        super().__init__()
         self._types = Types()
         self._internal = InternalProcedures(self)
         self._connection = connection
@@ -232,44 +131,28 @@ class Client(krpc.services.Client):
         self._expression_metadata: Any = None
         self._expression_remote_types: dict[bytes, Any] = {}
         try:
-            self._load_services(use_pregenerated_stubs)
+            self._load_services()
         except BaseException:
             self.close()
             raise
 
-    def _load_services(self, use_pregenerated_stubs: bool) -> None:
+    def _load_services(self) -> None:
         services = cast(
             KRPC.Services,
             self._invoke("KRPC", "GetServices", [], [], self._types.services_type),
         ).services
-
-        # Load services
+        # Register the types of every service before creating any of them: a service's
+        # procedures are built from types that any service may define, and a default value
+        # cannot be decoded before the definition of the enumeration it belongs to has been
+        # registered
         definitions = []
-        dynamic_services = []
-        stub_services = []
         for service_info in services:
-            service = None
-            if use_pregenerated_stubs:
-                service = self._services.get(service_info.name)
-            if service is not None:
-                definitions.extend(_stub_definitions(self, service_info, service))
-                stub_services.append((service_info, service))
-            else:
-                dynamic_services.append(service_info)
-                definitions.extend(service_definitions(service_info))
-        # Register the types of every service, whether its stubs were pre-generated or not,
-        # before creating any of them: a service's procedures are built from types that any
-        # service may define, and a default value cannot be decoded before the definition of
-        # the enumeration it belongs to has been registered
+            definitions.extend(service_definitions(service_info))
         register_all(self._types, definitions)
-        # Then dynamically create services for those without pre-generated stubs
-        for service_info in dynamic_services:
+        for service_info in services:
             setattr(
                 self, snake_case(service_info.name), create_service(self, service_info)
             )
-        # Add the class members that only the server's definition declares
-        for service_info, service in stub_services:
-            merge_service(self, service_info, service)
 
     def close(self) -> None:
         # The dispatcher thread stops trying to take a condition the caller can hold
@@ -673,6 +556,10 @@ class Client(krpc.services.Client):
             if not isinstance(value, typ.python_type):
                 try:
                     value = self._types.coerce_to(value, typ)
+                except EnumerationValueError as exc:
+                    raise TypeError(
+                        "%s.%s() argument %d: %s" % (service, procedure, i, exc)
+                    ) from exc
                 except ValueError as exc:
                     raise TypeError(
                         "%s.%s() argument %d must be a %s, got a %s"

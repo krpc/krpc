@@ -97,7 +97,9 @@ class TestAlarmEventOffset(TestCase):
         cls.conn = conn
         cls.space_center = cls.conn.space_center
         cls.alarm_manager = cls.space_center.alarm_manager
-        cls.vessel = cls.space_center.active_vessel
+        vessel = cls.space_center.active_vessel
+        assert vessel is not None
+        cls.vessel = vessel
 
     def tearDown(self):
         for alarm in list(self.alarm_manager.alarms):

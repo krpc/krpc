@@ -644,40 +644,62 @@ Passing :meth:`~krpc.client.Client.add_event` or :meth:`~krpc.client.Client.add_
 with parameters raises :class:`krpc.error.FunctionCompilationError`, and a compiled function with
 parameters raises ``StreamError``.
 
-Service Stubs
+Type Checking
 -------------
 
-The client includes code for each service that ships with kRPC, generated from the services of
-one kRPC release. These *stubs* give your editor the classes, procedures and type hints of each
-service.
-
-The stubs match the server from the same release, so install the client version that matches your
-server. With another version, a procedure that was removed or renamed raises an error when you
-call it. A parameter or return type that changed is not checked, so a call can send or return a
-wrong value with no error.
-
-When you connect, the client fills in what the stubs lack from the service definitions the server
-sends:
-
-* A service with no stub, such as one added by another mod, is generated at runtime.
-* A class member that only the server declares is added to the stub's class.
-* A structure the server declares with fewer fields than the stub is read as a plain named tuple,
-  with a warning.
-
-To generate every service at runtime instead, pass ``use_pregenerated_stubs=False``:
+The client includes a module for each service that ships with kRPC, which gives your editor and
+type checker the classes, procedures and type hints of that service:
 
 .. code-block:: python
 
-   conn = krpc.connect(use_pregenerated_stubs=False)
+   import krpc
 
-The services then match the server you connect to, whatever its version, but have no type hints.
+   conn = krpc.connect()
+   vessel = conn.space_center.active_vessel  # Vessel | None
+
+The client builds each service from the definitions the server sends when you connect, so it has
+the procedures of that server.
+
+An enumeration, structure or exception from a module works with no connection:
+
+.. code-block:: python
+
+   from krpc.services.spacecenter import SASMode, Vessel
+
+   def set_sas_mode(vessel: Vessel, mode: SASMode = SASMode.prograde) -> None:
+       vessel.auto_pilot.sas_mode = mode
+
+A class or service in a module is a declaration for type checkers. Use it in annotations and with
+``isinstance``, and call it through a connection, such as
+``conn.space_center.ReferenceFrame.create_relative``. Calling a declaration raises a ``TypeError``.
+
+The modules come from one kRPC release, and a server of another release is not supported. The
+services match the server, and the type hints are those of the client's release. An enumeration or
+structure the server defines differently is built for the connection. A module's enumeration value
+is sent by its number.
+
+.. _python-other-mods:
+
+Services of Other Mods
+^^^^^^^^^^^^^^^^^^^^^^
+
+A service another mod adds is built when you connect, like the others:
+
+.. code-block:: python
+
+   conn = krpc.connect()
+   conn.my_mod.get_mode()
+
+For importable types, generate a module for the service with :ref:`krpc-clientgen
+<service-api-clientgen>`. Import the module before connecting, as the client uses its
+enumerations, structures and exceptions only if they are registered by then.
 
 .. _python-client-reference:
 
 Client API Reference
 --------------------
 
-.. function:: krpc.connect([name=None], [address='127.0.0.1'], [port=50000], [use_pregenerated_stubs=True], [timeout=None], [handshake_timeout=5], [stall_timeout=30])
+.. function:: krpc.connect([name=None], [address='127.0.0.1'], [port=50000], [timeout=None], [handshake_timeout=5], [stall_timeout=30])
 
    Connects to a kRPC server, and returns a :class:`krpc.client.Client`.
 
@@ -685,10 +707,6 @@ Client API Reference
    :param str address: The address of the server, as a host name or an IP address. Defaults to
                        ``'127.0.0.1'``.
    :param int port: The port of the server. Defaults to 50000.
-   :param bool use_pregenerated_stubs: Whether to use the service stubs bundled with the client,
-                           which include type hints. A service with no bundled stub, or every
-                           service when this is ``False``, is generated at runtime. Defaults to
-                           ``True``.
    :param float timeout: How many seconds to wait for the connection to open. Defaults to
                            ``None``, which waits indefinitely. Without a timeout, a network that
                            drops the connection attempt leaves the client waiting.
@@ -702,7 +720,7 @@ Client API Reference
    Raises :class:`krpc.error.ConnectionError` if the connection fails or the server refuses it,
    and ``ValueError`` for a timeout that is not positive.
 
-.. function:: krpc.connect_local([name=None], [path], [use_pregenerated_stubs=True], [handshake_timeout=5], [stall_timeout=30])
+.. function:: krpc.connect_local([name=None], [path], [handshake_timeout=5], [stall_timeout=30])
 
    Connects to a kRPC server on the same machine over a local socket, and returns a
    :class:`krpc.client.Client`. The server must use the local socket protocol.
@@ -717,7 +735,6 @@ Client API Reference
    :param str name: A name for the connection, shown in the server window in the game.
    :param str path: The path of the server's socket, shown in the server window in the game.
                     Defaults to the path the server uses unless it was configured with another.
-   :param bool use_pregenerated_stubs: As for :func:`krpc.connect`.
    :param float handshake_timeout: As for :func:`krpc.connect`.
    :param float stall_timeout: As for :func:`krpc.connect`.
 
@@ -963,7 +980,7 @@ Numeric Limits
 The ``krpc.limits`` module names the extremes of the numeric types kRPC carries over the wire.
 Python integers are unbounded, and Python floats are C doubles, so the standard library covers
 ``DOUBLE`` alone. A service can declare one of these limits as a parameter's default value, and
-the generated stub then names the constant from this module.
+the generated module then names the constant from this module.
 
 The minimum of an unsigned type is ``0``, so it has no constant.
 

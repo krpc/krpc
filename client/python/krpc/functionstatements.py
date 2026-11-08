@@ -19,6 +19,7 @@ from typing import (
 )
 
 import krpc.schema.KRPC_pb2 as KRPC
+from krpc.declarations import is_class_type
 from krpc.definiteassignment import DefiniteAssignment
 from krpc.error import FunctionCompilationError
 from krpc.expressionutils import (
@@ -31,7 +32,6 @@ from krpc.expressionutils import (
     join_ptype,
     plain_ptype,
     same_shape,
-    unwrap_class,
     with_nullable,
 )
 from krpc.types import NATIVE_EXCEPTIONS, ClassBase
@@ -1533,7 +1533,7 @@ class _StatementCompiler:
                     node, _Result(value=element, is_value=True)
                 )
             ]
-        if isinstance(value, type):
+        if isinstance(value, type) and issubclass(value, BaseException):
             service = getattr(value, "_service_name", None)
             name = getattr(value, "_class_name", None)
             if service is not None and name is not None:
@@ -1544,7 +1544,7 @@ class _StatementCompiler:
                 builtins = self._builtin_exceptions()
                 if value in builtins:
                     return builtins[value]
-            elif issubclass(value, BaseException):
+            else:
                 names = self._caught_names(value)
                 if names:
                     return names
@@ -1900,10 +1900,9 @@ def _remote_annotation_ptype(
 ) -> KRPC.Type | None:
     """The type of a class, enumeration or structure a service defines,
     named by an annotation."""
-    value = unwrap_class(value)
     if not isinstance(value, type):
         return None
-    if issubclass(value, ClassBase):
+    if is_class_type(value):
         return compiler._class_ptype(value)
     if issubclass(value, enum.Enum):
         return compiler._enum_ptype(value)

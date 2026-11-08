@@ -98,7 +98,6 @@ its own target:
   ``//service/LiDAR``, ``//service/RemoteTech`` - the services.
 * ``//client/python``, ``//client/csharp``, ``//client/cpp``, ``//client/cnano``,
   ``//client/java``, ``//client/lua`` - the client libraries.
-* ``//client/python:python_base`` - the Python client without its generated stubs.
 * ``//protobuf:csharp``, ``//protobuf:java``, ``//protobuf:lua``, ``//protobuf:python`` - the
   protobuf code for each language.
 * ``//doc:html`` - the documentation.

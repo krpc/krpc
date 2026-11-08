@@ -1,25 +1,12 @@
+"""The generated declarations of the services the client ships with."""
+
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    {TYPE_CHECKING_IMPORTS}
-else:
-    try:
-        {IMPORTS}
-    except ImportError:
-        # Without the generated stubs, every service attribute is None
-
-        def _unavailable(_: object) -> None:
-            return None
-
-        {UNAVAILABLE}
+{IMPORTS}
 
 
 class Client:
-    def __init__(self) -> None:
-        {ATTRIBUTES}
+    """The services of a client, declared for type checkers. A client has an attribute for
+    each service the server has, built from the server's definitions when it connects."""
 
-        self._services = {
-            {SERVICES}
-        }
+    {ATTRIBUTES}

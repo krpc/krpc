@@ -5,8 +5,8 @@ Python has no name for any of these. Its integers are unbounded, so there is no 
 container length rather than a wire type's limit. Its floats are C doubles, so
 ``sys.float_info`` describes ``DOUBLE`` but says nothing about the 32-bit ``FLOAT``.
 
-A service may declare one of these as a parameter's default value. The generated stubs
-name the constant here rather than writing the decimal expansion, which for
+A service may declare one of these as a parameter's default value. A generated module
+names the constant here rather than writing the decimal expansion, which for
 ``9223372036854775807`` or ``1.7976931348623157e+308`` says far less about what was
 meant.
 

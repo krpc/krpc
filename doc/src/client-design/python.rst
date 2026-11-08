@@ -34,9 +34,8 @@ The stream manager holds each open ``StreamImpl`` strongly, so a stream outlives
 callbacks keep running. It holds every registered ``StreamImpl`` weakly, which keeps nothing alive.
 Each ``StreamImpl`` also holds the ``StreamManager``.
 
-The collector frees these cycles once the threads end, except that ``types._wrapped_subclasses``
-keeps a client with stubs. A callback holding its own stream or the client needs no special
-handling.
+The collector frees these cycles once the threads end. A callback holding its own stream or the
+client needs no special handling.
 
 Lifetime
 ^^^^^^^^
@@ -67,40 +66,35 @@ The threads follow the :doc:`shared design </client-design>`, and are named
 * During a close, another thread can hold a stream's condition. A ``krpc-waker`` thread then wakes
   the threads waiting on it, once the condition is free.
 
-Pre-Generated and Dynamic Services
-----------------------------------
+Services and Declarations
+-------------------------
 
-.. list-table::
-   :header-rows: 1
+Every service is built at connect from ``GetServices``, by ``create_service``. The client then has
+the members of the server it connects to, including those another mod adds to a shipped class.
+Each client has its own classes, in its ``Types``, so a static method is a closure over its client.
 
-   * - 
-     - Pre-generated
-     - Dynamic
-   * - Source
-     - ``krpc/services/``, from ``clientgen`` and ``python.tmpl`` in ``krpctools``
-     - ``create_service``, from ``GetServices`` at connect
-   * - Used for
-     - Every service with a stub, by default
-     - Other services, or all with ``use_pregenerated_stubs=False``
-   * - Class
-     - One per process, shared by every client
-     - One per client, in its ``Types``
-   * - Static method
-     - ``WrappedClass``, a per-client subclass
-     - Closure over the client
-
-* The stubs are optional. Without them, every service the server has is dynamic.
-* ``clientgen`` uses the Python client without pre-generated stubs.
 * A connect registers the types of every service, then builds the services. The types come first as
   a procedure can use a type from any service. A parameter's default value can also be an
   enumeration value, which cannot be decoded until that enumeration is registered.
-* A structure decodes using the field types the server declares, with or without stubs. A stub only
-  sets the Python class of the decoded value.
-* Fields are only ever appended to a structure, so a server declaring fewer fields than the stub is
-  older. The client then warns, and decodes the structure as a plain named tuple of the fields that
-  server declares.
-* A class member only the server declares goes on a per-client subclass of the stub class, as every
-  client in the process shares the stub class.
+* ``krpc/services/`` has a module per service, from ``clientgen`` and ``python.tmpl`` in
+  ``krpctools``. Its enumerations, structures and exceptions are real classes, and its classes and
+  services are declarations whose members raise ``TypeError``. ``clientgen`` runs the client
+  without the modules.
+* A module registers its enumerations, structures and exceptions in ``krpc/declarations.py`` on
+  import. A later registration replaces an earlier one, and ``import krpc`` imports the shipped
+  modules first, so a module generated for a newer server takes their place.
+* At connect, a client uses the registered class where the server's definition matches: an
+  enumeration on its names and values, a structure on its field names in order, an exception on its
+  name and the builtin it derives from. These classes hold no client, so every client shares them.
+  A registered class is never changed to fit a server, as every client shares it.
+* Otherwise the client builds its own class. A value of the module's enumeration converts to the
+  built one by its number, as the other clients send it, since a client and a server of different
+  releases are not supported. A structure decodes using the field types the server declares in
+  either case. ``except`` compares exception classes by identity, so only a shared exception class
+  catches a server error.
+* A built class does not derive from its declaration, which would show members a server lacks.
+  ``DeclaredClass``, the metaclass of a declaration, compares the service and class names for
+  ``isinstance`` and ``issubclass``.
 
 Server Side Functions
 ---------------------

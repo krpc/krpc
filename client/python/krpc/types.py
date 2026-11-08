@@ -2,13 +2,10 @@ from __future__ import annotations
 
 import collections
 import copy
-import functools
-import weakref
 from collections.abc import Callable, Iterable, Mapping
 from enum import Enum
 from typing import (
     TYPE_CHECKING,
-    Any,
     TypeVar,
     cast,
 )
@@ -24,6 +21,11 @@ class UnknownTypeError(ValueError):
     because its type code is not one this client knows about, or because it names a structure
     whose definition was skipped. Both are what a definition from a newer server looks like.
     """
+
+
+class EnumerationValueError(ValueError):
+    """Raised for an enumeration value whose number the server's definition of the enumeration
+    does not have."""
 
 
 VALUE_TYPES = {
@@ -132,9 +134,7 @@ class Types:
         self._types: dict[bytes, TypeBase] = {}
         self._exception_types: dict[tuple[str, str], type[Exception]] = {}
         # Type objects keyed by the arguments they were asked for, rather than by
-        # the serialized protobuf type that keys _types. The generated service
-        # stubs name their parameter and return types on every call, so this is on
-        # the hot path of every remote procedure call; a lookup here costs a tuple
+        # the serialized protobuf type that keys _types. A lookup here costs a tuple
         # hash instead of building and serializing a protobuf message.
         self._type_cache: dict[tuple[object, ...], TypeBase] = {}
 
@@ -157,22 +157,6 @@ class Types:
 
     def _value_type(self, code: KRPC.Type.TypeCode) -> ValueType:
         return cast(ValueType, self.as_type(_protobuf_type(code)))
-
-    def register_class_type(self, service: str, name: str, python_type: type) -> None:
-        protobuf_type = _protobuf_type(KRPC.Type.CLASS, service, name)
-        key = protobuf_type.SerializeToString()
-        assert key not in self._types
-        typ = ClassType(protobuf_type, None, python_type)
-        self._types[key] = typ
-        self._type_cache[(KRPC.Type.CLASS, service, name)] = typ
-
-    def register_enum_type(self, service: str, name: str, python_type: type) -> None:
-        protobuf_type = _protobuf_type(KRPC.Type.ENUMERATION, service, name)
-        key = protobuf_type.SerializeToString()
-        assert key not in self._types
-        typ = EnumerationType(protobuf_type, None, python_type)
-        self._types[key] = typ
-        self._type_cache[(KRPC.Type.ENUMERATION, service, name)] = typ
 
     def as_type(self, protobuf_type: KRPC.Type, doc: str | None = None) -> TypeBase:
         """Return a type object given a protocol buffer type"""
@@ -271,14 +255,19 @@ class Types:
         return cast(StructType, typ)
 
     def exception_type(
-        self, service: str, name: str, doc: str | None = None, mapped_type: str = ""
+        self,
+        service: str,
+        name: str,
+        doc: str | None = None,
+        mapped_type: str = "",
+        python_type: type[Exception] | None = None,
     ) -> type[Exception]:
-        """Get an exception type"""
+        """Get an exception type. Creates one, unless a python type to use instead is given."""
         key = (service, name)
         if key not in self._exception_types:
-            self._exception_types[key] = _create_exception_type(
-                service, name, doc, mapped_type
-            )
+            if python_type is None:
+                python_type = _create_exception_type(service, name, doc, mapped_type)
+            self._exception_types[key] = python_type
         return self._exception_types[key]
 
     def tuple_type(self, *value_types: TypeBase) -> TupleType:
@@ -352,6 +341,20 @@ class Types:
             return None
         if isinstance(value, typ.python_type):
             return value
+        # An enumeration value of the same service and name, from a definition that differs,
+        # converts by its number, as a value inside a collection is sent by its number too
+        if (
+            isinstance(typ, EnumerationType)
+            and isinstance(value, DocEnum)
+            and _enum_names(type(value)) == (typ._service_name, typ._enum_name)
+        ):
+            try:
+                return cast(type[Enum], typ.python_type)(value.value)
+            except ValueError as exn:
+                raise EnumerationValueError(
+                    "%s is numbered %d, which the server's definition of %s.%s does not have"
+                    % (value, value.value, typ._service_name, typ._enum_name)
+                ) from exn
         # Coerce identical class types from different client connections
         if isinstance(typ, ClassType) and isinstance(value, ClassBase):
             value_type = type(value)
@@ -384,6 +387,8 @@ class Types:
                         for i, x in enumerate(values)
                     ]
                 )
+        except EnumerationValueError:
+            raise
         except ValueError as exn:
             raise ValueError(
                 "Failed to coerce value "
@@ -508,11 +513,19 @@ class EnumerationType(TypeBase):
         only once its definition has been registered by calling set_values"""
         return self.python_type is not None
 
-    def set_values(self, values: Mapping[str, Mapping[str, object]]) -> None:
-        """Set the python type. Creates an Enum class
-        using the given values."""
+    def set_values(
+        self,
+        values: Mapping[str, Mapping[str, object]],
+        python_type: type | None = None,
+    ) -> None:
+        """Set the python type. Creates an Enum class using the given values, unless a python
+        type to use instead is given."""
         assert self.python_type is None
-        self.python_type = _create_enum_type(self._enum_name, values, self._doc)
+        if python_type is None:
+            python_type = _create_enum_type(
+                self._service_name, self._enum_name, values, self._doc
+            )
+        self.python_type = python_type
         if self._nullable_type is not None:
             self._nullable_type.python_type = self.python_type
 
@@ -781,13 +794,18 @@ def _create_class_type(service_name: str, class_name: str, doc: str | None) -> t
 
 
 def _create_enum_type(
-    enum_name: str, values: Mapping[str, Mapping[str, object]], doc: str | None
+    service_name: str,
+    enum_name: str,
+    values: Mapping[str, Mapping[str, object]],
+    doc: str | None,
 ) -> type[Enum]:
-    typ = Enum(
+    typ = DocEnum(
         enum_name,
         dict((name, x["value"]) for name, x in values.items()),
     )
     typ.__doc__ = doc
+    typ._service_name = service_name  # pyright: ignore[reportAttributeAccessIssue]
+    typ._class_name = enum_name  # pyright: ignore[reportAttributeAccessIssue]
     for name in values.keys():
         getattr(typ, name).__doc__ = values[name]["doc"]
     return typ  # pyright: ignore[reportReturnType]
@@ -824,82 +842,21 @@ class DefaultArgument:
         return self._value
 
 
-# Per-client subclasses of wrapped classes, keyed weakly by client then by the shared class. With
-# pre-generated stubs the class object is shared across every client, so binding a client to it must
-# not be done by writing _client onto the shared class (which multiple clients would overwrite for
-# each other). Each client gets its own subclass carrying its own _client instead.
-_wrapped_subclasses: weakref.WeakKeyDictionary[object, dict[type, type]] = (
-    weakref.WeakKeyDictionary()
-)
-
-
-def _wrapped_subclass(client: object, class_type: type) -> type:
-    """Return the given client's subclass of class_type, carrying that client as _client, creating
-    and caching it on first use."""
-    cache = _wrapped_subclasses.setdefault(client, {})
-    subclass = cache.get(class_type)
-    if subclass is None:
-        subclass = type(class_type.__name__, (class_type,), {"_client": client})
-        cache[class_type] = subclass
-    return subclass
-
-
-class WrappedClass:
-    """Wraps a class type accessed through a service, binding it to the client it was accessed
-    through so that its static methods use that client."""
-
-    def __init__(self, client: Client, class_type: type) -> None:
-        self._client = client
-        self._shared_type = class_type
-        self._class_type = _wrapped_subclass(client, class_type)
-        self.__doc__ = class_type.__doc__
-
-    def __call__(self, *args: object, **kwargs: object) -> Any:
-        return self._class_type(*args, **kwargs)
-
-    # A decoded object is an instance of the shared class, not the per-client subclass
-    def __instancecheck__(self, instance: object) -> bool:
-        return isinstance(instance, self._shared_type)
-
-    def __subclasscheck__(self, subclass: type) -> bool:
-        return issubclass(subclass, self._shared_type)
-
-    def __getattr__(self, name: str) -> Any:
-        return getattr(self._class_type, name)
-
-    def __dir__(self) -> list[str]:
-        return dir(self._class_type)
-
-
-class StaticMethod:
-    """Descriptor for static methods.
-
-    Like @classmethod, but also works when called on an instance: if the class does not already
-    have _client set, the instance's _client is injected onto it first. A class accessed through a
-    service is a per-client subclass (see WrappedClass) that already carries its own _client, so
-    this only applies to static methods called through an instance."""
-
-    def __init__(self, func: Callable) -> None:
-        self._func = func
-
-    def __get__(self, obj: object, objtype: type | None = None) -> Callable:
-        if objtype is None:
-            objtype = type(obj)
-        if obj is not None and not hasattr(objtype, "_client"):
-            objtype._client = obj._client  # pyright: ignore[reportAttributeAccessIssue]
-
-        @functools.wraps(self._func)
-        def bound(*args: object, **kwargs: object) -> object:
-            return self._func(objtype, *args, **kwargs)
-
-        bound.__self__ = objtype  # pyright: ignore[reportAttributeAccessIssue]
-        return bound
-
-
 _DocEnumT = TypeVar("_DocEnumT", bound="DocEnum")
 
 
+def _enum_names(cls: type) -> tuple[object, object] | None:
+    """The service and name of an enumeration, which a generated one has once registered and a
+    built one has once created"""
+    service_name = getattr(cls, "_service_name", None)
+    if service_name is None:
+        return None
+    return service_name, getattr(cls, "_class_name", None)
+
+
 class DocEnum(Enum):
+    """The base of a service's enumerations."""
+
     def __new__(cls: type[_DocEnumT], value: int, doc: str | None = None) -> _DocEnumT:
         self = object.__new__(cls)
         self._value_ = value

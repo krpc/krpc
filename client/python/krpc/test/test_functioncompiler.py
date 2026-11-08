@@ -3384,6 +3384,20 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         with self.assertRaises(ValueError):
             self.conn.run(guarded)
 
+    def test_except_an_enumeration_fails_to_compile(self) -> None:
+        enumeration = self.conn.test_service.TestEnum
+
+        def guarded() -> str:
+            try:
+                raise ValueError("inner")
+            except enumeration:  # pyright: ignore[reportGeneralTypeIssues]
+                return "wrong"
+            return "not reached"
+
+        with self.assertRaises(FunctionCompilationError) as cm:
+            self.conn.compile(guarded)
+        self.assertIn("not an exception type the server defines", str(cm.exception))
+
     def test_try_except_tries_handlers_in_order(self) -> None:
         def guarded() -> str:
             result = ""
