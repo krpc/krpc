@@ -5,14 +5,17 @@ from __future__ import annotations
 
 import functools
 from collections.abc import Iterable
-from typing import TYPE_CHECKING, Any, cast
+from typing import TYPE_CHECKING, cast
 
 import krpc.schema.KRPC_pb2 as KRPC
 from krpc.error import EncodingError
 
 if TYPE_CHECKING:
+    from typing_extensions import TypeIs
+
     from krpc.client import Client
     from krpc.event import Event
+    from krpc.services.krpc import Expression
     from krpc.types import TypeBase
 
 
@@ -27,6 +30,10 @@ class InternalProcedures:
     def expression_type(self) -> TypeBase:
         """The type of a server side function, a KRPC.Expression object"""
         return self._types.class_type("KRPC", "Expression")
+
+    def is_expression(self, value: object) -> TypeIs[Expression]:
+        """Whether a value is a KRPC.Expression object"""
+        return isinstance(value, self.expression_type.python_type)
 
     @functools.cached_property
     def _arguments_type(self) -> TypeBase:
@@ -64,7 +71,7 @@ class InternalProcedures:
         )
         return request
 
-    def add_function_stream(self, function: Any) -> int:
+    def add_function_stream(self, function: Expression) -> int:
         """Add a stream of a server side function, and return its id"""
         result = self._invoke(
             "AddFunctionStream",
@@ -74,11 +81,11 @@ class InternalProcedures:
         )
         return cast(int, _non_null(result))
 
-    def compile_function(self, function: Any) -> None:
+    def compile_function(self, function: Expression) -> None:
         self._invoke("CompileFunction", [function], [self.expression_type])
 
     def run_function(
-        self, function: Any, arguments: list[bytes | None]
+        self, function: Expression, arguments: list[bytes | None]
     ) -> bytes | None:
         """Run a server side function, and return its encoded value, or None for a null
         value"""
@@ -92,7 +99,7 @@ class InternalProcedures:
             ),
         )
 
-    def add_event(self, function: Any) -> Event:
+    def add_event(self, function: Expression) -> Event:
         """Add an event over a server side function"""
         result = self._invoke(
             "AddEvent", [function], [self.expression_type], self._types.event_type

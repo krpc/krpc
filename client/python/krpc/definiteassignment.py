@@ -352,7 +352,7 @@ class DefiniteAssignment:
         ):
             # The names a comprehension binds are its own, and its body may run
             # no times
-            bound = set()
+            bound: set[str] = set()
             for generator in node.generators:
                 bound |= {
                     name.id

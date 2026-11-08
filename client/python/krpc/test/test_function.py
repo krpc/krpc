@@ -170,7 +170,7 @@ class TestFunction(ServerTestCase, unittest.TestCase):
                 with self.assertRaisesRegex(
                     TypeError, "expected .*a KRPC.Expression object"
                 ):
-                    add(value)
+                    add(value)  # pyright: ignore[reportArgumentType]
 
     def test_stream_of_a_compiled_function_with_parameters_rejected(self) -> None:
         obj = self.conn.test_service.create_test_object("compiledparameters")

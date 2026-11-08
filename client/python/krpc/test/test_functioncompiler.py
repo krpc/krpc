@@ -3165,7 +3165,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         obj = self.conn.test_service.create_test_object("tryreturn")
         obj.int_property = 3
 
-        def at(index) -> str:
+        def at(index: int) -> Callable[[], str]:
             def lookup() -> str:
                 try:
                     values = [obj.int_property]
@@ -3173,7 +3173,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
                 except Exception as error:
                     return "missing: " + error  # pyright: ignore[reportOperatorIssue]
 
-            return lookup  # pyright: ignore[reportReturnType]
+            return lookup
 
         self.assertEqual("3", self.conn.run(at(3)))
         self.assertTrue(self.conn.run(at(0)).startswith("missing: "))

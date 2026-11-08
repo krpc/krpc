@@ -14,6 +14,7 @@ import threading
 from collections import abc
 from collections.abc import Callable, Iterable
 from enum import Enum
+from types import CodeType
 from typing import (
     TYPE_CHECKING,
     Any,
@@ -50,8 +51,11 @@ from krpc.expressionutils import (
 )
 from krpc.functionstatements import (
     UNTYPED,
+    LocalFunction,
+    Parameter,
     Recompile,
     UntypedRead,
+    _DeferredFunction,
     _StatementCompiler,
     annotation_ptype,
     compile_lambda_body,
@@ -62,6 +66,8 @@ from krpc.types import ClassBase, ClassType, EnumerationType, StructType, TypeBa
 
 if TYPE_CHECKING:
     from krpc.client import Client
+    from krpc.services.krpc import Expression
+    from krpc.services.krpc import Type as RemoteType
 
 
 class Parameters(NamedTuple):
@@ -82,9 +88,9 @@ class Parameters(NamedTuple):
 
 def compile_function(
     client: Client,
-    func: Callable,
+    func: Callable[..., object],
     streamed: bool = False,
-) -> Any:
+) -> Expression:
     """Compile a Python function into a server side function.
 
     Its result is a KRPC.Expression object that, when evaluated on the
@@ -95,15 +101,19 @@ def compile_function(
     return compile_function_with_type(client, func, streamed)[0]
 
 
+# A variable, by the position of the function body that declares it and its name.
+# A name of None is the return type
+_VariableKey = tuple[tuple[int, int] | None, str | None]
+
 # The type compile_function_with_type gives a function that evaluates to no value
 NO_VALUE = KRPC.Type()
 
 
 def compile_function_with_type(
     client: Client,
-    func: Callable,
+    func: Callable[..., object],
     streamed: bool = False,
-) -> tuple[Any, KRPC.Type | None, Parameters]:
+) -> tuple[Expression, KRPC.Type | None, Parameters]:
     """Compile a Python function into a server side function, and return it
     with the type of the values it evaluates to, as tracked by the compiler,
     and its parameters. The type is NO_VALUE for a function that evaluates to
@@ -111,8 +121,8 @@ def compile_function_with_type(
     # A variable is declared with the type of the first value assigned to it. A
     # later value that can be None where the first cannot widens the type, and
     # the function is compiled again with the variable declared that way
-    variable_types: dict[tuple[Any, str | None], KRPC.Type] = {}
-    client_values: dict[tuple[int, ...], Any] = {}
+    variable_types: dict[_VariableKey, KRPC.Type] = {}
+    client_values: dict[tuple[int, ...], object] = {}
     while True:
         compiler = _Compiler(client, func, variable_types, client_values)
         try:
@@ -123,7 +133,8 @@ def compile_function_with_type(
             return result
 
 
-_BINARY_OPS: dict[type, tuple[str, Callable[[Any, Any], Any]]] = {
+# The operators fold constants of any type, as Python does
+_BINARY_OPS: dict[type, tuple[str, Callable[[Any, Any], object]]] = {
     ast.Add: ("add", operator.add),
     ast.Sub: ("subtract", operator.sub),
     ast.Mult: ("multiply", operator.mul),
@@ -174,12 +185,13 @@ _INTEGER_RANGES = {
 }
 
 
-def _annotation_types(func: Callable) -> dict[str, type]:
+def _annotation_types(func: Callable[..., object]) -> dict[str, type]:
     """The types named in a function's evaluated annotations, by name,
     including those inside a typing form such as List[T]. A string annotation
     names no type."""
     types: dict[str, type] = {}
-    pending = list(getattr(func, "__annotations__", {}).values())
+    annotations = cast(dict[str, object], getattr(func, "__annotations__", {}))
+    pending = list(annotations.values())
     while pending:
         annotation = pending.pop()
         if isinstance(annotation, type):
@@ -237,7 +249,7 @@ _COLLECTION_KINDS: dict[int, type] = {
 }
 
 # How an empty list, set or dictionary is written
-_EMPTY_FORMS = {list: "[]", set: "set()", dict: "{}"}
+_EMPTY_FORMS: dict[type, str] = {list: "[]", set: "set()", dict: "{}"}
 
 
 def _orderable(ptype: KRPC.Type) -> bool:
@@ -276,7 +288,7 @@ def _comparable(left: KRPC.Type, right: KRPC.Type) -> bool:
     return all(_comparable(a, b) for a, b in zip(left.types, right.types))
 
 
-def _math_functions() -> dict[Any, tuple[str, int, int]]:
+def _math_functions() -> dict[Callable[..., object], tuple[str, int, int]]:
     """Functions from the math module with a server side equivalent, each with
     the smallest and largest number of arguments that equivalent takes."""
     import math
@@ -311,7 +323,7 @@ def _math_functions() -> dict[Any, tuple[str, int, int]]:
 _MATH_FUNCTIONS = _math_functions()
 
 
-def _is_a_math_function(value: object) -> TypeGuard[Callable[..., Any]]:
+def _is_a_math_function(value: object) -> TypeGuard[Callable[..., object]]:
     """Whether a value is a math module function with a server side
     equivalent. A value that cannot be hashed is not."""
     try:
@@ -330,7 +342,7 @@ _KEY_CODES = (
     KRPC.Type.STRING,
 )
 
-_COMPARE_OPS: dict[type, tuple[str, Callable[[Any, Any], Any]]] = {
+_COMPARE_OPS: dict[type, tuple[str, Callable[[Any, Any], object]]] = {
     ast.Eq: ("equal", operator.eq),
     ast.NotEq: ("not_equal", operator.ne),
     ast.Gt: ("greater_than", operator.gt),
@@ -374,7 +386,7 @@ def _count_sent_calls(client: Client) -> None:
             return
         send = connection.send_request
 
-        def counted(request: Any) -> None:
+        def counted(request: KRPC.Request) -> None:
             _SENT_CALLS.count = _sent_calls() + 1
             send(request)
 
@@ -414,14 +426,13 @@ class _Compiler:
     def __init__(
         self,
         client: Client,
-        func: Callable,
-        variable_types: dict[tuple[Any, str | None], KRPC.Type] | None = None,
-        client_values: dict[tuple[int, ...], Any] | None = None,
+        func: Callable[..., object],
+        variable_types: dict[_VariableKey, KRPC.Type] | None = None,
+        client_values: dict[tuple[int, ...], object] | None = None,
     ):
         self._client = client
-        # Untyped, as the compiler checks the types of the values it builds expressions from
-        self._expr: Any = client._krpc.Expression
-        self._type: Any = client._krpc.Type
+        self._expr = client._krpc.Expression
+        self._type = client._krpc.Type
         self._func = func
         # The types the function's parameter and return annotations name, by
         # name, as Python evaluated them where the function is defined
@@ -432,19 +443,19 @@ class _Compiler:
         # The names the function declares nonlocal, which are state variables
         self._state_names: set[str] = set()
         # name -> (function expression, [(parameter name, ptype)], return ptype)
-        self._local_functions: dict[str, Any] = {}
+        self._local_functions: dict[str, LocalFunction | _DeferredFunction] = {}
         # The local functions defined in a nested block, which are not callable
         # after it
         self._block_functions: set[str] = set()
         # The statement compiler for the function body being compiled, when
         # there is one; used by assignment expressions
-        self._active_statements: Any = None
+        self._active_statements: _StatementCompiler | None = None
         # The call written as a statement being compiled, whose value is discarded
         self._statement_call: ast.AST | None = None
         # The number of remote procedure calls the function makes
         self._remote_calls = 0
         # Calls of procedures that return no value
-        self._valueless_calls: list[Any] = []
+        self._valueless_calls: list[Expression] = []
         # The node being compiled, which an error converting a value names
         self._node: ast.AST | None = None
         if client._expression_metadata is None:
@@ -453,24 +464,24 @@ class _Compiler:
         self._metadata: Metadata = client._expression_metadata
         # Naming a type is a round trip, so the objects naming them are shared
         # by every function compiled for this connection
-        self._remote_types: dict[bytes, Any] = client._expression_remote_types
+        self._remote_types: dict[bytes, RemoteType] = client._expression_remote_types
         # (function body, variable name) -> the type a variable is declared with,
         # where a value assigned to it after the first can be None. A name of None
         # is the return type
-        self._variable_types: dict[tuple[Any, str | None], KRPC.Type] = (
+        self._variable_types: dict[_VariableKey, KRPC.Type] = (
             {} if variable_types is None else variable_types
         )
         # Whether compiling the function widened the type of a variable
         self._variables_widened = False
         # The values of the client side calls, by their position in the source,
         # so each call runs once however many times the function is compiled
-        self._client_values: dict[tuple[int, ...], Any] = (
+        self._client_values: dict[tuple[int, ...], object] = (
             {} if client_values is None else client_values
         )
 
     def compile(
         self, streamed: bool = False
-    ) -> tuple[Any, KRPC.Type | None, Parameters]:
+    ) -> tuple[Expression, KRPC.Type | None, Parameters]:
         # The compiler recurses over the syntax tree, so a deep enough expression
         # exhausts the interpreter's stack
         try:
@@ -482,7 +493,7 @@ class _Compiler:
 
     def _compile_function(
         self, streamed: bool
-    ) -> tuple[Any, KRPC.Type | None, Parameters]:
+    ) -> tuple[Expression, KRPC.Type | None, Parameters]:
         node = self._parse()
         self._node = node
         nested = local_function_nonlocal(node)
@@ -495,7 +506,9 @@ class _Compiler:
         parameters = self._parameters(node, streamed)
         if isinstance(node, ast.Lambda):
             result = self._compile_statement(node.body)
-            valueless = any(result.expression is call for call in self._valueless_calls)
+            valueless = not result.is_value and any(
+                result.expression is call for call in self._valueless_calls
+            )
         else:
             statements = _StatementCompiler(self)
             result = statements.compile_body(node.body, node.returns, parameters)
@@ -515,7 +528,9 @@ class _Compiler:
             ),
         )
 
-    def _parameters(self, node: Any, streamed: bool) -> list[Any]:
+    def _parameters(
+        self, node: ast.Lambda | ast.FunctionDef, streamed: bool
+    ) -> list[Parameter]:
         """The parameters of the function to compile, each a (name, ptype,
         parameter expression) triple. Only a def takes parameters, each with a
         type annotation, and a default the parameter's type can hold."""
@@ -537,12 +552,12 @@ class _Compiler:
                 "a function that is streamed, or checked for an event, cannot take "
                 "parameters",
             )
-        defaults = {
+        defaults: dict[str, object] = {
             name: parameter.default
             for name, parameter in inspect.signature(self._func).parameters.items()
             if parameter.default is not inspect.Parameter.empty
         }
-        parameters = []
+        parameters: list[Parameter] = []
         for argument in names:
             if argument.annotation is None:
                 raise self._error(
@@ -668,11 +683,17 @@ class _Compiler:
         return candidates[0]
 
     @staticmethod
-    def _code_span(code: Any) -> tuple[Any, Any]:
+    def _code_span(
+        code: CodeType,
+    ) -> tuple[tuple[int, int] | None, tuple[int, int] | None]:
         """The source positions at which the instructions of a code object start
         and end, as (line, column) pairs. None when the interpreter does not
         record columns."""
-        positions = getattr(code, "co_positions", None)
+        # co_positions is new in Python 3.11
+        positions = cast(
+            "Callable[[], Iterable[tuple[int | None, int | None, int | None, int | None]]] | None",
+            getattr(code, "co_positions", None),
+        )
         if positions is None:
             return None, None
         # An instruction of no width, such as the one starting the function,
@@ -680,7 +701,10 @@ class _Compiler:
         spans = [
             ((line, column), (end_line, end_column))
             for line, end_line, column, end_column in positions()
-            if None not in (line, end_line, column, end_column)
+            if line is not None
+            and end_line is not None
+            and column is not None
+            and end_column is not None
             and (line, column) != (end_line, end_column)
         ]
         if not spans:
@@ -709,7 +733,7 @@ class _Compiler:
         freevars = func.__code__.co_freevars
         if name in freevars and func.__closure__ is not None:
             try:
-                value = func.__closure__[freevars.index(name)].cell_contents
+                value: object = func.__closure__[freevars.index(name)].cell_contents
             except ValueError as exc:
                 raise self._error(
                     node,
@@ -719,9 +743,11 @@ class _Compiler:
             return _Result(value=value, is_value=True)
         if name in func.__globals__:
             return _Result(value=func.__globals__[name], is_value=True)
-        builtins = func.__globals__.get("__builtins__", {})
+        # The builtins of a module other than __main__ are a dictionary
+        builtins: object = func.__globals__.get("__builtins__", {})
         if not isinstance(builtins, dict):
-            builtins = builtins.__dict__
+            builtins = vars(builtins)
+        builtins = cast(dict[str, object], builtins)
         if name in builtins:
             return _Result(value=builtins[name], is_value=True)
         raise self._error(node, "cannot resolve the name '%s'" % name)
@@ -789,7 +815,10 @@ class _Compiler:
                 if procedure is not None and procedure.HasField("return_type"):
                     ptype = procedure.return_type
                 else:
-                    ptype = getattr(value, "_return_type__" + node.attr)().protobuf_type
+                    return_type = cast(
+                        TypeBase, getattr(value, "_return_type__" + node.attr)()
+                    )
+                    ptype = return_type.protobuf_type
                 # A StdLib property has the same value on every evaluation
                 if call.service != "StdLib":
                     self._remote_calls += 1
@@ -867,9 +896,8 @@ class _Compiler:
                     not argument.is_value for argument in arguments
                 ):
                     return self._compile_string_method(node, func.attr, base, arguments)
-                return self._compile_client_call(
-                    node, getattr(base.value, func.attr), arguments
-                )
+                attribute: object = getattr(base.value, func.attr)
+                return self._compile_client_call(node, attribute, arguments)
             if base.is_value and (
                 isinstance(base.value, ClassBase)
                 or self._is_service_object(base.value)
@@ -885,7 +913,7 @@ class _Compiler:
                     )
                 return self._compile_remote_call(node, func.attr, base)
             # A method on a plain client-side value
-            method = getattr(base.value, func.attr, None)
+            method: object = getattr(base.value, func.attr, None)
             if method is None:
                 raise self._error(node, "cannot resolve method '%s'" % func.attr)
             if _is_a_math_function(method):
@@ -992,7 +1020,7 @@ class _Compiler:
     def _compile_math_call(
         self,
         node: ast.Call,
-        func: Callable,
+        func: Callable[..., object],
     ) -> _Result:
         """Compile a call to a math module function: evaluated on the client
         when its arguments are known, and mapped to its server side equivalent
@@ -1104,7 +1132,10 @@ class _Compiler:
         )
 
     def _compile_local_function_call(self, node: ast.Call, name: str) -> _Result:
-        function, parameters, return_ptype = self._local_functions[name]
+        local = self._local_functions[name]
+        function, parameters, return_ptype = (
+            local.compiled() if isinstance(local, _DeferredFunction) else local
+        )
         if node.keywords:
             raise self._error(
                 node,
@@ -1116,7 +1147,7 @@ class _Compiler:
                 "'%s' takes %d positional argument%s"
                 % (name, len(parameters), "" if len(parameters) == 1 else "s"),
             )
-        arguments: dict[str, Any] = {}
+        arguments: dict[str, Expression] = {}
         for (parameter_name, parameter_ptype), argument in zip(parameters, node.args):
             arguments[parameter_name] = self._widened_expression(
                 node,
@@ -1134,9 +1165,9 @@ class _Compiler:
         remote class, return the object it is bound to and the member name."""
         if not callable(value):
             return None
-        owner = getattr(value, "__self__", None)
-        name = getattr(value, "__name__", None)
-        if owner is None or name is None:
+        owner: object = getattr(value, "__self__", None)
+        name: object = getattr(value, "__name__", None)
+        if owner is None or not isinstance(name, str):
             return None
         if (
             isinstance(owner, ClassBase)
@@ -1186,7 +1217,7 @@ class _Compiler:
             )
             for arg in node.args
         ]
-        expression = getattr(self._expr, operation)(base.expression, *args)
+        expression = self._operation(operation)(base.expression, *args)
         if name == "remove":
             # Removing a value that is not there is an error, as in Python
             if code == KRPC.Type.LIST:
@@ -1210,7 +1241,11 @@ class _Compiler:
             )
         return _Result(expression=expression)
 
-    def _removed(self, removal: Any, exception: str, message: str) -> Any:
+    def _operation(self, name: str) -> Callable[..., Expression]:
+        """The method of KRPC.Expression that builds an operation, by name"""
+        return cast("Callable[..., Expression]", getattr(self._expr, name))
+
+    def _removed(self, removal: Expression, exception: str, message: str) -> Expression:
         """A removal that raises the given kRPC exception when the value is not
         in the collection."""
         return self._expr.if_then(
@@ -1310,7 +1345,7 @@ class _Compiler:
                 "'%s' takes %d argument%s here"
                 % (name, arity, "" if arity == 1 else "s"),
             )
-        args = []
+        args: list[Expression] = []
         for argument in arguments:
             argument = self._to_expression(argument)
             ptype = argument.ptype
@@ -1332,7 +1367,7 @@ class _Compiler:
                 )
             args.append(argument.expression)
         expression = self._to_expression(base).expression
-        result = getattr(self._expr, operation)(expression, *args)
+        result = self._operation(operation)(expression, *args)
         if name == "split":
             ptype = build_ptype(KRPC.Type.LIST, [build_ptype(KRPC.Type.STRING)])
         elif name == "find":
@@ -1346,11 +1381,13 @@ class _Compiler:
     def _compile_client_call(
         self,
         node: ast.Call,
-        func: Any,
+        value: object,
         args: list[_Result] | None = None,
     ) -> _Result:
         """Call a client side function when compiling. The positional arguments
-        are compiled here unless they are given."""
+        are compiled here unless they are given. A value that cannot be called
+        raises a TypeError when called, a compile error."""
+        func = cast("Callable[..., object]", value)
         if isinstance(func, Stream) or isinstance(
             getattr(func, "__self__", None), Stream
         ):
@@ -1539,7 +1576,7 @@ class _Compiler:
             # so an integer left operand is made a double
             left = self._ensure_double(left)
         ptype = self._common_ptype(node, left, right)
-        op = getattr(self._expr, name)
+        op = self._operation(name)
         return _Result(expression=op(left.expression, right.expression), ptype=ptype)
 
     def _compile_shift(self, node: ast.BinOp, left: _Result, right: _Result) -> _Result:
@@ -1568,7 +1605,7 @@ class _Compiler:
 
         signed = ptype.code in (KRPC.Type.SINT32, KRPC.Type.SINT64)
 
-        def shifted(value: Any, count: Any) -> Any:
+        def shifted(value: Expression, count: Expression) -> Expression:
             if left_shift:
                 result = expr.left_shift(value, count)
             else:
@@ -1621,7 +1658,7 @@ class _Compiler:
         expr = self._expr
         zero = self._converted_expression(_Result(value=0, is_value=True), ptype, node)
 
-        def floored(dividend: Any, divisor: Any) -> Any:
+        def floored(dividend: Expression, divisor: Expression) -> Expression:
             remainder = expr.variable("remainder", self._remote_type(node, ptype))
             adjust = expr.conditional_and(
                 expr.not_equal(remainder, zero),
@@ -1773,7 +1810,7 @@ class _Compiler:
         zero = expr.constant_double(0)
         one = expr.constant_double(1)
 
-        def floored(dividend: Any, divisor: Any) -> Any:
+        def floored(dividend: Expression, divisor: Expression) -> Expression:
             remainder = expr.variable("remainder", double)
             quotient = expr.variable("quotient", double)
             floor = expr.variable("floor", double)
@@ -1844,7 +1881,7 @@ class _Compiler:
         zero = self._integer_constant(0, ptype.code)
         one = self._integer_constant(1, ptype.code)
 
-        def floored(dividend: Any, divisor: Any) -> Any:
+        def floored(dividend: Expression, divisor: Expression) -> Expression:
             quotient = expr.divide(dividend, divisor)
             adjust = expr.conditional_and(
                 expr.not_equal(expr.modulo(dividend, divisor), zero),
@@ -1863,7 +1900,7 @@ class _Compiler:
 
     def _in_source_order(
         self, node: ast.AST, given: list[_Result], used: list[_Result | None]
-    ) -> tuple[list[Any], list[Any], list[_Result | None]]:
+    ) -> tuple[list[Expression], list[Expression], list[_Result | None]]:
         """Hold computed values in variables, assigned in the order they are
         given, when the server would evaluate them in the order they are used.
         Returns the variables, their assignments and the values as used."""
@@ -1873,8 +1910,8 @@ class _Compiler:
         if [id(x) for x in computed] == [id(x) for x in in_use]:
             return [], [], used
         expr = self._expr
-        variables: list[Any] = []
-        assignments: list[Any] = []
+        variables: list[Expression] = []
+        assignments: list[Expression] = []
         held: dict[int, _Result] = {}
         for result in computed:
             if result.ptype is None:
@@ -1897,8 +1934,8 @@ class _Compiler:
         node: ast.AST,
         ptype: KRPC.Type,
         values: list[tuple[str, _Result]],
-        build: Callable[..., Any],
-    ) -> Any:
+        build: Callable[..., Expression],
+    ) -> Expression:
         """Assign values that are used more than once to variables of one type,
         and build an expression on the variables. Each value is evaluated once,
         before the built expression."""
@@ -2078,7 +2115,7 @@ class _Compiler:
         if folded is not None:
             return folded
         declared, preludes = self._hoist_chained_operands(node, operands)
-        comparisons = []
+        comparisons: list[Expression] = []
         for left, op, right in zip(operands, node.ops, operands[1:]):
             if isinstance(op, (ast.In, ast.NotIn)):
                 comparison = self._compile_membership(node, left, right)
@@ -2095,7 +2132,7 @@ class _Compiler:
                 else:
                     self._check_numbers(node, [left, right])
                     self._common_ptype(node, left, right)
-                comparison = getattr(self._expr, _COMPARE_OPS[type(op)][0])(
+                comparison = self._operation(_COMPARE_OPS[type(op)][0])(
                     left.expression, right.expression
                 )
             else:
@@ -2119,7 +2156,7 @@ class _Compiler:
 
     def _compile_membership(
         self, node: ast.Compare, value: _Result, container: _Result
-    ) -> Any:
+    ) -> Expression:
         """A test of whether a value is in a string, a collection, or the keys of
         a dictionary."""
         if container.is_value and _is_empty_collection(container.value):
@@ -2149,7 +2186,9 @@ class _Compiler:
             )
         return self._membership(node, value, container)
 
-    def _membership(self, node: ast.Compare, value: _Result, container: _Result) -> Any:
+    def _membership(
+        self, node: ast.Compare, value: _Result, container: _Result
+    ) -> Expression:
         """A test of whether a value is in a string, a list, a set, or the keys of
         a dictionary, evaluating the container first."""
         container = self._to_expression(container)
@@ -2182,7 +2221,7 @@ class _Compiler:
 
     def _numeric_membership(
         self, node: ast.AST, value: _Result, container: _Result, element: KRPC.Type
-    ) -> Any:
+    ) -> Expression:
         """A test of whether a number is in a collection of numbers of another
         type. Both are widened to their common type, as they are for =="""
         assert value.ptype is not None
@@ -2203,7 +2242,7 @@ class _Compiler:
         widened = expr.cast(parameter, self._remote_type(node, wider))
         cast_held = value.ptype.code != wider.code
 
-        def contains(held: Any) -> Any:
+        def contains(held: Expression) -> Expression:
             if cast_held:
                 held = expr.cast(held, self._remote_type(node, wider))
             return expr.any(
@@ -2213,7 +2252,9 @@ class _Compiler:
 
         return self._with_temporaries(node, value.ptype, [("value", value)], contains)
 
-    def _key_membership(self, node: ast.AST, dictionary: _Result, key: _Result) -> Any:
+    def _key_membership(
+        self, node: ast.AST, dictionary: _Result, key: _Result
+    ) -> Expression:
         """A test of whether a key is in a dictionary. A None is in no
         dictionary, and a number of a wider type than the keys is compared with
         each key widened, as for =="""
@@ -2262,7 +2303,7 @@ class _Compiler:
 
     def _key_expression(
         self, node: ast.AST, dictionary: KRPC.Type, key: _Result
-    ) -> Any:
+    ) -> Expression:
         """A key of a dictionary, converted to the type of its keys."""
         target = dictionary.types[0]
         where = "for a key of the dictionary"
@@ -2312,13 +2353,13 @@ class _Compiler:
 
     def _compile_tuple_membership(
         self, node: ast.Compare, value: _Result, container: _Result
-    ) -> Any:
+    ) -> Expression:
         """A test of whether a value is in a tuple, made as Python does, by
         comparing it with each element in turn until one is equal. The value and
         the tuple are each evaluated once, in that order."""
         expr = self._expr
-        variables: list[Any] = []
-        statements: list[Any] = []
+        variables: list[Expression] = []
+        statements: list[Expression] = []
 
         def held(name: str, result: _Result) -> _Result:
             result = self._to_expression(result)
@@ -2365,7 +2406,9 @@ class _Compiler:
             test = equal if position == 0 else expr.conditional_or(test, equal)
         return expr.block_with_variables(variables, statements + [test])
 
-    def _compile_is_none(self, node: ast.Compare, left: _Result, right: _Result) -> Any:
+    def _compile_is_none(
+        self, node: ast.Compare, left: _Result, right: _Result
+    ) -> Expression:
         """An identity comparison, which the algebra supports against None."""
         if right.is_value and right.value is None and not left.is_value:
             operand = left
@@ -2390,14 +2433,14 @@ class _Compiler:
 
     def _hoist_chained_operands(
         self, node: ast.Compare, operands: list[_Result]
-    ) -> tuple[list[Any], list[list[Any]]]:
+    ) -> tuple[list[Expression], list[list[Expression]]]:
         """Assign the operands of a chained comparison, except the last, to
         temporaries, and replace them in place with the temporary. A middle
         operand stands in two comparisons, and Python evaluates each operand
         once, in order, and only while the comparisons so far hold. Returns the
         temporaries, and the assignments to make before each comparison."""
-        declared: list[Any] = []
-        preludes: list[list[Any]] = [[] for _ in node.ops]
+        declared: list[Expression] = []
+        preludes: list[list[Expression]] = [[] for _ in node.ops]
         if len(operands) <= 2:
             return declared, preludes
         for index in range(len(operands) - 1):
@@ -2467,7 +2510,8 @@ class _Compiler:
                 size = len(base.ptype.types)
                 if not -size <= constant < size:
                     raise self._error(node, "tuple index out of range")
-                index = _Result(value=constant % size, is_value=True)
+                constant %= size
+                index = _Result(value=constant, is_value=True)
             elif constant < 0 and base.ptype is not None:
                 return self._compile_index_from_end(node, base, constant)
         if self._is_a_string(base):
@@ -2486,9 +2530,9 @@ class _Compiler:
             )
         element: KRPC.Type | None = None
         if code == KRPC.Type.TUPLE:
-            assert base.ptype is not None
-            element = base.ptype.types[index.value]  # pyright: ignore[reportArgumentType, reportCallIssue]
-            position = self._expr.constant_int(index.value)
+            assert base.ptype is not None and constant is not None
+            element = base.ptype.types[constant]
+            position = self._expr.constant_int(constant)
         else:
             if code == KRPC.Type.LIST:
                 assert base.ptype is not None
@@ -2498,7 +2542,7 @@ class _Compiler:
             expression=self._expr.get(base.expression, position), ptype=element
         )
 
-    def _index_expression(self, node: ast.AST, index: _Result) -> Any:
+    def _index_expression(self, node: ast.AST, index: _Result) -> Expression:
         """A position in a list or a string, which the server takes as an int."""
         if (
             index.is_value
@@ -2536,7 +2580,7 @@ class _Compiler:
         if self._is_a_string(base):
             ptype = build_ptype(KRPC.Type.STRING)
 
-            def indexed(value: Any) -> Any:
+            def indexed(value: Expression) -> Expression:
                 position = expr.add(expr.string_length(value), offset)
                 return expr.conditional(
                     expr.less_than(position, expr.constant_int(0)),
@@ -2547,7 +2591,7 @@ class _Compiler:
         else:
             ptype = self._element_ptype(node, base, "index", ordered=True)
 
-            def indexed(value: Any) -> Any:
+            def indexed(value: Expression) -> Expression:
                 position = expr.add(expr.count(value), offset)
                 return expr.conditional(
                     expr.less_than(position, expr.constant_int(0)),
@@ -2606,10 +2650,10 @@ class _Compiler:
             return self._compile_string_slice(node, collection, lower, upper)
         element = self._element_ptype(node, collection, "slice", ordered=True)
         expr = self._expr
-        variables: list[Any] = []
-        statements: list[Any] = []
+        variables: list[Expression] = []
+        statements: list[Expression] = []
 
-        def held(name: str, value: _Result) -> Any:
+        def held(name: str, value: _Result) -> Expression:
             variable = expr.variable(name, self._remote_type(node, value.ptype))
             variables.append(variable)
             statements.append(expr.assign(variable, value.expression))
@@ -2642,9 +2686,9 @@ class _Compiler:
         node: ast.Subscript,
         name: str,
         bound: _Result,
-        default: Any,
-        held: Callable[[str, _Result], Any],
-    ) -> Any:
+        default: Expression,
+        held: Callable[[str, _Result], Expression],
+    ) -> Expression:
         """A bound of a slice, as an int. A computed bound is held in a
         variable, and a None it holds stands for the default."""
         where = "for a bound of a slice"
@@ -2679,15 +2723,18 @@ class _Compiler:
         """Compile a slice of a tuple, by constant bounds, into a tuple of the
         values it holds. The type of each value is known only for a constant
         position."""
-        bounds = []
+        bounds: list[int | None] = []
         for bound in (lower, upper):
-            if bound is not None and not (
+            if bound is None:
+                bounds.append(None)
+            elif (
                 bound.is_value
                 and isinstance(bound.value, int)
                 and not isinstance(bound.value, bool)
             ):
+                bounds.append(bound.value)
+            else:
                 raise self._error(node, "a tuple can only be sliced by constant bounds")
-            bounds.append(None if bound is None else bound.value)
         assert values.ptype is not None
         types = values.ptype.types
         positions = range(len(types))[slice(*bounds)]
@@ -2728,13 +2775,15 @@ class _Compiler:
         variables = [text]
         statements = [expr.assign(text, string.expression)]
 
-        def held(name: str, value: _Result) -> Any:
+        def held(name: str, value: _Result) -> Expression:
             variable = expr.variable(name, self._remote_type(node, value.ptype))
             variables.append(variable)
             statements.append(expr.assign(variable, value.expression))
             return variable
 
-        def clamped(name: str, bound: _Result | None, default: Any) -> Any:
+        def clamped(
+            name: str, bound: _Result | None, default: Expression
+        ) -> Expression:
             if bound is None:
                 return default
             value = self._slice_bound(node, name, bound, default, held)
@@ -2808,7 +2857,7 @@ class _Compiler:
             for result in results
         )
         ulong = build_ptype(KRPC.Type.UINT64)
-        elements = []
+        elements: list[_Result] = []
         for result in results:
             if (
                 unsigned
@@ -2901,25 +2950,14 @@ class _Compiler:
         node: ast.AST,
         generators: list[ast.comprehension],
         elt: ast.expr,
-        quantifier: Callable[[Any, Any], Any] | None = None,
-    ) -> tuple[Any, KRPC.Type | None]:
+    ) -> tuple[Expression, KRPC.Type | None]:
         """Compile a comprehension to select/where over its collection.
         Comprehensions with multiple 'for' clauses flatten via the server's
         select-many operation. Returns the resulting collection expression and
-        the type of its elements. Given a quantifier, such as the server's any,
-        elt is a condition and the result is the pair (collection, predicate
-        function) instead. The predicate of a clause applies the quantifier to
-        the next clause, so the test stops as soon as its result is known."""
+        the type of its elements."""
         collection, parameter, scope = self._bind_generator(node, generators[0])
         self._scopes.append(scope)
         try:
-            if quantifier is not None and len(generators) > 1:
-                inner, predicate = self._compile_comprehension(
-                    node, generators[1:], elt, quantifier
-                )
-                return collection, self._expr.lambda_(
-                    [parameter], quantifier(inner, predicate)
-                )
             if len(generators) > 1:
                 # The outer collection is flattened over a function computing the
                 # inner comprehension for each of its values
@@ -2932,18 +2970,42 @@ class _Compiler:
                     ),
                     inner_element,
                 )
-            if quantifier is not None:
-                condition = self._to_expression(self._compile_condition(elt))
-                return collection, self._expr.lambda_([parameter], condition.expression)
             body = self._to_expression(self._compile(elt))
             function = self._expr.lambda_([parameter], body.expression)
             return self._expr.select(collection, function), body.ptype
         finally:
             self._scopes.pop()
 
+    def _compile_quantified(
+        self,
+        node: ast.AST,
+        generators: list[ast.comprehension],
+        elt: ast.expr,
+        quantifier: Callable[[Expression, Expression], Expression],
+    ) -> tuple[Expression, Expression]:
+        """Compile a comprehension whose elt is a condition, for a quantifier such
+        as the server's any. Returns the collection of the first 'for' clause and
+        the predicate function over its values. The predicate of a clause applies
+        the quantifier to the next clause, so the test stops as soon as its result
+        is known."""
+        collection, parameter, scope = self._bind_generator(node, generators[0])
+        self._scopes.append(scope)
+        try:
+            if len(generators) > 1:
+                inner, predicate = self._compile_quantified(
+                    node, generators[1:], elt, quantifier
+                )
+                return collection, self._expr.lambda_(
+                    [parameter], quantifier(inner, predicate)
+                )
+            condition = self._to_expression(self._compile_condition(elt))
+            return collection, self._expr.lambda_([parameter], condition.expression)
+        finally:
+            self._scopes.pop()
+
     def _bind_generator(
         self, node: ast.AST, generator: ast.comprehension
-    ) -> tuple[Any, Any, dict[str, _Result]]:
+    ) -> tuple[Expression, Expression, dict[str, _Result]]:
         """Compile one 'for' clause of a comprehension. Returns its collection,
         filtered by the clause's conditions, the parameter each value is passed
         to, and the scope naming the value or the parts it unpacks into."""
@@ -2993,13 +3055,13 @@ class _Compiler:
                     "only a tuple of %d values unpacks into this target"
                     % len(target.elts),
                 )
-            names = []
+            names: list[tuple[str, tuple[int, ...], KRPC.Type | None]] = []
             for index, (part, part_ptype) in enumerate(zip(target.elts, ptype.types)):
                 names.extend(self._unpack(node, part, part_ptype, path + (index,)))
             return names
         raise self._error(node, "unsupported target (%s)" % type(target).__name__)
 
-    def _unpacked(self, value: Any, path: tuple[int, ...]) -> Any:
+    def _unpacked(self, value: Expression, path: tuple[int, ...]) -> Expression:
         """The part of a tuple valued expression at a position found by _unpack."""
         for index in path:
             value = self._expr.get(value, self._expr.constant_int(index))
@@ -3068,7 +3130,7 @@ class _Compiler:
             return _Result(
                 value="".join(str(part.value) for part in parts), is_value=True
             )
-        expressions = []
+        expressions: list[Expression] = []
         for part in parts:
             if part.is_value:
                 expressions.append(self._expr.constant_string(str(part.value)))
@@ -3125,7 +3187,7 @@ class _Compiler:
         )
 
     @staticmethod
-    def _is_supported_builtin(value: object) -> TypeGuard[Callable[..., Any]]:
+    def _is_supported_builtin(value: object) -> TypeGuard[Callable[..., object]]:
         # Compared by identity, as a value can define equality to be anything
         return any(
             value is builtin
@@ -3153,7 +3215,7 @@ class _Compiler:
     def _compile_builtin(
         self,
         node: ast.Call,
-        func: Callable,
+        func: Callable[..., object],
     ) -> _Result:
         if func is print:
             return self._compile_print(node)
@@ -3180,7 +3242,7 @@ class _Compiler:
             return self._compile_scalar_builtin(node, func, argument)
         if func in (any, all) and isinstance(argument, ast.GeneratorExp):
             op = self._expr.any if func is any else self._expr.all
-            collection, predicate = self._compile_comprehension(
+            collection, predicate = self._compile_quantified(
                 argument, argument.generators, argument.elt, op
             )
             return _Result(
@@ -3191,7 +3253,9 @@ class _Compiler:
             value = self._fold(node, func, result.value).value
             # reversed() gives an iterator, which is read into a list
             return _Result(
-                value=list(cast(Iterable[Any], value)) if func is reversed else value,
+                value=list(cast(Iterable[object], value))
+                if func is reversed
+                else value,
                 is_value=True,
             )
         result = self._to_expression(result)
@@ -3265,7 +3329,7 @@ class _Compiler:
     def _check_builtin_keywords(
         self,
         node: ast.Call,
-        func: Callable,
+        func: Callable[..., object],
     ) -> None:
         """Raise for a keyword argument other than the key of sorted, min or max."""
         keys = ("key",) if func in (sorted, min, max) else ()
@@ -3316,7 +3380,7 @@ class _Compiler:
                 expression=self._expr.string_concat(
                     [
                         (
-                            self._expr.constant_string(part.value)
+                            self._expr.constant_string(cast(str, part.value))
                             if part.is_value
                             else self._string_of(node, part).expression
                         )
@@ -3368,7 +3432,7 @@ class _Compiler:
         limit = expr.variable("end", long)
         compare = expr.less_than if step.value > 0 else expr.greater_than
 
-        def counted(value: _Result) -> Any:
+        def counted(value: _Result) -> Expression:
             if (
                 value.is_value
                 and isinstance(value.value, int)
@@ -3509,7 +3573,7 @@ class _Compiler:
     def _folded_list(
         self,
         node: ast.Call,
-        func: Callable,
+        func: Callable[..., Iterable[object]],
         arguments: list[_Result],
     ) -> _Result:
         """Call a builtin producing a sequence on arguments known when compiling,
@@ -3520,7 +3584,7 @@ class _Compiler:
 
     def _compile_key_function(
         self, node: ast.Call, key: ast.expr, element: KRPC.Type | None
-    ) -> Any:
+    ) -> Expression:
         """Compile the lambda given as the key of a builtin, taking one value of the
         collection and producing the value to compare it by."""
         if not (isinstance(key, ast.Lambda) and len(key.args.args) == 1):
@@ -3555,7 +3619,7 @@ class _Compiler:
     def _compile_scalar_builtin(
         self,
         node: ast.Call,
-        func: Callable,
+        func: Callable[..., object],
         argument: ast.expr,
     ) -> _Result:
         result = self._compile(argument)
@@ -3661,8 +3725,8 @@ class _Compiler:
         expr = self._expr
         integer = build_ptype(KRPC.Type.SINT32)
 
-        def rounded(held_value: Any) -> Any:
-            def by_digits(held_digits: Any) -> Any:
+        def rounded(held_value: Expression) -> Expression:
+            def by_digits(held_digits: Expression) -> Expression:
                 return expr.conditional(
                     expr.greater_than_or_equal(held_digits, expr.constant_int(0)),
                     held_value,
@@ -3679,8 +3743,8 @@ class _Compiler:
         )
 
     def _integer_rounded(
-        self, node: ast.AST, ptype: KRPC.Type, value: Any, digits: Any
-    ) -> Any:
+        self, node: ast.AST, ptype: KRPC.Type, value: Expression, digits: Expression
+    ) -> Expression:
         """An integer rounded to a negative number of decimal places, half to
         even as Python rounds. The arithmetic is in the integer's own type, so a
         long keeps every digit. The power of ten the value is rounded to is
@@ -3792,7 +3856,7 @@ class _Compiler:
     def _compile_aggregate(
         self,
         node: ast.Call,
-        func: Callable,
+        func: Callable[..., object],
         result: _Result,
         element: KRPC.Type | None,
     ) -> _Result:
@@ -3823,7 +3887,7 @@ class _Compiler:
             operation = expr.min_by if func is min else expr.max_by
             ptype = element
 
-            def aggregate(values: Any) -> Any:
+            def aggregate(values: Expression) -> Expression:
                 return operation(values, selector)
 
         elif (
@@ -3840,13 +3904,13 @@ class _Compiler:
                 [first, second], expr.conditional(compare(second, first), second, first)
             )
 
-            def aggregate(values: Any) -> Any:
+            def aggregate(values: Expression) -> Expression:
                 return expr.aggregate(values, pairwise)
 
         else:
             operation = expr.min if func is min else expr.max
 
-            def aggregate(values: Any) -> Any:
+            def aggregate(values: Expression) -> Expression:
                 return operation(values)
 
         # Python raises ValueError for an empty collection
@@ -3872,7 +3936,7 @@ class _Compiler:
     def _compile_scalar_min_max(
         self,
         node: ast.Call,
-        func: Callable,
+        func: Callable[..., object],
     ) -> _Result:
         arguments = [self._compile(argument) for argument in node.args]
         if all(argument.is_value for argument in arguments):
@@ -3889,7 +3953,7 @@ class _Compiler:
     def _min_max_pair(
         self,
         node: ast.Call,
-        func: Callable,
+        func: Callable[..., object],
         left: _Result,
         right: _Result,
     ) -> _Result:
@@ -4076,7 +4140,8 @@ class _Compiler:
             # A generated value takes the server's number for its name
             try:
                 types = self._client._types
-                number = cast(Enum, types.coerce_to(value, types.as_type(ptype))).value
+                member = cast(Enum, types.coerce_to(value, types.as_type(ptype)))
+                number = cast(int, member.value)
             except ValueError as exn:
                 raise self._error(self._node, str(exn)) from exn
             return _Result(
@@ -4115,7 +4180,7 @@ class _Compiler:
             "cannot use a value of type %s in an expression" % type(value).__name__,
         )
 
-    def _collection_expression(self, value: Any, ptype: KRPC.Type | None) -> _Result:
+    def _collection_expression(self, value: object, ptype: KRPC.Type | None) -> _Result:
         """A list, tuple, set or dictionary as an expression. The type is that of
         any None or empty collection within the value."""
         expr = self._expr
@@ -4158,6 +4223,7 @@ class _Compiler:
                 )
             ptype = build_ptype(KRPC.Type.SET, [self._joined_ptype(elements)])
             return _Result(expression=expr.create_set(set(expressions)), ptype=ptype)
+        assert isinstance(value, dict)
         key_values = [_Result(value=key, is_value=True) for key in value.keys()]
         self._check_not_none(key_values, "the keys of a dictionary cannot be None")
         keys = self._typed_elements(
@@ -4292,7 +4358,7 @@ class _Compiler:
         parameters = list(procedure.parameters)
         # Arguments are keyed by position. The server gives a position a keyword
         # argument skips the parameter's default
-        expressions: dict[int, Any] = {}
+        expressions: dict[int, Expression] = {}
         for position, arg in enumerate(args):
             if arg is None:
                 continue
@@ -4318,7 +4384,7 @@ class _Compiler:
         result: _Result,
         procedure: KRPC.Procedure,
         parameter: KRPC.Parameter | None,
-    ) -> Any:
+    ) -> Expression:
         if parameter is None:
             return self._converted_expression(result, None, node)
         return self._converted_expression(
@@ -4336,7 +4402,7 @@ class _Compiler:
         node: ast.AST | None = None,
         where: str = "",
         hint: str = "",
-    ) -> Any:
+    ) -> Expression:
         """Convert a value to the type it is being used as. Python numbers have
         no sizes, so a numeric constant is built as the exact type wanted. A
         numeric expression of a different type is converted with a cast. A
@@ -4397,7 +4463,7 @@ class _Compiler:
             )
         return converted.expression
 
-    def _integer_constant(self, value: int, code: KRPC.Type.TypeCode) -> Any:
+    def _integer_constant(self, value: int, code: KRPC.Type.TypeCode) -> Expression:
         """A constant of one of the integer types."""
         return {
             KRPC.Type.SINT32: self._expr.constant_int,
@@ -4413,7 +4479,7 @@ class _Compiler:
         value: _Result,
         where: str,
         hint: str = "",
-    ) -> Any:
+    ) -> Expression:
         """Convert a value to a type fixed in advance, by a variable's
         declaration or a local function's parameter. An implicit conversion
         widens, so a value of a wider type is an error. The where and hint
@@ -4625,7 +4691,7 @@ class _Compiler:
         for element in ptype.types:
             self._check_keys(node, element)
 
-    def _remote_type(self, node: ast.AST | None, ptype: KRPC.Type | None) -> Any:
+    def _remote_type(self, node: ast.AST | None, ptype: KRPC.Type | None) -> RemoteType:
         self._check_keys(node, ptype)
         try:
             return remote_type(self._type, ptype, self._remote_types)
@@ -4658,8 +4724,8 @@ class _Compiler:
     def _fold(
         self,
         node: ast.AST | None,
-        func: Callable,
-        *args: Any,
+        func: Callable[..., object],
+        *args: object,
         prefix: str = "",
     ) -> _Result:
         """A value computed when compiling, by calling a function on values
