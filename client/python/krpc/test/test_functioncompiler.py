@@ -1449,6 +1449,65 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         big = 2**40
         self.assertEqual(big + 8, self.conn.run(lambda: obj.int_property & 8 | big))
 
+    def test_flags_operators(self) -> None:
+        service = self.conn.test_service
+        flags = service.TestFlags
+        obj = service.create_test_object("flags")
+        obj.int_property = 3
+        to_flags = service.int_to_flags
+        a, c = flags.value_a, flags.value_c
+        self.assertEqual(
+            a | flags.value_b | c, self.conn.run(lambda: to_flags(obj.int_property) | c)
+        )
+        self.assertEqual(a, self.conn.run(lambda: to_flags(obj.int_property) & (a | c)))
+        self.assertEqual(
+            flags.value_b | c,
+            self.conn.run(lambda: to_flags(obj.int_property) ^ (a | c)),
+        )
+        self.assertEqual(c, self.conn.run(lambda: ~to_flags(obj.int_property)))
+        self.assertEqual(
+            c, self.conn.run(lambda: ~service.flags_echo(a | flags.value_b))
+        )
+        self.assertTrue(self.conn.run(lambda: a in to_flags(obj.int_property)))
+        self.assertFalse(self.conn.run(lambda: c in to_flags(obj.int_property)))
+        self.assertTrue(self.conn.run(lambda: c not in to_flags(obj.int_property)))
+        self.assertTrue(
+            self.conn.run(lambda: to_flags(obj.int_property) in (a | flags.value_b | c))
+        )
+
+    def test_flags_truth(self) -> None:
+        service = self.conn.test_service
+        flags = service.TestFlags
+        obj = service.create_test_object("flags truth")
+        obj.int_property = 3
+        to_flags = service.int_to_flags
+        a, c = flags.value_a, flags.value_c
+        self.assertEqual(
+            1, self.conn.run(lambda: 1 if to_flags(obj.int_property) & a else 0)
+        )
+        self.assertEqual(
+            0, self.conn.run(lambda: 1 if to_flags(obj.int_property) & c else 0)
+        )
+        self.assertTrue(self.conn.run(lambda: not to_flags(obj.int_property) & c))
+        self.assertFalse(self.conn.run(lambda: not to_flags(obj.int_property)))
+
+    def test_flags_operator_errors(self) -> None:
+        service = self.conn.test_service
+        flags_value = service.flags_echo(service.TestFlags.value_a)
+        enum = service.TestEnum
+        with self.assertRaisesRegex(FunctionCompilationError, "is not a flags"):
+            self.conn.compile(lambda: service.enum_echo(enum.value_a) | enum.value_b)  # pyright: ignore[reportOperatorIssue]
+        with self.assertRaisesRegex(FunctionCompilationError, "is not a flags"):
+            self.conn.compile(lambda: ~service.enum_echo(enum.value_a))  # pyright: ignore[reportOperatorIssue]
+        with self.assertRaisesRegex(FunctionCompilationError, "cannot combine"):
+            self.conn.compile(
+                lambda: (
+                    service.flags_echo(flags_value) | service.enum_echo(enum.value_a)  # pyright: ignore[reportOperatorIssue]
+                )
+            )
+        with self.assertRaisesRegex(FunctionCompilationError, "one flags enumeration"):
+            self.conn.compile(lambda: service.flags_echo(flags_value) | 1)  # pyright: ignore[reportOperatorIssue]
+
     def test_shift_operators(self) -> None:
         obj = self.conn.test_service.create_test_object("shift")
         obj.int_property = 12
