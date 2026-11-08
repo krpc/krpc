@@ -826,6 +826,7 @@
 <li><p>Exceptions</p>
 <ul>
 <li><p>Raise a <code class="docutils literal notranslate"><span class="pre">KRPC</span></code> exception as its own class, derived from the builtin it was raised as before, so <code class="docutils literal notranslate"><span class="pre">except</span> <span class="pre">conn.krpc.ArgumentException</span></code> catches it (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1172">#1172</a>)</p></li>
+<li><p>Raise an <code class="docutils literal notranslate"><span class="pre">RPCError</span></code> for a server error whose type names a class, in place of failing with a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1300">#1300</a>)</p></li>
 </ul>
 </li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Return <code class="docutils literal notranslate"><span class="pre">KRPC.get_status</span></code> as the named tuple <code class="docutils literal notranslate"><span class="pre">ServerStatus</span></code>, with the settings and statistics under <code class="docutils literal notranslate"><span class="pre">settings</span></code> and <code class="docutils literal notranslate"><span class="pre">statistics</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1244">#1244</a>)</p></li>

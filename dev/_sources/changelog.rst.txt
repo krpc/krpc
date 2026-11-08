@@ -334,6 +334,7 @@ Python client
 * Exceptions
 
   * Raise a ``KRPC`` exception as its own class, derived from the builtin it was raised as before, so ``except conn.krpc.ArgumentException`` catches it (:issue:`1172`)
+  * Raise an ``RPCError`` for a server error whose type names a class, in place of failing with a ``TypeError`` (:issue:`1300`)
 
 * :breaking:`Breaking` Return ``KRPC.get_status`` as the named tuple ``ServerStatus``, with the settings and statistics under ``settings`` and ``statistics`` (:issue:`1244`)
 * :breaking:`Breaking` Leave internal procedures out of the services, such as ``KRPC.add_stream`` (:issue:`1269`)

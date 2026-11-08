@@ -577,7 +577,8 @@ exception, as any other call does.</p>
 <dl class="simple" id="spec-errors-unknown-exception">
 <dt><code class="docutils literal notranslate"><span class="pre">errors-unknown-exception</span> <span class="pre">[core]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A server error naming a service or exception absent from the client’s definitions
 raises the RPC error. The message carries the description and the <code class="docutils literal notranslate"><span class="pre">Service.Name</span></code> of
-the error. This includes an absent exception of a service the client has.</p>
+the error. This includes an absent exception of a service the client has, and a name the
+service gives to a class.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-errors-request-error">
