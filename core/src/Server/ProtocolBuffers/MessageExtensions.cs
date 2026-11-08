@@ -160,6 +160,7 @@ namespace KRPC.Server.ProtocolBuffers
             result.Documentation = enumeration.Documentation;
             result.Deprecated = enumeration.Deprecated;
             result.DeprecatedReason = enumeration.DeprecatedReason;
+            result.Flags = enumeration.Flags;
             return result;
         }
 

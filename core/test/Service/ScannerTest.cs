@@ -34,7 +34,7 @@ namespace KRPC.Test.Service
             var service = services.ServicesList.First (x => x.Name == "TestService");
             Assert.AreEqual (84, service.Procedures.Count);
             Assert.AreEqual (3, service.Classes.Count);
-            Assert.AreEqual (2, service.Enumerations.Count);
+            Assert.AreEqual (3, service.Enumerations.Count);
             Assert.AreEqual (3, service.Structs.Count);
             Assert.AreEqual ("<doc>\n<summary>\nTest service documentation.\n</summary>\n</doc>", service.Documentation);
             MessageAssert.IsNotDeprecated (service);
@@ -734,6 +734,15 @@ namespace KRPC.Test.Service
                     MessageAssert.HasValue (enumeration, 2, "Z", 2);
                     MessageAssert.IsNotDeprecated (enumeration);
                     MessageAssert.ValueIsNotDeprecated (enumeration, 0);
+                    Assert.IsFalse (enumeration.Flags);
+                } else if (enumeration.Name == "TestFlags") {
+                    MessageAssert.HasValues (enumeration, 5);
+                    MessageAssert.HasValue (enumeration, 0, "None", 0);
+                    MessageAssert.HasValue (enumeration, 1, "A", 1);
+                    MessageAssert.HasValue (enumeration, 2, "B", 2);
+                    MessageAssert.HasValue (enumeration, 3, "C", 4);
+                    MessageAssert.HasValue (enumeration, 4, "AB", 3);
+                    Assert.IsTrue (enumeration.Flags);
                 } else if (enumeration.Name == "DeprecatedEnum") {
                     MessageAssert.HasValues (enumeration, 2);
                     MessageAssert.HasValue (enumeration, 0, "A", 0, "<doc>\n<summary>\nA value that is not deprecated.\n</summary>\n</doc>");
@@ -746,8 +755,8 @@ namespace KRPC.Test.Service
                 }
                 foundEnumerations++;
             }
-            Assert.AreEqual (2, foundEnumerations);
-            Assert.AreEqual (2, service.Enumerations.Count);
+            Assert.AreEqual (3, foundEnumerations);
+            Assert.AreEqual (3, service.Enumerations.Count);
         }
 
         [Test]

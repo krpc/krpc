@@ -41,6 +41,11 @@ namespace KRPC.Service.Scanner
         public string DeprecatedReason { get; private set; }
 
         /// <summary>
+        /// Whether the enumeration is a flags enumeration, whose values can be combined.
+        /// </summary>
+        public bool Flags { get; private set; }
+
+        /// <summary>
         /// The CLR type of the enumeration.
         /// </summary>
         public Type UnderlyingType { get; private set; }
@@ -53,6 +58,7 @@ namespace KRPC.Service.Scanner
             Name = enumName;
             FullyQualifiedName = serviceName + "." + Name;
             UnderlyingType = enumType;
+            Flags = Enumerations.IsFlags (enumType);
             Values = values;
             Documentation = DocumentationUtils.ResolveCrefs (documentation);
             Deprecated = deprecated;
@@ -67,6 +73,8 @@ namespace KRPC.Service.Scanner
             var result = new OrderedDictionary ();
             result ["documentation"] = Documentation;
             result ["values"] = Values.Select (x => x.Serialize ()).ToList ();
+            if (Flags)
+                result ["flags"] = true;
             if (Deprecated) {
                 result ["deprecated"] = true;
                 result ["deprecated_reason"] = DeprecatedReason;

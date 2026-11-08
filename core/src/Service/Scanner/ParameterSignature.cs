@@ -53,15 +53,15 @@ namespace KRPC.Service.Scanner
                 CheckEnumerationValues (DefaultValue, Spec, location);
         }
 
-        // A default value holds only values its enumerations declare, as a client has no
-        // value of an enumeration for any other number
+        // A default value holds only values of its enumerations, as a client has no value of an
+        // enumeration for any other number
         static void CheckEnumerationValues (object value, TypeSpec spec, string location)
         {
             if (value == null)
                 return;
             switch (spec.Kind) {
             case TypeKind.Enum:
-                if (!Enum.IsDefined (spec.Type, Enum.ToObject (spec.Type, value)))
+                if (!Enumerations.IsValid (spec.Type, Convert.ToInt32 (value, CultureInfo.InvariantCulture)))
                     throw new ServiceException (
                         "The default value of " + location + " holds " +
                         Convert.ToInt64 (value, CultureInfo.InvariantCulture).ToString (CultureInfo.InvariantCulture) +

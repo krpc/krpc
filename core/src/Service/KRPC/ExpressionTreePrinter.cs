@@ -320,8 +320,12 @@ namespace KRPC.Service.KRPC
                 var bytes = value as byte[];
                 if (bytes != null)
                     return "0x" + BitConverter.ToString (bytes).Replace ("-", string.Empty);
-                if (value.GetType ().IsEnum)
-                    return FormatType (value.GetType ()) + "." + value;
+                if (value.GetType ().IsEnum) {
+                    // A flags combination formats as a comma separated list of names
+                    var enumType = FormatType (value.GetType ());
+                    var names = value.ToString ().Split (new [] { ", " }, StringSplitOptions.None);
+                    return string.Join (" | ", names.Select (name => enumType + "." + name).ToArray ());
+                }
                 var type = value as System.Type;
                 if (type != null)
                     return "typeof(" + FormatType (type) + ")";

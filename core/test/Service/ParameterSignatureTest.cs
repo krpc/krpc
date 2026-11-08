@@ -23,6 +23,15 @@ namespace KRPC.Test.Service
         {
         }
 
+        public static void FlagsDefault (
+            TestService.TestFlags x = TestService.TestFlags.A | TestService.TestFlags.C)
+        {
+        }
+
+        public static void UndeclaredFlagsDefault (TestService.TestFlags x = (TestService.TestFlags)8)
+        {
+        }
+
         public static void TakesAStream (global::KRPC.Service.Messages.Stream x)
         {
         }
@@ -91,6 +100,22 @@ namespace KRPC.Test.Service
             StringAssert.Contains ("TestService." + method, exn.Message);
             StringAssert.Contains ("holds 7", exn.Message);
             StringAssert.Contains ("TestEnum", exn.Message);
+        }
+
+        [Test]
+        public void FlagsCombinationDefault ()
+        {
+            Assert.AreEqual (
+                TestService.TestFlags.A | TestService.TestFlags.C,
+                Signature ("FlagsDefault").DefaultValue);
+        }
+
+        [Test]
+        public void UndeclaredFlagsBitDefault ()
+        {
+            var exn = Assert.Throws<ServiceException> (() => Signature ("UndeclaredFlagsDefault"));
+            StringAssert.Contains ("holds 8", exn.Message);
+            StringAssert.Contains ("TestFlags", exn.Message);
         }
 
         [TestCase ("TakesAStream")]

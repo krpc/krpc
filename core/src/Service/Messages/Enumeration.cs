@@ -15,6 +15,8 @@ namespace KRPC.Service.Messages
 
         public string DeprecatedReason { get; set; }
 
+        public bool Flags { get; set; }
+
         public Enumeration (string name)
         {
             Name = name;

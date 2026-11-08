@@ -724,6 +724,22 @@ namespace KRPC.Service.KRPC
             return new Expression (op (left, right));
         }
 
+        // A bitwise operator, which also combines two values of a flags enumeration as its int
+        static Expression BitwiseBinaryOp (
+            Func<LinqExpression, LinqExpression, LinqExpression> op, Expression arg0, Expression arg1, string name)
+        {
+            CheckOperands (arg0, arg1);
+            LinqExpression left = arg0;
+            LinqExpression right = arg1;
+            PromoteOperands (ref left, ref right, name);
+            var type = left.Type;
+            if (type == right.Type && type.IsEnum && Enumerations.IsFlags (type))
+                return new Expression (LinqExpression.Convert (
+                    op (LinqExpression.Convert (left, typeof (int)), LinqExpression.Convert (right, typeof (int))),
+                    type));
+            return new Expression (op (left, right));
+        }
+
         static Expression NullableBinaryOp (Func<LinqExpression, LinqExpression, LinqExpression> op, Expression arg0, Expression arg1)
         {
             CheckOperands (arg0, arg1);
@@ -850,7 +866,7 @@ namespace KRPC.Service.KRPC
                 throw new ArgumentException (
                     "Enumeration \"" + name + "\" not found in service \"" + service + "\"");
             var type = enumeration.UnderlyingType;
-            if (!System.Enum.IsDefined (type, value))
+            if (!Enumerations.IsValid (type, value))
                 throw new ArgumentException (
                     value + " is not a value of enumeration \"" + name + "\" " +
                     "in service \"" + service + "\"");
@@ -1717,23 +1733,29 @@ namespace KRPC.Service.KRPC
         /// <summary>
         /// Logical or bitwise and, which evaluates both operands.
         /// </summary>
+        /// <remarks>
+        /// Also takes two values of a flags enumeration, and gives the values they share.
+        /// </remarks>
         /// <param name="arg0">The first operand.</param>
         /// <param name="arg1">The second operand.</param>
         [KRPCMethod]
         public static Expression And(Expression arg0, Expression arg1)
         {
-            return NumericBinaryOp (LinqExpression.And, arg0, arg1, nameof (And));
+            return BitwiseBinaryOp (LinqExpression.And, arg0, arg1, nameof (And));
         }
 
         /// <summary>
         /// Logical or bitwise or, which evaluates both operands.
         /// </summary>
+        /// <remarks>
+        /// Also takes two values of a flags enumeration, and gives their combination.
+        /// </remarks>
         /// <param name="arg0">The first operand.</param>
         /// <param name="arg1">The second operand.</param>
         [KRPCMethod]
         public static Expression Or(Expression arg0, Expression arg1)
         {
-            return NumericBinaryOp (LinqExpression.Or, arg0, arg1, nameof (Or));
+            return BitwiseBinaryOp (LinqExpression.Or, arg0, arg1, nameof (Or));
         }
 
         /// <summary>
@@ -1767,12 +1789,15 @@ namespace KRPC.Service.KRPC
         /// <summary>
         /// Logical or bitwise exclusive or.
         /// </summary>
+        /// <remarks>
+        /// Also takes two values of a flags enumeration, and gives the values in only one of them.
+        /// </remarks>
         /// <param name="arg0">The first operand.</param>
         /// <param name="arg1">The second operand.</param>
         [KRPCMethod]
         public static Expression ExclusiveOr(Expression arg0, Expression arg1)
         {
-            return NumericBinaryOp (LinqExpression.ExclusiveOr, arg0, arg1, nameof (ExclusiveOr));
+            return BitwiseBinaryOp (LinqExpression.ExclusiveOr, arg0, arg1, nameof (ExclusiveOr));
         }
 
         /// <summary>

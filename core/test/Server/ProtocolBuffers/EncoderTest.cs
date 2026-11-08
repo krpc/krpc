@@ -252,6 +252,24 @@ namespace KRPC.Test.Server.ProtocolBuffers
                 () => Encoder.Decode ("0e".ToByteString (), TypeSpec.Create (typeof(TestService.TestEnum))));
         }
 
+        [TestCase ("00", TestService.TestFlags.None)]
+        [TestCase ("06", TestService.TestFlags.AB)]
+        [TestCase ("0a", TestService.TestFlags.A | TestService.TestFlags.C)]
+        [TestCase ("0e", TestService.TestFlags.AB | TestService.TestFlags.C)]
+        public void DecodeFlags (string data, TestService.TestFlags expected)
+        {
+            var value = Encoder.Decode (data.ToByteString (), TypeSpec.Create (typeof(TestService.TestFlags)));
+            Assert.AreEqual (expected, value);
+        }
+
+        [TestCase ("10")]
+        [TestCase ("01")]
+        public void DecodeUndeclaredFlagsBit (string data)
+        {
+            Assert.Throws<ArgumentException> (
+                () => Encoder.Decode (data.ToByteString (), TypeSpec.Create (typeof(TestService.TestFlags))));
+        }
+
         [Test]
         public void DecodeBoolOutOfRange ()
         {
