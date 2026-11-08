@@ -57,6 +57,24 @@ def is_call(call: KRPC.ProcedureCall, procedure: str) -> bool:
     return call.procedure_id == _procedure_id(procedure)
 
 
+def serve_definitions(
+    client: Client,
+    scripted_server: Callable[[Callable[[ScriptedServer], None]], ScriptedServer],
+    services: KRPC.Services,
+) -> ScriptedServer:
+    """Connect the client to a scripted server that answers GetServices with the given
+    definitions, and every other call with a zero value."""
+
+    def script(scripted: ScriptedServer) -> None:
+        scripted.accept()
+        scripted.serve()
+
+    scripted = scripted_server(script)
+    scripted.services = services.SerializeToString()
+    client.connect(scripted.endpoint())
+    return scripted
+
+
 def _is_service_call(call: KRPC.ProcedureCall, service: str, procedure: str) -> bool:
     # Note: a call by id is matched on its procedure alone, as the KRPC service id is set by hand
     return (not call.service or call.service == service) and is_call(call, procedure)

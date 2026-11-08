@@ -94,6 +94,7 @@ message Command {
     CallWithArguments call_with_arguments = 54;
     CompileFunction compile_function = 55;
     ScopeEvent scope_event = 56;
+    Declared declared = 57;
   }
 }
 
@@ -509,6 +510,13 @@ message ObjectId {
   Value a = 1;
 }
 
+// Whether the client's type for an enum or struct of a service, reached through the
+// connection, is the type its generated module declares. Replies with a bool Value.
+message Declared {
+  string service = 1;
+  string name = 2;
+}
+
 // Lists the names the client exposes: its services when no service is given, the members of a
 // service, or the members of a class or the values of an enum of a service. Replies with a list
 // Value of strings, or null in a testee that cannot list them.
@@ -569,6 +577,9 @@ message Enum {
   string service = 1;
   string name = 2;
   sint32 value = 3;
+  // Made from the client's generated module for the service, with no connection, for a testee
+  // with the declarations profile.
+  bool declared = 4;
 }
 
 message Items {
@@ -590,6 +601,8 @@ message Struct {
   string service = 1;
   string name = 2;
   repeated Value fields = 3;
+  // As for an Enum.
+  bool declared = 4;
 }
 
 // An object handle the testee holds. Each object a call returns gets a new handle, so two

@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import enum
 import gc
+import importlib
 import json
 import keyword
 import queue
@@ -38,6 +39,7 @@ PROFILES = [
     "error-types",
     "dynamic",
     "definitions",
+    "declarations",
     "defaults",
     "named-arguments",
     "streams",
@@ -246,6 +248,8 @@ class Testee:
         elif case == "object_id":
             obj = self._from_value(command.object_id.a)
             reply.value.uint64 = krpc.get_object_id(obj)
+        elif case == "declared":
+            reply.value.bool = self._is_declared(command.declared)
         elif case == "members":
             names = self._members(command.members)
             reply.value.list.items.extend(pb.Value(string=x) for x in sorted(names))
@@ -622,7 +626,12 @@ class Testee:
             with self._lock:
                 return self._objects[value.object.handle]
         if case == "enum":
-            return self._type(value.enum.service, value.enum.name)(value.enum.value)
+            enum_type = (
+                declared_type(value.enum.service, value.enum.name)
+                if value.enum.declared
+                else self._type(value.enum.service, value.enum.name)
+            )
+            return enum_type(value.enum.value)
         if case == "list":
             return [self._from_value(x) for x in value.list.items]
         if case == "set":
@@ -636,7 +645,12 @@ class Testee:
             }
         if case == "struct":
             fields = [self._from_value(x) for x in value.struct.fields]
-            return self._type(value.struct.service, value.struct.name)(*fields)
+            struct_type = (
+                declared_type(value.struct.service, value.struct.name)
+                if value.struct.declared
+                else self._type(value.struct.service, value.struct.name)
+            )
+            return struct_type(*fields)
         return getattr(value, case)
 
     def _members(self, command: pb.Members) -> list[str]:
@@ -676,6 +690,12 @@ class Testee:
         if name.startswith("Test"):
             return types.struct_type("TestService", name)
         return getattr(types, name + "_type")
+
+    def _is_declared(self, command: pb.Declared) -> bool:
+        """Whether the client's type for an enum or struct is its generated module's."""
+        return self._type(command.service, command.name) is declared_type(
+            command.service, command.name
+        )
 
     def _type(self, service: str, name: str) -> Any:
         """An enum, struct, class or exception type of a service."""
@@ -752,6 +772,11 @@ def member_name(name: str) -> str:
     """The name the client gives a procedure or method, with an underscore after a keyword."""
     name = snake_case(name)
     return name + "_" if keyword.iskeyword(name) else name
+
+
+def declared_type(service: str, name: str) -> Any:
+    """An enum or struct type of a service, from its generated module."""
+    return getattr(importlib.import_module("krpc.services." + service.lower()), name)
 
 
 def is_service(value: object) -> bool:

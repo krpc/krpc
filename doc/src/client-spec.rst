@@ -92,6 +92,9 @@ A client implements the ``core`` profile, and any of the others:
      - Checking and converting arguments at run time, and calls a static type system rules out
    * - ``definitions``
      - Building the services from the server's definitions when connecting
+   * - ``declarations``
+     - Generated enumerations and structures, used with no connection and shared where the
+       server's definitions match
    * - ``defaults``
      - Omitting arguments that have defaults
    * - ``named-arguments``

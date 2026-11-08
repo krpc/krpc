@@ -10,7 +10,7 @@ from driver import profile, raw, section, should, untested, values
 from driver.errors import assert_argument_error
 from driver.framing import encode_sint32, encode_size
 from driver.helpers import create
-from driver.scripted import ScriptedServer, definitions, is_call
+from driver.scripted import ScriptedServer, definitions, is_call, serve_definitions
 from driver.testee import TesteeError, invocation, wait_until
 
 import krpc.schema.KRPC_pb2 as KRPC
@@ -372,15 +372,7 @@ def with_definitions(client, server, scripted_server, *added):
     the added services, in order. Every call but GetServices gets a zero value."""
     services = KRPC.Services.FromString(definitions(server, "KRPC"))
     services.services.extend(added)
-
-    def script(scripted: ScriptedServer) -> None:
-        scripted.accept()
-        scripted.serve()
-
-    scripted = scripted_server(script)
-    scripted.services = services.SerializeToString()
-    client.connect(scripted.endpoint())
-    return scripted
+    return serve_definitions(client, scripted_server, services)
 
 
 @profile("definitions")
