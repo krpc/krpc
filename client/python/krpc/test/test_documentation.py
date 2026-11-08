@@ -51,6 +51,11 @@ class TestDocumentation(ServerTestCase, unittest.TestCase):
             ),
         )
 
+    def test_deprecated_signature(self) -> None:
+        # A deprecated procedure's signature has the parameters of the call it wraps
+        signature = inspect.signature(self.conn.test_service.deprecated_procedure)
+        self.assertEqual(["value"], list(signature.parameters))
+
     def test_deprecated(self) -> None:
         self.check_doc(
             "Deprecated. Use float_to_string instead.\n\n"
