@@ -534,6 +534,17 @@ Service documentation string.
 
 
 
+.. staticmethod:: flags_default([x = TestFlags.value_a | TestFlags.value_c])
+
+
+
+   :param TestFlags x:
+   :rtype: :class:`TestFlags`
+   
+
+
+
+
 .. staticmethod:: flags_echo(x)
 
 
@@ -1430,6 +1441,8 @@ Service documentation string.
 .. class:: TestFlags
 
    Flags documentation string.
+
+   A flags enumeration. :std:ref:`python-client-flags` shows how to combine its values.
 
 
    .. data:: none

@@ -27,6 +27,12 @@
 
 - Add `union`, `intersection`, `difference` and `contains` to the values of a flags enumeration (#1311)
 
+## client/python
+
+- Support flags enumerations, such as `SpaceCenter.MapFilterType`, as an `enum.Flag` (#1311)
+- Raise `EncodingError` for an enumeration result the enumeration does not declare, in place of
+  `ValueError` (#1311)
+
 ## tools/krpctools
 
 - Support flags enumerations in `clientgen` and `docgen` (#1311)

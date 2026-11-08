@@ -494,6 +494,12 @@ namespace TestServer
         }
 
         [KRPCProcedure]
+        public static TestFlags FlagsDefault (TestFlags x = TestFlags.ValueA | TestFlags.ValueC)
+        {
+            return x;
+        }
+
+        [KRPCProcedure]
         public static int FlagsToInt (TestFlags x)
         {
             return (int)x;

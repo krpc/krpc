@@ -5,7 +5,7 @@ import krpc.limits
 from krpc.declarations import DeclaredClass, DeclaredObject, declaration_error as _declaration, register as _register
 from krpc.event import Event
 from krpc.schema import KRPC_pb2
-from krpc.types import DocEnum
+from krpc.types import DocEnum, DocFlag
 import krpc.services.serviceb as _service_serviceb
 
 

@@ -1185,6 +1185,14 @@ static inline krpc_error_t krpc_TestService_EnumToString(krpc_connection_t conne
  */
 static inline krpc_error_t krpc_TestService_EnumToString_call(krpc_schema_ProcedureCall * procedureCall, krpc_TestService_TestEnum_t x);
 
+static inline krpc_error_t krpc_TestService_FlagsDefault(krpc_connection_t connection, krpc_TestService_TestFlags_t * returnValue, krpc_TestService_TestFlags_t x);
+
+/**
+ * Fills in the call krpc_TestService_FlagsDefault() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_TestService_FlagsDefault_call(krpc_schema_ProcedureCall * procedureCall, krpc_TestService_TestFlags_t x);
+
 static inline krpc_error_t krpc_TestService_FlagsEcho(krpc_connection_t connection, krpc_TestService_TestFlags_t * returnValue, krpc_TestService_TestFlags_t x);
 
 /**
@@ -6284,6 +6292,29 @@ static inline krpc_error_t krpc_TestService_EnumToString(krpc_connection_t conne
 
 static inline krpc_error_t krpc_TestService_EnumToString_call(krpc_schema_ProcedureCall * procedureCall, krpc_TestService_TestEnum_t x) {
   KRPC_CHECK(krpc_procedure_call(procedureCall, 857051661, 3467554098, 1));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_enum, &x));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_FlagsDefault(krpc_connection_t connection, krpc_TestService_TestFlags_t * returnValue, krpc_TestService_TestFlags_t x) {
+  krpc_call_t _call;
+  krpc_argument_t _arguments[1];
+  KRPC_CHECK(krpc_call(&_call, 857051661, 3991048083, 1, _arguments));
+  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_enum, &x));
+  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
+  KRPC_CHECK(krpc_init_result(&_result));
+  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
+  if (returnValue) {
+    pb_istream_t _stream;
+    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+    KRPC_CHECK(krpc_decode_enum(&_stream, (int*)returnValue));
+  }
+  KRPC_CHECK(krpc_free_result(&_result));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_FlagsDefault_call(krpc_schema_ProcedureCall * procedureCall, krpc_TestService_TestFlags_t x) {
+  KRPC_CHECK(krpc_procedure_call(procedureCall, 857051661, 3991048083, 1));
   KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_enum, &x));
   return KRPC_OK;
 }

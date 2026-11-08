@@ -3,7 +3,7 @@ from __future__ import annotations
 import collections
 import copy
 from collections.abc import Callable, Iterable, Mapping
-from enum import Enum
+from enum import Enum, Flag
 from typing import (
     TYPE_CHECKING,
     TypeVar,
@@ -345,7 +345,7 @@ class Types:
         # converts by its number, as a value inside a collection is sent by its number too
         if (
             isinstance(typ, EnumerationType)
-            and isinstance(value, DocEnum)
+            and isinstance(value, (DocEnum, DocFlag))
             and _enum_names(type(value)) == (typ._service_name, typ._enum_name)
         ):
             try:
@@ -517,13 +517,14 @@ class EnumerationType(TypeBase):
         self,
         values: Mapping[str, Mapping[str, object]],
         python_type: type | None = None,
+        flags: bool = False,
     ) -> None:
-        """Set the python type. Creates an Enum class using the given values, unless a python
-        type to use instead is given."""
+        """Set the python type. Creates an Enum class using the given values, or a Flag class
+        for a flags enumeration, unless a python type to use instead is given."""
         assert self.python_type is None
         if python_type is None:
             python_type = _create_enum_type(
-                self._service_name, self._enum_name, values, self._doc
+                self._service_name, self._enum_name, values, self._doc, flags
             )
         self.python_type = python_type
         if self._nullable_type is not None:
@@ -798,8 +799,10 @@ def _create_enum_type(
     enum_name: str,
     values: Mapping[str, Mapping[str, object]],
     doc: str | None,
+    flags: bool = False,
 ) -> type[Enum]:
-    typ = DocEnum(
+    base = DocFlag if flags else DocEnum
+    typ = base(
         enum_name,
         dict((name, x["value"]) for name, x in values.items()),
     )
@@ -858,6 +861,21 @@ class DocEnum(Enum):
     """The base of a service's enumerations."""
 
     def __new__(cls: type[_DocEnumT], value: int, doc: str | None = None) -> _DocEnumT:
+        self = object.__new__(cls)
+        self._value_ = value
+        if doc is not None:
+            self.__doc__ = doc.strip()
+        return self
+
+
+_DocFlagT = TypeVar("_DocFlagT", bound="DocFlag")
+
+
+class DocFlag(Flag):
+    """The base of a service's flags enumerations, whose values combine with ``|``. A
+    combination of values is a value too, and ``in`` tests whether it holds one."""
+
+    def __new__(cls: type[_DocFlagT], value: int, doc: str | None = None) -> _DocFlagT:
         self = object.__new__(cls)
         self._value_ = value
         if doc is not None:

@@ -650,6 +650,16 @@ namespace KRPC.Client.Services.TestService
             return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
         }
 
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "FlagsDefault", typeof(TypeSpecs))]
+        public global::KRPC.Client.Services.TestService.TestFlags FlagsDefault (global::KRPC.Client.Services.TestService.TestFlags x = global::KRPC.Client.Services.TestService.TestFlags.ValueA | global::KRPC.Client.Services.TestService.TestFlags.ValueC)
+        {
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (x, TypeSpecs.Spec20)
+            };
+            var _result = connection.Invoke ("TestService", "FlagsDefault", _args);
+            return (global::KRPC.Client.Services.TestService.TestFlags)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec20, connection);
+        }
+
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "FlagsEcho", typeof(TypeSpecs))]
         public global::KRPC.Client.Services.TestService.TestFlags FlagsEcho (global::KRPC.Client.Services.TestService.TestFlags x)
         {

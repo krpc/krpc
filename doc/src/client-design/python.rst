@@ -158,4 +158,4 @@ Mapping the Spec to Python
    * - Interrupting a blocked thread
      - Unsupported, as only the main thread can be interrupted, by ``KeyboardInterrupt``
    * - Flags enumeration
-     - Unsupported. A flags enumeration is a ``DocEnum``, which raises ``ValueError`` for a combination
+     - A ``DocFlag``, an ``enum.Flag``. A ``Flag`` reads a negative number as a complement, so the decoder rejects one

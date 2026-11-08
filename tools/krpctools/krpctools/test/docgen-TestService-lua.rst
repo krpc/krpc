@@ -401,6 +401,15 @@ Service documentation string.
 
 
 
+.. staticmethod:: flags_default(x?: TestService.TestFlags): TestService.TestFlags
+
+
+
+   :param x: Defaults to ``TestService.TestFlags.value_a:union(TestService.TestFlags.value_c)``.
+
+
+
+
 .. staticmethod:: flags_echo(x: TestService.TestFlags): TestService.TestFlags
 
 

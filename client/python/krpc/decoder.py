@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import struct
 from collections.abc import Callable, Iterable, Mapping
+from enum import Flag
 from typing import (
     TYPE_CHECKING,
     cast,
@@ -82,6 +83,17 @@ def decode_stream_id(data: bytes) -> int:
     return _decode_varint(data)[0]
 
 
+def _enum_value(enum_type: type, value: int) -> object:
+    """The value of an enumeration for a number. A Flag reads a negative number as the
+    complement of its bits, so a negative number is checked for here."""
+    if value < 0 and issubclass(enum_type, Flag):
+        raise EncodingError("%d is not a valid %s" % (value, enum_type.__name__))
+    try:
+        return enum_type(value)
+    except ValueError as exn:
+        raise EncodingError(str(exn)) from exn
+
+
 class Decoder:
     """Routines for decoding messages and values from
     the protocol buffer serialization format"""
@@ -103,7 +115,7 @@ class Decoder:
             return cls.decode_message(data, typ.python_type)
         if isinstance(typ, EnumerationType):
             value = cls._decode_value(data, cls._types.sint32_type)
-            return typ.python_type(value)
+            return _enum_value(typ.python_type, cast(int, value))
         if isinstance(typ, ClassType):
             object_id_typ = cls._types.uint64_type
             object_id = cls._decode_value(data, object_id_typ)
@@ -215,7 +227,7 @@ class Decoder:
         if isinstance(typ, EnumerationType):
             decode_value = _VALUE_DECODERS[cls._types.sint32_type.code]
             enum_type = typ.python_type
-            return lambda data: enum_type(decode_value(data))
+            return lambda data: _enum_value(enum_type, cast(int, decode_value(data)))
         return lambda data: cls.decode(client, data, typ)
 
     @classmethod

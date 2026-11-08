@@ -489,6 +489,16 @@
 
    
 
+   .. function:: TestFlags flags_default(TestFlags x = TestFlags::value_a | TestFlags::value_c)
+
+
+
+      :Parameters:
+
+
+
+   
+
    .. function:: TestFlags flags_echo(TestFlags x)
 
 

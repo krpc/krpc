@@ -350,6 +350,13 @@
       :param TestEnum x:
    
 
+   .. method:: TestFlags flagsDefault(TestFlags x)
+
+
+
+      :param TestFlags x:
+   
+
    .. method:: TestFlags flagsEcho(TestFlags x)
 
 

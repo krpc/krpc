@@ -5,7 +5,7 @@ import keyword
 import warnings
 from collections import defaultdict
 from collections.abc import Callable, Iterable, Iterator
-from enum import Enum
+from enum import Enum, Flag
 from typing import (
     TYPE_CHECKING,
     Any,
@@ -254,9 +254,14 @@ def _documentation(member: Any, service_name: str) -> str:
     return doc
 
 
-def _same_values(generated: type | None, values: dict[str, dict[str, object]]) -> bool:
-    """Whether a generated enumeration has the names and values of the server's definition"""
+def _same_values(
+    generated: type | None, values: dict[str, dict[str, object]], flags: bool
+) -> bool:
+    """Whether a generated enumeration has the names and values of the server's definition,
+    and is a flags enumeration when the definition is one"""
     if not (isinstance(generated, type) and issubclass(generated, Enum)):
+        return False
+    if issubclass(generated, Flag) != flags:
         return False
     return {name: member.value for name, member in generated.__members__.items()} == {
         name: value["value"] for name, value in values.items()
@@ -294,10 +299,10 @@ def service_definitions(
 
         def register(types: Types) -> None:
             generated = lookup(name, enumeration.name)
-            if not _same_values(generated, values):
+            if not _same_values(generated, values, enumeration.flags):
                 generated = None
             types.enumeration_type(name, enumeration.name, doc).set_values(
-                values, generated
+                values, generated, enumeration.flags
             )
 
         return register

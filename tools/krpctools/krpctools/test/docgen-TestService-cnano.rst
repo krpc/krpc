@@ -621,6 +621,19 @@ Service documentation string.
 
 
 
+.. function:: krpc_error_t krpc_TestService_FlagsDefault(krpc_connection_t connection, krpc_TestService_TestFlags_t * returnValue, krpc_TestService_TestFlags_t x)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
 .. function:: krpc_error_t krpc_TestService_FlagsEcho(krpc_connection_t connection, krpc_TestService_TestFlags_t * returnValue, krpc_TestService_TestFlags_t x)
 
 

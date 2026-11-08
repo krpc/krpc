@@ -262,6 +262,8 @@ class TestService : public Service {
 
   std::string enum_to_string(TestService::TestEnum x);
 
+  TestService::TestFlags flags_default(TestService::TestFlags x);
+
   TestService::TestFlags flags_echo(TestService::TestFlags x);
 
   std::vector<TestService::TestFlags> flags_list_echo(std::vector<TestService::TestFlags> x);
@@ -559,6 +561,8 @@ class TestService : public Service {
 
   ::krpc::Stream<std::string> enum_to_string_stream(TestService::TestEnum x);
 
+  ::krpc::Stream<TestService::TestFlags> flags_default_stream(TestService::TestFlags x);
+
   ::krpc::Stream<TestService::TestFlags> flags_echo_stream(TestService::TestFlags x);
 
   ::krpc::Stream<std::vector<TestService::TestFlags>> flags_list_echo_stream(std::vector<TestService::TestFlags> x);
@@ -776,6 +780,8 @@ class TestService : public Service {
   ::krpc::schema::ProcedureCall enum_list_default_call(std::vector<TestService::TestEnum> x);
 
   ::krpc::schema::ProcedureCall enum_to_string_call(TestService::TestEnum x);
+
+  ::krpc::schema::ProcedureCall flags_default_call(TestService::TestFlags x);
 
   ::krpc::schema::ProcedureCall flags_echo_call(TestService::TestFlags x);
 
@@ -2151,6 +2157,17 @@ inline std::string TestService::enum_to_string(TestService::TestEnum x) {
   return _result;
 }
 
+inline TestService::TestFlags TestService::flags_default(TestService::TestFlags x = TestService::TestFlags::value_a | TestService::TestFlags::value_c) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(x));
+  auto _data = this->_client.invoke("TestService", "FlagsDefault", _args, ::krpc::Client::Returns::value);
+  TestService::TestFlags _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), &this->_client);
+  return _result;
+}
+
 inline TestService::TestFlags TestService::flags_echo(TestService::TestFlags x) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
@@ -3177,6 +3194,13 @@ inline ::krpc::Stream<std::string> TestService::enum_to_string_stream(TestServic
   return ::krpc::Stream<std::string>(this->_client, this->_client.build_call("TestService", "EnumToString", _args));
 }
 
+inline ::krpc::Stream<TestService::TestFlags> TestService::flags_default_stream(TestService::TestFlags x = TestService::TestFlags::value_a | TestService::TestFlags::value_c) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(x));
+  return ::krpc::Stream<TestService::TestFlags>(this->_client, this->_client.build_call("TestService", "FlagsDefault", _args));
+}
+
 inline ::krpc::Stream<TestService::TestFlags> TestService::flags_echo_stream(TestService::TestFlags x) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
@@ -3922,6 +3946,13 @@ inline ::krpc::schema::ProcedureCall TestService::enum_to_string_call(TestServic
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(x));
   return this->_client.build_call("TestService", "EnumToString", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::flags_default_call(TestService::TestFlags x = TestService::TestFlags::value_a | TestService::TestFlags::value_c) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(x));
+  return this->_client.build_call("TestService", "FlagsDefault", _args);
 }
 
 inline ::krpc::schema::ProcedureCall TestService::flags_echo_call(TestService::TestFlags x) {

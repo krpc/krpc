@@ -5,7 +5,7 @@ import krpc.limits
 from krpc.declarations import DeclaredClass, DeclaredObject, declaration_error as _declaration, register as _register
 from krpc.event import Event
 from krpc.schema import KRPC_pb2
-from krpc.types import DocEnum
+from krpc.types import DocEnum, DocFlag
 {% for dependency in dependencies %}
 import {{ dependency.module }} as {{ dependency.alias }}
 {% endfor %}
@@ -45,7 +45,7 @@ self{% for x in parameters %}, {{x.name}}: {{ x.type.spec }}{%if 'default_value'
 {% endmacro %}
 
 {% for enum_name, enumeration in enumerations.items() %}
-class {{enum_name}}(DocEnum):
+class {{enum_name}}({% if enumeration.flags %}DocFlag{% else %}DocEnum{% endif %}):
 {% if enumeration.documentation %}{{ enumeration.documentation | indent(width=4) }}
 {% endif %}
     {% for enum_value in enumeration['values'] %}

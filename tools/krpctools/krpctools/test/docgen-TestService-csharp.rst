@@ -483,6 +483,16 @@
 
       :Game Scenes: All
 
+   .. function:: TestFlags FlagsDefault(TestFlags x = TestFlags.ValueA | TestFlags.ValueC)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
    .. function:: TestFlags FlagsEcho(TestFlags x)
 
 

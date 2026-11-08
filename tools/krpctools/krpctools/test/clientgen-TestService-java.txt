@@ -598,6 +598,16 @@ public class TestService {
     }
 
     @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "TestService", procedure = "FlagsDefault", types = _Types.class)
+    public krpc.client.services.TestService.TestFlags flagsDefault(krpc.client.services.TestService.TestFlags x) throws RPCException {
+        ByteString[] _args = new ByteString[] {
+            Encoder.encode(x, krpc.client.Types.createEnumeration("TestService", "TestFlags"))
+        };
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "FlagsDefault", _args);
+        return (krpc.client.services.TestService.TestFlags) Encoder.decode(_data.getValue(), krpc.client.Types.createEnumeration("TestService", "TestFlags"), this.connection);
+    }
+
+    @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "FlagsEcho", types = _Types.class)
     public krpc.client.services.TestService.TestFlags flagsEcho(krpc.client.services.TestService.TestFlags x) throws RPCException {
         ByteString[] _args = new ByteString[] {
@@ -2392,6 +2402,8 @@ public class TestService {
             PARAMETER_TYPES.put("EnumListDefault", new krpc.schema.KRPC.Type[] { krpc.client.Types.createList(krpc.client.Types.createEnumeration("TestService", "TestEnum")) });
             RETURN_TYPES.put("EnumToString", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
             PARAMETER_TYPES.put("EnumToString", new krpc.schema.KRPC.Type[] { krpc.client.Types.createEnumeration("TestService", "TestEnum") });
+            RETURN_TYPES.put("FlagsDefault", krpc.client.Types.createEnumeration("TestService", "TestFlags"));
+            PARAMETER_TYPES.put("FlagsDefault", new krpc.schema.KRPC.Type[] { krpc.client.Types.createEnumeration("TestService", "TestFlags") });
             RETURN_TYPES.put("FlagsEcho", krpc.client.Types.createEnumeration("TestService", "TestFlags"));
             PARAMETER_TYPES.put("FlagsEcho", new krpc.schema.KRPC.Type[] { krpc.client.Types.createEnumeration("TestService", "TestFlags") });
             RETURN_TYPES.put("FlagsListEcho", krpc.client.Types.createList(krpc.client.Types.createEnumeration("TestService", "TestFlags")));
@@ -2400,11 +2412,11 @@ public class TestService {
             PARAMETER_TYPES.put("FlagsStructEcho", new krpc.schema.KRPC.Type[] { krpc.client.Types.createStruct("TestService", "TestFlagsStruct") });
             RETURN_TYPES.put("FlagsToInt", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
             PARAMETER_TYPES.put("FlagsToInt", new krpc.schema.KRPC.Type[] { krpc.client.Types.createEnumeration("TestService", "TestFlags") });
-            RETURN_TYPES.put("FloatSpecialDefaults", krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT)));
-            PARAMETER_TYPES.put("FloatSpecialDefaults", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT) });
         }
 
         private static void initTypes1() {
+            RETURN_TYPES.put("FloatSpecialDefaults", krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT)));
+            PARAMETER_TYPES.put("FloatSpecialDefaults", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT) });
             RETURN_TYPES.put("FloatToString", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
             PARAMETER_TYPES.put("FloatToString", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT) });
             RETURN_TYPES.put("HexStringToBytes", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BYTES));
@@ -2503,11 +2515,11 @@ public class TestService {
             PARAMETER_TYPES.put("ThrowInvalidOperationExceptionLater", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("ThrowMappedException", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
             PARAMETER_TYPES.put("ThrowMappedException", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
-            RETURN_TYPES.put("TupleDefault", krpc.client.Types.createTuple(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL)));
-            PARAMETER_TYPES.put("TupleDefault", new krpc.schema.KRPC.Type[] { krpc.client.Types.createTuple(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL)) });
         }
 
         private static void initTypes2() {
+            RETURN_TYPES.put("TupleDefault", krpc.client.Types.createTuple(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL)));
+            PARAMETER_TYPES.put("TupleDefault", new krpc.schema.KRPC.Type[] { krpc.client.Types.createTuple(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL)) });
             RETURN_TYPES.put("UInt32ToString", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
             PARAMETER_TYPES.put("UInt32ToString", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32) });
             RETURN_TYPES.put("UInt64ToString", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));

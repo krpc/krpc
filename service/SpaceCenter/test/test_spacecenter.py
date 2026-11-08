@@ -188,11 +188,28 @@ class TestSpaceCenter(TestCase):
 
     def test_map_filter(self):
         MapFilterType = self.sc.MapFilterType
-        # The game holds -1 for every filter, which reads as All
-        self.assertEqual(MapFilterType.all, self.sc.map_filter)
-        for value in (MapFilterType.none, MapFilterType.debris, MapFilterType.all):
+        values = (
+            MapFilterType.none,
+            MapFilterType.debris,
+            MapFilterType.probes | MapFilterType.ships,
+            MapFilterType.all,
+        )
+        for value in values:
             self.sc.map_filter = value
             self.assertEqual(value, self.sc.map_filter)
+
+    def test_map_filter_combination(self):
+        MapFilterType = self.sc.MapFilterType
+        self.sc.map_filter = MapFilterType.probes | MapFilterType.ships
+        self.sc.map_filter |= MapFilterType.debris
+        value = self.sc.map_filter
+        self.assertIn(MapFilterType.probes, value)
+        self.assertIn(MapFilterType.debris, value)
+        self.assertNotIn(MapFilterType.rovers, value)
+        self.sc.map_filter = MapFilterType.all & ~MapFilterType.debris
+        self.assertNotIn(MapFilterType.debris, self.sc.map_filter)
+        self.assertIn(MapFilterType.ships, self.sc.map_filter)
+        self.sc.map_filter = MapFilterType.all
 
     def test_navball(self):
         self.assertTrue(self.sc.navball)

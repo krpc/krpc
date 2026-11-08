@@ -40,6 +40,7 @@ DEFAULTS = {
     "dictionary": ("DictionaryDefault", {1: False, 2: True}),
     "tuple": ("TupleDefault", (1, False)),
     "enum": ("EnumDefault", values.Enum(2)),
+    "flags": ("FlagsDefault", values.Enum(5)),
     "enum-list": ("EnumListDefault", [values.Enum(1), values.Enum(2)]),
     "empty-list": ("EmptyListDefault", []),
     "null": ("NullDefault", "null"),
