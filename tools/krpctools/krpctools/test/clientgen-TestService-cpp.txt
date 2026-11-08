@@ -34,6 +34,7 @@ class TestService : public Service {
 
   // Structure forward declarations
   struct DeprecatedStruct;
+  struct TestFlagsStruct;
   struct TestNestedNullableStruct;
   struct TestStruct;
   struct TestNestedStruct;
@@ -90,6 +91,61 @@ class TestService : public Service {
      */
     value_c = 2
   };
+
+  /**
+   * Flags documentation string.
+   */
+  enum struct TestFlags {
+    /**
+     * Flags None documentation string.
+     */
+    none = 0,
+    /**
+     * Flags ValueA documentation string.
+     */
+    value_a = 1,
+    /**
+     * Flags ValueB documentation string.
+     */
+    value_b = 2,
+    /**
+     * Flags ValueC documentation string.
+     */
+    value_c = 4,
+    /**
+     * Flags ValueAB documentation string.
+     */
+    value_ab = 3
+  };
+
+  friend constexpr TestFlags operator|(TestFlags a, TestFlags b) {
+    return static_cast<TestFlags>(static_cast<int32_t>(a) | static_cast<int32_t>(b));
+  }
+
+  friend constexpr TestFlags operator&(TestFlags a, TestFlags b) {
+    return static_cast<TestFlags>(static_cast<int32_t>(a) & static_cast<int32_t>(b));
+  }
+
+  friend constexpr TestFlags operator^(TestFlags a, TestFlags b) {
+    return static_cast<TestFlags>(static_cast<int32_t>(a) ^ static_cast<int32_t>(b));
+  }
+
+  // The complement within the values the enumeration declares
+  friend constexpr TestFlags operator~(TestFlags a) {
+    return static_cast<TestFlags>(~static_cast<int32_t>(a) & 7);
+  }
+
+  friend TestFlags& operator|=(TestFlags& a, TestFlags b) {
+    return a = a | b;
+  }
+
+  friend TestFlags& operator&=(TestFlags& a, TestFlags b) {
+    return a = a & b;
+  }
+
+  friend TestFlags& operator^=(TestFlags& a, TestFlags b) {
+    return a = a ^ b;
+  }
 
   std::string add_multiple_values(float x, int32_t y, int64_t z);
 
@@ -165,6 +221,8 @@ class TestService : public Service {
 
   std::optional<TestService::TestEnum> echo_nullable_enum(std::optional<TestService::TestEnum> x);
 
+  std::optional<TestService::TestFlags> echo_nullable_flags(std::optional<TestService::TestFlags> x);
+
   std::optional<float> echo_nullable_float(std::optional<float> value);
 
   /**
@@ -204,6 +262,14 @@ class TestService : public Service {
 
   std::string enum_to_string(TestService::TestEnum x);
 
+  TestService::TestFlags flags_echo(TestService::TestFlags x);
+
+  std::vector<TestService::TestFlags> flags_list_echo(std::vector<TestService::TestFlags> x);
+
+  TestService::TestFlagsStruct flags_struct_echo(TestService::TestFlagsStruct x);
+
+  int32_t flags_to_int(TestService::TestFlags x);
+
   /**
    * Procedure whose defaults are the special values of float, plus a finite fraction
    * that no float can hold exactly.
@@ -242,6 +308,8 @@ class TestService : public Service {
   std::vector<int64_t> int64_special_defaults(int64_t maximum, int64_t minimum);
 
   std::string int64_to_string(int64_t value);
+
+  TestService::TestFlags int_to_flags(int32_t x);
 
   /**
    * Returns first_value and from joined by an at
@@ -455,6 +523,8 @@ class TestService : public Service {
 
   ::krpc::Stream<std::optional<TestService::TestEnum>> echo_nullable_enum_stream(std::optional<TestService::TestEnum> x);
 
+  ::krpc::Stream<std::optional<TestService::TestFlags>> echo_nullable_flags_stream(std::optional<TestService::TestFlags> x);
+
   ::krpc::Stream<std::optional<float>> echo_nullable_float_stream(std::optional<float> value);
 
   ::krpc::Stream<std::optional<int32_t>> echo_nullable_int_stream(std::optional<int32_t> value);
@@ -489,6 +559,14 @@ class TestService : public Service {
 
   ::krpc::Stream<std::string> enum_to_string_stream(TestService::TestEnum x);
 
+  ::krpc::Stream<TestService::TestFlags> flags_echo_stream(TestService::TestFlags x);
+
+  ::krpc::Stream<std::vector<TestService::TestFlags>> flags_list_echo_stream(std::vector<TestService::TestFlags> x);
+
+  ::krpc::Stream<TestService::TestFlagsStruct> flags_struct_echo_stream(TestService::TestFlagsStruct x);
+
+  ::krpc::Stream<int32_t> flags_to_int_stream(TestService::TestFlags x);
+
   ::krpc::Stream<std::vector<float>> float_special_defaults_stream(float nan, float infinity, float negative_infinity, float maximum, float lowest, float fraction);
 
   ::krpc::Stream<std::string> float_to_string_stream(float value);
@@ -514,6 +592,8 @@ class TestService : public Service {
   ::krpc::Stream<std::vector<int64_t>> int64_special_defaults_stream(int64_t maximum, int64_t minimum);
 
   ::krpc::Stream<std::string> int64_to_string_stream(int64_t value);
+
+  ::krpc::Stream<TestService::TestFlags> int_to_flags_stream(int32_t x);
 
   ::krpc::Stream<std::string> join_with_at_sign_stream(std::string first_value, std::string from);
 
@@ -661,6 +741,8 @@ class TestService : public Service {
 
   ::krpc::schema::ProcedureCall echo_nullable_enum_call(std::optional<TestService::TestEnum> x);
 
+  ::krpc::schema::ProcedureCall echo_nullable_flags_call(std::optional<TestService::TestFlags> x);
+
   ::krpc::schema::ProcedureCall echo_nullable_float_call(std::optional<float> value);
 
   ::krpc::schema::ProcedureCall echo_nullable_int_call(std::optional<int32_t> value);
@@ -695,6 +777,14 @@ class TestService : public Service {
 
   ::krpc::schema::ProcedureCall enum_to_string_call(TestService::TestEnum x);
 
+  ::krpc::schema::ProcedureCall flags_echo_call(TestService::TestFlags x);
+
+  ::krpc::schema::ProcedureCall flags_list_echo_call(std::vector<TestService::TestFlags> x);
+
+  ::krpc::schema::ProcedureCall flags_struct_echo_call(TestService::TestFlagsStruct x);
+
+  ::krpc::schema::ProcedureCall flags_to_int_call(TestService::TestFlags x);
+
   ::krpc::schema::ProcedureCall float_special_defaults_call(float nan, float infinity, float negative_infinity, float maximum, float lowest, float fraction);
 
   ::krpc::schema::ProcedureCall float_to_string_call(float value);
@@ -720,6 +810,8 @@ class TestService : public Service {
   ::krpc::schema::ProcedureCall int64_special_defaults_call(int64_t maximum, int64_t minimum);
 
   ::krpc::schema::ProcedureCall int64_to_string_call(int64_t value);
+
+  ::krpc::schema::ProcedureCall int_to_flags_call(int32_t x);
 
   ::krpc::schema::ProcedureCall join_with_at_sign_call(std::string first_value, std::string from);
 
@@ -1011,6 +1103,45 @@ value(value), old_value(old_value) {}
   };
 
   /**
+   * Flags struct documentation string.
+   */
+  struct TestFlagsStruct {
+    TestService::TestFlags flags_field;
+
+    TestFlagsStruct() : flags_field() {}
+
+    TestFlagsStruct(TestService::TestFlags flags_field) :
+flags_field(flags_field) {}
+
+    bool operator==(const TestFlagsStruct& other) const {
+      return this->flags_field == other.flags_field;
+    }
+
+    bool operator!=(const TestFlagsStruct& other) const {
+      return !(*this == other);
+    }
+
+    // Ordered by the fields in turn, which is how a tuple of the same values orders
+    bool operator<(const TestFlagsStruct& other) const {
+      if (flags_field < other.flags_field)
+        return true;
+      return false;
+    }
+
+    bool operator>(const TestFlagsStruct& other) const {
+      return other < *this;
+    }
+
+    bool operator<=(const TestFlagsStruct& other) const {
+      return !(other < *this);
+    }
+
+    bool operator>=(const TestFlagsStruct& other) const {
+      return !(*this < other);
+    }
+  };
+
+  /**
    * Nested nullable struct documentation string.
    */
   struct TestNestedNullableStruct {
@@ -1239,6 +1370,10 @@ namespace encoder {
     return krpc::encoder::encode(static_cast<int32_t>(value));
   }
 
+  inline std::string encode(const services::TestService::TestFlags& value) {
+    return krpc::encoder::encode(static_cast<int32_t>(value));
+  }
+
 #if defined(__GNUC__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
@@ -1256,6 +1391,16 @@ namespace encoder {
 #if defined(__GNUC__)
 #pragma GCC diagnostic pop
 #endif
+
+  // A structure is sent as the values of its fields in order, which is the same encoding as
+  // a tuple of those values. See the note on the collection encoders for why the message it
+  // is sent in is kept between calls.
+  inline std::string encode(const services::TestService::TestFlagsStruct& value) {
+    static thread_local krpc::schema::Tuple structMessage;
+    structMessage.Clear();
+    structMessage.add_items(encode_item(value.flags_field));
+    return krpc::encoder::encode(structMessage);
+  }
 
   // A structure is sent as the values of its fields in order, which is the same encoding as
   // a tuple of those values. See the note on the collection encoders for why the message it
@@ -1330,6 +1475,12 @@ namespace decoder {
     value = static_cast<services::TestService::TestEnum>(x);
   }
 
+  inline void decode(services::TestService::TestFlags& value, const std::string& data, Client* client) {
+    int32_t x;
+    decode(x, data, client);
+    value = static_cast<services::TestService::TestFlags>(x);
+  }
+
 #if defined(__GNUC__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
@@ -1347,6 +1498,16 @@ namespace decoder {
 #if defined(__GNUC__)
 #pragma GCC diagnostic pop
 #endif
+
+  // Fields are only ever appended to a structure, so a value from a newer server may carry
+  // more items than this client knows about, and those are ignored.
+  inline void decode(services::TestService::TestFlagsStruct& value, const std::string& data, Client* client) {
+    static thread_local krpc::schema::Tuple structMessage;
+    if (!structMessage.ParseFromString(data)) throw EncodingError("Failed to decode message");
+    if (structMessage.items_size() < 1)
+      throw EncodingError("Value for TestFlagsStruct does not have all of its fields");
+    decode_item(value.flags_field, structMessage.items(0), client);
+  }
 
   // Fields are only ever appended to a structure, so a value from a newer server may carry
   // more items than this client knows about, and those are ignored.
@@ -1413,6 +1574,12 @@ inline std::size_t hash_value(const services::TestService::DeprecatedStruct& val
 #if defined(__GNUC__)
 #pragma GCC diagnostic pop
 #endif
+
+inline std::size_t hash_value(const services::TestService::TestFlagsStruct& value) {
+  std::size_t seed = 0;
+  hash_combine(&seed, hash_value(value.flags_field));
+  return seed;
+}
 
 inline std::size_t hash_value(const services::TestService::TestNestedNullableStruct& value) {
   std::size_t seed = 0;
@@ -1786,6 +1953,17 @@ inline std::optional<TestService::TestEnum> TestService::echo_nullable_enum(std:
   return _result;
 }
 
+inline std::optional<TestService::TestFlags> TestService::echo_nullable_flags(std::optional<TestService::TestFlags> x) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(x));
+  auto _data = this->_client.invoke("TestService", "EchoNullableFlags", _args, ::krpc::Client::Returns::value);
+  std::optional<TestService::TestFlags> _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), &this->_client);
+  return _result;
+}
+
 inline std::optional<float> TestService::echo_nullable_float(std::optional<float> value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
@@ -1973,6 +2151,50 @@ inline std::string TestService::enum_to_string(TestService::TestEnum x) {
   return _result;
 }
 
+inline TestService::TestFlags TestService::flags_echo(TestService::TestFlags x) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(x));
+  auto _data = this->_client.invoke("TestService", "FlagsEcho", _args, ::krpc::Client::Returns::value);
+  TestService::TestFlags _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), &this->_client);
+  return _result;
+}
+
+inline std::vector<TestService::TestFlags> TestService::flags_list_echo(std::vector<TestService::TestFlags> x) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(x));
+  auto _data = this->_client.invoke("TestService", "FlagsListEcho", _args, ::krpc::Client::Returns::value);
+  std::vector<TestService::TestFlags> _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), &this->_client);
+  return _result;
+}
+
+inline TestService::TestFlagsStruct TestService::flags_struct_echo(TestService::TestFlagsStruct x) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(x));
+  auto _data = this->_client.invoke("TestService", "FlagsStructEcho", _args, ::krpc::Client::Returns::value);
+  TestService::TestFlagsStruct _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), &this->_client);
+  return _result;
+}
+
+inline int32_t TestService::flags_to_int(TestService::TestFlags x) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(x));
+  auto _data = this->_client.invoke("TestService", "FlagsToInt", _args, ::krpc::Client::Returns::value);
+  int32_t _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), &this->_client);
+  return _result;
+}
+
 inline std::vector<float> TestService::float_special_defaults(float nan = std::numeric_limits<float>::quiet_NaN(), float infinity = std::numeric_limits<float>::infinity(), float negative_infinity = -std::numeric_limits<float>::infinity(), float maximum = (std::numeric_limits<float>::max)(), float lowest = std::numeric_limits<float>::lowest(), float fraction = 0.1f) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(6);
@@ -2118,6 +2340,17 @@ inline std::string TestService::int64_to_string(int64_t value) {
   _args.push_back(encoder::encode_arg(value));
   auto _data = this->_client.invoke("TestService", "Int64ToString", _args, ::krpc::Client::Returns::value);
   std::string _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), &this->_client);
+  return _result;
+}
+
+inline TestService::TestFlags TestService::int_to_flags(int32_t x) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(x));
+  auto _data = this->_client.invoke("TestService", "IntToFlags", _args, ::krpc::Client::Returns::value);
+  TestService::TestFlags _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), &this->_client);
   return _result;
@@ -2818,6 +3051,13 @@ inline ::krpc::Stream<std::optional<TestService::TestEnum>> TestService::echo_nu
   return ::krpc::Stream<std::optional<TestService::TestEnum>>(this->_client, this->_client.build_call("TestService", "EchoNullableEnum", _args));
 }
 
+inline ::krpc::Stream<std::optional<TestService::TestFlags>> TestService::echo_nullable_flags_stream(std::optional<TestService::TestFlags> x) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(x));
+  return ::krpc::Stream<std::optional<TestService::TestFlags>>(this->_client, this->_client.build_call("TestService", "EchoNullableFlags", _args));
+}
+
 inline ::krpc::Stream<std::optional<float>> TestService::echo_nullable_float_stream(std::optional<float> value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
@@ -2937,6 +3177,34 @@ inline ::krpc::Stream<std::string> TestService::enum_to_string_stream(TestServic
   return ::krpc::Stream<std::string>(this->_client, this->_client.build_call("TestService", "EnumToString", _args));
 }
 
+inline ::krpc::Stream<TestService::TestFlags> TestService::flags_echo_stream(TestService::TestFlags x) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(x));
+  return ::krpc::Stream<TestService::TestFlags>(this->_client, this->_client.build_call("TestService", "FlagsEcho", _args));
+}
+
+inline ::krpc::Stream<std::vector<TestService::TestFlags>> TestService::flags_list_echo_stream(std::vector<TestService::TestFlags> x) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(x));
+  return ::krpc::Stream<std::vector<TestService::TestFlags>>(this->_client, this->_client.build_call("TestService", "FlagsListEcho", _args));
+}
+
+inline ::krpc::Stream<TestService::TestFlagsStruct> TestService::flags_struct_echo_stream(TestService::TestFlagsStruct x) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(x));
+  return ::krpc::Stream<TestService::TestFlagsStruct>(this->_client, this->_client.build_call("TestService", "FlagsStructEcho", _args));
+}
+
+inline ::krpc::Stream<int32_t> TestService::flags_to_int_stream(TestService::TestFlags x) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(x));
+  return ::krpc::Stream<int32_t>(this->_client, this->_client.build_call("TestService", "FlagsToInt", _args));
+}
+
 inline ::krpc::Stream<std::vector<float>> TestService::float_special_defaults_stream(float nan = std::numeric_limits<float>::quiet_NaN(), float infinity = std::numeric_limits<float>::infinity(), float negative_infinity = -std::numeric_limits<float>::infinity(), float maximum = (std::numeric_limits<float>::max)(), float lowest = std::numeric_limits<float>::lowest(), float fraction = 0.1f) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(6);
@@ -3033,6 +3301,13 @@ inline ::krpc::Stream<std::string> TestService::int64_to_string_stream(int64_t v
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
   return ::krpc::Stream<std::string>(this->_client, this->_client.build_call("TestService", "Int64ToString", _args));
+}
+
+inline ::krpc::Stream<TestService::TestFlags> TestService::int_to_flags_stream(int32_t x) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(x));
+  return ::krpc::Stream<TestService::TestFlags>(this->_client, this->_client.build_call("TestService", "IntToFlags", _args));
 }
 
 inline ::krpc::Stream<std::string> TestService::join_with_at_sign_stream(std::string first_value, std::string from) {
@@ -3523,6 +3798,13 @@ inline ::krpc::schema::ProcedureCall TestService::echo_nullable_enum_call(std::o
   return this->_client.build_call("TestService", "EchoNullableEnum", _args);
 }
 
+inline ::krpc::schema::ProcedureCall TestService::echo_nullable_flags_call(std::optional<TestService::TestFlags> x) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(x));
+  return this->_client.build_call("TestService", "EchoNullableFlags", _args);
+}
+
 inline ::krpc::schema::ProcedureCall TestService::echo_nullable_float_call(std::optional<float> value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
@@ -3642,6 +3924,34 @@ inline ::krpc::schema::ProcedureCall TestService::enum_to_string_call(TestServic
   return this->_client.build_call("TestService", "EnumToString", _args);
 }
 
+inline ::krpc::schema::ProcedureCall TestService::flags_echo_call(TestService::TestFlags x) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(x));
+  return this->_client.build_call("TestService", "FlagsEcho", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::flags_list_echo_call(std::vector<TestService::TestFlags> x) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(x));
+  return this->_client.build_call("TestService", "FlagsListEcho", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::flags_struct_echo_call(TestService::TestFlagsStruct x) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(x));
+  return this->_client.build_call("TestService", "FlagsStructEcho", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::flags_to_int_call(TestService::TestFlags x) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(x));
+  return this->_client.build_call("TestService", "FlagsToInt", _args);
+}
+
 inline ::krpc::schema::ProcedureCall TestService::float_special_defaults_call(float nan = std::numeric_limits<float>::quiet_NaN(), float infinity = std::numeric_limits<float>::infinity(), float negative_infinity = -std::numeric_limits<float>::infinity(), float maximum = (std::numeric_limits<float>::max)(), float lowest = std::numeric_limits<float>::lowest(), float fraction = 0.1f) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(6);
@@ -3738,6 +4048,13 @@ inline ::krpc::schema::ProcedureCall TestService::int64_to_string_call(int64_t v
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
   return this->_client.build_call("TestService", "Int64ToString", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::int_to_flags_call(int32_t x) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(x));
+  return this->_client.build_call("TestService", "IntToFlags", _args);
 }
 
 inline ::krpc::schema::ProcedureCall TestService::join_with_at_sign_call(std::string first_value, std::string from) {
@@ -4476,6 +4793,13 @@ struct hash<krpc::services::TestService::DeprecatedStruct> {
 #if defined(__GNUC__)
 #pragma GCC diagnostic pop
 #endif
+
+template <>
+struct hash<krpc::services::TestService::TestFlagsStruct> {
+  std::size_t operator()(const krpc::services::TestService::TestFlagsStruct& value) const {
+    return krpc::hash_value(value);
+  }
+};
 
 template <>
 struct hash<krpc::services::TestService::TestNestedNullableStruct> {

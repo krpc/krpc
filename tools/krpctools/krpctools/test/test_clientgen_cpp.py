@@ -8,6 +8,12 @@ class TestClientGenCpp(ClientGenTestCase, unittest.TestCase):
     language = "cpp"
     generator = CppGenerator
 
+    def test_flags_default(self):
+        content = self.generate("FlagsService", self.load("FlagsDefault"))
+        self.assertIn(
+            "mode = FlagsService::Mode::slow | FlagsService::Mode::fast", content
+        )
+
     def test_bytes_default(self):
         content = self.generate("ServiceA", bytes_default())
         self.assertIn('std::string value = std::string("\\xca\\xfe", 2)', content)

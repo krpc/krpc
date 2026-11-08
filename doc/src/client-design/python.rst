@@ -157,3 +157,5 @@ Mapping the Spec to Python
      - ``threading.Condition``, held by the caller of ``wait``
    * - Interrupting a blocked thread
      - Unsupported, as only the main thread can be interrupted, by ``KeyboardInterrupt``
+   * - Flags enumeration
+     - Unsupported. A flags enumeration is a ``DocEnum``, which raises ``ValueError`` for a combination

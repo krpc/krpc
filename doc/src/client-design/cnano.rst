@@ -197,3 +197,5 @@ Mapping the Spec to C
      - The program calls ``krpc_connect`` again
    * - Double on AVR
      - A 32-bit ``double``, converted to and from 64 bits by ``src/utils.c``
+   * - Flags enumeration
+     - A ``typedef enum``, combined with C's integer operators

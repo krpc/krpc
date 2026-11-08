@@ -127,3 +127,6 @@ Mapping the Spec to C#
      - None. ``Stream`` and ``Event`` have no finalizer, so dropping every handle leaves them running
    * - Scoped stream or event
      - A ``using`` block. ``Dispose`` calls ``Remove``, and ignores a failed connection, as the server removes the stream with the connection and ``using`` keeps no second exception
+   * - Flags enumeration
+     - An ``enum`` with ``[Flags]``. C# cannot define operators on an ``enum``, so ``~`` sets the undeclared
+       bits too

@@ -39,6 +39,27 @@ Enum ValueC documentation string, in m/s², equal to
 """
 
 
+class TestFlags(DocEnum):
+    """
+    Flags documentation string.
+    """
+    none = 0, """
+Flags None documentation string.
+"""
+    value_a = 1, """
+Flags ValueA documentation string.
+"""
+    value_b = 2, """
+Flags ValueB documentation string.
+"""
+    value_c = 4, """
+Flags ValueC documentation string.
+"""
+    value_ab = 3, """
+Flags ValueAB documentation string.
+"""
+
+
 class DeprecatedStruct(NamedTuple):
     """
     Deprecated. Use TestStruct instead.
@@ -55,6 +76,13 @@ class DeprecatedStruct(NamedTuple):
 
     Deprecated struct OldValue documentation string.
     """
+
+
+class TestFlagsStruct(NamedTuple):
+    """
+    Flags struct documentation string.
+    """
+    flags_field: TestFlags
 
 
 class TestNestedNullableStruct(NamedTuple):
@@ -220,7 +248,9 @@ if TYPE_CHECKING:
     _TestClass = TestClass
     _DeprecatedEnum = DeprecatedEnum
     _TestEnum = TestEnum
+    _TestFlags = TestFlags
     _DeprecatedStruct = DeprecatedStruct
+    _TestFlagsStruct = TestFlagsStruct
     _TestNestedNullableStruct = TestNestedNullableStruct
     _TestStruct = TestStruct
     _TestNestedStruct = TestNestedStruct
@@ -240,7 +270,9 @@ class TestService(metaclass=DeclaredClass):
     TestClass: type[_TestClass] = TestClass
     DeprecatedEnum: type[_DeprecatedEnum] = DeprecatedEnum
     TestEnum: type[_TestEnum] = TestEnum
+    TestFlags: type[_TestFlags] = TestFlags
     DeprecatedStruct: type[_DeprecatedStruct] = DeprecatedStruct
+    TestFlagsStruct: type[_TestFlagsStruct] = TestFlagsStruct
     TestNestedNullableStruct: type[_TestNestedNullableStruct] = TestNestedNullableStruct
     TestStruct: type[_TestStruct] = TestStruct
     TestNestedStruct: type[_TestNestedStruct] = TestNestedStruct
@@ -406,6 +438,9 @@ class TestService(metaclass=DeclaredClass):
     def echo_nullable_enum(self, x: Optional[TestEnum]) -> Optional[TestEnum]:
         raise _declaration("TestService", None)
 
+    def echo_nullable_flags(self, x: Optional[TestFlags]) -> Optional[TestFlags]:
+        raise _declaration("TestService", None)
+
     def echo_nullable_float(self, value: Optional[float]) -> Optional[float]:
         raise _declaration("TestService", None)
 
@@ -464,6 +499,18 @@ class TestService(metaclass=DeclaredClass):
     def enum_to_string(self, x: TestEnum) -> str:
         raise _declaration("TestService", None)
 
+    def flags_echo(self, x: TestFlags) -> TestFlags:
+        raise _declaration("TestService", None)
+
+    def flags_list_echo(self, x: List[TestFlags]) -> List[TestFlags]:
+        raise _declaration("TestService", None)
+
+    def flags_struct_echo(self, x: TestFlagsStruct) -> TestFlagsStruct:
+        raise _declaration("TestService", None)
+
+    def flags_to_int(self, x: TestFlags) -> int:
+        raise _declaration("TestService", None)
+
     def float_special_defaults(self, nan: float = float("nan"), infinity: float = float("inf"), negative_infinity: float = -float("inf"), maximum: float = krpc.limits.FLOAT_MAX, lowest: float = krpc.limits.FLOAT_LOWEST, fraction: float = 0.1) -> List[float]:
         """
         Procedure whose defaults are the special values of float, plus a finite fraction
@@ -514,6 +561,9 @@ class TestService(metaclass=DeclaredClass):
         raise _declaration("TestService", None)
 
     def int64_to_string(self, value: int) -> str:
+        raise _declaration("TestService", None)
+
+    def int_to_flags(self, x: int) -> TestFlags:
         raise _declaration("TestService", None)
 
     def join_with_at_sign(self, first_value: str, from_: str) -> str:
@@ -689,7 +739,9 @@ _register(
     "TestService",
     DeprecatedEnum,
     TestEnum,
+    TestFlags,
     DeprecatedStruct,
+    TestFlagsStruct,
     TestNestedNullableStruct,
     TestStruct,
     TestNestedStruct,

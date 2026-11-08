@@ -9,6 +9,7 @@ using ConnectionResponse = KRPC.Schema.KRPC.ConnectionResponse;
 using Disconnect = KRPC.Schema.KRPC.Disconnect;
 using Error = KRPC.Conformance.Error;
 using Exception = System.Exception;
+using TestFlags = KRPC.Client.Services.TestService.TestFlags;
 
 namespace KRPC.Client.Conformance
 {
@@ -326,6 +327,18 @@ namespace KRPC.Client.Conformance
                 break;
             case Command.CommandOneofCase.Compare:
                 reply.Value = Result.Bool (Equal (Arg.Any (command.Compare.A), Arg.Any (command.Compare.B)));
+                break;
+            case Command.CommandOneofCase.FlagsUnion:
+                reply.Value = Result.Enum<TestFlags> () (
+                    Arg.Enum<TestFlags> (command.FlagsUnion.A) | Arg.Enum<TestFlags> (command.FlagsUnion.B));
+                break;
+            case Command.CommandOneofCase.FlagsContains:
+                reply.Value = Result.Bool (
+                    Arg.Enum<TestFlags> (command.FlagsContains.A).HasFlag (Arg.Enum<TestFlags> (command.FlagsContains.B)));
+                break;
+            case Command.CommandOneofCase.FlagsDifference:
+                reply.Value = Result.Enum<TestFlags> () (
+                    Arg.Enum<TestFlags> (command.FlagsDifference.A) & ~Arg.Enum<TestFlags> (command.FlagsDifference.B));
                 break;
             case Command.CommandOneofCase.Pause:
             case Command.CommandOneofCase.AwaitPause:

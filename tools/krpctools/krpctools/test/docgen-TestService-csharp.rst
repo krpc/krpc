@@ -302,6 +302,16 @@
 
       :Game Scenes: All
 
+   .. function:: TestFlags? EchoNullableFlags(TestFlags? x)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
    .. function:: float? EchoNullableFloat(float? value)
 
 
@@ -473,6 +483,46 @@
 
       :Game Scenes: All
 
+   .. function:: TestFlags FlagsEcho(TestFlags x)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. function:: System.Collections.Generic.IList<TestFlags> FlagsListEcho(System.Collections.Generic.IList<TestFlags> x)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. function:: TestFlagsStruct FlagsStructEcho(TestFlagsStruct x)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. function:: int FlagsToInt(TestFlags x)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
    .. function:: System.Collections.Generic.IList<float> FloatSpecialDefaults(float nan = float.NaN, float infinity = float.PositiveInfinity, float negativeInfinity = float.NegativeInfinity, float maximum = float.MaxValue, float lowest = float.MinValue, float fraction = 0.1f)
 
       Procedure whose defaults are the special values of float, plus a finite fraction
@@ -602,6 +652,16 @@
       :Game Scenes: All
 
    .. function:: string Int64ToString(long value)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. function:: TestFlags IntToFlags(int x)
 
 
 
@@ -1227,6 +1287,39 @@
 
 
 
+.. enum:: TestFlags
+
+   Flags documentation string.
+
+   A flags enumeration. :std:ref:`csharp-client-flags` shows how to combine its values.
+
+
+   .. enumerator:: None
+
+      Flags None documentation string.
+
+
+   .. enumerator:: ValueA
+
+      Flags ValueA documentation string.
+
+
+   .. enumerator:: ValueAB
+
+      Flags ValueAB documentation string.
+
+
+   .. enumerator:: ValueB
+
+      Flags ValueB documentation string.
+
+
+   .. enumerator:: ValueC
+
+      Flags ValueC documentation string.
+
+
+
 .. struct:: DeprecatedStruct
 
    .. warning:: Deprecated. Use :type:`TestStruct` instead.
@@ -1247,6 +1340,20 @@
       .. warning:: Deprecated. Use :prop:`DeprecatedStruct.Value` instead.
 
       Deprecated struct OldValue documentation string.
+
+
+.. struct:: TestFlagsStruct
+
+   Flags struct documentation string.
+
+   .. function:: TestFlagsStruct(TestFlags flagsField)
+
+      Construct a TestFlagsStruct from the values of its fields.
+
+
+   .. property:: TestFlags FlagsField { get; }
+
+
 
 
 .. struct:: TestNestedNullableStruct

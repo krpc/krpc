@@ -5,6 +5,7 @@ import com.google.protobuf.ByteString;
 import krpc.client.Connection;
 import krpc.client.Encoder;
 import krpc.client.RemoteEnum;
+import krpc.client.RemoteFlags;
 import krpc.client.RemoteObject;
 import krpc.client.RemoteStruct;
 import krpc.client.RPCInfo;
@@ -379,6 +380,19 @@ public class TestService {
     }
 
     @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "TestService", procedure = "EchoNullableFlags", types = _Types.class)
+    public krpc.client.services.TestService.TestFlags echoNullableFlags(krpc.client.services.TestService.TestFlags x) throws RPCException {
+        ByteString[] _args = new ByteString[] {
+            Encoder.encode(x, krpc.client.Types.createEnumeration("TestService", "TestFlags"))
+        };
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "EchoNullableFlags", _args);
+        if (_data.getIsNull()) {
+          return null;
+        }
+        return (krpc.client.services.TestService.TestFlags) Encoder.decode(_data.getValue(), krpc.client.Types.createEnumeration("TestService", "TestFlags"), this.connection);
+    }
+
+    @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "EchoNullableFloat", types = _Types.class)
     public Float echoNullableFloat(Float value) throws RPCException {
         ByteString[] _args = new ByteString[] {
@@ -583,6 +597,46 @@ public class TestService {
         return (String) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
     }
 
+    @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "TestService", procedure = "FlagsEcho", types = _Types.class)
+    public krpc.client.services.TestService.TestFlags flagsEcho(krpc.client.services.TestService.TestFlags x) throws RPCException {
+        ByteString[] _args = new ByteString[] {
+            Encoder.encode(x, krpc.client.Types.createEnumeration("TestService", "TestFlags"))
+        };
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "FlagsEcho", _args);
+        return (krpc.client.services.TestService.TestFlags) Encoder.decode(_data.getValue(), krpc.client.Types.createEnumeration("TestService", "TestFlags"), this.connection);
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "TestService", procedure = "FlagsListEcho", types = _Types.class)
+    public java.util.List<krpc.client.services.TestService.TestFlags> flagsListEcho(java.util.List<krpc.client.services.TestService.TestFlags> x) throws RPCException {
+        ByteString[] _args = new ByteString[] {
+            Encoder.encode(x, krpc.client.Types.createList(krpc.client.Types.createEnumeration("TestService", "TestFlags")))
+        };
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "FlagsListEcho", _args);
+        return (java.util.List<krpc.client.services.TestService.TestFlags>) Encoder.decode(_data.getValue(), krpc.client.Types.createList(krpc.client.Types.createEnumeration("TestService", "TestFlags")), this.connection);
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "TestService", procedure = "FlagsStructEcho", types = _Types.class)
+    public krpc.client.services.TestService.TestFlagsStruct flagsStructEcho(krpc.client.services.TestService.TestFlagsStruct x) throws RPCException {
+        ByteString[] _args = new ByteString[] {
+            Encoder.encode(x, krpc.client.Types.createStruct("TestService", "TestFlagsStruct"))
+        };
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "FlagsStructEcho", _args);
+        return (krpc.client.services.TestService.TestFlagsStruct) Encoder.decode(_data.getValue(), krpc.client.Types.createStruct("TestService", "TestFlagsStruct"), this.connection);
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "TestService", procedure = "FlagsToInt", types = _Types.class)
+    public int flagsToInt(krpc.client.services.TestService.TestFlags x) throws RPCException {
+        ByteString[] _args = new ByteString[] {
+            Encoder.encode(x, krpc.client.Types.createEnumeration("TestService", "TestFlags"))
+        };
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "FlagsToInt", _args);
+        return (int) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
+    }
+
     /**
      * Procedure whose defaults are the special values of float, plus a finite fraction
      * that no float can hold exactly.
@@ -731,6 +785,16 @@ public class TestService {
         };
         krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "Int64ToString", _args);
         return (String) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "TestService", procedure = "IntToFlags", types = _Types.class)
+    public krpc.client.services.TestService.TestFlags intToFlags(int x) throws RPCException {
+        ByteString[] _args = new ByteString[] {
+            Encoder.encode(x, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))
+        };
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "IntToFlags", _args);
+        return (krpc.client.services.TestService.TestFlags) Encoder.decode(_data.getValue(), krpc.client.Types.createEnumeration("TestService", "TestFlags"), this.connection);
     }
 
     /**
@@ -1354,6 +1418,68 @@ public class TestService {
     }
 
     /**
+     * Flags documentation string.
+     */
+    public static final class TestFlags extends RemoteFlags<TestFlags> {
+        /**
+         * Flags None documentation string.
+         */
+        public static final TestFlags NONE = new TestFlags(0);
+
+        /**
+         * Flags ValueA documentation string.
+         */
+        public static final TestFlags VALUE_A = new TestFlags(1);
+
+        /**
+         * Flags ValueB documentation string.
+         */
+        public static final TestFlags VALUE_B = new TestFlags(2);
+
+        /**
+         * Flags ValueC documentation string.
+         */
+        public static final TestFlags VALUE_C = new TestFlags(4);
+
+        /**
+         * Flags ValueAB documentation string.
+         */
+        public static final TestFlags VALUE_AB = new TestFlags(3);
+
+        private TestFlags (int value) {
+            super(value);
+        }
+
+        @Override
+        protected TestFlags withValue(int value) {
+            return fromValue(value);
+        }
+
+        /**
+         * Returns the value of the enumeration for a number, or null if the number holds a
+         * flag the enumeration does not declare.
+         */
+        public static TestFlags fromValue(int value) {
+            switch (value) {
+            case 0:
+                 return NONE;
+            case 1:
+                 return VALUE_A;
+            case 2:
+                 return VALUE_B;
+            case 4:
+                 return VALUE_C;
+            case 3:
+                 return VALUE_AB;
+            }
+            if ((value & ~7) != 0) {
+                return null;
+            }
+            return new TestFlags(value);
+        }
+    }
+
+    /**
      * Deprecated struct documentation string.
      *
      * @deprecated Use TestStruct instead.
@@ -1439,6 +1565,74 @@ public class TestService {
                 return result;
             }
             result = RemoteStruct.compareFields(oldValue, other.oldValue);
+            if (result != 0) {
+                return result;
+            }
+            return 0;
+        }
+    }
+
+    /**
+     * Flags struct documentation string.
+     */
+    public static class TestFlagsStruct implements RemoteStruct, Comparable<TestFlagsStruct> {
+        private final krpc.client.services.TestService.TestFlags flagsField;
+
+        public TestFlagsStruct(krpc.client.services.TestService.TestFlags flagsField) {
+            this.flagsField = flagsField;
+        }
+
+        public krpc.client.services.TestService.TestFlags getFlagsField() {
+            return flagsField;
+        }
+
+        private static final java.util.List<krpc.schema.KRPC.Type> FIELD_TYPES =
+            java.util.Collections.unmodifiableList(java.util.Arrays.asList(
+                krpc.client.Types.createEnumeration("TestService", "TestFlags")
+            ));
+
+        /** The types of the fields, in the order they are encoded in. */
+        public static java.util.List<krpc.schema.KRPC.Type> fieldTypes() {
+            return FIELD_TYPES;
+        }
+
+        /** Build a TestFlagsStruct from the values of its fields. */
+        @SuppressWarnings("unchecked")
+        public static TestFlagsStruct fromFieldValues(Object[] values) {
+            return new TestFlagsStruct(
+                (krpc.client.services.TestService.TestFlags) values[0]
+            );
+        }
+
+        @Override
+        public Object[] fieldValues() {
+            return new Object[] {
+                flagsField
+            };
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof TestFlagsStruct)) {
+                return false;
+            }
+            TestFlagsStruct other = (TestFlagsStruct) obj;
+            return java.util.Objects.deepEquals(this.flagsField, other.flagsField);
+        }
+
+        @Override
+        public int hashCode() {
+            return java.util.Arrays.deepHashCode(new Object[] {flagsField});
+        }
+
+        /**
+         * Compares this TestFlagsStruct with the given one, by its fields in turn, which is
+         * how a tuple of the same values compares.
+         */
+        @Override
+        public int compareTo(TestFlagsStruct other) {
+            int result;
+            result = RemoteStruct.compareFields(flagsField, other.flagsField);
             if (result != 0) {
                 return result;
             }
@@ -2162,6 +2356,8 @@ public class TestService {
             PARAMETER_TYPES.put("EchoNullableDouble", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.DOUBLE) });
             RETURN_TYPES.put("EchoNullableEnum", krpc.client.Types.createEnumeration("TestService", "TestEnum"));
             PARAMETER_TYPES.put("EchoNullableEnum", new krpc.schema.KRPC.Type[] { krpc.client.Types.createEnumeration("TestService", "TestEnum") });
+            RETURN_TYPES.put("EchoNullableFlags", krpc.client.Types.createEnumeration("TestService", "TestFlags"));
+            PARAMETER_TYPES.put("EchoNullableFlags", new krpc.schema.KRPC.Type[] { krpc.client.Types.createEnumeration("TestService", "TestFlags") });
             RETURN_TYPES.put("EchoNullableFloat", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT));
             PARAMETER_TYPES.put("EchoNullableFloat", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT) });
             RETURN_TYPES.put("EchoNullableInt", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
@@ -2196,8 +2392,19 @@ public class TestService {
             PARAMETER_TYPES.put("EnumListDefault", new krpc.schema.KRPC.Type[] { krpc.client.Types.createList(krpc.client.Types.createEnumeration("TestService", "TestEnum")) });
             RETURN_TYPES.put("EnumToString", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
             PARAMETER_TYPES.put("EnumToString", new krpc.schema.KRPC.Type[] { krpc.client.Types.createEnumeration("TestService", "TestEnum") });
+            RETURN_TYPES.put("FlagsEcho", krpc.client.Types.createEnumeration("TestService", "TestFlags"));
+            PARAMETER_TYPES.put("FlagsEcho", new krpc.schema.KRPC.Type[] { krpc.client.Types.createEnumeration("TestService", "TestFlags") });
+            RETURN_TYPES.put("FlagsListEcho", krpc.client.Types.createList(krpc.client.Types.createEnumeration("TestService", "TestFlags")));
+            PARAMETER_TYPES.put("FlagsListEcho", new krpc.schema.KRPC.Type[] { krpc.client.Types.createList(krpc.client.Types.createEnumeration("TestService", "TestFlags")) });
+            RETURN_TYPES.put("FlagsStructEcho", krpc.client.Types.createStruct("TestService", "TestFlagsStruct"));
+            PARAMETER_TYPES.put("FlagsStructEcho", new krpc.schema.KRPC.Type[] { krpc.client.Types.createStruct("TestService", "TestFlagsStruct") });
+            RETURN_TYPES.put("FlagsToInt", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
+            PARAMETER_TYPES.put("FlagsToInt", new krpc.schema.KRPC.Type[] { krpc.client.Types.createEnumeration("TestService", "TestFlags") });
             RETURN_TYPES.put("FloatSpecialDefaults", krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT)));
             PARAMETER_TYPES.put("FloatSpecialDefaults", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT) });
+        }
+
+        private static void initTypes1() {
             RETURN_TYPES.put("FloatToString", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
             PARAMETER_TYPES.put("FloatToString", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT) });
             RETURN_TYPES.put("HexStringToBytes", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BYTES));
@@ -2208,9 +2415,6 @@ public class TestService {
             PARAMETER_TYPES.put("IncrementList", new krpc.schema.KRPC.Type[] { krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)) });
             RETURN_TYPES.put("IncrementListOfStructs", krpc.client.Types.createList(krpc.client.Types.createStruct("TestService", "TestStruct")));
             PARAMETER_TYPES.put("IncrementListOfStructs", new krpc.schema.KRPC.Type[] { krpc.client.Types.createList(krpc.client.Types.createStruct("TestService", "TestStruct")) });
-        }
-
-        private static void initTypes1() {
             RETURN_TYPES.put("IncrementNestedCollection", krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))));
             PARAMETER_TYPES.put("IncrementNestedCollection", new krpc.schema.KRPC.Type[] { krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))) });
             RETURN_TYPES.put("IncrementSet", krpc.client.Types.createSet(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)));
@@ -2225,6 +2429,8 @@ public class TestService {
             PARAMETER_TYPES.put("Int64SpecialDefaults", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT64), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT64) });
             RETURN_TYPES.put("Int64ToString", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
             PARAMETER_TYPES.put("Int64ToString", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT64) });
+            RETURN_TYPES.put("IntToFlags", krpc.client.Types.createEnumeration("TestService", "TestFlags"));
+            PARAMETER_TYPES.put("IntToFlags", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32) });
             RETURN_TYPES.put("JoinWithAtSign", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
             PARAMETER_TYPES.put("JoinWithAtSign", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
             RETURN_TYPES.put("ListDefault", krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)));
@@ -2299,6 +2505,9 @@ public class TestService {
             PARAMETER_TYPES.put("ThrowMappedException", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
             RETURN_TYPES.put("TupleDefault", krpc.client.Types.createTuple(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL)));
             PARAMETER_TYPES.put("TupleDefault", new krpc.schema.KRPC.Type[] { krpc.client.Types.createTuple(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL)) });
+        }
+
+        private static void initTypes2() {
             RETURN_TYPES.put("UInt32ToString", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
             PARAMETER_TYPES.put("UInt32ToString", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32) });
             RETURN_TYPES.put("UInt64ToString", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
@@ -2311,9 +2520,6 @@ public class TestService {
             PARAMETER_TYPES.put("get_DeprecatedProperty", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("set_DeprecatedProperty", null);
             PARAMETER_TYPES.put("set_DeprecatedProperty", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
-        }
-
-        private static void initTypes2() {
             RETURN_TYPES.put("get_NullableObject", krpc.client.Types.createClass("TestService", "TestClass"));
             PARAMETER_TYPES.put("get_NullableObject", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("set_NullableObject", null);

@@ -9,3 +9,24 @@
 
 - **Breaking:** Make `MapFilterType` a flags enumeration, and change `MapFilterType.All` from -1
   to 32767 (#1311)
+
+## client/csharp
+
+- Generate a flags enumeration with `[Flags]` (#1311)
+
+## client/cpp
+
+- Generate the operators `|`, `&`, `^` and `~` for a flags enumeration (#1311)
+
+## client/java
+
+- **Breaking:** Generate a flags enumeration, such as `SpaceCenter.MapFilterType`, as a class of
+  constants with `or`, `and`, `xor`, `andNot` and `contains` (#1311)
+
+## client/lua
+
+- Add `union`, `intersection`, `difference` and `contains` to the values of a flags enumeration (#1311)
+
+## tools/krpctools
+
+- Support flags enumerations in `clientgen` and `docgen` (#1311)

@@ -386,6 +386,19 @@ Service documentation string.
 
 
 
+.. function:: krpc_error_t krpc_TestService_EchoNullableFlags(krpc_connection_t connection, krpc_TestService_TestFlags_t * returnValue, bool * returnValueIsNull, const krpc_TestService_TestFlags_t * x)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
 .. function:: krpc_error_t krpc_TestService_EchoNullableFloat(krpc_connection_t connection, float * returnValue, bool * returnValueIsNull, const float * value)
 
 
@@ -608,6 +621,58 @@ Service documentation string.
 
 
 
+.. function:: krpc_error_t krpc_TestService_FlagsEcho(krpc_connection_t connection, krpc_TestService_TestFlags_t * returnValue, krpc_TestService_TestFlags_t x)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_FlagsListEcho(krpc_connection_t connection, krpc_list_enum_t * returnValue, const krpc_list_enum_t * x)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_FlagsStructEcho(krpc_connection_t connection, krpc_TestService_TestFlagsStruct_t * returnValue, const krpc_TestService_TestFlagsStruct_t * x)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_FlagsToInt(krpc_connection_t connection, int32_t * returnValue, krpc_TestService_TestFlags_t x)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
 .. function:: krpc_error_t krpc_TestService_FloatSpecialDefaults(krpc_connection_t connection, krpc_list_float_t * returnValue, float nan, float infinity, float negativeInfinity, float maximum, float lowest, float fraction)
 
    Procedure whose defaults are the special values of float, plus a finite fraction
@@ -773,6 +838,19 @@ Service documentation string.
 
 
 .. function:: krpc_error_t krpc_TestService_Int64ToString(krpc_connection_t connection, char * * returnValue, int64_t value)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_IntToFlags(krpc_connection_t connection, krpc_TestService_TestFlags_t * returnValue, int32_t x)
 
 
 
@@ -1542,6 +1620,39 @@ Service documentation string.
 
 
 
+.. type:: krpc_TestService_TestFlags_t
+
+   Flags documentation string.
+
+   A flags enumeration. :std:ref:`cnano-client-flags` shows how to combine its values.
+
+
+   .. macro:: KRPC_TESTSERVICE_TESTFLAGS_NONE
+
+      Flags None documentation string.
+
+
+   .. macro:: KRPC_TESTSERVICE_TESTFLAGS_VALUEA
+
+      Flags ValueA documentation string.
+
+
+   .. macro:: KRPC_TESTSERVICE_TESTFLAGS_VALUEAB
+
+      Flags ValueAB documentation string.
+
+
+   .. macro:: KRPC_TESTSERVICE_TESTFLAGS_VALUEB
+
+      Flags ValueB documentation string.
+
+
+   .. macro:: KRPC_TESTSERVICE_TESTFLAGS_VALUEC
+
+      Flags ValueC documentation string.
+
+
+
 .. type:: krpc_TestService_DeprecatedStruct_t
 
    .. warning:: Deprecated. Use :type:`krpc_TestService_TestStruct_t` instead.
@@ -1558,6 +1669,16 @@ Service documentation string.
       .. warning:: Deprecated. Use :member:`krpc_TestService_DeprecatedStruct_t.value` instead.
 
       Deprecated struct OldValue documentation string.
+
+
+.. type:: krpc_TestService_TestFlagsStruct_t
+
+   Flags struct documentation string.
+
+
+   .. member:: krpc_TestService_TestFlags_t flags_field
+
+
 
 
 .. type:: krpc_TestService_TestNestedNullableStruct_t

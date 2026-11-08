@@ -175,6 +175,19 @@ comes back into range.
 .. seealso:: :doc:`/user-guide/object-lifetime` describes how each kind of object behaves in more
              detail.
 
+.. _java-client-flags:
+
+Flags Enumerations
+------------------
+
+A flags enumeration, such as :type:`~krpc.client.services.SpaceCenter.MapFilterType`, holds any
+combination of its values. It is a class of constants, which you combine with ``or`` and test for
+one with ``contains``:
+
+.. literalinclude:: /scripts/java/Flags.java
+
+``and``, ``xor`` and ``andNot`` give the other combinations of two values.
+
 .. _java-client-streams:
 
 Streaming Data

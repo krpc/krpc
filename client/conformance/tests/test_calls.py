@@ -528,21 +528,22 @@ def test_undefined_type(client, server, scripted_server, case):
 
 @profile("definitions")
 @pytest.mark.parametrize(
-    "case", ["defined-before", "defined-after", "in-a-list", "same-service"]
+    "case", ["defined-before", "defined-after", "in-a-list", "same-service", "flags"]
 )
 def test_enumeration_default(client, server, scripted_server, case):
     """A procedure's parameter defaults to a value of an enumeration, alone or in a
-    collection. The client calls the procedure without the argument, and sends none. The
-    enumeration is of the same service or another, in either order in the definitions."""
+    collection, or to a combination of the values of a flags enumeration. The client calls
+    the procedure without the argument, and sends none. The enumeration is of the same
+    service or another, in either order in the definitions."""
     modes = KRPC.Service(name="Modes")
     user = KRPC.Service(name="User")
     owner = user if case == "same-service" else modes
-    enumeration = owner.enumerations.add(name="Mode")
+    enumeration = owner.enumerations.add(name="Mode", flags=case == "flags")
     enumeration.values.add(name="Slow", value=1)
     enumeration.values.add(name="Fast", value=2)
     typ = KRPC.Type(code=KRPC.Type.ENUMERATION, service=owner.name, name="Mode")
-    # The enumeration value 2
-    default = encode_sint32(2)
+    # The enumeration value 2, or the combination of both values
+    default = encode_sint32(3 if case == "flags" else 2)
     if case == "in-a-list":
         typ = KRPC.Type(code=KRPC.Type.LIST, types=[typ])
         default = KRPC.List(items=[default]).SerializeToString()

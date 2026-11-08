@@ -342,6 +342,19 @@ itself reads normally, but a call on one of its parts fails with
 .. seealso:: :doc:`/user-guide/object-lifetime` describes how each kind of object behaves in more
              detail.
 
+.. _cnano-client-flags:
+
+Flags Enumerations
+------------------
+
+A flags enumeration, such as :type:`krpc_SpaceCenter_MapFilterType_t`, holds any combination of
+its values. You combine values with ``|``, and test for one with ``&``:
+
+.. literalinclude:: /scripts/cnano/Flags.c
+   :start-after: [docs]
+   :end-before: [/docs]
+   :dedent:
+
 Server Side Functions
 ---------------------
 

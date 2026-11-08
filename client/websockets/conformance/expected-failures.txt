@@ -65,6 +65,11 @@ test_values.py::test_structures[list]  # No values of type ListType
 test_values.py::test_structures[nested]  # No values of type ClassType
 test_values.py::test_structures[struct]  # No values of type StructType
 test_values.py::test_undeclared_enum_result  # No values of type EnumerationType
+test_values.py::test_flags  # No values of type EnumerationType
+test_values.py::test_flags_declared_values  # No values of type EnumerationType
+test_values.py::test_undeclared_flags_result  # No values of type EnumerationType
+test_values.py::test_flags_union  # No flags commands
+test_values.py::test_flags_contains  # No flags commands
 test_values.py::test_message_result  # No values of type MessageType
 test_codec.py::test_dictionary_value_left_out  # No decode command
 test_codec.py::test_empty_data  # No decode command

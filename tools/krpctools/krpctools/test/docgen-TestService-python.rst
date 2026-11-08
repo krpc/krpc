@@ -335,6 +335,17 @@ Service documentation string.
 
 
 
+.. staticmethod:: echo_nullable_flags(x)
+
+
+
+   :param TestFlags or None x:
+   :rtype: :class:`TestFlags` or None
+   
+
+
+
+
 .. staticmethod:: echo_nullable_float(value)
 
 
@@ -523,6 +534,50 @@ Service documentation string.
 
 
 
+.. staticmethod:: flags_echo(x)
+
+
+
+   :param TestFlags x:
+   :rtype: :class:`TestFlags`
+   
+
+
+
+
+.. staticmethod:: flags_list_echo(x)
+
+
+
+   :param list x:
+   :rtype: list(:class:`TestFlags`)
+   
+
+
+
+
+.. staticmethod:: flags_struct_echo(x)
+
+
+
+   :param TestFlagsStruct x:
+   :rtype: :class:`TestFlagsStruct`
+   
+
+
+
+
+.. staticmethod:: flags_to_int(x)
+
+
+
+   :param TestFlags x:
+   :rtype: int
+   
+
+
+
+
 .. staticmethod:: float_special_defaults([nan = float("nan")], [infinity = float("inf")], [negative_infinity = -float("inf")], [maximum = krpc.limits.FLOAT_MAX], [lowest = krpc.limits.FLOAT_LOWEST], [fraction = 0.1])
 
    Procedure whose defaults are the special values of float, plus a finite fraction
@@ -669,6 +724,17 @@ Service documentation string.
 
    :param int value:
    :rtype: str
+   
+
+
+
+
+.. staticmethod:: int_to_flags(x)
+
+
+
+   :param int x:
+   :rtype: :class:`TestFlags`
    
 
 
@@ -1361,6 +1427,37 @@ Service documentation string.
 
 
 
+.. class:: TestFlags
+
+   Flags documentation string.
+
+
+   .. data:: none
+
+      Flags None documentation string.
+
+
+   .. data:: value_a
+
+      Flags ValueA documentation string.
+
+
+   .. data:: value_ab
+
+      Flags ValueAB documentation string.
+
+
+   .. data:: value_b
+
+      Flags ValueB documentation string.
+
+
+   .. data:: value_c
+
+      Flags ValueC documentation string.
+
+
+
 .. class:: DeprecatedStruct(value, old_value)
 
    .. warning:: Deprecated. Use :class:`TestStruct` instead.
@@ -1381,6 +1478,18 @@ Service documentation string.
       Deprecated struct OldValue documentation string.
 
       :rtype: int
+
+
+.. class:: TestFlagsStruct(flags_field)
+
+   Flags struct documentation string.
+
+
+   .. attribute:: flags_field
+
+
+
+      :rtype: :class:`TestFlags`
 
 
 .. class:: TestNestedNullableStruct(list_field, string_field)

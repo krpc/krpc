@@ -253,6 +253,19 @@ back into range.
 .. seealso:: :doc:`/user-guide/object-lifetime` describes how each kind of object behaves in more
              detail.
 
+.. _cpp-client-flags:
+
+Flags Enumerations
+------------------
+
+A flags enumeration, such as :type:`~krpc::services::SpaceCenter::MapFilterType`, holds any
+combination of its values. Its ``enum struct`` has the operators ``|``, ``&``, ``^`` and ``~``, and
+their assignment forms. You combine values with ``|``, and test for one with ``&``:
+
+.. literalinclude:: /scripts/cpp/Flags.cpp
+
+``~`` gives the values the enumeration declares that its operand does not hold.
+
 .. _cpp-client-streams:
 
 Streaming Data

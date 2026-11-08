@@ -1,0 +1,43 @@
+{
+  "FlagsService": {
+    "id": 1,
+    "documentation": "",
+    "procedures": {
+      "Frob": {
+        "id": 1,
+        "parameters": [
+          {
+            "name": "mode",
+            "type": {
+              "code": "ENUMERATION",
+              "service": "FlagsService",
+              "name": "Mode"
+            },
+            "default_value": "Bg=="
+          }
+        ],
+        "documentation": ""
+      }
+    },
+    "classes": {},
+    "enumerations": {
+      "Mode": {
+        "documentation": "",
+        "values": [
+          {
+            "name": "Slow",
+            "value": 1,
+            "documentation": ""
+          },
+          {
+            "name": "Fast",
+            "value": 2,
+            "documentation": ""
+          }
+        ],
+        "flags": true
+      }
+    },
+    "exceptions": {}
+  }
+}

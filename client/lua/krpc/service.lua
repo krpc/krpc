@@ -128,7 +128,7 @@ function service.register_definitions(types, svc)
     for _,value in ipairs(enum.values) do
       values[service.to_snake_case(value.name)] = value.value
     end
-    types:enumeration_type(svc.name, enum.name):set_values(values)
+    types:enumeration_type(svc.name, enum.name):set_values(values, enum.flags)
   end
   for _,struct in ipairs(svc.structs) do
     -- A structure whose fields cannot all be resolved is left without any, so that whatever

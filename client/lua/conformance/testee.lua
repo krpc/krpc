@@ -454,6 +454,13 @@ local function dispatch(command)
     return { sint32 = sign }
   elseif case == 'compare' then
     return { bool = from_value(command.compare.a) == from_value(command.compare.b) }
+  elseif case == 'flags_union' then
+    return to_value(from_value(command.flags_union.a):union(from_value(command.flags_union.b)))
+  elseif case == 'flags_contains' then
+    return { bool = from_value(command.flags_contains.a):contains(from_value(command.flags_contains.b)) }
+  elseif case == 'flags_difference' then
+    return to_value(
+      from_value(command.flags_difference.a):difference(from_value(command.flags_difference.b)))
   end
   error('Unknown command ' .. tostring(case), 0)
 end

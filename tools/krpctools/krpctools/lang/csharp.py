@@ -228,9 +228,9 @@ class CsharpLanguage(Language):
         if isinstance(typ, ClassType) and value is None:
             return "null"
         if isinstance(typ, EnumerationType):
-            return "%s.%s" % (
-                self.parse_type(typ),
-                self.parse_enum_value_name(value.name),
+            return " | ".join(
+                "%s.%s" % (self.parse_type(typ), self.parse_enum_value_name(name))
+                for name in self.enum_value_names(value)
             )
         if value is None:
             return "null"

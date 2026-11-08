@@ -383,11 +383,13 @@ class Enumeration(Appendable):
         sort,
         deprecated=False,
         deprecated_reason="",
+        flags=False,
     ):
         super().__init__()
         self.service_name = service_name
         self.name = name
         self.fullname = service_name + "." + name
+        self.flags = flags
         values = (EnumerationValue(service_name, name, **value) for value in values)
         self.values = OrderedDict((v.name, v) for v in sorted(values, key=sort))
         self.documentation = documentation

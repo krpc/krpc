@@ -98,9 +98,9 @@ class PythonLanguage(Language):
         if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.FLOAT:
             return float32_literal(value)
         if isinstance(typ, EnumerationType):
-            return "%s.%s" % (
-                self.parse_type(typ),
-                self.parse_enum_value_name(value.name),
+            return " | ".join(
+                "%s.%s" % (self.parse_type(typ), self.parse_enum_value_name(name))
+                for name in self.enum_value_names(value)
             )
         if isinstance(typ, StructType):
             values = [

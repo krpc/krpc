@@ -476,6 +476,22 @@ class Client:
         assert isinstance(result, int)
         return result
 
+    def flags_union(self, a: pb.Value, b: pb.Value) -> Any:
+        """The client's union of two TestService.TestFlags values."""
+        reply = self.testee.run(flags_union=pb.FlagsUnion(a=a, b=b))
+        return values.native(reply.value)
+
+    def flags_contains(self, a: pb.Value, b: pb.Value) -> bool:
+        """Whether a TestService.TestFlags value holds every flag of another, by the client's
+        test for it."""
+        reply = self.testee.run(flags_contains=pb.FlagsContains(a=a, b=b))
+        return bool(values.native(reply.value))
+
+    def flags_difference(self, a: pb.Value, b: pb.Value) -> Any:
+        """A TestService.TestFlags value with the flags of another removed, by the client."""
+        reply = self.testee.run(flags_difference=pb.FlagsDifference(a=a, b=b))
+        return values.native(reply.value)
+
     def compare_handles(self, a: Stream | Event, b: Stream | Event) -> bool:
         """The language's equality of two stream handles, or two event handles."""
         reply = self.testee.run(

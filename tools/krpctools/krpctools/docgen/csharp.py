@@ -116,9 +116,9 @@ class CsharpDomain(Domain[CsharpLanguage]):
             )
             return "new %s(%s)" % (self.type(typ), ", ".join(values))
         if isinstance(typ, EnumerationType):
-            return "%s.%s" % (
-                self.type(typ),
-                self.language.parse_enum_value_name(value.name),
+            return " | ".join(
+                "%s.%s" % (self.type(typ), self.language.parse_enum_value_name(name))
+                for name in self.language.enum_value_names(value)
             )
         if isinstance(typ, TupleType):
             if value is None:

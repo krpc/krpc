@@ -1,3 +1,5 @@
+import enum
+
 from krpc.definitions import (
     CLASS,
     ENUMERATION,
@@ -117,9 +119,14 @@ def _register_enumeration(service, name, enumeration):
         )
         for value in enumeration["values"]
     )
+    # A flags enumeration decodes a combination as a Flag, whose name joins the names of the
+    # values it holds with "|"
+    python_type = None
+    if enumeration.get("flags", False):
+        python_type = enum.Flag(name, {k: v["value"] for k, v in values.items()})
 
     def register(types):
-        types.enumeration_type(service, name).set_values(values)
+        types.enumeration_type(service, name).set_values(values, python_type)
 
     return register
 

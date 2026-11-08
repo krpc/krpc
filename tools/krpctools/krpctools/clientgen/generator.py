@@ -1,4 +1,6 @@
 import collections
+import functools
+import operator
 import re
 from typing import Generic, TypeVar
 
@@ -227,6 +229,10 @@ class Generator(Generic[LanguageT]):
                     for x in enumeration["values"]
                 ],
                 "documentation": self.parse_documentation(enumeration["documentation"]),
+                "flags": enumeration.get("flags", False),
+                "mask": functools.reduce(
+                    operator.or_, (x["value"] for x in enumeration["values"]), 0
+                ),
                 "deprecated": enumeration.get("deprecated", False),
                 "deprecated_reason": self.parse_deprecation_reason(
                     enumeration.get("deprecated_reason", "")

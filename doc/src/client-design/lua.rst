@@ -164,3 +164,5 @@ Mapping the Spec to Lua
      - The function's own type, read from the server
    * - Enumeration value
      - An instance of the connection's class, with the number in ``.value``
+   * - Flags enumeration value
+     - An instance of a ``Types.Flags`` class, combined with its methods, as Lua 5.1 has no bitwise operators to overload

@@ -1821,6 +1821,9 @@ namespace KRPC.Client.Services.KRPC
         /// <summary>
         /// Logical or bitwise and, which evaluates both operands.
         /// </summary>
+        /// <remarks>
+        /// Also takes two values of a flags enumeration, and gives the values they share.
+        /// </remarks>
         /// <param name="arg0">The first operand.</param>
         /// <param name="arg1">The second operand.</param>
         /// <param name="connection">A connection object.</param>
@@ -2800,6 +2803,9 @@ namespace KRPC.Client.Services.KRPC
         /// <summary>
         /// Logical or bitwise exclusive or.
         /// </summary>
+        /// <remarks>
+        /// Also takes two values of a flags enumeration, and gives the values in only one of them.
+        /// </remarks>
         /// <param name="arg0">The first operand.</param>
         /// <param name="arg1">The second operand.</param>
         /// <param name="connection">A connection object.</param>
@@ -3367,6 +3373,9 @@ namespace KRPC.Client.Services.KRPC
         /// <summary>
         /// Logical or bitwise or, which evaluates both operands.
         /// </summary>
+        /// <remarks>
+        /// Also takes two values of a flags enumeration, and gives their combination.
+        /// </remarks>
         /// <param name="arg0">The first operand.</param>
         /// <param name="arg1">The second operand.</param>
         /// <param name="connection">A connection object.</param>

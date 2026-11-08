@@ -458,6 +458,82 @@ namespace TestServer
         }
 
         /// <summary>
+        /// Flags documentation string.
+        /// </summary>
+        [KRPCEnum]
+        [Serializable]
+        [Flags]
+        public enum TestFlags
+        {
+            /// <summary>
+            /// Flags None documentation string.
+            /// </summary>
+            None = 0,
+            /// <summary>
+            /// Flags ValueA documentation string.
+            /// </summary>
+            ValueA = 1,
+            /// <summary>
+            /// Flags ValueB documentation string.
+            /// </summary>
+            ValueB = 2,
+            /// <summary>
+            /// Flags ValueC documentation string.
+            /// </summary>
+            ValueC = 4,
+            /// <summary>
+            /// Flags ValueAB documentation string.
+            /// </summary>
+            ValueAB = ValueA | ValueB
+        }
+
+        [KRPCProcedure]
+        public static TestFlags FlagsEcho (TestFlags x)
+        {
+            return x;
+        }
+
+        [KRPCProcedure]
+        public static int FlagsToInt (TestFlags x)
+        {
+            return (int)x;
+        }
+
+        [KRPCProcedure]
+        public static TestFlags IntToFlags (int x)
+        {
+            return (TestFlags)x;
+        }
+
+        [KRPCProcedure]
+        public static TestFlags? EchoNullableFlags (TestFlags? x)
+        {
+            return x;
+        }
+
+        [KRPCProcedure]
+        public static IList<TestFlags> FlagsListEcho (IList<TestFlags> x)
+        {
+            return x;
+        }
+
+        /// <summary>
+        /// Flags struct documentation string.
+        /// </summary>
+        [KRPCStruct]
+        public struct TestFlagsStruct
+        {
+            [KRPCProperty]
+            public TestFlags FlagsField { get; set; }
+        }
+
+        [KRPCProcedure]
+        public static TestFlagsStruct FlagsStructEcho (TestFlagsStruct x)
+        {
+            return x;
+        }
+
+        /// <summary>
         /// Struct documentation string.
         /// </summary>
         [KRPCStruct]

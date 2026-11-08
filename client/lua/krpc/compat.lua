@@ -29,4 +29,31 @@ else
   end
 end
 
+-- Bitwise operations on non-negative integers below 2^31, such as the values of a flags
+-- enumeration. Lua 5.1 has no bitwise operators, and 5.3's do not parse in 5.1.
+local function _bitwise(a, b, op)
+  local result, bit = 0, 1
+  while a > 0 or b > 0 do
+    local x, y = a % 2, b % 2
+    if op(x, y) then
+      result = result + bit
+    end
+    a, b, bit = math.floor((a - x) / 2), math.floor((b - y) / 2), bit * 2
+  end
+  return result
+end
+
+function compat.bor(a, b)
+  return _bitwise(a, b, function(x, y) return x == 1 or y == 1 end)
+end
+
+function compat.band(a, b)
+  return _bitwise(a, b, function(x, y) return x == 1 and y == 1 end)
+end
+
+-- The bits of a that are not in b
+function compat.bandnot(a, b)
+  return _bitwise(a, b, function(x, y) return x == 1 and y == 0 end)
+end
+
 return compat

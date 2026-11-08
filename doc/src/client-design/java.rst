@@ -138,6 +138,8 @@ Mapping the Spec to Java
      - ``Duration.ZERO`` to connect, ``Double.POSITIVE_INFINITY`` to wait
    * - Static method
      - ``Class.method(connection, ...)``. ``addStream`` and ``getCall`` take the connection first, and drop it unchecked
+   * - Flags enumeration
+     - A final class of constants extending ``RemoteFlags``, as an ``enum`` cannot hold a combination. One type names it in every signature, and ``Encoder`` decodes it through ``fromValue`` as any enumeration. An ``EnumSet`` would need its own encoding and a different signature
    * - Scoped stream or event
      - Try-with-resources. ``close()`` calls ``remove()``, and declares ``RPCException``. The language keeps the block's exception, with the exception from ``close()`` suppressed
 

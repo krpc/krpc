@@ -92,10 +92,11 @@ class LuaLanguage(Language):
         if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.FLOAT:
             return float32_literal(value)
         if isinstance(typ, EnumerationType):
-            return "%s.%s" % (
-                self.parse_type(typ),
-                self.parse_enum_value_name(value.name),
-            )
+            names = [
+                "%s.%s" % (self.parse_type(typ), self.parse_enum_value_name(name))
+                for name in self.enum_value_names(value)
+            ]
+            return names[0] + "".join(":union(%s)" % x for x in names[1:])
         if isinstance(typ, StructType):
             # A structure is written as its field values in order, which is the form the
             # client coerces to one
