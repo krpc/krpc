@@ -27,6 +27,7 @@ component's unreleased section.
 - [MechJeb](service/MechJeb/CHANGELOG.md)
 - [KerbalEngineerRedux](service/KerbalEngineerRedux/CHANGELOG.md)
 - [ScanSat](service/ScanSat/CHANGELOG.md)
+- [RasterPropMonitor](service/RasterPropMonitor/CHANGELOG.md)
 
 ## Clients
 

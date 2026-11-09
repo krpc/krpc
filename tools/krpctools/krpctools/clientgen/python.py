@@ -40,6 +40,7 @@ SHIPPED_MODULES = {
     "MechJeb": "krpc.ksp.mechjeb",
     "KerbalEngineerRedux": "krpc.ksp.kerbalengineerredux",
     "ScanSat": "krpc.ksp.scansat",
+    "RasterPropMonitor": "krpc.ksp.rasterpropmonitor",
     "Debug": "krpc.ksp.debug",
 }
 

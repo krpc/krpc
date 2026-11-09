@@ -102,6 +102,9 @@
     <Compile Include="$(bazel-bin)\client\csharp\Services\ScanSat.cs">
       <Link>Services\ScanSat.cs</Link>
     </Compile>
+    <Compile Include="$(bazel-bin)\client\csharp\Services\RasterPropMonitor.cs">
+      <Link>Services\RasterPropMonitor.cs</Link>
+    </Compile>
     <Compile Include="$(bazel-bin)\client\csharp\Services\Debug.cs">
       <Link>Services\Debug.cs</Link>
     </Compile>

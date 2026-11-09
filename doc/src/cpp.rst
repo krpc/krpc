@@ -998,4 +998,5 @@ API Reference
    cpp/api/mechjeb
    cpp/api/kerbal-engineer-redux
    cpp/api/scansat
+   cpp/api/raster-prop-monitor
    cpp/api/debug

@@ -1145,4 +1145,5 @@ API Reference
    python/api/mechjeb
    python/api/kerbal-engineer-redux
    python/api/scansat
+   python/api/raster-prop-monitor
    python/api/debug
