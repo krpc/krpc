@@ -1218,43 +1218,45 @@ names the reason, such as <code class="docutils literal notranslate"><span class
 <li><p>A call made once the connection has closed or failed raises an error.</p></li>
 </ul>
 </section>
-<section id="remote-objects">
-<h2>Remote Objects<a class="headerlink" href="#remote-objects" title="Link to this heading">#</a></h2>
-<p>Many procedures return an object identifying something in the game, such as a vessel or a part.
-The object holds no copy of the game’s state. It is just a reference to it. Each call through it
-reads the game as it is now:</p>
-<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'krpc'</span>
-<span class="kd">local</span><span class="w"> </span><span class="nv">socket</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'socket'</span>
-<span class="kd">local</span><span class="w"> </span><span class="nv">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">krpc</span><span class="p">.</span><span class="nf">connect</span><span class="p">()</span>
-<span class="kd">local</span><span class="w"> </span><span class="nv">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">conn</span><span class="p">.</span><span class="py">space_center</span><span class="p">.</span><span class="py">active_vessel</span>
-<span class="kd">local</span><span class="w"> </span><span class="nv">flight_info</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">vessel</span><span class="p">:</span><span class="nf">flight</span><span class="p">()</span>
-
-<span class="c1">-- Each read gets the current altitude from the game</span>
-<span class="nb">print</span><span class="p">(</span><span class="nv">flight_info</span><span class="p">.</span><span class="py">mean_altitude</span><span class="p">)</span>
-<span class="nv">socket</span><span class="p">.</span><span class="nf">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="nv">flight_info</span><span class="p">.</span><span class="py">mean_altitude</span><span class="p">)</span>
-
-<span class="c1">-- Two objects for the same vessel are equal</span>
-<span class="nb">print</span><span class="p">(</span><span class="nv">vessel</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nv">conn</span><span class="p">.</span><span class="py">space_center</span><span class="p">.</span><span class="py">active_vessel</span><span class="p">)</span>
-</pre></div>
+<section id="values">
+<span id="lua-client-values"></span><h2>Values<a class="headerlink" href="#values" title="Link to this heading">#</a></h2>
+<p>Procedures take and return values of these types:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Type</p></th>
+<th class="head"><p>Lua type</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Integer, floating point number, boolean</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">number</span></code>, <code class="docutils literal notranslate"><span class="pre">boolean</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>String, bytes</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">string</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Tuple, list</p></td>
+<td><p>Penlight’s <code class="docutils literal notranslate"><span class="pre">List</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Set, dictionary</p></td>
+<td><p>Penlight’s <code class="docutils literal notranslate"><span class="pre">Set</span></code> and <code class="docutils literal notranslate"><span class="pre">Map</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Class</p></td>
+<td><p>A remote object, described below</p></td>
+</tr>
+<tr class="row-odd"><td><p>Enumeration</p></td>
+<td><p>A value of the enumeration, such as <code class="docutils literal notranslate"><span class="pre">conn.space_center.MapFilterType.debris</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Structure</p></td>
+<td><p>A value with a field for each field of the structure</p></td>
+</tr>
+<tr class="row-odd"><td><p>Null</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">nil</span></code>, or <code class="docutils literal notranslate"><span class="pre">Types.none</span></code> as described below</p></td>
+</tr>
+</tbody>
+</table>
 </div>
-<p>Two objects for the same thing in the game compare equal with <code class="docutils literal notranslate"><span class="pre">==</span></code>.</p>
-<p>Once the thing an object identifies is destroyed, such as a part that explodes, each call through
-it raises an error naming <a class="reference internal" href="lua/api/krpc/krpc.html#lua-KRPC.ObjectDestroyedException" title="KRPC.ObjectDestroyedException"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KRPC.ObjectDestroyedException</span></code></a>.</p>
-<p>An object for a vessel or a part keeps working when you load a save, quickload or revert, and
-then reads the loaded game. Other objects depend on what they identify. A maneuver node, for
-example, is destroyed by a load.</p>
-<p>A vessel far from the active vessel is <em>unloaded</em>, and the game keeps no parts for it. The vessel
-itself reads normally, but a call on one of its parts raises an error naming
-<a class="reference internal" href="lua/api/krpc/krpc.html#lua-KRPC.ObjectNotLoadedException" title="KRPC.ObjectNotLoadedException"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KRPC.ObjectNotLoadedException</span></code></a>. The part works again once the vessel comes back into range.</p>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p><a class="reference internal" href="user-guide/object-lifetime.html"><span class="doc">Object Lifetime</span></a> describes how each kind of object behaves in more
-detail.</p>
-</div>
-</section>
 <section id="flags-enumerations">
-<span id="lua-client-flags"></span><h2>Flags Enumerations<a class="headerlink" href="#flags-enumerations" title="Link to this heading">#</a></h2>
+<span id="lua-client-flags"></span><h3>Flags Enumerations<a class="headerlink" href="#flags-enumerations" title="Link to this heading">#</a></h3>
 <p>A flags enumeration, such as <a class="reference internal" href="lua/api/space-center/space-center.html#lua-SpaceCenter.MapFilterType" title="SpaceCenter.MapFilterType"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">MapFilterType</span></code></a>, holds any combination of its
 values. You combine values with <code class="docutils literal notranslate"><span class="pre">union</span></code>, and test for one with <code class="docutils literal notranslate"><span class="pre">contains</span></code>:</p>
 <div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'krpc'</span>
@@ -1275,7 +1277,7 @@ values. You combine values with <code class="docutils literal notranslate"><span
 <p><code class="docutils literal notranslate"><span class="pre">intersection</span></code> and <code class="docutils literal notranslate"><span class="pre">difference</span></code> give the other combinations of two values.</p>
 </section>
 <section id="null-values">
-<h2>Null Values<a class="headerlink" href="#null-values" title="Link to this heading">#</a></h2>
+<h3>Null Values<a class="headerlink" href="#null-values" title="Link to this heading">#</a></h3>
 <p>A procedure that can return null returns <code class="docutils literal notranslate"><span class="pre">nil</span></code>. The following prints the name of the target
 vessel, if there is one, then clears the target:</p>
 <div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'krpc'</span>
@@ -1313,6 +1315,42 @@ it raises an error.</p>
 </div>
 <p>Pass <a class="reference internal" href="#lua-krpc.Types.none" title="krpc.Types.none"><code class="xref lua lua-data docutils literal notranslate"><span class="pre">Types.none</span></code></a> as an argument for a null at a parameter whose default
 is not null.</p>
+</section>
+</section>
+<section id="remote-objects">
+<h2>Remote Objects<a class="headerlink" href="#remote-objects" title="Link to this heading">#</a></h2>
+<p>Many procedures return an object identifying something in the game, such as a vessel or a part.
+The object holds no copy of the game’s state. It is just a reference to it. Each call through it
+reads the game as it is now:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'krpc'</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">socket</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'socket'</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">krpc</span><span class="p">.</span><span class="nf">connect</span><span class="p">()</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">conn</span><span class="p">.</span><span class="py">space_center</span><span class="p">.</span><span class="py">active_vessel</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">flight_info</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">vessel</span><span class="p">:</span><span class="nf">flight</span><span class="p">()</span>
+
+<span class="c1">-- Each read gets the current altitude from the game</span>
+<span class="nb">print</span><span class="p">(</span><span class="nv">flight_info</span><span class="p">.</span><span class="py">mean_altitude</span><span class="p">)</span>
+<span class="nv">socket</span><span class="p">.</span><span class="nf">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nv">flight_info</span><span class="p">.</span><span class="py">mean_altitude</span><span class="p">)</span>
+
+<span class="c1">-- Two objects for the same vessel are equal</span>
+<span class="nb">print</span><span class="p">(</span><span class="nv">vessel</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nv">conn</span><span class="p">.</span><span class="py">space_center</span><span class="p">.</span><span class="py">active_vessel</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Two objects for the same thing in the game compare equal with <code class="docutils literal notranslate"><span class="pre">==</span></code>.</p>
+<p>Once the thing an object identifies is destroyed, such as a part that explodes, each call through
+it raises an error naming <a class="reference internal" href="lua/api/krpc/krpc.html#lua-KRPC.ObjectDestroyedException" title="KRPC.ObjectDestroyedException"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KRPC.ObjectDestroyedException</span></code></a>.</p>
+<p>An object for a vessel or a part keeps working when you load a save, quickload or revert, and
+then reads the loaded game. Other objects depend on what they identify. A maneuver node, for
+example, is destroyed by a load.</p>
+<p>A vessel far from the active vessel is <em>unloaded</em>, and the game keeps no parts for it. The vessel
+itself reads normally, but a call on one of its parts raises an error naming
+<a class="reference internal" href="lua/api/krpc/krpc.html#lua-KRPC.ObjectNotLoadedException" title="KRPC.ObjectNotLoadedException"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KRPC.ObjectNotLoadedException</span></code></a>. The part works again once the vessel comes back into range.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="user-guide/object-lifetime.html"><span class="doc">Object Lifetime</span></a> describes how each kind of object behaves in more
+detail.</p>
+</div>
 </section>
 <section id="server-side-functions">
 <h2>Server Side Functions<a class="headerlink" href="#server-side-functions" title="Link to this heading">#</a></h2>
@@ -1633,9 +1671,12 @@ double.</p>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calling-remote-procedures">Calling Remote Procedures</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#handling-errors">Handling Errors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#values">Values</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flags-enumerations">Flags Enumerations</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#null-values">Null Values</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#remote-objects">Remote Objects</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flags-enumerations">Flags Enumerations</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#null-values">Null Values</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#server-side-functions">Server Side Functions</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#running-a-function">Running a Function</a></li>
 </ul>

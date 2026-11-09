@@ -116,35 +116,39 @@ The error is a string describing the failure:
   names the reason, such as ``SERVER_STOPPED``.
 * A call made once the connection has closed or failed raises an error.
 
-Remote Objects
---------------
+.. _lua-client-values:
 
-Many procedures return an object identifying something in the game, such as a vessel or a part.
-The object holds no copy of the game's state. It is just a reference to it. Each call through it
-reads the game as it is now:
+Values
+------
 
-.. literalinclude:: /scripts/lua/RemoteObjects.lua
+Procedures take and return values of these types:
 
-Two objects for the same thing in the game compare equal with ``==``.
+.. list-table::
+   :header-rows: 1
 
-Once the thing an object identifies is destroyed, such as a part that explodes, each call through
-it raises an error naming :class:`KRPC.ObjectDestroyedException`.
-
-An object for a vessel or a part keeps working when you load a save, quickload or revert, and
-then reads the loaded game. Other objects depend on what they identify. A maneuver node, for
-example, is destroyed by a load.
-
-A vessel far from the active vessel is *unloaded*, and the game keeps no parts for it. The vessel
-itself reads normally, but a call on one of its parts raises an error naming
-:class:`KRPC.ObjectNotLoadedException`. The part works again once the vessel comes back into range.
-
-.. seealso:: :doc:`/user-guide/object-lifetime` describes how each kind of object behaves in more
-             detail.
+   * - Type
+     - Lua type
+   * - Integer, floating point number, boolean
+     - ``number``, ``boolean``
+   * - String, bytes
+     - ``string``
+   * - Tuple, list
+     - Penlight's ``List``
+   * - Set, dictionary
+     - Penlight's ``Set`` and ``Map``
+   * - Class
+     - A remote object, described below
+   * - Enumeration
+     - A value of the enumeration, such as ``conn.space_center.MapFilterType.debris``
+   * - Structure
+     - A value with a field for each field of the structure
+   * - Null
+     - ``nil``, or ``Types.none`` as described below
 
 .. _lua-client-flags:
 
 Flags Enumerations
-------------------
+^^^^^^^^^^^^^^^^^^
 
 A flags enumeration, such as :class:`~SpaceCenter.MapFilterType`, holds any combination of its
 values. You combine values with ``union``, and test for one with ``contains``:
@@ -154,7 +158,7 @@ values. You combine values with ``union``, and test for one with ``contains``:
 ``intersection`` and ``difference`` give the other combinations of two values.
 
 Null Values
------------
+^^^^^^^^^^^
 
 A procedure that can return null returns ``nil``. The following prints the name of the target
 vessel, if there is one, then clears the target:
@@ -181,6 +185,31 @@ A Lua table cannot hold ``nil``, so a null in a list, tuple, dictionary or struc
 
 Pass :data:`Types.none <krpc.Types.none>` as an argument for a null at a parameter whose default
 is not null.
+
+Remote Objects
+--------------
+
+Many procedures return an object identifying something in the game, such as a vessel or a part.
+The object holds no copy of the game's state. It is just a reference to it. Each call through it
+reads the game as it is now:
+
+.. literalinclude:: /scripts/lua/RemoteObjects.lua
+
+Two objects for the same thing in the game compare equal with ``==``.
+
+Once the thing an object identifies is destroyed, such as a part that explodes, each call through
+it raises an error naming :class:`KRPC.ObjectDestroyedException`.
+
+An object for a vessel or a part keeps working when you load a save, quickload or revert, and
+then reads the loaded game. Other objects depend on what they identify. A maneuver node, for
+example, is destroyed by a load.
+
+A vessel far from the active vessel is *unloaded*, and the game keeps no parts for it. The vessel
+itself reads normally, but a call on one of its parts raises an error naming
+:class:`KRPC.ObjectNotLoadedException`. The part works again once the vessel comes back into range.
+
+.. seealso:: :doc:`/user-guide/object-lifetime` describes how each kind of object behaves in more
+             detail.
 
 Server Side Functions
 ---------------------
