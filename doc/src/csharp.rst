@@ -121,6 +121,52 @@ The exception you catch depends on the error:
 * A call made once the connection has closed or failed throws
   :type:`~KRPC.Client.ConnectionException`.
 
+.. _csharp-client-values:
+
+Values
+------
+
+Procedures take and return values of these types:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Type
+     - C# type
+   * - Integer
+     - ``int``, ``long``, ``uint``, ``ulong``
+   * - Floating point number, boolean
+     - ``float``, ``double``, ``bool``
+   * - String, bytes
+     - ``string``, ``byte[]``
+   * - Tuple
+     - ``Tuple``
+   * - List, set, dictionary
+     - ``IList``, ``ISet``, ``IDictionary``
+   * - Class
+     - A remote object, described below
+   * - Enumeration
+     - An ``enum``, with ``[Flags]`` for a flags enumeration
+   * - Structure
+     - A ``struct``
+   * - Null
+     - ``null``, with ``T?`` for a value type
+
+.. _csharp-client-flags:
+
+Flags Enumerations
+^^^^^^^^^^^^^^^^^^
+
+A flags enumeration, such as :type:`~KRPC.Client.Services.SpaceCenter.MapFilterType`, holds any
+combination of its values. It is an enumeration with the ``[Flags]`` attribute. You combine values
+with ``|``, and test for one with ``HasFlag``:
+
+.. literalinclude:: /scripts/csharp/Flags.cs
+
+``~`` complements every bit, including the bits the enumeration does not declare. The server
+rejects the result, so you use ``~`` only to remove flags with ``&``, as in
+``filter & ~MapFilterType.Debris``.
+
 Remote Objects
 --------------
 
@@ -146,21 +192,6 @@ comes back into range.
 
 .. seealso:: :doc:`/user-guide/object-lifetime` describes how each kind of object behaves in more
              detail.
-
-.. _csharp-client-flags:
-
-Flags Enumerations
-------------------
-
-A flags enumeration, such as :type:`~KRPC.Client.Services.SpaceCenter.MapFilterType`, holds any
-combination of its values. It is an enumeration with the ``[Flags]`` attribute. You combine values
-with ``|``, and test for one with ``HasFlag``:
-
-.. literalinclude:: /scripts/csharp/Flags.cs
-
-``~`` complements every bit, including the bits the enumeration does not declare. The server
-rejects the result, so you use ``~`` only to remove flags with ``&``, as in
-``filter & ~MapFilterType.Debris``.
 
 .. _csharp-client-streams:
 
