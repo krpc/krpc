@@ -489,6 +489,15 @@ Operators
   operators.
 * ``&&`` and ``||`` short-circuit on the server. ``&`` and ``|`` evaluate both operands.
 
+A function combines and tests the values of a :ref:`flags enumeration <csharp-client-flags>`
+with ``|``, ``&``, ``^``, ``~`` and ``HasFlag``:
+
+.. literalinclude:: /scripts/csharp/FlagsFunction.cs
+
+In a function, ``~`` keeps to the declared values. A comparison is the exception, as C# compares
+the numbers of the values. ``x == ~MapFilterType.Debris`` is never true, and
+``x == (MapFilterType.All & ~MapFilterType.Debris)`` is the comparison you want.
+
 Null Values
 ^^^^^^^^^^^
 

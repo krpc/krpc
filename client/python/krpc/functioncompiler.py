@@ -13,7 +13,7 @@ import textwrap
 import threading
 from collections import abc
 from collections.abc import Callable, Iterable
-from enum import Enum
+from enum import Enum, Flag
 from types import CodeType
 from typing import (
     TYPE_CHECKING,
@@ -1315,6 +1315,52 @@ class _Compiler:
     def _is_a_bool(result: _Result) -> bool:
         return result.ptype is not None and result.ptype.code == KRPC.Type.BOOL
 
+    @staticmethod
+    def _is_an_enumeration(result: _Result) -> bool:
+        return (result.is_value and isinstance(result.value, Enum)) or (
+            not result.is_value
+            and result.ptype is not None
+            and result.ptype.code == KRPC.Type.ENUMERATION
+        )
+
+    def _flags_ptype(self, node: ast.AST, results: list[_Result]) -> KRPC.Type:
+        """The flags enumeration that the operands of a flags operator share.
+        Raise for an operand of another type or another enumeration, or an
+        enumeration without flags."""
+        ptypes = [
+            with_nullable(cast(KRPC.Type, result.ptype), False)
+            for result in results
+            if result.ptype is not None
+        ]
+        if len(ptypes) != len(results) or any(
+            ptype.code != KRPC.Type.ENUMERATION for ptype in ptypes
+        ):
+            raise self._error(
+                node, "a flags operation needs two values of one flags enumeration"
+            )
+        if any(
+            (ptype.service, ptype.name) != (ptypes[0].service, ptypes[0].name)
+            for ptype in ptypes
+        ):
+            raise self._error(
+                node,
+                "cannot combine values of the enumerations %s and %s"
+                % tuple(_type_name(ptype) for ptype in ptypes),
+            )
+        if not self._is_flags_ptype(ptypes[0]):
+            raise self._error(
+                node, "%s is not a flags enumeration" % _type_name(ptypes[0])
+            )
+        return ptypes[0]
+
+    def _is_flags_ptype(self, ptype: KRPC.Type) -> bool:
+        """Whether a type is a flags enumeration."""
+        if ptype.code != KRPC.Type.ENUMERATION:
+            return False
+        typ = self._client._types.as_type(with_nullable(ptype, False))
+        python_type = typ.python_type if isinstance(typ, EnumerationType) else None
+        return isinstance(python_type, type) and issubclass(python_type, Flag)
+
     def _check_numbers(self, node: ast.AST, results: list[_Result]) -> None:
         """Raise for an operand of a numeric operation whose type is known and is
         not a number."""
@@ -1554,6 +1600,12 @@ class _Compiler:
                 ptype=ptype,
             )
         bitwise = isinstance(node.op, (ast.BitAnd, ast.BitOr, ast.BitXor))
+        if bitwise and any(self._is_an_enumeration(x) for x in (left, right)):
+            ptype = self._flags_ptype(node, [left, right])
+            op = self._operation(name)
+            return _Result(
+                expression=op(left.expression, right.expression), ptype=ptype
+            )
         if not (bitwise and all(self._is_a_bool(x) for x in (left, right))):
             self._check_numbers(node, [left, right])
             if bitwise and any(
@@ -2057,6 +2109,11 @@ class _Compiler:
             if result.is_value:
                 return self._fold(node, operator.invert, result.value)
             result = self._to_expression(result)
+            if self._is_an_enumeration(result):
+                ptype = self._flags_ptype(node, [result])
+                return _Result(
+                    expression=self._expr.not_(result.expression), ptype=ptype
+                )
             if result.ptype is not None and not self._is_an_integer(result):
                 raise self._error(
                     node, "~ is only supported on an integer; use not for a bool"
@@ -2158,7 +2215,9 @@ class _Compiler:
         self, node: ast.Compare, value: _Result, container: _Result
     ) -> Expression:
         """A test of whether a value is in a string, a collection, or the keys of
-        a dictionary."""
+        a dictionary, or of whether a flags value holds another."""
+        if self._is_an_enumeration(container):
+            return self._flags_membership(node, value, container)
         if container.is_value and _is_empty_collection(container.value):
             # The value is computed for its effects
             return self._expr.block(
@@ -2185,6 +2244,24 @@ class _Compiler:
                 [variable], [expr.assign(variable, value.expression), test]
             )
         return self._membership(node, value, container)
+
+    def _flags_membership(
+        self, node: ast.Compare, value: _Result, container: _Result
+    ) -> Expression:
+        """Whether a flags value holds another, as ``container & value == value``.
+        The value is held in a variable, so it is evaluated once and first."""
+        value = self._to_expression(value)
+        container = self._to_expression(container)
+        ptype = self._flags_ptype(node, [value, container])
+        expr = self._expr
+        variable = expr.variable("value", self._remote_type(node, ptype))
+        return expr.block_with_variables(
+            [variable],
+            [
+                expr.assign(variable, value.expression),
+                expr.equal(expr.and_(container.expression, variable), variable),
+            ],
+        )
 
     def _membership(
         self, node: ast.Compare, value: _Result, container: _Result
@@ -4003,8 +4080,8 @@ class _Compiler:
 
     def _truth(self, node: ast.AST, result: _Result) -> _Result:
         """Whether a value is true, as Python tests it in a condition: a number
-        when it is not zero, a string, bytes or a collection when it is not
-        empty, and any other value when it is not None. None is false. A value
+        or a flags value when it is not zero, a string, bytes or a collection
+        when it is not empty, and any other value when it is not None. None is false. A value
         of unknown type is left for the server to check."""
         if result.is_value:
             return self._fold(node, bool, result.value)
@@ -4013,13 +4090,19 @@ class _Compiler:
             return result
         expr = self._expr
         zero = expr.constant_int(0)
-        if ptype.nullable and ptype.code in NUMERIC_CODES + (
-            KRPC.Type.BOOL,
-            KRPC.Type.STRING,
-            KRPC.Type.BYTES,
-            KRPC.Type.LIST,
-            KRPC.Type.SET,
-            KRPC.Type.DICTIONARY,
+        flags = self._is_flags_ptype(ptype)
+        if ptype.nullable and (
+            flags
+            or ptype.code
+            in NUMERIC_CODES
+            + (
+                KRPC.Type.BOOL,
+                KRPC.Type.STRING,
+                KRPC.Type.BYTES,
+                KRPC.Type.LIST,
+                KRPC.Type.SET,
+                KRPC.Type.DICTIONARY,
+            )
         ):
             # None is false, and the value is held to test it for None and for truth
             present = with_nullable(ptype, False)
@@ -4034,6 +4117,9 @@ class _Compiler:
                     ).expression,
                 ),
             )
+        elif flags:
+            # A flags value is true when it holds a flag
+            test = expr.not_equal(expr.cast(result.expression, self._type.int()), zero)
         elif ptype.code in NUMERIC_CODES:
             test = expr.not_equal(
                 result.expression,

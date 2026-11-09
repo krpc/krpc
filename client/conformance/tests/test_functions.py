@@ -9,7 +9,12 @@ import math
 import pytest
 import testee_pb2 as pb
 from driver import profile, section, values
-from driver.errors import assert_argument_error, assert_error_kind, is_removed_error
+from driver.errors import (
+    assert_argument_error,
+    assert_error_kind,
+    assert_server_error_kind,
+    is_removed_error,
+)
 from driver.functions import Functions
 from driver.helpers import ended, name, raised
 from driver.scripted import functions_script, null_stream_ids
@@ -129,6 +134,7 @@ SCALAR_TYPES = {
 SERVICE_TYPES = {
     "TestClass": "ClassType",
     "TestEnum": "EnumerationType",
+    "TestFlags": "EnumerationType",
     "TestStruct": "StructType",
 }
 
@@ -738,3 +744,109 @@ def test_null_in_callback(connected, request, typ):
     expected = set_value()
     calls = callback.wait_for_calls(1)
     assert [typed_value(connected, typ, x) for x in calls] == [expected]
+
+
+section("Flags")
+
+# The expression for each operation on two flags values, built from the two operands
+FLAGS_OPERATIONS = {
+    "union": (lambda functions, a, b: functions.expression("Or", a, b), 7),
+    "intersection": (lambda functions, a, b: functions.expression("And", a, b), 1),
+    "symmetric-difference": (
+        lambda functions, a, b: functions.expression("ExclusiveOr", a, b),
+        6,
+    ),
+    "difference": (
+        lambda functions, a, b: functions.expression(
+            "And", a, functions.expression("Not", b)
+        ),
+        2,
+    ),
+}
+
+
+def flags(value):
+    """A TestService.TestFlags value."""
+    return values.enum("TestService", "TestFlags", value)
+
+
+def constant_flags(functions, value):
+    """A function whose value is a TestService.TestFlags value."""
+    return functions.expression(
+        "ConstantEnum",
+        values.string("TestService"),
+        values.string("TestFlags"),
+        values.sint32(value),
+    )
+
+
+@profile("functions")
+@pytest.mark.parametrize("case", list(FLAGS_OPERATIONS))
+def test_flags_operations(connected, functions, case):
+    """A function combines two values of a flags enumeration it is passed, with
+    ``KRPC.Expression.Or``, ``And`` and ``ExclusiveOr``. ``Not`` gives the declared values
+    its operand does not hold, so the difference of two values is ``And`` of the first
+    with ``Not`` of the second."""
+    build, expected = FLAGS_OPERATIONS[case]
+    flags_type = krpc_type(functions, "TestFlags")
+    a = functions.parameter("a", flags_type)
+    b = functions.parameter("b", flags_type)
+    function = functions.lambda_([a, b], build(functions, a, b))
+    result = connected.run_function(
+        function, "TestFlags", ("TestFlags", flags(3)), ("TestFlags", flags(5))
+    )
+    assert result == values.Enum(expected), result
+
+
+@profile("functions")
+@pytest.mark.parametrize(("value", "expected"), [(1, True), (2, False), (5, True)])
+def test_flags_contains(connected, functions, value, expected):
+    """A function tests whether a value of a flags enumeration holds another, as the
+    intersection of the two equal to the value tested for."""
+    flags_type = krpc_type(functions, "TestFlags")
+    a = functions.parameter("a", flags_type)
+    b = functions.parameter("b", flags_type)
+    contains = functions.expression("Equal", functions.expression("And", b, a), a)
+    function = functions.lambda_([a, b], contains)
+    result = connected.run_function(
+        function, "bool", ("TestFlags", flags(value)), ("TestFlags", flags(5))
+    )
+    assert result is expected
+
+
+@profile("functions", "streams")
+def test_flags_stream(connected, functions, control, request):
+    """A stream of a function that combines values of a flags enumeration follows its
+    operands."""
+    value = functions.expression(
+        "Cast", functions.value(name(request)), krpc_type(functions, "TestFlags")
+    )
+    function = functions.expression("Or", value, constant_flags(functions, 4))
+    stream = connected.add_function_stream(function, "TestFlags")
+    assert stream.get() == values.Enum(4)
+    control.conformance_service.set_value(name(request), 1)
+    assert wait_until(lambda: stream.get() == values.Enum(5))
+
+
+@profile("functions")
+@pytest.mark.parametrize("case", ["two-enumerations", "not-flags", "not-of-not-flags"])
+def test_flags_refused(connected, functions, case):
+    """Building a function that combines values of two enumerations that differ, or of an
+    enumeration that is not a flags enumeration, raises the server's
+    ``KRPC.InvalidOperationException``."""
+    test_enum = functions.expression(
+        "ConstantEnum",
+        values.string("TestService"),
+        values.string("TestEnum"),
+        values.sint32(1),
+    )
+    if case == "two-enumerations":
+        build = lambda: functions.expression(  # noqa: E731
+            "Or", constant_flags(functions, 1), test_enum
+        )
+    elif case == "not-flags":
+        build = lambda: functions.expression("Or", test_enum, test_enum)  # noqa: E731
+    else:
+        build = lambda: functions.expression("Not", test_enum)  # noqa: E731
+    error = raised(build)
+    assert_server_error_kind(error, "InvalidOperationException")

@@ -1803,13 +1803,29 @@ namespace KRPC.Service.KRPC
         /// <summary>
         /// Logical or bitwise negation.
         /// </summary>
+        /// <remarks>
+        /// Also takes a value of a flags enumeration, and gives the declared values it does not hold.
+        /// </remarks>
         /// <param name="arg">The operand.</param>
         [KRPCMethod]
         public static Expression Not(Expression arg)
         {
             if (ReferenceEquals (arg, null))
                 throw new ArgumentNullException (nameof (arg));
-            return new Expression (LinqExpression.Not (UnwrapNullable (arg, "The operand of Not")));
+            var operand = UnwrapNullable (arg, "The operand of Not");
+            var type = operand.Type;
+            if (type.IsEnum) {
+                if (!Enumerations.IsFlags (type))
+                    throw new InvalidOperationException (
+                        "Cannot negate a value of type " + type + ", as it is not a flags enumeration");
+                // The complement, masked to the declared values
+                return new Expression (LinqExpression.Convert (
+                    LinqExpression.And (
+                        LinqExpression.Not (LinqExpression.Convert (operand, typeof (int))),
+                        LinqExpression.Constant (Enumerations.Mask (type))),
+                    type));
+            }
+            return new Expression (LinqExpression.Not (operand));
         }
 
         /// <summary>

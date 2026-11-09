@@ -628,6 +628,8 @@ namespace KRPC.Client
                 return CompileWriteLine (node);
             if (method.Name == "ToString" && node.Object != null && !IsClientSide (node))
                 return CompileToString (node);
+            if (method.DeclaringType == typeof(Enum) && method.Name == "HasFlag" && !IsClientSide (node))
+                return CompileHasFlag (node);
             if (method.DeclaringType == typeof(string) && method.Name == "Concat" &&
                 !IsClientSide (node))
                 return CompileStringConcat (node);
@@ -721,6 +723,66 @@ namespace KRPC.Client
                 { "ToEven", "Round" },
                 { "AwayFromZero", "RoundHalfAwayFromZero" }
             };
+
+        /// <summary>
+        /// Compile a.HasFlag (b) as a &amp; b == b, for two values of one flags enumeration.
+        /// </summary>
+        Result CompileHasFlag (MethodCallExpression node)
+        {
+            var value = Unboxed (node.Object);
+            var flag = Unboxed (node.Arguments [0]);
+            if (flag.Type != value.Type || !IsAFlagsEnumeration (value.Type))
+                throw Error (node, "HasFlag needs two values of one flags enumeration");
+            var operands = new [] {
+                ToExpression (CompileNode (value), value.Type),
+                ToExpression (CompileNode (flag), flag.Type)
+            };
+            return Result.FromExpression (WithVariables (operands, x => ServerExpression.Equal (
+                connection, ServerExpression.And (connection, x [0], x [1]), x [1])));
+        }
+
+        // An enumeration value viewed as an Enum, as HasFlag takes it
+        static Expression Unboxed (Expression node)
+        {
+            while (node.NodeType == ExpressionType.Convert && node.Type == typeof(Enum))
+                node = ((UnaryExpression)node).Operand;
+            return node;
+        }
+
+        static bool IsAFlagsEnumeration (Type type)
+        {
+            return type.IsEnum && type.IsDefined (typeof(FlagsAttribute), false);
+        }
+
+        /// <summary>
+        /// The union of the values a flags enumeration declares. A flags value converted from a
+        /// number keeps only these bits, as C# folds ~a on a constant to a number holding the
+        /// undeclared bits too.
+        /// </summary>
+        static int FlagsMask (Type type)
+        {
+            var mask = 0;
+            foreach (var flag in Enum.GetValues (type))
+                mask |= Convert.ToInt32 (flag, null);
+            return mask;
+        }
+
+        /// <summary>
+        /// The operand of ~a for a value of a flags enumeration, which C# builds as a cast of
+        /// the complement of its number. Null for any other node.
+        /// </summary>
+        static Expression FlagsComplementOperand (UnaryExpression node)
+        {
+            var complement = node.Operand.NodeType;
+            if (!IsAFlagsEnumeration (node.Type) ||
+                (complement != ExpressionType.Not && complement != ExpressionType.OnesComplement))
+                return null;
+            var number = ((UnaryExpression)node.Operand).Operand;
+            if (number.NodeType != ExpressionType.Convert)
+                return null;
+            var operand = ((UnaryExpression)number).Operand;
+            return operand.Type == node.Type ? operand : null;
+        }
 
         /// <summary>
         /// Compile a call of Math.Round to the StdLib procedure for the rounding rule it asks for.
@@ -1881,6 +1943,14 @@ namespace KRPC.Client
             case ExpressionType.ConvertChecked: {
                     if (IsBoxing (node) || IsReferenceUpcast (node))
                         return CompileNode (node.Operand);
+                    // The complement of the number holds bits the enumeration does not declare
+                    var complemented = FlagsComplementOperand (node);
+                    if (complemented != null) {
+                        if (IsClientSide (node))
+                            return Fold (node);
+                        return Result.FromExpression (ServerExpression.Not (
+                            connection, ToExpression (CompileNode (complemented), complemented.Type)));
+                    }
                     var operand = CompileNode (node.Operand);
                     if (operand.IsValue)
                         return Fold (node, new [] { node.Operand }, new [] { operand });
@@ -1888,11 +1958,13 @@ namespace KRPC.Client
                     var source = Nullable.GetUnderlyingType (node.Operand.Type) ?? node.Operand.Type;
                     if (node.NodeType == ExpressionType.ConvertChecked && !IsWidening (source, target))
                         throw CheckedError (node);
+                    var number = ToExpression (operand, node.Operand.Type);
+                    if (IsAFlagsEnumeration (node.Type) && node.Operand.Type == typeof(int))
+                        number = ServerExpression.And (
+                            connection, number, ServerExpression.ConstantInt (connection, FlagsMask (node.Type)));
                     // A cast to a nullable type keeps a null
                     return Result.FromExpression (ServerExpression.Cast (
-                        connection,
-                        ToExpression (operand, node.Operand.Type),
-                        RemoteType (node.Type, node)));
+                        connection, number, RemoteType (node.Type, node)));
                 }
             default:
                 if (IsClientSide (node))
@@ -2246,11 +2318,13 @@ namespace KRPC.Client
                 return ServerExpression.ConstantBytes (connection, (byte[])value);
             if (value is RemoteObject remoteObject)
                 return ServerExpression.ConstantObject (connection, RemoteObject.GetObjectId (remoteObject));
-            if (type.IsEnum)
+            if (type.IsEnum) {
+                var number = Convert.ToInt32 (value, null);
+                if (IsAFlagsEnumeration (type))
+                    number &= FlagsMask (type);
                 return ServerExpression.Cast (
-                    connection,
-                    ServerExpression.ConstantInt (connection, Convert.ToInt32 (value, null)),
-                    RemoteType (type, null));
+                    connection, ServerExpression.ConstantInt (connection, number), RemoteType (type, null));
+            }
             if (value is IDictionary dictionary) {
                 var types = GenericArguments (value.GetType (), typeof(IDictionary<,>));
                 var keys = new List<ServerExpression> ();

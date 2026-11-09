@@ -83,8 +83,8 @@ Value run_basic(const Expression& function, const std::vector<Argument>& args) {
 template <typename F>
 bool with_type(const std::string& type, F&& f);
 
-/** Runs a function with no arguments, with one argument of a type the testee knows, or with
-    sint32 value and arguments of the basic types. */
+/** Runs a function with no arguments, with one or two arguments of a type the testee knows, or
+    with sint32 value and arguments of the basic types. */
 template <typename Tag>
 Value run(krpc::Client& client, const Expression& function, const RunFunction& command) {
   const auto& args = command.arguments();
@@ -94,6 +94,16 @@ Value run(krpc::Client& client, const Expression& function, const RunFunction& c
     auto known = with_type(command.argument_types(0), [&](auto arg) {
       using Arg = decltype(arg);
       result = run_with<Tag>(function, Arg::arg(client, args.Get(0)));
+    });
+    if (known) return *result;
+  }
+  if (args.size() == 2 && command.argument_types_size() == 2 &&
+      command.argument_types(0) == command.argument_types(1)) {
+    std::optional<Value> result;
+    auto known = with_type(command.argument_types(0), [&](auto arg) {
+      using Arg = decltype(arg);
+      result =
+          run_with<Tag>(function, Arg::arg(client, args.Get(0)), Arg::arg(client, args.Get(1)));
     });
     if (known) return *result;
   }
@@ -133,6 +143,8 @@ bool with_type(const std::string& type, F&& f) {
     f(Object<TestClass>());
   else if (type == "TestEnum")
     f(Enum<krpc::services::TestService::TestEnum>());
+  else if (type == "TestFlags")
+    f(Enum<krpc::services::TestService::TestFlags>());
   else if (type == "TestStruct")
     f(TestService_TestStruct());
   else if (type == "list(sint32)")

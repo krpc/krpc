@@ -218,7 +218,7 @@ local function codec_type(name)
   end
   if name == 'TestClass' then
     return types:class_type('TestService', name)
-  elseif name == 'TestEnum' then
+  elseif name == 'TestEnum' or name == 'TestFlags' then
     return types:enumeration_type('TestService', name)
   elseif name:sub(1, 4) == 'Test' then
     return types:struct_type('TestService', name)

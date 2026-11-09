@@ -461,6 +461,13 @@ Operators
 * ``==``, ``!=`` and ``in`` take values of the same kind. Numbers of different types widen to a
   common type.
 
+A function combines and tests the values of a :ref:`flags enumeration <python-client-flags>`
+with ``|``, ``&``, ``^``, ``~`` and ``in``:
+
+.. literalinclude:: /scripts/python/FlagsFunction.py
+
+Both operands are values of one flags enumeration.
+
 None and Truth
 ^^^^^^^^^^^^^^
 
@@ -469,7 +476,8 @@ None and Truth
   other assignments. Elsewhere, give it a type with an annotation or ``typing.cast``, for
   example ``cast(Optional[str], None)``.
 * A condition tests truth as Python does. ``None`` is false, a number is true when it is not
-  zero, and a string, bytes or a collection when it is not empty. Any other value is true.
+  zero, and a string, bytes or a collection when it is not empty. A flags value is true when it
+  holds a flag. Any other value is true.
 
 Collections
 ^^^^^^^^^^^

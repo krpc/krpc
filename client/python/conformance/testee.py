@@ -692,7 +692,7 @@ class Testee:
             return types.tuple_type(*items)
         if name == "TestClass":
             return types.class_type("TestService", name)
-        if name == "TestEnum":
+        if name in ("TestEnum", "TestFlags"):
             return types.enumeration_type("TestService", name)
         if name.startswith("Test"):
             return types.struct_type("TestService", name)
