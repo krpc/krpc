@@ -128,6 +128,40 @@ namespace KRPC.Utils
             return body == null ? null : Expression.Lambda<TDelegate> (body, parameters).Compile ();
         }
 
+        /// <summary>
+        /// A delegate that calls a constructor of <paramref name="type"/> and returns the new
+        /// instance.
+        /// </summary>
+        /// <remarks>
+        /// The constructor's parameters match the delegate's exactly or, for the only
+        /// constructor with that parameter count, convert from them.
+        /// </remarks>
+        public static TDelegate Constructor<TDelegate> (Type type) where TDelegate : class
+        {
+            if (type.IsAbstract)
+                return null;
+            var invoke = typeof (TDelegate).GetMethod ("Invoke");
+            var parameters = invoke.GetParameters ()
+                .Select (p => Expression.Parameter (p.ParameterType, p.Name)).ToArray ();
+            var types = parameters.Select (p => p.Type).ToArray ();
+            var constructor = type.GetConstructor (Flags | BindingFlags.Instance, null, types, null);
+            if (constructor == null) {
+                var candidates = type.GetConstructors (Flags | BindingFlags.Instance)
+                    .Where (c => c.GetParameters ().Length == types.Length)
+                    .Take (2).ToArray ();
+                if (candidates.Length != 1)
+                    return null;
+                constructor = candidates [0];
+            }
+            var arguments = constructor.GetParameters ()
+                .Select ((p, i) => p.ParameterType.IsByRef ? null : Convert (parameters [i], p.ParameterType))
+                .ToArray ();
+            if (arguments.Any (x => x == null))
+                return null;
+            var body = Convert (Expression.New (constructor, arguments), invoke.ReturnType);
+            return body == null ? null : Expression.Lambda<TDelegate> (body, parameters).Compile ();
+        }
+
         static MethodInfo FindMethod (Type type, string name, BindingFlags kind, Type [] types)
         {
             var method = type.GetMethod (name, Flags | kind, null, types, null);

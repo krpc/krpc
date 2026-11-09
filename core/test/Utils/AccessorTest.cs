@@ -30,6 +30,17 @@ namespace KRPC.Test.Utils
 
         public int Fixed { get { return 7; } }
 
+        public Base ()
+        {
+        }
+
+        Base (Shade shade)
+        {
+            this.shade = shade;
+        }
+
+        public Shade Shade { get { return shade; } }
+
         static bool Ready { get { return true; } }
 
         protected virtual string Describe ()
@@ -86,6 +97,10 @@ namespace KRPC.Test.Utils
         }
 
         public new string Fixed { get { return "derived"; } }
+    }
+
+    abstract class Abstract
+    {
     }
 
     delegate void SplitDelegate (int value, out int half, out int rest);
@@ -289,6 +304,28 @@ namespace KRPC.Test.Utils
         {
             Assert.IsNull (Accessor.Method<Action<Base>> (typeof (Base), "Missing"));
             Assert.IsNull (Accessor.Method<Action<Base, int, int>> (typeof (Base), "Describe"));
+        }
+
+        [Test]
+        public void ConstructorCallsPrivateConstructor ()
+        {
+            var create = Accessor.Constructor<Func<Shade, Base>> (typeof (Base));
+            Assert.AreEqual (Shade.Light, create (Shade.Light).Shade);
+        }
+
+        [Test]
+        public void ConstructorConvertsParameters ()
+        {
+            var create = Accessor.Constructor<Func<int, object>> (typeof (Base));
+            Assert.AreEqual (Shade.Light, ((Base)create ((int)Shade.Light)).Shade);
+        }
+
+        [Test]
+        public void ConstructorMissing ()
+        {
+            Assert.IsNull (Accessor.Constructor<Func<int, int, object>> (typeof (Base)));
+            Assert.IsNull (Accessor.Constructor<Func<string, int>> (typeof (Base)));
+            Assert.IsNull (Accessor.Constructor<Func<object>> (typeof (Abstract)));
         }
     }
 }
