@@ -324,6 +324,22 @@ class B9PartSwitch(_PartMod):
     part = "b9PartSwitchTest"
 
 
+class NearFutureSolar(_PartMod):
+    """Near Future Solar, whose ModuleCurvedSolarPanel the SpaceCenter SolarPanel class
+    wraps."""
+
+    name = "NearFutureSolar"
+    source = _GITHUB + (
+        "post-kerbin-mining-corporation/NearFutureSolar/releases/download/1.3.3/"
+        "NearFutureSolar_1_3_3.zip"
+    )
+    sha256 = "4dab8ed0b69bad969a75e89668a95ddc912b7618c7de5f6e87fe570adba6c4df"
+    # The archive also bundles B9PartSwitch and ModuleManager, installed on their own
+    folders = ("NearFutureSolar",)
+    requires = ("B9PartSwitch",)
+    part = "nfs-panel-deploying-curved-25-1"
+
+
 class _AssemblyMod(Mod):
     """A mod told apart by the major.minor version of its loaded assembly."""
 
@@ -395,6 +411,7 @@ MODS = [
     FAR,
     RealFuels,
     B9PartSwitch,
+    NearFutureSolar,
     KSPCommunityPartModules,
     KSPCommunityPartModules04,
     KOS,
