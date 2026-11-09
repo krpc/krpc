@@ -6,8 +6,7 @@ RemoteTech
 ==========
 
 
-This service provides functionality to interact with
-`RemoteTech <https://forum.kerbalspaceprogram.com/topic/139167-111-remotetech-v199-2020-12-19/>`_.
+Provides functionality to interact with RemoteTech.
 
 
 .. function:: krpc_error_t krpc_RemoteTech_Available(krpc_connection_t connection, bool * returnValue)

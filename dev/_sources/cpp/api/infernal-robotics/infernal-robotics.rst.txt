@@ -9,8 +9,7 @@ InfernalRobotics
 .. namespace:: krpc::services
 .. class:: InfernalRobotics : public krpc::Service
 
-   This service provides functionality to interact with
-   `Infernal Robotics <https://forum.kerbalspaceprogram.com/topic/184787-infernal-robotics-next/>`_.
+   Provides functionality to interact with Infernal Robotics Next.
 
    .. function:: InfernalRobotics(krpc::Client& client)
 

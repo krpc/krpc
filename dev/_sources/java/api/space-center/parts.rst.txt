@@ -343,11 +343,7 @@ Part
 
       .. note::
 
-         The name tag part module is provided by
-         `KSPCommunityPartModules <https://github.com/KSPModdingLibs/KSPCommunityPartModules>`_
-         0.5 or later, or by
-         `kOS <https://forum.kerbalspaceprogram.com/topic/165628-ksp-112x-kos-v1400-kos-scriptable-autopilot-system/>`_,
-         which shares this string.
+         Requires KSPCommunityPartModules 0.5 or later, or kOS, which share one name tag.
 
    .. method:: String getFlagURL()
 
@@ -381,7 +377,7 @@ Part
    .. method:: double getCost()
 
 
-      The cost of the part, in units of funds.
+      The cost of the part with its resources full, in units of funds.
 
    
 
@@ -1115,7 +1111,7 @@ Part
 
       .. note::
 
-         Not available when the Ferram Aerospace Research mod is installed.
+         Not available when Ferram Aerospace Research is installed.
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> drag(ReferenceFrame referenceFrame)
 
@@ -1129,7 +1125,7 @@ Part
 
       .. note::
 
-         Not available when the Ferram Aerospace Research mod is installed.
+         Not available when Ferram Aerospace Research is installed.
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> centerOfBuoyancy(ReferenceFrame referenceFrame)
 
@@ -1280,8 +1276,7 @@ Part
    .. method:: boolean getHasRealFuelsTank()
 
 
-      Whether the part is a fuel tank managed by
-      `RealFuels <https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/>`_.
+      Whether the part is a fuel tank managed by RealFuels.
       The remaining properties in this section are only available when it is.
 
    
@@ -1295,6 +1290,10 @@ Part
 
    
 
+      .. note::
+
+         Requires RealFuels.
+
    .. method:: double getBoiloffRate()
 
 
@@ -1307,6 +1306,10 @@ Part
       if the part is not a RealFuels fuel tank (see :meth:`Part.getHasRealFuelsTank()`).
 
    
+
+      .. note::
+
+         Requires RealFuels.
 
 
 
@@ -1472,6 +1475,10 @@ Module
 .. type:: public class PartField
 
    A field of a part module. Obtained by calling :meth:`Module.getFieldList()`.
+
+   .. note::
+
+      Setting a field runs the callbacks that the right-click menu of the part runs.
 
    .. method:: Module getModule()
 
@@ -2784,11 +2791,16 @@ Engine
 
       Whether the engine has a recognized thrust reverser. This is ``true`` for
       stock engines with a thrust reverser (such as the J-33 "Wheesley" and
-      J-90 "Goliath" turbofan engines) and for selected mod engines. It is
+      J-90 "Goliath" turbofan engines) and for supported mod engines. It is
       ``false`` for engines whose reverser is not recognized, as KSP provides no
       standard way to detect one.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Recognizes the thrust reversers of Firespitter and KerbalActuators.
 
    .. method:: boolean getThrustReversed()
 
@@ -2813,8 +2825,7 @@ Engine
    .. method:: boolean getHasRealFuels()
 
 
-      Whether the engine is managed by
-      `RealFuels <https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/>`_.
+      Whether the engine is managed by RealFuels.
       The remaining properties in this section are only available when it is.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
@@ -2828,6 +2839,11 @@ Engine
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
+
+      .. note::
+
+         Requires RealFuels.
+
    .. method:: java.util.Map<String,Double> getIgnitionResources()
 
 
@@ -2838,6 +2854,11 @@ Engine
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
+
+      .. note::
+
+         Requires RealFuels.
+
    .. method:: boolean getHasUllage()
 
 
@@ -2846,6 +2867,11 @@ Engine
       managed by RealFuels (see :meth:`Engine.getHasRealFuels()`).
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Requires RealFuels.
 
    .. method:: double getPropellantStability()
 
@@ -2856,6 +2882,11 @@ Engine
       by RealFuels (see :meth:`Engine.getHasRealFuels()`).
 
       :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires RealFuels.
 
    .. method:: double getPropellantReliability()
 
@@ -2868,6 +2899,11 @@ Engine
 
       :Game Scenes: Flight
 
+
+      .. note::
+
+         Requires RealFuels.
+
    .. method:: boolean getPressureFed()
 
 
@@ -2877,6 +2913,11 @@ Engine
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
+
+      .. note::
+
+         Requires RealFuels.
+
    .. method:: boolean getHasFeedPressure()
 
 
@@ -2885,6 +2926,11 @@ Engine
       engine is not managed by RealFuels (see :meth:`Engine.getHasRealFuels()`).
 
       :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires RealFuels.
 
 
 
@@ -2974,6 +3020,10 @@ Experiment
 .. type:: public class Experiment
 
    Obtained by calling :meth:`Part.getExperiment()`.
+
+   .. note::
+
+      Includes the experiments of DMagic's DMModuleScienceAnimateGeneric.
 
    .. method:: Part getPart()
 
@@ -3158,7 +3208,10 @@ Fairing
 .. type:: public class Fairing
 
    A fairing. Obtained by calling :meth:`Part.getFairing()`.
-   Supports both stock fairings, and those from the ProceduralFairings mod.
+
+   .. note::
+
+      Includes the fairings of ProceduralFairings.
 
    .. method:: Part getPart()
 
@@ -3366,6 +3419,10 @@ Parachute
 .. type:: public class Parachute
 
    A parachute. Obtained by calling :meth:`Part.getParachute()`.
+
+   .. note::
+
+      Includes the parachutes of RealChute.
 
    .. method:: Part getPart()
 
@@ -4756,6 +4813,10 @@ Solar Panel
 .. type:: public class SolarPanel
 
    A solar panel. Obtained by calling :meth:`Part.getSolarPanel()`.
+
+   .. note::
+
+      Includes the curved solar panels of Near Future Solar.
 
    .. method:: Part getPart()
 

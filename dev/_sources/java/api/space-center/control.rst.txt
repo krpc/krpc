@@ -600,14 +600,14 @@ Control
 
       Returns ``true`` if the given action group is enabled.
 
-      :param int group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+      :param int group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when Extended Action Groups is installed.
       :Game Scenes: Flight
 
    .. method:: void setActionGroup(int group, boolean state)
 
       Sets the state of the given action group.
 
-      :param int group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+      :param int group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when Extended Action Groups is installed.
       :param boolean state:
       :Game Scenes: Flight
 
@@ -615,7 +615,7 @@ Control
 
       Toggles the state of the given action group.
 
-      :param int group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+      :param int group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when Extended Action Groups is installed.
       :Game Scenes: Flight
 
    .. method:: java.util.List<ActionGroupAction> getActionGroupActions(int group)
@@ -624,14 +624,14 @@ Control
       Each entry identifies the part, the part module, and the action's name and identifier.
       Returns an empty list if no actions are assigned to the group.
 
-      :param int group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+      :param int group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when Extended Action Groups is installed.
       :Game Scenes: Flight
 
 
       .. note::
 
          For stock action groups, the assignments are read from each part action directly.
-         When the Extended Action Groups mod is installed, the assignments are queried from
+         When Extended Action Groups is installed, the assignments are queried from
          the mod instead, so that actions assigned to its additional groups are included.
 
    .. method:: Node addNode(double ut, float prograde, float normal, float radial)
@@ -742,7 +742,7 @@ Control
 
       The part module that the action belongs to. Returns ``null`` for a
       part-level action that is not associated with a module. This only occurs when
-      the Extended Action Groups mod is installed, as it can assign actions defined
+      Extended Action Groups is installed, as it can assign actions defined
       directly on a part, rather than on one of its modules, to an action group.
 
    .. method:: String getName()

@@ -460,14 +460,14 @@ SpaceCenter
    .. method:: boolean getFARAvailable()
 
 
-      Whether `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/>`_ is installed.
+      Whether Ferram Aerospace Research is installed.
 
    
 
    .. method:: boolean getRealFuelsAvailable()
 
 
-      Whether `RealFuels <https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/>`_ is installed.
+      Whether RealFuels is installed.
 
    
 

@@ -552,7 +552,7 @@ AutoPilot
       .. note::
 
          When disabled, only :attr:`AutoPilot.max_angular_velocity` limits the angular velocity. Not
-         applied when the Ferram Aerospace Research mod is installed.
+         applied when Ferram Aerospace Research is installed.
 
    .. attribute:: pitch_yaw_attenuation_angle
 

@@ -1123,6 +1123,43 @@
 <li class="toctree-l1"><a class="reference internal" href="space-center/alarms.html">Alarms</a></li>
 </ul>
 </div>
+<section id="supported-mods">
+<h2>Supported Mods<a class="headerlink" href="#supported-mods" title="Link to this heading">#</a></h2>
+<p>The SpaceCenter service supports the following mods. None of them needs to be installed, but
+some functionality requires one of them, and the docs note where it does.</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/KSPModStewards/Ferram-Aerospace-Research">Ferram Aerospace Research</a>: <a class="reference internal" href="space-center/flight.html#c.krpc_SpaceCenter_Flight_t" title="krpc_SpaceCenter_Flight_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Flight_t</span></code></a> works with the stock
+aerodynamics or with Ferram Aerospace Research, and reads from whichever is in use. Some
+members require it, such as <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Flight_LiftCoefficient()</span></code>, and
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Part_Lift()</span></code> and <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Part_Drag()</span></code> are not
+available with it.</p></li>
+<li><p><a class="reference external" href="https://github.com/linuxgurugamer/AGExt">Extended Action Groups</a> adds action groups 10 to 250 to <a class="reference internal" href="space-center/control.html#c.krpc_SpaceCenter_Control_t" title="krpc_SpaceCenter_Control_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Control_t</span></code></a>.</p></li>
+<li><p><a class="reference external" href="https://github.com/KSP-RO/RealFuels">RealFuels</a> adds ignitions, ullage and feed pressure to <a class="reference internal" href="space-center/parts.html#c.krpc_SpaceCenter_Engine_t" title="krpc_SpaceCenter_Engine_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Engine_t</span></code></a>,
+and tank pressure and boil-off to <a class="reference internal" href="space-center/parts.html#c.krpc_SpaceCenter_Part_t" title="krpc_SpaceCenter_Part_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Part_t</span></code></a>.</p></li>
+<li><p><a class="reference internal" href="space-center/parts.html#c.krpc_SpaceCenter_Parachute_t" title="krpc_SpaceCenter_Parachute_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Parachute_t</span></code></a> objects support <a class="reference external" href="https://github.com/ChrisViral/RealChute">RealChute</a>.</p></li>
+<li><p><a class="reference internal" href="space-center/parts.html#c.krpc_SpaceCenter_Fairing_t" title="krpc_SpaceCenter_Fairing_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Fairing_t</span></code></a> objects support <a class="reference external" href="https://github.com/KSP-RO/ProceduralFairings">ProceduralFairings</a>.</p></li>
+<li><p><a class="reference internal" href="space-center/parts.html#c.krpc_SpaceCenter_SolarPanel_t" title="krpc_SpaceCenter_SolarPanel_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_SpaceCenter_SolarPanel_t</span></code></a> objects support the curved solar panels of
+<a class="reference external" href="https://github.com/post-kerbin-mining-corporation/NearFutureSolar">Near Future Solar</a>.</p></li>
+<li><p><a class="reference internal" href="space-center/parts.html#c.krpc_SpaceCenter_Experiment_t" title="krpc_SpaceCenter_Experiment_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Experiment_t</span></code></a> objects support DMagic’s
+<a class="reference external" href="https://github.com/DMagic1/DMModuleScienceAnimateGeneric">DMModuleScienceAnimateGeneric</a>.</p></li>
+<li><p><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Engine_ThrustReversed()</span></code> supports the thrust reversers of
+<a class="reference external" href="https://github.com/snjo/Firespitter">Firespitter</a> and <a class="reference external" href="https://github.com/Angel-125/KerbalActuators">KerbalActuators</a>.</p></li>
+<li><p><a class="reference external" href="https://github.com/KSPModdingLibs/KSPCommunityPartModules">KSPCommunityPartModules</a> 0.5 or later, or <a class="reference external" href="https://github.com/KSP-KOS/KOS">kOS</a>, provides the name tag in
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Part_Tag()</span></code>.</p></li>
+<li><p><a class="reference external" href="https://github.com/blowfishpro/B9PartSwitch">B9PartSwitch</a> switches a part’s subtype when its field is set through
+<a class="reference internal" href="space-center/parts.html#c.krpc_SpaceCenter_PartField_t" title="krpc_SpaceCenter_PartField_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_SpaceCenter_PartField_t</span></code></a>.</p></li>
+<li><p><a class="reference external" href="https://github.com/JonnyOThan/TweakScale">TweakScale Rescaled</a> parts report their scaled masses, resources, thrust, torque and cost.</p></li>
+<li><p><a class="reference internal" href="space-center/parts.html#c.krpc_SpaceCenter_Antenna_t" title="krpc_SpaceCenter_Antenna_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Antenna_t</span></code></a> objects support stock antennas only. The
+<a class="reference internal" href="remote-tech.html"><span class="doc">RemoteTech service</span></a> covers RemoteTech antennas.</p></li>
+</ul>
+<p>These services cover other mods:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="kerbal-alarm-clock.html"><span class="doc">Kerbal Alarm Clock</span></a></p></li>
+<li><p><a class="reference internal" href="remote-tech.html"><span class="doc">RemoteTech</span></a></p></li>
+<li><p><a class="reference internal" href="infernal-robotics.html"><span class="doc">Infernal Robotics Next</span></a></p></li>
+<li><p><a class="reference internal" href="docking-camera.html"><span class="doc">Docking Camera (KURS)</span></a></p></li>
+</ul>
+</section>
 </section>
 
 
@@ -1163,6 +1200,18 @@
                 <dialog id="pst-secondary-sidebar-modal" tabindex="-1"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#supported-mods">Supported Mods</a></li>
+</ul>
+  </nav></div>
 
   <div class="sidebar-secondary-item">
 

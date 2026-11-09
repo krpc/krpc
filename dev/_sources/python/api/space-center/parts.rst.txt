@@ -380,11 +380,7 @@ Part
 
       .. note::
 
-         The name tag part module is provided by
-         `KSPCommunityPartModules <https://github.com/KSPModdingLibs/KSPCommunityPartModules>`_
-         0.5 or later, or by
-         `kOS <https://forum.kerbalspaceprogram.com/topic/165628-ksp-112x-kos-v1400-kos-scriptable-autopilot-system/>`_,
-         which shares this string.
+         Requires KSPCommunityPartModules 0.5 or later, or kOS, which share one name tag.
 
    .. attribute:: flag_url
 
@@ -417,7 +413,7 @@ Part
 
    .. attribute:: cost
 
-      The cost of the part, in units of funds.
+      The cost of the part with its resources full, in units of funds.
 
       :Attribute: Read-only, cannot be set
       :rtype: float
@@ -1237,7 +1233,7 @@ Part
 
       .. note::
 
-         Not available when the Ferram Aerospace Research mod is installed.
+         Not available when Ferram Aerospace Research is installed.
 
    .. method:: drag(reference_frame)
 
@@ -1252,7 +1248,7 @@ Part
 
       .. note::
 
-         Not available when the Ferram Aerospace Research mod is installed.
+         Not available when Ferram Aerospace Research is installed.
 
    .. method:: center_of_buoyancy(reference_frame)
 
@@ -1413,8 +1409,7 @@ Part
 
    .. attribute:: has_real_fuels_tank
 
-      Whether the part is a fuel tank managed by
-      `RealFuels <https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/>`_.
+      Whether the part is a fuel tank managed by RealFuels.
       The remaining properties in this section are only available when it is.
 
       :Attribute: Read-only, cannot be set
@@ -1431,6 +1426,10 @@ Part
       :rtype: bool
    
 
+      .. note::
+
+         Requires RealFuels.
+
    .. attribute:: boiloff_rate
 
       The rate at which the tank's cryogenic contents are boiling off, in kilograms per
@@ -1444,6 +1443,10 @@ Part
       :Attribute: Read-only, cannot be set
       :rtype: float
    
+
+      .. note::
+
+         Requires RealFuels.
 
 
 
@@ -1616,6 +1619,10 @@ Module
 .. class:: PartField
 
    A field of a part module. Obtained by calling :attr:`Module.field_list`.
+
+   .. note::
+
+      Setting a field runs the callbacks that the right-click menu of the part runs.
 
    .. attribute:: module
 
@@ -3016,13 +3023,18 @@ Engine
 
       Whether the engine has a recognized thrust reverser. This is ``True`` for
       stock engines with a thrust reverser (such as the J-33 "Wheesley" and
-      J-90 "Goliath" turbofan engines) and for selected mod engines. It is
+      J-90 "Goliath" turbofan engines) and for supported mod engines. It is
       ``False`` for engines whose reverser is not recognized, as KSP provides no
       standard way to detect one.
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
       :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Recognizes the thrust reversers of Firespitter and KerbalActuators.
 
    .. attribute:: thrust_reversed
 
@@ -3046,8 +3058,7 @@ Engine
 
    .. attribute:: has_real_fuels
 
-      Whether the engine is managed by
-      `RealFuels <https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/>`_.
+      Whether the engine is managed by RealFuels.
       The remaining properties in this section are only available when it is.
 
       :Attribute: Read-only, cannot be set
@@ -3064,6 +3075,11 @@ Engine
       :rtype: int
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
+
+      .. note::
+
+         Requires RealFuels.
+
    .. attribute:: ignition_resources
 
       The resources the engine consumes each time it ignites, keyed by resource name, with
@@ -3075,6 +3091,11 @@ Engine
       :rtype: dict(str, float)
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
+
+      .. note::
+
+         Requires RealFuels.
+
    .. attribute:: has_ullage
 
       Whether the engine's propellant is subject to ullage, so that it must be settled
@@ -3084,6 +3105,11 @@ Engine
       :Attribute: Read-only, cannot be set
       :rtype: bool
       :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Requires RealFuels.
 
    .. attribute:: propellant_stability
 
@@ -3095,6 +3121,11 @@ Engine
       :Attribute: Read-only, cannot be set
       :rtype: float
       :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires RealFuels.
 
    .. attribute:: propellant_reliability
 
@@ -3108,6 +3139,11 @@ Engine
       :rtype: float
       :Game Scenes: Flight
 
+
+      .. note::
+
+         Requires RealFuels.
+
    .. attribute:: pressure_fed
 
       Whether the engine is fed by tank pressure rather than by a pump, and so needs to
@@ -3118,6 +3154,11 @@ Engine
       :rtype: bool
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
+
+      .. note::
+
+         Requires RealFuels.
+
    .. attribute:: has_feed_pressure
 
       Whether the tanks feeding the engine supply the pressure it needs. Always
@@ -3127,6 +3168,11 @@ Engine
       :Attribute: Read-only, cannot be set
       :rtype: bool
       :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires RealFuels.
 
 
 
@@ -3226,6 +3272,10 @@ Experiment
 .. class:: Experiment
 
    Obtained by calling :attr:`Part.experiment`.
+
+   .. note::
+
+      Includes the experiments of DMagic's DMModuleScienceAnimateGeneric.
 
    .. attribute:: part
 
@@ -3435,7 +3485,10 @@ Fairing
 .. class:: Fairing
 
    A fairing. Obtained by calling :attr:`Part.fairing`.
-   Supports both stock fairings, and those from the ProceduralFairings mod.
+
+   .. note::
+
+      Includes the fairings of ProceduralFairings.
 
    .. attribute:: part
 
@@ -3656,6 +3709,10 @@ Parachute
 .. class:: Parachute
 
    A parachute. Obtained by calling :attr:`Part.parachute`.
+
+   .. note::
+
+      Includes the parachutes of RealChute.
 
    .. attribute:: part
 
@@ -5118,6 +5175,10 @@ Solar Panel
 .. class:: SolarPanel
 
    A solar panel. Obtained by calling :attr:`Part.solar_panel`.
+
+   .. note::
+
+      Includes the curved solar panels of Near Future Solar.
 
    .. attribute:: part
 

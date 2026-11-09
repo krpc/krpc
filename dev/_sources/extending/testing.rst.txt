@@ -41,12 +41,12 @@ built into ``build/Heatshields.zip`` beside it:
 .. literalinclude:: /scripts/extending/testing/conftest.py
    :language: python
 
-A mod names the folders it installs into GameData. ``present`` returns whether the running game
-loaded the mod, or ``None`` when the mod gives no way to tell. A mod that needs another mod names
-it in ``requires``.
+A mod names the folders it installs into GameData, and in ``files`` any files it puts at the top
+of GameData. ``present`` returns whether the running game loaded the mod, or ``None`` when the
+mod gives no way to tell. A mod that needs another mod names it in ``requires``.
 
 Each test class names the mods it requires. Before its ``setUpClass`` runs, KSP is running with
-exactly those mods:
+exactly those mods and the mods they require:
 
 .. literalinclude:: /scripts/extending/testing/test_heatshields.py
    :language: python

@@ -326,11 +326,7 @@ Part
 
       .. note::
 
-         The name tag part module is provided by
-         `KSPCommunityPartModules <https://github.com/KSPModdingLibs/KSPCommunityPartModules>`_
-         0.5 or later, or by
-         `kOS <https://forum.kerbalspaceprogram.com/topic/165628-ksp-112x-kos-v1400-kos-scriptable-autopilot-system/>`_,
-         which shares this string.
+         Requires KSPCommunityPartModules 0.5 or later, or kOS, which share one name tag.
 
    .. property:: string FlagURL { get; set; }
 
@@ -357,7 +353,7 @@ Part
 
    .. property:: double Cost { get; }
 
-      The cost of the part, in units of funds.
+      The cost of the part with its resources full, in units of funds.
 
       :Game Scenes: All
 
@@ -1049,7 +1045,7 @@ Part
 
       .. note::
 
-         Not available when the Ferram Aerospace Research mod is installed.
+         Not available when Ferram Aerospace Research is installed.
 
    .. function:: System.Tuple<double,double,double> Drag(ReferenceFrame referenceFrame)
 
@@ -1066,7 +1062,7 @@ Part
 
       .. note::
 
-         Not available when the Ferram Aerospace Research mod is installed.
+         Not available when Ferram Aerospace Research is installed.
 
    .. function:: System.Tuple<double,double,double> CenterOfBuoyancy(ReferenceFrame referenceFrame)
 
@@ -1226,8 +1222,7 @@ Part
 
    .. property:: bool HasRealFuelsTank { get; }
 
-      Whether the part is a fuel tank managed by
-      `RealFuels <https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/>`_.
+      Whether the part is a fuel tank managed by RealFuels.
       The remaining properties in this section are only available when it is.
 
       :Game Scenes: All
@@ -1240,6 +1235,11 @@ Part
 
       :Game Scenes: All
 
+
+      .. note::
+
+         Requires RealFuels.
+
    .. property:: double BoiloffRate { get; }
 
       The rate at which the tank's cryogenic contents are boiling off, in kilograms per
@@ -1251,6 +1251,11 @@ Part
       if the part is not a RealFuels fuel tank (see :prop:`Part.HasRealFuelsTank`).
 
       :Game Scenes: All
+
+
+      .. note::
+
+         Requires RealFuels.
 
 
 
@@ -1404,6 +1409,10 @@ Module
 .. class:: PartField
 
    A field of a part module. Obtained by calling :prop:`Module.FieldList`.
+
+   .. note::
+
+      Setting a field runs the callbacks that the right-click menu of the part runs.
 
    .. property:: Module Module { get; }
 
@@ -2632,11 +2641,16 @@ Engine
 
       Whether the engine has a recognized thrust reverser. This is ``true`` for
       stock engines with a thrust reverser (such as the J-33 "Wheesley" and
-      J-90 "Goliath" turbofan engines) and for selected mod engines. It is
+      J-90 "Goliath" turbofan engines) and for supported mod engines. It is
       ``false`` for engines whose reverser is not recognized, as KSP provides no
       standard way to detect one.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Recognizes the thrust reversers of Firespitter and KerbalActuators.
 
    .. property:: bool ThrustReversed { get; set; }
 
@@ -2659,8 +2673,7 @@ Engine
 
    .. property:: bool HasRealFuels { get; }
 
-      Whether the engine is managed by
-      `RealFuels <https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/>`_.
+      Whether the engine is managed by RealFuels.
       The remaining properties in this section are only available when it is.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
@@ -2673,6 +2686,11 @@ Engine
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
+
+      .. note::
+
+         Requires RealFuels.
+
    .. property:: System.Collections.Generic.IDictionary<string,double> IgnitionResources { get; }
 
       The resources the engine consumes each time it ignites, keyed by resource name, with
@@ -2682,6 +2700,11 @@ Engine
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
+
+      .. note::
+
+         Requires RealFuels.
+
    .. property:: bool HasUllage { get; }
 
       Whether the engine's propellant is subject to ullage, so that it must be settled
@@ -2689,6 +2712,11 @@ Engine
       managed by RealFuels (see :prop:`Engine.HasRealFuels`).
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Requires RealFuels.
 
    .. property:: double PropellantStability { get; }
 
@@ -2698,6 +2726,11 @@ Engine
       by RealFuels (see :prop:`Engine.HasRealFuels`).
 
       :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires RealFuels.
 
    .. property:: double PropellantReliability { get; }
 
@@ -2709,6 +2742,11 @@ Engine
 
       :Game Scenes: Flight
 
+
+      .. note::
+
+         Requires RealFuels.
+
    .. property:: bool PressureFed { get; }
 
       Whether the engine is fed by tank pressure rather than by a pump, and so needs to
@@ -2717,6 +2755,11 @@ Engine
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
+
+      .. note::
+
+         Requires RealFuels.
+
    .. property:: bool HasFeedPressure { get; }
 
       Whether the tanks feeding the engine supply the pressure it needs. Always
@@ -2724,6 +2767,11 @@ Engine
       engine is not managed by RealFuels (see :prop:`Engine.HasRealFuels`).
 
       :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires RealFuels.
 
 
 
@@ -2803,6 +2851,10 @@ Experiment
 .. class:: Experiment
 
    Obtained by calling :prop:`Part.Experiment`.
+
+   .. note::
+
+      Includes the experiments of DMagic's DMModuleScienceAnimateGeneric.
 
    .. property:: Part Part { get; }
 
@@ -2980,7 +3032,10 @@ Fairing
 .. class:: Fairing
 
    A fairing. Obtained by calling :prop:`Part.Fairing`.
-   Supports both stock fairings, and those from the ProceduralFairings mod.
+
+   .. note::
+
+      Includes the fairings of ProceduralFairings.
 
    .. property:: Part Part { get; }
 
@@ -3165,6 +3220,10 @@ Parachute
 .. class:: Parachute
 
    A parachute. Obtained by calling :prop:`Part.Parachute`.
+
+   .. note::
+
+      Includes the parachutes of RealChute.
 
    .. property:: Part Part { get; }
 
@@ -4446,6 +4505,10 @@ Solar Panel
 .. class:: SolarPanel
 
    A solar panel. Obtained by calling :prop:`Part.SolarPanel`.
+
+   .. note::
+
+      Includes the curved solar panels of Near Future Solar.
 
    .. property:: Part Part { get; }
 

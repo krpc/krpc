@@ -1,5 +1,6 @@
 .. default-domain:: lua
 .. highlight:: lua
+.. currentmodule:: SpaceCenter
 
 SpaceCenter API
 ===============
@@ -28,3 +29,54 @@ SpaceCenter API
    space-center/contracts
    space-center/geometry-types
    space-center/alarms
+
+Supported Mods
+--------------
+
+The SpaceCenter service supports the following mods. None of them needs to be installed, but
+some functionality requires one of them, and the docs note where it does.
+
+* `Ferram Aerospace Research`_: :class:`SpaceCenter.Flight` works with the stock
+  aerodynamics or with Ferram Aerospace Research, and reads from whichever is in use. Some
+  members require it, such as :attr:`SpaceCenter.Flight.lift_coefficient`, and
+  :meth:`SpaceCenter.Part.lift` and :meth:`SpaceCenter.Part.drag` are not
+  available with it.
+* `Extended Action Groups`_ adds action groups 10 to 250 to :class:`SpaceCenter.Control`.
+* `RealFuels`_ adds ignitions, ullage and feed pressure to :class:`SpaceCenter.Engine`,
+  and tank pressure and boil-off to :class:`SpaceCenter.Part`.
+* :class:`SpaceCenter.Parachute` objects support `RealChute`_.
+* :class:`SpaceCenter.Fairing` objects support `ProceduralFairings`_.
+* :class:`SpaceCenter.SolarPanel` objects support the curved solar panels of
+  `Near Future Solar`_.
+* :class:`SpaceCenter.Experiment` objects support DMagic's
+  `DMModuleScienceAnimateGeneric`_.
+* :attr:`SpaceCenter.Engine.thrust_reversed` supports the thrust reversers of
+  `Firespitter`_ and `KerbalActuators`_.
+* `KSPCommunityPartModules`_ 0.5 or later, or `kOS`_, provides the name tag in
+  :attr:`SpaceCenter.Part.tag`.
+* `B9PartSwitch`_ switches a part's subtype when its field is set through
+  :class:`SpaceCenter.PartField`.
+* `TweakScale Rescaled`_ parts report their scaled masses, resources, thrust, torque and cost.
+* :class:`SpaceCenter.Antenna` objects support stock antennas only. The
+  :doc:`RemoteTech service <remote-tech>` covers RemoteTech antennas.
+
+These services cover other mods:
+
+* :doc:`Kerbal Alarm Clock <kerbal-alarm-clock>`
+* :doc:`RemoteTech <remote-tech>`
+* :doc:`Infernal Robotics Next <infernal-robotics>`
+* :doc:`Docking Camera (KURS) <docking-camera>`
+
+.. _Ferram Aerospace Research: https://github.com/KSPModStewards/Ferram-Aerospace-Research
+.. _Extended Action Groups: https://github.com/linuxgurugamer/AGExt
+.. _RealFuels: https://github.com/KSP-RO/RealFuels
+.. _RealChute: https://github.com/ChrisViral/RealChute
+.. _ProceduralFairings: https://github.com/KSP-RO/ProceduralFairings
+.. _Near Future Solar: https://github.com/post-kerbin-mining-corporation/NearFutureSolar
+.. _DMModuleScienceAnimateGeneric: https://github.com/DMagic1/DMModuleScienceAnimateGeneric
+.. _Firespitter: https://github.com/snjo/Firespitter
+.. _KerbalActuators: https://github.com/Angel-125/KerbalActuators
+.. _KSPCommunityPartModules: https://github.com/KSPModdingLibs/KSPCommunityPartModules
+.. _kOS: https://github.com/KSP-KOS/KOS
+.. _B9PartSwitch: https://github.com/blowfishpro/B9PartSwitch
+.. _TweakScale Rescaled: https://github.com/JonnyOThan/TweakScale

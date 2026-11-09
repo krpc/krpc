@@ -11,8 +11,7 @@ LIDAR
 
    .. warning:: Deprecated. Use :func:`SpaceCenter::raycast_distance` instead.
 
-   Provides RPCs to interact with the
-   `LiDAR <https://github.com/nullprofile/LaserDist>`_ mod.
+   Provides functionality to interact with the LiDAR mod.
 
    .. function:: LIDAR(krpc::Client& client)
 

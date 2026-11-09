@@ -537,7 +537,7 @@ AutoPilot
       .. note::
 
          When disabled, only :meth:`AutoPilot.getMaxAngularVelocity()` limits the angular velocity. Not
-         applied when the Ferram Aerospace Research mod is installed.
+         applied when Ferram Aerospace Research is installed.
 
    .. method:: double getPitchYawAttenuationAngle()
 

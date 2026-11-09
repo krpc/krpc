@@ -112,6 +112,9 @@ SpaceCenter service
   * :breaking:`Breaking` Rename ``ConfigNode.GetValues`` and ``ConfigNode.GetNodes`` to ``ConfigNode.FindValues`` and ``ConfigNode.FindNodes`` (:issue:`1261`)
 
 * :breaking:`Breaking` Make ``MapFilterType`` a flags enumeration, and change ``MapFilterType.All`` from -1 to 32767 (:issue:`1311`)
+* Fix setting a ``PartField`` skipping the callbacks the right-click menu runs, which left changes such as a B9PartSwitch subtype switch without effect (:issue:`1314`)
+* Support the curved solar panels from Near Future Solar in ``SolarPanel`` (:issue:`1314`)
+* Include the cost of part modules, such as fairing panels and TweakScale's scaling, in ``Part.Cost`` (:issue:`1314`)
 
 
 InfernalRobotics service

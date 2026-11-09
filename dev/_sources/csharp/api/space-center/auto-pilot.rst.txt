@@ -497,7 +497,7 @@ AutoPilot
       .. note::
 
          When disabled, only :prop:`AutoPilot.MaxAngularVelocity` limits the angular velocity. Not
-         applied when the Ferram Aerospace Research mod is installed.
+         applied when Ferram Aerospace Research is installed.
 
    .. property:: double PitchYawAttenuationAngle { get; set; }
 

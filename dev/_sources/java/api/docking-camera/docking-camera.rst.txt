@@ -8,8 +8,7 @@ DockingCamera
 
 .. type:: public class DockingCamera
 
-   This service provides functionality to interact with
-   `Docking Camera (KURS) <https://spacedock.info/mod/1542>`_.
+   Provides functionality to interact with Docking Camera (KURS).
 
    .. method:: boolean getAvailable()
 

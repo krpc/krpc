@@ -9,8 +9,7 @@ DockingCamera
 .. namespace:: krpc::services
 .. class:: DockingCamera : public krpc::Service
 
-   This service provides functionality to interact with
-   `Docking Camera (KURS) <https://spacedock.info/mod/1542>`_.
+   Provides functionality to interact with Docking Camera (KURS).
 
    .. function:: DockingCamera(krpc::Client& client)
 

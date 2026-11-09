@@ -2090,7 +2090,7 @@ Throws an exception if staging is locked.</p>
 <dd><p>Returns <code class="docutils literal notranslate"><span class="pre">True</span></code> if the given action group is enabled.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>group</strong> (<em>int</em>) – A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the <a class="reference external" href="https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/">Extended Action Groups mod</a> is installed.</p>
+<dd class="field-odd"><p><strong>group</strong> (<em>int</em>) – A number between 0 and 9 inclusive, or between 0 and 250 inclusive when Extended Action Groups is installed.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>bool</p>
@@ -2108,8 +2108,7 @@ Throws an exception if staging is locked.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>group</strong> (<em>int</em>) – <p>A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the <a class="reference external" href="https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/">Extended Action Groups mod</a> is installed.</p>
-</p></li>
+<li><p><strong>group</strong> (<em>int</em>) – A number between 0 and 9 inclusive, or between 0 and 250 inclusive when Extended Action Groups is installed.</p></li>
 <li><p><strong>state</strong> (<em>bool</em>)</p></li>
 </ul>
 </dd>
@@ -2125,8 +2124,7 @@ Throws an exception if staging is locked.</p>
 <dd><p>Toggles the state of the given action group.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>group</strong> (<em>int</em>) – <p>A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the <a class="reference external" href="https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/">Extended Action Groups mod</a> is installed.</p>
-</p>
+<dd class="field-odd"><p><strong>group</strong> (<em>int</em>) – A number between 0 and 9 inclusive, or between 0 and 250 inclusive when Extended Action Groups is installed.</p>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-even"><p>Flight</p>
@@ -2142,8 +2140,7 @@ Each entry identifies the part, the part module, and the action’s name and ide
 Returns an empty list if no actions are assigned to the group.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>group</strong> (<em>int</em>) – <p>A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the <a class="reference external" href="https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/">Extended Action Groups mod</a> is installed.</p>
-</p>
+<dd class="field-odd"><p><strong>group</strong> (<em>int</em>) – A number between 0 and 9 inclusive, or between 0 and 250 inclusive when Extended Action Groups is installed.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>list(<a class="reference internal" href="#SpaceCenter.ActionGroupAction" title="SpaceCenter.ActionGroupAction"><code class="xref py py-class docutils literal notranslate"><span class="pre">ActionGroupAction</span></code></a>)</p>
@@ -2155,7 +2152,7 @@ Returns an empty list if no actions are assigned to the group.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>For stock action groups, the assignments are read from each part action directly.
-When the Extended Action Groups mod is installed, the assignments are queried from
+When Extended Action Groups is installed, the assignments are queried from
 the mod instead, so that actions assigned to its additional groups are included.</p>
 </div>
 </dd></dl>
@@ -2330,7 +2327,7 @@ Obtained by calling <a class="reference internal" href="#SpaceCenter.Control.get
 <span class="sig-name descname"><span class="pre">module</span></span><a class="headerlink" href="#SpaceCenter.ActionGroupAction.module" title="Link to this definition">#</a></dt>
 <dd><p>The part module that the action belongs to. Returns <code class="docutils literal notranslate"><span class="pre">None</span></code> for a
 part-level action that is not associated with a module. This only occurs when
-the Extended Action Groups mod is installed, as it can assign actions defined
+Extended Action Groups is installed, as it can assign actions defined
 directly on a part, rather than on one of its modules, to an action group.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>

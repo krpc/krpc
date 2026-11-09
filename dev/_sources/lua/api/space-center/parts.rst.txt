@@ -301,11 +301,7 @@ Part
 
       .. note::
 
-         The name tag part module is provided by
-         `KSPCommunityPartModules <https://github.com/KSPModdingLibs/KSPCommunityPartModules>`_
-         0.5 or later, or by
-         `kOS <https://forum.kerbalspaceprogram.com/topic/165628-ksp-112x-kos-v1400-kos-scriptable-autopilot-system/>`_,
-         which shares this string.
+         Requires KSPCommunityPartModules 0.5 or later, or kOS, which share one name tag.
 
    .. attribute:: flag_url: string
 
@@ -331,7 +327,7 @@ Part
 
    .. attribute:: cost: number
 
-      The cost of the part, in units of funds.
+      The cost of the part with its resources full, in units of funds.
 
       :Attribute: Read-only, cannot be set
 
@@ -971,7 +967,7 @@ Part
 
       .. note::
 
-         Not available when the Ferram Aerospace Research mod is installed.
+         Not available when Ferram Aerospace Research is installed.
 
    .. method:: drag(reference_frame: SpaceCenter.ReferenceFrame): Tuple
 
@@ -983,7 +979,7 @@ Part
 
       .. note::
 
-         Not available when the Ferram Aerospace Research mod is installed.
+         Not available when Ferram Aerospace Research is installed.
 
    .. method:: center_of_buoyancy(reference_frame: SpaceCenter.ReferenceFrame): Tuple
 
@@ -1117,8 +1113,7 @@ Part
 
    .. attribute:: has_real_fuels_tank: boolean
 
-      Whether the part is a fuel tank managed by
-      `RealFuels <https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/>`_.
+      Whether the part is a fuel tank managed by RealFuels.
       The remaining properties in this section are only available when it is.
 
       :Attribute: Read-only, cannot be set
@@ -1131,6 +1126,10 @@ Part
 
       :Attribute: Read-only, cannot be set
 
+      .. note::
+
+         Requires RealFuels.
+
    .. attribute:: boiloff_rate: number
 
       The rate at which the tank's cryogenic contents are boiling off, in kilograms per
@@ -1142,6 +1141,10 @@ Part
       if the part is not a RealFuels fuel tank (see :attr:`SpaceCenter.Part.has_real_fuels_tank`).
 
       :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         Requires RealFuels.
 
 
 
@@ -1294,6 +1297,10 @@ Module
 .. class:: PartField
 
    A field of a part module. Obtained by calling :attr:`SpaceCenter.Module.field_list`.
+
+   .. note::
+
+      Setting a field runs the callbacks that the right-click menu of the part runs.
 
    .. attribute:: module: SpaceCenter.Module
 
@@ -2441,11 +2448,15 @@ Engine
 
       Whether the engine has a recognized thrust reverser. This is ``True`` for
       stock engines with a thrust reverser (such as the J-33 "Wheesley" and
-      J-90 "Goliath" turbofan engines) and for selected mod engines. It is
+      J-90 "Goliath" turbofan engines) and for supported mod engines. It is
       ``False`` for engines whose reverser is not recognized, as KSP provides no
       standard way to detect one.
 
       :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         Recognizes the thrust reversers of Firespitter and KerbalActuators.
 
    .. attribute:: thrust_reversed: boolean
 
@@ -2465,8 +2476,7 @@ Engine
 
    .. attribute:: has_real_fuels: boolean
 
-      Whether the engine is managed by
-      `RealFuels <https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/>`_.
+      Whether the engine is managed by RealFuels.
       The remaining properties in this section are only available when it is.
 
       :Attribute: Read-only, cannot be set
@@ -2479,6 +2489,10 @@ Engine
 
       :Attribute: Read-only, cannot be set
 
+      .. note::
+
+         Requires RealFuels.
+
    .. attribute:: ignition_resources: Map
 
       The resources the engine consumes each time it ignites, keyed by resource name, with
@@ -2488,6 +2502,10 @@ Engine
 
       :Attribute: Read-only, cannot be set
 
+      .. note::
+
+         Requires RealFuels.
+
    .. attribute:: has_ullage: boolean
 
       Whether the engine's propellant is subject to ullage, so that it must be settled
@@ -2495,6 +2513,10 @@ Engine
       managed by RealFuels (see :attr:`SpaceCenter.Engine.has_real_fuels`).
 
       :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         Requires RealFuels.
 
    .. attribute:: propellant_stability: number
 
@@ -2504,6 +2526,10 @@ Engine
       by RealFuels (see :attr:`SpaceCenter.Engine.has_real_fuels`).
 
       :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         Requires RealFuels.
 
    .. attribute:: propellant_reliability: number
 
@@ -2515,6 +2541,10 @@ Engine
 
       :Attribute: Read-only, cannot be set
 
+      .. note::
+
+         Requires RealFuels.
+
    .. attribute:: pressure_fed: boolean
 
       Whether the engine is fed by tank pressure rather than by a pump, and so needs to
@@ -2523,6 +2553,10 @@ Engine
 
       :Attribute: Read-only, cannot be set
 
+      .. note::
+
+         Requires RealFuels.
+
    .. attribute:: has_feed_pressure: boolean
 
       Whether the tanks feeding the engine supply the pressure it needs. Always
@@ -2530,6 +2564,10 @@ Engine
       engine is not managed by RealFuels (see :attr:`SpaceCenter.Engine.has_real_fuels`).
 
       :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         Requires RealFuels.
 
 
 
@@ -2609,6 +2647,10 @@ Experiment
 .. class:: Experiment
 
    Obtained by calling :attr:`SpaceCenter.Part.experiment`.
+
+   .. note::
+
+      Includes the experiments of DMagic's DMModuleScienceAnimateGeneric.
 
    .. attribute:: part: SpaceCenter.Part
 
@@ -2777,7 +2819,10 @@ Fairing
 .. class:: Fairing
 
    A fairing. Obtained by calling :attr:`SpaceCenter.Part.fairing`.
-   Supports both stock fairings, and those from the ProceduralFairings mod.
+
+   .. note::
+
+      Includes the fairings of ProceduralFairings.
 
    .. attribute:: part: SpaceCenter.Part
 
@@ -2955,6 +3000,10 @@ Parachute
 .. class:: Parachute
 
    A parachute. Obtained by calling :attr:`SpaceCenter.Part.parachute`.
+
+   .. note::
+
+      Includes the parachutes of RealChute.
 
    .. attribute:: part: SpaceCenter.Part
 
@@ -4125,6 +4174,10 @@ Solar Panel
 .. class:: SolarPanel
 
    A solar panel. Obtained by calling :attr:`SpaceCenter.Part.solar_panel`.
+
+   .. note::
+
+      Includes the curved solar panels of Near Future Solar.
 
    .. attribute:: part: SpaceCenter.Part
 

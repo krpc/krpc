@@ -8,8 +8,7 @@ RemoteTech
 
 .. module:: RemoteTech
 
-This service provides functionality to interact with
-`RemoteTech <https://forum.kerbalspaceprogram.com/topic/139167-111-remotetech-v199-2020-12-19/>`_.
+Provides functionality to interact with RemoteTech.
 
 
 .. attribute:: available

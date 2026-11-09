@@ -568,8 +568,7 @@ Flight
 
          The position, velocity, rotation and angular velocity arguments, and the returned
          torque, are all expressed in reference frame :class:`ReferenceFrame`. When
-         `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/>`_
-         is installed the angular velocity argument is ignored.
+         Ferram Aerospace Research is installed the angular velocity argument is ignored.
          Atmospheric temperature and density are evaluated at the current universal time.
 
          This is the ideal rigid-body aerodynamic torque, summed from the per-part forces
@@ -604,9 +603,8 @@ Flight
          is recommended so that the spatial state has unambiguous inertial semantics.
 
          This is an instantaneous rigid-body result based on the vessel's current parts,
-         drag cubes and control-surface state. When
-         `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/>`_
-         is installed the angular velocity and *ut* arguments are ignored.
+         drag cubes and control-surface state. When Ferram Aerospace Research is installed
+         the angular velocity and *ut* arguments are ignored.
 
    .. attribute:: lift
 
@@ -719,7 +717,7 @@ Flight
 
       .. note::
 
-         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/>`_.
+         Requires Ferram Aerospace Research.
 
    .. attribute:: true_air_speed
 
@@ -795,7 +793,7 @@ Flight
 
       .. note::
 
-         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/>`_.
+         Requires Ferram Aerospace Research.
 
    .. attribute:: drag_coefficient
 
@@ -809,7 +807,7 @@ Flight
 
       .. note::
 
-         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/>`_.
+         Requires Ferram Aerospace Research.
 
    .. attribute:: lift_coefficient
 
@@ -823,7 +821,7 @@ Flight
 
       .. note::
 
-         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/>`_.
+         Requires Ferram Aerospace Research.
 
    .. attribute:: ballistic_coefficient
 
@@ -836,7 +834,7 @@ Flight
 
       .. note::
 
-         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/>`_.
+         Requires Ferram Aerospace Research.
 
    .. attribute:: thrust_specific_fuel_consumption
 
@@ -852,7 +850,7 @@ Flight
 
       .. note::
 
-         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/>`_.
+         Requires Ferram Aerospace Research.
 
 
 

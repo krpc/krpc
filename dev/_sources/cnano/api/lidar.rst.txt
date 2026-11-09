@@ -10,7 +10,7 @@ LIDAR API
    Deprecated. The LIDAR service will be removed in a future release. Use
    :func:`krpc_SpaceCenter_RaycastDistance` instead.
 
-Provides RPCs to interact with the `LiDAR <https://github.com/nullprofile/LaserDist>`_ mod.
+Provides functionality to interact with the `LiDAR <https://github.com/nullprofile/LaserDist>`_ mod.
 
 .. toctree::
    :includehidden:

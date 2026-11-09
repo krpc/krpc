@@ -629,7 +629,7 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
 .. attribute:: far_available
 
-   Whether `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/>`_ is installed.
+   Whether Ferram Aerospace Research is installed.
 
    :Attribute: Read-only, cannot be set
    :rtype: bool
@@ -640,7 +640,7 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
 .. attribute:: real_fuels_available
 
-   Whether `RealFuels <https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/>`_ is installed.
+   Whether RealFuels is installed.
 
    :Attribute: Read-only, cannot be set
    :rtype: bool

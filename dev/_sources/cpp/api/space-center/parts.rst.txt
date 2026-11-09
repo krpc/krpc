@@ -324,11 +324,7 @@ Part
 
       .. note::
 
-         The name tag part module is provided by
-         `KSPCommunityPartModules <https://github.com/KSPModdingLibs/KSPCommunityPartModules>`_
-         0.5 or later, or by
-         `kOS <https://forum.kerbalspaceprogram.com/topic/165628-ksp-112x-kos-v1400-kos-scriptable-autopilot-system/>`_,
-         which shares this string.
+         Requires KSPCommunityPartModules 0.5 or later, or kOS, which share one name tag.
 
    .. function:: std::string flag_url()
    .. function:: void set_flag_url(std::string value)
@@ -358,7 +354,7 @@ Part
 
    .. function:: double cost()
 
-      The cost of the part, in units of funds.
+      The cost of the part with its resources full, in units of funds.
 
    
 
@@ -1040,7 +1036,7 @@ Part
 
       .. note::
 
-         Not available when the Ferram Aerospace Research mod is installed.
+         Not available when Ferram Aerospace Research is installed.
 
    .. function:: std::tuple<double, double, double> drag(ReferenceFrame reference_frame)
 
@@ -1057,7 +1053,7 @@ Part
 
       .. note::
 
-         Not available when the Ferram Aerospace Research mod is installed.
+         Not available when Ferram Aerospace Research is installed.
 
    .. function:: std::tuple<double, double, double> center_of_buoyancy(ReferenceFrame reference_frame)
 
@@ -1217,8 +1213,7 @@ Part
 
    .. function:: bool has_real_fuels_tank()
 
-      Whether the part is a fuel tank managed by
-      `RealFuels <https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/>`_.
+      Whether the part is a fuel tank managed by RealFuels.
       The remaining properties in this section are only available when it is.
 
    
@@ -1231,6 +1226,10 @@ Part
 
    
 
+      .. note::
+
+         Requires RealFuels.
+
    .. function:: double boiloff_rate()
 
       The rate at which the tank's cryogenic contents are boiling off, in kilograms per
@@ -1242,6 +1241,10 @@ Part
       if the part is not a RealFuels fuel tank (see :func:`Part::has_real_fuels_tank`).
 
    
+
+      .. note::
+
+         Requires RealFuels.
 
 
 
@@ -1399,6 +1402,10 @@ Module
 .. class:: PartField
 
    A field of a part module. Obtained by calling :func:`Module::field_list`.
+
+   .. note::
+
+      Setting a field runs the callbacks that the right-click menu of the part runs.
 
    .. function:: Module module()
 
@@ -2653,11 +2660,16 @@ Engine
 
       Whether the engine has a recognized thrust reverser. This is ``true`` for
       stock engines with a thrust reverser (such as the J-33 "Wheesley" and
-      J-90 "Goliath" turbofan engines) and for selected mod engines. It is
+      J-90 "Goliath" turbofan engines) and for supported mod engines. It is
       ``false`` for engines whose reverser is not recognized, as KSP provides no
       standard way to detect one.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Recognizes the thrust reversers of Firespitter and KerbalActuators.
 
    .. function:: bool thrust_reversed()
    .. function:: void set_thrust_reversed(bool value)
@@ -2681,8 +2693,7 @@ Engine
 
    .. function:: bool has_real_fuels()
 
-      Whether the engine is managed by
-      `RealFuels <https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/>`_.
+      Whether the engine is managed by RealFuels.
       The remaining properties in this section are only available when it is.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
@@ -2695,6 +2706,11 @@ Engine
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
+
+      .. note::
+
+         Requires RealFuels.
+
    .. function:: std::map<std::string, double> ignition_resources()
 
       The resources the engine consumes each time it ignites, keyed by resource name, with
@@ -2704,6 +2720,11 @@ Engine
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
+
+      .. note::
+
+         Requires RealFuels.
+
    .. function:: bool has_ullage()
 
       Whether the engine's propellant is subject to ullage, so that it must be settled
@@ -2711,6 +2732,11 @@ Engine
       managed by RealFuels (see :func:`Engine::has_real_fuels`).
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Requires RealFuels.
 
    .. function:: double propellant_stability()
 
@@ -2720,6 +2746,11 @@ Engine
       by RealFuels (see :func:`Engine::has_real_fuels`).
 
       :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires RealFuels.
 
    .. function:: double propellant_reliability()
 
@@ -2731,6 +2762,11 @@ Engine
 
       :Game Scenes: Flight
 
+
+      .. note::
+
+         Requires RealFuels.
+
    .. function:: bool pressure_fed()
 
       Whether the engine is fed by tank pressure rather than by a pump, and so needs to
@@ -2739,6 +2775,11 @@ Engine
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
+
+      .. note::
+
+         Requires RealFuels.
+
    .. function:: bool has_feed_pressure()
 
       Whether the tanks feeding the engine supply the pressure it needs. Always
@@ -2746,6 +2787,11 @@ Engine
       engine is not managed by RealFuels (see :func:`Engine::has_real_fuels`).
 
       :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires RealFuels.
 
 
 
@@ -2825,6 +2871,10 @@ Experiment
 .. class:: Experiment
 
    Obtained by calling :func:`Part::experiment`.
+
+   .. note::
+
+      Includes the experiments of DMagic's DMModuleScienceAnimateGeneric.
 
    .. function:: Part part()
 
@@ -2996,7 +3046,10 @@ Fairing
 .. class:: Fairing
 
    A fairing. Obtained by calling :func:`Part::fairing`.
-   Supports both stock fairings, and those from the ProceduralFairings mod.
+
+   .. note::
+
+      Includes the fairings of ProceduralFairings.
 
    .. function:: Part part()
 
@@ -3187,6 +3240,10 @@ Parachute
 .. class:: Parachute
 
    A parachute. Obtained by calling :func:`Part::parachute`.
+
+   .. note::
+
+      Includes the parachutes of RealChute.
 
    .. function:: Part part()
 
@@ -4519,6 +4576,10 @@ Solar Panel
 .. class:: SolarPanel
 
    A solar panel. Obtained by calling :func:`Part::solar_panel`.
+
+   .. note::
+
+      Includes the curved solar panels of Near Future Solar.
 
    .. function:: Part part()
 

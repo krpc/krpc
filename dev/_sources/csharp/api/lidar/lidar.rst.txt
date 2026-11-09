@@ -10,8 +10,7 @@ LIDAR
 
    .. warning:: Deprecated. Use :meth:`SpaceCenter.RaycastDistance <SpaceCenter.SpaceCenter.RaycastDistance>` instead.
 
-   Provides RPCs to interact with the
-   `LiDAR <https://github.com/nullprofile/LaserDist>`_ mod.
+   Provides functionality to interact with the LiDAR mod.
 
    .. property:: bool Available { get; }
 

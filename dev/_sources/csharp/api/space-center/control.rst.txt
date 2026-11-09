@@ -518,7 +518,7 @@ Control
 
       :parameters:
 
-       * **group** -- A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+       * **group** -- A number between 0 and 9 inclusive, or between 0 and 250 inclusive when Extended Action Groups is installed.
 
       :Game Scenes: Flight
 
@@ -528,7 +528,7 @@ Control
 
       :parameters:
 
-       * **group** -- A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+       * **group** -- A number between 0 and 9 inclusive, or between 0 and 250 inclusive when Extended Action Groups is installed.
 
 
       :Game Scenes: Flight
@@ -539,7 +539,7 @@ Control
 
       :parameters:
 
-       * **group** -- A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+       * **group** -- A number between 0 and 9 inclusive, or between 0 and 250 inclusive when Extended Action Groups is installed.
 
       :Game Scenes: Flight
 
@@ -551,7 +551,7 @@ Control
 
       :parameters:
 
-       * **group** -- A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+       * **group** -- A number between 0 and 9 inclusive, or between 0 and 250 inclusive when Extended Action Groups is installed.
 
       :Game Scenes: Flight
 
@@ -559,7 +559,7 @@ Control
       .. note::
 
          For stock action groups, the assignments are read from each part action directly.
-         When the Extended Action Groups mod is installed, the assignments are queried from
+         When Extended Action Groups is installed, the assignments are queried from
          the mod instead, so that actions assigned to its additional groups are included.
 
    .. function:: Node AddNode(double ut, float prograde = 0.0f, float normal = 0.0f, float radial = 0.0f)
@@ -674,7 +674,7 @@ Control
 
       The part module that the action belongs to. Returns ``null`` for a
       part-level action that is not associated with a module. This only occurs when
-      the Extended Action Groups mod is installed, as it can assign actions defined
+      Extended Action Groups is installed, as it can assign actions defined
       directly on a part, rather than on one of its modules, to an action group.
 
    .. property:: string Name { get; }

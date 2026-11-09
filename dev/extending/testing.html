@@ -594,11 +594,11 @@ built into <code class="docutils literal notranslate"><span class="pre">build/He
 <span class="n">register</span><span class="p">(</span><span class="n">KSP</span><span class="p">(</span><span class="n">mods</span><span class="o">=</span><span class="p">[</span><span class="n">Heatshields</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">build</span><span class="p">,</span> <span class="s2">"Heatshields.zip"</span><span class="p">))]))</span>
 </pre></div>
 </div>
-<p>A mod names the folders it installs into GameData. <code class="docutils literal notranslate"><span class="pre">present</span></code> returns whether the running game
-loaded the mod, or <code class="docutils literal notranslate"><span class="pre">None</span></code> when the mod gives no way to tell. A mod that needs another mod names
-it in <code class="docutils literal notranslate"><span class="pre">requires</span></code>.</p>
+<p>A mod names the folders it installs into GameData, and in <code class="docutils literal notranslate"><span class="pre">files</span></code> any files it puts at the top
+of GameData. <code class="docutils literal notranslate"><span class="pre">present</span></code> returns whether the running game loaded the mod, or <code class="docutils literal notranslate"><span class="pre">None</span></code> when the
+mod gives no way to tell. A mod that needs another mod names it in <code class="docutils literal notranslate"><span class="pre">requires</span></code>.</p>
 <p>Each test class names the mods it requires. Before its <code class="docutils literal notranslate"><span class="pre">setUpClass</span></code> runs, KSP is running with
-exactly those mods:</p>
+exactly those mods and the mods they require:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">krpctools.game.ksp</span><span class="w"> </span><span class="kn">import</span> <span class="n">TestCase</span>
 
 

@@ -324,11 +324,7 @@ Part
 
       .. note::
 
-         The name tag part module is provided by
-         `KSPCommunityPartModules <https://github.com/KSPModdingLibs/KSPCommunityPartModules>`_
-         0.5 or later, or by
-         `kOS <https://forum.kerbalspaceprogram.com/topic/165628-ksp-112x-kos-v1400-kos-scriptable-autopilot-system/>`_,
-         which shares this string.
+         Requires KSPCommunityPartModules 0.5 or later, or kOS, which share one name tag.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Part_FlagURL(krpc_connection_t connection, char * * returnValue, krpc_SpaceCenter_Part_t instance)
    .. function:: krpc_error_t krpc_SpaceCenter_Part_set_FlagURL(krpc_connection_t connection, krpc_SpaceCenter_Part_t instance, const char * value)
@@ -358,7 +354,7 @@ Part
 
    .. function:: krpc_error_t krpc_SpaceCenter_Part_Cost(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_Part_t instance)
 
-      The cost of the part, in units of funds.
+      The cost of the part with its resources full, in units of funds.
 
    
 
@@ -1040,7 +1036,7 @@ Part
 
       .. note::
 
-         Not available when the Ferram Aerospace Research mod is installed.
+         Not available when Ferram Aerospace Research is installed.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Part_Drag(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_Part_t instance, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
@@ -1057,7 +1053,7 @@ Part
 
       .. note::
 
-         Not available when the Ferram Aerospace Research mod is installed.
+         Not available when Ferram Aerospace Research is installed.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Part_CenterOfBuoyancy(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_Part_t instance, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
@@ -1217,8 +1213,7 @@ Part
 
    .. function:: krpc_error_t krpc_SpaceCenter_Part_HasRealFuelsTank(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Part_t instance)
 
-      Whether the part is a fuel tank managed by
-      `RealFuels <https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/>`_.
+      Whether the part is a fuel tank managed by RealFuels.
       The remaining properties in this section are only available when it is.
 
    
@@ -1231,6 +1226,10 @@ Part
 
    
 
+      .. note::
+
+         Requires RealFuels.
+
    .. function:: krpc_error_t krpc_SpaceCenter_Part_BoiloffRate(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_Part_t instance)
 
       The rate at which the tank's cryogenic contents are boiling off, in kilograms per
@@ -1242,6 +1241,10 @@ Part
       if the part is not a RealFuels fuel tank (see :func:`krpc_SpaceCenter_Part_HasRealFuelsTank`).
 
    
+
+      .. note::
+
+         Requires RealFuels.
 
 
 
@@ -1398,6 +1401,10 @@ Module
 .. type:: krpc_SpaceCenter_PartField_t
 
    A field of a part module. Obtained by calling :func:`krpc_SpaceCenter_Module_FieldList`.
+
+   .. note::
+
+      Setting a field runs the callbacks that the right-click menu of the part runs.
 
    .. function:: krpc_error_t krpc_SpaceCenter_PartField_Module(krpc_connection_t connection, krpc_SpaceCenter_Module_t * returnValue, krpc_SpaceCenter_PartField_t instance)
 
@@ -2649,11 +2656,16 @@ Engine
 
       Whether the engine has a recognized thrust reverser. This is ``true`` for
       stock engines with a thrust reverser (such as the J-33 "Wheesley" and
-      J-90 "Goliath" turbofan engines) and for selected mod engines. It is
+      J-90 "Goliath" turbofan engines) and for supported mod engines. It is
       ``false`` for engines whose reverser is not recognized, as KSP provides no
       standard way to detect one.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Recognizes the thrust reversers of Firespitter and KerbalActuators.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_ThrustReversed(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Engine_t instance)
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_set_ThrustReversed(krpc_connection_t connection, krpc_SpaceCenter_Engine_t instance, bool value)
@@ -2677,8 +2689,7 @@ Engine
 
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_HasRealFuels(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Engine_t instance)
 
-      Whether the engine is managed by
-      `RealFuels <https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/>`_.
+      Whether the engine is managed by RealFuels.
       The remaining properties in this section are only available when it is.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
@@ -2691,6 +2702,11 @@ Engine
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
+
+      .. note::
+
+         Requires RealFuels.
+
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_IgnitionResources(krpc_connection_t connection, krpc_dictionary_string_double_t * returnValue, krpc_SpaceCenter_Engine_t instance)
 
       The resources the engine consumes each time it ignites, keyed by resource name, with
@@ -2700,6 +2716,11 @@ Engine
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
+
+      .. note::
+
+         Requires RealFuels.
+
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_HasUllage(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Engine_t instance)
 
       Whether the engine's propellant is subject to ullage, so that it must be settled
@@ -2707,6 +2728,11 @@ Engine
       managed by RealFuels (see :func:`krpc_SpaceCenter_Engine_HasRealFuels`).
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Requires RealFuels.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_PropellantStability(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_Engine_t instance)
 
@@ -2716,6 +2742,11 @@ Engine
       by RealFuels (see :func:`krpc_SpaceCenter_Engine_HasRealFuels`).
 
       :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires RealFuels.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_PropellantReliability(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_Engine_t instance)
 
@@ -2727,6 +2758,11 @@ Engine
 
       :Game Scenes: Flight
 
+
+      .. note::
+
+         Requires RealFuels.
+
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_PressureFed(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Engine_t instance)
 
       Whether the engine is fed by tank pressure rather than by a pump, and so needs to
@@ -2735,6 +2771,11 @@ Engine
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
+
+      .. note::
+
+         Requires RealFuels.
+
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_HasFeedPressure(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Engine_t instance)
 
       Whether the tanks feeding the engine supply the pressure it needs. Always
@@ -2742,6 +2783,11 @@ Engine
       engine is not managed by RealFuels (see :func:`krpc_SpaceCenter_Engine_HasRealFuels`).
 
       :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires RealFuels.
 
 
 
@@ -2821,6 +2867,10 @@ Experiment
 .. type:: krpc_SpaceCenter_Experiment_t
 
    Obtained by calling :func:`krpc_SpaceCenter_Part_Experiment`.
+
+   .. note::
+
+      Includes the experiments of DMagic's DMModuleScienceAnimateGeneric.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Experiment_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_SpaceCenter_Experiment_t instance)
 
@@ -2990,7 +3040,10 @@ Fairing
 .. type:: krpc_SpaceCenter_Fairing_t
 
    A fairing. Obtained by calling :func:`krpc_SpaceCenter_Part_Fairing`.
-   Supports both stock fairings, and those from the ProceduralFairings mod.
+
+   .. note::
+
+      Includes the fairings of ProceduralFairings.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Fairing_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_SpaceCenter_Fairing_t instance)
 
@@ -3181,6 +3234,10 @@ Parachute
 .. type:: krpc_SpaceCenter_Parachute_t
 
    A parachute. Obtained by calling :func:`krpc_SpaceCenter_Part_Parachute`.
+
+   .. note::
+
+      Includes the parachutes of RealChute.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Parachute_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_SpaceCenter_Parachute_t instance)
 
@@ -4508,6 +4565,10 @@ Solar Panel
 .. type:: krpc_SpaceCenter_SolarPanel_t
 
    A solar panel. Obtained by calling :func:`krpc_SpaceCenter_Part_SolarPanel`.
+
+   .. note::
+
+      Includes the curved solar panels of Near Future Solar.
 
    .. function:: krpc_error_t krpc_SpaceCenter_SolarPanel_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_SpaceCenter_SolarPanel_t instance)
 

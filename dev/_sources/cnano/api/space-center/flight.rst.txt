@@ -490,8 +490,7 @@ Flight
 
          The position, velocity, rotation and angular velocity arguments, and the returned
          torque, are all expressed in reference frame :type:`krpc_SpaceCenter_ReferenceFrame_t`. When
-         `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/>`_
-         is installed the angular velocity argument is ignored.
+         Ferram Aerospace Research is installed the angular velocity argument is ignored.
          Atmospheric temperature and density are evaluated at the current universal time.
 
          This is the ideal rigid-body aerodynamic torque, summed from the per-part forces
@@ -528,9 +527,8 @@ Flight
          is recommended so that the spatial state has unambiguous inertial semantics.
 
          This is an instantaneous rigid-body result based on the vessel's current parts,
-         drag cubes and control-surface state. When
-         `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/>`_
-         is installed the angular velocity and *ut* arguments are ignored.
+         drag cubes and control-surface state. When Ferram Aerospace Research is installed
+         the angular velocity and *ut* arguments are ignored.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Flight_Lift(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_Flight_t instance)
 
@@ -625,7 +623,7 @@ Flight
 
       .. note::
 
-         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/>`_.
+         Requires Ferram Aerospace Research.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Flight_TrueAirSpeed(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Flight_t instance)
 
@@ -685,7 +683,7 @@ Flight
 
       .. note::
 
-         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/>`_.
+         Requires Ferram Aerospace Research.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Flight_DragCoefficient(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Flight_t instance)
 
@@ -697,7 +695,7 @@ Flight
 
       .. note::
 
-         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/>`_.
+         Requires Ferram Aerospace Research.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Flight_LiftCoefficient(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Flight_t instance)
 
@@ -709,7 +707,7 @@ Flight
 
       .. note::
 
-         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/>`_.
+         Requires Ferram Aerospace Research.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Flight_BallisticCoefficient(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Flight_t instance)
 
@@ -720,7 +718,7 @@ Flight
 
       .. note::
 
-         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/>`_.
+         Requires Ferram Aerospace Research.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Flight_ThrustSpecificFuelConsumption(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Flight_t instance)
 
@@ -734,7 +732,7 @@ Flight
 
       .. note::
 
-         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/>`_.
+         Requires Ferram Aerospace Research.
 
 
 
