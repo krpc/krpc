@@ -113,6 +113,46 @@ The exception you catch depends on the error:
 * A call made once the connection has closed or failed raises
   :class:`krpc.error.ConnectionError`.
 
+.. _python-client-values:
+
+Values
+------
+
+Procedures take and return values of these types:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Type
+     - Python type
+   * - Integer, floating point number, boolean
+     - ``int``, ``float``, ``bool``
+   * - String, bytes
+     - ``str``, ``bytes``
+   * - Tuple, list, set, dictionary
+     - ``tuple``, ``list``, ``set``, ``dict``
+   * - Class
+     - A remote object, described below
+   * - Enumeration
+     - An ``enum.Enum``, or an ``enum.Flag`` for a flags enumeration
+   * - Structure
+     - A ``NamedTuple``
+   * - Null
+     - ``None``
+
+.. _python-client-flags:
+
+Flags Enumerations
+^^^^^^^^^^^^^^^^^^
+
+A flags enumeration, such as :class:`SpaceCenter.MapFilterType`, holds any combination of its
+values. It is an ``enum.Flag``. You combine values with ``|``, and test for one with ``in``:
+
+.. literalinclude:: /scripts/python/Flags.py
+
+``&``, ``^`` and ``~`` give the other combinations. ``~`` keeps to the values the enumeration
+declares.
+
 Remote Objects
 --------------
 
@@ -138,19 +178,6 @@ range.
 
 .. seealso:: :doc:`/user-guide/object-lifetime` describes how each kind of object behaves in more
              detail.
-
-.. _python-client-flags:
-
-Flags Enumerations
-------------------
-
-A flags enumeration, such as :class:`SpaceCenter.MapFilterType`, holds any combination of its
-values. It is an ``enum.Flag``. You combine values with ``|``, and test for one with ``in``:
-
-.. literalinclude:: /scripts/python/Flags.py
-
-``&``, ``^`` and ``~`` give the other combinations. ``~`` keeps to the values the enumeration
-declares.
 
 .. _python-client-streams:
 

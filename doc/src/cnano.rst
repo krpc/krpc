@@ -316,6 +316,48 @@ The :ref:`compilation options <cnano-client-compilation-options>` can instead ex
 assertion or call a handler on each error from a procedure. The functions that open a connection,
 :func:`krpc_connect` and :func:`krpc_disconnect` always return the error code.
 
+.. _cnano-client-values:
+
+Values
+------
+
+Procedures take and return values of these types:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Type
+     - C type
+   * - Integer
+     - ``int32_t``, ``int64_t``, ``uint32_t``, ``uint64_t``
+   * - Floating point number, boolean
+     - ``float``, ``double``, ``bool``
+   * - String, bytes
+     - ``char *``, :type:`krpc_bytes_t`
+   * - Tuple, list, set, dictionary
+     - A generated ``struct``, such as ``krpc_list_string_t``
+   * - Class
+     - A remote object, described below
+   * - Enumeration
+     - A ``typedef enum``
+   * - Structure
+     - A generated ``struct``
+   * - Null
+     - ``NULL`` for an argument, and a ``bool`` set for a result
+
+.. _cnano-client-flags:
+
+Flags Enumerations
+^^^^^^^^^^^^^^^^^^
+
+A flags enumeration, such as :type:`krpc_SpaceCenter_MapFilterType_t`, holds any combination of
+its values. You combine values with ``|``, and test for one with ``&``:
+
+.. literalinclude:: /scripts/cnano/Flags.c
+   :start-after: [docs]
+   :end-before: [/docs]
+   :dedent:
+
 Remote Objects
 --------------
 
@@ -341,19 +383,6 @@ itself reads normally, but a call on one of its parts fails with
 
 .. seealso:: :doc:`/user-guide/object-lifetime` describes how each kind of object behaves in more
              detail.
-
-.. _cnano-client-flags:
-
-Flags Enumerations
-------------------
-
-A flags enumeration, such as :type:`krpc_SpaceCenter_MapFilterType_t`, holds any combination of
-its values. You combine values with ``|``, and test for one with ``&``:
-
-.. literalinclude:: /scripts/cnano/Flags.c
-   :start-after: [docs]
-   :end-before: [/docs]
-   :dedent:
 
 Server Side Functions
 ---------------------

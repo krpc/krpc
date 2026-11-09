@@ -146,6 +146,50 @@ The standard Java exceptions are unchecked. The exception classes of the service
 :type:`~krpc.client.RPCException`, which is checked. Every remote procedure declares
 ``throws RPCException``, and connecting declares ``throws IOException``.
 
+.. _java-client-values:
+
+Values
+------
+
+Procedures take and return values of these types:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Type
+     - Java type
+   * - Integer
+     - ``int``, ``long``, and ``int`` or ``long`` bit for bit for an unsigned integer
+   * - Floating point number, boolean
+     - ``float``, ``double``, ``boolean``
+   * - String, bytes
+     - ``String``, ``byte[]``
+   * - Tuple
+     - A tuple of ``org.javatuples``, such as ``Pair``
+   * - List, set, dictionary
+     - ``java.util.List``, ``Set``, ``Map``
+   * - Class
+     - A remote object, described below
+   * - Enumeration
+     - An ``enum``, or a class of constants for a flags enumeration
+   * - Structure
+     - A class with a getter for each field
+   * - Null
+     - ``null``, with the boxed type of a primitive
+
+.. _java-client-flags:
+
+Flags Enumerations
+^^^^^^^^^^^^^^^^^^
+
+A flags enumeration, such as :type:`~krpc.client.services.SpaceCenter.MapFilterType`, holds any
+combination of its values. It is a class of constants, which you combine with ``or`` and test for
+one with ``contains``:
+
+.. literalinclude:: /scripts/java/Flags.java
+
+``and``, ``xor`` and ``andNot`` give the other combinations of two values.
+
 Remote Objects
 --------------
 
@@ -174,19 +218,6 @@ comes back into range.
 
 .. seealso:: :doc:`/user-guide/object-lifetime` describes how each kind of object behaves in more
              detail.
-
-.. _java-client-flags:
-
-Flags Enumerations
-------------------
-
-A flags enumeration, such as :type:`~krpc.client.services.SpaceCenter.MapFilterType`, holds any
-combination of its values. It is a class of constants, which you combine with ``or`` and test for
-one with ``contains``:
-
-.. literalinclude:: /scripts/java/Flags.java
-
-``and``, ``xor`` and ``andNot`` give the other combinations of two values.
 
 .. _java-client-streams:
 
