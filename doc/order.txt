@@ -3065,6 +3065,11 @@ RasterPropMonitor.Monitor.Pages
 RasterPropMonitor.Monitor.ActivePage
 RasterPropMonitor.Monitor.Buttons
 RasterPropMonitor.Monitor.PressButton
+RasterPropMonitor.Monitor.PageButtons
+RasterPropMonitor.Monitor.PressPageButton
+RasterPropMonitor.Monitor.CaptureButton
+RasterPropMonitor.Monitor.ReleaseCapture
+RasterPropMonitor.Monitor.CapturedButtonPressed
 RasterPropMonitor.Monitor.Display
 RasterPropMonitor.Monitor.ScreenWidth
 RasterPropMonitor.Monitor.ScreenHeight

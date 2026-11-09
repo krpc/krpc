@@ -478,6 +478,81 @@ class TestMonitorIVA(MonitorTestCase):
         self.assertIn("- HOME RPM v" + self.version, other.text.split("\n"))
 
 
+# The page buttons of RPM's bundled MFD, and the global buttons it does not use for pages
+PAGE_BUTTONS = (
+    ["buttonR%d" % i for i in range(1, 8)]
+    + ["button_%s" % b for b in "ABCDEFG"]
+    + ["button_STBY"]
+)
+
+
+class TestPageButtons(MonitorTestCase):
+    def tearDown(self):
+        for button in PAGE_BUTTONS:
+            self.monitor.release_capture(button)
+        self.monitor.active_page = "home"
+
+    def test_page_buttons(self):
+        self.assertCountEqual(PAGE_BUTTONS, self.monitor.page_buttons)
+
+    def test_press_page_button(self):
+        # The NAV button selects the map page
+        self.monitor.press_page_button("buttonR1")
+        self.assertEqual("map", self.monitor.active_page)
+        # A button with two pages shows one, then the other
+        self.monitor.press_page_button("buttonR2")
+        self.assertEqual("orbit", self.monitor.active_page)
+        self.monitor.press_page_button("buttonR2")
+        self.assertEqual("orbitgraphical", self.monitor.active_page)
+
+    def test_press_page_button_unknown(self):
+        for button in ("buttonR8", "button_UP", "krpcNoSuchButton"):
+            with self.assertRaises(ValueError):
+                self.monitor.press_page_button(button)
+
+    def test_capture(self):
+        self.monitor.capture_button("buttonR1", "krpc")
+        self.assertCountEqual(PAGE_BUTTONS, self.monitor.page_buttons)
+        with self.monitor.captured_button_pressed("buttonR1") as captured:
+            with captured.condition:
+                self.monitor.press_page_button("buttonR1")
+                self.assertTrue(captured.wait(5))
+        self.assertEqual("krpc", self.monitor.active_page)
+        # The other buttons are RPM's
+        self.monitor.press_page_button("buttonR3")
+        self.assertEqual("targetcam", self.monitor.active_page)
+
+    def test_capture_other_page(self):
+        # A captured button can show any page, here one of RPM's
+        self.monitor.capture_button("buttonR1", "orbit")
+        self.monitor.press_page_button("buttonR1")
+        self.assertEqual("orbit", self.monitor.active_page)
+
+    def test_capture_one_monitor(self):
+        self.monitor.capture_button("buttonR1", "krpc")
+        other = self.monitors[1]
+        other.press_page_button("buttonR1")
+        self.assertEqual("map", other.active_page)
+        other.active_page = "home"
+
+    def test_release(self):
+        self.monitor.capture_button("buttonR1", "krpc")
+        self.monitor.release_capture("buttonR1")
+        with self.monitor.captured_button_pressed("buttonR1") as captured:
+            with captured.condition:
+                self.monitor.press_page_button("buttonR1")
+                self.assertFalse(captured.wait(0.5))
+        self.assertEqual("map", self.monitor.active_page)
+        # Releasing a button that is not captured does nothing
+        self.monitor.release_capture("buttonR1")
+
+    def test_capture_invalid(self):
+        with self.assertRaises(ValueError):
+            self.monitor.capture_button("button_UP", "krpc")
+        with self.assertRaises(ValueError):
+            self.monitor.capture_button("buttonR1", "krpcNoSuchPage")
+
+
 def png_size(image):
     return struct.unpack(">II", image[16:24])
 
@@ -741,6 +816,18 @@ class TestDisplay(MonitorTestCase):
     def test_named_display_empty_name(self):
         with self.assertRaises(ValueError):
             self.rpm.display(self.vessel, " ")
+
+    def test_capture_kept_when_iva_rebuilt(self):
+        # KSP builds new buttons, and the capture is applied to them
+        self.monitor.capture_button("buttonR1", "krpc")
+        self.leave_iva()
+        self.enter_iva()
+        self.monitor.active_page = "home"
+        self.monitor.press_page_button("buttonR1")
+        self.assertEqual("krpc", self.monitor.active_page)
+        self.monitor.release_capture("buttonR1")
+        self.monitor.press_page_button("buttonR1")
+        self.assertEqual("map", self.monitor.active_page)
 
     def test_kept_when_iva_rebuilt(self):
         self.display.text = "Kept"

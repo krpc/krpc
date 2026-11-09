@@ -7,6 +7,7 @@ using KRPC.Service.StdLib;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
 using UnityEngine;
+using ButtonAPI = KRPC.RasterPropMonitor.API.Button;
 using MonitorAPI = KRPC.RasterPropMonitor.API.Monitor;
 using PageAPI = KRPC.RasterPropMonitor.API.Page;
 
@@ -95,6 +96,15 @@ namespace KRPC.RasterPropMonitor
         }
 
         InternalModule Find (InternalModel model)
+        {
+            return Find (model, propID, index);
+        }
+
+        /// <summary>
+        /// The monitor module with the given place among the monitor modules of a prop, or
+        /// null if there is none.
+        /// </summary>
+        internal static InternalModule Find (InternalModel model, int propID, int index)
         {
             var prop = model.props.FirstOrDefault (p => p.propID == propID);
             if (prop == null)
@@ -248,6 +258,88 @@ namespace KRPC.RasterPropMonitor
             if (Time.frameCount == frame)
                 throw new YieldException<Action> (() => ReleaseButton (id, frame));
             MonitorAPI.GlobalButtonRelease (StartedMonitor, id);
+        }
+
+        ButtonCaptures Captures {
+            get { return ButtonCaptures.Of (part.InternalPart.flightID, propID, index); }
+        }
+
+        /// <summary>
+        /// The names of the prop's buttons that select the monitor's pages, e.g.
+        /// <c>buttonR1</c>. A captured button is one of them.
+        /// </summary>
+        [KRPCProperty]
+        public IList<string> PageButtons {
+            get { return Captures.PageButtons (StartedMonitor); }
+        }
+
+        /// <summary>
+        /// Press and release a page button, as the player does. The release is on the next
+        /// frame. A captured button shows the page the script chose.
+        /// Throws an exception if the button does not select the monitor's pages.
+        /// </summary>
+        /// <param name="name">The name of the button, from <see cref="PageButtons"/>.</param>
+        [KRPCMethod]
+        public void PressPageButton (string name)
+        {
+            var button = Captures.PageButton (StartedMonitor, name);
+            if (button == null)
+                throw new ArgumentException ("The monitor has no page button named " + name, nameof (name));
+            ButtonAPI.MouseDown (button);
+            int frame = Time.frameCount;
+            throw new YieldException<Action> (() => ReleasePageButton (button, frame));
+        }
+
+        static void ReleasePageButton (Component button, int frame)
+        {
+            if (Time.frameCount == frame)
+                throw new YieldException<Action> (() => ReleasePageButton (button, frame));
+            if (button != null)
+                ButtonAPI.MouseUp (button);
+        }
+
+        /// <summary>
+        /// Take a page button from Raster Prop Monitor. A press of the button then shows the
+        /// given page, such as the <c>krpc</c> page of the monitor's own display, in place of
+        /// the pages Raster Prop Monitor assigns it, and fires <see cref="CapturedButtonPressed"/>.
+        /// The capture lasts while KSP builds the IVA again, but is not saved with the game.
+        /// Throws an exception if the button does not select the monitor's pages, or the
+        /// monitor has no page with the name.
+        /// </summary>
+        /// <param name="name">The name of the button, from <see cref="PageButtons"/>.</param>
+        /// <param name="page">The name of the page to show.</param>
+        [KRPCMethod]
+        public void CaptureButton (string name, string page)
+        {
+            var monitor = StartedMonitor;
+            var captures = Captures;
+            if (!captures.PageButtons (monitor).Contains (name))
+                throw new ArgumentException ("The monitor has no page button named " + name, nameof (name));
+            if (!MonitorAPI.Pages (monitor).Cast<object> ().Any (p => PageAPI.Name (p) == page))
+                throw new ArgumentException ("The monitor has no page named " + page, nameof (page));
+            captures.Capture (monitor, name, page);
+        }
+
+        /// <summary>
+        /// Give a captured page button back to Raster Prop Monitor.
+        /// </summary>
+        /// <param name="name">The name of the button.</param>
+        [KRPCMethod]
+        public void ReleaseCapture (string name)
+        {
+            Captures.Release (name);
+        }
+
+        /// <summary>
+        /// An event that fires when the player presses a captured page button.
+        /// The event lasts until it is removed.
+        /// </summary>
+        /// <param name="name">The name of the button.</param>
+        [KRPCMethod]
+        public KRPC.Service.Messages.Event CapturedButtonPressed (string name)
+        {
+            var captures = Captures;
+            return Display.CountEvent (() => captures.Presses (name));
         }
 
         /// <summary>

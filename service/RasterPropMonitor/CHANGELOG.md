@@ -5,4 +5,5 @@
   monitors (#1335)
 - Add screen pages that a script draws and whose button presses it answers, with an optional
   Module Manager patch that gives every RPM screen one (#1335)
+- Add page button captures, so a press of an RPM page button shows a script's page (#1335)
 - Add PNG and JPEG images from RPM's external cameras, which a stream turns into video (#424)

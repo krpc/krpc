@@ -41,6 +41,7 @@
     </Compile>
     <Compile Include="Addon.cs" />
     <Compile Include="API.cs" />
+    <Compile Include="ButtonCaptures.cs" />
     <Compile Include="Computer.cs" />
     <Compile Include="Display.cs" />
     <Compile Include="DisplayState.cs" />

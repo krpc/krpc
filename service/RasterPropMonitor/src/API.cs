@@ -91,6 +91,16 @@ namespace KRPC.RasterPropMonitor
             public static Action<object> Cleanup;
         }
 
+        public static class Button
+        {
+            public static Type Type;
+            public static Func<object, IList> PageTriggers;
+            public static Func<object, List<Action>> ClickHandlers;
+            public static Func<object, Delegate> TriggerSelector;
+            public static Action<object> MouseDown;
+            public static Action<object> MouseUp;
+        }
+
         public static class Page
         {
             public static Func<object, string> Name;
@@ -189,6 +199,13 @@ namespace KRPC.RasterPropMonitor
             Camera.Render = Method<Func<object, RenderTexture, float, float, bool>> (flying, "Render");
             Camera.Cameras = Field<UnityEngine.Camera []> (flying, "cameraObject");
             Camera.Cleanup = Method<Action<object>> (flying, "CleanupCameraObjects");
+
+            var button = Button.Type = Type (assembly, "JSI.SmarterButton");
+            Button.PageTriggers = Field<IList> (button, "pageTriggers");
+            Button.ClickHandlers = Field<List<Action>> (button, "clickHandlers");
+            Button.TriggerSelector = Field<Delegate> (Type (assembly, "JSI.SmarterButton+PageTriggerSet"), "selector");
+            Button.MouseDown = Method<Action<object>> (button, "OnMouseDown");
+            Button.MouseUp = Method<Action<object>> (button, "OnMouseUp");
 
             var page = Type (assembly, "JSI.MonitorPage");
             Page.Name = Field<string> (page, "name");

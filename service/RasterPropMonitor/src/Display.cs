@@ -116,7 +116,7 @@ namespace KRPC.RasterPropMonitor
         }
 
         // An event that fires on each update in which the count has grown
-        static KRPC.Service.Messages.Event CountEvent (Func<int> count)
+        internal static KRPC.Service.Messages.Event CountEvent (Func<int> count)
         {
             var last = count ();
             return new Event (() => {
