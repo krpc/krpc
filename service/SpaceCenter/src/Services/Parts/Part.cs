@@ -193,11 +193,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The cost of the part, in units of funds.
+        /// The cost of the part with its resources full, in units of funds.
         /// </summary>
         [KRPCProperty]
         public double Cost {
-            get { return InternalPart.partInfo.cost; }
+            get {
+                var cost = InternalPart.partInfo.cost;
+                return cost + InternalPart.GetModuleCosts (cost, ModifierStagingSituation.CURRENT);
+            }
         }
 
         /// <summary>

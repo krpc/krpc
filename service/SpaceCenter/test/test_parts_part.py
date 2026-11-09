@@ -341,7 +341,8 @@ class TestPartsPart(TestCase):
     def test_fairing(self):
         part = self.parts.with_name("fairingSize1")[0]
         self.assertEqual("fairingSize1", part.name)
-        self.assertEqual(300, part.cost)
+        # The base cost plus the cost of the fairing panels
+        self.assertAlmostEqual(318.70, part.cost, places=2)
         self.assertEqual(self.vessel, part.vessel)
         self.assertEqual("mk1-3pod", part.parent.name)
         self.assertEqual([], part.children)
