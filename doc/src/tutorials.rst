@@ -13,3 +13,4 @@ These tutorials walk through complete scripts that fly vessels and use the featu
    tutorials/docking-guidance
    tutorials/user-interface
    tutorials/drawing
+   tutorials/raster-prop-monitor

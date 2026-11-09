@@ -24,12 +24,14 @@ CONFIG = "pyrightconfig.json"
 # (path under doc/src/scripts, pyright rule) pairs that are expected and harmless:
 # - DockingGuidance.py imports numpy, which the test does not install, and
 #   passes 1 to curses' window.keypad, which typeshed declares as taking a bool.
+# - CameraVideo.py imports Pillow, which the test does not install.
 # - SwitchModes.py adds a handler's exception to a string. In a server side
 #   function the handler binds the exception's message, which is a string.
 ALLOWED = {
     ("user-guide/server-side-functions/SwitchModes.py", "reportOperatorIssue"),
     ("tutorials/docking-guidance/DockingGuidance.py", "reportMissingImports"),
     ("tutorials/docking-guidance/DockingGuidance.py", "reportArgumentType"),
+    ("tutorials/raster-prop-monitor/CameraVideo.py", "reportMissingImports"),
 }
 
 OPTIONAL_ARG = re.compile(
