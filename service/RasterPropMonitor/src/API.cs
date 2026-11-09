@@ -1,8 +1,10 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using KRPC.Utils;
+using UnityEngine;
 using Logger = KRPC.Utils.Logger;
 
 namespace KRPC.RasterPropMonitor
@@ -49,6 +51,44 @@ namespace KRPC.RasterPropMonitor
         // StringProcessorFormatter
         static Func<IFormatProvider> formatProvider;
 
+        // The members a Monitor reaches
+        public static class Monitor
+        {
+            public static Type Type;
+            public static Func<object, IList> Pages;
+            public static Func<object, object> ActivePage;
+            public static Action<object, object> PageButtonClick;
+            public static Action<object, int> GlobalButtonClick;
+            public static Action<object, int> GlobalButtonRelease;
+            public static Func<object, string> GlobalButtons;
+            public static Func<object, int> ScreenWidth;
+            public static Func<object, int> ScreenHeight;
+            public static Func<object, int> ScreenPixelWidth;
+            public static Func<object, int> ScreenPixelHeight;
+            public static Func<object, int> LetterWidth;
+            public static Func<object, int> LetterHeight;
+            public static Func<object, bool> StartupComplete;
+            public static Func<object, RenderTexture> ScreenTexture;
+            public static Func<object, object> TextRenderer;
+            public static Func<global::Part, bool> ShouldUpdate;
+            public static Func<object, PartModule> Computer;
+            public static Action<object> FillScreenBuffer;
+            public static Action<object> RenderScreen;
+            public static Action<object> UpdateVariables;
+        }
+
+        public static class Page
+        {
+            public static Func<object, string> Name;
+            public static Func<object, string> ProcessedText;
+            public static Func<object, string> TextOverlay;
+            public static Func<object, Color> DefaultColor;
+            public static Func<object, int> ScreenXMin;
+            public static Func<object, int> ScreenYMin;
+            public static Func<object, string> Text;
+            public static Func<object, Dictionary<char, Rect>> FontCharacters;
+        }
+
         public static void Load ()
         {
             IsAvailable = false;
@@ -88,6 +128,8 @@ namespace KRPC.RasterPropMonitor
             if (formatProvider == null)
                 missing.Add ("StringProcessorFormatter.fp");
 
+            LoadMonitor (assembly);
+
             if (missing.Count > 0) {
                 Logger.WriteLine ("Load API: " + assemblyName + " members not found: " +
                                   string.Join (", ", missing.ToArray ()) + "; skipping", Logger.Severity.Error);
@@ -95,6 +137,41 @@ namespace KRPC.RasterPropMonitor
             }
             IsAvailable = true;
             Logger.WriteLine ("Load API: Successfully loaded " + assemblyName + " version " + assembly.GetName ().Version);
+        }
+
+        static void LoadMonitor (System.Reflection.Assembly assembly)
+        {
+            var monitor = Monitor.Type = Type (assembly, "JSI.RasterPropMonitor");
+            Monitor.Pages = Field<IList> (monitor, "pages");
+            Monitor.ActivePage = Field<object> (monitor, "activePage");
+            Monitor.PageButtonClick = Method<Action<object, object>> (monitor, "PageButtonClick");
+            Monitor.GlobalButtonClick = Method<Action<object, int>> (monitor, "GlobalButtonClick");
+            Monitor.GlobalButtonRelease = Method<Action<object, int>> (monitor, "GlobalButtonRelease");
+            Monitor.GlobalButtons = Field<string> (monitor, "globalButtons");
+            Monitor.ScreenWidth = Field<int> (monitor, "screenWidth");
+            Monitor.ScreenHeight = Field<int> (monitor, "screenHeight");
+            Monitor.ScreenPixelWidth = Field<int> (monitor, "screenPixelWidth");
+            Monitor.ScreenPixelHeight = Field<int> (monitor, "screenPixelHeight");
+            Monitor.LetterWidth = Field<int> (monitor, "fontLetterWidth");
+            Monitor.LetterHeight = Field<int> (monitor, "fontLetterHeight");
+            Monitor.StartupComplete = Field<bool> (monitor, "startupComplete");
+            Monitor.ScreenTexture = Field<RenderTexture> (monitor, "screenTexture");
+            Monitor.TextRenderer = Field<object> (monitor, "textRenderer");
+            Monitor.ShouldUpdate = Method<Func<global::Part, bool>> (Type (assembly, "JSI.JUtil"), "RasterPropMonitorShouldUpdate");
+            Monitor.Computer = Field<PartModule> (monitor, "rpmComp");
+            Monitor.FillScreenBuffer = Method<Action<object>> (monitor, "FillScreenBuffer");
+            Monitor.RenderScreen = Method<Action<object>> (monitor, "RenderScreen");
+            Monitor.UpdateVariables = Method<Action<object>> (computerType, "UpdateVariables");
+
+            var page = Type (assembly, "JSI.MonitorPage");
+            Page.Name = Field<string> (page, "name");
+            Page.ProcessedText = Field<string> (page, "ProcessedText");
+            Page.TextOverlay = Field<string> (page, "textOverlay");
+            Page.DefaultColor = Field<Color> (page, "defaultColor");
+            Page.ScreenXMin = Field<int> (page, "screenXMin");
+            Page.ScreenYMin = Field<int> (page, "screenYMin");
+            Page.Text = Field<string> (page, "text");
+            Page.FontCharacters = Field<Dictionary<char, Rect>> (Type (assembly, "JSI.TextRenderer"), "fontCharacters");
         }
 
         static Type Type (System.Reflection.Assembly assembly, string name)
@@ -232,6 +309,29 @@ namespace KRPC.RasterPropMonitor
             for (int i = 0; i < lines.Length; i++)
                 lines [i] = FormatLine (computer, lines [i]);
             return string.Join ("\n", lines);
+        }
+
+        /// <summary>
+        /// The names of the variables in page text, in order, as the page's formatters read
+        /// them.
+        /// </summary>
+        public static IList<string> VariableNames (string text)
+        {
+            var names = new List<string> ();
+            if (text == null)
+                return names;
+            foreach (var line in text.Split ('\n')) {
+                if (line.IndexOf (variableListSeparator, StringComparison.Ordinal) < 0)
+                    continue;
+                var tokens = line.Split (new [] { variableListSeparator }, StringSplitOptions.RemoveEmptyEntries);
+                if (tokens.Length != 2)
+                    continue;
+                foreach (var name in tokens [1].Split ((char [])null, StringSplitOptions.RemoveEmptyEntries)) {
+                    if (!names.Contains (name))
+                        names.Add (name);
+                }
+            }
+            return names;
         }
 
         // A line of page text, as StringProcessorFormatter formats it

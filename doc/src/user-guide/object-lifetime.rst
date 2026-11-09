@@ -141,6 +141,9 @@ Infernal Robotics servo, a LaserDist laser, a docking camera, a SCANsat scanner 
 Monitor computer are destroyed once their part is destroyed, or once the part loses the module that
 provides them.
 
+A Raster Prop Monitor monitor is a prop in its part's IVA, which KSP builds only for the active
+vessel. It is not loaded while its part has no IVA, and works again once the vessel is active.
+
 An Infernal Robotics servo group is identified by its vessel and the group's name. Renaming a
 group destroys every object for it, exactly as renaming a kerbal does, and the group has to be
 obtained again under the new name.

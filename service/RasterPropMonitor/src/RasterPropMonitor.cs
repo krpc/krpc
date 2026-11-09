@@ -62,6 +62,25 @@ namespace KRPC.RasterPropMonitor
                 .ToList ();
         }
 
+        /// <summary>
+        /// The monitors in the IVAs of a vessel's parts.
+        /// Throws an exception if the vessel is not the active vessel.
+        /// </summary>
+        /// <param name="vessel">The active vessel.</param>
+        /// <remarks>
+        /// KSP builds IVAs only for the active vessel.
+        /// </remarks>
+        [KRPCProcedure (GameScene = GameScene.Flight)]
+        public static IList<Monitor> Monitors (SpaceCenter.Services.Vessel vessel)
+        {
+            CheckAPI ();
+            if (ReferenceEquals (vessel, null))
+                throw new ArgumentNullException (nameof (vessel));
+            if (vessel.InternalVessel != FlightGlobals.ActiveVessel)
+                throw new ArgumentException ("The vessel is not the active vessel", nameof (vessel));
+            return Monitor.Of (vessel.InternalVessel);
+        }
+
         // A computer on the vessel, through which RPM reaches the vessel's persistent variables
         static PartModule VesselComputer (SpaceCenter.Services.Vessel vessel)
         {
