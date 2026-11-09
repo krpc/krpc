@@ -311,6 +311,19 @@ class RealFuels(Mod):
         return conn.space_center.real_fuels_available
 
 
+class B9PartSwitch(_PartMod):
+    """Switches part subtypes, which changes their resources and mass. The archive is the
+    part module alone, and the overlay adds a part that uses it."""
+
+    name = "B9PartSwitch"
+    source = _GITHUB + (
+        "blowfishpro/B9PartSwitch/releases/download/v2.20.0/B9PartSwitch_v2.20.0.zip"
+    )
+    sha256 = "ebf4c01f37a92f3ec0d74a9c653fae707298cf22ab0484c18a0e5670783a2121"
+    folders = ("B9PartSwitch",)
+    part = "b9PartSwitchTest"
+
+
 class _AssemblyMod(Mod):
     """A mod told apart by the major.minor version of its loaded assembly."""
 
@@ -381,6 +394,7 @@ MODS = [
     AGExt,
     FAR,
     RealFuels,
+    B9PartSwitch,
     KSPCommunityPartModules,
     KSPCommunityPartModules04,
     KOS,
