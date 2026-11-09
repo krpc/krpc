@@ -137,9 +137,9 @@ destroyed by their own removal, by the service's ``Clear``, or by a scene change
 to. The server also removes what a client created when that client disconnects.
 
 An object for something carried by a part lives as long as that part. A RemoteTech antenna, an
-Infernal Robotics servo, a LaserDist laser, a docking camera, a SCANsat scanner and a Raster Prop
-Monitor computer are destroyed once their part is destroyed, or once the part loses the module that
-provides them.
+Infernal Robotics servo, a LaserDist laser, a docking camera, a SCANsat scanner, and a Raster
+Prop Monitor computer or external camera are destroyed once their part is destroyed, or once the
+part loses the module that provides them.
 
 A Raster Prop Monitor monitor is a prop in its part's IVA, which KSP builds only for the active
 vessel. It is not loaded while its part has no IVA, and works again once the vessel is active.

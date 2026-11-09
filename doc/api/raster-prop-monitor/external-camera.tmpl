@@ -1,0 +1,9 @@
+.. default-domain:: {{ domain.sphinxname }}
+.. highlight:: {{ domain.highlight }}
+{{ domain.currentmodule('RasterPropMonitor') }}
+{% import domain.macros as macros with context %}
+
+External Camera
+===============
+
+{{ macros.class(services['RasterPropMonitor'].classes['ExternalCamera']) }}

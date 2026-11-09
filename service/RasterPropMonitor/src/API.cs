@@ -77,6 +77,20 @@ namespace KRPC.RasterPropMonitor
             public static Action<object> UpdateVariables;
         }
 
+        public static class Camera
+        {
+            public static Type SelectorType;
+            public static Func<object, string> Prefix;
+            public static Func<object, int> Current;
+            public static Func<object, float> MinFoV;
+            public static Func<object, float> MaxFoV;
+            public static Type FlyingCameraType;
+            public static Func<object, string, float, bool> PointCamera;
+            public static Func<object, RenderTexture, float, float, bool> Render;
+            public static Func<object, UnityEngine.Camera []> Cameras;
+            public static Action<object> Cleanup;
+        }
+
         public static class Page
         {
             public static Func<object, string> Name;
@@ -164,6 +178,17 @@ namespace KRPC.RasterPropMonitor
             Monitor.FillScreenBuffer = Method<Action<object>> (monitor, "FillScreenBuffer");
             Monitor.RenderScreen = Method<Action<object>> (monitor, "RenderScreen");
             Monitor.UpdateVariables = Method<Action<object>> (computerType, "UpdateVariables");
+
+            var selector = Camera.SelectorType = Type (assembly, "JSI.JSIExternalCameraSelector");
+            Camera.Prefix = Field<string> (selector, "cameraIDPrefix");
+            Camera.Current = Field<int> (selector, "current");
+            Camera.MinFoV = Field<float> (selector, "cameraFoVMin");
+            Camera.MaxFoV = Field<float> (selector, "cameraFoVMax");
+            var flying = Camera.FlyingCameraType = Type (assembly, "JSI.FlyingCamera");
+            Camera.PointCamera = Method<Func<object, string, float, bool>> (flying, "PointCamera");
+            Camera.Render = Method<Func<object, RenderTexture, float, float, bool>> (flying, "Render");
+            Camera.Cameras = Field<UnityEngine.Camera []> (flying, "cameraObject");
+            Camera.Cleanup = Method<Action<object>> (flying, "CleanupCameraObjects");
 
             var page = Type (assembly, "JSI.MonitorPage");
             Page.Name = Field<string> (page, "name");

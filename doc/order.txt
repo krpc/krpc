@@ -3045,6 +3045,7 @@ RasterPropMonitor.RemoveGlobalPersistentVariable
 RasterPropMonitor.GlobalPersistentVariableChanged
 RasterPropMonitor.Monitors
 RasterPropMonitor.Display
+RasterPropMonitor.Cameras
 RasterPropMonitor.Computer.Part
 RasterPropMonitor.Computer.PersistentVariable
 RasterPropMonitor.Computer.SetPersistentVariable
@@ -3086,6 +3087,13 @@ RasterPropMonitor.Display.Clear
 RasterPropMonitor.Display.Shown
 RasterPropMonitor.Display.ButtonPressed
 RasterPropMonitor.Display.ButtonReleased
+RasterPropMonitor.ExternalCamera
+RasterPropMonitor.ExternalCamera.Part
+RasterPropMonitor.ExternalCamera.Name
+RasterPropMonitor.ExternalCamera.MinFoV
+RasterPropMonitor.ExternalCamera.MaxFoV
+RasterPropMonitor.ExternalCamera.FoV
+RasterPropMonitor.ExternalCamera.Image
 Debug
 Debug.SetCircularOrbit
 Debug.SetOrbit

@@ -1,5 +1,6 @@
 import os
 import struct
+import time
 import unittest
 import zlib
 
@@ -10,6 +11,8 @@ CRAFT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "craft")
 # RPM's patches give the Mk1 lander can a computer, and leave the fuel tank without one
 POD = "landerCabinSmall"
 TANK = "fuelTankSmallFlat"
+# RPM's radial camera part, two of which sit on the root pod as ExtCam1 and ExtCam2
+CAMERA = "JSIPrimitiveExternalCamera.v2"
 
 
 class RasterPropMonitorTestCase(TestCase):
@@ -473,6 +476,101 @@ class TestMonitorIVA(MonitorTestCase):
         other.active_page = "home"
         self.wait(0.1)
         self.assertIn("- HOME RPM v" + self.version, other.text.split("\n"))
+
+
+def png_size(image):
+    return struct.unpack(">II", image[16:24])
+
+
+class TestExternalCamera(RasterPropMonitorTestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.cameras = sorted(
+            cls.rpm.cameras(cls.vessel), key=lambda camera: camera.name
+        )
+
+    def tearDown(self):
+        for camera in self.cameras:
+            camera.fo_v = camera.max_fo_v
+
+    def test_cameras(self):
+        self.assertEqual(
+            ["ExtCam1", "ExtCam2"], [camera.name for camera in self.cameras]
+        )
+        parts = self.vessel.parts.with_name(CAMERA)
+        self.assertCountEqual(parts, [camera.part for camera in self.cameras])
+
+    def test_field_of_view(self):
+        camera = self.cameras[0]
+        self.assertEqual(5, camera.min_fo_v)
+        self.assertEqual(60, camera.max_fo_v)
+        self.assertEqual(60, camera.fo_v)
+        camera.fo_v = 30
+        self.assertEqual(30, camera.fo_v)
+        # A value outside the camera's range is clamped
+        camera.fo_v = 1
+        self.assertEqual(5, camera.fo_v)
+        camera.fo_v = 100
+        self.assertEqual(60, camera.fo_v)
+
+    def test_image(self):
+        # The flight camera is on, as the cameras render in any camera mode
+        image = self.cameras[0].image(320, 240)
+        self.assertEqual(b"\x89PNG\r\n\x1a\n", image[:8])
+        self.assertEqual((320, 240), png_size(image))
+
+    def test_images_differ(self):
+        # The cameras face different ways
+        first, second = (camera.image(160, 120) for camera in self.cameras)
+        self.assertNotEqual(first, second)
+
+    def test_image_field_of_view(self):
+        camera = self.cameras[0]
+        wide = camera.image(160, 120)
+        camera.fo_v = camera.min_fo_v
+        self.assertNotEqual(wide, camera.image(160, 120))
+
+    def test_image_size(self):
+        for width, height in ((0, 10), (10, 0), (-1, 10)):
+            with self.assertRaises(ValueError):
+                self.cameras[0].image(width, height)
+
+    def test_image_jpeg(self):
+        jpeg = self.rpm.ImageFormat.jpeg
+        image = self.cameras[0].image(320, 240, jpeg)
+        self.assertEqual(b"\xff\xd8\xff", image[:3])
+        self.assertEqual((320, 240), jpeg_size(image))
+
+    def test_image_quality(self):
+        camera = self.cameras[0]
+        jpeg = self.rpm.ImageFormat.jpeg
+        small, large = (camera.image(320, 240, jpeg, quality) for quality in (10, 95))
+        self.assertLess(len(small), len(large))
+
+    def test_image_quality_range(self):
+        jpeg = self.rpm.ImageFormat.jpeg
+        for quality in (0, 101):
+            with self.assertRaises(ValueError):
+                self.cameras[0].image(10, 10, jpeg, quality)
+        # PNG ignores the quality
+        image = self.cameras[0].image(10, 10, quality=0)
+        self.assertEqual(b"\x89PNG\r\n\x1a\n", image[:8])
+
+    def test_image_stream(self):
+        # A stream at a rate is a video of the camera
+        frames = []
+        jpeg = self.rpm.ImageFormat.jpeg
+        stream = self.conn.add_stream(self.cameras[0].image, 160, 120, jpeg)
+        stream.rate = 10
+        stream.add_callback(frames.append)
+        try:
+            time.sleep(0.5)
+            count = len(frames)
+            time.sleep(2)
+            self.assertAlmostEqual(20, len(frames) - count, delta=4)
+        finally:
+            stream.remove()
 
 
 def jpeg_size(data):

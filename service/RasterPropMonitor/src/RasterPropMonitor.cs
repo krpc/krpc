@@ -7,9 +7,8 @@ using KRPC.Service.Attributes;
 namespace KRPC.RasterPropMonitor
 {
     /// <summary>
-    /// This service provides the variables of
-    /// <a href="https://github.com/FirstPersonKSP/RasterPropMonitor">Raster Prop Monitor</a>,
-    /// which the props in an IVA show and the switches set.
+    /// This service provides the IVA screens, variables and external cameras of
+    /// <a href="https://github.com/FirstPersonKSP/RasterPropMonitor">Raster Prop Monitor</a>.
     /// </summary>
     /// <remarks>
     /// A persistent variable is a number a script and the props share: a prop shows it, and a
@@ -96,6 +95,19 @@ namespace KRPC.RasterPropMonitor
             if (string.IsNullOrEmpty (name) || name.Trim ().Length == 0)
                 throw new ArgumentException ("The name is empty", nameof (name));
             return new Display (DisplayState.Of (vessel.InternalVessel.id, name.Trim ()));
+        }
+
+        /// <summary>
+        /// The external cameras on a vessel's parts.
+        /// </summary>
+        /// <param name="vessel">The vessel.</param>
+        [KRPCProcedure (GameScene = GameScene.Flight)]
+        public static IList<ExternalCamera> Cameras (SpaceCenter.Services.Vessel vessel)
+        {
+            CheckAPI ();
+            if (ReferenceEquals (vessel, null))
+                throw new ArgumentNullException (nameof (vessel));
+            return ExternalCamera.Of (vessel.InternalVessel);
         }
 
         // A computer on the vessel, through which RPM reaches the vessel's persistent variables
