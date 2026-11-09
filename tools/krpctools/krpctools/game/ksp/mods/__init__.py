@@ -388,6 +388,21 @@ class KOS(_PartMod):
     part = "kOSMachine1m"
 
 
+class TweakScaleRescaled(_AssemblyMod):
+    """TweakScale Rescaled, which scales parts and the stats of their modules."""
+
+    name = "TweakScaleRescaled"
+    source = _GITHUB + (
+        "JonnyOThan/TweakScale/releases/download/3.3.2.1/TweakScale-3.3.2.1.zip"
+    )
+    sha256 = "669199d6ec88eab5335ee96fc0066c6ac035edc332e079c627c636078847d38d"
+    folders = ("TweakScale",)
+    files = ("999_Scale_Redist.dll",)
+    requires = ("Harmony",)
+    assembly = "Scale"
+    version = "3.3"
+
+
 MODS = [
     Harmony,
     ClickThroughBlocker,
@@ -415,4 +430,5 @@ MODS = [
     KSPCommunityPartModules,
     KSPCommunityPartModules04,
     KOS,
+    TweakScaleRescaled,
 ]
