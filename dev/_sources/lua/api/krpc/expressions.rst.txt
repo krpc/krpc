@@ -271,6 +271,10 @@ assembled and run.
 
       :param arg: The operand.
 
+      .. note::
+
+         Also takes a value of a flags enumeration, and gives the declared values it does not hold.
+
    .. staticmethod:: negate(arg: KRPC.Expression): KRPC.Expression
 
       Numerical negation, which negates a uint as a long.

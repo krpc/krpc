@@ -1762,6 +1762,21 @@ and the ordering comparisons take numbers only.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">==</span></code>, <code class="docutils literal notranslate"><span class="pre">!=</span></code> and <code class="docutils literal notranslate"><span class="pre">in</span></code> take values of the same kind. Numbers of different types widen to a
 common type.</p></li>
 </ul>
+<p>A function combines and tests the values of a <a class="reference internal" href="#python-client-flags"><span class="std std-ref">flags enumeration</span></a>
+with <code class="docutils literal notranslate"><span class="pre">|</span></code>, <code class="docutils literal notranslate"><span class="pre">&amp;</span></code>, <code class="docutils literal notranslate"><span class="pre">^</span></code>, <code class="docutils literal notranslate"><span class="pre">~</span></code> and <code class="docutils literal notranslate"><span class="pre">in</span></code>:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="n">space_center</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span>
+<span class="n">MapFilterType</span> <span class="o">=</span> <span class="n">space_center</span><span class="o">.</span><span class="n">MapFilterType</span>
+
+<span class="c1"># Stream whether map mode shows both probes and ships, computed on the server</span>
+<span class="n">craft</span> <span class="o">=</span> <span class="n">MapFilterType</span><span class="o">.</span><span class="n">probes</span> <span class="o">|</span> <span class="n">MapFilterType</span><span class="o">.</span><span class="n">ships</span>
+<span class="n">shows_craft</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_stream</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">craft</span> <span class="ow">in</span> <span class="n">space_center</span><span class="o">.</span><span class="n">map_filter</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">shows_craft</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>Both operands are values of one flags enumeration.</p>
 </section>
 <section id="none-and-truth">
 <h3>None and Truth<a class="headerlink" href="#none-and-truth" title="Link to this heading">#</a></h3>
@@ -1771,7 +1786,8 @@ conditional, the other elements of a list, the function’s other returns, or th
 other assignments. Elsewhere, give it a type with an annotation or <code class="docutils literal notranslate"><span class="pre">typing.cast</span></code>, for
 example <code class="docutils literal notranslate"><span class="pre">cast(Optional[str],</span> <span class="pre">None)</span></code>.</p></li>
 <li><p>A condition tests truth as Python does. <code class="docutils literal notranslate"><span class="pre">None</span></code> is false, a number is true when it is not
-zero, and a string, bytes or a collection when it is not empty. Any other value is true.</p></li>
+zero, and a string, bytes or a collection when it is not empty. A flags value is true when it
+holds a flag. Any other value is true.</p></li>
 </ul>
 </section>
 <section id="collections">

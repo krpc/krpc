@@ -702,6 +702,32 @@ and for an object.</p>
 </dd>
 </dl>
 </section>
+<section id="flags">
+<h2>Flags<a class="headerlink" href="#flags" title="Link to this heading">#</a></h2>
+<dl class="simple" id="spec-functions-flags-operations">
+<dt><code class="docutils literal notranslate"><span class="pre">functions-flags-operations</span> <span class="pre">[functions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A function combines two values of a flags enumeration it is passed, with
+<code class="docutils literal notranslate"><span class="pre">KRPC.Expression.Or</span></code>, <code class="docutils literal notranslate"><span class="pre">And</span></code> and <code class="docutils literal notranslate"><span class="pre">ExclusiveOr</span></code>. <code class="docutils literal notranslate"><span class="pre">Not</span></code> gives the declared values
+its operand does not hold, so the difference of two values is <code class="docutils literal notranslate"><span class="pre">And</span></code> of the first
+with <code class="docutils literal notranslate"><span class="pre">Not</span></code> of the second.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-functions-flags-contains">
+<dt><code class="docutils literal notranslate"><span class="pre">functions-flags-contains</span> <span class="pre">[functions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A function tests whether a value of a flags enumeration holds another, as the
+intersection of the two equal to the value tested for.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-functions-flags-stream">
+<dt><code class="docutils literal notranslate"><span class="pre">functions-flags-stream</span> <span class="pre">[functions,</span> <span class="pre">streams]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A stream of a function that combines values of a flags enumeration follows its
+operands.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-functions-flags-refused">
+<dt><code class="docutils literal notranslate"><span class="pre">functions-flags-refused</span> <span class="pre">[functions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Building a function that combines values of two enumerations that differ, or of an
+enumeration that is not a flags enumeration, raises the server’s
+<code class="docutils literal notranslate"><span class="pre">KRPC.InvalidOperationException</span></code>.</p>
+</dd>
+</dl>
+</section>
 </section>
 
 
@@ -755,6 +781,7 @@ and for an object.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#events">Events</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running">Running</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#values">Values</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flags">Flags</a></li>
 </ul>
   </nav></div>
 

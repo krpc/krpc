@@ -1903,6 +1903,28 @@ server.</p></li>
 operators.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&amp;&amp;</span></code> and <code class="docutils literal notranslate"><span class="pre">||</span></code> short-circuit on the server. <code class="docutils literal notranslate"><span class="pre">&amp;</span></code> and <code class="docutils literal notranslate"><span class="pre">|</span></code> evaluate both operands.</p></li>
 </ul>
+<p>A function combines and tests the values of a <a class="reference internal" href="#csharp-client-flags"><span class="std std-ref">flags enumeration</span></a>
+with <code class="docutils literal notranslate"><span class="pre">|</span></code>, <code class="docutils literal notranslate"><span class="pre">&amp;</span></code>, <code class="docutils literal notranslate"><span class="pre">^</span></code>, <code class="docutils literal notranslate"><span class="pre">~</span></code> and <code class="docutils literal notranslate"><span class="pre">HasFlag</span></code>:</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client.Services.SpaceCenter</span><span class="p">;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Program</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Connection</span><span class="p">();</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">spaceCenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">SpaceCenter</span><span class="p">();</span>
+
+<span class="w">        </span><span class="c1">// Stream whether map mode shows both probes and ships, computed on the server</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">craft</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MapFilterType</span><span class="p">.</span><span class="n">Probes</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">MapFilterType</span><span class="p">.</span><span class="n">Ships</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">showsCraft</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">AddStream</span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">spaceCenter</span><span class="p">.</span><span class="n">MapFilter</span><span class="p">.</span><span class="n">HasFlag</span><span class="p">(</span><span class="n">craft</span><span class="p">));</span>
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">showsCraft</span><span class="p">.</span><span class="n">Get</span><span class="p">());</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>In a function, <code class="docutils literal notranslate"><span class="pre">~</span></code> keeps to the declared values. A comparison is the exception, as C# compares
+the numbers of the values. <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">==</span> <span class="pre">~MapFilterType.Debris</span></code> is never true, and
+<code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">==</span> <span class="pre">(MapFilterType.All</span> <span class="pre">&amp;</span> <span class="pre">~MapFilterType.Debris)</span></code> is the comparison you want.</p>
 </section>
 <section id="null-values">
 <h3>Null Values<a class="headerlink" href="#null-values" title="Link to this heading">#</a></h3>

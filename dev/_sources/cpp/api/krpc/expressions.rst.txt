@@ -379,6 +379,10 @@ assembled and run.
 
    
 
+      .. note::
+
+         Also takes a value of a flags enumeration, and gives the declared values it does not hold.
+
    .. function:: static Expression negate(Client& connection, Expression arg)
 
       Numerical negation, which negates a uint as a long.

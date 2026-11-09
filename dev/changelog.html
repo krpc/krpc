@@ -552,6 +552,7 @@
 <li><p>Support flags enumerations, a <code class="docutils literal notranslate"><span class="pre">KRPCEnum</span></code> with <code class="docutils literal notranslate"><span class="pre">[Flags]</span></code> whose values a client can combine (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1311">#1311</a>)</p></li>
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">flags</span></code> to the <code class="docutils literal notranslate"><span class="pre">Enumeration</span></code> message, set for a flags enumeration (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1311">#1311</a>)</p></li>
 <li><p>Combine flags enumeration values in server side functions with <code class="docutils literal notranslate"><span class="pre">KRPC.Expression.And</span></code>, <code class="docutils literal notranslate"><span class="pre">Or</span></code> and <code class="docutils literal notranslate"><span class="pre">ExclusiveOr</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1311">#1311</a>)</p></li>
+<li><p>Take a flags enumeration value in <code class="docutils literal notranslate"><span class="pre">KRPC.Expression.Not</span></code>, which gives the declared values it does not hold (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1313">#1313</a>)</p></li>
 </ul>
 </section>
 <section id="server">
@@ -692,6 +693,7 @@
 <li><p>Target .NET Standard 2.0 in place of .NET Framework 4.7.2, so a .NET 5 or later project uses the package without a compatibility warning (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1274">#1274</a>)</p></li>
 <li><p>Fix .NET Framework programs failing to load <code class="docutils literal notranslate"><span class="pre">System.Memory</span></code> when decoding a nullable value in a collection or structure (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1274">#1274</a>)</p></li>
 <li><p>Generate a flags enumeration with <code class="docutils literal notranslate"><span class="pre">[Flags]</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1311">#1311</a>)</p></li>
+<li><p>Compile <code class="docutils literal notranslate"><span class="pre">~</span></code> and <code class="docutils literal notranslate"><span class="pre">HasFlag</span></code> on flags enumeration values in server side functions (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1313">#1313</a>)</p></li>
 </ul>
 </section>
 <section id="id1">
@@ -860,6 +862,7 @@
 </li>
 <li><p>Support flags enumerations, such as <code class="docutils literal notranslate"><span class="pre">SpaceCenter.MapFilterType</span></code>, as an <code class="docutils literal notranslate"><span class="pre">enum.Flag</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1311">#1311</a>)</p></li>
 <li><p>Raise <code class="docutils literal notranslate"><span class="pre">EncodingError</span></code> for an enumeration result the enumeration does not declare, in place of <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1311">#1311</a>)</p></li>
+<li><p>Compile <code class="docutils literal notranslate"><span class="pre">|</span></code>, <code class="docutils literal notranslate"><span class="pre">&amp;</span></code>, <code class="docutils literal notranslate"><span class="pre">^</span></code>, <code class="docutils literal notranslate"><span class="pre">~</span></code>, <code class="docutils literal notranslate"><span class="pre">in</span></code> and truth tests on flags enumeration values in server side functions (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1313">#1313</a>)</p></li>
 </ul>
 </section>
 <section id="krpctools">

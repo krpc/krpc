@@ -331,6 +331,10 @@ assembled and run.
       :rtype: :class:`Expression`
    
 
+      .. note::
+
+         Also takes a value of a flags enumeration, and gives the declared values it does not hold.
+
    .. staticmethod:: negate(arg)
 
       Numerical negation, which negates a uint as a long.

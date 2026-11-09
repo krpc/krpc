@@ -301,6 +301,10 @@ assembled and run.
       :param Expression arg: The operand.
    
 
+      .. note::
+
+         Also takes a value of a flags enumeration, and gives the declared values it does not hold.
+
    .. method:: static Expression negate(Connection connection, Expression arg)
 
       Numerical negation, which negates a uint as a long.

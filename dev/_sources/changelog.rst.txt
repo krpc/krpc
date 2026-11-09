@@ -74,6 +74,7 @@ Core
 * Support flags enumerations, a ``KRPCEnum`` with ``[Flags]`` whose values a client can combine (:issue:`1311`)
 * Add ``flags`` to the ``Enumeration`` message, set for a flags enumeration (:issue:`1311`)
 * Combine flags enumeration values in server side functions with ``KRPC.Expression.And``, ``Or`` and ``ExclusiveOr`` (:issue:`1311`)
+* Take a flags enumeration value in ``KRPC.Expression.Not``, which gives the declared values it does not hold (:issue:`1313`)
 
 
 Server
@@ -209,6 +210,7 @@ C# client
 * Target .NET Standard 2.0 in place of .NET Framework 4.7.2, so a .NET 5 or later project uses the package without a compatibility warning (:issue:`1274`)
 * Fix .NET Framework programs failing to load ``System.Memory`` when decoding a nullable value in a collection or structure (:issue:`1274`)
 * Generate a flags enumeration with ``[Flags]`` (:issue:`1311`)
+* Compile ``~`` and ``HasFlag`` on flags enumeration values in server side functions (:issue:`1313`)
 
 
 C++ client
@@ -365,6 +367,7 @@ Python client
 
 * Support flags enumerations, such as ``SpaceCenter.MapFilterType``, as an ``enum.Flag`` (:issue:`1311`)
 * Raise ``EncodingError`` for an enumeration result the enumeration does not declare, in place of ``ValueError`` (:issue:`1311`)
+* Compile ``|``, ``&``, ``^``, ``~``, ``in`` and truth tests on flags enumeration values in server side functions (:issue:`1313`)
 
 
 krpctools

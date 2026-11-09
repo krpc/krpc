@@ -391,6 +391,11 @@ assembled and run.
 
       :Game Scenes: All
 
+
+      .. note::
+
+         Also takes a value of a flags enumeration, and gives the declared values it does not hold.
+
    .. function:: static Expression Negate(IConnection connection, Expression arg)
 
       Numerical negation, which negates a uint as a long.

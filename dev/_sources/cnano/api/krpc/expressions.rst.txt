@@ -379,6 +379,10 @@ assembled and run.
 
    
 
+      .. note::
+
+         Also takes a value of a flags enumeration, and gives the declared values it does not hold.
+
    .. function:: krpc_error_t krpc_KRPC_Expression_Negate(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg)
 
       Numerical negation, which negates a uint as a long.
