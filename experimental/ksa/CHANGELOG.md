@@ -19,6 +19,9 @@
     window
   - Fix serial servers failing to start on Linux and macOS, with the native serial port library
     not found
+  - Support KSA v2026.11.10.5801
+- Flight and orbits
+  - **Breaking:** Return the scale height at sea level from `Body.ScaleHeight`
 - Clients
   - Add stubs and documentation for the JavaScript client
   - Add a WebSockets server on port 50001 to the default settings, for the JavaScript client

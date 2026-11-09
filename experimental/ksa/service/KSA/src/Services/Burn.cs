@@ -219,9 +219,12 @@ namespace KRPC.KSA.Services
             get {
                 // As the game's burn editor computes it
                 var orbit = InternalBurn.GetPostBurnPatch ()?.Orbit;
-                if (orbit == null || !Radiation.TryComputeOrbitDoseRate (orbit, orbit.Parent.GetPositionEcl (), orbitDoseAverages, out var rate))
+                if (orbit == null)
                     return (float)double.NaN;
-                return (float)rate.Value ();
+                var dose = Radiation.ComputeOrbitDoseRates (orbit, orbit.Parent.GetPositionEcl (), orbitDoseAverages);
+                if (dose.Status != OrbitDoseStatus.Averaged)
+                    return (float)double.NaN;
+                return (float)dose.Rates.Total.Value ();
             }
         }
 

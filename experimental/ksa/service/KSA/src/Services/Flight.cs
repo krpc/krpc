@@ -240,8 +240,10 @@ namespace KRPC.KSA.Services
             get {
                 // As the game's orbit dose gauge computes it
                 var v = InternalVehicle;
-                if (!Radiation.TryComputeOrbitDoseRates (v, orbitDoseAverages, out var rates))
+                var dose = Radiation.ComputeOrbitDoseRates (v, orbitDoseAverages);
+                if (dose.Status != OrbitDoseStatus.Averaged)
                     return (float)double.NaN;
+                var rates = dose.Rates;
                 var events = ParticleEvents.ComputeDoseRate (v.GetPositionEcl (), null, rates.StarExposure, Universe.GetElapsedSeconds (), doseTerms);
                 return (float)((rates.Total + events).Value ());
             }
@@ -252,7 +254,7 @@ namespace KRPC.KSA.Services
         /// </summary>
         [KRPCProperty]
         public float DynamicPressure {
-            get { return (float)PhysicalAtmosphereReference.GetDynamicPressure (InternalVehicle); }
+            get { return (float)InternalVehicle.ComputeDynamicPressure (); }
         }
 
         /// <summary>

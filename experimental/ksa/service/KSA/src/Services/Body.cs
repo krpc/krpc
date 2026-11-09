@@ -97,8 +97,8 @@ namespace KRPC.KSA.Services
             get { return InternalBody is Astronomical astronomical && astronomical.IsStar (); }
         }
 
-        PhysicalAtmosphereReference Atmosphere {
-            get { return InternalBody.GetAtmosphereReference ()?.Physical; }
+        PhysicalAtmosphere Atmosphere {
+            get { return InternalBody.GetPhysicalAtmosphere (); }
         }
 
         /// <summary>
@@ -128,12 +128,17 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
-        /// The height over which the atmospheric pressure falls by a factor of <c>e</c>, in
-        /// meters. Zero for a body with no atmosphere.
+        /// The height over which the atmospheric pressure falls by a factor of <c>e</c> at
+        /// sea level, in meters. Zero for a body with no atmosphere.
         /// </summary>
         [KRPCProperty]
         public float ScaleHeight {
-            get { return (float)(Atmosphere?.ScaleHeight.InMeters () ?? 0); }
+            get {
+                // Hydrostatic scale height, p / (rho g)
+                if (Atmosphere == null)
+                    return 0;
+                return SeaLevelPressure / (SeaLevelDensity * SurfaceGravity);
+            }
         }
 
         /// <summary>
@@ -144,7 +149,7 @@ namespace KRPC.KSA.Services
         [KRPCMethod]
         public float PressureAt (double altitude)
         {
-            return (float)(Atmosphere?.GetAtmosphericPressureAtAltitude (altitude) ?? 0);
+            return (float)(Atmosphere?.ComputePressureAtAltitude (altitude) ?? 0);
         }
 
         /// <summary>
@@ -155,7 +160,7 @@ namespace KRPC.KSA.Services
         [KRPCMethod]
         public float DensityAt (double altitude)
         {
-            return (float)(Atmosphere?.GetAtmosphericDensityAtAltitude (altitude) ?? 0);
+            return (float)(Atmosphere?.ComputeDensityAtAltitude (altitude) ?? 0);
         }
 
         /// <summary>
@@ -252,7 +257,7 @@ namespace KRPC.KSA.Services
                 if (InternalBody is not Celestial celestial)
                     return new List<string> ();
                 return celestial.BodyTemplate.Locations.OfType<LandmarkReference> ()
-                    .Where (landmark => landmark.IsLaunchPad).Select (landmark => landmark.Id).ToList ();
+                    .Where (landmark => landmark.IsLaunchPad).Select (landmark => landmark.Key).ToList ();
             }
         }
 
@@ -358,7 +363,7 @@ namespace KRPC.KSA.Services
                 var biomes = (InternalBody as Celestial)?.BodyTemplate.BiomesReference;
                 if (biomes == null)
                     return new List<string> ();
-                return biomes.Biomes.Select (biome => biome.Alias).ToList ();
+                return biomes.Biomes.Select (biome => biome.Key).ToList ();
             }
         }
 

@@ -173,8 +173,7 @@ namespace KRPC.KSA.Services
         [KRPCProperty]
         public float AvailableThrust {
             get {
-                var v = InternalVehicle;
-                return v.ComputeActiveThrust (v.PhysicsEnvironment.AtmosphericPressure);
+                return (float)Utils.Engines.Performance (InternalVehicle, fullThrottle: true).thrust;
             }
         }
 

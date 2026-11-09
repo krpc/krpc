@@ -251,7 +251,7 @@ namespace KRPC.KSA.Services
         public void GoOnEva ()
         {
             var seat = Seat ?? throw new InvalidOperationException ("The kitten is not in a seat");
-            if (!EVADoor.PerformEvaForSeat (seat.Part.InternalVehicle, seat.InternalSeat))
+            if (EVADoor.PerformEvaForSeat (seat.Part.InternalVehicle, seat.InternalSeat) != EvaRequest.Queued)
                 throw new InvalidOperationException ("The vehicle has no EVA hatch");
             WaitFor (() => OnEva, "The kitten did not go on EVA", 10);
         }
@@ -269,7 +269,8 @@ namespace KRPC.KSA.Services
         public Vehicle Board ()
         {
             var eva = EvaOrThrow;
-            if (!eva.TryFindBoardTarget (out var host, out var door))
+            var (status, host, door) = eva.FindBoardTarget ();
+            if (status != BoardTargetStatus.Found)
                 throw new InvalidOperationException ("No EVA hatch with a free seat is in range");
             InputEvents.KittenBoardBuffer.Add (new InputEvents.KittenBoardData { Kitten = eva, Host = host, Door = door });
             return WaitFor (() => !OnEva, () => new Vehicle (host), "The kitten did not board the vehicle", 10);
