@@ -11,7 +11,7 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// A solar panel. Obtained by calling <see cref="Part.SolarPanel"/>.
     /// </summary>
     /// <remarks>
-    /// This includes the curved solar panels from Near Future Solar.
+    /// Includes the curved solar panels of Near Future Solar.
     /// </remarks>
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public class SolarPanel : Equatable<SolarPanel>, IGameObjectState

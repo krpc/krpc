@@ -787,7 +787,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         /// <remarks>
         /// When disabled, only <see cref="MaxAngularVelocity"/> limits the angular velocity. Not
-        /// applied when the Ferram Aerospace Research mod is installed.
+        /// applied when Ferram Aerospace Research is installed.
         /// </remarks>
         [KRPCProperty]
         public bool LimitAngularVelocity {

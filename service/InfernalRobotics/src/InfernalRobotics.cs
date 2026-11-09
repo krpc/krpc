@@ -7,8 +7,7 @@ using KRPC.Service.Attributes;
 namespace KRPC.InfernalRobotics
 {
     /// <summary>
-    /// This service provides functionality to interact with
-    /// <a href="https://forum.kerbalspaceprogram.com/topic/184787-infernal-robotics-next/">Infernal Robotics</a>.
+    /// Provides functionality to interact with Infernal Robotics Next.
     /// </summary>
     [KRPCService (Id = 4, GameScene = GameScene.Flight)]
     public static class InfernalRobotics

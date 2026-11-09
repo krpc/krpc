@@ -7,8 +7,7 @@ using KRPC.Utils;
 namespace KRPC.DockingCamera
 {
     /// <summary>
-    /// This service provides functionality to interact with
-    /// <a href="https://spacedock.info/mod/1542">Docking Camera (KURS)</a>.
+    /// Provides functionality to interact with Docking Camera (KURS).
     /// </summary>
     [KRPCService(Id = 11, GameScene = GameScene.All)]
     public static class DockingCamera

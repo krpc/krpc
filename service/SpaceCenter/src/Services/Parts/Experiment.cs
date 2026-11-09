@@ -13,6 +13,9 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// <summary>
     /// Obtained by calling <see cref="Part.Experiment"/>.
     /// </summary>
+    /// <remarks>
+    /// Includes the experiments of DMagic's DMModuleScienceAnimateGeneric.
+    /// </remarks>
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public class Experiment : Equatable<Experiment>, IGameObjectState
     {

@@ -133,11 +133,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// in-game user interface. Throws an exception if no name tag part module is installed.
         /// </summary>
         /// <remarks>
-        /// The name tag part module is provided by
-        /// <a href="https://github.com/KSPModdingLibs/KSPCommunityPartModules">KSPCommunityPartModules</a>
-        /// 0.5 or later, or by
-        /// <a href="https://forum.kerbalspaceprogram.com/topic/165628-ksp-112x-kos-v1400-kos-scriptable-autopilot-system/">kOS</a>,
-        /// which shares this string.
+        /// Requires KSPCommunityPartModules 0.5 or later, or kOS, which share one name tag.
         /// </remarks>
         [KRPCProperty]
         public string Tag {
@@ -1074,7 +1070,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <param name="referenceFrame">The reference frame that the returned
         /// vector is in.</param>
         /// <remarks>
-        /// Not available when the Ferram Aerospace Research mod is installed.
+        /// Not available when Ferram Aerospace Research is installed.
         /// </remarks>
         [KRPCMethod (GameScene = GameScene.Flight)]
         public Tuple3 Lift (ReferenceFrame referenceFrame)
@@ -1092,7 +1088,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <param name="referenceFrame">The reference frame that the returned
         /// vector is in.</param>
         /// <remarks>
-        /// Not available when the Ferram Aerospace Research mod is installed.
+        /// Not available when Ferram Aerospace Research is installed.
         /// </remarks>
         [KRPCMethod (GameScene = GameScene.Flight)]
         public Tuple3 Drag (ReferenceFrame referenceFrame)
@@ -1337,8 +1333,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Whether the part is a fuel tank managed by
-        /// <a href="https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/">RealFuels</a>.
+        /// Whether the part is a fuel tank managed by RealFuels.
         /// The remaining properties in this section are only available when it is.
         /// </summary>
         [KRPCProperty]
@@ -1351,6 +1346,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// draw from (see <see cref="Engine.PressureFed"/>). Throws an exception if the part is
         /// not a RealFuels fuel tank (see <see cref="HasRealFuelsTank"/>).
         /// </summary>
+        /// <remarks>
+        /// Requires RealFuels.
+        /// </remarks>
         [KRPCProperty]
         public bool HighlyPressurized {
             get { return RealFuelsTankModule.HighlyPressurized; }
@@ -1365,6 +1363,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// temperature RealFuels holds down instead, and in the editor. Throws an exception
         /// if the part is not a RealFuels fuel tank (see <see cref="HasRealFuelsTank"/>).
         /// </summary>
+        /// <remarks>
+        /// Requires RealFuels.
+        /// </remarks>
         [KRPCProperty]
         public double BoiloffRate {
             get { return RealFuelsTankModule.BoiloffRate; }

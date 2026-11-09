@@ -8,8 +8,7 @@ using KRPC.Service.Attributes;
 namespace KRPC.KerbalAlarmClock
 {
     /// <summary>
-    /// This service provides functionality to interact with
-    /// <a href="https://forum.kerbalspaceprogram.com/topic/22809-112x-kerbal-alarm-clock-v31300-april-10/">Kerbal Alarm Clock</a>.
+    /// Provides functionality to interact with Kerbal Alarm Clock.
     /// </summary>
     [KRPCService (Id = 5, GameScene = GameScene.All)]
     public static class KerbalAlarmClock
