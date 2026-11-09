@@ -679,6 +679,10 @@ SpaceCenter
 
    The set of things that are visible in map mode.
 
+   .. note::
+
+      The values may be combined.   A flags enumeration. :std:ref:`cpp-client-flags` shows how to combine its values.
+
 
    .. enumerator:: all
 

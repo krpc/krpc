@@ -157,3 +157,5 @@ Mapping the Spec to Python
      - ``threading.Condition``, held by the caller of ``wait``
    * - Interrupting a blocked thread
      - Unsupported, as only the main thread can be interrupted, by ``KeyboardInterrupt``
+   * - Flags enumeration
+     - A ``DocFlag``, an ``enum.Flag``. A ``Flag`` reads a negative number as a complement, so the decoder rejects one

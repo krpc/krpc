@@ -914,6 +914,14 @@ service if it has its <code class="docutils literal notranslate"><span class="pr
 <li><p>The <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/enum">underlying C# type</a> must be an
 <code class="docutils literal notranslate"><span class="pre">int</span></code>.</p></li>
 </ul>
+<p>An enumeration with <code class="docutils literal notranslate"><span class="pre">[Flags]</span></code> is a <em>flags enumeration</em>, whose values a client can combine. A
+value of it is any number holding no bit outside the union of the values it declares. It must
+also satisfy the following criteria:</p>
+<ul class="simple">
+<li><p>It declares a value of 0, such as <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p>Each value is 0, a single bit, or a union of single bits the enumeration declares.</p></li>
+<li><p>No value is negative.</p></li>
+</ul>
 <p><strong>Examples</strong></p>
 <ul>
 <li><p>Declare an enumeration type with two values:</p>
@@ -929,6 +937,18 @@ service if it has its <code class="docutils literal notranslate"><span class="pr
 
 <span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
 <span class="n">state</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">eva</span><span class="o">.</span><span class="n">FlagState</span><span class="o">.</span><span class="n">lowered</span>
+</pre></div>
+</div>
+</li>
+<li><p>Declare a flags enumeration, whose <code class="docutils literal notranslate"><span class="pre">All</span></code> value is the union of the others:</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="na">[Flags]</span>
+<span class="na">[KRPCEnum (Service = "EVA")]</span>
+<span class="k">public</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="n">SuitLights</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">None</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Helmet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Shoulders</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+<span class="w">    </span><span class="n">All</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Helmet</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Shoulders</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 </li>

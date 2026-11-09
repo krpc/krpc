@@ -1561,6 +1561,26 @@ itself reads normally, but a call on one of its parts fails with
 detail.</p>
 </div>
 </section>
+<section id="flags-enumerations">
+<span id="cnano-client-flags"></span><h2>Flags Enumerations<a class="headerlink" href="#flags-enumerations" title="Link to this heading">#</a></h2>
+<p>A flags enumeration, such as <a class="reference internal" href="cnano/api/space-center/space-center.html#c.krpc_SpaceCenter_MapFilterType_t" title="krpc_SpaceCenter_MapFilterType_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_SpaceCenter_MapFilterType_t</span></code></a>, holds any combination of
+its values. You combine values with <code class="docutils literal notranslate"><span class="pre">|</span></code>, and test for one with <code class="docutils literal notranslate"><span class="pre">&amp;</span></code>:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// Show only probes and ships in map mode</span>
+<span class="n">krpc_SpaceCenter_set_MapFilter</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span>
+<span class="w">                               </span><span class="n">KRPC_SPACECENTER_MAPFILTERTYPE_PROBES</span><span class="w"> </span><span class="o">|</span>
+<span class="w">                                   </span><span class="n">KRPC_SPACECENTER_MAPFILTERTYPE_SHIPS</span><span class="p">);</span>
+
+<span class="c1">// Check whether map mode shows debris</span>
+<span class="n">krpc_SpaceCenter_MapFilterType_t</span><span class="w"> </span><span class="n">filter</span><span class="p">;</span>
+<span class="n">krpc_SpaceCenter_MapFilter</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">filter</span><span class="p">);</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">"%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">filter</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">KRPC_SPACECENTER_MAPFILTERTYPE_DEBRIS</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+
+<span class="c1">// Show debris as well</span>
+<span class="n">krpc_SpaceCenter_set_MapFilter</span><span class="p">(</span>
+<span class="w">    </span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">filter</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">KRPC_SPACECENTER_MAPFILTERTYPE_DEBRIS</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
 <section id="server-side-functions">
 <h2>Server Side Functions<a class="headerlink" href="#server-side-functions" title="Link to this heading">#</a></h2>
 <p>A server side function runs inside the game. You build it in your program with the expression
@@ -2151,6 +2171,7 @@ failed to fill in too, and free a call before filling it in again.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calling-remote-procedures">Calling Remote Procedures</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#handling-errors">Handling Errors</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#remote-objects">Remote Objects</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flags-enumerations">Flags Enumerations</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#server-side-functions">Server Side Functions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#streams-and-events">Streams and Events</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deprecated-members">Deprecated Members</a></li>

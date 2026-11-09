@@ -640,92 +640,96 @@ SpaceCenter
 
 
 
-.. type:: public enum MapFilterType
+.. type:: public static final class MapFilterType
 
    The set of things that are visible in map mode.
 
+   .. note::
 
-   .. field:: public MapFilterType ALL
+      The values may be combined.   A flags enumeration. :std:ref:`java-client-flags` shows how to combine its values.
+
+
+   .. field:: public static final MapFilterType ALL
 
       Everything.
 
 
-   .. field:: public MapFilterType NONE
+   .. field:: public static final MapFilterType NONE
 
       Nothing.
 
 
-   .. field:: public MapFilterType DEBRIS
+   .. field:: public static final MapFilterType DEBRIS
 
       Debris.
 
 
-   .. field:: public MapFilterType UNKNOWN
+   .. field:: public static final MapFilterType UNKNOWN
 
       Unknown.
 
 
-   .. field:: public MapFilterType SPACE_OBJECTS
+   .. field:: public static final MapFilterType SPACE_OBJECTS
 
       SpaceObjects.
 
 
-   .. field:: public MapFilterType PROBES
+   .. field:: public static final MapFilterType PROBES
 
       Probes.
 
 
-   .. field:: public MapFilterType ROVERS
+   .. field:: public static final MapFilterType ROVERS
 
       Rovers.
 
 
-   .. field:: public MapFilterType LANDERS
+   .. field:: public static final MapFilterType LANDERS
 
       Landers.
 
 
-   .. field:: public MapFilterType SHIPS
+   .. field:: public static final MapFilterType SHIPS
 
       Ships.
 
 
-   .. field:: public MapFilterType STATIONS
+   .. field:: public static final MapFilterType STATIONS
 
       Stations.
 
 
-   .. field:: public MapFilterType BASES
+   .. field:: public static final MapFilterType BASES
 
       Bases.
 
 
-   .. field:: public MapFilterType EV_AS
+   .. field:: public static final MapFilterType EV_AS
 
       EVAs.
 
 
-   .. field:: public MapFilterType FLAGS
+   .. field:: public static final MapFilterType FLAGS
 
       Flags.
 
 
-   .. field:: public MapFilterType PLANE
+   .. field:: public static final MapFilterType PLANE
 
       Planes.
 
 
-   .. field:: public MapFilterType RELAY
+   .. field:: public static final MapFilterType RELAY
 
       Relays.
 
 
-   .. field:: public MapFilterType SITE
+   .. field:: public static final MapFilterType SITE
 
       Launch Sites.
 
 
-   .. field:: public MapFilterType DEPLOYED_SCIENCE_CONTROLLER
+   .. field:: public static final MapFilterType DEPLOYED_SCIENCE_CONTROLLER
 
       Deployed Science Controllers.
 

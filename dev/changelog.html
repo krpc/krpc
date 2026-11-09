@@ -549,6 +549,9 @@
 <li><p>Fail only the call whose argument the server cannot decode, and run the other calls in the request (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1280">#1280</a>)</p></li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Fail a call with an argument position past the procedure’s last parameter, or with two arguments at one position, in place of ignoring an argument (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1290">#1290</a>)</p></li>
 <li><p>Fix rate limited streams updating at as little as half their rate (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1310">#1310</a>)</p></li>
+<li><p>Support flags enumerations, a <code class="docutils literal notranslate"><span class="pre">KRPCEnum</span></code> with <code class="docutils literal notranslate"><span class="pre">[Flags]</span></code> whose values a client can combine (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1311">#1311</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">flags</span></code> to the <code class="docutils literal notranslate"><span class="pre">Enumeration</span></code> message, set for a flags enumeration (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1311">#1311</a>)</p></li>
+<li><p>Combine flags enumeration values in server side functions with <code class="docutils literal notranslate"><span class="pre">KRPC.Expression.And</span></code>, <code class="docutils literal notranslate"><span class="pre">Or</span></code> and <code class="docutils literal notranslate"><span class="pre">ExclusiveOr</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1311">#1311</a>)</p></li>
 </ul>
 </section>
 <section id="server">
@@ -586,7 +589,7 @@
 <li><p><span class="changelog-marker breaking">Breaking</span> Rename <code class="docutils literal notranslate"><span class="pre">ConfigNode.GetValues</span></code> and <code class="docutils literal notranslate"><span class="pre">ConfigNode.GetNodes</span></code> to <code class="docutils literal notranslate"><span class="pre">ConfigNode.FindValues</span></code> and <code class="docutils literal notranslate"><span class="pre">ConfigNode.FindNodes</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1261">#1261</a>)</p></li>
 </ul>
 </li>
-<li><p><span class="changelog-marker breaking">Breaking</span> Reject a combination of <code class="docutils literal notranslate"><span class="pre">MapFilterType</span></code> values in <code class="docutils literal notranslate"><span class="pre">SpaceCenter.MapFilter</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1280">#1280</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Make <code class="docutils literal notranslate"><span class="pre">MapFilterType</span></code> a flags enumeration, and change <code class="docutils literal notranslate"><span class="pre">MapFilterType.All</span></code> from -1 to 32767 (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1311">#1311</a>)</p></li>
 </ul>
 </section>
 <section id="infernalrobotics-service">
@@ -688,6 +691,7 @@
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">EncodingException</span></code>, thrown when the server returns null for a value that cannot be null (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1269">#1269</a>)</p></li>
 <li><p>Target .NET Standard 2.0 in place of .NET Framework 4.7.2, so a .NET 5 or later project uses the package without a compatibility warning (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1274">#1274</a>)</p></li>
 <li><p>Fix .NET Framework programs failing to load <code class="docutils literal notranslate"><span class="pre">System.Memory</span></code> when decoding a nullable value in a collection or structure (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1274">#1274</a>)</p></li>
+<li><p>Generate a flags enumeration with <code class="docutils literal notranslate"><span class="pre">[Flags]</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1311">#1311</a>)</p></li>
 </ul>
 </section>
 <section id="id1">
@@ -733,6 +737,7 @@
 <li><p><span class="changelog-marker breaking">Breaking</span> Service constructors take the client by reference, as in <code class="docutils literal notranslate"><span class="pre">SpaceCenter</span> <span class="pre">sc(conn)</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1285">#1285</a>)</p></li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Object, stream and event constructors take the client by reference, as in <code class="docutils literal notranslate"><span class="pre">Vessel(conn,</span> <span class="pre">id)</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1286">#1286</a>)</p></li>
 <li><p>Service constructors accept a temporary client, as in <code class="docutils literal notranslate"><span class="pre">SpaceCenter</span> <span class="pre">sc(krpc::connect())</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1286">#1286</a>)</p></li>
+<li><p>Generate the operators <code class="docutils literal notranslate"><span class="pre">|</span></code>, <code class="docutils literal notranslate"><span class="pre">&amp;</span></code>, <code class="docutils literal notranslate"><span class="pre">^</span></code> and <code class="docutils literal notranslate"><span class="pre">~</span></code> for a flags enumeration (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1311">#1311</a>)</p></li>
 </ul>
 </section>
 <section id="java-client">
@@ -770,6 +775,7 @@
 <li><p><span class="changelog-marker breaking">Breaking</span> Return <code class="docutils literal notranslate"><span class="pre">KRPC.getStatus</span></code> as the struct <code class="docutils literal notranslate"><span class="pre">KRPC.ServerStatus</span></code>, with the settings and statistics under <code class="docutils literal notranslate"><span class="pre">getSettings</span></code> and <code class="docutils literal notranslate"><span class="pre">getStatistics</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1244">#1244</a>)</p></li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Leave internal procedures out of the services, such as <code class="docutils literal notranslate"><span class="pre">KRPC.addStream</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1269">#1269</a>)</p></li>
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">Connection.compile</span></code> for a server side function built with the expression API (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1269">#1269</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Generate a flags enumeration, such as <code class="docutils literal notranslate"><span class="pre">SpaceCenter.MapFilterType</span></code>, as a class of constants with <code class="docutils literal notranslate"><span class="pre">or</span></code>, <code class="docutils literal notranslate"><span class="pre">and</span></code>, <code class="docutils literal notranslate"><span class="pre">xor</span></code>, <code class="docutils literal notranslate"><span class="pre">andNot</span></code> and <code class="docutils literal notranslate"><span class="pre">contains</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1311">#1311</a>)</p></li>
 </ul>
 </section>
 <section id="lua-client">
@@ -790,6 +796,7 @@
 <li><p>Fix a <code class="docutils literal notranslate"><span class="pre">nil</span></code> argument dropping the arguments after it (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1278">#1278</a>)</p></li>
 </ul>
 </li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">union</span></code>, <code class="docutils literal notranslate"><span class="pre">intersection</span></code>, <code class="docutils literal notranslate"><span class="pre">difference</span></code> and <code class="docutils literal notranslate"><span class="pre">contains</span></code> to the values of a flags enumeration (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1311">#1311</a>)</p></li>
 </ul>
 </section>
 <section id="python-client">
@@ -851,6 +858,8 @@
 <li><p>Type the functions <code class="docutils literal notranslate"><span class="pre">compile</span></code>, <code class="docutils literal notranslate"><span class="pre">run</span></code>, <code class="docutils literal notranslate"><span class="pre">add_stream</span></code> and <code class="docutils literal notranslate"><span class="pre">add_event</span></code> take, and the <code class="docutils literal notranslate"><span class="pre">KRPC.Expression</span></code> object <code class="docutils literal notranslate"><span class="pre">compile</span></code> returns (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1306">#1306</a>)</p></li>
 </ul>
 </li>
+<li><p>Support flags enumerations, such as <code class="docutils literal notranslate"><span class="pre">SpaceCenter.MapFilterType</span></code>, as an <code class="docutils literal notranslate"><span class="pre">enum.Flag</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1311">#1311</a>)</p></li>
+<li><p>Raise <code class="docutils literal notranslate"><span class="pre">EncodingError</span></code> for an enumeration result the enumeration does not declare, in place of <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1311">#1311</a>)</p></li>
 </ul>
 </section>
 <section id="krpctools">
@@ -892,6 +901,7 @@
 </ul>
 </li>
 <li><p>Name the module of another service a generated Python module imports with <code class="docutils literal notranslate"><span class="pre">--include</span></code>, for a mod whose service uses another mod’s types (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1304">#1304</a>)</p></li>
+<li><p>Support flags enumerations in <code class="docutils literal notranslate"><span class="pre">clientgen</span></code> and <code class="docutils literal notranslate"><span class="pre">docgen</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1311">#1311</a>)</p></li>
 </ul>
 </section>
 </section>

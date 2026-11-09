@@ -275,6 +275,10 @@ assembled and run.
       :rtype: :class:`Expression`
    
 
+      .. note::
+
+         Also takes two values of a flags enumeration, and gives the values they share.
+
    .. staticmethod:: or_(arg0, arg1)
 
       Logical or bitwise or, which evaluates both operands.
@@ -283,6 +287,10 @@ assembled and run.
       :param Expression arg1: The second operand.
       :rtype: :class:`Expression`
    
+
+      .. note::
+
+         Also takes two values of a flags enumeration, and gives their combination.
 
    .. staticmethod:: conditional_and(arg0, arg1)
 
@@ -310,6 +318,10 @@ assembled and run.
       :param Expression arg1: The second operand.
       :rtype: :class:`Expression`
    
+
+      .. note::
+
+         Also takes two values of a flags enumeration, and gives the values in only one of them.
 
    .. staticmethod:: not_(arg)
 

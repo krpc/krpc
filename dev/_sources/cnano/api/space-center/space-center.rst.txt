@@ -854,6 +854,10 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
    The set of things that are visible in map mode.
 
+   .. note::
+
+      The values may be combined.   A flags enumeration. :std:ref:`cnano-client-flags` shows how to combine its values.
+
 
    .. macro:: KRPC_SPACECENTER_MAPFILTERTYPE_ALL
 

@@ -250,6 +250,10 @@ assembled and run.
       :param Expression arg1: The second operand.
    
 
+      .. note::
+
+         Also takes two values of a flags enumeration, and gives the values they share.
+
    .. method:: static Expression or(Connection connection, Expression arg0, Expression arg1)
 
       Logical or bitwise or, which evaluates both operands.
@@ -257,6 +261,10 @@ assembled and run.
       :param Expression arg0: The first operand.
       :param Expression arg1: The second operand.
    
+
+      .. note::
+
+         Also takes two values of a flags enumeration, and gives their combination.
 
    .. method:: static Expression conditionalAnd(Connection connection, Expression arg0, Expression arg1)
 
@@ -281,6 +289,10 @@ assembled and run.
       :param Expression arg0: The first operand.
       :param Expression arg1: The second operand.
    
+
+      .. note::
+
+         Also takes two values of a flags enumeration, and gives the values in only one of them.
 
    .. method:: static Expression not(Connection connection, Expression arg)
 

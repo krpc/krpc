@@ -95,6 +95,9 @@ message Command {
     CompileFunction compile_function = 55;
     ScopeEvent scope_event = 56;
     Declared declared = 57;
+    FlagsUnion flags_union = 58;
+    FlagsContains flags_contains = 59;
+    FlagsDifference flags_difference = 60;
   }
 }
 
@@ -484,6 +487,27 @@ message HashHandle {
 // with the language's equality.
 // Replies with a bool Value.
 message Compare {
+  Value a = 1;
+  Value b = 2;
+}
+
+// Combines two TestService.TestFlags values with the client's union of flags, such as a | b.
+// Replies with the combination as an enum Value.
+message FlagsUnion {
+  Value a = 1;
+  Value b = 2;
+}
+
+// Tests whether a TestService.TestFlags value holds every flag of another, with the client's test
+// for it. Replies with a bool Value.
+message FlagsContains {
+  Value a = 1;
+  Value b = 2;
+}
+
+// Removes the flags of one TestService.TestFlags value from another, such as a & ~b. Replies with
+// the result as an enum Value.
+message FlagsDifference {
   Value a = 1;
   Value b = 2;
 }

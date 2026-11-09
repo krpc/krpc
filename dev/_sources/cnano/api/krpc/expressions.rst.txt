@@ -313,6 +313,10 @@ assembled and run.
 
    
 
+      .. note::
+
+         Also takes two values of a flags enumeration, and gives the values they share.
+
    .. function:: krpc_error_t krpc_KRPC_Expression_Or(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg0, krpc_KRPC_Expression_t arg1)
 
       Logical or bitwise or, which evaluates both operands.
@@ -323,6 +327,10 @@ assembled and run.
        * **arg1** -- The second operand.
 
    
+
+      .. note::
+
+         Also takes two values of a flags enumeration, and gives their combination.
 
    .. function:: krpc_error_t krpc_KRPC_Expression_ConditionalAnd(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg0, krpc_KRPC_Expression_t arg1)
 
@@ -356,6 +364,10 @@ assembled and run.
        * **arg1** -- The second operand.
 
    
+
+      .. note::
+
+         Also takes two values of a flags enumeration, and gives the values in only one of them.
 
    .. function:: krpc_error_t krpc_KRPC_Expression_Not(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg)
 

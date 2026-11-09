@@ -71,6 +71,9 @@ Core
 * Fail only the call whose argument the server cannot decode, and run the other calls in the request (:issue:`1280`)
 * :breaking:`Breaking` Fail a call with an argument position past the procedure's last parameter, or with two arguments at one position, in place of ignoring an argument (:issue:`1290`)
 * Fix rate limited streams updating at as little as half their rate (:issue:`1310`)
+* Support flags enumerations, a ``KRPCEnum`` with ``[Flags]`` whose values a client can combine (:issue:`1311`)
+* Add ``flags`` to the ``Enumeration`` message, set for a flags enumeration (:issue:`1311`)
+* Combine flags enumeration values in server side functions with ``KRPC.Expression.And``, ``Or`` and ``ExclusiveOr`` (:issue:`1311`)
 
 
 Server
@@ -107,7 +110,7 @@ SpaceCenter service
 
   * :breaking:`Breaking` Rename ``ConfigNode.GetValues`` and ``ConfigNode.GetNodes`` to ``ConfigNode.FindValues`` and ``ConfigNode.FindNodes`` (:issue:`1261`)
 
-* :breaking:`Breaking` Reject a combination of ``MapFilterType`` values in ``SpaceCenter.MapFilter`` (:issue:`1280`)
+* :breaking:`Breaking` Make ``MapFilterType`` a flags enumeration, and change ``MapFilterType.All`` from -1 to 32767 (:issue:`1311`)
 
 
 InfernalRobotics service
@@ -205,6 +208,7 @@ C# client
 * Add ``EncodingException``, thrown when the server returns null for a value that cannot be null (:issue:`1269`)
 * Target .NET Standard 2.0 in place of .NET Framework 4.7.2, so a .NET 5 or later project uses the package without a compatibility warning (:issue:`1274`)
 * Fix .NET Framework programs failing to load ``System.Memory`` when decoding a nullable value in a collection or structure (:issue:`1274`)
+* Generate a flags enumeration with ``[Flags]`` (:issue:`1311`)
 
 
 C++ client
@@ -247,6 +251,7 @@ C++ client
 * :breaking:`Breaking` Service constructors take the client by reference, as in ``SpaceCenter sc(conn)`` (:issue:`1285`)
 * :breaking:`Breaking` Object, stream and event constructors take the client by reference, as in ``Vessel(conn, id)`` (:issue:`1286`)
 * Service constructors accept a temporary client, as in ``SpaceCenter sc(krpc::connect())`` (:issue:`1286`)
+* Generate the operators ``|``, ``&``, ``^`` and ``~`` for a flags enumeration (:issue:`1311`)
 
 
 Java client
@@ -281,6 +286,7 @@ Java client
 * :breaking:`Breaking` Return ``KRPC.getStatus`` as the struct ``KRPC.ServerStatus``, with the settings and statistics under ``getSettings`` and ``getStatistics`` (:issue:`1244`)
 * :breaking:`Breaking` Leave internal procedures out of the services, such as ``KRPC.addStream`` (:issue:`1269`)
 * Add ``Connection.compile`` for a server side function built with the expression API (:issue:`1269`)
+* :breaking:`Breaking` Generate a flags enumeration, such as ``SpaceCenter.MapFilterType``, as a class of constants with ``or``, ``and``, ``xor``, ``andNot`` and ``contains`` (:issue:`1311`)
 
 
 Lua client
@@ -300,6 +306,7 @@ Lua client
   * Pass a ``nil`` argument as null, for a parameter that can be null and has no default (:issue:`1278`)
   * Fix a ``nil`` argument dropping the arguments after it (:issue:`1278`)
 
+* Add ``union``, ``intersection``, ``difference`` and ``contains`` to the values of a flags enumeration (:issue:`1311`)
 
 
 Python client
@@ -356,6 +363,8 @@ Python client
 
   * Type the functions ``compile``, ``run``, ``add_stream`` and ``add_event`` take, and the ``KRPC.Expression`` object ``compile`` returns (:issue:`1306`)
 
+* Support flags enumerations, such as ``SpaceCenter.MapFilterType``, as an ``enum.Flag`` (:issue:`1311`)
+* Raise ``EncodingError`` for an enumeration result the enumeration does not declare, in place of ``ValueError`` (:issue:`1311`)
 
 
 krpctools
@@ -396,6 +405,7 @@ krpctools
   * Add ``krpctools.game``, with a pytest plugin and test case classes for testing a mod against a running game (:issue:`1299`)
 
 * Name the module of another service a generated Python module imports with ``--include``, for a mod whose service uses another mod's types (:issue:`1304`)
+* Support flags enumerations in ``clientgen`` and ``docgen`` (:issue:`1311`)
 
 
 v0.7.0

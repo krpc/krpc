@@ -671,6 +671,10 @@ in different orders.</p></li>
 <tr class="row-odd"><td><p>Scoped stream or event</p></td>
 <td><p>A <code class="docutils literal notranslate"><span class="pre">using</span></code> block. <code class="docutils literal notranslate"><span class="pre">Dispose</span></code> calls <code class="docutils literal notranslate"><span class="pre">Remove</span></code>, and ignores a failed connection, as the server removes the stream with the connection and <code class="docutils literal notranslate"><span class="pre">using</span></code> keeps no second exception</p></td>
 </tr>
+<tr class="row-even"><td><p>Flags enumeration</p></td>
+<td><p>An <code class="docutils literal notranslate"><span class="pre">enum</span></code> with <code class="docutils literal notranslate"><span class="pre">[Flags]</span></code>. C# cannot define operators on an <code class="docutils literal notranslate"><span class="pre">enum</span></code>, so <code class="docutils literal notranslate"><span class="pre">~</span></code> sets the undeclared
+bits too</p></td>
+</tr>
 </tbody>
 </table>
 </div>

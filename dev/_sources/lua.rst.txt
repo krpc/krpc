@@ -141,6 +141,18 @@ itself reads normally, but a call on one of its parts raises an error naming
 .. seealso:: :doc:`/user-guide/object-lifetime` describes how each kind of object behaves in more
              detail.
 
+.. _lua-client-flags:
+
+Flags Enumerations
+------------------
+
+A flags enumeration, such as :class:`~SpaceCenter.MapFilterType`, holds any combination of its
+values. You combine values with ``union``, and test for one with ``contains``:
+
+.. literalinclude:: /scripts/lua/Flags.lua
+
+``intersection`` and ``difference`` give the other combinations of two values.
+
 Null Values
 -----------
 

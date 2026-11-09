@@ -1383,6 +1383,35 @@ back into range.</p>
 detail.</p>
 </div>
 </section>
+<section id="flags-enumerations">
+<span id="cpp-client-flags"></span><h2>Flags Enumerations<a class="headerlink" href="#flags-enumerations" title="Link to this heading">#</a></h2>
+<p>A flags enumeration, such as <a class="reference internal" href="cpp/api/space-center/space-center.html#_CPPv4N4krpc8services11SpaceCenter13MapFilterTypeE" title="krpc::services::SpaceCenter::MapFilterType"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">MapFilterType</span></code></a>, holds any
+combination of its values. Its <code class="docutils literal notranslate"><span class="pre">enum</span> <span class="pre">struct</span></code> has the operators <code class="docutils literal notranslate"><span class="pre">|</span></code>, <code class="docutils literal notranslate"><span class="pre">&amp;</span></code>, <code class="docutils literal notranslate"><span class="pre">^</span></code> and <code class="docutils literal notranslate"><span class="pre">~</span></code>, and
+their assignment forms. You combine values with <code class="docutils literal notranslate"><span class="pre">|</span></code>, and test for one with <code class="docutils literal notranslate"><span class="pre">&amp;</span></code>:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc/services/space_center.hpp&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">using</span><span class="w"> </span><span class="n">MapFilterType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="o">::</span><span class="n">services</span><span class="o">::</span><span class="n">SpaceCenter</span><span class="o">::</span><span class="n">MapFilterType</span><span class="p">;</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="o">::</span><span class="n">connect</span><span class="p">();</span>
+<span class="w">  </span><span class="n">krpc</span><span class="o">::</span><span class="n">services</span><span class="o">::</span><span class="n">SpaceCenter</span><span class="w"> </span><span class="n">sc</span><span class="p">(</span><span class="n">conn</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Show only probes and ships in map mode</span>
+<span class="w">  </span><span class="n">sc</span><span class="p">.</span><span class="n">set_map_filter</span><span class="p">(</span><span class="n">MapFilterType</span><span class="o">::</span><span class="n">probes</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">MapFilterType</span><span class="o">::</span><span class="n">ships</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Check whether map mode shows debris</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">filter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sc</span><span class="p">.</span><span class="n">map_filter</span><span class="p">();</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="p">((</span><span class="n">filter</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">MapFilterType</span><span class="o">::</span><span class="n">debris</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">MapFilterType</span><span class="o">::</span><span class="n">debris</span><span class="p">)</span>
+<span class="w">            </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// Show debris as well</span>
+<span class="w">  </span><span class="n">sc</span><span class="p">.</span><span class="n">set_map_filter</span><span class="p">(</span><span class="n">filter</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">MapFilterType</span><span class="o">::</span><span class="n">debris</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">~</span></code> gives the values the enumeration declares that its operand does not hold.</p>
+</section>
 <section id="streaming-data">
 <span id="cpp-client-streams"></span><h2>Streaming Data<a class="headerlink" href="#streaming-data" title="Link to this heading">#</a></h2>
 <p>A common use of kRPC is to read data from the game continuously. The following does so by calling
@@ -2526,6 +2555,7 @@ types, so a container keyed by one needs this:</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calling-remote-procedures">Calling Remote Procedures</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#handling-errors">Handling Errors</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#remote-objects">Remote Objects</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flags-enumerations">Flags Enumerations</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#streaming-data">Streaming Data</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#waiting-for-changes">Waiting for Changes</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#callbacks">Callbacks</a></li>

@@ -738,6 +738,10 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
    The set of things that are visible in map mode.
 
+   .. note::
+
+      The values may be combined.   A flags enumeration. :std:ref:`lua-client-flags` shows how to combine its values.
+
 
    .. data:: all
 

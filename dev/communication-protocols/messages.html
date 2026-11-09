@@ -911,7 +911,8 @@ to its own type.</p></td>
 <li><p>Bytes are left over after a value, or a value is cut short.</p></li>
 <li><p>A <code class="docutils literal notranslate"><span class="pre">TUPLE</span></code>, <code class="docutils literal notranslate"><span class="pre">LIST</span></code>, <code class="docutils literal notranslate"><span class="pre">SET</span></code>, <code class="docutils literal notranslate"><span class="pre">DICTIONARY</span></code> or <code class="docutils literal notranslate"><span class="pre">STRUCT</span></code> message holds an unknown field.</p></li>
 <li><p>A <code class="docutils literal notranslate"><span class="pre">SINT32</span></code>, <code class="docutils literal notranslate"><span class="pre">UINT32</span></code> or <code class="docutils literal notranslate"><span class="pre">ENUMERATION</span></code> value is out of its 32-bit range.</p></li>
-<li><p>An <code class="docutils literal notranslate"><span class="pre">ENUMERATION</span></code> value is one the enumeration does not declare.</p></li>
+<li><p>An <code class="docutils literal notranslate"><span class="pre">ENUMERATION</span></code> value is one the enumeration does not declare. For a flags enumeration, it
+is a value holding a bit outside the union of the values the enumeration declares.</p></li>
 <li><p>A <code class="docutils literal notranslate"><span class="pre">BOOL</span></code> value is not 0 or 1.</p></li>
 <li><p>A <code class="docutils literal notranslate"><span class="pre">TUPLE</span></code> has the wrong number of items.</p></li>
 </ul>
@@ -1223,6 +1224,7 @@ format:</p>
 <span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">documentation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="na">deprecated</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">deprecated_reason</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="na">flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span>
 <span class="p">}</span>
 
 <span class="kd">message</span><span class="w"> </span><span class="nc">EnumerationValue</span><span class="w"> </span><span class="p">{</span>
@@ -1250,6 +1252,9 @@ can be assigned. The fields are:</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">documentation</span></code> - Documentation for the enumeration.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">deprecated</span></code> - Whether the enumeration is deprecated.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">deprecated_reason</span></code> - The reason for the deprecation.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">flags</span></code> - Whether the enumeration is a flags enumeration. A value of one is any combination of
+its values: a number holding no bit outside the union of the values it declares. A value of any
+other enumeration is one of the values it declares.</p></li>
 </ul>
 </section>
 <section id="structures">

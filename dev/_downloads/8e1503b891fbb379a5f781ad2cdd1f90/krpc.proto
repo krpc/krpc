@@ -171,6 +171,7 @@ message Enumeration {
   string documentation = 3;
   bool deprecated = 4;
   string deprecated_reason = 5;
+  bool flags = 6;
 }
 
 message EnumerationValue {

@@ -313,6 +313,10 @@ assembled and run.
 
    
 
+      .. note::
+
+         Also takes two values of a flags enumeration, and gives the values they share.
+
    .. function:: static Expression or_(Client& connection, Expression arg0, Expression arg1)
 
       Logical or bitwise or, which evaluates both operands.
@@ -323,6 +327,10 @@ assembled and run.
        * **arg1** -- The second operand.
 
    
+
+      .. note::
+
+         Also takes two values of a flags enumeration, and gives their combination.
 
    .. function:: static Expression conditional_and(Client& connection, Expression arg0, Expression arg1)
 
@@ -356,6 +364,10 @@ assembled and run.
        * **arg1** -- The second operand.
 
    
+
+      .. note::
+
+         Also takes two values of a flags enumeration, and gives the values in only one of them.
 
    .. function:: static Expression not_(Client& connection, Expression arg)
 

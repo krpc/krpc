@@ -147,6 +147,21 @@ comes back into range.
 .. seealso:: :doc:`/user-guide/object-lifetime` describes how each kind of object behaves in more
              detail.
 
+.. _csharp-client-flags:
+
+Flags Enumerations
+------------------
+
+A flags enumeration, such as :type:`~KRPC.Client.Services.SpaceCenter.MapFilterType`, holds any
+combination of its values. It is an enumeration with the ``[Flags]`` attribute. You combine values
+with ``|``, and test for one with ``HasFlag``:
+
+.. literalinclude:: /scripts/csharp/Flags.cs
+
+``~`` complements every bit, including the bits the enumeration does not declare. The server
+rejects the result, so you use ``~`` only to remove flags with ``&``, as in
+``filter & ~MapFilterType.Debris``.
+
 .. _csharp-client-streams:
 
 Streaming Data

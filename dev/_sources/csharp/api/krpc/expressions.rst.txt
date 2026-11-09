@@ -322,6 +322,11 @@ assembled and run.
 
       :Game Scenes: All
 
+
+      .. note::
+
+         Also takes two values of a flags enumeration, and gives the values they share.
+
    .. function:: static Expression Or(IConnection connection, Expression arg0, Expression arg1)
 
       Logical or bitwise or, which evaluates both operands.
@@ -332,6 +337,11 @@ assembled and run.
        * **arg1** -- The second operand.
 
       :Game Scenes: All
+
+
+      .. note::
+
+         Also takes two values of a flags enumeration, and gives their combination.
 
    .. function:: static Expression ConditionalAnd(IConnection connection, Expression arg0, Expression arg1)
 
@@ -365,6 +375,11 @@ assembled and run.
        * **arg1** -- The second operand.
 
       :Game Scenes: All
+
+
+      .. note::
+
+         Also takes two values of a flags enumeration, and gives the values in only one of them.
 
    .. function:: static Expression Not(IConnection connection, Expression arg)
 

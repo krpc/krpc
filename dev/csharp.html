@@ -1306,6 +1306,36 @@ comes back into range.</p>
 detail.</p>
 </div>
 </section>
+<section id="flags-enumerations">
+<span id="csharp-client-flags"></span><h2>Flags Enumerations<a class="headerlink" href="#flags-enumerations" title="Link to this heading">#</a></h2>
+<p>A flags enumeration, such as <a class="reference internal" href="csharp/api/space-center/space-center.html#enum-KRPC.Client.Services.SpaceCenter.MapFilterType" title="enum: KRPC.Client.Services.SpaceCenter.MapFilterType"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">MapFilterType</span></code></a>, holds any
+combination of its values. It is an enumeration with the <code class="docutils literal notranslate"><span class="pre">[Flags]</span></code> attribute. You combine values
+with <code class="docutils literal notranslate"><span class="pre">|</span></code>, and test for one with <code class="docutils literal notranslate"><span class="pre">HasFlag</span></code>:</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client.Services.SpaceCenter</span><span class="p">;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Program</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Connection</span><span class="p">();</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">spaceCenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">SpaceCenter</span><span class="p">();</span>
+
+<span class="w">        </span><span class="c1">// Show only probes and ships in map mode</span>
+<span class="w">        </span><span class="n">spaceCenter</span><span class="p">.</span><span class="n">MapFilter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MapFilterType</span><span class="p">.</span><span class="n">Probes</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">MapFilterType</span><span class="p">.</span><span class="n">Ships</span><span class="p">;</span>
+
+<span class="w">        </span><span class="c1">// Check whether map mode shows debris</span>
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">spaceCenter</span><span class="p">.</span><span class="n">MapFilter</span><span class="p">.</span><span class="n">HasFlag</span><span class="p">(</span><span class="n">MapFilterType</span><span class="p">.</span><span class="n">Debris</span><span class="p">));</span>
+
+<span class="w">        </span><span class="c1">// Show debris as well</span>
+<span class="w">        </span><span class="n">spaceCenter</span><span class="p">.</span><span class="n">MapFilter</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="n">MapFilterType</span><span class="p">.</span><span class="n">Debris</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">~</span></code> complements every bit, including the bits the enumeration does not declare. The server
+rejects the result, so you use <code class="docutils literal notranslate"><span class="pre">~</span></code> only to remove flags with <code class="docutils literal notranslate"><span class="pre">&amp;</span></code>, as in
+<code class="docutils literal notranslate"><span class="pre">filter</span> <span class="pre">&amp;</span> <span class="pre">~MapFilterType.Debris</span></code>.</p>
+</section>
 <section id="streaming-data">
 <span id="csharp-client-streams"></span><h2>Streaming Data<a class="headerlink" href="#streaming-data" title="Link to this heading">#</a></h2>
 <p>A common use of kRPC is to read data from the game continuously. The following does so by calling
@@ -2522,6 +2552,7 @@ names the unsupported construct. See <a class="reference internal" href="#csharp
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calling-remote-procedures">Calling Remote Procedures</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#handling-errors">Handling Errors</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#remote-objects">Remote Objects</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flags-enumerations">Flags Enumerations</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#streaming-data">Streaming Data</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#waiting-for-changes">Waiting for Changes</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#callbacks">Callbacks</a></li>

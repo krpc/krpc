@@ -1253,6 +1253,27 @@ itself reads normally, but a call on one of its parts raises an error naming
 detail.</p>
 </div>
 </section>
+<section id="flags-enumerations">
+<span id="lua-client-flags"></span><h2>Flags Enumerations<a class="headerlink" href="#flags-enumerations" title="Link to this heading">#</a></h2>
+<p>A flags enumeration, such as <a class="reference internal" href="lua/api/space-center/space-center.html#lua-SpaceCenter.MapFilterType" title="SpaceCenter.MapFilterType"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">MapFilterType</span></code></a>, holds any combination of its
+values. You combine values with <code class="docutils literal notranslate"><span class="pre">union</span></code>, and test for one with <code class="docutils literal notranslate"><span class="pre">contains</span></code>:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'krpc'</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">krpc</span><span class="p">.</span><span class="nf">connect</span><span class="p">()</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">MapFilterType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">conn</span><span class="p">.</span><span class="py">space_center</span><span class="p">.</span><span class="py">MapFilterType</span>
+
+<span class="c1">-- Show only probes and ships in map mode</span>
+<span class="nv">conn</span><span class="p">.</span><span class="py">space_center</span><span class="p">.</span><span class="py">map_filter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">MapFilterType</span><span class="p">.</span><span class="py">probes</span><span class="p">:</span><span class="nf">union</span><span class="p">(</span><span class="nv">MapFilterType</span><span class="p">.</span><span class="py">ships</span><span class="p">)</span>
+
+<span class="c1">-- Check whether map mode shows debris</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">filter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">conn</span><span class="p">.</span><span class="py">space_center</span><span class="p">.</span><span class="py">map_filter</span>
+<span class="nb">print</span><span class="p">(</span><span class="nv">filter</span><span class="p">:</span><span class="nf">contains</span><span class="p">(</span><span class="nv">MapFilterType</span><span class="p">.</span><span class="py">debris</span><span class="p">))</span>
+
+<span class="c1">-- Show debris as well</span>
+<span class="nv">conn</span><span class="p">.</span><span class="py">space_center</span><span class="p">.</span><span class="py">map_filter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">filter</span><span class="p">:</span><span class="nf">union</span><span class="p">(</span><span class="nv">MapFilterType</span><span class="p">.</span><span class="py">debris</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">intersection</span></code> and <code class="docutils literal notranslate"><span class="pre">difference</span></code> give the other combinations of two values.</p>
+</section>
 <section id="null-values">
 <h2>Null Values<a class="headerlink" href="#null-values" title="Link to this heading">#</a></h2>
 <p>A procedure that can return null returns <code class="docutils literal notranslate"><span class="pre">nil</span></code>. The following prints the name of the target
@@ -1613,6 +1634,7 @@ double.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calling-remote-procedures">Calling Remote Procedures</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#handling-errors">Handling Errors</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#remote-objects">Remote Objects</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flags-enumerations">Flags Enumerations</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#null-values">Null Values</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#server-side-functions">Server Side Functions</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#running-a-function">Running a Function</a></li>

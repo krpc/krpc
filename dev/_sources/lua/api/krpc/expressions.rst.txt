@@ -225,12 +225,20 @@ assembled and run.
       :param arg0: The first operand.
       :param arg1: The second operand.
 
+      .. note::
+
+         Also takes two values of a flags enumeration, and gives the values they share.
+
    .. staticmethod:: or(arg0: KRPC.Expression, arg1: KRPC.Expression): KRPC.Expression
 
       Logical or bitwise or, which evaluates both operands.
 
       :param arg0: The first operand.
       :param arg1: The second operand.
+
+      .. note::
+
+         Also takes two values of a flags enumeration, and gives their combination.
 
    .. staticmethod:: conditional_and(arg0: KRPC.Expression, arg1: KRPC.Expression): KRPC.Expression
 
@@ -252,6 +260,10 @@ assembled and run.
 
       :param arg0: The first operand.
       :param arg1: The second operand.
+
+      .. note::
+
+         Also takes two values of a flags enumeration, and gives the values in only one of them.
 
    .. staticmethod:: not(arg: KRPC.Expression): KRPC.Expression
 
