@@ -13,6 +13,9 @@ freshly-installed mod (overwriting on conflict).
   whose science experiment is a `DMModuleScienceAnimateGeneric`, so the SpaceCenter `Experiment`
   tests can exercise kRPC's DMagic support. The DMagic archive is only the part module, no parts.
 
+* `B9PartSwitch/TestPart.cfg` — a ModuleManager patch adding `b9PartSwitchTest`, an FL-T400
+  whose tank switches between three B9PartSwitch subtypes. The B9PartSwitch archive has no parts.
+
 * `000_ClickThroughBlocker/Global.cfg` — the global focus-handling default. Its presence is
   what makes ClickThroughBlocker skip its first-run focus popup on a new/loaded save (the popup
   only shows when this file is absent); `PopUpShown.cfg` alone does not suppress it.

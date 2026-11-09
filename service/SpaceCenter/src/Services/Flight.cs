@@ -1035,9 +1035,8 @@ namespace KRPC.SpaceCenter.Services
         /// is recommended so that the spatial state has unambiguous inertial semantics.
         ///
         /// This is an instantaneous rigid-body result based on the vessel's current parts,
-        /// drag cubes and control-surface state. When
-        /// <a href="https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/">Ferram Aerospace Research</a>
-        /// is installed the angular velocity and <paramref name="ut"/> arguments are ignored.
+        /// drag cubes and control-surface state. When Ferram Aerospace Research is installed
+        /// the angular velocity and <paramref name="ut"/> arguments are ignored.
         /// </remarks>
         [KRPCMethod]
         public Wrench SimulateAerodynamicWrenchAt(CelestialBody body, Tuple3 position, Tuple3 velocity, Tuple4 rotation, Tuple3 angularVelocity, double ut)
@@ -1107,8 +1106,7 @@ namespace KRPC.SpaceCenter.Services
         /// <remarks>
         /// The position, velocity, rotation and angular velocity arguments, and the returned
         /// torque, are all expressed in reference frame <see cref="ReferenceFrame"/>. When
-        /// <a href="https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/">Ferram Aerospace Research</a>
-        /// is installed the angular velocity argument is ignored.
+        /// Ferram Aerospace Research is installed the angular velocity argument is ignored.
         /// Atmospheric temperature and density are evaluated at the current universal time.
         ///
         /// This is the ideal rigid-body aerodynamic torque, summed from the per-part forces
@@ -1243,7 +1241,7 @@ namespace KRPC.SpaceCenter.Services
         /// The vessels Reynolds number.
         /// </summary>
         /// <remarks>
-        /// Requires <a href="https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/">Ferram Aerospace Research</a>.
+        /// Requires Ferram Aerospace Research.
         /// </remarks>
         [KRPCProperty]
         public float ReynoldsNumber {
@@ -1349,7 +1347,7 @@ namespace KRPC.SpaceCenter.Services
         /// a minor stall and a value greater than 0.5 indicates a large-scale stall.
         /// </summary>
         /// <remarks>
-        /// Requires <a href="https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/">Ferram Aerospace Research</a>.
+        /// Requires Ferram Aerospace Research.
         /// </remarks>
         [KRPCProperty]
         public float StallFraction {
@@ -1368,7 +1366,7 @@ namespace KRPC.SpaceCenter.Services
         /// It depends on air speed, air density and wing area.
         /// </summary>
         /// <remarks>
-        /// Requires <a href="https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/">Ferram Aerospace Research</a>.
+        /// Requires Ferram Aerospace Research.
         /// </remarks>
         [KRPCProperty]
         public float DragCoefficient {
@@ -1383,7 +1381,7 @@ namespace KRPC.SpaceCenter.Services
         /// depends on air speed, air density and wing area.
         /// </summary>
         /// <remarks>
-        /// Requires <a href="https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/">Ferram Aerospace Research</a>.
+        /// Requires Ferram Aerospace Research.
         /// </remarks>
         [KRPCProperty]
         public float LiftCoefficient {
@@ -1397,7 +1395,7 @@ namespace KRPC.SpaceCenter.Services
         /// The <a href="https://en.wikipedia.org/wiki/Ballistic_coefficient">ballistic coefficient</a>.
         /// </summary>
         /// <remarks>
-        /// Requires <a href="https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/">Ferram Aerospace Research</a>.
+        /// Requires Ferram Aerospace Research.
         /// </remarks>
         [KRPCProperty]
         public float BallisticCoefficient {
@@ -1414,7 +1412,7 @@ namespace KRPC.SpaceCenter.Services
         /// per hour, to produce one newton of thrust.
         /// </summary>
         /// <remarks>
-        /// Requires <a href="https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/">Ferram Aerospace Research</a>.
+        /// Requires Ferram Aerospace Research.
         /// </remarks>
         [KRPCProperty]
         public float ThrustSpecificFuelConsumption {

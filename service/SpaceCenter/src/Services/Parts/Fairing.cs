@@ -8,8 +8,10 @@ namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
     /// A fairing. Obtained by calling <see cref="Part.Fairing"/>.
-    /// Supports both stock fairings, and those from the ProceduralFairings mod.
     /// </summary>
+    /// <remarks>
+    /// Includes the fairings of ProceduralFairings.
+    /// </remarks>
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public class Fairing : Equatable<Fairing>, IGameObjectState
     {

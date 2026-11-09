@@ -11,6 +11,9 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// <summary>
     /// A parachute. Obtained by calling <see cref="Part.Parachute"/>.
     /// </summary>
+    /// <remarks>
+    /// Includes the parachutes of RealChute.
+    /// </remarks>
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public class Parachute : Equatable<Parachute>, IGameObjectState
     {

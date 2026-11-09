@@ -10,9 +10,9 @@ import urllib.error
 import zipfile
 from unittest import mock
 
-from krpctools.game import game, install
+from krpctools.game import game, install, launch
 from krpctools.game.ksp import KSP
-from krpctools.game.ksp.game import copy_folder
+from krpctools.game.ksp.game import copy_file, copy_folder
 
 # A clean no-mod GameData: the stock game, kRPC, the ModuleManager assembly and its
 # runtime-generated cache files.
@@ -78,6 +78,10 @@ class TestValidateInstall(TempDirTestCase):
         self._populate([*_CLEAN, "RealChute", "000_Harmony"])
         self.ksp.validate_install(["RealChute", "Harmony"])
 
+    def test_requested_mod_files_allowed(self):
+        self._populate([*_CLEAN, "TweakScale", "999_Scale_Redist.dll", "000_Harmony"])
+        self.ksp.validate_install(["TweakScaleRescaled", "Harmony"])
+
     def test_unrequested_mod_raises(self):
         self._populate([*_CLEAN, "RealChute"])
         with self.assertRaises(RuntimeError) as cm:
@@ -121,6 +125,30 @@ class TestRequirements(unittest.TestCase):
                 self.assertIn(name, ksp.mods)
 
 
+class TestLoadedModsMatch(unittest.TestCase):
+    def test_required_mods_match(self):
+        self.assertTrue(launch._matches(KSP(), {"FAR"}, {"FAR"}))
+
+    def test_loaded_dependency_matches(self):
+        self.assertTrue(
+            launch._matches(
+                KSP(), {"KerbalAlarmClock"}, {"KerbalAlarmClock", "ToolbarControl"}
+            )
+        )
+
+    def test_missing_mod_does_not_match(self):
+        self.assertFalse(
+            launch._matches(KSP(), {"KerbalAlarmClock"}, {"ToolbarControl"})
+        )
+
+    def test_unrequired_mod_does_not_match(self):
+        self.assertFalse(
+            launch._matches(
+                KSP(), {"ToolbarControl"}, {"KerbalAlarmClock", "ToolbarControl"}
+            )
+        )
+
+
 class TestCopyFolder(TempDirTestCase):
     def test_from_zip(self):
         archive = os.path.join(self.dir, "mod.zip")
@@ -155,6 +183,31 @@ class TestCopyFolder(TempDirTestCase):
             f.writestr("GameData/Other/Other.dll", "other")
         with self.assertRaises(RuntimeError):
             copy_folder(archive, "Mod", os.path.join(self.dir, "out"))
+
+
+class TestCopyFile(TempDirTestCase):
+    def test_from_zip(self):
+        archive = os.path.join(self.dir, "mod.zip")
+        with zipfile.ZipFile(archive, "w") as f:
+            f.writestr("Mod-1.0/GameData/Mod.dll", "dll")
+            f.writestr("Mod-1.0/GameData/Mod/Mod.dll", "nested")
+        dst = os.path.join(self.dir, "Mod.dll")
+        copy_file(archive, "Mod.dll", dst)
+        with open(dst, encoding="utf-8") as f:
+            self.assertEqual("dll", f.read())
+
+    def test_from_directory(self):
+        self.write("build/GameData/Mod.dll", "dll")
+        dst = os.path.join(self.dir, "Mod.dll")
+        copy_file(os.path.join(self.dir, "build"), "Mod.dll", dst)
+        self.assertTrue(os.path.isfile(dst))
+
+    def test_missing_file_raises(self):
+        archive = os.path.join(self.dir, "mod.zip")
+        with zipfile.ZipFile(archive, "w") as f:
+            f.writestr("GameData/Mod/Mod.dll", "nested")
+        with self.assertRaises(RuntimeError):
+            copy_file(archive, "Mod.dll", os.path.join(self.dir, "Mod.dll"))
 
 
 class TestFetch(TempDirTestCase):

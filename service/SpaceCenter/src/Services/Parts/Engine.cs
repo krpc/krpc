@@ -680,10 +680,13 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Whether the engine has a recognized thrust reverser. This is <c>true</c> for
         /// stock engines with a thrust reverser (such as the J-33 "Wheesley" and
-        /// J-90 "Goliath" turbofan engines) and for selected mod engines. It is
+        /// J-90 "Goliath" turbofan engines) and for supported mod engines. It is
         /// <c>false</c> for engines whose reverser is not recognized, as KSP provides no
         /// standard way to detect one.
         /// </summary>
+        /// <remarks>
+        /// Recognizes the thrust reversers of Firespitter and KerbalActuators.
+        /// </remarks>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool CanReverseThrust {
             get { return InternalThrustReverser != null; }
@@ -735,8 +738,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Whether the engine is managed by
-        /// <a href="https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/">RealFuels</a>.
+        /// Whether the engine is managed by RealFuels.
         /// The remaining properties in this section are only available when it is.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
@@ -749,6 +751,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// unlimited number of times. Throws an exception if the engine is not managed by
         /// RealFuels (see <see cref="HasRealFuels"/>).
         /// </summary>
+        /// <remarks>
+        /// Requires RealFuels.
+        /// </remarks>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public int Ignitions {
             get { return RealFuelsEngineModule.Ignitions; }
@@ -760,6 +765,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// light if they are not available. Throws an exception if the engine is not managed by
         /// RealFuels (see <see cref="HasRealFuels"/>).
         /// </summary>
+        /// <remarks>
+        /// Requires RealFuels.
+        /// </remarks>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public IDictionary<string, double> IgnitionResources {
             get { return RealFuelsEngineModule.IgnitionResources; }
@@ -770,6 +778,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// before the engine will run reliably. Throws an exception if the engine is not
         /// managed by RealFuels (see <see cref="HasRealFuels"/>).
         /// </summary>
+        /// <remarks>
+        /// Requires RealFuels.
+        /// </remarks>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool HasUllage {
             get { return RealFuelsEngineModule.HasUllage; }
@@ -781,6 +792,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// coasting and rotation unsettle it. Throws an exception if the engine is not managed
         /// by RealFuels (see <see cref="HasRealFuels"/>).
         /// </summary>
+        /// <remarks>
+        /// Requires RealFuels.
+        /// </remarks>
         [KRPCProperty]
         public double PropellantStability {
             get { return RealFuelsEngineModule.PropellantStability; }
@@ -793,6 +807,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// engine runs. Throws an exception if the engine is not managed by RealFuels
         /// (see <see cref="HasRealFuels"/>).
         /// </summary>
+        /// <remarks>
+        /// Requires RealFuels.
+        /// </remarks>
         [KRPCProperty]
         public double PropellantReliability {
             get { return RealFuelsEngineModule.PropellantReliability; }
@@ -803,6 +820,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// draw from a highly pressurized tank. Throws an exception if the engine is not
         /// managed by RealFuels (see <see cref="HasRealFuels"/>).
         /// </summary>
+        /// <remarks>
+        /// Requires RealFuels.
+        /// </remarks>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool PressureFed {
             get { return RealFuelsEngineModule.PressureFed; }
@@ -813,6 +833,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <c>true</c> for an engine that is not pressure fed. Throws an exception if the
         /// engine is not managed by RealFuels (see <see cref="HasRealFuels"/>).
         /// </summary>
+        /// <remarks>
+        /// Requires RealFuels.
+        /// </remarks>
         [KRPCProperty]
         public bool HasFeedPressure {
             get { return RealFuelsEngineModule.HasFeedPressure; }

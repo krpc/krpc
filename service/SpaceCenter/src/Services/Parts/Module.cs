@@ -190,18 +190,5 @@ namespace KRPC.SpaceCenter.Services.Parts
         public IList<PartAction> ActionList {
             get { return AllActions.Select (a => new PartAction (this, a)).ToList (); }
         }
-
-        /// <summary>
-        /// Restore a field to its original value: the value KSP recorded when the part was
-        /// loaded. Note that BaseField.SetOriginalValue does not do this -- despite its name,
-        /// it re-snapshots the current value as the new original -- so instead this writes
-        /// originalValue back through BaseField.SetValue (which also fires OnValueModified).
-        /// </summary>
-        internal void RestoreOriginalFieldValue(BaseField<KSPField> field) {
-            var original = field.originalValue;
-            if (original == null && field.FieldInfo.FieldType.IsValueType)
-                return;
-            field.SetValue (original, InternalModule);
-        }
     }
 }

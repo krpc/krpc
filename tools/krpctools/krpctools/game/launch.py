@@ -14,6 +14,8 @@ import time
 
 import krpc
 
+from . import install
+
 # Progress messages (installing, launching, the mod set in use) go to this logger at INFO.
 # pytest shows them with log_cli; outside pytest, INFO is dropped by default.
 log = logging.getLogger("krpctools.game")
@@ -49,6 +51,11 @@ def loaded_mods(game, conn, required=()):
         if present or (present is None and name in required):
             loaded.add(name)
     return loaded
+
+
+def _matches(game, required, installed):
+    """Whether the loaded mods are the required ones, plus any of the mods they require."""
+    return required <= installed <= set(install.requirements(game, required))
 
 
 def _validate(game, required):
@@ -147,7 +154,7 @@ def _unsatisfiable_message(game, required, installed=None):
 def _mismatch_message(game, required, installed):
     parts = []
     missing = sorted(required - installed)
-    extra = sorted(installed - required)
+    extra = sorted(installed - set(install.requirements(game, required)))
     if missing:
         parts.append("missing required mod(s): " + ", ".join(missing))
     if extra:
@@ -175,7 +182,7 @@ def ensure(game, mods=()):
     conn = _try_connect(game)
     if conn is not None:
         installed = loaded_mods(game, conn, required)
-        if installed == required:
+        if _matches(game, required, installed):
             return
         if game.process is None:
             raise RuntimeError(_mismatch_message(game, required, installed))
@@ -195,7 +202,7 @@ def ensure(game, mods=()):
     # Launch, and check the required mods loaded before any test runs against the game
     conn = launch(game, required)
     installed = loaded_mods(game, conn, required)
-    if installed != required:
+    if not _matches(game, required, installed):
         game.unsatisfiable.add(frozenset(required))
         stop(game)
         raise RuntimeError(_unsatisfiable_message(game, required, installed))

@@ -241,3 +241,6 @@ schemas
 protoc
 CPython
 waker
+DMagic
+Firespitter
+subtype

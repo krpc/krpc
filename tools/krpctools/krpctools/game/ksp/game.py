@@ -78,6 +78,23 @@ def _folder_members(archive, folder):
     return members
 
 
+def copy_file(source, name, dst):
+    """Copy the file GameData/<name> from source, a zip archive or a directory, to dst."""
+    if zipfile.is_zipfile(source):
+        with zipfile.ZipFile(source) as archive:
+            for member in archive.infolist():
+                parts = member.filename.split("/")
+                if parts[-2:] == ["GameData", name] and not member.is_dir():
+                    with archive.open(member) as src, open(dst, "wb") as f:
+                        shutil.copyfileobj(src, f)
+                    return
+        raise RuntimeError("%s has no GameData/%s" % (source, name))
+    path = os.path.join(source, "GameData", name)
+    if not os.path.isfile(path):
+        raise RuntimeError("%s has no GameData/%s" % (source, name))
+    shutil.copy(path, dst)
+
+
 def copy_folder(source, folder, dst):
     """Copy GameData/<folder> from source, a zip archive or a directory, to dst."""
     if zipfile.is_zipfile(source):
@@ -105,15 +122,18 @@ def copy_folder(source, folder, dst):
 
 
 class Mod(game.Mod):
-    """A KSP mod, installed as the folders it puts in GameData.
+    """A KSP mod, installed as the folders and files it puts in GameData.
 
-    The source holds each folder as GameData/<folder>: an archive as released, or a
-    directory. After a folder is installed, any files under the mod's overlay directory for
-    that folder are copied over it.
+    The source holds each folder as GameData/<folder>, and each file as GameData/<file>: an
+    archive as released, or a directory. After a folder is installed, any files under the mod's
+    overlay directory for that folder are copied over it.
     """
 
     # The GameData folders the mod installs
     folders = ()
+
+    # The files the mod installs at the top of GameData
+    files = ()
 
     # The directory of config overlays, one subdirectory per folder. The supported mods keep
     # theirs beside their definitions.
@@ -233,10 +253,18 @@ class KSP(game.Game):
             if os.path.isdir(overlay):
                 shutil.copytree(overlay, dst, dirs_exist_ok=True)
             normalize_permissions(dst)
+        for name in mod.files:
+            dst = os.path.join(self.gamedata(), name)
+            copy_file(path, name, dst)
+            os.chmod(dst, 0o644)
 
     def remove_mod(self, mod):
         for folder in mod.folders:
             shutil.rmtree(os.path.join(self.gamedata(), folder), ignore_errors=True)
+        for name in mod.files:
+            path = os.path.join(self.gamedata(), name)
+            if os.path.exists(path):
+                os.remove(path)
 
     def validate_install(self, mods):
         """Fail if GameData holds anything beyond the stock game, kRPC, ModuleManager and
@@ -246,6 +274,7 @@ class KSP(game.Game):
         allowed = set(_BASELINE_GAMEDATA)
         for name in mods:
             allowed.update(self.mods[name].folders)
+            allowed.update(self.mods[name].files)
         gamedata = self.gamedata()
         unexpected = [
             entry

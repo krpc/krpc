@@ -7,8 +7,7 @@ using KRPC.Utils;
 namespace KRPC.LiDAR
 {
     /// <summary>
-    /// Provides RPCs to interact with the
-    /// <a href="https://github.com/nullprofile/LaserDist">LiDAR</a> mod.
+    /// Provides functionality to interact with the LiDAR mod.
     /// </summary>
     [Obsolete ("Use <see cref=\"M:KRPC.SpaceCenter.Services.SpaceCenter.RaycastDistance\"/> instead.")]
     [KRPCService(Id = 10, GameScene = GameScene.All)]

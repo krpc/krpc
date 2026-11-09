@@ -311,6 +311,35 @@ class RealFuels(Mod):
         return conn.space_center.real_fuels_available
 
 
+class B9PartSwitch(_PartMod):
+    """Switches part subtypes, which changes their resources and mass. The archive is the
+    part module alone, and the overlay adds a part that uses it."""
+
+    name = "B9PartSwitch"
+    source = _GITHUB + (
+        "blowfishpro/B9PartSwitch/releases/download/v2.20.0/B9PartSwitch_v2.20.0.zip"
+    )
+    sha256 = "ebf4c01f37a92f3ec0d74a9c653fae707298cf22ab0484c18a0e5670783a2121"
+    folders = ("B9PartSwitch",)
+    part = "b9PartSwitchTest"
+
+
+class NearFutureSolar(_PartMod):
+    """Near Future Solar, whose ModuleCurvedSolarPanel the SpaceCenter SolarPanel class
+    wraps."""
+
+    name = "NearFutureSolar"
+    source = _GITHUB + (
+        "post-kerbin-mining-corporation/NearFutureSolar/releases/download/1.3.3/"
+        "NearFutureSolar_1_3_3.zip"
+    )
+    sha256 = "4dab8ed0b69bad969a75e89668a95ddc912b7618c7de5f6e87fe570adba6c4df"
+    # The archive also bundles B9PartSwitch and ModuleManager, installed on their own
+    folders = ("NearFutureSolar",)
+    requires = ("B9PartSwitch",)
+    part = "nfs-panel-deploying-curved-25-1"
+
+
 class _AssemblyMod(Mod):
     """A mod told apart by the major.minor version of its loaded assembly."""
 
@@ -359,6 +388,21 @@ class KOS(_PartMod):
     part = "kOSMachine1m"
 
 
+class TweakScaleRescaled(_AssemblyMod):
+    """TweakScale Rescaled, which scales parts and the stats of their modules."""
+
+    name = "TweakScaleRescaled"
+    source = _GITHUB + (
+        "JonnyOThan/TweakScale/releases/download/3.3.2.1/TweakScale-3.3.2.1.zip"
+    )
+    sha256 = "669199d6ec88eab5335ee96fc0066c6ac035edc332e079c627c636078847d38d"
+    folders = ("TweakScale",)
+    files = ("999_Scale_Redist.dll",)
+    requires = ("Harmony",)
+    assembly = "Scale"
+    version = "3.3"
+
+
 MODS = [
     Harmony,
     ClickThroughBlocker,
@@ -381,7 +425,10 @@ MODS = [
     AGExt,
     FAR,
     RealFuels,
+    B9PartSwitch,
+    NearFutureSolar,
     KSPCommunityPartModules,
     KSPCommunityPartModules04,
     KOS,
+    TweakScaleRescaled,
 ]
