@@ -96,6 +96,8 @@ namespace TestingTools
             var game = GamePersistence.LoadGame (name, HighLogic.SaveFolder, true, false);
             if (game == null || game.flightState == null || !game.compatible)
                 throw new ArgumentException ("Failed to load save '" + name + "'");
+            // Add the scenario modules of installed mods that the save lacks
+            GamePersistence.UpdateScenarioModules (game);
             FlightDriver.StartAndFocusVessel (game, game.flightState.activeVesselIdx);
             throw new YieldException<Action> (() => WaitForVesselSwitch(0));
         }
