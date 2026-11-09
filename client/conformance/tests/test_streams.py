@@ -97,6 +97,9 @@ def stream_values(connected, kind):
     if kind == "enum":
         enum = values.enum("TestService", "TestEnum", 2)
         return connected.add_stream("TestService", "EnumEcho", enum), values.Enum(2)
+    if kind == "flags":
+        flags = values.enum("TestService", "TestFlags", 5)
+        return connected.add_stream("TestService", "FlagsEcho", flags), values.Enum(5)
     if kind == "struct":
         struct = values.struct(
             "TestService",
@@ -403,6 +406,7 @@ def test_first_value(connected, control, request, case):
         "null-string",
         "nullable-int",
         "enum",
+        "flags",
         "struct",
         "list-of-nullable-ints",
         "list-of-nullable-objects",
@@ -410,7 +414,7 @@ def test_first_value(connected, control, request, case):
 )
 def test_value_types(connected, kind):
     """A stream delivers a value of any type, such as a null, an enumeration value, a
-    structure and a collection holding nulls."""
+    combination of flags, a structure and a collection holding nulls."""
     stream, expected = stream_values(connected, kind)
     result = stream.get()
     if kind == "list-of-nullable-objects":

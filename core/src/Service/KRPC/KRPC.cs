@@ -112,6 +112,7 @@ namespace KRPC.Service.KRPC
                         enm.Documentation = enmSignature.Documentation;
                     enm.Deprecated = enmSignature.Deprecated;
                     enm.DeprecatedReason = enmSignature.DeprecatedReason;
+                    enm.Flags = enmSignature.Flags;
                     foreach (var enmValueSignature in enmSignature.Values) {
                         var enmValue = new EnumerationValue (enmValueSignature.Name, enmValueSignature.Value);
                         if (enmValueSignature.Documentation.Length > 0)

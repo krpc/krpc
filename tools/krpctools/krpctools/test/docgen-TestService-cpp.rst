@@ -308,6 +308,16 @@
 
    
 
+   .. function:: std::optional<TestFlags> echo_nullable_flags(std::optional<TestFlags> x)
+
+
+
+      :Parameters:
+
+
+
+   
+
    .. function:: std::optional<float> echo_nullable_float(std::optional<float> value)
 
 
@@ -479,6 +489,56 @@
 
    
 
+   .. function:: TestFlags flags_default(TestFlags x = TestFlags::value_a | TestFlags::value_c)
+
+
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: TestFlags flags_echo(TestFlags x)
+
+
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: std::vector<TestFlags> flags_list_echo(std::vector<TestFlags> x)
+
+
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: TestFlagsStruct flags_struct_echo(TestFlagsStruct x)
+
+
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: int32_t flags_to_int(TestFlags x)
+
+
+
+      :Parameters:
+
+
+
+   
+
    .. function:: std::vector<float> float_special_defaults(float nan = std::numeric_limits<float>::quiet_NaN(), float infinity = std::numeric_limits<float>::infinity(), float negative_infinity = -std::numeric_limits<float>::infinity(), float maximum = (std::numeric_limits<float>::max)(), float lowest = std::numeric_limits<float>::lowest(), float fraction = 0.1f)
 
       Procedure whose defaults are the special values of float, plus a finite fraction
@@ -608,6 +668,16 @@
    
 
    .. function:: std::string int64_to_string(int64_t value)
+
+
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: TestFlags int_to_flags(int32_t x)
 
 
 
@@ -1240,6 +1310,40 @@
 
 
 .. namespace:: krpc::services::TestService
+.. enum-struct:: TestFlags
+
+   Flags documentation string.
+
+   A flags enumeration. :std:ref:`cpp-client-flags` shows how to combine its values.
+
+
+   .. enumerator:: none
+
+      Flags None documentation string.
+
+
+   .. enumerator:: value_a
+
+      Flags ValueA documentation string.
+
+
+   .. enumerator:: value_ab
+
+      Flags ValueAB documentation string.
+
+
+   .. enumerator:: value_b
+
+      Flags ValueB documentation string.
+
+
+   .. enumerator:: value_c
+
+      Flags ValueC documentation string.
+
+
+
+.. namespace:: krpc::services::TestService
 .. struct:: DeprecatedStruct
 
    .. warning:: Deprecated. Use :struct:`TestStruct` instead.
@@ -1256,6 +1360,17 @@
       .. warning:: Deprecated. Use :member:`DeprecatedStruct::value` instead.
 
       Deprecated struct OldValue documentation string.
+
+
+.. namespace:: krpc::services::TestService
+.. struct:: TestFlagsStruct
+
+   Flags struct documentation string.
+
+
+   .. member:: TestFlags flags_field
+
+
 
 
 .. namespace:: krpc::services::TestService

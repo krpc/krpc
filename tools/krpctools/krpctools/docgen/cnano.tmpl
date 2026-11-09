@@ -137,6 +137,9 @@
 {{ gendoc(x.documentation) | indent }}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}{% endif %}
+{% if x.flags %}   A flags enumeration. :std:ref:`cnano-client-flags` shows how to combine its values.
+
+{% endif %}
 {% for value in x.values.values() %}{{ mark_documented(value) }}
    .. macro:: KRPC_{{ x.service_name | upper }}_{{ x.name | upper }}_{{ value.name | upper }}
 

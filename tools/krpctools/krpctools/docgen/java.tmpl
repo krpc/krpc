@@ -141,7 +141,7 @@
 {% endmacro %}
 
 {% macro enumeration(x) %}{{ mark_documented(x) }}
-.. type:: public enum {{ x.name }}
+.. type:: {% if x.flags %}public static final class{% else %}public enum{% endif %} {{ x.name }}
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 
@@ -149,8 +149,11 @@
 {{ gendoc(x.documentation) | indent }}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}{% endif %}
+{% if x.flags %}   A flags enumeration. :std:ref:`java-client-flags` shows how to combine its values.
+
+{% endif %}
 {% for value in x.values.values() %}{{ mark_documented(value) }}
-   .. field:: public {{ x.name }} {{ value.name | snakecase | upper }}
+   .. field:: public {% if x.flags %}static final {% endif %}{{ x.name }} {{ value.name | snakecase | upper }}
 
 {% if value.deprecated %}{{ deprecated(value) | indent(width=6) }}
 

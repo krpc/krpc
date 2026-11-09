@@ -354,6 +354,20 @@ final class Testee {
       case ORDER:
         reply.setValue(Values.resultSint32(order(command.getOrder())));
         break;
+      case FLAGS_UNION:
+        reply.setValue(Values.resultEnum(
+            flags(command.getFlagsUnion().getA()).or(flags(command.getFlagsUnion().getB()))));
+        break;
+      case FLAGS_CONTAINS:
+        reply.setValue(Values.resultBool(
+            flags(command.getFlagsContains().getA())
+                .contains(flags(command.getFlagsContains().getB()))));
+        break;
+      case FLAGS_DIFFERENCE:
+        reply.setValue(Values.resultEnum(
+            flags(command.getFlagsDifference().getA())
+                .andNot(flags(command.getFlagsDifference().getB()))));
+        break;
       case HOLD_CONDITION:
         // Held by run, apart from the update condition, which a connection has none of
         if (command.getHoldCondition().getStream() == 0) {
@@ -611,6 +625,10 @@ final class Testee {
     UnsupportedException(String message) {
       super(message);
     }
+  }
+
+  private static TestService.TestFlags flags(Value value) {
+    return Values.argEnum(TestService.TestFlags::fromValue).apply(value);
   }
 
   /** The sign of the order of two values by compareTo, once equals agrees with it. */

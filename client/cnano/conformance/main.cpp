@@ -183,6 +183,29 @@ class Testee {
         *reply->mutable_value() = result_bool(a == b);
         break;
       }
+      case Command::kFlagsUnion: {
+        using TestFlags = Enum<krpc_TestService_TestFlags_t>;
+        auto a = TestFlags::arg(command.flags_union().a());
+        auto b = TestFlags::arg(command.flags_union().b());
+        *reply->mutable_value() =
+            TestFlags::result(static_cast<krpc_TestService_TestFlags_t>(a | b));
+        break;
+      }
+      case Command::kFlagsContains: {
+        using TestFlags = Enum<krpc_TestService_TestFlags_t>;
+        auto a = TestFlags::arg(command.flags_contains().a());
+        auto b = TestFlags::arg(command.flags_contains().b());
+        *reply->mutable_value() = result_bool((a & b) == b);
+        break;
+      }
+      case Command::kFlagsDifference: {
+        using TestFlags = Enum<krpc_TestService_TestFlags_t>;
+        auto a = TestFlags::arg(command.flags_difference().a());
+        auto b = TestFlags::arg(command.flags_difference().b());
+        *reply->mutable_value() = TestFlags::result(static_cast<krpc_TestService_TestFlags_t>(
+            static_cast<uint32_t>(a) & ~static_cast<uint32_t>(b)));
+        break;
+      }
       case Command::kFailWrite:
         // The client's errors carry no message, so the fault's message goes unused
         write_fault = true;

@@ -684,6 +684,8 @@ namespace KRPC.Service
         /// 4. Underlying type must be a 32-bit signed integer (int)
         /// 5. Must be declared inside a kRPC service if it doesn't have the service explicity set
         /// 6. Must not be declared inside a kRPC service if it does have the service explicity set
+        /// 7. A flags enumeration must have values that are 0, a single bit, or a union of single
+        ///    bits it declares, and no negative value
         /// </summary>
         public static void ValidateKRPCEnum (Type type)
         {
@@ -699,6 +701,8 @@ namespace KRPC.Service
             // Check the underlying type is an int
             if (Enum.GetUnderlyingType (type) != typeof(int))
                 throw new ServiceException ("KRPCEnum " + type + " has underlying type " + Enum.GetUnderlyingType (type) + "; but only int is supported");
+            if (Enumerations.IsFlags (type))
+                Enumerations.ValidateFlags (type);
             // If it doesn't have the Service property set, check the enum is defined directly inside a KRPCService
             var declaringType = type.DeclaringType;
             if (attribute.Service == null && (declaringType == null || !Reflection.HasAttribute<KRPCServiceAttribute> (declaringType)))

@@ -271,7 +271,8 @@ An argument's encoding fills its bytes exactly. The call fails with an error if:
 * Bytes are left over after a value, or a value is cut short.
 * A ``TUPLE``, ``LIST``, ``SET``, ``DICTIONARY`` or ``STRUCT`` message holds an unknown field.
 * A ``SINT32``, ``UINT32`` or ``ENUMERATION`` value is out of its 32-bit range.
-* An ``ENUMERATION`` value is one the enumeration does not declare.
+* An ``ENUMERATION`` value is one the enumeration does not declare. For a flags enumeration, it
+  is a value holding a bit outside the union of the values the enumeration declares.
 * A ``BOOL`` value is not 0 or 1.
 * A ``TUPLE`` has the wrong number of items.
 
@@ -653,6 +654,10 @@ The fields are:
 * ``deprecated`` - Whether the enumeration is deprecated.
 
 * ``deprecated_reason`` - The reason for the deprecation.
+
+* ``flags`` - Whether the enumeration is a flags enumeration. A value of one is any combination of
+  its values: a number holding no bit outside the union of the values it declares. A value of any
+  other enumeration is one of the values it declares.
 
 .. _communication-protocol-structures:
 

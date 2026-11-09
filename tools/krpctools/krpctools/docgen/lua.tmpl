@@ -147,6 +147,9 @@
 {{ gendoc(x.documentation) | indent }}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}{% endif %}
+{% if x.flags %}   A flags enumeration. :std:ref:`lua-client-flags` shows how to combine its values.
+
+{% endif %}
 {% for value in x.values.values() %}{{ mark_documented(value) }}
    .. data:: {{ value.name | snakecase }}
 

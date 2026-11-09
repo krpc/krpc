@@ -295,6 +295,21 @@ namespace KRPC.Test.Service
             Z
         }
 
+        /// <summary>
+        /// Documentation string for TestFlags.
+        /// </summary>
+        [KRPCEnum]
+        [Serializable]
+        [Flags]
+        public enum TestFlags
+        {
+            None = 0,
+            A = 1,
+            B = 2,
+            C = 4,
+            AB = A | B
+        }
+
         [Serializable]
         public enum TestEnumWithoutAttribute
         {

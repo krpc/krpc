@@ -252,6 +252,14 @@ Service documentation string.
 
 
 
+.. staticmethod:: echo_nullable_flags(x: TestService.TestFlags | Types.none): TestService.TestFlags | nil
+
+
+
+
+
+
+
 .. staticmethod:: echo_nullable_float(value: number | Types.none): number | nil
 
 
@@ -393,6 +401,47 @@ Service documentation string.
 
 
 
+.. staticmethod:: flags_default(x?: TestService.TestFlags): TestService.TestFlags
+
+
+
+   :param x: Defaults to ``TestService.TestFlags.value_a:union(TestService.TestFlags.value_c)``.
+
+
+
+
+.. staticmethod:: flags_echo(x: TestService.TestFlags): TestService.TestFlags
+
+
+
+
+
+
+
+.. staticmethod:: flags_list_echo(x: List): List
+
+
+
+
+
+
+
+.. staticmethod:: flags_struct_echo(x: TestService.TestFlagsStruct): TestService.TestFlagsStruct
+
+
+
+
+
+
+
+.. staticmethod:: flags_to_int(x: TestService.TestFlags): number
+
+
+
+
+
+
+
 .. staticmethod:: float_special_defaults(nan?: number, infinity?: number, negative_infinity?: number, maximum?: number, lowest?: number, fraction?: number): List
 
    Procedure whose defaults are the special values of float, plus a finite fraction
@@ -501,6 +550,14 @@ Service documentation string.
 
 
 .. staticmethod:: int64_to_string(value: number): string
+
+
+
+
+
+
+
+.. staticmethod:: int_to_flags(x: number): TestService.TestFlags
 
 
 
@@ -1035,6 +1092,39 @@ Service documentation string.
 
 
 
+.. class:: TestFlags
+
+   Flags documentation string.
+
+   A flags enumeration. :std:ref:`lua-client-flags` shows how to combine its values.
+
+
+   .. data:: none
+
+      Flags None documentation string.
+
+
+   .. data:: value_a
+
+      Flags ValueA documentation string.
+
+
+   .. data:: value_ab
+
+      Flags ValueAB documentation string.
+
+
+   .. data:: value_b
+
+      Flags ValueB documentation string.
+
+
+   .. data:: value_c
+
+      Flags ValueC documentation string.
+
+
+
 .. class:: DeprecatedStruct
 
    .. warning:: Deprecated. Use :class:`TestService.TestStruct` instead.
@@ -1052,6 +1142,17 @@ Service documentation string.
       .. warning:: Deprecated. Use :attr:`TestService.DeprecatedStruct.value` instead.
 
       Deprecated struct OldValue documentation string.
+
+
+
+.. class:: TestFlagsStruct
+
+   Flags struct documentation string.
+
+
+   .. attribute:: flags_field: TestService.TestFlags
+
+
 
 
 

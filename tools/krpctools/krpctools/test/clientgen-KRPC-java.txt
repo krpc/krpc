@@ -5,6 +5,7 @@ import com.google.protobuf.ByteString;
 import krpc.client.Connection;
 import krpc.client.Encoder;
 import krpc.client.RemoteEnum;
+import krpc.client.RemoteFlags;
 import krpc.client.RemoteObject;
 import krpc.client.RemoteStruct;
 import krpc.client.RPCInfo;
@@ -1546,6 +1547,8 @@ public class KRPC {
 
         /**
          * Logical or bitwise and, which evaluates both operands.
+         *
+         * Also takes two values of a flags enumeration, and gives the values they share.
          * @param arg0 The first operand.
          * @param arg1 The second operand.
          */
@@ -2407,6 +2410,8 @@ public class KRPC {
 
         /**
          * Logical or bitwise exclusive or.
+         *
+         * Also takes two values of a flags enumeration, and gives the values in only one of them.
          * @param arg0 The first operand.
          * @param arg1 The second operand.
          */
@@ -2906,6 +2911,8 @@ public class KRPC {
 
         /**
          * Logical or bitwise or, which evaluates both operands.
+         *
+         * Also takes two values of a flags enumeration, and gives their combination.
          * @param arg0 The first operand.
          * @param arg1 The second operand.
          */

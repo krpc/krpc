@@ -270,8 +270,8 @@ class Testee:
         elif case in ("pause", "await_pause", "resume", "fail_write"):
             self._fault(case, command)
             reply.value.SetInParent()
-        elif case in ("compare", "order"):
-            self._compare(case, command, reply)
+        elif case in ("compare", "order") or case.startswith("flags_"):
+            self._operation(case, command, reply)
         elif case in (
             "hold_condition",
             "release_condition",
@@ -283,19 +283,26 @@ class Testee:
         else:
             raise ValueError("Unknown command %s" % case)
 
-    def _compare(self, case: str, command: pb.Command, reply: pb.Reply) -> None:
-        """Compare two values with the language's equality, or order them."""
+    def _operation(self, case: str, command: pb.Command, reply: pb.Reply) -> None:
+        """Compare two values with the language's equality, order them, or combine two flags
+        enumeration values."""
         operands = getattr(command, case)
         a = self._from_value(operands.a)
         b = self._from_value(operands.b)
         if case == "compare":
             reply.value.bool = a == b
-        else:
+        elif case == "order":
             sign = (a > b) - (a < b)
             operators = [a <= b, a >= b, a == b, a != b]
             if operators != [sign <= 0, sign >= 0, sign == 0, sign != 0]:
                 raise ValueError("The comparison operators disagree on the order")
             reply.value.sint32 = sign
+        elif case == "flags_union":
+            reply.value.CopyFrom(self._to_value(a | b))
+        elif case == "flags_contains":
+            reply.value.bool = b in a
+        else:
+            reply.value.CopyFrom(self._to_value(a & ~b))
 
     def _dispatch_condition(self, case: str, command: pb.Command) -> None:
         conn = self._connection()

@@ -1,7 +1,3 @@
-## service/SpaceCenter
-
-- **Breaking:** Reject a combination of `MapFilterType` values in `SpaceCenter.MapFilter` (#1280)
-
 ## core
 
 - **Breaking:** Reject an argument with bytes left over or an unknown field (#1280)

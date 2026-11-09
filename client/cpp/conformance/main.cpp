@@ -785,6 +785,27 @@ class Testee {
         *reply->mutable_value() = result_bool(equal);
         break;
       }
+      case Command::kFlagsUnion: {
+        using TestFlags = Enum<krpc::services::TestService::TestFlags>;
+        auto a = TestFlags::arg(connected(), command.flags_union().a());
+        auto b = TestFlags::arg(connected(), command.flags_union().b());
+        *reply->mutable_value() = TestFlags::result(a | b);
+        break;
+      }
+      case Command::kFlagsContains: {
+        using TestFlags = Enum<krpc::services::TestService::TestFlags>;
+        auto a = TestFlags::arg(connected(), command.flags_contains().a());
+        auto b = TestFlags::arg(connected(), command.flags_contains().b());
+        *reply->mutable_value() = result_bool((a & b) == b);
+        break;
+      }
+      case Command::kFlagsDifference: {
+        using TestFlags = Enum<krpc::services::TestService::TestFlags>;
+        auto a = TestFlags::arg(connected(), command.flags_difference().a());
+        auto b = TestFlags::arg(connected(), command.flags_difference().b());
+        *reply->mutable_value() = TestFlags::result(a & ~b);
+        break;
+      }
       case Command::kEncode:
         reply->mutable_value()->set_bytes(
             codec(command.encode().type()).encode(connected(), command.encode().value()));

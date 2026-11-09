@@ -509,6 +509,8 @@ class KRPC : public Service {
 
     /**
      * Logical or bitwise and, which evaluates both operands.
+     *
+     * Also takes two values of a flags enumeration, and gives the values they share.
      * @param client A client object.
      * @param arg0 The first operand.
      * @param arg1 The second operand.
@@ -957,6 +959,8 @@ class KRPC : public Service {
 
     /**
      * Logical or bitwise exclusive or.
+     *
+     * Also takes two values of a flags enumeration, and gives the values in only one of them.
      * @param client A client object.
      * @param arg0 The first operand.
      * @param arg1 The second operand.
@@ -1218,6 +1222,8 @@ class KRPC : public Service {
 
     /**
      * Logical or bitwise or, which evaluates both operands.
+     *
+     * Also takes two values of a flags enumeration, and gives their combination.
      * @param client A client object.
      * @param arg0 The first operand.
      * @param arg1 The second operand.

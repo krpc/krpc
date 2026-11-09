@@ -96,6 +96,48 @@ class {{ service_name }} : public Service {
 
     {% endfor %}
   };
+  {% if enm.flags %}
+
+  {% if enm.deprecated %}
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+  {% endif %}
+  friend constexpr {{ enum_name }} operator|({{ enum_name }} a, {{ enum_name }} b) {
+    return static_cast<{{ enum_name }}>(static_cast<int32_t>(a) | static_cast<int32_t>(b));
+  }
+
+  friend constexpr {{ enum_name }} operator&({{ enum_name }} a, {{ enum_name }} b) {
+    return static_cast<{{ enum_name }}>(static_cast<int32_t>(a) & static_cast<int32_t>(b));
+  }
+
+  friend constexpr {{ enum_name }} operator^({{ enum_name }} a, {{ enum_name }} b) {
+    return static_cast<{{ enum_name }}>(static_cast<int32_t>(a) ^ static_cast<int32_t>(b));
+  }
+
+  // The complement within the values the enumeration declares
+  friend constexpr {{ enum_name }} operator~({{ enum_name }} a) {
+    return static_cast<{{ enum_name }}>(~static_cast<int32_t>(a) & {{ enm.mask }});
+  }
+
+  friend {{ enum_name }}& operator|=({{ enum_name }}& a, {{ enum_name }} b) {
+    return a = a | b;
+  }
+
+  friend {{ enum_name }}& operator&=({{ enum_name }}& a, {{ enum_name }} b) {
+    return a = a & b;
+  }
+
+  friend {{ enum_name }}& operator^=({{ enum_name }}& a, {{ enum_name }} b) {
+    return a = a ^ b;
+  }
+  {% if enm.deprecated %}
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
+  {% endif %}
+  {% endif %}
   {% endfor %}
   {% for procedure_name,procedure in procedures.items() %}
 

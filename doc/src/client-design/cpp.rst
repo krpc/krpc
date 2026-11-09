@@ -129,5 +129,8 @@ Mapping the Spec to C++
      - Unsupported, as a C++ thread cannot be interrupted
    * - Scoped stream or event
      - A block holding the last copy. A copy kept past the block keeps the stream running
+   * - Flags enumeration
+     - An ``enum struct`` with generated operators, as hidden friends of the service class that
+       declares it. ``~`` keeps to the declared values, so a complement holds no undeclared bit
 
 A stream value is decoded when it is read, and for each callback.

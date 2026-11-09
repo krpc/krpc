@@ -5,7 +5,7 @@ import krpc.limits
 from krpc.declarations import DeclaredClass, DeclaredObject, declaration_error as _declaration, register as _register
 from krpc.event import Event
 from krpc.schema import KRPC_pb2
-from krpc.types import DocEnum
+from krpc.types import DocEnum, DocFlag
 
 
 class GameScene(DocEnum):
@@ -459,6 +459,8 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
     def and_(arg0: Expression, arg1: Expression) -> Expression:
         """
         Logical or bitwise and, which evaluates both operands.
+
+        Also takes two values of a flags enumeration, and gives the values they share.
 
         :param arg0: The first operand.
 
@@ -1052,6 +1054,8 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         Logical or bitwise exclusive or.
 
+        Also takes two values of a flags enumeration, and gives the values in only one of them.
+
         :param arg0: The first operand.
 
         :param arg1: The second operand.
@@ -1401,6 +1405,8 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
     def or_(arg0: Expression, arg1: Expression) -> Expression:
         """
         Logical or bitwise or, which evaluates both operands.
+
+        Also takes two values of a flags enumeration, and gives their combination.
 
         :param arg0: The first operand.
 

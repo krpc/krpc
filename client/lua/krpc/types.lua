@@ -5,6 +5,7 @@ local Map = require 'pl.Map'
 local seq = require 'pl.seq'
 local stringx = require 'pl.stringx'
 local utils = require 'pl.utils'
+local compat = require 'krpc.compat'
 local protobuf = require 'krpc.protobuf'
 
 local Types = class()
@@ -348,6 +349,29 @@ function Types.Enum:_init(value)
   self.value = value
 end
 
+--- A value of a flags enumeration: a combination of the values the enumeration declares.
+Types.Flags = class(Types.Enum)
+
+--- The combination of this value and another.
+function Types.Flags:union(other)
+  return self._class(compat.bor(self.value, other.value))
+end
+
+--- The flags this value shares with another.
+function Types.Flags:intersection(other)
+  return self._class(compat.band(self.value, other.value))
+end
+
+--- This value with the flags of another removed.
+function Types.Flags:difference(other)
+  return self._class(compat.bandnot(self.value, other.value))
+end
+
+--- Whether this value holds every flag of another.
+function Types.Flags:contains(other)
+  return compat.band(self.value, other.value) == other.value
+end
+
 local function _create_struct_type(service_name, struct_name, field_names)
   local cls = class(Types.StructBase)
   cls['_service_name'] = service_name
@@ -356,10 +380,20 @@ local function _create_struct_type(service_name, struct_name, field_names)
   return cls
 end
 
-local function _create_enum_type(_service_name, _class_name, values)
-  local cls = class(Types.Enum)
+local function _create_enum_type(_service_name, _class_name, values, flags)
+  local cls = class(flags and Types.Flags or Types.Enum)
   for k, v in pairs(values) do
     cls[k] = cls(v)
+  end
+  -- A value named after a method, such as union, would hide the method from the values
+  if flags then
+    cls.__index = function(_, key)
+      local member = rawget(cls, key)
+      if getmetatable(member) == cls and Types.Flags[key] ~= nil then
+        return Types.Flags[key]
+      end
+      return member
+    end
   end
   return cls
 end
@@ -456,8 +490,8 @@ function Types.EnumerationType:_init(protobuf_type)
   self:super(protobuf_type, nil, type_string)
 end
 
-function Types.EnumerationType:set_values(values)
-  self.lua_type = _create_enum_type(self._service_name, self._class_name, values)
+function Types.EnumerationType:set_values(values, flags)
+  self.lua_type = _create_enum_type(self._service_name, self._class_name, values, flags)
   if self._nullable_type ~= nil then
     self._nullable_type.lua_type = self.lua_type
   end

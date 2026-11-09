@@ -221,9 +221,9 @@ class CppLanguage(Language):
         if value is None:
             return self.parse_type(typ) + "()"
         if isinstance(typ, EnumerationType):
-            return "%s::%s" % (
-                self._parse_type(typ),
-                self.parse_enum_value_name(value.name),
+            return " | ".join(
+                "%s::%s" % (self._parse_type(typ), self.parse_enum_value_name(name))
+                for name in self.enum_value_names(value)
             )
         # A collection is written as a braced initializer list. Parentheses would name a
         # constructor instead, so std::vector<int32_t>(1, 2, 3) is not the vector of those

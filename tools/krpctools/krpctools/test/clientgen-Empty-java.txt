@@ -5,6 +5,7 @@ import com.google.protobuf.ByteString;
 import krpc.client.Connection;
 import krpc.client.Encoder;
 import krpc.client.RemoteEnum;
+import krpc.client.RemoteFlags;
 import krpc.client.RemoteObject;
 import krpc.client.RemoteStruct;
 import krpc.client.RPCInfo;

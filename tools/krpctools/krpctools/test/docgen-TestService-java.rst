@@ -223,6 +223,13 @@
       :param TestEnum x:
    
 
+   .. method:: TestFlags echoNullableFlags(TestFlags x)
+
+
+
+      :param TestFlags x:
+   
+
    .. method:: Float echoNullableFloat(Float value)
 
 
@@ -343,6 +350,41 @@
       :param TestEnum x:
    
 
+   .. method:: TestFlags flagsDefault(TestFlags x)
+
+
+
+      :param TestFlags x:
+   
+
+   .. method:: TestFlags flagsEcho(TestFlags x)
+
+
+
+      :param TestFlags x:
+   
+
+   .. method:: java.util.List<TestFlags> flagsListEcho(java.util.List<TestFlags> x)
+
+
+
+      :param java.util.List<TestFlags> x:
+   
+
+   .. method:: TestFlagsStruct flagsStructEcho(TestFlagsStruct x)
+
+
+
+      :param TestFlagsStruct x:
+   
+
+   .. method:: int flagsToInt(TestFlags x)
+
+
+
+      :param TestFlags x:
+   
+
    .. method:: java.util.List<Float> floatSpecialDefaults(float nan, float infinity, float negativeInfinity, float maximum, float lowest, float fraction)
 
       Procedure whose defaults are the special values of float, plus a finite fraction
@@ -440,6 +482,13 @@
 
 
       :param long value:
+   
+
+   .. method:: TestFlags intToFlags(int x)
+
+
+
+      :param int x:
    
 
    .. method:: String joinWithAtSign(String firstValue, String from)
@@ -939,6 +988,39 @@
 
 
 
+.. type:: public static final class TestFlags
+
+   Flags documentation string.
+
+   A flags enumeration. :std:ref:`java-client-flags` shows how to combine its values.
+
+
+   .. field:: public static final TestFlags NONE
+
+      Flags None documentation string.
+
+
+   .. field:: public static final TestFlags VALUE_A
+
+      Flags ValueA documentation string.
+
+
+   .. field:: public static final TestFlags VALUE_AB
+
+      Flags ValueAB documentation string.
+
+
+   .. field:: public static final TestFlags VALUE_B
+
+      Flags ValueB documentation string.
+
+
+   .. field:: public static final TestFlags VALUE_C
+
+      Flags ValueC documentation string.
+
+
+
 .. type:: public class DeprecatedStruct
 
    .. warning:: Deprecated. Use :type:`TestStruct` instead.
@@ -959,6 +1041,20 @@
       .. warning:: Deprecated. Use :meth:`DeprecatedStruct.getValue()` instead.
 
       Deprecated struct OldValue documentation string.
+
+
+.. type:: public class TestFlagsStruct
+
+   Flags struct documentation string.
+
+   .. constructor:: public TestFlagsStruct(TestFlags flagsField)
+
+      Construct a TestFlagsStruct from the values of its fields.
+
+
+   .. method:: TestFlags getFlagsField()
+
+
 
 
 .. type:: public class TestNestedNullableStruct

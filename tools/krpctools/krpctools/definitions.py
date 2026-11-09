@@ -117,9 +117,10 @@ def _register_enumeration(service, name, enumeration):
         )
         for value in enumeration["values"]
     )
+    flags = enumeration.get("flags", False)
 
     def register(types):
-        types.enumeration_type(service, name).set_values(values)
+        types.enumeration_type(service, name).set_values(values, flags=flags)
 
     return register
 

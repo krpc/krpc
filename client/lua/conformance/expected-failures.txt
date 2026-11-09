@@ -54,6 +54,9 @@ test_values.py::test_enum_equality  # == compares enumeration values by identity
 test_values.py::test_structure_equality  # As test_enum_equality
 test_values.py::test_undeclared_enum_value  # An enum type takes any number
 test_values.py::test_undeclared_enum_result  # As test_undeclared_enum_value
+test_values.py::test_undeclared_flags_value  # As test_undeclared_enum_value
+test_values.py::test_undeclared_flags_result  # As test_undeclared_enum_value
+test_values.py::test_combined_enum_value  # As test_undeclared_enum_value
 test_calls.py::test_too_many_arguments[procedure]  # Arguments past the last parameter are dropped
 test_calls.py::test_too_many_arguments[method]  # As test_too_many_arguments[procedure]
 test_objects.py::test_unknown_object_id[zero-argument]  # As test_errors.py::test_message_prefix

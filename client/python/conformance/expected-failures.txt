@@ -65,7 +65,6 @@ test_streams.py::test_remove_during_server_ending  # The client has no race poin
 test_concurrency.py::test_value_read_before_wake  # The client has no race points
 test_streams.py::test_value_as_first_call_ends  # The client has no race points
 test_codec.py::test_invalid_utf8  # A string that is not valid UTF-8 raises UnicodeDecodeError, not the encoding error
-test_values.py::test_undeclared_enum_result  # An undeclared enum value raises ValueError, not the encoding error
 test_connection.py::test_handshake_failed_write  # The write's OSError escapes the handshake unwrapped
 test_concurrency.py::test_wait_holding_another @skip  # The dispatcher thread waits for the condition held, so the update of the stream waited on is never announced
 test_concurrency.py::test_held_stream_ending_before_value  # A read on the thread holding the condition raises "Stream has no value", as the ending is announced only once the condition is free

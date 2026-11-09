@@ -356,10 +356,13 @@ namespace KRPC.Server.ProtocolBuffers
         {
             var number = ReadSInt32 (stream, spec);
             object value;
-            if (!spec.EnumValues.TryGetValue (number, out value))
-                throw new ArgumentException (
-                    "The value " + number + " is not declared by " + spec.Type);
-            return value;
+            if (spec.EnumValues.TryGetValue (number, out value))
+                return value;
+            // A combination of the values of a flags enumeration
+            if (spec.EnumMask.HasValue && (number & ~spec.EnumMask.Value) == 0)
+                return Enum.ToObject (spec.Type, number);
+            throw new ArgumentException (
+                "The value " + number + " is not declared by " + spec.Type);
         }
 
         static bool ReadBool (CodedInputStream stream)

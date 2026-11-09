@@ -8,6 +8,7 @@ from typing import (
 
 import krpc.schema.KRPC_pb2 as KRPC
 from krpc.decoder import Decoder
+from krpc.error import EncodingError
 from krpc.types import (
     DictionaryType,
     EnumerationType,
@@ -146,7 +147,7 @@ def decode_default_value(
     _check_registered(typ, location)
     try:
         return Decoder.decode(client, value, typ)
-    except ValueError as exn:
+    except (ValueError, EncodingError) as exn:
         raise RuntimeError("%s: %s" % (location, exn)) from exn
 
 

@@ -6,14 +6,18 @@ namespace KRPC.SpaceCenter
     /// <summary>
     /// The set of things that are visible in map mode.
     /// </summary>
+    /// <remarks>
+    /// The values may be combined.
+    /// </remarks>
     [Serializable]
+    [Flags]
     [KRPCEnum(Service = "SpaceCenter")]
     public enum MapFilterType
     {
         /// <summary>
         /// Everything.
         /// </summary>
-        All = MapViewFiltering.VesselTypeFilter.All,
+        All = 0x7FFF,
         /// <summary>
         /// Nothing.
         /// </summary>

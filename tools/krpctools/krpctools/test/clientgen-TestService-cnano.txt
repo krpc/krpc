@@ -26,6 +26,25 @@ typedef krpc_object_t krpc_TestService_DeprecatedClass_t;
  */
 typedef krpc_object_t krpc_TestService_TestClass_t;
 
+#ifndef KRPC_TYPE_TESTSERVICE_TESTFLAGSSTRUCT
+#define KRPC_TYPE_TESTSERVICE_TESTFLAGSSTRUCT
+
+typedef struct krpc_TestService_TestFlagsStruct_s krpc_TestService_TestFlagsStruct_t;
+struct krpc_TestService_TestFlagsStruct_s {
+  krpc_enum_t flags_field;
+};
+
+static inline krpc_error_t krpc_encode_TestService_TestFlagsStruct(
+  pb_ostream_t * stream, const krpc_TestService_TestFlagsStruct_t * value);
+static inline krpc_error_t krpc_encode_size_TestService_TestFlagsStruct(
+  size_t * size, const krpc_TestService_TestFlagsStruct_t * value);
+static inline bool krpc_encode_callback_TestService_TestFlagsStruct(
+  pb_ostream_t * stream, const pb_field_t * field, void * const * arg);
+static inline krpc_error_t krpc_decode_TestService_TestFlagsStruct(
+  pb_istream_t * stream, krpc_TestService_TestFlagsStruct_t * value);
+
+#endif  // KRPC_TYPE_TESTSERVICE_TESTFLAGSSTRUCT
+
 #ifndef KRPC_TYPE_NULLABLE_OBJECT
 #define KRPC_TYPE_NULLABLE_OBJECT
 
@@ -755,6 +774,32 @@ typedef enum {
   KRPC_TESTSERVICE_TESTENUM_VALUEC = 2
 } krpc_TestService_TestEnum_t;
 
+/**
+ * Flags documentation string.
+ */
+typedef enum {
+  /**
+   * Flags None documentation string.
+   */
+  KRPC_TESTSERVICE_TESTFLAGS_NONE = 0,
+  /**
+   * Flags ValueA documentation string.
+   */
+  KRPC_TESTSERVICE_TESTFLAGS_VALUEA = 1,
+  /**
+   * Flags ValueB documentation string.
+   */
+  KRPC_TESTSERVICE_TESTFLAGS_VALUEB = 2,
+  /**
+   * Flags ValueC documentation string.
+   */
+  KRPC_TESTSERVICE_TESTFLAGS_VALUEC = 4,
+  /**
+   * Flags ValueAB documentation string.
+   */
+  KRPC_TESTSERVICE_TESTFLAGS_VALUEAB = 3
+} krpc_TestService_TestFlags_t;
+
 static inline krpc_error_t krpc_TestService_AddMultipleValues(krpc_connection_t connection, char * * returnValue, float x, int32_t y, int64_t z);
 
 /**
@@ -989,6 +1034,14 @@ static inline krpc_error_t krpc_TestService_EchoNullableEnum(krpc_connection_t c
  */
 static inline krpc_error_t krpc_TestService_EchoNullableEnum_call(krpc_schema_ProcedureCall * procedureCall, const krpc_TestService_TestEnum_t * x);
 
+static inline krpc_error_t krpc_TestService_EchoNullableFlags(krpc_connection_t connection, krpc_TestService_TestFlags_t * returnValue, bool * returnValueIsNull, const krpc_TestService_TestFlags_t * x);
+
+/**
+ * Fills in the call krpc_TestService_EchoNullableFlags() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_TestService_EchoNullableFlags_call(krpc_schema_ProcedureCall * procedureCall, const krpc_TestService_TestFlags_t * x);
+
 static inline krpc_error_t krpc_TestService_EchoNullableFloat(krpc_connection_t connection, float * returnValue, bool * returnValueIsNull, const float * value);
 
 /**
@@ -1132,6 +1185,46 @@ static inline krpc_error_t krpc_TestService_EnumToString(krpc_connection_t conne
  */
 static inline krpc_error_t krpc_TestService_EnumToString_call(krpc_schema_ProcedureCall * procedureCall, krpc_TestService_TestEnum_t x);
 
+static inline krpc_error_t krpc_TestService_FlagsDefault(krpc_connection_t connection, krpc_TestService_TestFlags_t * returnValue, krpc_TestService_TestFlags_t x);
+
+/**
+ * Fills in the call krpc_TestService_FlagsDefault() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_TestService_FlagsDefault_call(krpc_schema_ProcedureCall * procedureCall, krpc_TestService_TestFlags_t x);
+
+static inline krpc_error_t krpc_TestService_FlagsEcho(krpc_connection_t connection, krpc_TestService_TestFlags_t * returnValue, krpc_TestService_TestFlags_t x);
+
+/**
+ * Fills in the call krpc_TestService_FlagsEcho() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_TestService_FlagsEcho_call(krpc_schema_ProcedureCall * procedureCall, krpc_TestService_TestFlags_t x);
+
+static inline krpc_error_t krpc_TestService_FlagsListEcho(krpc_connection_t connection, krpc_list_enum_t * returnValue, const krpc_list_enum_t * x);
+
+/**
+ * Fills in the call krpc_TestService_FlagsListEcho() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_TestService_FlagsListEcho_call(krpc_schema_ProcedureCall * procedureCall, const krpc_list_enum_t * x);
+
+static inline krpc_error_t krpc_TestService_FlagsStructEcho(krpc_connection_t connection, krpc_TestService_TestFlagsStruct_t * returnValue, const krpc_TestService_TestFlagsStruct_t * x);
+
+/**
+ * Fills in the call krpc_TestService_FlagsStructEcho() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_TestService_FlagsStructEcho_call(krpc_schema_ProcedureCall * procedureCall, const krpc_TestService_TestFlagsStruct_t * x);
+
+static inline krpc_error_t krpc_TestService_FlagsToInt(krpc_connection_t connection, int32_t * returnValue, krpc_TestService_TestFlags_t x);
+
+/**
+ * Fills in the call krpc_TestService_FlagsToInt() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_TestService_FlagsToInt_call(krpc_schema_ProcedureCall * procedureCall, krpc_TestService_TestFlags_t x);
+
 /**
  * Procedure whose defaults are the special values of float, plus a finite fraction
  * that no float can hold exactly.
@@ -1248,6 +1341,14 @@ static inline krpc_error_t krpc_TestService_Int64ToString(krpc_connection_t conn
  * krpc_free_procedure_call().
  */
 static inline krpc_error_t krpc_TestService_Int64ToString_call(krpc_schema_ProcedureCall * procedureCall, int64_t value);
+
+static inline krpc_error_t krpc_TestService_IntToFlags(krpc_connection_t connection, krpc_TestService_TestFlags_t * returnValue, int32_t x);
+
+/**
+ * Fills in the call krpc_TestService_IntToFlags() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_TestService_IntToFlags_call(krpc_schema_ProcedureCall * procedureCall, int32_t x);
 
 /**
  * Returns firstValue and from joined by an at
@@ -1861,6 +1962,89 @@ static inline krpc_error_t krpc_TestService_TestClass_StringPropertyPrivateSet(k
 static inline krpc_error_t krpc_TestService_TestClass_StringPropertyPrivateSet_call(krpc_schema_ProcedureCall * procedureCall, krpc_TestService_TestClass_t instance);
 
 // Implementation
+
+#ifndef KRPC_IMPL_TYPE_TESTSERVICE_TESTFLAGSSTRUCT
+#define KRPC_IMPL_TYPE_TESTSERVICE_TESTFLAGSSTRUCT
+
+static inline bool krpc_encode_callback_items_TestService_TestFlagsStruct(
+  pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
+  const krpc_TestService_TestFlagsStruct_t * value = (const krpc_TestService_TestFlagsStruct_t*)(*arg);
+  {
+    if (!pb_encode_tag_for_field(stream, field))
+      KRPC_CALLBACK_RETURN_ERROR("encoding tag for tuple item");
+    size_t size;
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_enum(&size, value->flags_field));
+    if (!pb_encode_varint(stream, size))
+      KRPC_CALLBACK_RETURN_ERROR("encoding size for tuple item");
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_enum(stream, value->flags_field));
+  }
+  return true;
+}
+
+static inline krpc_error_t krpc_encode_TestService_TestFlagsStruct(
+  pb_ostream_t * stream, const krpc_TestService_TestFlagsStruct_t * value) {
+  krpc_schema_Tuple message = krpc_schema_Tuple_init_default;
+  message.items.funcs.encode = &krpc_encode_callback_items_TestService_TestFlagsStruct;
+  message.items.arg = (krpc_TestService_TestFlagsStruct_t*)value;
+  KRPC_RETURN_ON_ERROR(krpc_encode_message_Tuple(stream, &message));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_encode_size_TestService_TestFlagsStruct(
+  size_t * size, const krpc_TestService_TestFlagsStruct_t * value) {
+  pb_ostream_t stream = PB_OSTREAM_SIZING;
+  KRPC_RETURN_ON_ERROR(krpc_encode_TestService_TestFlagsStruct(&stream, value));
+  *size = stream.bytes_written;
+  return KRPC_OK;
+}
+
+static inline bool krpc_encode_callback_TestService_TestFlagsStruct(
+  pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
+  if (!pb_encode_tag_for_field(stream, field))
+    KRPC_CALLBACK_RETURN_ERROR("encoding tag for TestService_TestFlagsStruct");
+  krpc_TestService_TestFlagsStruct_t * value = (krpc_TestService_TestFlagsStruct_t*)(*arg);
+  size_t size;
+  KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_TestService_TestFlagsStruct(&size, value));
+  if (!pb_encode_varint(stream, size))
+    KRPC_CALLBACK_RETURN_ERROR("encoding size for TestService_TestFlagsStruct");
+  KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_TestService_TestFlagsStruct(stream, value));
+  return true;
+}
+
+static inline bool krpc_decode_callback_item_TestService_TestFlagsStruct(
+  pb_istream_t * stream, const pb_field_t * field, void ** arg) {
+  typedef struct State {size_t pos; krpc_TestService_TestFlagsStruct_t * value;} State;
+  State * state = (State*)(*arg);
+  krpc_TestService_TestFlagsStruct_t * value = state->value;
+  switch (state->pos) {
+  case 0:
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_enum(stream, &value->flags_field));
+    break;
+  default:
+    // Fields are only ever appended to a structure, so a value from a newer server may
+    // carry more items than this client knows about, and those are skipped
+    if (!pb_read(stream, NULL, stream->bytes_left))
+      KRPC_CALLBACK_RETURN_ERROR("skipping an appended struct field");
+    break;
+  }
+  state->pos++;
+  return true;
+}
+
+static inline krpc_error_t krpc_decode_TestService_TestFlagsStruct(
+  pb_istream_t * stream, krpc_TestService_TestFlagsStruct_t * value) {
+  krpc_schema_Tuple message = krpc_schema_Tuple_init_default;
+  message.items.funcs.decode = &krpc_decode_callback_item_TestService_TestFlagsStruct;
+  typedef struct State { size_t pos; krpc_TestService_TestFlagsStruct_t * value; } State;
+  State state = { 0, value };
+  message.items.arg = &state;
+  KRPC_RETURN_ON_ERROR(krpc_decode_message_Tuple(stream, &message));
+  if (state.pos < 1)
+    KRPC_RETURN_ERROR(DECODING_FAILED, "too few fields for a TestService_TestFlagsStruct");
+  return KRPC_OK;
+}
+
+#endif  // KRPC_IMPL_TYPE_TESTSERVICE_TESTFLAGSSTRUCT
 
 #ifndef KRPC_IMPL_TYPE_NULLABLE_OBJECT
 #define KRPC_IMPL_TYPE_NULLABLE_OBJECT
@@ -5536,6 +5720,44 @@ static inline krpc_error_t krpc_TestService_EchoNullableEnum_call(krpc_schema_Pr
   return KRPC_OK;
 }
 
+static inline krpc_error_t krpc_TestService_EchoNullableFlags(krpc_connection_t connection, krpc_TestService_TestFlags_t * returnValue, bool * returnValueIsNull, const krpc_TestService_TestFlags_t * x) {
+  krpc_call_t _call;
+  krpc_argument_t _arguments[1];
+  KRPC_CHECK(krpc_call(&_call, 857051661, 2096715729, 1, _arguments));
+  if (x == NULL) {
+    KRPC_CHECK(krpc_add_null_argument(&_call, 0));
+  } else {
+    KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_enum, x));
+  }
+  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
+  KRPC_CHECK(krpc_init_result(&_result));
+  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
+  if (returnValue) {
+    if (_result.message.is_null) {
+      if (returnValueIsNull)
+        *returnValueIsNull = true;
+    } else {
+      if (returnValueIsNull)
+        *returnValueIsNull = false;
+      pb_istream_t _stream;
+      KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+      KRPC_CHECK(krpc_decode_enum(&_stream, (int*)returnValue));
+    }
+  }
+  KRPC_CHECK(krpc_free_result(&_result));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_EchoNullableFlags_call(krpc_schema_ProcedureCall * procedureCall, const krpc_TestService_TestFlags_t * x) {
+  KRPC_CHECK(krpc_procedure_call(procedureCall, 857051661, 2096715729, 1));
+  if (x == NULL) {
+    KRPC_CHECK(krpc_procedure_call_null_argument(procedureCall, 0));
+  } else {
+    KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_enum, x));
+  }
+  return KRPC_OK;
+}
+
 static inline krpc_error_t krpc_TestService_EchoNullableFloat(krpc_connection_t connection, float * returnValue, bool * returnValueIsNull, const float * value) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
@@ -6074,6 +6296,121 @@ static inline krpc_error_t krpc_TestService_EnumToString_call(krpc_schema_Proced
   return KRPC_OK;
 }
 
+static inline krpc_error_t krpc_TestService_FlagsDefault(krpc_connection_t connection, krpc_TestService_TestFlags_t * returnValue, krpc_TestService_TestFlags_t x) {
+  krpc_call_t _call;
+  krpc_argument_t _arguments[1];
+  KRPC_CHECK(krpc_call(&_call, 857051661, 3991048083, 1, _arguments));
+  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_enum, &x));
+  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
+  KRPC_CHECK(krpc_init_result(&_result));
+  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
+  if (returnValue) {
+    pb_istream_t _stream;
+    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+    KRPC_CHECK(krpc_decode_enum(&_stream, (int*)returnValue));
+  }
+  KRPC_CHECK(krpc_free_result(&_result));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_FlagsDefault_call(krpc_schema_ProcedureCall * procedureCall, krpc_TestService_TestFlags_t x) {
+  KRPC_CHECK(krpc_procedure_call(procedureCall, 857051661, 3991048083, 1));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_enum, &x));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_FlagsEcho(krpc_connection_t connection, krpc_TestService_TestFlags_t * returnValue, krpc_TestService_TestFlags_t x) {
+  krpc_call_t _call;
+  krpc_argument_t _arguments[1];
+  KRPC_CHECK(krpc_call(&_call, 857051661, 1631012067, 1, _arguments));
+  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_enum, &x));
+  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
+  KRPC_CHECK(krpc_init_result(&_result));
+  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
+  if (returnValue) {
+    pb_istream_t _stream;
+    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+    KRPC_CHECK(krpc_decode_enum(&_stream, (int*)returnValue));
+  }
+  KRPC_CHECK(krpc_free_result(&_result));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_FlagsEcho_call(krpc_schema_ProcedureCall * procedureCall, krpc_TestService_TestFlags_t x) {
+  KRPC_CHECK(krpc_procedure_call(procedureCall, 857051661, 1631012067, 1));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_enum, &x));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_FlagsListEcho(krpc_connection_t connection, krpc_list_enum_t * returnValue, const krpc_list_enum_t * x) {
+  krpc_call_t _call;
+  krpc_argument_t _arguments[1];
+  KRPC_CHECK(krpc_call(&_call, 857051661, 1673459156, 1, _arguments));
+  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_list_enum, x));
+  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
+  KRPC_CHECK(krpc_init_result(&_result));
+  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
+  if (returnValue) {
+    pb_istream_t _stream;
+    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+    KRPC_CHECK(krpc_decode_list_enum(&_stream, returnValue));
+  }
+  KRPC_CHECK(krpc_free_result(&_result));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_FlagsListEcho_call(krpc_schema_ProcedureCall * procedureCall, const krpc_list_enum_t * x) {
+  KRPC_CHECK(krpc_procedure_call(procedureCall, 857051661, 1673459156, 1));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_list_enum, x));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_FlagsStructEcho(krpc_connection_t connection, krpc_TestService_TestFlagsStruct_t * returnValue, const krpc_TestService_TestFlagsStruct_t * x) {
+  krpc_call_t _call;
+  krpc_argument_t _arguments[1];
+  KRPC_CHECK(krpc_call(&_call, 857051661, 210586525, 1, _arguments));
+  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_TestService_TestFlagsStruct, x));
+  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
+  KRPC_CHECK(krpc_init_result(&_result));
+  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
+  if (returnValue) {
+    pb_istream_t _stream;
+    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+    KRPC_CHECK(krpc_decode_TestService_TestFlagsStruct(&_stream, returnValue));
+  }
+  KRPC_CHECK(krpc_free_result(&_result));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_FlagsStructEcho_call(krpc_schema_ProcedureCall * procedureCall, const krpc_TestService_TestFlagsStruct_t * x) {
+  KRPC_CHECK(krpc_procedure_call(procedureCall, 857051661, 210586525, 1));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_TestService_TestFlagsStruct, x));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_FlagsToInt(krpc_connection_t connection, int32_t * returnValue, krpc_TestService_TestFlags_t x) {
+  krpc_call_t _call;
+  krpc_argument_t _arguments[1];
+  KRPC_CHECK(krpc_call(&_call, 857051661, 3196409400, 1, _arguments));
+  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_enum, &x));
+  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
+  KRPC_CHECK(krpc_init_result(&_result));
+  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
+  if (returnValue) {
+    pb_istream_t _stream;
+    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+    KRPC_CHECK(krpc_decode_int32(&_stream, returnValue));
+  }
+  KRPC_CHECK(krpc_free_result(&_result));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_FlagsToInt_call(krpc_schema_ProcedureCall * procedureCall, krpc_TestService_TestFlags_t x) {
+  KRPC_CHECK(krpc_procedure_call(procedureCall, 857051661, 3196409400, 1));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_enum, &x));
+  return KRPC_OK;
+}
+
 static inline krpc_error_t krpc_TestService_FloatSpecialDefaults(krpc_connection_t connection, krpc_list_float_t * returnValue, float nan, float infinity, float negativeInfinity, float maximum, float lowest, float fraction) {
   krpc_call_t _call;
   krpc_argument_t _arguments[6];
@@ -6384,6 +6721,29 @@ static inline krpc_error_t krpc_TestService_Int64ToString(krpc_connection_t conn
 static inline krpc_error_t krpc_TestService_Int64ToString_call(krpc_schema_ProcedureCall * procedureCall, int64_t value) {
   KRPC_CHECK(krpc_procedure_call(procedureCall, 857051661, 3361617767, 1));
   KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_int64, &value));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_IntToFlags(krpc_connection_t connection, krpc_TestService_TestFlags_t * returnValue, int32_t x) {
+  krpc_call_t _call;
+  krpc_argument_t _arguments[1];
+  KRPC_CHECK(krpc_call(&_call, 857051661, 1767244251, 1, _arguments));
+  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_int32, &x));
+  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
+  KRPC_CHECK(krpc_init_result(&_result));
+  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
+  if (returnValue) {
+    pb_istream_t _stream;
+    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+    KRPC_CHECK(krpc_decode_enum(&_stream, (int*)returnValue));
+  }
+  KRPC_CHECK(krpc_free_result(&_result));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_IntToFlags_call(krpc_schema_ProcedureCall * procedureCall, int32_t x) {
+  KRPC_CHECK(krpc_procedure_call(procedureCall, 857051661, 1767244251, 1));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_int32, &x));
   return KRPC_OK;
 }
 

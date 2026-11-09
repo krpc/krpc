@@ -102,6 +102,19 @@ class Language:
         """The name of a value of an enumeration, as the enumeration declares it"""
         return self.parse_name(name)
 
+    @staticmethod
+    def enum_value_names(value):
+        """The names of the declared values an enumeration value is, or the names of those a
+        combination of flags holds"""
+        # Before Python 3.11, a combination has no name
+        if value.name is not None:
+            return value.name.split("|")
+        return [
+            x.name
+            for x in type(value).__members__.values()
+            if x.value != 0 and x.value & (x.value - 1) == 0 and value.value & x.value
+        ]
+
     def parse_type(self, typ):
         raise NotImplementedError
 

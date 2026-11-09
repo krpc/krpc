@@ -139,6 +139,19 @@ range.
 .. seealso:: :doc:`/user-guide/object-lifetime` describes how each kind of object behaves in more
              detail.
 
+.. _python-client-flags:
+
+Flags Enumerations
+------------------
+
+A flags enumeration, such as :class:`SpaceCenter.MapFilterType`, holds any combination of its
+values. It is an ``enum.Flag``. You combine values with ``|``, and test for one with ``in``:
+
+.. literalinclude:: /scripts/python/Flags.py
+
+``&``, ``^`` and ``~`` give the other combinations. ``~`` keeps to the values the enumeration
+declares.
+
 .. _python-client-streams:
 
 Streaming Data

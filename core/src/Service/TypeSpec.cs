@@ -22,8 +22,11 @@ namespace KRPC.Service
             Nullable = nullable;
             types = containedTypes;
             Kind = KindOf (type);
-            if (Kind == TypeKind.Enum)
+            if (Kind == TypeKind.Enum) {
                 EnumValues = EnumValuesOf (type);
+                if (Enumerations.IsFlags (type))
+                    EnumMask = EnumValues.Keys.Aggregate (0, (mask, value) => mask | value);
+            }
         }
 
         /// <summary>
@@ -54,6 +57,12 @@ namespace KRPC.Service
         /// kind of type. Decoding looks a value up here, which costs no reflection or allocation.
         /// </summary>
         internal IDictionary<int,object> EnumValues { get; private set; }
+
+        /// <summary>
+        /// The union of the values of a flags enumeration, or null for any other type. A number
+        /// that holds no bit outside it is a value of the enumeration.
+        /// </summary>
+        internal int? EnumMask { get; private set; }
 
         static readonly IDictionary<Type,IDictionary<int,object>> enumValues =
             new Dictionary<Type,IDictionary<int,object>> ();

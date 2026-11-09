@@ -659,6 +659,8 @@ static inline krpc_error_t krpc_KRPC_Expression_All_call(krpc_schema_ProcedureCa
 
 /**
  * Logical or bitwise and, which evaluates both operands.
+ *
+ * Also takes two values of a flags enumeration, and gives the values they share.
  * @param connection A connection object.
  * @param returnValue The value returned.
  * @param arg0 The first operand.
@@ -1427,6 +1429,8 @@ static inline krpc_error_t krpc_KRPC_Expression_Except_call(krpc_schema_Procedur
 
 /**
  * Logical or bitwise exclusive or.
+ *
+ * Also takes two values of a flags enumeration, and gives the values in only one of them.
  * @param connection A connection object.
  * @param returnValue The value returned.
  * @param arg0 The first operand.
@@ -1864,6 +1868,8 @@ static inline krpc_error_t krpc_KRPC_Expression_NotEqual_call(krpc_schema_Proced
 
 /**
  * Logical or bitwise or, which evaluates both operands.
+ *
+ * Also takes two values of a flags enumeration, and gives their combination.
  * @param connection A connection object.
  * @param returnValue The value returned.
  * @param arg0 The first operand.

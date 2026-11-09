@@ -328,6 +328,117 @@ def test_undeclared_enum_result(client, server, scripted_server):
         client.close()
 
 
+section(
+    "Flags Enumerations",
+    "A flags enumeration holds any combination of its values. A number is a value of it when "
+    "it holds no bit outside the union of the values it declares.",
+)
+
+
+def flags_value(value: int) -> pb.Value:
+    """A TestService.TestFlags value."""
+    return values.enum("TestService", "TestFlags", value)
+
+
+def test_flags(connected):
+    """A combination of flags arrives intact in both directions, also in a list, a nullable
+    and a structure."""
+    for value in (1, 5, 7):
+        assert (
+            connected.invoke("TestService", "FlagsToInt", flags_value(value)) == value
+        )
+        result = connected.invoke("TestService", "IntToFlags", values.sint32(value))
+        assert result == values.Enum(value)
+        result = connected.invoke("TestService", "FlagsEcho", flags_value(value))
+        assert result == values.Enum(value)
+    result = connected.invoke(
+        "TestService", "FlagsListEcho", values.list_of([flags_value(5), flags_value(6)])
+    )
+    assert result == [values.Enum(5), values.Enum(6)]
+    result = connected.invoke("TestService", "EchoNullableFlags", flags_value(5))
+    assert result == values.Enum(5)
+    struct = values.struct("TestService", "TestFlagsStruct", flags_value(5))
+    result = connected.invoke("TestService", "FlagsStructEcho", struct)
+    assert result == values.Struct((values.Enum(5),))
+
+
+def test_flags_declared_values(connected):
+    """The zero value and a value declared as a union of others decode as the values the
+    enumeration declares."""
+    for value in (0, 3):
+        result = connected.invoke("TestService", "IntToFlags", values.sint32(value))
+        assert result == values.Enum(value)
+        result = connected.invoke("TestService", "FlagsEcho", flags_value(value))
+        assert result == values.Enum(value)
+
+
+def test_flags_union(connected):
+    """A combination of flags built by the client equals the same combination from the
+    server."""
+    union = connected.flags_union(flags_value(1), flags_value(4))
+    assert union == values.Enum(5)
+    assert connected.invoke("TestService", "FlagsToInt", flags_value(union.value)) == 5
+    assert connected.flags_union(flags_value(1), flags_value(2)) == values.Enum(3)
+    assert connected.flags_union(flags_value(3), flags_value(0)) == values.Enum(3)
+
+
+# A combination of flags, a value, and whether the combination holds the value
+FLAGS_CONTAINS = [
+    (5, 1, True),
+    (5, 4, True),
+    (5, 2, False),
+    (5, 3, False),
+    (7, 3, True),
+]
+
+
+def test_flags_contains(connected):
+    """The client tests whether a combination of flags holds a value, and removes a value
+    from a combination."""
+    for a, b, expected in FLAGS_CONTAINS:
+        result = connected.flags_contains(flags_value(a), flags_value(b))
+        assert result is expected, (a, b)
+    assert connected.flags_difference(flags_value(7), flags_value(2)) == values.Enum(5)
+    assert connected.flags_difference(flags_value(5), flags_value(2)) == values.Enum(5)
+    assert connected.flags_difference(flags_value(3), flags_value(3)) == values.Enum(0)
+
+
+def test_undeclared_flags_result(connected):
+    """A flags enumeration result holding a bit the enumeration does not declare raises the
+    encoding error. The next call succeeds."""
+    with pytest.raises(TesteeError) as info:
+        connected.invoke("TestService", "IntToFlags", values.sint32(9))
+    if error_types(connected):
+        assert info.value.error.kind == pb.Error.ENCODING, info.value.error
+    assert connected.invoke("TestService", "Int32ToString", values.sint32(1)) == "1"
+
+
+@profile("dynamic")
+def test_undeclared_flags_value(client, server, scripted_server):
+    """A flags enumeration value holding a bit the enumeration does not declare raises
+    the encoding or argument error, before the request is sent."""
+    refused_before_sending(client, server, scripted_server, "FlagsEcho", flags_value(9))
+
+
+@profile("dynamic")
+def test_combined_enum_value(client, server, scripted_server):
+    """A combination of the values of an enumeration that is not a flags enumeration
+    raises the encoding or argument error, before the request is sent."""
+    refused_before_sending(
+        client, server, scripted_server, "EnumToString", enum_value(3)
+    )
+
+
+def test_flags_definitions(server):
+    """The service definitions mark a flags enumeration, and leave other enumerations
+    unmarked."""
+    services = KRPC.Services.FromString(raw.call(server, "KRPC", "GetServices").value)
+    service = next(x for x in services.services if x.name == "TestService")
+    enumerations = {x.name: x for x in service.enumerations}
+    assert enumerations["TestFlags"].flags
+    assert not enumerations["TestEnum"].flags
+
+
 section("Strings and Bytes")
 
 

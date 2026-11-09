@@ -118,6 +118,7 @@
     <Compile Include="Service\ClassStaticMethodHandler.cs" />
     <Compile Include="Service\DocumentationException.cs" />
     <Compile Include="Service\DocumentationUtils.cs" />
+    <Compile Include="Service\Enumerations.cs" />
     <Compile Include="Service\Event.cs" />
     <Compile Include="Service\EventStream.cs" />
     <Compile Include="Service\FunctionStream.cs" />

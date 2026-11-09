@@ -377,6 +377,42 @@ namespace KRPC.Test.Service.KRPC
                 () => Expression.ConstantEnum ("TestService", "NoSuchEnum", 0));
             Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
                 () => Expression.ConstantEnum ("TestService", "TestEnum", 99));
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Expression.ConstantEnum ("TestService", "TestEnum", 3));
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Expression.ConstantEnum ("TestService", "TestFlags", 8));
+        }
+
+        [TestCase ("And", 1)]
+        [TestCase ("Or", 7)]
+        [TestCase ("ExclusiveOr", 6)]
+        public void FlagsOperators (string op, int expected)
+        {
+            var method = typeof (Expression).GetMethod (op);
+            var result = (Expression)method.Invoke (null, new object [] {
+                Expression.ConstantEnum ("TestService", "TestFlags", 3),
+                Expression.ConstantEnum ("TestService", "TestFlags", 5) });
+            var value = Eval<global::KRPC.Test.Service.TestService.TestFlags> (result);
+            Assert.AreEqual ((global::KRPC.Test.Service.TestService.TestFlags)expected, value);
+        }
+
+        [Test]
+        public void EnumOperatorsNeedFlags ()
+        {
+            Assert.Throws<System.InvalidOperationException> (
+                () => Expression.Or (
+                    Expression.ConstantEnum ("TestService", "TestEnum", 1),
+                    Expression.ConstantEnum ("TestService", "TestEnum", 2)));
+        }
+
+        [Test]
+        public void ConstantFlagsCombination ()
+        {
+            var value = Eval<global::KRPC.Test.Service.TestService.TestFlags> (
+                Expression.ConstantEnum ("TestService", "TestFlags", 5));
+            Assert.AreEqual (
+                global::KRPC.Test.Service.TestService.TestFlags.A |
+                global::KRPC.Test.Service.TestService.TestFlags.C, value);
         }
 
         [Test]

@@ -27,6 +27,7 @@ import com.google.protobuf.ByteString;
 import krpc.client.Connection;
 import krpc.client.Encoder;
 import krpc.client.RemoteEnum;
+import krpc.client.RemoteFlags;
 import krpc.client.RemoteObject;
 import krpc.client.RemoteStruct;
 import krpc.client.RPCInfo;
@@ -96,6 +97,43 @@ public class {{ service_name }} {
 {% endif %}
 {% if enm.deprecated %}    @Deprecated
 {% endif %}
+    {% if enm.flags %}
+    public static final class {{ enum_name }} extends RemoteFlags<{{ enum_name }}> {
+        {% for value in enm['values'] %}
+{% if value.documentation %}{{ value.documentation | indent(width=8) }}
+{% endif %}
+{% if value.deprecated %}        @Deprecated
+{% endif %}
+        public static final {{ enum_name }} {{ value.name }} = new {{ enum_name }}({{ value.value }});
+
+        {% endfor %}
+        private {{ enum_name }} (int value) {
+            super(value);
+        }
+
+        @Override
+        protected {{ enum_name }} withValue(int value) {
+            return fromValue(value);
+        }
+
+        /**
+         * Returns the value of the enumeration for a number, or null if the number holds a
+         * flag the enumeration does not declare.
+         */
+        public static {{ enum_name }} fromValue(int value) {
+            switch (value) {
+            {% for value in enm['values'] %}
+            case {{ value.value }}:
+                 return {{ value.name }};
+            {% endfor %}
+            }
+            if ((value & ~{{ enm.mask }}) != 0) {
+                return null;
+            }
+            return new {{ enum_name }}(value);
+        }
+    }
+    {% else %}
     public enum {{ enum_name }} implements RemoteEnum {
         {% for value in enm['values'] %}
 {% if value.documentation %}{{ value.documentation | indent(width=8) }}
@@ -127,6 +165,7 @@ public class {{ service_name }} {
             return null;
         }
     }
+    {% endif %}
     {% endfor %}
     {% for struct_name,struct in structs.items() %}
 

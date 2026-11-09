@@ -47,6 +47,15 @@ namespace KRPC.Test.Service.KRPC
         }
 
         [Test]
+        public void FlagsConstant ()
+        {
+            Check (
+                "Constant<KRPC.Test.Service.TestService.TestFlags> " +
+                "KRPC.Test.Service.TestService.TestFlags.A | KRPC.Test.Service.TestService.TestFlags.C\n",
+                Expression.ConstantEnum ("TestService", "TestFlags", 5));
+        }
+
+        [Test]
         public void StateVariable ()
         {
             Check (

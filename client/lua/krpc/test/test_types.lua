@@ -21,6 +21,17 @@ function TestTypes:test_nullable_type_shares_its_lua_type()
   luaunit.assertEquals(struct.field_types, nullable_struct.field_types)
 end
 
+function TestTypes:test_flags_value_named_after_a_method()
+  local types = Types()
+  local typ = types:enumeration_type('ServiceName', 'FlagsName')
+  typ:set_values({none = 0, union = 1, contains = 2}, true)
+  local flags = typ.lua_type
+  local value = flags.union:union(flags.contains)
+  luaunit.assertEquals(value.value, 3)
+  luaunit.assertTrue(value:contains(flags.union))
+  luaunit.assertIs(value._class, flags)
+end
+
 function TestTypes:test_struct_and_class_compare_unequal_to_other_values()
   local types = Types()
   local struct_type = types:struct_type('ServiceName', 'EqualityStruct')

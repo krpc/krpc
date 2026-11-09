@@ -46,6 +46,14 @@ class TestClientGenCsharp(ClientGenTestCase, unittest.TestCase):
     language = "csharp"
     generator = CsharpGenerator
 
+    def test_flags_default(self):
+        content = self.generate("FlagsService", self.load("FlagsDefault"))
+        self.assertIn(
+            "mode = global::KRPC.Client.Services.FlagsService.Mode.Slow | "
+            "global::KRPC.Client.Services.FlagsService.Mode.Fast",
+            content,
+        )
+
     def test_bytes_default(self):
         # A byte array is not a compile-time constant, so it defaults to null
         content = self.generate("ServiceA", bytes_default())

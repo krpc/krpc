@@ -356,6 +356,16 @@ to add functionality to the kRPC server.
      <https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/enum>`_ must be an
      ``int``.
 
+   An enumeration with ``[Flags]`` is a *flags enumeration*, whose values a client can combine. A
+   value of it is any number holding no bit outside the union of the values it declares. It must
+   also satisfy the following criteria:
+
+   * It declares a value of 0, such as ``None``.
+
+   * Each value is 0, a single bit, or a union of single bits the enumeration declares.
+
+   * No value is negative.
+
    **Examples**
 
    * Declare an enumeration type with two values:
@@ -372,6 +382,14 @@ to add functionality to the kRPC server.
         :language: python
         :start-after: [docs]
         :end-before: [/docs]
+
+   * Declare a flags enumeration, whose ``All`` value is the union of the others:
+
+     .. literalinclude:: /scripts/extending/attributes/FlagsEnumeration.lib.cs
+        :language: csharp
+        :start-after: [docs]
+        :end-before: [/docs]
+        :dedent:
 
 .. cs:attribute:: KRPCStruct (string Service)
 
