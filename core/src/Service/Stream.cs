@@ -18,9 +18,14 @@ namespace KRPC.Service
             set { StreamResult.Id = value; }
         }
 
+        static readonly Stopwatch clock = Stopwatch.StartNew ();
+
+        // How far a rate limited stream may fall behind its schedule, in milliseconds
+        const double MaxLag = 100;
+
         float rate;
         float delay;
-        Stopwatch timer;
+        double due;
         bool updated;
         bool ranWithNoValue;
 
@@ -63,8 +68,13 @@ namespace KRPC.Service
             StreamResult = new StreamResult ();
             rate = 0;
             delay = 0;
-            timer = Stopwatch.StartNew ();
+            Now = () => clock.Elapsed.TotalMilliseconds;
         }
+
+        /// <summary>
+        /// The time, in milliseconds, that rate limiting keeps to.
+        /// </summary>
+        internal Func<double> Now { get; set; }
 
         /// <summary>
         /// The update rate of the stream in Hz.
@@ -72,8 +82,11 @@ namespace KRPC.Service
         public float Rate {
           get { return rate; }
           set {
+              var newDelay = value == 0 ? 0 : 1000.0f / value;
+              // Count the new period from the last run, so a new rate applies at once
+              due += newDelay - delay;
               rate = value;
-              delay = rate == 0 ? 0 : 1000.0f / rate;
+              delay = newDelay;
           }
         }
 
@@ -82,16 +95,17 @@ namespace KRPC.Service
         /// Rate limiting is applied by this method.
         /// </summary>
         public void Update() {
+            var now = Now ();
             // The first update is never rate limited, so a new stream sends its value at once
-            if (updated && rate != 0 && timer.ElapsedMilliseconds < delay) {
-                return;
+            if (updated && rate != 0) {
+                if (now < due)
+                    return;
+                due = Math.Max (due, now - MaxLag) + delay;
+            } else {
+                due = now + delay;
             }
             updated = true;
             UpdateInternal();
-            if (rate != 0) {
-                timer.Reset();
-                timer.Start();
-            }
         }
 
         /// <summary>

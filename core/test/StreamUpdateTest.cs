@@ -41,6 +41,27 @@ namespace KRPC.Test
             }
         }
 
+        // A stream that counts its runs, at a time the test sets
+        sealed class CountingStream : global::KRPC.Service.Stream
+        {
+            public int Runs;
+            public double Time;
+
+            public CountingStream ()
+            {
+                Now = () => Time;
+            }
+
+            public override void UpdateInternal ()
+            {
+                Runs++;
+                var result = new ProcedureResult ();
+                result.Spec = TypeSpec.Create (typeof (int));
+                result.Value = Runs;
+                Result = result;
+            }
+        }
+
         sealed class ThrowingStream : global::KRPC.Service.Stream
         {
             public override void UpdateInternal ()
@@ -289,6 +310,50 @@ namespace KRPC.Test
             var update = Update ();
             Assert.AreEqual (1, update.Count);
             Assert.AreEqual (42, ResultFor (update, id).Value);
+        }
+
+        [TestCase (10)]
+        [TestCase (15)]
+        [TestCase (30)]
+        public void ARateLimitedStreamKeepsItsRateOverBurstsOfUpdates (int rate)
+        {
+            var stream = new CountingStream ();
+            var id = Add (stream);
+            core.SetStreamRate (client, id, rate);
+            // Ten seconds of 50 Hz physics ticks, run three at a time every 60 ms
+            for (int tick = 0; tick < 500; tick++) {
+                stream.Time = (tick / 3) * 60 + (tick % 3) * 0.1;
+                Update ();
+            }
+            Assert.AreEqual (rate * 10, stream.Runs, rate / 2);
+        }
+
+        [Test]
+        public void ARaisedRateAppliesFromTheLastRun ()
+        {
+            var stream = new CountingStream ();
+            var id = Add (stream);
+            core.SetStreamRate (client, id, 0.2f);
+            Update ();
+            stream.Time = 100;
+            core.SetStreamRate (client, id, 30);
+            Update ();
+            Assert.AreEqual (2, stream.Runs);
+        }
+
+        [Test]
+        public void ARateLimitedStreamCatchesUpAtMostAFewUpdatesAfterAStall ()
+        {
+            var stream = new CountingStream ();
+            var id = Add (stream);
+            core.SetStreamRate (client, id, 50);
+            Update ();
+            // A one second stall, then updates in quick succession
+            stream.Time = 1000;
+            for (int i = 0; i < 20; i++)
+                Update ();
+            // The stream runs until it is no more than 100 ms behind, at 20 ms a run
+            Assert.AreEqual (1 + 6, stream.Runs);
         }
 
         [Test]
