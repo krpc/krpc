@@ -10,7 +10,7 @@ import urllib.error
 import zipfile
 from unittest import mock
 
-from krpctools.game import game, install
+from krpctools.game import game, install, launch
 from krpctools.game.ksp import KSP
 from krpctools.game.ksp.game import copy_folder
 
@@ -119,6 +119,30 @@ class TestRequirements(unittest.TestCase):
         for mod in ksp.mods.values():
             for name in mod.requires:
                 self.assertIn(name, ksp.mods)
+
+
+class TestLoadedModsMatch(unittest.TestCase):
+    def test_required_mods_match(self):
+        self.assertTrue(launch._matches(KSP(), {"FAR"}, {"FAR"}))
+
+    def test_loaded_dependency_matches(self):
+        self.assertTrue(
+            launch._matches(
+                KSP(), {"KerbalAlarmClock"}, {"KerbalAlarmClock", "ToolbarControl"}
+            )
+        )
+
+    def test_missing_mod_does_not_match(self):
+        self.assertFalse(
+            launch._matches(KSP(), {"KerbalAlarmClock"}, {"ToolbarControl"})
+        )
+
+    def test_unrequired_mod_does_not_match(self):
+        self.assertFalse(
+            launch._matches(
+                KSP(), {"ToolbarControl"}, {"KerbalAlarmClock", "ToolbarControl"}
+            )
+        )
 
 
 class TestCopyFolder(TempDirTestCase):

@@ -46,7 +46,7 @@ loaded the mod, or ``None`` when the mod gives no way to tell. A mod that needs 
 it in ``requires``.
 
 Each test class names the mods it requires. Before its ``setUpClass`` runs, KSP is running with
-exactly those mods:
+exactly those mods and the mods they require:
 
 .. literalinclude:: /scripts/extending/testing/test_heatshields.py
    :language: python
