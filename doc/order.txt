@@ -3044,6 +3044,7 @@ RasterPropMonitor.SetGlobalPersistentVariable
 RasterPropMonitor.RemoveGlobalPersistentVariable
 RasterPropMonitor.GlobalPersistentVariableChanged
 RasterPropMonitor.Monitors
+RasterPropMonitor.Display
 RasterPropMonitor.Computer.Part
 RasterPropMonitor.Computer.PersistentVariable
 RasterPropMonitor.Computer.SetPersistentVariable
@@ -3063,6 +3064,7 @@ RasterPropMonitor.Monitor.Pages
 RasterPropMonitor.Monitor.ActivePage
 RasterPropMonitor.Monitor.Buttons
 RasterPropMonitor.Monitor.PressButton
+RasterPropMonitor.Monitor.Display
 RasterPropMonitor.Monitor.ScreenWidth
 RasterPropMonitor.Monitor.ScreenHeight
 RasterPropMonitor.Monitor.ScreenPixelWidth
@@ -3077,6 +3079,13 @@ RasterPropMonitor.Monitor.Image
 RasterPropMonitor.ImageFormat
 RasterPropMonitor.ImageFormat.PNG
 RasterPropMonitor.ImageFormat.JPEG
+RasterPropMonitor.Display.Name
+RasterPropMonitor.Display.Text
+RasterPropMonitor.Display.Image
+RasterPropMonitor.Display.Clear
+RasterPropMonitor.Display.Shown
+RasterPropMonitor.Display.ButtonPressed
+RasterPropMonitor.Display.ButtonReleased
 Debug
 Debug.SetCircularOrbit
 Debug.SetOrbit

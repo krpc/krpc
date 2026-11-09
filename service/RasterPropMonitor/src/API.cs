@@ -86,6 +86,8 @@ namespace KRPC.RasterPropMonitor
             public static Func<object, int> ScreenXMin;
             public static Func<object, int> ScreenYMin;
             public static Func<object, string> Text;
+            public static Func<object, MonoBehaviour> PageHandler;
+            public static Func<object, MonoBehaviour> BackgroundHandler;
             public static Func<object, Dictionary<char, Rect>> FontCharacters;
         }
 
@@ -171,6 +173,8 @@ namespace KRPC.RasterPropMonitor
             Page.ScreenXMin = Field<int> (page, "screenXMin");
             Page.ScreenYMin = Field<int> (page, "screenYMin");
             Page.Text = Field<string> (page, "text");
+            Page.PageHandler = Field<MonoBehaviour> (page, "pageHandlerModule");
+            Page.BackgroundHandler = Field<MonoBehaviour> (page, "backgroundHandlerModule");
             Page.FontCharacters = Field<Dictionary<char, Rect>> (Type (assembly, "JSI.TextRenderer"), "fontCharacters");
         }
 

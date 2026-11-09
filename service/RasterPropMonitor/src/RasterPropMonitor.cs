@@ -81,6 +81,23 @@ namespace KRPC.RasterPropMonitor
             return Monitor.Of (vessel.InternalVessel);
         }
 
+        /// <summary>
+        /// The display of a vessel with the given name, which every page whose
+        /// <c>KRPCDisplay</c> handler names it shows.
+        /// </summary>
+        /// <param name="vessel">The vessel.</param>
+        /// <param name="name">The name of the display.</param>
+        [KRPCProcedure (GameScene = GameScene.Flight)]
+        public static Display Display (SpaceCenter.Services.Vessel vessel, string name)
+        {
+            CheckAPI ();
+            if (ReferenceEquals (vessel, null))
+                throw new ArgumentNullException (nameof (vessel));
+            if (string.IsNullOrEmpty (name) || name.Trim ().Length == 0)
+                throw new ArgumentException ("The name is empty", nameof (name));
+            return new Display (DisplayState.Of (vessel.InternalVessel.id, name.Trim ()));
+        }
+
         // A computer on the vessel, through which RPM reaches the vessel's persistent variables
         static PartModule VesselComputer (SpaceCenter.Services.Vessel vessel)
         {

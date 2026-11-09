@@ -251,6 +251,15 @@ namespace KRPC.RasterPropMonitor
         }
 
         /// <summary>
+        /// The monitor's own display, which its pages show when their <c>KRPCDisplay</c>
+        /// handler names no display.
+        /// </summary>
+        [KRPCProperty]
+        public Display Display {
+            get { return new Display (DisplayState.Of (part.InternalPart.flightID, propID, index)); }
+        }
+
+        /// <summary>
         /// The width of the screen, in characters.
         /// </summary>
         [KRPCProperty]

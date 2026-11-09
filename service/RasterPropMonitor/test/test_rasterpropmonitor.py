@@ -1,6 +1,7 @@
 import os
 import struct
 import unittest
+import zlib
 
 from krpctools.game.ksp import TestCase
 
@@ -261,6 +262,16 @@ class MonitorTestCase(RasterPropMonitorTestCase):
         cls.camera = cls.sc.camera
         cls.flight_mode = cls.camera.mode
 
+    @classmethod
+    def enter_iva(cls):
+        cls.camera.mode = cls.sc.CameraMode.iva
+        cls.wait(1)
+
+    @classmethod
+    def leave_iva(cls):
+        cls.camera.mode = cls.flight_mode
+        cls.wait(1)
+
     def show(self, page):
         self.monitor.active_page = page
         self.assertEqual(page, self.monitor.active_page)
@@ -290,7 +301,15 @@ class TestMonitor(MonitorTestCase):
 
     def test_pages(self):
         pages = self.monitor.pages
-        for page in ("home", "test", "orbit", "targetmenu", "aviapfd"):
+        for page in (
+            "home",
+            "test",
+            "orbit",
+            "targetmenu",
+            "aviapfd",
+            "krpc",
+            "krpctest",
+        ):
             self.assertIn(page, pages)
 
     def test_active_page(self):
@@ -338,6 +357,33 @@ class TestMonitor(MonitorTestCase):
         self.assertEqual(b"\x89PNG\r\n\x1a\n", image[:8])
         self.assertEqual((640, 640), struct.unpack(">II", image[16:24]))
 
+    def test_display_outside_iva(self):
+        # The text follows its variable with the flight camera on
+        self.assertEqual(self.flight_mode, self.camera.mode)
+        computer = self.rpm.computer(self.monitor.part)
+        display = self.monitor.display
+        display.text = "V {0:F1}$&$PERSISTENT_krpcOutside"
+        self.show("krpc")
+        for value in (1.5, 2.5):
+            computer.set_persistent_variable("krpcOutside", value)
+            # A monitor updates at most once a frame
+            self.wait(0.1)
+            self.assertEqual("V %.1f" % value, self.monitor.text)
+        computer.remove_persistent_variable("krpcOutside")
+        display.clear()
+        self.show("home")
+
+    def test_image_outside_iva(self):
+        self.assertEqual(self.flight_mode, self.camera.mode)
+        display = self.monitor.display
+        self.show("krpc")
+        blank = self.monitor.image()
+        display.image = png(64, 64, (0, 0, 255))
+        self.wait(0.1)
+        self.assertNotEqual(blank, self.monitor.image())
+        display.clear()
+        self.show("home")
+
     def test_other_pod_outside_iva(self):
         root = self.vessel.parts.root
         other = [m for m in self.rpm.monitors(self.vessel) if m.part != root][0]
@@ -350,22 +396,14 @@ class TestMonitorIVA(MonitorTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        # KSP does not enter the IVA straight after a launch. Setting the mode again in the
-        # IVA leaves it
-        for _ in range(20):
-            if cls.camera.mode == cls.sc.CameraMode.iva:
-                break
-            cls.camera.mode = cls.sc.CameraMode.iva
-            cls.wait(0.5)
-        assert cls.camera.mode == cls.sc.CameraMode.iva
-        cls.wait(1)
+        cls.enter_iva()
         cls.version = cls.rpm.computer(cls.monitor.part).format_variables(
             "{0}$&$RPMVERSION"
         )
 
     @classmethod
     def tearDownClass(cls):
-        cls.camera.mode = cls.flight_mode
+        cls.leave_iva()
         super().tearDownClass()
 
     def test_text(self):
@@ -446,6 +484,172 @@ def jpeg_size(data):
             height, width = struct.unpack(">HH", data[pos + 5 : pos + 9])
             return width, height
         pos += 2 + length
+
+
+def png(width, height, rgb):
+    """A PNG image of one color."""
+
+    def chunk(kind, data):
+        body = kind + data
+        return struct.pack(">I", len(data)) + body + struct.pack(">I", zlib.crc32(body))
+
+    row = b"\x00" + bytes(rgb) * width
+    return (
+        b"\x89PNG\r\n\x1a\n"
+        + chunk(b"IHDR", struct.pack(">IIBBBBB", width, height, 8, 2, 0, 0, 0))
+        + chunk(b"IDAT", zlib.compress(row * height))
+        + chunk(b"IEND", b"")
+    )
+
+
+# Tag text and the characters RPM draws for it, from TextRenderer.ParseText. A line with no
+# closing bracket comes last, as RPM looks for the bracket past the end of the line.
+TAG_RULES = [
+    ("[hw]a[/hw][dw]b[/dw][sup]c[/sup][sub]d[/sub]", "abcd"),
+    ("[@x5]e[@y-3]f[@xq]g", "efg"),
+    ("[#ff0000]h[#ff000080]i", "hi"),
+    ("[font1]j[font0]", "j"),
+    ("[abc]k[#12]", "[abc]k[#12]"),
+    ("x[]y", "x]y"),
+    ("x[a]y", "xa]y"),
+    ("[[]", "[]"),
+    ("[[abc]", "[[abc]"),
+    ("x[no close", "xno close"),
+]
+
+
+class TestDisplay(MonitorTestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.display = cls.monitor.display
+        cls.enter_iva()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.leave_iva()
+        super().tearDownClass()
+
+    def setUp(self):
+        self.display.clear()
+        self.show("krpc")
+
+    def lines(self, monitor=None):
+        return (monitor or self.monitor).text.split("\n")
+
+    def test_own_display(self):
+        self.assertIsNone(self.display.name)
+        self.assertEqual(self.display, self.monitor.display)
+        self.assertNotEqual(self.display, self.monitors[1].display)
+        self.display.text = "Hello [#ff0000]World"
+        self.assertEqual("Hello [#ff0000]World", self.display.text)
+        self.wait(0.5)
+        self.assertEqual(["Hello World"], self.lines())
+        self.assertEqual("Hello [#ff0000]World", self.monitor.raw_text)
+
+    def test_shown(self):
+        self.assertTrue(self.display.shown)
+        self.show("home")
+        self.assertFalse(self.display.shown)
+        self.show("krpc")
+        self.assertTrue(self.display.shown)
+
+    def test_tag_rules(self):
+        self.display.text = "\n".join(text for text, _ in TAG_RULES)
+        self.wait(0.5)
+        self.assertEqual([drawn for _, drawn in TAG_RULES], self.lines())
+
+    def test_variables(self):
+        computer = self.rpm.computer(self.monitor.part)
+        computer.set_persistent_variable("krpcDisplay", 2.5)
+        self.display.text = "V {0:F1}$&$PERSISTENT_krpcDisplay"
+        self.wait(0.5)
+        self.assertEqual(["V 2.5"], self.lines())
+        self.assertEqual(["PERSISTENT_krpcDisplay"], self.monitor.variables)
+        # RPM updates the variable with no call to the display
+        computer.set_persistent_variable("krpcDisplay", 3.5)
+        self.wait(0.5)
+        self.assertEqual(["V 3.5"], self.lines())
+        computer.remove_persistent_variable("krpcDisplay")
+
+    def test_image(self):
+        self.wait(0.5)
+        blank = self.monitor.image()
+        red = png(64, 64, (255, 0, 0))
+        self.display.image = red
+        self.assertEqual(red, self.display.image)
+        self.wait(0.5)
+        self.assertNotEqual(blank, self.monitor.image())
+        self.display.image = None
+        self.assertIsNone(self.display.image)
+
+    def test_invalid_image(self):
+        with self.assertRaises(ValueError):
+            self.display.image = b"not an image"
+        self.assertIsNone(self.display.image)
+
+    def test_clear(self):
+        self.display.text = "Text"
+        self.display.image = png(8, 8, (0, 255, 0))
+        self.display.clear()
+        self.assertEqual("", self.display.text)
+        self.assertIsNone(self.display.image)
+
+    def test_button_events(self):
+        up = BUTTONS.index("button_UP")
+        with self.display.button_pressed(up) as pressed:
+            with self.display.button_released(up) as released:
+                with pressed.condition:
+                    self.monitor.press_button(up)
+                    self.assertTrue(pressed.wait(5))
+                with released.condition:
+                    self.assertTrue(released.wait(5))
+
+    def test_button_events_other_button(self):
+        up = BUTTONS.index("button_UP")
+        down = BUTTONS.index("button_DOWN")
+        with self.display.button_pressed(up) as pressed:
+            with pressed.condition:
+                self.monitor.press_button(down)
+                self.assertFalse(pressed.wait(0.5))
+
+    def test_button_events_hidden(self):
+        # A press on another page goes to that page's handler
+        up = BUTTONS.index("button_UP")
+        self.show("home")
+        with self.display.button_pressed(up) as pressed:
+            with pressed.condition:
+                self.monitor.press_button(up)
+                self.assertFalse(pressed.wait(0.5))
+
+    def test_named_display(self):
+        named = self.rpm.display(self.vessel, "test")
+        self.assertEqual("test", named.name)
+        self.assertEqual(named, self.rpm.display(self.vessel, "test"))
+        self.assertNotEqual(named, self.display)
+        named.text = "Shared"
+        # The test overlay adds a page showing the display to every screen
+        for monitor in self.monitors[:2]:
+            monitor.active_page = "krpctest"
+        self.wait(0.5)
+        self.assertTrue(named.shown)
+        for monitor in self.monitors[:2]:
+            self.assertEqual(["Shared"], self.lines(monitor))
+        for monitor in self.monitors[:2]:
+            monitor.active_page = "krpc"
+        self.assertFalse(named.shown)
+        named.clear()
+
+    def test_named_display_empty_name(self):
+        with self.assertRaises(ValueError):
+            self.rpm.display(self.vessel, " ")
+
+    def test_kept_when_iva_rebuilt(self):
+        self.display.text = "Kept"
+        self.leave_iva()
+        self.enter_iva()
+        self.show("krpc")
+        self.assertEqual(["Kept"], self.lines())
 
 
 if __name__ == "__main__":

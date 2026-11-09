@@ -42,7 +42,10 @@
     <Compile Include="Addon.cs" />
     <Compile Include="API.cs" />
     <Compile Include="Computer.cs" />
+    <Compile Include="Display.cs" />
+    <Compile Include="DisplayState.cs" />
     <Compile Include="ImageFormat.cs" />
+    <Compile Include="KRPCDisplay.cs" />
     <Compile Include="Monitor.cs" />
     <Compile Include="RasterPropMonitor.cs" />
     <Compile Include="ScreenText.cs" />

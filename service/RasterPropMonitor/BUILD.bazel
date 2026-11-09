@@ -11,6 +11,7 @@ filegroup(
     name = "RasterPropMonitor",
     srcs = [
         "CHANGELOG.md",
+        "RasterPropMonitorDisplay.cfg",
         ":KRPC.RasterPropMonitor",
         ":ServiceDefinitions",
     ],

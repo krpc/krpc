@@ -2,12 +2,18 @@
 
 `__init__.py` defines the supported mods: each one's pinned archive, its dependencies and its
 presence check. The subdirectories are config overlays, layered onto a mod after it is
-installed into KSP's `GameData` (see `KSP.install_mod` in `../game.py`). Overlays have two uses:
-suppressing a mod's first-run window, which blocks the unattended game the tests drive, and
-adding a test-only part config for a mod whose archive ships a part module but no parts.
+installed into KSP's `GameData` (see `KSP.install_mod` in `../game.py`). Overlays have three
+uses: suppressing a mod's first-run window, which blocks the unattended game the tests drive,
+adding a test-only part config for a mod whose archive ships a part module but no parts, and
+adding test-only props or pages.
 
 Each subdirectory mirrors a mod's `GameData/<subdir>` tree, and its files are copied over the
 freshly-installed mod (overwriting on conflict).
+
+* `JSI/KRPCTestDisplay.cfg` — a ModuleManager patch adding a page named `krpctest` to every
+  Raster Prop Monitor screen, showing the vessel's display named `test`. kRPC's own patch gives
+  each screen a page for its own display, and this one lets the tests show one display on
+  several screens.
 
 * `DMagicScienceAnimate/TestPart.cfg` — a ModuleManager patch adding `dmagicSensorTest`, a part
   whose science experiment is a `DMModuleScienceAnimateGeneric`, so the SpaceCenter `Experiment`

@@ -143,6 +143,7 @@ provides them.
 
 A Raster Prop Monitor monitor is a prop in its part's IVA, which KSP builds only for the active
 vessel. It is not loaded while its part has no IVA, and works again once the vessel is active.
+A Raster Prop Monitor display is kept by the service, and lasts until the server stops.
 
 An Infernal Robotics servo group is identified by its vessel and the group's name. Renaming a
 group destroys every object for it, exactly as renaming a kerbal does, and the group has to be
