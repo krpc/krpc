@@ -10,5 +10,5 @@ mod_version = "0.2.0"
 ksa_version = "2026.11.10.5801"
 
 # The StarMap release, and the sha256 of its zip
-starmap_version = "0.4.8"
-starmap_sha256 = "5324240f15d6841835158940057359ef011149bbc30b4d50f7b27480df7b2d5c"
+starmap_version = "0.5.4"
+starmap_sha256 = "bcf14ac68dfb6558152586fd98776fc5013006a0406c37792f5f6afcf0561366"

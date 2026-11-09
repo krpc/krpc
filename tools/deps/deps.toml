@@ -409,7 +409,7 @@ at = [
 # The kRPC for KSA mod
 [[dep]]
 name = "StarMap"
-version = "0.4.8"
+version = "0.5.4"
 source = "github-release:StarMapLoader/StarMap"
 hold = "experimental/ksa/tools/release/01-update-ksa.py --starmap moves it, with its sha256"
 at = ['experimental/ksa/config.bzl: starmap_version = "{version}"']
@@ -440,7 +440,7 @@ at = [
 
 [[dep]]
 name = "StarMap.API"
-version = "0.3.6"
+version = "0.5.4"
 source = "nuget:StarMap.API"
 regen = ["nuget"]
 at = [
