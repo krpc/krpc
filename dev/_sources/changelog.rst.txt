@@ -70,6 +70,7 @@ Core
 * :breaking:`Breaking` Reject a 32-bit number out of range, a tuple with the wrong number of items, an undeclared enum value, or a bool other than 0 or 1 (:issue:`1280`)
 * Fail only the call whose argument the server cannot decode, and run the other calls in the request (:issue:`1280`)
 * :breaking:`Breaking` Fail a call with an argument position past the procedure's last parameter, or with two arguments at one position, in place of ignoring an argument (:issue:`1290`)
+* Fix rate limited streams updating at as little as half their rate (:issue:`1310`)
 
 
 Server
