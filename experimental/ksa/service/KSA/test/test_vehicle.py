@@ -159,13 +159,15 @@ class TestDestroy(ksatest.TestCase):
 
     def test_destroy(self):
         vehicle = self.find_vehicle("Gemini7")
-        (kitten,) = vehicle.crew
+        crew = vehicle.crew
+        self.assertEqual(2, len(crew))
         vehicle.destroy()
         self.assertNotIn("Gemini7", [v.name for v in self.ksa.vehicles])
         with self.assertRaises(self.conn.krpc.ObjectDestroyedException):
             vehicle.name
-        self.assertTrue(kitten.killed_in_action)
-        self.assertIsNone(kitten.vehicle)
+        for kitten in crew:
+            self.assertTrue(kitten.killed_in_action)
+            self.assertIsNone(kitten.vehicle)
 
     def test_destroy_active_vehicle(self):
         vehicle = self.ksa.active_vehicle

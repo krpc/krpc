@@ -95,13 +95,17 @@ class TestCamera(ksatest.TestCase):
         )
 
     def test_focus_kitten(self):
-        kitten = self.ksa.kittens["Hunter"]
+        kitten = self.find_vehicle("Gemini7").crew[0]
+        kitten.go_on_eva()
+        # Going on EVA hands control to the kitten
+        self.ksa.active_vehicle = self.vehicle
+        ksatest.wait_until(lambda: self.ksa.active_vehicle == self.vehicle)
         self.camera.focused_kitten = kitten
         self.assertEqual(kitten, self.camera.focused_kitten)
         self.assertIsNone(self.camera.focused_vehicle)
         self.assertIsNone(self.ksa.active_kitten)
 
     def test_focus_kitten_not_on_eva(self):
-        (kitten,) = self.find_vehicle("Gemini7").crew
+        kitten = self.find_vehicle("Gemini7").crew[0]
         with self.assertRaises(RuntimeError):
             self.camera.focused_kitten = kitten
