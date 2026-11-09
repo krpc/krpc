@@ -10,6 +10,9 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// <summary>
     /// A field of a part module. Obtained by calling <see cref="Module.FieldList"/>.
     /// </summary>
+    /// <remarks>
+    /// Setting a field runs the callbacks that the right-click menu of the part runs.
+    /// </remarks>
     [KRPCClass (Service = "SpaceCenter")]
     public class PartField : Equatable<PartField>, IGameObjectState
     {
@@ -128,7 +131,27 @@ namespace KRPC.SpaceCenter.Services.Parts
             if (!type.IsAssignableFrom (value.GetType ()))
                 throw new ArgumentException (
                     "Cannot set field with type " + type + " to a value of type " + value.GetType ());
-            InternalField.SetValue (value, Module.InternalModule);
+            SetValue (value);
+        }
+
+        /// <summary>
+        /// Set the field as the part's right-click menu does. Some modules act on a change
+        /// only through the UI control callback, such as B9PartSwitch switching subtype.
+        /// </summary>
+        void SetValue (object value)
+        {
+            var field = InternalField;
+            var host = Module.InternalModule;
+            var oldValue = field.GetValue (host);
+            field.SetValue (value, host);
+            if (Equals (oldValue, field.GetValue (host)))
+                return;
+            var editor = HighLogic.LoadedSceneIsEditor;
+            var control = editor ? field.uiControlEditor : field.uiControlFlight;
+            if (control != null && control.onFieldChanged != null)
+                control.onFieldChanged (field, oldValue);
+            if (editor && (control == null || !control.suppressEditorShipModified))
+                GameEvents.onEditorShipModified.Fire (EditorLogic.fetch.ship);
         }
 
         void CheckType (FieldType expected)
@@ -227,7 +250,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public void Reset ()
         {
-            Module.RestoreOriginalFieldValue (InternalField);
+            // Note: BaseField.SetOriginalValue snapshots the current value as the original.
+            var original = InternalField.originalValue;
+            if (original == null && InternalField.FieldInfo.FieldType.IsValueType)
+                return;
+            SetValue (original);
         }
     }
 }
