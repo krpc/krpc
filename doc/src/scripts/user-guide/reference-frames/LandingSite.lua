@@ -1,5 +1,5 @@
 local krpc = require 'krpc'
-local platform = require 'krpc.platform'
+local socket = require 'socket'
 
 local conn = krpc.connect('Landing Site')
 local vessel = conn.space_center.active_vessel
@@ -19,5 +19,5 @@ local landing_reference_frame = body:surface_reference_frame(
 conn.drawing.add_axes(landing_reference_frame)
 
 while true do
-   platform.sleep(1)
+   socket.sleep(1)
 end

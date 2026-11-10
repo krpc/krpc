@@ -1,5 +1,5 @@
 local krpc = require 'krpc'
-local platform = require 'krpc.platform'
+local socket = require 'socket'
 local math = require 'math'
 local List = require 'pl.List'
 
@@ -20,11 +20,11 @@ vessel.control.throttle = 1
 
 -- Countdown...
 print('3...')
-platform.sleep(1)
+socket.sleep(1)
 print('2...')
-platform.sleep(1)
+socket.sleep(1)
 print('1...')
-platform.sleep(1)
+socket.sleep(1)
 print('Launch!')
 
 -- Activate the first stage
@@ -112,7 +112,7 @@ while vessel.orbit.time_to_apoapsis - (burn_time/2.) > 0 do
 end
 print('Executing burn')
 vessel.control.throttle = 1
-platform.sleep(burn_time - 0.1)
+socket.sleep(burn_time - 0.1)
 print('Fine tuning')
 vessel.control.throttle = 0.05
 while node:remaining_burn_vector(node.reference_frame)[2] > 0 do
