@@ -297,11 +297,12 @@ back into range.
 .. seealso:: :doc:`/user-guide/object-lifetime` describes how each kind of object behaves in more
              detail.
 
-Static Methods
-^^^^^^^^^^^^^^
+Calling Methods
+---------------
 
-You call a static method on its class, passing the client as its first argument. Its ``_stream``
-and ``_call`` forms take the client first too:
+You call a method on an object of its class. A *static* method needs no object, and you call it on
+the class itself, passing the client as its first argument. Its ``_stream`` and ``_call`` forms
+take the client first too:
 
 .. literalinclude:: /scripts/cpp/StaticMethods.cpp
 

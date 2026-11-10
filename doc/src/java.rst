@@ -219,12 +219,13 @@ comes back into range.
 .. seealso:: :doc:`/user-guide/object-lifetime` describes how each kind of object behaves in more
              detail.
 
-Static Methods
-^^^^^^^^^^^^^^
+Calling Methods
+---------------
 
-You call a static method on its class, passing the connection as its first argument.
-:meth:`~Connection.addStream` streams it with the class, the method's name and its other arguments,
-as the stream runs on the connection it is added on:
+You call a method on an object of its class. A *static* method needs no object, and you call it on
+the class itself, passing the connection as its first argument. :meth:`~Connection.addStream`
+streams it with the class, the method's name and its other arguments, as the stream runs on the
+connection it is added on:
 
 .. literalinclude:: /scripts/java/StaticMethods.java
 

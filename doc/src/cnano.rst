@@ -384,11 +384,13 @@ itself reads normally, but a call on one of its parts fails with
 .. seealso:: :doc:`/user-guide/object-lifetime` describes how each kind of object behaves in more
              detail.
 
-Static Methods
-^^^^^^^^^^^^^^
+Calling Methods
+---------------
 
-The function of a static method takes the connection first, as every function does, followed by
-the method's arguments:
+Each method of a class has a function, which takes the connection first, as every function does.
+A method's function then takes the object, followed by the method's arguments. A *static*
+method needs no object, so its function takes the method's arguments straight after the
+connection:
 
 .. literalinclude:: /scripts/cnano/StaticMethods.c
 

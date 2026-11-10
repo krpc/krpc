@@ -179,11 +179,12 @@ range.
 .. seealso:: :doc:`/user-guide/object-lifetime` describes how each kind of object behaves in more
              detail.
 
-Static Methods
-^^^^^^^^^^^^^^
+Calling Methods
+---------------
 
-You call a static method on its class. Reach the class through the connection's service, and call
-the method on it. Pass the method to :meth:`~krpc.client.Client.add_stream` to stream it:
+You call a method on an object of its class. A *static* method needs no object, and you call it on
+the class itself. Reach the class through the connection's service. Pass the method to
+:meth:`~krpc.client.Client.add_stream` to stream it:
 
 .. literalinclude:: /scripts/python/StaticMethods.py
 
