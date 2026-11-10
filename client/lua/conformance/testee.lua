@@ -162,6 +162,10 @@ local function public_members(obj)
         members[k] = true
       end
     end
+    -- A deprecated member is left out of the class table, so that reading it warns
+    for k, _ in pairs(rawget(t, '_deprecated_members') or {}) do
+      members[k] = true
+    end
   end
   add(obj)
   local cls = getmetatable(obj)
@@ -229,11 +233,14 @@ end
 local function members(command)
   local names = {}
   if (command.service or '') == '' then
-    -- The services are the connection's own public keys
+    -- The services are the connection's own public keys, and its deprecated services
     for k, v in pairs(conn) do
       if type(k) == 'string' and k:sub(1, 1) ~= '_' and type(v) == 'table' then
         names[#names + 1] = k
       end
+    end
+    for k, _ in pairs(conn._deprecated_services) do
+      names[#names + 1] = k
     end
   else
     local obj = conn[to_snake_case(command.service)]
@@ -298,6 +305,64 @@ end
 local function invoke(command)
   local func, args, count = resolve(command)
   return func(table.unpack(args, 1, count))
+end
+
+-- A failure the driver reports as a test the language cannot carry out
+local function unsupported(message)
+  error({ unsupported = message }, 0)
+end
+
+-- Use a member of a service: a call of a procedure or the building of its call, or a read of the
+-- service, a type or an enumeration value
+local function use_member(command)
+  if command.invoke ~= nil then
+    if command.use == 'call' then
+      local func, args, count = resolve(command.invoke)
+      conn:get_call(func, table.unpack(args, 1, count))
+    else
+      invoke(command.invoke)
+    end
+    return
+  end
+  if command.member == '' then
+    local _ = conn[to_snake_case(command.service)]
+    return
+  end
+  local type_name, name = command.member:match('^([^.]*)%.?(.*)$')
+  local typ = conn[to_snake_case(command.service)][type_name]
+  if typ == nil then
+    unsupported('The client has no ' .. type_name)
+  end
+  if name ~= '' then
+    if typ._field_names ~= nil then
+      unsupported('A field of a structure is a table entry, which cannot warn when read')
+    end
+    local _ = typ[to_snake_case(name)]
+  end
+end
+
+-- The warnings a use of a member raises
+local function deprecation_signals(command)
+  local warn = Types.warn
+  -- Reaching a member is not part of its use, and the client warns of each member once
+  Types.warn = function() end
+  if command.member ~= '' then
+    local service = conn[to_snake_case(command.service)]
+    local type_name = command.member:match('^([^.]*)%.')
+    if type_name ~= nil then
+      local _ = service[type_name]
+    end
+  end
+  local signals = {}
+  Types.warn = function(message)
+    signals[#signals + 1] = { string = message }
+  end
+  local ok, err = pcall(use_member, command)
+  Types.warn = warn
+  if not ok then
+    error(err, 0)
+  end
+  return { list = { items = signals } }
 end
 
 -- Connecting the default connection closes every connection, and connecting a named one
@@ -443,6 +508,9 @@ local function dispatch(command)
   elseif case == 'members' then
     connected()
     return members(command.members)
+  elseif case == 'deprecation_signals' then
+    connected()
+    return deprecation_signals(command.deprecation_signals)
   elseif case == 'order' then
     local a = from_value(command.order.a)
     local b = from_value(command.order.b)
@@ -476,7 +544,10 @@ local function run(command)
   else
     -- A failed connect, and a call once the connection has ended, fail with the connection
     local kind = 'RPC'
-    if command.command == 'connect' or (conn ~= nil and conn._error ~= nil) then
+    if type(result) == 'table' and result.unsupported ~= nil then
+      kind = 'UNSUPPORTED'
+      result = result.unsupported
+    elseif command.command == 'connect' or (conn ~= nil and conn._error ~= nil) then
       kind = 'CONNECTION'
     end
     reply.error = { kind = kind, message = tostring(result) }

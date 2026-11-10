@@ -319,6 +319,9 @@ namespace KRPC.Client.Conformance
                 // The stubs are compiled from the service definitions
                 reply.Value = new Value { Null = true };
                 break;
+            case Command.CommandOneofCase.DeprecationSignals:
+                reply.Value = Deprecation.Signals (command.DeprecationSignals);
+                break;
             case Command.CommandOneofCase.Encode:
                 reply.Value = Codec.Encode (command.Encode);
                 break;

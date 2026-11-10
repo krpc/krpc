@@ -3,7 +3,7 @@ load("//:config.bzl", "cmake_version", "version")
 load("//tools/build:client_test.bzl", "client_test")
 load("//tools/build:cog.bzl", "cog_test")
 load("//tools/build:conformance.bzl", "conformance_test")
-load("//tools/build:cpp.bzl", "clang_format_test", "clang_tidy_test", "doxygen_test")
+load("//tools/build:cpp.bzl", "cc_deprecation_signals", "clang_format_test", "clang_tidy_test", "doxygen_test")
 load("//tools/build:pkg.bzl", "pkg_zip")
 load("//tools/build/protobuf:nanopb.bzl", "protobuf_nanopb")
 load("//tools/krpctools:clientgen.bzl", "clientgen_dispatch", "clientgen_services")
@@ -201,6 +201,38 @@ cc_test(
     deps = ["@cpp_googletest//:gtest"],
 )
 
+# The compiler's warnings for a use of each deprecated member, for the testee to report
+cc_library(
+    name = "conformance-stub-headers",
+    testonly = True,
+    hdrs = [
+        "conformance/services/deprecated_service.h",
+        ":services-testservice",
+    ],
+    includes = [
+        "conformance",
+        "test",
+    ],
+    deps = [":krpc_cnano_error_messages"],
+)
+
+cc_deprecation_signals(
+    name = "conformance-deprecation-signals",
+    testonly = True,
+    src = "conformance/deprecation_uses.c",
+    out = "conformance/deprecation_signals.hpp",
+    # MSVC has no enumeration value attribute in C
+    copts = select({
+        "@rules_cc//cc/compiler:msvc-cl": ["/TP"],
+        "//conditions:default": [],
+    }),
+    cxx = select({
+        "@rules_cc//cc/compiler:msvc-cl": True,
+        "//conditions:default": False,
+    }),
+    deps = [":conformance-stub-headers"],
+)
+
 # The conformance tests, driving the client through its testee over each transport
 cc_binary(
     name = "conformance-testee",
@@ -210,6 +242,7 @@ cc_binary(
         "conformance/dispatch_values.hpp",
         "conformance/framing.hpp",
         "conformance/main.cpp",
+        ":conformance-deprecation-signals",
         ":services-testservice",
     ] + clientgen_dispatch(
         out = "conformance/{snake_service}_dispatch.hpp",

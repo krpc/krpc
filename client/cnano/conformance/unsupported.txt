@@ -25,3 +25,7 @@ test_connection.py::test_localsocket_fallback_path  # As test_localsocket_defaul
 test_values.py::test_structure_equality  # C has no equality of structures
 test_values.py::test_structure_hash  # The language has no hash of a value
 test_values.py::test_message_result  # nanopb decodes a repeated field with no max_count only through a callback the caller sets, so Services decodes empty
+test_calls.py::test_deprecated_exception  # An exception has no C type
+test_calls.py::test_deprecated_service  # A service has no C type
+test_calls.py::test_deprecated_service_member[exception]  # As test_deprecated_exception
+test_calls.py::test_not_deprecated[exception]  # As test_deprecated_exception

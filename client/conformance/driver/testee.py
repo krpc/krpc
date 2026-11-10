@@ -546,6 +546,27 @@ class Client:
         assert isinstance(result, list)
         return set(result)
 
+    def deprecation_signals(
+        self,
+        service: str,
+        member: str,
+        procedure: str = "",
+        *args: pb.Value,
+        reason: bool = False,
+        use: str = "",
+    ) -> list[str]:
+        """What a program gets for a use of a member, which the call of a procedure uses, if
+        one is given. A test that reads the reason says so. A use other than a call, "stream"
+        or "call", streams the procedure or builds its call."""
+        command = pb.DeprecationSignals(
+            service=service, member=member, reason=reason, use=use
+        )
+        if procedure:
+            command.invoke.CopyFrom(_invoke(service, procedure, args, None))
+        result = values.native(self.testee.run(deprecation_signals=command).value)
+        assert isinstance(result, list)
+        return result
+
     def encode(self, typ: str, value: pb.Value) -> bytes:
         """A value encoded with the client's encoder."""
         reply = self.testee.run(encode=pb.Encode(type=typ, value=value))

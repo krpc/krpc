@@ -6,7 +6,7 @@ import time
 
 import pytest
 import testee_pb2 as pb
-from driver import profile, raw, section, should, untested, values
+from driver import profile, raw, section, should, values
 from driver.errors import assert_argument_error
 from driver.framing import encode_sint32, encode_size
 from driver.helpers import create
@@ -354,11 +354,292 @@ def test_class_extension_members(connected):
     ) == ("value=alpha")
 
 
+section(
+    "Deprecated Members",
+    "A client signals the use of a deprecated member, so that a program can move to its "
+    "replacement. The signal is the language's own: a warning at run time, or a warning from the "
+    "compiler. The member still works.",
+)
+
+
+def deprecated_object(connected):
+    """A value of the deprecated class, which the testee holds."""
+    return values.obj(connected.invoke("TestService", "CreateDeprecatedClass"))
+
+
 @should
-@untested("The testee protocol has no channel for warnings")
-def test_deprecated_warning():
-    """A client in a language with a runtime warning mechanism warns on a call to a
-    deprecated member."""
+def test_deprecated_procedure(connected):
+    """A client signals a call of a deprecated procedure."""
+    assert connected.deprecation_signals(
+        "TestService", "DeprecatedProcedure", "DeprecatedProcedure", values.float32(1)
+    )
+
+
+@should
+@pytest.mark.parametrize(
+    ("procedure", "args"),
+    [("get_DeprecatedProperty", ()), ("set_DeprecatedProperty", ("value",))],
+    ids=["getter", "setter"],
+)
+def test_deprecated_property(connected, procedure, args):
+    """A client signals a read and a write of a deprecated property."""
+    args = [values.string(x) for x in args]
+    assert connected.deprecation_signals(
+        "TestService", "DeprecatedProperty", procedure, *args
+    )
+
+
+@should
+def test_deprecated_class(connected):
+    """A client signals a use of a deprecated class."""
+    assert connected.deprecation_signals("TestService", "DeprecatedClass")
+
+
+@should
+def test_deprecated_method(connected):
+    """A client signals a call of a deprecated method."""
+    obj = deprecated_object(connected)
+    assert connected.deprecation_signals(
+        "TestService",
+        "DeprecatedClass.DeprecatedMethod",
+        "DeprecatedClass_DeprecatedMethod",
+        obj,
+    )
+
+
+@should
+def test_deprecated_enum(connected):
+    """A client signals a use of a deprecated enumeration."""
+    assert connected.deprecation_signals("TestService", "DeprecatedEnum")
+
+
+@should
+def test_deprecated_enum_value(connected):
+    """A client signals a use of a deprecated value of an enumeration that is not deprecated,
+    and no use of its other values."""
+    assert connected.deprecation_signals("TestService", "PartlyDeprecatedEnum.ValueB")
+    assert not connected.deprecation_signals(
+        "TestService", "PartlyDeprecatedEnum.ValueA"
+    )
+
+
+@should
+def test_deprecated_struct(connected):
+    """A client signals a use of a deprecated structure."""
+    assert connected.deprecation_signals("TestService", "DeprecatedStruct")
+
+
+@should
+def test_deprecated_struct_field(connected):
+    """A client signals a read of a deprecated field of a structure that is not deprecated, and
+    no read of its other fields."""
+    assert connected.deprecation_signals(
+        "TestService", "PartlyDeprecatedStruct.OldValue"
+    )
+    assert not connected.deprecation_signals(
+        "TestService", "PartlyDeprecatedStruct.Value"
+    )
+
+
+@should
+def test_deprecated_exception(connected):
+    """A client signals a use of a deprecated exception."""
+    assert connected.deprecation_signals("TestService", "DeprecatedException")
+
+
+# The members of the deprecated class with no deprecation of their own, and the calls that use them
+INHERITED_CLASS_MEMBERS = {
+    "method": ("InheritedMethod", "DeprecatedClass_InheritedMethod", True),
+    "static-method": (
+        "InheritedStaticMethod",
+        "DeprecatedClass_static_InheritedStaticMethod",
+        False,
+    ),
+    "property": ("InheritedProperty", "DeprecatedClass_get_InheritedProperty", True),
+}
+
+
+@should
+@pytest.mark.parametrize("member", list(INHERITED_CLASS_MEMBERS))
+def test_deprecated_class_member(connected, member):
+    """A member of a deprecated class is deprecated, with no deprecation of its own."""
+    name, procedure, instance = INHERITED_CLASS_MEMBERS[member]
+    args = [deprecated_object(connected)] if instance else []
+    assert connected.deprecation_signals(
+        "TestService", "DeprecatedClass." + name, procedure, *args
+    )
+
+
+@should
+def test_deprecated_enum_member(connected):
+    """A value of a deprecated enumeration is deprecated, with no deprecation of its own."""
+    assert connected.deprecation_signals("TestService", "DeprecatedEnum.ValueA")
+
+
+@should
+def test_deprecated_struct_member(connected):
+    """A field of a deprecated structure is deprecated, with no deprecation of its own."""
+    assert connected.deprecation_signals("TestService", "DeprecatedStruct.Value")
+
+
+@should
+def test_deprecated_service(connected):
+    """A client signals a use of a deprecated service, and no use of a service that is not
+    deprecated."""
+    assert connected.deprecation_signals("DeprecatedService", "")
+    assert not connected.deprecation_signals("TestService", "")
+
+
+# The members of the deprecated service, and the procedures that use them
+DEPRECATED_SERVICE_MEMBERS = {
+    "procedure": ("Procedure", "Procedure"),
+    "property": ("Property", "get_Property"),
+    "class": ("ServiceClass", ""),
+    "class-method": ("ServiceClass.StaticMethod", "ServiceClass_static_StaticMethod"),
+    "enum": ("ServiceEnum", ""),
+    "enum-value": ("ServiceEnum.Value", ""),
+    "struct": ("ServiceStruct", ""),
+    "struct-field": ("ServiceStruct.Field", ""),
+    "exception": ("ServiceException", ""),
+}
+
+
+@should
+@pytest.mark.parametrize("member", list(DEPRECATED_SERVICE_MEMBERS))
+def test_deprecated_service_member(connected, member):
+    """A member of a deprecated service is deprecated, with no deprecation of its own."""
+    name, procedure = DEPRECATED_SERVICE_MEMBERS[member]
+    assert connected.deprecation_signals("DeprecatedService", name, procedure)
+
+
+# The deprecated procedures a program can stream or build the call of, the calls that use them,
+# and the arguments of each call
+DEPRECATED_CALLS = {
+    "procedure": (
+        "DeprecatedProcedure",
+        "DeprecatedProcedure",
+        lambda connected: [values.float32(1)],
+    ),
+    "property": ("DeprecatedProperty", "get_DeprecatedProperty", lambda connected: []),
+    "method": (
+        "DeprecatedClass.DeprecatedMethod",
+        "DeprecatedClass_DeprecatedMethod",
+        lambda connected: [deprecated_object(connected)],
+    ),
+}
+
+
+def assert_signals_use(connected, member, use):
+    """Check that a use of a deprecated procedure signals, and the same use of a procedure that
+    is not deprecated does not."""
+    name, procedure, args = DEPRECATED_CALLS[member]
+    args = args(connected)
+    assert connected.deprecation_signals("TestService", name, procedure, *args, use=use)
+    assert not connected.deprecation_signals(
+        "TestService", "FloatToString", "FloatToString", values.float32(1), use=use
+    )
+
+
+@should
+@profile("streams")
+@pytest.mark.parametrize("member", list(DEPRECATED_CALLS))
+def test_deprecated_stream(connected, member):
+    """A client signals a stream of a deprecated procedure, method or property."""
+    assert_signals_use(connected, member, "stream")
+
+
+@should
+@profile("functions")
+@pytest.mark.parametrize("member", list(DEPRECATED_CALLS))
+def test_deprecated_call(connected, member):
+    """A client signals the call of a deprecated procedure, method or property that it builds
+    for a server side function."""
+    assert_signals_use(connected, member, "call")
+
+
+def assert_reason(signals, reason):
+    """Check that each signal gives the reason, as the client writes names in it."""
+    assert signals
+    for signal in signals:
+        assert reason in signal.replace("_", "").lower()
+
+
+@should
+def test_deprecated_reason(connected):
+    """A signal gives the reason for the deprecation."""
+    signals = connected.deprecation_signals(
+        "TestService",
+        "DeprecatedProcedure",
+        "DeprecatedProcedure",
+        values.float32(1),
+        reason=True,
+    )
+    assert_reason(signals, "floattostring")
+
+
+@should
+def test_deprecated_reason_of_container(connected):
+    """A member with no reason of its own takes the reason of its service or class."""
+    signals = connected.deprecation_signals(
+        "DeprecatedService", "Procedure", "Procedure", reason=True
+    )
+    assert_reason(signals, "use testservice instead")
+    obj = deprecated_object(connected)
+    signals = connected.deprecation_signals(
+        "TestService",
+        "DeprecatedClass.InheritedMethod",
+        "DeprecatedClass_InheritedMethod",
+        obj,
+        reason=True,
+    )
+    assert_reason(signals, "use testclass instead")
+
+
+@should
+def test_deprecated_reason_of_member(connected):
+    """A member with a reason of its own keeps it, in a deprecated class."""
+    obj = deprecated_object(connected)
+    signals = connected.deprecation_signals(
+        "TestService",
+        "DeprecatedClass.DeprecatedMethod",
+        "DeprecatedClass_DeprecatedMethod",
+        obj,
+        reason=True,
+    )
+    assert_reason(signals, "getvalue")
+
+
+@should
+def test_deprecated_reason_of_class(connected):
+    """A member with no reason of its own, of a deprecated class in a deprecated service, takes
+    the reason of its class."""
+    signals = connected.deprecation_signals(
+        "DeprecatedService",
+        "ReasonedClass.StaticMethod",
+        "ReasonedClass_static_StaticMethod",
+        reason=True,
+    )
+    assert_reason(signals, 'use "testservice.testclass" instead')
+
+
+# Members that are not deprecated, and the calls that use them
+NOT_DEPRECATED = {
+    "procedure": ("FloatToString", "FloatToString", [values.float32(1)]),
+    "property": ("StringProperty", "set_StringProperty", [values.string("value")]),
+    "class": ("TestClass", "", []),
+    "enum": ("TestEnum", "", []),
+    "enum-value": ("TestEnum.ValueA", "", []),
+    "struct": ("TestStruct", "", []),
+    "struct-field": ("TestStruct.IntField", "", []),
+    "exception": ("CustomException", "", []),
+}
+
+
+@pytest.mark.parametrize("member", list(NOT_DEPRECATED))
+def test_not_deprecated(connected, member):
+    """A client gives no signal for a member that is not deprecated."""
+    name, procedure, args = NOT_DEPRECATED[member]
+    assert not connected.deprecation_signals("TestService", name, procedure, *args)
 
 
 section(

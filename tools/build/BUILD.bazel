@@ -38,6 +38,11 @@ py_binary(
 )
 
 py_binary(
+    name = "deprecation_signals",
+    srcs = ["deprecation_signals.py"],
+)
+
+py_binary(
     name = "run_and_stamp",
     srcs = ["run_and_stamp.py"],
 )

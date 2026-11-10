@@ -4,3 +4,10 @@ test_objects.py::test_hash_across_connections  # As test_hash
 test_values.py::test_structure_hash  # The language has no hash of a value
 test_functions.py::test_null_for_non_nullable_type[double]  # A Lua value can be nil
 test_functions.py::test_null_for_non_nullable_type[TestClass]  # As test_null_for_non_nullable_type[double]
+test_calls.py::test_deprecated_struct_field  # A field of a structure is a table entry, which cannot warn when read
+test_calls.py::test_deprecated_struct_member  # As test_deprecated_struct_field
+test_calls.py::test_deprecated_service_member[struct-field]  # As test_deprecated_struct_field
+test_calls.py::test_not_deprecated[struct-field]  # As test_deprecated_struct_field
+test_calls.py::test_deprecated_exception  # The client has no exception types
+test_calls.py::test_deprecated_service_member[exception]  # As test_deprecated_exception
+test_calls.py::test_not_deprecated[exception]  # As test_deprecated_exception

@@ -340,6 +340,9 @@ final class Testee {
         // The stubs are compiled from the service definitions
         reply.setValue(Value.newBuilder().setNull(true));
         break;
+      case DEPRECATION_SIGNALS:
+        reply.setValue(Deprecation.signals(command.getDeprecationSignals()));
+        break;
       case ENCODE:
         reply.setValue(Codec.encode(command.getEncode()));
         break;
