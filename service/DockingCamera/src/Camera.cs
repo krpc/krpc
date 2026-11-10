@@ -84,18 +84,22 @@ namespace KRPC.DockingCamera
         }
 
         /// <summary>
-        /// The image from the camera, a 256 by 256 pixel PNG.
+        /// The image from the camera, 256 by 256 pixels.
         /// Throws an exception if the camera is off or not started.
         /// </summary>
+        /// <param name="format">The format of the image.</param>
+        /// <param name="quality">The quality of a JPEG image, from 1 to 100.</param>
+        /// <returns>The image data.</returns>
         /// <remarks>
         /// The camera is switched on by setting the <c>IsEnabled</c> field of its
         /// <c>PartCameraModule</c> or <c>DockingCameraModule</c> to <c>true</c>, which also opens
         /// the camera window.
         /// </remarks>
-        [KRPCProperty]
-        public byte[] Image
+        [KRPCMethod]
+        public byte[] Image(ImageFormat format = ImageFormat.PNG, int quality = 75)
         {
-            get { return API.GetImage(Module, imageSize, imageSize); }
+            ImageEncoder.CheckQuality(format, quality);
+            return API.GetImage(Module, imageSize, imageSize, format, quality);
         }
     }
 }

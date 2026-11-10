@@ -2435,6 +2435,9 @@ DockingCamera.Available
 DockingCamera.Camera
 DockingCamera.Camera.Part
 DockingCamera.Camera.Image
+DockingCamera.ImageFormat
+DockingCamera.ImageFormat.PNG
+DockingCamera.ImageFormat.JPEG
 Debug
 Debug.SetCircularOrbit
 Debug.SetOrbit
