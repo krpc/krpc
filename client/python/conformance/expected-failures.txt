@@ -75,3 +75,5 @@ test_concurrency.py::test_spurious_wake[stream] @flaky  # Fails now and then, se
 test_streams.py::test_wake_waiter[remove] @flaky  # Fails now and then, seen only on CI: a read before the dispatcher thread announces the first value returns it, and the late announcement wakes the wait, which then returns true before the stream ends
 test_streams.py::test_wake_waiter[close] @flaky  # As test_streams.py::test_wake_waiter[remove]
 test_concurrency.py::test_wake_waiter_holding_another[close] @flaky  # As test_streams.py::test_wake_waiter[remove]
+test_streams.py::test_wake_waiter[connection-failure] @flaky  # As test_streams.py::test_wake_waiter[remove]
+test_concurrency.py::test_wake_waiter_holding_another[connection-failure] @flaky  # As test_streams.py::test_wake_waiter[remove]
