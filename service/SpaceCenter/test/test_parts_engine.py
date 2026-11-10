@@ -660,6 +660,39 @@ class TestPartsEngineReverserFirespitter(EngineTestBase, TestCase):
         self.assertFalse(engine.thrust_reversed)
 
 
+class TestPartsEngineReverserKerbalActuators(EngineTestBase, TestCase):
+    mods = ["KerbalActuators"]
+
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save()
+        cls.launch_vessel_from_vab("PartsEngineReverserKerbalActuators")
+        cls.remove_other_vessels()
+        cls.vessel = cls.connect().space_center.active_vessel
+        cls.parts = cls.vessel.parts
+
+    def test_thrust_reverser(self):
+        engine = self.get_engine("kerbalActuatorsReverserTest")
+        self.assertTrue(engine.can_reverse_thrust)
+        self.assertFalse(engine.thrust_reversed)
+
+        engine.thrust_reversed = True
+        self.assertTrue(engine.thrust_reversed)
+        engine.thrust_reversed = True
+        self.assertTrue(engine.thrust_reversed)
+
+        engine.toggle_thrust_reversal()
+        self.assertFalse(engine.thrust_reversed)
+        engine.thrust_reversed = False
+        self.assertFalse(engine.thrust_reversed)
+
+    def test_fixed_propeller(self):
+        engine = self.get_engine("kerbalActuatorsFixedTest")
+        self.assertFalse(engine.can_reverse_thrust)
+        self.assertRaises(RuntimeError, getattr, engine, "thrust_reversed")
+        self.assertRaises(RuntimeError, engine.toggle_thrust_reversal)
+
+
 class TestGimbalOverrideAttitude(TestCase):
     """The gimbal override actually flies the vessel. Uses the "Vessel" craft,
     whose single gimballed engine thrusts through the centre of mass, so a

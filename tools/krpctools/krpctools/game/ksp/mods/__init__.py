@@ -351,6 +351,20 @@ class Firespitter(_PartMod):
     part = "FSnoseEngine"
 
 
+class KerbalActuators(_PartMod):
+    """KerbalActuators, whose WBIPropSpinner module is another engine thrust reverser. The
+    archive is the part module alone, and the overlay adds the parts that use it."""
+
+    name = "KerbalActuators"
+    source = _GITHUB + (
+        "Angel-125/KerbalActuators/releases/download/v1.9.0/KerbalActuators.zip"
+    )
+    sha256 = "ff5ab1d099158440a5259da56b8e31d778a977c5469be3f3defca2439a6b7ff7"
+    # The archive also bundles ModuleManager, installed on its own
+    folders = ("WildBlueIndustries",)
+    part = "kerbalActuatorsReverserTest"
+
+
 class _AssemblyMod(Mod):
     """A mod told apart by the major.minor version of its loaded assembly."""
 
@@ -439,6 +453,7 @@ MODS = [
     B9PartSwitch,
     NearFutureSolar,
     Firespitter,
+    KerbalActuators,
     KSPCommunityPartModules,
     KSPCommunityPartModules04,
     KOS,
