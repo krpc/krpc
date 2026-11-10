@@ -1,5 +1,5 @@
 local krpc = require 'krpc'
-local platform = require 'krpc.platform'
+local socket = require 'socket'
 local conn = krpc.connect('Launch')
 local vessel = conn.space_center.active_vessel
 local flight = vessel:flight()
@@ -11,7 +11,7 @@ vessel.control:activate_next_stage()
 print(vessel.name .. ' has launched')
 
 while flight.mean_altitude < 10000 do
-    platform.sleep(0.1)
+    socket.sleep(0.1)
 end
 
 vessel.control.throttle = 0

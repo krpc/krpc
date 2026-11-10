@@ -340,6 +340,7 @@ Lua client
 * Warn once per member on standard error on a use of a deprecated service, procedure, method, property, class, enumeration, enumeration value or structure (:issue:`1322`)
 * Warn when ``get_call`` builds the call of a deprecated procedure, method or property (:issue:`1322`)
 * Deprecate each member of a deprecated service, class or enumeration (:issue:`1322`)
+* :deprecated:`Deprecated` ``krpc.platform.sleep``, in favor of luasocket's ``socket.sleep``. It now sleeps without holding a CPU core, and for fractions of a second (:issue:`1323`)
 
 
 Python client

@@ -1,5 +1,5 @@
 local krpc = require 'krpc'
-local platform = require 'krpc.platform'
+local socket = require 'socket'
 local math = require 'math'
 local List = require 'pl.List'
 local conn = krpc.connect('Pitch/Heading/Roll')
@@ -76,6 +76,6 @@ while true do
     print(string.format('pitch = %.1f, heading = %.1f, roll = %.1f',
                         pitch, heading, roll))
 
-    platform.sleep(1)
+    socket.sleep(1)
 
 end

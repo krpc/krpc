@@ -1,5 +1,5 @@
 local krpc = require 'krpc'
-local platform = require 'krpc.platform'
+local socket = require 'socket'
 local List = require 'pl.List'
 local conn = krpc.connect('User Interface Example')
 local canvas = conn.ui.stock_canvas
@@ -55,5 +55,5 @@ while true do
     -- Update the thrust text
     text.content = string.format('Thrust: %.1f kN', vessel.thrust/1000)
 
-    platform.sleep(0.1)
+    socket.sleep(0.1)
 end

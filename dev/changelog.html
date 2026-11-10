@@ -831,6 +831,7 @@
 <li><p>Warn once per member on standard error on a use of a deprecated service, procedure, method, property, class, enumeration, enumeration value or structure (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1322">#1322</a>)</p></li>
 <li><p>Warn when <code class="docutils literal notranslate"><span class="pre">get_call</span></code> builds the call of a deprecated procedure, method or property (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1322">#1322</a>)</p></li>
 <li><p>Deprecate each member of a deprecated service, class or enumeration (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1322">#1322</a>)</p></li>
+<li><p><span class="changelog-marker deprecated">Deprecated</span> <code class="docutils literal notranslate"><span class="pre">krpc.platform.sleep</span></code>, in favor of luasocket’s <code class="docutils literal notranslate"><span class="pre">socket.sleep</span></code>. It now sleeps without holding a CPU core, and for fractions of a second (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1323">#1323</a>)</p></li>
 </ul>
 </section>
 <section id="python-client">

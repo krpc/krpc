@@ -917,7 +917,7 @@ is shown while the mouse rests on the button.</p>
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-0-0-5" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-5" name="0-5" role="tabpanel" tabindex="0"><div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'krpc'</span>
-<span class="kd">local</span><span class="w"> </span><span class="nv">platform</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'krpc.platform'</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">socket</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'socket'</span>
 <span class="kd">local</span><span class="w"> </span><span class="nv">List</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'pl.List'</span>
 <span class="kd">local</span><span class="w"> </span><span class="nv">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">krpc</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="s1">'User Interface Example'</span><span class="p">)</span>
 <span class="kd">local</span><span class="w"> </span><span class="nv">canvas</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">conn</span><span class="p">.</span><span class="py">ui</span><span class="p">.</span><span class="py">stock_canvas</span>
@@ -973,7 +973,7 @@ is shown while the mouse rests on the button.</p>
 <span class="w">    </span><span class="c1">-- Update the thrust text</span>
 <span class="w">    </span><span class="nv">text</span><span class="p">.</span><span class="py">content</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">string.format</span><span class="p">(</span><span class="s1">'Thrust: %.1f kN'</span><span class="p">,</span><span class="w"> </span><span class="nv">vessel</span><span class="p">.</span><span class="py">thrust</span><span class="o">/</span><span class="mi">1000</span><span class="p">)</span>
 
-<span class="w">    </span><span class="nv">platform</span><span class="p">.</span><span class="nf">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="w">    </span><span class="nv">socket</span><span class="p">.</span><span class="nf">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
 <span class="kr">end</span>
 </pre></div>
 </div>
