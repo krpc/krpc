@@ -1165,6 +1165,14 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Whether RealAntennas is installed.
+        /// </summary>
+        [KRPCProperty]
+        public static bool RealAntennasAvailable {
+            get { return ExternalAPI.RealAntennas.IsAvailable; }
+        }
+
+        /// <summary>
         /// Whether RealFuels is installed.
         /// </summary>
         [KRPCProperty]

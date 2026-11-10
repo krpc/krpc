@@ -16,6 +16,7 @@ namespace KRPC.SpaceCenter
         {
             ExternalAPI.AGExt.Load ();
             ExternalAPI.FAR.Load ();
+            ExternalAPI.RealAntennas.Load ();
             ExternalAPI.RealFuels.Load ();
             ExternalAPI.RemoteTech.Load ();
         }

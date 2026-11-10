@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
+using RealAntennasAPI = KRPC.SpaceCenter.ExternalAPI.RealAntennas;
 using ObjectDestroyedException = KRPC.Service.KRPC.ObjectDestroyedException;
 using ObjectNotLoadedException = KRPC.Service.KRPC.ObjectNotLoadedException;
 
@@ -167,6 +168,71 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public CommNode End {
             get { return new CommNode (end); }
+        }
+
+        /// <summary>
+        /// The RealAntennas link. Throws if RealAntennas is not available. A link's
+        /// forward direction is from <see cref="Start"/> to <see cref="End"/>.
+        /// </summary>
+        CommNet.CommLink RealAntennasLink {
+            get {
+                var link = InternalLink;
+                if (!RealAntennasAPI.IsLink (link))
+                    throw new InvalidOperationException ("RealAntennas is not available");
+                return link;
+            }
+        }
+
+        /// <summary>
+        /// The data rate from <see cref="Start"/> to <see cref="End"/>, in bits per second.
+        /// </summary>
+        /// <remarks>
+        /// Requires RealAntennas.
+        /// </remarks>
+        [KRPCProperty]
+        public double ForwardDataRate {
+            get { return RealAntennasAPI.ForwardDataRate (RealAntennasLink); }
+        }
+
+        /// <summary>
+        /// The data rate from <see cref="End"/> to <see cref="Start"/>, in bits per second.
+        /// </summary>
+        /// <remarks>
+        /// Requires RealAntennas.
+        /// </remarks>
+        [KRPCProperty]
+        public double ReverseDataRate {
+            get { return RealAntennasAPI.ReverseDataRate (RealAntennasLink); }
+        }
+
+        /// <summary>
+        /// The antenna at <see cref="Start"/> that transmits over the link, or <c>null</c> if
+        /// <see cref="Start"/> is a ground station or an unloaded vessel.
+        /// </summary>
+        /// <remarks>
+        /// Requires RealAntennas.
+        /// </remarks>
+        [KRPCProperty (Nullable = true)]
+        public Parts.Antenna StartAntenna {
+            get { return ToAntenna (RealAntennasAPI.ForwardTransmitter (RealAntennasLink)); }
+        }
+
+        /// <summary>
+        /// The antenna at <see cref="End"/> that receives over the link, or <c>null</c> if
+        /// <see cref="End"/> is a ground station or an unloaded vessel.
+        /// </summary>
+        /// <remarks>
+        /// Requires RealAntennas.
+        /// </remarks>
+        [KRPCProperty (Nullable = true)]
+        public Parts.Antenna EndAntenna {
+            get { return ToAntenna (RealAntennasAPI.ForwardReceiver (RealAntennasLink)); }
+        }
+
+        static Parts.Antenna ToAntenna (object antenna)
+        {
+            var module = RealAntennasAPI.Module (antenna) as ModuleDataTransmitter;
+            return module == null ? null : new Parts.Antenna (new Parts.Part (module.part), module);
         }
     }
 }

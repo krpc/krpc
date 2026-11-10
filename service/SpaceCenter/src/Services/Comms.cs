@@ -121,6 +121,9 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The combined power of all active antennae on the vessel.
         /// </summary>
+        /// <remarks>
+        /// Not used by RealAntennas, which replaces the stock range model.
+        /// </remarks>
         [KRPCProperty]
         public double Power {
             get {

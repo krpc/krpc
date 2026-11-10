@@ -96,6 +96,7 @@
     <Compile Include="NameTagWarningAddon.cs" />
     <Compile Include="ExternalAPI\AGExt.cs" />
     <Compile Include="ExternalAPI\FAR.cs" />
+    <Compile Include="ExternalAPI\RealAntennas.cs" />
     <Compile Include="ExternalAPI\RealFuels.cs" />
     <Compile Include="ExternalAPI\RemoteTech.cs" />
     <Compile Include="Lifetime\CachedObject.cs" />
@@ -154,6 +155,7 @@
     <Compile Include="Services\Orbit.cs" />
     <Compile Include="Services\Parts\ActionGroupAction.cs" />
     <Compile Include="Services\Parts\Antenna.cs" />
+    <Compile Include="Services\Parts\AntennaTargetMode.cs" />
     <Compile Include="Services\Parts\AutoStrutMode.cs" />
     <Compile Include="Services\Parts\CargoBay.cs" />
     <Compile Include="Services\Parts\ConfigNode.cs" />

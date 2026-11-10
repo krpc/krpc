@@ -311,6 +311,22 @@ class RealFuels(Mod):
         return conn.space_center.real_fuels_available
 
 
+class RealAntennas(Mod):
+    """RealAntennas, which replaces CommNet's range model with a link budget. A
+    SpaceCenter property gives whether it is active."""
+
+    name = "RealAntennas"
+    source = _GITHUB + (
+        "KSP-RO/RealAntennas/releases/download/v2.12.0.0/RealAntennas-v2.12.0.0.zip"
+    )
+    sha256 = "2630574a64131c9990d0613aac75d9458b5e2172d3e4c502287841f90e358e51"
+    folders = ("RealAntennas",)
+    requires = ("ToolbarControl", "KSPCommunityFixes", "KSPBurst")
+
+    def present(self, game, conn):
+        return conn.space_center.real_antennas_available
+
+
 class B9PartSwitch(_PartMod):
     """Switches part subtypes, which changes their resources and mass. The archive is the
     part module alone, and the overlay adds a part that uses it."""
@@ -425,6 +441,7 @@ MODS = [
     AGExt,
     FAR,
     RealFuels,
+    RealAntennas,
     B9PartSwitch,
     NearFutureSolar,
     KSPCommunityPartModules,

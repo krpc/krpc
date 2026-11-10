@@ -201,12 +201,16 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// A list of all antennas in the vessel.
         /// </summary>
         /// <remarks>
+        /// A part with several antennas has an entry for each.
         /// If RemoteTech is installed, this will always return an empty list.
         /// To interact with RemoteTech antennas, use the RemoteTech service APIs.
         /// </remarks>
         [KRPCProperty]
         public IList<Antenna> Antennas {
-            get { return All.Where (Antenna.Is).Select (part => new Antenna (part)).ToList (); }
+            get {
+                return All.SelectMany (part => part.InternalPart.Modules.OfType<ModuleDataTransmitter> ()
+                    .Select (module => new Antenna (part, module))).ToList ();
+            }
         }
 
         /// <summary>

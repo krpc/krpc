@@ -44,6 +44,21 @@ class TestPartsAntenna(TestCase):
         self.assertEqual(2, antenna.packet_size)
         self.assertEqual(18, antenna.packet_resource_cost)
 
+    def test_real_antennas_members_require_the_mod(self):
+        self.assertFalse(self.connect().space_center.real_antennas_available)
+        antenna = self.fixed_antenna
+        self.assertRaises(RuntimeError, getattr, antenna, "gain")
+        self.assertRaises(RuntimeError, getattr, antenna, "target_mode")
+        self.assertRaises(RuntimeError, antenna.set_target_azimuth_elevation, 0, 0)
+        comms = self.connect().space_center.active_vessel.comms
+        link = self.wait_until(
+            lambda: comms.control_path, message="the vessel to connect"
+        )[0]
+        for name in ("forward_data_rate", "reverse_data_rate"):
+            self.assertRaises(RuntimeError, getattr, link, name)
+        for name in ("start_antenna", "end_antenna"):
+            self.assertRaises(RuntimeError, getattr, link, name)
+
     def test_deploy(self):
         self.assertTrue(self.deployable_antenna.deployable)
 
