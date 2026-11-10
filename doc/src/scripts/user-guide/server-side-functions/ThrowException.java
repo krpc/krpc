@@ -17,14 +17,12 @@ public class ThrowException {
       SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
       Vessel vessel = spaceCenter.getActiveVessel();
       // [docs]
+      Expression.Bound e = Expression.bind(connection);
       ProcedureCall amount = connection.getCall(
           vessel.getResources(), "amount", "LiquidFuel");
-      Expression expr = Expression.ifThen(connection,
-          Expression.lessThan(connection,
-              Expression.call(connection, amount),
-              Expression.constantDouble(connection, 100)),
-          Expression.throw_(connection, "KRPC", "InvalidOperationException",
-              Expression.constantString(connection, "not enough fuel")));
+      Expression expr = e.ifThen(
+          e.lessThan(e.call(amount), e.constantDouble(100)),
+          e.throw_("KRPC", "InvalidOperationException", e.constantString("not enough fuel")));
       connection.run(expr);
       // [/docs]
     }

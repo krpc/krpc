@@ -10,13 +10,11 @@ int main() {
   auto vessel = sc.active_vessel().value();
   typedef krpc::services::KRPC::Expression Expr;
   // [docs]
+  auto e = Expr::bind(conn);
   auto amount = vessel.resources().amount_call("LiquidFuel");
-  auto expr = Expr::if_then(
-      conn,
-      Expr::less_than(conn, Expr::call(conn, amount),
-                      Expr::constant_double(conn, 100)),
-      Expr::throw_(conn, "KRPC", "InvalidOperationException",
-                   Expr::constant_string(conn, "not enough fuel")));
+  auto expr = e.if_then(e.less_than(e.call(amount), e.constant_double(100)),
+                        e.throw_("KRPC", "InvalidOperationException",
+                                 e.constant_string("not enough fuel")));
   krpc::run(expr);
   // [/docs]
 }

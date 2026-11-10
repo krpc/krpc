@@ -16,10 +16,9 @@ public class FunctionStream {
 
       // Build a function that computes
       // the vessel's altitude in kilometers
-      Expression expr = Expression.divide(
-          connection,
-          Expression.call(connection, connection.getCall(flight, "getMeanAltitude")),
-          Expression.constantDouble(connection, 1000));
+      Expression.Bound e = Expression.bind(connection);
+      Expression expr = e.divide(
+          e.call(connection.getCall(flight, "getMeanAltitude")), e.constantDouble(1000));
 
       // Stream the value of the function
       Stream<Double> stream = connection.addStream(expr);

@@ -75,11 +75,11 @@ int main() {
 
   // Disable engines when target apoapsis is reached
   vessel.control().set_throttle(0.25);
-  typedef krpc::services::KRPC::Expression Expr;
+  auto e = krpc::services::KRPC::Expression::bind(conn);
   {
-    auto expr = Expr::greater_than_or_equal(
-        conn, Expr::call(conn, vessel.orbit().apoapsis_altitude_call()),
-        Expr::constant_double(conn, target_altitude));
+    auto expr =
+        e.greater_than_or_equal(e.call(vessel.orbit().apoapsis_altitude_call()),
+                                e.constant_double(target_altitude));
     auto event = krpc::add_event(expr);
     event.acquire();
     event.wait();
@@ -91,9 +91,8 @@ int main() {
   // Wait until out of atmosphere
   std::cout << "Coasting out of atmosphere" << std::endl;
   {
-    auto expr = Expr::greater_than_or_equal(
-        conn, Expr::call(conn, vessel.flight().mean_altitude_call()),
-        Expr::constant_double(conn, 70500));
+    auto expr = e.greater_than_or_equal(
+        e.call(vessel.flight().mean_altitude_call()), e.constant_double(70500));
     auto event = krpc::add_event(expr);
     event.acquire();
     event.wait();
@@ -135,9 +134,9 @@ int main() {
   // Execute burn
   std::cout << "Ready to execute burn" << std::endl;
   {
-    auto expr = Expr::less_than_or_equal(
-        conn, Expr::call(conn, vessel.orbit().time_to_apoapsis_call()),
-        Expr::constant_double(conn, burn_time / 2.0));
+    auto expr =
+        e.less_than_or_equal(e.call(vessel.orbit().time_to_apoapsis_call()),
+                             e.constant_double(burn_time / 2.0));
     auto event = krpc::add_event(expr);
     event.acquire();
     event.wait();
@@ -150,11 +149,10 @@ int main() {
   std::cout << "Fine tuning" << std::endl;
   vessel.control().set_throttle(0.05);
   {
-    auto remaining_burn = Expr::call(
-        conn, node.remaining_burn_vector_call(node.reference_frame()));
-    auto expr = Expr::less_than_or_equal(
-        conn, Expr::get(conn, remaining_burn, Expr::constant_int(conn, 1)),
-        Expr::constant_double(conn, 0));
+    auto remaining_burn =
+        e.call(node.remaining_burn_vector_call(node.reference_frame()));
+    auto expr = e.less_than_or_equal(e.get(remaining_burn, e.constant_int(1)),
+                                     e.constant_double(0));
     auto event = krpc::add_event(expr);
     event.acquire();
     event.wait();

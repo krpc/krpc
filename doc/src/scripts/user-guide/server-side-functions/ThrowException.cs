@@ -12,13 +12,11 @@ class Program {
         var spaceCenter = connection.SpaceCenter ();
         var vessel = spaceCenter.ActiveVessel;
         // [docs]
+        var e = Expression.Bind (connection);
         var amount = Connection.GetCall (() => vessel.Resources.Amount ("LiquidFuel"));
-        var expr = Expression.IfThen (connection,
-            Expression.LessThan (connection,
-                Expression.Call (connection, amount),
-                Expression.ConstantDouble (connection, 100)),
-            Expression.Throw (connection, "KRPC", "InvalidOperationException",
-                Expression.ConstantString (connection, "not enough fuel")));
+        var expr = e.IfThen (
+            e.LessThan (e.Call (amount), e.ConstantDouble (100)),
+            e.Throw ("KRPC", "InvalidOperationException", e.ConstantString ("not enough fuel")));
         connection.Run (expr);
         // [/docs]
     }

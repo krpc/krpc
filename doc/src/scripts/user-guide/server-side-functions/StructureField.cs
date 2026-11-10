@@ -13,9 +13,9 @@ class Program {
         var vessel = spaceCenter.ActiveVessel;
         var siteInfo = Connection.GetCall (() => vessel.Comms.ControlPath [0].Start);
         // [docs]
+        var e = Expression.Bind (connection);
         // The Name field of a structure a call returns
-        var expr = Expression.GetField (connection,
-            Expression.Call (connection, siteInfo), "Name");
+        var expr = e.GetField (e.Call (siteInfo), "Name");
         // [/docs]
     }
 }

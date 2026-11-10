@@ -14,10 +14,9 @@ public class EventCallback {
       SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
       Flight flight = spaceCenter.getActiveVessel().flight(null);
 
-      Expression expr = Expression.greaterThan(
-          connection,
-          Expression.call(connection, connection.getCall(flight, "getMeanAltitude")),
-          Expression.constantDouble(connection, 1000));
+      Expression.Bound e = Expression.bind(connection);
+      Expression expr = e.greaterThan(
+          e.call(connection.getCall(flight, "getMeanAltitude")), e.constantDouble(1000));
       Event event = connection.addEvent(expr);
 
       event.addCallback(() -> System.out.println("Altitude reached 1000m"));

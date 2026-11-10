@@ -11,7 +11,8 @@ int main() {
   typedef krpc::services::KRPC::Expression Expr;
   auto site_info = vessel.comms().control_path()[0].start_call();
   // [docs]
+  auto e = Expr::bind(conn);
   // The Name field of a structure a call returns
-  auto expr = Expr::get_field(conn, Expr::call(conn, site_info), "Name");
+  auto expr = e.get_field(e.call(site_info), "Name");
   // [/docs]
 }

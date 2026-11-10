@@ -9,6 +9,7 @@ import krpc.client.services.SpaceCenter.Flight;
 import krpc.client.services.SpaceCenter.Node;
 import krpc.client.services.SpaceCenter.ReferenceFrame;
 import krpc.client.services.SpaceCenter.Resources;
+import krpc.schema.KRPC.ProcedureCall;
 
 import org.javatuples.Triplet;
 
@@ -93,12 +94,12 @@ public class LaunchIntoOrbit {
 
         // Disable engines when target apoapsis is reached
         vessel.getControl().setThrottle(0.25f);
+        Expression.Bound e = Expression.bind(connection);
         {
-          Expression expr = Expression.greaterThanOrEqual(
-            connection,
-            Expression.call(
-              connection, connection.getCall(vessel.getOrbit(), "getApoapsisAltitude")),
-            Expression.constantDouble(connection, targetAltitude));
+          ProcedureCall apoapsisAltitude =
+            connection.getCall(vessel.getOrbit(), "getApoapsisAltitude");
+          Expression expr = e.greaterThanOrEqual(
+            e.call(apoapsisAltitude), e.constantDouble(targetAltitude));
           Event event = connection.addEvent(expr);
           synchronized (event.getCondition()) {
             event.waitFor();
@@ -110,11 +111,10 @@ public class LaunchIntoOrbit {
         // Wait until out of atmosphere
         System.out.println("Coasting out of atmosphere");
         {
-          Expression expr = Expression.greaterThanOrEqual(
-            connection,
-            Expression.call(
-              connection, connection.getCall(vessel.flight(null), "getMeanAltitude")),
-            Expression.constantDouble(connection, 70500));
+          ProcedureCall meanAltitude =
+            connection.getCall(vessel.flight(null), "getMeanAltitude");
+          Expression expr = e.greaterThanOrEqual(
+            e.call(meanAltitude), e.constantDouble(70500));
           Event event = connection.addEvent(expr);
           synchronized (event.getCondition()) {
             event.waitFor();
@@ -158,11 +158,10 @@ public class LaunchIntoOrbit {
         // Execute burn
         System.out.println("Ready to execute burn");
         {
-          Expression expr = Expression.lessThanOrEqual(
-            connection,
-            Expression.call(
-              connection, connection.getCall(vessel.getOrbit(), "getTimeToApoapsis")),
-            Expression.constantDouble(connection, burnTime / 2.0));
+          ProcedureCall timeToApoapsis =
+            connection.getCall(vessel.getOrbit(), "getTimeToApoapsis");
+          Expression expr = e.lessThanOrEqual(
+            e.call(timeToApoapsis), e.constantDouble(burnTime / 2.0));
           Event event = connection.addEvent(expr);
           synchronized (event.getCondition()) {
             event.waitFor();
@@ -174,13 +173,10 @@ public class LaunchIntoOrbit {
         System.out.println("Fine tuning");
         vessel.getControl().setThrottle(0.05f);
         {
-          Expression remainingBurn = Expression.call(
-            connection,
+          Expression remainingBurn = e.call(
             connection.getCall(node, "remainingBurnVector", node.getReferenceFrame()));
-          Expression expr = Expression.lessThanOrEqual(
-            connection,
-            Expression.get(connection, remainingBurn, Expression.constantInt(connection, 1)),
-            Expression.constantDouble(connection, 0));
+          Expression expr = e.lessThanOrEqual(
+            e.get(remainingBurn, e.constantInt(1)), e.constantDouble(0));
           Event event = connection.addEvent(expr);
           synchronized (event.getCondition()) {
             event.waitFor();

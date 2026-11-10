@@ -12,30 +12,30 @@ class Program {
         var spaceCenter = connection.SpaceCenter ();
         var vessel = spaceCenter.ActiveVessel;
         // [docs]
+        var e = Expression.Bind (connection);
+        var t = Type.Bind (connection);
         // A C# lambda cannot hold a loop or a handler, so the expression API builds them
-        var engine = Expression.Variable (connection, "engine",
-            Type.ClassType (connection, "SpaceCenter", "Engine"));
-        var result = Expression.Variable (connection, "result", Type.String (connection));
-        var error = Expression.Variable (connection, "error", Type.String (connection));
+        var engine = e.Variable ("engine", t.ClassType ("SpaceCenter", "Engine"));
+        var result = e.Variable ("result", t.String ());
+        var error = e.Variable ("error", t.String ());
         var toggleMode = Connection.GetCall (
             (System.Linq.Expressions.Expression<Action>)
             (() => vessel.Parts.Engines [0].ToggleMode ()));
-        var switchModes = Expression.BlockWithVariables (connection,
+        var switchModes = e.BlockWithVariables (
             new List<Expression> { engine, result, error },
             new List<Expression> {
-                Expression.TryCatchAll (connection,
-                    Expression.Block (connection, new List<Expression> {
-                        Expression.ForEach (connection, engine,
+                e.TryCatchAll (
+                    e.Block (new List<Expression> {
+                        e.ForEach (engine,
                             connection.Compile (() => vessel.Parts.Engines),
-                            Expression.CallWithArguments (connection, toggleMode,
+                            e.CallWithArguments (toggleMode,
                                 new Dictionary<int, Expression> { { 0, engine } })),
-                        Expression.Assign (connection, result,
-                            Expression.ConstantString (connection, "switched"))
+                        e.Assign (result, e.ConstantString ("switched"))
                     }),
                     error,
-                    Expression.Assign (connection, result,
-                        Expression.StringConcat (connection, new List<Expression> {
-                            Expression.ConstantString (connection, "could not switch: "),
+                    e.Assign (result,
+                        e.StringConcat (new List<Expression> {
+                            e.ConstantString ("could not switch: "),
                             error
                         }))),
                 result

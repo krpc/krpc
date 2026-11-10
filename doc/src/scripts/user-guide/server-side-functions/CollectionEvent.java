@@ -16,22 +16,19 @@ public class CollectionEvent {
     try (Connection connection = Connection.newInstance()) {
       SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
       SpaceCenter.Vessel vessel = spaceCenter.getActiveVessel();
+      Expression.Bound e = Expression.bind(connection);
+      Type.Bound t = Type.bind(connection);
 
       // A function taking an engine, returning true if it is out of fuel
-      Expression engine = Expression.parameter(
-        connection, "engine",
-        Type.classType(connection, "SpaceCenter", "Engine"));
+      Expression engine = e.parameter("engine", t.classType("SpaceCenter", "Engine"));
       ProcedureCall hasFuel = connection.getCall(
         vessel.getParts().getEngines().get(0), "getHasFuel");
-      Expression outOfFuel = Expression.lambda(
-        connection, Arrays.asList(engine),
-        Expression.not(connection, Expression.callWithArguments(
-          connection, hasFuel, Collections.singletonMap(0, engine))));
+      Expression outOfFuel = e.lambda(Arrays.asList(engine),
+        e.not(e.callWithArguments(hasFuel, Collections.singletonMap(0, engine))));
 
       // Whether any engine satisfies it
       ProcedureCall engines = connection.getCall(vessel.getParts(), "getEngines");
-      Expression expr = Expression.any(
-        connection, Expression.call(connection, engines), outOfFuel);
+      Expression expr = e.any(e.call(engines), outOfFuel);
 
       Event event = connection.addEvent(expr);
       synchronized (event.getCondition()) {

@@ -757,6 +757,11 @@ Two kinds of object appear here:
 Each factory method is an RPC that creates one node on the server and returns a handle to it.
 Building a function costs one RPC per node, paid once.
 
+The factory methods are static methods. In C#, Java and C++, the examples call them through the
+class bound to the connection, which passes the connection to each one: ``Expression.Bind`` in C#
+and ``bind`` in Java and C++. Python and Lua reach the class through the connection, as
+``conn.krpc.Expression``.
+
 Operators and Types
 ^^^^^^^^^^^^^^^^^^^
 

@@ -25,12 +25,10 @@ public class SubOrbitalFlight {
     System.out.println("Launch!");
     vessel.getControl().activateNextStage();
 
+    Expression.Bound e = Expression.bind(connection);
     {
       ProcedureCall solidFuel = connection.getCall(vessel.getResources(), "amount", "SolidFuel");
-      Expression expr = Expression.lessThan(
-        connection,
-        Expression.call(connection, solidFuel),
-        Expression.constantFloat(connection, 0.1f));
+      Expression expr = e.lessThan(e.call(solidFuel), e.constantFloat(0.1f));
       Event event = connection.addEvent(expr);
       synchronized (event.getCondition()) {
         event.waitFor();
@@ -42,10 +40,7 @@ public class SubOrbitalFlight {
     Flight flight = vessel.flight(null);
     {
       ProcedureCall meanAltitude = connection.getCall(flight, "getMeanAltitude");
-      Expression expr = Expression.greaterThan(
-        connection,
-        Expression.call(connection, meanAltitude),
-        Expression.constantDouble(connection, 10000));
+      Expression expr = e.greaterThan(e.call(meanAltitude), e.constantDouble(10000));
       Event event = connection.addEvent(expr);
       synchronized (event.getCondition()) {
         event.waitFor();
@@ -58,10 +53,7 @@ public class SubOrbitalFlight {
     {
       ProcedureCall apoapsisAltitude = connection.getCall(
         vessel.getOrbit(), "getApoapsisAltitude");
-      Expression expr = Expression.greaterThan(
-        connection,
-        Expression.call(connection, apoapsisAltitude),
-        Expression.constantDouble(connection, 100000));
+      Expression expr = e.greaterThan(e.call(apoapsisAltitude), e.constantDouble(100000));
       Event event = connection.addEvent(expr);
       synchronized (event.getCondition()) {
         event.waitFor();
@@ -76,10 +68,7 @@ public class SubOrbitalFlight {
 
     {
       ProcedureCall srfAltitude = connection.getCall(flight, "getSurfaceAltitude");
-      Expression expr = Expression.lessThan(
-        connection,
-        Expression.call(connection, srfAltitude),
-        Expression.constantDouble(connection, 1000));
+      Expression expr = e.lessThan(e.call(srfAltitude), e.constantDouble(1000));
       Event event = connection.addEvent(expr);
       synchronized (event.getCondition()) {
         event.waitFor();

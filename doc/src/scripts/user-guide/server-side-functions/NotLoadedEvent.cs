@@ -8,21 +8,21 @@ using Type = KRPC.Client.Services.KRPC.Type;
 class Program {
     public static void Main() {
         var connection = new Connection();
+        var e = Expression.Bind(connection);
+        var t = Type.Bind(connection);
         var spaceCenter = connection.SpaceCenter();
         var flight = spaceCenter.ActiveVessel.Flight();
 
         // A C# lambda cannot hold a handler, so the expression API builds it
         // around a compiled condition
-        var above = Expression.Variable(connection, "above", Type.Bool(connection));
-        var above1000m = Expression.BlockWithVariables(connection,
+        var above = e.Variable("above", t.Bool());
+        var above1000m = e.BlockWithVariables(
             new List<Expression> { above },
             new List<Expression> {
-                Expression.TryCatch(connection,
-                    Expression.Assign(connection, above,
-                        connection.Compile(() => flight.MeanAltitude > 1000)),
+                e.TryCatch(
+                    e.Assign(above, connection.Compile(() => flight.MeanAltitude > 1000)),
                     "KRPC", "ObjectNotLoadedException", null,
-                    Expression.Assign(connection, above,
-                        Expression.ConstantBool(connection, false))),
+                    e.Assign(above, e.ConstantBool(false))),
                 above
             });
 
