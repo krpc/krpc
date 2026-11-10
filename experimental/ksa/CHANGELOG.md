@@ -22,6 +22,10 @@
   - Support KSA v2026.11.10.5801
 - Flight and orbits
   - **Breaking:** Return the scale height at sea level from `Body.ScaleHeight`
+  - Add the air temperature, speed of sound, Mach number and breathable air to `Flight`
+  - Add the temperature, speed of sound, oxygen fraction and molar mass of an atmosphere to
+    `Body`
+
 - Clients
   - Add stubs and documentation for the JavaScript client
   - Add a WebSockets server on port 50001 to the default settings, for the JavaScript client

@@ -159,6 +159,10 @@ KSA.Body.SeaLevelDensity
 KSA.Body.ScaleHeight
 KSA.Body.PressureAt
 KSA.Body.DensityAt
+KSA.Body.TemperatureAt
+KSA.Body.SpeedOfSoundAt
+KSA.Body.AtmosphereOxygenFraction
+KSA.Body.AtmosphereMolarMass
 KSA.Body.HasOcean
 KSA.Body.OceanDensity
 KSA.Body.SurfaceGravity
@@ -200,6 +204,10 @@ KSA.Flight.Heading
 KSA.Flight.Roll
 KSA.Flight.StaticPressure
 KSA.Flight.AtmosphereDensity
+KSA.Flight.StaticAirTemperature
+KSA.Flight.SpeedOfSound
+KSA.Flight.Mach
+KSA.Flight.OutsideAir
 KSA.Flight.DynamicPressure
 KSA.Flight.DoseRate
 KSA.Flight.OrbitAverageDoseRate
@@ -209,6 +217,11 @@ KSA.Flight.SideslipAngle
 KSA.Flight.Prograde
 KSA.Flight.Normal
 KSA.Flight.Radial
+KSA.OutsideAir
+KSA.OutsideAir.NoAtmosphere
+KSA.OutsideAir.NoOxygen
+KSA.OutsideAir.TooThin
+KSA.OutsideAir.Breathable
 KSA.Control
 KSA.Control.Throttle
 KSA.Control.EngineOn

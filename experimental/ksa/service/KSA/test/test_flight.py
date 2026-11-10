@@ -53,6 +53,10 @@ class TestFlight(ksatest.TestCase):
         self.assertLess(self.flight.static_pressure, 1)
         self.assertLess(self.flight.atmosphere_density, 1e-6)
         self.assertLess(self.flight.dynamic_pressure, 1)
+        self.assertEqual(0, self.flight.static_air_temperature)
+        self.assertEqual(0, self.flight.speed_of_sound)
+        self.assertEqual(0, self.flight.mach)
+        self.assertEqual(self.ksa.OutsideAir.no_atmosphere, self.flight.outside_air)
 
     def test_g_force(self):
         # Coasting in orbit is free fall

@@ -164,6 +164,57 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The temperature of the atmosphere at an altitude, in kelvin. Zero for a body with
+        /// no atmosphere, or above the atmosphere.
+        /// </summary>
+        /// <param name="altitude">Altitude above the body's mean radius, in meters.</param>
+        [KRPCMethod]
+        public float TemperatureAt (double altitude)
+        {
+            var atmosphere = AtmosphereAt (altitude);
+            return atmosphere == null ? 0 : (float)atmosphere.ComputeTemperatureAtAltitude (altitude);
+        }
+
+        /// <summary>
+        /// The speed of sound in the atmosphere at an altitude, in meters per second. Zero for
+        /// a body with no atmosphere, or above the atmosphere.
+        /// </summary>
+        /// <param name="altitude">Altitude above the body's mean radius, in meters.</param>
+        [KRPCMethod]
+        public float SpeedOfSoundAt (double altitude)
+        {
+            var atmosphere = AtmosphereAt (altitude);
+            if (atmosphere == null)
+                return 0;
+            return (float)atmosphere.Mixture.ComputeSpeedOfSound (atmosphere.ComputeTemperatureAtAltitude (altitude));
+        }
+
+        // The atmosphere at an altitude, or null at or above its top, as in Flight
+        PhysicalAtmosphere AtmosphereAt (double altitude)
+        {
+            var atmosphere = Atmosphere;
+            return atmosphere != null && altitude < atmosphere.Height ? atmosphere : null;
+        }
+
+        /// <summary>
+        /// The fraction of the atmosphere that is oxygen, by volume. Zero for a body with no
+        /// atmosphere.
+        /// </summary>
+        [KRPCProperty]
+        public float AtmosphereOxygenFraction {
+            get { return (float)(Atmosphere?.OxygenVolumeFraction ?? 0); }
+        }
+
+        /// <summary>
+        /// The mean molar mass of the atmosphere, in kilograms per mole. Zero for a body with
+        /// no atmosphere.
+        /// </summary>
+        [KRPCProperty]
+        public float AtmosphereMolarMass {
+            get { return (float)(Atmosphere?.Mixture.MolarMass ?? 0); }
+        }
+
+        /// <summary>
         /// Whether the body has an ocean.
         /// </summary>
         [KRPCProperty]
