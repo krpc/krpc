@@ -41,6 +41,10 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The current mode of the camera.
         /// </summary>
+        /// <remarks>
+        /// Setting the mode to <see cref="CameraMode.IVA"/> throws an exception if the
+        /// active vessel has no crew, or none of its crew can be viewed in an interior.
+        /// </remarks>
         [KRPCProperty]
         public CameraMode Mode {
             get {
@@ -74,11 +78,30 @@ namespace KRPC.SpaceCenter.Services
                         FlightCamera.SetMode (FlightCamera.Modes.ORBITAL);
                         break;
                     case CameraMode.IVA:
-                        CameraManager.Instance.SetCameraIVA();
+                        EnterIVA (0);
                         break;
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Switch the camera to IVA mode. The game spawns a vessel's kerbals in its
+        /// interiors a few frames after the vessel loads, so we wait for one to appear.
+        /// </summary>
+        static void EnterIVA (int tick)
+        {
+            var cameraManager = CameraManager.Instance;
+            // Selecting the kerbal already in view leaves IVA
+            if (cameraManager.currentCameraMode == CameraManager.CameraMode.IVA)
+                return;
+            if (FlightGlobals.ActiveVessel.GetCrewCount () == 0)
+                throw new InvalidOperationException ("The active vessel has no crew");
+            if (cameraManager.SetCameraIVA ())
+                return;
+            if (tick > 500)
+                throw new InvalidOperationException ("Failed to switch the camera to IVA mode");
+            throw new YieldException<Action> (() => EnterIVA (tick + 1));
         }
 
         /// <summary>
