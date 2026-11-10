@@ -12,6 +12,9 @@ freshly-installed mod (overwriting on conflict).
 * `DMagicScienceAnimate/TestPart.cfg` — a ModuleManager patch adding `dmagicSensorTest`, a part
   whose science experiment is a `DMModuleScienceAnimateGeneric`, so the SpaceCenter `Experiment`
   tests can exercise kRPC's DMagic support. The DMagic archive is only the part module, no parts.
+* `WildBlueIndustries/TestPart.cfg` - a ModuleManager patch adding two Juno clones with a
+  `WBIPropSpinner`, `kerbalActuatorsReverserTest` and `kerbalActuatorsFixedTest`, for the
+  KerbalActuators thrust reverser tests. KerbalActuators ships the part module but no parts.
 
 * `B9PartSwitch/TestPart.cfg` — a ModuleManager patch adding `b9PartSwitchTest`, an FL-T400
   whose tank switches between three B9PartSwitch subtypes. The B9PartSwitch archive has no parts.

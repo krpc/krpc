@@ -138,7 +138,7 @@ class SolverEngines(Mod):
 
 
 class ROUtils(Mod):
-    """RealFuels' utility library."""
+    """The utility library of RealFuels and Procedural Fairings."""
 
     name = "ROUtils"
     source = _GITHUB + "KSP-RO/ROUtils/releases/download/v1.2.0.0/ROUtils-v1.2.0.0.zip"
@@ -356,6 +356,48 @@ class NearFutureSolar(_PartMod):
     part = "nfs-panel-deploying-curved-25-1"
 
 
+class ProceduralFairings(Mod):
+    """Procedural Fairings, whose fairing sides the SpaceCenter Fairing class wraps. Its
+    parts load without its plugin, so the check looks for the plugin's module."""
+
+    name = "ProceduralFairings"
+    source = _GITHUB + (
+        "KSP-RO/ProceduralFairings/releases/download/v6.8.0.0/"
+        "ProceduralFairings-v6.8.0.0.zip"
+    )
+    sha256 = "bd574414e01ebecb6fd056bb7c62a7de7cdae4160c1550c98931128890918400"
+    folders = ("ProceduralFairings",)
+    requires = ("ROUtils", "KSPCommunityFixes")
+
+    def present(self, game, conn):
+        return conn.testing_tools.part_module_available("ProceduralFairingDecoupler")
+
+
+class Firespitter(_PartMod):
+    """Firespitter, whose FSswitchEngineThrustTransform module is one of the engine thrust
+    reversers the SpaceCenter Engine class drives."""
+
+    name = "Firespitter"
+    source = _GITHUB + "snjo/Firespitter/releases/download/v7.17/Firespitter_7.17.zip"
+    sha256 = "ce19d8abc5ef3343752146644f4f8baa25daae4f38124541399590d4156e87fc"
+    folders = ("Firespitter",)
+    part = "FSnoseEngine"
+
+
+class KerbalActuators(_PartMod):
+    """KerbalActuators, whose WBIPropSpinner module is another engine thrust reverser. The
+    archive is the part module alone, and the overlay adds the parts that use it."""
+
+    name = "KerbalActuators"
+    source = _GITHUB + (
+        "Angel-125/KerbalActuators/releases/download/v1.9.0/KerbalActuators.zip"
+    )
+    sha256 = "ff5ab1d099158440a5259da56b8e31d778a977c5469be3f3defca2439a6b7ff7"
+    # The archive also bundles ModuleManager, installed on its own
+    folders = ("WildBlueIndustries",)
+    part = "kerbalActuatorsReverserTest"
+
+
 class _AssemblyMod(Mod):
     """A mod told apart by the major.minor version of its loaded assembly."""
 
@@ -444,6 +486,9 @@ MODS = [
     RealAntennas,
     B9PartSwitch,
     NearFutureSolar,
+    ProceduralFairings,
+    Firespitter,
+    KerbalActuators,
     KSPCommunityPartModules,
     KSPCommunityPartModules04,
     KOS,
