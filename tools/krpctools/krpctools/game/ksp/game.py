@@ -65,17 +65,21 @@ def normalize_permissions(path):
 
 def _folder_members(archive, folder):
     """The members of a zip archive under GameData/<folder>/, at any depth, as (member,
-    path relative to the folder) pairs."""
+    path relative to the folder) pairs. An archive with no GameData folder gives the
+    members under <folder>/ at its root."""
     members = []
+    root = []
     for member in archive.infolist():
         parts = member.filename.split("/")
         if ".." in parts or member.is_dir():
             continue
+        if len(parts) > 1 and parts[0] == folder:
+            root.append((member, "/".join(parts[1:])))
         for i in range(len(parts) - 2):
             if parts[i] == "GameData" and parts[i + 1] == folder:
                 members.append((member, "/".join(parts[i + 2 :])))
                 break
-    return members
+    return members or root
 
 
 def copy_file(source, name, dst):
@@ -96,7 +100,8 @@ def copy_file(source, name, dst):
 
 
 def copy_folder(source, folder, dst):
-    """Copy GameData/<folder> from source, a zip archive or a directory, to dst."""
+    """Copy GameData/<folder>, or <folder> at the root, from source, a zip archive or a
+    directory, to dst."""
     if zipfile.is_zipfile(source):
         with zipfile.ZipFile(source) as archive:
             members = _folder_members(archive, folder)

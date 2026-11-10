@@ -165,6 +165,16 @@ class TestCopyFolder(TempDirTestCase):
             ),
         )
 
+    def test_from_zip_root(self):
+        archive = os.path.join(self.dir, "mod.zip")
+        with zipfile.ZipFile(archive, "w") as f:
+            f.writestr("Mod/Mod.dll", "dll")
+            f.writestr("Other/Other.dll", "other")
+        dst = os.path.join(self.dir, "out")
+        copy_folder(archive, "Mod", dst)
+        self.assertTrue(os.path.isfile(os.path.join(dst, "Mod.dll")))
+        self.assertFalse(os.path.exists(os.path.join(dst, "Other.dll")))
+
     def test_from_directory(self):
         self.write("build/GameData/Mod/Mod.dll", "dll")
         dst = os.path.join(self.dir, "out")
