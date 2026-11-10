@@ -47,6 +47,7 @@ atm
 autotune
 autotuned
 badass
+beamwidth
 biome
 biomes
 bitwise
@@ -146,6 +147,7 @@ ns
 nullability
 nullable
 omni
+omnidirectional
 online
 overdamped
 parametrized

@@ -718,6 +718,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// An <see cref="Antenna"/> if the part is an antenna, otherwise <c>null</c>.
         /// </summary>
         /// <remarks>
+        /// For a part with several antennas, this is the first. <see cref="Parts.Antennas"/>
+        /// lists them all.
         /// If RemoteTech is installed, this will always return <c>null</c>.
         /// To interact with RemoteTech antennas, use the RemoteTech service APIs.
         /// </remarks>
