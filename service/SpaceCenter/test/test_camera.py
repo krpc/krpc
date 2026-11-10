@@ -257,6 +257,51 @@ class TestCameraMap(CameraTestBase, CameraDistanceTestBase, TestCase):
         cls.wait(1)
 
 
+class TestCameraIVALaunch(TestCase):
+    """Entering IVA straight after a launch, before the game has placed the crew in
+    the vessel's interiors."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save()
+        cls.remove_other_vessels()
+        space_center = cls.connect().space_center
+        cls.space_center = space_center
+        # One Kerbal per test, as a launch leaves its crew assigned
+        for name in ("IVA Launch Kerman", "IVA Twice Kerman"):
+            if space_center.get_kerbal(name) is None:
+                space_center.create_kerbal(name, "Pilot", True)
+        cls._stage_craft("Multi", "VAB", None)
+        cls.camera = space_center.camera
+        cls.mode = space_center.CameraMode
+
+    def tearDown(self):
+        self.camera.mode = self.mode.automatic
+        self.wait(1)
+
+    def launch(self, crew):
+        self.space_center.launch_vessel("VAB", "Multi", "LaunchPad", crew)
+
+    def test_enter_after_launch(self):
+        self.launch(["IVA Launch Kerman"])
+        self.camera.mode = self.mode.iva
+        self.assertEqual(self.mode.iva, self.camera.mode)
+
+    def test_enter_twice(self):
+        self.launch(["IVA Twice Kerman"])
+        self.camera.mode = self.mode.iva
+        self.camera.mode = self.mode.iva
+        self.wait(1)
+        self.assertEqual(self.mode.iva, self.camera.mode)
+
+    def test_no_crew(self):
+        self.launch([])
+        with self.assertRaises(RuntimeError) as cm:
+            self.camera.mode = self.mode.iva
+        self.assertIn("The active vessel has no crew", str(cm.exception))
+        self.assertNotEqual(self.mode.iva, self.camera.mode)
+
+
 class TestCameraDistanceDuringSwitch(TestCase):
     # Runs last so its deliberately unsettled camera state does not leak into the
     # other camera test classes (new_save does not reload when already in flight).
