@@ -20,6 +20,12 @@
   - Fix serial servers failing to start on Linux and macOS, with the native serial port library
     not found
   - Support KSA v2026.11.10.5801
+
+- Crew and life support
+  - Add life support: the supplies of a vehicle and its habitat zones, how long they last,
+    and moving meals and canisters between habitats
+  - Add `KSA.LifeSupportEnabled` and `KSA.RadiationEnabled`
+
 - Flight and orbits
   - **Breaking:** Return the scale height at sea level from `Body.ScaleHeight`
   - Add the air temperature, speed of sound, Mach number and breathable air to `Flight`

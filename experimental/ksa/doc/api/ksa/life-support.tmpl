@@ -1,0 +1,13 @@
+.. default-domain:: {{ domain.sphinxname }}
+.. highlight:: {{ domain.highlight }}
+{{ domain.currentmodule('KSA') }}
+{% import domain.macros as macros with context %}
+
+Life Support
+============
+
+{{ macros.class(services['KSA'].classes['LifeSupport']) }}
+{{ macros.enumeration(services['KSA'].enumerations['LifeSupportLevel']) }}
+{{ macros.enumeration(services['KSA'].enumerations['LifeSupportSupply']) }}
+{{ macros.class(services['KSA'].classes['HabitatZone']) }}
+{{ macros.class(services['KSA'].classes['Habitat']) }}

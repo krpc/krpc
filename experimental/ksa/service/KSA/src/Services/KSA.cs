@@ -116,6 +116,22 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// Whether the crew use up supplies, as set when the game was created.
+        /// </summary>
+        [KRPCProperty]
+        public static bool LifeSupportEnabled {
+            get { return Universe.Rules.LifeSupport; }
+        }
+
+        /// <summary>
+        /// Whether radiation harms the crew, as set when the game was created.
+        /// </summary>
+        [KRPCProperty]
+        public static bool RadiationEnabled {
+            get { return Universe.Rules.Radiation; }
+        }
+
+        /// <summary>
         /// The simulation speed, as a multiple of real time. Zero when paused.
         /// </summary>
         [KRPCProperty]
