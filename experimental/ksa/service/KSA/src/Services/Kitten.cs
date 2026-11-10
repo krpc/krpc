@@ -300,9 +300,55 @@ namespace KRPC.KSA.Services
         public void GoOnEva ()
         {
             var seat = Seat ?? throw new InvalidOperationException ("The kitten is not in a seat");
-            if (EVADoor.PerformEvaForSeat (seat.Part.InternalVehicle, seat.InternalSeat) != EvaRequest.Queued)
+            var vehicle = seat.Part.InternalVehicle;
+            // As the game's EVA button checks
+            switch (vehicle.CheckEva (Entry, seat.InternalSeat)) {
+            case EvaCheck.Incapacitated:
+                throw new InvalidOperationException ("The kitten is incapacitated");
+            case EvaCheck.Degraded:
+                throw new InvalidOperationException ("The kitten is too weak to go on EVA");
+            case EvaCheck.NoSuitSupply:
+                throw new InvalidOperationException ("The habitat zone has no supplies to fill the kitten's suit");
+            }
+            switch (EVADoor.PerformEvaForSeat (vehicle, seat.InternalSeat)) {
+            case EvaRequest.NoDoor:
                 throw new InvalidOperationException ("The vehicle has no EVA hatch");
+            case EvaRequest.EmptySeat:
+            case EvaRequest.NotOnRoster:
+                throw new InvalidOperationException ("The kitten is not in the seat");
+            }
             WaitFor (() => OnEva, "The kitten did not go on EVA", 10);
+        }
+
+        /// <summary>
+        /// Whether the kitten can go on EVA. See <see cref="GoOnEva"/>.
+        /// </summary>
+        [KRPCProperty]
+        public bool CanGoOnEva {
+            get {
+                var seat = Seat;
+                if (seat == null)
+                    return false;
+                var vehicle = seat.Part.InternalVehicle;
+                return vehicle.CheckEva (Entry, seat.InternalSeat) == EvaCheck.Ready && !vehicle.Parts.EVADoors.Modules.IsEmpty;
+            }
+        }
+
+        /// <summary>
+        /// How long the supplies in the kitten's suit last, or <c>null</c> if the kitten is
+        /// not on EVA.
+        /// </summary>
+        /// <remarks>
+        /// The suit is filled from the kitten's habitat zone when it goes on EVA, and what is
+        /// left returns to the zone when it boards.
+        /// </remarks>
+        [KRPCProperty (Nullable = true)]
+        public LifeSupport LifeSupport {
+            get {
+                _ = Entry;
+                var eva = Eva;
+                return eva == null ? null : new LifeSupport (new Vehicle (eva));
+            }
         }
 
         /// <summary>
@@ -323,6 +369,129 @@ namespace KRPC.KSA.Services
                 throw new InvalidOperationException ("No EVA hatch with a free seat is in range");
             InputEvents.KittenBoardBuffer.Add (new InputEvents.KittenBoardData { Kitten = eva, Host = host, Door = door });
             return WaitFor (() => !OnEva, () => new Vehicle (host), "The kitten did not board the vehicle", 10);
+        }
+
+        /// <summary>
+        /// Whether the kitten is on EVA and an EVA hatch with a free seat is in range. See
+        /// <see cref="Board"/>.
+        /// </summary>
+        [KRPCProperty]
+        public bool CanBoard {
+            get {
+                _ = Entry;
+                var eva = Eva;
+                return eva != null && eva.FindBoardTarget ().Status == BoardTargetStatus.Found;
+            }
+        }
+
+        global::KSA.Habitat Cargo {
+            get { return EvaCarry.FindCargo (EvaOrThrow.Parts) ?? throw new InvalidOperationException ("The kitten has no space to carry supplies"); }
+        }
+
+        /// <summary>
+        /// The number of meals the kitten on EVA carries. Throws an exception if the kitten is
+        /// not on EVA.
+        /// </summary>
+        [KRPCProperty]
+        public int CarriedMeals {
+            get { return EvaCarry.Count (Cargo, EvaOrThrow.Parts.Moles.States).Meals; }
+        }
+
+        /// <summary>
+        /// The number of carbon dioxide scrubber canisters the kitten on EVA carries. Throws an
+        /// exception if the kitten is not on EVA.
+        /// </summary>
+        [KRPCProperty]
+        public int CarriedCanisters {
+            get { return EvaCarry.Count (Cargo, EvaOrThrow.Parts.Moles.States).Canisters; }
+        }
+
+        /// <summary>
+        /// Take meals and canisters from a habitat within reach, and return once the kitten
+        /// carries them. Takes fewer when the habitat holds fewer, or the kitten cannot carry
+        /// more.
+        /// </summary>
+        /// <param name="habitat">The habitat, which must store supplies.</param>
+        /// <param name="meals">The number of meals to take.</param>
+        /// <param name="canisters">The number of canisters to take.</param>
+        /// <remarks>
+        /// Throws an exception if the kitten is not on EVA or is unwell, life support is
+        /// disabled, or the habitat stores no supplies or is out of reach. See
+        /// <see cref="CanCarry"/>.
+        /// </remarks>
+        [KRPCMethod]
+        public void Take (Habitat habitat, int meals = 0, int canisters = 0)
+        {
+            Carry (habitat, CarryDirection.Take, meals, canisters);
+        }
+
+        /// <summary>
+        /// Stow the meals and canisters the kitten carries in a habitat within reach, and
+        /// return once they are stowed. Stows fewer when the kitten carries fewer, or the
+        /// habitat has less room.
+        /// </summary>
+        /// <param name="habitat">The habitat, which must store supplies.</param>
+        /// <param name="meals">The number of meals to stow.</param>
+        /// <param name="canisters">The number of canisters to stow.</param>
+        /// <remarks>
+        /// Throws an exception if the kitten is not on EVA or is unwell, life support is
+        /// disabled, or the habitat stores no supplies or is out of reach. See
+        /// <see cref="CanCarry"/>.
+        /// </remarks>
+        [KRPCMethod]
+        public void Stow (Habitat habitat, int meals = 0, int canisters = 0)
+        {
+            Carry (habitat, CarryDirection.Stow, meals, canisters);
+        }
+
+        /// <summary>
+        /// Whether the kitten can take supplies from or stow them in a habitat. See
+        /// <see cref="Take"/> and <see cref="Stow"/>.
+        /// </summary>
+        /// <param name="habitat">The habitat.</param>
+        [KRPCMethod]
+        public bool CanCarry (Habitat habitat)
+        {
+            if (ReferenceEquals (habitat, null))
+                throw new ArgumentNullException (nameof (habitat));
+            _ = Entry;
+            var eva = Eva;
+            return eva != null && eva.CheckCarry (habitat.Part.InternalVehicle, habitat.InternalHabitat) == CarryCheck.Ready;
+        }
+
+        void Carry (Habitat habitat, CarryDirection direction, int meals, int canisters)
+        {
+            if (ReferenceEquals (habitat, null))
+                throw new ArgumentNullException (nameof (habitat));
+            if (meals < 0 || canisters < 0)
+                throw new ArgumentException ("The number of meals and canisters must not be negative");
+            var eva = EvaOrThrow;
+            var host = habitat.Part.InternalVehicle;
+            var module = habitat.InternalHabitat;
+            switch (eva.CheckCarry (host, module)) {
+            case CarryCheck.LifeSupportOff:
+                throw new InvalidOperationException ("Life support is disabled");
+            case CarryCheck.NoCargoSpace:
+                throw new InvalidOperationException ("The kitten has no space to carry supplies");
+            case CarryCheck.Unwell:
+                throw new InvalidOperationException ("The kitten is too weak to carry supplies");
+            case CarryCheck.NotStorage:
+                throw new InvalidOperationException ("The habitat does not store supplies");
+            case CarryCheck.OutOfReach:
+                throw new InvalidOperationException ("The habitat is out of reach");
+            }
+            if (meals == 0 && canisters == 0)
+                return;
+            var before = (CarriedMeals, CarriedCanisters);
+            // As the game's carry window takes and stows supplies
+            InputEvents.KittenCarryBuffer.Add (new InputEvents.KittenCarryData {
+                Kitten = eva,
+                Host = host,
+                Habitat = module,
+                Direction = direction,
+                Load = new CarryLoad (meals, canisters)
+            });
+            Waits.Until (() => (CarriedMeals, CarriedCanisters) != before);
         }
 
         static void WaitFor (Func<bool> condition, string error, int updates)

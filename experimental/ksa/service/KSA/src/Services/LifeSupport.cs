@@ -7,8 +7,9 @@ using KSA;
 namespace KRPC.KSA.Services
 {
     /// <summary>
-    /// How long the supplies of a vehicle or a habitat zone last its crew. Obtained from
-    /// <see cref="Vehicle.LifeSupport"/> or <see cref="HabitatZone.LifeSupport"/>.
+    /// How long the supplies of a vehicle, a habitat zone or a kitten's suit last. Obtained
+    /// from <see cref="Vehicle.LifeSupport"/>, <see cref="HabitatZone.LifeSupport"/> or
+    /// <see cref="Kitten.LifeSupport"/>.
     /// </summary>
     /// <remarks>
     /// The times count down only while <see cref="KSA.LifeSupportEnabled"/> is true. Air
@@ -140,7 +141,8 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
-        /// The time until the first supply runs out, in seconds. Infinite with no crew.
+        /// The time until the first supply runs out, in seconds. A suit counts its air and
+        /// scrubber only. Infinite with no crew.
         /// </summary>
         [KRPCProperty]
         public float Time {

@@ -26,6 +26,12 @@
     and moving meals and canisters between habitats
   - Add `KSA.LifeSupportEnabled` and `KSA.RadiationEnabled`
   - Add the condition and cause of death of kittens, and whether a vehicle can be flown
+  - **Breaking:** Move a kitten in `Seat.Kitten` only within its habitat zone, and refuse an
+    incapacitated or retired kitten
+  - Refuse `Kitten.GoOnEva` for a kitten too weak to go, or without supplies for its suit, and
+    add `Kitten.CanGoOnEva` and `Kitten.CanBoard`
+  - Add the life support of a kitten's suit, and taking and stowing supplies on EVA
+  - Add `DockingPort.HatchOpen`
 
 - Flight and orbits
   - **Breaking:** Return the scale height at sea level from `Body.ScaleHeight`

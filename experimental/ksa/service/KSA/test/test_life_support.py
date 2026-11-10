@@ -211,6 +211,7 @@ class TestKittenCondition(ksatest.TestCase):
             self.assertEqual(condition.warning, kitten.condition(supply.air))
             self.assertEqual(condition.degraded, kitten.worst_condition)
             self.assertFalse(kitten.incapacitated)
+            self.assertFalse(kitten.can_go_on_eva)
         self.assertTrue(self.vehicle.controllable)
 
         self.warp_to(start + 2.3 * 3600)
@@ -220,6 +221,13 @@ class TestKittenCondition(ksatest.TestCase):
             self.assertIsNone(kitten.cause_of_death)
         self.assertTrue(self.vehicle.has_control_module)
         self.assertFalse(self.vehicle.controllable)
+        kitten, crewmate = self.kittens
+        seat = crewmate.seat
+        with self.assertRaises(RuntimeError):
+            seat.kitten = kitten
+        self.assertEqual(crewmate, seat.kitten)
+        with self.assertRaises(RuntimeError):
+            kitten.go_on_eva()
 
         self.warp_to(start + 3.3 * 3600)
         for kitten in self.kittens:
