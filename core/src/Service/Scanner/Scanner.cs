@@ -160,8 +160,10 @@ namespace KRPC.Service.Scanner
             if (!signatures.ContainsKey ("KRPC"))
                 HandleError(errors, string.Empty, "KRPC service could not be found");
 
-            foreach (var service in signatures.Values)
+            foreach (var service in signatures.Values) {
                 CheckProcedureIds (service, errors);
+                CheckTypes (service, errors);
+            }
             return signatures;
         }
 
@@ -178,6 +180,35 @@ namespace KRPC.Service.Scanner
                 } else if (names.Count > 1) {
                     HandleError (errors, "service " + service.Name,
                         "Procedures " + string.Join (", ", names.ToArray ()) + " share the id " + group.Key);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Check that the classes, enumerations, structures and exceptions of the service have
+        /// unique names, compared case-insensitively, and unique ids, none of them 0.
+        /// </summary>
+        internal static void CheckTypes (ServiceSignature service, IList<string> errors)
+        {
+            var types = service.Classes.Values.Select (x => new { x.Name, x.FullyQualifiedName, x.Id })
+                .Concat (service.Enumerations.Values.Select (x => new { x.Name, x.FullyQualifiedName, x.Id }))
+                .Concat (service.Structs.Values.Select (x => new { x.Name, x.FullyQualifiedName, x.Id }))
+                .Concat (service.Exceptions.Values.Select (x => new { x.Name, x.FullyQualifiedName, x.Id }))
+                .ToList ();
+            var context = "service " + service.Name;
+            foreach (var group in types.GroupBy (x => x.Name.ToUpperInvariant ()).OrderBy (x => x.Key, StringComparer.Ordinal)) {
+                var names = group.Select (x => x.FullyQualifiedName).OrderBy (x => x, StringComparer.Ordinal).ToList ();
+                if (names.Count > 1)
+                    HandleError (errors, context, "Types " + string.Join (", ", names.ToArray ()) + " share a name, compared case-insensitively");
+            }
+            foreach (var group in types.GroupBy (x => x.Id).OrderBy (x => x.Key)) {
+                var names = group.Select (x => x.FullyQualifiedName).OrderBy (x => x, StringComparer.Ordinal).ToList ();
+                if (group.Key == 0) {
+                    foreach (var name in names)
+                        HandleError (errors, context, "Type " + name + " has id 0");
+                } else if (names.Count > 1 && group.Select (x => x.Name).Distinct ().Count () > 1) {
+                    // Types of one name share a hashed id, and are reported as sharing the name
+                    HandleError (errors, context, "Types " + string.Join (", ", names.ToArray ()) + " share the id " + group.Key);
                 }
             }
         }

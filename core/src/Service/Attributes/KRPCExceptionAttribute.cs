@@ -14,6 +14,11 @@ namespace KRPC.Service.Attributes
         public string Service { get; set; }
 
         /// <summary>
+        /// The id of the exception, which defaults to a hash of its name.
+        /// </summary>
+        public uint Id { get; set; }
+
+        /// <summary>
         /// Exception type to map onto this exception type.
         /// </summary>
         /// <remarks>

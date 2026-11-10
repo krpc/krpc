@@ -20,6 +20,11 @@ namespace KRPC.Service.Scanner
         public string FullyQualifiedName { get; private set; }
 
         /// <summary>
+        /// Id of the class. Uniquely identifies the type within the service.
+        /// </summary>
+        public uint Id { get; private set; }
+
+        /// <summary>
         /// Documentation for the class
         /// </summary>
         public string Documentation { get; private set; }
@@ -46,6 +51,7 @@ namespace KRPC.Service.Scanner
         {
             Name = className;
             FullyQualifiedName = serviceName + "." + Name;
+            Id = TypeUtils.GetTypeId (classType);
             UnderlyingType = classType;
             Documentation = DocumentationUtils.ResolveCrefs (documentation);
             Deprecated = deprecated;
@@ -58,6 +64,7 @@ namespace KRPC.Service.Scanner
         public OrderedDictionary Serialize ()
         {
             var result = new OrderedDictionary ();
+            result ["id"] = Id;
             result ["documentation"] = Documentation;
             if (Deprecated) {
                 result ["deprecated"] = true;

@@ -251,6 +251,26 @@ namespace KRPC.Service
         }
 
         /// <summary>
+        /// The id of the given class, enumeration, structure or exception type: the id set in
+        /// its attribute, or the hash of its name.
+        /// </summary>
+        public static uint GetTypeId (Type type)
+        {
+            uint id;
+            if (Reflection.HasAttribute<KRPCClassAttribute> (type))
+                id = Reflection.GetAttribute<KRPCClassAttribute> (type).Id;
+            else if (Reflection.HasAttribute<KRPCEnumAttribute> (type))
+                id = Reflection.GetAttribute<KRPCEnumAttribute> (type).Id;
+            else if (Reflection.HasAttribute<KRPCStructAttribute> (type))
+                id = Reflection.GetAttribute<KRPCStructAttribute> (type).Id;
+            else if (Reflection.HasAttribute<KRPCExceptionAttribute> (type))
+                id = Reflection.GetAttribute<KRPCExceptionAttribute> (type).Id;
+            else
+                throw new ArgumentException (type + " is not a kRPC class, enumeration, structure or exception");
+            return GetId (type.Name, id);
+        }
+
+        /// <summary>
         /// The id set in the attribute of the given procedure, method or extension method,
         /// or 0 for none.
         /// </summary>

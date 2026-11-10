@@ -14,6 +14,11 @@ namespace KRPC.Service.Attributes
         public string Service { get; set; }
 
         /// <summary>
+        /// The id of the class, which defaults to a hash of its name.
+        /// </summary>
+        public uint Id { get; set; }
+
+        /// <summary>
         /// Game scene(s) in which the class' members are available.
         /// </summary>
         public GameScene GameScene { get; set; }

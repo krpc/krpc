@@ -21,6 +21,11 @@ namespace KRPC.Service.Scanner
         public string FullyQualifiedName { get; private set; }
 
         /// <summary>
+        /// Id of the structure. Uniquely identifies the type within the service.
+        /// </summary>
+        public uint Id { get; private set; }
+
+        /// <summary>
         /// Signatures of the fields of the structure, in the order they are declared, which is
         /// the order their values are serialized in.
         /// </summary>
@@ -53,6 +58,7 @@ namespace KRPC.Service.Scanner
         {
             Name = structName;
             FullyQualifiedName = serviceName + "." + Name;
+            Id = TypeUtils.GetTypeId (structType);
             UnderlyingType = structType;
             Fields = fields;
             Documentation = DocumentationUtils.ResolveCrefs (documentation);
@@ -66,6 +72,7 @@ namespace KRPC.Service.Scanner
         public OrderedDictionary Serialize ()
         {
             var result = new OrderedDictionary ();
+            result ["id"] = Id;
             result ["documentation"] = Documentation;
             result ["fields"] = Fields.Select (x => x.Serialize ()).ToList ();
             if (Deprecated) {

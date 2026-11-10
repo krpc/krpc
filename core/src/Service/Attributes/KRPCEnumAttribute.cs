@@ -12,5 +12,10 @@ namespace KRPC.Service.Attributes
         /// Name of the service in which the enum is declared.
         /// </summary>
         public string Service { get; set; }
+
+        /// <summary>
+        /// The id of the enumeration, which defaults to a hash of its name.
+        /// </summary>
+        public uint Id { get; set; }
     }
 }

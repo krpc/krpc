@@ -21,6 +21,11 @@ namespace KRPC.Service.Scanner
         public string FullyQualifiedName { get; private set; }
 
         /// <summary>
+        /// Id of the enumeration. Uniquely identifies the type within the service.
+        /// </summary>
+        public uint Id { get; private set; }
+
+        /// <summary>
         /// Signatures of the values in the enumeration.
         /// </summary>
         public IList<EnumerationValueSignature> Values { get; private set; }
@@ -57,6 +62,7 @@ namespace KRPC.Service.Scanner
         {
             Name = enumName;
             FullyQualifiedName = serviceName + "." + Name;
+            Id = TypeUtils.GetTypeId (enumType);
             UnderlyingType = enumType;
             Flags = Enumerations.IsFlags (enumType);
             Values = values;
@@ -71,6 +77,7 @@ namespace KRPC.Service.Scanner
         public OrderedDictionary Serialize ()
         {
             var result = new OrderedDictionary ();
+            result ["id"] = Id;
             result ["documentation"] = Documentation;
             result ["values"] = Values.Select (x => x.Serialize ()).ToList ();
             if (Flags)

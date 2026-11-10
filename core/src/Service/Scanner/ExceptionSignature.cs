@@ -22,6 +22,11 @@ namespace KRPC.Service.Scanner
         public string FullyQualifiedName { get; private set; }
 
         /// <summary>
+        /// Id of the exception. Uniquely identifies the type within the service.
+        /// </summary>
+        public uint Id { get; private set; }
+
+        /// <summary>
         /// Documentation for the exception
         /// </summary>
         public string Documentation { get; private set; }
@@ -53,6 +58,7 @@ namespace KRPC.Service.Scanner
         {
             Name = className;
             FullyQualifiedName = serviceName + "." + Name;
+            Id = TypeUtils.GetTypeId (exnType);
             UnderlyingType = exnType;
             Documentation = DocumentationUtils.ResolveCrefs (documentation);
             Deprecated = deprecated;
@@ -67,6 +73,7 @@ namespace KRPC.Service.Scanner
         public OrderedDictionary Serialize ()
         {
             var result = new OrderedDictionary ();
+            result ["id"] = Id;
             result ["documentation"] = Documentation;
             if (Deprecated) {
                 result ["deprecated"] = true;
