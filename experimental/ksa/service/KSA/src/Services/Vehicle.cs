@@ -241,6 +241,23 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// Whether the vehicle can be flown. A vehicle needs a control module, and a crewed
+        /// vehicle with every kitten incapacitated also needs a probe core.
+        /// </summary>
+        [KRPCProperty]
+        public bool Controllable {
+            get { return InternalVehicle.IsControllable; }
+        }
+
+        /// <summary>
+        /// Whether the vehicle has a control module, such as a capsule or a probe core.
+        /// </summary>
+        [KRPCProperty]
+        public bool HasControlModule {
+            get { return InternalVehicle.HasControlModule; }
+        }
+
+        /// <summary>
         /// How long the supplies of the vehicle's worst habitat zone last its crew, or
         /// <c>null</c> if the vehicle has no habitats.
         /// </summary>

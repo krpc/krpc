@@ -156,3 +156,72 @@ class TestSupplyTransfer(TestVehicleCase):
         self.assertEqual(meals, self.cabin.meals)
         self.assertEqual(canisters, self.cabin.canisters)
 
+
+class TestKittenCondition(ksatest.TestCase):
+    def warp_to(self, ut):
+        # The game stops the warp when supplies run out, and when a kitten's condition
+        # worsens
+        for _ in range(10):
+            if self.ksa.ut >= ut - 1:
+                return
+            self.ksa.warp_to(ut)
+        self.fail("The warp did not reach the time")
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.load_save()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.load_save()
+
+    def setUp(self):
+        self.vehicle = self.find_vehicle("Gemini7")
+        self.kittens = self.vehicle.crew
+
+    def test_healthy(self):
+        supply = self.ksa.LifeSupportSupply
+        healthy = self.ksa.KittenCondition.healthy
+        for kitten in self.kittens:
+            self.assertIsNone(kitten.cause_of_death)
+            self.assertEqual(healthy, kitten.worst_condition)
+            self.assertFalse(kitten.incapacitated)
+            for s in (supply.air, supply.scrubber, supply.water, supply.food):
+                self.assertEqual(0, kitten.time_without(s))
+                self.assertEqual(healthy, kitten.condition(s))
+        self.assertTrue(self.vehicle.has_control_module)
+        self.assertTrue(self.vehicle.controllable)
+
+    def test_without_supplies(self):
+        # With two kittens in 1.4 cubic meters, the canisters run out first: degraded
+        # after 0.875 hours without, incapacitated after 1.925 and dead after 2.8
+        supply = self.ksa.LifeSupportSupply
+        condition = self.ksa.KittenCondition
+        self.load_save()
+        self.setUp()
+        start = self.ksa.ut
+        self.ksa.Debug.empty_resources(self.vehicle)
+        self.assertEqual(self.ksa.LifeSupportLevel.out, self.vehicle.life_support.level)
+
+        self.warp_to(start + 3600)
+        for kitten in self.kittens:
+            self.assertAlmostEqual(3600, kitten.time_without(supply.air), delta=300)
+            self.assertEqual(condition.degraded, kitten.condition(supply.scrubber))
+            self.assertEqual(condition.warning, kitten.condition(supply.air))
+            self.assertEqual(condition.degraded, kitten.worst_condition)
+            self.assertFalse(kitten.incapacitated)
+        self.assertTrue(self.vehicle.controllable)
+
+        self.warp_to(start + 2.3 * 3600)
+        for kitten in self.kittens:
+            self.assertEqual(condition.incapacitated, kitten.worst_condition)
+            self.assertTrue(kitten.incapacitated)
+            self.assertIsNone(kitten.cause_of_death)
+        self.assertTrue(self.vehicle.has_control_module)
+        self.assertFalse(self.vehicle.controllable)
+
+        self.warp_to(start + 3.3 * 3600)
+        for kitten in self.kittens:
+            self.assertTrue(kitten.killed_in_action)
+            self.assertEqual(self.ksa.DeathCause.no_scrubber, kitten.cause_of_death)

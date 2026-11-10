@@ -25,6 +25,7 @@
   - Add life support: the supplies of a vehicle and its habitat zones, how long they last,
     and moving meals and canisters between habitats
   - Add `KSA.LifeSupportEnabled` and `KSA.RadiationEnabled`
+  - Add the condition and cause of death of kittens, and whether a vehicle can be flown
 
 - Flight and orbits
   - **Breaking:** Return the scale height at sea level from `Body.ScaleHeight`

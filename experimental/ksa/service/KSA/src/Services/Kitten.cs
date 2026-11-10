@@ -111,6 +111,55 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// What killed the kitten, or <c>null</c> if it is alive.
+        /// </summary>
+        [KRPCProperty (Nullable = true)]
+        public DeathCause? CauseOfDeath {
+            get {
+                var entry = Entry;
+                return entry.Kia ? (DeathCause)entry.CauseOfDeath : null;
+            }
+        }
+
+        /// <summary>
+        /// The time the kitten has gone without a supply, in seconds. It counts down again
+        /// once the supply returns.
+        /// </summary>
+        /// <param name="supply">The supply.</param>
+        [KRPCMethod]
+        public float TimeWithout (LifeSupportSupply supply)
+        {
+            return (float)Entry.Condition.GetSecondsWithout ((global::KSA.LifeSupportSupply)supply, Universe.GetElapsedTime ());
+        }
+
+        /// <summary>
+        /// The effect on the kitten of going without a supply.
+        /// </summary>
+        /// <param name="supply">The supply.</param>
+        [KRPCMethod]
+        public KittenCondition Condition (LifeSupportSupply supply)
+        {
+            return (KittenCondition)Entry.Condition.GetRung ((global::KSA.LifeSupportSupply)supply, Universe.GetElapsedTime ());
+        }
+
+        /// <summary>
+        /// The kitten's worst condition across its supplies.
+        /// </summary>
+        [KRPCProperty]
+        public KittenCondition WorstCondition {
+            get { return (KittenCondition)Entry.Condition.GetWorstRung (Universe.GetElapsedTime (), out _); }
+        }
+
+        /// <summary>
+        /// Whether the kitten is incapacitated by going without a supply. An incapacitated
+        /// kitten cannot fly the vehicle or move supplies.
+        /// </summary>
+        [KRPCProperty]
+        public bool Incapacitated {
+            get { return Entry.Condition.IsIncapacitated (Universe.GetElapsedTime ()); }
+        }
+
+        /// <summary>
         /// The number of missions the kitten has flown, including the current one.
         /// </summary>
         [KRPCProperty]

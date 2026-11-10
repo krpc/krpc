@@ -151,7 +151,7 @@ namespace KRPC.KSA.Services
         /// <param name="ut">The universal time to warp to, in seconds.</param>
         /// <remarks>
         /// Does nothing when the time is in the past. Returns early if the game stops the
-        /// warp, for example when its menu pauses the game.
+        /// warp, for example when its menu pauses the game, or a vehicle's supplies run out.
         /// </remarks>
         [KRPCProcedure]
         public static void WarpTo (double ut)
