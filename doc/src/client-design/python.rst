@@ -76,6 +76,8 @@ Each client has its own classes, in its ``Types``, so a static method is a closu
 * A connect registers the types of every service, then builds the services. The types come first as
   a procedure can use a type from any service. A parameter's default value can also be an
   enumeration value, which cannot be decoded until that enumeration is registered.
+* The client clears the type identifiers from the ``Type`` messages in ``GetServices``. It names a
+  type by its service and name, and keys its types on the ``Type`` messages it builds from them.
 * ``clientgen`` and ``python.tmpl`` in ``krpctools`` generate a module per service. Its
   enumerations, structures and exceptions are real classes, and its classes and services are
   declarations whose members raise ``TypeError``. ``clientgen`` runs the client without the modules.

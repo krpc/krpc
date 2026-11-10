@@ -126,7 +126,7 @@ to add functionality to the kRPC server.
       :start-after: [docs]
       :end-before: [/docs]
 
-.. cs:attribute:: KRPCClass (string Service, KRPC.Service.GameScene GameScene = KRPC.Service.GameScene.Inherit)
+.. cs:attribute:: KRPCClass (string Service, KRPC.Service.GameScene GameScene = KRPC.Service.GameScene.Inherit, uint Id = 0)
 
    :parameters:
 
@@ -136,9 +136,17 @@ to add functionality to the kRPC server.
     * **GameScene** -- The game scenes in which the class' methods and properties are
       available. Defaults to inherit this setting from the service the class is defined in.
 
+    * **Id** -- Optional integer identifier for the class. If omitted or set to 0, an identifier
+      is generated from a hash of the class name. The classes, enumerations, structures and
+      exceptions of a service share one set of identifiers. Set it only to resolve a clash with
+      another type of the service.
+
    This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ is applied to
    non-static classes. It adds the class to the server, so that references to instances of the class
    can be passed between client and server.
+
+   The classes, enumerations, structures and exceptions of a service have unique names, compared
+   case-insensitively.
 
    A :cs:attr:`KRPCClass` must be part of a service, just like a
    :cs:attr:`KRPCProcedure`. However, it would be restrictive if the class had to be declared as
@@ -328,12 +336,14 @@ to add functionality to the kRPC server.
    An id set on a member of ``Marker`` applies only to the ``Marker`` procedure. A base class that is
    not a :cs:attr:`KRPCClass` sets no ids, on its members or with this attribute.
 
-.. cs:attribute:: KRPCEnum (string Service)
+.. cs:attribute:: KRPCEnum (string Service, uint Id = 0)
 
    :parameters:
 
     * **Service** -- Optional name of the service to add this enum to. If omitted, the enum is added
       to the service that contains its definition.
+
+    * **Id** -- Optional integer identifier for the enumeration, as for :cs:attr:`KRPCClass`.
 
    This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ is applied to
    enumeration types. It adds the enumeration and its permissible values to the server. This
@@ -391,12 +401,14 @@ to add functionality to the kRPC server.
         :end-before: [/docs]
         :dedent:
 
-.. cs:attribute:: KRPCStruct (string Service)
+.. cs:attribute:: KRPCStruct (string Service, uint Id = 0)
 
    :parameters:
 
     * **Service** -- Optional name of the service to add this structure to. If omitted, the
       structure is added to the service that contains its definition.
+
+    * **Id** -- Optional integer identifier for the structure, as for :cs:attr:`KRPCClass`.
 
    This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ is applied to a
    ``struct``. It adds the structure and its fields to the server. A structure is a compound value
@@ -469,7 +481,7 @@ to add functionality to the kRPC server.
      :cs:attr:`KRPCProperty` attribute. A field whose type is ``Nullable<T>`` needs no
      annotation.
 
-.. cs:attribute:: KRPCException (string Service, Type MappedException)
+.. cs:attribute:: KRPCException (string Service, Type MappedException, uint Id = 0)
 
    :parameters:
 
@@ -477,6 +489,7 @@ to add functionality to the kRPC server.
       to the service that contains its definition.
     * **MappedException** -- Optional type of an exception to map to this exception. For example,
       can be used to map a built-in C# exception type onto this kRPC exception type.
+    * **Id** -- Optional integer identifier for the exception, as for :cs:attr:`KRPCClass`.
 
    This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ is applied to
    an exception class type.

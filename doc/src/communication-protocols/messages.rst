@@ -172,6 +172,10 @@ A service or procedure can also set its identifier by hand, to resolve a clash.
 Service identifiers 1 to 255 are reserved for the services that ship with kRPC, which keeps them
 short on the wire.
 
+The classes, enumerations, structures and exceptions of a service have identifiers by the same
+rule, from the type's name. They share one identifier space per service, apart from the
+procedures. An error and a ``Type`` message carry the identifiers next to the names.
+
 A parameter can have a default value, listed in the procedure's
 :ref:`description <communication-protocol-service-description-message>`. A call can leave out the
 ``Argument`` for such a parameter, and the procedure runs with the default. The ``position`` field
@@ -207,7 +211,11 @@ The fields of an error are:
 * ``service`` - The service that defines the exception type, when the error is one of the
   exceptions a service lists. Empty otherwise.
 
-* ``name`` - The name of that exception type. Empty otherwise.
+* ``exception`` - The name of that exception type. Empty otherwise.
+
+* ``service_id`` - The identifier of that service. 0 otherwise.
+
+* ``exception_id`` - The identifier of that exception type. 0 otherwise.
 
 * ``description`` - A description of the error.
 
@@ -615,6 +623,8 @@ The fields are:
 
 * ``name`` - The name of the class.
 
+* ``id`` - The identifier of the class.
+
 * ``documentation`` - Documentation for the class.
 
 * ``deprecated`` - Whether the class is deprecated.
@@ -635,6 +645,8 @@ format:
 The fields are:
 
 * ``name`` - The name of the enumeration.
+
+* ``id`` - The identifier of the enumeration.
 
 * ``values`` - A list of ``EnumerationValue`` messages, indicating the values that the enumeration
   can be assigned. The fields are:
@@ -675,6 +687,8 @@ each :cs:attr:`KRPCStruct` are specified in a ``Struct`` message, with the forma
 The fields are:
 
 * ``name`` - The name of the structure.
+
+* ``id`` - The identifier of the structure.
 
 * ``fields`` - A list of ``StructField`` messages, one for each field of the structure, in the
   order their values are encoded in. The fields are:
@@ -721,6 +735,8 @@ The fields are:
 
 * ``name`` - The name of the exception type.
 
+* ``id`` - The identifier of the exception type, as in the ``exception_id`` field of an error.
+
 * ``documentation`` - Documentation for the exception.
 
 * ``deprecated`` - Whether the exception is deprecated.
@@ -766,8 +782,9 @@ The ``code`` field specifies the type. ``NONE`` is the code of an unset type, su
 type of a procedure that returns no value.
 
 For ``CLASS``, ``ENUMERATION`` and ``STRUCT`` types the ``service`` and ``name`` fields specify the
-service that defines the class, enumeration or structure and its name. For all other types these
-fields are empty.
+service that defines the class, enumeration or structure and its name. The ``service_id`` and
+``id`` fields hold their identifiers. For all other types the names are empty and the identifiers
+are 0.
 
 For collection types the ``types`` repeated field will contain the sub-types:
 
