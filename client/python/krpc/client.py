@@ -23,7 +23,12 @@ from krpc.functioncompiler import (
     compile_function_with_type,
 )
 from krpc.internalprocedures import InternalProcedures
-from krpc.service import create_service, service_definitions
+from krpc.service import (
+    create_service,
+    deprecation_warning,
+    inherit_deprecation,
+    service_definitions,
+)
 from krpc.session import DEFAULT_STALL_TIMEOUT, Session
 from krpc.stream import Stream
 from krpc.streammanager import StreamManager
@@ -34,6 +39,7 @@ from krpc.types import (
     StreamType,
     TypeBase,
     Types,
+    warn_deprecated,
 )
 from krpc.utils import snake_case
 
@@ -105,10 +111,22 @@ class Client:
     client.ServiceName.ProcedureName(parameter)
     """
 
-    if TYPE_CHECKING:
-        # A client type a generated module declares adds its service, and any other service
-        # is Any to type checkers
-        def __getattr__(self, name: str) -> Any: ...
+    # A client type a generated module declares adds its service, and any other service is Any
+    # to type checkers
+    def __getattr__(self, name: str) -> Any:
+        """A deprecated service, which is kept out of the client's attributes so that reading it
+        reaches here and warns"""
+        deprecated = self.__dict__.get("_deprecated_services", {})
+        if name not in deprecated:
+            raise AttributeError(
+                "%r object has no attribute %r" % (type(self).__name__, name)
+            )
+        message, service = deprecated[name]
+        warn_deprecated(message)
+        return service
+
+    def __dir__(self) -> list[str]:
+        return [*super().__dir__(), *self.__dict__.get("_deprecated_services", {})]
 
     @property
     def _krpc(self) -> _KRPCService:
@@ -160,12 +178,20 @@ class Client:
         definitions = []
         lookup = client_lookup(type(self))
         for service_info in services:
+            inherit_deprecation(service_info)
             definitions.extend(service_definitions(service_info, lookup))
         register_all(self._types, definitions)
+        self._deprecated_services: dict[str, tuple[str, object]] = {}
         for service_info in services:
-            setattr(
-                self, snake_case(service_info.name), create_service(self, service_info)
+            name = snake_case(service_info.name)
+            service = create_service(self, service_info)
+            message = deprecation_warning(
+                service_info, service_info.name, service_info.name
             )
+            if message:
+                self._deprecated_services[name] = (message, service)
+            else:
+                setattr(self, name, service)
 
     def close(self) -> None:
         # The dispatcher thread stops trying to take a condition the caller can hold
@@ -470,11 +496,13 @@ class Client:
         if func == getattr:
             name = cast(str, args[1])
             builder = getattr(args[0], "_build_call__" + name)
+            used = getattr(getattr(type(args[0]), name, None), "fget", None)
             args = tuple()
             kwargs = {}
         elif func == setattr:
             name = cast(str, args[1])
             builder = getattr(args[0], "_build_call_set__" + name)
+            used = getattr(getattr(type(args[0]), name, None), "fset", None)
             args = (args[2],)
             kwargs = {}
         else:
@@ -482,6 +510,10 @@ class Client:
                 func.__self__,  # pyright: ignore[reportFunctionMemberAccess]
                 "_build_call__" + func.__name__,
             )
+            used = func
+        deprecation = getattr(used, "_deprecation", None)
+        if deprecation:
+            warn_deprecated(deprecation)
         return cast(KRPC.ProcedureCall, builder(*args, **kwargs))
 
     def _get_return_type(

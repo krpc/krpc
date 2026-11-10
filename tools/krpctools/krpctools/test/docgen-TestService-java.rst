@@ -86,6 +86,14 @@
       :param String id:
    
 
+   .. method:: DeprecatedClass createDeprecatedClass()
+
+      .. warning:: Deprecated. Use :meth:`TestService.createTestObject(String)` instead.
+
+      Create an instance of a deprecated class documentation string.
+
+   
+
    .. method:: TestClass createTestObject(String value)
 
 
@@ -118,6 +126,14 @@
       .. warning:: Deprecated. Use :meth:`TestService.getStringProperty()` instead.
 
       Deprecated property documentation string.
+
+   
+
+   .. method:: DeprecatedStruct deprecatedStructProcedure()
+
+      .. warning:: Deprecated. Use :type:`TestStruct` instead.
+
+      Procedure returning a deprecated struct documentation string.
 
    
 
@@ -574,6 +590,12 @@
       :param TestClass obj:
    
 
+   .. method:: PartlyDeprecatedStruct partlyDeprecatedStructProcedure()
+
+      Procedure returning a partly deprecated struct documentation string.
+
+   
+
    .. method:: krpc.client.Event removeEventAfter(int milliseconds)
 
 
@@ -845,6 +867,26 @@
 
    
 
+   .. method:: String inheritedMethod()
+
+      Method with no deprecation of its own documentation string.
+
+   
+
+   .. method:: String getInheritedProperty()
+
+   .. method:: void setInheritedProperty(String value)
+
+      Property with no deprecation of its own documentation string.
+
+   
+
+   .. method:: static String inheritedStaticMethod(Connection connection)
+
+      Static method with no deprecation of its own documentation string.
+
+   
+
 
 
 .. type:: public class TestClass
@@ -966,6 +1008,24 @@
 
 
 
+.. type:: public enum PartlyDeprecatedEnum
+
+   Partly deprecated enum documentation string.
+
+
+   .. field:: public PartlyDeprecatedEnum VALUE_A
+
+      Partly deprecated enum ValueA documentation string.
+
+
+   .. field:: public PartlyDeprecatedEnum VALUE_B
+
+      .. warning:: Deprecated. Use :field:`PartlyDeprecatedEnum.VALUE_A` instead.
+
+      Partly deprecated enum ValueB documentation string.
+
+
+
 .. type:: public enum TestEnum
 
    Enum documentation string.
@@ -1041,6 +1101,26 @@
       .. warning:: Deprecated. Use :meth:`DeprecatedStruct.getValue()` instead.
 
       Deprecated struct OldValue documentation string.
+
+
+.. type:: public class PartlyDeprecatedStruct
+
+   Partly deprecated struct documentation string.
+
+   .. constructor:: public PartlyDeprecatedStruct(int value, int oldValue)
+
+      Construct a PartlyDeprecatedStruct from the values of its fields.
+
+
+   .. method:: int getValue()
+
+      Partly deprecated struct Value documentation string.
+
+   .. method:: int getOldValue()
+
+      .. warning:: Deprecated. Use :meth:`PartlyDeprecatedStruct.getValue()` instead.
+
+      Partly deprecated struct OldValue documentation string.
 
 
 .. type:: public class TestFlagsStruct

@@ -15,6 +15,7 @@ import queue
 import sys
 import threading
 import time
+import warnings
 from collections.abc import Callable
 from typing import IO, Any
 
@@ -253,15 +254,10 @@ class Testee:
         elif case == "members":
             names = self._members(command.members)
             reply.value.list.items.extend(pb.Value(string=x) for x in sorted(names))
-        elif case == "encode":
-            typ = self._codec_type(command.encode.type)
-            reply.value.bytes = Encoder.encode(
-                self._from_value(command.encode.value), typ
-            )
-        elif case == "decode":
-            typ = self._codec_type(command.decode.type)
-            value = Decoder.decode(self._connection(), command.decode.data, typ)
-            reply.value.CopyFrom(self._to_value(value))
+        elif case == "deprecation_signals":
+            reply.value.CopyFrom(self._deprecation_signals(command.deprecation_signals))
+        elif case in ("encode", "decode"):
+            self._codec(case, command, reply)
         elif case == "release":
             self._release(command.release.callback).release()
             reply.value.SetInParent()
@@ -282,6 +278,18 @@ class Testee:
             reply.value.SetInParent()
         else:
             raise ValueError("Unknown command %s" % case)
+
+    def _codec(self, case: str, command: pb.Command, reply: pb.Reply) -> None:
+        """Encode a value, or decode bytes, at a codec type."""
+        if case == "encode":
+            typ = self._codec_type(command.encode.type)
+            reply.value.bytes = Encoder.encode(
+                self._from_value(command.encode.value), typ
+            )
+        else:
+            typ = self._codec_type(command.decode.type)
+            value = Decoder.decode(self._connection(), command.decode.data, typ)
+            reply.value.CopyFrom(self._to_value(value))
 
     def _operation(self, case: str, command: pb.Command, reply: pb.Reply) -> None:
         """Compare two values with the language's equality, order them, or combine two flags
@@ -674,6 +682,45 @@ class Testee:
             if isinstance(obj, type) and issubclass(obj, enum.Enum):
                 return [x.name for x in obj]
         return [x for x in dir(obj) if not x.startswith("_")]
+
+    def _deprecation_signals(self, command: pb.DeprecationSignals) -> pb.Value:
+        # Reaching the member is not part of its use
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            use = self._member_use(command)
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always")
+            use()
+        signals = [
+            pb.Value(string=str(x.message))
+            for x in caught
+            if issubclass(x.category, DeprecationWarning)
+        ]
+        return pb.Value(list=pb.Items(items=signals))
+
+    def _member_use(self, command: pb.DeprecationSignals) -> Callable[[], object]:
+        """A function that uses a member of a service: a call of a procedure, or a read of the
+        service, a type, a value of an enumeration or a field of a structure."""
+        if command.HasField("invoke"):
+            func, args = self._resolve(command.invoke)
+            conn = self._connection()
+            if command.use == "stream":
+                return lambda: conn.add_stream(func, *args).remove()
+            if command.use == "call":
+                return lambda: conn.get_call(func, *args)
+            return lambda: func(*args)
+        conn = self._connection()
+        if not command.member:
+            return lambda: getattr(conn, snake_case(command.service))
+        service = getattr(conn, snake_case(command.service))
+        type_name, _, name = command.member.partition(".")
+        if not name:
+            return lambda: getattr(service, type_name)
+        typ = getattr(service, type_name)
+        if hasattr(typ, "_fields"):
+            value = typ(*[None] * len(typ._fields))
+            return lambda: getattr(value, snake_case(name))
+        return lambda: getattr(typ, snake_case(name))
 
     def _codec_type(self, name: str) -> TypeBase:
         """The client's type for a codec type name, such as "list(nullable uint32)"."""

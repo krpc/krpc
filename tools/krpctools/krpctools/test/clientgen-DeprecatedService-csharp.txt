@@ -1,0 +1,430 @@
+using Google.Protobuf;
+using System;
+using System.Collections.Generic;
+using System.Runtime.Serialization;
+
+#if NET35
+using systemAlias = global::KRPC.Client.Compatibility;
+using genericCollectionsAlias = global::KRPC.Client.Compatibility;
+#else
+using systemAlias = global::System;
+using genericCollectionsAlias = global::System.Collections.Generic;
+#endif
+
+// Generated code references its own deprecated members (e.g. when registering
+// exception types), so suppress the deprecation warnings within this file.
+#pragma warning disable 612, 618
+
+namespace KRPC.Client.Services.DeprecatedService
+{
+    /// <summary>
+    /// Extension methods for DeprecatedService service.
+    /// </summary>
+    public static class ExtensionMethods
+    {
+        /// <summary>
+        /// Create an instance of the DeprecatedService service.
+        /// </summary>
+        [global::System.Obsolete ("Use TestService instead.")]
+        public static global::KRPC.Client.Services.DeprecatedService.Service DeprecatedService (this global::KRPC.Client.IConnection connection)
+        {
+            return new global::KRPC.Client.Services.DeprecatedService.Service (connection);
+        }
+    }
+
+    // The types the stubs encode and decode values of, built once each. A spec names the
+    // positions inside a value that can hold null, which a C# type cannot always say.
+    static class TypeSpecs
+    {
+        internal static readonly global::KRPC.Client.TypeSpec Spec0 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.DeprecatedService.ServiceClass));
+        internal static readonly global::KRPC.Client.TypeSpec Spec1 = global::KRPC.Client.TypeSpec.For (typeof(string));
+        internal static readonly global::KRPC.Client.TypeSpec Spec2 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.DeprecatedService.ServiceStruct));
+        internal static readonly global::KRPC.Client.TypeSpec Spec3 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.DeprecatedService.ReasonedClass));
+
+        // The procedures whose values a C# type cannot describe on its own, which a call
+        // built from an expression looks up by name
+        static readonly global::System.Collections.Generic.Dictionary<string, global::KRPC.Client.TypeSpec> returnSpecs =
+            new global::System.Collections.Generic.Dictionary<string, global::KRPC.Client.TypeSpec> {
+            };
+
+        static readonly global::System.Collections.Generic.Dictionary<string, global::KRPC.Client.TypeSpec[]> parameterSpecs =
+            new global::System.Collections.Generic.Dictionary<string, global::KRPC.Client.TypeSpec[]> {
+            };
+
+        public static global::KRPC.Client.TypeSpec ReturnSpec (string procedure)
+        {
+            global::KRPC.Client.TypeSpec spec;
+            return returnSpecs.TryGetValue (procedure, out spec) ? spec : null;
+        }
+
+        public static global::KRPC.Client.TypeSpec[] ParameterSpecs (string procedure)
+        {
+            global::KRPC.Client.TypeSpec[] specs;
+            return parameterSpecs.TryGetValue (procedure, out specs) ? specs : null;
+        }
+    }
+
+    /// <summary>
+    /// DeprecatedService service.
+    /// </summary>
+    [global::System.Obsolete ("Use TestService instead.")]
+    public class Service
+    {
+        global::KRPC.Client.IConnection connection;
+
+        internal Service (global::KRPC.Client.IConnection serverConnection)
+        {
+            connection = serverConnection;
+            AddExceptionTypes (serverConnection);
+        }
+
+        internal static void AddExceptionTypes (global::KRPC.Client.IConnection serverConnection)
+        {
+            serverConnection.AddExceptionType ("DeprecatedService", "ServiceException", typeof (ServiceException));
+        }
+
+        /// <summary>
+        /// A procedure.
+        /// </summary>
+        [global::System.Obsolete ("Use TestService instead.")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("DeprecatedService", "Procedure", typeof(TypeSpecs))]
+        public string Procedure ()
+        {
+            var _result = connection.Invoke ("DeprecatedService", "Procedure");
+            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec1, connection);
+        }
+
+        /// <summary>
+        /// A procedure returning a structure.
+        /// </summary>
+        [global::System.Obsolete ("Use TestService instead.")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("DeprecatedService", "StructProcedure", typeof(TypeSpecs))]
+        public global::KRPC.Client.Services.DeprecatedService.ServiceStruct StructProcedure ()
+        {
+            var _result = connection.Invoke ("DeprecatedService", "StructProcedure");
+            return (global::KRPC.Client.Services.DeprecatedService.ServiceStruct)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec2, connection);
+        }
+
+        /// <summary>
+        /// A property.
+        /// </summary>
+        [global::System.Obsolete ("Use TestService instead.")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("DeprecatedService", "get_Property", typeof(TypeSpecs))]
+        public string Property {
+            get {
+                var _result = connection.Invoke ("DeprecatedService", "get_Property");
+                return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec1, connection);
+            }
+            set {
+                var _args = new ByteString[] {
+                    global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec1)
+                };
+                connection.Invoke ("DeprecatedService", "set_Property", _args);
+            }
+        }
+    }
+
+    /// <summary>
+    /// An enumeration.
+    /// </summary>
+    [Serializable]
+    [global::System.Obsolete ("Use TestService instead.")]
+    public enum ServiceEnum
+    {
+        /// <summary>
+        /// A value.
+        /// </summary>
+        [global::System.Obsolete ("Use TestService instead.")]
+        Value = 0
+    }
+
+    /// <summary>
+    /// A structure.
+    /// </summary>
+    [Serializable]
+    [global::KRPC.Client.Attributes.KRPCStruct]
+    [global::System.Obsolete ("Use TestService instead.")]
+    public struct ServiceStruct : IEquatable<ServiceStruct>, IComparable<ServiceStruct>
+    {
+        /// <summary>
+        /// Construct a ServiceStruct from the values of its fields.
+        /// </summary>
+        public ServiceStruct (int field) : this ()
+        {
+            Field = field;
+        }
+
+        /// <summary>
+        /// A field.
+        /// </summary>
+        [global::System.Obsolete ("Use TestService instead.")]
+        public int Field { get; private set; }
+
+        /// <summary>
+        /// Returns true if this ServiceStruct is equal to the given object.
+        /// </summary>
+        public override bool Equals (object obj)
+        {
+            return obj is ServiceStruct && Equals ((ServiceStruct)obj);
+        }
+
+        /// <summary>
+        /// Returns true if this ServiceStruct is equal to the given one.
+        /// </summary>
+        public bool Equals (ServiceStruct other)
+        {
+            return global::KRPC.Client.ValueUtils.Equal (Field, other.Field);
+        }
+
+        /// <summary>
+        /// Returns a hash code for this ServiceStruct.
+        /// </summary>
+        public override int GetHashCode ()
+        {
+            int hash = 17;
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (Field);
+            return hash;
+        }
+
+        /// <summary>
+        /// Returns true if the two ServiceStruct values are equal.
+        /// </summary>
+        public static bool operator == (ServiceStruct lhs, ServiceStruct rhs)
+        {
+            return lhs.Equals (rhs);
+        }
+
+        /// <summary>
+        /// Returns true if the two ServiceStruct values are not equal.
+        /// </summary>
+        public static bool operator != (ServiceStruct lhs, ServiceStruct rhs)
+        {
+            return !lhs.Equals (rhs);
+        }
+
+        /// <summary>
+        /// Compares this ServiceStruct with the given one, by its fields in turn, which is
+        /// how a tuple of the same values compares. A field whose type has no ordering, such as
+        /// a collection, throws unless the two values are the same object, as it does in a
+        /// tuple, so two ServiceStructs that are equal can still throw here.
+        /// </summary>
+        public int CompareTo (ServiceStruct other)
+        {
+            int result;
+            result = global::System.Collections.Generic.Comparer<int>.Default.Compare (Field, other.Field);
+            if (result != 0)
+                return result;
+            return 0;
+        }
+
+        /// <summary>
+        /// Returns true if the first ServiceStruct orders before the second.
+        /// </summary>
+        public static bool operator < (ServiceStruct lhs, ServiceStruct rhs)
+        {
+            return lhs.CompareTo (rhs) < 0;
+        }
+
+        /// <summary>
+        /// Returns true if the first ServiceStruct orders after the second.
+        /// </summary>
+        public static bool operator > (ServiceStruct lhs, ServiceStruct rhs)
+        {
+            return lhs.CompareTo (rhs) > 0;
+        }
+
+        /// <summary>
+        /// Returns true if the first ServiceStruct does not order after the second.
+        /// </summary>
+        public static bool operator <= (ServiceStruct lhs, ServiceStruct rhs)
+        {
+            return lhs.CompareTo (rhs) <= 0;
+        }
+
+        /// <summary>
+        /// Returns true if the first ServiceStruct does not order before the second.
+        /// </summary>
+        public static bool operator >= (ServiceStruct lhs, ServiceStruct rhs)
+        {
+            return lhs.CompareTo (rhs) >= 0;
+        }
+    }
+
+    /// <summary>
+    /// An exception.
+    /// </summary>
+    [Serializable]
+    [global::System.Obsolete ("Use TestService instead.")]
+    public class ServiceException : global::KRPC.Client.RPCException
+    {
+        /// <summary>
+        /// Construct an ServiceException with no message.
+        /// </summary>
+        public ServiceException ()
+        {
+        }
+
+        /// <summary>
+        /// Construct an ServiceException with the given message.
+        /// </summary>
+        public ServiceException (string message) : base (message)
+        {
+        }
+
+        /// <summary>
+        /// Construct an ServiceException with the given message and inner exception.
+        /// </summary>
+        public ServiceException (string message, Exception inner) : base (message, inner)
+        {
+        }
+
+#if !NET
+        /// <summary>
+        /// Construct an ServiceException with the given serialization info and streaming context.
+        /// </summary>
+        protected ServiceException (SerializationInfo info, StreamingContext context) : base (info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// A class deprecated with a reason of its own.
+    /// </summary>
+    [global::System.Obsolete ("Use \"TestService.TestClass\" instead.")]
+    public class ReasonedClass : global::KRPC.Client.RemoteObject
+    {
+        /// <summary>
+        /// Construct an instance of this remote object. Should not be called directly. This interface is intended for internal decoding.
+        /// </summary>
+        public ReasonedClass (global::KRPC.Client.IConnection connection, UInt64 id) : base (connection, id)
+        {
+        }
+
+        /// <summary>
+        /// A static method.
+        /// </summary>
+        /// <param name="connection">A connection object.</param>
+        [global::System.Obsolete ("Use \"TestService.TestClass\" instead.")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("DeprecatedService", "ReasonedClass_static_StaticMethod", typeof(TypeSpecs))]
+        public static string StaticMethod (IConnection connection)
+        {
+            if (connection == null)
+                throw new ArgumentNullException (nameof (connection));
+            var _result = connection.Invoke ("DeprecatedService", "ReasonedClass_static_StaticMethod");
+            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec1, connection);
+        }
+
+        /// <summary>
+        /// Binds the static methods of <see cref="ReasonedClass" /> to a connection.
+        /// </summary>
+        /// <param name="connection">The connection the methods are called on.</param>
+        /// <returns>The bound methods.</returns>
+        public static Bound Bind (global::KRPC.Client.IConnection connection)
+        {
+            if (connection == null)
+                throw new ArgumentNullException (nameof (connection));
+            return new Bound (connection);
+        }
+
+        /// <summary>
+        /// The static methods of <see cref="ReasonedClass" />, bound to a connection.
+        /// </summary>
+        public sealed class Bound
+        {
+            readonly global::KRPC.Client.IConnection connection;
+
+            internal Bound (global::KRPC.Client.IConnection connection)
+            {
+                this.connection = connection;
+            }
+
+            /// <summary>
+            /// A static method.
+            /// </summary>
+            [global::System.Obsolete ("Use \"TestService.TestClass\" instead.")]
+            [global::KRPC.Client.Attributes.RPCAttribute ("DeprecatedService", "ReasonedClass_static_StaticMethod", typeof(TypeSpecs))]
+            public string StaticMethod ()
+            {
+                return global::KRPC.Client.Services.DeprecatedService.ReasonedClass.StaticMethod (connection);
+            }
+        }
+    }
+
+    /// <summary>
+    /// A class.
+    /// </summary>
+    [global::System.Obsolete ("Use TestService instead.")]
+    public class ServiceClass : global::KRPC.Client.RemoteObject
+    {
+        /// <summary>
+        /// Construct an instance of this remote object. Should not be called directly. This interface is intended for internal decoding.
+        /// </summary>
+        public ServiceClass (global::KRPC.Client.IConnection connection, UInt64 id) : base (connection, id)
+        {
+        }
+
+        /// <summary>
+        /// A method.
+        /// </summary>
+        [global::System.Obsolete ("Use TestService instead.")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("DeprecatedService", "ServiceClass_Method", typeof(TypeSpecs))]
+        public string Method ()
+        {
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (this, TypeSpecs.Spec0)
+            };
+            var _result = connection.Invoke ("DeprecatedService", "ServiceClass_Method", _args);
+            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec1, connection);
+        }
+
+        /// <summary>
+        /// A static method.
+        /// </summary>
+        /// <param name="connection">A connection object.</param>
+        [global::System.Obsolete ("Use TestService instead.")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("DeprecatedService", "ServiceClass_static_StaticMethod", typeof(TypeSpecs))]
+        public static string StaticMethod (IConnection connection)
+        {
+            if (connection == null)
+                throw new ArgumentNullException (nameof (connection));
+            var _result = connection.Invoke ("DeprecatedService", "ServiceClass_static_StaticMethod");
+            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec1, connection);
+        }
+
+        /// <summary>
+        /// Binds the static methods of <see cref="ServiceClass" /> to a connection.
+        /// </summary>
+        /// <param name="connection">The connection the methods are called on.</param>
+        /// <returns>The bound methods.</returns>
+        public static Bound Bind (global::KRPC.Client.IConnection connection)
+        {
+            if (connection == null)
+                throw new ArgumentNullException (nameof (connection));
+            return new Bound (connection);
+        }
+
+        /// <summary>
+        /// The static methods of <see cref="ServiceClass" />, bound to a connection.
+        /// </summary>
+        public sealed class Bound
+        {
+            readonly global::KRPC.Client.IConnection connection;
+
+            internal Bound (global::KRPC.Client.IConnection connection)
+            {
+                this.connection = connection;
+            }
+
+            /// <summary>
+            /// A static method.
+            /// </summary>
+            [global::System.Obsolete ("Use TestService instead.")]
+            [global::KRPC.Client.Attributes.RPCAttribute ("DeprecatedService", "ServiceClass_static_StaticMethod", typeof(TypeSpecs))]
+            public string StaticMethod ()
+            {
+                return global::KRPC.Client.Services.DeprecatedService.ServiceClass.StaticMethod (connection);
+            }
+        }
+    }
+}

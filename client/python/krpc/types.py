@@ -2,10 +2,13 @@ from __future__ import annotations
 
 import collections
 import copy
+import sys
+import warnings
 from collections.abc import Callable, Iterable, Mapping
 from enum import Enum, Flag
 from typing import (
     TYPE_CHECKING,
+    Any,
     TypeVar,
     cast,
 )
@@ -13,7 +16,20 @@ from typing import (
 import krpc.schema.KRPC_pb2 as KRPC
 
 if TYPE_CHECKING:
+    from typing_extensions import deprecated as deprecated
+
     from krpc.client import Client
+else:
+
+    def deprecated(message, /, *, category=None, stacklevel=1):
+        """The decorator of PEP 702 for a type checker. The built service warns at run time,
+        and the client depends on no typing package."""
+
+        def decorator(member):
+            member.__deprecated__ = message
+            return member
+
+        return decorator
 
 
 class UnknownTypeError(ValueError):
@@ -564,17 +580,19 @@ class StructType(TypeBase):
         self,
         fields: Iterable[tuple[str, TypeBase]],
         python_type: type | None = None,
+        deprecated_fields: Mapping[str, str] | None = None,
     ) -> None:
         """Set the fields of the structure, as pairs of a name and a type in the order the
         structure declares them. Creates a named tuple to represent a value of the
-        structure, unless a python type to use instead is given."""
+        structure, unless a python type to use instead is given. Reading a field in
+        deprecated_fields warns with the message it maps to."""
         assert self.python_type is None
         fields = list(fields)
         self.field_names = [name for name, _ in fields]
         self.field_types = [typ for _, typ in fields]
         if python_type is None:
             python_type = _create_struct_type(
-                self._struct_name, self.field_names, self._doc
+                self._struct_name, self.field_names, self._doc, deprecated_fields or {}
             )
         self.python_type = python_type
         if isinstance(self._nullable_type, StructType):
@@ -811,14 +829,23 @@ def _create_enum_type(
     typ._class_name = enum_name  # pyright: ignore[reportAttributeAccessIssue]
     for name in values.keys():
         getattr(typ, name).__doc__ = values[name]["doc"]
+    for name, value in values.items():
+        message = value.get("deprecated")
+        if message:
+            deprecate_attribute(cast(type, typ), name, cast(str, message))
     return typ  # pyright: ignore[reportReturnType]
 
 
 def _create_struct_type(
-    struct_name: str, field_names: list[str], doc: str | None
+    struct_name: str,
+    field_names: list[str],
+    doc: str | None,
+    deprecated_fields: Mapping[str, str],
 ) -> type:
     typ = collections.namedtuple(struct_name, field_names)
     typ.__doc__ = doc
+    for name, message in deprecated_fields.items():
+        deprecate_attribute(typ, name, message)
     return typ
 
 
@@ -843,6 +870,62 @@ class DefaultArgument:
 
     def __repr__(self) -> str:
         return self._value
+
+
+def deprecation_message(name: str, reason: str) -> str:
+    """The text of the warning for a use of a deprecated member"""
+    return (
+        "%s is deprecated: %s" % (name, reason) if reason else name + " is deprecated"
+    )
+
+
+def warn_deprecated(message: str) -> None:
+    """Warn of the use of a deprecated member, at the first caller outside the client, as a
+    program can reach the member through several of the client's functions."""
+    frame = sys._getframe(0)
+    level = 1
+    while frame is not None and frame.f_globals.get("__name__", "").startswith("krpc."):
+        frame = frame.f_back
+        level += 1
+    warnings.warn(message, DeprecationWarning, stacklevel=level)
+
+
+class _DeprecatedAttribute:
+    """A class attribute whose reads warn, in place of an enumeration value or a struct field"""
+
+    def __init__(self, value: Any, message: str) -> None:
+        self._value = value
+        self._message = message
+
+    def __get__(self, obj: object, objtype: type | None = None) -> Any:
+        warnings.warn(self._message, DeprecationWarning, stacklevel=2)
+        bind = getattr(type(self._value), "__get__", None)
+        return self._value if bind is None else bind(self._value, obj, objtype)
+
+
+def deprecate_attribute(cls: type, name: str, message: str) -> None:
+    """Warn on each read of a value of an enumeration or a field of a structure. The client's
+    own encoding and decoding read neither by name, so a value the server sends does not warn."""
+    # An enumeration refuses a new value for a member through its own __setattr__
+    type.__setattr__(cls, name, _DeprecatedAttribute(getattr(cls, name), message))
+
+
+class DeprecatedDefinition:
+    """A class, enumeration, structure or exception on a service, whose reads warn"""
+
+    def __init__(self, name: str, message: str, value: object) -> None:
+        self._name = name
+        self._message = message
+        self.value = value
+
+    def __get__(self, obj: object, objtype: type | None = None) -> Any:
+        if obj is None:
+            return self
+        warnings.warn(self._message, DeprecationWarning, stacklevel=2)
+        return self.value
+
+    def __set__(self, obj: object, value: object) -> None:
+        raise AttributeError("%s cannot be set" % self._name)
 
 
 _DocEnumT = TypeVar("_DocEnumT", bound="DocEnum")

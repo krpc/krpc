@@ -27,14 +27,17 @@ from krpc.definitions import (
 from krpc.docmath import to_text
 from krpc.types import (
     DefaultArgument,
+    DeprecatedDefinition,
     DynamicClassBase,
     DynamicType,
     TypeBase,
     Types,
     UnknownTypeError,
     check_type_is_known,
+    deprecation_message,
     is_a_known_type,
     native_exception,
+    warn_deprecated,
 )
 from krpc.utils import snake_case
 
@@ -135,6 +138,39 @@ def _parse_deprecation_reason(reason: str, service_name: str) -> str:
     return _parse_documentation_content(node, parse_cref)
 
 
+def inherit_deprecation(service: KRPC.Service) -> None:
+    """Deprecate each member of a deprecated service, class, enumeration or structure. A member
+    with no reason of its own takes the reason of its container."""
+
+    def inherit(member: Any, container: Any) -> None:
+        if container.deprecated:
+            member.deprecated = True
+            member.deprecated_reason = (
+                member.deprecated_reason or container.deprecated_reason
+            )
+
+    # A class's reason comes before its service's
+    classes = {cls.name: cls for cls in service.classes}
+    for procedure in service.procedures:
+        if Attributes.is_a_class_member(procedure.name):
+            inherit(procedure, classes[Attributes.get_class_name(procedure.name)])
+    for members in (
+        service.classes,
+        service.enumerations,
+        service.structs,
+        service.exceptions,
+        service.procedures,
+    ):
+        for member in members:
+            inherit(member, service)
+    for enumeration in service.enumerations:
+        for value in enumeration.values:
+            inherit(value, enumeration)
+    for struct in service.structs:
+        for field in struct.fields:
+            inherit(field, struct)
+
+
 def _deprecated_doc(doc: str, reason: str, service_name: str) -> str:
     """Prepend a deprecation notice to a constructed docstring"""
     reason = _parse_deprecation_reason(reason, service_name)
@@ -149,15 +185,17 @@ def _wrap_deprecated(
     service_name: str,
 ) -> Callable:
     """Wrap an invoker so that calling it emits a DeprecationWarning"""
-    message = qualified_name + " is deprecated"
-    if reason:
-        message += ": " + _parse_deprecation_reason(reason, service_name)
+    message = deprecation_message(
+        qualified_name, _parse_deprecation_reason(reason, service_name)
+    )
 
     @functools.wraps(func)
     def wrapper(*args: object, **kwargs: object) -> object:
-        warnings.warn(message, DeprecationWarning, stacklevel=2)
+        warn_deprecated(message)
         return func(*args, **kwargs)
 
+    # Client.get_call warns with it, as building a call skips the wrapper
+    wrapper._deprecation = message  # pyright: ignore[reportAttributeAccessIssue]
     return wrapper
 
 
@@ -268,6 +306,15 @@ def _same_values(
     }
 
 
+def deprecation_warning(member: Any, service_name: str, qualified_name: str) -> str:
+    """The text of the warning for a use of a member, or an empty string for a member that is
+    not deprecated"""
+    if not member.deprecated:
+        return ""
+    reason = _parse_deprecation_reason(member.deprecated_reason, service_name)
+    return deprecation_message(qualified_name, reason)
+
+
 def service_definitions(
     service: KRPC.Service, lookup: Lookup = registered
 ) -> Iterator[Definition]:
@@ -292,7 +339,15 @@ def service_definitions(
         values = dict(
             (
                 _member_name(value.name),
-                {"value": value.value, "doc": _documentation(value, name)},
+                {
+                    "value": value.value,
+                    "doc": _documentation(value, name),
+                    "deprecated": deprecation_warning(
+                        value,
+                        name,
+                        "%s.%s.%s" % (name, enumeration.name, _member_name(value.name)),
+                    ),
+                },
             )
             for value in enumeration.values
         )
@@ -346,7 +401,16 @@ def service_definitions(
             generated = lookup(name, struct.name)
             if getattr(generated, "_fields", None) != tuple(field_names):
                 generated = None
-            types.struct_type(name, struct.name, doc).set_fields(fields, generated)
+            deprecated_fields = {
+                field_name: deprecation_warning(
+                    field, name, "%s.%s.%s" % (name, struct.name, field_name)
+                )
+                for field_name, field in zip(field_names, struct.fields)
+                if field.deprecated
+            }
+            types.struct_type(name, struct.name, doc).set_fields(
+                fields, generated, deprecated_fields=deprecated_fields
+            )
 
         return register
 
@@ -532,10 +596,20 @@ class ServiceBase(DynamicType):
     # the service
 
     @classmethod
+    def _add_service_type(cls, member: Any, python_type: object) -> None:
+        """Make a type a member of the service"""
+        warning = deprecation_warning(
+            member, cls._name, "%s.%s" % (cls._name, member.name)
+        )
+        if warning:
+            python_type = DeprecatedDefinition(member.name, warning, python_type)
+        setattr(cls, member.name, python_type)
+
+    @classmethod
     def _add_service_class(cls, remote_cls: KRPC.Class) -> None:
         """Add a class type"""
         class_type = cls._client._types.class_type(cls._name, remote_cls.name)
-        setattr(cls, remote_cls.name, class_type.python_type)
+        cls._add_service_type(remote_cls, class_type.python_type)
 
     @classmethod
     def _add_service_enumeration(cls, enumeration: KRPC.Enumeration) -> None:
@@ -543,13 +617,13 @@ class ServiceBase(DynamicType):
         enumeration_type = cls._client._types.enumeration_type(
             cls._name, enumeration.name
         )
-        setattr(cls, enumeration.name, enumeration_type.python_type)
+        cls._add_service_type(enumeration, enumeration_type.python_type)
 
     @classmethod
     def _add_service_struct(cls, struct: KRPC.Struct) -> None:
         """Add a structure type"""
         struct_type = cls._client._types.struct_type(cls._name, struct.name)
-        setattr(cls, struct.name, struct_type.python_type)
+        cls._add_service_type(struct, struct_type.python_type)
 
     @classmethod
     def _add_service_exception(cls, exception: KRPC.Exception) -> None:
@@ -557,7 +631,7 @@ class ServiceBase(DynamicType):
         exception_type = cls._client._types.exception_type(
             cls._name, exception.name, mapped_type=exception.mapped_type
         )
-        setattr(cls, exception.name, exception_type)
+        cls._add_service_type(exception, exception_type)
 
     @classmethod
     def _parse_procedure(

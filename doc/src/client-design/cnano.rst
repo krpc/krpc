@@ -145,6 +145,10 @@ keeps names out of flash and off the wire.
 Each procedure also has a ``_call`` function, for server side functions. An unused one adds compile
 time and no code.
 
+``KRPC_DEPRECATED`` goes before a declaration, the one position GCC, Clang and MSVC share. An
+enumeration value takes ``KRPC_DEPRECATED_VALUE`` after its name, as the attribute has no other
+position there. MSVC has no such attribute in C, so the macro is empty for it.
+
 Server Side Functions
 ---------------------
 

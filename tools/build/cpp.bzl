@@ -2,6 +2,8 @@
 
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//rules:build_test.bzl", "build_test")
+load("@rules_cc//cc:action_names.bzl", "ACTION_NAMES")
+load("@rules_cc//cc:find_cc_toolchain.bzl", "find_cc_toolchain", "use_cc_toolchain")
 load("@rules_cc//cc/common:cc_common.bzl", "cc_common")
 load("@rules_cc//cc/common:cc_info.bzl", "CcInfo")
 load("@rules_python//python:defs.bzl", "py_test")
@@ -289,3 +291,70 @@ def doxygen_test(name, srcs, c = False, unlinked = [], **kwargs):
         data = [doxygen] + srcs,
         **kwargs
     )
+
+def _deprecation_signals_impl(ctx):
+    cc_toolchain = find_cc_toolchain(ctx)
+    source = ctx.file.src
+    is_c = source.extension == "c" and not ctx.attr.cxx
+    cpp = ctx.fragments.cpp
+    features = cc_common.configure_features(
+        ctx = ctx,
+        cc_toolchain = cc_toolchain,
+        requested_features = ctx.features,
+        unsupported_features = ctx.disabled_features,
+    )
+    compilation = cc_common.merge_cc_infos(cc_infos = [d[CcInfo] for d in ctx.attr.deps]).compilation_context
+    action = ACTION_NAMES.c_compile if is_c else ACTION_NAMES.cpp_compile
+    variables = cc_common.create_compile_variables(
+        feature_configuration = features,
+        cc_toolchain = cc_toolchain,
+        user_compile_flags = list(cpp.copts) + list(cpp.conlyopts if is_c else cpp.cxxopts) + ctx.attr.copts,
+        source_file = source.path,
+        include_directories = compilation.includes,
+        quote_include_directories = compilation.quote_includes,
+        system_include_directories = compilation.system_includes,
+        preprocessor_defines = compilation.defines,
+    )
+    args = ctx.actions.args()
+    args.add(ctx.outputs.out.path)
+    args.add(source.path)
+    args.add(cc_toolchain.compiler)
+    args.add(cc_common.get_tool_for_action(feature_configuration = features, action_name = action))
+    args.add_all(cc_common.get_memory_inefficient_command_line(
+        feature_configuration = features,
+        action_name = action,
+        variables = variables,
+    ))
+    ctx.actions.run(
+        executable = ctx.executable._tool,
+        arguments = [args],
+        env = cc_common.get_environment_variables(
+            feature_configuration = features,
+            action_name = action,
+            variables = variables,
+        ),
+        inputs = depset([source], transitive = [compilation.headers, cc_toolchain.all_files]),
+        outputs = [ctx.outputs.out],
+        mnemonic = "DeprecationSignals",
+        progress_message = "Compiling the uses of deprecated members in %s" % ctx.label,
+    )
+
+cc_deprecation_signals = rule(
+    implementation = _deprecation_signals_impl,
+    doc = """A header holding the compiler's deprecation warnings for each use in a source, as
+    described in deprecation_signals.py. The source compiles with the headers of its deps.""",
+    attrs = {
+        "src": attr.label(allow_single_file = [".c", ".cpp"]),
+        "deps": attr.label_list(providers = [CcInfo]),
+        "copts": attr.string_list(),
+        "cxx": attr.bool(doc = "Whether to compile a C source with the C++ action and options."),
+        "out": attr.output(mandatory = True),
+        "_tool": attr.label(
+            default = Label("//tools/build:deprecation_signals"),
+            executable = True,
+            cfg = "exec",
+        ),
+    },
+    fragments = ["cpp"],
+    toolchains = use_cc_toolchain(),
+)

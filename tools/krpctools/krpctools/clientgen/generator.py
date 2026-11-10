@@ -1,4 +1,5 @@
 import collections
+import copy
 import functools
 import operator
 import re
@@ -36,6 +37,39 @@ LanguageT = TypeVar("LanguageT", bound=Language)
 _RETURNS = re.compile(r"\s*<returns>.*?</returns>", re.DOTALL)
 
 
+def string_literal(text):
+    """Text escaped for a double-quoted string literal, in each language clientgen writes one"""
+    return text.replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\n")
+
+
+def inherit_deprecation(defs):
+    """A copy of the definitions of a service, where each member of a deprecated service,
+    class, enumeration or structure is deprecated. A member with no reason of its own takes
+    the reason of its container."""
+
+    def inherit(member, container):
+        if container.get("deprecated"):
+            member["deprecated"] = True
+            if not member.get("deprecated_reason"):
+                member["deprecated_reason"] = container.get("deprecated_reason", "")
+
+    defs = copy.deepcopy(defs)
+    # A class's reason comes before its service's
+    for name, procedure in defs.get("procedures", {}).items():
+        if Attributes.is_a_class_member(name):
+            inherit(procedure, defs["classes"][Attributes.get_class_name(name)])
+    for kind in ("classes", "enumerations", "structs", "exceptions", "procedures"):
+        for member in defs.get(kind, {}).values():
+            inherit(member, defs)
+    for enumeration in defs.get("enumerations", {}).values():
+        for value in enumeration["values"]:
+            inherit(value, enumeration)
+    for struct in defs.get("structs", {}).values():
+        for field in struct["fields"]:
+            inherit(field, struct)
+    return defs
+
+
 class Generator(Generic[LanguageT]):
     language: LanguageT
     # Whether the generated code includes the code of the other services whose types it uses
@@ -45,7 +79,7 @@ class Generator(Generic[LanguageT]):
         self._macro_template = macro_template
         self._service = service
         self._definitions = definitions
-        self._defs = definitions.services[service]
+        self._defs = inherit_deprecation(definitions.services[service])
         # The path the generated code of another service is included by, keyed by service
         self._includes = includes or {}
         # The registry every service in the definitions was registered in, so that a type
@@ -80,6 +114,7 @@ class Generator(Generic[LanguageT]):
         env.filters["lower_camel_case"] = lower_camel_case
         env.filters["indent"] = indent
         env.filters["singleline"] = single_line
+        env.filters["string_literal"] = string_literal
         template = env.from_string(self._macro_template)
         content = template.render(context)
         return content.rstrip() + "\n"
@@ -193,6 +228,10 @@ class Generator(Generic[LanguageT]):
             "service_id": self._defs["id"],
             "service_documentation": self.parse_documentation(
                 self._defs.get("documentation", "")
+            ),
+            "service_deprecated": self._defs.get("deprecated", False),
+            "service_deprecated_reason": self.parse_deprecation_reason(
+                self._defs.get("deprecated_reason", "")
             ),
             "procedures": {},
             "properties": {},

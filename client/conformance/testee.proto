@@ -98,6 +98,7 @@ message Command {
     FlagsUnion flags_union = 58;
     FlagsContains flags_contains = 59;
     FlagsDifference flags_difference = 60;
+    DeprecationSignals deprecation_signals = 61;
   }
 }
 
@@ -550,6 +551,28 @@ message Declared {
 message Members {
   string service = 1;
   string name = 2;
+}
+
+// Reports what a program gets for a use of a member of a service, and replies with a list Value
+// of strings, one per signal, empty for a member with none. A testee for a language with
+// run-time warnings uses the member and replies with the warnings the use raises. A testee for a
+// language that warns at compile time replies with the compiler's warnings for a use of the member,
+// or the attribute they come from. A testee for a language with no signal for the kind of member
+// replies with an UNSUPPORTED error.
+message DeprecationSignals {
+  string service = 1;
+  // The server's name for the member, such as "DeprecatedProcedure", "DeprecatedProperty",
+  // "DeprecatedEnum" or "DeprecatedEnum.ValueB", or empty for the service itself.
+  string member = 2;
+  // The call that uses a procedure, method or property, for a testee that uses the member.
+  Invoke invoke = 3;
+  // Whether the test reads the reason in the signals. A testee whose language has no reason in a
+  // signal replies with an UNSUPPORTED error.
+  bool reason = 4;
+  // How the testee uses the procedure of invoke: empty to call it, "stream" to add a stream of it,
+  // or "call" to build the call that a stream or a server side function is made from. A testee
+  // whose language has no signal for the use replies with an UNSUPPORTED error.
+  string use = 5;
 }
 
 // Encodes a value with the client's encoder, and replies with the bytes as a bytes Value. The type

@@ -1,0 +1,512 @@
+#pragma once
+
+#include <cstddef>
+#include <functional>
+#include <limits>
+#include <map>
+#include <set>
+#include <stdexcept>
+#include <string>
+#include <tuple>
+#include <vector>
+
+#include <krpc/decoder.hpp>
+#include <krpc/encoder.hpp>
+#include <krpc/error.hpp>
+#include <krpc/event.hpp>
+#include <krpc/hash.hpp>
+#include <krpc/object.hpp>
+#include <krpc/service.hpp>
+#include <krpc/stream.hpp>
+
+// Generated code uses the deprecated declarations it makes, such as a stream of a deprecated
+// structure. A use in a program still warns.
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#elif defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable : 4996)
+#endif
+
+namespace krpc {
+namespace services {
+
+class [[deprecated("Use TestService instead.")]] DeprecatedService : public Service {
+ public:
+  explicit DeprecatedService(const Client& client);
+
+  // Class forward declarations
+  class ReasonedClass;
+  class ServiceClass;
+
+  // Structure forward declarations
+  struct ServiceStruct;
+
+  /**
+   * An exception.
+   *
+   * \deprecated Use TestService instead.
+   */
+  class [[deprecated("Use TestService instead.")]] ServiceException : public ::krpc::RPCError {
+   public:
+    inline explicit ServiceException(const std::string& msg) : ::krpc::RPCError(msg) {}
+  };
+
+  /**
+   * An enumeration.
+   *
+   * \deprecated Use TestService instead.
+   */
+  enum struct [[deprecated("Use TestService instead.")]] ServiceEnum {
+    /**
+     * A value.
+     *
+     * \deprecated Use TestService instead.
+     */
+    value [[deprecated("Use TestService instead.")]] = 0
+  };
+
+  /**
+   * A procedure.
+   *
+   * \deprecated Use TestService instead.
+   */
+  [[deprecated("Use TestService instead.")]]
+  std::string procedure();
+
+  /**
+   * A procedure returning a structure.
+   *
+   * \deprecated Use TestService instead.
+   */
+  [[deprecated("Use TestService instead.")]]
+  DeprecatedService::ServiceStruct struct_procedure();
+
+  /**
+   * A property.
+   *
+   * \deprecated Use TestService instead.
+   */
+  [[deprecated("Use TestService instead.")]]
+  std::string property();
+
+  /**
+   * A property.
+   *
+   * \deprecated Use TestService instead.
+   */
+  [[deprecated("Use TestService instead.")]]
+  void set_property(std::string value);
+
+  [[deprecated("Use TestService instead.")]] ::krpc::Stream<std::string> procedure_stream();
+
+  [[deprecated("Use TestService instead.")]] ::krpc::Stream<DeprecatedService::ServiceStruct> struct_procedure_stream();
+
+  [[deprecated("Use TestService instead.")]] ::krpc::Stream<std::string> property_stream();
+
+  [[deprecated("Use TestService instead.")]] ::krpc::schema::ProcedureCall procedure_call();
+
+  [[deprecated("Use TestService instead.")]] ::krpc::schema::ProcedureCall struct_procedure_call();
+
+  [[deprecated("Use TestService instead.")]] ::krpc::schema::ProcedureCall property_call();
+
+  [[deprecated("Use TestService instead.")]] ::krpc::schema::ProcedureCall set_property_call(std::string value);
+
+  /**
+   * A class deprecated with a reason of its own.
+   *
+   * \deprecated Use "TestService.TestClass" instead.
+   */
+  class [[deprecated("Use \"TestService.TestClass\" instead.")]] ReasonedClass : public krpc::Object<ReasonedClass> {
+   public:
+    ReasonedClass();
+    ReasonedClass(const Client& client, uint64_t id);
+
+    /**
+     * A static method.
+     *
+     * \deprecated Use "TestService.TestClass" instead.
+     */
+    [[deprecated("Use \"TestService.TestClass\" instead.")]]
+    static std::string static_method(Client& client);
+
+    [[deprecated("Use \"TestService.TestClass\" instead.")]] static ::krpc::Stream<std::string> static_method_stream(Client& client);
+
+    [[deprecated("Use \"TestService.TestClass\" instead.")]] static ::krpc::schema::ProcedureCall static_method_call(Client& client);
+
+    /**
+     * The static methods of DeprecatedService::ReasonedClass, bound to a client.
+     */
+    class Bound {
+     public:
+      explicit Bound(const Client& client);
+
+      /**
+       * A static method.
+       *
+       * \deprecated Use "TestService.TestClass" instead.
+       */
+      [[deprecated("Use \"TestService.TestClass\" instead.")]]
+      std::string static_method() const;
+
+     private:
+      mutable Client _client;
+    };
+
+    /**
+     * Binds the static methods of DeprecatedService::ReasonedClass to a client.
+     * @param client The client the methods are called on.
+     * @return The bound methods.
+     */
+    static Bound bind(const Client& client);
+  };
+
+  /**
+   * A class.
+   *
+   * \deprecated Use TestService instead.
+   */
+  class [[deprecated("Use TestService instead.")]] ServiceClass : public krpc::Object<ServiceClass> {
+   public:
+    ServiceClass();
+    ServiceClass(const Client& client, uint64_t id);
+
+    /**
+     * A method.
+     *
+     * \deprecated Use TestService instead.
+     */
+    [[deprecated("Use TestService instead.")]]
+    std::string method();
+
+    /**
+     * A static method.
+     *
+     * \deprecated Use TestService instead.
+     */
+    [[deprecated("Use TestService instead.")]]
+    static std::string static_method(Client& client);
+
+    [[deprecated("Use TestService instead.")]] ::krpc::Stream<std::string> method_stream();
+
+    [[deprecated("Use TestService instead.")]] static ::krpc::Stream<std::string> static_method_stream(Client& client);
+
+    [[deprecated("Use TestService instead.")]] ::krpc::schema::ProcedureCall method_call();
+
+    [[deprecated("Use TestService instead.")]] static ::krpc::schema::ProcedureCall static_method_call(Client& client);
+
+    /**
+     * The static methods of DeprecatedService::ServiceClass, bound to a client.
+     */
+    class Bound {
+     public:
+      explicit Bound(const Client& client);
+
+      /**
+       * A static method.
+       *
+       * \deprecated Use TestService instead.
+       */
+      [[deprecated("Use TestService instead.")]]
+      std::string static_method() const;
+
+     private:
+      mutable Client _client;
+    };
+
+    /**
+     * Binds the static methods of DeprecatedService::ServiceClass to a client.
+     * @param client The client the methods are called on.
+     * @return The bound methods.
+     */
+    static Bound bind(const Client& client);
+  };
+
+  /**
+   * A structure.
+   *
+   * \deprecated Use TestService instead.
+   */
+  struct [[deprecated("Use TestService instead.")]] ServiceStruct {
+    /**
+     * A field.
+     *
+     * \deprecated Use TestService instead.
+     */
+    int32_t field [[deprecated("Use TestService instead.")]];
+
+    ServiceStruct() : field() {}
+
+    ServiceStruct(int32_t field) :
+field(field) {}
+
+    bool operator==(const ServiceStruct& other) const {
+      return this->field == other.field;
+    }
+
+    bool operator!=(const ServiceStruct& other) const {
+      return !(*this == other);
+    }
+
+    // Ordered by the fields in turn, which is how a tuple of the same values orders
+    bool operator<(const ServiceStruct& other) const {
+      if (field < other.field)
+        return true;
+      return false;
+    }
+
+    bool operator>(const ServiceStruct& other) const {
+      return other < *this;
+    }
+
+    bool operator<=(const ServiceStruct& other) const {
+      return !(other < *this);
+    }
+
+    bool operator>=(const ServiceStruct& other) const {
+      return !(*this < other);
+    }
+  };
+};
+
+}  // namespace services
+
+namespace encoder {
+
+  inline std::string encode(const services::DeprecatedService::ServiceEnum& value) {
+    return krpc::encoder::encode(static_cast<int32_t>(value));
+  }
+
+  // A structure is sent as the values of its fields in order, which is the same encoding as
+  // a tuple of those values. See the note on the collection encoders for why the message it
+  // is sent in is kept between calls.
+  inline std::string encode(const services::DeprecatedService::ServiceStruct& value) {
+    static thread_local krpc::schema::Tuple structMessage;
+    structMessage.Clear();
+    structMessage.add_items(encode_item(value.field));
+    return krpc::encoder::encode(structMessage);
+  }
+
+}  // namespace encoder
+
+namespace decoder {
+
+  inline void decode(services::DeprecatedService::ServiceEnum& value, const std::string& data, Client* client) {
+    int32_t x;
+    decode(x, data, client);
+    value = static_cast<services::DeprecatedService::ServiceEnum>(x);
+  }
+
+  // Fields are only ever appended to a structure, so a value from a newer server may carry
+  // more items than this client knows about, and those are ignored.
+  inline void decode(services::DeprecatedService::ServiceStruct& value, const std::string& data, Client* client) {
+    static thread_local krpc::schema::Tuple structMessage;
+    if (!structMessage.ParseFromString(data)) throw EncodingError("Failed to decode message");
+    if (structMessage.items_size() < 1)
+      throw EncodingError("Value for ServiceStruct does not have all of its fields");
+    decode_item(value.field, structMessage.items(0), client);
+  }
+
+}  // namespace decoder
+
+inline std::size_t hash_value(const services::DeprecatedService::ServiceStruct& value) {
+  std::size_t seed = 0;
+  hash_combine(&seed, hash_value(value.field));
+  return seed;
+}
+
+// A collection encoder or decoder calls encode and decode on the type it contains
+// without qualifying them. The ones above are declared after those templates, so
+// argument dependent lookup is what reaches them. It searches the namespace that
+// encloses the type, which is this one. These name the same functions here, as a
+// second function with the same signature is ambiguous to a compiler that finds both.
+namespace services {
+  using krpc::encoder::encode;
+  using krpc::decoder::decode;
+  using krpc::hash_value;
+}  // namespace services
+
+namespace services {
+
+inline DeprecatedService::DeprecatedService(const Client& client):
+  Service(client) {
+  _client.add_exception_thrower(
+    "DeprecatedService", "ServiceException",
+    [] (const std::string& msg) { throw ServiceException(msg); });
+}
+
+inline std::string DeprecatedService::procedure() {
+  auto _data = this->_client.invoke("DeprecatedService", "Procedure", {}, ::krpc::Client::Returns::value);
+  std::string _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), &this->_client);
+  return _result;
+}
+
+inline DeprecatedService::ServiceStruct DeprecatedService::struct_procedure() {
+  auto _data = this->_client.invoke("DeprecatedService", "StructProcedure", {}, ::krpc::Client::Returns::value);
+  DeprecatedService::ServiceStruct _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), &this->_client);
+  return _result;
+}
+
+inline std::string DeprecatedService::property() {
+  auto _data = this->_client.invoke("DeprecatedService", "get_Property", {}, ::krpc::Client::Returns::value);
+  std::string _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), &this->_client);
+  return _result;
+}
+
+inline void DeprecatedService::set_property(std::string value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  this->_client.invoke("DeprecatedService", "set_Property", _args, ::krpc::Client::Returns::value);
+}
+
+inline ::krpc::Stream<std::string> DeprecatedService::procedure_stream() {
+  return ::krpc::Stream<std::string>(this->_client, this->_client.build_call("DeprecatedService", "Procedure"));
+}
+
+inline ::krpc::Stream<DeprecatedService::ServiceStruct> DeprecatedService::struct_procedure_stream() {
+  return ::krpc::Stream<DeprecatedService::ServiceStruct>(this->_client, this->_client.build_call("DeprecatedService", "StructProcedure"));
+}
+
+inline ::krpc::Stream<std::string> DeprecatedService::property_stream() {
+  return ::krpc::Stream<std::string>(this->_client, this->_client.build_call("DeprecatedService", "get_Property"));
+}
+
+inline ::krpc::schema::ProcedureCall DeprecatedService::procedure_call() {
+  return this->_client.build_call("DeprecatedService", "Procedure");
+}
+
+inline ::krpc::schema::ProcedureCall DeprecatedService::struct_procedure_call() {
+  return this->_client.build_call("DeprecatedService", "StructProcedure");
+}
+
+inline ::krpc::schema::ProcedureCall DeprecatedService::property_call() {
+  return this->_client.build_call("DeprecatedService", "get_Property");
+}
+
+inline ::krpc::schema::ProcedureCall DeprecatedService::set_property_call(std::string value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  return this->_client.build_call("DeprecatedService", "set_Property", _args);
+}
+
+inline DeprecatedService::ReasonedClass::ReasonedClass():
+  Object("DeprecatedService::ReasonedClass") {}
+
+inline DeprecatedService::ReasonedClass::ReasonedClass(const Client& client, uint64_t id):
+  Object(client, "DeprecatedService::ReasonedClass", id) {}
+
+inline std::string DeprecatedService::ReasonedClass::static_method(Client& _client) {
+  auto _data = _client.invoke("DeprecatedService", "ReasonedClass_static_StaticMethod", {}, ::krpc::Client::Returns::value);
+    std::string _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), &_client);
+  return _result;
+}
+
+inline ::krpc::Stream<std::string> DeprecatedService::ReasonedClass::static_method_stream(Client& _client) {
+  return ::krpc::Stream<std::string>(_client, _client.build_call("DeprecatedService", "ReasonedClass_static_StaticMethod"));
+}
+
+inline ::krpc::schema::ProcedureCall DeprecatedService::ReasonedClass::static_method_call(Client& _client) {
+  return _client.build_call("DeprecatedService", "ReasonedClass_static_StaticMethod");
+}
+
+inline DeprecatedService::ReasonedClass::Bound::Bound(const Client& client):
+  _client(client) {}
+
+inline std::string DeprecatedService::ReasonedClass::Bound::static_method() const {
+  return DeprecatedService::ReasonedClass::static_method(_client);
+}
+
+inline DeprecatedService::ReasonedClass::Bound DeprecatedService::ReasonedClass::bind(const Client& client) {
+  return Bound(client);
+}
+
+inline DeprecatedService::ServiceClass::ServiceClass():
+  Object("DeprecatedService::ServiceClass") {}
+
+inline DeprecatedService::ServiceClass::ServiceClass(const Client& client, uint64_t id):
+  Object(client, "DeprecatedService::ServiceClass", id) {}
+
+inline std::string DeprecatedService::ServiceClass::method() {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(*this));
+  auto _data = this->_client.invoke("DeprecatedService", "ServiceClass_Method", _args, ::krpc::Client::Returns::value);
+  std::string _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), &this->_client);
+  return _result;
+}
+
+inline std::string DeprecatedService::ServiceClass::static_method(Client& _client) {
+  auto _data = _client.invoke("DeprecatedService", "ServiceClass_static_StaticMethod", {}, ::krpc::Client::Returns::value);
+    std::string _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), &_client);
+  return _result;
+}
+
+inline ::krpc::Stream<std::string> DeprecatedService::ServiceClass::method_stream() {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(*this));
+  return ::krpc::Stream<std::string>(this->_client, this->_client.build_call("DeprecatedService", "ServiceClass_Method", _args));
+}
+
+inline ::krpc::Stream<std::string> DeprecatedService::ServiceClass::static_method_stream(Client& _client) {
+  return ::krpc::Stream<std::string>(_client, _client.build_call("DeprecatedService", "ServiceClass_static_StaticMethod"));
+}
+
+inline ::krpc::schema::ProcedureCall DeprecatedService::ServiceClass::method_call() {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(*this));
+  return this->_client.build_call("DeprecatedService", "ServiceClass_Method", _args);
+}
+
+inline ::krpc::schema::ProcedureCall DeprecatedService::ServiceClass::static_method_call(Client& _client) {
+  return _client.build_call("DeprecatedService", "ServiceClass_static_StaticMethod");
+}
+
+inline DeprecatedService::ServiceClass::Bound::Bound(const Client& client):
+  _client(client) {}
+
+inline std::string DeprecatedService::ServiceClass::Bound::static_method() const {
+  return DeprecatedService::ServiceClass::static_method(_client);
+}
+
+inline DeprecatedService::ServiceClass::Bound DeprecatedService::ServiceClass::bind(const Client& client) {
+  return Bound(client);
+}
+}  // namespace services
+
+}  // namespace krpc
+
+// A structure is a type of this program's own, so unlike a tuple it can be given a std::hash,
+// and an unordered container of one needs nothing further.
+namespace std {
+
+template <>
+struct hash<krpc::services::DeprecatedService::ServiceStruct> {
+  std::size_t operator()(const krpc::services::DeprecatedService::ServiceStruct& value) const {
+    return krpc::hash_value(value);
+  }
+};
+
+}  // namespace std
+
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#elif defined(_MSC_VER)
+#pragma warning(pop)
+#endif

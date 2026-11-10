@@ -17,6 +17,8 @@
 extern "C" {
 #endif
 
+KRPC_DEPRECATED_USES_BEGIN
+
 #ifndef KRPC_TYPE_LIST_ENUM
 #define KRPC_TYPE_LIST_ENUM
 
@@ -177,6 +179,8 @@ static inline krpc_error_t krpc_ServiceA_FrobAll_call(krpc_schema_ProcedureCall 
   KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_list_enum, modes));
   return KRPC_OK;
 }
+
+KRPC_DEPRECATED_USES_END
 
 #ifdef __cplusplus
 }  // extern "C"

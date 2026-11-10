@@ -143,6 +143,9 @@ class ClientGenTestCase(_Base):
     def test_krpc(self):
         self.run_test("KRPC", "KRPC")
 
+    def test_deprecated_service(self):
+        self.run_test("DeprecatedService", "DeprecatedService")
+
     def test_ordering(self):
         self.run_test("ServiceA", "Ordering")
 

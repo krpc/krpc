@@ -1,0 +1,181 @@
+from __future__ import annotations
+from typing import Tuple, Set, Dict, List, NamedTuple, Optional, TYPE_CHECKING
+import krpc.client
+import krpc.limits
+from krpc.declarations import DeclaredClass, DeclaredObject, declaration_error as _declaration, register as _register
+from krpc.event import Event
+from krpc.schema import KRPC_pb2
+from krpc.types import DocEnum, DocFlag, deprecate_attribute, deprecated
+
+
+
+@deprecated("Use TestService instead.")
+class ServiceEnum(DocEnum):
+    """
+    Deprecated. Use TestService instead.
+
+    An enumeration.
+    """
+    value = 0, """
+A value.
+"""
+
+
+deprecate_attribute(ServiceEnum, "value", "DeprecatedService.ServiceEnum.value is deprecated: Use TestService instead.")
+
+
+@deprecated("Use TestService instead.")
+class ServiceStruct(NamedTuple):
+    """
+    Deprecated. Use TestService instead.
+
+    A structure.
+    """
+    field: int
+    """
+    Deprecated. Use TestService instead.
+
+    A field.
+    """
+
+
+deprecate_attribute(ServiceStruct, "field", "DeprecatedService.ServiceStruct.field is deprecated: Use TestService instead.")
+
+
+@deprecated("Use TestService instead.")
+class ServiceException(RuntimeError):
+    """
+    Deprecated. Use TestService instead.
+
+    An exception.
+    """
+
+
+@deprecated("Use \"TestService.TestClass\" instead.")
+class ReasonedClass(DeclaredObject, metaclass=DeclaredClass):
+    """
+    Deprecated. Use "TestService.TestClass" instead.
+
+    A class deprecated with a reason of its own.
+    """
+    _service_name = "DeprecatedService"
+    _class_name = "ReasonedClass"
+
+    @staticmethod
+    @deprecated("Use \"TestService.TestClass\" instead.")
+    def static_method() -> str:
+        """
+        Deprecated. Use "TestService.TestClass" instead.
+
+        A static method.
+        """
+        raise _declaration("DeprecatedService", "ReasonedClass")
+
+
+
+@deprecated("Use TestService instead.")
+class ServiceClass(DeclaredObject, metaclass=DeclaredClass):
+    """
+    Deprecated. Use TestService instead.
+
+    A class.
+    """
+    _service_name = "DeprecatedService"
+    _class_name = "ServiceClass"
+
+    @deprecated("Use TestService instead.")
+    def method(self) -> str:
+        """
+        Deprecated. Use TestService instead.
+
+        A method.
+        """
+        raise _declaration("DeprecatedService", "ServiceClass")
+
+    @staticmethod
+    @deprecated("Use TestService instead.")
+    def static_method() -> str:
+        """
+        Deprecated. Use TestService instead.
+
+        A static method.
+        """
+        raise _declaration("DeprecatedService", "ServiceClass")
+
+
+
+# Aliases for the types the service declares as its attributes, as an annotation in the body of
+# the service would otherwise name the attribute itself
+if TYPE_CHECKING:
+    _ReasonedClass = ReasonedClass
+    _ServiceClass = ServiceClass
+    _ServiceEnum = ServiceEnum
+    _ServiceStruct = ServiceStruct
+    _ServiceException = ServiceException
+
+
+@deprecated("Use TestService instead.")
+class DeprecatedService(metaclass=DeclaredClass):
+    """
+    A deprecated service, whose members are deprecated only through it, other than one class.
+    """
+    _service_name = "DeprecatedService"
+    _class_name = None
+
+    ReasonedClass: type[_ReasonedClass] = ReasonedClass
+    ServiceClass: type[_ServiceClass] = ServiceClass
+    ServiceEnum: type[_ServiceEnum] = ServiceEnum
+    ServiceStruct: type[_ServiceStruct] = ServiceStruct
+    ServiceException: type[_ServiceException] = ServiceException
+
+    @property
+    @deprecated("Use TestService instead.")
+    def property(self) -> str:
+        """
+        Deprecated. Use TestService instead.
+
+        A property.
+        """
+        raise _declaration("DeprecatedService", None)
+
+    @property.setter
+    @deprecated("Use TestService instead.")
+    def property(self, value: str) -> None:
+        raise _declaration("DeprecatedService", None)
+
+    @deprecated("Use TestService instead.")
+    def procedure(self) -> str:
+        """
+        Deprecated. Use TestService instead.
+
+        A procedure.
+        """
+        raise _declaration("DeprecatedService", None)
+
+    @deprecated("Use TestService instead.")
+    def struct_procedure(self) -> ServiceStruct:
+        """
+        Deprecated. Use TestService instead.
+
+        A procedure returning a structure.
+        """
+        raise _declaration("DeprecatedService", None)
+
+
+class DeprecatedServiceClient(krpc.client.Client):
+    """
+    A client with the DeprecatedService service, as ``krpc.connect[DeprecatedServiceClient]()``
+    connects. Combine it with the client types of other services in a subclass of them all.
+    """
+
+    _declares_service = "DeprecatedService"
+
+    deprecated_service: DeprecatedService
+
+
+_register(
+    "DeprecatedService",
+    ServiceEnum,
+    ServiceStruct,
+    ServiceException,
+)

@@ -75,12 +75,14 @@ namespace KRPC.Client.Services.TestService
         internal static readonly global::KRPC.Client.TypeSpec Spec37 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.TestStruct));
         internal static readonly global::KRPC.Client.TypeSpec Spec38 = global::KRPC.Client.TypeSpec.For (typeof(systemAlias::Tuple<global::KRPC.Client.Services.TestService.TestClass,global::KRPC.Client.Services.TestService.TestClass>));
         internal static readonly global::KRPC.Client.TypeSpec Spec39 = global::KRPC.Client.TypeSpec.For (typeof(systemAlias::Tuple<int,bool>));
-        internal static readonly global::KRPC.Client.TypeSpec Spec40 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<double>));
-        internal static readonly global::KRPC.Client.TypeSpec Spec41 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<float>));
-        internal static readonly global::KRPC.Client.TypeSpec Spec42 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<long>));
-        internal static readonly global::KRPC.Client.TypeSpec Spec43 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Event));
-        internal static readonly global::KRPC.Client.TypeSpec Spec44 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<uint>));
-        internal static readonly global::KRPC.Client.TypeSpec Spec45 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<ulong>));
+        internal static readonly global::KRPC.Client.TypeSpec Spec40 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.DeprecatedStruct));
+        internal static readonly global::KRPC.Client.TypeSpec Spec41 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<double>));
+        internal static readonly global::KRPC.Client.TypeSpec Spec42 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<float>));
+        internal static readonly global::KRPC.Client.TypeSpec Spec43 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<long>));
+        internal static readonly global::KRPC.Client.TypeSpec Spec44 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Event));
+        internal static readonly global::KRPC.Client.TypeSpec Spec45 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.PartlyDeprecatedStruct));
+        internal static readonly global::KRPC.Client.TypeSpec Spec46 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<uint>));
+        internal static readonly global::KRPC.Client.TypeSpec Spec47 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<ulong>));
 
         // The procedures whose values a C# type cannot describe on its own, which a call
         // built from an expression looks up by name
@@ -245,6 +247,17 @@ namespace KRPC.Client.Services.TestService
             return (global::KRPC.Client.Services.TestService.TestStruct)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec37, connection);
         }
 
+        /// <summary>
+        /// Create an instance of a deprecated class documentation string.
+        /// </summary>
+        [global::System.Obsolete ("Use CreateTestObject instead.")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "CreateDeprecatedClass", typeof(TypeSpecs))]
+        public global::KRPC.Client.Services.TestService.DeprecatedClass CreateDeprecatedClass ()
+        {
+            var _result = connection.Invoke ("TestService", "CreateDeprecatedClass");
+            return (global::KRPC.Client.Services.TestService.DeprecatedClass)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec9, connection);
+        }
+
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "CreateTestObject", typeof(TypeSpecs))]
         public global::KRPC.Client.Services.TestService.TestClass CreateTestObject (string value)
         {
@@ -283,6 +296,17 @@ namespace KRPC.Client.Services.TestService
             return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
         }
 
+        /// <summary>
+        /// Procedure returning a deprecated struct documentation string.
+        /// </summary>
+        [global::System.Obsolete ("Use TestStruct instead.")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "DeprecatedStructProcedure", typeof(TypeSpecs))]
+        public global::KRPC.Client.Services.TestService.DeprecatedStruct DeprecatedStructProcedure ()
+        {
+            var _result = connection.Invoke ("TestService", "DeprecatedStructProcedure");
+            return (global::KRPC.Client.Services.TestService.DeprecatedStruct)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec40, connection);
+        }
+
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "DictionaryDefault", typeof(TypeSpecs))]
         public global::System.Collections.Generic.IDictionary<int,bool> DictionaryDefault (global::System.Collections.Generic.IDictionary<int,bool> x = null)
         {
@@ -307,7 +331,7 @@ namespace KRPC.Client.Services.TestService
                 global::KRPC.Client.Encoder.Encode (lowest, TypeSpecs.Spec11)
             };
             var _result = connection.Invoke ("TestService", "DoubleSpecialDefaults", _args);
-            return (global::System.Collections.Generic.IList<double>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec40, connection);
+            return (global::System.Collections.Generic.IList<double>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec41, connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "DoubleToString", typeof(TypeSpecs))]
@@ -716,7 +740,7 @@ namespace KRPC.Client.Services.TestService
                 global::KRPC.Client.Encoder.Encode (fraction, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("TestService", "FloatSpecialDefaults", _args);
-            return (global::System.Collections.Generic.IList<float>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec41, connection);
+            return (global::System.Collections.Generic.IList<float>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec42, connection);
         }
 
         /// <summary>
@@ -837,7 +861,7 @@ namespace KRPC.Client.Services.TestService
                 global::KRPC.Client.Encoder.Encode (minimum, TypeSpecs.Spec2)
             };
             var _result = connection.Invoke ("TestService", "Int64SpecialDefaults", _args);
-            return (global::System.Collections.Generic.IList<long>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec42, connection);
+            return (global::System.Collections.Generic.IList<long>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec43, connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Int64ToString", typeof(TypeSpecs))]
@@ -936,7 +960,7 @@ namespace KRPC.Client.Services.TestService
                 global::KRPC.Client.Encoder.Encode (repeats, TypeSpecs.Spec24)
             };
             var _result = connection.Invoke ("TestService", "OnTimer", _args, global::KRPC.Schema.KRPC.Type.Types.TypeCode.Event);
-            return (global::KRPC.Client.Event)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec43, connection);
+            return (global::KRPC.Client.Event)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec44, connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "OptionalArguments", typeof(TypeSpecs))]
@@ -952,6 +976,16 @@ namespace KRPC.Client.Services.TestService
             return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
         }
 
+        /// <summary>
+        /// Procedure returning a partly deprecated struct documentation string.
+        /// </summary>
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "PartlyDeprecatedStructProcedure", typeof(TypeSpecs))]
+        public global::KRPC.Client.Services.TestService.PartlyDeprecatedStruct PartlyDeprecatedStructProcedure ()
+        {
+            var _result = connection.Invoke ("TestService", "PartlyDeprecatedStructProcedure");
+            return (global::KRPC.Client.Services.TestService.PartlyDeprecatedStruct)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec45, connection);
+        }
+
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "RemoveEventAfter", typeof(TypeSpecs))]
         public global::KRPC.Client.Event RemoveEventAfter (uint milliseconds)
         {
@@ -959,7 +993,7 @@ namespace KRPC.Client.Services.TestService
                 global::KRPC.Client.Encoder.Encode (milliseconds, TypeSpecs.Spec24)
             };
             var _result = connection.Invoke ("TestService", "RemoveEventAfter", _args, global::KRPC.Schema.KRPC.Type.Types.TypeCode.Event);
-            return (global::KRPC.Client.Event)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec43, connection);
+            return (global::KRPC.Client.Event)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec44, connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "RemoveTestObject", typeof(TypeSpecs))]
@@ -1263,7 +1297,7 @@ namespace KRPC.Client.Services.TestService
                 global::KRPC.Client.Encoder.Encode (maximum, TypeSpecs.Spec24)
             };
             var _result = connection.Invoke ("TestService", "Uint32SpecialDefaults", _args);
-            return (global::System.Collections.Generic.IList<uint>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec44, connection);
+            return (global::System.Collections.Generic.IList<uint>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec46, connection);
         }
 
         /// <summary>
@@ -1276,7 +1310,7 @@ namespace KRPC.Client.Services.TestService
                 global::KRPC.Client.Encoder.Encode (maximum, TypeSpecs.Spec25)
             };
             var _result = connection.Invoke ("TestService", "Uint64SpecialDefaults", _args);
-            return (global::System.Collections.Generic.IList<ulong>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec45, connection);
+            return (global::System.Collections.Generic.IList<ulong>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec47, connection);
         }
 
         /// <summary>
@@ -1378,11 +1412,29 @@ namespace KRPC.Client.Services.TestService
         /// <summary>
         /// Deprecated enum ValueA documentation string.
         /// </summary>
+        [global::System.Obsolete ("Use TestEnum instead.")]
         ValueA = 0,
         /// <summary>
         /// Deprecated enum ValueB documentation string.
         /// </summary>
         [global::System.Obsolete ("Use DeprecatedEnum.ValueA instead.")]
+        ValueB = 1
+    }
+
+    /// <summary>
+    /// Partly deprecated enum documentation string.
+    /// </summary>
+    [Serializable]
+    public enum PartlyDeprecatedEnum
+    {
+        /// <summary>
+        /// Partly deprecated enum ValueA documentation string.
+        /// </summary>
+        ValueA = 0,
+        /// <summary>
+        /// Partly deprecated enum ValueB documentation string.
+        /// </summary>
+        [global::System.Obsolete ("Use PartlyDeprecatedEnum.ValueA instead.")]
         ValueB = 1
     }
 
@@ -1456,6 +1508,7 @@ namespace KRPC.Client.Services.TestService
         /// <summary>
         /// Deprecated struct Value documentation string.
         /// </summary>
+        [global::System.Obsolete ("Use TestStruct instead.")]
         public int Value { get; private set; }
 
         /// <summary>
@@ -1553,6 +1606,127 @@ namespace KRPC.Client.Services.TestService
         /// Returns true if the first DeprecatedStruct does not order before the second.
         /// </summary>
         public static bool operator >= (DeprecatedStruct lhs, DeprecatedStruct rhs)
+        {
+            return lhs.CompareTo (rhs) >= 0;
+        }
+    }
+
+    /// <summary>
+    /// Partly deprecated struct documentation string.
+    /// </summary>
+    [Serializable]
+    [global::KRPC.Client.Attributes.KRPCStruct]
+    public struct PartlyDeprecatedStruct : IEquatable<PartlyDeprecatedStruct>, IComparable<PartlyDeprecatedStruct>
+    {
+        /// <summary>
+        /// Construct a PartlyDeprecatedStruct from the values of its fields.
+        /// </summary>
+        public PartlyDeprecatedStruct (int value, int oldValue) : this ()
+        {
+            Value = value;
+            OldValue = oldValue;
+        }
+
+        /// <summary>
+        /// Partly deprecated struct Value documentation string.
+        /// </summary>
+        public int Value { get; private set; }
+
+        /// <summary>
+        /// Partly deprecated struct OldValue documentation string.
+        /// </summary>
+        [global::System.Obsolete ("Use PartlyDeprecatedStruct.Value instead.")]
+        public int OldValue { get; private set; }
+
+        /// <summary>
+        /// Returns true if this PartlyDeprecatedStruct is equal to the given object.
+        /// </summary>
+        public override bool Equals (object obj)
+        {
+            return obj is PartlyDeprecatedStruct && Equals ((PartlyDeprecatedStruct)obj);
+        }
+
+        /// <summary>
+        /// Returns true if this PartlyDeprecatedStruct is equal to the given one.
+        /// </summary>
+        public bool Equals (PartlyDeprecatedStruct other)
+        {
+            return global::KRPC.Client.ValueUtils.Equal (Value, other.Value) && global::KRPC.Client.ValueUtils.Equal (OldValue, other.OldValue);
+        }
+
+        /// <summary>
+        /// Returns a hash code for this PartlyDeprecatedStruct.
+        /// </summary>
+        public override int GetHashCode ()
+        {
+            int hash = 17;
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (Value);
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (OldValue);
+            return hash;
+        }
+
+        /// <summary>
+        /// Returns true if the two PartlyDeprecatedStruct values are equal.
+        /// </summary>
+        public static bool operator == (PartlyDeprecatedStruct lhs, PartlyDeprecatedStruct rhs)
+        {
+            return lhs.Equals (rhs);
+        }
+
+        /// <summary>
+        /// Returns true if the two PartlyDeprecatedStruct values are not equal.
+        /// </summary>
+        public static bool operator != (PartlyDeprecatedStruct lhs, PartlyDeprecatedStruct rhs)
+        {
+            return !lhs.Equals (rhs);
+        }
+
+        /// <summary>
+        /// Compares this PartlyDeprecatedStruct with the given one, by its fields in turn, which is
+        /// how a tuple of the same values compares. A field whose type has no ordering, such as
+        /// a collection, throws unless the two values are the same object, as it does in a
+        /// tuple, so two PartlyDeprecatedStructs that are equal can still throw here.
+        /// </summary>
+        public int CompareTo (PartlyDeprecatedStruct other)
+        {
+            int result;
+            result = global::System.Collections.Generic.Comparer<int>.Default.Compare (Value, other.Value);
+            if (result != 0)
+                return result;
+            result = global::System.Collections.Generic.Comparer<int>.Default.Compare (OldValue, other.OldValue);
+            if (result != 0)
+                return result;
+            return 0;
+        }
+
+        /// <summary>
+        /// Returns true if the first PartlyDeprecatedStruct orders before the second.
+        /// </summary>
+        public static bool operator < (PartlyDeprecatedStruct lhs, PartlyDeprecatedStruct rhs)
+        {
+            return lhs.CompareTo (rhs) < 0;
+        }
+
+        /// <summary>
+        /// Returns true if the first PartlyDeprecatedStruct orders after the second.
+        /// </summary>
+        public static bool operator > (PartlyDeprecatedStruct lhs, PartlyDeprecatedStruct rhs)
+        {
+            return lhs.CompareTo (rhs) > 0;
+        }
+
+        /// <summary>
+        /// Returns true if the first PartlyDeprecatedStruct does not order after the second.
+        /// </summary>
+        public static bool operator <= (PartlyDeprecatedStruct lhs, PartlyDeprecatedStruct rhs)
+        {
+            return lhs.CompareTo (rhs) <= 0;
+        }
+
+        /// <summary>
+        /// Returns true if the first PartlyDeprecatedStruct does not order before the second.
+        /// </summary>
+        public static bool operator >= (PartlyDeprecatedStruct lhs, PartlyDeprecatedStruct rhs)
         {
             return lhs.CompareTo (rhs) >= 0;
         }
@@ -2265,6 +2439,91 @@ namespace KRPC.Client.Services.TestService
             };
             var _result = connection.Invoke ("TestService", "DeprecatedClass_DeprecatedMethod", _args);
             return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
+        }
+
+        /// <summary>
+        /// Method with no deprecation of its own documentation string.
+        /// </summary>
+        [global::System.Obsolete ("Use TestClass instead.")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "DeprecatedClass_InheritedMethod", typeof(TypeSpecs))]
+        public string InheritedMethod ()
+        {
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (this, TypeSpecs.Spec9)
+            };
+            var _result = connection.Invoke ("TestService", "DeprecatedClass_InheritedMethod", _args);
+            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
+        }
+
+        /// <summary>
+        /// Static method with no deprecation of its own documentation string.
+        /// </summary>
+        /// <param name="connection">A connection object.</param>
+        [global::System.Obsolete ("Use TestClass instead.")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "DeprecatedClass_static_InheritedStaticMethod", typeof(TypeSpecs))]
+        public static string InheritedStaticMethod (IConnection connection)
+        {
+            if (connection == null)
+                throw new ArgumentNullException (nameof (connection));
+            var _result = connection.Invoke ("TestService", "DeprecatedClass_static_InheritedStaticMethod");
+            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
+        }
+
+        /// <summary>
+        /// Binds the static methods of <see cref="DeprecatedClass" /> to a connection.
+        /// </summary>
+        /// <param name="connection">The connection the methods are called on.</param>
+        /// <returns>The bound methods.</returns>
+        public static Bound Bind (global::KRPC.Client.IConnection connection)
+        {
+            if (connection == null)
+                throw new ArgumentNullException (nameof (connection));
+            return new Bound (connection);
+        }
+
+        /// <summary>
+        /// The static methods of <see cref="DeprecatedClass" />, bound to a connection.
+        /// </summary>
+        public sealed class Bound
+        {
+            readonly global::KRPC.Client.IConnection connection;
+
+            internal Bound (global::KRPC.Client.IConnection connection)
+            {
+                this.connection = connection;
+            }
+
+            /// <summary>
+            /// Static method with no deprecation of its own documentation string.
+            /// </summary>
+            [global::System.Obsolete ("Use TestClass instead.")]
+            [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "DeprecatedClass_static_InheritedStaticMethod", typeof(TypeSpecs))]
+            public string InheritedStaticMethod ()
+            {
+                return global::KRPC.Client.Services.TestService.DeprecatedClass.InheritedStaticMethod (connection);
+            }
+        }
+
+        /// <summary>
+        /// Property with no deprecation of its own documentation string.
+        /// </summary>
+        [global::System.Obsolete ("Use TestClass instead.")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "DeprecatedClass_get_InheritedProperty", typeof(TypeSpecs))]
+        public string InheritedProperty {
+            get {
+                var _args = new ByteString[] {
+                    global::KRPC.Client.Encoder.Encode (this, TypeSpecs.Spec9)
+                };
+                var _result = connection.Invoke ("TestService", "DeprecatedClass_get_InheritedProperty", _args);
+                return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
+            }
+            set {
+                var _args = new ByteString[] {
+                    global::KRPC.Client.Encoder.Encode (this, TypeSpecs.Spec9),
+                    global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec4)
+                };
+                connection.Invoke ("TestService", "DeprecatedClass_set_InheritedProperty", _args);
+            }
         }
     }
 

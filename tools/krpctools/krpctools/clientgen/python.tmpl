@@ -5,7 +5,7 @@ import krpc.limits
 from krpc.declarations import DeclaredClass, DeclaredObject, declaration_error as _declaration, register as _register
 from krpc.event import Event
 from krpc.schema import KRPC_pb2
-from krpc.types import DocEnum, DocFlag
+from krpc.types import DocEnum, DocFlag, deprecate_attribute, deprecated
 {% for dependency in dependencies %}
 import {{ dependency.module }} as {{ dependency.alias }}
 {% endfor %}
@@ -18,6 +18,9 @@ self{% for x in parameters %}, {{x.name}}: {{ x.type.spec }}{%if 'default_value'
     {% for prop_name, prop in properties.items() %}
     @property
     {% if 'getter' in prop %}
+    {% if prop.getter.deprecated %}
+    @deprecated("{{ prop.getter.deprecated_reason | string_literal }}")
+    {% endif %}
     def {{prop_name}}(self) -> {{ prop.getter.return_type.spec }}:
 {% if prop.getter.documentation %}{{ prop.getter.documentation | indent(width=8) }}
 {% endif %}
@@ -28,6 +31,9 @@ self{% for x in parameters %}, {{x.name}}: {{ x.type.spec }}{%if 'default_value'
 
     {% if 'setter' in prop %}
     @{{prop_name}}.setter
+    {% if prop.setter.deprecated %}
+    @deprecated("{{ prop.setter.deprecated_reason | string_literal }}")
+    {% endif %}
     def {{prop_name}}({{ arg_list(prop.setter.parameters) }}) -> None:
         raise _declaration({{ owner }})
 
@@ -36,6 +42,9 @@ self{% for x in parameters %}, {{x.name}}: {{ x.type.spec }}{%if 'default_value'
 {% endmacro %}
 {% macro methods_of(methods, owner) %}
     {% for proc_name, procedure in methods.items() %}
+    {% if procedure.deprecated %}
+    @deprecated("{{ procedure.deprecated_reason | string_literal }}")
+    {% endif %}
     def {{proc_name}}({{ arg_list(procedure.parameters) }}) -> {{ procedure.return_type.spec }}:
 {% if procedure.documentation %}{{ procedure.documentation | indent(width=8) }}
 {% endif %}
@@ -44,8 +53,14 @@ self{% for x in parameters %}, {{x.name}}: {{ x.type.spec }}{%if 'default_value'
     {% endfor %}
 {% endmacro %}
 
+{% macro deprecated_decorator(member) %}
+{% if member.deprecated %}@deprecated("{{ member.deprecated_reason | string_literal }}")
+{% endif %}{% endmacro %}
+{% macro deprecation_message(name, member) %}
+"{{ name }} is deprecated{% if member.deprecated_reason %}: {{ member.deprecated_reason | string_literal }}{% endif %}"{% endmacro %}
+
 {% for enum_name, enumeration in enumerations.items() %}
-class {{enum_name}}({% if enumeration.flags %}DocFlag{% else %}DocEnum{% endif %}):
+{{ deprecated_decorator(enumeration) }}class {{enum_name}}({% if enumeration.flags %}DocFlag{% else %}DocEnum{% endif %}):
 {% if enumeration.documentation %}{{ enumeration.documentation | indent(width=4) }}
 {% endif %}
     {% for enum_value in enumeration['values'] %}
@@ -54,9 +69,16 @@ class {{enum_name}}({% if enumeration.flags %}DocFlag{% else %}DocEnum{% endif %
     {% endfor %}
 
 
+{% for enum_value in enumeration['values'] if enum_value.deprecated %}
+deprecate_attribute({{ enum_name }}, "{{ enum_value['name'] }}", {{ deprecation_message(service_name + '.' + enum_name + '.' + enum_value['name'], enum_value) }})
+{% if loop.last %}
+
+
+{% endif %}
+{% endfor %}
 {% endfor %}
 {% for struct_name, struct in structs.items() %}
-class {{struct_name}}(NamedTuple):
+{{ deprecated_decorator(struct) }}class {{struct_name}}(NamedTuple):
 {% if struct.documentation %}{{ struct.documentation | indent(width=4) }}
 {% endif %}
     {% for field in struct['fields'] %}
@@ -66,9 +88,16 @@ class {{struct_name}}(NamedTuple):
     {% endfor %}
 
 
+{% for field in struct['fields'] if field.deprecated %}
+deprecate_attribute({{ struct_name }}, "{{ field.name }}", {{ deprecation_message(service_name + '.' + struct_name + '.' + field.name, field) }})
+{% if loop.last %}
+
+
+{% endif %}
+{% endfor %}
 {% endfor %}
 {% for exception_name, exception in exceptions.items() %}
-class {{exception_name}}({{ exception.native or 'RuntimeError' }}):
+{{ deprecated_decorator(exception) }}class {{exception_name}}({{ exception.native or 'RuntimeError' }}):
 {% if exception.documentation %}{{ exception.documentation | indent(width=4) }}
 {% else %}
     pass
@@ -77,7 +106,7 @@ class {{exception_name}}({{ exception.native or 'RuntimeError' }}):
 
 {% endfor %}
 {% for class_name, class in classes.items() %}
-class {{class_name}}(DeclaredObject, metaclass=DeclaredClass):
+{{ deprecated_decorator(class) }}class {{class_name}}(DeclaredObject, metaclass=DeclaredClass):
 {% if class.documentation %}{{ class.documentation | indent(width=4) }}
 {% endif %}
     _service_name = "{{ service_name }}"
@@ -87,6 +116,9 @@ class {{class_name}}(DeclaredObject, metaclass=DeclaredClass):
 {{ methods_of(class['methods'], '"' + service_name + '", "' + class_name + '"') -}}
     {% for proc_name, procedure in class['static_methods'].items() %}
     @staticmethod
+    {% if procedure.deprecated %}
+    @deprecated("{{ procedure.deprecated_reason | string_literal }}")
+    {% endif %}
     def {{proc_name}}({{ static_arg_list(procedure.parameters) }}) -> {{ procedure.return_type.spec }}:
 {% if procedure.documentation %}{{ procedure.documentation | indent(width=8) }}
 {% endif %}
@@ -106,6 +138,9 @@ if TYPE_CHECKING:
 {% endfor %}
 
 
+{% if service_deprecated %}
+@deprecated("{{ service_deprecated_reason | string_literal }}")
+{% endif %}
 class {{ service_name }}(metaclass=DeclaredClass):
 {% if service_documentation %}{{ service_documentation | indent(width=4) }}
 {% endif %}

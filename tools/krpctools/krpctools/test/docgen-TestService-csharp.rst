@@ -116,6 +116,15 @@
 
       :Game Scenes: All
 
+   .. function:: DeprecatedClass CreateDeprecatedClass()
+
+      .. warning:: Deprecated. Use :meth:`TestService.CreateTestObject <TestService.TestService.CreateTestObject>` instead.
+
+      Create an instance of a deprecated class documentation string.
+
+
+      :Game Scenes: All
+
    .. function:: TestClass CreateTestObject(string value)
 
 
@@ -155,6 +164,15 @@
       .. warning:: Deprecated. Use :prop:`TestService.StringProperty <TestService.TestService.StringProperty>` instead.
 
       Deprecated property documentation string.
+
+      :Game Scenes: All
+
+   .. function:: DeprecatedStruct DeprecatedStructProcedure()
+
+      .. warning:: Deprecated. Use :type:`TestStruct` instead.
+
+      Procedure returning a deprecated struct documentation string.
+
 
       :Game Scenes: All
 
@@ -784,6 +802,13 @@
 
       :Game Scenes: All
 
+   .. function:: PartlyDeprecatedStruct PartlyDeprecatedStructProcedure()
+
+      Procedure returning a partly deprecated struct documentation string.
+
+
+      :Game Scenes: All
+
    .. function:: KRPC.Client.Event RemoveEventAfter(uint milliseconds)
 
 
@@ -1137,6 +1162,26 @@
 
       :Game Scenes: All
 
+   .. function:: string InheritedMethod()
+
+      Method with no deprecation of its own documentation string.
+
+
+      :Game Scenes: All
+
+   .. property:: string InheritedProperty { get; set; }
+
+      Property with no deprecation of its own documentation string.
+
+      :Game Scenes: All
+
+   .. function:: static string InheritedStaticMethod(IConnection connection)
+
+      Static method with no deprecation of its own documentation string.
+
+
+      :Game Scenes: All
+
 
 
 .. class:: TestClass
@@ -1275,6 +1320,24 @@
 
 
 
+.. enum:: PartlyDeprecatedEnum
+
+   Partly deprecated enum documentation string.
+
+
+   .. enumerator:: ValueA
+
+      Partly deprecated enum ValueA documentation string.
+
+
+   .. enumerator:: ValueB
+
+      .. warning:: Deprecated. Use :value:`PartlyDeprecatedEnum.ValueA` instead.
+
+      Partly deprecated enum ValueB documentation string.
+
+
+
 .. enum:: TestEnum
 
    Enum documentation string.
@@ -1350,6 +1413,26 @@
       .. warning:: Deprecated. Use :prop:`DeprecatedStruct.Value` instead.
 
       Deprecated struct OldValue documentation string.
+
+
+.. struct:: PartlyDeprecatedStruct
+
+   Partly deprecated struct documentation string.
+
+   .. function:: PartlyDeprecatedStruct(int value, int oldValue)
+
+      Construct a PartlyDeprecatedStruct from the values of its fields.
+
+
+   .. property:: int Value { get; }
+
+      Partly deprecated struct Value documentation string.
+
+   .. property:: int OldValue { get; }
+
+      .. warning:: Deprecated. Use :prop:`PartlyDeprecatedStruct.Value` instead.
+
+      Partly deprecated struct OldValue documentation string.
 
 
 .. struct:: TestFlagsStruct

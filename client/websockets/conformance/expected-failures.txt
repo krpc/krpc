@@ -78,3 +78,22 @@ test_values.py::test_null_flag[object]  # No values of type ClassType
 test_connection.py::test_failed_write  # No fail_write command
 test_connection.py::test_handshake_failed_write  # No fail_write command
 test_connection.py::test_handshake_status  # No values of type StructType
+test_calls.py::test_deprecated_procedure  # No deprecation_signals command
+test_calls.py::test_deprecated_property  # No deprecation_signals command
+test_calls.py::test_deprecated_class  # No deprecation_signals command
+test_calls.py::test_deprecated_method  # No deprecation_signals command
+test_calls.py::test_deprecated_enum  # No deprecation_signals command
+test_calls.py::test_deprecated_enum_value  # No deprecation_signals command
+test_calls.py::test_deprecated_struct  # No deprecation_signals command
+test_calls.py::test_deprecated_struct_field  # No deprecation_signals command
+test_calls.py::test_deprecated_exception  # No deprecation_signals command
+test_calls.py::test_deprecated_class_member  # No deprecation_signals command
+test_calls.py::test_deprecated_enum_member  # No deprecation_signals command
+test_calls.py::test_deprecated_struct_member  # No deprecation_signals command
+test_calls.py::test_deprecated_service  # No deprecation_signals command
+test_calls.py::test_deprecated_service_member  # No deprecation_signals command
+test_calls.py::test_deprecated_reason  # No deprecation_signals command
+test_calls.py::test_deprecated_reason_of_container  # No deprecation_signals command
+test_calls.py::test_deprecated_reason_of_member  # No deprecation_signals command
+test_calls.py::test_deprecated_reason_of_class  # No deprecation_signals command
+test_calls.py::test_not_deprecated  # No deprecation_signals command

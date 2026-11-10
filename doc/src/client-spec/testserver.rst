@@ -55,5 +55,7 @@ with documentation.
        encodes and decodes values and calls procedures.
    * - ``ConformanceService``
      - Server state that the conformance tests control.
+   * - ``DeprecatedService``
+     - A deprecated service, for testing how a client signals the use of its members.
    * - ``Benchmark``
      - Procedures for measuring the cost of a call.

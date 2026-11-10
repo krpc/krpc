@@ -16,3 +16,9 @@ test_functions.py::test_stream_null_for_non_nullable_type[TestClass]  # As test_
 test_functions.py::test_null_in_callback[double]  # As test_null_for_non_nullable_type[double]
 test_functions.py::test_null_in_callback[TestClass]  # A Java class type can hold null
 test_objects.py::test_static_method_through_an_object_connection  # A static method is called through its class
+test_calls.py::test_deprecated_reason  # @Deprecated has no reason
+test_calls.py::test_deprecated_reason_of_container  # As test_deprecated_reason
+test_calls.py::test_deprecated_reason_of_member  # As test_deprecated_reason
+test_calls.py::test_deprecated_reason_of_class  # As test_deprecated_reason
+test_calls.py::test_deprecated_stream  # A stream names its method in a string, which javac does not check
+test_calls.py::test_deprecated_call  # As test_deprecated_stream

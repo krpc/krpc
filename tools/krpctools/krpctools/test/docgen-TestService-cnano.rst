@@ -145,6 +145,18 @@ Service documentation string.
 
 
 
+.. function:: krpc_error_t krpc_TestService_CreateDeprecatedClass(krpc_connection_t connection, krpc_TestService_DeprecatedClass_t * returnValue)
+
+   .. warning:: Deprecated. Use :func:`krpc_TestService_CreateTestObject` instead.
+
+   Create an instance of a deprecated class documentation string.
+
+
+   
+
+
+
+
 .. function:: krpc_error_t krpc_TestService_CreateTestObject(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue, const char * value)
 
 
@@ -194,6 +206,18 @@ Service documentation string.
    .. warning:: Deprecated. Use :func:`krpc_TestService_StringProperty` instead.
 
    Deprecated property documentation string.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_DeprecatedStructProcedure(krpc_connection_t connection, krpc_TestService_DeprecatedStruct_t * returnValue)
+
+   .. warning:: Deprecated. Use :type:`krpc_TestService_TestStruct_t` instead.
+
+   Procedure returning a deprecated struct documentation string.
+
 
    
 
@@ -1011,6 +1035,16 @@ Service documentation string.
 
 
 
+.. function:: krpc_error_t krpc_TestService_PartlyDeprecatedStructProcedure(krpc_connection_t connection, krpc_TestService_PartlyDeprecatedStruct_t * returnValue)
+
+   Procedure returning a partly deprecated struct documentation string.
+
+
+   
+
+
+
+
 .. function:: krpc_error_t krpc_TestService_RemoveEventAfter(krpc_connection_t connection, uint64_t * returnValue, uint32_t milliseconds)
 
 
@@ -1471,6 +1505,27 @@ Service documentation string.
 
    
 
+   .. function:: krpc_error_t krpc_TestService_DeprecatedClass_InheritedMethod(krpc_connection_t connection, char * * returnValue, krpc_TestService_DeprecatedClass_t instance)
+
+      Method with no deprecation of its own documentation string.
+
+
+   
+
+   .. function:: krpc_error_t krpc_TestService_DeprecatedClass_InheritedProperty(krpc_connection_t connection, char * * returnValue, krpc_TestService_DeprecatedClass_t instance)
+   .. function:: krpc_error_t krpc_TestService_DeprecatedClass_set_InheritedProperty(krpc_connection_t connection, krpc_TestService_DeprecatedClass_t instance, const char * value)
+
+      Property with no deprecation of its own documentation string.
+
+   
+
+   .. function:: krpc_error_t krpc_TestService_DeprecatedClass_InheritedStaticMethod(krpc_connection_t connection, char * * returnValue)
+
+      Static method with no deprecation of its own documentation string.
+
+
+   
+
 
 
 .. type:: krpc_TestService_TestClass_t
@@ -1611,6 +1666,24 @@ Service documentation string.
 
 
 
+.. type:: krpc_TestService_PartlyDeprecatedEnum_t
+
+   Partly deprecated enum documentation string.
+
+
+   .. macro:: KRPC_TESTSERVICE_PARTLYDEPRECATEDENUM_VALUEA
+
+      Partly deprecated enum ValueA documentation string.
+
+
+   .. macro:: KRPC_TESTSERVICE_PARTLYDEPRECATEDENUM_VALUEB
+
+      .. warning:: Deprecated. Use :macro:`KRPC_TESTSERVICE_PARTLYDEPRECATEDENUM_VALUEA` instead.
+
+      Partly deprecated enum ValueB documentation string.
+
+
+
 .. type:: krpc_TestService_TestEnum_t
 
    Enum documentation string.
@@ -1682,6 +1755,22 @@ Service documentation string.
       .. warning:: Deprecated. Use :member:`krpc_TestService_DeprecatedStruct_t.value` instead.
 
       Deprecated struct OldValue documentation string.
+
+
+.. type:: krpc_TestService_PartlyDeprecatedStruct_t
+
+   Partly deprecated struct documentation string.
+
+
+   .. member:: int32_t value
+
+      Partly deprecated struct Value documentation string.
+
+   .. member:: int32_t old_value
+
+      .. warning:: Deprecated. Use :member:`krpc_TestService_PartlyDeprecatedStruct_t.value` instead.
+
+      Partly deprecated struct OldValue documentation string.
 
 
 .. type:: krpc_TestService_TestFlagsStruct_t

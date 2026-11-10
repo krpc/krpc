@@ -18,6 +18,7 @@ csharp_assembly_info(
 
 srcs = [
     "src/ConformanceService.cs",
+    "src/DeprecatedService.cs",
     "src/TestService.cs",
     ":AssemblyInfo",
 ]
@@ -101,6 +102,14 @@ service_definitions(
     out = "TestService.json",
     assemblies = [":TestService"],
     service = "TestService",
+    visibility = ["//visibility:public"],
+)
+
+service_definitions(
+    name = "DeprecatedServiceDefinitions",
+    out = "DeprecatedService.json",
+    assemblies = [":TestService"],
+    service = "DeprecatedService",
     visibility = ["//visibility:public"],
 )
 

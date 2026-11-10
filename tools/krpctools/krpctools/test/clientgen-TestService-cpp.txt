@@ -21,6 +21,16 @@
 
 #include <KRPC>
 
+// Generated code uses the deprecated declarations it makes, such as a stream of a deprecated
+// structure. A use in a program still warns.
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#elif defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable : 4996)
+#endif
+
 namespace krpc {
 namespace services {
 
@@ -34,6 +44,7 @@ class TestService : public Service {
 
   // Structure forward declarations
   struct DeprecatedStruct;
+  struct PartlyDeprecatedStruct;
   struct TestFlagsStruct;
   struct TestNestedNullableStruct;
   struct TestStruct;
@@ -63,14 +74,32 @@ class TestService : public Service {
   enum struct [[deprecated("Use TestEnum instead.")]] DeprecatedEnum {
     /**
      * Deprecated enum ValueA documentation string.
+     *
+     * \deprecated Use TestEnum instead.
      */
-    value_a = 0,
+    value_a [[deprecated("Use TestEnum instead.")]] = 0,
     /**
      * Deprecated enum ValueB documentation string.
      *
      * \deprecated Use DeprecatedEnum::value_a instead.
      */
     value_b [[deprecated("Use DeprecatedEnum::value_a instead.")]] = 1
+  };
+
+  /**
+   * Partly deprecated enum documentation string.
+   */
+  enum struct PartlyDeprecatedEnum {
+    /**
+     * Partly deprecated enum ValueA documentation string.
+     */
+    value_a = 0,
+    /**
+     * Partly deprecated enum ValueB documentation string.
+     *
+     * \deprecated Use PartlyDeprecatedEnum::value_a instead.
+     */
+    value_b [[deprecated("Use PartlyDeprecatedEnum::value_a instead.")]] = 1
   };
 
   /**
@@ -171,6 +200,14 @@ class TestService : public Service {
    */
   TestService::TestStruct counter_struct(std::string id);
 
+  /**
+   * Create an instance of a deprecated class documentation string.
+   *
+   * \deprecated Use create_test_object instead.
+   */
+  [[deprecated("Use create_test_object instead.")]]
+  TestService::DeprecatedClass create_deprecated_class();
+
   TestService::TestClass create_test_object(std::string value);
 
   /**
@@ -186,6 +223,14 @@ class TestService : public Service {
    */
   [[deprecated]]
   std::string deprecated_procedure_no_message(float value);
+
+  /**
+   * Procedure returning a deprecated struct documentation string.
+   *
+   * \deprecated Use TestStruct instead.
+   */
+  [[deprecated("Use TestStruct instead.")]]
+  TestService::DeprecatedStruct deprecated_struct_procedure();
 
   std::map<int32_t, bool> dictionary_default(std::map<int32_t, bool> x);
 
@@ -339,6 +384,11 @@ class TestService : public Service {
 
   std::string optional_arguments(std::string x, std::string y, std::string z, std::optional<TestService::TestClass> obj);
 
+  /**
+   * Procedure returning a partly deprecated struct documentation string.
+   */
+  TestService::PartlyDeprecatedStruct partly_deprecated_struct_procedure();
+
   ::krpc::Event remove_event_after(uint32_t milliseconds);
 
   void remove_test_object(TestService::TestClass value);
@@ -491,11 +541,15 @@ class TestService : public Service {
 
   ::krpc::Stream<TestService::TestStruct> counter_struct_stream(std::string id);
 
+  [[deprecated("Use create_test_object instead.")]] ::krpc::Stream<TestService::DeprecatedClass> create_deprecated_class_stream();
+
   ::krpc::Stream<TestService::TestClass> create_test_object_stream(std::string value);
 
-  ::krpc::Stream<std::string> deprecated_procedure_stream(float value);
+  [[deprecated("Use float_to_string instead.")]] ::krpc::Stream<std::string> deprecated_procedure_stream(float value);
 
-  ::krpc::Stream<std::string> deprecated_procedure_no_message_stream(float value);
+  [[deprecated]] ::krpc::Stream<std::string> deprecated_procedure_no_message_stream(float value);
+
+  [[deprecated("Use TestStruct instead.")]] ::krpc::Stream<TestService::DeprecatedStruct> deprecated_struct_procedure_stream();
 
   ::krpc::Stream<std::map<int32_t, bool>> dictionary_default_stream(std::map<int32_t, bool> x);
 
@@ -615,6 +669,8 @@ class TestService : public Service {
 
   ::krpc::Stream<std::string> optional_arguments_stream(std::string x, std::string y, std::string z, std::optional<TestService::TestClass> obj);
 
+  ::krpc::Stream<TestService::PartlyDeprecatedStruct> partly_deprecated_struct_procedure_stream();
+
   ::krpc::Stream<::krpc::Event> remove_event_after_stream(uint32_t milliseconds);
 
   ::krpc::Stream<void> remove_test_object_stream(TestService::TestClass value);
@@ -681,7 +737,7 @@ class TestService : public Service {
 
   ::krpc::Stream<std::vector<uint64_t>> uint64_special_defaults_stream(uint64_t maximum);
 
-  ::krpc::Stream<std::string> deprecated_property_stream();
+  [[deprecated("Use string_property instead.")]] ::krpc::Stream<std::string> deprecated_property_stream();
 
   ::krpc::Stream<std::optional<TestService::TestClass>> nullable_object_stream();
 
@@ -711,11 +767,15 @@ class TestService : public Service {
 
   ::krpc::schema::ProcedureCall counter_struct_call(std::string id);
 
+  [[deprecated("Use create_test_object instead.")]] ::krpc::schema::ProcedureCall create_deprecated_class_call();
+
   ::krpc::schema::ProcedureCall create_test_object_call(std::string value);
 
-  ::krpc::schema::ProcedureCall deprecated_procedure_call(float value);
+  [[deprecated("Use float_to_string instead.")]] ::krpc::schema::ProcedureCall deprecated_procedure_call(float value);
 
-  ::krpc::schema::ProcedureCall deprecated_procedure_no_message_call(float value);
+  [[deprecated]] ::krpc::schema::ProcedureCall deprecated_procedure_no_message_call(float value);
+
+  [[deprecated("Use TestStruct instead.")]] ::krpc::schema::ProcedureCall deprecated_struct_procedure_call();
 
   ::krpc::schema::ProcedureCall dictionary_default_call(std::map<int32_t, bool> x);
 
@@ -835,6 +895,8 @@ class TestService : public Service {
 
   ::krpc::schema::ProcedureCall optional_arguments_call(std::string x, std::string y, std::string z, std::optional<TestService::TestClass> obj);
 
+  ::krpc::schema::ProcedureCall partly_deprecated_struct_procedure_call();
+
   ::krpc::schema::ProcedureCall remove_event_after_call(uint32_t milliseconds);
 
   ::krpc::schema::ProcedureCall remove_test_object_call(TestService::TestClass value);
@@ -901,9 +963,9 @@ class TestService : public Service {
 
   ::krpc::schema::ProcedureCall uint64_special_defaults_call(uint64_t maximum);
 
-  ::krpc::schema::ProcedureCall deprecated_property_call();
+  [[deprecated("Use string_property instead.")]] ::krpc::schema::ProcedureCall deprecated_property_call();
 
-  ::krpc::schema::ProcedureCall set_deprecated_property_call(std::string value);
+  [[deprecated("Use string_property instead.")]] ::krpc::schema::ProcedureCall set_deprecated_property_call(std::string value);
 
   ::krpc::schema::ProcedureCall nullable_object_call();
 
@@ -939,9 +1001,81 @@ class TestService : public Service {
     [[deprecated("Use TestClass::get_value instead.")]]
     std::string deprecated_method();
 
-    ::krpc::Stream<std::string> deprecated_method_stream();
+    /**
+     * Method with no deprecation of its own documentation string.
+     *
+     * \deprecated Use TestClass instead.
+     */
+    [[deprecated("Use TestClass instead.")]]
+    std::string inherited_method();
 
-    ::krpc::schema::ProcedureCall deprecated_method_call();
+    /**
+     * Static method with no deprecation of its own documentation string.
+     *
+     * \deprecated Use TestClass instead.
+     */
+    [[deprecated("Use TestClass instead.")]]
+    static std::string inherited_static_method(Client& client);
+
+    /**
+     * Property with no deprecation of its own documentation string.
+     *
+     * \deprecated Use TestClass instead.
+     */
+    [[deprecated("Use TestClass instead.")]]
+    std::string inherited_property();
+
+    /**
+     * Property with no deprecation of its own documentation string.
+     *
+     * \deprecated Use TestClass instead.
+     */
+    [[deprecated("Use TestClass instead.")]]
+    void set_inherited_property(std::string value);
+
+    [[deprecated("Use TestClass::get_value instead.")]] ::krpc::Stream<std::string> deprecated_method_stream();
+
+    [[deprecated("Use TestClass instead.")]] ::krpc::Stream<std::string> inherited_method_stream();
+
+    [[deprecated("Use TestClass instead.")]] static ::krpc::Stream<std::string> inherited_static_method_stream(Client& client);
+
+    [[deprecated("Use TestClass instead.")]] ::krpc::Stream<std::string> inherited_property_stream();
+
+    [[deprecated("Use TestClass::get_value instead.")]] ::krpc::schema::ProcedureCall deprecated_method_call();
+
+    [[deprecated("Use TestClass instead.")]] ::krpc::schema::ProcedureCall inherited_method_call();
+
+    [[deprecated("Use TestClass instead.")]] static ::krpc::schema::ProcedureCall inherited_static_method_call(Client& client);
+
+    [[deprecated("Use TestClass instead.")]] ::krpc::schema::ProcedureCall inherited_property_call();
+
+    [[deprecated("Use TestClass instead.")]] ::krpc::schema::ProcedureCall set_inherited_property_call(std::string value);
+
+    /**
+     * The static methods of TestService::DeprecatedClass, bound to a client.
+     */
+    class Bound {
+     public:
+      explicit Bound(const Client& client);
+
+      /**
+       * Static method with no deprecation of its own documentation string.
+       *
+       * \deprecated Use TestClass instead.
+       */
+      [[deprecated("Use TestClass instead.")]]
+      std::string inherited_static_method() const;
+
+     private:
+      mutable Client _client;
+    };
+
+    /**
+     * Binds the static methods of TestService::DeprecatedClass to a client.
+     * @param client The client the methods are called on.
+     * @return The bound methods.
+     */
+    static Bound bind(const Client& client);
   };
 
   /**
@@ -1092,8 +1226,10 @@ class TestService : public Service {
   struct [[deprecated("Use TestStruct instead.")]] DeprecatedStruct {
     /**
      * Deprecated struct Value documentation string.
+     *
+     * \deprecated Use TestStruct instead.
      */
-    int32_t value;
+    int32_t value [[deprecated("Use TestStruct instead.")]];
     /**
      * Deprecated struct OldValue documentation string.
      *
@@ -1134,6 +1270,58 @@ value(value), old_value(old_value) {}
     }
 
     bool operator>=(const DeprecatedStruct& other) const {
+      return !(*this < other);
+    }
+  };
+
+  /**
+   * Partly deprecated struct documentation string.
+   */
+  struct PartlyDeprecatedStruct {
+    /**
+     * Partly deprecated struct Value documentation string.
+     */
+    int32_t value;
+    /**
+     * Partly deprecated struct OldValue documentation string.
+     *
+     * \deprecated Use PartlyDeprecatedStruct::value instead.
+     */
+    int32_t old_value [[deprecated("Use PartlyDeprecatedStruct::value instead.")]];
+
+    PartlyDeprecatedStruct() : value(), old_value() {}
+
+    PartlyDeprecatedStruct(int32_t value, int32_t old_value) :
+value(value), old_value(old_value) {}
+
+    bool operator==(const PartlyDeprecatedStruct& other) const {
+      return this->value == other.value && this->old_value == other.old_value;
+    }
+
+    bool operator!=(const PartlyDeprecatedStruct& other) const {
+      return !(*this == other);
+    }
+
+    // Ordered by the fields in turn, which is how a tuple of the same values orders
+    bool operator<(const PartlyDeprecatedStruct& other) const {
+      if (value < other.value)
+        return true;
+      if (other.value < value)
+        return false;
+      if (old_value < other.old_value)
+        return true;
+      return false;
+    }
+
+    bool operator>(const PartlyDeprecatedStruct& other) const {
+      return other < *this;
+    }
+
+    bool operator<=(const PartlyDeprecatedStruct& other) const {
+      return !(other < *this);
+    }
+
+    bool operator>=(const PartlyDeprecatedStruct& other) const {
       return !(*this < other);
     }
   };
@@ -1391,16 +1579,13 @@ int_field(int_field), nullable_int_field(nullable_int_field), nullable_enum_fiel
 
 namespace encoder {
 
-#if defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
   inline std::string encode(const services::TestService::DeprecatedEnum& value) {
     return krpc::encoder::encode(static_cast<int32_t>(value));
   }
-#if defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
+
+  inline std::string encode(const services::TestService::PartlyDeprecatedEnum& value) {
+    return krpc::encoder::encode(static_cast<int32_t>(value));
+  }
 
   inline std::string encode(const services::TestService::TestEnum& value) {
     return krpc::encoder::encode(static_cast<int32_t>(value));
@@ -1410,10 +1595,6 @@ namespace encoder {
     return krpc::encoder::encode(static_cast<int32_t>(value));
   }
 
-#if defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
   // A structure is sent as the values of its fields in order, which is the same encoding as
   // a tuple of those values. See the note on the collection encoders for why the message it
   // is sent in is kept between calls.
@@ -1424,9 +1605,17 @@ namespace encoder {
     structMessage.add_items(encode_item(value.old_value));
     return krpc::encoder::encode(structMessage);
   }
-#if defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
+
+  // A structure is sent as the values of its fields in order, which is the same encoding as
+  // a tuple of those values. See the note on the collection encoders for why the message it
+  // is sent in is kept between calls.
+  inline std::string encode(const services::TestService::PartlyDeprecatedStruct& value) {
+    static thread_local krpc::schema::Tuple structMessage;
+    structMessage.Clear();
+    structMessage.add_items(encode_item(value.value));
+    structMessage.add_items(encode_item(value.old_value));
+    return krpc::encoder::encode(structMessage);
+  }
 
   // A structure is sent as the values of its fields in order, which is the same encoding as
   // a tuple of those values. See the note on the collection encoders for why the message it
@@ -1492,18 +1681,17 @@ namespace encoder {
 
 namespace decoder {
 
-#if defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
   inline void decode(services::TestService::DeprecatedEnum& value, const std::string& data, Client* client) {
     int32_t x;
     decode(x, data, client);
     value = static_cast<services::TestService::DeprecatedEnum>(x);
   }
-#if defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
+
+  inline void decode(services::TestService::PartlyDeprecatedEnum& value, const std::string& data, Client* client) {
+    int32_t x;
+    decode(x, data, client);
+    value = static_cast<services::TestService::PartlyDeprecatedEnum>(x);
+  }
 
   inline void decode(services::TestService::TestEnum& value, const std::string& data, Client* client) {
     int32_t x;
@@ -1517,10 +1705,6 @@ namespace decoder {
     value = static_cast<services::TestService::TestFlags>(x);
   }
 
-#if defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
   // Fields are only ever appended to a structure, so a value from a newer server may carry
   // more items than this client knows about, and those are ignored.
   inline void decode(services::TestService::DeprecatedStruct& value, const std::string& data, Client* client) {
@@ -1531,9 +1715,17 @@ namespace decoder {
     decode_item(value.value, structMessage.items(0), client);
     decode_item(value.old_value, structMessage.items(1), client);
   }
-#if defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
+
+  // Fields are only ever appended to a structure, so a value from a newer server may carry
+  // more items than this client knows about, and those are ignored.
+  inline void decode(services::TestService::PartlyDeprecatedStruct& value, const std::string& data, Client* client) {
+    static thread_local krpc::schema::Tuple structMessage;
+    if (!structMessage.ParseFromString(data)) throw EncodingError("Failed to decode message");
+    if (structMessage.items_size() < 2)
+      throw EncodingError("Value for PartlyDeprecatedStruct does not have all of its fields");
+    decode_item(value.value, structMessage.items(0), client);
+    decode_item(value.old_value, structMessage.items(1), client);
+  }
 
   // Fields are only ever appended to a structure, so a value from a newer server may carry
   // more items than this client knows about, and those are ignored.
@@ -1597,19 +1789,19 @@ namespace decoder {
 
 }  // namespace decoder
 
-#if defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
 inline std::size_t hash_value(const services::TestService::DeprecatedStruct& value) {
   std::size_t seed = 0;
   hash_combine(&seed, hash_value(value.value));
   hash_combine(&seed, hash_value(value.old_value));
   return seed;
 }
-#if defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
+
+inline std::size_t hash_value(const services::TestService::PartlyDeprecatedStruct& value) {
+  std::size_t seed = 0;
+  hash_combine(&seed, hash_value(value.value));
+  hash_combine(&seed, hash_value(value.old_value));
+  return seed;
+}
 
 inline std::size_t hash_value(const services::TestService::TestFlagsStruct& value) {
   std::size_t seed = 0;
@@ -1669,16 +1861,9 @@ inline TestService::TestService(const Client& client):
   _client.add_exception_thrower(
     "TestService", "CustomException",
     [] (const std::string& msg) { throw CustomException(msg); });
-#if defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
   _client.add_exception_thrower(
     "TestService", "DeprecatedException",
     [] (const std::string& msg) { throw DeprecatedException(msg); });
-#if defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
 }
 
 inline std::string TestService::add_multiple_values(float x, int32_t y, int64_t z) {
@@ -1798,6 +1983,14 @@ inline TestService::TestStruct TestService::counter_struct(std::string id = "") 
   return _result;
 }
 
+inline TestService::DeprecatedClass TestService::create_deprecated_class() {
+  auto _data = this->_client.invoke("TestService", "CreateDeprecatedClass", {}, ::krpc::Client::Returns::value);
+  TestService::DeprecatedClass _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), &this->_client);
+  return _result;
+}
+
 inline TestService::TestClass TestService::create_test_object(std::string value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
@@ -1826,6 +2019,14 @@ inline std::string TestService::deprecated_procedure_no_message(float value) {
   _args.push_back(encoder::encode_arg(value));
   auto _data = this->_client.invoke("TestService", "DeprecatedProcedureNoMessage", _args, ::krpc::Client::Returns::value);
   std::string _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), &this->_client);
+  return _result;
+}
+
+inline TestService::DeprecatedStruct TestService::deprecated_struct_procedure() {
+  auto _data = this->_client.invoke("TestService", "DeprecatedStructProcedure", {}, ::krpc::Client::Returns::value);
+  TestService::DeprecatedStruct _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), &this->_client);
   return _result;
@@ -2496,6 +2697,14 @@ inline std::string TestService::optional_arguments(std::string x, std::string y 
   return _result;
 }
 
+inline TestService::PartlyDeprecatedStruct TestService::partly_deprecated_struct_procedure() {
+  auto _data = this->_client.invoke("TestService", "PartlyDeprecatedStructProcedure", {}, ::krpc::Client::Returns::value);
+  TestService::PartlyDeprecatedStruct _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), &this->_client);
+  return _result;
+}
+
 inline ::krpc::Event TestService::remove_event_after(uint32_t milliseconds) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
@@ -2975,6 +3184,10 @@ inline ::krpc::Stream<TestService::TestStruct> TestService::counter_struct_strea
   return ::krpc::Stream<TestService::TestStruct>(this->_client, this->_client.build_call("TestService", "CounterStruct", _args));
 }
 
+inline ::krpc::Stream<TestService::DeprecatedClass> TestService::create_deprecated_class_stream() {
+  return ::krpc::Stream<TestService::DeprecatedClass>(this->_client, this->_client.build_call("TestService", "CreateDeprecatedClass"));
+}
+
 inline ::krpc::Stream<TestService::TestClass> TestService::create_test_object_stream(std::string value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
@@ -2994,6 +3207,10 @@ inline ::krpc::Stream<std::string> TestService::deprecated_procedure_no_message_
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
   return ::krpc::Stream<std::string>(this->_client, this->_client.build_call("TestService", "DeprecatedProcedureNoMessage", _args));
+}
+
+inline ::krpc::Stream<TestService::DeprecatedStruct> TestService::deprecated_struct_procedure_stream() {
+  return ::krpc::Stream<TestService::DeprecatedStruct>(this->_client, this->_client.build_call("TestService", "DeprecatedStructProcedure"));
 }
 
 inline ::krpc::Stream<std::map<int32_t, bool>> TestService::dictionary_default_stream(std::map<int32_t, bool> x = std::map<int32_t, bool>{{1, false}, {2, true}}) {
@@ -3425,6 +3642,10 @@ inline ::krpc::Stream<std::string> TestService::optional_arguments_stream(std::s
   return ::krpc::Stream<std::string>(this->_client, this->_client.build_call("TestService", "OptionalArguments", _args));
 }
 
+inline ::krpc::Stream<TestService::PartlyDeprecatedStruct> TestService::partly_deprecated_struct_procedure_stream() {
+  return ::krpc::Stream<TestService::PartlyDeprecatedStruct>(this->_client, this->_client.build_call("TestService", "PartlyDeprecatedStructProcedure"));
+}
+
 inline ::krpc::Stream<::krpc::Event> TestService::remove_event_after_stream(uint32_t milliseconds) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
@@ -3729,6 +3950,10 @@ inline ::krpc::schema::ProcedureCall TestService::counter_struct_call(std::strin
   return this->_client.build_call("TestService", "CounterStruct", _args);
 }
 
+inline ::krpc::schema::ProcedureCall TestService::create_deprecated_class_call() {
+  return this->_client.build_call("TestService", "CreateDeprecatedClass");
+}
+
 inline ::krpc::schema::ProcedureCall TestService::create_test_object_call(std::string value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
@@ -3748,6 +3973,10 @@ inline ::krpc::schema::ProcedureCall TestService::deprecated_procedure_no_messag
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
   return this->_client.build_call("TestService", "DeprecatedProcedureNoMessage", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::deprecated_struct_procedure_call() {
+  return this->_client.build_call("TestService", "DeprecatedStructProcedure");
 }
 
 inline ::krpc::schema::ProcedureCall TestService::dictionary_default_call(std::map<int32_t, bool> x = std::map<int32_t, bool>{{1, false}, {2, true}}) {
@@ -4179,6 +4408,10 @@ inline ::krpc::schema::ProcedureCall TestService::optional_arguments_call(std::s
   return this->_client.build_call("TestService", "OptionalArguments", _args);
 }
 
+inline ::krpc::schema::ProcedureCall TestService::partly_deprecated_struct_procedure_call() {
+  return this->_client.build_call("TestService", "PartlyDeprecatedStructProcedure");
+}
+
 inline ::krpc::schema::ProcedureCall TestService::remove_event_after_call(uint32_t milliseconds) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
@@ -4458,6 +4691,44 @@ inline std::string TestService::DeprecatedClass::deprecated_method() {
   return _result;
 }
 
+inline std::string TestService::DeprecatedClass::inherited_method() {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(*this));
+  auto _data = this->_client.invoke("TestService", "DeprecatedClass_InheritedMethod", _args, ::krpc::Client::Returns::value);
+  std::string _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), &this->_client);
+  return _result;
+}
+
+inline std::string TestService::DeprecatedClass::inherited_property() {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(*this));
+  auto _data = this->_client.invoke("TestService", "DeprecatedClass_get_InheritedProperty", _args, ::krpc::Client::Returns::value);
+  std::string _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), &this->_client);
+  return _result;
+}
+
+inline void TestService::DeprecatedClass::set_inherited_property(std::string value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(2);
+  _args.push_back(encoder::encode_arg(*this));
+  _args.push_back(encoder::encode_arg(value));
+  this->_client.invoke("TestService", "DeprecatedClass_set_InheritedProperty", _args, ::krpc::Client::Returns::value);
+}
+
+inline std::string TestService::DeprecatedClass::inherited_static_method(Client& _client) {
+  auto _data = _client.invoke("TestService", "DeprecatedClass_static_InheritedStaticMethod", {}, ::krpc::Client::Returns::value);
+    std::string _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), &_client);
+  return _result;
+}
+
 inline ::krpc::Stream<std::string> TestService::DeprecatedClass::deprecated_method_stream() {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
@@ -4465,11 +4736,66 @@ inline ::krpc::Stream<std::string> TestService::DeprecatedClass::deprecated_meth
   return ::krpc::Stream<std::string>(this->_client, this->_client.build_call("TestService", "DeprecatedClass_DeprecatedMethod", _args));
 }
 
+inline ::krpc::Stream<std::string> TestService::DeprecatedClass::inherited_method_stream() {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(*this));
+  return ::krpc::Stream<std::string>(this->_client, this->_client.build_call("TestService", "DeprecatedClass_InheritedMethod", _args));
+}
+
+inline ::krpc::Stream<std::string> TestService::DeprecatedClass::inherited_property_stream() {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(*this));
+  return ::krpc::Stream<std::string>(this->_client, this->_client.build_call("TestService", "DeprecatedClass_get_InheritedProperty", _args));
+}
+
+inline ::krpc::Stream<std::string> TestService::DeprecatedClass::inherited_static_method_stream(Client& _client) {
+  return ::krpc::Stream<std::string>(_client, _client.build_call("TestService", "DeprecatedClass_static_InheritedStaticMethod"));
+}
+
 inline ::krpc::schema::ProcedureCall TestService::DeprecatedClass::deprecated_method_call() {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(*this));
   return this->_client.build_call("TestService", "DeprecatedClass_DeprecatedMethod", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::DeprecatedClass::inherited_method_call() {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(*this));
+  return this->_client.build_call("TestService", "DeprecatedClass_InheritedMethod", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::DeprecatedClass::inherited_property_call() {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(*this));
+  return this->_client.build_call("TestService", "DeprecatedClass_get_InheritedProperty", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::DeprecatedClass::set_inherited_property_call(std::string value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(2);
+  _args.push_back(encoder::encode_arg(*this));
+  _args.push_back(encoder::encode_arg(value));
+  return this->_client.build_call("TestService", "DeprecatedClass_set_InheritedProperty", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::DeprecatedClass::inherited_static_method_call(Client& _client) {
+  return _client.build_call("TestService", "DeprecatedClass_static_InheritedStaticMethod");
+}
+
+inline TestService::DeprecatedClass::Bound::Bound(const Client& client):
+  _client(client) {}
+
+inline std::string TestService::DeprecatedClass::Bound::inherited_static_method() const {
+  return TestService::DeprecatedClass::inherited_static_method(_client);
+}
+
+inline TestService::DeprecatedClass::Bound TestService::DeprecatedClass::bind(const Client& client) {
+  return Bound(client);
 }
 
 inline TestService::TestClass::TestClass():
@@ -4860,19 +5186,19 @@ inline TestService::TestClass::Bound TestService::TestClass::bind(const Client& 
 // and an unordered container of one needs nothing further.
 namespace std {
 
-#if defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
 template <>
 struct hash<krpc::services::TestService::DeprecatedStruct> {
   std::size_t operator()(const krpc::services::TestService::DeprecatedStruct& value) const {
     return krpc::hash_value(value);
   }
 };
-#if defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
+
+template <>
+struct hash<krpc::services::TestService::PartlyDeprecatedStruct> {
+  std::size_t operator()(const krpc::services::TestService::PartlyDeprecatedStruct& value) const {
+    return krpc::hash_value(value);
+  }
+};
 
 template <>
 struct hash<krpc::services::TestService::TestFlagsStruct> {
@@ -4910,3 +5236,9 @@ struct hash<krpc::services::TestService::TestNullableStruct> {
 };
 
 }  // namespace std
+
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#elif defined(_MSC_VER)
+#pragma warning(pop)
+#endif

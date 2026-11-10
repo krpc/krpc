@@ -37,7 +37,8 @@ import krpc.client.Types;
 // Generated code references its own deprecated members (e.g. when registering
 // exception types), so suppress the deprecation warnings within this class.
 @SuppressWarnings("deprecation")
-public class {{ service_name }} {
+{% if service_deprecated %}@Deprecated
+{% endif %}public class {{ service_name }} {
 
     public static {{ service_name }} newInstance(Connection connection) {
         return new {{ service_name }}(connection);

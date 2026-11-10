@@ -95,6 +95,16 @@ Service documentation string.
 
 
 
+.. staticmethod:: create_deprecated_class(): TestService.DeprecatedClass
+
+   .. warning:: Deprecated. Use :meth:`TestService.create_test_object` instead.
+
+   Create an instance of a deprecated class documentation string.
+
+
+
+
+
 .. staticmethod:: create_test_object(value: string): TestService.TestClass
 
 
@@ -130,6 +140,16 @@ Service documentation string.
    Deprecated property documentation string.
 
    :Attribute: Can be read or written
+
+
+
+
+.. staticmethod:: deprecated_struct_procedure(): TestService.DeprecatedStruct
+
+   .. warning:: Deprecated. Use :class:`TestService.TestStruct` instead.
+
+   Procedure returning a deprecated struct documentation string.
+
 
 
 
@@ -660,6 +680,14 @@ Service documentation string.
 
 
 
+.. staticmethod:: partly_deprecated_struct_procedure(): TestService.PartlyDeprecatedStruct
+
+   Procedure returning a partly deprecated struct documentation string.
+
+
+
+
+
 .. staticmethod:: remove_event_after(milliseconds: number): number
 
 
@@ -982,6 +1010,20 @@ Service documentation string.
 
       Deprecated method documentation string.
 
+   .. method:: inherited_method(): string
+
+      Method with no deprecation of its own documentation string.
+
+   .. attribute:: inherited_property: string
+
+      Property with no deprecation of its own documentation string.
+
+      :Attribute: Can be read or written
+
+   .. staticmethod:: inherited_static_method(): string
+
+      Static method with no deprecation of its own documentation string.
+
 
 
 .. class:: TestClass
@@ -1070,6 +1112,24 @@ Service documentation string.
 
 
 
+.. class:: PartlyDeprecatedEnum
+
+   Partly deprecated enum documentation string.
+
+
+   .. data:: value_a
+
+      Partly deprecated enum ValueA documentation string.
+
+
+   .. data:: value_b
+
+      .. warning:: Deprecated. Use :data:`TestService.PartlyDeprecatedEnum.value_a` instead.
+
+      Partly deprecated enum ValueB documentation string.
+
+
+
 .. class:: TestEnum
 
    Enum documentation string.
@@ -1142,6 +1202,24 @@ Service documentation string.
       .. warning:: Deprecated. Use :attr:`TestService.DeprecatedStruct.value` instead.
 
       Deprecated struct OldValue documentation string.
+
+
+
+.. class:: PartlyDeprecatedStruct
+
+   Partly deprecated struct documentation string.
+
+
+   .. attribute:: value: number
+
+      Partly deprecated struct Value documentation string.
+
+
+   .. attribute:: old_value: number
+
+      .. warning:: Deprecated. Use :attr:`TestService.PartlyDeprecatedStruct.value` instead.
+
+      Partly deprecated struct OldValue documentation string.
 
 
 

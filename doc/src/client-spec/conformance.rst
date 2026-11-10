@@ -62,6 +62,9 @@ does for each command. The file also ships in the ``krpctools`` package, as
 * A testee with the ``concurrency`` profile runs commands on tasks named in the command, as
   threads or async tasks. A testee without it runs every command in order on one thread.
 * A command the client offers no way to carry out gets an ``Error`` of kind ``UNSUPPORTED``.
+* ``DeprecationSignals`` asks what a program gets for a use of a member. A testee for a language with
+  run-time warnings uses the member and reports them. A testee for a compiled language reports the
+  attribute by reflection, or the compiler's warnings, which it records when it is built.
 
 The testee exits when its standard input closes.
 

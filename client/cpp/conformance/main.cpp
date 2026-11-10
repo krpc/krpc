@@ -28,6 +28,7 @@
 #include <utility>
 #include <vector>
 
+#include "deprecation_signals.hpp"
 #include "dispatch_values.hpp"
 #include "framing.hpp"
 #include "services/conformance_service.hpp"
@@ -818,6 +819,16 @@ class Testee {
         // The stubs are compiled from the service definitions
         reply->mutable_value()->set_null(true);
         break;
+      case Command::kDeprecationSignals: {
+        const auto& signals = command.deprecation_signals();
+        auto member = signals.service();
+        if (!signals.member().empty()) member += "." + signals.member();
+        if (!signals.use().empty()) member += ":" + signals.use();
+        auto* list = reply->mutable_value()->mutable_list();
+        for (const auto& signal : kDeprecationSignals.at(member))
+          list->add_items()->set_string(signal);
+        break;
+      }
       case Command::kOrder: {
         using TestClass = krpc::services::TestService::TestClass;
         const auto& a = command.order().a();

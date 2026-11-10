@@ -14,6 +14,7 @@
 #include <string>
 #include <vector>
 
+#include "deprecation_signals.hpp"
 #include "dispatch_values.hpp"
 #include "framing.hpp"
 #include "services/conformance_service.h"
@@ -163,6 +164,18 @@ class Testee {
       case Command::kHash:
         reply->mutable_value()->set_null(true);
         break;
+      case Command::kDeprecationSignals: {
+        const auto& signals = command.deprecation_signals();
+        auto member = signals.service() + "." + signals.member();
+        if (member.find("Exception") != std::string::npos)
+          throw Unsupported("An exception has no C type");
+        if (signals.member().empty()) throw Unsupported("A service has no C type");
+        if (!signals.use().empty()) member += ":" + signals.use();
+        auto* list = reply->mutable_value()->mutable_list();
+        for (const auto& signal : kDeprecationSignals.at(member))
+          list->add_items()->set_string(signal);
+        break;
+      }
       case Command::kObjectId:
         // An object is its id, so there is no helper to get it
         reply->mutable_value()->set_uint64(arg_object(command.object_id().a()));
