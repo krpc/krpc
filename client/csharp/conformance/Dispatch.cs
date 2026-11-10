@@ -15,11 +15,11 @@ namespace KRPC.Client.Conformance
             var args = invoke.Arguments;
             switch (invoke.Service) {
             case "KRPC":
-                return InvokeKRPC (connection, invoke.Procedure, args);
+                return InvokeKRPC (connection, invoke.Procedure, args, invoke.Bound);
             case "TestService":
-                return InvokeTestService (connection, invoke.Procedure, args);
+                return InvokeTestService (connection, invoke.Procedure, args, invoke.Bound);
             case "ConformanceService":
-                return InvokeConformanceService (connection, invoke.Procedure, args);
+                return InvokeConformanceService (connection, invoke.Procedure, args, invoke.Bound);
             default:
                 throw new NotSupportedException ("The testee cannot call service " + invoke.Service);
             }
@@ -35,11 +35,11 @@ namespace KRPC.Client.Conformance
             var args = invoke.Arguments;
             switch (invoke.Service) {
             case "KRPC":
-                return AddStreamKRPC (connection, invoke.Procedure, args);
+                return AddStreamKRPC (connection, invoke.Procedure, args, invoke.Bound);
             case "TestService":
-                return AddStreamTestService (connection, invoke.Procedure, args);
+                return AddStreamTestService (connection, invoke.Procedure, args, invoke.Bound);
             case "ConformanceService":
-                return AddStreamConformanceService (connection, invoke.Procedure, args);
+                return AddStreamConformanceService (connection, invoke.Procedure, args, invoke.Bound);
             default:
                 throw new NotSupportedException ("The testee cannot stream service " + invoke.Service);
             }
@@ -50,11 +50,11 @@ namespace KRPC.Client.Conformance
             var args = invoke.Arguments;
             switch (invoke.Service) {
             case "KRPC":
-                return CallKRPC (connection, invoke.Procedure, args);
+                return CallKRPC (connection, invoke.Procedure, args, invoke.Bound);
             case "TestService":
-                return CallTestService (connection, invoke.Procedure, args);
+                return CallTestService (connection, invoke.Procedure, args, invoke.Bound);
             case "ConformanceService":
-                return CallConformanceService (connection, invoke.Procedure, args);
+                return CallConformanceService (connection, invoke.Procedure, args, invoke.Bound);
             default:
                 throw new NotSupportedException ("The testee cannot build a call of service " + invoke.Service);
             }

@@ -211,6 +211,17 @@ itself reads normally, but a call on one of its parts raises an error naming
 .. seealso:: :doc:`/user-guide/object-lifetime` describes how each kind of object behaves in more
              detail.
 
+Calling Methods
+---------------
+
+You call a method on an object of its class, with a colon. A *static* method needs no object, and
+you call it on the class itself with a dot. Reach the class through the connection's service:
+
+.. literalinclude:: /scripts/lua/StaticMethods.lua
+
+The call runs on the connection the class is reached through. Called through an object, a static
+method runs on the object's connection.
+
 Server Side Functions
 ---------------------
 

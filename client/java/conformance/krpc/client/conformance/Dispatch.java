@@ -11,13 +11,16 @@ final class Dispatch {
   static Value invoke(Connection connection, Invoke invoke) throws Exception {
     switch (invoke.getService()) {
       case "KRPC":
-        return KRPCDispatch.invoke(connection, invoke.getProcedure(), invoke.getArgumentsList());
+        return KRPCDispatch.invoke(connection, invoke.getProcedure(), invoke.getArgumentsList(),
+            invoke.getBound());
       case "TestService":
         return TestServiceDispatch.invoke(
-            connection, invoke.getProcedure(), invoke.getArgumentsList());
+            connection, invoke.getProcedure(), invoke.getArgumentsList(),
+            invoke.getBound());
       case "ConformanceService":
         return ConformanceServiceDispatch.invoke(
-            connection, invoke.getProcedure(), invoke.getArgumentsList());
+            connection, invoke.getProcedure(), invoke.getArgumentsList(),
+            invoke.getBound());
       default:
         throw new UnsupportedOperationException(
             "The testee cannot call service " + invoke.getService());
@@ -28,13 +31,16 @@ final class Dispatch {
     switch (invoke.getService()) {
       case "KRPC":
         return KRPCDispatch.addStream(
-            connection, invoke.getProcedure(), invoke.getArgumentsList());
+            connection, invoke.getProcedure(), invoke.getArgumentsList(),
+            invoke.getBound());
       case "TestService":
         return TestServiceDispatch.addStream(
-            connection, invoke.getProcedure(), invoke.getArgumentsList());
+            connection, invoke.getProcedure(), invoke.getArgumentsList(),
+            invoke.getBound());
       case "ConformanceService":
         return ConformanceServiceDispatch.addStream(
-            connection, invoke.getProcedure(), invoke.getArgumentsList());
+            connection, invoke.getProcedure(), invoke.getArgumentsList(),
+            invoke.getBound());
       default:
         throw new UnsupportedOperationException(
             "The testee cannot stream service " + invoke.getService());
@@ -45,13 +51,16 @@ final class Dispatch {
       throws Exception {
     switch (invoke.getService()) {
       case "KRPC":
-        return KRPCDispatch.call(connection, invoke.getProcedure(), invoke.getArgumentsList());
+        return KRPCDispatch.call(connection, invoke.getProcedure(), invoke.getArgumentsList(),
+            invoke.getBound());
       case "TestService":
         return TestServiceDispatch.call(
-            connection, invoke.getProcedure(), invoke.getArgumentsList());
+            connection, invoke.getProcedure(), invoke.getArgumentsList(),
+            invoke.getBound());
       case "ConformanceService":
         return ConformanceServiceDispatch.call(
-            connection, invoke.getProcedure(), invoke.getArgumentsList());
+            connection, invoke.getProcedure(), invoke.getArgumentsList(),
+            invoke.getBound());
       default:
         throw new UnsupportedOperationException(
             "The testee cannot build a call of service " + invoke.getService());

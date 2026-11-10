@@ -17,20 +17,18 @@ public class NotLoadedStream {
       Flight flight = spaceCenter.getActiveVessel().flight(null);
 
       // [docs]
+      Expression.Bound e = Expression.bind(connection);
       // altitude = meanAltitude / 1000, or 0 if the vessel is not loaded
-      Expression altitude = Expression.variable(connection, "altitude", Type.double_(connection));
-      Expression altitudeKm = Expression.blockWithVariables(
-          connection,
+      Expression altitude = e.variable("altitude", Type.bind(connection).double_());
+      Expression km = e.divide(
+          e.call(connection.getCall(flight, "getMeanAltitude")), e.constantDouble(1000));
+      Expression altitudeKm = e.blockWithVariables(
           Arrays.asList(altitude),
           Arrays.asList(
-              Expression.tryCatch(connection,
-                  Expression.assign(connection, altitude,
-                      Expression.divide(connection,
-                          Expression.call(connection, connection.getCall(flight, "getMeanAltitude")),
-                          Expression.constantDouble(connection, 1000))),
+              e.tryCatch(
+                  e.assign(altitude, km),
                   "KRPC", "ObjectNotLoadedException", null,
-                  Expression.assign(connection, altitude,
-                      Expression.constantDouble(connection, 0))),
+                  e.assign(altitude, e.constantDouble(0))),
               altitude));
 
       Stream<Double> stream = connection.addStream(altitudeKm);

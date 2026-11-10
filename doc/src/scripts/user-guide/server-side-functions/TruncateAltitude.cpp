@@ -13,8 +13,9 @@ int main() {
   typedef krpc::services::KRPC::Type KType;
   auto mean_altitude = flight.mean_altitude_call();
   // [docs]
+  auto e = Expr::bind(conn);
+  auto t = KType::bind(conn);
   // Truncate the altitude to a whole number of meters
-  auto expr =
-      Expr::cast(conn, Expr::call(conn, mean_altitude), KType::int_(conn));
+  auto expr = e.cast(e.call(mean_altitude), t.int_());
   // [/docs]
 }

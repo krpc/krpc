@@ -33,13 +33,23 @@ struct {{ service_name }}_{{ struct.name }} {
 {% endfor %}
 
 inline Value invoke_{{ service_name | snake_case }}(::krpc::Client& client, const std::string& procedure,
-                       const Arguments& args) {
+                       const Arguments& args, [[maybe_unused]] bool bound) {
   {% for member in members %}
   {% for variant in member.variants %}
   if (procedure == "{{ member.remote_name }}" && args.size() == {{ variant.count }}) {
     {% for p in variant.parameters %}
     auto {{ p.name }} = {{ p.tag }}::arg(client, args.Get({{ p.index }}));
     {% endfor %}
+    {% if variant.bound_call %}
+    if (bound) {
+      {% if member.result %}
+      return {{ member.result.tag }}::result({{ variant.bound_call }});
+      {% else %}
+      {{ variant.bound_call }};
+      return result_none();
+      {% endif %}
+    }
+    {% endif %}
     {% if member.result %}
     return {{ member.result.tag }}::result({{ variant.call }});
     {% else %}

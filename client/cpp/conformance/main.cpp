@@ -966,15 +966,18 @@ class Testee {
 
   Value invoke(const krpc::conformance::Invoke& command) {
     if (command.service() == "KRPC")
-      return invoke_krpc(connected(), command.procedure(), command.arguments());
+      return invoke_krpc(connected(), command.procedure(), command.arguments(), command.bound());
     if (command.service() == "TestService")
-      return invoke_test_service(connected(), command.procedure(), command.arguments());
+      return invoke_test_service(connected(), command.procedure(), command.arguments(),
+                                 command.bound());
     if (command.service() == "ConformanceService")
-      return invoke_conformance_service(connected(), command.procedure(), command.arguments());
+      return invoke_conformance_service(connected(), command.procedure(), command.arguments(),
+                                        command.bound());
     throw std::invalid_argument("The testee cannot call service " + command.service());
   }
 
   StreamHandle add_stream(const krpc::conformance::Invoke& command) {
+    if (command.bound()) throw Unsupported("A bound class has no stream forms");
     if (command.service() == "KRPC")
       return add_stream_krpc(connected(), command.procedure(), command.arguments());
     if (command.service() == "TestService")
@@ -985,6 +988,7 @@ class Testee {
   }
 
   krpc::schema::ProcedureCall call(const krpc::conformance::Invoke& command) {
+    if (command.bound()) throw Unsupported("A bound class has no call forms");
     if (command.service() == "KRPC")
       return call_krpc(connected(), command.procedure(), command.arguments());
     if (command.service() == "TestService")
@@ -1028,9 +1032,9 @@ int main() {
   krpc_conformance::Writer output;
   krpc::conformance::Output hello;
   hello.mutable_hello()->set_client("cpp");
-  for (const char* profile :
-       {"core", "error-types", "defaults", "streams", "events", "functions", "function-types",
-        "connections", "concurrency", "callbacks", "conditions", "ordering", "races"})
+  for (const char* profile : {"core", "error-types", "defaults", "streams", "events", "functions",
+                              "function-types", "connections", "bound-classes", "concurrency",
+                              "callbacks", "conditions", "ordering", "races"})
     hello.mutable_hello()->add_profiles(profile);
   for (const char* protocol : {"tcpip", "localsocket"})
     hello.mutable_hello()->add_protocols(protocol);

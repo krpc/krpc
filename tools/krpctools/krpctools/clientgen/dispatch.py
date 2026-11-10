@@ -195,6 +195,19 @@ class DispatchGenerator(Generator):
                 procedure_call = self.procedure_call(
                     member_kind, cls, member_name, parameters[:count]
                 )
+            # A static method called through its class bound to the connection
+            bound_call = None
+            bound_stream = None
+            bound_procedure_call = None
+            if member_kind == STATIC_METHOD:
+                bound_call = self.bound_call(cls, member_name, parameters[:count])
+                if streamed:
+                    bound_stream = self.bound_stream(
+                        cls, member_name, parameters[:count]
+                    )
+                    bound_procedure_call = self.bound_procedure_call(
+                        cls, member_name, parameters[:count]
+                    )
             variants.append(
                 {
                     "count": count,
@@ -204,6 +217,9 @@ class DispatchGenerator(Generator):
                     ),
                     "stream": stream,
                     "procedure_call": procedure_call,
+                    "bound_call": bound_call,
+                    "bound_stream": bound_stream,
+                    "bound_procedure_call": bound_procedure_call,
                 }
             )
         return {
@@ -271,6 +287,21 @@ class DispatchGenerator(Generator):
 
     def procedure_call(self, kind, cls, name, parameters) -> str | None:
         """The code that builds the call a stream of a member makes, as a ProcedureCall"""
+        return None
+
+    def bound_call(self, cls, name, parameters) -> str | None:
+        """A call of a static method through its class bound to the connection, where the
+        client has one"""
+        return None
+
+    def bound_stream(self, cls, name, parameters) -> str | None:
+        """The code that streams a static method through its class bound to the connection,
+        or None where the client has no bound stream"""
+        return None
+
+    def bound_procedure_call(self, cls, name, parameters) -> str | None:
+        """The code that builds the call of a static method through its class bound to the
+        connection, or None where the client has no bound call message"""
         return None
 
     def stream(self, kind, cls, name, parameters) -> str | None:
@@ -417,6 +448,21 @@ class CsharpDispatchGenerator(DispatchGenerator):
     def procedure_call(self, kind, cls, name, parameters):
         return "Connection.GetCall (() => %s)" % self.call(kind, cls, name, parameters)
 
+    def bound_call(self, cls, name, parameters):
+        return "%s.Bind (connection).%s (%s)" % (
+            self.class_type(self._service, cls),
+            name,
+            _arguments(parameters),
+        )
+
+    def bound_stream(self, cls, name, parameters):
+        return "connection.AddStream (() => %s)" % self.bound_call(
+            cls, name, parameters
+        )
+
+    def bound_procedure_call(self, cls, name, parameters):
+        return "Connection.GetCall (() => %s)" % self.bound_call(cls, name, parameters)
+
 
 class JavaDispatchGenerator(DispatchGenerator):
     """A conversion is an arg, a Function from a Value, and a result, a Function to a Value,
@@ -546,8 +592,7 @@ class JavaDispatchGenerator(DispatchGenerator):
         if kind == GETTER:
             return 'connection.addStream(%s.class, "get%s")' % (self._service, name)
         if kind == STATIC_METHOD:
-            # The stub of a static method takes the connection first
-            return 'connection.addStream(%s.class, "%s", connection%s)' % (
+            return 'connection.addStream(%s.class, "%s"%s)' % (
                 self.class_type(self._service, cls),
                 self._name(name),
                 "".join(", " + x["name"] for x in parameters),
@@ -561,6 +606,25 @@ class JavaDispatchGenerator(DispatchGenerator):
 
     def procedure_call(self, kind, cls, name, parameters):
         return self.stream(kind, cls, name, parameters).replace(
+            "connection.addStream(", "connection.getCall(", 1
+        )
+
+    def bound_call(self, cls, name, parameters):
+        return "%s.bind(connection).%s(%s)" % (
+            self.class_type(self._service, cls),
+            self._name(name),
+            _arguments(parameters),
+        )
+
+    def bound_stream(self, cls, name, parameters):
+        return 'connection.addStream(%s.Bound.class, "%s"%s)' % (
+            self.class_type(self._service, cls),
+            self._name(name),
+            "".join(", " + x["name"] for x in parameters),
+        )
+
+    def bound_procedure_call(self, cls, name, parameters):
+        return self.bound_stream(cls, name, parameters).replace(
             "connection.addStream(", "connection.getCall(", 1
         )
 
@@ -648,6 +712,13 @@ class CppDispatchGenerator(DispatchGenerator):
 
     def procedure_call(self, kind, cls, name, parameters):
         return self.call(kind, cls, name, parameters, "_call")
+
+    def bound_call(self, cls, name, parameters):
+        return "%s::bind(client).%s(%s)" % (
+            self.class_type(self._service, cls),
+            self._name(name),
+            _arguments(parameters),
+        )
 
 
 class CnanoDispatchGenerator(DispatchGenerator, CnanoGenerator):

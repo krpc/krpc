@@ -215,6 +215,7 @@ conformance_test(
         "functions",
         "function-types",
         "connections",
+        "bound-classes",
         "concurrency",
         "callbacks",
         "conditions",

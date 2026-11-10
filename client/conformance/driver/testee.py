@@ -340,20 +340,26 @@ class Client:
         named: dict[str, pb.Value] | None = None,
         connection: str = "",
         through: values.Object | None = None,
+        bound: bool = False,
     ) -> Any:
         """Call a procedure. Arguments in named are passed by the server's parameter name.
-        A static method is called through the object in through, if one is given."""
+        A static method is called through the object in through, if one is given, or through
+        its class bound to the connection if bound is set."""
         invoke = _invoke(service, procedure, args, named)
+        invoke.bound = bound
         if through is not None:
             invoke.through.CopyFrom(values.obj(through))
         reply = self.testee.run(invoke=invoke, connection=connection)
         return values.native(reply.value)
 
-    def add_stream(self, service: str, procedure: str, *args: pb.Value) -> Stream:
-        """Add a stream."""
-        reply = self.testee.run(
-            add_stream=pb.AddStream(invoke=_invoke(service, procedure, args))
-        )
+    def add_stream(
+        self, service: str, procedure: str, *args: pb.Value, bound: bool = False
+    ) -> Stream:
+        """Add a stream. A static method is streamed through its class bound to the
+        connection if bound is set."""
+        invoke = _invoke(service, procedure, args)
+        invoke.bound = bound
+        reply = self.testee.run(add_stream=pb.AddStream(invoke=invoke))
         return Stream(self, reply.stream)
 
     def scoped_stream(self, service: str, procedure: str, *args: pb.Value) -> None:
@@ -379,11 +385,14 @@ class Client:
         return Event(self, result.handle)
 
     def call_function(
-        self, service: str, procedure: str, *args: pb.Value
+        self, service: str, procedure: str, *args: pb.Value, bound: bool = False
     ) -> values.Object:
         """A server side function that makes a call, built over the call the client builds
-        for its stream."""
-        reply = self.testee.run(call=pb.Call(invoke=_invoke(service, procedure, args)))
+        for its stream. A static method's call is built through its class bound to the
+        connection if bound is set."""
+        invoke = _invoke(service, procedure, args)
+        invoke.bound = bound
+        reply = self.testee.run(call=pb.Call(invoke=invoke))
         result = values.native(reply.value)
         assert isinstance(result, values.Object), result
         return result

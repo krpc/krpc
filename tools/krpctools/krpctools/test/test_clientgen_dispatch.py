@@ -99,10 +99,10 @@ class TestClientGenDispatch(unittest.TestCase):
             " TestService.newInstance(connection).echoListOfNullableInts(a0));",
             content,
         )
-        # The stub of a static method takes the connection first
+        # A static method streams with its arguments only
         self.assertIn(
             "connection.addStream(krpc.client.services.TestService.TestClass.class,"
-            ' "staticMethod", connection, a0, a1)',
+            ' "staticMethod", a0, a1)',
             content,
         )
 

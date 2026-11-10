@@ -12,10 +12,10 @@ class Program {
         var spaceCenter = connection.SpaceCenter ();
         var someVessel = spaceCenter.Vessels [0];
         // [docs]
+        var e = Expression.Bind (connection);
         var target = Connection.GetCall (() => spaceCenter.TargetVessel);
-        var expr = Expression.Equal (connection,
-            Expression.Call (connection, target),
-            Expression.ConstantObject (connection, RemoteObject.GetObjectId (someVessel)));
+        var expr = e.Equal (
+            e.Call (target), e.ConstantObject (RemoteObject.GetObjectId (someVessel)));
         var evnt = connection.AddEvent (expr);
         // [/docs]
     }

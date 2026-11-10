@@ -18,6 +18,7 @@ PROFILES = frozenset(
         "functions",
         "function-types",
         "connections",
+        "bound-classes",
         "concurrency",
         "ordering",
         "races",

@@ -577,6 +577,20 @@ def test_call_member_kinds(connected, case):
     assert connected.run_function(function, typ) == expected
 
 
+@profile("functions", "bound-classes")
+def test_call_bound_static_method(connected):
+    """The client builds the call for a static method called through its class bound to
+    the connection. A function that makes the call returns the method's value."""
+    function = connected.call_function(
+        "TestService",
+        "TestClass_static_StaticMethod",
+        values.string("beta"),
+        values.string("gamma"),
+        bound=True,
+    )
+    assert connected.run_function(function, "string") == "staticbetagamma"
+
+
 @profile("functions")
 def test_call_with_arguments(connected, functions):
     """The client passes the call it builds for a stream to

@@ -2394,6 +2394,55 @@ namespace KRPC.Client.Services.TestService
         }
 
         /// <summary>
+        /// Binds the static methods of <see cref="TestClass" /> to a connection.
+        /// </summary>
+        /// <param name="connection">The connection the methods are called on.</param>
+        /// <returns>The bound methods.</returns>
+        public static Bound Bind (global::KRPC.Client.IConnection connection)
+        {
+            if (connection == null)
+                throw new ArgumentNullException (nameof (connection));
+            return new Bound (connection);
+        }
+
+        /// <summary>
+        /// The static methods of <see cref="TestClass" />, bound to a connection.
+        /// </summary>
+        public sealed class Bound
+        {
+            readonly global::KRPC.Client.IConnection connection;
+
+            internal Bound (global::KRPC.Client.IConnection connection)
+            {
+                this.connection = connection;
+            }
+
+            /// <summary>
+            /// Returns static followed by <paramref name="a" /> and <paramref name="b" />.
+            /// </summary>
+            /// <param name="a">The first string.</param>
+            /// <param name="b">The second string.</param>
+            /// <returns>The strings joined.</returns>
+            [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "TestClass_static_StaticMethod", typeof(TypeSpecs))]
+            public string StaticMethod (string a = "", string b = "")
+            {
+                return global::KRPC.Client.Services.TestService.TestClass.StaticMethod (connection, a, b);
+            }
+
+            [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "TestClass_static_StaticNullableObject", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.TestService.TestClass StaticNullableObject (global::KRPC.Client.Services.TestService.TestClass value)
+            {
+                return global::KRPC.Client.Services.TestService.TestClass.StaticNullableObject (connection, value);
+            }
+
+            [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "TestClass_static_StaticOptionalArguments", typeof(TypeSpecs))]
+            public string StaticOptionalArguments (string x, string y = "foo", string z = "bar", global::KRPC.Client.Services.TestService.TestClass obj = null)
+            {
+                return global::KRPC.Client.Services.TestService.TestClass.StaticOptionalArguments (connection, x, y, z, obj);
+            }
+        }
+
+        /// <summary>
         /// Property documentation string.
         /// </summary>
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "TestClass_get_IntProperty", typeof(TypeSpecs))]

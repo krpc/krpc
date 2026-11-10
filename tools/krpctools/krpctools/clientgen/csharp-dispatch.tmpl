@@ -11,7 +11,7 @@ namespace KRPC.Client.Conformance
 {
     static partial class Dispatch
     {
-        static Value Invoke{{ service_name }} (Connection connection, string procedure, global::System.Collections.Generic.IList<Value> args)
+        static Value Invoke{{ service_name }} (Connection connection, string procedure, global::System.Collections.Generic.IList<Value> args, bool bound)
         {
             switch (procedure) {
             {% for member in members %}
@@ -21,6 +21,16 @@ namespace KRPC.Client.Conformance
                     {% for p in variant.parameters %}
                     var {{ p.name }} = {{ p.arg }} (args [{{ p.index }}]);
                     {% endfor %}
+                    {% if variant.bound_call %}
+                    if (bound) {
+                        {% if member.result %}
+                        return {{ member.result.result }} ({{ variant.bound_call }});
+                        {% else %}
+                        {{ variant.bound_call }};
+                        return Result.None ();
+                        {% endif %}
+                    }
+                    {% endif %}
                     {% if member.result %}
                     return {{ member.result.result }} ({{ variant.call }});
                     {% else %}
@@ -36,7 +46,7 @@ namespace KRPC.Client.Conformance
             }
         }
 
-        static IStreamHandle AddStream{{ service_name }} (Connection connection, string procedure, global::System.Collections.Generic.IList<Value> args)
+        static IStreamHandle AddStream{{ service_name }} (Connection connection, string procedure, global::System.Collections.Generic.IList<Value> args, bool bound)
         {
             switch (procedure) {
             {% for member in members if member.stream %}
@@ -46,6 +56,15 @@ namespace KRPC.Client.Conformance
                     {% for p in variant.parameters %}
                     var {{ p.name }} = {{ p.arg }} (args [{{ p.index }}]);
                     {% endfor %}
+                    {% if variant.bound_stream %}
+                    if (bound) {
+                        {% if member.result %}
+                        return Result.Stream<{{ member.result.type }}> ({{ variant.bound_stream }}, {{ member.result.result }});
+                        {% else %}
+                        return Result.Stream ({{ variant.bound_stream }});
+                        {% endif %}
+                    }
+                    {% endif %}
                     {% if member.result %}
                     return Result.Stream<{{ member.result.type }}> ({{ variant.stream }}, {{ member.result.result }});
                     {% else %}
@@ -60,7 +79,7 @@ namespace KRPC.Client.Conformance
             }
         }
 
-        static global::KRPC.Schema.KRPC.ProcedureCall Call{{ service_name }} (Connection connection, string procedure, global::System.Collections.Generic.IList<Value> args)
+        static global::KRPC.Schema.KRPC.ProcedureCall Call{{ service_name }} (Connection connection, string procedure, global::System.Collections.Generic.IList<Value> args, bool bound)
         {
             switch (procedure) {
             {% for member in members if member.stream %}
@@ -70,6 +89,10 @@ namespace KRPC.Client.Conformance
                     {% for p in variant.parameters %}
                     var {{ p.name }} = {{ p.arg }} (args [{{ p.index }}]);
                     {% endfor %}
+                    {% if variant.bound_procedure_call %}
+                    if (bound)
+                        return {{ variant.bound_procedure_call }};
+                    {% endif %}
                     return {{ variant.procedure_call }};
                 }
                 {% endfor %}

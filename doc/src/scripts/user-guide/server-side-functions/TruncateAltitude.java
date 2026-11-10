@@ -19,11 +19,10 @@ public class TruncateAltitude {
       Flight flight = vessel.flight(null);
       ProcedureCall meanAltitude = connection.getCall(flight, "getMeanAltitude");
       // [docs]
+      Expression.Bound e = Expression.bind(connection);
+      Type.Bound t = Type.bind(connection);
       // Truncate the altitude to a whole number of meters
-      Expression expr = Expression.cast(
-          connection,
-          Expression.call(connection, meanAltitude),
-          Type.int_(connection));
+      Expression expr = e.cast(e.call(meanAltitude), t.int_());
       // [/docs]
     }
   }

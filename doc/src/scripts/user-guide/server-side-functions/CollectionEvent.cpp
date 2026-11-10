@@ -13,20 +13,20 @@ int main() {
 
   typedef krpc::services::KRPC::Expression Expr;
   typedef krpc::services::KRPC::Type KType;
+  auto e = Expr::bind(conn);
+  auto t = KType::bind(conn);
 
   // A function taking an engine, returning true if it is out of fuel
-  auto engine = Expr::parameter(
-      conn, "engine", KType::class_type(conn, "SpaceCenter", "Engine"));
+  auto engine = e.parameter("engine", t.class_type("SpaceCenter", "Engine"));
   auto has_fuel = vessel.parts().engines()[0].has_fuel_call();
-  auto out_of_fuel = Expr::lambda(
-      conn, std::vector<Expr>({engine}),
-      Expr::not_(conn,
-                 Expr::call_with_arguments(
-                     conn, has_fuel, std::map<int32_t, Expr>({{0, engine}}))));
+  auto out_of_fuel =
+      e.lambda(std::vector<Expr>({engine}),
+               e.not_(e.call_with_arguments(
+                   has_fuel, std::map<int32_t, Expr>({{0, engine}}))));
 
   // Whether any engine satisfies it
   auto engines = vessel.parts().engines_call();
-  auto expr = Expr::any(conn, Expr::call(conn, engines), out_of_fuel);
+  auto expr = e.any(e.call(engines), out_of_fuel);
 
   auto event = krpc::add_event(expr);
   event.acquire();

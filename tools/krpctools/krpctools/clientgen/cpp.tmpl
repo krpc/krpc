@@ -231,6 +231,34 @@ class {{ service_name }} : public Service {
 
     ::krpc::schema::ProcedureCall {{ property_name }}_call({{ sig_parameters(property.parameters) }});
     {% endfor %}
+    {% if cls.static_methods %}
+
+    /**
+     * The static methods of {{ service_name }}::{{ class_name }}, bound to a client.
+     */
+    class Bound {
+     public:
+      explicit Bound(const Client& client);
+      {% for method_name,method in cls.static_methods.items() %}
+
+{% if method.bound_documentation %}{{ method.bound_documentation | indent(width=6) }}
+{% endif %}
+{% if method.deprecated %}      [[deprecated{% if method.deprecated_reason %}("{{ method.deprecated_reason }}"){% endif %}]]
+{% endif %}
+      {{ method.return_type }} {{ method_name }}({{ sig_parameters(method.parameters) }}) const;
+      {% endfor %}
+
+     private:
+      mutable Client _client;
+    };
+
+    /**
+     * Binds the static methods of {{ service_name }}::{{ class_name }} to a client.
+     * @param client The client the methods are called on.
+     * @return The bound methods.
+     */
+    static Bound bind(const Client& client);
+    {% endif %}
   };
   {% endfor %}
   {% for struct_name,struct in structs.items() %}
@@ -526,6 +554,37 @@ inline ::krpc::schema::ProcedureCall {{ service_name }}::{{ class_name }}::{{ me
 {{ procedure_call(service_name, method.remote_name, method.return_type, method.parameters | length > 0, True) | indent(width=2) }}
 }
 {% endfor %}
+{% if cls.static_methods %}
+
+inline {{ service_name }}::{{ class_name }}::Bound::Bound(const Client& client):
+  _client(client) {}
+{% for method_name,method in cls.static_methods.items() %}
+
+{% if method.deprecated %}
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#elif defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable : 4996)
+#endif
+{% endif %}
+inline {{ method.return_type }} {{ service_name }}::{{ class_name }}::Bound::{{ method_name }}({{ impl_parameters(method.parameters) }}) const {
+  {{ 'return ' if method.return_type != 'void' else '' }}{{ service_name }}::{{ class_name }}::{{ method_name }}({{ (['_client'] + method.parameters | map(attribute='name') | list) | join(', ') }});
+}
+{% if method.deprecated %}
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#elif defined(_MSC_VER)
+#pragma warning(pop)
+#endif
+{% endif %}
+{% endfor %}
+
+inline {{ service_name }}::{{ class_name }}::Bound {{ service_name }}::{{ class_name }}::bind(const Client& client) {
+  return Bound(client);
+}
+{% endif %}
 {% endfor %}
 }  // namespace services
 

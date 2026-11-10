@@ -1052,6 +1052,36 @@ class TestService : public Service {
     ::krpc::schema::ProcedureCall set_string_property_private_get_call(std::string value);
 
     ::krpc::schema::ProcedureCall string_property_private_set_call();
+
+    /**
+     * The static methods of TestService::TestClass, bound to a client.
+     */
+    class Bound {
+     public:
+      explicit Bound(const Client& client);
+
+      /**
+       * Returns static followed by a and b.
+       * @param a The first string.
+       * @param b The second string.
+       * @return The strings joined.
+       */
+      std::string static_method(std::string a, std::string b) const;
+
+      std::optional<TestService::TestClass> static_nullable_object(std::optional<TestService::TestClass> value) const;
+
+      std::string static_optional_arguments(std::string x, std::string y, std::string z, std::optional<TestService::TestClass> obj) const;
+
+     private:
+      mutable Client _client;
+    };
+
+    /**
+     * Binds the static methods of TestService::TestClass to a client.
+     * @param client The client the methods are called on.
+     * @return The bound methods.
+     */
+    static Bound bind(const Client& client);
   };
 
   /**
@@ -4802,6 +4832,25 @@ inline ::krpc::schema::ProcedureCall TestService::TestClass::static_optional_arg
   _args.push_back(encoder::encode_arg(z));
   _args.push_back(encoder::encode_arg(obj));
   return _client.build_call("TestService", "TestClass_static_StaticOptionalArguments", _args);
+}
+
+inline TestService::TestClass::Bound::Bound(const Client& client):
+  _client(client) {}
+
+inline std::string TestService::TestClass::Bound::static_method(std::string a = "", std::string b = "") const {
+  return TestService::TestClass::static_method(_client, a, b);
+}
+
+inline std::optional<TestService::TestClass> TestService::TestClass::Bound::static_nullable_object(std::optional<TestService::TestClass> value) const {
+  return TestService::TestClass::static_nullable_object(_client, value);
+}
+
+inline std::string TestService::TestClass::Bound::static_optional_arguments(std::string x, std::string y = "foo", std::string z = "bar", std::optional<TestService::TestClass> obj = std::optional<TestService::TestClass>()) const {
+  return TestService::TestClass::static_optional_arguments(_client, x, y, z, obj);
+}
+
+inline TestService::TestClass::Bound TestService::TestClass::bind(const Client& client) {
+  return Bound(client);
 }
 }  // namespace services
 

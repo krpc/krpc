@@ -36,3 +36,5 @@ test_connection.py::test_close_interrupted  # As test_calls.py::test_abandoned_i
 test_concurrency.py::test_interrupted_wait[stream]  # As test_calls.py::test_abandoned_id
 test_concurrency.py::test_interrupted_wait[event]  # As test_calls.py::test_abandoned_id
 test_objects.py::test_static_method_through_an_object_connection  # A static method is called through its class
+test_streams.py::test_bound_static_method  # A bound class is a shorthand for calls, with no stream forms
+test_functions.py::test_call_bound_static_method  # A bound class is a shorthand for calls, with no call forms

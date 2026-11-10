@@ -14,21 +14,18 @@ int main() {
   typedef krpc::services::KRPC::Type KType;
 
   // [docs]
+  auto e = Expr::bind(conn);
+  auto t = KType::bind(conn);
   // altitude = mean_altitude / 1000, or 0 if the vessel is not loaded
-  auto altitude = Expr::variable(conn, "altitude", KType::double_(conn));
-  auto altitude_km = Expr::block_with_variables(
-      conn, std::vector<Expr>({altitude}),
-      std::vector<Expr>(
-          {Expr::try_catch(
-               conn,
-               Expr::assign(
-                   conn, altitude,
-                   Expr::divide(conn,
-                                Expr::call(conn, flight.mean_altitude_call()),
-                                Expr::constant_double(conn, 1000))),
-               "KRPC", "ObjectNotLoadedException", std::nullopt,
-               Expr::assign(conn, altitude, Expr::constant_double(conn, 0))),
-           altitude}));
+  auto altitude = e.variable("altitude", t.double_());
+  auto km =
+      e.divide(e.call(flight.mean_altitude_call()), e.constant_double(1000));
+  auto altitude_km = e.block_with_variables(
+      std::vector<Expr>({altitude}),
+      std::vector<Expr>({e.try_catch(e.assign(altitude, km), "KRPC",
+                                     "ObjectNotLoadedException", std::nullopt,
+                                     e.assign(altitude, e.constant_double(0))),
+                         altitude}));
 
   auto stream = krpc::add_stream<double>(altitude_km);
   // [/docs]

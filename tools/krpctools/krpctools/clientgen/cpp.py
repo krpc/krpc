@@ -90,7 +90,6 @@ class CppGenerator(Generator[CppLanguage]):
 
             for info in class_info["static_methods"].values():
                 info["return_set_client"] = self.parse_set_client(info["procedure"])
-                self.add_client_param_doxygen(info)
 
             class_properties = collections.OrderedDict()
             for name, info in class_info["properties"].items():
@@ -148,6 +147,12 @@ class CppGenerator(Generator[CppLanguage]):
             )
         for info in deprecatable:
             self.add_deprecated_doxygen(info)
+
+        # A static method takes the client first, and its bound form takes no client
+        for class_info in context["classes"].values():
+            for info in class_info["static_methods"].values():
+                info["bound_documentation"] = info.get("documentation", "")
+                self.add_client_param_doxygen(info)
 
         return context
 

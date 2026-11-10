@@ -193,6 +193,19 @@ comes back into range.
 .. seealso:: :doc:`/user-guide/object-lifetime` describes how each kind of object behaves in more
              detail.
 
+Calling Methods
+---------------
+
+You call a method on an object of its class. A *static* method needs no object, and you call it on
+the class itself, passing the connection as its first argument. In a stream, the connection the
+stream is added on runs the call:
+
+.. literalinclude:: /scripts/csharp/StaticMethods.cs
+
+``Bind`` binds a class's static methods to a connection, so each call leaves it out:
+
+.. literalinclude:: /scripts/csharp/BoundStaticMethods.cs
+
 .. _csharp-client-streams:
 
 Streaming Data

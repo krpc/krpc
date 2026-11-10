@@ -4339,6 +4339,1679 @@ namespace KRPC.Client.Services.KRPC
         }
 
         /// <summary>
+        /// Binds the static methods of <see cref="Expression" /> to a connection.
+        /// </summary>
+        /// <param name="connection">The connection the methods are called on.</param>
+        /// <returns>The bound methods.</returns>
+        public static Bound Bind (global::KRPC.Client.IConnection connection)
+        {
+            if (connection == null)
+                throw new ArgumentNullException (nameof (connection));
+            return new Bound (connection);
+        }
+
+        /// <summary>
+        /// The static methods of <see cref="Expression" />, bound to a connection.
+        /// </summary>
+        public sealed class Bound
+        {
+            readonly global::KRPC.Client.IConnection connection;
+
+            internal Bound (global::KRPC.Client.IConnection connection)
+            {
+                this.connection = connection;
+            }
+
+            /// <summary>
+            /// Numerical addition.
+            /// </summary>
+            /// <param name="arg0">The first operand.</param>
+            /// <param name="arg1">The second operand.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Add", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Add (global::KRPC.Client.Services.KRPC.Expression arg0, global::KRPC.Client.Services.KRPC.Expression arg1)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Add (connection, arg0, arg1);
+            }
+
+            /// <summary>
+            /// The result of applying an accumulator function over a collection.
+            /// </summary>
+            /// <remarks>
+            /// Throws an exception if the collection is empty.
+            /// </remarks>
+            /// <returns>The accumulated value.</returns>
+            /// <param name="arg">The collection.</param>
+            /// <param name="func">The accumulator function.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Aggregate", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Aggregate (global::KRPC.Client.Services.KRPC.Expression arg, global::KRPC.Client.Services.KRPC.Expression func)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Aggregate (connection, arg, func);
+            }
+
+            /// <summary>
+            /// The result of applying an accumulator function over a collection, starting from a seed.
+            /// </summary>
+            /// <remarks>
+            /// The seed widens to the type of the accumulated value, the function's result.
+            /// </remarks>
+            /// <returns>The accumulated value.</returns>
+            /// <param name="arg">The collection.</param>
+            /// <param name="seed">The seed value.</param>
+            /// <param name="func">The accumulator function.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_AggregateWithSeed", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression AggregateWithSeed (global::KRPC.Client.Services.KRPC.Expression arg, global::KRPC.Client.Services.KRPC.Expression seed, global::KRPC.Client.Services.KRPC.Expression func)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.AggregateWithSeed (connection, arg, seed, func);
+            }
+
+            /// <summary>
+            /// Whether a predicate function returns true for every value of a collection.
+            /// </summary>
+            /// <returns>Whether all items satisfy the predicate.</returns>
+            /// <param name="arg">The collection.</param>
+            /// <param name="predicate">The predicate function.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_All", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression All (global::KRPC.Client.Services.KRPC.Expression arg, global::KRPC.Client.Services.KRPC.Expression predicate)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.All (connection, arg, predicate);
+            }
+
+            /// <summary>
+            /// Logical or bitwise and, which evaluates both operands.
+            /// </summary>
+            /// <remarks>
+            /// Also takes two values of a flags enumeration, and gives the values they share.
+            /// </remarks>
+            /// <param name="arg0">The first operand.</param>
+            /// <param name="arg1">The second operand.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_And", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression And (global::KRPC.Client.Services.KRPC.Expression arg0, global::KRPC.Client.Services.KRPC.Expression arg1)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.And (connection, arg0, arg1);
+            }
+
+            /// <summary>
+            /// Whether a predicate function returns true for any value of a collection.
+            /// </summary>
+            /// <returns>Whether any item satisfies the predicate.</returns>
+            /// <param name="arg">The collection.</param>
+            /// <param name="predicate">The predicate function.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Any", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Any (global::KRPC.Client.Services.KRPC.Expression arg, global::KRPC.Client.Services.KRPC.Expression predicate)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Any (connection, arg, predicate);
+            }
+
+            /// <summary>
+            /// A statement adding a value to a list or a set.
+            /// </summary>
+            /// <remarks>
+            /// The value goes on the end of a list. A set holding the value is left unchanged.
+            /// </remarks>
+            /// <param name="collection">The list or set to add to.</param>
+            /// <param name="value">The value to add.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Append", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Append (global::KRPC.Client.Services.KRPC.Expression collection, global::KRPC.Client.Services.KRPC.Expression value)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Append (connection, collection, value);
+            }
+
+            /// <summary>
+            /// An assignment to a local variable, state variable or function parameter.
+            /// </summary>
+            /// <remarks>
+            /// The value's type must be assignable to the variable's type. A numeric value of a
+            /// different type is widened, and narrowing it requires a cast.
+            /// </remarks>
+            /// <param name="variable">The variable to assign to.</param>
+            /// <param name="value">The value to assign.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Assign", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Assign (global::KRPC.Client.Services.KRPC.Expression variable, global::KRPC.Client.Services.KRPC.Expression value)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Assign (connection, variable, value);
+            }
+
+            /// <summary>
+            /// The average of the values of a collection.
+            /// </summary>
+            /// <remarks>
+            /// Throws an exception if the collection is empty and its values are not nullable.
+            /// </remarks>
+            /// <returns>The average of the elements in the collection.</returns>
+            /// <param name="arg">The list or set.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Average", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Average (global::KRPC.Client.Services.KRPC.Expression arg)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Average (connection, arg);
+            }
+
+            /// <summary>
+            /// A block of statements, whose value is that of its last statement.
+            /// </summary>
+            /// <param name="statements">The statements.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Block", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Block (global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.Expression> statements)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Block (connection, statements);
+            }
+
+            /// <summary>
+            /// A block of statements with local variables.
+            /// </summary>
+            /// <remarks>
+            /// The value of the block is that of its last statement. The variables are in scope
+            /// for the statements of the block, including within nested functions.
+            /// </remarks>
+            /// <param name="variables">The local variables of the block.</param>
+            /// <param name="statements">The statements.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_BlockWithVariables", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression BlockWithVariables (global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.Expression> variables, global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.Expression> statements)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.BlockWithVariables (connection, variables, statements);
+            }
+
+            /// <summary>
+            /// A break statement, which ends the enclosing loop.
+            /// </summary>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Break", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Break ()
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Break (connection);
+            }
+
+            /// <summary>
+            /// A dictionary built from a collection, with a key and a value computed from each
+            /// element.
+            /// </summary>
+            /// <remarks>
+            /// A repeated key takes the last of its values.
+            /// </remarks>
+            /// <returns>The dictionary.</returns>
+            /// <param name="arg">The list or set.</param>
+            /// <param name="keyFunc">The function computing an element's key.</param>
+            /// <param name="valueFunc">The function computing an element's value.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_BuildDictionary", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression BuildDictionary (global::KRPC.Client.Services.KRPC.Expression arg, global::KRPC.Client.Services.KRPC.Expression keyFunc, global::KRPC.Client.Services.KRPC.Expression valueFunc)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.BuildDictionary (connection, arg, keyFunc, valueFunc);
+            }
+
+            /// <summary>
+            /// An RPC call.
+            /// </summary>
+            /// <remarks>
+            /// The instance the call is made on, and the values of its arguments, are fixed
+            /// when the expression is created. A call to a procedure with no return value is
+            /// evaluated for its effects, as a statement in a <see cref="global::KRPC.Client.Services.KRPC.Expression.Block" />. A collection the
+            /// procedure returns is copied, as a client would receive it.
+            /// </remarks>
+            /// <param name="call">The procedure call.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Call", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Call (global::KRPC.Schema.KRPC.ProcedureCall call)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Call (connection, call);
+            }
+
+            /// <summary>
+            /// An RPC call, where some or all of the arguments are computed by expressions.
+            /// </summary>
+            /// <remarks>
+            /// Position 0 is the instance of a class method or property. A position with no
+            /// expression takes the argument encoded in the call, or the parameter's default. A
+            /// collection the procedure returns is copied, as a client would receive it.
+            /// </remarks>
+            /// <param name="call">The RPC to call.</param>
+            /// <param name="args">Expressions computing the call's arguments, by position.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_CallWithArguments", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression CallWithArguments (global::KRPC.Schema.KRPC.ProcedureCall call, global::System.Collections.Generic.IDictionary<int,global::KRPC.Client.Services.KRPC.Expression> args)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.CallWithArguments (connection, call, args);
+            }
+
+            /// <summary>
+            /// A value cast to the given type.
+            /// </summary>
+            /// <remarks>
+            /// A tuple or collection is cast element by element.
+            /// </remarks>
+            /// <param name="arg">The value to cast.</param>
+            /// <param name="type">Type to cast the argument to.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Cast", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Cast (global::KRPC.Client.Services.KRPC.Expression arg, global::KRPC.Client.Services.KRPC.Type type)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Cast (connection, arg, type);
+            }
+
+            /// <summary>
+            /// A statement removing every value from a list or a set, or every entry from a dictionary.
+            /// </summary>
+            /// <param name="collection">The list, set or dictionary.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Clear", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Clear (global::KRPC.Client.Services.KRPC.Expression collection)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Clear (connection, collection);
+            }
+
+            /// <summary>
+            /// The values of one collection followed by those of another.
+            /// </summary>
+            /// <remarks>
+            /// The result is lazily evaluated. <see cref="global::KRPC.Client.Services.KRPC.Expression.ToList" /> makes it concrete.
+            /// </remarks>
+            /// <returns>The first collection followed by the second.</returns>
+            /// <param name="arg1">The first collection.</param>
+            /// <param name="arg2">The second collection.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Concat", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Concat (global::KRPC.Client.Services.KRPC.Expression arg1, global::KRPC.Client.Services.KRPC.Expression arg2)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Concat (connection, arg1, arg2);
+            }
+
+            /// <summary>
+            /// The second argument if the condition is true, and the third argument otherwise.
+            /// </summary>
+            /// <remarks>
+            /// Throws an exception if the two values have no common type.
+            /// </remarks>
+            /// <param name="condition">The boolean condition.</param>
+            /// <param name="ifTrue">The value when the condition is true.</param>
+            /// <param name="ifFalse">The value when the condition is false.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Conditional", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Conditional (global::KRPC.Client.Services.KRPC.Expression condition, global::KRPC.Client.Services.KRPC.Expression ifTrue, global::KRPC.Client.Services.KRPC.Expression ifFalse)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Conditional (connection, condition, ifTrue, ifFalse);
+            }
+
+            /// <summary>
+            /// Logical and, which evaluates the second operand only when the first is true.
+            /// </summary>
+            /// <param name="arg0">The first operand.</param>
+            /// <param name="arg1">The second operand.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_ConditionalAnd", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression ConditionalAnd (global::KRPC.Client.Services.KRPC.Expression arg0, global::KRPC.Client.Services.KRPC.Expression arg1)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.ConditionalAnd (connection, arg0, arg1);
+            }
+
+            /// <summary>
+            /// Logical or, which evaluates the second operand only when the first is false.
+            /// </summary>
+            /// <param name="arg0">The first operand.</param>
+            /// <param name="arg1">The second operand.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_ConditionalOr", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression ConditionalOr (global::KRPC.Client.Services.KRPC.Expression arg0, global::KRPC.Client.Services.KRPC.Expression arg1)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.ConditionalOr (connection, arg0, arg1);
+            }
+
+            /// <summary>
+            /// A constant value of boolean type.
+            /// </summary>
+            /// <param name="value">The value.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_ConstantBool", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression ConstantBool (bool value)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.ConstantBool (connection, value);
+            }
+
+            /// <summary>
+            /// A constant value of bytes type.
+            /// </summary>
+            /// <param name="value">The value.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_ConstantBytes", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression ConstantBytes (byte[] value)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.ConstantBytes (connection, value);
+            }
+
+            /// <summary>
+            /// A constant value of double precision floating point type.
+            /// </summary>
+            /// <param name="value">The value.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_ConstantDouble", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression ConstantDouble (double value)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.ConstantDouble (connection, value);
+            }
+
+            /// <summary>
+            /// A constant value of an enumeration a service defines.
+            /// </summary>
+            /// <param name="service">The name of the service the enumeration is defined in.</param>
+            /// <param name="name">The name of the enumeration.</param>
+            /// <param name="value">The value of the member of the enumeration.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_ConstantEnum", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression ConstantEnum (string service, string name, int value)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.ConstantEnum (connection, service, name, value);
+            }
+
+            /// <summary>
+            /// A constant value of single precision floating point type.
+            /// </summary>
+            /// <param name="value">The value.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_ConstantFloat", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression ConstantFloat (float value)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.ConstantFloat (connection, value);
+            }
+
+            /// <summary>
+            /// A constant value of integer type.
+            /// </summary>
+            /// <param name="value">The value.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_ConstantInt", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression ConstantInt (int value)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.ConstantInt (connection, value);
+            }
+
+            /// <summary>
+            /// A constant value of long integer type.
+            /// </summary>
+            /// <param name="value">The value.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_ConstantLong", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression ConstantLong (long value)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.ConstantLong (connection, value);
+            }
+
+            /// <summary>
+            /// A null constant of the given type.
+            /// </summary>
+            /// <remarks>
+            /// The type is made nullable, as by <see cref="global::KRPC.Client.Services.KRPC.Type.NullableType" />.
+            /// </remarks>
+            /// <param name="type">The type of the value.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_ConstantNull", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression ConstantNull (global::KRPC.Client.Services.KRPC.Type type)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.ConstantNull (connection, type);
+            }
+
+            /// <summary>
+            /// A constant object, an instance of a class a service defines.
+            /// </summary>
+            /// <remarks>
+            /// The object is given by its object identifier.
+            /// </remarks>
+            /// <param name="value">The object identifier of the object.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_ConstantObject", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression ConstantObject (ulong value)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.ConstantObject (connection, value);
+            }
+
+            /// <summary>
+            /// A constant value of string type.
+            /// </summary>
+            /// <param name="value">The value.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_ConstantString", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression ConstantString (string value)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.ConstantString (connection, value);
+            }
+
+            /// <summary>
+            /// A constant value of unsigned integer type.
+            /// </summary>
+            /// <param name="value">The value.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_ConstantUInt", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression ConstantUInt (uint value)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.ConstantUInt (connection, value);
+            }
+
+            /// <summary>
+            /// A constant value of unsigned long integer type.
+            /// </summary>
+            /// <param name="value">The value.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_ConstantULong", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression ConstantULong (ulong value)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.ConstantULong (connection, value);
+            }
+
+            /// <summary>
+            /// Whether a collection contains a value.
+            /// </summary>
+            /// <returns>Whether the collection contains the value.</returns>
+            /// <param name="arg">The collection.</param>
+            /// <param name="value">The value to look for.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Contains", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Contains (global::KRPC.Client.Services.KRPC.Expression arg, global::KRPC.Client.Services.KRPC.Expression value)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Contains (connection, arg, value);
+            }
+
+            /// <summary>
+            /// Whether a dictionary contains a key.
+            /// </summary>
+            /// <returns>Whether the dictionary contains the key.</returns>
+            /// <param name="dictionary">The dictionary.</param>
+            /// <param name="key">The key to look for.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_ContainsKey", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression ContainsKey (global::KRPC.Client.Services.KRPC.Expression dictionary, global::KRPC.Client.Services.KRPC.Expression key)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.ContainsKey (connection, dictionary, key);
+            }
+
+            /// <summary>
+            /// A continue statement, which skips to the next iteration of the enclosing loop.
+            /// </summary>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Continue", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Continue ()
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Continue (connection);
+            }
+
+            /// <summary>
+            /// The string representation of a value.
+            /// </summary>
+            /// <remarks>
+            /// A value other than a number, boolean, string or enumeration converts as .NET
+            /// formats it, which for a collection is the name of its type. Throws an exception if
+            /// the value is null.
+            /// </remarks>
+            /// <returns>The string representation of the value.</returns>
+            /// <param name="arg">The value to convert.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_ConvertToString", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression ConvertToString (global::KRPC.Client.Services.KRPC.Expression arg)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.ConvertToString (connection, arg);
+            }
+
+            /// <summary>
+            /// The number of values in a collection.
+            /// </summary>
+            /// <returns>The number of elements in the collection.</returns>
+            /// <param name="arg">The list, set or dictionary.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Count", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Count (global::KRPC.Client.Services.KRPC.Expression arg)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Count (connection, arg);
+            }
+
+            /// <summary>
+            /// A dictionary of the given keys and corresponding values, with numbers widened to
+            /// their common type. Throws an exception if there are no keys, the counts differ, the
+            /// keys are not of a valid key type, or a key is null.
+            /// </summary>
+            /// <remarks>
+            /// A repeated key takes the last of its values.
+            /// </remarks>
+            /// <returns>The dictionary.</returns>
+            /// <param name="keys">The keys.</param>
+            /// <param name="values">The values.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_CreateDictionary", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression CreateDictionary (global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.Expression> keys, global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.Expression> values)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.CreateDictionary (connection, keys, values);
+            }
+
+            /// <summary>
+            /// An empty dictionary of the given key and value types. Throws an exception if the
+            /// key type is nullable or not a valid key type.
+            /// </summary>
+            /// <returns>The empty dictionary.</returns>
+            /// <param name="keyType">The type of the dictionary's keys.</param>
+            /// <param name="valueType">The type of the dictionary's values.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_CreateEmptyDictionary", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression CreateEmptyDictionary (global::KRPC.Client.Services.KRPC.Type keyType, global::KRPC.Client.Services.KRPC.Type valueType)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.CreateEmptyDictionary (connection, keyType, valueType);
+            }
+
+            /// <summary>
+            /// An empty list of the given value type.
+            /// </summary>
+            /// <returns>The empty list.</returns>
+            /// <param name="valueType">The type of the values the list holds.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_CreateEmptyList", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression CreateEmptyList (global::KRPC.Client.Services.KRPC.Type valueType)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.CreateEmptyList (connection, valueType);
+            }
+
+            /// <summary>
+            /// An empty set of the given value type. Throws an exception if the value type is
+            /// nullable.
+            /// </summary>
+            /// <returns>The empty set.</returns>
+            /// <param name="valueType">The type of the values the set holds.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_CreateEmptySet", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression CreateEmptySet (global::KRPC.Client.Services.KRPC.Type valueType)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.CreateEmptySet (connection, valueType);
+            }
+
+            /// <summary>
+            /// A list of the given values, with numbers widened to their common type. Throws an
+            /// exception if there are no values.
+            /// </summary>
+            /// <returns>The list.</returns>
+            /// <param name="values">The values.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_CreateList", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression CreateList (global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.Expression> values)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.CreateList (connection, values);
+            }
+
+            /// <summary>
+            /// A set of the given values, with numbers widened to their common type. Throws an
+            /// exception if there are no values, or a value is null.
+            /// </summary>
+            /// <remarks>
+            /// The values are evaluated in an unspecified order.
+            /// </remarks>
+            /// <returns>The set.</returns>
+            /// <param name="values">The values.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_CreateSet", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression CreateSet (genericCollectionsAlias::ISet<global::KRPC.Client.Services.KRPC.Expression> values)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.CreateSet (connection, values);
+            }
+
+            /// <summary>
+            /// A structure with the given field values. Throws an exception if the field values do
+            /// not match its fields.
+            /// </summary>
+            /// <returns>The structure.</returns>
+            /// <param name="type">The type of the structure.</param>
+            /// <param name="fieldValues">The values of the structure's fields,
+            /// in the order the structure declares them.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_CreateStruct", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression CreateStruct (global::KRPC.Client.Services.KRPC.Type type, global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.Expression> fieldValues)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.CreateStruct (connection, type, fieldValues);
+            }
+
+            /// <summary>
+            /// A tuple of the given elements. Throws an exception if there are no elements or more
+            /// than seven.
+            /// </summary>
+            /// <returns>The tuple.</returns>
+            /// <param name="elements">The elements.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_CreateTuple", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression CreateTuple (global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.Expression> elements)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.CreateTuple (connection, elements);
+            }
+
+            /// <summary>
+            /// The keys of a dictionary, as a list.
+            /// </summary>
+            /// <remarks>
+            /// The collection operations take the keys of a dictionary from here, and its values
+            /// from <see cref="global::KRPC.Client.Services.KRPC.Expression.DictionaryValues" />.
+            /// </remarks>
+            /// <returns>The keys of the dictionary.</returns>
+            /// <param name="dictionary">The dictionary.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_DictionaryKeys", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression DictionaryKeys (global::KRPC.Client.Services.KRPC.Expression dictionary)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.DictionaryKeys (connection, dictionary);
+            }
+
+            /// <summary>
+            /// The values of a dictionary, as a list.
+            /// </summary>
+            /// <returns>The values of the dictionary.</returns>
+            /// <param name="dictionary">The dictionary.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_DictionaryValues", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression DictionaryValues (global::KRPC.Client.Services.KRPC.Expression dictionary)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.DictionaryValues (connection, dictionary);
+            }
+
+            /// <summary>
+            /// The values of a collection with duplicates removed, keeping the first
+            /// occurrence of each.
+            /// </summary>
+            /// <remarks>
+            /// The result is lazily evaluated. <see cref="global::KRPC.Client.Services.KRPC.Expression.ToList" /> makes it concrete.
+            /// </remarks>
+            /// <returns>The distinct values of the collection.</returns>
+            /// <param name="arg">The collection.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Distinct", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Distinct (global::KRPC.Client.Services.KRPC.Expression arg)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Distinct (connection, arg);
+            }
+
+            /// <summary>
+            /// Numerical division.
+            /// </summary>
+            /// <param name="arg0">The first operand.</param>
+            /// <param name="arg1">The second operand.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Divide", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Divide (global::KRPC.Client.Services.KRPC.Expression arg0, global::KRPC.Client.Services.KRPC.Expression arg1)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Divide (connection, arg0, arg1);
+            }
+
+            /// <summary>
+            /// The value at the given position in a collection.
+            /// </summary>
+            /// <remarks>
+            /// Throws an exception if the index is out of range.
+            /// </remarks>
+            /// <returns>The value at the given position.</returns>
+            /// <param name="arg">The collection.</param>
+            /// <param name="index">The position of the value, counting from zero.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_ElementAt", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression ElementAt (global::KRPC.Client.Services.KRPC.Expression arg, global::KRPC.Client.Services.KRPC.Expression index)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.ElementAt (connection, arg, index);
+            }
+
+            /// <summary>
+            /// Equality comparison.
+            /// </summary>
+            /// <remarks>
+            /// Collections, tuples, bytes and structures compare by their contents. Throws an
+            /// exception if the operands are of unrelated types.
+            /// </remarks>
+            /// <param name="arg0">The first operand.</param>
+            /// <param name="arg1">The second operand.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Equal", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Equal (global::KRPC.Client.Services.KRPC.Expression arg0, global::KRPC.Client.Services.KRPC.Expression arg1)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Equal (connection, arg0, arg1);
+            }
+
+            /// <summary>
+            /// The values of the first collection that are not in the second, with
+            /// duplicates removed.
+            /// </summary>
+            /// <remarks>
+            /// The result is lazily evaluated. <see cref="global::KRPC.Client.Services.KRPC.Expression.ToList" /> makes it concrete.
+            /// </remarks>
+            /// <returns>The difference between the two collections.</returns>
+            /// <param name="arg1">The first collection.</param>
+            /// <param name="arg2">The second collection.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Except", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Except (global::KRPC.Client.Services.KRPC.Expression arg1, global::KRPC.Client.Services.KRPC.Expression arg2)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Except (connection, arg1, arg2);
+            }
+
+            /// <summary>
+            /// Logical or bitwise exclusive or.
+            /// </summary>
+            /// <remarks>
+            /// Also takes two values of a flags enumeration, and gives the values in only one of them.
+            /// </remarks>
+            /// <param name="arg0">The first operand.</param>
+            /// <param name="arg1">The second operand.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_ExclusiveOr", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression ExclusiveOr (global::KRPC.Client.Services.KRPC.Expression arg0, global::KRPC.Client.Services.KRPC.Expression arg1)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.ExclusiveOr (connection, arg0, arg1);
+            }
+
+            /// <summary>
+            /// The first value of a collection.
+            /// </summary>
+            /// <remarks>
+            /// Throws an exception if the collection is empty.
+            /// </remarks>
+            /// <returns>The first value.</returns>
+            /// <param name="arg">The collection.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_First", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression First (global::KRPC.Client.Services.KRPC.Expression arg)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.First (connection, arg);
+            }
+
+            /// <summary>
+            /// A loop that evaluates the body once for each value of a collection.
+            /// </summary>
+            /// <remarks>
+            /// The loop variable is a local variable declared by an enclosing
+            /// <see cref="global::KRPC.Client.Services.KRPC.Expression.BlockWithVariables" />, or a parameter of an enclosing <see cref="global::KRPC.Client.Services.KRPC.Expression.Lambda" />.
+            /// A <see cref="global::KRPC.Client.Services.KRPC.Expression.Break" /> or <see cref="global::KRPC.Client.Services.KRPC.Expression.Continue" /> in the body applies to this loop.
+            /// </remarks>
+            /// <param name="variable">The loop variable.</param>
+            /// <param name="collection">The collection to iterate over.</param>
+            /// <param name="body">The statement evaluated on each iteration.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_ForEach", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression ForEach (global::KRPC.Client.Services.KRPC.Expression variable, global::KRPC.Client.Services.KRPC.Expression collection, global::KRPC.Client.Services.KRPC.Expression body)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.ForEach (connection, variable, collection, body);
+            }
+
+            /// <summary>
+            /// An element of a tuple, list or dictionary.
+            /// </summary>
+            /// <remarks>
+            /// A tuple takes a constant integer index, a list a zero indexed integer and a
+            /// dictionary a key. Throws an exception if the index is out of range or the key is
+            /// missing, and for a tuple when the expression is created.
+            /// </remarks>
+            /// <returns>The element.</returns>
+            /// <param name="arg">The tuple, list or dictionary.</param>
+            /// <param name="index">The index or key of the element.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Get", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Get (global::KRPC.Client.Services.KRPC.Expression arg, global::KRPC.Client.Services.KRPC.Expression index)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Get (connection, arg, index);
+            }
+
+            /// <summary>
+            /// The value of a field of a structure. Throws an exception if the value is not a
+            /// structure, or has no field of the given name.
+            /// </summary>
+            /// <returns>The value of the field.</returns>
+            /// <param name="arg">The structure.</param>
+            /// <param name="name">The name of the field to access.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_GetField", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression GetField (global::KRPC.Client.Services.KRPC.Expression arg, string name)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.GetField (connection, arg, name);
+            }
+
+            /// <summary>
+            /// Greater than numerical comparison.
+            /// </summary>
+            /// <param name="arg0">The first operand.</param>
+            /// <param name="arg1">The second operand.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_GreaterThan", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression GreaterThan (global::KRPC.Client.Services.KRPC.Expression arg0, global::KRPC.Client.Services.KRPC.Expression arg1)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.GreaterThan (connection, arg0, arg1);
+            }
+
+            /// <summary>
+            /// Greater than or equal numerical comparison.
+            /// </summary>
+            /// <param name="arg0">The first operand.</param>
+            /// <param name="arg1">The second operand.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_GreaterThanOrEqual", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression GreaterThanOrEqual (global::KRPC.Client.Services.KRPC.Expression arg0, global::KRPC.Client.Services.KRPC.Expression arg1)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.GreaterThanOrEqual (connection, arg0, arg1);
+            }
+
+            /// <summary>
+            /// The values of a collection grouped by the key a function produces for each of them.
+            /// </summary>
+            /// <returns>A dictionary of each key to the values that produced it.</returns>
+            /// <param name="arg">The collection.</param>
+            /// <param name="key">A function producing the key to group values by.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_GroupBy", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression GroupBy (global::KRPC.Client.Services.KRPC.Expression arg, global::KRPC.Client.Services.KRPC.Expression key)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.GroupBy (connection, arg, key);
+            }
+
+            /// <summary>
+            /// An if statement, with no value.
+            /// </summary>
+            /// <remarks>
+            /// Use <see cref="global::KRPC.Client.Services.KRPC.Expression.Conditional" /> for an if-then-else that produces a value.
+            /// </remarks>
+            /// <param name="condition">The boolean condition.</param>
+            /// <param name="body">The statement evaluated when the condition is true.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_IfThen", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression IfThen (global::KRPC.Client.Services.KRPC.Expression condition, global::KRPC.Client.Services.KRPC.Expression body)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.IfThen (connection, condition, body);
+            }
+
+            /// <summary>
+            /// An if-else statement, with no value.
+            /// </summary>
+            /// <remarks>
+            /// Use <see cref="global::KRPC.Client.Services.KRPC.Expression.Conditional" /> for an if-then-else that produces a value.
+            /// </remarks>
+            /// <param name="condition">The boolean condition.</param>
+            /// <param name="body">The statement evaluated when the condition is true.</param>
+            /// <param name="elseBody">The statement evaluated when the condition is false.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_IfThenElse", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression IfThenElse (global::KRPC.Client.Services.KRPC.Expression condition, global::KRPC.Client.Services.KRPC.Expression body, global::KRPC.Client.Services.KRPC.Expression elseBody)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.IfThenElse (connection, condition, body, elseBody);
+            }
+
+            /// <summary>
+            /// The values in both of two collections, with duplicates removed.
+            /// </summary>
+            /// <remarks>
+            /// The result is lazily evaluated. <see cref="global::KRPC.Client.Services.KRPC.Expression.ToList" /> makes it concrete.
+            /// </remarks>
+            /// <returns>The intersection of the two collections.</returns>
+            /// <param name="arg1">The first collection.</param>
+            /// <param name="arg2">The second collection.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Intersect", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Intersect (global::KRPC.Client.Services.KRPC.Expression arg1, global::KRPC.Client.Services.KRPC.Expression arg2)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Intersect (connection, arg1, arg2);
+            }
+
+            /// <summary>
+            /// A function call.
+            /// </summary>
+            /// <returns>A function call.</returns>
+            /// <param name="function">The function to call.</param>
+            /// <param name="args">The arguments to call the function with.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Invoke", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Invoke (global::KRPC.Client.Services.KRPC.Expression function, global::System.Collections.Generic.IDictionary<string,global::KRPC.Client.Services.KRPC.Expression> args)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Invoke (connection, function, args);
+            }
+
+            /// <summary>
+            /// Whether a value is null. Throws an exception if the type of the value cannot be null.
+            /// </summary>
+            /// <param name="value">The value.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_IsNull", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression IsNull (global::KRPC.Client.Services.KRPC.Expression value)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.IsNull (connection, value);
+            }
+
+            /// <summary>
+            /// A function with the given parameters and body.
+            /// </summary>
+            /// <remarks>
+            /// The body is an expression or a block of statements, and a body with no value is
+            /// evaluated for its effects. A <see cref="global::KRPC.Client.Services.KRPC.Expression.Return" /> or <see cref="global::KRPC.Client.Services.KRPC.Expression.ReturnNothing" />
+            /// statement ends the evaluation.
+            /// </remarks>
+            /// <returns>A function.</returns>
+            /// <param name="parameters">The parameters of the function.</param>
+            /// <param name="body">The body of the function.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Lambda", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Lambda (global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.Expression> parameters, global::KRPC.Client.Services.KRPC.Expression body)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Lambda (connection, parameters, body);
+            }
+
+            /// <summary>
+            /// The last value of a collection.
+            /// </summary>
+            /// <remarks>
+            /// Throws an exception if the collection is empty.
+            /// </remarks>
+            /// <returns>The last value.</returns>
+            /// <param name="arg">The collection.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Last", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Last (global::KRPC.Client.Services.KRPC.Expression arg)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Last (connection, arg);
+            }
+
+            /// <summary>
+            /// Bitwise left shift.
+            /// </summary>
+            /// <remarks>
+            /// Only the low 5 bits of the count are used for a 32-bit value, and the low 6 bits
+            /// for a 64-bit value.
+            /// </remarks>
+            /// <param name="arg0">The first operand.</param>
+            /// <param name="arg1">The second operand.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_LeftShift", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression LeftShift (global::KRPC.Client.Services.KRPC.Expression arg0, global::KRPC.Client.Services.KRPC.Expression arg1)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.LeftShift (connection, arg0, arg1);
+            }
+
+            /// <summary>
+            /// Less than numerical comparison.
+            /// </summary>
+            /// <param name="arg0">The first operand.</param>
+            /// <param name="arg1">The second operand.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_LessThan", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression LessThan (global::KRPC.Client.Services.KRPC.Expression arg0, global::KRPC.Client.Services.KRPC.Expression arg1)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.LessThan (connection, arg0, arg1);
+            }
+
+            /// <summary>
+            /// Less than or equal numerical comparison.
+            /// </summary>
+            /// <param name="arg0">The first operand.</param>
+            /// <param name="arg1">The second operand.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_LessThanOrEqual", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression LessThanOrEqual (global::KRPC.Client.Services.KRPC.Expression arg0, global::KRPC.Client.Services.KRPC.Expression arg1)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.LessThanOrEqual (connection, arg0, arg1);
+            }
+
+            /// <summary>
+            /// The largest value of a collection.
+            /// </summary>
+            /// <remarks>
+            /// Throws an exception if the collection is empty and its values are not nullable.
+            /// </remarks>
+            /// <returns>The largest value in the collection.</returns>
+            /// <param name="arg">The list or set.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Max", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Max (global::KRPC.Client.Services.KRPC.Expression arg)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Max (connection, arg);
+            }
+
+            /// <summary>
+            /// The value of a collection with the largest key.
+            /// </summary>
+            /// <remarks>
+            /// Throws an exception if the collection is empty.
+            /// </remarks>
+            /// <returns>The value with the largest key.</returns>
+            /// <param name="arg">The collection.</param>
+            /// <param name="key">A function producing the key to compare values by.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_MaxBy", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression MaxBy (global::KRPC.Client.Services.KRPC.Expression arg, global::KRPC.Client.Services.KRPC.Expression key)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.MaxBy (connection, arg, key);
+            }
+
+            /// <summary>
+            /// The smallest value of a collection.
+            /// </summary>
+            /// <remarks>
+            /// Throws an exception if the collection is empty and its values are not nullable.
+            /// </remarks>
+            /// <returns>The smallest value in the collection.</returns>
+            /// <param name="arg">The list or set.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Min", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Min (global::KRPC.Client.Services.KRPC.Expression arg)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Min (connection, arg);
+            }
+
+            /// <summary>
+            /// The value of a collection with the smallest key.
+            /// </summary>
+            /// <remarks>
+            /// Throws an exception if the collection is empty.
+            /// </remarks>
+            /// <returns>The value with the smallest key.</returns>
+            /// <param name="arg">The collection.</param>
+            /// <param name="key">A function producing the key to compare values by.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_MinBy", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression MinBy (global::KRPC.Client.Services.KRPC.Expression arg, global::KRPC.Client.Services.KRPC.Expression key)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.MinBy (connection, arg, key);
+            }
+
+            /// <summary>
+            /// Numerical modulo operator.
+            /// </summary>
+            /// <param name="arg0">The first operand.</param>
+            /// <param name="arg1">The second operand.</param>
+            /// <returns>The remainder of arg0 divided by arg1</returns>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Modulo", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Modulo (global::KRPC.Client.Services.KRPC.Expression arg0, global::KRPC.Client.Services.KRPC.Expression arg1)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Modulo (connection, arg0, arg1);
+            }
+
+            /// <summary>
+            /// Numerical multiplication.
+            /// </summary>
+            /// <param name="arg0">The first operand.</param>
+            /// <param name="arg1">The second operand.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Multiply", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Multiply (global::KRPC.Client.Services.KRPC.Expression arg0, global::KRPC.Client.Services.KRPC.Expression arg1)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Multiply (connection, arg0, arg1);
+            }
+
+            /// <summary>
+            /// Numerical negation, which negates a uint as a long.
+            /// </summary>
+            /// <param name="arg">The operand.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Negate", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Negate (global::KRPC.Client.Services.KRPC.Expression arg)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Negate (connection, arg);
+            }
+
+            /// <summary>
+            /// Logical or bitwise negation.
+            /// </summary>
+            /// <remarks>
+            /// Also takes a value of a flags enumeration, and gives the declared values it does not hold.
+            /// </remarks>
+            /// <param name="arg">The operand.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Not", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Not (global::KRPC.Client.Services.KRPC.Expression arg)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Not (connection, arg);
+            }
+
+            /// <summary>
+            /// Inequality comparison.
+            /// </summary>
+            /// <remarks>
+            /// Collections, tuples, bytes and structures compare by their contents. Throws an
+            /// exception if the operands are of unrelated types.
+            /// </remarks>
+            /// <param name="arg0">The first operand.</param>
+            /// <param name="arg1">The second operand.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_NotEqual", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression NotEqual (global::KRPC.Client.Services.KRPC.Expression arg0, global::KRPC.Client.Services.KRPC.Expression arg1)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.NotEqual (connection, arg0, arg1);
+            }
+
+            /// <summary>
+            /// Logical or bitwise or, which evaluates both operands.
+            /// </summary>
+            /// <remarks>
+            /// Also takes two values of a flags enumeration, and gives their combination.
+            /// </remarks>
+            /// <param name="arg0">The first operand.</param>
+            /// <param name="arg1">The second operand.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Or", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Or (global::KRPC.Client.Services.KRPC.Expression arg0, global::KRPC.Client.Services.KRPC.Expression arg1)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Or (connection, arg0, arg1);
+            }
+
+            /// <summary>
+            /// The values of a collection ordered by the key a function produces for each of them.
+            /// </summary>
+            /// <remarks>
+            /// The result is lazily evaluated. <see cref="global::KRPC.Client.Services.KRPC.Expression.ToList" /> makes it concrete.
+            /// </remarks>
+            /// <returns>The ordered collection.</returns>
+            /// <param name="arg">The collection to order.</param>
+            /// <param name="key">A function producing the key to order values by.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_OrderBy", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression OrderBy (global::KRPC.Client.Services.KRPC.Expression arg, global::KRPC.Client.Services.KRPC.Expression key)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.OrderBy (connection, arg, key);
+            }
+
+            /// <summary>
+            /// A named parameter of a function.
+            /// </summary>
+            /// <remarks>
+            /// A value is bound to it by name with <see cref="global::KRPC.Client.Services.KRPC.Expression.Invoke" />, or by its position in
+            /// the parameters of a <see cref="global::KRPC.Client.Services.KRPC.Expression.Lambda" />.
+            /// </remarks>
+            /// <returns>A named parameter.</returns>
+            /// <param name="name">The name of the parameter.</param>
+            /// <param name="type">The type of the parameter.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Parameter", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Parameter (string name, global::KRPC.Client.Services.KRPC.Type type)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Parameter (connection, name, type);
+            }
+
+            /// <summary>
+            /// Numerical power operator.
+            /// </summary>
+            /// <param name="arg0">The first operand.</param>
+            /// <param name="arg1">The second operand.</param>
+            /// <returns>arg0 raised to the power of arg1, at the common type of the operands</returns>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Power", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Power (global::KRPC.Client.Services.KRPC.Expression arg0, global::KRPC.Client.Services.KRPC.Expression arg1)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Power (connection, arg0, arg1);
+            }
+
+            /// <summary>
+            /// A removal of a value from a list or a set, or of an entry from a dictionary.
+            /// </summary>
+            /// <remarks>
+            /// The first occurrence is removed from a list.
+            /// </remarks>
+            /// <returns>Whether the collection held the value.</returns>
+            /// <param name="collection">The list, set or dictionary.</param>
+            /// <param name="value">The value to remove, or the key of the entry to
+            /// remove.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Remove", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Remove (global::KRPC.Client.Services.KRPC.Expression collection, global::KRPC.Client.Services.KRPC.Expression value)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Remove (connection, collection, value);
+            }
+
+            /// <summary>
+            /// A statement removing the element at an index of a list.
+            /// </summary>
+            /// <remarks>
+            /// Throws an exception if the index is out of range.
+            /// </remarks>
+            /// <param name="list">The list.</param>
+            /// <param name="index">The index of the element, counting from zero.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_RemoveAt", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression RemoveAt (global::KRPC.Client.Services.KRPC.Expression list, global::KRPC.Client.Services.KRPC.Expression index)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.RemoveAt (connection, list, index);
+            }
+
+            /// <summary>
+            /// A return statement, which ends the enclosing function with a value.
+            /// </summary>
+            /// <param name="value">The value to return.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Return", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Return (global::KRPC.Client.Services.KRPC.Expression value)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Return (connection, value);
+            }
+
+            /// <summary>
+            /// A return statement, which ends the enclosing function with no value.
+            /// </summary>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_ReturnNothing", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression ReturnNothing ()
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.ReturnNothing (connection);
+            }
+
+            /// <summary>
+            /// The values of a collection in the opposite order.
+            /// </summary>
+            /// <remarks>
+            /// The result is lazily evaluated. <see cref="global::KRPC.Client.Services.KRPC.Expression.ToList" /> makes it concrete.
+            /// </remarks>
+            /// <returns>The reversed collection.</returns>
+            /// <param name="arg">The collection.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Reverse", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Reverse (global::KRPC.Client.Services.KRPC.Expression arg)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Reverse (connection, arg);
+            }
+
+            /// <summary>
+            /// Bitwise right shift.
+            /// </summary>
+            /// <remarks>
+            /// Only the low 5 bits of the count are used for a 32-bit value, and the low 6 bits
+            /// for a 64-bit value.
+            /// </remarks>
+            /// <param name="arg0">The first operand.</param>
+            /// <param name="arg1">The second operand.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_RightShift", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression RightShift (global::KRPC.Client.Services.KRPC.Expression arg0, global::KRPC.Client.Services.KRPC.Expression arg1)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.RightShift (connection, arg0, arg1);
+            }
+
+            /// <summary>
+            /// The result of a function for each value of a collection.
+            /// </summary>
+            /// <remarks>
+            /// The result is lazily evaluated. <see cref="global::KRPC.Client.Services.KRPC.Expression.ToList" /> makes it concrete.
+            /// </remarks>
+            /// <returns>The collection of function results.</returns>
+            /// <param name="arg">The list or set.</param>
+            /// <param name="func">The function, taking an element of the collection.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Select", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Select (global::KRPC.Client.Services.KRPC.Expression arg, global::KRPC.Client.Services.KRPC.Expression func)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Select (connection, arg, func);
+            }
+
+            /// <summary>
+            /// The values of the collections a function returns for each value of a collection,
+            /// flattened into one.
+            /// </summary>
+            /// <remarks>
+            /// The result is lazily evaluated. <see cref="global::KRPC.Client.Services.KRPC.Expression.ToList" /> makes it concrete.
+            /// </remarks>
+            /// <returns>The flattened collection of function results.</returns>
+            /// <param name="arg">The list or set.</param>
+            /// <param name="func">The function, taking an element of the collection
+            /// and returning a collection.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_SelectMany", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression SelectMany (global::KRPC.Client.Services.KRPC.Expression arg, global::KRPC.Client.Services.KRPC.Expression func)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.SelectMany (connection, arg, func);
+            }
+
+            /// <summary>
+            /// A statement setting an element of a list, or an entry of a dictionary.
+            /// </summary>
+            /// <remarks>
+            /// A key the dictionary does not hold is added. Throws an exception if the index
+            /// is out of range for the list.
+            /// </remarks>
+            /// <param name="collection">The list or dictionary.</param>
+            /// <param name="index">The index of the element, counting from zero, or the key of the entry.</param>
+            /// <param name="value">The value to set.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Set", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Set (global::KRPC.Client.Services.KRPC.Expression collection, global::KRPC.Client.Services.KRPC.Expression index, global::KRPC.Client.Services.KRPC.Expression value)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Set (connection, collection, index, value);
+            }
+
+            /// <summary>
+            /// A collection without its first count values.
+            /// </summary>
+            /// <remarks>
+            /// The result is lazily evaluated. <see cref="global::KRPC.Client.Services.KRPC.Expression.ToList" /> makes it concrete.
+            /// </remarks>
+            /// <returns>The collection without its first count values.</returns>
+            /// <param name="arg">The collection.</param>
+            /// <param name="count">The number of values to skip.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Skip", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Skip (global::KRPC.Client.Services.KRPC.Expression arg, global::KRPC.Client.Services.KRPC.Expression count)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Skip (connection, arg, count);
+            }
+
+            /// <summary>
+            /// A variable that keeps its value between evaluations of a function.
+            /// </summary>
+            /// <remarks>
+            /// The initial value is evaluated once, when the variable is created, and gives the
+            /// variable its type. The value belongs to the variable, so every function that
+            /// contains it shares it.
+            /// </remarks>
+            /// <returns>A state variable.</returns>
+            /// <param name="name">The name of the variable.</param>
+            /// <param name="initialValue">The initial value of the variable.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_StateVariable", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression StateVariable (string name, global::KRPC.Client.Services.KRPC.Expression initialValue)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.StateVariable (connection, name, initialValue);
+            }
+
+            /// <summary>
+            /// The concatenation of strings.
+            /// </summary>
+            /// <remarks>
+            /// Use <see cref="global::KRPC.Client.Services.KRPC.Expression.ConvertToString" /> to convert other values to strings.
+            /// </remarks>
+            /// <returns>The concatenated string.</returns>
+            /// <param name="args">The strings to concatenate, in order.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_StringConcat", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression StringConcat (global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.Expression> args)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.StringConcat (connection, args);
+            }
+
+            /// <summary>
+            /// Whether one string occurs within another.
+            /// </summary>
+            /// <returns>Whether the value occurs in the string.</returns>
+            /// <param name="arg">The string to search.</param>
+            /// <param name="value">The string to search for.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_StringContains", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression StringContains (global::KRPC.Client.Services.KRPC.Expression arg, global::KRPC.Client.Services.KRPC.Expression value)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.StringContains (connection, arg, value);
+            }
+
+            /// <summary>
+            /// Whether a string ends with another.
+            /// </summary>
+            /// <returns>Whether the string ends with the value.</returns>
+            /// <param name="arg">The string to test.</param>
+            /// <param name="value">The string to test for.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_StringEndsWith", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression StringEndsWith (global::KRPC.Client.Services.KRPC.Expression arg, global::KRPC.Client.Services.KRPC.Expression value)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.StringEndsWith (connection, arg, value);
+            }
+
+            /// <summary>
+            /// The character at the given position in a string, as a string of length one.
+            /// </summary>
+            /// <remarks>
+            /// Throws an exception if the index is out of range.
+            /// </remarks>
+            /// <returns>The character at the given position.</returns>
+            /// <param name="arg">The string.</param>
+            /// <param name="index">The position of the character, counting from zero.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_StringGet", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression StringGet (global::KRPC.Client.Services.KRPC.Expression arg, global::KRPC.Client.Services.KRPC.Expression index)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.StringGet (connection, arg, index);
+            }
+
+            /// <summary>
+            /// The position of the first occurrence of one string within another.
+            /// </summary>
+            /// <returns>The position of the value, counting from zero, or -1 if it does not occur.</returns>
+            /// <param name="arg">The string to search.</param>
+            /// <param name="value">The string to search for.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_StringIndexOf", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression StringIndexOf (global::KRPC.Client.Services.KRPC.Expression arg, global::KRPC.Client.Services.KRPC.Expression value)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.StringIndexOf (connection, arg, value);
+            }
+
+            /// <summary>
+            /// Strings joined together, separated by another string.
+            /// </summary>
+            /// <returns>The joined string.</returns>
+            /// <param name="separator">The string to put between the values.</param>
+            /// <param name="values">The strings to join.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_StringJoin", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression StringJoin (global::KRPC.Client.Services.KRPC.Expression separator, global::KRPC.Client.Services.KRPC.Expression values)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.StringJoin (connection, separator, values);
+            }
+
+            /// <summary>
+            /// The number of characters in a string.
+            /// </summary>
+            /// <returns>The length of the string.</returns>
+            /// <param name="arg">The string.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_StringLength", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression StringLength (global::KRPC.Client.Services.KRPC.Expression arg)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.StringLength (connection, arg);
+            }
+
+            /// <summary>
+            /// A string with every occurrence of one string replaced by another.
+            /// </summary>
+            /// <remarks>
+            /// Throws an exception if the string to replace is empty.
+            /// </remarks>
+            /// <returns>The string with the replacements made.</returns>
+            /// <param name="arg">The string to search.</param>
+            /// <param name="oldValue">The string to replace.</param>
+            /// <param name="newValue">The string to replace it with.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_StringReplace", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression StringReplace (global::KRPC.Client.Services.KRPC.Expression arg, global::KRPC.Client.Services.KRPC.Expression oldValue, global::KRPC.Client.Services.KRPC.Expression newValue)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.StringReplace (connection, arg, oldValue, newValue);
+            }
+
+            /// <summary>
+            /// The parts of a string separated by another string.
+            /// </summary>
+            /// <returns>The parts of the string.</returns>
+            /// <param name="arg">The string to split.</param>
+            /// <param name="separator">The string that separates the parts.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_StringSplit", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression StringSplit (global::KRPC.Client.Services.KRPC.Expression arg, global::KRPC.Client.Services.KRPC.Expression separator)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.StringSplit (connection, arg, separator);
+            }
+
+            /// <summary>
+            /// Whether a string starts with another.
+            /// </summary>
+            /// <returns>Whether the string starts with the value.</returns>
+            /// <param name="arg">The string to test.</param>
+            /// <param name="value">The string to test for.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_StringStartsWith", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression StringStartsWith (global::KRPC.Client.Services.KRPC.Expression arg, global::KRPC.Client.Services.KRPC.Expression value)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.StringStartsWith (connection, arg, value);
+            }
+
+            /// <summary>
+            /// Part of a string.
+            /// </summary>
+            /// <remarks>
+            /// Throws an exception if the start or the length is out of range.
+            /// </remarks>
+            /// <returns>The substring.</returns>
+            /// <param name="arg">The string.</param>
+            /// <param name="start">The position to start at, counting from zero.</param>
+            /// <param name="length">The number of characters to take.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_StringSubstring", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression StringSubstring (global::KRPC.Client.Services.KRPC.Expression arg, global::KRPC.Client.Services.KRPC.Expression start, global::KRPC.Client.Services.KRPC.Expression length)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.StringSubstring (connection, arg, start, length);
+            }
+
+            /// <summary>
+            /// A string in lower case, independently of the game's language.
+            /// </summary>
+            /// <returns>The string in lower case.</returns>
+            /// <param name="arg">The string.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_StringToLower", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression StringToLower (global::KRPC.Client.Services.KRPC.Expression arg)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.StringToLower (connection, arg);
+            }
+
+            /// <summary>
+            /// A string in upper case, independently of the game's language.
+            /// </summary>
+            /// <returns>The string in upper case.</returns>
+            /// <param name="arg">The string.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_StringToUpper", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression StringToUpper (global::KRPC.Client.Services.KRPC.Expression arg)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.StringToUpper (connection, arg);
+            }
+
+            /// <summary>
+            /// A string with white space removed from both ends.
+            /// </summary>
+            /// <returns>The trimmed string.</returns>
+            /// <param name="arg">The string.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_StringTrim", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression StringTrim (global::KRPC.Client.Services.KRPC.Expression arg)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.StringTrim (connection, arg);
+            }
+
+            /// <summary>
+            /// A string with white space removed from its end.
+            /// </summary>
+            /// <returns>The trimmed string.</returns>
+            /// <param name="arg">The string.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_StringTrimEnd", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression StringTrimEnd (global::KRPC.Client.Services.KRPC.Expression arg)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.StringTrimEnd (connection, arg);
+            }
+
+            /// <summary>
+            /// A string with white space removed from its start.
+            /// </summary>
+            /// <returns>The trimmed string.</returns>
+            /// <param name="arg">The string.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_StringTrimStart", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression StringTrimStart (global::KRPC.Client.Services.KRPC.Expression arg)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.StringTrimStart (connection, arg);
+            }
+
+            /// <summary>
+            /// Numerical subtraction.
+            /// </summary>
+            /// <param name="arg0">The first operand.</param>
+            /// <param name="arg1">The second operand.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Subtract", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Subtract (global::KRPC.Client.Services.KRPC.Expression arg0, global::KRPC.Client.Services.KRPC.Expression arg1)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Subtract (connection, arg0, arg1);
+            }
+
+            /// <summary>
+            /// The sum of the values of a collection.
+            /// </summary>
+            /// <returns>The sum of the elements in the collection.</returns>
+            /// <param name="arg">The list or set.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Sum", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Sum (global::KRPC.Client.Services.KRPC.Expression arg)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Sum (connection, arg);
+            }
+
+            /// <summary>
+            /// The first count values of a collection.
+            /// </summary>
+            /// <remarks>
+            /// The result is lazily evaluated. <see cref="global::KRPC.Client.Services.KRPC.Expression.ToList" /> makes it concrete.
+            /// </remarks>
+            /// <returns>The first count values of the collection.</returns>
+            /// <param name="arg">The collection.</param>
+            /// <param name="count">The number of values to take.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Take", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Take (global::KRPC.Client.Services.KRPC.Expression arg, global::KRPC.Client.Services.KRPC.Expression count)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Take (connection, arg, count);
+            }
+
+            /// <summary>
+            /// A throw statement, which raises the named exception.
+            /// </summary>
+            /// <remarks>
+            /// The client receives the exception as an error from the function, or from the stream
+            /// or event evaluating it. For example, the service <c>KRPC</c> and the name
+            /// <c>Error</c> raise <see cref="global::KRPC.Client.Services.KRPC.Error" />. Throws an exception if the service does not
+            /// declare it.
+            /// </remarks>
+            /// <param name="service">The name of the service the exception is defined in.</param>
+            /// <param name="name">The name of the exception.</param>
+            /// <param name="message">The message of the exception.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Throw", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Throw (string service, string name, global::KRPC.Client.Services.KRPC.Expression message)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Throw (connection, service, name, message);
+            }
+
+            /// <summary>
+            /// A collection as a list.
+            /// </summary>
+            /// <returns>The collection as a list.</returns>
+            /// <param name="arg">The collection.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_ToList", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression ToList (global::KRPC.Client.Services.KRPC.Expression arg)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.ToList (connection, arg);
+            }
+
+            /// <summary>
+            /// A collection as a set.
+            /// </summary>
+            /// <remarks>
+            /// Throws an exception if a value is null.
+            /// </remarks>
+            /// <returns>The collection as a set.</returns>
+            /// <param name="arg">The collection.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_ToSet", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression ToSet (global::KRPC.Client.Services.KRPC.Expression arg)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.ToSet (connection, arg);
+            }
+
+            /// <summary>
+            /// A try-catch statement that handles the named exception.
+            /// </summary>
+            /// <remarks>
+            /// Only an exception a service declares can be named, and <see cref="global::KRPC.Client.Services.KRPC.Expression.TryCatchAll" />
+            /// handles any exception. Throws an exception if the service does not declare it.
+            /// </remarks>
+            /// <param name="body">The statement to evaluate.</param>
+            /// <param name="service">The name of the service the exception is defined in.</param>
+            /// <param name="name">The name of the exception.</param>
+            /// <param name="message">A string variable assigned the exception's message, or null.</param>
+            /// <param name="handler">The statement evaluated when the exception is caught.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_TryCatch", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression TryCatch (global::KRPC.Client.Services.KRPC.Expression body, string service, string name, global::KRPC.Client.Services.KRPC.Expression message, global::KRPC.Client.Services.KRPC.Expression handler)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.TryCatch (connection, body, service, name, message, handler);
+            }
+
+            /// <summary>
+            /// A try-catch statement that handles any exception.
+            /// </summary>
+            /// <param name="body">The statement to evaluate.</param>
+            /// <param name="message">A string variable assigned the exception's message, or null.</param>
+            /// <param name="handler">The statement evaluated when an exception is caught.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_TryCatchAll", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression TryCatchAll (global::KRPC.Client.Services.KRPC.Expression body, global::KRPC.Client.Services.KRPC.Expression message, global::KRPC.Client.Services.KRPC.Expression handler)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.TryCatchAll (connection, body, message, handler);
+            }
+
+            /// <summary>
+            /// A try-finally statement.
+            /// </summary>
+            /// <remarks>
+            /// The finalizer is evaluated after the body, whether or not the body raises an
+            /// exception. A break, continue or return cannot leave the finalizer.
+            /// </remarks>
+            /// <param name="body">The statement to evaluate.</param>
+            /// <param name="finalizer">The statement evaluated after the body.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_TryFinally", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression TryFinally (global::KRPC.Client.Services.KRPC.Expression body, global::KRPC.Client.Services.KRPC.Expression finalizer)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.TryFinally (connection, body, finalizer);
+            }
+
+            /// <summary>
+            /// The values in either of two collections, with duplicates removed.
+            /// </summary>
+            /// <remarks>
+            /// The result is lazily evaluated. <see cref="global::KRPC.Client.Services.KRPC.Expression.ToList" /> makes it concrete.
+            /// </remarks>
+            /// <returns>The union of the two collections.</returns>
+            /// <param name="arg1">The first collection.</param>
+            /// <param name="arg2">The second collection.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Union", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Union (global::KRPC.Client.Services.KRPC.Expression arg1, global::KRPC.Client.Services.KRPC.Expression arg2)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Union (connection, arg1, arg2);
+            }
+
+            /// <summary>
+            /// A local variable, declared by <see cref="global::KRPC.Client.Services.KRPC.Expression.BlockWithVariables" />.
+            /// </summary>
+            /// <returns>A local variable.</returns>
+            /// <param name="name">The name of the variable.</param>
+            /// <param name="type">The type of the variable.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Variable", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Variable (string name, global::KRPC.Client.Services.KRPC.Type type)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Variable (connection, name, type);
+            }
+
+            /// <summary>
+            /// The values of a collection for which a predicate function returns true.
+            /// </summary>
+            /// <remarks>
+            /// The result is lazily evaluated. <see cref="global::KRPC.Client.Services.KRPC.Expression.ToList" /> makes it concrete.
+            /// </remarks>
+            /// <returns>The filtered collection.</returns>
+            /// <param name="arg">The list or set.</param>
+            /// <param name="func">The predicate function, taking an element of the collection.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Where", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Where (global::KRPC.Client.Services.KRPC.Expression arg, global::KRPC.Client.Services.KRPC.Expression func)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Where (connection, arg, func);
+            }
+
+            /// <summary>
+            /// A while loop, which evaluates the body while the condition is true.
+            /// </summary>
+            /// <remarks>
+            /// A <see cref="global::KRPC.Client.Services.KRPC.Expression.Break" /> or <see cref="global::KRPC.Client.Services.KRPC.Expression.Continue" /> in the body applies to this loop.
+            /// </remarks>
+            /// <param name="condition">The boolean condition.</param>
+            /// <param name="body">The statement evaluated on each iteration.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_While", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression While (global::KRPC.Client.Services.KRPC.Expression condition, global::KRPC.Client.Services.KRPC.Expression body)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.While (connection, condition, body);
+            }
+
+            /// <summary>
+            /// The results of a function applied to the values of two collections in pairs.
+            /// </summary>
+            /// <remarks>
+            /// The result is as long as the shorter of the two collections. It is lazily
+            /// evaluated, and <see cref="global::KRPC.Client.Services.KRPC.Expression.ToList" /> makes it concrete.
+            /// </remarks>
+            /// <returns>The combined collection.</returns>
+            /// <param name="arg1">The first collection.</param>
+            /// <param name="arg2">The second collection.</param>
+            /// <param name="func">A function combining a value from each collection.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Zip", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Zip (global::KRPC.Client.Services.KRPC.Expression arg1, global::KRPC.Client.Services.KRPC.Expression arg2, global::KRPC.Client.Services.KRPC.Expression func)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Zip (connection, arg1, arg2, func);
+            }
+        }
+
+        /// <summary>
         /// Whether the expression evaluates to a value.
         /// </summary>
         /// <remarks>
@@ -4666,6 +6339,197 @@ namespace KRPC.Client.Services.KRPC
                 throw new ArgumentNullException (nameof (connection));
             var _result = connection.Invoke ("KRPC", "Type_static_ULong");
             return (global::KRPC.Client.Services.KRPC.Type)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
+        }
+
+        /// <summary>
+        /// Binds the static methods of <see cref="Type" /> to a connection.
+        /// </summary>
+        /// <param name="connection">The connection the methods are called on.</param>
+        /// <returns>The bound methods.</returns>
+        public static Bound Bind (global::KRPC.Client.IConnection connection)
+        {
+            if (connection == null)
+                throw new ArgumentNullException (nameof (connection));
+            return new Bound (connection);
+        }
+
+        /// <summary>
+        /// The static methods of <see cref="Type" />, bound to a connection.
+        /// </summary>
+        public sealed class Bound
+        {
+            readonly global::KRPC.Client.IConnection connection;
+
+            internal Bound (global::KRPC.Client.IConnection connection)
+            {
+                this.connection = connection;
+            }
+
+            /// <summary>
+            /// A boolean type.
+            /// </summary>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Type_static_Bool", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Type Bool ()
+            {
+                return global::KRPC.Client.Services.KRPC.Type.Bool (connection);
+            }
+
+            /// <summary>
+            /// A byte sequence type.
+            /// </summary>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Type_static_Bytes", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Type Bytes ()
+            {
+                return global::KRPC.Client.Services.KRPC.Type.Bytes (connection);
+            }
+
+            /// <summary>
+            /// The type of a class defined by a service.
+            /// </summary>
+            /// <param name="service">The name of the service the class is defined in.</param>
+            /// <param name="name">The name of the class.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Type_static_ClassType", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Type ClassType (string service, string name)
+            {
+                return global::KRPC.Client.Services.KRPC.Type.ClassType (connection, service, name);
+            }
+
+            /// <summary>
+            /// A dictionary type. Throws an exception if the key type is nullable or not a valid
+            /// key type.
+            /// </summary>
+            /// <param name="keyType">The type of the keys of the dictionary.</param>
+            /// <param name="valueType">The type of the values of the dictionary.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Type_static_DictionaryType", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Type DictionaryType (global::KRPC.Client.Services.KRPC.Type keyType, global::KRPC.Client.Services.KRPC.Type valueType)
+            {
+                return global::KRPC.Client.Services.KRPC.Type.DictionaryType (connection, keyType, valueType);
+            }
+
+            /// <summary>
+            /// A double precision floating point number type.
+            /// </summary>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Type_static_Double", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Type Double ()
+            {
+                return global::KRPC.Client.Services.KRPC.Type.Double (connection);
+            }
+
+            /// <summary>
+            /// The type of an enumeration defined by a service.
+            /// </summary>
+            /// <param name="service">The name of the service the enumeration is defined in.</param>
+            /// <param name="name">The name of the enumeration.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Type_static_EnumerationType", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Type EnumerationType (string service, string name)
+            {
+                return global::KRPC.Client.Services.KRPC.Type.EnumerationType (connection, service, name);
+            }
+
+            /// <summary>
+            /// A single precision floating point number type.
+            /// </summary>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Type_static_Float", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Type Float ()
+            {
+                return global::KRPC.Client.Services.KRPC.Type.Float (connection);
+            }
+
+            /// <summary>
+            /// A signed 32-bit integer type.
+            /// </summary>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Type_static_Int", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Type Int ()
+            {
+                return global::KRPC.Client.Services.KRPC.Type.Int (connection);
+            }
+
+            /// <summary>
+            /// A list type.
+            /// </summary>
+            /// <param name="valueType">The type of the elements of the list.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Type_static_ListType", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Type ListType (global::KRPC.Client.Services.KRPC.Type valueType)
+            {
+                return global::KRPC.Client.Services.KRPC.Type.ListType (connection, valueType);
+            }
+
+            /// <summary>
+            /// A signed 64-bit integer type.
+            /// </summary>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Type_static_Long", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Type Long ()
+            {
+                return global::KRPC.Client.Services.KRPC.Type.Long (connection);
+            }
+
+            /// <summary>
+            /// A nullable type, holding a value of the given type or null.
+            /// </summary>
+            /// <param name="valueType">The type of the value.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Type_static_NullableType", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Type NullableType (global::KRPC.Client.Services.KRPC.Type valueType)
+            {
+                return global::KRPC.Client.Services.KRPC.Type.NullableType (connection, valueType);
+            }
+
+            /// <summary>
+            /// A set type. Throws an exception if the element type is nullable.
+            /// </summary>
+            /// <param name="valueType">The type of the elements of the set.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Type_static_SetType", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Type SetType (global::KRPC.Client.Services.KRPC.Type valueType)
+            {
+                return global::KRPC.Client.Services.KRPC.Type.SetType (connection, valueType);
+            }
+
+            /// <summary>
+            /// A string type.
+            /// </summary>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Type_static_String", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Type String ()
+            {
+                return global::KRPC.Client.Services.KRPC.Type.String (connection);
+            }
+
+            /// <summary>
+            /// The type of a structure defined by a service.
+            /// </summary>
+            /// <param name="service">The name of the service the structure is defined in.</param>
+            /// <param name="name">The name of the structure.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Type_static_StructType", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Type StructType (string service, string name)
+            {
+                return global::KRPC.Client.Services.KRPC.Type.StructType (connection, service, name);
+            }
+
+            /// <summary>
+            /// A tuple type. Throws an exception if there are no element types or more than seven.
+            /// </summary>
+            /// <param name="valueTypes">The types of the elements of the tuple.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Type_static_TupleType", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Type TupleType (global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.Type> valueTypes)
+            {
+                return global::KRPC.Client.Services.KRPC.Type.TupleType (connection, valueTypes);
+            }
+
+            /// <summary>
+            /// An unsigned 32-bit integer type.
+            /// </summary>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Type_static_UInt", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Type UInt ()
+            {
+                return global::KRPC.Client.Services.KRPC.Type.UInt (connection);
+            }
+
+            /// <summary>
+            /// An unsigned 64-bit integer type.
+            /// </summary>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Type_static_ULong", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Type ULong ()
+            {
+                return global::KRPC.Client.Services.KRPC.Type.ULong (connection);
+            }
         }
 
         /// <summary>

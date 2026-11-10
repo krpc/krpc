@@ -2209,6 +2209,1108 @@ class KRPC : public Service {
     ::krpc::schema::ProcedureCall parameter_types_call();
 
     ::krpc::schema::ProcedureCall return_type_call();
+
+    /**
+     * The static methods of KRPC::Expression, bound to a client.
+     */
+    class Bound {
+     public:
+      explicit Bound(const Client& client);
+
+      /**
+       * Numerical addition.
+       * @param arg0 The first operand.
+       * @param arg1 The second operand.
+       */
+      KRPC::Expression add(KRPC::Expression arg0, KRPC::Expression arg1) const;
+
+      /**
+       * The result of applying an accumulator function over a collection.
+       *
+       * Throws an exception if the collection is empty.
+       * @return The accumulated value.
+       * @param arg The collection.
+       * @param func The accumulator function.
+       */
+      KRPC::Expression aggregate(KRPC::Expression arg, KRPC::Expression func) const;
+
+      /**
+       * The result of applying an accumulator function over a collection, starting from a seed.
+       *
+       * The seed widens to the type of the accumulated value, the function's result.
+       * @return The accumulated value.
+       * @param arg The collection.
+       * @param seed The seed value.
+       * @param func The accumulator function.
+       */
+      KRPC::Expression aggregate_with_seed(KRPC::Expression arg, KRPC::Expression seed, KRPC::Expression func) const;
+
+      /**
+       * Whether a predicate function returns true for every value of a collection.
+       * @return Whether all items satisfy the predicate.
+       * @param arg The collection.
+       * @param predicate The predicate function.
+       */
+      KRPC::Expression all(KRPC::Expression arg, KRPC::Expression predicate) const;
+
+      /**
+       * Logical or bitwise and, which evaluates both operands.
+       *
+       * Also takes two values of a flags enumeration, and gives the values they share.
+       * @param arg0 The first operand.
+       * @param arg1 The second operand.
+       */
+      KRPC::Expression and_(KRPC::Expression arg0, KRPC::Expression arg1) const;
+
+      /**
+       * Whether a predicate function returns true for any value of a collection.
+       * @return Whether any item satisfies the predicate.
+       * @param arg The collection.
+       * @param predicate The predicate function.
+       */
+      KRPC::Expression any(KRPC::Expression arg, KRPC::Expression predicate) const;
+
+      /**
+       * A statement adding a value to a list or a set.
+       *
+       * The value goes on the end of a list. A set holding the value is left unchanged.
+       * @param collection The list or set to add to.
+       * @param value The value to add.
+       */
+      KRPC::Expression append(KRPC::Expression collection, KRPC::Expression value) const;
+
+      /**
+       * An assignment to a local variable, state variable or function parameter.
+       *
+       * The value's type must be assignable to the variable's type. A numeric value of a
+       * different type is widened, and narrowing it requires a cast.
+       * @param variable The variable to assign to.
+       * @param value The value to assign.
+       */
+      KRPC::Expression assign(KRPC::Expression variable, KRPC::Expression value) const;
+
+      /**
+       * The average of the values of a collection.
+       *
+       * Throws an exception if the collection is empty and its values are not nullable.
+       * @return The average of the elements in the collection.
+       * @param arg The list or set.
+       */
+      KRPC::Expression average(KRPC::Expression arg) const;
+
+      /**
+       * A block of statements, whose value is that of its last statement.
+       * @param statements The statements.
+       */
+      KRPC::Expression block(std::vector<KRPC::Expression> statements) const;
+
+      /**
+       * A block of statements with local variables.
+       *
+       * The value of the block is that of its last statement. The variables are in scope
+       * for the statements of the block, including within nested functions.
+       * @param variables The local variables of the block.
+       * @param statements The statements.
+       */
+      KRPC::Expression block_with_variables(std::vector<KRPC::Expression> variables, std::vector<KRPC::Expression> statements) const;
+
+      /**
+       * A break statement, which ends the enclosing loop.
+       */
+      KRPC::Expression break_() const;
+
+      /**
+       * A dictionary built from a collection, with a key and a value computed from each
+       * element.
+       *
+       * A repeated key takes the last of its values.
+       * @return The dictionary.
+       * @param arg The list or set.
+       * @param key_func The function computing an element's key.
+       * @param value_func The function computing an element's value.
+       */
+      KRPC::Expression build_dictionary(KRPC::Expression arg, KRPC::Expression key_func, KRPC::Expression value_func) const;
+
+      /**
+       * An RPC call.
+       *
+       * The instance the call is made on, and the values of its arguments, are fixed
+       * when the expression is created. A call to a procedure with no return value is
+       * evaluated for its effects, as a statement in a krpc::services::KRPC::Expression::block(). A collection the
+       * procedure returns is copied, as a client would receive it.
+       * @param call The procedure call.
+       */
+      KRPC::Expression call(krpc::schema::ProcedureCall call) const;
+
+      /**
+       * An RPC call, where some or all of the arguments are computed by expressions.
+       *
+       * Position 0 is the instance of a class method or property. A position with no
+       * expression takes the argument encoded in the call, or the parameter's default. A
+       * collection the procedure returns is copied, as a client would receive it.
+       * @param call The RPC to call.
+       * @param args Expressions computing the call's arguments, by position.
+       */
+      KRPC::Expression call_with_arguments(krpc::schema::ProcedureCall call, std::map<int32_t, KRPC::Expression> args) const;
+
+      /**
+       * A value cast to the given type.
+       *
+       * A tuple or collection is cast element by element.
+       * @param arg The value to cast.
+       * @param type Type to cast the argument to.
+       */
+      KRPC::Expression cast(KRPC::Expression arg, KRPC::Type type) const;
+
+      /**
+       * A statement removing every value from a list or a set, or every entry from a dictionary.
+       * @param collection The list, set or dictionary.
+       */
+      KRPC::Expression clear(KRPC::Expression collection) const;
+
+      /**
+       * The values of one collection followed by those of another.
+       *
+       * The result is lazily evaluated. krpc::services::KRPC::Expression::to_list() makes it concrete.
+       * @return The first collection followed by the second.
+       * @param arg1 The first collection.
+       * @param arg2 The second collection.
+       */
+      KRPC::Expression concat(KRPC::Expression arg1, KRPC::Expression arg2) const;
+
+      /**
+       * The second argument if the condition is true, and the third argument otherwise.
+       *
+       * Throws an exception if the two values have no common type.
+       * @param condition The boolean condition.
+       * @param if_true The value when the condition is true.
+       * @param if_false The value when the condition is false.
+       */
+      KRPC::Expression conditional(KRPC::Expression condition, KRPC::Expression if_true, KRPC::Expression if_false) const;
+
+      /**
+       * Logical and, which evaluates the second operand only when the first is true.
+       * @param arg0 The first operand.
+       * @param arg1 The second operand.
+       */
+      KRPC::Expression conditional_and(KRPC::Expression arg0, KRPC::Expression arg1) const;
+
+      /**
+       * Logical or, which evaluates the second operand only when the first is false.
+       * @param arg0 The first operand.
+       * @param arg1 The second operand.
+       */
+      KRPC::Expression conditional_or(KRPC::Expression arg0, KRPC::Expression arg1) const;
+
+      /**
+       * A constant value of boolean type.
+       * @param value The value.
+       */
+      KRPC::Expression constant_bool(bool value) const;
+
+      /**
+       * A constant value of bytes type.
+       * @param value The value.
+       */
+      KRPC::Expression constant_bytes(std::string value) const;
+
+      /**
+       * A constant value of double precision floating point type.
+       * @param value The value.
+       */
+      KRPC::Expression constant_double(double value) const;
+
+      /**
+       * A constant value of an enumeration a service defines.
+       * @param service The name of the service the enumeration is defined in.
+       * @param name The name of the enumeration.
+       * @param value The value of the member of the enumeration.
+       */
+      KRPC::Expression constant_enum(std::string service, std::string name, int32_t value) const;
+
+      /**
+       * A constant value of single precision floating point type.
+       * @param value The value.
+       */
+      KRPC::Expression constant_float(float value) const;
+
+      /**
+       * A constant value of integer type.
+       * @param value The value.
+       */
+      KRPC::Expression constant_int(int32_t value) const;
+
+      /**
+       * A constant value of long integer type.
+       * @param value The value.
+       */
+      KRPC::Expression constant_long(int64_t value) const;
+
+      /**
+       * A null constant of the given type.
+       *
+       * The type is made nullable, as by krpc::services::KRPC::Type::nullable_type().
+       * @param type The type of the value.
+       */
+      KRPC::Expression constant_null(KRPC::Type type) const;
+
+      /**
+       * A constant object, an instance of a class a service defines.
+       *
+       * The object is given by its object identifier.
+       * @param value The object identifier of the object.
+       */
+      KRPC::Expression constant_object(uint64_t value) const;
+
+      /**
+       * A constant value of string type.
+       * @param value The value.
+       */
+      KRPC::Expression constant_string(std::string value) const;
+
+      /**
+       * A constant value of unsigned integer type.
+       * @param value The value.
+       */
+      KRPC::Expression constant_u_int(uint32_t value) const;
+
+      /**
+       * A constant value of unsigned long integer type.
+       * @param value The value.
+       */
+      KRPC::Expression constant_u_long(uint64_t value) const;
+
+      /**
+       * Whether a collection contains a value.
+       * @return Whether the collection contains the value.
+       * @param arg The collection.
+       * @param value The value to look for.
+       */
+      KRPC::Expression contains(KRPC::Expression arg, KRPC::Expression value) const;
+
+      /**
+       * Whether a dictionary contains a key.
+       * @return Whether the dictionary contains the key.
+       * @param dictionary The dictionary.
+       * @param key The key to look for.
+       */
+      KRPC::Expression contains_key(KRPC::Expression dictionary, KRPC::Expression key) const;
+
+      /**
+       * A continue statement, which skips to the next iteration of the enclosing loop.
+       */
+      KRPC::Expression continue_() const;
+
+      /**
+       * The string representation of a value.
+       *
+       * A value other than a number, boolean, string or enumeration converts as .NET
+       * formats it, which for a collection is the name of its type. Throws an exception if
+       * the value is null.
+       * @return The string representation of the value.
+       * @param arg The value to convert.
+       */
+      KRPC::Expression convert_to_string(KRPC::Expression arg) const;
+
+      /**
+       * The number of values in a collection.
+       * @return The number of elements in the collection.
+       * @param arg The list, set or dictionary.
+       */
+      KRPC::Expression count(KRPC::Expression arg) const;
+
+      /**
+       * A dictionary of the given keys and corresponding values, with numbers widened to
+       * their common type. Throws an exception if there are no keys, the counts differ, the
+       * keys are not of a valid key type, or a key is null.
+       *
+       * A repeated key takes the last of its values.
+       * @return The dictionary.
+       * @param keys The keys.
+       * @param values The values.
+       */
+      KRPC::Expression create_dictionary(std::vector<KRPC::Expression> keys, std::vector<KRPC::Expression> values) const;
+
+      /**
+       * An empty dictionary of the given key and value types. Throws an exception if the
+       * key type is nullable or not a valid key type.
+       * @return The empty dictionary.
+       * @param key_type The type of the dictionary's keys.
+       * @param value_type The type of the dictionary's values.
+       */
+      KRPC::Expression create_empty_dictionary(KRPC::Type key_type, KRPC::Type value_type) const;
+
+      /**
+       * An empty list of the given value type.
+       * @return The empty list.
+       * @param value_type The type of the values the list holds.
+       */
+      KRPC::Expression create_empty_list(KRPC::Type value_type) const;
+
+      /**
+       * An empty set of the given value type. Throws an exception if the value type is
+       * nullable.
+       * @return The empty set.
+       * @param value_type The type of the values the set holds.
+       */
+      KRPC::Expression create_empty_set(KRPC::Type value_type) const;
+
+      /**
+       * A list of the given values, with numbers widened to their common type. Throws an
+       * exception if there are no values.
+       * @return The list.
+       * @param values The values.
+       */
+      KRPC::Expression create_list(std::vector<KRPC::Expression> values) const;
+
+      /**
+       * A set of the given values, with numbers widened to their common type. Throws an
+       * exception if there are no values, or a value is null.
+       *
+       * The values are evaluated in an unspecified order.
+       * @return The set.
+       * @param values The values.
+       */
+      KRPC::Expression create_set(std::set<KRPC::Expression> values) const;
+
+      /**
+       * A structure with the given field values. Throws an exception if the field values do
+       * not match its fields.
+       * @return The structure.
+       * @param type The type of the structure.
+       * @param field_values The values of the structure's fields,
+       * in the order the structure declares them.
+       */
+      KRPC::Expression create_struct(KRPC::Type type, std::vector<KRPC::Expression> field_values) const;
+
+      /**
+       * A tuple of the given elements. Throws an exception if there are no elements or more
+       * than seven.
+       * @return The tuple.
+       * @param elements The elements.
+       */
+      KRPC::Expression create_tuple(std::vector<KRPC::Expression> elements) const;
+
+      /**
+       * The keys of a dictionary, as a list.
+       *
+       * The collection operations take the keys of a dictionary from here, and its values
+       * from krpc::services::KRPC::Expression::dictionary_values().
+       * @return The keys of the dictionary.
+       * @param dictionary The dictionary.
+       */
+      KRPC::Expression dictionary_keys(KRPC::Expression dictionary) const;
+
+      /**
+       * The values of a dictionary, as a list.
+       * @return The values of the dictionary.
+       * @param dictionary The dictionary.
+       */
+      KRPC::Expression dictionary_values(KRPC::Expression dictionary) const;
+
+      /**
+       * The values of a collection with duplicates removed, keeping the first
+       * occurrence of each.
+       *
+       * The result is lazily evaluated. krpc::services::KRPC::Expression::to_list() makes it concrete.
+       * @return The distinct values of the collection.
+       * @param arg The collection.
+       */
+      KRPC::Expression distinct(KRPC::Expression arg) const;
+
+      /**
+       * Numerical division.
+       * @param arg0 The first operand.
+       * @param arg1 The second operand.
+       */
+      KRPC::Expression divide(KRPC::Expression arg0, KRPC::Expression arg1) const;
+
+      /**
+       * The value at the given position in a collection.
+       *
+       * Throws an exception if the index is out of range.
+       * @return The value at the given position.
+       * @param arg The collection.
+       * @param index The position of the value, counting from zero.
+       */
+      KRPC::Expression element_at(KRPC::Expression arg, KRPC::Expression index) const;
+
+      /**
+       * Equality comparison.
+       *
+       * Collections, tuples, bytes and structures compare by their contents. Throws an
+       * exception if the operands are of unrelated types.
+       * @param arg0 The first operand.
+       * @param arg1 The second operand.
+       */
+      KRPC::Expression equal(KRPC::Expression arg0, KRPC::Expression arg1) const;
+
+      /**
+       * The values of the first collection that are not in the second, with
+       * duplicates removed.
+       *
+       * The result is lazily evaluated. krpc::services::KRPC::Expression::to_list() makes it concrete.
+       * @return The difference between the two collections.
+       * @param arg1 The first collection.
+       * @param arg2 The second collection.
+       */
+      KRPC::Expression except(KRPC::Expression arg1, KRPC::Expression arg2) const;
+
+      /**
+       * Logical or bitwise exclusive or.
+       *
+       * Also takes two values of a flags enumeration, and gives the values in only one of them.
+       * @param arg0 The first operand.
+       * @param arg1 The second operand.
+       */
+      KRPC::Expression exclusive_or(KRPC::Expression arg0, KRPC::Expression arg1) const;
+
+      /**
+       * The first value of a collection.
+       *
+       * Throws an exception if the collection is empty.
+       * @return The first value.
+       * @param arg The collection.
+       */
+      KRPC::Expression first(KRPC::Expression arg) const;
+
+      /**
+       * A loop that evaluates the body once for each value of a collection.
+       *
+       * The loop variable is a local variable declared by an enclosing
+       * krpc::services::KRPC::Expression::block_with_variables(), or a parameter of an enclosing krpc::services::KRPC::Expression::lambda().
+       * A krpc::services::KRPC::Expression::break_() or krpc::services::KRPC::Expression::continue_() in the body applies to this loop.
+       * @param variable The loop variable.
+       * @param collection The collection to iterate over.
+       * @param body The statement evaluated on each iteration.
+       */
+      KRPC::Expression for_each(KRPC::Expression variable, KRPC::Expression collection, KRPC::Expression body) const;
+
+      /**
+       * An element of a tuple, list or dictionary.
+       *
+       * A tuple takes a constant integer index, a list a zero indexed integer and a
+       * dictionary a key. Throws an exception if the index is out of range or the key is
+       * missing, and for a tuple when the expression is created.
+       * @return The element.
+       * @param arg The tuple, list or dictionary.
+       * @param index The index or key of the element.
+       */
+      KRPC::Expression get(KRPC::Expression arg, KRPC::Expression index) const;
+
+      /**
+       * The value of a field of a structure. Throws an exception if the value is not a
+       * structure, or has no field of the given name.
+       * @return The value of the field.
+       * @param arg The structure.
+       * @param name The name of the field to access.
+       */
+      KRPC::Expression get_field(KRPC::Expression arg, std::string name) const;
+
+      /**
+       * Greater than numerical comparison.
+       * @param arg0 The first operand.
+       * @param arg1 The second operand.
+       */
+      KRPC::Expression greater_than(KRPC::Expression arg0, KRPC::Expression arg1) const;
+
+      /**
+       * Greater than or equal numerical comparison.
+       * @param arg0 The first operand.
+       * @param arg1 The second operand.
+       */
+      KRPC::Expression greater_than_or_equal(KRPC::Expression arg0, KRPC::Expression arg1) const;
+
+      /**
+       * The values of a collection grouped by the key a function produces for each of them.
+       * @return A dictionary of each key to the values that produced it.
+       * @param arg The collection.
+       * @param key A function producing the key to group values by.
+       */
+      KRPC::Expression group_by(KRPC::Expression arg, KRPC::Expression key) const;
+
+      /**
+       * An if statement, with no value.
+       *
+       * Use krpc::services::KRPC::Expression::conditional() for an if-then-else that produces a value.
+       * @param condition The boolean condition.
+       * @param body The statement evaluated when the condition is true.
+       */
+      KRPC::Expression if_then(KRPC::Expression condition, KRPC::Expression body) const;
+
+      /**
+       * An if-else statement, with no value.
+       *
+       * Use krpc::services::KRPC::Expression::conditional() for an if-then-else that produces a value.
+       * @param condition The boolean condition.
+       * @param body The statement evaluated when the condition is true.
+       * @param else_body The statement evaluated when the condition is false.
+       */
+      KRPC::Expression if_then_else(KRPC::Expression condition, KRPC::Expression body, KRPC::Expression else_body) const;
+
+      /**
+       * The values in both of two collections, with duplicates removed.
+       *
+       * The result is lazily evaluated. krpc::services::KRPC::Expression::to_list() makes it concrete.
+       * @return The intersection of the two collections.
+       * @param arg1 The first collection.
+       * @param arg2 The second collection.
+       */
+      KRPC::Expression intersect(KRPC::Expression arg1, KRPC::Expression arg2) const;
+
+      /**
+       * A function call.
+       * @return A function call.
+       * @param function The function to call.
+       * @param args The arguments to call the function with.
+       */
+      KRPC::Expression invoke(KRPC::Expression function, std::map<std::string, KRPC::Expression> args) const;
+
+      /**
+       * Whether a value is null. Throws an exception if the type of the value cannot be null.
+       * @param value The value.
+       */
+      KRPC::Expression is_null(KRPC::Expression value) const;
+
+      /**
+       * A function with the given parameters and body.
+       *
+       * The body is an expression or a block of statements, and a body with no value is
+       * evaluated for its effects. A krpc::services::KRPC::Expression::return_() or krpc::services::KRPC::Expression::return_nothing()
+       * statement ends the evaluation.
+       * @return A function.
+       * @param parameters The parameters of the function.
+       * @param body The body of the function.
+       */
+      KRPC::Expression lambda(std::vector<KRPC::Expression> parameters, KRPC::Expression body) const;
+
+      /**
+       * The last value of a collection.
+       *
+       * Throws an exception if the collection is empty.
+       * @return The last value.
+       * @param arg The collection.
+       */
+      KRPC::Expression last(KRPC::Expression arg) const;
+
+      /**
+       * Bitwise left shift.
+       *
+       * Only the low 5 bits of the count are used for a 32-bit value, and the low 6 bits
+       * for a 64-bit value.
+       * @param arg0 The first operand.
+       * @param arg1 The second operand.
+       */
+      KRPC::Expression left_shift(KRPC::Expression arg0, KRPC::Expression arg1) const;
+
+      /**
+       * Less than numerical comparison.
+       * @param arg0 The first operand.
+       * @param arg1 The second operand.
+       */
+      KRPC::Expression less_than(KRPC::Expression arg0, KRPC::Expression arg1) const;
+
+      /**
+       * Less than or equal numerical comparison.
+       * @param arg0 The first operand.
+       * @param arg1 The second operand.
+       */
+      KRPC::Expression less_than_or_equal(KRPC::Expression arg0, KRPC::Expression arg1) const;
+
+      /**
+       * The largest value of a collection.
+       *
+       * Throws an exception if the collection is empty and its values are not nullable.
+       * @return The largest value in the collection.
+       * @param arg The list or set.
+       */
+      KRPC::Expression max(KRPC::Expression arg) const;
+
+      /**
+       * The value of a collection with the largest key.
+       *
+       * Throws an exception if the collection is empty.
+       * @return The value with the largest key.
+       * @param arg The collection.
+       * @param key A function producing the key to compare values by.
+       */
+      KRPC::Expression max_by(KRPC::Expression arg, KRPC::Expression key) const;
+
+      /**
+       * The smallest value of a collection.
+       *
+       * Throws an exception if the collection is empty and its values are not nullable.
+       * @return The smallest value in the collection.
+       * @param arg The list or set.
+       */
+      KRPC::Expression min(KRPC::Expression arg) const;
+
+      /**
+       * The value of a collection with the smallest key.
+       *
+       * Throws an exception if the collection is empty.
+       * @return The value with the smallest key.
+       * @param arg The collection.
+       * @param key A function producing the key to compare values by.
+       */
+      KRPC::Expression min_by(KRPC::Expression arg, KRPC::Expression key) const;
+
+      /**
+       * Numerical modulo operator.
+       * @param arg0 The first operand.
+       * @param arg1 The second operand.
+       * @return The remainder of arg0 divided by arg1
+       */
+      KRPC::Expression modulo(KRPC::Expression arg0, KRPC::Expression arg1) const;
+
+      /**
+       * Numerical multiplication.
+       * @param arg0 The first operand.
+       * @param arg1 The second operand.
+       */
+      KRPC::Expression multiply(KRPC::Expression arg0, KRPC::Expression arg1) const;
+
+      /**
+       * Numerical negation, which negates a uint as a long.
+       * @param arg The operand.
+       */
+      KRPC::Expression negate(KRPC::Expression arg) const;
+
+      /**
+       * Logical or bitwise negation.
+       *
+       * Also takes a value of a flags enumeration, and gives the declared values it does not hold.
+       * @param arg The operand.
+       */
+      KRPC::Expression not_(KRPC::Expression arg) const;
+
+      /**
+       * Inequality comparison.
+       *
+       * Collections, tuples, bytes and structures compare by their contents. Throws an
+       * exception if the operands are of unrelated types.
+       * @param arg0 The first operand.
+       * @param arg1 The second operand.
+       */
+      KRPC::Expression not_equal(KRPC::Expression arg0, KRPC::Expression arg1) const;
+
+      /**
+       * Logical or bitwise or, which evaluates both operands.
+       *
+       * Also takes two values of a flags enumeration, and gives their combination.
+       * @param arg0 The first operand.
+       * @param arg1 The second operand.
+       */
+      KRPC::Expression or_(KRPC::Expression arg0, KRPC::Expression arg1) const;
+
+      /**
+       * The values of a collection ordered by the key a function produces for each of them.
+       *
+       * The result is lazily evaluated. krpc::services::KRPC::Expression::to_list() makes it concrete.
+       * @return The ordered collection.
+       * @param arg The collection to order.
+       * @param key A function producing the key to order values by.
+       */
+      KRPC::Expression order_by(KRPC::Expression arg, KRPC::Expression key) const;
+
+      /**
+       * A named parameter of a function.
+       *
+       * A value is bound to it by name with krpc::services::KRPC::Expression::invoke(), or by its position in
+       * the parameters of a krpc::services::KRPC::Expression::lambda().
+       * @return A named parameter.
+       * @param name The name of the parameter.
+       * @param type The type of the parameter.
+       */
+      KRPC::Expression parameter(std::string name, KRPC::Type type) const;
+
+      /**
+       * Numerical power operator.
+       * @param arg0 The first operand.
+       * @param arg1 The second operand.
+       * @return arg0 raised to the power of arg1, at the common type of the operands
+       */
+      KRPC::Expression power(KRPC::Expression arg0, KRPC::Expression arg1) const;
+
+      /**
+       * A removal of a value from a list or a set, or of an entry from a dictionary.
+       *
+       * The first occurrence is removed from a list.
+       * @return Whether the collection held the value.
+       * @param collection The list, set or dictionary.
+       * @param value The value to remove, or the key of the entry to
+       * remove.
+       */
+      KRPC::Expression remove(KRPC::Expression collection, KRPC::Expression value) const;
+
+      /**
+       * A statement removing the element at an index of a list.
+       *
+       * Throws an exception if the index is out of range.
+       * @param list The list.
+       * @param index The index of the element, counting from zero.
+       */
+      KRPC::Expression remove_at(KRPC::Expression list, KRPC::Expression index) const;
+
+      /**
+       * A return statement, which ends the enclosing function with a value.
+       * @param value The value to return.
+       */
+      KRPC::Expression return_(KRPC::Expression value) const;
+
+      /**
+       * A return statement, which ends the enclosing function with no value.
+       */
+      KRPC::Expression return_nothing() const;
+
+      /**
+       * The values of a collection in the opposite order.
+       *
+       * The result is lazily evaluated. krpc::services::KRPC::Expression::to_list() makes it concrete.
+       * @return The reversed collection.
+       * @param arg The collection.
+       */
+      KRPC::Expression reverse(KRPC::Expression arg) const;
+
+      /**
+       * Bitwise right shift.
+       *
+       * Only the low 5 bits of the count are used for a 32-bit value, and the low 6 bits
+       * for a 64-bit value.
+       * @param arg0 The first operand.
+       * @param arg1 The second operand.
+       */
+      KRPC::Expression right_shift(KRPC::Expression arg0, KRPC::Expression arg1) const;
+
+      /**
+       * The result of a function for each value of a collection.
+       *
+       * The result is lazily evaluated. krpc::services::KRPC::Expression::to_list() makes it concrete.
+       * @return The collection of function results.
+       * @param arg The list or set.
+       * @param func The function, taking an element of the collection.
+       */
+      KRPC::Expression select(KRPC::Expression arg, KRPC::Expression func) const;
+
+      /**
+       * The values of the collections a function returns for each value of a collection,
+       * flattened into one.
+       *
+       * The result is lazily evaluated. krpc::services::KRPC::Expression::to_list() makes it concrete.
+       * @return The flattened collection of function results.
+       * @param arg The list or set.
+       * @param func The function, taking an element of the collection
+       * and returning a collection.
+       */
+      KRPC::Expression select_many(KRPC::Expression arg, KRPC::Expression func) const;
+
+      /**
+       * A statement setting an element of a list, or an entry of a dictionary.
+       *
+       * A key the dictionary does not hold is added. Throws an exception if the index
+       * is out of range for the list.
+       * @param collection The list or dictionary.
+       * @param index The index of the element, counting from zero, or the key of the entry.
+       * @param value The value to set.
+       */
+      KRPC::Expression set(KRPC::Expression collection, KRPC::Expression index, KRPC::Expression value) const;
+
+      /**
+       * A collection without its first count values.
+       *
+       * The result is lazily evaluated. krpc::services::KRPC::Expression::to_list() makes it concrete.
+       * @return The collection without its first count values.
+       * @param arg The collection.
+       * @param count The number of values to skip.
+       */
+      KRPC::Expression skip(KRPC::Expression arg, KRPC::Expression count) const;
+
+      /**
+       * A variable that keeps its value between evaluations of a function.
+       *
+       * The initial value is evaluated once, when the variable is created, and gives the
+       * variable its type. The value belongs to the variable, so every function that
+       * contains it shares it.
+       * @return A state variable.
+       * @param name The name of the variable.
+       * @param initial_value The initial value of the variable.
+       */
+      KRPC::Expression state_variable(std::string name, KRPC::Expression initial_value) const;
+
+      /**
+       * The concatenation of strings.
+       *
+       * Use krpc::services::KRPC::Expression::convert_to_string() to convert other values to strings.
+       * @return The concatenated string.
+       * @param args The strings to concatenate, in order.
+       */
+      KRPC::Expression string_concat(std::vector<KRPC::Expression> args) const;
+
+      /**
+       * Whether one string occurs within another.
+       * @return Whether the value occurs in the string.
+       * @param arg The string to search.
+       * @param value The string to search for.
+       */
+      KRPC::Expression string_contains(KRPC::Expression arg, KRPC::Expression value) const;
+
+      /**
+       * Whether a string ends with another.
+       * @return Whether the string ends with the value.
+       * @param arg The string to test.
+       * @param value The string to test for.
+       */
+      KRPC::Expression string_ends_with(KRPC::Expression arg, KRPC::Expression value) const;
+
+      /**
+       * The character at the given position in a string, as a string of length one.
+       *
+       * Throws an exception if the index is out of range.
+       * @return The character at the given position.
+       * @param arg The string.
+       * @param index The position of the character, counting from zero.
+       */
+      KRPC::Expression string_get(KRPC::Expression arg, KRPC::Expression index) const;
+
+      /**
+       * The position of the first occurrence of one string within another.
+       * @return The position of the value, counting from zero, or -1 if it does not occur.
+       * @param arg The string to search.
+       * @param value The string to search for.
+       */
+      KRPC::Expression string_index_of(KRPC::Expression arg, KRPC::Expression value) const;
+
+      /**
+       * Strings joined together, separated by another string.
+       * @return The joined string.
+       * @param separator The string to put between the values.
+       * @param values The strings to join.
+       */
+      KRPC::Expression string_join(KRPC::Expression separator, KRPC::Expression values) const;
+
+      /**
+       * The number of characters in a string.
+       * @return The length of the string.
+       * @param arg The string.
+       */
+      KRPC::Expression string_length(KRPC::Expression arg) const;
+
+      /**
+       * A string with every occurrence of one string replaced by another.
+       *
+       * Throws an exception if the string to replace is empty.
+       * @return The string with the replacements made.
+       * @param arg The string to search.
+       * @param old_value The string to replace.
+       * @param new_value The string to replace it with.
+       */
+      KRPC::Expression string_replace(KRPC::Expression arg, KRPC::Expression old_value, KRPC::Expression new_value) const;
+
+      /**
+       * The parts of a string separated by another string.
+       * @return The parts of the string.
+       * @param arg The string to split.
+       * @param separator The string that separates the parts.
+       */
+      KRPC::Expression string_split(KRPC::Expression arg, KRPC::Expression separator) const;
+
+      /**
+       * Whether a string starts with another.
+       * @return Whether the string starts with the value.
+       * @param arg The string to test.
+       * @param value The string to test for.
+       */
+      KRPC::Expression string_starts_with(KRPC::Expression arg, KRPC::Expression value) const;
+
+      /**
+       * Part of a string.
+       *
+       * Throws an exception if the start or the length is out of range.
+       * @return The substring.
+       * @param arg The string.
+       * @param start The position to start at, counting from zero.
+       * @param length The number of characters to take.
+       */
+      KRPC::Expression string_substring(KRPC::Expression arg, KRPC::Expression start, KRPC::Expression length) const;
+
+      /**
+       * A string in lower case, independently of the game's language.
+       * @return The string in lower case.
+       * @param arg The string.
+       */
+      KRPC::Expression string_to_lower(KRPC::Expression arg) const;
+
+      /**
+       * A string in upper case, independently of the game's language.
+       * @return The string in upper case.
+       * @param arg The string.
+       */
+      KRPC::Expression string_to_upper(KRPC::Expression arg) const;
+
+      /**
+       * A string with white space removed from both ends.
+       * @return The trimmed string.
+       * @param arg The string.
+       */
+      KRPC::Expression string_trim(KRPC::Expression arg) const;
+
+      /**
+       * A string with white space removed from its end.
+       * @return The trimmed string.
+       * @param arg The string.
+       */
+      KRPC::Expression string_trim_end(KRPC::Expression arg) const;
+
+      /**
+       * A string with white space removed from its start.
+       * @return The trimmed string.
+       * @param arg The string.
+       */
+      KRPC::Expression string_trim_start(KRPC::Expression arg) const;
+
+      /**
+       * Numerical subtraction.
+       * @param arg0 The first operand.
+       * @param arg1 The second operand.
+       */
+      KRPC::Expression subtract(KRPC::Expression arg0, KRPC::Expression arg1) const;
+
+      /**
+       * The sum of the values of a collection.
+       * @return The sum of the elements in the collection.
+       * @param arg The list or set.
+       */
+      KRPC::Expression sum(KRPC::Expression arg) const;
+
+      /**
+       * The first count values of a collection.
+       *
+       * The result is lazily evaluated. krpc::services::KRPC::Expression::to_list() makes it concrete.
+       * @return The first count values of the collection.
+       * @param arg The collection.
+       * @param count The number of values to take.
+       */
+      KRPC::Expression take(KRPC::Expression arg, KRPC::Expression count) const;
+
+      /**
+       * A throw statement, which raises the named exception.
+       *
+       * The client receives the exception as an error from the function, or from the stream
+       * or event evaluating it. For example, the service `KRPC` and the name
+       * `Error` raise krpc::services::KRPC::Error. Throws an exception if the service does not
+       * declare it.
+       * @param service The name of the service the exception is defined in.
+       * @param name The name of the exception.
+       * @param message The message of the exception.
+       */
+      KRPC::Expression throw_(std::string service, std::string name, KRPC::Expression message) const;
+
+      /**
+       * A collection as a list.
+       * @return The collection as a list.
+       * @param arg The collection.
+       */
+      KRPC::Expression to_list(KRPC::Expression arg) const;
+
+      /**
+       * A collection as a set.
+       *
+       * Throws an exception if a value is null.
+       * @return The collection as a set.
+       * @param arg The collection.
+       */
+      KRPC::Expression to_set(KRPC::Expression arg) const;
+
+      /**
+       * A try-catch statement that handles the named exception.
+       *
+       * Only an exception a service declares can be named, and krpc::services::KRPC::Expression::try_catch_all()
+       * handles any exception. Throws an exception if the service does not declare it.
+       * @param body The statement to evaluate.
+       * @param service The name of the service the exception is defined in.
+       * @param name The name of the exception.
+       * @param message A string variable assigned the exception's message, or null.
+       * @param handler The statement evaluated when the exception is caught.
+       */
+      KRPC::Expression try_catch(KRPC::Expression body, std::string service, std::string name, std::optional<KRPC::Expression> message, KRPC::Expression handler) const;
+
+      /**
+       * A try-catch statement that handles any exception.
+       * @param body The statement to evaluate.
+       * @param message A string variable assigned the exception's message, or null.
+       * @param handler The statement evaluated when an exception is caught.
+       */
+      KRPC::Expression try_catch_all(KRPC::Expression body, std::optional<KRPC::Expression> message, KRPC::Expression handler) const;
+
+      /**
+       * A try-finally statement.
+       *
+       * The finalizer is evaluated after the body, whether or not the body raises an
+       * exception. A break, continue or return cannot leave the finalizer.
+       * @param body The statement to evaluate.
+       * @param finalizer The statement evaluated after the body.
+       */
+      KRPC::Expression try_finally(KRPC::Expression body, KRPC::Expression finalizer) const;
+
+      /**
+       * The values in either of two collections, with duplicates removed.
+       *
+       * The result is lazily evaluated. krpc::services::KRPC::Expression::to_list() makes it concrete.
+       * @return The union of the two collections.
+       * @param arg1 The first collection.
+       * @param arg2 The second collection.
+       */
+      KRPC::Expression union_(KRPC::Expression arg1, KRPC::Expression arg2) const;
+
+      /**
+       * A local variable, declared by krpc::services::KRPC::Expression::block_with_variables().
+       * @return A local variable.
+       * @param name The name of the variable.
+       * @param type The type of the variable.
+       */
+      KRPC::Expression variable(std::string name, KRPC::Type type) const;
+
+      /**
+       * The values of a collection for which a predicate function returns true.
+       *
+       * The result is lazily evaluated. krpc::services::KRPC::Expression::to_list() makes it concrete.
+       * @return The filtered collection.
+       * @param arg The list or set.
+       * @param func The predicate function, taking an element of the collection.
+       */
+      KRPC::Expression where(KRPC::Expression arg, KRPC::Expression func) const;
+
+      /**
+       * A while loop, which evaluates the body while the condition is true.
+       *
+       * A krpc::services::KRPC::Expression::break_() or krpc::services::KRPC::Expression::continue_() in the body applies to this loop.
+       * @param condition The boolean condition.
+       * @param body The statement evaluated on each iteration.
+       */
+      KRPC::Expression while_(KRPC::Expression condition, KRPC::Expression body) const;
+
+      /**
+       * The results of a function applied to the values of two collections in pairs.
+       *
+       * The result is as long as the shorter of the two collections. It is lazily
+       * evaluated, and krpc::services::KRPC::Expression::to_list() makes it concrete.
+       * @return The combined collection.
+       * @param arg1 The first collection.
+       * @param arg2 The second collection.
+       * @param func A function combining a value from each collection.
+       */
+      KRPC::Expression zip(KRPC::Expression arg1, KRPC::Expression arg2, KRPC::Expression func) const;
+
+     private:
+      mutable Client _client;
+    };
+
+    /**
+     * Binds the static methods of KRPC::Expression to a client.
+     * @param client The client the methods are called on.
+     * @return The bound methods.
+     */
+    static Bound bind(const Client& client);
   };
 
   /**
@@ -2443,6 +3545,122 @@ class KRPC : public Service {
     ::krpc::schema::ProcedureCall service_call();
 
     ::krpc::schema::ProcedureCall types_call();
+
+    /**
+     * The static methods of KRPC::Type, bound to a client.
+     */
+    class Bound {
+     public:
+      explicit Bound(const Client& client);
+
+      /**
+       * A boolean type.
+       */
+      KRPC::Type bool_() const;
+
+      /**
+       * A byte sequence type.
+       */
+      KRPC::Type bytes() const;
+
+      /**
+       * The type of a class defined by a service.
+       * @param service The name of the service the class is defined in.
+       * @param name The name of the class.
+       */
+      KRPC::Type class_type(std::string service, std::string name) const;
+
+      /**
+       * A dictionary type. Throws an exception if the key type is nullable or not a valid
+       * key type.
+       * @param key_type The type of the keys of the dictionary.
+       * @param value_type The type of the values of the dictionary.
+       */
+      KRPC::Type dictionary_type(KRPC::Type key_type, KRPC::Type value_type) const;
+
+      /**
+       * A double precision floating point number type.
+       */
+      KRPC::Type double_() const;
+
+      /**
+       * The type of an enumeration defined by a service.
+       * @param service The name of the service the enumeration is defined in.
+       * @param name The name of the enumeration.
+       */
+      KRPC::Type enumeration_type(std::string service, std::string name) const;
+
+      /**
+       * A single precision floating point number type.
+       */
+      KRPC::Type float_() const;
+
+      /**
+       * A signed 32-bit integer type.
+       */
+      KRPC::Type int_() const;
+
+      /**
+       * A list type.
+       * @param value_type The type of the elements of the list.
+       */
+      KRPC::Type list_type(KRPC::Type value_type) const;
+
+      /**
+       * A signed 64-bit integer type.
+       */
+      KRPC::Type long_() const;
+
+      /**
+       * A nullable type, holding a value of the given type or null.
+       * @param value_type The type of the value.
+       */
+      KRPC::Type nullable_type(KRPC::Type value_type) const;
+
+      /**
+       * A set type. Throws an exception if the element type is nullable.
+       * @param value_type The type of the elements of the set.
+       */
+      KRPC::Type set_type(KRPC::Type value_type) const;
+
+      /**
+       * A string type.
+       */
+      KRPC::Type string() const;
+
+      /**
+       * The type of a structure defined by a service.
+       * @param service The name of the service the structure is defined in.
+       * @param name The name of the structure.
+       */
+      KRPC::Type struct_type(std::string service, std::string name) const;
+
+      /**
+       * A tuple type. Throws an exception if there are no element types or more than seven.
+       * @param value_types The types of the elements of the tuple.
+       */
+      KRPC::Type tuple_type(std::vector<KRPC::Type> value_types) const;
+
+      /**
+       * An unsigned 32-bit integer type.
+       */
+      KRPC::Type u_int() const;
+
+      /**
+       * An unsigned 64-bit integer type.
+       */
+      KRPC::Type u_long() const;
+
+     private:
+      mutable Client _client;
+    };
+
+    /**
+     * Binds the static methods of KRPC::Type to a client.
+     * @param client The client the methods are called on.
+     * @return The bound methods.
+     */
+    static Bound bind(const Client& client);
   };
 
   /**
@@ -6749,6 +7967,513 @@ inline ::krpc::schema::ProcedureCall KRPC::Expression::zip_call(Client& _client,
   return _client.build_call("KRPC", "Expression_static_Zip", _args);
 }
 
+inline KRPC::Expression::Bound::Bound(const Client& client):
+  _client(client) {}
+
+inline KRPC::Expression KRPC::Expression::Bound::add(KRPC::Expression arg0, KRPC::Expression arg1) const {
+  return KRPC::Expression::add(_client, arg0, arg1);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::aggregate(KRPC::Expression arg, KRPC::Expression func) const {
+  return KRPC::Expression::aggregate(_client, arg, func);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::aggregate_with_seed(KRPC::Expression arg, KRPC::Expression seed, KRPC::Expression func) const {
+  return KRPC::Expression::aggregate_with_seed(_client, arg, seed, func);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::all(KRPC::Expression arg, KRPC::Expression predicate) const {
+  return KRPC::Expression::all(_client, arg, predicate);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::and_(KRPC::Expression arg0, KRPC::Expression arg1) const {
+  return KRPC::Expression::and_(_client, arg0, arg1);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::any(KRPC::Expression arg, KRPC::Expression predicate) const {
+  return KRPC::Expression::any(_client, arg, predicate);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::append(KRPC::Expression collection, KRPC::Expression value) const {
+  return KRPC::Expression::append(_client, collection, value);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::assign(KRPC::Expression variable, KRPC::Expression value) const {
+  return KRPC::Expression::assign(_client, variable, value);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::average(KRPC::Expression arg) const {
+  return KRPC::Expression::average(_client, arg);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::block(std::vector<KRPC::Expression> statements) const {
+  return KRPC::Expression::block(_client, statements);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::block_with_variables(std::vector<KRPC::Expression> variables, std::vector<KRPC::Expression> statements) const {
+  return KRPC::Expression::block_with_variables(_client, variables, statements);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::break_() const {
+  return KRPC::Expression::break_(_client);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::build_dictionary(KRPC::Expression arg, KRPC::Expression key_func, KRPC::Expression value_func) const {
+  return KRPC::Expression::build_dictionary(_client, arg, key_func, value_func);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::call(krpc::schema::ProcedureCall call) const {
+  return KRPC::Expression::call(_client, call);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::call_with_arguments(krpc::schema::ProcedureCall call, std::map<int32_t, KRPC::Expression> args) const {
+  return KRPC::Expression::call_with_arguments(_client, call, args);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::cast(KRPC::Expression arg, KRPC::Type type) const {
+  return KRPC::Expression::cast(_client, arg, type);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::clear(KRPC::Expression collection) const {
+  return KRPC::Expression::clear(_client, collection);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::concat(KRPC::Expression arg1, KRPC::Expression arg2) const {
+  return KRPC::Expression::concat(_client, arg1, arg2);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::conditional(KRPC::Expression condition, KRPC::Expression if_true, KRPC::Expression if_false) const {
+  return KRPC::Expression::conditional(_client, condition, if_true, if_false);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::conditional_and(KRPC::Expression arg0, KRPC::Expression arg1) const {
+  return KRPC::Expression::conditional_and(_client, arg0, arg1);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::conditional_or(KRPC::Expression arg0, KRPC::Expression arg1) const {
+  return KRPC::Expression::conditional_or(_client, arg0, arg1);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::constant_bool(bool value) const {
+  return KRPC::Expression::constant_bool(_client, value);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::constant_bytes(std::string value) const {
+  return KRPC::Expression::constant_bytes(_client, value);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::constant_double(double value) const {
+  return KRPC::Expression::constant_double(_client, value);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::constant_enum(std::string service, std::string name, int32_t value) const {
+  return KRPC::Expression::constant_enum(_client, service, name, value);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::constant_float(float value) const {
+  return KRPC::Expression::constant_float(_client, value);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::constant_int(int32_t value) const {
+  return KRPC::Expression::constant_int(_client, value);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::constant_long(int64_t value) const {
+  return KRPC::Expression::constant_long(_client, value);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::constant_null(KRPC::Type type) const {
+  return KRPC::Expression::constant_null(_client, type);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::constant_object(uint64_t value) const {
+  return KRPC::Expression::constant_object(_client, value);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::constant_string(std::string value) const {
+  return KRPC::Expression::constant_string(_client, value);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::constant_u_int(uint32_t value) const {
+  return KRPC::Expression::constant_u_int(_client, value);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::constant_u_long(uint64_t value) const {
+  return KRPC::Expression::constant_u_long(_client, value);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::contains(KRPC::Expression arg, KRPC::Expression value) const {
+  return KRPC::Expression::contains(_client, arg, value);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::contains_key(KRPC::Expression dictionary, KRPC::Expression key) const {
+  return KRPC::Expression::contains_key(_client, dictionary, key);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::continue_() const {
+  return KRPC::Expression::continue_(_client);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::convert_to_string(KRPC::Expression arg) const {
+  return KRPC::Expression::convert_to_string(_client, arg);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::count(KRPC::Expression arg) const {
+  return KRPC::Expression::count(_client, arg);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::create_dictionary(std::vector<KRPC::Expression> keys, std::vector<KRPC::Expression> values) const {
+  return KRPC::Expression::create_dictionary(_client, keys, values);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::create_empty_dictionary(KRPC::Type key_type, KRPC::Type value_type) const {
+  return KRPC::Expression::create_empty_dictionary(_client, key_type, value_type);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::create_empty_list(KRPC::Type value_type) const {
+  return KRPC::Expression::create_empty_list(_client, value_type);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::create_empty_set(KRPC::Type value_type) const {
+  return KRPC::Expression::create_empty_set(_client, value_type);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::create_list(std::vector<KRPC::Expression> values) const {
+  return KRPC::Expression::create_list(_client, values);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::create_set(std::set<KRPC::Expression> values) const {
+  return KRPC::Expression::create_set(_client, values);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::create_struct(KRPC::Type type, std::vector<KRPC::Expression> field_values) const {
+  return KRPC::Expression::create_struct(_client, type, field_values);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::create_tuple(std::vector<KRPC::Expression> elements) const {
+  return KRPC::Expression::create_tuple(_client, elements);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::dictionary_keys(KRPC::Expression dictionary) const {
+  return KRPC::Expression::dictionary_keys(_client, dictionary);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::dictionary_values(KRPC::Expression dictionary) const {
+  return KRPC::Expression::dictionary_values(_client, dictionary);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::distinct(KRPC::Expression arg) const {
+  return KRPC::Expression::distinct(_client, arg);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::divide(KRPC::Expression arg0, KRPC::Expression arg1) const {
+  return KRPC::Expression::divide(_client, arg0, arg1);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::element_at(KRPC::Expression arg, KRPC::Expression index) const {
+  return KRPC::Expression::element_at(_client, arg, index);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::equal(KRPC::Expression arg0, KRPC::Expression arg1) const {
+  return KRPC::Expression::equal(_client, arg0, arg1);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::except(KRPC::Expression arg1, KRPC::Expression arg2) const {
+  return KRPC::Expression::except(_client, arg1, arg2);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::exclusive_or(KRPC::Expression arg0, KRPC::Expression arg1) const {
+  return KRPC::Expression::exclusive_or(_client, arg0, arg1);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::first(KRPC::Expression arg) const {
+  return KRPC::Expression::first(_client, arg);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::for_each(KRPC::Expression variable, KRPC::Expression collection, KRPC::Expression body) const {
+  return KRPC::Expression::for_each(_client, variable, collection, body);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::get(KRPC::Expression arg, KRPC::Expression index) const {
+  return KRPC::Expression::get(_client, arg, index);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::get_field(KRPC::Expression arg, std::string name) const {
+  return KRPC::Expression::get_field(_client, arg, name);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::greater_than(KRPC::Expression arg0, KRPC::Expression arg1) const {
+  return KRPC::Expression::greater_than(_client, arg0, arg1);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::greater_than_or_equal(KRPC::Expression arg0, KRPC::Expression arg1) const {
+  return KRPC::Expression::greater_than_or_equal(_client, arg0, arg1);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::group_by(KRPC::Expression arg, KRPC::Expression key) const {
+  return KRPC::Expression::group_by(_client, arg, key);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::if_then(KRPC::Expression condition, KRPC::Expression body) const {
+  return KRPC::Expression::if_then(_client, condition, body);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::if_then_else(KRPC::Expression condition, KRPC::Expression body, KRPC::Expression else_body) const {
+  return KRPC::Expression::if_then_else(_client, condition, body, else_body);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::intersect(KRPC::Expression arg1, KRPC::Expression arg2) const {
+  return KRPC::Expression::intersect(_client, arg1, arg2);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::invoke(KRPC::Expression function, std::map<std::string, KRPC::Expression> args) const {
+  return KRPC::Expression::invoke(_client, function, args);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::is_null(KRPC::Expression value) const {
+  return KRPC::Expression::is_null(_client, value);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::lambda(std::vector<KRPC::Expression> parameters, KRPC::Expression body) const {
+  return KRPC::Expression::lambda(_client, parameters, body);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::last(KRPC::Expression arg) const {
+  return KRPC::Expression::last(_client, arg);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::left_shift(KRPC::Expression arg0, KRPC::Expression arg1) const {
+  return KRPC::Expression::left_shift(_client, arg0, arg1);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::less_than(KRPC::Expression arg0, KRPC::Expression arg1) const {
+  return KRPC::Expression::less_than(_client, arg0, arg1);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::less_than_or_equal(KRPC::Expression arg0, KRPC::Expression arg1) const {
+  return KRPC::Expression::less_than_or_equal(_client, arg0, arg1);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::max(KRPC::Expression arg) const {
+  return KRPC::Expression::max(_client, arg);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::max_by(KRPC::Expression arg, KRPC::Expression key) const {
+  return KRPC::Expression::max_by(_client, arg, key);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::min(KRPC::Expression arg) const {
+  return KRPC::Expression::min(_client, arg);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::min_by(KRPC::Expression arg, KRPC::Expression key) const {
+  return KRPC::Expression::min_by(_client, arg, key);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::modulo(KRPC::Expression arg0, KRPC::Expression arg1) const {
+  return KRPC::Expression::modulo(_client, arg0, arg1);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::multiply(KRPC::Expression arg0, KRPC::Expression arg1) const {
+  return KRPC::Expression::multiply(_client, arg0, arg1);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::negate(KRPC::Expression arg) const {
+  return KRPC::Expression::negate(_client, arg);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::not_(KRPC::Expression arg) const {
+  return KRPC::Expression::not_(_client, arg);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::not_equal(KRPC::Expression arg0, KRPC::Expression arg1) const {
+  return KRPC::Expression::not_equal(_client, arg0, arg1);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::or_(KRPC::Expression arg0, KRPC::Expression arg1) const {
+  return KRPC::Expression::or_(_client, arg0, arg1);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::order_by(KRPC::Expression arg, KRPC::Expression key) const {
+  return KRPC::Expression::order_by(_client, arg, key);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::parameter(std::string name, KRPC::Type type) const {
+  return KRPC::Expression::parameter(_client, name, type);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::power(KRPC::Expression arg0, KRPC::Expression arg1) const {
+  return KRPC::Expression::power(_client, arg0, arg1);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::remove(KRPC::Expression collection, KRPC::Expression value) const {
+  return KRPC::Expression::remove(_client, collection, value);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::remove_at(KRPC::Expression list, KRPC::Expression index) const {
+  return KRPC::Expression::remove_at(_client, list, index);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::return_(KRPC::Expression value) const {
+  return KRPC::Expression::return_(_client, value);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::return_nothing() const {
+  return KRPC::Expression::return_nothing(_client);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::reverse(KRPC::Expression arg) const {
+  return KRPC::Expression::reverse(_client, arg);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::right_shift(KRPC::Expression arg0, KRPC::Expression arg1) const {
+  return KRPC::Expression::right_shift(_client, arg0, arg1);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::select(KRPC::Expression arg, KRPC::Expression func) const {
+  return KRPC::Expression::select(_client, arg, func);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::select_many(KRPC::Expression arg, KRPC::Expression func) const {
+  return KRPC::Expression::select_many(_client, arg, func);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::set(KRPC::Expression collection, KRPC::Expression index, KRPC::Expression value) const {
+  return KRPC::Expression::set(_client, collection, index, value);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::skip(KRPC::Expression arg, KRPC::Expression count) const {
+  return KRPC::Expression::skip(_client, arg, count);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::state_variable(std::string name, KRPC::Expression initial_value) const {
+  return KRPC::Expression::state_variable(_client, name, initial_value);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::string_concat(std::vector<KRPC::Expression> args) const {
+  return KRPC::Expression::string_concat(_client, args);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::string_contains(KRPC::Expression arg, KRPC::Expression value) const {
+  return KRPC::Expression::string_contains(_client, arg, value);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::string_ends_with(KRPC::Expression arg, KRPC::Expression value) const {
+  return KRPC::Expression::string_ends_with(_client, arg, value);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::string_get(KRPC::Expression arg, KRPC::Expression index) const {
+  return KRPC::Expression::string_get(_client, arg, index);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::string_index_of(KRPC::Expression arg, KRPC::Expression value) const {
+  return KRPC::Expression::string_index_of(_client, arg, value);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::string_join(KRPC::Expression separator, KRPC::Expression values) const {
+  return KRPC::Expression::string_join(_client, separator, values);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::string_length(KRPC::Expression arg) const {
+  return KRPC::Expression::string_length(_client, arg);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::string_replace(KRPC::Expression arg, KRPC::Expression old_value, KRPC::Expression new_value) const {
+  return KRPC::Expression::string_replace(_client, arg, old_value, new_value);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::string_split(KRPC::Expression arg, KRPC::Expression separator) const {
+  return KRPC::Expression::string_split(_client, arg, separator);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::string_starts_with(KRPC::Expression arg, KRPC::Expression value) const {
+  return KRPC::Expression::string_starts_with(_client, arg, value);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::string_substring(KRPC::Expression arg, KRPC::Expression start, KRPC::Expression length) const {
+  return KRPC::Expression::string_substring(_client, arg, start, length);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::string_to_lower(KRPC::Expression arg) const {
+  return KRPC::Expression::string_to_lower(_client, arg);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::string_to_upper(KRPC::Expression arg) const {
+  return KRPC::Expression::string_to_upper(_client, arg);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::string_trim(KRPC::Expression arg) const {
+  return KRPC::Expression::string_trim(_client, arg);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::string_trim_end(KRPC::Expression arg) const {
+  return KRPC::Expression::string_trim_end(_client, arg);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::string_trim_start(KRPC::Expression arg) const {
+  return KRPC::Expression::string_trim_start(_client, arg);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::subtract(KRPC::Expression arg0, KRPC::Expression arg1) const {
+  return KRPC::Expression::subtract(_client, arg0, arg1);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::sum(KRPC::Expression arg) const {
+  return KRPC::Expression::sum(_client, arg);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::take(KRPC::Expression arg, KRPC::Expression count) const {
+  return KRPC::Expression::take(_client, arg, count);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::throw_(std::string service, std::string name, KRPC::Expression message) const {
+  return KRPC::Expression::throw_(_client, service, name, message);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::to_list(KRPC::Expression arg) const {
+  return KRPC::Expression::to_list(_client, arg);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::to_set(KRPC::Expression arg) const {
+  return KRPC::Expression::to_set(_client, arg);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::try_catch(KRPC::Expression body, std::string service, std::string name, std::optional<KRPC::Expression> message, KRPC::Expression handler) const {
+  return KRPC::Expression::try_catch(_client, body, service, name, message, handler);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::try_catch_all(KRPC::Expression body, std::optional<KRPC::Expression> message, KRPC::Expression handler) const {
+  return KRPC::Expression::try_catch_all(_client, body, message, handler);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::try_finally(KRPC::Expression body, KRPC::Expression finalizer) const {
+  return KRPC::Expression::try_finally(_client, body, finalizer);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::union_(KRPC::Expression arg1, KRPC::Expression arg2) const {
+  return KRPC::Expression::union_(_client, arg1, arg2);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::variable(std::string name, KRPC::Type type) const {
+  return KRPC::Expression::variable(_client, name, type);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::where(KRPC::Expression arg, KRPC::Expression func) const {
+  return KRPC::Expression::where(_client, arg, func);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::while_(KRPC::Expression condition, KRPC::Expression body) const {
+  return KRPC::Expression::while_(_client, condition, body);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::zip(KRPC::Expression arg1, KRPC::Expression arg2, KRPC::Expression func) const {
+  return KRPC::Expression::zip(_client, arg1, arg2, func);
+}
+
+inline KRPC::Expression::Bound KRPC::Expression::bind(const Client& client) {
+  return Bound(client);
+}
+
 inline KRPC::Type::Type():
   Object("KRPC::Type") {}
 
@@ -7234,6 +8959,81 @@ inline ::krpc::schema::ProcedureCall KRPC::Type::u_int_call(Client& _client) {
 
 inline ::krpc::schema::ProcedureCall KRPC::Type::u_long_call(Client& _client) {
   return _client.build_call("KRPC", "Type_static_ULong");
+}
+
+inline KRPC::Type::Bound::Bound(const Client& client):
+  _client(client) {}
+
+inline KRPC::Type KRPC::Type::Bound::bool_() const {
+  return KRPC::Type::bool_(_client);
+}
+
+inline KRPC::Type KRPC::Type::Bound::bytes() const {
+  return KRPC::Type::bytes(_client);
+}
+
+inline KRPC::Type KRPC::Type::Bound::class_type(std::string service, std::string name) const {
+  return KRPC::Type::class_type(_client, service, name);
+}
+
+inline KRPC::Type KRPC::Type::Bound::dictionary_type(KRPC::Type key_type, KRPC::Type value_type) const {
+  return KRPC::Type::dictionary_type(_client, key_type, value_type);
+}
+
+inline KRPC::Type KRPC::Type::Bound::double_() const {
+  return KRPC::Type::double_(_client);
+}
+
+inline KRPC::Type KRPC::Type::Bound::enumeration_type(std::string service, std::string name) const {
+  return KRPC::Type::enumeration_type(_client, service, name);
+}
+
+inline KRPC::Type KRPC::Type::Bound::float_() const {
+  return KRPC::Type::float_(_client);
+}
+
+inline KRPC::Type KRPC::Type::Bound::int_() const {
+  return KRPC::Type::int_(_client);
+}
+
+inline KRPC::Type KRPC::Type::Bound::list_type(KRPC::Type value_type) const {
+  return KRPC::Type::list_type(_client, value_type);
+}
+
+inline KRPC::Type KRPC::Type::Bound::long_() const {
+  return KRPC::Type::long_(_client);
+}
+
+inline KRPC::Type KRPC::Type::Bound::nullable_type(KRPC::Type value_type) const {
+  return KRPC::Type::nullable_type(_client, value_type);
+}
+
+inline KRPC::Type KRPC::Type::Bound::set_type(KRPC::Type value_type) const {
+  return KRPC::Type::set_type(_client, value_type);
+}
+
+inline KRPC::Type KRPC::Type::Bound::string() const {
+  return KRPC::Type::string(_client);
+}
+
+inline KRPC::Type KRPC::Type::Bound::struct_type(std::string service, std::string name) const {
+  return KRPC::Type::struct_type(_client, service, name);
+}
+
+inline KRPC::Type KRPC::Type::Bound::tuple_type(std::vector<KRPC::Type> value_types) const {
+  return KRPC::Type::tuple_type(_client, value_types);
+}
+
+inline KRPC::Type KRPC::Type::Bound::u_int() const {
+  return KRPC::Type::u_int(_client);
+}
+
+inline KRPC::Type KRPC::Type::Bound::u_long() const {
+  return KRPC::Type::u_long(_client);
+}
+
+inline KRPC::Type::Bound KRPC::Type::bind(const Client& client) {
+  return Bound(client);
 }
 }  // namespace services
 
