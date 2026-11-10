@@ -5,10 +5,12 @@ import krpc.limits
 from krpc.declarations import DeclaredClass, DeclaredObject, declaration_error as _declaration, register as _register
 from krpc.event import Event
 from krpc.schema import KRPC_pb2
-from krpc.types import DocEnum, DocFlag
+from krpc.types import DocEnum, DocFlag, deprecate_attribute, deprecated
 import krpc.services.krpc as _service_krpc
 
 
+
+@deprecated("Use TestEnum instead.")
 class DeprecatedEnum(DocEnum):
     """
     Deprecated. Use TestEnum instead.
@@ -21,6 +23,25 @@ Deprecated enum ValueA documentation string.
     value_b = 1, """
 Deprecated enum ValueB documentation string.
 """
+
+
+deprecate_attribute(DeprecatedEnum, "value_a", "TestService.DeprecatedEnum.value_a is deprecated: Use TestEnum instead.")
+deprecate_attribute(DeprecatedEnum, "value_b", "TestService.DeprecatedEnum.value_b is deprecated: Use DeprecatedEnum.value_a instead.")
+
+
+class PartlyDeprecatedEnum(DocEnum):
+    """
+    Partly deprecated enum documentation string.
+    """
+    value_a = 0, """
+Partly deprecated enum ValueA documentation string.
+"""
+    value_b = 1, """
+Partly deprecated enum ValueB documentation string.
+"""
+
+
+deprecate_attribute(PartlyDeprecatedEnum, "value_b", "TestService.PartlyDeprecatedEnum.value_b is deprecated: Use PartlyDeprecatedEnum.value_a instead.")
 
 
 class TestEnum(DocEnum):
@@ -60,6 +81,7 @@ Flags ValueAB documentation string.
 """
 
 
+@deprecated("Use TestStruct instead.")
 class DeprecatedStruct(NamedTuple):
     """
     Deprecated. Use TestStruct instead.
@@ -68,6 +90,8 @@ class DeprecatedStruct(NamedTuple):
     """
     value: int
     """
+    Deprecated. Use TestStruct instead.
+
     Deprecated struct Value documentation string.
     """
     old_value: int
@@ -76,6 +100,29 @@ class DeprecatedStruct(NamedTuple):
 
     Deprecated struct OldValue documentation string.
     """
+
+
+deprecate_attribute(DeprecatedStruct, "value", "TestService.DeprecatedStruct.value is deprecated: Use TestStruct instead.")
+deprecate_attribute(DeprecatedStruct, "old_value", "TestService.DeprecatedStruct.old_value is deprecated: Use DeprecatedStruct.value instead.")
+
+
+class PartlyDeprecatedStruct(NamedTuple):
+    """
+    Partly deprecated struct documentation string.
+    """
+    value: int
+    """
+    Partly deprecated struct Value documentation string.
+    """
+    old_value: int
+    """
+    Deprecated. Use PartlyDeprecatedStruct.value instead.
+
+    Partly deprecated struct OldValue documentation string.
+    """
+
+
+deprecate_attribute(PartlyDeprecatedStruct, "old_value", "TestService.PartlyDeprecatedStruct.old_value is deprecated: Use PartlyDeprecatedStruct.value instead.")
 
 
 class TestFlagsStruct(NamedTuple):
@@ -130,6 +177,7 @@ class CustomException(RuntimeError):
     pass
 
 
+@deprecated("Use CustomException instead.")
 class DeprecatedException(RuntimeError):
     """
     Deprecated. Use CustomException instead.
@@ -138,6 +186,7 @@ class DeprecatedException(RuntimeError):
     """
 
 
+@deprecated("Use TestClass instead.")
 class DeprecatedClass(DeclaredObject, metaclass=DeclaredClass):
     """
     Deprecated. Use TestClass instead.
@@ -147,11 +196,46 @@ class DeprecatedClass(DeclaredObject, metaclass=DeclaredClass):
     _service_name = "TestService"
     _class_name = "DeprecatedClass"
 
+    @property
+    @deprecated("Use TestClass instead.")
+    def inherited_property(self) -> str:
+        """
+        Deprecated. Use TestClass instead.
+
+        Property with no deprecation of its own documentation string.
+        """
+        raise _declaration("TestService", "DeprecatedClass")
+
+    @inherited_property.setter
+    @deprecated("Use TestClass instead.")
+    def inherited_property(self, value: str) -> None:
+        raise _declaration("TestService", "DeprecatedClass")
+
+    @deprecated("Use TestClass.get_value instead.")
     def deprecated_method(self) -> str:
         """
         Deprecated. Use TestClass.get_value instead.
 
         Deprecated method documentation string.
+        """
+        raise _declaration("TestService", "DeprecatedClass")
+
+    @deprecated("Use TestClass instead.")
+    def inherited_method(self) -> str:
+        """
+        Deprecated. Use TestClass instead.
+
+        Method with no deprecation of its own documentation string.
+        """
+        raise _declaration("TestService", "DeprecatedClass")
+
+    @staticmethod
+    @deprecated("Use TestClass instead.")
+    def inherited_static_method() -> str:
+        """
+        Deprecated. Use TestClass instead.
+
+        Static method with no deprecation of its own documentation string.
         """
         raise _declaration("TestService", "DeprecatedClass")
 
@@ -247,9 +331,11 @@ if TYPE_CHECKING:
     _DeprecatedClass = DeprecatedClass
     _TestClass = TestClass
     _DeprecatedEnum = DeprecatedEnum
+    _PartlyDeprecatedEnum = PartlyDeprecatedEnum
     _TestEnum = TestEnum
     _TestFlags = TestFlags
     _DeprecatedStruct = DeprecatedStruct
+    _PartlyDeprecatedStruct = PartlyDeprecatedStruct
     _TestFlagsStruct = TestFlagsStruct
     _TestNestedNullableStruct = TestNestedNullableStruct
     _TestStruct = TestStruct
@@ -269,9 +355,11 @@ class TestService(metaclass=DeclaredClass):
     DeprecatedClass: type[_DeprecatedClass] = DeprecatedClass
     TestClass: type[_TestClass] = TestClass
     DeprecatedEnum: type[_DeprecatedEnum] = DeprecatedEnum
+    PartlyDeprecatedEnum: type[_PartlyDeprecatedEnum] = PartlyDeprecatedEnum
     TestEnum: type[_TestEnum] = TestEnum
     TestFlags: type[_TestFlags] = TestFlags
     DeprecatedStruct: type[_DeprecatedStruct] = DeprecatedStruct
+    PartlyDeprecatedStruct: type[_PartlyDeprecatedStruct] = PartlyDeprecatedStruct
     TestFlagsStruct: type[_TestFlagsStruct] = TestFlagsStruct
     TestNestedNullableStruct: type[_TestNestedNullableStruct] = TestNestedNullableStruct
     TestStruct: type[_TestStruct] = TestStruct
@@ -281,6 +369,7 @@ class TestService(metaclass=DeclaredClass):
     DeprecatedException: type[_DeprecatedException] = DeprecatedException
 
     @property
+    @deprecated("Use string_property instead.")
     def deprecated_property(self) -> str:
         """
         Deprecated. Use string_property instead.
@@ -290,6 +379,7 @@ class TestService(metaclass=DeclaredClass):
         raise _declaration("TestService", None)
 
     @deprecated_property.setter
+    @deprecated("Use string_property instead.")
     def deprecated_property(self, value: str) -> None:
         raise _declaration("TestService", None)
 
@@ -371,9 +461,19 @@ class TestService(metaclass=DeclaredClass):
         """
         raise _declaration("TestService", None)
 
+    @deprecated("Use create_test_object instead.")
+    def create_deprecated_class(self) -> DeprecatedClass:
+        """
+        Deprecated. Use create_test_object instead.
+
+        Create an instance of a deprecated class documentation string.
+        """
+        raise _declaration("TestService", None)
+
     def create_test_object(self, value: str) -> TestClass:
         raise _declaration("TestService", None)
 
+    @deprecated("Use float_to_string instead.")
     def deprecated_procedure(self, value: float) -> str:
         """
         Deprecated. Use float_to_string instead.
@@ -382,11 +482,21 @@ class TestService(metaclass=DeclaredClass):
         """
         raise _declaration("TestService", None)
 
+    @deprecated("")
     def deprecated_procedure_no_message(self, value: float) -> str:
         """
         Deprecated.
 
         Deprecated procedure with no reason documentation string.
+        """
+        raise _declaration("TestService", None)
+
+    @deprecated("Use TestStruct instead.")
+    def deprecated_struct_procedure(self) -> DeprecatedStruct:
+        """
+        Deprecated. Use TestStruct instead.
+
+        Procedure returning a deprecated struct documentation string.
         """
         raise _declaration("TestService", None)
 
@@ -606,6 +716,12 @@ class TestService(metaclass=DeclaredClass):
     def optional_arguments(self, x: str, y: str = 'foo', z: str = 'bar', obj: Optional[TestClass] = None) -> str:
         raise _declaration("TestService", None)
 
+    def partly_deprecated_struct_procedure(self) -> PartlyDeprecatedStruct:
+        """
+        Procedure returning a partly deprecated struct documentation string.
+        """
+        raise _declaration("TestService", None)
+
     def remove_event_after(self, milliseconds: int) -> Event:
         raise _declaration("TestService", None)
 
@@ -741,9 +857,11 @@ class TestServiceClient(krpc.client.Client):
 _register(
     "TestService",
     DeprecatedEnum,
+    PartlyDeprecatedEnum,
     TestEnum,
     TestFlags,
     DeprecatedStruct,
+    PartlyDeprecatedStruct,
     TestFlagsStruct,
     TestNestedNullableStruct,
     TestStruct,

@@ -263,7 +263,8 @@ Deprecated Members
 A member of a service can be deprecated, when a newer member replaces it. A deprecated member
 still works, but may be removed in a future release, so move to its replacement.
 
-The API reference marks it as deprecated, and names the replacement.
+The API reference marks it as deprecated, and names the replacement. Using it writes a warning
+naming the replacement to standard error, once per member on a connection.
 
 Service Stubs
 -------------

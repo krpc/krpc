@@ -113,6 +113,25 @@ Each client has its own classes, in its ``Types``, so a static method is a closu
   checks with no client type. It imports ``krpc.ksp`` on the first connect, which keeps
   ``import krpc`` free of generated modules.
 
+Deprecated Members
+------------------
+
+A warning fires where a program reads a member, which keeps the cost off other members and off the
+values the client decodes:
+
+* A deprecated enumeration value or structure field is a descriptor on the class, in place of the
+  member or the ``namedtuple`` field getter. The client's encoder and decoder read neither by name,
+  so a value from the server gives no warning. A generated module sets these on its own classes.
+* A deprecated class, enumeration, structure or exception is a descriptor on the service class, in
+  place of the type.
+
+A read is the use that warns for a structure field, as the decoder and a program build a structure
+through one constructor.
+
+The generated modules take the ``deprecated`` decorator from ``krpc.types``. A type checker sees the
+one in ``typing_extensions``. At run time it only records the message, as the built service warns,
+and the client depends on no typing package.
+
 Server Side Functions
 ---------------------
 

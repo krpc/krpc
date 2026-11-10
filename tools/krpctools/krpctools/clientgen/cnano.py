@@ -20,7 +20,7 @@ from ..lang.cnano import CnanoLanguage
 from ..utils import as_type
 from . import crefs
 from .docparser import DocParser
-from .generator import Generator
+from .generator import Generator, inherit_deprecation
 
 
 class CnanoGenerator(Generator[CnanoLanguage]):
@@ -165,6 +165,7 @@ class CnanoGenerator(Generator[CnanoLanguage]):
             for name, member in zip(typ.field_names, members):
                 member["member"] = self.parse_name(snake_case(name))
             result.update({"kind": "struct", "value_types": members})
+            self.add_struct_deprecation(typ, result)
         elif isinstance(typ, (ListType, SetType)):
             result.update(
                 {
@@ -252,6 +253,22 @@ class CnanoGenerator(Generator[CnanoLanguage]):
                     parameter["type"]["ccvtype"] = "const %s *" % ctype
                     parameter["type"]["getptr"] = ""
         return parameters
+
+    def add_struct_deprecation(self, typ, info):
+        """Add the deprecation of a structure and its fields, as the header of each service
+        that uses the structure declares it, whichever service defines it."""
+        service = typ.protobuf_type.service
+        defs = inherit_deprecation(self._definitions.services[service])
+        struct = defs["structs"][typ.protobuf_type.name]
+        info["deprecated"] = struct.get("deprecated", False)
+        info["deprecated_reason"] = self.parse_deprecation_reason(
+            struct.get("deprecated_reason", "")
+        )
+        for member, field in zip(info["value_types"], struct["fields"]):
+            member["deprecated"] = field.get("deprecated", False)
+            member["deprecated_reason"] = self.parse_deprecation_reason(
+                field.get("deprecated_reason", "")
+            )
 
     def parse_default_value(self, value, typ):
         # No default arguments in C

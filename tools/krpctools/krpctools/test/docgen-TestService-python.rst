@@ -127,6 +127,18 @@ Service documentation string.
 
 
 
+.. staticmethod:: create_deprecated_class()
+
+   .. warning:: Deprecated. Use :meth:`create_test_object` instead.
+
+   Create an instance of a deprecated class documentation string.
+
+   :rtype: :class:`DeprecatedClass`
+   
+
+
+
+
 .. staticmethod:: create_test_object(value)
 
 
@@ -172,6 +184,18 @@ Service documentation string.
 
    :Attribute: Can be read or written
    :rtype: str
+   
+
+
+
+
+.. staticmethod:: deprecated_struct_procedure()
+
+   .. warning:: Deprecated. Use :class:`TestStruct` instead.
+
+   Procedure returning a deprecated struct documentation string.
+
+   :rtype: :class:`DeprecatedStruct`
    
 
 
@@ -872,6 +896,16 @@ Service documentation string.
 
 
 
+.. staticmethod:: partly_deprecated_struct_procedure()
+
+   Procedure returning a partly deprecated struct documentation string.
+
+   :rtype: :class:`PartlyDeprecatedStruct`
+   
+
+
+
+
 .. staticmethod:: remove_event_after(milliseconds)
 
 
@@ -1284,6 +1318,28 @@ Service documentation string.
       :rtype: str
    
 
+   .. method:: inherited_method()
+
+      Method with no deprecation of its own documentation string.
+
+      :rtype: str
+   
+
+   .. attribute:: inherited_property
+
+      Property with no deprecation of its own documentation string.
+
+      :Attribute: Can be read or written
+      :rtype: str
+   
+
+   .. staticmethod:: inherited_static_method()
+
+      Static method with no deprecation of its own documentation string.
+
+      :rtype: str
+   
+
 
 
 .. class:: TestClass
@@ -1416,6 +1472,24 @@ Service documentation string.
 
 
 
+.. class:: PartlyDeprecatedEnum
+
+   Partly deprecated enum documentation string.
+
+
+   .. data:: value_a
+
+      Partly deprecated enum ValueA documentation string.
+
+
+   .. data:: value_b
+
+      .. warning:: Deprecated. Use :attr:`PartlyDeprecatedEnum.value_a` instead.
+
+      Partly deprecated enum ValueB documentation string.
+
+
+
 .. class:: TestEnum
 
    Enum documentation string.
@@ -1489,6 +1563,26 @@ Service documentation string.
       .. warning:: Deprecated. Use :attr:`DeprecatedStruct.value` instead.
 
       Deprecated struct OldValue documentation string.
+
+      :rtype: int
+
+
+.. class:: PartlyDeprecatedStruct(value, old_value)
+
+   Partly deprecated struct documentation string.
+
+
+   .. attribute:: value
+
+      Partly deprecated struct Value documentation string.
+
+      :rtype: int
+
+   .. attribute:: old_value
+
+      .. warning:: Deprecated. Use :attr:`PartlyDeprecatedStruct.value` instead.
+
+      Partly deprecated struct OldValue documentation string.
 
       :rtype: int
 

@@ -10,8 +10,9 @@ local Attributes = require 'krpc.attributes'
 
 local service = {}
 
--- The service and procedure each function a service or class is built with calls, and the number
--- of leading parameters it does not send, by function. Client:get_call reads it. The keys are weak
+-- The service and procedure each function a service or class is built with calls, the number of
+-- leading parameters it does not send, and the warning for a deprecated one, by function.
+-- Client:get_call reads it. The keys are weak
 -- and the values hold no types, as Lua 5.1 and LuaJIT have no ephemeron tables.
 service.procedures = setmetatable({}, { __mode = 'k' })
 
@@ -91,11 +92,110 @@ local function _construct_func(svc, procedure_name, prefix_param_names, param_na
   return result
 end
 
+--- Flatten a deprecation reason to plain text. The reason may hold the see-cref markup of
+--- documentation strings. A reference becomes a dotted name, with the prefix of the current
+--- service dropped and a member's name in snake case.
+local function _parse_deprecation_reason(reason, service_name)
+  local function cref(kind, name)
+    if name:sub(1, #service_name + 1) == service_name .. '.' then
+      name = name:sub(#service_name + 2)
+    end
+    if kind == 'M' then
+      local path, member = name:match('^(.*%.)([^.]*)$')
+      return (path or '') .. service.to_snake_case(member or name)
+    end
+    return name
+  end
+  reason = reason:gsub('<see cref=[\'"](%u):([^\'"]*)[\'"]%s*/>', cref)
+  return (reason:gsub('<[^>]*>', ''))
+end
+
+--- The text of the warning for a use of a deprecated member
+function service.deprecation_warning(member, service_name, qualified_name)
+  local reason = _parse_deprecation_reason(member.deprecated_reason or '', service_name)
+  if reason == '' then
+    return qualified_name .. ' is deprecated'
+  end
+  return qualified_name .. ' is deprecated: ' .. reason
+end
+
+--- Deprecate each member of a deprecated service, class, enumeration or structure. A member
+--- with no reason of its own takes the reason of its container.
+function service.inherit_deprecation(svc)
+  local function inherit(member, container)
+    if container.deprecated then
+      member.deprecated = true
+      if (member.deprecated_reason or '') == '' then
+        member.deprecated_reason = container.deprecated_reason
+      end
+    end
+  end
+  -- A class's reason comes before its service's
+  local classes = {}
+  for _,cls in ipairs(svc.classes) do
+    classes[cls.name] = cls
+  end
+  for _,procedure in ipairs(svc.procedures) do
+    if Attributes.is_a_class_member(procedure.name) then
+      inherit(procedure, classes[Attributes.get_class_name(procedure.name)])
+    end
+  end
+  for _,kind in ipairs{'classes', 'enumerations', 'structs', 'exceptions', 'procedures'} do
+    for _,member in ipairs(svc[kind]) do
+      inherit(member, svc)
+    end
+  end
+  for _,enum in ipairs(svc.enumerations) do
+    for _,value in ipairs(enum.values) do
+      inherit(value, enum)
+    end
+  end
+  for _,struct in ipairs(svc.structs) do
+    for _,field in ipairs(struct.fields) do
+      inherit(field, struct)
+    end
+  end
+end
+
 local ServiceBase = class(Types.DynamicType)
 
 --- Whether a value is the service of the given name, from any connection
 function service.is_service(value, name)
   return ServiceBase:class_of(value) and value._name == name
+end
+
+--- A function that warns of the use of a member, if it is deprecated, then calls the given one
+function ServiceBase:_deprecating(member, qualified_name, func)
+  if not member.deprecated then
+    return func
+  end
+  local types = self._client._types
+  local message = service.deprecation_warning(member, self._name, self._name .. '.' .. qualified_name)
+  local deprecating = function(...)
+    types:warn_deprecated(message)
+    return func(...)
+  end
+  -- So that get_call accepts the wrapper, and warns as the wrapper does
+  local info = {}
+  for k, v in pairs(service.procedures[func]) do
+    info[k] = v
+  end
+  info.deprecation = message
+  service.procedures[deprecating] = info
+  return deprecating
+end
+
+--- Add a class, enumeration or structure type. A deprecated type is left out of the service's
+--- class table, so that reading it reaches __index, set up by create_service
+function ServiceBase:_add_service_type(member, lua_type)
+  if member.deprecated then
+    self._deprecated_members[member.name] = {
+      value = lua_type,
+      message = service.deprecation_warning(member, self._name, self._name .. '.' .. member.name)
+    }
+  else
+    self[member.name] = lua_type
+  end
 end
 
 function ServiceBase:_parse_procedure(procedure)
@@ -125,10 +225,17 @@ function service.register_definitions(types, svc)
   end
   for _,enum in ipairs(svc.enumerations) do
     local values = {}
+    local deprecated = {}
     for _,value in ipairs(enum.values) do
-      values[service.to_snake_case(value.name)] = value.value
+      local name = service.to_snake_case(value.name)
+      values[name] = value.value
+      if value.deprecated then
+        deprecated[name] = service.deprecation_warning(value, svc.name, svc.name .. '.' .. enum.name .. '.' .. name)
+      end
     end
-    types:enumeration_type(svc.name, enum.name):set_values(values, enum.flags)
+    types:enumeration_type(svc.name, enum.name):set_values(values, enum.flags, deprecated, function(message)
+      types:warn_deprecated(message)
+    end)
   end
   for _,struct in ipairs(svc.structs) do
     -- A structure whose fields cannot all be resolved is left without any, so that whatever
@@ -156,17 +263,17 @@ end
 
 --- Add a class type
 function ServiceBase:_add_service_class(cls)
-  self[cls.name] = self._client._types:class_type(self._name, cls.name).lua_type
+  self:_add_service_type(cls, self._client._types:class_type(self._name, cls.name).lua_type)
 end
 
 --- Add an enumeration type
 function ServiceBase:_add_service_enumeration(enum)
-  self[enum.name] = self._client._types:enumeration_type(self._name, enum.name).lua_type
+  self:_add_service_type(enum, self._client._types:enumeration_type(self._name, enum.name).lua_type)
 end
 
 --- Add a structure type
 function ServiceBase:_add_service_struct(struct)
-  self[struct.name] = self._client._types:struct_type(self._name, struct.name).lua_type
+  self:_add_service_type(struct, self._client._types:struct_type(self._name, struct.name).lua_type)
 end
 
 --- Add a procedure
@@ -175,21 +282,23 @@ function ServiceBase:_add_service_procedure(procedure)
   local func = _construct_func(self, procedure.name, List{}, param_names, param_types, param_required, return_type)
   --build_request = ...
   local name = service.to_snake_case(procedure.name)
-  return self:_add_static_method(name, func)
+  return self:_add_static_method(name, self:_deprecating(procedure, name, func))
 end
 
 function ServiceBase:_add_service_property(name, getter, setter)
+  name = service.to_snake_case(name)
   if getter then
     local getter_name = getter.name
     local _,_,_,return_type = self:_parse_procedure(getter)
-    getter = _construct_func(self, getter_name, List{'self'}, nil, nil, nil, return_type)
+    getter = self:_deprecating(getter, name,
+      _construct_func(self, getter_name, List{'self'}, nil, nil, nil, return_type))
   end
   if setter then
     local setter_name = setter.name
     local param_names, param_types, param_required = self:_parse_procedure(setter)
-    setter = _construct_func(self, setter_name, List{'self'}, param_names, param_types, param_required, nil)
+    setter = self:_deprecating(setter, name,
+      _construct_func(self, setter_name, List{'self'}, param_names, param_types, param_required, nil))
   end
-  name = service.to_snake_case(name)
   return self:_add_property(name, getter, setter)
 end
 
@@ -203,7 +312,7 @@ function ServiceBase:_add_service_class_method(class_name, method_name, procedur
   local func = _construct_func(self, procedure.name, nil, param_names, param_types, param_required, return_type)
   --build_request = ...
   local name = service.to_snake_case(method_name)
-  class_cls:_add_method(name, func)
+  class_cls:_add_method(name, self:_deprecating(procedure, class_name .. '.' .. name, func))
 end
 
 --- Add a static method to a class
@@ -213,24 +322,27 @@ function ServiceBase:_add_service_class_static_method(class_name, method_name, p
   local func = _construct_func(self, procedure.name, nil, param_names, param_types, param_required, return_type)
   --local build_request = ...
   local name = service.to_snake_case(method_name)
-  class_cls:_add_static_method(name, func)
+  class_cls:_add_static_method(name, self:_deprecating(procedure, class_name .. '.' .. name, func))
 end
 
 --- Add a property to a class
 function ServiceBase:_add_service_class_property(class_name, property_name, getter, setter)
   local class_cls = self._client._types:class_type(self._name, class_name).lua_type
+  local qualified_name = class_name .. '.' .. service.to_snake_case(property_name)
   if getter then
     local getter_name = getter.name
     local param_names, param_types, param_required, return_type = self:_parse_procedure(getter)
     -- Rename this to self if it doesn't cause a name clash
     --if 'self' not in param_names:
     --  param_names[0] = 'self'
-    getter = _construct_func(self, getter_name, nil, param_names, param_types, param_required, return_type)
+    getter = self:_deprecating(getter, qualified_name,
+      _construct_func(self, getter_name, nil, param_names, param_types, param_required, return_type))
     --local build_request = ...
   end
   if setter then
     local param_names, param_types, param_required = self:_parse_procedure(setter)
-    setter = _construct_func(self, setter.name, nil, param_names, param_types, param_required, nil)
+    setter = self:_deprecating(setter, qualified_name,
+      _construct_func(self, setter.name, nil, param_names, param_types, param_required, nil))
   end
   property_name = service.to_snake_case(property_name)
   return class_cls:_add_property(property_name, getter, setter)
@@ -256,6 +368,19 @@ function service.create_service(client, svc)
   cls._client = client
   cls._name = svc.name
   cls._invoke = bind1(client._invoke, client)
+
+  -- The deprecated types of the service, which warn when read
+  local deprecated_members = {}
+  cls._deprecated_members = deprecated_members
+  local index = cls.__index
+  cls.__index = function(t, key)
+    local member = deprecated_members[key]
+    if member ~= nil then
+      client._types:warn_deprecated(member.message)
+      return member.value
+    end
+    return index(t, key)
+  end
 
   -- Add class types to svc
   for _,cls2 in ipairs(svc.classes) do

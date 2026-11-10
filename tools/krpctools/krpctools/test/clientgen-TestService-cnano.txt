@@ -17,14 +17,61 @@
 extern "C" {
 #endif
 
+KRPC_DEPRECATED_USES_BEGIN
+
 /**
  * Deprecated class documentation string.
  */
+KRPC_DEPRECATED("Use TestClass instead.")
 typedef krpc_object_t krpc_TestService_DeprecatedClass_t;
 /**
  * Class documentation string.
  */
 typedef krpc_object_t krpc_TestService_TestClass_t;
+
+#ifndef KRPC_TYPE_TESTSERVICE_DEPRECATEDSTRUCT
+#define KRPC_TYPE_TESTSERVICE_DEPRECATEDSTRUCT
+
+KRPC_DEPRECATED("Use TestStruct instead.")
+typedef struct krpc_TestService_DeprecatedStruct_s krpc_TestService_DeprecatedStruct_t;
+struct krpc_TestService_DeprecatedStruct_s {
+  KRPC_DEPRECATED("Use TestStruct instead.")
+  int32_t value;
+  KRPC_DEPRECATED("Use DeprecatedStruct.Value instead.")
+  int32_t old_value;
+};
+
+static inline krpc_error_t krpc_encode_TestService_DeprecatedStruct(
+  pb_ostream_t * stream, const krpc_TestService_DeprecatedStruct_t * value);
+static inline krpc_error_t krpc_encode_size_TestService_DeprecatedStruct(
+  size_t * size, const krpc_TestService_DeprecatedStruct_t * value);
+static inline bool krpc_encode_callback_TestService_DeprecatedStruct(
+  pb_ostream_t * stream, const pb_field_t * field, void * const * arg);
+static inline krpc_error_t krpc_decode_TestService_DeprecatedStruct(
+  pb_istream_t * stream, krpc_TestService_DeprecatedStruct_t * value);
+
+#endif  // KRPC_TYPE_TESTSERVICE_DEPRECATEDSTRUCT
+
+#ifndef KRPC_TYPE_TESTSERVICE_PARTLYDEPRECATEDSTRUCT
+#define KRPC_TYPE_TESTSERVICE_PARTLYDEPRECATEDSTRUCT
+
+typedef struct krpc_TestService_PartlyDeprecatedStruct_s krpc_TestService_PartlyDeprecatedStruct_t;
+struct krpc_TestService_PartlyDeprecatedStruct_s {
+  int32_t value;
+  KRPC_DEPRECATED("Use PartlyDeprecatedStruct.Value instead.")
+  int32_t old_value;
+};
+
+static inline krpc_error_t krpc_encode_TestService_PartlyDeprecatedStruct(
+  pb_ostream_t * stream, const krpc_TestService_PartlyDeprecatedStruct_t * value);
+static inline krpc_error_t krpc_encode_size_TestService_PartlyDeprecatedStruct(
+  size_t * size, const krpc_TestService_PartlyDeprecatedStruct_t * value);
+static inline bool krpc_encode_callback_TestService_PartlyDeprecatedStruct(
+  pb_ostream_t * stream, const pb_field_t * field, void * const * arg);
+static inline krpc_error_t krpc_decode_TestService_PartlyDeprecatedStruct(
+  pb_istream_t * stream, krpc_TestService_PartlyDeprecatedStruct_t * value);
+
+#endif  // KRPC_TYPE_TESTSERVICE_PARTLYDEPRECATEDSTRUCT
 
 #ifndef KRPC_TYPE_TESTSERVICE_TESTFLAGSSTRUCT
 #define KRPC_TYPE_TESTSERVICE_TESTFLAGSSTRUCT
@@ -744,16 +791,31 @@ static inline krpc_error_t krpc_decode_tuple_object_object(
 /**
  * Deprecated enum documentation string.
  */
+KRPC_DEPRECATED("Use TestEnum instead.")
 typedef enum {
   /**
    * Deprecated enum ValueA documentation string.
    */
-  KRPC_TESTSERVICE_DEPRECATEDENUM_VALUEA = 0,
+  KRPC_TESTSERVICE_DEPRECATEDENUM_VALUEA KRPC_DEPRECATED_VALUE("Use TestEnum instead.") = 0,
   /**
    * Deprecated enum ValueB documentation string.
    */
-  KRPC_TESTSERVICE_DEPRECATEDENUM_VALUEB = 1
+  KRPC_TESTSERVICE_DEPRECATEDENUM_VALUEB KRPC_DEPRECATED_VALUE("Use DeprecatedEnum.ValueA instead.") = 1
 } krpc_TestService_DeprecatedEnum_t;
+
+/**
+ * Partly deprecated enum documentation string.
+ */
+typedef enum {
+  /**
+   * Partly deprecated enum ValueA documentation string.
+   */
+  KRPC_TESTSERVICE_PARTLYDEPRECATEDENUM_VALUEA = 0,
+  /**
+   * Partly deprecated enum ValueB documentation string.
+   */
+  KRPC_TESTSERVICE_PARTLYDEPRECATEDENUM_VALUEB KRPC_DEPRECATED_VALUE("Use PartlyDeprecatedEnum.ValueA instead.") = 1
+} krpc_TestService_PartlyDeprecatedEnum_t;
 
 /**
  * Enum documentation string.
@@ -884,6 +946,19 @@ static inline krpc_error_t krpc_TestService_CounterStruct(krpc_connection_t conn
  */
 static inline krpc_error_t krpc_TestService_CounterStruct_call(krpc_schema_ProcedureCall * procedureCall, const char * id);
 
+/**
+ * Create an instance of a deprecated class documentation string.
+ */
+KRPC_DEPRECATED("Use CreateTestObject instead.")
+static inline krpc_error_t krpc_TestService_CreateDeprecatedClass(krpc_connection_t connection, krpc_TestService_DeprecatedClass_t * returnValue);
+
+/**
+ * Fills in the call krpc_TestService_CreateDeprecatedClass() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
+ * krpc_free_procedure_call().
+ */
+KRPC_DEPRECATED("Use CreateTestObject instead.")
+static inline krpc_error_t krpc_TestService_CreateDeprecatedClass_call(krpc_schema_ProcedureCall * procedureCall);
+
 static inline krpc_error_t krpc_TestService_CreateTestObject(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue, const char * value);
 
 /**
@@ -902,6 +977,7 @@ static inline krpc_error_t krpc_TestService_DeprecatedProcedure(krpc_connection_
  * Fills in the call krpc_TestService_DeprecatedProcedure() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
  * krpc_free_procedure_call().
  */
+KRPC_DEPRECATED("Use FloatToString instead.")
 static inline krpc_error_t krpc_TestService_DeprecatedProcedure_call(krpc_schema_ProcedureCall * procedureCall, float value);
 
 /**
@@ -914,7 +990,21 @@ static inline krpc_error_t krpc_TestService_DeprecatedProcedureNoMessage(krpc_co
  * Fills in the call krpc_TestService_DeprecatedProcedureNoMessage() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
  * krpc_free_procedure_call().
  */
+KRPC_DEPRECATED("")
 static inline krpc_error_t krpc_TestService_DeprecatedProcedureNoMessage_call(krpc_schema_ProcedureCall * procedureCall, float value);
+
+/**
+ * Procedure returning a deprecated struct documentation string.
+ */
+KRPC_DEPRECATED("Use TestStruct instead.")
+static inline krpc_error_t krpc_TestService_DeprecatedStructProcedure(krpc_connection_t connection, krpc_TestService_DeprecatedStruct_t * returnValue);
+
+/**
+ * Fills in the call krpc_TestService_DeprecatedStructProcedure() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
+ * krpc_free_procedure_call().
+ */
+KRPC_DEPRECATED("Use TestStruct instead.")
+static inline krpc_error_t krpc_TestService_DeprecatedStructProcedure_call(krpc_schema_ProcedureCall * procedureCall);
 
 static inline krpc_error_t krpc_TestService_DictionaryDefault(krpc_connection_t connection, krpc_dictionary_int32_bool_t * returnValue, const krpc_dictionary_int32_bool_t * x);
 
@@ -1425,6 +1515,17 @@ static inline krpc_error_t krpc_TestService_OptionalArguments(krpc_connection_t 
  */
 static inline krpc_error_t krpc_TestService_OptionalArguments_call(krpc_schema_ProcedureCall * procedureCall, const char * x, const char * y, const char * z, krpc_TestService_TestClass_t obj);
 
+/**
+ * Procedure returning a partly deprecated struct documentation string.
+ */
+static inline krpc_error_t krpc_TestService_PartlyDeprecatedStructProcedure(krpc_connection_t connection, krpc_TestService_PartlyDeprecatedStruct_t * returnValue);
+
+/**
+ * Fills in the call krpc_TestService_PartlyDeprecatedStructProcedure() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_TestService_PartlyDeprecatedStructProcedure_call(krpc_schema_ProcedureCall * procedureCall);
+
 static inline krpc_error_t krpc_TestService_RemoveEventAfter(krpc_connection_t connection, uint64_t * returnValue, uint32_t milliseconds);
 
 /**
@@ -1720,6 +1821,7 @@ static inline krpc_error_t krpc_TestService_DeprecatedProperty(krpc_connection_t
  * Fills in the call krpc_TestService_DeprecatedProperty() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
  * krpc_free_procedure_call().
  */
+KRPC_DEPRECATED("Use StringProperty instead.")
 static inline krpc_error_t krpc_TestService_DeprecatedProperty_call(krpc_schema_ProcedureCall * procedureCall);
 
 /**
@@ -1732,6 +1834,7 @@ static inline krpc_error_t krpc_TestService_set_DeprecatedProperty(krpc_connecti
  * Fills in the call krpc_TestService_set_DeprecatedProperty() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
  * krpc_free_procedure_call().
  */
+KRPC_DEPRECATED("Use StringProperty instead.")
 static inline krpc_error_t krpc_TestService_set_DeprecatedProperty_call(krpc_schema_ProcedureCall * procedureCall, const char * value);
 
 static inline krpc_error_t krpc_TestService_NullableObject(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue);
@@ -1822,7 +1925,60 @@ static inline krpc_error_t krpc_TestService_DeprecatedClass_DeprecatedMethod(krp
  * Fills in the call krpc_TestService_DeprecatedClass_DeprecatedMethod() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
  * krpc_free_procedure_call().
  */
+KRPC_DEPRECATED("Use TestClass.GetValue instead.")
 static inline krpc_error_t krpc_TestService_DeprecatedClass_DeprecatedMethod_call(krpc_schema_ProcedureCall * procedureCall, krpc_TestService_DeprecatedClass_t instance);
+
+/**
+ * Method with no deprecation of its own documentation string.
+ */
+KRPC_DEPRECATED("Use TestClass instead.")
+static inline krpc_error_t krpc_TestService_DeprecatedClass_InheritedMethod(krpc_connection_t connection, char * * returnValue, krpc_TestService_DeprecatedClass_t instance);
+
+/**
+ * Fills in the call krpc_TestService_DeprecatedClass_InheritedMethod() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
+ * krpc_free_procedure_call().
+ */
+KRPC_DEPRECATED("Use TestClass instead.")
+static inline krpc_error_t krpc_TestService_DeprecatedClass_InheritedMethod_call(krpc_schema_ProcedureCall * procedureCall, krpc_TestService_DeprecatedClass_t instance);
+
+/**
+ * Static method with no deprecation of its own documentation string.
+ */
+KRPC_DEPRECATED("Use TestClass instead.")
+static inline krpc_error_t krpc_TestService_DeprecatedClass_InheritedStaticMethod(krpc_connection_t connection, char * * returnValue);
+
+/**
+ * Fills in the call krpc_TestService_DeprecatedClass_InheritedStaticMethod() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
+ * krpc_free_procedure_call().
+ */
+KRPC_DEPRECATED("Use TestClass instead.")
+static inline krpc_error_t krpc_TestService_DeprecatedClass_InheritedStaticMethod_call(krpc_schema_ProcedureCall * procedureCall);
+
+/**
+ * Property with no deprecation of its own documentation string.
+ */
+KRPC_DEPRECATED("Use TestClass instead.")
+static inline krpc_error_t krpc_TestService_DeprecatedClass_InheritedProperty(krpc_connection_t connection, char * * returnValue, krpc_TestService_DeprecatedClass_t instance);
+
+/**
+ * Fills in the call krpc_TestService_DeprecatedClass_InheritedProperty() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
+ * krpc_free_procedure_call().
+ */
+KRPC_DEPRECATED("Use TestClass instead.")
+static inline krpc_error_t krpc_TestService_DeprecatedClass_InheritedProperty_call(krpc_schema_ProcedureCall * procedureCall, krpc_TestService_DeprecatedClass_t instance);
+
+/**
+ * Property with no deprecation of its own documentation string.
+ */
+KRPC_DEPRECATED("Use TestClass instead.")
+static inline krpc_error_t krpc_TestService_DeprecatedClass_set_InheritedProperty(krpc_connection_t connection, krpc_TestService_DeprecatedClass_t instance, const char * value);
+
+/**
+ * Fills in the call krpc_TestService_DeprecatedClass_set_InheritedProperty() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
+ * krpc_free_procedure_call().
+ */
+KRPC_DEPRECATED("Use TestClass instead.")
+static inline krpc_error_t krpc_TestService_DeprecatedClass_set_InheritedProperty_call(krpc_schema_ProcedureCall * procedureCall, krpc_TestService_DeprecatedClass_t instance, const char * value);
 
 static inline krpc_error_t krpc_TestService_TestClass_EchoNullableObject(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue, krpc_TestService_TestClass_t instance, krpc_TestService_TestClass_t value);
 
@@ -1962,6 +2118,196 @@ static inline krpc_error_t krpc_TestService_TestClass_StringPropertyPrivateSet(k
 static inline krpc_error_t krpc_TestService_TestClass_StringPropertyPrivateSet_call(krpc_schema_ProcedureCall * procedureCall, krpc_TestService_TestClass_t instance);
 
 // Implementation
+
+#ifndef KRPC_IMPL_TYPE_TESTSERVICE_DEPRECATEDSTRUCT
+#define KRPC_IMPL_TYPE_TESTSERVICE_DEPRECATEDSTRUCT
+
+static inline bool krpc_encode_callback_items_TestService_DeprecatedStruct(
+  pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
+  const krpc_TestService_DeprecatedStruct_t * value = (const krpc_TestService_DeprecatedStruct_t*)(*arg);
+  {
+    if (!pb_encode_tag_for_field(stream, field))
+      KRPC_CALLBACK_RETURN_ERROR("encoding tag for tuple item");
+    size_t size;
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_int32(&size, value->value));
+    if (!pb_encode_varint(stream, size))
+      KRPC_CALLBACK_RETURN_ERROR("encoding size for tuple item");
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_int32(stream, value->value));
+  }
+  {
+    if (!pb_encode_tag_for_field(stream, field))
+      KRPC_CALLBACK_RETURN_ERROR("encoding tag for tuple item");
+    size_t size;
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_int32(&size, value->old_value));
+    if (!pb_encode_varint(stream, size))
+      KRPC_CALLBACK_RETURN_ERROR("encoding size for tuple item");
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_int32(stream, value->old_value));
+  }
+  return true;
+}
+
+static inline krpc_error_t krpc_encode_TestService_DeprecatedStruct(
+  pb_ostream_t * stream, const krpc_TestService_DeprecatedStruct_t * value) {
+  krpc_schema_Tuple message = krpc_schema_Tuple_init_default;
+  message.items.funcs.encode = &krpc_encode_callback_items_TestService_DeprecatedStruct;
+  message.items.arg = (krpc_TestService_DeprecatedStruct_t*)value;
+  KRPC_RETURN_ON_ERROR(krpc_encode_message_Tuple(stream, &message));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_encode_size_TestService_DeprecatedStruct(
+  size_t * size, const krpc_TestService_DeprecatedStruct_t * value) {
+  pb_ostream_t stream = PB_OSTREAM_SIZING;
+  KRPC_RETURN_ON_ERROR(krpc_encode_TestService_DeprecatedStruct(&stream, value));
+  *size = stream.bytes_written;
+  return KRPC_OK;
+}
+
+static inline bool krpc_encode_callback_TestService_DeprecatedStruct(
+  pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
+  if (!pb_encode_tag_for_field(stream, field))
+    KRPC_CALLBACK_RETURN_ERROR("encoding tag for TestService_DeprecatedStruct");
+  krpc_TestService_DeprecatedStruct_t * value = (krpc_TestService_DeprecatedStruct_t*)(*arg);
+  size_t size;
+  KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_TestService_DeprecatedStruct(&size, value));
+  if (!pb_encode_varint(stream, size))
+    KRPC_CALLBACK_RETURN_ERROR("encoding size for TestService_DeprecatedStruct");
+  KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_TestService_DeprecatedStruct(stream, value));
+  return true;
+}
+
+static inline bool krpc_decode_callback_item_TestService_DeprecatedStruct(
+  pb_istream_t * stream, const pb_field_t * field, void ** arg) {
+  typedef struct State {size_t pos; krpc_TestService_DeprecatedStruct_t * value;} State;
+  State * state = (State*)(*arg);
+  krpc_TestService_DeprecatedStruct_t * value = state->value;
+  switch (state->pos) {
+  case 0:
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_int32(stream, &value->value));
+    break;
+  case 1:
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_int32(stream, &value->old_value));
+    break;
+  default:
+    // Fields are only ever appended to a structure, so a value from a newer server may
+    // carry more items than this client knows about, and those are skipped
+    if (!pb_read(stream, NULL, stream->bytes_left))
+      KRPC_CALLBACK_RETURN_ERROR("skipping an appended struct field");
+    break;
+  }
+  state->pos++;
+  return true;
+}
+
+static inline krpc_error_t krpc_decode_TestService_DeprecatedStruct(
+  pb_istream_t * stream, krpc_TestService_DeprecatedStruct_t * value) {
+  krpc_schema_Tuple message = krpc_schema_Tuple_init_default;
+  message.items.funcs.decode = &krpc_decode_callback_item_TestService_DeprecatedStruct;
+  typedef struct State { size_t pos; krpc_TestService_DeprecatedStruct_t * value; } State;
+  State state = { 0, value };
+  message.items.arg = &state;
+  KRPC_RETURN_ON_ERROR(krpc_decode_message_Tuple(stream, &message));
+  if (state.pos < 2)
+    KRPC_RETURN_ERROR(DECODING_FAILED, "too few fields for a TestService_DeprecatedStruct");
+  return KRPC_OK;
+}
+
+#endif  // KRPC_IMPL_TYPE_TESTSERVICE_DEPRECATEDSTRUCT
+
+#ifndef KRPC_IMPL_TYPE_TESTSERVICE_PARTLYDEPRECATEDSTRUCT
+#define KRPC_IMPL_TYPE_TESTSERVICE_PARTLYDEPRECATEDSTRUCT
+
+static inline bool krpc_encode_callback_items_TestService_PartlyDeprecatedStruct(
+  pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
+  const krpc_TestService_PartlyDeprecatedStruct_t * value = (const krpc_TestService_PartlyDeprecatedStruct_t*)(*arg);
+  {
+    if (!pb_encode_tag_for_field(stream, field))
+      KRPC_CALLBACK_RETURN_ERROR("encoding tag for tuple item");
+    size_t size;
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_int32(&size, value->value));
+    if (!pb_encode_varint(stream, size))
+      KRPC_CALLBACK_RETURN_ERROR("encoding size for tuple item");
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_int32(stream, value->value));
+  }
+  {
+    if (!pb_encode_tag_for_field(stream, field))
+      KRPC_CALLBACK_RETURN_ERROR("encoding tag for tuple item");
+    size_t size;
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_int32(&size, value->old_value));
+    if (!pb_encode_varint(stream, size))
+      KRPC_CALLBACK_RETURN_ERROR("encoding size for tuple item");
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_int32(stream, value->old_value));
+  }
+  return true;
+}
+
+static inline krpc_error_t krpc_encode_TestService_PartlyDeprecatedStruct(
+  pb_ostream_t * stream, const krpc_TestService_PartlyDeprecatedStruct_t * value) {
+  krpc_schema_Tuple message = krpc_schema_Tuple_init_default;
+  message.items.funcs.encode = &krpc_encode_callback_items_TestService_PartlyDeprecatedStruct;
+  message.items.arg = (krpc_TestService_PartlyDeprecatedStruct_t*)value;
+  KRPC_RETURN_ON_ERROR(krpc_encode_message_Tuple(stream, &message));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_encode_size_TestService_PartlyDeprecatedStruct(
+  size_t * size, const krpc_TestService_PartlyDeprecatedStruct_t * value) {
+  pb_ostream_t stream = PB_OSTREAM_SIZING;
+  KRPC_RETURN_ON_ERROR(krpc_encode_TestService_PartlyDeprecatedStruct(&stream, value));
+  *size = stream.bytes_written;
+  return KRPC_OK;
+}
+
+static inline bool krpc_encode_callback_TestService_PartlyDeprecatedStruct(
+  pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
+  if (!pb_encode_tag_for_field(stream, field))
+    KRPC_CALLBACK_RETURN_ERROR("encoding tag for TestService_PartlyDeprecatedStruct");
+  krpc_TestService_PartlyDeprecatedStruct_t * value = (krpc_TestService_PartlyDeprecatedStruct_t*)(*arg);
+  size_t size;
+  KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_TestService_PartlyDeprecatedStruct(&size, value));
+  if (!pb_encode_varint(stream, size))
+    KRPC_CALLBACK_RETURN_ERROR("encoding size for TestService_PartlyDeprecatedStruct");
+  KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_TestService_PartlyDeprecatedStruct(stream, value));
+  return true;
+}
+
+static inline bool krpc_decode_callback_item_TestService_PartlyDeprecatedStruct(
+  pb_istream_t * stream, const pb_field_t * field, void ** arg) {
+  typedef struct State {size_t pos; krpc_TestService_PartlyDeprecatedStruct_t * value;} State;
+  State * state = (State*)(*arg);
+  krpc_TestService_PartlyDeprecatedStruct_t * value = state->value;
+  switch (state->pos) {
+  case 0:
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_int32(stream, &value->value));
+    break;
+  case 1:
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_int32(stream, &value->old_value));
+    break;
+  default:
+    // Fields are only ever appended to a structure, so a value from a newer server may
+    // carry more items than this client knows about, and those are skipped
+    if (!pb_read(stream, NULL, stream->bytes_left))
+      KRPC_CALLBACK_RETURN_ERROR("skipping an appended struct field");
+    break;
+  }
+  state->pos++;
+  return true;
+}
+
+static inline krpc_error_t krpc_decode_TestService_PartlyDeprecatedStruct(
+  pb_istream_t * stream, krpc_TestService_PartlyDeprecatedStruct_t * value) {
+  krpc_schema_Tuple message = krpc_schema_Tuple_init_default;
+  message.items.funcs.decode = &krpc_decode_callback_item_TestService_PartlyDeprecatedStruct;
+  typedef struct State { size_t pos; krpc_TestService_PartlyDeprecatedStruct_t * value; } State;
+  State state = { 0, value };
+  message.items.arg = &state;
+  KRPC_RETURN_ON_ERROR(krpc_decode_message_Tuple(stream, &message));
+  if (state.pos < 2)
+    KRPC_RETURN_ERROR(DECODING_FAILED, "too few fields for a TestService_PartlyDeprecatedStruct");
+  return KRPC_OK;
+}
+
+#endif  // KRPC_IMPL_TYPE_TESTSERVICE_PARTLYDEPRECATEDSTRUCT
 
 #ifndef KRPC_IMPL_TYPE_TESTSERVICE_TESTFLAGSSTRUCT
 #define KRPC_IMPL_TYPE_TESTSERVICE_TESTFLAGSSTRUCT
@@ -5246,6 +5592,26 @@ static inline krpc_error_t krpc_TestService_CounterStruct_call(krpc_schema_Proce
   return KRPC_OK;
 }
 
+static inline krpc_error_t krpc_TestService_CreateDeprecatedClass(krpc_connection_t connection, krpc_TestService_DeprecatedClass_t * returnValue) {
+  krpc_call_t _call;
+  KRPC_CHECK(krpc_call(&_call, 857051661, 623454212, 0, NULL));
+  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
+  KRPC_CHECK(krpc_init_result(&_result));
+  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
+  if (returnValue) {
+    pb_istream_t _stream;
+    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+    KRPC_CHECK(krpc_decode_object(&_stream, returnValue));
+  }
+  KRPC_CHECK(krpc_free_result(&_result));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_CreateDeprecatedClass_call(krpc_schema_ProcedureCall * procedureCall) {
+  KRPC_CHECK(krpc_procedure_call(procedureCall, 857051661, 623454212, 0));
+  return KRPC_OK;
+}
+
 static inline krpc_error_t krpc_TestService_CreateTestObject(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue, const char * value) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
@@ -5312,6 +5678,26 @@ static inline krpc_error_t krpc_TestService_DeprecatedProcedureNoMessage(krpc_co
 static inline krpc_error_t krpc_TestService_DeprecatedProcedureNoMessage_call(krpc_schema_ProcedureCall * procedureCall, float value) {
   KRPC_CHECK(krpc_procedure_call(procedureCall, 857051661, 3905834002, 1));
   KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_float, &value));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_DeprecatedStructProcedure(krpc_connection_t connection, krpc_TestService_DeprecatedStruct_t * returnValue) {
+  krpc_call_t _call;
+  KRPC_CHECK(krpc_call(&_call, 857051661, 719673648, 0, NULL));
+  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
+  KRPC_CHECK(krpc_init_result(&_result));
+  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
+  if (returnValue) {
+    pb_istream_t _stream;
+    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+    KRPC_CHECK(krpc_decode_TestService_DeprecatedStruct(&_stream, returnValue));
+  }
+  KRPC_CHECK(krpc_free_result(&_result));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_DeprecatedStructProcedure_call(krpc_schema_ProcedureCall * procedureCall) {
+  KRPC_CHECK(krpc_procedure_call(procedureCall, 857051661, 719673648, 0));
   return KRPC_OK;
 }
 
@@ -6957,6 +7343,26 @@ static inline krpc_error_t krpc_TestService_OptionalArguments_call(krpc_schema_P
   return KRPC_OK;
 }
 
+static inline krpc_error_t krpc_TestService_PartlyDeprecatedStructProcedure(krpc_connection_t connection, krpc_TestService_PartlyDeprecatedStruct_t * returnValue) {
+  krpc_call_t _call;
+  KRPC_CHECK(krpc_call(&_call, 857051661, 2541260816, 0, NULL));
+  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
+  KRPC_CHECK(krpc_init_result(&_result));
+  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
+  if (returnValue) {
+    pb_istream_t _stream;
+    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+    KRPC_CHECK(krpc_decode_TestService_PartlyDeprecatedStruct(&_stream, returnValue));
+  }
+  KRPC_CHECK(krpc_free_result(&_result));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_PartlyDeprecatedStructProcedure_call(krpc_schema_ProcedureCall * procedureCall) {
+  KRPC_CHECK(krpc_procedure_call(procedureCall, 857051661, 2541260816, 0));
+  return KRPC_OK;
+}
+
 static inline krpc_error_t krpc_TestService_RemoveEventAfter(krpc_connection_t connection, uint64_t * returnValue, uint32_t milliseconds) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
@@ -7929,6 +8335,92 @@ static inline krpc_error_t krpc_TestService_DeprecatedClass_DeprecatedMethod_cal
   return KRPC_OK;
 }
 
+static inline krpc_error_t krpc_TestService_DeprecatedClass_InheritedMethod(krpc_connection_t connection, char * * returnValue, krpc_TestService_DeprecatedClass_t instance) {
+  krpc_call_t _call;
+  krpc_argument_t _arguments[1];
+  KRPC_CHECK(krpc_call(&_call, 857051661, 1406232063, 1, _arguments));
+  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_uint64, &instance));
+  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
+  KRPC_CHECK(krpc_init_result(&_result));
+  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
+  if (returnValue) {
+    pb_istream_t _stream;
+    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+    KRPC_CHECK(krpc_decode_string(&_stream, returnValue));
+  }
+  KRPC_CHECK(krpc_free_result(&_result));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_DeprecatedClass_InheritedMethod_call(krpc_schema_ProcedureCall * procedureCall, krpc_TestService_DeprecatedClass_t instance) {
+  KRPC_CHECK(krpc_procedure_call(procedureCall, 857051661, 1406232063, 1));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_uint64, &instance));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_DeprecatedClass_InheritedProperty(krpc_connection_t connection, char * * returnValue, krpc_TestService_DeprecatedClass_t instance) {
+  krpc_call_t _call;
+  krpc_argument_t _arguments[1];
+  KRPC_CHECK(krpc_call(&_call, 857051661, 322432168, 1, _arguments));
+  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_uint64, &instance));
+  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
+  KRPC_CHECK(krpc_init_result(&_result));
+  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
+  if (returnValue) {
+    pb_istream_t _stream;
+    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+    KRPC_CHECK(krpc_decode_string(&_stream, returnValue));
+  }
+  KRPC_CHECK(krpc_free_result(&_result));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_DeprecatedClass_InheritedProperty_call(krpc_schema_ProcedureCall * procedureCall, krpc_TestService_DeprecatedClass_t instance) {
+  KRPC_CHECK(krpc_procedure_call(procedureCall, 857051661, 322432168, 1));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_uint64, &instance));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_DeprecatedClass_set_InheritedProperty(krpc_connection_t connection, krpc_TestService_DeprecatedClass_t instance, const char * value) {
+  krpc_call_t _call;
+  krpc_argument_t _arguments[2];
+  KRPC_CHECK(krpc_call(&_call, 857051661, 2025797609, 2, _arguments));
+  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_uint64, &instance));
+  KRPC_CHECK(krpc_add_argument(&_call, 1, &krpc_encode_callback_string, &value));
+  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
+  KRPC_CHECK(krpc_init_result(&_result));
+  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
+  KRPC_CHECK(krpc_free_result(&_result));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_DeprecatedClass_set_InheritedProperty_call(krpc_schema_ProcedureCall * procedureCall, krpc_TestService_DeprecatedClass_t instance, const char * value) {
+  KRPC_CHECK(krpc_procedure_call(procedureCall, 857051661, 2025797609, 2));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_uint64, &instance));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 1, &krpc_encode_callback_string, &value));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_DeprecatedClass_InheritedStaticMethod(krpc_connection_t connection, char * * returnValue) {
+  krpc_call_t _call;
+  KRPC_CHECK(krpc_call(&_call, 857051661, 313918032, 0, NULL));
+  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
+  KRPC_CHECK(krpc_init_result(&_result));
+  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
+  if (returnValue) {
+    pb_istream_t _stream;
+    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+    KRPC_CHECK(krpc_decode_string(&_stream, returnValue));
+  }
+  KRPC_CHECK(krpc_free_result(&_result));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_DeprecatedClass_InheritedStaticMethod_call(krpc_schema_ProcedureCall * procedureCall) {
+  KRPC_CHECK(krpc_procedure_call(procedureCall, 857051661, 313918032, 0));
+  return KRPC_OK;
+}
+
 static inline krpc_error_t krpc_TestService_TestClass_EchoNullableObject(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue, krpc_TestService_TestClass_t instance, krpc_TestService_TestClass_t value) {
   krpc_call_t _call;
   krpc_argument_t _arguments[2];
@@ -8323,6 +8815,8 @@ static inline krpc_error_t krpc_TestService_TestClass_StaticOptionalArguments_ca
   }
   return KRPC_OK;
 }
+
+KRPC_DEPRECATED_USES_END
 
 #ifdef __cplusplus
 }  // extern "C"

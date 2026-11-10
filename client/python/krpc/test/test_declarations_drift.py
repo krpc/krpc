@@ -6,15 +6,18 @@ from krpc.declarations import DeclaredClass
 from krpc.services import krpc as krpc_module
 from krpc.services import testservice
 from krpc.test.servertestcase import ServerTestCase
+from krpc.types import DeprecatedDefinition
+
+
+def _member(cls: type, name: str) -> object:
+    """A member of a class, with a deprecated type on a built service unwrapped"""
+    member = inspect.getattr_static(cls, name)
+    return member.value if isinstance(member, DeprecatedDefinition) else member
 
 
 def _members(cls: type) -> dict[str, object]:
     """The public members a class declares or is built with, by name"""
-    return {
-        name: inspect.getattr_static(cls, name)
-        for name in dir(cls)
-        if not name.startswith("_")
-    }
+    return {name: _member(cls, name) for name in dir(cls) if not name.startswith("_")}
 
 
 def _parameters(func: object, skip_first: bool) -> list[tuple[str, bool]]:
@@ -71,7 +74,9 @@ class TestDeclarationsDrift(ServerTestCase, unittest.TestCase):
                 and declared._service_name == service_name
                 and declared._class_name is not None
             ):
-                self.check_class(declared, getattr(service, declared._class_name))
+                built = _member(type(service), declared._class_name)
+                assert isinstance(built, type)
+                self.check_class(declared, built)
 
     def test_test_service(self) -> None:
         self.check_module(testservice, self.conn.test_service)

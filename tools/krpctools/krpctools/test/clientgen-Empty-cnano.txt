@@ -15,7 +15,11 @@
 extern "C" {
 #endif
 
+KRPC_DEPRECATED_USES_BEGIN
+
 // Implementation
+
+KRPC_DEPRECATED_USES_END
 
 #ifdef __cplusplus
 }  // extern "C"

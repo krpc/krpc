@@ -121,6 +121,15 @@
 
    
 
+   .. function:: DeprecatedClass create_deprecated_class()
+
+      .. warning:: Deprecated. Use :func:`create_test_object` instead.
+
+      Create an instance of a deprecated class documentation string.
+
+
+   
+
    .. function:: TestClass create_test_object(std::string value)
 
 
@@ -161,6 +170,15 @@
       .. warning:: Deprecated. Use :func:`string_property` instead.
 
       Deprecated property documentation string.
+
+   
+
+   .. function:: DeprecatedStruct deprecated_struct_procedure()
+
+      .. warning:: Deprecated. Use :struct:`TestStruct` instead.
+
+      Procedure returning a deprecated struct documentation string.
+
 
    
 
@@ -792,6 +810,13 @@
 
    
 
+   .. function:: PartlyDeprecatedStruct partly_deprecated_struct_procedure()
+
+      Procedure returning a partly deprecated struct documentation string.
+
+
+   
+
    .. function:: krpc::Event remove_event_after(uint32_t milliseconds)
 
 
@@ -1145,6 +1170,27 @@
 
    
 
+   .. function:: std::string inherited_method()
+
+      Method with no deprecation of its own documentation string.
+
+
+   
+
+   .. function:: std::string inherited_property()
+   .. function:: void set_inherited_property(std::string value)
+
+      Property with no deprecation of its own documentation string.
+
+   
+
+   .. function:: static std::string inherited_static_method(Client& connection)
+
+      Static method with no deprecation of its own documentation string.
+
+
+   
+
 
 
 .. class:: TestClass
@@ -1287,6 +1333,25 @@
 
 
 .. namespace:: krpc::services::TestService
+.. enum-struct:: PartlyDeprecatedEnum
+
+   Partly deprecated enum documentation string.
+
+
+   .. enumerator:: value_a
+
+      Partly deprecated enum ValueA documentation string.
+
+
+   .. enumerator:: value_b
+
+      .. warning:: Deprecated. Use :enumerator:`PartlyDeprecatedEnum::value_a` instead.
+
+      Partly deprecated enum ValueB documentation string.
+
+
+
+.. namespace:: krpc::services::TestService
 .. enum-struct:: TestEnum
 
    Enum documentation string.
@@ -1360,6 +1425,23 @@
       .. warning:: Deprecated. Use :member:`DeprecatedStruct::value` instead.
 
       Deprecated struct OldValue documentation string.
+
+
+.. namespace:: krpc::services::TestService
+.. struct:: PartlyDeprecatedStruct
+
+   Partly deprecated struct documentation string.
+
+
+   .. member:: int32_t value
+
+      Partly deprecated struct Value documentation string.
+
+   .. member:: int32_t old_value
+
+      .. warning:: Deprecated. Use :member:`PartlyDeprecatedStruct::value` instead.
+
+      Partly deprecated struct OldValue documentation string.
 
 
 .. namespace:: krpc::services::TestService

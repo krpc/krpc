@@ -1170,7 +1170,7 @@ namespace TestServer
         /// </summary>
         [KRPCProperty]
         [Obsolete ("Use <see cref='StringProperty'/> instead.")]
-        public static string DeprecatedProperty { get; set; }
+        public static string DeprecatedProperty { get; set; } = "value";
 
         /// <summary>
         /// Deprecated class documentation string.
@@ -1198,6 +1198,40 @@ namespace TestServer
             {
                 return "value";
             }
+
+            /// <summary>
+            /// Method with no deprecation of its own documentation string.
+            /// </summary>
+            [KRPCMethod]
+            public string InheritedMethod ()
+            {
+                return "value";
+            }
+
+            /// <summary>
+            /// Static method with no deprecation of its own documentation string.
+            /// </summary>
+            [KRPCMethod]
+            public static string InheritedStaticMethod ()
+            {
+                return "value";
+            }
+
+            /// <summary>
+            /// Property with no deprecation of its own documentation string.
+            /// </summary>
+            [KRPCProperty]
+            public string InheritedProperty { get; set; } = "value";
+        }
+
+        /// <summary>
+        /// Create an instance of a deprecated class documentation string.
+        /// </summary>
+        [KRPCProcedure]
+        [Obsolete ("Use <see cref='CreateTestObject'/> instead.")]
+        public static DeprecatedClass CreateDeprecatedClass ()
+        {
+            return new DeprecatedClass ();
         }
 
         /// <summary>
@@ -1214,6 +1248,24 @@ namespace TestServer
             ValueA,
             /// <summary>
             /// Deprecated enum ValueB documentation string.
+            /// </summary>
+            [Obsolete ("Use <see cref='ValueA'/> instead.")]
+            ValueB
+        }
+
+        /// <summary>
+        /// Partly deprecated enum documentation string.
+        /// </summary>
+        [KRPCEnum]
+        [Serializable]
+        public enum PartlyDeprecatedEnum
+        {
+            /// <summary>
+            /// Partly deprecated enum ValueA documentation string.
+            /// </summary>
+            ValueA,
+            /// <summary>
+            /// Partly deprecated enum ValueB documentation string.
             /// </summary>
             [Obsolete ("Use <see cref='ValueA'/> instead.")]
             ValueB
@@ -1238,6 +1290,45 @@ namespace TestServer
             [KRPCProperty]
             [Obsolete ("Use <see cref='Value'/> instead.")]
             public int OldValue { get; set; }
+        }
+
+        /// <summary>
+        /// Partly deprecated struct documentation string.
+        /// </summary>
+        [KRPCStruct]
+        public struct PartlyDeprecatedStruct
+        {
+            /// <summary>
+            /// Partly deprecated struct Value documentation string.
+            /// </summary>
+            [KRPCProperty]
+            public int Value { get; set; }
+
+            /// <summary>
+            /// Partly deprecated struct OldValue documentation string.
+            /// </summary>
+            [KRPCProperty]
+            [Obsolete ("Use <see cref='Value'/> instead.")]
+            public int OldValue { get; set; }
+        }
+
+        /// <summary>
+        /// Procedure returning a deprecated struct documentation string.
+        /// </summary>
+        [KRPCProcedure]
+        [Obsolete ("Use <see cref='TestStruct'/> instead.")]
+        public static DeprecatedStruct DeprecatedStructProcedure ()
+        {
+            return new DeprecatedStruct ();
+        }
+
+        /// <summary>
+        /// Procedure returning a partly deprecated struct documentation string.
+        /// </summary>
+        [KRPCProcedure]
+        public static PartlyDeprecatedStruct PartlyDeprecatedStructProcedure ()
+        {
+            return new PartlyDeprecatedStruct ();
         }
 
         /// <summary>

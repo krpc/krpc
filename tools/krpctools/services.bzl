@@ -22,4 +22,5 @@ SERVICES = [
 # The services only the conformance testees use, declared by clientgen_dispatch
 CONFORMANCE_SERVICES = [
     struct(name = "ConformanceService", defs = "//tools/TestServer:ConformanceServiceDefinitions", deps = ["KRPC"], test = True, game = None),
+    struct(name = "DeprecatedService", defs = "//tools/TestServer:DeprecatedServiceDefinitions", deps = [], test = True, game = None),
 ]

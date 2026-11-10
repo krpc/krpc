@@ -88,6 +88,7 @@ CODE_TO_STRING:set(Types.SERVICES, 'Services')
 
 function Types:_init()
   self._types = Map{}
+  self._warned_deprecated = {}
 end
 
 -- Declared ahead of _protobuf_type, which calls it
@@ -380,10 +381,25 @@ local function _create_struct_type(service_name, struct_name, field_names)
   return cls
 end
 
-local function _create_enum_type(_service_name, _class_name, values, flags)
+-- A deprecated value is left out of the class table, so that reading it reaches __index
+local function _create_enum_type(_service_name, _class_name, values, flags, deprecated, warn)
   local cls = class(flags and Types.Flags or Types.Enum)
+  local deprecated_values = {}
   for k, v in pairs(values) do
-    cls[k] = cls(v)
+    if deprecated[k] then
+      deprecated_values[k] = cls(v)
+    else
+      cls[k] = cls(v)
+    end
+  end
+  if next(deprecated_values) ~= nil then
+    cls._deprecated_members = deprecated_values
+    getmetatable(cls).__index = function(_, k)
+      if deprecated_values[k] ~= nil then
+        warn(deprecated[k])
+      end
+      return deprecated_values[k]
+    end
   end
   -- A value named after a method, such as union, would hide the method from the values
   if flags then
@@ -490,8 +506,11 @@ function Types.EnumerationType:_init(protobuf_type)
   self:super(protobuf_type, nil, type_string)
 end
 
-function Types.EnumerationType:set_values(values, flags)
-  self.lua_type = _create_enum_type(self._service_name, self._class_name, values, flags)
+--- Set the values of the enumeration. Reading a value in deprecated calls warn with the message
+--- it maps to.
+function Types.EnumerationType:set_values(values, flags, deprecated, warn)
+  self.lua_type = _create_enum_type(
+    self._service_name, self._class_name, values, flags, deprecated or {}, warn)
   if self._nullable_type ~= nil then
     self._nullable_type.lua_type = self.lua_type
   end
@@ -658,6 +677,19 @@ function Types.check_type_is_known(typ)
   elseif typ:is_a(Types.DictionaryType) then
     Types.check_type_is_known(typ.key_type)
     Types.check_type_is_known(typ.value_type)
+  end
+end
+
+--- Write a warning to standard error
+function Types.warn(message)
+  io.stderr:write(message .. '\n')
+end
+
+--- Warn of the use of a deprecated member, once per member on a connection
+function Types:warn_deprecated(message)
+  if not self._warned_deprecated[message] then
+    self._warned_deprecated[message] = true
+    Types.warn(message)
   end
 end
 

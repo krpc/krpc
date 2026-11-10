@@ -33,6 +33,7 @@
       <Link>ToolCommandLine.cs</Link>
     </Compile>
     <Compile Include="ConformanceService.cs" />
+    <Compile Include="DeprecatedService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="TestService.cs" />
     <Compile Include="TestService2.cs" />

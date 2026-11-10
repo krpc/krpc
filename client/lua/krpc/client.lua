@@ -29,12 +29,37 @@ function Client:_init(connection)
   -- Register the types of every service before creating any of them, as a service's procedures
   -- are built from types that any service may define
   for _, service in ipairs(services) do
+    Service.inherit_deprecation(service)
     register_definitions(self._types, service)
   end
 
   -- Set up services
+  self._deprecated_services = {}
   for _, service in ipairs(services) do
-    self[to_snake_case(service.name)] = create_service(self, service)
+    local name = to_snake_case(service.name)
+    local svc = create_service(self, service)
+    if service.deprecated then
+      self._deprecated_services[name] = {
+        value = svc,
+        message = Service.deprecation_warning(service, service.name, service.name)
+      }
+    else
+      self[name] = svc
+    end
+  end
+end
+
+-- A deprecated service is left out of the client's table, so that reading it reaches here and warns
+Client.__index = function(client, key)
+  local value = Client[key]
+  if value ~= nil then
+    return value
+  end
+  local deprecated = rawget(client, '_deprecated_services')
+  local service = deprecated and deprecated[key]
+  if service ~= nil then
+    client._types:warn_deprecated(service.message)
+    return service.value
   end
 end
 
@@ -232,6 +257,9 @@ function Client:get_call(procedure, ...)
   local info = Service.procedures[procedure]
   if info == nil then
     error('get_call expects a procedure of a service or a class', 2)
+  end
+  if info.deprecation ~= nil then
+    self._types:warn_deprecated(info.deprecation)
   end
   local parameters = self._procedure_parameters[info.service .. '.' .. info.procedure]
   if parameters == nil then

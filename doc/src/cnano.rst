@@ -435,7 +435,7 @@ A member of a service can be deprecated, when a newer member replaces it. A depr
 still works, but may be removed in a future release, so move to its replacement.
 
 The API reference marks it as deprecated, and names the replacement. The compiler warns when your
-program calls it, naming the replacement too.
+program uses it, naming the replacement too.
 
 Service Stubs
 -------------

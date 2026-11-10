@@ -1,4 +1,5 @@
 #pragma once
+{% macro deprecated_attribute(member) %}{% if member.deprecated %}[[deprecated{% if member.deprecated_reason %}("{{ member.deprecated_reason | string_literal }}"){% endif %}]] {% endif %}{% endmacro %}
 {% macro args(parameters) %}
 std::vector<krpc::encoder::Value> _args;
 _args.reserve({{ parameters | length }});
@@ -53,10 +54,20 @@ return {% if is_static %}_client.{% else %}this->_client.{% endif %}build_call("
 {% endfor %}
 {% endif %}
 
+// Generated code uses the deprecated declarations it makes, such as a stream of a deprecated
+// structure. A use in a program still warns.
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#elif defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable : 4996)
+#endif
+
 namespace krpc {
 namespace services {
 
-class {{ service_name }} : public Service {
+class {% if service_deprecated %}[[deprecated{% if service_deprecated_reason %}("{{ service_deprecated_reason | string_literal }}"){% endif %}]] {% endif %}{{ service_name }} : public Service {
  public:
   explicit {{ service_name }}(const Client& client);
   {% if classes | length > 0 %}
@@ -78,7 +89,7 @@ class {{ service_name }} : public Service {
 
 {% if exception.documentation %}{{ exception.documentation | indent(width=2) }}
 {% endif %}
-  class {% if exception.deprecated %}[[deprecated{% if exception.deprecated_reason %}("{{ exception.deprecated_reason }}"){% endif %}]] {% endif %}{{ exception_name }} : public {{ exception.native or '::krpc::RPCError' }} {
+  class {% if exception.deprecated %}[[deprecated{% if exception.deprecated_reason %}("{{ exception.deprecated_reason | string_literal }}"){% endif %}]] {% endif %}{{ exception_name }} : public {{ exception.native or '::krpc::RPCError' }} {
    public:
     inline explicit {{ exception_name }}(const std::string& msg) : {{ exception.native or '::krpc::RPCError' }}(msg) {}
   };
@@ -88,22 +99,16 @@ class {{ service_name }} : public Service {
 
 {% if enm.documentation %}{{ enm.documentation | indent(width=2) }}
 {% endif %}
-  enum struct {% if enm.deprecated %}[[deprecated{% if enm.deprecated_reason %}("{{ enm.deprecated_reason }}"){% endif %}]] {% endif %}{{ enum_name }} {
+  enum struct {% if enm.deprecated %}[[deprecated{% if enm.deprecated_reason %}("{{ enm.deprecated_reason | string_literal }}"){% endif %}]] {% endif %}{{ enum_name }} {
     {% for value in enm['values'] %}
 {% if value.documentation %}{{ value.documentation | indent(width=4) }}
 {% endif %}
-    {{ value.name }}{% if value.deprecated %} [[deprecated{% if value.deprecated_reason %}("{{ value.deprecated_reason }}"){% endif %}]]{% endif %} = {{ value.value }}{% if not loop.last %},{% endif %}
+    {{ value.name }}{% if value.deprecated %} [[deprecated{% if value.deprecated_reason %}("{{ value.deprecated_reason | string_literal }}"){% endif %}]]{% endif %} = {{ value.value }}{% if not loop.last %},{% endif %}
 
     {% endfor %}
   };
   {% if enm.flags %}
 
-  {% if enm.deprecated %}
-#if defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
-  {% endif %}
   friend constexpr {{ enum_name }} operator|({{ enum_name }} a, {{ enum_name }} b) {
     return static_cast<{{ enum_name }}>(static_cast<int32_t>(a) | static_cast<int32_t>(b));
   }
@@ -132,18 +137,13 @@ class {{ service_name }} : public Service {
   friend {{ enum_name }}& operator^=({{ enum_name }}& a, {{ enum_name }} b) {
     return a = a ^ b;
   }
-  {% if enm.deprecated %}
-#if defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
-  {% endif %}
   {% endif %}
   {% endfor %}
   {% for procedure_name,procedure in procedures.items() %}
 
 {% if procedure.documentation %}{{ procedure.documentation | indent(width=2) }}
 {% endif %}
-{% if procedure.deprecated %}  [[deprecated{% if procedure.deprecated_reason %}("{{ procedure.deprecated_reason }}"){% endif %}]]
+{% if procedure.deprecated %}  [[deprecated{% if procedure.deprecated_reason %}("{{ procedure.deprecated_reason | string_literal }}"){% endif %}]]
 {% endif %}
   {{ procedure.return_type }} {{ procedure_name }}({{ sig_parameters(procedure.parameters) }});
   {% endfor %}
@@ -151,33 +151,33 @@ class {{ service_name }} : public Service {
 
 {% if property.documentation %}{{ property.documentation | indent(width=2) }}
 {% endif %}
-{% if property.deprecated %}  [[deprecated{% if property.deprecated_reason %}("{{ property.deprecated_reason }}"){% endif %}]]
+{% if property.deprecated %}  [[deprecated{% if property.deprecated_reason %}("{{ property.deprecated_reason | string_literal }}"){% endif %}]]
 {% endif %}
   {{ property.return_type }} {{ property_name }}({{ sig_parameters(property.parameters) }});
   {% endfor %}
   {% for procedure_name,procedure in procedures.items() %}
 
-  ::krpc::Stream<{{ procedure.return_type }}> {{ procedure_name }}_stream({{ sig_parameters(procedure.parameters) }});
+  {{ deprecated_attribute(procedure) }}::krpc::Stream<{{ procedure.return_type }}> {{ procedure_name }}_stream({{ sig_parameters(procedure.parameters) }});
   {% endfor %}
   {% for property_name,property in properties.items() %}
   {% if property.return_type != 'void' %}
 
-  ::krpc::Stream<{{ property.return_type }}> {{ property_name }}_stream({{ sig_parameters(property.parameters) }});
+  {{ deprecated_attribute(property) }}::krpc::Stream<{{ property.return_type }}> {{ property_name }}_stream({{ sig_parameters(property.parameters) }});
   {% endif %}
   {% endfor %}
   {% for procedure_name,procedure in procedures.items() %}
 
-  ::krpc::schema::ProcedureCall {{ procedure_name }}_call({{ sig_parameters(procedure.parameters) }});
+  {{ deprecated_attribute(procedure) }}::krpc::schema::ProcedureCall {{ procedure_name }}_call({{ sig_parameters(procedure.parameters) }});
   {% endfor %}
   {% for property_name,property in properties.items() %}
 
-  ::krpc::schema::ProcedureCall {{ property_name }}_call({{ sig_parameters(property.parameters) }});
+  {{ deprecated_attribute(property) }}::krpc::schema::ProcedureCall {{ property_name }}_call({{ sig_parameters(property.parameters) }});
   {% endfor %}
   {% for class_name,cls in classes.items() %}
 
 {% if cls.documentation %}{{ cls.documentation | indent(width=2) }}
 {% endif %}
-  class {% if cls.deprecated %}[[deprecated{% if cls.deprecated_reason %}("{{ cls.deprecated_reason }}"){% endif %}]] {% endif %}{{ class_name }} : public krpc::Object<{{ class_name }}> {
+  class {% if cls.deprecated %}[[deprecated{% if cls.deprecated_reason %}("{{ cls.deprecated_reason | string_literal }}"){% endif %}]] {% endif %}{{ class_name }} : public krpc::Object<{{ class_name }}> {
    public:
     {{ class_name }}();
     {{ class_name }}(const Client& client, uint64_t id);
@@ -185,7 +185,7 @@ class {{ service_name }} : public Service {
 
 {% if method.documentation %}{{ method.documentation | indent(width=4) }}
 {% endif %}
-{% if method.deprecated %}    [[deprecated{% if method.deprecated_reason %}("{{ method.deprecated_reason }}"){% endif %}]]
+{% if method.deprecated %}    [[deprecated{% if method.deprecated_reason %}("{{ method.deprecated_reason | string_literal }}"){% endif %}]]
 {% endif %}
     {{ method.return_type }} {{ method_name }}({{ sig_parameters(method.parameters) }});
     {% endfor %}
@@ -193,7 +193,7 @@ class {{ service_name }} : public Service {
 
 {% if method.documentation %}{{ method.documentation | indent(width=4) }}
 {% endif %}
-{% if method.deprecated %}    [[deprecated{% if method.deprecated_reason %}("{{ method.deprecated_reason }}"){% endif %}]]
+{% if method.deprecated %}    [[deprecated{% if method.deprecated_reason %}("{{ method.deprecated_reason | string_literal }}"){% endif %}]]
 {% endif %}
     static {{ method.return_type }} {{ method_name }}({{ sig_parameters([{'type': 'Client&', 'name': 'client'}] + method.parameters) }});
     {% endfor %}
@@ -201,35 +201,35 @@ class {{ service_name }} : public Service {
 
 {% if property.documentation %}{{ property.documentation | indent(width=4) }}
 {% endif %}
-{% if property.deprecated %}    [[deprecated{% if property.deprecated_reason %}("{{ property.deprecated_reason }}"){% endif %}]]
+{% if property.deprecated %}    [[deprecated{% if property.deprecated_reason %}("{{ property.deprecated_reason | string_literal }}"){% endif %}]]
 {% endif %}
     {{ property.return_type }} {{ property_name }}({{ sig_parameters(property.parameters) }});
     {% endfor %}
     {% for method_name,method in cls.methods.items() %}
 
-    ::krpc::Stream<{{ method.return_type }}> {{ method_name }}_stream({{ sig_parameters(method.parameters) }});
+    {{ deprecated_attribute(method) }}::krpc::Stream<{{ method.return_type }}> {{ method_name }}_stream({{ sig_parameters(method.parameters) }});
     {% endfor %}
     {% for method_name,method in cls.static_methods.items() %}
 
-    static ::krpc::Stream<{{ method.return_type }}> {{ method_name }}_stream({{ sig_parameters([{'type': 'Client&', 'name': 'client'}] + method.parameters) }});
+    {{ deprecated_attribute(method) }}static ::krpc::Stream<{{ method.return_type }}> {{ method_name }}_stream({{ sig_parameters([{'type': 'Client&', 'name': 'client'}] + method.parameters) }});
     {% endfor %}
     {% for property_name,property in cls.properties.items() %}
     {% if property.return_type != 'void' %}
 
-    ::krpc::Stream<{{ property.return_type }}> {{ property_name }}_stream({{ sig_parameters(property.parameters) }});
+    {{ deprecated_attribute(property) }}::krpc::Stream<{{ property.return_type }}> {{ property_name }}_stream({{ sig_parameters(property.parameters) }});
     {% endif %}
     {% endfor %}
     {% for method_name,method in cls.methods.items() %}
 
-    ::krpc::schema::ProcedureCall {{ method_name }}_call({{ sig_parameters(method.parameters) }});
+    {{ deprecated_attribute(method) }}::krpc::schema::ProcedureCall {{ method_name }}_call({{ sig_parameters(method.parameters) }});
     {% endfor %}
     {% for method_name,method in cls.static_methods.items() %}
 
-    static ::krpc::schema::ProcedureCall {{ method_name }}_call({{ sig_parameters([{'type': 'Client&', 'name': 'client'}] + method.parameters) }});
+    {{ deprecated_attribute(method) }}static ::krpc::schema::ProcedureCall {{ method_name }}_call({{ sig_parameters([{'type': 'Client&', 'name': 'client'}] + method.parameters) }});
     {% endfor %}
     {% for property_name,property in cls.properties.items() %}
 
-    ::krpc::schema::ProcedureCall {{ property_name }}_call({{ sig_parameters(property.parameters) }});
+    {{ deprecated_attribute(property) }}::krpc::schema::ProcedureCall {{ property_name }}_call({{ sig_parameters(property.parameters) }});
     {% endfor %}
     {% if cls.static_methods %}
 
@@ -243,7 +243,7 @@ class {{ service_name }} : public Service {
 
 {% if method.bound_documentation %}{{ method.bound_documentation | indent(width=6) }}
 {% endif %}
-{% if method.deprecated %}      [[deprecated{% if method.deprecated_reason %}("{{ method.deprecated_reason }}"){% endif %}]]
+{% if method.deprecated %}      [[deprecated{% if method.deprecated_reason %}("{{ method.deprecated_reason | string_literal }}"){% endif %}]]
 {% endif %}
       {{ method.return_type }} {{ method_name }}({{ sig_parameters(method.parameters) }}) const;
       {% endfor %}
@@ -265,11 +265,11 @@ class {{ service_name }} : public Service {
 
 {% if struct.documentation %}{{ struct.documentation | indent(width=2) }}
 {% endif %}
-  struct {% if struct.deprecated %}[[deprecated{% if struct.deprecated_reason %}("{{ struct.deprecated_reason }}"){% endif %}]] {% endif %}{{ struct_name }} {
+  struct {% if struct.deprecated %}[[deprecated{% if struct.deprecated_reason %}("{{ struct.deprecated_reason | string_literal }}"){% endif %}]] {% endif %}{{ struct_name }} {
     {% for field in struct['fields'] %}
 {% if field.documentation %}{{ field.documentation | indent(width=4) }}
 {% endif %}
-    {{ field.type }} {{ field.name }}{% if field.deprecated %} [[deprecated{% if field.deprecated_reason %}("{{ field.deprecated_reason }}"){% endif %}]]{% endif %};
+    {{ field.type }} {{ field.name }}{% if field.deprecated %} [[deprecated{% if field.deprecated_reason %}("{{ field.deprecated_reason | string_literal }}"){% endif %}]]{% endif %};
     {% endfor %}
 
     {{ struct_name }}() : {% for field in struct['fields'] %}{{ field.name }}(){% if not loop.last %}, {% endif %}{% endfor %} {}
@@ -319,29 +319,12 @@ class {{ service_name }} : public Service {
 namespace encoder {
   {% for enum_name,enm in enumerations.items() %}
 
-  {% if enm.deprecated %}
-#if defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
-  {% endif %}
   inline std::string encode(const services::{{ service_name }}::{{ enum_name }}& value) {
     return krpc::encoder::encode(static_cast<int32_t>(value));
   }
-  {% if enm.deprecated %}
-#if defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
-  {% endif %}
   {% endfor %}
   {% for struct_name,struct in structs.items() %}
 
-  {% if struct.deprecated %}
-#if defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
-  {% endif %}
   // A structure is sent as the values of its fields in order, which is the same encoding as
   // a tuple of those values. See the note on the collection encoders for why the message it
   // is sent in is kept between calls.
@@ -353,11 +336,6 @@ namespace encoder {
     {% endfor %}
     return krpc::encoder::encode(structMessage);
   }
-  {% if struct.deprecated %}
-#if defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
-  {% endif %}
   {% endfor %}
 
 }  // namespace encoder
@@ -365,31 +343,14 @@ namespace encoder {
 namespace decoder {
   {% for enum_name,enm in enumerations.items() %}
 
-  {% if enm.deprecated %}
-#if defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
-  {% endif %}
   inline void decode(services::{{ service_name }}::{{ enum_name }}& value, const std::string& data, Client* client) {
     int32_t x;
     decode(x, data, client);
     value = static_cast<services::{{ service_name }}::{{ enum_name }}>(x);
   }
-  {% if enm.deprecated %}
-#if defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
-  {% endif %}
   {% endfor %}
   {% for struct_name,struct in structs.items() %}
 
-  {% if struct.deprecated %}
-#if defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
-  {% endif %}
   // Fields are only ever appended to a structure, so a value from a newer server may carry
   // more items than this client knows about, and those are ignored.
   inline void decode(services::{{ service_name }}::{{ struct_name }}& value, const std::string& data, Client* client) {
@@ -401,23 +362,12 @@ namespace decoder {
     decode_item(value.{{ field.name }}, structMessage.items({{ loop.index0 }}), client);
     {% endfor %}
   }
-  {% if struct.deprecated %}
-#if defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
-  {% endif %}
   {% endfor %}
 
 }  // namespace decoder
 {% if structs | length > 0 %}
 
 {% for struct_name,struct in structs.items() %}
-{% if struct.deprecated %}
-#if defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
-{% endif %}
 inline std::size_t hash_value(const services::{{ service_name }}::{{ struct_name }}& value) {
   std::size_t seed = 0;
   {% for field in struct['fields'] %}
@@ -425,11 +375,6 @@ inline std::size_t hash_value(const services::{{ service_name }}::{{ struct_name
   {% endfor %}
   return seed;
 }
-{% if struct.deprecated %}
-#if defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
-{% endif %}
 
 {% endfor %}
 {% endif %}
@@ -452,20 +397,9 @@ namespace services {
 inline {{ service_name }}::{{ service_name }}(const Client& client):
   Service(client) {
   {% for exception_name,exception in exceptions.items() %}
-  {% if exception.deprecated %}
-#if defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
-  {% endif %}
   _client.add_exception_thrower(
     "{{ service_name }}", "{{ exception_name }}",
     [] (const std::string& msg) { throw {{ exception_name }}(msg); });
-  {% if exception.deprecated %}
-#if defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
-  {% endif %}
   {% endfor %}
 }
 {% for procedure_name,procedure in procedures.items()|list + properties.items()|list %}
@@ -560,25 +494,9 @@ inline {{ service_name }}::{{ class_name }}::Bound::Bound(const Client& client):
   _client(client) {}
 {% for method_name,method in cls.static_methods.items() %}
 
-{% if method.deprecated %}
-#if defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#elif defined(_MSC_VER)
-#pragma warning(push)
-#pragma warning(disable : 4996)
-#endif
-{% endif %}
 inline {{ method.return_type }} {{ service_name }}::{{ class_name }}::Bound::{{ method_name }}({{ impl_parameters(method.parameters) }}) const {
   {{ 'return ' if method.return_type != 'void' else '' }}{{ service_name }}::{{ class_name }}::{{ method_name }}({{ (['_client'] + method.parameters | map(attribute='name') | list) | join(', ') }});
 }
-{% if method.deprecated %}
-#if defined(__GNUC__)
-#pragma GCC diagnostic pop
-#elif defined(_MSC_VER)
-#pragma warning(pop)
-#endif
-{% endif %}
 {% endfor %}
 
 inline {{ service_name }}::{{ class_name }}::Bound {{ service_name }}::{{ class_name }}::bind(const Client& client) {
@@ -596,24 +514,19 @@ inline {{ service_name }}::{{ class_name }}::Bound {{ service_name }}::{{ class_
 namespace std {
 {% for struct_name,struct in structs.items() %}
 
-{% if struct.deprecated %}
-#if defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
-{% endif %}
 template <>
 struct hash<krpc::services::{{ service_name }}::{{ struct_name }}> {
   std::size_t operator()(const krpc::services::{{ service_name }}::{{ struct_name }}& value) const {
     return krpc::hash_value(value);
   }
 };
-{% if struct.deprecated %}
-#if defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
-{% endif %}
 {% endfor %}
 
 }  // namespace std
 {% endif %}
+
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#elif defined(_MSC_VER)
+#pragma warning(pop)
+#endif
