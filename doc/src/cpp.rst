@@ -297,6 +297,14 @@ back into range.
 .. seealso:: :doc:`/user-guide/object-lifetime` describes how each kind of object behaves in more
              detail.
 
+Static Methods
+^^^^^^^^^^^^^^
+
+You call a static method on its class, passing the client as its first argument. Its ``_stream``
+and ``_call`` forms take the client first too:
+
+.. literalinclude:: /scripts/cpp/StaticMethods.cpp
+
 .. _cpp-client-streams:
 
 Streaming Data

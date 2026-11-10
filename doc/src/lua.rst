@@ -211,6 +211,17 @@ itself reads normally, but a call on one of its parts raises an error naming
 .. seealso:: :doc:`/user-guide/object-lifetime` describes how each kind of object behaves in more
              detail.
 
+Static Methods
+^^^^^^^^^^^^^^
+
+You call a static method on its class. Reach the class through the connection's service, and call
+the method with a dot:
+
+.. literalinclude:: /scripts/lua/StaticMethods.lua
+
+The call runs on the connection the class is reached through. Called through an object, a static
+method runs on the object's connection.
+
 Server Side Functions
 ---------------------
 

@@ -193,6 +193,14 @@ comes back into range.
 .. seealso:: :doc:`/user-guide/object-lifetime` describes how each kind of object behaves in more
              detail.
 
+Static Methods
+^^^^^^^^^^^^^^
+
+You call a static method on its class, passing the connection as its first argument. In a stream,
+the connection the stream is added on runs the call:
+
+.. literalinclude:: /scripts/csharp/StaticMethods.cs
+
 .. _csharp-client-streams:
 
 Streaming Data

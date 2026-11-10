@@ -384,6 +384,14 @@ itself reads normally, but a call on one of its parts fails with
 .. seealso:: :doc:`/user-guide/object-lifetime` describes how each kind of object behaves in more
              detail.
 
+Static Methods
+^^^^^^^^^^^^^^
+
+The function of a static method takes the connection first, as every function does, followed by
+the method's arguments:
+
+.. literalinclude:: /scripts/cnano/StaticMethods.c
+
 Server Side Functions
 ---------------------
 

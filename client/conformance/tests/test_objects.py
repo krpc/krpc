@@ -126,7 +126,9 @@ def test_method_connection(connected, server, request):
 
 @profile("connections")
 def test_static_method_connection(connected, server, request):
-    """A static method calls over the connection it is called on."""
+    """A static method calls over the connection it is called on. Where classes are values,
+    that is the connection of the service the class is reached through. Elsewhere it is the
+    connection passed as the method's first argument."""
     names = two_connections(connected, server, request)
     for x, client_name in names.items():
         assert (
