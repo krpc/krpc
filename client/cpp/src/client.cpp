@@ -300,15 +300,15 @@ void detail::ExceptionThrowers::add(const std::string& service, const std::strin
 void detail::ExceptionThrowers::throw_exception(const schema::Error& error) const {
   std::string message = error.description();
   if (!error.stack_trace().empty()) message += "\nServer stack trace:\n" + error.stack_trace();
-  if (!error.service().empty() && !error.name().empty()) {
-    auto key = std::make_pair(error.service(), error.name());
+  if (!error.service().empty() && !error.exception().empty()) {
+    auto key = std::make_pair(error.service(), error.exception());
     std::unique_lock<std::mutex> guard(lock);
     auto thrower = throwers.find(key);
     if (thrower == throwers.end()) {
       // The type is unknown here if the generated header for its service was never
       // instantiated in this translation unit, so nothing registered a thrower for it.
       // Report the error itself, named by its type on the server.
-      throw RPCError(error.service() + "." + error.name() + ": " + message);
+      throw RPCError(error.service() + "." + error.exception() + ": " + message);
     }
     // Copy the thrower and release the lock before calling it: it throws, and it must not
     // be holding this lock while the exception propagates out through the caller.

@@ -238,6 +238,29 @@ namespace KRPC.Test.Service.KRPC
         }
 
         [Test]
+        public void GetServicesTypeIds ()
+        {
+            var services = global::KRPC.Service.KRPC.KRPC.GetServices ().ServicesList;
+            var service3 = services.First (x => x.Name == "TestService3Name");
+            Assert.AreEqual (20, service3.Classes.First (x => x.Name == "TestClassWithAnId3").Id);
+            Assert.AreEqual (21, service3.Enumerations.First (x => x.Name == "TestEnumWithAnId3").Id);
+            Assert.AreEqual (22, service3.Structs.First (x => x.Name == "TestStructWithAnId3").Id);
+            Assert.AreEqual (23, service3.Exceptions.First (x => x.Name == "TestExceptionWithAnId3").Id);
+            var signatures = global::KRPC.Service.Services.Instance.Signatures;
+            foreach (var service in services) {
+                var signature = signatures [service.Name];
+                foreach (var cls in service.Classes)
+                    Assert.AreEqual (signature.Classes [cls.Name].Id, cls.Id);
+                foreach (var enumeration in service.Enumerations)
+                    Assert.AreEqual (signature.Enumerations [enumeration.Name].Id, enumeration.Id);
+                foreach (var str in service.Structs)
+                    Assert.AreEqual (signature.Structs [str.Name].Id, str.Id);
+                foreach (var exception in service.Exceptions)
+                    Assert.AreEqual (signature.Exceptions [exception.Name].Id, exception.Id);
+            }
+        }
+
+        [Test]
         public void PauseUnpause ()
         {
             bool paused = false;

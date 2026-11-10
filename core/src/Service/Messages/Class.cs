@@ -5,15 +5,18 @@ namespace KRPC.Service.Messages
     {
         public string Name { get; private set; }
 
+        public uint Id { get; private set; }
+
         public string Documentation { get; set; }
 
         public bool Deprecated { get; set; }
 
         public string DeprecatedReason { get; set; }
 
-        public Class (string name)
+        public Class (string name, uint id)
         {
             Name = name;
+            Id = id;
             Documentation = string.Empty;
             DeprecatedReason = string.Empty;
         }

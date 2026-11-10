@@ -57,7 +57,7 @@ namespace KRPC.Test.Service
         {
             Assert.IsFalse (result.HasValue);
             Assert.IsTrue (result.HasError);
-            Assert.AreEqual (name, result.Error.Name);
+            Assert.AreEqual (name, result.Error.Exception);
             Assert.AreEqual (description, result.Error.Description);
         }
 
@@ -743,7 +743,7 @@ namespace KRPC.Test.Service
         [Test]
         public void HandleRequestWithAnUndecodableArgumentFailsOnlyThatCall ()
         {
-            Assert.AreEqual ("ArgumentException", RunFailingCall (UndecodableCall ()).Name);
+            Assert.AreEqual ("ArgumentException", RunFailingCall (UndecodableCall ()).Exception);
         }
 
         [TestCase (1u)]
@@ -751,7 +751,7 @@ namespace KRPC.Test.Service
         public void HandleRequestWithAnArgumentPositionOutOfRangeFailsOnlyThatCall (uint position)
         {
             var error = RunFailingCall (CallWithPositions (position));
-            Assert.AreEqual ("ArgumentException", error.Name);
+            Assert.AreEqual ("ArgumentException", error.Exception);
             Assert.AreEqual (
                 "Argument position " + position + " out of range for TestService.ProcedureSingleArgReturns",
                 error.Description);
@@ -761,7 +761,7 @@ namespace KRPC.Test.Service
         public void HandleRequestWithADuplicateArgumentPositionFailsOnlyThatCall ()
         {
             var error = RunFailingCall (CallWithPositions (0, 0));
-            Assert.AreEqual ("ArgumentException", error.Name);
+            Assert.AreEqual ("ArgumentException", error.Exception);
             Assert.AreEqual (
                 "Duplicate argument position 0 for TestService.ProcedureSingleArgReturns",
                 error.Description);
@@ -780,10 +780,25 @@ namespace KRPC.Test.Service
             request.Calls.Add (outer);
             var response = new RequestContinuation (null, request.ToMessage ()).Run ();
             Assert.IsFalse (response.HasError);
-            Assert.AreEqual ("ArgumentException", response.Results [0].Error.Name);
+            Assert.AreEqual ("ArgumentException", response.Results [0].Error.Exception);
             Assert.AreEqual (
                 "Argument position 5 out of range for TestService.ProcedureSingleArgReturns",
                 response.Results [0].Error.Description);
+        }
+
+        [Test]
+        public void HandleExceptionSetsTheIdsOfTheExceptionAndItsService ()
+        {
+            var services = global::KRPC.Service.Services.Instance;
+            var error = services.HandleException (new TestExceptionWithAnId3 ());
+            Assert.AreEqual ("TestService3Name", error.Service);
+            Assert.AreEqual ("TestExceptionWithAnId3", error.Exception);
+            Assert.AreEqual (1234, error.ServiceId);
+            Assert.AreEqual (23, error.ExceptionId);
+            error = services.HandleException (new System.Exception ("Not a kRPC exception"));
+            Assert.AreEqual (string.Empty, error.Exception);
+            Assert.AreEqual (0, error.ServiceId);
+            Assert.AreEqual (0, error.ExceptionId);
         }
 
         [Test]
@@ -798,7 +813,9 @@ namespace KRPC.Test.Service
             request.Calls.Add (addStream);
             var response = new RequestContinuation (null, request.ToMessage ()).Run ();
             Assert.IsFalse (response.HasError);
-            Assert.AreEqual ("ArgumentException", response.Results [0].Error.Name);
+            Assert.AreEqual ("ArgumentException", response.Results [0].Error.Exception);
+            Assert.AreEqual (1, response.Results [0].Error.ServiceId);
+            Assert.AreEqual (1727780136, response.Results [0].Error.ExceptionId);
         }
 
         [Test]

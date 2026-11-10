@@ -90,7 +90,9 @@ message ProcedureResult {
 
 message Error {
   string service = 1;
-  string name = 2;
+  string exception = 2;
+  uint32 service_id = 5;
+  uint32 exception_id = 6;
   string description = 3;
   string stack_trace = 4;
 }
@@ -160,6 +162,7 @@ message Parameter {
 
 message Class {
   string name = 1;
+  uint32 id = 5;
   string documentation = 2;
   bool deprecated = 3;
   string deprecated_reason = 4;
@@ -167,6 +170,7 @@ message Class {
 
 message Enumeration {
   string name = 1;
+  uint32 id = 7;
   repeated EnumerationValue values = 2;
   string documentation = 3;
   bool deprecated = 4;
@@ -184,6 +188,7 @@ message EnumerationValue {
 
 message Exception {
   string name = 1;
+  uint32 id = 6;
   string documentation = 2;
   bool deprecated = 3;
   string deprecated_reason = 4;
@@ -192,6 +197,7 @@ message Exception {
 
 message Struct {
   string name = 1;
+  uint32 id = 6;
   repeated StructField fields = 2;
   string documentation = 3;
   bool deprecated = 4;
@@ -210,6 +216,8 @@ message Type {
   TypeCode code = 1;
   string service = 2;
   string name = 3;
+  uint32 service_id = 6;
+  uint32 id = 7;
   repeated Type types = 4;
   bool nullable = 5;
 

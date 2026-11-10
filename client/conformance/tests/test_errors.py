@@ -74,7 +74,7 @@ def full_message(connected, server, service, procedure, *args):
         message += "\nServer stack trace:\n" + expected.stack_trace
     prefix = ""
     if not error_types(connected):
-        prefix = "%s.%s: " % (expected.service, expected.name)
+        prefix = "%s.%s: " % (expected.service, expected.exception)
     return prefix + message, prefix
 
 
@@ -160,7 +160,7 @@ def test_unknown_exception(client, server, scripted_server, service, name):
     raises the RPC error. The message carries the description and the ``Service.Name`` of
     the error. This includes an absent exception of a service the client has, and a name the
     service gives to a class."""
-    sent = KRPC.Error(service=service, name=name, description="Oops")
+    sent = KRPC.Error(service=service, exception=name, description="Oops")
     error = scripted_error(
         client, erroring_server(server, scripted_server, result_error=sent)
     )

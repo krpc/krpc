@@ -7,6 +7,8 @@ namespace KRPC.Service.Messages
     {
         public string Name { get; private set; }
 
+        public uint Id { get; private set; }
+
         public IList<StructField> Fields { get; private set; }
 
         public string Documentation { get; set; }
@@ -15,9 +17,10 @@ namespace KRPC.Service.Messages
 
         public string DeprecatedReason { get; set; }
 
-        public Struct (string name)
+        public Struct (string name, uint id)
         {
             Name = name;
+            Id = id;
             Fields = new List<StructField> ();
             Documentation = string.Empty;
             DeprecatedReason = string.Empty;

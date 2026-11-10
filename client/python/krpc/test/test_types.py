@@ -1,7 +1,15 @@
 import unittest
 
-from krpc.schema.KRPC_pb2 import Type
-from krpc.types import StructType, Types
+from krpc.schema.KRPC_pb2 import (
+    Parameter,
+    Procedure,
+    Service,
+    Services,
+    Struct,
+    StructField,
+    Type,
+)
+from krpc.types import StructType, Types, clear_type_ids
 
 
 class TestTypes(unittest.TestCase):
@@ -55,6 +63,33 @@ class TestTypes(unittest.TestCase):
         struct.set_fields([("count", types.uint32_type)])
         self.assertIs(struct.python_type, nullable_struct.python_type)
         self.assertEqual(struct.field_types, nullable_struct.field_types)
+
+    def test_clear_type_ids(self) -> None:
+        cls = Type(
+            code=Type.CLASS, service="ServiceName", name="ClassName", service_id=1, id=2
+        )
+        services = Services(
+            services=[
+                Service(
+                    procedures=[
+                        Procedure(
+                            parameters=[Parameter(type=cls)],
+                            return_type=Type(code=Type.LIST, types=[cls]),
+                        )
+                    ],
+                    structs=[Struct(fields=[StructField(type=cls)])],
+                )
+            ]
+        )
+        clear_type_ids(services)
+        procedure = services.services[0].procedures[0]
+        cleared = Type(code=Type.CLASS, service="ServiceName", name="ClassName")
+        self.assertEqual(cleared, procedure.parameters[0].type)
+        self.assertEqual(cleared, procedure.return_type.types[0])
+        self.assertEqual(cleared, services.services[0].structs[0].fields[0].type)
+        no_value = Services(services=[Service(procedures=[Procedure()])])
+        clear_type_ids(no_value)
+        self.assertFalse(no_value.services[0].procedures[0].HasField("return_type"))
 
     def test_struct_comparison(self) -> None:
         types = Types()

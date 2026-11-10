@@ -763,8 +763,8 @@ public class Connection implements AutoCloseable {
     if (!error.getStackTrace().isEmpty()) {
       message += "\nServer stack trace:\n" + error.getStackTrace();
     }
-    if (!error.getService().isEmpty() && !error.getName().isEmpty()) {
-      String key = error.getService() + "." + error.getName();
+    if (!error.getService().isEmpty() && !error.getException().isEmpty()) {
+      String key = error.getService() + "." + error.getException();
       Class<?> exnType = exceptionTypes.get(key);
       Constructor<?> ctor = null;
       if (exnType != null) {

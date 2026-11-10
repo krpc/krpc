@@ -99,7 +99,7 @@ namespace KRPC.Service.KRPC
                     service.Procedures.Add (procedure);
                 }
                 foreach (var clsSignature in serviceSignature.Classes.Values) {
-                    var cls = new Class (clsSignature.Name);
+                    var cls = new Class (clsSignature.Name, clsSignature.Id);
                     if (clsSignature.Documentation.Length > 0)
                         cls.Documentation = clsSignature.Documentation;
                     cls.Deprecated = clsSignature.Deprecated;
@@ -107,7 +107,7 @@ namespace KRPC.Service.KRPC
                     service.Classes.Add (cls);
                 }
                 foreach (var enmSignature in serviceSignature.Enumerations.Values) {
-                    var enm = new Enumeration (enmSignature.Name);
+                    var enm = new Enumeration (enmSignature.Name, enmSignature.Id);
                     if (enmSignature.Documentation.Length > 0)
                         enm.Documentation = enmSignature.Documentation;
                     enm.Deprecated = enmSignature.Deprecated;
@@ -124,7 +124,7 @@ namespace KRPC.Service.KRPC
                     service.Enumerations.Add (enm);
                 }
                 foreach (var structSignature in serviceSignature.Structs.Values) {
-                    var str = new Messages.Struct (structSignature.Name);
+                    var str = new Messages.Struct (structSignature.Name, structSignature.Id);
                     if (structSignature.Documentation.Length > 0)
                         str.Documentation = structSignature.Documentation;
                     str.Deprecated = structSignature.Deprecated;
@@ -140,7 +140,7 @@ namespace KRPC.Service.KRPC
                     service.Structs.Add (str);
                 }
                 foreach (var exnSignature in serviceSignature.Exceptions.Values) {
-                    var exn = new Messages.Exception (exnSignature.Name);
+                    var exn = new Messages.Exception (exnSignature.Name, exnSignature.Id);
                     if (exnSignature.Documentation.Length > 0)
                         exn.Documentation = exnSignature.Documentation;
                     exn.Deprecated = exnSignature.Deprecated;

@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING
 import krpc.schema.KRPC_pb2 as KRPC
 from krpc.attributes import Attributes
 from krpc.service import _member_name
+from krpc.types import clear_type_ids
 
 if TYPE_CHECKING:
     from krpc.client import Client
@@ -95,7 +96,7 @@ class Metadata:
         self.mapped_types: dict[tuple[str, str], str] = {}
         # (service, procedure name) -> procedure
         self.procedures: dict[tuple[str, str], KRPC.Procedure] = {}
-        for service in client._krpc.get_services().services:
+        for service in clear_type_ids(client._krpc.get_services()).services:
             for exception in service.exceptions:
                 self.exceptions.append((service.name, exception.name))
                 if exception.mapped_type:

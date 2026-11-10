@@ -37,6 +37,27 @@ namespace KRPC.Test.Server.ProtocolBuffers
         {
             Assert.AreEqual (42, Encode (GameScene.All).Id);
             Assert.AreEqual (7, new global::KRPC.Service.Messages.Service ("ServiceName", 7).ToProtobufMessage ().Id);
+            Assert.AreEqual (8, new Class ("ClassName", 8).ToProtobufMessage ().Id);
+            Assert.AreEqual (9, new Enumeration ("EnumerationName", 9).ToProtobufMessage ().Id);
+            Assert.AreEqual (10, new Struct ("StructName", 10).ToProtobufMessage ().Id);
+            Assert.AreEqual (11, new global::KRPC.Service.Messages.Exception ("ExceptionName", 11).ToProtobufMessage ().Id);
+            var error = new Error ("ServiceName", "ExceptionName", 12, 13, "Description", string.Empty).ToProtobufMessage ();
+            Assert.AreEqual (12, error.ServiceId);
+            Assert.AreEqual (13, error.ExceptionId);
+        }
+
+        [Test]
+        public void EncodeTypeIds ()
+        {
+            var type = TypeSpec.Create (typeof(global::KRPC.Test.Service.TestClassWithAnId3)).ToProtobufMessage ();
+            Assert.AreEqual ("TestService3Name", type.Service);
+            Assert.AreEqual ("TestClassWithAnId3", type.Name);
+            Assert.AreEqual (1234, type.ServiceId);
+            Assert.AreEqual (20, type.Id);
+            var list = TypeSpec.Create (typeof(System.Collections.Generic.IList<global::KRPC.Test.Service.TestEnumWithAnId3>)).ToProtobufMessage ();
+            Assert.AreEqual (21, list.Types_ [0].Id);
+            Assert.AreEqual (0, list.Id);
+            Assert.AreEqual (0, TypeSpec.Create (typeof(int)).ToProtobufMessage ().ServiceId);
         }
 
         [Test]

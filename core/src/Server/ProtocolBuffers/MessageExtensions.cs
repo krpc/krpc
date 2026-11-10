@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using KRPC.Service;
 using KRPC.Service.Messages;
+using KRPC.Service.Scanner;
 
 namespace KRPC.Server.ProtocolBuffers
 {
@@ -45,7 +46,9 @@ namespace KRPC.Server.ProtocolBuffers
         {
             return new Schema.KRPC.Error {
                 Service = error.Service,
-                Name = error.Name,
+                Exception = error.Exception,
+                ServiceId = error.ServiceId,
+                ExceptionId = error.ExceptionId,
                 Description = error.Description,
                 StackTrace = error.StackTrace
             };
@@ -146,6 +149,7 @@ namespace KRPC.Server.ProtocolBuffers
         {
             var result = new Schema.KRPC.Class ();
             result.Name = cls.Name;
+            result.Id = cls.Id;
             result.Documentation = cls.Documentation;
             result.Deprecated = cls.Deprecated;
             result.DeprecatedReason = cls.DeprecatedReason;
@@ -156,6 +160,7 @@ namespace KRPC.Server.ProtocolBuffers
         {
             var result = new Schema.KRPC.Enumeration ();
             result.Name = enumeration.Name;
+            result.Id = enumeration.Id;
             result.Values.Add (enumeration.Values.Select (ToProtobufMessage));
             result.Documentation = enumeration.Documentation;
             result.Deprecated = enumeration.Deprecated;
@@ -179,6 +184,7 @@ namespace KRPC.Server.ProtocolBuffers
         {
             var result = new Schema.KRPC.Struct ();
             result.Name = str.Name;
+            result.Id = str.Id;
             result.Fields.Add (str.Fields.Select (ToProtobufMessage));
             result.Documentation = str.Documentation;
             result.Deprecated = str.Deprecated;
@@ -201,11 +207,38 @@ namespace KRPC.Server.ProtocolBuffers
         {
             var result = new Schema.KRPC.Exception ();
             result.Name = exception.Name;
+            result.Id = exception.Id;
             result.Documentation = exception.Documentation;
             result.Deprecated = exception.Deprecated;
             result.DeprecatedReason = exception.DeprecatedReason;
             result.MappedType = exception.MappedType;
             return result;
+        }
+
+        /// <summary>
+        /// Set the service id and type id of a class, enumeration or structure type, from the
+        /// signature of its service. Both stay 0 for a type of a service that did not load.
+        /// </summary>
+        static void SetTypeIds (Schema.KRPC.Type result)
+        {
+            ServiceSignature service;
+            if (!Service.Services.Instance.Signatures.TryGetValue (result.Service, out service))
+                return;
+            ClassSignature cls;
+            EnumerationSignature enumeration;
+            StructSignature str;
+            if (result.Code == Schema.KRPC.Type.Types.TypeCode.Class &&
+                service.Classes.TryGetValue (result.Name, out cls))
+                result.Id = cls.Id;
+            else if (result.Code == Schema.KRPC.Type.Types.TypeCode.Enumeration &&
+                     service.Enumerations.TryGetValue (result.Name, out enumeration))
+                result.Id = enumeration.Id;
+            else if (result.Code == Schema.KRPC.Type.Types.TypeCode.Struct &&
+                     service.Structs.TryGetValue (result.Name, out str))
+                result.Id = str.Id;
+            else
+                return;
+            result.ServiceId = service.Id;
         }
 
         public static Schema.KRPC.Type ToProtobufMessage (this TypeSpec spec)
@@ -257,14 +290,17 @@ namespace KRPC.Server.ProtocolBuffers
                 result.Code = Schema.KRPC.Type.Types.TypeCode.Class;
                 result.Service = TypeUtils.GetClassServiceName (type);
                 result.Name = type.Name;
+                SetTypeIds (result);
             } else if (TypeUtils.IsAnEnumType (type)) {
                 result.Code = Schema.KRPC.Type.Types.TypeCode.Enumeration;
                 result.Service = TypeUtils.GetEnumServiceName (type);
                 result.Name = type.Name;
+                SetTypeIds (result);
             } else if (TypeUtils.IsAStructType (type)) {
                 result.Code = Schema.KRPC.Type.Types.TypeCode.Struct;
                 result.Service = TypeUtils.GetStructServiceName (type);
                 result.Name = type.Name;
+                SetTypeIds (result);
             } else if (TypeUtils.IsAListCollectionType (type)) {
                 result.Code = Schema.KRPC.Type.Types.TypeCode.List;
                 result.Types_.Add (spec.Types.Select (ToProtobufMessage));

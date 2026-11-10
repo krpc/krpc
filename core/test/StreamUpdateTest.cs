@@ -94,7 +94,7 @@ namespace KRPC.Test
                         HasValue = result.Result.HasValue,
                         Value = result.Result.Value,
                         Error = result.Result.HasError ? result.Result.Error.Description : null,
-                        ErrorName = result.Result.HasError ? result.Result.Error.Name : null
+                        ErrorName = result.Result.HasError ? result.Result.Error.Exception : null
                     });
                 updates.Add (update);
             };
