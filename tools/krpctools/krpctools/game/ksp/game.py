@@ -129,9 +129,9 @@ def copy_folder(source, folder, dst):
 class Mod(game.Mod):
     """A KSP mod, installed as the folders and files it puts in GameData.
 
-    The source holds each folder as GameData/<folder>, and each file as GameData/<file>: an
-    archive as released, or a directory. After a folder is installed, any files under the mod's
-    overlay directory for that folder are copied over it.
+    The source holds each folder as GameData/<folder>, or <folder> at the root, and each file
+    as GameData/<file>: an archive as released, or a directory. After a folder is installed,
+    any files under the mod's overlay directory for that folder are copied over it.
     """
 
     # The GameData folders the mod installs

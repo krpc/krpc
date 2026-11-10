@@ -340,6 +340,17 @@ class NearFutureSolar(_PartMod):
     part = "nfs-panel-deploying-curved-25-1"
 
 
+class Firespitter(_PartMod):
+    """Firespitter, whose FSswitchEngineThrustTransform module is one of the engine thrust
+    reversers the SpaceCenter Engine class drives."""
+
+    name = "Firespitter"
+    source = _GITHUB + "snjo/Firespitter/releases/download/v7.17/Firespitter_7.17.zip"
+    sha256 = "ce19d8abc5ef3343752146644f4f8baa25daae4f38124541399590d4156e87fc"
+    folders = ("Firespitter",)
+    part = "FSnoseEngine"
+
+
 class _AssemblyMod(Mod):
     """A mod told apart by the major.minor version of its loaded assembly."""
 
@@ -427,6 +438,7 @@ MODS = [
     RealFuels,
     B9PartSwitch,
     NearFutureSolar,
+    Firespitter,
     KSPCommunityPartModules,
     KSPCommunityPartModules04,
     KOS,
