@@ -1160,6 +1160,10 @@ Obtained by calling <a class="reference internal" href="vessel.html#lua-SpaceCen
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Not used by RealAntennas, which replaces the stock range model.</p>
+</div>
 </dd></dl>
 
 <dl class="lua attribute">
@@ -1221,6 +1225,68 @@ Obtained by calling <a class="reference internal" href="vessel.html#lua-SpaceCen
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CommLink.forward_data_rate">
+<span class="sig-name descname"><span class="pre">forward_data_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.CommLink.forward_data_rate" title="Link to this definition">#</a></dt>
+<dd><p>The data rate from <a class="reference internal" href="#lua-SpaceCenter.CommLink.start" title="SpaceCenter.CommLink.start"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.CommLink.start</span></code></a> to <a class="reference internal" href="#lua-SpaceCenter.CommLink.end" title="SpaceCenter.CommLink.end"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.CommLink.end</span></code></a>, in bits per second.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CommLink.reverse_data_rate">
+<span class="sig-name descname"><span class="pre">reverse_data_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.CommLink.reverse_data_rate" title="Link to this definition">#</a></dt>
+<dd><p>The data rate from <a class="reference internal" href="#lua-SpaceCenter.CommLink.end" title="SpaceCenter.CommLink.end"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.CommLink.end</span></code></a> to <a class="reference internal" href="#lua-SpaceCenter.CommLink.start" title="SpaceCenter.CommLink.start"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.CommLink.start</span></code></a>, in bits per second.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CommLink.start_antenna">
+<span class="sig-name descname"><span class="pre">start_antenna</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="parts.html#lua-SpaceCenter.Antenna" title="SpaceCenter.Antenna"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.Antenna</span></code></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">nil</span></code><a class="headerlink" href="#lua-SpaceCenter.CommLink.start_antenna" title="Link to this definition">#</a></dt>
+<dd><p>The antenna at <a class="reference internal" href="#lua-SpaceCenter.CommLink.start" title="SpaceCenter.CommLink.start"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.CommLink.start</span></code></a> that transmits over the link, or <code class="docutils literal notranslate"><span class="pre">nil</span></code> if
+<a class="reference internal" href="#lua-SpaceCenter.CommLink.start" title="SpaceCenter.CommLink.start"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.CommLink.start</span></code></a> is a ground station or an unloaded vessel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CommLink.end_antenna">
+<span class="sig-name descname"><span class="pre">end_antenna</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="parts.html#lua-SpaceCenter.Antenna" title="SpaceCenter.Antenna"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.Antenna</span></code></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">nil</span></code><a class="headerlink" href="#lua-SpaceCenter.CommLink.end_antenna" title="Link to this definition">#</a></dt>
+<dd><p>The antenna at <a class="reference internal" href="#lua-SpaceCenter.CommLink.end" title="SpaceCenter.CommLink.end"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.CommLink.end</span></code></a> that receives over the link, or <code class="docutils literal notranslate"><span class="pre">nil</span></code> if
+<a class="reference internal" href="#lua-SpaceCenter.CommLink.end" title="SpaceCenter.CommLink.end"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.CommLink.end</span></code></a> is a ground station or an unloaded vessel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
 </dd></dl>
 
 </dd></dl>

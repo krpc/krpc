@@ -1160,6 +1160,10 @@ Obtained by calling <a class="reference internal" href="vessel.html#_CPPv4N4krpc
 <dd class="field-odd"><p>Flight</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Not used by RealAntennas, which replaces the stock range model.</p>
+</div>
 </dd></dl>
 
 <dl class="cpp function">
@@ -1201,6 +1205,48 @@ Obtained by calling <a class="reference internal" href="vessel.html#_CPPv4N4krpc
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter8CommLink3endEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter8CommLink3endEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter8CommLink3endEv"></span><span id="krpc::services::SpaceCenter::CommLink::end"></span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter8CommNodeE" title="krpc::services::SpaceCenter::CommNode"><span class="n"><span class="pre">CommNode</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">end</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter8CommLink3endEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>End point of the link.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter8CommLink17forward_data_rateEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter8CommLink17forward_data_rateEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter8CommLink17forward_data_rateEv"></span><span id="krpc::services::SpaceCenter::CommLink::forward_data_rate"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">forward_data_rate</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter8CommLink17forward_data_rateEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The data rate from <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter8CommLink5startEv" title="krpc::services::SpaceCenter::CommLink::start"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">CommLink::start()</span></code></a> to <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter8CommLink3endEv" title="krpc::services::SpaceCenter::CommLink::end"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">CommLink::end()</span></code></a>, in bits per second.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter8CommLink17reverse_data_rateEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter8CommLink17reverse_data_rateEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter8CommLink17reverse_data_rateEv"></span><span id="krpc::services::SpaceCenter::CommLink::reverse_data_rate"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">reverse_data_rate</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter8CommLink17reverse_data_rateEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The data rate from <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter8CommLink3endEv" title="krpc::services::SpaceCenter::CommLink::end"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">CommLink::end()</span></code></a> to <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter8CommLink5startEv" title="krpc::services::SpaceCenter::CommLink::start"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">CommLink::start()</span></code></a>, in bits per second.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter8CommLink13start_antennaEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter8CommLink13start_antennaEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter8CommLink13start_antennaEv"></span><span id="krpc::services::SpaceCenter::CommLink::start_antenna"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">optional</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="parts.html#_CPPv4N4krpc8services11SpaceCenter7AntennaE" title="krpc::services::SpaceCenter::Antenna"><span class="n"><span class="pre">Antenna</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">start_antenna</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter8CommLink13start_antennaEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The antenna at <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter8CommLink5startEv" title="krpc::services::SpaceCenter::CommLink::start"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">CommLink::start()</span></code></a> that transmits over the link, or <code class="docutils literal notranslate"><span class="pre">NULL</span></code> if
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter8CommLink5startEv" title="krpc::services::SpaceCenter::CommLink::start"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">CommLink::start()</span></code></a> is a ground station or an unloaded vessel.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter8CommLink11end_antennaEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter8CommLink11end_antennaEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter8CommLink11end_antennaEv"></span><span id="krpc::services::SpaceCenter::CommLink::end_antenna"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">optional</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="parts.html#_CPPv4N4krpc8services11SpaceCenter7AntennaE" title="krpc::services::SpaceCenter::Antenna"><span class="n"><span class="pre">Antenna</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">end_antenna</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter8CommLink11end_antennaEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The antenna at <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter8CommLink3endEv" title="krpc::services::SpaceCenter::CommLink::end"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">CommLink::end()</span></code></a> that receives over the link, or <code class="docutils literal notranslate"><span class="pre">NULL</span></code> if
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter8CommLink3endEv" title="krpc::services::SpaceCenter::CommLink::end"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">CommLink::end()</span></code></a> is a ground station or an unloaded vessel.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
 </dd></dl>
 
 </dd></dl>

@@ -114,6 +114,7 @@ Parts
 
       .. note::
 
+         A part with several antennas has an entry for each.
          If RemoteTech is installed, this will always return an empty list.
          To interact with RemoteTech antennas, use the RemoteTech service APIs.
 
@@ -758,6 +759,8 @@ Part
 
       .. note::
 
+         For a part with several antennas, this is the first. :func:`krpc_SpaceCenter_Parts_Antennas`
+         lists them all.
          If RemoteTech is installed, this will always return ``nullptr``.
          To interact with RemoteTech antennas, use the RemoteTech service APIs.
 
@@ -1743,7 +1746,7 @@ Antenna
 ^^^^^^^
 
 .. note:: If RemoteTech is installed, use the RemoteTech service APIs to interact with antennas.
-          This class is only for stock KSP antennas.
+          This class covers stock and RealAntennas antennas.
 
 
 .. type:: krpc_SpaceCenter_Antenna_t
@@ -1814,6 +1817,11 @@ Antenna
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
+
+      .. note::
+
+         Not used by RealAntennas, which replaces the stock range model.
+
    .. function:: krpc_error_t krpc_SpaceCenter_Antenna_Combinable(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Antenna_t instance)
 
       Whether the antenna can be combined with other antennae on the vessel
@@ -1821,11 +1829,21 @@ Antenna
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
+
+      .. note::
+
+         Not used by RealAntennas, which replaces the stock range model.
+
    .. function:: krpc_error_t krpc_SpaceCenter_Antenna_CombinableExponent(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_Antenna_t instance)
 
       Exponent used to calculate the combined power of multiple antennae on a vessel.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Not used by RealAntennas, which replaces the stock range model.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Antenna_PacketInterval(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Antenna_t instance)
 
@@ -1844,6 +1862,344 @@ Antenna
       Units of electric charge consumed per packet sent.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_Gain(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Antenna_t instance)
+
+      The gain of the antenna, in :math:`\mathrm{dBi}`.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_TransmitPower(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Antenna_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_set_TransmitPower(krpc_connection_t connection, krpc_SpaceCenter_Antenna_t instance, float value)
+
+      Returns the transmit power of the antenna, in :math:`\mathrm{dBm}`, and sets it in the editor.
+      Throws an exception if set in flight, or outside zero to :func:`krpc_SpaceCenter_Antenna_MaxTransmitPower`.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_MaxTransmitPower(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Antenna_t instance)
+
+      The largest transmit power the antenna can be set to, in :math:`\mathrm{dBm}`.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_TechLevel(krpc_connection_t connection, int32_t * returnValue, krpc_SpaceCenter_Antenna_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_set_TechLevel(krpc_connection_t connection, krpc_SpaceCenter_Antenna_t instance, int32_t value)
+
+      Returns the tech level of the antenna, and sets it in the editor. Throws an
+      exception if set in flight, or outside zero to :func:`krpc_SpaceCenter_Antenna_MaxTechLevel`.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_MaxTechLevel(krpc_connection_t connection, int32_t * returnValue, krpc_SpaceCenter_Antenna_t instance)
+
+      The highest tech level the antenna can be set to.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_Band(krpc_connection_t connection, char * * returnValue, krpc_SpaceCenter_Antenna_t instance)
+
+      The name of the radio frequency band the antenna uses, e.g. ``"S"``.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_Frequency(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_Antenna_t instance)
+
+      The frequency of the antenna's band, in Hz.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_DataRate(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_Antenna_t instance)
+
+      The highest data rate the antenna supports, in bits per second.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_Beamwidth(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_Antenna_t instance)
+
+      The half-power beamwidth of the antenna, in degrees.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_IdlePowerDraw(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_Antenna_t instance)
+
+      The power the antenna draws while idle, in watts.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_ActivePowerDraw(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_Antenna_t instance)
+
+      The power the antenna draws while transmitting, in watts. This includes
+      :func:`krpc_SpaceCenter_Antenna_IdlePowerDraw`.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_Enabled(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Antenna_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_set_Enabled(krpc_connection_t connection, krpc_SpaceCenter_Antenna_t instance, bool value)
+
+      Returns whether the antenna is enabled, and sets it in the editor. Throws an
+      exception if set in flight.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Requires RealAntennas. A disabled antenna does not communicate and draws no power.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_DisablePermanently(krpc_connection_t connection, krpc_SpaceCenter_Antenna_t instance)
+
+      Disable the antenna for the rest of the flight. It then draws no power.
+
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_CanTarget(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Antenna_t instance)
+
+      Whether the antenna can be pointed at a target. Omnidirectional antennas
+      cannot.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_TargetMode(krpc_connection_t connection, krpc_SpaceCenter_AntennaTargetMode_t * returnValue, krpc_SpaceCenter_Antenna_t instance)
+
+      The kind of target the antenna points at.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_TargetVessel(krpc_connection_t connection, krpc_SpaceCenter_Vessel_t * returnValue, krpc_SpaceCenter_Antenna_t instance)
+
+      The vessel the antenna points at, or ``nullptr`` if it does not point at a vessel.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_TargetBody(krpc_connection_t connection, krpc_SpaceCenter_CelestialBody_t * returnValue, krpc_SpaceCenter_Antenna_t instance)
+
+      The body the antenna points at, or at a position on, or ``nullptr`` if it points at
+      neither.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_TargetDirection(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_Antenna_t instance, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      The direction the antenna points in, in the given reference frame. Throws an
+      exception if the antenna has no target (see :func:`krpc_SpaceCenter_Antenna_TargetMode`).
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame that the returned direction is in.
+
+      :returns: The direction as a unit vector.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_SetTargetVessel(krpc_connection_t connection, krpc_SpaceCenter_Antenna_t instance, krpc_SpaceCenter_Vessel_t vessel)
+
+      Point the antenna at a vessel.
+
+      :Parameters:
+
+       * **vessel** -- The vessel.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires RealAntennas. Throws an exception if the antenna cannot be pointed
+         (see :func:`krpc_SpaceCenter_Antenna_CanTarget`).
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_SetTargetBody(krpc_connection_t connection, krpc_SpaceCenter_Antenna_t instance, krpc_SpaceCenter_CelestialBody_t body)
+
+      Point the antenna at the center of a body.
+
+      :Parameters:
+
+       * **body** -- The body.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires RealAntennas. Throws an exception if the antenna cannot be pointed
+         (see :func:`krpc_SpaceCenter_Antenna_CanTarget`).
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_SetTargetPosition(krpc_connection_t connection, krpc_SpaceCenter_Antenna_t instance, krpc_SpaceCenter_CelestialBody_t body, double latitude, double longitude, double altitude)
+
+      Point the antenna at a position on or above a body.
+
+      :Parameters:
+
+       * **body** -- The body.
+       * **latitude** -- The latitude, in degrees.
+       * **longitude** -- The longitude, in degrees.
+       * **altitude** -- The altitude above sea level, in meters.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires RealAntennas. Throws an exception if the antenna cannot be pointed
+         (see :func:`krpc_SpaceCenter_Antenna_CanTarget`).
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_SetTargetAzimuthElevation(krpc_connection_t connection, krpc_SpaceCenter_Antenna_t instance, double azimuth, double elevation)
+
+      Point the antenna in a direction relative to the vessel's position on the surface.
+
+      :Parameters:
+
+       * **azimuth** -- The azimuth, in degrees clockwise from north, from 0 to 360.
+       * **elevation** -- The elevation above the horizon, in degrees, from -90 to 90.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires RealAntennas. Throws an exception if the antenna cannot be pointed
+         (see :func:`krpc_SpaceCenter_Antenna_CanTarget`).
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_SetTargetOrbitRelative(krpc_connection_t connection, krpc_SpaceCenter_Antenna_t instance, double deflection, double elevation)
+
+      Point the antenna in a direction relative to the vessel's orbital velocity.
+
+      :Parameters:
+
+       * **deflection** -- The angle from the orbital velocity in the orbital plane, in degrees, from -180 to 180.
+       * **elevation** -- The angle out of the orbital plane, in degrees, from -90 to 90.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires RealAntennas. Throws an exception if the antenna cannot be pointed
+         (see :func:`krpc_SpaceCenter_Antenna_CanTarget`).
+
+
+
+
+.. type:: krpc_SpaceCenter_AntennaTargetMode_t
+
+   The kind of target a RealAntennas antenna points at. See :func:`krpc_SpaceCenter_Antenna_TargetMode`.
+
+
+   .. macro:: KRPC_SPACECENTER_ANTENNATARGETMODE_NONE
+
+      The antenna has no target. Omnidirectional antennas have none.
+
+
+   .. macro:: KRPC_SPACECENTER_ANTENNATARGETMODE_VESSEL
+
+      A vessel. See :func:`krpc_SpaceCenter_Antenna_SetTargetVessel`.
+
+
+   .. macro:: KRPC_SPACECENTER_ANTENNATARGETMODE_BODY
+
+      The center of a body. See :func:`krpc_SpaceCenter_Antenna_SetTargetBody`.
+
+
+   .. macro:: KRPC_SPACECENTER_ANTENNATARGETMODE_POSITION
+
+      A position on or above a body. See :func:`krpc_SpaceCenter_Antenna_SetTargetPosition`.
+
+
+   .. macro:: KRPC_SPACECENTER_ANTENNATARGETMODE_AZIMUTHELEVATION
+
+      An azimuth and elevation from the vessel's position. See
+      :func:`krpc_SpaceCenter_Antenna_SetTargetAzimuthElevation`.
+
+
+   .. macro:: KRPC_SPACECENTER_ANTENNATARGETMODE_ORBITRELATIVE
+
+      A direction relative to the vessel's orbital velocity. See
+      :func:`krpc_SpaceCenter_Antenna_SetTargetOrbitRelative`.
 
 
 

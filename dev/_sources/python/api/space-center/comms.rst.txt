@@ -51,6 +51,11 @@ Communications
       :rtype: float
       :Game Scenes: Flight
 
+
+      .. note::
+
+         Not used by RealAntennas, which replaces the stock range model.
+
    .. attribute:: control_path
 
       The communication path used to control the vessel.
@@ -96,6 +101,56 @@ Communications
       :Attribute: Read-only, cannot be set
       :rtype: :class:`CommNode`
    
+
+   .. attribute:: forward_data_rate
+
+      The data rate from :attr:`CommLink.start` to :attr:`CommLink.end`, in bits per second.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. attribute:: reverse_data_rate
+
+      The data rate from :attr:`CommLink.end` to :attr:`CommLink.start`, in bits per second.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. attribute:: start_antenna
+
+      The antenna at :attr:`CommLink.start` that transmits over the link, or ``None`` if
+      :attr:`CommLink.start` is a ground station or an unloaded vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Antenna` or None
+   
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. attribute:: end_antenna
+
+      The antenna at :attr:`CommLink.end` that receives over the link, or ``None`` if
+      :attr:`CommLink.end` is a ground station or an unloaded vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Antenna` or None
+   
+
+      .. note::
+
+         Requires RealAntennas.
 
 
 

@@ -92,6 +92,7 @@ Parts
 
       .. note::
 
+         A part with several antennas has an entry for each.
          If RemoteTech is installed, this will always return an empty list.
          To interact with RemoteTech antennas, use the RemoteTech service APIs.
 
@@ -720,6 +721,8 @@ Part
 
       .. note::
 
+         For a part with several antennas, this is the first. :attr:`SpaceCenter.Parts.antennas`
+         lists them all.
          If RemoteTech is installed, this will always return ``nil``.
          To interact with RemoteTech antennas, use the RemoteTech service APIs.
 
@@ -1605,7 +1608,7 @@ Antenna
 ^^^^^^^
 
 .. note:: If RemoteTech is installed, use the RemoteTech service APIs to interact with antennas.
-          This class is only for stock KSP antennas.
+          This class covers stock and RealAntennas antennas.
 
 
 .. class:: Antenna
@@ -1667,6 +1670,10 @@ Antenna
 
       :Attribute: Read-only, cannot be set
 
+      .. note::
+
+         Not used by RealAntennas, which replaces the stock range model.
+
    .. attribute:: combinable: boolean
 
       Whether the antenna can be combined with other antennae on the vessel
@@ -1674,11 +1681,19 @@ Antenna
 
       :Attribute: Read-only, cannot be set
 
+      .. note::
+
+         Not used by RealAntennas, which replaces the stock range model.
+
    .. attribute:: combinable_exponent: number
 
       Exponent used to calculate the combined power of multiple antennae on a vessel.
 
       :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         Not used by RealAntennas, which replaces the stock range model.
 
    .. attribute:: packet_interval: number
 
@@ -1697,6 +1712,292 @@ Antenna
       Units of electric charge consumed per packet sent.
 
       :Attribute: Read-only, cannot be set
+
+   .. attribute:: gain: number
+
+      The gain of the antenna, in :math:`\mathrm{dBi}`.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. attribute:: transmit_power: number
+
+      Returns the transmit power of the antenna, in :math:`\mathrm{dBm}`, and sets it in the editor.
+      Throws an exception if set in flight, or outside zero to :attr:`SpaceCenter.Antenna.max_transmit_power`.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. attribute:: max_transmit_power: number
+
+      The largest transmit power the antenna can be set to, in :math:`\mathrm{dBm}`.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. attribute:: tech_level: number
+
+      Returns the tech level of the antenna, and sets it in the editor. Throws an
+      exception if set in flight, or outside zero to :attr:`SpaceCenter.Antenna.max_tech_level`.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. attribute:: max_tech_level: number
+
+      The highest tech level the antenna can be set to.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. attribute:: band: string
+
+      The name of the radio frequency band the antenna uses, e.g. ``"S"``.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. attribute:: frequency: number
+
+      The frequency of the antenna's band, in Hz.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. attribute:: data_rate: number
+
+      The highest data rate the antenna supports, in bits per second.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. attribute:: beamwidth: number
+
+      The half-power beamwidth of the antenna, in degrees.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. attribute:: idle_power_draw: number
+
+      The power the antenna draws while idle, in watts.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. attribute:: active_power_draw: number
+
+      The power the antenna draws while transmitting, in watts. This includes
+      :attr:`SpaceCenter.Antenna.idle_power_draw`.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. attribute:: enabled: boolean
+
+      Returns whether the antenna is enabled, and sets it in the editor. Throws an
+      exception if set in flight.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires RealAntennas. A disabled antenna does not communicate and draws no power.
+
+   .. method:: disable_permanently()
+
+      Disable the antenna for the rest of the flight. It then draws no power.
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. attribute:: can_target: boolean
+
+      Whether the antenna can be pointed at a target. Omnidirectional antennas
+      cannot.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. attribute:: target_mode: SpaceCenter.AntennaTargetMode
+
+      The kind of target the antenna points at.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. attribute:: target_vessel: SpaceCenter.Vessel | nil
+
+      The vessel the antenna points at, or ``nil`` if it does not point at a vessel.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. attribute:: target_body: SpaceCenter.CelestialBody | nil
+
+      The body the antenna points at, or at a position on, or ``nil`` if it points at
+      neither.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. method:: target_direction(reference_frame: SpaceCenter.ReferenceFrame): Tuple
+
+      The direction the antenna points in, in the given reference frame. Throws an
+      exception if the antenna has no target (see :attr:`SpaceCenter.Antenna.target_mode`).
+
+      :param reference_frame: The reference frame that the returned direction is in.
+      :returns: The direction as a unit vector.
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. method:: set_target_vessel(vessel: SpaceCenter.Vessel)
+
+      Point the antenna at a vessel.
+
+      :param vessel: The vessel.
+
+      .. note::
+
+         Requires RealAntennas. Throws an exception if the antenna cannot be pointed
+         (see :attr:`SpaceCenter.Antenna.can_target`).
+
+   .. method:: set_target_body(body: SpaceCenter.CelestialBody)
+
+      Point the antenna at the center of a body.
+
+      :param body: The body.
+
+      .. note::
+
+         Requires RealAntennas. Throws an exception if the antenna cannot be pointed
+         (see :attr:`SpaceCenter.Antenna.can_target`).
+
+   .. method:: set_target_position(body: SpaceCenter.CelestialBody, latitude: number, longitude: number, altitude: number)
+
+      Point the antenna at a position on or above a body.
+
+      :param body: The body.
+      :param latitude: The latitude, in degrees.
+      :param longitude: The longitude, in degrees.
+      :param altitude: The altitude above sea level, in meters.
+
+      .. note::
+
+         Requires RealAntennas. Throws an exception if the antenna cannot be pointed
+         (see :attr:`SpaceCenter.Antenna.can_target`).
+
+   .. method:: set_target_azimuth_elevation(azimuth: number, elevation: number)
+
+      Point the antenna in a direction relative to the vessel's position on the surface.
+
+      :param azimuth: The azimuth, in degrees clockwise from north, from 0 to 360.
+      :param elevation: The elevation above the horizon, in degrees, from -90 to 90.
+
+      .. note::
+
+         Requires RealAntennas. Throws an exception if the antenna cannot be pointed
+         (see :attr:`SpaceCenter.Antenna.can_target`).
+
+   .. method:: set_target_orbit_relative(deflection: number, elevation: number)
+
+      Point the antenna in a direction relative to the vessel's orbital velocity.
+
+      :param deflection: The angle from the orbital velocity in the orbital plane, in degrees, from -180 to 180.
+      :param elevation: The angle out of the orbital plane, in degrees, from -90 to 90.
+
+      .. note::
+
+         Requires RealAntennas. Throws an exception if the antenna cannot be pointed
+         (see :attr:`SpaceCenter.Antenna.can_target`).
+
+
+
+
+.. class:: AntennaTargetMode
+
+   The kind of target a RealAntennas antenna points at. See :attr:`SpaceCenter.Antenna.target_mode`.
+
+
+   .. data:: none
+
+      The antenna has no target. Omnidirectional antennas have none.
+
+
+   .. data:: vessel
+
+      A vessel. See :meth:`SpaceCenter.Antenna.set_target_vessel`.
+
+
+   .. data:: body
+
+      The center of a body. See :meth:`SpaceCenter.Antenna.set_target_body`.
+
+
+   .. data:: position
+
+      A position on or above a body. See :meth:`SpaceCenter.Antenna.set_target_position`.
+
+
+   .. data:: azimuth_elevation
+
+      An azimuth and elevation from the vessel's position. See
+      :meth:`SpaceCenter.Antenna.set_target_azimuth_elevation`.
+
+
+   .. data:: orbit_relative
+
+      A direction relative to the vessel's orbital velocity. See
+      :meth:`SpaceCenter.Antenna.set_target_orbit_relative`.
 
 
 

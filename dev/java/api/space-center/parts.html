@@ -1274,7 +1274,8 @@ equivalent to “Control From Here” in game.</p>
 <dd><p>A list of all antennas in the vessel.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>If RemoteTech is installed, this will always return an empty list.
+<p>A part with several antennas has an entry for each.
+If RemoteTech is installed, this will always return an empty list.
 To interact with RemoteTech antennas, use the RemoteTech service APIs.</p>
 </div>
 </dd></dl>
@@ -2107,7 +2108,9 @@ fuel line is out of this part.</p>
 <dd><p>An <a class="reference internal" href="#krpc.client.services.SpaceCenter.Part.getAntenna()" title="krpc.client.services.SpaceCenter.Part.getAntenna()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Part.getAntenna()</span></code></a> if the part is an antenna, otherwise <code class="docutils literal notranslate"><span class="pre">null</span></code>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>If RemoteTech is installed, this will always return <code class="docutils literal notranslate"><span class="pre">null</span></code>.
+<p>For a part with several antennas, this is the first. <a class="reference internal" href="#krpc.client.services.SpaceCenter.Parts.getAntennas()" title="krpc.client.services.SpaceCenter.Parts.getAntennas()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Parts.getAntennas()</span></code></a>
+lists them all.
+If RemoteTech is installed, this will always return <code class="docutils literal notranslate"><span class="pre">null</span></code>.
 To interact with RemoteTech antennas, use the RemoteTech service APIs.</p>
 </div>
 </dd></dl>
@@ -3333,7 +3336,7 @@ is no child node with the given name.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>If RemoteTech is installed, use the RemoteTech service APIs to interact with antennas.
-This class is only for stock KSP antennas.</p>
+This class covers stock and RealAntennas antennas.</p>
 </div>
 <dl class="java type">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Antenna">
@@ -3451,6 +3454,10 @@ Throws <a class="reference internal" href="../krpc/krpc.html#krpc.client.service
 <dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Not used by RealAntennas, which replaces the stock range model.</p>
+</div>
 </dd></dl>
 
 <dl class="java method">
@@ -3463,6 +3470,10 @@ to boost the power.</p>
 <dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Not used by RealAntennas, which replaces the stock range model.</p>
+</div>
 </dd></dl>
 
 <dl class="java method">
@@ -3474,6 +3485,10 @@ to boost the power.</p>
 <dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Not used by RealAntennas, which replaces the stock range model.</p>
+</div>
 </dd></dl>
 
 <dl class="java method">
@@ -3507,6 +3522,460 @@ to boost the power.</p>
 <dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Antenna.getGain()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getGain</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Antenna.getGain()" title="Link to this definition">#</a></dt>
+<dd><p>The gain of the antenna, in <span class="math notranslate nohighlight">\(\mathrm{dBi}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Antenna.getTransmitPower()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getTransmitPower</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Antenna.getTransmitPower()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Antenna.setTransmitPower(float)">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setTransmitPower</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Antenna.setTransmitPower(float)" title="Link to this definition">#</a></dt>
+<dd><p>Returns the transmit power of the antenna, in <span class="math notranslate nohighlight">\(\mathrm{dBm}\)</span>, and sets it in the editor.
+Throws an exception if set in flight, or outside zero to <a class="reference internal" href="#krpc.client.services.SpaceCenter.Antenna.getMaxTransmitPower()" title="krpc.client.services.SpaceCenter.Antenna.getMaxTransmitPower()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Antenna.getMaxTransmitPower()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Antenna.getMaxTransmitPower()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMaxTransmitPower</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Antenna.getMaxTransmitPower()" title="Link to this definition">#</a></dt>
+<dd><p>The largest transmit power the antenna can be set to, in <span class="math notranslate nohighlight">\(\mathrm{dBm}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Antenna.getTechLevel()">
+<span class="pre">int</span> <span class="sig-name descname"><span class="pre">getTechLevel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Antenna.getTechLevel()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Antenna.setTechLevel(int)">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setTechLevel</span></span><span class="sig-paren">(</span><span class="pre">int</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Antenna.setTechLevel(int)" title="Link to this definition">#</a></dt>
+<dd><p>Returns the tech level of the antenna, and sets it in the editor. Throws an
+exception if set in flight, or outside zero to <a class="reference internal" href="#krpc.client.services.SpaceCenter.Antenna.getMaxTechLevel()" title="krpc.client.services.SpaceCenter.Antenna.getMaxTechLevel()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Antenna.getMaxTechLevel()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Antenna.getMaxTechLevel()">
+<span class="pre">int</span> <span class="sig-name descname"><span class="pre">getMaxTechLevel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Antenna.getMaxTechLevel()" title="Link to this definition">#</a></dt>
+<dd><p>The highest tech level the antenna can be set to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Antenna.getBand()">
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getBand</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Antenna.getBand()" title="Link to this definition">#</a></dt>
+<dd><p>The name of the radio frequency band the antenna uses, e.g. <code class="docutils literal notranslate"><span class="pre">&quot;S&quot;</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Antenna.getFrequency()">
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getFrequency</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Antenna.getFrequency()" title="Link to this definition">#</a></dt>
+<dd><p>The frequency of the antenna’s band, in Hz.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Antenna.getDataRate()">
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getDataRate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Antenna.getDataRate()" title="Link to this definition">#</a></dt>
+<dd><p>The highest data rate the antenna supports, in bits per second.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Antenna.getBeamwidth()">
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getBeamwidth</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Antenna.getBeamwidth()" title="Link to this definition">#</a></dt>
+<dd><p>The half-power beamwidth of the antenna, in degrees.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Antenna.getIdlePowerDraw()">
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getIdlePowerDraw</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Antenna.getIdlePowerDraw()" title="Link to this definition">#</a></dt>
+<dd><p>The power the antenna draws while idle, in watts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Antenna.getActivePowerDraw()">
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getActivePowerDraw</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Antenna.getActivePowerDraw()" title="Link to this definition">#</a></dt>
+<dd><p>The power the antenna draws while transmitting, in watts. This includes
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.Antenna.getIdlePowerDraw()" title="krpc.client.services.SpaceCenter.Antenna.getIdlePowerDraw()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Antenna.getIdlePowerDraw()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Antenna.getEnabled()">
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getEnabled</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Antenna.getEnabled()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Antenna.setEnabled(boolean)">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setEnabled</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Antenna.setEnabled(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Returns whether the antenna is enabled, and sets it in the editor. Throws an
+exception if set in flight.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas. A disabled antenna does not communicate and draws no power.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Antenna.disablePermanently()">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">disablePermanently</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Antenna.disablePermanently()" title="Link to this definition">#</a></dt>
+<dd><p>Disable the antenna for the rest of the flight. It then draws no power.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Antenna.getCanTarget()">
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getCanTarget</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Antenna.getCanTarget()" title="Link to this definition">#</a></dt>
+<dd><p>Whether the antenna can be pointed at a target. Omnidirectional antennas
+cannot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Antenna.getTargetMode()">
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.AntennaTargetMode" title="krpc.client.services.SpaceCenter.AntennaTargetMode"><span class="pre">AntennaTargetMode</span></a> <span class="sig-name descname"><span class="pre">getTargetMode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Antenna.getTargetMode()" title="Link to this definition">#</a></dt>
+<dd><p>The kind of target the antenna points at.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Antenna.getTargetVessel()">
+<a class="reference internal" href="vessel.html#krpc.client.services.SpaceCenter.Vessel" title="krpc.client.services.SpaceCenter.Vessel"><span class="pre">Vessel</span></a> <span class="sig-name descname"><span class="pre">getTargetVessel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Antenna.getTargetVessel()" title="Link to this definition">#</a></dt>
+<dd><p>The vessel the antenna points at, or <code class="docutils literal notranslate"><span class="pre">null</span></code> if it does not point at a vessel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Antenna.getTargetBody()">
+<a class="reference internal" href="celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody" title="krpc.client.services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a> <span class="sig-name descname"><span class="pre">getTargetBody</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Antenna.getTargetBody()" title="Link to this definition">#</a></dt>
+<dd><p>The body the antenna points at, or at a position on, or <code class="docutils literal notranslate"><span class="pre">null</span></code> if it points at
+neither.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Antenna.targetDirection(ReferenceFrame)">
+<a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/package-summary.html" title="org.javatuples"><span class="pre">org.javatuples</span></a><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">targetDirection</span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Antenna.targetDirection(ReferenceFrame)" title="Link to this definition">#</a></dt>
+<dd><p>The direction the antenna points in, in the given reference frame. Throws an
+exception if the antenna has no target (see <a class="reference internal" href="#krpc.client.services.SpaceCenter.Antenna.getTargetMode()" title="krpc.client.services.SpaceCenter.Antenna.getTargetMode()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Antenna.getTargetMode()</span></code></a>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>referenceFrame</strong> (<span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><code class="xref java java-type docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a></span>) – The reference frame that the returned direction is in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The direction as a unit vector.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Antenna.setTargetVessel(Vessel)">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setTargetVessel</span></span><span class="sig-paren">(</span><a class="reference internal" href="vessel.html#krpc.client.services.SpaceCenter.Vessel" title="krpc.client.services.SpaceCenter.Vessel"><span class="pre">Vessel</span></a><em> <span class="pre">vessel</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Antenna.setTargetVessel(Vessel)" title="Link to this definition">#</a></dt>
+<dd><p>Point the antenna at a vessel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vessel</strong> (<span><a class="reference internal" href="vessel.html#krpc.client.services.SpaceCenter.Vessel" title="krpc.client.services.SpaceCenter.Vessel"><code class="xref java java-type docutils literal notranslate"><span class="pre">Vessel</span></code></a></span>) – The vessel.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas. Throws an exception if the antenna cannot be pointed
+(see <a class="reference internal" href="#krpc.client.services.SpaceCenter.Antenna.getCanTarget()" title="krpc.client.services.SpaceCenter.Antenna.getCanTarget()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Antenna.getCanTarget()</span></code></a>).</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Antenna.setTargetBody(CelestialBody)">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setTargetBody</span></span><span class="sig-paren">(</span><a class="reference internal" href="celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody" title="krpc.client.services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a><em> <span class="pre">body</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Antenna.setTargetBody(CelestialBody)" title="Link to this definition">#</a></dt>
+<dd><p>Point the antenna at the center of a body.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> (<span><a class="reference internal" href="celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody" title="krpc.client.services.SpaceCenter.CelestialBody"><code class="xref java java-type docutils literal notranslate"><span class="pre">CelestialBody</span></code></a></span>) – The body.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas. Throws an exception if the antenna cannot be pointed
+(see <a class="reference internal" href="#krpc.client.services.SpaceCenter.Antenna.getCanTarget()" title="krpc.client.services.SpaceCenter.Antenna.getCanTarget()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Antenna.getCanTarget()</span></code></a>).</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Antenna.setTargetPosition(CelestialBody, double, double, double)">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setTargetPosition</span></span><span class="sig-paren">(</span><a class="reference internal" href="celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody" title="krpc.client.services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a><em> <span class="pre">body</span></em>, <span class="pre">double</span><em> <span class="pre">latitude</span></em>, <span class="pre">double</span><em> <span class="pre">longitude</span></em>, <span class="pre">double</span><em> <span class="pre">altitude</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Antenna.setTargetPosition(CelestialBody, double, double, double)" title="Link to this definition">#</a></dt>
+<dd><p>Point the antenna at a position on or above a body.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> (<span><a class="reference internal" href="celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody" title="krpc.client.services.SpaceCenter.CelestialBody"><code class="xref java java-type docutils literal notranslate"><span class="pre">CelestialBody</span></code></a></span>) – The body.</p></li>
+<li><p><strong>latitude</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">double</span></code></span>) – The latitude, in degrees.</p></li>
+<li><p><strong>longitude</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">double</span></code></span>) – The longitude, in degrees.</p></li>
+<li><p><strong>altitude</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">double</span></code></span>) – The altitude above sea level, in meters.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas. Throws an exception if the antenna cannot be pointed
+(see <a class="reference internal" href="#krpc.client.services.SpaceCenter.Antenna.getCanTarget()" title="krpc.client.services.SpaceCenter.Antenna.getCanTarget()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Antenna.getCanTarget()</span></code></a>).</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Antenna.setTargetAzimuthElevation(double, double)">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setTargetAzimuthElevation</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">azimuth</span></em>, <span class="pre">double</span><em> <span class="pre">elevation</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Antenna.setTargetAzimuthElevation(double, double)" title="Link to this definition">#</a></dt>
+<dd><p>Point the antenna in a direction relative to the vessel’s position on the surface.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>azimuth</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">double</span></code></span>) – The azimuth, in degrees clockwise from north, from 0 to 360.</p></li>
+<li><p><strong>elevation</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">double</span></code></span>) – The elevation above the horizon, in degrees, from -90 to 90.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas. Throws an exception if the antenna cannot be pointed
+(see <a class="reference internal" href="#krpc.client.services.SpaceCenter.Antenna.getCanTarget()" title="krpc.client.services.SpaceCenter.Antenna.getCanTarget()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Antenna.getCanTarget()</span></code></a>).</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Antenna.setTargetOrbitRelative(double, double)">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setTargetOrbitRelative</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">deflection</span></em>, <span class="pre">double</span><em> <span class="pre">elevation</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Antenna.setTargetOrbitRelative(double, double)" title="Link to this definition">#</a></dt>
+<dd><p>Point the antenna in a direction relative to the vessel’s orbital velocity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>deflection</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">double</span></code></span>) – The angle from the orbital velocity in the orbital plane, in degrees, from -180 to 180.</p></li>
+<li><p><strong>elevation</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">double</span></code></span>) – The angle out of the orbital plane, in degrees, from -90 to 90.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas. Throws an exception if the antenna cannot be pointed
+(see <a class="reference internal" href="#krpc.client.services.SpaceCenter.Antenna.getCanTarget()" title="krpc.client.services.SpaceCenter.Antenna.getCanTarget()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Antenna.getCanTarget()</span></code></a>).</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AntennaTargetMode">
+<span class="pre">public</span> <span class="pre">enum</span> <span class="sig-name descname"><span class="pre">AntennaTargetMode</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AntennaTargetMode" title="Link to this definition">#</a></dt>
+<dd><p>The kind of target a RealAntennas antenna points at. See <a class="reference internal" href="#krpc.client.services.SpaceCenter.Antenna.getTargetMode()" title="krpc.client.services.SpaceCenter.Antenna.getTargetMode()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Antenna.getTargetMode()</span></code></a>.</p>
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AntennaTargetMode.NONE">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.AntennaTargetMode" title="krpc.client.services.SpaceCenter.AntennaTargetMode"><span class="pre">AntennaTargetMode</span></a> <span class="sig-name descname"><span class="pre">NONE</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AntennaTargetMode.NONE" title="Link to this definition">#</a></dt>
+<dd><p>The antenna has no target. Omnidirectional antennas have none.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AntennaTargetMode.VESSEL">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.AntennaTargetMode" title="krpc.client.services.SpaceCenter.AntennaTargetMode"><span class="pre">AntennaTargetMode</span></a> <span class="sig-name descname"><span class="pre">VESSEL</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AntennaTargetMode.VESSEL" title="Link to this definition">#</a></dt>
+<dd><p>A vessel. See <a class="reference internal" href="#krpc.client.services.SpaceCenter.Antenna.setTargetVessel(Vessel)" title="krpc.client.services.SpaceCenter.Antenna.setTargetVessel(Vessel)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Antenna.setTargetVessel(Vessel)</span></code></a>.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AntennaTargetMode.BODY">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.AntennaTargetMode" title="krpc.client.services.SpaceCenter.AntennaTargetMode"><span class="pre">AntennaTargetMode</span></a> <span class="sig-name descname"><span class="pre">BODY</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AntennaTargetMode.BODY" title="Link to this definition">#</a></dt>
+<dd><p>The center of a body. See <a class="reference internal" href="#krpc.client.services.SpaceCenter.Antenna.setTargetBody(CelestialBody)" title="krpc.client.services.SpaceCenter.Antenna.setTargetBody(CelestialBody)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Antenna.setTargetBody(CelestialBody)</span></code></a>.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AntennaTargetMode.POSITION">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.AntennaTargetMode" title="krpc.client.services.SpaceCenter.AntennaTargetMode"><span class="pre">AntennaTargetMode</span></a> <span class="sig-name descname"><span class="pre">POSITION</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AntennaTargetMode.POSITION" title="Link to this definition">#</a></dt>
+<dd><p>A position on or above a body. See <a class="reference internal" href="#krpc.client.services.SpaceCenter.Antenna.setTargetPosition(CelestialBody, double, double, double)" title="krpc.client.services.SpaceCenter.Antenna.setTargetPosition(CelestialBody, double, double, double)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Antenna.setTargetPosition(CelestialBody,</span> <span class="pre">double,</span> <span class="pre">double,</span> <span class="pre">double)</span></code></a>.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AntennaTargetMode.AZIMUTH_ELEVATION">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.AntennaTargetMode" title="krpc.client.services.SpaceCenter.AntennaTargetMode"><span class="pre">AntennaTargetMode</span></a> <span class="sig-name descname"><span class="pre">AZIMUTH_ELEVATION</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AntennaTargetMode.AZIMUTH_ELEVATION" title="Link to this definition">#</a></dt>
+<dd><p>An azimuth and elevation from the vessel’s position. See
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.Antenna.setTargetAzimuthElevation(double, double)" title="krpc.client.services.SpaceCenter.Antenna.setTargetAzimuthElevation(double, double)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Antenna.setTargetAzimuthElevation(double,</span> <span class="pre">double)</span></code></a>.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AntennaTargetMode.ORBIT_RELATIVE">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.AntennaTargetMode" title="krpc.client.services.SpaceCenter.AntennaTargetMode"><span class="pre">AntennaTargetMode</span></a> <span class="sig-name descname"><span class="pre">ORBIT_RELATIVE</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AntennaTargetMode.ORBIT_RELATIVE" title="Link to this definition">#</a></dt>
+<dd><p>A direction relative to the vessel’s orbital velocity. See
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.Antenna.setTargetOrbitRelative(double, double)" title="krpc.client.services.SpaceCenter.Antenna.setTargetOrbitRelative(double, double)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Antenna.setTargetOrbitRelative(double,</span> <span class="pre">double)</span></code></a>.</p>
 </dd></dl>
 
 </dd></dl>

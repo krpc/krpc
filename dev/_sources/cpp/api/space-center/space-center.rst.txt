@@ -500,6 +500,12 @@ SpaceCenter
 
    
 
+   .. function:: bool real_antennas_available()
+
+      Whether RealAntennas is installed.
+
+   
+
    .. function:: void create_kerbal(std::string name, std::string job, bool male)
 
       Creates a Kerbal.

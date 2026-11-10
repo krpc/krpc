@@ -551,6 +551,15 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
 
 
+.. attribute:: real_antennas_available: boolean
+
+   Whether RealAntennas is installed.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
 .. staticmethod:: create_kerbal(name: string, job: string, male: boolean)
 
    Creates a Kerbal.

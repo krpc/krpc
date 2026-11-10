@@ -493,6 +493,12 @@ SpaceCenter
 
       :Game Scenes: All
 
+   .. property:: bool RealAntennasAvailable { get; }
+
+      Whether RealAntennas is installed.
+
+      :Game Scenes: All
+
    .. function:: void CreateKerbal(string name, string job, bool male)
 
       Creates a Kerbal.

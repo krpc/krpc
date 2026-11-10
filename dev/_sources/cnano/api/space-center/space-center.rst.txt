@@ -645,6 +645,15 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
 
 
+.. function:: krpc_error_t krpc_SpaceCenter_RealAntennasAvailable(krpc_connection_t connection, bool * returnValue)
+
+   Whether RealAntennas is installed.
+
+   
+
+
+
+
 .. function:: krpc_error_t krpc_SpaceCenter_CreateKerbal(krpc_connection_t connection, const char * name, const char * job, bool male)
 
    Creates a Kerbal.

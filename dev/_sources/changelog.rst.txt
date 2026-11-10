@@ -116,6 +116,14 @@ SpaceCenter service
 * Support the curved solar panels from Near Future Solar in ``SolarPanel`` (:issue:`1314`)
 * Include the cost of part modules, such as fairing panels and TweakScale's scaling, in ``Part.Cost`` (:issue:`1314`)
 * Fix setting ``Camera.Mode`` to IVA straight after a launch doing nothing, and setting it again in the IVA leaving it (:issue:`1318`)
+* Support RealAntennas
+
+  * Add its link budget to ``Antenna``: gain, transmit power, tech level, band, data rate, beamwidth, power draw and enabled (:issue:`1320`)
+  * Add antenna targeting to ``Antenna`` (:issue:`1320`)
+  * Add data rates and antennas to ``CommLink`` (:issue:`1320`)
+  * List each antenna of a part with several in ``Parts.Antennas`` (:issue:`1320`)
+  * Add ``SpaceCenter.RealAntennasAvailable`` (:issue:`1320`)
+
 
 
 InfernalRobotics service

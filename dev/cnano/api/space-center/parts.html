@@ -1274,7 +1274,8 @@ equivalent to “Control From Here” in game.</p>
 <dd><p>A list of all antennas in the vessel.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>If RemoteTech is installed, this will always return an empty list.
+<p>A part with several antennas has an entry for each.
+If RemoteTech is installed, this will always return an empty list.
 To interact with RemoteTech antennas, use the RemoteTech service APIs.</p>
 </div>
 </dd></dl>
@@ -2107,7 +2108,9 @@ fuel line is out of this part.</p>
 <dd><p>An <a class="reference internal" href="#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_Antenna" title="krpc_SpaceCenter_Part_Antenna"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Part_Antenna()</span></code></a> if the part is an antenna, otherwise <code class="docutils literal notranslate"><span class="pre">nullptr</span></code>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>If RemoteTech is installed, this will always return <code class="docutils literal notranslate"><span class="pre">nullptr</span></code>.
+<p>For a part with several antennas, this is the first. <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Parts_Antennas()</span></code>
+lists them all.
+If RemoteTech is installed, this will always return <code class="docutils literal notranslate"><span class="pre">nullptr</span></code>.
 To interact with RemoteTech antennas, use the RemoteTech service APIs.</p>
 </div>
 </dd></dl>
@@ -3333,7 +3336,7 @@ is no child node with the given name.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>If RemoteTech is installed, use the RemoteTech service APIs to interact with antennas.
-This class is only for stock KSP antennas.</p>
+This class covers stock and RealAntennas antennas.</p>
 </div>
 <dl class="c type">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Antenna_t">
@@ -3451,6 +3454,10 @@ Throws <code class="docutils literal notranslate"><span class="pre">KRPC.Invalid
 <dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Not used by RealAntennas, which replaces the stock range model.</p>
+</div>
 </dd></dl>
 
 <dl class="c function">
@@ -3463,6 +3470,10 @@ to boost the power.</p>
 <dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Not used by RealAntennas, which replaces the stock range model.</p>
+</div>
 </dd></dl>
 
 <dl class="c function">
@@ -3474,6 +3485,10 @@ to boost the power.</p>
 <dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Not used by RealAntennas, which replaces the stock range model.</p>
+</div>
 </dd></dl>
 
 <dl class="c function">
@@ -3507,6 +3522,460 @@ to boost the power.</p>
 <dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_Gain">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_Gain</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t" title="krpc_SpaceCenter_Antenna_t"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_Gain" title="Link to this definition">#</a><br /></dt>
+<dd><p>The gain of the antenna, in <span class="math notranslate nohighlight">\(\mathrm{dBi}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_TransmitPower">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_TransmitPower</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t" title="krpc_SpaceCenter_Antenna_t"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_TransmitPower" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_set_TransmitPower">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_set_TransmitPower</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t" title="krpc_SpaceCenter_Antenna_t"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_set_TransmitPower" title="Link to this definition">#</a><br /></dt>
+<dd><p>Returns the transmit power of the antenna, in <span class="math notranslate nohighlight">\(\mathrm{dBm}\)</span>, and sets it in the editor.
+Throws an exception if set in flight, or outside zero to <a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_MaxTransmitPower" title="krpc_SpaceCenter_Antenna_MaxTransmitPower"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Antenna_MaxTransmitPower()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_MaxTransmitPower">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_MaxTransmitPower</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t" title="krpc_SpaceCenter_Antenna_t"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_MaxTransmitPower" title="Link to this definition">#</a><br /></dt>
+<dd><p>The largest transmit power the antenna can be set to, in <span class="math notranslate nohighlight">\(\mathrm{dBm}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_TechLevel">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_TechLevel</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t" title="krpc_SpaceCenter_Antenna_t"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_TechLevel" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_set_TechLevel">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_set_TechLevel</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t" title="krpc_SpaceCenter_Antenna_t"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_set_TechLevel" title="Link to this definition">#</a><br /></dt>
+<dd><p>Returns the tech level of the antenna, and sets it in the editor. Throws an
+exception if set in flight, or outside zero to <a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_MaxTechLevel" title="krpc_SpaceCenter_Antenna_MaxTechLevel"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Antenna_MaxTechLevel()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_MaxTechLevel">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_MaxTechLevel</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t" title="krpc_SpaceCenter_Antenna_t"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_MaxTechLevel" title="Link to this definition">#</a><br /></dt>
+<dd><p>The highest tech level the antenna can be set to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_Band">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_Band</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t" title="krpc_SpaceCenter_Antenna_t"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_Band" title="Link to this definition">#</a><br /></dt>
+<dd><p>The name of the radio frequency band the antenna uses, e.g. <code class="docutils literal notranslate"><span class="pre">&quot;S&quot;</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_Frequency">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_Frequency</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t" title="krpc_SpaceCenter_Antenna_t"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_Frequency" title="Link to this definition">#</a><br /></dt>
+<dd><p>The frequency of the antenna’s band, in Hz.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_DataRate">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_DataRate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t" title="krpc_SpaceCenter_Antenna_t"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_DataRate" title="Link to this definition">#</a><br /></dt>
+<dd><p>The highest data rate the antenna supports, in bits per second.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_Beamwidth">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_Beamwidth</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t" title="krpc_SpaceCenter_Antenna_t"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_Beamwidth" title="Link to this definition">#</a><br /></dt>
+<dd><p>The half-power beamwidth of the antenna, in degrees.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_IdlePowerDraw">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_IdlePowerDraw</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t" title="krpc_SpaceCenter_Antenna_t"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_IdlePowerDraw" title="Link to this definition">#</a><br /></dt>
+<dd><p>The power the antenna draws while idle, in watts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_ActivePowerDraw">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_ActivePowerDraw</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t" title="krpc_SpaceCenter_Antenna_t"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_ActivePowerDraw" title="Link to this definition">#</a><br /></dt>
+<dd><p>The power the antenna draws while transmitting, in watts. This includes
+<a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_IdlePowerDraw" title="krpc_SpaceCenter_Antenna_IdlePowerDraw"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Antenna_IdlePowerDraw()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_Enabled">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_Enabled</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t" title="krpc_SpaceCenter_Antenna_t"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_Enabled" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_set_Enabled">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_set_Enabled</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t" title="krpc_SpaceCenter_Antenna_t"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_set_Enabled" title="Link to this definition">#</a><br /></dt>
+<dd><p>Returns whether the antenna is enabled, and sets it in the editor. Throws an
+exception if set in flight.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas. A disabled antenna does not communicate and draws no power.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_DisablePermanently">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_DisablePermanently</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t" title="krpc_SpaceCenter_Antenna_t"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_DisablePermanently" title="Link to this definition">#</a><br /></dt>
+<dd><p>Disable the antenna for the rest of the flight. It then draws no power.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_CanTarget">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_CanTarget</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t" title="krpc_SpaceCenter_Antenna_t"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_CanTarget" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the antenna can be pointed at a target. Omnidirectional antennas
+cannot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_TargetMode">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_TargetMode</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_AntennaTargetMode_t" title="krpc_SpaceCenter_AntennaTargetMode_t"><span class="n"><span class="pre">krpc_SpaceCenter_AntennaTargetMode_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t" title="krpc_SpaceCenter_Antenna_t"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_TargetMode" title="Link to this definition">#</a><br /></dt>
+<dd><p>The kind of target the antenna points at.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_TargetVessel">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_TargetVessel</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="vessel.html#c.krpc_SpaceCenter_Vessel_t" title="krpc_SpaceCenter_Vessel_t"><span class="n"><span class="pre">krpc_SpaceCenter_Vessel_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t" title="krpc_SpaceCenter_Antenna_t"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_TargetVessel" title="Link to this definition">#</a><br /></dt>
+<dd><p>The vessel the antenna points at, or <code class="docutils literal notranslate"><span class="pre">nullptr</span></code> if it does not point at a vessel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_TargetBody">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_TargetBody</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="celestial-body.html#c.krpc_SpaceCenter_CelestialBody_t" title="krpc_SpaceCenter_CelestialBody_t"><span class="n"><span class="pre">krpc_SpaceCenter_CelestialBody_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t" title="krpc_SpaceCenter_Antenna_t"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_TargetBody" title="Link to this definition">#</a><br /></dt>
+<dd><p>The body the antenna points at, or at a position on, or <code class="docutils literal notranslate"><span class="pre">nullptr</span></code> if it points at
+neither.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_TargetDirection">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_TargetDirection</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t" title="krpc_SpaceCenter_Antenna_t"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">referenceFrame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_TargetDirection" title="Link to this definition">#</a><br /></dt>
+<dd><p>The direction the antenna points in, in the given reference frame. Throws an
+exception if the antenna has no target (see <a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_TargetMode" title="krpc_SpaceCenter_Antenna_TargetMode"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Antenna_TargetMode()</span></code></a>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>referenceFrame</strong> – The reference frame that the returned direction is in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The direction as a unit vector.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_SetTargetVessel">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_SetTargetVessel</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t" title="krpc_SpaceCenter_Antenna_t"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <a class="reference internal" href="vessel.html#c.krpc_SpaceCenter_Vessel_t" title="krpc_SpaceCenter_Vessel_t"><span class="n"><span class="pre">krpc_SpaceCenter_Vessel_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">vessel</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_SetTargetVessel" title="Link to this definition">#</a><br /></dt>
+<dd><p>Point the antenna at a vessel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vessel</strong> – The vessel.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas. Throws an exception if the antenna cannot be pointed
+(see <a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_CanTarget" title="krpc_SpaceCenter_Antenna_CanTarget"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Antenna_CanTarget()</span></code></a>).</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_SetTargetBody">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_SetTargetBody</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t" title="krpc_SpaceCenter_Antenna_t"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <a class="reference internal" href="celestial-body.html#c.krpc_SpaceCenter_CelestialBody_t" title="krpc_SpaceCenter_CelestialBody_t"><span class="n"><span class="pre">krpc_SpaceCenter_CelestialBody_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">body</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_SetTargetBody" title="Link to this definition">#</a><br /></dt>
+<dd><p>Point the antenna at the center of a body.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> – The body.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas. Throws an exception if the antenna cannot be pointed
+(see <a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_CanTarget" title="krpc_SpaceCenter_Antenna_CanTarget"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Antenna_CanTarget()</span></code></a>).</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_SetTargetPosition">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_SetTargetPosition</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t" title="krpc_SpaceCenter_Antenna_t"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <a class="reference internal" href="celestial-body.html#c.krpc_SpaceCenter_CelestialBody_t" title="krpc_SpaceCenter_CelestialBody_t"><span class="n"><span class="pre">krpc_SpaceCenter_CelestialBody_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">body</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">latitude</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">longitude</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">altitude</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_SetTargetPosition" title="Link to this definition">#</a><br /></dt>
+<dd><p>Point the antenna at a position on or above a body.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> – The body.</p></li>
+<li><p><strong>latitude</strong> – The latitude, in degrees.</p></li>
+<li><p><strong>longitude</strong> – The longitude, in degrees.</p></li>
+<li><p><strong>altitude</strong> – The altitude above sea level, in meters.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas. Throws an exception if the antenna cannot be pointed
+(see <a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_CanTarget" title="krpc_SpaceCenter_Antenna_CanTarget"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Antenna_CanTarget()</span></code></a>).</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_SetTargetAzimuthElevation">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_SetTargetAzimuthElevation</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t" title="krpc_SpaceCenter_Antenna_t"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">azimuth</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">elevation</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_SetTargetAzimuthElevation" title="Link to this definition">#</a><br /></dt>
+<dd><p>Point the antenna in a direction relative to the vessel’s position on the surface.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>azimuth</strong> – The azimuth, in degrees clockwise from north, from 0 to 360.</p></li>
+<li><p><strong>elevation</strong> – The elevation above the horizon, in degrees, from -90 to 90.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas. Throws an exception if the antenna cannot be pointed
+(see <a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_CanTarget" title="krpc_SpaceCenter_Antenna_CanTarget"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Antenna_CanTarget()</span></code></a>).</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_SetTargetOrbitRelative">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_SetTargetOrbitRelative</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t" title="krpc_SpaceCenter_Antenna_t"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">deflection</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">elevation</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_SetTargetOrbitRelative" title="Link to this definition">#</a><br /></dt>
+<dd><p>Point the antenna in a direction relative to the vessel’s orbital velocity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>deflection</strong> – The angle from the orbital velocity in the orbital plane, in degrees, from -180 to 180.</p></li>
+<li><p><strong>elevation</strong> – The angle out of the orbital plane, in degrees, from -90 to 90.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas. Throws an exception if the antenna cannot be pointed
+(see <a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_CanTarget" title="krpc_SpaceCenter_Antenna_CanTarget"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Antenna_CanTarget()</span></code></a>).</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="c type">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_AntennaTargetMode_t">
+<span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_AntennaTargetMode_t</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_AntennaTargetMode_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>The kind of target a RealAntennas antenna points at. See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Antenna_TargetMode()</span></code>.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_AntennaTargetMode_t.KRPC_SPACECENTER_ANTENNATARGETMODE_NONE">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_SPACECENTER_ANTENNATARGETMODE_NONE</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_AntennaTargetMode_t.KRPC_SPACECENTER_ANTENNATARGETMODE_NONE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The antenna has no target. Omnidirectional antennas have none.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_AntennaTargetMode_t.KRPC_SPACECENTER_ANTENNATARGETMODE_VESSEL">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_SPACECENTER_ANTENNATARGETMODE_VESSEL</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_AntennaTargetMode_t.KRPC_SPACECENTER_ANTENNATARGETMODE_VESSEL" title="Link to this definition">#</a><br /></dt>
+<dd><p>A vessel. See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Antenna_SetTargetVessel()</span></code>.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_AntennaTargetMode_t.KRPC_SPACECENTER_ANTENNATARGETMODE_BODY">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_SPACECENTER_ANTENNATARGETMODE_BODY</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_AntennaTargetMode_t.KRPC_SPACECENTER_ANTENNATARGETMODE_BODY" title="Link to this definition">#</a><br /></dt>
+<dd><p>The center of a body. See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Antenna_SetTargetBody()</span></code>.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_AntennaTargetMode_t.KRPC_SPACECENTER_ANTENNATARGETMODE_POSITION">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_SPACECENTER_ANTENNATARGETMODE_POSITION</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_AntennaTargetMode_t.KRPC_SPACECENTER_ANTENNATARGETMODE_POSITION" title="Link to this definition">#</a><br /></dt>
+<dd><p>A position on or above a body. See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Antenna_SetTargetPosition()</span></code>.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_AntennaTargetMode_t.KRPC_SPACECENTER_ANTENNATARGETMODE_AZIMUTHELEVATION">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_SPACECENTER_ANTENNATARGETMODE_AZIMUTHELEVATION</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_AntennaTargetMode_t.KRPC_SPACECENTER_ANTENNATARGETMODE_AZIMUTHELEVATION" title="Link to this definition">#</a><br /></dt>
+<dd><p>An azimuth and elevation from the vessel’s position. See
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Antenna_SetTargetAzimuthElevation()</span></code>.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_AntennaTargetMode_t.KRPC_SPACECENTER_ANTENNATARGETMODE_ORBITRELATIVE">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_SPACECENTER_ANTENNATARGETMODE_ORBITRELATIVE</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_AntennaTargetMode_t.KRPC_SPACECENTER_ANTENNATARGETMODE_ORBITRELATIVE" title="Link to this definition">#</a><br /></dt>
+<dd><p>A direction relative to the vessel’s orbital velocity. See
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Antenna_SetTargetOrbitRelative()</span></code>.</p>
 </dd></dl>
 
 </dd></dl>

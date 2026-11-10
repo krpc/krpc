@@ -1160,6 +1160,10 @@ Obtained by calling <a class="reference internal" href="vessel.html#property-KRP
 <dd class="field-odd"><p>Flight</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Not used by RealAntennas, which replaces the stock range model.</p>
+</div>
 </dd></dl>
 
 <dl class="cs property">
@@ -1221,6 +1225,68 @@ Obtained by calling <a class="reference internal" href="vessel.html#property-KRP
 <dd class="field-odd"><p>All</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.CommLink.ForwardDataRate">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">ForwardDataRate</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.CommLink.ForwardDataRate" title="Link to this definition">#</a></dt>
+<dd><p>The data rate from <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.CommLink.Start" title="property: KRPC.Client.Services.SpaceCenter.CommLink.Start"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">CommLink.Start</span></code></a> to <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.CommLink.End" title="property: KRPC.Client.Services.SpaceCenter.CommLink.End"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">CommLink.End</span></code></a>, in bits per second.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.CommLink.ReverseDataRate">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">ReverseDataRate</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.CommLink.ReverseDataRate" title="Link to this definition">#</a></dt>
+<dd><p>The data rate from <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.CommLink.End" title="property: KRPC.Client.Services.SpaceCenter.CommLink.End"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">CommLink.End</span></code></a> to <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.CommLink.Start" title="property: KRPC.Client.Services.SpaceCenter.CommLink.Start"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">CommLink.Start</span></code></a>, in bits per second.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.CommLink.StartAntenna">
+<a class="reference internal" href="parts.html#class-KRPC.Client.Services.SpaceCenter.Antenna" title="class: KRPC.Client.Services.SpaceCenter.Antenna"><span class="pre">Antenna</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">StartAntenna</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.CommLink.StartAntenna" title="Link to this definition">#</a></dt>
+<dd><p>The antenna at <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.CommLink.Start" title="property: KRPC.Client.Services.SpaceCenter.CommLink.Start"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">CommLink.Start</span></code></a> that transmits over the link, or <code class="docutils literal notranslate"><span class="pre">null</span></code> if
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.CommLink.Start" title="property: KRPC.Client.Services.SpaceCenter.CommLink.Start"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">CommLink.Start</span></code></a> is a ground station or an unloaded vessel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.CommLink.EndAntenna">
+<a class="reference internal" href="parts.html#class-KRPC.Client.Services.SpaceCenter.Antenna" title="class: KRPC.Client.Services.SpaceCenter.Antenna"><span class="pre">Antenna</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">EndAntenna</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.CommLink.EndAntenna" title="Link to this definition">#</a></dt>
+<dd><p>The antenna at <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.CommLink.End" title="property: KRPC.Client.Services.SpaceCenter.CommLink.End"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">CommLink.End</span></code></a> that receives over the link, or <code class="docutils literal notranslate"><span class="pre">null</span></code> if
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.CommLink.End" title="property: KRPC.Client.Services.SpaceCenter.CommLink.End"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">CommLink.End</span></code></a> is a ground station or an unloaded vessel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
 </dd></dl>
 
 </dd></dl>

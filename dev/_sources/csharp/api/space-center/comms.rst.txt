@@ -41,6 +41,11 @@ Communications
 
       :Game Scenes: Flight
 
+
+      .. note::
+
+         Not used by RealAntennas, which replaces the stock range model.
+
    .. property:: System.Collections.Generic.IList<CommLink> ControlPath { get; }
 
       The communication path used to control the vessel.
@@ -76,6 +81,52 @@ Communications
       End point of the link.
 
       :Game Scenes: All
+
+   .. property:: double ForwardDataRate { get; }
+
+      The data rate from :prop:`CommLink.Start` to :prop:`CommLink.End`, in bits per second.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. property:: double ReverseDataRate { get; }
+
+      The data rate from :prop:`CommLink.End` to :prop:`CommLink.Start`, in bits per second.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. property:: Antenna StartAntenna { get; }
+
+      The antenna at :prop:`CommLink.Start` that transmits over the link, or ``null`` if
+      :prop:`CommLink.Start` is a ground station or an unloaded vessel.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. property:: Antenna EndAntenna { get; }
+
+      The antenna at :prop:`CommLink.End` that receives over the link, or ``null`` if
+      :prop:`CommLink.End` is a ground station or an unloaded vessel.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Requires RealAntennas.
 
 
 

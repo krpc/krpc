@@ -46,6 +46,11 @@ Communications
 
       :Game Scenes: Flight
 
+
+      .. note::
+
+         Not used by RealAntennas, which replaces the stock range model.
+
    .. method:: java.util.List<CommLink> getControlPath()
 
 
@@ -86,6 +91,52 @@ Communications
       End point of the link.
 
    
+
+   .. method:: double getForwardDataRate()
+
+
+      The data rate from :meth:`CommLink.getStart()` to :meth:`CommLink.getEnd()`, in bits per second.
+
+   
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. method:: double getReverseDataRate()
+
+
+      The data rate from :meth:`CommLink.getEnd()` to :meth:`CommLink.getStart()`, in bits per second.
+
+   
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. method:: Antenna getStartAntenna()
+
+
+      The antenna at :meth:`CommLink.getStart()` that transmits over the link, or ``null`` if
+      :meth:`CommLink.getStart()` is a ground station or an unloaded vessel.
+
+   
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. method:: Antenna getEndAntenna()
+
+
+      The antenna at :meth:`CommLink.getEnd()` that receives over the link, or ``null`` if
+      :meth:`CommLink.getEnd()` is a ground station or an unloaded vessel.
+
+   
+
+      .. note::
+
+         Requires RealAntennas.
 
 
 

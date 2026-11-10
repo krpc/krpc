@@ -41,6 +41,11 @@ Communications
 
       :Game Scenes: Flight
 
+
+      .. note::
+
+         Not used by RealAntennas, which replaces the stock range model.
+
    .. function:: std::vector<CommLink> control_path()
 
       The communication path used to control the vessel.
@@ -76,6 +81,48 @@ Communications
       End point of the link.
 
    
+
+   .. function:: double forward_data_rate()
+
+      The data rate from :func:`CommLink::start` to :func:`CommLink::end`, in bits per second.
+
+   
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. function:: double reverse_data_rate()
+
+      The data rate from :func:`CommLink::end` to :func:`CommLink::start`, in bits per second.
+
+   
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. function:: std::optional<Antenna> start_antenna()
+
+      The antenna at :func:`CommLink::start` that transmits over the link, or ``NULL`` if
+      :func:`CommLink::start` is a ground station or an unloaded vessel.
+
+   
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. function:: std::optional<Antenna> end_antenna()
+
+      The antenna at :func:`CommLink::end` that receives over the link, or ``NULL`` if
+      :func:`CommLink::end` is a ground station or an unloaded vessel.
+
+   
+
+      .. note::
+
+         Requires RealAntennas.
 
 
 

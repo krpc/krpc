@@ -471,6 +471,13 @@ SpaceCenter
 
    
 
+   .. method:: boolean getRealAntennasAvailable()
+
+
+      Whether RealAntennas is installed.
+
+   
+
    .. method:: void createKerbal(String name, String job, boolean male)
 
       Creates a Kerbal.

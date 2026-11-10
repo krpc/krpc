@@ -41,6 +41,11 @@ Communications
 
       :Game Scenes: Flight
 
+
+      .. note::
+
+         Not used by RealAntennas, which replaces the stock range model.
+
    .. function:: krpc_error_t krpc_SpaceCenter_Comms_ControlPath(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_SpaceCenter_Comms_t instance)
 
       The communication path used to control the vessel.
@@ -76,6 +81,48 @@ Communications
       End point of the link.
 
    
+
+   .. function:: krpc_error_t krpc_SpaceCenter_CommLink_ForwardDataRate(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_CommLink_t instance)
+
+      The data rate from :func:`krpc_SpaceCenter_CommLink_Start` to :func:`krpc_SpaceCenter_CommLink_End`, in bits per second.
+
+   
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_CommLink_ReverseDataRate(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_CommLink_t instance)
+
+      The data rate from :func:`krpc_SpaceCenter_CommLink_End` to :func:`krpc_SpaceCenter_CommLink_Start`, in bits per second.
+
+   
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_CommLink_StartAntenna(krpc_connection_t connection, krpc_SpaceCenter_Antenna_t * returnValue, krpc_SpaceCenter_CommLink_t instance)
+
+      The antenna at :func:`krpc_SpaceCenter_CommLink_Start` that transmits over the link, or ``nullptr`` if
+      :func:`krpc_SpaceCenter_CommLink_Start` is a ground station or an unloaded vessel.
+
+   
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_CommLink_EndAntenna(krpc_connection_t connection, krpc_SpaceCenter_Antenna_t * returnValue, krpc_SpaceCenter_CommLink_t instance)
+
+      The antenna at :func:`krpc_SpaceCenter_CommLink_End` that receives over the link, or ``nullptr`` if
+      :func:`krpc_SpaceCenter_CommLink_End` is a ground station or an unloaded vessel.
+
+   
+
+      .. note::
+
+         Requires RealAntennas.
 
 
 

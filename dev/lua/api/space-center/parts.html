@@ -1274,7 +1274,8 @@ equivalent to “Control From Here” in game.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>If RemoteTech is installed, this will always return an empty list.
+<p>A part with several antennas has an entry for each.
+If RemoteTech is installed, this will always return an empty list.
 To interact with RemoteTech antennas, use the RemoteTech service APIs.</p>
 </div>
 </dd></dl>
@@ -2339,7 +2340,9 @@ fuel line is out of this part.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>If RemoteTech is installed, this will always return <code class="docutils literal notranslate"><span class="pre">nil</span></code>.
+<p>For a part with several antennas, this is the first. <a class="reference internal" href="#lua-SpaceCenter.Parts.antennas" title="SpaceCenter.Parts.antennas"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Parts.antennas</span></code></a>
+lists them all.
+If RemoteTech is installed, this will always return <code class="docutils literal notranslate"><span class="pre">nil</span></code>.
 To interact with RemoteTech antennas, use the RemoteTech service APIs.</p>
 </div>
 </dd></dl>
@@ -3742,7 +3745,7 @@ is no child node with the given name.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>If RemoteTech is installed, use the RemoteTech service APIs to interact with antennas.
-This class is only for stock KSP antennas.</p>
+This class covers stock and RealAntennas antennas.</p>
 </div>
 <dl class="lua class">
 <dt class="sig sig-object lua" id="lua-SpaceCenter.Antenna">
@@ -3840,6 +3843,10 @@ Throws <a class="reference internal" href="../krpc/krpc.html#lua-KRPC.InvalidOpe
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Not used by RealAntennas, which replaces the stock range model.</p>
+</div>
 </dd></dl>
 
 <dl class="lua attribute">
@@ -3852,6 +3859,10 @@ to boost the power.</p>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Not used by RealAntennas, which replaces the stock range model.</p>
+</div>
 </dd></dl>
 
 <dl class="lua attribute">
@@ -3863,6 +3874,10 @@ to boost the power.</p>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Not used by RealAntennas, which replaces the stock range model.</p>
+</div>
 </dd></dl>
 
 <dl class="lua attribute">
@@ -3896,6 +3911,416 @@ to boost the power.</p>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Antenna.gain">
+<span class="sig-name descname"><span class="pre">gain</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Antenna.gain" title="Link to this definition">#</a></dt>
+<dd><p>The gain of the antenna, in <span class="math notranslate nohighlight">\(\mathrm{dBi}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Antenna.transmit_power">
+<span class="sig-name descname"><span class="pre">transmit_power</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Antenna.transmit_power" title="Link to this definition">#</a></dt>
+<dd><p>Returns the transmit power of the antenna, in <span class="math notranslate nohighlight">\(\mathrm{dBm}\)</span>, and sets it in the editor.
+Throws an exception if set in flight, or outside zero to <a class="reference internal" href="#lua-SpaceCenter.Antenna.max_transmit_power" title="SpaceCenter.Antenna.max_transmit_power"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Antenna.max_transmit_power</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Antenna.max_transmit_power">
+<span class="sig-name descname"><span class="pre">max_transmit_power</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Antenna.max_transmit_power" title="Link to this definition">#</a></dt>
+<dd><p>The largest transmit power the antenna can be set to, in <span class="math notranslate nohighlight">\(\mathrm{dBm}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Antenna.tech_level">
+<span class="sig-name descname"><span class="pre">tech_level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Antenna.tech_level" title="Link to this definition">#</a></dt>
+<dd><p>Returns the tech level of the antenna, and sets it in the editor. Throws an
+exception if set in flight, or outside zero to <a class="reference internal" href="#lua-SpaceCenter.Antenna.max_tech_level" title="SpaceCenter.Antenna.max_tech_level"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Antenna.max_tech_level</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Antenna.max_tech_level">
+<span class="sig-name descname"><span class="pre">max_tech_level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Antenna.max_tech_level" title="Link to this definition">#</a></dt>
+<dd><p>The highest tech level the antenna can be set to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Antenna.band">
+<span class="sig-name descname"><span class="pre">band</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><a class="headerlink" href="#lua-SpaceCenter.Antenna.band" title="Link to this definition">#</a></dt>
+<dd><p>The name of the radio frequency band the antenna uses, e.g. <code class="docutils literal notranslate"><span class="pre">&quot;S&quot;</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Antenna.frequency">
+<span class="sig-name descname"><span class="pre">frequency</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Antenna.frequency" title="Link to this definition">#</a></dt>
+<dd><p>The frequency of the antenna’s band, in Hz.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Antenna.data_rate">
+<span class="sig-name descname"><span class="pre">data_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Antenna.data_rate" title="Link to this definition">#</a></dt>
+<dd><p>The highest data rate the antenna supports, in bits per second.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Antenna.beamwidth">
+<span class="sig-name descname"><span class="pre">beamwidth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Antenna.beamwidth" title="Link to this definition">#</a></dt>
+<dd><p>The half-power beamwidth of the antenna, in degrees.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Antenna.idle_power_draw">
+<span class="sig-name descname"><span class="pre">idle_power_draw</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Antenna.idle_power_draw" title="Link to this definition">#</a></dt>
+<dd><p>The power the antenna draws while idle, in watts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Antenna.active_power_draw">
+<span class="sig-name descname"><span class="pre">active_power_draw</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Antenna.active_power_draw" title="Link to this definition">#</a></dt>
+<dd><p>The power the antenna draws while transmitting, in watts. This includes
+<a class="reference internal" href="#lua-SpaceCenter.Antenna.idle_power_draw" title="SpaceCenter.Antenna.idle_power_draw"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Antenna.idle_power_draw</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Antenna.enabled">
+<span class="sig-name descname"><span class="pre">enabled</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.Antenna.enabled" title="Link to this definition">#</a></dt>
+<dd><p>Returns whether the antenna is enabled, and sets it in the editor. Throws an
+exception if set in flight.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas. A disabled antenna does not communicate and draws no power.</p>
+</div>
+</dd></dl>
+
+<dl class="lua method">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Antenna.disable_permanently">
+<span class="sig-name descname"><span class="pre">disable_permanently</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-SpaceCenter.Antenna.disable_permanently" title="Link to this definition">#</a></dt>
+<dd><p>Disable the antenna for the rest of the flight. It then draws no power.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Antenna.can_target">
+<span class="sig-name descname"><span class="pre">can_target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.Antenna.can_target" title="Link to this definition">#</a></dt>
+<dd><p>Whether the antenna can be pointed at a target. Omnidirectional antennas
+cannot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Antenna.target_mode">
+<span class="sig-name descname"><span class="pre">target_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-SpaceCenter.AntennaTargetMode" title="SpaceCenter.AntennaTargetMode"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.AntennaTargetMode</span></code></a><a class="headerlink" href="#lua-SpaceCenter.Antenna.target_mode" title="Link to this definition">#</a></dt>
+<dd><p>The kind of target the antenna points at.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Antenna.target_vessel">
+<span class="sig-name descname"><span class="pre">target_vessel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="vessel.html#lua-SpaceCenter.Vessel" title="SpaceCenter.Vessel"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.Vessel</span></code></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">nil</span></code><a class="headerlink" href="#lua-SpaceCenter.Antenna.target_vessel" title="Link to this definition">#</a></dt>
+<dd><p>The vessel the antenna points at, or <code class="docutils literal notranslate"><span class="pre">nil</span></code> if it does not point at a vessel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Antenna.target_body">
+<span class="sig-name descname"><span class="pre">target_body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="celestial-body.html#lua-SpaceCenter.CelestialBody" title="SpaceCenter.CelestialBody"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.CelestialBody</span></code></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">nil</span></code><a class="headerlink" href="#lua-SpaceCenter.Antenna.target_body" title="Link to this definition">#</a></dt>
+<dd><p>The body the antenna points at, or at a position on, or <code class="docutils literal notranslate"><span class="pre">nil</span></code> if it points at
+neither.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="lua method">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Antenna.target_direction">
+<span class="sig-name descname"><span class="pre">target_direction</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-SpaceCenter.Antenna.target_direction" title="Link to this definition">#</a></dt>
+<dd><p>The direction the antenna points in, in the given reference frame. Throws an
+exception if the antenna has no target (see <a class="reference internal" href="#lua-SpaceCenter.Antenna.target_mode" title="SpaceCenter.Antenna.target_mode"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Antenna.target_mode</span></code></a>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>reference_frame</strong> – The reference frame that the returned direction is in.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The direction as a unit vector.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="lua method">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Antenna.set_target_vessel">
+<span class="sig-name descname"><span class="pre">set_target_vessel</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">vessel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="vessel.html#lua-SpaceCenter.Vessel" title="SpaceCenter.Vessel"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.Vessel</span></code></a><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-SpaceCenter.Antenna.set_target_vessel" title="Link to this definition">#</a></dt>
+<dd><p>Point the antenna at a vessel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>vessel</strong> – The vessel.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas. Throws an exception if the antenna cannot be pointed
+(see <a class="reference internal" href="#lua-SpaceCenter.Antenna.can_target" title="SpaceCenter.Antenna.can_target"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Antenna.can_target</span></code></a>).</p>
+</div>
+</dd></dl>
+
+<dl class="lua method">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Antenna.set_target_body">
+<span class="sig-name descname"><span class="pre">set_target_body</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="celestial-body.html#lua-SpaceCenter.CelestialBody" title="SpaceCenter.CelestialBody"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.CelestialBody</span></code></a><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-SpaceCenter.Antenna.set_target_body" title="Link to this definition">#</a></dt>
+<dd><p>Point the antenna at the center of a body.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>body</strong> – The body.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas. Throws an exception if the antenna cannot be pointed
+(see <a class="reference internal" href="#lua-SpaceCenter.Antenna.can_target" title="SpaceCenter.Antenna.can_target"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Antenna.can_target</span></code></a>).</p>
+</div>
+</dd></dl>
+
+<dl class="lua method">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Antenna.set_target_position">
+<span class="sig-name descname"><span class="pre">set_target_position</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="celestial-body.html#lua-SpaceCenter.CelestialBody" title="SpaceCenter.CelestialBody"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.CelestialBody</span></code></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">latitude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">longitude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">altitude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><br /><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-SpaceCenter.Antenna.set_target_position" title="Link to this definition">#</a><br /></dt>
+<dd><p>Point the antenna at a position on or above a body.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> – The body.</p></li>
+<li><p><strong>latitude</strong> – The latitude, in degrees.</p></li>
+<li><p><strong>longitude</strong> – The longitude, in degrees.</p></li>
+<li><p><strong>altitude</strong> – The altitude above sea level, in meters.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas. Throws an exception if the antenna cannot be pointed
+(see <a class="reference internal" href="#lua-SpaceCenter.Antenna.can_target" title="SpaceCenter.Antenna.can_target"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Antenna.can_target</span></code></a>).</p>
+</div>
+</dd></dl>
+
+<dl class="lua method">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Antenna.set_target_azimuth_elevation">
+<span class="sig-name descname"><span class="pre">set_target_azimuth_elevation</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">azimuth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">elevation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-SpaceCenter.Antenna.set_target_azimuth_elevation" title="Link to this definition">#</a></dt>
+<dd><p>Point the antenna in a direction relative to the vessel’s position on the surface.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>azimuth</strong> – The azimuth, in degrees clockwise from north, from 0 to 360.</p></li>
+<li><p><strong>elevation</strong> – The elevation above the horizon, in degrees, from -90 to 90.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas. Throws an exception if the antenna cannot be pointed
+(see <a class="reference internal" href="#lua-SpaceCenter.Antenna.can_target" title="SpaceCenter.Antenna.can_target"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Antenna.can_target</span></code></a>).</p>
+</div>
+</dd></dl>
+
+<dl class="lua method">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Antenna.set_target_orbit_relative">
+<span class="sig-name descname"><span class="pre">set_target_orbit_relative</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">deflection</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">elevation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-SpaceCenter.Antenna.set_target_orbit_relative" title="Link to this definition">#</a></dt>
+<dd><p>Point the antenna in a direction relative to the vessel’s orbital velocity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>deflection</strong> – The angle from the orbital velocity in the orbital plane, in degrees, from -180 to 180.</p></li>
+<li><p><strong>elevation</strong> – The angle out of the orbital plane, in degrees, from -90 to 90.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas. Throws an exception if the antenna cannot be pointed
+(see <a class="reference internal" href="#lua-SpaceCenter.Antenna.can_target" title="SpaceCenter.Antenna.can_target"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Antenna.can_target</span></code></a>).</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="lua class">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AntennaTargetMode">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">SpaceCenter.</span></span><span class="sig-name descname"><span class="pre">AntennaTargetMode</span></span><a class="headerlink" href="#lua-SpaceCenter.AntennaTargetMode" title="Link to this definition">#</a></dt>
+<dd><p>The kind of target a RealAntennas antenna points at. See <a class="reference internal" href="#lua-SpaceCenter.Antenna.target_mode" title="SpaceCenter.Antenna.target_mode"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Antenna.target_mode</span></code></a>.</p>
+<dl class="lua data">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AntennaTargetMode.none">
+<span class="sig-name descname"><span class="pre">none</span></span><a class="headerlink" href="#lua-SpaceCenter.AntennaTargetMode.none" title="Link to this definition">#</a></dt>
+<dd><p>The antenna has no target. Omnidirectional antennas have none.</p>
+</dd></dl>
+
+<dl class="lua data">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AntennaTargetMode.vessel">
+<span class="sig-name descname"><span class="pre">vessel</span></span><a class="headerlink" href="#lua-SpaceCenter.AntennaTargetMode.vessel" title="Link to this definition">#</a></dt>
+<dd><p>A vessel. See <a class="reference internal" href="#lua-SpaceCenter.Antenna.set_target_vessel" title="SpaceCenter.Antenna.set_target_vessel"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Antenna:set_target_vessel()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="lua data">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AntennaTargetMode.body">
+<span class="sig-name descname"><span class="pre">body</span></span><a class="headerlink" href="#lua-SpaceCenter.AntennaTargetMode.body" title="Link to this definition">#</a></dt>
+<dd><p>The center of a body. See <a class="reference internal" href="#lua-SpaceCenter.Antenna.set_target_body" title="SpaceCenter.Antenna.set_target_body"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Antenna:set_target_body()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="lua data">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AntennaTargetMode.position">
+<span class="sig-name descname"><span class="pre">position</span></span><a class="headerlink" href="#lua-SpaceCenter.AntennaTargetMode.position" title="Link to this definition">#</a></dt>
+<dd><p>A position on or above a body. See <a class="reference internal" href="#lua-SpaceCenter.Antenna.set_target_position" title="SpaceCenter.Antenna.set_target_position"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Antenna:set_target_position()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="lua data">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AntennaTargetMode.azimuth_elevation">
+<span class="sig-name descname"><span class="pre">azimuth_elevation</span></span><a class="headerlink" href="#lua-SpaceCenter.AntennaTargetMode.azimuth_elevation" title="Link to this definition">#</a></dt>
+<dd><p>An azimuth and elevation from the vessel’s position. See
+<a class="reference internal" href="#lua-SpaceCenter.Antenna.set_target_azimuth_elevation" title="SpaceCenter.Antenna.set_target_azimuth_elevation"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Antenna:set_target_azimuth_elevation()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="lua data">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AntennaTargetMode.orbit_relative">
+<span class="sig-name descname"><span class="pre">orbit_relative</span></span><a class="headerlink" href="#lua-SpaceCenter.AntennaTargetMode.orbit_relative" title="Link to this definition">#</a></dt>
+<dd><p>A direction relative to the vessel’s orbital velocity. See
+<a class="reference internal" href="#lua-SpaceCenter.Antenna.set_target_orbit_relative" title="SpaceCenter.Antenna.set_target_orbit_relative"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Antenna:set_target_orbit_relative()</span></code></a>.</p>
 </dd></dl>
 
 </dd></dl>

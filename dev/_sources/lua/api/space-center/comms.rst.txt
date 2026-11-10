@@ -41,6 +41,10 @@ Communications
 
       :Attribute: Read-only, cannot be set
 
+      .. note::
+
+         Not used by RealAntennas, which replaces the stock range model.
+
    .. attribute:: control_path: List
 
       The communication path used to control the vessel.
@@ -76,6 +80,48 @@ Communications
       End point of the link.
 
       :Attribute: Read-only, cannot be set
+
+   .. attribute:: forward_data_rate: number
+
+      The data rate from :attr:`SpaceCenter.CommLink.start` to :attr:`SpaceCenter.CommLink.end`, in bits per second.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. attribute:: reverse_data_rate: number
+
+      The data rate from :attr:`SpaceCenter.CommLink.end` to :attr:`SpaceCenter.CommLink.start`, in bits per second.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. attribute:: start_antenna: SpaceCenter.Antenna | nil
+
+      The antenna at :attr:`SpaceCenter.CommLink.start` that transmits over the link, or ``nil`` if
+      :attr:`SpaceCenter.CommLink.start` is a ground station or an unloaded vessel.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. attribute:: end_antenna: SpaceCenter.Antenna | nil
+
+      The antenna at :attr:`SpaceCenter.CommLink.end` that receives over the link, or ``nil`` if
+      :attr:`SpaceCenter.CommLink.end` is a ground station or an unloaded vessel.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         Requires RealAntennas.
 
 
 

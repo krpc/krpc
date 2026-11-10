@@ -1160,6 +1160,10 @@ Obtained by calling <a class="reference internal" href="vessel.html#krpc.client.
 <dd class="field-odd"><p>Flight</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Not used by RealAntennas, which replaces the stock range model.</p>
+</div>
 </dd></dl>
 
 <dl class="java method">
@@ -1201,6 +1205,48 @@ Obtained by calling <a class="reference internal" href="vessel.html#krpc.client.
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CommLink.getEnd()">
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.CommNode" title="krpc.client.services.SpaceCenter.CommNode"><span class="pre">CommNode</span></a> <span class="sig-name descname"><span class="pre">getEnd</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CommLink.getEnd()" title="Link to this definition">#</a></dt>
 <dd><p>End point of the link.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CommLink.getForwardDataRate()">
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getForwardDataRate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CommLink.getForwardDataRate()" title="Link to this definition">#</a></dt>
+<dd><p>The data rate from <a class="reference internal" href="#krpc.client.services.SpaceCenter.CommLink.getStart()" title="krpc.client.services.SpaceCenter.CommLink.getStart()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">CommLink.getStart()</span></code></a> to <a class="reference internal" href="#krpc.client.services.SpaceCenter.CommLink.getEnd()" title="krpc.client.services.SpaceCenter.CommLink.getEnd()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">CommLink.getEnd()</span></code></a>, in bits per second.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CommLink.getReverseDataRate()">
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getReverseDataRate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CommLink.getReverseDataRate()" title="Link to this definition">#</a></dt>
+<dd><p>The data rate from <a class="reference internal" href="#krpc.client.services.SpaceCenter.CommLink.getEnd()" title="krpc.client.services.SpaceCenter.CommLink.getEnd()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">CommLink.getEnd()</span></code></a> to <a class="reference internal" href="#krpc.client.services.SpaceCenter.CommLink.getStart()" title="krpc.client.services.SpaceCenter.CommLink.getStart()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">CommLink.getStart()</span></code></a>, in bits per second.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CommLink.getStartAntenna()">
+<a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.Antenna" title="krpc.client.services.SpaceCenter.Antenna"><span class="pre">Antenna</span></a> <span class="sig-name descname"><span class="pre">getStartAntenna</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CommLink.getStartAntenna()" title="Link to this definition">#</a></dt>
+<dd><p>The antenna at <a class="reference internal" href="#krpc.client.services.SpaceCenter.CommLink.getStart()" title="krpc.client.services.SpaceCenter.CommLink.getStart()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">CommLink.getStart()</span></code></a> that transmits over the link, or <code class="docutils literal notranslate"><span class="pre">null</span></code> if
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.CommLink.getStart()" title="krpc.client.services.SpaceCenter.CommLink.getStart()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">CommLink.getStart()</span></code></a> is a ground station or an unloaded vessel.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CommLink.getEndAntenna()">
+<a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.Antenna" title="krpc.client.services.SpaceCenter.Antenna"><span class="pre">Antenna</span></a> <span class="sig-name descname"><span class="pre">getEndAntenna</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CommLink.getEndAntenna()" title="Link to this definition">#</a></dt>
+<dd><p>The antenna at <a class="reference internal" href="#krpc.client.services.SpaceCenter.CommLink.getEnd()" title="krpc.client.services.SpaceCenter.CommLink.getEnd()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">CommLink.getEnd()</span></code></a> that receives over the link, or <code class="docutils literal notranslate"><span class="pre">null</span></code> if
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.CommLink.getEnd()" title="krpc.client.services.SpaceCenter.CommLink.getEnd()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">CommLink.getEnd()</span></code></a> is a ground station or an unloaded vessel.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires RealAntennas.</p>
+</div>
 </dd></dl>
 
 </dd></dl>

@@ -103,6 +103,7 @@ Parts
 
       .. note::
 
+         A part with several antennas has an entry for each.
          If RemoteTech is installed, this will always return an empty list.
          To interact with RemoteTech antennas, use the RemoteTech service APIs.
 
@@ -827,6 +828,8 @@ Part
 
       .. note::
 
+         For a part with several antennas, this is the first. :meth:`Parts.getAntennas()`
+         lists them all.
          If RemoteTech is installed, this will always return ``null``.
          To interact with RemoteTech antennas, use the RemoteTech service APIs.
 
@@ -1818,7 +1821,7 @@ Antenna
 ^^^^^^^
 
 .. note:: If RemoteTech is installed, use the RemoteTech service APIs to interact with antennas.
-          This class is only for stock KSP antennas.
+          This class covers stock and RealAntennas antennas.
 
 
 .. type:: public class Antenna
@@ -1894,6 +1897,11 @@ Antenna
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
+
+      .. note::
+
+         Not used by RealAntennas, which replaces the stock range model.
+
    .. method:: boolean getCombinable()
 
 
@@ -1902,12 +1910,22 @@ Antenna
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
+
+      .. note::
+
+         Not used by RealAntennas, which replaces the stock range model.
+
    .. method:: double getCombinableExponent()
 
 
       Exponent used to calculate the combined power of multiple antennae on a vessel.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Not used by RealAntennas, which replaces the stock range model.
 
    .. method:: float getPacketInterval()
 
@@ -1929,6 +1947,341 @@ Antenna
       Units of electric charge consumed per packet sent.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. method:: float getGain()
+
+
+      The gain of the antenna, in :math:`\mathrm{dBi}`.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. method:: float getTransmitPower()
+
+   .. method:: void setTransmitPower(float value)
+
+      Returns the transmit power of the antenna, in :math:`\mathrm{dBm}`, and sets it in the editor.
+      Throws an exception if set in flight, or outside zero to :meth:`Antenna.getMaxTransmitPower()`.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. method:: float getMaxTransmitPower()
+
+
+      The largest transmit power the antenna can be set to, in :math:`\mathrm{dBm}`.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. method:: int getTechLevel()
+
+   .. method:: void setTechLevel(int value)
+
+      Returns the tech level of the antenna, and sets it in the editor. Throws an
+      exception if set in flight, or outside zero to :meth:`Antenna.getMaxTechLevel()`.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. method:: int getMaxTechLevel()
+
+
+      The highest tech level the antenna can be set to.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. method:: String getBand()
+
+
+      The name of the radio frequency band the antenna uses, e.g. ``"S"``.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. method:: double getFrequency()
+
+
+      The frequency of the antenna's band, in Hz.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. method:: double getDataRate()
+
+
+      The highest data rate the antenna supports, in bits per second.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. method:: double getBeamwidth()
+
+
+      The half-power beamwidth of the antenna, in degrees.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. method:: double getIdlePowerDraw()
+
+
+      The power the antenna draws while idle, in watts.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. method:: double getActivePowerDraw()
+
+
+      The power the antenna draws while transmitting, in watts. This includes
+      :meth:`Antenna.getIdlePowerDraw()`.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. method:: boolean getEnabled()
+
+   .. method:: void setEnabled(boolean value)
+
+      Returns whether the antenna is enabled, and sets it in the editor. Throws an
+      exception if set in flight.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Requires RealAntennas. A disabled antenna does not communicate and draws no power.
+
+   .. method:: void disablePermanently()
+
+      Disable the antenna for the rest of the flight. It then draws no power.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. method:: boolean getCanTarget()
+
+
+      Whether the antenna can be pointed at a target. Omnidirectional antennas
+      cannot.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. method:: AntennaTargetMode getTargetMode()
+
+
+      The kind of target the antenna points at.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. method:: Vessel getTargetVessel()
+
+
+      The vessel the antenna points at, or ``null`` if it does not point at a vessel.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. method:: CelestialBody getTargetBody()
+
+
+      The body the antenna points at, or at a position on, or ``null`` if it points at
+      neither.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> targetDirection(ReferenceFrame referenceFrame)
+
+      The direction the antenna points in, in the given reference frame. Throws an
+      exception if the antenna has no target (see :meth:`Antenna.getTargetMode()`).
+
+      :param ReferenceFrame referenceFrame: The reference frame that the returned direction is in.
+      :returns: The direction as a unit vector.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. method:: void setTargetVessel(Vessel vessel)
+
+      Point the antenna at a vessel.
+
+      :param Vessel vessel: The vessel.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires RealAntennas. Throws an exception if the antenna cannot be pointed
+         (see :meth:`Antenna.getCanTarget()`).
+
+   .. method:: void setTargetBody(CelestialBody body)
+
+      Point the antenna at the center of a body.
+
+      :param CelestialBody body: The body.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires RealAntennas. Throws an exception if the antenna cannot be pointed
+         (see :meth:`Antenna.getCanTarget()`).
+
+   .. method:: void setTargetPosition(CelestialBody body, double latitude, double longitude, double altitude)
+
+      Point the antenna at a position on or above a body.
+
+      :param CelestialBody body: The body.
+      :param double latitude: The latitude, in degrees.
+      :param double longitude: The longitude, in degrees.
+      :param double altitude: The altitude above sea level, in meters.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires RealAntennas. Throws an exception if the antenna cannot be pointed
+         (see :meth:`Antenna.getCanTarget()`).
+
+   .. method:: void setTargetAzimuthElevation(double azimuth, double elevation)
+
+      Point the antenna in a direction relative to the vessel's position on the surface.
+
+      :param double azimuth: The azimuth, in degrees clockwise from north, from 0 to 360.
+      :param double elevation: The elevation above the horizon, in degrees, from -90 to 90.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires RealAntennas. Throws an exception if the antenna cannot be pointed
+         (see :meth:`Antenna.getCanTarget()`).
+
+   .. method:: void setTargetOrbitRelative(double deflection, double elevation)
+
+      Point the antenna in a direction relative to the vessel's orbital velocity.
+
+      :param double deflection: The angle from the orbital velocity in the orbital plane, in degrees, from -180 to 180.
+      :param double elevation: The angle out of the orbital plane, in degrees, from -90 to 90.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires RealAntennas. Throws an exception if the antenna cannot be pointed
+         (see :meth:`Antenna.getCanTarget()`).
+
+
+
+
+.. type:: public enum AntennaTargetMode
+
+   The kind of target a RealAntennas antenna points at. See :meth:`Antenna.getTargetMode()`.
+
+
+   .. field:: public AntennaTargetMode NONE
+
+      The antenna has no target. Omnidirectional antennas have none.
+
+
+   .. field:: public AntennaTargetMode VESSEL
+
+      A vessel. See :meth:`Antenna.setTargetVessel(Vessel)`.
+
+
+   .. field:: public AntennaTargetMode BODY
+
+      The center of a body. See :meth:`Antenna.setTargetBody(CelestialBody)`.
+
+
+   .. field:: public AntennaTargetMode POSITION
+
+      A position on or above a body. See :meth:`Antenna.setTargetPosition(CelestialBody, double, double, double)`.
+
+
+   .. field:: public AntennaTargetMode AZIMUTH_ELEVATION
+
+      An azimuth and elevation from the vessel's position. See
+      :meth:`Antenna.setTargetAzimuthElevation(double, double)`.
+
+
+   .. field:: public AntennaTargetMode ORBIT_RELATIVE
+
+      A direction relative to the vessel's orbital velocity. See
+      :meth:`Antenna.setTargetOrbitRelative(double, double)`.
 
 
 

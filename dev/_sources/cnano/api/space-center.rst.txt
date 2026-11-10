@@ -57,8 +57,9 @@ some functionality requires one of them, and the docs note where it does.
 * `B9PartSwitch`_ switches a part's subtype when its field is set through
   :type:`krpc_SpaceCenter_PartField_t`.
 * `TweakScale Rescaled`_ parts report their scaled masses, resources, thrust, torque and cost.
-* :type:`krpc_SpaceCenter_Antenna_t` objects support stock antennas only. The
-  :doc:`RemoteTech service <remote-tech>` covers RemoteTech antennas.
+* `RealAntennas`_ adds the link budget and targeting to :type:`krpc_SpaceCenter_Antenna_t`,
+  and data rates to :type:`krpc_SpaceCenter_CommLink_t`.
+* The :doc:`RemoteTech service <remote-tech>` covers RemoteTech antennas.
 
 These services cover other mods:
 
@@ -70,6 +71,7 @@ These services cover other mods:
 .. _Ferram Aerospace Research: https://github.com/KSPModStewards/Ferram-Aerospace-Research
 .. _Extended Action Groups: https://github.com/linuxgurugamer/AGExt
 .. _RealFuels: https://github.com/KSP-RO/RealFuels
+.. _RealAntennas: https://github.com/KSP-RO/RealAntennas
 .. _RealChute: https://github.com/ChrisViral/RealChute
 .. _ProceduralFairings: https://github.com/KSP-RO/ProceduralFairings
 .. _Near Future Solar: https://github.com/post-kerbin-mining-corporation/NearFutureSolar
