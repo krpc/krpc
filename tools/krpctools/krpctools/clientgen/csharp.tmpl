@@ -402,6 +402,45 @@ namespace KRPC.Client.Services.{{ service_name }}
 {% endif %}
         }
         {% endfor %}
+        {% if cls.static_methods %}
+
+        /// <summary>
+        /// Binds the static methods of <see cref="{{ class_name }}" /> to a connection.
+        /// </summary>
+        /// <param name="connection">The connection the methods are called on.</param>
+        /// <returns>The bound methods.</returns>
+        public static Bound Bind (global::KRPC.Client.IConnection connection)
+        {
+            if (connection == null)
+                throw new ArgumentNullException (nameof (connection));
+            return new Bound (connection);
+        }
+
+        /// <summary>
+        /// The static methods of <see cref="{{ class_name }}" />, bound to a connection.
+        /// </summary>
+        public sealed class Bound
+        {
+            readonly global::KRPC.Client.IConnection connection;
+
+            internal Bound (global::KRPC.Client.IConnection connection)
+            {
+                this.connection = connection;
+            }
+            {% for method_name,method in cls.static_methods.items() %}
+
+{% if method.documentation %}{{ method.documentation | indent(width=12) }}
+{% endif %}
+{% if method.deprecated %}            [global::System.Obsolete{% if method.deprecated_reason %} ("{{ method.deprecated_reason }}"){% endif %}]
+{% endif %}
+            [global::KRPC.Client.Attributes.RPCAttribute ("{{ service_name }}", "{{ method.remote_name }}", typeof(TypeSpecs))]
+            public {{ method.return_type }} {{ method_name }} ({{ sig_parameters(method.parameters) }})
+            {
+                {{ 'return ' if method.return_type != 'void' else '' }}global::KRPC.Client.Services.{{ service_name }}.{{ class_name }}.{{ method_name }} ({{ (['connection'] + method.parameters | map(attribute='name') | list) | join(', ') }});
+            }
+            {% endfor %}
+        }
+        {% endif %}
         {% for property_name,property in cls.properties.items() %}
 
 {% if property.documentation %}{{ property.documentation | indent(width=8) }}

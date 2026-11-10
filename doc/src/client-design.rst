@@ -270,6 +270,28 @@ In Python, C# and Java, the stream runs on the connection the method is called o
 connection the object came from. In C++, it runs on the object's client, or for a static method the
 client passed to it.
 
+Static Methods
+--------------
+
+A static method takes its connection from one place, the one its language gives a class:
+
+* In Python and Lua a class is a value. Each connection builds its own, and a static method runs
+  on the connection of the service the class is reached through.
+* In C#, Java and C++ a class is a type. The connection is the static method's first argument. In
+  C-nano, every function takes the connection first.
+
+A stream or call message of a static method never takes the connection a second time. In C# and
+Java, a stream runs on the connection its ``AddStream`` is called on, and the connection named in
+the call is not used. A call message holds no connection.
+
+C#, Java and C++ also generate ``Bind`` on each class with static methods. It returns a ``Bound``
+object holding the connection, with each static method minus that parameter. It is the counterpart
+of ``conn.krpc.Expression`` in Python, and shortens an expression tree that passes the connection
+at every node. The ``Bound`` methods carry the RPC attribute of the static method, so a C# lambda
+or a Java ``addStream`` takes them as it takes a service's methods. A C++ ``Bound`` is a shorthand
+for the calls that build large expression trees. It has no ``_stream`` or ``_call`` forms, which
+stay on the static method.
+
 .. toctree::
    :hidden:
 

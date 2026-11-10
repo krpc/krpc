@@ -306,6 +306,43 @@ public class {{ service_name }} {
 {% endif %}
         }
         {% endfor %}
+        {% if cls.static_methods %}
+
+        /**
+         * Binds the static methods of {@link {{ class_name }}} to a connection.
+         * @param connection The connection the methods are called on.
+         * @return The bound methods.
+         */
+        public static Bound bind(Connection connection) {
+            if (connection == null) {
+                throw new NullPointerException("connection");
+            }
+            return new Bound(connection);
+        }
+
+        /**
+         * The static methods of {@link {{ class_name }}}, bound to a connection.
+         */
+        public static final class Bound {
+            private final Connection connection;
+
+            private Bound(Connection connection) {
+                this.connection = connection;
+            }
+            {% for method_name,method in cls.static_methods.items() %}
+
+{% if method.documentation %}{{ method.documentation | indent(width=12) }}
+{% endif %}
+{% if method.deprecated %}            @Deprecated
+{% endif %}
+            @RPCInfo(service = "{{ service_name }}", procedure = "{{ method.remote_name }}", types = _Types.class)
+            public {{ method.return_type.name }} {{ method_name }}({{ sig_parameters(method.parameters) }}) throws RPCException
+            {
+                {{ 'return ' if method.return_type.name != 'void' else '' }}krpc.client.services.{{ service_name }}.{{ class_name }}.{{ method_name }}({{ (['connection'] + method.parameters | map(attribute='name') | list) | join(', ') }});
+            }
+            {% endfor %}
+        }
+        {% endif %}
     }
     {% endfor %}
 

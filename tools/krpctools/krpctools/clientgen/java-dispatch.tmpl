@@ -10,7 +10,7 @@ import krpc.conformance.Testee.Value;
 final class {{ service_name }}Dispatch {
   private {{ service_name }}Dispatch() {}
 
-  static Value invoke(Connection connection, String procedure, List<Value> args)
+  static Value invoke(Connection connection, String procedure, List<Value> args, boolean bound)
       throws Exception {
     switch (procedure) {
       {% for member in members %}
@@ -20,6 +20,16 @@ final class {{ service_name }}Dispatch {
           {% for p in variant.parameters %}
           {{ p.boxed }} {{ p.name }} = Values.arg({{ p.arg }}, args.get({{ p.index }}));
           {% endfor %}
+          {% if variant.bound_call %}
+          if (bound) {
+            {% if member.result %}
+            return Values.<{{ member.result.boxed }}>result({{ member.result.result }}, {{ variant.bound_call }});
+            {% else %}
+            {{ variant.bound_call }};
+            return Values.resultNone();
+            {% endif %}
+          }
+          {% endif %}
           {% if member.result %}
           return Values.<{{ member.result.boxed }}>result({{ member.result.result }}, {{ variant.call }});
           {% else %}
@@ -37,7 +47,8 @@ final class {{ service_name }}Dispatch {
     }
   }
 
-  static StreamHandle addStream(Connection connection, String procedure, List<Value> args)
+  static StreamHandle addStream(
+      Connection connection, String procedure, List<Value> args, boolean bound)
       throws Exception {
     switch (procedure) {
       {% for member in members if member.stream %}
@@ -47,6 +58,15 @@ final class {{ service_name }}Dispatch {
           {% for p in variant.parameters %}
           {{ p.boxed }} {{ p.name }} = Values.arg({{ p.arg }}, args.get({{ p.index }}));
           {% endfor %}
+          {% if variant.bound_stream %}
+          if (bound) {
+            {% if member.result %}
+            return new StreamHandle({{ variant.bound_stream }}, x -> Values.<{{ member.result.boxed }}>result({{ member.result.result }}, ({{ member.result.boxed }}) x));
+            {% else %}
+            return new StreamHandle({{ variant.bound_stream }}, x -> Values.resultNone());
+            {% endif %}
+          }
+          {% endif %}
           {% if member.result %}
           return new StreamHandle({{ variant.stream }}, x -> Values.<{{ member.result.boxed }}>result({{ member.result.result }}, ({{ member.result.boxed }}) x));
           {% else %}
@@ -64,7 +84,8 @@ final class {{ service_name }}Dispatch {
   }
 
   static krpc.schema.KRPC.ProcedureCall call(
-      Connection connection, String procedure, List<Value> args) throws Exception {
+      Connection connection, String procedure, List<Value> args, boolean bound)
+      throws Exception {
     switch (procedure) {
       {% for member in members if member.stream %}
       case "{{ member.remote_name }}": {
@@ -73,6 +94,11 @@ final class {{ service_name }}Dispatch {
           {% for p in variant.parameters %}
           {{ p.boxed }} {{ p.name }} = Values.arg({{ p.arg }}, args.get({{ p.index }}));
           {% endfor %}
+          {% if variant.bound_procedure_call %}
+          if (bound) {
+            return {{ variant.bound_procedure_call }};
+          }
+          {% endif %}
           return {{ variant.procedure_call }};
         }
         {% endfor %}

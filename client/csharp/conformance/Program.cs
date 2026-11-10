@@ -18,7 +18,7 @@ namespace KRPC.Client.Conformance
     {
         static readonly string[] Profiles = {
             "core", "error-types", "defaults", "streams", "events", "functions", "function-types",
-            "connections", "concurrency", "callbacks", "conditions", "ordering", "races"
+            "connections", "bound-classes", "concurrency", "callbacks", "conditions", "ordering", "races"
         };
 
         static readonly string[] Protocols = { "tcpip", "localsocket" };

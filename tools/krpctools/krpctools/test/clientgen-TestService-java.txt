@@ -2293,6 +2293,53 @@ public class TestService {
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("TestService", "TestClass_static_StaticOptionalArguments", _args);
             return (String) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), connection);
         }
+
+        /**
+         * Binds the static methods of {@link TestClass} to a connection.
+         * @param connection The connection the methods are called on.
+         * @return The bound methods.
+         */
+        public static Bound bind(Connection connection) {
+            if (connection == null) {
+                throw new NullPointerException("connection");
+            }
+            return new Bound(connection);
+        }
+
+        /**
+         * The static methods of {@link TestClass}, bound to a connection.
+         */
+        public static final class Bound {
+            private final Connection connection;
+
+            private Bound(Connection connection) {
+                this.connection = connection;
+            }
+
+            /**
+             * Returns static followed by a and b.
+             * @param a The first string.
+             * @param b The second string.
+             * @return The strings joined.
+             */
+            @RPCInfo(service = "TestService", procedure = "TestClass_static_StaticMethod", types = _Types.class)
+            public String staticMethod(String a, String b) throws RPCException
+            {
+                return krpc.client.services.TestService.TestClass.staticMethod(connection, a, b);
+            }
+
+            @RPCInfo(service = "TestService", procedure = "TestClass_static_StaticNullableObject", types = _Types.class)
+            public krpc.client.services.TestService.TestClass staticNullableObject(krpc.client.services.TestService.TestClass value) throws RPCException
+            {
+                return krpc.client.services.TestService.TestClass.staticNullableObject(connection, value);
+            }
+
+            @RPCInfo(service = "TestService", procedure = "TestClass_static_StaticOptionalArguments", types = _Types.class)
+            public String staticOptionalArguments(String x, String y, String z, krpc.client.services.TestService.TestClass obj) throws RPCException
+            {
+                return krpc.client.services.TestService.TestClass.staticOptionalArguments(connection, x, y, z, obj);
+            }
+        }
     }
 
     public static class _Types {

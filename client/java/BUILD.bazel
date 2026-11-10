@@ -177,6 +177,7 @@ conformance_test(
         "events",
         "functions",
         "connections",
+        "bound-classes",
         "concurrency",
         "callbacks",
         "conditions",

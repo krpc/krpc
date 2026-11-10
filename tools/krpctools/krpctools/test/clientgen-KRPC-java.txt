@@ -3760,6 +3760,1613 @@ public class KRPC {
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Zip", _args);
             return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
+
+        /**
+         * Binds the static methods of {@link Expression} to a connection.
+         * @param connection The connection the methods are called on.
+         * @return The bound methods.
+         */
+        public static Bound bind(Connection connection) {
+            if (connection == null) {
+                throw new NullPointerException("connection");
+            }
+            return new Bound(connection);
+        }
+
+        /**
+         * The static methods of {@link Expression}, bound to a connection.
+         */
+        public static final class Bound {
+            private final Connection connection;
+
+            private Bound(Connection connection) {
+                this.connection = connection;
+            }
+
+            /**
+             * Numerical addition.
+             * @param arg0 The first operand.
+             * @param arg1 The second operand.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Add", types = _Types.class)
+            public krpc.client.services.KRPC.Expression add(krpc.client.services.KRPC.Expression arg0, krpc.client.services.KRPC.Expression arg1) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.add(connection, arg0, arg1);
+            }
+
+            /**
+             * The result of applying an accumulator function over a collection.
+             *
+             * Throws an exception if the collection is empty.
+             * @return The accumulated value.
+             * @param arg The collection.
+             * @param func The accumulator function.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Aggregate", types = _Types.class)
+            public krpc.client.services.KRPC.Expression aggregate(krpc.client.services.KRPC.Expression arg, krpc.client.services.KRPC.Expression func) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.aggregate(connection, arg, func);
+            }
+
+            /**
+             * The result of applying an accumulator function over a collection, starting from a seed.
+             *
+             * The seed widens to the type of the accumulated value, the function's result.
+             * @return The accumulated value.
+             * @param arg The collection.
+             * @param seed The seed value.
+             * @param func The accumulator function.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_AggregateWithSeed", types = _Types.class)
+            public krpc.client.services.KRPC.Expression aggregateWithSeed(krpc.client.services.KRPC.Expression arg, krpc.client.services.KRPC.Expression seed, krpc.client.services.KRPC.Expression func) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.aggregateWithSeed(connection, arg, seed, func);
+            }
+
+            /**
+             * Whether a predicate function returns true for every value of a collection.
+             * @return Whether all items satisfy the predicate.
+             * @param arg The collection.
+             * @param predicate The predicate function.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_All", types = _Types.class)
+            public krpc.client.services.KRPC.Expression all(krpc.client.services.KRPC.Expression arg, krpc.client.services.KRPC.Expression predicate) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.all(connection, arg, predicate);
+            }
+
+            /**
+             * Logical or bitwise and, which evaluates both operands.
+             *
+             * Also takes two values of a flags enumeration, and gives the values they share.
+             * @param arg0 The first operand.
+             * @param arg1 The second operand.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_And", types = _Types.class)
+            public krpc.client.services.KRPC.Expression and(krpc.client.services.KRPC.Expression arg0, krpc.client.services.KRPC.Expression arg1) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.and(connection, arg0, arg1);
+            }
+
+            /**
+             * Whether a predicate function returns true for any value of a collection.
+             * @return Whether any item satisfies the predicate.
+             * @param arg The collection.
+             * @param predicate The predicate function.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Any", types = _Types.class)
+            public krpc.client.services.KRPC.Expression any(krpc.client.services.KRPC.Expression arg, krpc.client.services.KRPC.Expression predicate) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.any(connection, arg, predicate);
+            }
+
+            /**
+             * A statement adding a value to a list or a set.
+             *
+             * The value goes on the end of a list. A set holding the value is left unchanged.
+             * @param collection The list or set to add to.
+             * @param value The value to add.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Append", types = _Types.class)
+            public krpc.client.services.KRPC.Expression append(krpc.client.services.KRPC.Expression collection, krpc.client.services.KRPC.Expression value) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.append(connection, collection, value);
+            }
+
+            /**
+             * An assignment to a local variable, state variable or function parameter.
+             *
+             * The value's type must be assignable to the variable's type. A numeric value of a
+             * different type is widened, and narrowing it requires a cast.
+             * @param variable The variable to assign to.
+             * @param value The value to assign.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Assign", types = _Types.class)
+            public krpc.client.services.KRPC.Expression assign(krpc.client.services.KRPC.Expression variable, krpc.client.services.KRPC.Expression value) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.assign(connection, variable, value);
+            }
+
+            /**
+             * The average of the values of a collection.
+             *
+             * Throws an exception if the collection is empty and its values are not nullable.
+             * @return The average of the elements in the collection.
+             * @param arg The list or set.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Average", types = _Types.class)
+            public krpc.client.services.KRPC.Expression average(krpc.client.services.KRPC.Expression arg) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.average(connection, arg);
+            }
+
+            /**
+             * A block of statements, whose value is that of its last statement.
+             * @param statements The statements.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Block", types = _Types.class)
+            public krpc.client.services.KRPC.Expression block(java.util.List<krpc.client.services.KRPC.Expression> statements) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.block(connection, statements);
+            }
+
+            /**
+             * A block of statements with local variables.
+             *
+             * The value of the block is that of its last statement. The variables are in scope
+             * for the statements of the block, including within nested functions.
+             * @param variables The local variables of the block.
+             * @param statements The statements.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_BlockWithVariables", types = _Types.class)
+            public krpc.client.services.KRPC.Expression blockWithVariables(java.util.List<krpc.client.services.KRPC.Expression> variables, java.util.List<krpc.client.services.KRPC.Expression> statements) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.blockWithVariables(connection, variables, statements);
+            }
+
+            /**
+             * A break statement, which ends the enclosing loop.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Break", types = _Types.class)
+            public krpc.client.services.KRPC.Expression break_() throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.break_(connection);
+            }
+
+            /**
+             * A dictionary built from a collection, with a key and a value computed from each
+             * element.
+             *
+             * A repeated key takes the last of its values.
+             * @return The dictionary.
+             * @param arg The list or set.
+             * @param keyFunc The function computing an element's key.
+             * @param valueFunc The function computing an element's value.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_BuildDictionary", types = _Types.class)
+            public krpc.client.services.KRPC.Expression buildDictionary(krpc.client.services.KRPC.Expression arg, krpc.client.services.KRPC.Expression keyFunc, krpc.client.services.KRPC.Expression valueFunc) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.buildDictionary(connection, arg, keyFunc, valueFunc);
+            }
+
+            /**
+             * An RPC call.
+             *
+             * The instance the call is made on, and the values of its arguments, are fixed
+             * when the expression is created. A call to a procedure with no return value is
+             * evaluated for its effects, as a statement in a {@link KRPC.Expression#block}. A collection the
+             * procedure returns is copied, as a client would receive it.
+             * @param call The procedure call.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Call", types = _Types.class)
+            public krpc.client.services.KRPC.Expression call(krpc.schema.KRPC.ProcedureCall call) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.call(connection, call);
+            }
+
+            /**
+             * An RPC call, where some or all of the arguments are computed by expressions.
+             *
+             * Position 0 is the instance of a class method or property. A position with no
+             * expression takes the argument encoded in the call, or the parameter's default. A
+             * collection the procedure returns is copied, as a client would receive it.
+             * @param call The RPC to call.
+             * @param args Expressions computing the call's arguments, by position.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_CallWithArguments", types = _Types.class)
+            public krpc.client.services.KRPC.Expression callWithArguments(krpc.schema.KRPC.ProcedureCall call, java.util.Map<Integer,krpc.client.services.KRPC.Expression> args) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.callWithArguments(connection, call, args);
+            }
+
+            /**
+             * A value cast to the given type.
+             *
+             * A tuple or collection is cast element by element.
+             * @param arg The value to cast.
+             * @param type Type to cast the argument to.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Cast", types = _Types.class)
+            public krpc.client.services.KRPC.Expression cast(krpc.client.services.KRPC.Expression arg, krpc.client.services.KRPC.Type type) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.cast(connection, arg, type);
+            }
+
+            /**
+             * A statement removing every value from a list or a set, or every entry from a dictionary.
+             * @param collection The list, set or dictionary.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Clear", types = _Types.class)
+            public krpc.client.services.KRPC.Expression clear(krpc.client.services.KRPC.Expression collection) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.clear(connection, collection);
+            }
+
+            /**
+             * The values of one collection followed by those of another.
+             *
+             * The result is lazily evaluated. {@link KRPC.Expression#toList} makes it concrete.
+             * @return The first collection followed by the second.
+             * @param arg1 The first collection.
+             * @param arg2 The second collection.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Concat", types = _Types.class)
+            public krpc.client.services.KRPC.Expression concat(krpc.client.services.KRPC.Expression arg1, krpc.client.services.KRPC.Expression arg2) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.concat(connection, arg1, arg2);
+            }
+
+            /**
+             * The second argument if the condition is true, and the third argument otherwise.
+             *
+             * Throws an exception if the two values have no common type.
+             * @param condition The boolean condition.
+             * @param ifTrue The value when the condition is true.
+             * @param ifFalse The value when the condition is false.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Conditional", types = _Types.class)
+            public krpc.client.services.KRPC.Expression conditional(krpc.client.services.KRPC.Expression condition, krpc.client.services.KRPC.Expression ifTrue, krpc.client.services.KRPC.Expression ifFalse) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.conditional(connection, condition, ifTrue, ifFalse);
+            }
+
+            /**
+             * Logical and, which evaluates the second operand only when the first is true.
+             * @param arg0 The first operand.
+             * @param arg1 The second operand.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_ConditionalAnd", types = _Types.class)
+            public krpc.client.services.KRPC.Expression conditionalAnd(krpc.client.services.KRPC.Expression arg0, krpc.client.services.KRPC.Expression arg1) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.conditionalAnd(connection, arg0, arg1);
+            }
+
+            /**
+             * Logical or, which evaluates the second operand only when the first is false.
+             * @param arg0 The first operand.
+             * @param arg1 The second operand.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_ConditionalOr", types = _Types.class)
+            public krpc.client.services.KRPC.Expression conditionalOr(krpc.client.services.KRPC.Expression arg0, krpc.client.services.KRPC.Expression arg1) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.conditionalOr(connection, arg0, arg1);
+            }
+
+            /**
+             * A constant value of boolean type.
+             * @param value The value.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_ConstantBool", types = _Types.class)
+            public krpc.client.services.KRPC.Expression constantBool(boolean value) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.constantBool(connection, value);
+            }
+
+            /**
+             * A constant value of bytes type.
+             * @param value The value.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_ConstantBytes", types = _Types.class)
+            public krpc.client.services.KRPC.Expression constantBytes(byte[] value) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.constantBytes(connection, value);
+            }
+
+            /**
+             * A constant value of double precision floating point type.
+             * @param value The value.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_ConstantDouble", types = _Types.class)
+            public krpc.client.services.KRPC.Expression constantDouble(double value) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.constantDouble(connection, value);
+            }
+
+            /**
+             * A constant value of an enumeration a service defines.
+             * @param service The name of the service the enumeration is defined in.
+             * @param name The name of the enumeration.
+             * @param value The value of the member of the enumeration.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_ConstantEnum", types = _Types.class)
+            public krpc.client.services.KRPC.Expression constantEnum(String service, String name, int value) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.constantEnum(connection, service, name, value);
+            }
+
+            /**
+             * A constant value of single precision floating point type.
+             * @param value The value.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_ConstantFloat", types = _Types.class)
+            public krpc.client.services.KRPC.Expression constantFloat(float value) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.constantFloat(connection, value);
+            }
+
+            /**
+             * A constant value of integer type.
+             * @param value The value.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_ConstantInt", types = _Types.class)
+            public krpc.client.services.KRPC.Expression constantInt(int value) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.constantInt(connection, value);
+            }
+
+            /**
+             * A constant value of long integer type.
+             * @param value The value.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_ConstantLong", types = _Types.class)
+            public krpc.client.services.KRPC.Expression constantLong(long value) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.constantLong(connection, value);
+            }
+
+            /**
+             * A null constant of the given type.
+             *
+             * The type is made nullable, as by {@link KRPC.Type#nullableType}.
+             * @param type The type of the value.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_ConstantNull", types = _Types.class)
+            public krpc.client.services.KRPC.Expression constantNull(krpc.client.services.KRPC.Type type) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.constantNull(connection, type);
+            }
+
+            /**
+             * A constant object, an instance of a class a service defines.
+             *
+             * The object is given by its object identifier.
+             * @param value The object identifier of the object.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_ConstantObject", types = _Types.class)
+            public krpc.client.services.KRPC.Expression constantObject(long value) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.constantObject(connection, value);
+            }
+
+            /**
+             * A constant value of string type.
+             * @param value The value.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_ConstantString", types = _Types.class)
+            public krpc.client.services.KRPC.Expression constantString(String value) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.constantString(connection, value);
+            }
+
+            /**
+             * A constant value of unsigned integer type.
+             * @param value The value.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_ConstantUInt", types = _Types.class)
+            public krpc.client.services.KRPC.Expression constantUInt(int value) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.constantUInt(connection, value);
+            }
+
+            /**
+             * A constant value of unsigned long integer type.
+             * @param value The value.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_ConstantULong", types = _Types.class)
+            public krpc.client.services.KRPC.Expression constantULong(long value) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.constantULong(connection, value);
+            }
+
+            /**
+             * Whether a collection contains a value.
+             * @return Whether the collection contains the value.
+             * @param arg The collection.
+             * @param value The value to look for.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Contains", types = _Types.class)
+            public krpc.client.services.KRPC.Expression contains(krpc.client.services.KRPC.Expression arg, krpc.client.services.KRPC.Expression value) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.contains(connection, arg, value);
+            }
+
+            /**
+             * Whether a dictionary contains a key.
+             * @return Whether the dictionary contains the key.
+             * @param dictionary The dictionary.
+             * @param key The key to look for.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_ContainsKey", types = _Types.class)
+            public krpc.client.services.KRPC.Expression containsKey(krpc.client.services.KRPC.Expression dictionary, krpc.client.services.KRPC.Expression key) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.containsKey(connection, dictionary, key);
+            }
+
+            /**
+             * A continue statement, which skips to the next iteration of the enclosing loop.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Continue", types = _Types.class)
+            public krpc.client.services.KRPC.Expression continue_() throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.continue_(connection);
+            }
+
+            /**
+             * The string representation of a value.
+             *
+             * A value other than a number, boolean, string or enumeration converts as .NET
+             * formats it, which for a collection is the name of its type. Throws an exception if
+             * the value is null.
+             * @return The string representation of the value.
+             * @param arg The value to convert.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_ConvertToString", types = _Types.class)
+            public krpc.client.services.KRPC.Expression convertToString(krpc.client.services.KRPC.Expression arg) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.convertToString(connection, arg);
+            }
+
+            /**
+             * The number of values in a collection.
+             * @return The number of elements in the collection.
+             * @param arg The list, set or dictionary.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Count", types = _Types.class)
+            public krpc.client.services.KRPC.Expression count(krpc.client.services.KRPC.Expression arg) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.count(connection, arg);
+            }
+
+            /**
+             * A dictionary of the given keys and corresponding values, with numbers widened to
+             * their common type. Throws an exception if there are no keys, the counts differ, the
+             * keys are not of a valid key type, or a key is null.
+             *
+             * A repeated key takes the last of its values.
+             * @return The dictionary.
+             * @param keys The keys.
+             * @param values The values.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_CreateDictionary", types = _Types.class)
+            public krpc.client.services.KRPC.Expression createDictionary(java.util.List<krpc.client.services.KRPC.Expression> keys, java.util.List<krpc.client.services.KRPC.Expression> values) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.createDictionary(connection, keys, values);
+            }
+
+            /**
+             * An empty dictionary of the given key and value types. Throws an exception if the
+             * key type is nullable or not a valid key type.
+             * @return The empty dictionary.
+             * @param keyType The type of the dictionary's keys.
+             * @param valueType The type of the dictionary's values.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_CreateEmptyDictionary", types = _Types.class)
+            public krpc.client.services.KRPC.Expression createEmptyDictionary(krpc.client.services.KRPC.Type keyType, krpc.client.services.KRPC.Type valueType) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.createEmptyDictionary(connection, keyType, valueType);
+            }
+
+            /**
+             * An empty list of the given value type.
+             * @return The empty list.
+             * @param valueType The type of the values the list holds.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_CreateEmptyList", types = _Types.class)
+            public krpc.client.services.KRPC.Expression createEmptyList(krpc.client.services.KRPC.Type valueType) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.createEmptyList(connection, valueType);
+            }
+
+            /**
+             * An empty set of the given value type. Throws an exception if the value type is
+             * nullable.
+             * @return The empty set.
+             * @param valueType The type of the values the set holds.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_CreateEmptySet", types = _Types.class)
+            public krpc.client.services.KRPC.Expression createEmptySet(krpc.client.services.KRPC.Type valueType) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.createEmptySet(connection, valueType);
+            }
+
+            /**
+             * A list of the given values, with numbers widened to their common type. Throws an
+             * exception if there are no values.
+             * @return The list.
+             * @param values The values.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_CreateList", types = _Types.class)
+            public krpc.client.services.KRPC.Expression createList(java.util.List<krpc.client.services.KRPC.Expression> values) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.createList(connection, values);
+            }
+
+            /**
+             * A set of the given values, with numbers widened to their common type. Throws an
+             * exception if there are no values, or a value is null.
+             *
+             * The values are evaluated in an unspecified order.
+             * @return The set.
+             * @param values The values.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_CreateSet", types = _Types.class)
+            public krpc.client.services.KRPC.Expression createSet(java.util.Set<krpc.client.services.KRPC.Expression> values) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.createSet(connection, values);
+            }
+
+            /**
+             * A structure with the given field values. Throws an exception if the field values do
+             * not match its fields.
+             * @return The structure.
+             * @param type The type of the structure.
+             * @param fieldValues The values of the structure's fields,
+             * in the order the structure declares them.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_CreateStruct", types = _Types.class)
+            public krpc.client.services.KRPC.Expression createStruct(krpc.client.services.KRPC.Type type, java.util.List<krpc.client.services.KRPC.Expression> fieldValues) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.createStruct(connection, type, fieldValues);
+            }
+
+            /**
+             * A tuple of the given elements. Throws an exception if there are no elements or more
+             * than seven.
+             * @return The tuple.
+             * @param elements The elements.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_CreateTuple", types = _Types.class)
+            public krpc.client.services.KRPC.Expression createTuple(java.util.List<krpc.client.services.KRPC.Expression> elements) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.createTuple(connection, elements);
+            }
+
+            /**
+             * The keys of a dictionary, as a list.
+             *
+             * The collection operations take the keys of a dictionary from here, and its values
+             * from {@link KRPC.Expression#dictionaryValues}.
+             * @return The keys of the dictionary.
+             * @param dictionary The dictionary.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_DictionaryKeys", types = _Types.class)
+            public krpc.client.services.KRPC.Expression dictionaryKeys(krpc.client.services.KRPC.Expression dictionary) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.dictionaryKeys(connection, dictionary);
+            }
+
+            /**
+             * The values of a dictionary, as a list.
+             * @return The values of the dictionary.
+             * @param dictionary The dictionary.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_DictionaryValues", types = _Types.class)
+            public krpc.client.services.KRPC.Expression dictionaryValues(krpc.client.services.KRPC.Expression dictionary) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.dictionaryValues(connection, dictionary);
+            }
+
+            /**
+             * The values of a collection with duplicates removed, keeping the first
+             * occurrence of each.
+             *
+             * The result is lazily evaluated. {@link KRPC.Expression#toList} makes it concrete.
+             * @return The distinct values of the collection.
+             * @param arg The collection.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Distinct", types = _Types.class)
+            public krpc.client.services.KRPC.Expression distinct(krpc.client.services.KRPC.Expression arg) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.distinct(connection, arg);
+            }
+
+            /**
+             * Numerical division.
+             * @param arg0 The first operand.
+             * @param arg1 The second operand.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Divide", types = _Types.class)
+            public krpc.client.services.KRPC.Expression divide(krpc.client.services.KRPC.Expression arg0, krpc.client.services.KRPC.Expression arg1) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.divide(connection, arg0, arg1);
+            }
+
+            /**
+             * The value at the given position in a collection.
+             *
+             * Throws an exception if the index is out of range.
+             * @return The value at the given position.
+             * @param arg The collection.
+             * @param index The position of the value, counting from zero.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_ElementAt", types = _Types.class)
+            public krpc.client.services.KRPC.Expression elementAt(krpc.client.services.KRPC.Expression arg, krpc.client.services.KRPC.Expression index) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.elementAt(connection, arg, index);
+            }
+
+            /**
+             * Equality comparison.
+             *
+             * Collections, tuples, bytes and structures compare by their contents. Throws an
+             * exception if the operands are of unrelated types.
+             * @param arg0 The first operand.
+             * @param arg1 The second operand.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Equal", types = _Types.class)
+            public krpc.client.services.KRPC.Expression equal(krpc.client.services.KRPC.Expression arg0, krpc.client.services.KRPC.Expression arg1) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.equal(connection, arg0, arg1);
+            }
+
+            /**
+             * The values of the first collection that are not in the second, with
+             * duplicates removed.
+             *
+             * The result is lazily evaluated. {@link KRPC.Expression#toList} makes it concrete.
+             * @return The difference between the two collections.
+             * @param arg1 The first collection.
+             * @param arg2 The second collection.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Except", types = _Types.class)
+            public krpc.client.services.KRPC.Expression except(krpc.client.services.KRPC.Expression arg1, krpc.client.services.KRPC.Expression arg2) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.except(connection, arg1, arg2);
+            }
+
+            /**
+             * Logical or bitwise exclusive or.
+             *
+             * Also takes two values of a flags enumeration, and gives the values in only one of them.
+             * @param arg0 The first operand.
+             * @param arg1 The second operand.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_ExclusiveOr", types = _Types.class)
+            public krpc.client.services.KRPC.Expression exclusiveOr(krpc.client.services.KRPC.Expression arg0, krpc.client.services.KRPC.Expression arg1) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.exclusiveOr(connection, arg0, arg1);
+            }
+
+            /**
+             * The first value of a collection.
+             *
+             * Throws an exception if the collection is empty.
+             * @return The first value.
+             * @param arg The collection.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_First", types = _Types.class)
+            public krpc.client.services.KRPC.Expression first(krpc.client.services.KRPC.Expression arg) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.first(connection, arg);
+            }
+
+            /**
+             * A loop that evaluates the body once for each value of a collection.
+             *
+             * The loop variable is a local variable declared by an enclosing
+             * {@link KRPC.Expression#blockWithVariables}, or a parameter of an enclosing {@link KRPC.Expression#lambda}.
+             * A {@link KRPC.Expression#break_} or {@link KRPC.Expression#continue_} in the body applies to this loop.
+             * @param variable The loop variable.
+             * @param collection The collection to iterate over.
+             * @param body The statement evaluated on each iteration.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_ForEach", types = _Types.class)
+            public krpc.client.services.KRPC.Expression forEach(krpc.client.services.KRPC.Expression variable, krpc.client.services.KRPC.Expression collection, krpc.client.services.KRPC.Expression body) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.forEach(connection, variable, collection, body);
+            }
+
+            /**
+             * An element of a tuple, list or dictionary.
+             *
+             * A tuple takes a constant integer index, a list a zero indexed integer and a
+             * dictionary a key. Throws an exception if the index is out of range or the key is
+             * missing, and for a tuple when the expression is created.
+             * @return The element.
+             * @param arg The tuple, list or dictionary.
+             * @param index The index or key of the element.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Get", types = _Types.class)
+            public krpc.client.services.KRPC.Expression get(krpc.client.services.KRPC.Expression arg, krpc.client.services.KRPC.Expression index) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.get(connection, arg, index);
+            }
+
+            /**
+             * The value of a field of a structure. Throws an exception if the value is not a
+             * structure, or has no field of the given name.
+             * @return The value of the field.
+             * @param arg The structure.
+             * @param name The name of the field to access.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_GetField", types = _Types.class)
+            public krpc.client.services.KRPC.Expression getField(krpc.client.services.KRPC.Expression arg, String name) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.getField(connection, arg, name);
+            }
+
+            /**
+             * Greater than numerical comparison.
+             * @param arg0 The first operand.
+             * @param arg1 The second operand.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_GreaterThan", types = _Types.class)
+            public krpc.client.services.KRPC.Expression greaterThan(krpc.client.services.KRPC.Expression arg0, krpc.client.services.KRPC.Expression arg1) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.greaterThan(connection, arg0, arg1);
+            }
+
+            /**
+             * Greater than or equal numerical comparison.
+             * @param arg0 The first operand.
+             * @param arg1 The second operand.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_GreaterThanOrEqual", types = _Types.class)
+            public krpc.client.services.KRPC.Expression greaterThanOrEqual(krpc.client.services.KRPC.Expression arg0, krpc.client.services.KRPC.Expression arg1) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.greaterThanOrEqual(connection, arg0, arg1);
+            }
+
+            /**
+             * The values of a collection grouped by the key a function produces for each of them.
+             * @return A dictionary of each key to the values that produced it.
+             * @param arg The collection.
+             * @param key A function producing the key to group values by.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_GroupBy", types = _Types.class)
+            public krpc.client.services.KRPC.Expression groupBy(krpc.client.services.KRPC.Expression arg, krpc.client.services.KRPC.Expression key) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.groupBy(connection, arg, key);
+            }
+
+            /**
+             * An if statement, with no value.
+             *
+             * Use {@link KRPC.Expression#conditional} for an if-then-else that produces a value.
+             * @param condition The boolean condition.
+             * @param body The statement evaluated when the condition is true.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_IfThen", types = _Types.class)
+            public krpc.client.services.KRPC.Expression ifThen(krpc.client.services.KRPC.Expression condition, krpc.client.services.KRPC.Expression body) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.ifThen(connection, condition, body);
+            }
+
+            /**
+             * An if-else statement, with no value.
+             *
+             * Use {@link KRPC.Expression#conditional} for an if-then-else that produces a value.
+             * @param condition The boolean condition.
+             * @param body The statement evaluated when the condition is true.
+             * @param elseBody The statement evaluated when the condition is false.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_IfThenElse", types = _Types.class)
+            public krpc.client.services.KRPC.Expression ifThenElse(krpc.client.services.KRPC.Expression condition, krpc.client.services.KRPC.Expression body, krpc.client.services.KRPC.Expression elseBody) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.ifThenElse(connection, condition, body, elseBody);
+            }
+
+            /**
+             * The values in both of two collections, with duplicates removed.
+             *
+             * The result is lazily evaluated. {@link KRPC.Expression#toList} makes it concrete.
+             * @return The intersection of the two collections.
+             * @param arg1 The first collection.
+             * @param arg2 The second collection.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Intersect", types = _Types.class)
+            public krpc.client.services.KRPC.Expression intersect(krpc.client.services.KRPC.Expression arg1, krpc.client.services.KRPC.Expression arg2) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.intersect(connection, arg1, arg2);
+            }
+
+            /**
+             * A function call.
+             * @return A function call.
+             * @param function The function to call.
+             * @param args The arguments to call the function with.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Invoke", types = _Types.class)
+            public krpc.client.services.KRPC.Expression invoke(krpc.client.services.KRPC.Expression function, java.util.Map<String,krpc.client.services.KRPC.Expression> args) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.invoke(connection, function, args);
+            }
+
+            /**
+             * Whether a value is null. Throws an exception if the type of the value cannot be null.
+             * @param value The value.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_IsNull", types = _Types.class)
+            public krpc.client.services.KRPC.Expression isNull(krpc.client.services.KRPC.Expression value) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.isNull(connection, value);
+            }
+
+            /**
+             * A function with the given parameters and body.
+             *
+             * The body is an expression or a block of statements, and a body with no value is
+             * evaluated for its effects. A {@link KRPC.Expression#return_} or {@link KRPC.Expression#returnNothing}
+             * statement ends the evaluation.
+             * @return A function.
+             * @param parameters The parameters of the function.
+             * @param body The body of the function.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Lambda", types = _Types.class)
+            public krpc.client.services.KRPC.Expression lambda(java.util.List<krpc.client.services.KRPC.Expression> parameters, krpc.client.services.KRPC.Expression body) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.lambda(connection, parameters, body);
+            }
+
+            /**
+             * The last value of a collection.
+             *
+             * Throws an exception if the collection is empty.
+             * @return The last value.
+             * @param arg The collection.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Last", types = _Types.class)
+            public krpc.client.services.KRPC.Expression last(krpc.client.services.KRPC.Expression arg) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.last(connection, arg);
+            }
+
+            /**
+             * Bitwise left shift.
+             *
+             * Only the low 5 bits of the count are used for a 32-bit value, and the low 6 bits
+             * for a 64-bit value.
+             * @param arg0 The first operand.
+             * @param arg1 The second operand.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_LeftShift", types = _Types.class)
+            public krpc.client.services.KRPC.Expression leftShift(krpc.client.services.KRPC.Expression arg0, krpc.client.services.KRPC.Expression arg1) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.leftShift(connection, arg0, arg1);
+            }
+
+            /**
+             * Less than numerical comparison.
+             * @param arg0 The first operand.
+             * @param arg1 The second operand.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_LessThan", types = _Types.class)
+            public krpc.client.services.KRPC.Expression lessThan(krpc.client.services.KRPC.Expression arg0, krpc.client.services.KRPC.Expression arg1) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.lessThan(connection, arg0, arg1);
+            }
+
+            /**
+             * Less than or equal numerical comparison.
+             * @param arg0 The first operand.
+             * @param arg1 The second operand.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_LessThanOrEqual", types = _Types.class)
+            public krpc.client.services.KRPC.Expression lessThanOrEqual(krpc.client.services.KRPC.Expression arg0, krpc.client.services.KRPC.Expression arg1) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.lessThanOrEqual(connection, arg0, arg1);
+            }
+
+            /**
+             * The largest value of a collection.
+             *
+             * Throws an exception if the collection is empty and its values are not nullable.
+             * @return The largest value in the collection.
+             * @param arg The list or set.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Max", types = _Types.class)
+            public krpc.client.services.KRPC.Expression max(krpc.client.services.KRPC.Expression arg) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.max(connection, arg);
+            }
+
+            /**
+             * The value of a collection with the largest key.
+             *
+             * Throws an exception if the collection is empty.
+             * @return The value with the largest key.
+             * @param arg The collection.
+             * @param key A function producing the key to compare values by.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_MaxBy", types = _Types.class)
+            public krpc.client.services.KRPC.Expression maxBy(krpc.client.services.KRPC.Expression arg, krpc.client.services.KRPC.Expression key) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.maxBy(connection, arg, key);
+            }
+
+            /**
+             * The smallest value of a collection.
+             *
+             * Throws an exception if the collection is empty and its values are not nullable.
+             * @return The smallest value in the collection.
+             * @param arg The list or set.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Min", types = _Types.class)
+            public krpc.client.services.KRPC.Expression min(krpc.client.services.KRPC.Expression arg) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.min(connection, arg);
+            }
+
+            /**
+             * The value of a collection with the smallest key.
+             *
+             * Throws an exception if the collection is empty.
+             * @return The value with the smallest key.
+             * @param arg The collection.
+             * @param key A function producing the key to compare values by.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_MinBy", types = _Types.class)
+            public krpc.client.services.KRPC.Expression minBy(krpc.client.services.KRPC.Expression arg, krpc.client.services.KRPC.Expression key) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.minBy(connection, arg, key);
+            }
+
+            /**
+             * Numerical modulo operator.
+             * @param arg0 The first operand.
+             * @param arg1 The second operand.
+             * @return The remainder of arg0 divided by arg1
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Modulo", types = _Types.class)
+            public krpc.client.services.KRPC.Expression modulo(krpc.client.services.KRPC.Expression arg0, krpc.client.services.KRPC.Expression arg1) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.modulo(connection, arg0, arg1);
+            }
+
+            /**
+             * Numerical multiplication.
+             * @param arg0 The first operand.
+             * @param arg1 The second operand.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Multiply", types = _Types.class)
+            public krpc.client.services.KRPC.Expression multiply(krpc.client.services.KRPC.Expression arg0, krpc.client.services.KRPC.Expression arg1) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.multiply(connection, arg0, arg1);
+            }
+
+            /**
+             * Numerical negation, which negates a uint as a long.
+             * @param arg The operand.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Negate", types = _Types.class)
+            public krpc.client.services.KRPC.Expression negate(krpc.client.services.KRPC.Expression arg) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.negate(connection, arg);
+            }
+
+            /**
+             * Logical or bitwise negation.
+             *
+             * Also takes a value of a flags enumeration, and gives the declared values it does not hold.
+             * @param arg The operand.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Not", types = _Types.class)
+            public krpc.client.services.KRPC.Expression not(krpc.client.services.KRPC.Expression arg) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.not(connection, arg);
+            }
+
+            /**
+             * Inequality comparison.
+             *
+             * Collections, tuples, bytes and structures compare by their contents. Throws an
+             * exception if the operands are of unrelated types.
+             * @param arg0 The first operand.
+             * @param arg1 The second operand.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_NotEqual", types = _Types.class)
+            public krpc.client.services.KRPC.Expression notEqual(krpc.client.services.KRPC.Expression arg0, krpc.client.services.KRPC.Expression arg1) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.notEqual(connection, arg0, arg1);
+            }
+
+            /**
+             * Logical or bitwise or, which evaluates both operands.
+             *
+             * Also takes two values of a flags enumeration, and gives their combination.
+             * @param arg0 The first operand.
+             * @param arg1 The second operand.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Or", types = _Types.class)
+            public krpc.client.services.KRPC.Expression or(krpc.client.services.KRPC.Expression arg0, krpc.client.services.KRPC.Expression arg1) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.or(connection, arg0, arg1);
+            }
+
+            /**
+             * The values of a collection ordered by the key a function produces for each of them.
+             *
+             * The result is lazily evaluated. {@link KRPC.Expression#toList} makes it concrete.
+             * @return The ordered collection.
+             * @param arg The collection to order.
+             * @param key A function producing the key to order values by.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_OrderBy", types = _Types.class)
+            public krpc.client.services.KRPC.Expression orderBy(krpc.client.services.KRPC.Expression arg, krpc.client.services.KRPC.Expression key) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.orderBy(connection, arg, key);
+            }
+
+            /**
+             * A named parameter of a function.
+             *
+             * A value is bound to it by name with {@link KRPC.Expression#invoke}, or by its position in
+             * the parameters of a {@link KRPC.Expression#lambda}.
+             * @return A named parameter.
+             * @param name The name of the parameter.
+             * @param type The type of the parameter.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Parameter", types = _Types.class)
+            public krpc.client.services.KRPC.Expression parameter(String name, krpc.client.services.KRPC.Type type) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.parameter(connection, name, type);
+            }
+
+            /**
+             * Numerical power operator.
+             * @param arg0 The first operand.
+             * @param arg1 The second operand.
+             * @return arg0 raised to the power of arg1, at the common type of the operands
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Power", types = _Types.class)
+            public krpc.client.services.KRPC.Expression power(krpc.client.services.KRPC.Expression arg0, krpc.client.services.KRPC.Expression arg1) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.power(connection, arg0, arg1);
+            }
+
+            /**
+             * A removal of a value from a list or a set, or of an entry from a dictionary.
+             *
+             * The first occurrence is removed from a list.
+             * @return Whether the collection held the value.
+             * @param collection The list, set or dictionary.
+             * @param value The value to remove, or the key of the entry to
+             * remove.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Remove", types = _Types.class)
+            public krpc.client.services.KRPC.Expression remove(krpc.client.services.KRPC.Expression collection, krpc.client.services.KRPC.Expression value) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.remove(connection, collection, value);
+            }
+
+            /**
+             * A statement removing the element at an index of a list.
+             *
+             * Throws an exception if the index is out of range.
+             * @param list The list.
+             * @param index The index of the element, counting from zero.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_RemoveAt", types = _Types.class)
+            public krpc.client.services.KRPC.Expression removeAt(krpc.client.services.KRPC.Expression list, krpc.client.services.KRPC.Expression index) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.removeAt(connection, list, index);
+            }
+
+            /**
+             * A return statement, which ends the enclosing function with no value.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_ReturnNothing", types = _Types.class)
+            public krpc.client.services.KRPC.Expression returnNothing() throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.returnNothing(connection);
+            }
+
+            /**
+             * A return statement, which ends the enclosing function with a value.
+             * @param value The value to return.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Return", types = _Types.class)
+            public krpc.client.services.KRPC.Expression return_(krpc.client.services.KRPC.Expression value) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.return_(connection, value);
+            }
+
+            /**
+             * The values of a collection in the opposite order.
+             *
+             * The result is lazily evaluated. {@link KRPC.Expression#toList} makes it concrete.
+             * @return The reversed collection.
+             * @param arg The collection.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Reverse", types = _Types.class)
+            public krpc.client.services.KRPC.Expression reverse(krpc.client.services.KRPC.Expression arg) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.reverse(connection, arg);
+            }
+
+            /**
+             * Bitwise right shift.
+             *
+             * Only the low 5 bits of the count are used for a 32-bit value, and the low 6 bits
+             * for a 64-bit value.
+             * @param arg0 The first operand.
+             * @param arg1 The second operand.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_RightShift", types = _Types.class)
+            public krpc.client.services.KRPC.Expression rightShift(krpc.client.services.KRPC.Expression arg0, krpc.client.services.KRPC.Expression arg1) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.rightShift(connection, arg0, arg1);
+            }
+
+            /**
+             * The result of a function for each value of a collection.
+             *
+             * The result is lazily evaluated. {@link KRPC.Expression#toList} makes it concrete.
+             * @return The collection of function results.
+             * @param arg The list or set.
+             * @param func The function, taking an element of the collection.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Select", types = _Types.class)
+            public krpc.client.services.KRPC.Expression select(krpc.client.services.KRPC.Expression arg, krpc.client.services.KRPC.Expression func) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.select(connection, arg, func);
+            }
+
+            /**
+             * The values of the collections a function returns for each value of a collection,
+             * flattened into one.
+             *
+             * The result is lazily evaluated. {@link KRPC.Expression#toList} makes it concrete.
+             * @return The flattened collection of function results.
+             * @param arg The list or set.
+             * @param func The function, taking an element of the collection
+             * and returning a collection.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_SelectMany", types = _Types.class)
+            public krpc.client.services.KRPC.Expression selectMany(krpc.client.services.KRPC.Expression arg, krpc.client.services.KRPC.Expression func) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.selectMany(connection, arg, func);
+            }
+
+            /**
+             * A statement setting an element of a list, or an entry of a dictionary.
+             *
+             * A key the dictionary does not hold is added. Throws an exception if the index
+             * is out of range for the list.
+             * @param collection The list or dictionary.
+             * @param index The index of the element, counting from zero, or the key of the entry.
+             * @param value The value to set.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Set", types = _Types.class)
+            public krpc.client.services.KRPC.Expression set(krpc.client.services.KRPC.Expression collection, krpc.client.services.KRPC.Expression index, krpc.client.services.KRPC.Expression value) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.set(connection, collection, index, value);
+            }
+
+            /**
+             * A collection without its first count values.
+             *
+             * The result is lazily evaluated. {@link KRPC.Expression#toList} makes it concrete.
+             * @return The collection without its first count values.
+             * @param arg The collection.
+             * @param count The number of values to skip.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Skip", types = _Types.class)
+            public krpc.client.services.KRPC.Expression skip(krpc.client.services.KRPC.Expression arg, krpc.client.services.KRPC.Expression count) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.skip(connection, arg, count);
+            }
+
+            /**
+             * A variable that keeps its value between evaluations of a function.
+             *
+             * The initial value is evaluated once, when the variable is created, and gives the
+             * variable its type. The value belongs to the variable, so every function that
+             * contains it shares it.
+             * @return A state variable.
+             * @param name The name of the variable.
+             * @param initialValue The initial value of the variable.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_StateVariable", types = _Types.class)
+            public krpc.client.services.KRPC.Expression stateVariable(String name, krpc.client.services.KRPC.Expression initialValue) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.stateVariable(connection, name, initialValue);
+            }
+
+            /**
+             * The concatenation of strings.
+             *
+             * Use {@link KRPC.Expression#convertToString} to convert other values to strings.
+             * @return The concatenated string.
+             * @param args The strings to concatenate, in order.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_StringConcat", types = _Types.class)
+            public krpc.client.services.KRPC.Expression stringConcat(java.util.List<krpc.client.services.KRPC.Expression> args) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.stringConcat(connection, args);
+            }
+
+            /**
+             * Whether one string occurs within another.
+             * @return Whether the value occurs in the string.
+             * @param arg The string to search.
+             * @param value The string to search for.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_StringContains", types = _Types.class)
+            public krpc.client.services.KRPC.Expression stringContains(krpc.client.services.KRPC.Expression arg, krpc.client.services.KRPC.Expression value) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.stringContains(connection, arg, value);
+            }
+
+            /**
+             * Whether a string ends with another.
+             * @return Whether the string ends with the value.
+             * @param arg The string to test.
+             * @param value The string to test for.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_StringEndsWith", types = _Types.class)
+            public krpc.client.services.KRPC.Expression stringEndsWith(krpc.client.services.KRPC.Expression arg, krpc.client.services.KRPC.Expression value) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.stringEndsWith(connection, arg, value);
+            }
+
+            /**
+             * The character at the given position in a string, as a string of length one.
+             *
+             * Throws an exception if the index is out of range.
+             * @return The character at the given position.
+             * @param arg The string.
+             * @param index The position of the character, counting from zero.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_StringGet", types = _Types.class)
+            public krpc.client.services.KRPC.Expression stringGet(krpc.client.services.KRPC.Expression arg, krpc.client.services.KRPC.Expression index) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.stringGet(connection, arg, index);
+            }
+
+            /**
+             * The position of the first occurrence of one string within another.
+             * @return The position of the value, counting from zero, or -1 if it does not occur.
+             * @param arg The string to search.
+             * @param value The string to search for.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_StringIndexOf", types = _Types.class)
+            public krpc.client.services.KRPC.Expression stringIndexOf(krpc.client.services.KRPC.Expression arg, krpc.client.services.KRPC.Expression value) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.stringIndexOf(connection, arg, value);
+            }
+
+            /**
+             * Strings joined together, separated by another string.
+             * @return The joined string.
+             * @param separator The string to put between the values.
+             * @param values The strings to join.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_StringJoin", types = _Types.class)
+            public krpc.client.services.KRPC.Expression stringJoin(krpc.client.services.KRPC.Expression separator, krpc.client.services.KRPC.Expression values) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.stringJoin(connection, separator, values);
+            }
+
+            /**
+             * The number of characters in a string.
+             * @return The length of the string.
+             * @param arg The string.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_StringLength", types = _Types.class)
+            public krpc.client.services.KRPC.Expression stringLength(krpc.client.services.KRPC.Expression arg) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.stringLength(connection, arg);
+            }
+
+            /**
+             * A string with every occurrence of one string replaced by another.
+             *
+             * Throws an exception if the string to replace is empty.
+             * @return The string with the replacements made.
+             * @param arg The string to search.
+             * @param oldValue The string to replace.
+             * @param newValue The string to replace it with.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_StringReplace", types = _Types.class)
+            public krpc.client.services.KRPC.Expression stringReplace(krpc.client.services.KRPC.Expression arg, krpc.client.services.KRPC.Expression oldValue, krpc.client.services.KRPC.Expression newValue) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.stringReplace(connection, arg, oldValue, newValue);
+            }
+
+            /**
+             * The parts of a string separated by another string.
+             * @return The parts of the string.
+             * @param arg The string to split.
+             * @param separator The string that separates the parts.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_StringSplit", types = _Types.class)
+            public krpc.client.services.KRPC.Expression stringSplit(krpc.client.services.KRPC.Expression arg, krpc.client.services.KRPC.Expression separator) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.stringSplit(connection, arg, separator);
+            }
+
+            /**
+             * Whether a string starts with another.
+             * @return Whether the string starts with the value.
+             * @param arg The string to test.
+             * @param value The string to test for.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_StringStartsWith", types = _Types.class)
+            public krpc.client.services.KRPC.Expression stringStartsWith(krpc.client.services.KRPC.Expression arg, krpc.client.services.KRPC.Expression value) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.stringStartsWith(connection, arg, value);
+            }
+
+            /**
+             * Part of a string.
+             *
+             * Throws an exception if the start or the length is out of range.
+             * @return The substring.
+             * @param arg The string.
+             * @param start The position to start at, counting from zero.
+             * @param length The number of characters to take.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_StringSubstring", types = _Types.class)
+            public krpc.client.services.KRPC.Expression stringSubstring(krpc.client.services.KRPC.Expression arg, krpc.client.services.KRPC.Expression start, krpc.client.services.KRPC.Expression length) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.stringSubstring(connection, arg, start, length);
+            }
+
+            /**
+             * A string in lower case, independently of the game's language.
+             * @return The string in lower case.
+             * @param arg The string.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_StringToLower", types = _Types.class)
+            public krpc.client.services.KRPC.Expression stringToLower(krpc.client.services.KRPC.Expression arg) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.stringToLower(connection, arg);
+            }
+
+            /**
+             * A string in upper case, independently of the game's language.
+             * @return The string in upper case.
+             * @param arg The string.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_StringToUpper", types = _Types.class)
+            public krpc.client.services.KRPC.Expression stringToUpper(krpc.client.services.KRPC.Expression arg) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.stringToUpper(connection, arg);
+            }
+
+            /**
+             * A string with white space removed from both ends.
+             * @return The trimmed string.
+             * @param arg The string.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_StringTrim", types = _Types.class)
+            public krpc.client.services.KRPC.Expression stringTrim(krpc.client.services.KRPC.Expression arg) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.stringTrim(connection, arg);
+            }
+
+            /**
+             * A string with white space removed from its end.
+             * @return The trimmed string.
+             * @param arg The string.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_StringTrimEnd", types = _Types.class)
+            public krpc.client.services.KRPC.Expression stringTrimEnd(krpc.client.services.KRPC.Expression arg) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.stringTrimEnd(connection, arg);
+            }
+
+            /**
+             * A string with white space removed from its start.
+             * @return The trimmed string.
+             * @param arg The string.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_StringTrimStart", types = _Types.class)
+            public krpc.client.services.KRPC.Expression stringTrimStart(krpc.client.services.KRPC.Expression arg) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.stringTrimStart(connection, arg);
+            }
+
+            /**
+             * Numerical subtraction.
+             * @param arg0 The first operand.
+             * @param arg1 The second operand.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Subtract", types = _Types.class)
+            public krpc.client.services.KRPC.Expression subtract(krpc.client.services.KRPC.Expression arg0, krpc.client.services.KRPC.Expression arg1) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.subtract(connection, arg0, arg1);
+            }
+
+            /**
+             * The sum of the values of a collection.
+             * @return The sum of the elements in the collection.
+             * @param arg The list or set.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Sum", types = _Types.class)
+            public krpc.client.services.KRPC.Expression sum(krpc.client.services.KRPC.Expression arg) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.sum(connection, arg);
+            }
+
+            /**
+             * The first count values of a collection.
+             *
+             * The result is lazily evaluated. {@link KRPC.Expression#toList} makes it concrete.
+             * @return The first count values of the collection.
+             * @param arg The collection.
+             * @param count The number of values to take.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Take", types = _Types.class)
+            public krpc.client.services.KRPC.Expression take(krpc.client.services.KRPC.Expression arg, krpc.client.services.KRPC.Expression count) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.take(connection, arg, count);
+            }
+
+            /**
+             * A throw statement, which raises the named exception.
+             *
+             * The client receives the exception as an error from the function, or from the stream
+             * or event evaluating it. For example, the service {@code KRPC} and the name
+             * {@code Error} raise {@link KRPC.Error}. Throws an exception if the service does not
+             * declare it.
+             * @param service The name of the service the exception is defined in.
+             * @param name The name of the exception.
+             * @param message The message of the exception.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Throw", types = _Types.class)
+            public krpc.client.services.KRPC.Expression throw_(String service, String name, krpc.client.services.KRPC.Expression message) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.throw_(connection, service, name, message);
+            }
+
+            /**
+             * A collection as a list.
+             * @return The collection as a list.
+             * @param arg The collection.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_ToList", types = _Types.class)
+            public krpc.client.services.KRPC.Expression toList(krpc.client.services.KRPC.Expression arg) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.toList(connection, arg);
+            }
+
+            /**
+             * A collection as a set.
+             *
+             * Throws an exception if a value is null.
+             * @return The collection as a set.
+             * @param arg The collection.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_ToSet", types = _Types.class)
+            public krpc.client.services.KRPC.Expression toSet(krpc.client.services.KRPC.Expression arg) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.toSet(connection, arg);
+            }
+
+            /**
+             * A try-catch statement that handles the named exception.
+             *
+             * Only an exception a service declares can be named, and {@link KRPC.Expression#tryCatchAll}
+             * handles any exception. Throws an exception if the service does not declare it.
+             * @param body The statement to evaluate.
+             * @param service The name of the service the exception is defined in.
+             * @param name The name of the exception.
+             * @param message A string variable assigned the exception's message, or null.
+             * @param handler The statement evaluated when the exception is caught.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_TryCatch", types = _Types.class)
+            public krpc.client.services.KRPC.Expression tryCatch(krpc.client.services.KRPC.Expression body, String service, String name, krpc.client.services.KRPC.Expression message, krpc.client.services.KRPC.Expression handler) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.tryCatch(connection, body, service, name, message, handler);
+            }
+
+            /**
+             * A try-catch statement that handles any exception.
+             * @param body The statement to evaluate.
+             * @param message A string variable assigned the exception's message, or null.
+             * @param handler The statement evaluated when an exception is caught.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_TryCatchAll", types = _Types.class)
+            public krpc.client.services.KRPC.Expression tryCatchAll(krpc.client.services.KRPC.Expression body, krpc.client.services.KRPC.Expression message, krpc.client.services.KRPC.Expression handler) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.tryCatchAll(connection, body, message, handler);
+            }
+
+            /**
+             * A try-finally statement.
+             *
+             * The finalizer is evaluated after the body, whether or not the body raises an
+             * exception. A break, continue or return cannot leave the finalizer.
+             * @param body The statement to evaluate.
+             * @param finalizer The statement evaluated after the body.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_TryFinally", types = _Types.class)
+            public krpc.client.services.KRPC.Expression tryFinally(krpc.client.services.KRPC.Expression body, krpc.client.services.KRPC.Expression finalizer) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.tryFinally(connection, body, finalizer);
+            }
+
+            /**
+             * The values in either of two collections, with duplicates removed.
+             *
+             * The result is lazily evaluated. {@link KRPC.Expression#toList} makes it concrete.
+             * @return The union of the two collections.
+             * @param arg1 The first collection.
+             * @param arg2 The second collection.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Union", types = _Types.class)
+            public krpc.client.services.KRPC.Expression union(krpc.client.services.KRPC.Expression arg1, krpc.client.services.KRPC.Expression arg2) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.union(connection, arg1, arg2);
+            }
+
+            /**
+             * A local variable, declared by {@link KRPC.Expression#blockWithVariables}.
+             * @return A local variable.
+             * @param name The name of the variable.
+             * @param type The type of the variable.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Variable", types = _Types.class)
+            public krpc.client.services.KRPC.Expression variable(String name, krpc.client.services.KRPC.Type type) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.variable(connection, name, type);
+            }
+
+            /**
+             * The values of a collection for which a predicate function returns true.
+             *
+             * The result is lazily evaluated. {@link KRPC.Expression#toList} makes it concrete.
+             * @return The filtered collection.
+             * @param arg The list or set.
+             * @param func The predicate function, taking an element of the collection.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Where", types = _Types.class)
+            public krpc.client.services.KRPC.Expression where(krpc.client.services.KRPC.Expression arg, krpc.client.services.KRPC.Expression func) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.where(connection, arg, func);
+            }
+
+            /**
+             * A while loop, which evaluates the body while the condition is true.
+             *
+             * A {@link KRPC.Expression#break_} or {@link KRPC.Expression#continue_} in the body applies to this loop.
+             * @param condition The boolean condition.
+             * @param body The statement evaluated on each iteration.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_While", types = _Types.class)
+            public krpc.client.services.KRPC.Expression while_(krpc.client.services.KRPC.Expression condition, krpc.client.services.KRPC.Expression body) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.while_(connection, condition, body);
+            }
+
+            /**
+             * The results of a function applied to the values of two collections in pairs.
+             *
+             * The result is as long as the shorter of the two collections. It is lazily
+             * evaluated, and {@link KRPC.Expression#toList} makes it concrete.
+             * @return The combined collection.
+             * @param arg1 The first collection.
+             * @param arg2 The second collection.
+             * @param func A function combining a value from each collection.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Zip", types = _Types.class)
+            public krpc.client.services.KRPC.Expression zip(krpc.client.services.KRPC.Expression arg1, krpc.client.services.KRPC.Expression arg2, krpc.client.services.KRPC.Expression func) throws RPCException
+            {
+                return krpc.client.services.KRPC.Expression.zip(connection, arg1, arg2, func);
+            }
+        }
     }
 
     /**
@@ -4075,6 +5682,195 @@ public class KRPC {
         {
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Type_static_ULong");
             return (krpc.client.services.KRPC.Type) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Type"), connection);
+        }
+
+        /**
+         * Binds the static methods of {@link Type} to a connection.
+         * @param connection The connection the methods are called on.
+         * @return The bound methods.
+         */
+        public static Bound bind(Connection connection) {
+            if (connection == null) {
+                throw new NullPointerException("connection");
+            }
+            return new Bound(connection);
+        }
+
+        /**
+         * The static methods of {@link Type}, bound to a connection.
+         */
+        public static final class Bound {
+            private final Connection connection;
+
+            private Bound(Connection connection) {
+                this.connection = connection;
+            }
+
+            /**
+             * A boolean type.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Type_static_Bool", types = _Types.class)
+            public krpc.client.services.KRPC.Type bool() throws RPCException
+            {
+                return krpc.client.services.KRPC.Type.bool(connection);
+            }
+
+            /**
+             * A byte sequence type.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Type_static_Bytes", types = _Types.class)
+            public krpc.client.services.KRPC.Type bytes() throws RPCException
+            {
+                return krpc.client.services.KRPC.Type.bytes(connection);
+            }
+
+            /**
+             * The type of a class defined by a service.
+             * @param service The name of the service the class is defined in.
+             * @param name The name of the class.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Type_static_ClassType", types = _Types.class)
+            public krpc.client.services.KRPC.Type classType(String service, String name) throws RPCException
+            {
+                return krpc.client.services.KRPC.Type.classType(connection, service, name);
+            }
+
+            /**
+             * A dictionary type. Throws an exception if the key type is nullable or not a valid
+             * key type.
+             * @param keyType The type of the keys of the dictionary.
+             * @param valueType The type of the values of the dictionary.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Type_static_DictionaryType", types = _Types.class)
+            public krpc.client.services.KRPC.Type dictionaryType(krpc.client.services.KRPC.Type keyType, krpc.client.services.KRPC.Type valueType) throws RPCException
+            {
+                return krpc.client.services.KRPC.Type.dictionaryType(connection, keyType, valueType);
+            }
+
+            /**
+             * A double precision floating point number type.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Type_static_Double", types = _Types.class)
+            public krpc.client.services.KRPC.Type double_() throws RPCException
+            {
+                return krpc.client.services.KRPC.Type.double_(connection);
+            }
+
+            /**
+             * The type of an enumeration defined by a service.
+             * @param service The name of the service the enumeration is defined in.
+             * @param name The name of the enumeration.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Type_static_EnumerationType", types = _Types.class)
+            public krpc.client.services.KRPC.Type enumerationType(String service, String name) throws RPCException
+            {
+                return krpc.client.services.KRPC.Type.enumerationType(connection, service, name);
+            }
+
+            /**
+             * A single precision floating point number type.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Type_static_Float", types = _Types.class)
+            public krpc.client.services.KRPC.Type float_() throws RPCException
+            {
+                return krpc.client.services.KRPC.Type.float_(connection);
+            }
+
+            /**
+             * A signed 32-bit integer type.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Type_static_Int", types = _Types.class)
+            public krpc.client.services.KRPC.Type int_() throws RPCException
+            {
+                return krpc.client.services.KRPC.Type.int_(connection);
+            }
+
+            /**
+             * A list type.
+             * @param valueType The type of the elements of the list.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Type_static_ListType", types = _Types.class)
+            public krpc.client.services.KRPC.Type listType(krpc.client.services.KRPC.Type valueType) throws RPCException
+            {
+                return krpc.client.services.KRPC.Type.listType(connection, valueType);
+            }
+
+            /**
+             * A signed 64-bit integer type.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Type_static_Long", types = _Types.class)
+            public krpc.client.services.KRPC.Type long_() throws RPCException
+            {
+                return krpc.client.services.KRPC.Type.long_(connection);
+            }
+
+            /**
+             * A nullable type, holding a value of the given type or null.
+             * @param valueType The type of the value.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Type_static_NullableType", types = _Types.class)
+            public krpc.client.services.KRPC.Type nullableType(krpc.client.services.KRPC.Type valueType) throws RPCException
+            {
+                return krpc.client.services.KRPC.Type.nullableType(connection, valueType);
+            }
+
+            /**
+             * A set type. Throws an exception if the element type is nullable.
+             * @param valueType The type of the elements of the set.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Type_static_SetType", types = _Types.class)
+            public krpc.client.services.KRPC.Type setType(krpc.client.services.KRPC.Type valueType) throws RPCException
+            {
+                return krpc.client.services.KRPC.Type.setType(connection, valueType);
+            }
+
+            /**
+             * A string type.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Type_static_String", types = _Types.class)
+            public krpc.client.services.KRPC.Type string() throws RPCException
+            {
+                return krpc.client.services.KRPC.Type.string(connection);
+            }
+
+            /**
+             * The type of a structure defined by a service.
+             * @param service The name of the service the structure is defined in.
+             * @param name The name of the structure.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Type_static_StructType", types = _Types.class)
+            public krpc.client.services.KRPC.Type structType(String service, String name) throws RPCException
+            {
+                return krpc.client.services.KRPC.Type.structType(connection, service, name);
+            }
+
+            /**
+             * A tuple type. Throws an exception if there are no element types or more than seven.
+             * @param valueTypes The types of the elements of the tuple.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Type_static_TupleType", types = _Types.class)
+            public krpc.client.services.KRPC.Type tupleType(java.util.List<krpc.client.services.KRPC.Type> valueTypes) throws RPCException
+            {
+                return krpc.client.services.KRPC.Type.tupleType(connection, valueTypes);
+            }
+
+            /**
+             * An unsigned 32-bit integer type.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Type_static_UInt", types = _Types.class)
+            public krpc.client.services.KRPC.Type uInt() throws RPCException
+            {
+                return krpc.client.services.KRPC.Type.uInt(connection);
+            }
+
+            /**
+             * An unsigned 64-bit integer type.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Type_static_ULong", types = _Types.class)
+            public krpc.client.services.KRPC.Type uLong() throws RPCException
+            {
+                return krpc.client.services.KRPC.Type.uLong(connection);
+            }
         }
     }
 

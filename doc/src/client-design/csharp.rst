@@ -85,8 +85,8 @@ A C# type cannot say that a reference-typed position inside a collection is null
 reads the spec from ``RPCAttribute.Types``, the service's generated ``TypeSpecs`` class. A compiled
 lambda holding a reference inside a collection or tuple asks the server for its return type.
 
-Connections carried by the lambda's objects, its services and a static method's argument are not
-used or checked.
+Connections carried by the lambda's objects, its services, a static method's argument and a
+``Bound`` object are not used or checked.
 
 Generated Stubs and Target Framework
 ------------------------------------

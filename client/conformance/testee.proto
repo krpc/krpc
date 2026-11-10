@@ -215,6 +215,9 @@ message Invoke {
   // An object to call a static method through, in a language that calls a static method on an
   // object. A testee whose language does not replies with an UNSUPPORTED error.
   Value through = 5;
+  // Whether to call a static method through its class bound to the connection, in a client of
+  // the bound-classes profile.
+  bool bound = 6;
 }
 
 // An argument passed by the name the server gives the parameter, such as "y".

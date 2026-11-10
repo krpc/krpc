@@ -305,6 +305,10 @@ and ``_call`` forms take the client first too:
 
 .. literalinclude:: /scripts/cpp/StaticMethods.cpp
 
+``bind`` binds a class's static methods to a client, so each call leaves it out:
+
+.. literalinclude:: /scripts/cpp/BoundStaticMethods.cpp
+
 .. _cpp-client-streams:
 
 Streaming Data

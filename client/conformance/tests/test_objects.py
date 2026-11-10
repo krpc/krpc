@@ -139,6 +139,23 @@ def test_static_method_connection(connected, server, request):
         )
 
 
+@profile("connections", "bound-classes")
+def test_bound_static_method_connection(connected, server, request):
+    """A static method called through its class bound to a connection calls over that
+    connection."""
+    names = two_connections(connected, server, request)
+    for x, client_name in names.items():
+        assert (
+            connected.invoke(
+                "ConformanceService",
+                "Probe_static_StaticClientName",
+                connection=x,
+                bound=True,
+            )
+            == client_name
+        )
+
+
 @profile("connections")
 def test_static_method_through_an_object_connection(connected, server, request):
     """In a language that calls a static method on an object, a static method called

@@ -201,6 +201,10 @@ the connection the stream is added on runs the call:
 
 .. literalinclude:: /scripts/csharp/StaticMethods.cs
 
+``Bind`` binds a class's static methods to a connection, so each call leaves it out:
+
+.. literalinclude:: /scripts/csharp/BoundStaticMethods.cs
+
 .. _csharp-client-streams:
 
 Streaming Data

@@ -208,6 +208,20 @@ def test_members(connected, member):
     assert stream.get() == expected
 
 
+@profile("streams", "bound-classes")
+def test_bound_static_method(connected):
+    """The client streams a static method called through its class bound to the
+    connection."""
+    stream = connected.add_stream(
+        "TestService",
+        "TestClass_static_StaticMethod",
+        values.string("a"),
+        values.string("b"),
+        bound=True,
+    )
+    assert stream.get() == "staticab"
+
+
 @profile("streams")
 def test_null_stream_id(client, server, scripted_server):
     """A null result for the call that adds a stream raises the encoding error. The next

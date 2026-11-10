@@ -228,6 +228,10 @@ as the stream runs on the connection it is added on:
 
 .. literalinclude:: /scripts/java/StaticMethods.java
 
+``bind`` binds a class's static methods to a connection, so each call leaves it out:
+
+.. literalinclude:: /scripts/java/BoundStaticMethods.java
+
 .. _java-client-streams:
 
 Streaming Data
@@ -566,9 +570,9 @@ Client API Reference
 
       Creates a stream for a call to the method named *method* of the class *clazz*, with
       arguments *args*, and returns a :type:`Stream`. The class is a service, such as
-      ``SpaceCenter.class``, or a class with a static method. The call runs on this connection,
-      so the arguments of a static method leave out its connection. Each call creates a new
-      stream.
+      ``SpaceCenter.class``, a class with a static method, or its ``Bound`` class. The call runs
+      on this connection, so the arguments of a static method leave out its connection. Each call
+      creates a new stream.
 
       Throws an :type:`RPCException` if the class has no method of that name taking the
       arguments.
