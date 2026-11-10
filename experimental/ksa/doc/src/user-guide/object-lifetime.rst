@@ -39,7 +39,8 @@ Burns
 -----
 
 A burn object raises an exception once the burn is removed. The flight computer removes a burn
-it completes when another burn follows it, and keeps the last one.
+it completes when another burn follows it, and keeps the last one. The game removes a burn that
+stops part way, such as when the engines run out of propellant.
 
 Orbits
 ------

@@ -16,7 +16,8 @@ namespace KRPC.KSA.Services
     /// The change in velocity is given along the vehicle's orbit at the time of the burn:
     /// prograde, along the orbit normal, and radially outward. An object for a burn throws an
     /// exception once the burn is removed. The flight computer removes a burn it completes
-    /// when another burn follows it, and keeps the last one.
+    /// when another burn follows it, and keeps the last one. The game removes a burn that
+    /// stops part way, such as when the engines run out of propellant.
     /// </remarks>
     [KRPCClass (Service = "KSA")]
     public class Burn : Equatable<Burn>, IGameObjectState

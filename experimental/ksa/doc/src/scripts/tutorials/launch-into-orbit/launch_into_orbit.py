@@ -41,20 +41,14 @@ def stage():
     control.activate_next_sequence()
 
 
-def execute_burn(burn):
-    """Execute a burn with the flight computer, staging when a stage runs
-    dry."""
-    while True:
-        auto_pilot.auto_burn = True
-        finished = conn.add_event(lambda: not auto_pilot.auto_burn)
-        with finished.condition:
-            finished.wait()
-        finished.remove()
-        # The flight computer stops the burn when the engines run out of
-        # propellant
-        if burn.remaining_delta_v < 1:
-            break
-        stage()
+def circularization_burn(ut):
+    """Plan a burn at ut that makes the orbit circular, from the vis-viva
+    equation."""
+    mu = body.gravitational_parameter
+    r = orbit.radius_at(ut)
+    v1 = math.sqrt(mu * (2 / r - 1 / orbit.semi_major_axis))
+    v2 = math.sqrt(mu / r)
+    return vehicle.add_burn(ut, prograde=v2 - v1)
 
 
 print("Launching")
@@ -90,13 +84,23 @@ with above_atmosphere.condition:
     above_atmosphere.wait()
 
 print("Circularizing")
-mu = body.gravitational_parameter
-r = orbit.apoapsis
-v1 = math.sqrt(mu * (2 / r - 1 / orbit.semi_major_axis))
-v2 = math.sqrt(mu / r)
-burn = vehicle.add_burn(ksa.ut + orbit.time_to_apoapsis, prograde=v2 - v1)
+burn = circularization_burn(ksa.ut + orbit.time_to_apoapsis)
 ksa.warp_to(burn.ignition_time - 30)
-execute_burn(burn)
+while True:
+    auto_pilot.auto_burn = True
+    finished = conn.add_event(lambda: not auto_pilot.auto_burn)
+    with finished.condition:
+        finished.wait()
+    finished.remove()
+    # Engines with propellant left mean the burn is complete
+    if available_thrust() > 0:
+        break
+    # The game removes a burn that stopped part way, so we plan the rest
+    # of it
+    stage()
+    if vehicle.available_thrust == 0:
+        raise RuntimeError("Out of propellant")
+    burn = circularization_burn(ksa.ut + 30)
 burn.remove()
 
 print(
