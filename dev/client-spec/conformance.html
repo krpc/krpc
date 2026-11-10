@@ -600,6 +600,9 @@ arrive between a command and its reply.</p></li>
 <li><p>A testee with the <code class="docutils literal notranslate"><span class="pre">concurrency</span></code> profile runs commands on tasks named in the command, as
 threads or async tasks. A testee without it runs every command in order on one thread.</p></li>
 <li><p>A command the client offers no way to carry out gets an <code class="docutils literal notranslate"><span class="pre">Error</span></code> of kind <code class="docutils literal notranslate"><span class="pre">UNSUPPORTED</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DeprecationSignals</span></code> asks what a program gets for a use of a member. A testee for a language with
+run-time warnings uses the member and reports them. A testee for a compiled language reports the
+attribute by reflection, or the compiler’s warnings, which it records when it is built.</p></li>
 </ul>
 <p>The testee exits when its standard input closes.</p>
 </section>

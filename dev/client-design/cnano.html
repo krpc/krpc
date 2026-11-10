@@ -693,6 +693,9 @@ is <code class="docutils literal notranslate"><span class="pre">static</span> <s
 keeps names out of flash and off the wire.</p>
 <p>Each procedure also has a <code class="docutils literal notranslate"><span class="pre">_call</span></code> function, for server side functions. An unused one adds compile
 time and no code.</p>
+<p><code class="docutils literal notranslate"><span class="pre">KRPC_DEPRECATED</span></code> goes before a declaration, the one position GCC, Clang and MSVC share. An
+enumeration value takes <code class="docutils literal notranslate"><span class="pre">KRPC_DEPRECATED_VALUE</span></code> after its name, as the attribute has no other
+position there. MSVC has no such attribute in C, so the macro is empty for it.</p>
 </section>
 <section id="server-side-functions">
 <h2>Server Side Functions<a class="headerlink" href="#server-side-functions" title="Link to this heading">#</a></h2>

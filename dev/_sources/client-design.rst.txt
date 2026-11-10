@@ -301,3 +301,50 @@ stay on the static method.
    client-design/cnano
    client-design/java
    client-design/lua
+
+Deprecation
+-----------
+
+Each client signals the use of a deprecated member with the language's own mechanism:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Client
+     - Signal
+     - Kinds with no signal
+   * - Python
+     - ``DeprecationWarning`` at run time, and ``@deprecated`` for type checkers
+     -
+   * - C#
+     - ``[Obsolete]``
+     -
+   * - C++
+     - ``[[deprecated]]``
+     -
+   * - C-nano
+     - ``KRPC_DEPRECATED``
+     - Services and exceptions, which have no C type
+   * - Java
+     - ``@Deprecated``, which holds no reason
+     - Streams and calls, which name their method in a string
+   * - Lua
+     - A warning on standard error, once per member on a connection
+     - Exceptions, which the client does not expose, and structure fields
+
+A stream, and the call a server side function makes, use a procedure too. Python and Lua warn when
+the client builds the call. In C++ and C-nano, the ``_stream`` and ``_call`` functions carry the
+attribute. In C#, the lambda that names the procedure warns.
+
+A member of a deprecated service, class, enumeration or structure is deprecated. A member with no
+reason of its own takes the reason of its nearest deprecated container. ``clientgen`` and the Python
+and Lua clients apply this to their copy of the definitions when they read them. The protocol and
+``docgen`` keep the attributes as declared, so the API reference has one notice per page.
+
+A deprecated service is marked too: the C# extension method and service class, and the C++, Java
+and Python service class. The Python and Lua clients keep it out of the client's attributes, so
+that reading it reaches the attribute-miss hook, which warns.
+
+Generated C++ and C-nano code uses the deprecated declarations it makes, so each header suppresses
+the warning around its own contents. The suppression goes by the location of the use, so a use in a
+program still warns.

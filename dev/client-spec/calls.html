@@ -585,9 +585,97 @@ getter or only a setter.</p>
 returning a class of a third service.</p>
 </dd>
 </dl>
-<dl class="simple" id="spec-calls-deprecated-warning">
-<dt><code class="docutils literal notranslate"><span class="pre">calls-deprecated-warning</span> <span class="pre">[core]</span> <span class="pre">[SHOULD]</span></code></dt><dd><p>A client in a language with a runtime warning mechanism warns on a call to a
-deprecated member.</p>
+</section>
+<section id="deprecated-members">
+<h2>Deprecated Members<a class="headerlink" href="#deprecated-members" title="Link to this heading">#</a></h2>
+<p>A client signals the use of a deprecated member, so that a program can move to its replacement. The signal is the language’s own: a warning at run time, or a warning from the compiler. The member still works.</p>
+<dl class="simple" id="spec-calls-deprecated-procedure">
+<dt><code class="docutils literal notranslate"><span class="pre">calls-deprecated-procedure</span> <span class="pre">[core]</span> <span class="pre">[SHOULD]</span></code></dt><dd><p>A client signals a call of a deprecated procedure.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-calls-deprecated-property">
+<dt><code class="docutils literal notranslate"><span class="pre">calls-deprecated-property</span> <span class="pre">[core]</span> <span class="pre">[SHOULD]</span></code></dt><dd><p>A client signals a read and a write of a deprecated property.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-calls-deprecated-class">
+<dt><code class="docutils literal notranslate"><span class="pre">calls-deprecated-class</span> <span class="pre">[core]</span> <span class="pre">[SHOULD]</span></code></dt><dd><p>A client signals a use of a deprecated class.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-calls-deprecated-method">
+<dt><code class="docutils literal notranslate"><span class="pre">calls-deprecated-method</span> <span class="pre">[core]</span> <span class="pre">[SHOULD]</span></code></dt><dd><p>A client signals a call of a deprecated method.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-calls-deprecated-enum">
+<dt><code class="docutils literal notranslate"><span class="pre">calls-deprecated-enum</span> <span class="pre">[core]</span> <span class="pre">[SHOULD]</span></code></dt><dd><p>A client signals a use of a deprecated enumeration.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-calls-deprecated-enum-value">
+<dt><code class="docutils literal notranslate"><span class="pre">calls-deprecated-enum-value</span> <span class="pre">[core]</span> <span class="pre">[SHOULD]</span></code></dt><dd><p>A client signals a use of a deprecated value of an enumeration that is not deprecated,
+and no use of its other values.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-calls-deprecated-struct">
+<dt><code class="docutils literal notranslate"><span class="pre">calls-deprecated-struct</span> <span class="pre">[core]</span> <span class="pre">[SHOULD]</span></code></dt><dd><p>A client signals a use of a deprecated structure.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-calls-deprecated-struct-field">
+<dt><code class="docutils literal notranslate"><span class="pre">calls-deprecated-struct-field</span> <span class="pre">[core]</span> <span class="pre">[SHOULD]</span></code></dt><dd><p>A client signals a read of a deprecated field of a structure that is not deprecated, and
+no read of its other fields.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-calls-deprecated-exception">
+<dt><code class="docutils literal notranslate"><span class="pre">calls-deprecated-exception</span> <span class="pre">[core]</span> <span class="pre">[SHOULD]</span></code></dt><dd><p>A client signals a use of a deprecated exception.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-calls-deprecated-class-member">
+<dt><code class="docutils literal notranslate"><span class="pre">calls-deprecated-class-member</span> <span class="pre">[core]</span> <span class="pre">[SHOULD]</span></code></dt><dd><p>A member of a deprecated class is deprecated, with no deprecation of its own.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-calls-deprecated-enum-member">
+<dt><code class="docutils literal notranslate"><span class="pre">calls-deprecated-enum-member</span> <span class="pre">[core]</span> <span class="pre">[SHOULD]</span></code></dt><dd><p>A value of a deprecated enumeration is deprecated, with no deprecation of its own.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-calls-deprecated-struct-member">
+<dt><code class="docutils literal notranslate"><span class="pre">calls-deprecated-struct-member</span> <span class="pre">[core]</span> <span class="pre">[SHOULD]</span></code></dt><dd><p>A field of a deprecated structure is deprecated, with no deprecation of its own.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-calls-deprecated-service">
+<dt><code class="docutils literal notranslate"><span class="pre">calls-deprecated-service</span> <span class="pre">[core]</span> <span class="pre">[SHOULD]</span></code></dt><dd><p>A client signals a use of a deprecated service, and no use of a service that is not
+deprecated.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-calls-deprecated-service-member">
+<dt><code class="docutils literal notranslate"><span class="pre">calls-deprecated-service-member</span> <span class="pre">[core]</span> <span class="pre">[SHOULD]</span></code></dt><dd><p>A member of a deprecated service is deprecated, with no deprecation of its own.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-calls-deprecated-stream">
+<dt><code class="docutils literal notranslate"><span class="pre">calls-deprecated-stream</span> <span class="pre">[streams]</span> <span class="pre">[SHOULD]</span></code></dt><dd><p>A client signals a stream of a deprecated procedure, method or property.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-calls-deprecated-call">
+<dt><code class="docutils literal notranslate"><span class="pre">calls-deprecated-call</span> <span class="pre">[functions]</span> <span class="pre">[SHOULD]</span></code></dt><dd><p>A client signals the call of a deprecated procedure, method or property that it builds
+for a server side function.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-calls-deprecated-reason">
+<dt><code class="docutils literal notranslate"><span class="pre">calls-deprecated-reason</span> <span class="pre">[core]</span> <span class="pre">[SHOULD]</span></code></dt><dd><p>A signal gives the reason for the deprecation.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-calls-deprecated-reason-of-container">
+<dt><code class="docutils literal notranslate"><span class="pre">calls-deprecated-reason-of-container</span> <span class="pre">[core]</span> <span class="pre">[SHOULD]</span></code></dt><dd><p>A member with no reason of its own takes the reason of its service or class.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-calls-deprecated-reason-of-member">
+<dt><code class="docutils literal notranslate"><span class="pre">calls-deprecated-reason-of-member</span> <span class="pre">[core]</span> <span class="pre">[SHOULD]</span></code></dt><dd><p>A member with a reason of its own keeps it, in a deprecated class.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-calls-deprecated-reason-of-class">
+<dt><code class="docutils literal notranslate"><span class="pre">calls-deprecated-reason-of-class</span> <span class="pre">[core]</span> <span class="pre">[SHOULD]</span></code></dt><dd><p>A member with no reason of its own, of a deprecated class in a deprecated service, takes
+the reason of its class.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-calls-not-deprecated">
+<dt><code class="docutils literal notranslate"><span class="pre">calls-not-deprecated</span> <span class="pre">[core]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A client gives no signal for a member that is not deprecated.</p>
 </dd>
 </dl>
 </section>
@@ -779,6 +867,7 @@ timeout does not apply to the wait.</p>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#members">Members</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deprecated-members">Deprecated Members</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#service-definitions">Service Definitions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#arguments">Arguments</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#responses">Responses</a></li>

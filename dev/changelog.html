@@ -661,6 +661,9 @@
 <li><p>Add a <code class="docutils literal notranslate"><span class="pre">_call</span></code> function for each procedure, such as <code class="docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Flight_Speed_call</span></code>, for <code class="docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_Call</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1267">#1267</a>)</p></li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Leave internal procedures out of the services, such as <code class="docutils literal notranslate"><span class="pre">krpc_KRPC_AddStream</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1269">#1269</a>)</p></li>
 <li><p>Relicense the C-nano client and the Arduino library under the MIT license (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1281">#1281</a>)</p></li>
+<li><p>Mark deprecated classes, enumerations, enumeration values, structures and structure fields with <code class="docutils literal notranslate"><span class="pre">KRPC_DEPRECATED</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1322">#1322</a>)</p></li>
+<li><p>Mark the <code class="docutils literal notranslate"><span class="pre">_call</span></code> functions of deprecated procedures with <code class="docutils literal notranslate"><span class="pre">KRPC_DEPRECATED</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1322">#1322</a>)</p></li>
+<li><p>Deprecate each member of a deprecated service, class, enumeration or structure (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1322">#1322</a>)</p></li>
 </ul>
 </section>
 <section id="c-client">
@@ -709,6 +712,8 @@
 <li><p>Fix .NET Framework programs failing to load <code class="docutils literal notranslate"><span class="pre">System.Memory</span></code> when decoding a nullable value in a collection or structure (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1274">#1274</a>)</p></li>
 <li><p>Generate a flags enumeration with <code class="docutils literal notranslate"><span class="pre">[Flags]</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1311">#1311</a>)</p></li>
 <li><p>Compile <code class="docutils literal notranslate"><span class="pre">~</span></code> and <code class="docutils literal notranslate"><span class="pre">HasFlag</span></code> on flags enumeration values in server side functions (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1313">#1313</a>)</p></li>
+<li><p>Mark a deprecated service’s extension method and <code class="docutils literal notranslate"><span class="pre">Service</span></code> class with <code class="docutils literal notranslate"><span class="pre">[Obsolete]</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1322">#1322</a>)</p></li>
+<li><p>Deprecate each member of a deprecated service, class, enumeration or structure (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1322">#1322</a>)</p></li>
 </ul>
 </section>
 <section id="id1">
@@ -756,6 +761,10 @@
 <li><p><span class="changelog-marker breaking">Breaking</span> Object, stream and event constructors take the client by reference, as in <code class="docutils literal notranslate"><span class="pre">Vessel(conn,</span> <span class="pre">id)</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1286">#1286</a>)</p></li>
 <li><p>Service constructors accept a temporary client, as in <code class="docutils literal notranslate"><span class="pre">SpaceCenter</span> <span class="pre">sc(krpc::connect())</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1286">#1286</a>)</p></li>
 <li><p>Generate the operators <code class="docutils literal notranslate"><span class="pre">|</span></code>, <code class="docutils literal notranslate"><span class="pre">&amp;</span></code>, <code class="docutils literal notranslate"><span class="pre">^</span></code> and <code class="docutils literal notranslate"><span class="pre">~</span></code> for a flags enumeration (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1311">#1311</a>)</p></li>
+<li><p>Declare a deprecated service’s class <code class="docutils literal notranslate"><span class="pre">[[deprecated]]</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1322">#1322</a>)</p></li>
+<li><p>Declare the <code class="docutils literal notranslate"><span class="pre">_stream</span></code> and <code class="docutils literal notranslate"><span class="pre">_call</span></code> functions of deprecated procedures <code class="docutils literal notranslate"><span class="pre">[[deprecated]]</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1322">#1322</a>)</p></li>
+<li><p>Deprecate each member of a deprecated service, class, enumeration or structure (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1322">#1322</a>)</p></li>
+<li><p>Fix generated headers warning about their own deprecated members (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1322">#1322</a>)</p></li>
 </ul>
 </section>
 <section id="java-client">
@@ -796,6 +805,8 @@
 <li><p><span class="changelog-marker breaking">Breaking</span> Leave internal procedures out of the services, such as <code class="docutils literal notranslate"><span class="pre">KRPC.addStream</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1269">#1269</a>)</p></li>
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">Connection.compile</span></code> for a server side function built with the expression API (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1269">#1269</a>)</p></li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Generate a flags enumeration, such as <code class="docutils literal notranslate"><span class="pre">SpaceCenter.MapFilterType</span></code>, as a class of constants with <code class="docutils literal notranslate"><span class="pre">or</span></code>, <code class="docutils literal notranslate"><span class="pre">and</span></code>, <code class="docutils literal notranslate"><span class="pre">xor</span></code>, <code class="docutils literal notranslate"><span class="pre">andNot</span></code> and <code class="docutils literal notranslate"><span class="pre">contains</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1311">#1311</a>)</p></li>
+<li><p>Mark a deprecated service’s class with <code class="docutils literal notranslate"><span class="pre">&#64;Deprecated</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1322">#1322</a>)</p></li>
+<li><p>Deprecate each member of a deprecated service, class, enumeration or structure (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1322">#1322</a>)</p></li>
 </ul>
 </section>
 <section id="lua-client">
@@ -817,6 +828,9 @@
 </ul>
 </li>
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">union</span></code>, <code class="docutils literal notranslate"><span class="pre">intersection</span></code>, <code class="docutils literal notranslate"><span class="pre">difference</span></code> and <code class="docutils literal notranslate"><span class="pre">contains</span></code> to the values of a flags enumeration (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1311">#1311</a>)</p></li>
+<li><p>Warn once per member on standard error on a use of a deprecated service, procedure, method, property, class, enumeration, enumeration value or structure (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1322">#1322</a>)</p></li>
+<li><p>Warn when <code class="docutils literal notranslate"><span class="pre">get_call</span></code> builds the call of a deprecated procedure, method or property (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1322">#1322</a>)</p></li>
+<li><p>Deprecate each member of a deprecated service, class or enumeration (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1322">#1322</a>)</p></li>
 </ul>
 </section>
 <section id="python-client">
@@ -881,6 +895,10 @@
 <li><p>Support flags enumerations, such as <code class="docutils literal notranslate"><span class="pre">SpaceCenter.MapFilterType</span></code>, as an <code class="docutils literal notranslate"><span class="pre">enum.Flag</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1311">#1311</a>)</p></li>
 <li><p>Raise <code class="docutils literal notranslate"><span class="pre">EncodingError</span></code> for an enumeration result the enumeration does not declare, in place of <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1311">#1311</a>)</p></li>
 <li><p>Compile <code class="docutils literal notranslate"><span class="pre">|</span></code>, <code class="docutils literal notranslate"><span class="pre">&amp;</span></code>, <code class="docutils literal notranslate"><span class="pre">^</span></code>, <code class="docutils literal notranslate"><span class="pre">~</span></code>, <code class="docutils literal notranslate"><span class="pre">in</span></code> and truth tests on flags enumeration values in server side functions (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1313">#1313</a>)</p></li>
+<li><p>Warn when a stream or <code class="docutils literal notranslate"><span class="pre">get_call</span></code> uses a deprecated procedure, method or property (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1322">#1322</a>)</p></li>
+<li><p>Warn on a use of a deprecated service, class, enumeration, enumeration value, structure, structure field or exception (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1322">#1322</a>)</p></li>
+<li><p>Mark deprecated members of the generated stubs with <code class="docutils literal notranslate"><span class="pre">&#64;deprecated</span></code>, so type checkers report them (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1322">#1322</a>)</p></li>
+<li><p>Deprecate each member of a deprecated service, class, enumeration or structure (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1322">#1322</a>)</p></li>
 </ul>
 </section>
 <section id="krpctools">
@@ -923,6 +941,8 @@
 </li>
 <li><p>Name the module of another service a generated Python module imports with <code class="docutils literal notranslate"><span class="pre">--include</span></code>, for a mod whose service uses another mod’s types (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1304">#1304</a>)</p></li>
 <li><p>Support flags enumerations in <code class="docutils literal notranslate"><span class="pre">clientgen</span></code> and <code class="docutils literal notranslate"><span class="pre">docgen</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1311">#1311</a>)</p></li>
+<li><p>Add the <code class="docutils literal notranslate"><span class="pre">DeprecationSignals</span></code> command to the conformance testee protocol, which a testee needs for the deprecation tests (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1322">#1322</a>)</p></li>
+<li><p>Ship the <code class="docutils literal notranslate"><span class="pre">DeprecatedService</span></code> definitions beside <code class="docutils literal notranslate"><span class="pre">TestService.json</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1322">#1322</a>)</p></li>
 </ul>
 </section>
 </section>

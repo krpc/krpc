@@ -70,6 +70,10 @@ of every service, then builds each service, as a procedure can name a type from 
   and a ``set_x`` on the class table, reached through ``__index`` and ``__newindex``.
 * A member naming a type this client does not know is skipped, with a warning on standard error, so
   a newer server still connects.
+* A deprecated type or enumeration value is left out of its class table, and ``__index`` warns and
+  returns it. The other members keep a plain table lookup. A structure field is an entry on the
+  value, read with no hook, so it gives no warning.
+* ``Types`` records the deprecated members it has warned of, so a loop does not repeat a warning.
 
 Null Values
 -----------

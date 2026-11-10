@@ -1733,9 +1733,11 @@ thread removes ends with the exception for a removed stream.</p>
 <p>A member of a service can be deprecated, when a newer member replaces it. A deprecated member
 still works, but may be removed in a future release, so move to its replacement.</p>
 <p>The API reference and the member’s docstring mark it as deprecated, and name the replacement.
-Calling it emits a <code class="docutils literal notranslate"><span class="pre">DeprecationWarning</span></code> naming the replacement too. Python hides
-<code class="docutils literal notranslate"><span class="pre">DeprecationWarning</span></code> by default. Run Python with <code class="docutils literal notranslate"><span class="pre">-W</span> <span class="pre">default</span></code>, or use the <code class="docutils literal notranslate"><span class="pre">warnings</span></code> module,
-to see them.</p>
+Using it emits a <code class="docutils literal notranslate"><span class="pre">DeprecationWarning</span></code> naming the replacement too. Python shows a
+<code class="docutils literal notranslate"><span class="pre">DeprecationWarning</span></code> by default only for code in <code class="docutils literal notranslate"><span class="pre">__main__</span></code>. Run Python with <code class="docutils literal notranslate"><span class="pre">-W</span> <span class="pre">default</span></code>, or
+use the <code class="docutils literal notranslate"><span class="pre">warnings</span></code> module, to see the others.</p>
+<p>The <a class="reference internal" href="#python-type-checking"><span class="std std-ref">generated modules</span></a> mark it with the <code class="docutils literal notranslate"><span class="pre">&#64;deprecated</span></code> decorator of
+<span class="target" id="index-0"></span><a class="pep reference external" href="https://peps.python.org/pep-0702/"><strong>PEP 702</strong></a>, so a type checker reports it too.</p>
 </section>
 <section id="writing-server-side-functions">
 <span id="python-client-compiling-functions"></span><h2>Writing Server Side Functions<a class="headerlink" href="#writing-server-side-functions" title="Link to this heading">#</a></h2>

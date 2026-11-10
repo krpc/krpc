@@ -862,6 +862,58 @@ stay on the static method.</p>
 <div class="toctree-wrapper compound">
 </div>
 </section>
+<section id="deprecation">
+<h2>Deprecation<a class="headerlink" href="#deprecation" title="Link to this heading">#</a></h2>
+<p>Each client signals the use of a deprecated member with the language’s own mechanism:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Client</p></th>
+<th class="head"><p>Signal</p></th>
+<th class="head"><p>Kinds with no signal</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Python</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DeprecationWarning</span></code> at run time, and <code class="docutils literal notranslate"><span class="pre">&#64;deprecated</span></code> for type checkers</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>C#</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">[Obsolete]</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>C++</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">[[deprecated]]</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>C-nano</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">KRPC_DEPRECATED</span></code></p></td>
+<td><p>Services and exceptions, which have no C type</p></td>
+</tr>
+<tr class="row-even"><td><p>Java</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&#64;Deprecated</span></code>, which holds no reason</p></td>
+<td><p>Streams and calls, which name their method in a string</p></td>
+</tr>
+<tr class="row-odd"><td><p>Lua</p></td>
+<td><p>A warning on standard error, once per member on a connection</p></td>
+<td><p>Exceptions, which the client does not expose, and structure fields</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>A stream, and the call a server side function makes, use a procedure too. Python and Lua warn when
+the client builds the call. In C++ and C-nano, the <code class="docutils literal notranslate"><span class="pre">_stream</span></code> and <code class="docutils literal notranslate"><span class="pre">_call</span></code> functions carry the
+attribute. In C#, the lambda that names the procedure warns.</p>
+<p>A member of a deprecated service, class, enumeration or structure is deprecated. A member with no
+reason of its own takes the reason of its nearest deprecated container. <code class="docutils literal notranslate"><span class="pre">clientgen</span></code> and the Python
+and Lua clients apply this to their copy of the definitions when they read them. The protocol and
+<code class="docutils literal notranslate"><span class="pre">docgen</span></code> keep the attributes as declared, so the API reference has one notice per page.</p>
+<p>A deprecated service is marked too: the C# extension method and service class, and the C++, Java
+and Python service class. The Python and Lua clients keep it out of the client’s attributes, so
+that reading it reaches the attribute-miss hook, which warns.</p>
+<p>Generated C++ and C-nano code uses the deprecated declarations it makes, so each header suppresses
+the warning around its own contents. The suppression goes by the location of the use, so a use in a
+program still warns.</p>
+</section>
 </section>
 
 
@@ -924,6 +976,7 @@ stay on the static method.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#single-threaded-clients">Single-Threaded Clients</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stream-and-call-forms">Stream and Call Forms</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#static-methods">Static Methods</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deprecation">Deprecation</a></li>
 </ul>
   </nav></div>
 

@@ -180,6 +180,9 @@ C-nano client
 * Add a ``_call`` function for each procedure, such as ``krpc_SpaceCenter_Flight_Speed_call``, for ``krpc_KRPC_Expression_Call`` (:issue:`1267`)
 * :breaking:`Breaking` Leave internal procedures out of the services, such as ``krpc_KRPC_AddStream`` (:issue:`1269`)
 * Relicense the C-nano client and the Arduino library under the MIT license (:issue:`1281`)
+* Mark deprecated classes, enumerations, enumeration values, structures and structure fields with ``KRPC_DEPRECATED`` (:issue:`1322`)
+* Mark the ``_call`` functions of deprecated procedures with ``KRPC_DEPRECATED`` (:issue:`1322`)
+* Deprecate each member of a deprecated service, class, enumeration or structure (:issue:`1322`)
 
 
 C# client
@@ -225,6 +228,8 @@ C# client
 * Fix .NET Framework programs failing to load ``System.Memory`` when decoding a nullable value in a collection or structure (:issue:`1274`)
 * Generate a flags enumeration with ``[Flags]`` (:issue:`1311`)
 * Compile ``~`` and ``HasFlag`` on flags enumeration values in server side functions (:issue:`1313`)
+* Mark a deprecated service's extension method and ``Service`` class with ``[Obsolete]`` (:issue:`1322`)
+* Deprecate each member of a deprecated service, class, enumeration or structure (:issue:`1322`)
 
 
 C++ client
@@ -269,6 +274,10 @@ C++ client
 * :breaking:`Breaking` Object, stream and event constructors take the client by reference, as in ``Vessel(conn, id)`` (:issue:`1286`)
 * Service constructors accept a temporary client, as in ``SpaceCenter sc(krpc::connect())`` (:issue:`1286`)
 * Generate the operators ``|``, ``&``, ``^`` and ``~`` for a flags enumeration (:issue:`1311`)
+* Declare a deprecated service's class ``[[deprecated]]`` (:issue:`1322`)
+* Declare the ``_stream`` and ``_call`` functions of deprecated procedures ``[[deprecated]]`` (:issue:`1322`)
+* Deprecate each member of a deprecated service, class, enumeration or structure (:issue:`1322`)
+* Fix generated headers warning about their own deprecated members (:issue:`1322`)
 
 
 Java client
@@ -306,6 +315,8 @@ Java client
 * :breaking:`Breaking` Leave internal procedures out of the services, such as ``KRPC.addStream`` (:issue:`1269`)
 * Add ``Connection.compile`` for a server side function built with the expression API (:issue:`1269`)
 * :breaking:`Breaking` Generate a flags enumeration, such as ``SpaceCenter.MapFilterType``, as a class of constants with ``or``, ``and``, ``xor``, ``andNot`` and ``contains`` (:issue:`1311`)
+* Mark a deprecated service's class with ``@Deprecated`` (:issue:`1322`)
+* Deprecate each member of a deprecated service, class, enumeration or structure (:issue:`1322`)
 
 
 Lua client
@@ -326,6 +337,9 @@ Lua client
   * Fix a ``nil`` argument dropping the arguments after it (:issue:`1278`)
 
 * Add ``union``, ``intersection``, ``difference`` and ``contains`` to the values of a flags enumeration (:issue:`1311`)
+* Warn once per member on standard error on a use of a deprecated service, procedure, method, property, class, enumeration, enumeration value or structure (:issue:`1322`)
+* Warn when ``get_call`` builds the call of a deprecated procedure, method or property (:issue:`1322`)
+* Deprecate each member of a deprecated service, class or enumeration (:issue:`1322`)
 
 
 Python client
@@ -385,6 +399,10 @@ Python client
 * Support flags enumerations, such as ``SpaceCenter.MapFilterType``, as an ``enum.Flag`` (:issue:`1311`)
 * Raise ``EncodingError`` for an enumeration result the enumeration does not declare, in place of ``ValueError`` (:issue:`1311`)
 * Compile ``|``, ``&``, ``^``, ``~``, ``in`` and truth tests on flags enumeration values in server side functions (:issue:`1313`)
+* Warn when a stream or ``get_call`` uses a deprecated procedure, method or property (:issue:`1322`)
+* Warn on a use of a deprecated service, class, enumeration, enumeration value, structure, structure field or exception (:issue:`1322`)
+* Mark deprecated members of the generated stubs with ``@deprecated``, so type checkers report them (:issue:`1322`)
+* Deprecate each member of a deprecated service, class, enumeration or structure (:issue:`1322`)
 
 
 krpctools
@@ -426,6 +444,8 @@ krpctools
 
 * Name the module of another service a generated Python module imports with ``--include``, for a mod whose service uses another mod's types (:issue:`1304`)
 * Support flags enumerations in ``clientgen`` and ``docgen`` (:issue:`1311`)
+* Add the ``DeprecationSignals`` command to the conformance testee protocol, which a testee needs for the deprecation tests (:issue:`1322`)
+* Ship the ``DeprecatedService`` definitions beside ``TestService.json`` (:issue:`1322`)
 
 
 v0.7.0

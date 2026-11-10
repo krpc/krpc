@@ -414,9 +414,12 @@ A member of a service can be deprecated, when a newer member replaces it. A depr
 still works, but may be removed in a future release, so move to its replacement.
 
 The API reference and the member's docstring mark it as deprecated, and name the replacement.
-Calling it emits a ``DeprecationWarning`` naming the replacement too. Python hides
-``DeprecationWarning`` by default. Run Python with ``-W default``, or use the ``warnings`` module,
-to see them.
+Using it emits a ``DeprecationWarning`` naming the replacement too. Python shows a
+``DeprecationWarning`` by default only for code in ``__main__``. Run Python with ``-W default``, or
+use the ``warnings`` module, to see the others.
+
+The :ref:`generated modules <python-type-checking>` mark it with the ``@deprecated`` decorator of
+:pep:`702`, so a type checker reports it too.
 
 .. _python-client-compiling-functions:
 

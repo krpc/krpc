@@ -651,6 +651,23 @@ checks with no client type. It imports <code class="docutils literal notranslate
 <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">krpc</span></code> free of generated modules.</p></li>
 </ul>
 </section>
+<section id="deprecated-members">
+<h2>Deprecated Members<a class="headerlink" href="#deprecated-members" title="Link to this heading">#</a></h2>
+<p>A warning fires where a program reads a member, which keeps the cost off other members and off the
+values the client decodes:</p>
+<ul class="simple">
+<li><p>A deprecated enumeration value or structure field is a descriptor on the class, in place of the
+member or the <code class="docutils literal notranslate"><span class="pre">namedtuple</span></code> field getter. The client’s encoder and decoder read neither by name,
+so a value from the server gives no warning. A generated module sets these on its own classes.</p></li>
+<li><p>A deprecated class, enumeration, structure or exception is a descriptor on the service class, in
+place of the type.</p></li>
+</ul>
+<p>A read is the use that warns for a structure field, as the decoder and a program build a structure
+through one constructor.</p>
+<p>The generated modules take the <code class="docutils literal notranslate"><span class="pre">deprecated</span></code> decorator from <code class="docutils literal notranslate"><span class="pre">krpc.types</span></code>. A type checker sees the
+one in <code class="docutils literal notranslate"><span class="pre">typing_extensions</span></code>. At run time it only records the message, as the built service warns,
+and the client depends on no typing package.</p>
+</section>
 <section id="server-side-functions">
 <h2>Server Side Functions<a class="headerlink" href="#server-side-functions" title="Link to this heading">#</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">compile</span></code>, <code class="docutils literal notranslate"><span class="pre">run</span></code>, <code class="docutils literal notranslate"><span class="pre">add_stream</span></code> and <code class="docutils literal notranslate"><span class="pre">add_event</span></code> take a Python function.
@@ -763,6 +780,7 @@ would keep the values it first captured.</p>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#threads">Threads</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#services-and-declarations">Services and Declarations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deprecated-members">Deprecated Members</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#server-side-functions">Server Side Functions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#transports">Transports</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mapping-the-spec-to-python">Mapping the Spec to Python</a></li>

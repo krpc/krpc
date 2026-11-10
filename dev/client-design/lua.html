@@ -608,6 +608,10 @@ Arguments are read by position, so a <code class="docutils literal notranslate">
 and a <code class="docutils literal notranslate"><span class="pre">set_x</span></code> on the class table, reached through <code class="docutils literal notranslate"><span class="pre">__index</span></code> and <code class="docutils literal notranslate"><span class="pre">__newindex</span></code>.</p></li>
 <li><p>A member naming a type this client does not know is skipped, with a warning on standard error, so
 a newer server still connects.</p></li>
+<li><p>A deprecated type or enumeration value is left out of its class table, and <code class="docutils literal notranslate"><span class="pre">__index</span></code> warns and
+returns it. The other members keep a plain table lookup. A structure field is an entry on the
+value, read with no hook, so it gives no warning.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Types</span></code> records the deprecated members it has warned of, so a loop does not repeat a warning.</p></li>
 </ul>
 </section>
 <section id="null-values">

@@ -548,8 +548,8 @@
   <section id="deprecating-service-members">
 <h1>Deprecating Service Members<a class="headerlink" href="#deprecating-service-members" title="Link to this heading">#</a></h1>
 <p>To deprecate part of a service’s API, annotate it with the standard C# <code class="docutils literal notranslate"><span class="pre">System.Obsolete</span></code>
-attribute. This can be applied to services, procedures, properties, classes, methods and
-enumerations. For example:</p>
+attribute. This can be applied to services, procedures, properties, classes, methods, enumerations,
+enumeration values, structures, structure fields and exceptions. For example:</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="na">[KRPCProcedure]</span>
 <span class="na">[Obsolete ("Use &lt;see cref='Flag.Remove'/&gt; instead.")]</span>
 <span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">RemoveFlag</span><span class="p">(</span><span class="n">Flag</span><span class="w"> </span><span class="n">flag</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -560,10 +560,14 @@ enumerations. For example:</p>
 <p>The deprecation, along with the message from the attribute, is included in the service definition
 and sent to clients over the wire, as the <code class="docutils literal notranslate"><span class="pre">deprecated</span></code> and <code class="docutils literal notranslate"><span class="pre">deprecated_reason</span></code> fields returned
 by <code class="docutils literal notranslate"><span class="pre">KRPC.GetServices</span></code>. Any <code class="docutils literal notranslate"><span class="pre">&lt;see</span> <span class="pre">cref='...'/&gt;</span></code> references in the message are resolved to the
-name of the referenced member; unqualified names are resolved against the declaring type. Clients then expose the deprecation using each language’s own
-mechanism: for example, the Python client emits a <code class="docutils literal notranslate"><span class="pre">DeprecationWarning</span></code> when a deprecated member
-is called, and the generated C#, C++, C-nano and Java client code marks deprecated members with
-<code class="docutils literal notranslate"><span class="pre">[Obsolete]</span></code>, <code class="docutils literal notranslate"><span class="pre">[[deprecated]]</span></code>, <code class="docutils literal notranslate"><span class="pre">KRPC_DEPRECATED</span></code> and <code class="docutils literal notranslate"><span class="pre">&#64;Deprecated</span></code> respectively.</p>
+name of the referenced member; unqualified names are resolved against the declaring type.</p>
+<p>Clients then expose the deprecation using each language’s own mechanism: the Python client emits a
+<code class="docutils literal notranslate"><span class="pre">DeprecationWarning</span></code>, the Lua client writes a warning to standard error, and the generated C#, C++,
+C-nano and Java client code marks deprecated members with <code class="docutils literal notranslate"><span class="pre">[Obsolete]</span></code>, <code class="docutils literal notranslate"><span class="pre">[[deprecated]]</span></code>,
+<code class="docutils literal notranslate"><span class="pre">KRPC_DEPRECATED</span></code> and <code class="docutils literal notranslate"><span class="pre">&#64;Deprecated</span></code> respectively.</p>
+<p>Deprecating a service, class, enumeration or structure deprecates its members in every client, so you
+do not need to annotate each one. A member with no message of its own takes the message of its
+container. The service definition and the API reference keep the attributes as you declared them.</p>
 </section>
 
 
