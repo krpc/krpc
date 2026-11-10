@@ -5,6 +5,7 @@ import unittest
 from krpctools.game.ksp import TestCase
 
 PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
+JPEG_SIGNATURE = b"\xff\xd8\xff"
 
 # The part of each kind of camera on the test craft, and its module
 CAMERAS = [
@@ -43,7 +44,7 @@ class TestDockingCamera(TestCase):
     def image(camera):
         """The camera's image, or None while the camera is off."""
         try:
-            return camera.image
+            return camera.image()
         except RuntimeError:
             return None
 
@@ -88,6 +89,12 @@ class TestDockingCamera(TestCase):
                 self.assertEqual(PNG_SIGNATURE, image[:8])
                 # The width and height from the IHDR chunk
                 self.assertEqual((256, 256), struct.unpack(">II", image[16:24]))
+                jpeg = camera.image(self.dc.ImageFormat.jpeg)
+                self.assertEqual(JPEG_SIGNATURE, jpeg[:3])
+                with self.assertRaises(ValueError):
+                    camera.image(self.dc.ImageFormat.jpeg, 0)
+                # PNG ignores the quality
+                self.assertEqual(PNG_SIGNATURE, camera.image(quality=0)[:8])
                 self.set_enabled(enabled, False)
 
 

@@ -57,8 +57,8 @@ namespace KRPC.DockingCamera
             return name == null ? null : part.Modules[name];
         }
 
-        // Renders the cameras into a texture and encodes it as a PNG, as BaseCamera.GetPic does
-        public static byte[] GetImage(PartModule module, int width, int height)
+        // Renders the cameras into a texture as BaseCamera.GetPic does, and encodes it
+        public static byte[] GetImage(PartModule module, int width, int height, ImageFormat format, int quality)
         {
             var camera = cameras[module.moduleName](module);
             var unityCameras = camera == null ? null : allCameras(camera);
@@ -76,7 +76,7 @@ namespace KRPC.DockingCamera
                 RenderTexture.active = renderTexture;
                 image.ReadPixels(new Rect(0, 0, width, height), 0, 0);
                 image.Apply();
-                return image.EncodeToPNG();
+                return ImageEncoder.Encode(image, format, quality);
             } finally {
                 // Restore the mod's own render targets
                 for (int i = 0; i < unityCameras.Count; i++)

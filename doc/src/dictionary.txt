@@ -120,6 +120,7 @@ libz
 linters
 linux
 localhost
+lossy
 lua
 luarocks
 luasocket
