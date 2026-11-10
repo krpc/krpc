@@ -138,7 +138,7 @@ class SolverEngines(Mod):
 
 
 class ROUtils(Mod):
-    """RealFuels' utility library."""
+    """The utility library of RealFuels and Procedural Fairings."""
 
     name = "ROUtils"
     source = _GITHUB + "KSP-RO/ROUtils/releases/download/v1.2.0.0/ROUtils-v1.2.0.0.zip"
@@ -340,6 +340,23 @@ class NearFutureSolar(_PartMod):
     part = "nfs-panel-deploying-curved-25-1"
 
 
+class ProceduralFairings(Mod):
+    """Procedural Fairings, whose fairing sides the SpaceCenter Fairing class wraps. Its
+    parts load without its plugin, so the check looks for the plugin's module."""
+
+    name = "ProceduralFairings"
+    source = _GITHUB + (
+        "KSP-RO/ProceduralFairings/releases/download/v6.8.0.0/"
+        "ProceduralFairings-v6.8.0.0.zip"
+    )
+    sha256 = "bd574414e01ebecb6fd056bb7c62a7de7cdae4160c1550c98931128890918400"
+    folders = ("ProceduralFairings",)
+    requires = ("ROUtils", "KSPCommunityFixes")
+
+    def present(self, game, conn):
+        return conn.testing_tools.part_module_available("ProceduralFairingDecoupler")
+
+
 class Firespitter(_PartMod):
     """Firespitter, whose FSswitchEngineThrustTransform module is one of the engine thrust
     reversers the SpaceCenter Engine class drives."""
@@ -452,6 +469,7 @@ MODS = [
     RealFuels,
     B9PartSwitch,
     NearFutureSolar,
+    ProceduralFairings,
     Firespitter,
     KerbalActuators,
     KSPCommunityPartModules,
