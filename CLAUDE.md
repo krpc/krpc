@@ -376,7 +376,7 @@ An issue or pull request takes one kind, at least one component, and the other l
 | Component | `server`, `protocol`, `service`, `client`, `tools`, `build`, `docs` | `server` covers `core` and each mod's server plugin. `client` covers any client change |
 | Game | `ksp`, `ksa` | The game a change is specific to. `core`, client and tool changes take neither |
 | Language | `python`, `cpp`, `cnano`, `csharp`, `java`, `lua` | The client a change is specific to, with `client` |
-| Mods | `mod-compatibility` | Added to the kind for a change that concerns another mod |
+| Mods | `mods` | Added to the kind for a change that concerns another mod |
 | Dependencies | `dependencies` | Added to the kind for a dependency update. Dependabot sets it |
 | Triage | `needs-triage` | Set by the issue templates, removed once triaged |
 
