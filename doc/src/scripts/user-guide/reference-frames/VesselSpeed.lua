@@ -1,5 +1,5 @@
 local krpc = require 'krpc'
-local platform = require 'krpc.platform'
+local socket = require 'socket'
 local conn = krpc.connect('Vessel speed')
 local vessel = conn.space_center.active_vessel
 local obt_frame = vessel.orbit.body.non_rotating_reference_frame
@@ -11,5 +11,5 @@ while true do
     print(string.format(
       'Orbital speed = %.1f m/s, Surface speed = %.1f m/s',
       obt_speed, srf_speed))
-    platform.sleep(1)
+    socket.sleep(1)
 end

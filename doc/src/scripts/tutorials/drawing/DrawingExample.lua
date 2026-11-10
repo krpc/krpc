@@ -1,5 +1,5 @@
 local krpc = require 'krpc'
-local platform = require 'krpc.platform'
+local socket = require 'socket'
 local List = require 'pl.List'
 local conn = krpc.connect('Drawing Example')
 local space_center = conn.space_center
@@ -28,5 +28,5 @@ arrow.end_arrow = true
 -- Label the arrow with the orbital speed of the vessel
 while true do
   arrow.label = string.format('%.0f m/s', vessel.orbit.speed)
-  platform.sleep(1)
+  socket.sleep(1)
 end

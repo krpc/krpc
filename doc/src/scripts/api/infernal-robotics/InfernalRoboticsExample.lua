@@ -1,5 +1,5 @@
 local krpc = require 'krpc'
-local platform = require 'krpc.platform'
+local socket = require 'socket'
 
 local conn = krpc.connect('InfernalRobotics Example')
 local vessel = conn.space_center.active_vessel
@@ -15,5 +15,5 @@ for _,servo in ipairs(group.servos) do
 end
 
 group:move_right()
-platform.sleep(1)
+socket.sleep(1)
 group:stop()

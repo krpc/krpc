@@ -175,7 +175,7 @@ take effect:
       .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.lua
          :language: lua
          :start-at: vessel.auto_pilot:target_pitch_and_heading(90, 90)
-         :end-at: platform.sleep(1)
+         :end-at: socket.sleep(1)
 
 Part Two: Lift-off!
 -------------------

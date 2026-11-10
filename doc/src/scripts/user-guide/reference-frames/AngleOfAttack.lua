@@ -1,5 +1,5 @@
 local krpc = require 'krpc'
-local platform = require 'krpc.platform'
+local socket = require 'socket'
 local math = require 'math'
 local conn = krpc.connect('Angle of attack')
 local vessel = conn.space_center.active_vessel
@@ -24,6 +24,6 @@ while true do
 
     print(string.format('Angle of attack = %.1f', angle))
 
-    platform.sleep(1)
+    socket.sleep(1)
 
 end
