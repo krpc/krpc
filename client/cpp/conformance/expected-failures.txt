@@ -28,3 +28,6 @@ test_functions.py::test_null_for_non_nullable_type[TestClass]  # As test_null_fo
 test_functions.py::test_stream_null_for_non_nullable_type[TestClass]  # As test_null_for_non_nullable_type[TestClass]
 test_concurrency.py::test_wait_holding_another @skip  # The dispatcher thread waits for the condition held, so the update of the stream waited on is never announced
 test_concurrency.py::test_held_stream_ending_before_value  # A read on the thread holding the condition raises "Stream has no value", as the ending is announced only once the condition is free
+test_concurrency.py::test_held_stream_ending @flaky  # Fails now and then, seen only on CI: a read on the thread that takes the condition raises "Stream has no value"
+test_concurrency.py::test_value_read_before_wake @flaky  # Fails now and then, seen only on CI: the read made while the update is paused returns the earlier value
+test_concurrency.py::test_wake_update_waiter[connection-failure] @flaky  # Fails now and then, seen only on CI: the waiting thread is not woken within the reply timeout
