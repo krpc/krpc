@@ -1113,16 +1113,45 @@
 </dd></dl>
 
 <dl class="java method">
-<dt class="sig sig-object java" id="krpc.client.services.DockingCamera.Camera.getImage()">
-<span class="pre">byte</span><span class="pre">[]</span> <span class="sig-name descname"><span class="pre">getImage</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.DockingCamera.Camera.getImage()" title="Link to this definition">#</a></dt>
-<dd><p>The image from the camera, a 256 by 256 pixel PNG.
+<dt class="sig sig-object java" id="krpc.client.services.DockingCamera.Camera.image(ImageFormat, int)">
+<span class="pre">byte</span><span class="pre">[]</span> <span class="sig-name descname"><span class="pre">image</span></span><span class="sig-paren">(</span><a class="reference internal" href="#krpc.client.services.DockingCamera.ImageFormat" title="krpc.client.services.DockingCamera.ImageFormat"><span class="pre">ImageFormat</span></a><em> <span class="pre">format</span></em>, <span class="pre">int</span><em> <span class="pre">quality</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.DockingCamera.Camera.image(ImageFormat, int)" title="Link to this definition">#</a></dt>
+<dd><p>The image from the camera, 256 by 256 pixels.
 Throws an exception if the camera is off or not started.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>format</strong> (<span><a class="reference internal" href="#krpc.client.services.DockingCamera.ImageFormat" title="krpc.client.services.DockingCamera.ImageFormat"><code class="xref java java-type docutils literal notranslate"><span class="pre">ImageFormat</span></code></a></span>) – The format of the image.</p></li>
+<li><p><strong>quality</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">int</span></code></span>) – The quality of a JPEG image, from 1 to 100.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The image data.</p>
+</dd>
+</dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The camera is switched on by setting the <code class="docutils literal notranslate"><span class="pre">IsEnabled</span></code> field of its
 <code class="docutils literal notranslate"><span class="pre">PartCameraModule</span></code> or <code class="docutils literal notranslate"><span class="pre">DockingCameraModule</span></code> to <code class="docutils literal notranslate"><span class="pre">true</span></code>, which also opens
 the camera window.</p>
 </div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.DockingCamera.ImageFormat">
+<span class="pre">public</span> <span class="pre">enum</span> <span class="sig-name descname"><span class="pre">ImageFormat</span></span><a class="headerlink" href="#krpc.client.services.DockingCamera.ImageFormat" title="Link to this definition">#</a></dt>
+<dd><p>The file format of an image.</p>
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.DockingCamera.ImageFormat.PNG">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.DockingCamera.ImageFormat" title="krpc.client.services.DockingCamera.ImageFormat"><span class="pre">ImageFormat</span></a> <span class="sig-name descname"><span class="pre">PNG</span></span><a class="headerlink" href="#krpc.client.services.DockingCamera.ImageFormat.PNG" title="Link to this definition">#</a></dt>
+<dd><p>PNG, which is lossless.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.DockingCamera.ImageFormat.JPEG">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.DockingCamera.ImageFormat" title="krpc.client.services.DockingCamera.ImageFormat"><span class="pre">ImageFormat</span></a> <span class="sig-name descname"><span class="pre">JPEG</span></span><a class="headerlink" href="#krpc.client.services.DockingCamera.ImageFormat.JPEG" title="Link to this definition">#</a></dt>
+<dd><p>JPEG, which is lossy, and smaller and faster to encode than PNG.</p>
 </dd></dl>
 
 </dd></dl>

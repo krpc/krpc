@@ -6532,7 +6532,7 @@
 </li>
       <li><a href="java/api/infernal-robotics/servo-group.html#krpc.client.services.InfernalRobotics.ServoGroup.getIKActive()">getIKActive() (Java method)</a>
 </li>
-      <li><a href="java/api/docking-camera/camera.html#krpc.client.services.DockingCamera.Camera.getImage()">getImage() (Java method)</a>, <a href="java/api/drawing/map-marker.html#krpc.client.services.Drawing.MapMarker.getImage()">[1]</a>, <a href="java/api/drawing/navball-marker.html#krpc.client.services.Drawing.NavballMarker.getImage()">[2]</a>
+      <li><a href="java/api/drawing/map-marker.html#krpc.client.services.Drawing.MapMarker.getImage()">getImage() (Java method)</a>, <a href="java/api/drawing/navball-marker.html#krpc.client.services.Drawing.NavballMarker.getImage()">[1]</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.getImpactTolerance()">getImpactTolerance() (Java method)</a>
 </li>
@@ -8108,14 +8108,10 @@
         <li><a href="python/api/infernal-robotics/servo-group.html#InfernalRobotics.ServoGroup.ik_active">(ServoGroup attribute)</a>
 </li>
       </ul></li>
-      <li><a href="lua/api/docking-camera/camera.html#lua-DockingCamera.Camera.image">image (attribute in DockingCamera.Camera)</a>
+      <li><a href="lua/api/drawing/map-marker.html#lua-Drawing.MapMarker.image">image (attribute in Drawing.MapMarker)</a>
 
       <ul>
-        <li><a href="lua/api/drawing/map-marker.html#lua-Drawing.MapMarker.image">(attribute in Drawing.MapMarker)</a>
-</li>
         <li><a href="lua/api/drawing/navball-marker.html#lua-Drawing.NavballMarker.image">(attribute in Drawing.NavballMarker)</a>
-</li>
-        <li><a href="python/api/docking-camera/camera.html#DockingCamera.Camera.image">(Camera attribute)</a>
 </li>
       </ul></li>
       <li><a href="lua/api/drawing/image.html#lua-Drawing.Image">Image (class in Drawing)</a>, <a href="python/api/drawing/image.html#Drawing.Image">[1]</a>
@@ -8129,9 +8125,25 @@
       <li><a href="python/api/drawing/map-marker.html#Drawing.MapMarker.image">image (MapMarker attribute)</a>
 
       <ul>
+        <li><a href="lua/api/docking-camera/camera.html#lua-DockingCamera.Camera.image">(method in DockingCamera.Camera)</a>
+</li>
         <li><a href="python/api/drawing/navball-marker.html#Drawing.NavballMarker.image">(NavballMarker attribute)</a>
 </li>
       </ul></li>
+      <li><a href="python/api/docking-camera/camera.html#DockingCamera.Camera.image">image() (Camera method)</a>
+</li>
+      <li><a href="java/api/docking-camera/camera.html#krpc.client.services.DockingCamera.Camera.image(ImageFormat, int)">image(ImageFormat, int) (Java method)</a>
+</li>
+      <li><a href="lua/api/docking-camera/camera.html#lua-DockingCamera.ImageFormat">ImageFormat (class in DockingCamera)</a>, <a href="python/api/docking-camera/camera.html#DockingCamera.ImageFormat">[1]</a>
+
+      <ul>
+        <li><a href="java/api/docking-camera/camera.html#krpc.client.services.DockingCamera.ImageFormat">(Java enum)</a>
+</li>
+      </ul></li>
+      <li><a href="python/api/docking-camera/camera.html#DockingCamera.ImageFormat.jpeg">ImageFormat.jpeg (in module DockingCamera)</a>
+</li>
+      <li><a href="python/api/docking-camera/camera.html#DockingCamera.ImageFormat.png">ImageFormat.png (in module DockingCamera)</a>
+</li>
       <li><a href="lua/api/drawing/map-marker.html#lua-Drawing.MapMarkerIcon.impact">impact (data in Drawing.MapMarkerIcon)</a>
 </li>
       <li><a href="java/api/drawing/map-marker.html#krpc.client.services.Drawing.MapMarkerIcon.IMPACT">IMPACT (Java field)</a>
@@ -8265,6 +8277,8 @@
 </li>
       <li><a href="python/api/ui/input-field.html#UI.InputContentType.password">InputContentType.password (in module UI)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/api/ui/input-field.html#UI.InputContentType.standard">InputContentType.standard (in module UI)</a>
 </li>
       <li><a href="lua/api/ui/input-field.html#lua-UI.InputField">InputField (class in UI)</a>, <a href="python/api/ui/input-field.html#UI.InputField">[1]</a>
@@ -8273,8 +8287,6 @@
         <li><a href="java/api/ui/input-field.html#krpc.client.services.UI.InputField">(Java class)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/space-center/parts.html#lua-SpaceCenter.ResourceConverter.inputs">inputs (method in SpaceCenter.ResourceConverter)</a>
 </li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.ResourceConverter.inputs">inputs() (ResourceConverter method)</a>
@@ -8563,6 +8575,10 @@
         <li><a href="python/api/space-center/parts.html#SpaceCenter.Fairing.jettisoned">(Fairing attribute)</a>
 </li>
       </ul></li>
+      <li><a href="lua/api/docking-camera/camera.html#lua-DockingCamera.ImageFormat.jpeg">jpeg (data in DockingCamera.ImageFormat)</a>
+</li>
+      <li><a href="java/api/docking-camera/camera.html#krpc.client.services.DockingCamera.ImageFormat.JPEG">JPEG (Java field)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -8771,7 +8787,7 @@
 </li>
       <li><a href="csharp/api/docking-camera/camera.html#class-KRPC.Client.Services.DockingCamera.Camera">KRPC.Client.Services.DockingCamera.Camera (C# class)</a>
 </li>
-      <li><a href="csharp/api/docking-camera/camera.html#property-KRPC.Client.Services.DockingCamera.Camera.Image">KRPC.Client.Services.DockingCamera.Camera.Image (C# property)</a>
+      <li><a href="csharp/api/docking-camera/camera.html#function-KRPC.Client.Services.DockingCamera.Camera.Image">KRPC.Client.Services.DockingCamera.Camera.Image (C# function)</a>
 </li>
       <li><a href="csharp/api/docking-camera/camera.html#property-KRPC.Client.Services.DockingCamera.Camera.Part">KRPC.Client.Services.DockingCamera.Camera.Part (C# property)</a>
 </li>
@@ -8780,6 +8796,12 @@
       <li><a href="csharp/api/docking-camera/docking-camera.html#property-KRPC.Client.Services.DockingCamera.DockingCamera.Available">KRPC.Client.Services.DockingCamera.DockingCamera.Available (C# property)</a>
 </li>
       <li><a href="csharp/api/docking-camera/docking-camera.html#function-KRPC.Client.Services.DockingCamera.DockingCamera.Camera">KRPC.Client.Services.DockingCamera.DockingCamera.Camera (C# function)</a>
+</li>
+      <li><a href="csharp/api/docking-camera/camera.html#enum-KRPC.Client.Services.DockingCamera.ImageFormat">KRPC.Client.Services.DockingCamera.ImageFormat (C# enum)</a>
+</li>
+      <li><a href="csharp/api/docking-camera/camera.html#enumerator-KRPC.Client.Services.DockingCamera.ImageFormat.JPEG">KRPC.Client.Services.DockingCamera.ImageFormat.JPEG (C# enumerator)</a>
+</li>
+      <li><a href="csharp/api/docking-camera/camera.html#enumerator-KRPC.Client.Services.DockingCamera.ImageFormat.PNG">KRPC.Client.Services.DockingCamera.ImageFormat.PNG (C# enumerator)</a>
 </li>
       <li><a href="java/api/drawing/arc.html#package-krpc.client.services.Drawing">krpc.client.services.Drawing (package)</a>, <a href="java/api/drawing/box.html#package-krpc.client.services.Drawing">[1]</a>, <a href="java/api/drawing/circle.html#package-krpc.client.services.Drawing">[2]</a>, <a href="java/api/drawing/drawing.html#package-krpc.client.services.Drawing">[3]</a>, <a href="java/api/drawing/image.html#package-krpc.client.services.Drawing">[4]</a>, <a href="java/api/drawing/line.html#package-krpc.client.services.Drawing">[5]</a>, <a href="java/api/drawing/map-marker.html#package-krpc.client.services.Drawing">[6]</a>, <a href="java/api/drawing/navball-marker.html#package-krpc.client.services.Drawing">[7]</a>, <a href="java/api/drawing/orbit-path.html#package-krpc.client.services.Drawing">[8]</a>, <a href="java/api/drawing/point.html#package-krpc.client.services.Drawing">[9]</a>, <a href="java/api/drawing/polygon.html#package-krpc.client.services.Drawing">[10]</a>, <a href="java/api/drawing/polyline.html#package-krpc.client.services.Drawing">[11]</a>, <a href="java/api/drawing/sphere.html#package-krpc.client.services.Drawing">[12]</a>, <a href="java/api/drawing/text.html#package-krpc.client.services.Drawing">[13]</a>
 </li>
@@ -14036,11 +14058,17 @@
 </li>
       <li><a href="cpp/api/docking-camera/docking-camera.html#_CPPv4N4krpc8services13DockingCamera6cameraEN11SpaceCenter4PartE">krpc::services::DockingCamera::camera (C++ function)</a>
 </li>
-      <li><a href="cpp/api/docking-camera/camera.html#_CPPv4N4krpc8services13DockingCamera6Camera5imageEv">krpc::services::DockingCamera::Camera::image (C++ function)</a>
+      <li><a href="cpp/api/docking-camera/camera.html#_CPPv4N4krpc8services13DockingCamera6Camera5imageE11ImageFormat7int32_t">krpc::services::DockingCamera::Camera::image (C++ function)</a>
 </li>
       <li><a href="cpp/api/docking-camera/camera.html#_CPPv4N4krpc8services13DockingCamera6Camera4partEv">krpc::services::DockingCamera::Camera::part (C++ function)</a>
 </li>
       <li><a href="cpp/api/docking-camera/docking-camera.html#_CPPv4N4krpc8services13DockingCamera13DockingCameraERN4krpc6ClientE">krpc::services::DockingCamera::DockingCamera (C++ function)</a>
+</li>
+      <li><a href="cpp/api/docking-camera/camera.html#_CPPv4N4krpc8services13DockingCamera11ImageFormatE">krpc::services::DockingCamera::ImageFormat (C++ enum)</a>
+</li>
+      <li><a href="cpp/api/docking-camera/camera.html#_CPPv4N4krpc8services13DockingCamera11ImageFormat4jpegE">krpc::services::DockingCamera::ImageFormat::jpeg (C++ enumerator)</a>
+</li>
+      <li><a href="cpp/api/docking-camera/camera.html#_CPPv4N4krpc8services13DockingCamera11ImageFormat3pngE">krpc::services::DockingCamera::ImageFormat::png (C++ enumerator)</a>
 </li>
       <li><a href="cpp/api/drawing/drawing.html#_CPPv4N4krpc8services7DrawingE">krpc::services::Drawing (C++ class)</a>
 </li>
@@ -17308,12 +17336,12 @@
 </li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter5Force6removeEv">krpc::services::SpaceCenter::Force::remove (C++ function)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter5Force16set_force_vectorENSt5tupleIdddEE">krpc::services::SpaceCenter::Force::set_force_vector (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter5Force12set_positionENSt5tupleIdddEE">krpc::services::SpaceCenter::Force::set_position (C++ function)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter5Force19set_reference_frameE14ReferenceFrame">krpc::services::SpaceCenter::Force::set_reference_frame (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/space-center.html#_CPPv4N4krpc8services11SpaceCenter5fundsEv">krpc::services::SpaceCenter::funds (C++ function)</a>
@@ -20107,6 +20135,12 @@
       <li><a href="cnano/api/docking-camera/camera.html#c.krpc_DockingCamera_Camera_t.krpc_DockingCamera_Camera_Image">krpc_DockingCamera_Camera_t.krpc_DockingCamera_Camera_Image (C function)</a>
 </li>
       <li><a href="cnano/api/docking-camera/camera.html#c.krpc_DockingCamera_Camera_t.krpc_DockingCamera_Camera_Part">krpc_DockingCamera_Camera_t.krpc_DockingCamera_Camera_Part (C function)</a>
+</li>
+      <li><a href="cnano/api/docking-camera/camera.html#c.krpc_DockingCamera_ImageFormat_t">krpc_DockingCamera_ImageFormat_t (C type)</a>
+</li>
+      <li><a href="cnano/api/docking-camera/camera.html#c.krpc_DockingCamera_ImageFormat_t.KRPC_DOCKINGCAMERA_IMAGEFORMAT_JPEG">krpc_DockingCamera_ImageFormat_t.KRPC_DOCKINGCAMERA_IMAGEFORMAT_JPEG (C macro)</a>
+</li>
+      <li><a href="cnano/api/docking-camera/camera.html#c.krpc_DockingCamera_ImageFormat_t.KRPC_DOCKINGCAMERA_IMAGEFORMAT_PNG">krpc_DockingCamera_ImageFormat_t.KRPC_DOCKINGCAMERA_IMAGEFORMAT_PNG (C macro)</a>
 </li>
       <li><a href="cnano/api/drawing/drawing.html#c.krpc_Drawing_AddArc">krpc_Drawing_AddArc (C function)</a>
 </li>
@@ -28542,14 +28576,14 @@
         <li><a href="python/api/space-center/vessel.html#SpaceCenter.Vessel.physics_range">(Vessel attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/space-center/space-center.html#lua-SpaceCenter.physics_warp_factor">physics_warp_factor (attribute in SpaceCenter)</a>
 
       <ul>
         <li><a href="python/api/space-center/space-center.html#SpaceCenter.physics_warp_factor">(in module SpaceCenter)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/stdlib.html#lua-StdLib.pi">pi (attribute in StdLib)</a>
 
       <ul>
@@ -28688,6 +28722,10 @@
         <li><a href="python/api/space-center/parts.html#SpaceCenter.RoboticController.playing">(RoboticController attribute)</a>
 </li>
       </ul></li>
+      <li><a href="lua/api/docking-camera/camera.html#lua-DockingCamera.ImageFormat.png">png (data in DockingCamera.ImageFormat)</a>
+</li>
+      <li><a href="java/api/docking-camera/camera.html#krpc.client.services.DockingCamera.ImageFormat.PNG">PNG (Java field)</a>
+</li>
       <li><a href="lua/api/drawing/point.html#lua-Drawing.Point">Point (class in Drawing)</a>, <a href="python/api/drawing/point.html#Drawing.Point">[1]</a>
 
       <ul>

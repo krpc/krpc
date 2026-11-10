@@ -18,12 +18,14 @@ Camera
       :rtype: :class:`SpaceCenter.Part`
    
 
-   .. attribute:: image
+   .. method:: image([format = ImageFormat.png], [quality = 75])
 
-      The image from the camera, a 256 by 256 pixel PNG.
+      The image from the camera, 256 by 256 pixels.
       Throws an exception if the camera is off or not started.
 
-      :Attribute: Read-only, cannot be set
+      :param ImageFormat format: The format of the image.
+      :param int quality: The quality of a JPEG image, from 1 to 100.
+      :returns: The image data.
       :rtype: bytes
    
 
@@ -32,3 +34,20 @@ Camera
          The camera is switched on by setting the ``IsEnabled`` field of its
          ``PartCameraModule`` or ``DockingCameraModule`` to ``True``, which also opens
          the camera window.
+
+
+
+
+.. class:: ImageFormat
+
+   The file format of an image.
+
+
+   .. data:: png
+
+      PNG, which is lossless.
+
+
+   .. data:: jpeg
+
+      JPEG, which is lossy, and smaller and faster to encode than PNG.

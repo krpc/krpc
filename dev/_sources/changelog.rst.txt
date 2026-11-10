@@ -142,6 +142,7 @@ DockingCamera service
 * :breaking:`Breaking` Support the public Docking Camera (KURS) 1.3.9 release, in place of an unreleased fork (:issue:`1232`)
 * :breaking:`Breaking` ``Camera.Image`` throws an exception if the camera is off or not started, in place of returning an empty array (:issue:`1232`)
 * Support the cameras Docking Camera (KURS) adds to docking ports (:issue:`1232`)
+* :breaking:`Breaking` ``Camera.Image`` is a method taking an ``ImageFormat`` and a JPEG quality (:issue:`1317`)
 
 
 C-nano client
