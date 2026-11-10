@@ -17,6 +17,11 @@ Camera
 
       :Attribute: Can be read or written
 
+      .. note::
+
+         Setting the mode to :data:`SpaceCenter.CameraMode.iva` throws an exception if the
+         active vessel has no crew, or none of its crew can be viewed in an interior.
+
    .. method:: next_camera()
 
       Switch to the next available camera.

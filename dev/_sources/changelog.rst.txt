@@ -115,6 +115,7 @@ SpaceCenter service
 * Fix setting a ``PartField`` skipping the callbacks the right-click menu runs, which left changes such as a B9PartSwitch subtype switch without effect (:issue:`1314`)
 * Support the curved solar panels from Near Future Solar in ``SolarPanel`` (:issue:`1314`)
 * Include the cost of part modules, such as fairing panels and TweakScale's scaling, in ``Part.Cost`` (:issue:`1314`)
+* Fix setting ``Camera.Mode`` to IVA straight after a launch doing nothing, and setting it again in the IVA leaving it (:issue:`1318`)
 
 
 InfernalRobotics service

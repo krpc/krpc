@@ -18,6 +18,12 @@ Camera
 
       :Game Scenes: Flight
 
+
+      .. note::
+
+         Setting the mode to :enumerator:`CameraMode::iva` throws an exception if the
+         active vessel has no crew, or none of its crew can be viewed in an interior.
+
    .. function:: void next_camera()
 
       Switch to the next available camera.

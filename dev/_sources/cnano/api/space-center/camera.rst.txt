@@ -18,6 +18,12 @@ Camera
 
       :Game Scenes: Flight
 
+
+      .. note::
+
+         Setting the mode to :macro:`KRPC_SPACECENTER_CAMERAMODE_IVA` throws an exception if the
+         active vessel has no crew, or none of its crew can be viewed in an interior.
+
    .. function:: krpc_error_t krpc_SpaceCenter_Camera_NextCamera(krpc_connection_t connection, krpc_SpaceCenter_Camera_t instance)
 
       Switch to the next available camera.
