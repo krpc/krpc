@@ -20,10 +20,8 @@ public class CustomEvent {
       ProcedureCall meanAltitude = connection.getCall(flight, "getMeanAltitude");
 
       // Build the function on the server
-      Expression expr = Expression.greaterThan(
-        connection,
-        Expression.call(connection, meanAltitude),
-        Expression.constantDouble(connection, 1000));
+      Expression.Bound e = Expression.bind(connection);
+      Expression expr = e.greaterThan(e.call(meanAltitude), e.constantDouble(1000));
 
       Event event = connection.addEvent(expr);
       synchronized (event.getCondition()) {

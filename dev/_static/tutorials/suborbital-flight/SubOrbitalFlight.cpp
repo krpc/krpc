@@ -20,12 +20,11 @@ int main() {
   std::cout << "Launch!" << std::endl;
   vessel.control().activate_next_stage();
 
-  typedef krpc::services::KRPC::Expression Expr;
+  auto e = krpc::services::KRPC::Expression::bind(conn);
 
   {
     auto solid_fuel = vessel.resources().amount_call("SolidFuel");
-    auto expr = Expr::less_than(conn, Expr::call(conn, solid_fuel),
-                                Expr::constant_float(conn, 0.1));
+    auto expr = e.less_than(e.call(solid_fuel), e.constant_float(0.1));
     auto event = krpc::add_event(expr);
     event.acquire();
     event.wait();
@@ -36,9 +35,8 @@ int main() {
 
   auto flight = vessel.flight();
   {
-    auto expr =
-        Expr::greater_than(conn, Expr::call(conn, flight.mean_altitude_call()),
-                           Expr::constant_double(conn, 10000));
+    auto expr = e.greater_than(e.call(flight.mean_altitude_call()),
+                               e.constant_double(10000));
     auto event = krpc::add_event(expr);
     event.acquire();
     event.wait();
@@ -50,8 +48,8 @@ int main() {
 
   {
     auto apoapsis_altitude = vessel.orbit().apoapsis_altitude_call();
-    auto expr = Expr::greater_than(conn, Expr::call(conn, apoapsis_altitude),
-                                   Expr::constant_double(conn, 100000));
+    auto expr =
+        e.greater_than(e.call(apoapsis_altitude), e.constant_double(100000));
     auto event = krpc::add_event(expr);
     event.acquire();
     event.wait();
@@ -65,9 +63,8 @@ int main() {
   vessel.auto_pilot().set_engaged(false);
 
   {
-    auto expr =
-        Expr::less_than(conn, Expr::call(conn, flight.surface_altitude_call()),
-                        Expr::constant_double(conn, 1000));
+    auto expr = e.less_than(e.call(flight.surface_altitude_call()),
+                            e.constant_double(1000));
     auto event = krpc::add_event(expr);
     event.acquire();
     event.wait();

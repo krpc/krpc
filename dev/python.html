@@ -1315,6 +1315,32 @@ range.</p>
 detail.</p>
 </div>
 </section>
+<section id="calling-methods">
+<h2>Calling Methods<a class="headerlink" href="#calling-methods" title="Link to this heading">#</a></h2>
+<p>You call a method on an object of its class. A <em>static</em> method needs no object, and you call it on
+the class itself. Reach the class through the connection’s service. Pass the method to
+<a class="reference internal" href="#krpc.client.Client.add_stream" title="krpc.client.Client.add_stream"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_stream()</span></code></a> to stream it:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
+<span class="n">frame</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">orbit</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">reference_frame</span>
+<span class="n">Orbit</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">Orbit</span>
+
+<span class="c1"># Call a method on an object</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">vessel</span><span class="o">.</span><span class="n">position</span><span class="p">(</span><span class="n">frame</span><span class="p">))</span>
+
+<span class="c1"># Call a static method on the class</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">Orbit</span><span class="o">.</span><span class="n">reference_plane_direction</span><span class="p">(</span><span class="n">frame</span><span class="p">))</span>
+
+<span class="c1"># Stream it</span>
+<span class="n">direction</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_stream</span><span class="p">(</span><span class="n">Orbit</span><span class="o">.</span><span class="n">reference_plane_direction</span><span class="p">,</span> <span class="n">frame</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">direction</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>The call runs on the connection the class is reached through. Called through an object, a static
+method runs on the object’s connection.</p>
+</section>
 <section id="streaming-data">
 <span id="python-client-streams"></span><h2>Streaming Data<a class="headerlink" href="#streaming-data" title="Link to this heading">#</a></h2>
 <p>A common use of kRPC is to read data from the game continuously. The following does so by calling
@@ -2617,6 +2643,7 @@ the generated module then names the constant from this module.</p>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#remote-objects">Remote Objects</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calling-methods">Calling Methods</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#streaming-data">Streaming Data</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#waiting-for-changes">Waiting for Changes</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#callbacks">Callbacks</a></li>

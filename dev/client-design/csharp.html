@@ -620,8 +620,8 @@ one, which F# units of measure add, still count as a single call.</p></li>
 <p>A C# type cannot say that a reference-typed position inside a collection is nullable. <code class="docutils literal notranslate"><span class="pre">GetCall</span></code>
 reads the spec from <code class="docutils literal notranslate"><span class="pre">RPCAttribute.Types</span></code>, the service’s generated <code class="docutils literal notranslate"><span class="pre">TypeSpecs</span></code> class. A compiled
 lambda holding a reference inside a collection or tuple asks the server for its return type.</p>
-<p>Connections carried by the lambda’s objects, its services and a static method’s argument are not
-used or checked.</p>
+<p>Connections carried by the lambda’s objects, its services, a static method’s argument and a
+<code class="docutils literal notranslate"><span class="pre">Bound</span></code> object are not used or checked.</p>
 </section>
 <section id="generated-stubs-and-target-framework">
 <h2>Generated Stubs and Target Framework<a class="headerlink" href="#generated-stubs-and-target-framework" title="Link to this heading">#</a></h2>

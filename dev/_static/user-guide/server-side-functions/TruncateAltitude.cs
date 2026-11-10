@@ -14,10 +14,10 @@ class Program {
         var flight = vessel.Flight ();
         var meanAltitude = Connection.GetCall (() => flight.MeanAltitude);
         // [docs]
+        var e = Expression.Bind (connection);
+        var t = Type.Bind (connection);
         // Truncate the altitude to a whole number of meters
-        var expr = Expression.Cast (connection,
-            Expression.Call (connection, meanAltitude),
-            Type.Int (connection));
+        var expr = e.Cast (e.Call (meanAltitude), t.Int ());
         // [/docs]
     }
 }

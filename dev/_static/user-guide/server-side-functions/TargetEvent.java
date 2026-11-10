@@ -18,10 +18,10 @@ public class TargetEvent {
       SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
       Vessel someVessel = spaceCenter.getVessels().get(0);
       // [docs]
+      Expression.Bound e = Expression.bind(connection);
       ProcedureCall target = connection.getCall(SpaceCenter.class, "getTargetVessel");
-      Expression expr = Expression.equal(connection,
-          Expression.call(connection, target),
-          Expression.constantObject(connection, RemoteObject.getObjectId(someVessel)));
+      Expression expr = e.equal(
+          e.call(target), e.constantObject(RemoteObject.getObjectId(someVessel)));
       Event event = connection.addEvent(expr);
       // [/docs]
     }

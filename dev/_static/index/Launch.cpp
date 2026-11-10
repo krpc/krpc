@@ -16,10 +16,9 @@ int main() {
   vessel.control().activate_next_stage();
   std::cout << vessel.name() << " has launched" << std::endl;
 
-  typedef krpc::services::KRPC::Expression Expr;
-  auto expr =
-      Expr::greater_than(conn, Expr::call(conn, flight.mean_altitude_call()),
-                         Expr::constant_double(conn, 10000));
+  auto e = krpc::services::KRPC::Expression::bind(conn);
+  auto expr = e.greater_than(e.call(flight.mean_altitude_call()),
+                             e.constant_double(10000));
   auto event = krpc::add_event(expr);
   event.acquire();
   event.wait();

@@ -9,9 +9,8 @@ int main() {
   krpc::services::SpaceCenter sc(conn);
   auto flight = sc.active_vessel().value().flight();
   auto mean_altitude = flight.mean_altitude_call();
-  typedef krpc::services::KRPC::Expression Expr;
-  auto expr = Expr::greater_than(conn, Expr::call(conn, mean_altitude),
-                                 Expr::constant_double(conn, 1000));
+  auto e = krpc::services::KRPC::Expression::bind(conn);
+  auto expr = e.greater_than(e.call(mean_altitude), e.constant_double(1000));
   {
     auto event = krpc::add_event(expr);
     event.get_condition_lock().lock();

@@ -15,21 +15,19 @@ public class NotLoadedEvent {
     try (Connection connection = Connection.newInstance()) {
       SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
       Flight flight = spaceCenter.getActiveVessel().flight(null);
+      Expression.Bound e = Expression.bind(connection);
+      Type.Bound t = Type.bind(connection);
 
       // above = meanAltitude > 1000, or false if the vessel is not loaded
-      Expression above = Expression.variable(connection, "above", Type.bool(connection));
-      Expression above1000m = Expression.blockWithVariables(
-        connection,
+      Expression above = e.variable("above", t.bool());
+      Expression altitude = e.call(connection.getCall(flight, "getMeanAltitude"));
+      Expression above1000m = e.blockWithVariables(
         Arrays.asList(above),
         Arrays.asList(
-          Expression.tryCatch(connection,
-            Expression.assign(connection, above,
-              Expression.greaterThan(connection,
-                Expression.call(connection, connection.getCall(flight, "getMeanAltitude")),
-                Expression.constantDouble(connection, 1000))),
+          e.tryCatch(
+            e.assign(above, e.greaterThan(altitude, e.constantDouble(1000))),
             "KRPC", "ObjectNotLoadedException", null,
-            Expression.assign(connection, above,
-              Expression.constantBool(connection, false))),
+            e.assign(above, e.constantBool(false))),
           above));
 
       Event event = connection.addEvent(above1000m);

@@ -216,6 +216,7 @@ C# client
 
   * :breaking:`Breaking` Remove the trailing space after ``Server stack trace:`` in an exception's message, and separate its lines with ``\n`` on every platform (:issue:`1172`)
 
+* Add ``Bind`` to classes with static methods, for calling them without passing the connection (:issue:`1195`)
 * :breaking:`Breaking` Return ``KRPC.GetStatus`` as the struct ``ServerStatus``, with the settings and statistics under ``Settings`` and ``Statistics`` (:issue:`1244`)
 * :breaking:`Breaking` Leave internal procedures out of the services, such as ``KRPC.AddStream`` (:issue:`1269`)
 * Add ``Connection.Compile`` for a server side function built with the expression API (:issue:`1269`)
@@ -258,6 +259,7 @@ C++ client
   * :breaking:`Breaking` Derive the ``KRPC`` exceptions with a standard equivalent from it, e.g. ``ArgumentException`` from ``std::invalid_argument``, in place of ``RPCError`` (:issue:`1172`)
   * :breaking:`Breaking` Add the server stack trace to an exception's message (:issue:`1172`)
 
+* Add ``bind`` to classes with static methods, for calling them without passing the client (:issue:`1195`)
 * :breaking:`Breaking` Return ``KRPC::get_status`` as the struct ``KRPC::ServerStatus``, whose fields are members, with the settings and statistics under ``settings`` and ``statistics`` (:issue:`1244`)
 * :breaking:`Breaking` Leave internal procedures out of the services, such as ``KRPC::add_stream`` (:issue:`1269`)
 * Add ``krpc::compile`` for a server side function built with the expression API (:issue:`1269`)
@@ -297,6 +299,8 @@ Java client
 
   * :breaking:`Breaking` Throw ``InvalidOperationException`` as ``IllegalStateException``, and ``ArgumentOutOfRangeException`` as ``IllegalArgumentException`` (:issue:`1172`)
 
+* :deprecated:`Deprecated` Passing the connection to ``addStream`` and ``getCall`` for a static method, which now take only its arguments (:issue:`1195`)
+* Add ``bind`` to classes with static methods, for calling them without passing the connection (:issue:`1195`)
 * Publish the client to Maven Central as ``io.github.krpc:krpc-java`` (:issue:`1231`)
 * :breaking:`Breaking` Return ``KRPC.getStatus`` as the struct ``KRPC.ServerStatus``, with the settings and statistics under ``getSettings`` and ``getStatistics`` (:issue:`1244`)
 * :breaking:`Breaking` Leave internal procedures out of the services, such as ``KRPC.addStream`` (:issue:`1269`)

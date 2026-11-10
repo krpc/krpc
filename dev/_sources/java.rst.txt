@@ -219,6 +219,20 @@ comes back into range.
 .. seealso:: :doc:`/user-guide/object-lifetime` describes how each kind of object behaves in more
              detail.
 
+Calling Methods
+---------------
+
+You call a method on an object of its class. A *static* method needs no object, and you call it on
+the class itself, passing the connection as its first argument. :meth:`~Connection.addStream`
+streams it with the class, the method's name and its other arguments, as the stream runs on the
+connection it is added on:
+
+.. literalinclude:: /scripts/java/StaticMethods.java
+
+``bind`` binds a class's static methods to a connection, so each call leaves it out:
+
+.. literalinclude:: /scripts/java/BoundStaticMethods.java
+
 .. _java-client-streams:
 
 Streaming Data
@@ -557,11 +571,17 @@ Client API Reference
 
       Creates a stream for a call to the method named *method* of the class *clazz*, with
       arguments *args*, and returns a :type:`Stream`. The class is a service, such as
-      ``SpaceCenter.class``, or a class with a static method. For a static method, pass the
-      connection as the first argument. Each call creates a new stream.
+      ``SpaceCenter.class``, a class with a static method, or its ``Bound`` class. The call runs
+      on this connection, so the arguments of a static method leave out its connection. Each call
+      creates a new stream.
 
       Throws an :type:`RPCException` if the class has no method of that name taking the
       arguments.
+
+      .. note::
+
+         Passing the connection first, for a static method, is deprecated. The call runs on this
+         connection, whichever connection is passed.
 
    .. method:: <T> Stream<T> addStream(KRPC.Expression function)
 

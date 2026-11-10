@@ -1619,6 +1619,44 @@ itself reads normally, but a call on one of its parts fails with
 detail.</p>
 </div>
 </section>
+<section id="calling-methods">
+<h2>Calling Methods<a class="headerlink" href="#calling-methods" title="Link to this heading">#</a></h2>
+<p>Each method of a class has a function, which takes the connection first, as every function does.
+A method’s function then takes the object, followed by the method’s arguments. A <em>static</em>
+method needs no object, so its function takes the method’s arguments straight after the
+connection:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/space_center.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">krpc_connection_t</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_open_serial</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"COM0"</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_connect</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"Static methods example"</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_t</span><span class="w"> </span><span class="n">vessel</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_ActiveVessel</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">vessel</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Orbit_t</span><span class="w"> </span><span class="n">orbit</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_Orbit</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">orbit</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_CelestialBody_t</span><span class="w"> </span><span class="n">body</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Orbit_Body</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">body</span><span class="p">,</span><span class="w"> </span><span class="n">orbit</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_ReferenceFrame_t</span><span class="w"> </span><span class="n">frame</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_CelestialBody_ReferenceFrame</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">frame</span><span class="p">,</span><span class="w"> </span><span class="n">body</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Call a method of the Vessel class, passing the vessel first</span>
+<span class="w">  </span><span class="n">krpc_tuple_double_double_double_t</span><span class="w"> </span><span class="n">position</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_Position</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">position</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">,</span><span class="w"> </span><span class="n">frame</span><span class="p">);</span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"%.2f, %.2f, %.2f</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">position</span><span class="p">.</span><span class="n">e0</span><span class="p">,</span><span class="w"> </span><span class="n">position</span><span class="p">.</span><span class="n">e1</span><span class="p">,</span><span class="w"> </span><span class="n">position</span><span class="p">.</span><span class="n">e2</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Call a static method of the Orbit class</span>
+<span class="w">  </span><span class="n">krpc_tuple_double_double_double_t</span><span class="w"> </span><span class="n">direction</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Orbit_ReferencePlaneDirection</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">direction</span><span class="p">,</span><span class="w"> </span><span class="n">frame</span><span class="p">);</span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"%.2f, %.2f, %.2f</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">direction</span><span class="p">.</span><span class="n">e0</span><span class="p">,</span><span class="w"> </span><span class="n">direction</span><span class="p">.</span><span class="n">e1</span><span class="p">,</span><span class="w"> </span><span class="n">direction</span><span class="p">.</span><span class="n">e2</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">krpc_disconnect</span><span class="p">(</span><span class="n">conn</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
 <section id="server-side-functions">
 <h2>Server Side Functions<a class="headerlink" href="#server-side-functions" title="Link to this heading">#</a></h2>
 <p>A server side function runs inside the game. You build it in your program with the expression
@@ -2213,6 +2251,7 @@ failed to fill in too, and free a call before filling it in again.</p>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#remote-objects">Remote Objects</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calling-methods">Calling Methods</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#server-side-functions">Server Side Functions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#streams-and-events">Streams and Events</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deprecated-members">Deprecated Members</a></li>

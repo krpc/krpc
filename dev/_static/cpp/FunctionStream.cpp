@@ -13,9 +13,9 @@ int main() {
 
   // Build a function that computes
   // the vessel's altitude in kilometers
-  typedef krpc::services::KRPC::Expression Expr;
-  auto expr = Expr::divide(conn, Expr::call(conn, flight.mean_altitude_call()),
-                           Expr::constant_double(conn, 1000));
+  auto e = krpc::services::KRPC::Expression::bind(conn);
+  auto expr =
+      e.divide(e.call(flight.mean_altitude_call()), e.constant_double(1000));
 
   // Stream the value of the function
   auto stream = krpc::add_stream<double>(expr);

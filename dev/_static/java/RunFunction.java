@@ -21,9 +21,8 @@ public class RunFunction {
       ProcedureCall speed = connection.getCall(flight, "getSpeed");
 
       // Build a function that reads the altitude and the speed
-      Expression expr = Expression.createTuple(connection, Arrays.asList(
-          Expression.call(connection, meanAltitude),
-          Expression.call(connection, speed)));
+      Expression.Bound e = Expression.bind(connection);
+      Expression expr = e.createTuple(Arrays.asList(e.call(meanAltitude), e.call(speed)));
 
       // Run the function once, so both values come from the same physics tick
       Pair<Double, Double> result = connection.run(expr);

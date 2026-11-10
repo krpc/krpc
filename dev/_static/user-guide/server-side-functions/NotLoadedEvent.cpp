@@ -13,21 +13,19 @@ int main() {
 
   typedef krpc::services::KRPC::Expression Expr;
   typedef krpc::services::KRPC::Type KType;
+  auto e = Expr::bind(conn);
+  auto t = KType::bind(conn);
 
   // above = mean_altitude > 1000, or false if the vessel is not loaded
-  auto above = Expr::variable(conn, "above", KType::bool_(conn));
-  auto above_1000m = Expr::block_with_variables(
-      conn, std::vector<Expr>({above}),
+  auto above = e.variable("above", t.bool_());
+  auto altitude = e.call(flight.mean_altitude_call());
+  auto above_1000m = e.block_with_variables(
+      std::vector<Expr>({above}),
       std::vector<Expr>(
-          {Expr::try_catch(
-               conn,
-               Expr::assign(
-                   conn, above,
-                   Expr::greater_than(
-                       conn, Expr::call(conn, flight.mean_altitude_call()),
-                       Expr::constant_double(conn, 1000))),
-               "KRPC", "ObjectNotLoadedException", std::nullopt,
-               Expr::assign(conn, above, Expr::constant_bool(conn, false))),
+          {e.try_catch(e.assign(above, e.greater_than(altitude,
+                                                      e.constant_double(1000))),
+                       "KRPC", "ObjectNotLoadedException", std::nullopt,
+                       e.assign(above, e.constant_bool(false))),
            above}));
 
   auto event = krpc::add_event(above_1000m);

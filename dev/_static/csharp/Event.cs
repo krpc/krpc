@@ -14,9 +14,8 @@ class Program {
         var meanAltitude = Connection.GetCall(() => flight.MeanAltitude);
 
         // Build the function on the server
-        var expr = Expression.GreaterThan(connection,
-            Expression.Call(connection, meanAltitude),
-            Expression.ConstantDouble(connection, 1000));
+        var e = Expression.Bind(connection);
+        var expr = e.GreaterThan(e.Call(meanAltitude), e.ConstantDouble(1000));
 
         var evnt = connection.AddEvent(expr);
         lock (evnt.Condition) {

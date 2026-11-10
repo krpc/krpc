@@ -674,16 +674,20 @@ server’s definitions match</p></td>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">connections</span></code></p></td>
 <td><p>Several connections open at once, sharing objects</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">concurrency</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">bound-classes</span></code></p></td>
+<td><p>Calling a class’s static methods through the class bound to a connection, in a language
+where a class is a type</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">concurrency</span></code></p></td>
 <td><p>Concurrent calls, waits, callbacks and closes, on threads or async tasks</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ordering</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ordering</span></code></p></td>
 <td><p>Ordering objects, in a language that orders values</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">races</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">races</span></code></p></td>
 <td><p>Forcing races between the update thread and the program, by pausing a thread of the client</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">tcpip</span></code>, <code class="docutils literal notranslate"><span class="pre">localsocket</span></code>, <code class="docutils literal notranslate"><span class="pre">serialio</span></code>, <code class="docutils literal notranslate"><span class="pre">websockets</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tcpip</span></code>, <code class="docutils literal notranslate"><span class="pre">localsocket</span></code>, <code class="docutils literal notranslate"><span class="pre">serialio</span></code>, <code class="docutils literal notranslate"><span class="pre">websockets</span></code></p></td>
 <td><p>The <a class="reference internal" href="communication-protocols.html"><span class="doc">communication protocols</span></a></p></td>
 </tr>
 </tbody>

@@ -839,6 +839,26 @@ streams, so it adds only <code class="docutils literal notranslate"><span class=
 <p>In Python, C# and Java, the stream runs on the connection the method is called on, whichever
 connection the object came from. In C++, it runs on the object’s client, or for a static method the
 client passed to it.</p>
+</section>
+<section id="static-methods">
+<h2>Static Methods<a class="headerlink" href="#static-methods" title="Link to this heading">#</a></h2>
+<p>A static method takes its connection from one place, the one its language gives a class:</p>
+<ul class="simple">
+<li><p>In Python and Lua a class is a value. Each connection builds its own, and a static method runs
+on the connection of the service the class is reached through.</p></li>
+<li><p>In C#, Java and C++ a class is a type. The connection is the static method’s first argument. In
+C-nano, every function takes the connection first.</p></li>
+</ul>
+<p>A stream or call message of a static method never takes the connection a second time. In C# and
+Java, a stream runs on the connection its <code class="docutils literal notranslate"><span class="pre">AddStream</span></code> is called on, and the connection named in
+the call is not used. A call message holds no connection.</p>
+<p>C#, Java and C++ also generate <code class="docutils literal notranslate"><span class="pre">Bind</span></code> on each class with static methods. It returns a <code class="docutils literal notranslate"><span class="pre">Bound</span></code>
+object holding the connection, with each static method minus that parameter. It is the counterpart
+of <code class="docutils literal notranslate"><span class="pre">conn.krpc.Expression</span></code> in Python, and shortens an expression tree that passes the connection
+at every node. The <code class="docutils literal notranslate"><span class="pre">Bound</span></code> methods carry the RPC attribute of the static method, so a C# lambda
+or a Java <code class="docutils literal notranslate"><span class="pre">addStream</span></code> takes them as it takes a service’s methods. A C++ <code class="docutils literal notranslate"><span class="pre">Bound</span></code> is a shorthand
+for the calls that build large expression trees. It has no <code class="docutils literal notranslate"><span class="pre">_stream</span></code> or <code class="docutils literal notranslate"><span class="pre">_call</span></code> forms, which
+stay on the static method.</p>
 <div class="toctree-wrapper compound">
 </div>
 </section>
@@ -903,6 +923,7 @@ client passed to it.</p>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#single-threaded-clients">Single-Threaded Clients</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stream-and-call-forms">Stream and Call Forms</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#static-methods">Static Methods</a></li>
 </ul>
   </nav></div>
 

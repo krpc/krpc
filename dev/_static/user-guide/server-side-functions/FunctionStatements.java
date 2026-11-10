@@ -9,23 +9,19 @@ import java.util.Arrays;
 public class FunctionStatements {
   public static void main(String[] args) throws IOException, RPCException {
     try (Connection connection = Connection.newInstance()) {
+      Expression.Bound e = Expression.bind(connection);
+      Type.Bound t = Type.bind(connection);
+
       // total = 0; for (int x : new int[] {1, 2, 3}) total += x;
-      Expression total = Expression.variable(
-        connection, "total", Type.int_(connection));
-      Expression x = Expression.variable(connection, "x", Type.int_(connection));
-      Expression values = Expression.createList(connection, Arrays.asList(
-        Expression.constantInt(connection, 1),
-        Expression.constantInt(connection, 2),
-        Expression.constantInt(connection, 3)));
-      Expression program = Expression.blockWithVariables(
-        connection,
+      Expression total = e.variable("total", t.int_());
+      Expression x = e.variable("x", t.int_());
+      Expression values = e.createList(Arrays.asList(
+        e.constantInt(1), e.constantInt(2), e.constantInt(3)));
+      Expression program = e.blockWithVariables(
         Arrays.asList(total, x),
         Arrays.asList(
-          Expression.assign(connection, total,
-            Expression.constantInt(connection, 0)),
-          Expression.forEach(connection, x, values,
-            Expression.assign(connection, total,
-              Expression.add(connection, total, x))),
+          e.assign(total, e.constantInt(0)),
+          e.forEach(x, values, e.assign(total, e.add(total, x))),
           total));
 
       int result = connection.run(program);

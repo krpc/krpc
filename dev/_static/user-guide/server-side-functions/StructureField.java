@@ -18,9 +18,9 @@ public class StructureField {
       Vessel vessel = spaceCenter.getActiveVessel();
       ProcedureCall siteInfo = connection.getCall(vessel.getComms().getControlPath().get(0), "getStart");
       // [docs]
+      Expression.Bound e = Expression.bind(connection);
       // The Name field of a structure a call returns
-      Expression expr = Expression.getField(
-          connection, Expression.call(connection, siteInfo), "Name");
+      Expression expr = e.getField(e.call(siteInfo), "Name");
       // [/docs]
     }
   }

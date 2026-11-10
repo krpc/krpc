@@ -249,7 +249,7 @@ that fires when less than 0.1 units of solid fuel are left, then activate the ne
 
       .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cpp
          :language: cpp
-         :start-at: typedef krpc::services::KRPC::Expression Expr;
+         :start-at: auto e = krpc::services::KRPC::Expression::bind(conn);
          :end-at: vessel.control().activate_next_stage();
 
    .. group-tab:: C
