@@ -796,13 +796,15 @@ public class Connection implements AutoCloseable {
   }
 
   /**
-   * Create a stream for a static method call. A method with no return value runs on each update
-   * for its effects, and the stream's value is null, as a {@code Stream<Void>}.
+   * Create a stream for a call to a service procedure or a static method. The call runs on this
+   * connection, so the arguments of a static method leave out its connection. Passing the
+   * connection first is deprecated. A method with no return value runs on each update for its
+   * effects, and the stream's value is null, as a {@code Stream<Void>}.
    *
    * @param clazz
-   *            The class containing the static method.
+   *            The service, or the class containing the static method.
    * @param method
-   *            The name of the static method.
+   *            The name of the method.
    * @param args
    *            The arguments to pass to the method.
    *
@@ -810,8 +812,9 @@ public class Connection implements AutoCloseable {
    */
   public <T> Stream<T> addStream(Class<?> clazz, String method, Object... args)
       throws StreamException, RPCException {
-    Method methodInfo = getMethodByName(clazz, method, args);
-    return new Stream<T>(this, streamedType(methodInfo), getCall(methodInfo, null, args));
+    MethodMatch match = getMethodByName(clazz, true, method, args);
+    KRPC.ProcedureCall call = getCall(match.method, null, match.args);
+    return new Stream<T>(this, streamedType(match.method), call);
   }
 
   /**
@@ -829,8 +832,9 @@ public class Connection implements AutoCloseable {
    */
   public <T> Stream<T> addStream(RemoteObject instance, String method, Object... args)
       throws StreamException, RPCException {
-    Method methodInfo = getMethodByName(instance.getClass(), method, args);
-    return new Stream<T>(this, streamedType(methodInfo), getCall(methodInfo, instance, args));
+    MethodMatch match = getMethodByName(instance.getClass(), false, method, args);
+    return new Stream<T>(
+        this, streamedType(match.method), getCall(match.method, instance, match.args));
   }
 
   /**
@@ -1059,12 +1063,14 @@ public class Connection implements AutoCloseable {
   }
 
   /**
-   * Get the procedure call message for a static method call.
+   * Get the procedure call message for a call to a service procedure or a static method. The
+   * arguments of a static method leave out its connection, as for
+   * {@link #addStream(Class, String, Object...)}.
    *
    * @param clazz
-   *            The class containing the static method.
+   *            The service, or the class containing the static method.
    * @param method
-   *            The name of the static method.
+   *            The name of the method.
    * @param args
    *            The arguments to pass to the method.
    *
@@ -1072,7 +1078,8 @@ public class Connection implements AutoCloseable {
    */
   public KRPC.ProcedureCall getCall(Class<?> clazz, String method, Object... args)
       throws RPCException {
-    return getCall(getMethodByName(clazz, method, args), null, args);
+    MethodMatch match = getMethodByName(clazz, true, method, args);
+    return getCall(match.method, null, match.args);
   }
 
   /**
@@ -1089,7 +1096,8 @@ public class Connection implements AutoCloseable {
    */
   public KRPC.ProcedureCall getCall(RemoteObject instance, String method, Object... args)
       throws RPCException {
-    return getCall(getMethodByName(instance.getClass(), method, args), instance, args);
+    MethodMatch match = getMethodByName(instance.getClass(), false, method, args);
+    return getCall(match.method, instance, match.args);
   }
 
   private KRPC.ProcedureCall getCall(Method method, Object instance, Object... args)
@@ -1110,10 +1118,7 @@ public class Connection implements AutoCloseable {
       throw new RPCException("Failed to get procedure call message", exn);
     }
 
-    if (instance == null && Modifier.isStatic(method.getModifiers())) {
-      // Remove connection parameter for static methods
-      args = Arrays.copyOfRange(args, 1, args.length);
-    } else if (instance != null) {
+    if (instance != null) {
       // Add instance parameter for remote object methods
       Object[] newArgs = new Object[args.length + 1];
       newArgs[0] = instance;
@@ -1129,6 +1134,12 @@ public class Connection implements AutoCloseable {
       encodedArgs[i] = Encoder.encode(args[i], parameterTypes[i]);
     }
     return buildCall(method, encodedArgs);
+  }
+
+  // Whether a method is the stub of a static method, which takes the connection first
+  private static boolean isStaticStub(Class<?>[] paramTypes, Method method) {
+    return Modifier.isStatic(method.getModifiers())
+        && paramTypes.length > 0 && paramTypes[0] == Connection.class;
   }
 
   /** The type of a stream's values, for a stream of a call to a remote procedure. */
@@ -1156,27 +1167,47 @@ public class Connection implements AutoCloseable {
     }
   }
 
-  private Method getMethodByName(Class<?> clazz, String methodName, Object... args)
-      throws RPCException {
+  // A method found by name, and the arguments of the call to it
+  private static final class MethodMatch {
+    final Method method;
+    final Object[] args;
+
+    MethodMatch(Method method, Object[] args) {
+      this.method = method;
+      this.args = args;
+    }
+  }
+
+  // Finds a method taking the arguments. Called on a class, the stub of a static method takes
+  // the connection first, which the arguments leave out. The deprecated form passes a connection
+  // there, which the call drops, as the call runs on this connection.
+  private MethodMatch getMethodByName(
+      Class<?> clazz, boolean onClass, String methodName, Object... args) throws RPCException {
     Method[] methods = clazz.getMethods();
     for (Method method : methods) {
       if (!method.getName().equals(methodName)) {
         continue;
       }
       Class<?>[] paramTypes = method.getParameterTypes();
-      if (args.length != paramTypes.length) {
+      boolean stub = onClass && isStaticStub(paramTypes, method);
+      int start = stub && args.length == paramTypes.length - 1 ? 1 : 0;
+      if (args.length != paramTypes.length - start) {
         continue;
       }
       boolean matches = true;
       for (int i = 0; i < args.length; i++) {
-        if (!isArgumentAssignable(paramTypes[i], args[i])) {
+        if (!isArgumentAssignable(paramTypes[start + i], args[i])) {
           matches = false;
           break;
         }
       }
-      if (matches) {
-        return method;
+      if (!matches) {
+        continue;
       }
+      if (stub && start == 0) {
+        return new MethodMatch(method, Arrays.copyOfRange(args, 1, args.length));
+      }
+      return new MethodMatch(method, args);
     }
     String params = "";
     for (int i = 0; i < args.length; i++) {

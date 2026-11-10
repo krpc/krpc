@@ -557,11 +557,17 @@ Client API Reference
 
       Creates a stream for a call to the method named *method* of the class *clazz*, with
       arguments *args*, and returns a :type:`Stream`. The class is a service, such as
-      ``SpaceCenter.class``, or a class with a static method. For a static method, pass the
-      connection as the first argument. Each call creates a new stream.
+      ``SpaceCenter.class``, or a class with a static method. The call runs on this connection,
+      so the arguments of a static method leave out its connection. Each call creates a new
+      stream.
 
       Throws an :type:`RPCException` if the class has no method of that name taking the
       arguments.
+
+      .. note::
+
+         Passing the connection first, for a static method, is deprecated. The call runs on this
+         connection, whichever connection is passed.
 
    .. method:: <T> Stream<T> addStream(KRPC.Expression function)
 

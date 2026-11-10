@@ -546,8 +546,7 @@ class JavaDispatchGenerator(DispatchGenerator):
         if kind == GETTER:
             return 'connection.addStream(%s.class, "get%s")' % (self._service, name)
         if kind == STATIC_METHOD:
-            # The stub of a static method takes the connection first
-            return 'connection.addStream(%s.class, "%s", connection%s)' % (
+            return 'connection.addStream(%s.class, "%s"%s)' % (
                 self.class_type(self._service, cls),
                 self._name(name),
                 "".join(", " + x["name"] for x in parameters),
