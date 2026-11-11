@@ -92,6 +92,9 @@
     <Compile Include="$(bazel-bin)\client\csharp\Services\KerbalEngineerRedux.cs">
       <Link>Services\KerbalEngineerRedux.cs</Link>
     </Compile>
+    <Compile Include="$(bazel-bin)\client\csharp\Services\ScanSat.cs">
+      <Link>Services\ScanSat.cs</Link>
+    </Compile>
     <Compile Include="$(bazel-bin)\client\csharp\Services\Debug.cs">
       <Link>Services\Debug.cs</Link>
     </Compile>

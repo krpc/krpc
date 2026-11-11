@@ -1023,4 +1023,5 @@ API Reference
    csharp/api/trajectories
    csharp/api/mechjeb
    csharp/api/kerbal-engineer-redux
+   csharp/api/scansat
    csharp/api/debug

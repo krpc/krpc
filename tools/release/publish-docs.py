@@ -76,6 +76,7 @@ CONTENT_PATHS = (
     "service/DockingCamera/src",
     "service/MechJeb/src",
     "service/KerbalEngineerRedux/src",
+    "service/ScanSat/src",
 )
 
 # The per-component CHANGELOG.md files the unified changelog page is merged from.

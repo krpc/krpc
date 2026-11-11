@@ -1,0 +1,11 @@
+.. default-domain:: {{ domain.sphinxname }}
+.. highlight:: {{ domain.highlight }}
+{{ domain.currentmodule('ScanSat') }}
+{% import domain.macros as macros with context %}
+
+Scanner
+=======
+
+{{ macros.class(services['ScanSat'].classes['Scanner']) }}
+
+{{ macros.enumeration(services['ScanSat'].enumerations['ScannerState']) }}

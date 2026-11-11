@@ -1,0 +1,23 @@
+.. default-domain:: {{ domain.sphinxname }}
+.. highlight:: {{ domain.highlight }}
+
+SCANsat API
+===========
+
+Provides functionality to interact with the `SCANsat <https://github.com/KSPModStewards/SCANsat>`_ mod.
+
+.. toctree::
+   :includehidden:
+   :maxdepth: 1
+
+   scansat/scansat
+   scansat/scanner
+   scansat/map
+
+Example
+-------
+
+The following example switches on the scanners of the active vessel, then prints the altimetry
+coverage of the body it orbits and the height of the terrain below it:
+
+.. literalinclude:: /scripts/api/scansat/ScanSatExample.{{ domain.codeext }}

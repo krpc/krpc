@@ -26,6 +26,7 @@ component's unreleased section.
 - [Trajectories](service/Trajectories/CHANGELOG.md)
 - [MechJeb](service/MechJeb/CHANGELOG.md)
 - [KerbalEngineerRedux](service/KerbalEngineerRedux/CHANGELOG.md)
+- [ScanSat](service/ScanSat/CHANGELOG.md)
 
 ## Clients
 

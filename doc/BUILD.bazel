@@ -103,6 +103,7 @@ changeloggen(
         "//service/Trajectories:CHANGELOG.md",
         "//service/MechJeb:CHANGELOG.md",
         "//service/KerbalEngineerRedux:CHANGELOG.md",
+        "//service/ScanSat:CHANGELOG.md",
         "//service/Debug:CHANGELOG.md",
         "//client/cnano:CHANGELOG.md",
         "//client/csharp:CHANGELOG.md",
@@ -208,6 +209,7 @@ defs = [
     "//service/Trajectories:ServiceDefinitions",
     "//service/MechJeb:ServiceDefinitions",
     "//service/KerbalEngineerRedux:ServiceDefinitions",
+    "//service/ScanSat:ServiceDefinitions",
     "//service/Debug:ServiceDefinitions",
 ]
 
