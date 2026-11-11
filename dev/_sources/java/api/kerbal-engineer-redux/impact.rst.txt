@@ -1,0 +1,40 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.KerbalEngineerRedux
+
+Impact
+======
+
+
+.. type:: public class Impact
+
+   The point where the vessel's orbit meets the terrain.
+
+   .. constructor:: public Impact(double uT, double timeTo, double latitude, double longitude, double elevation, String biome)
+
+      Construct a Impact from the values of its fields.
+
+
+   .. method:: double getUT()
+
+      The universal time of impact, in seconds.
+
+   .. method:: double getTimeTo()
+
+      The time until impact, in seconds.
+
+   .. method:: double getLatitude()
+
+      The latitude of the impact site, in degrees.
+
+   .. method:: double getLongitude()
+
+      The longitude of the impact site, in degrees.
+
+   .. method:: double getElevation()
+
+      The elevation of the terrain at the impact site above sea level, in meters.
+
+   .. method:: String getBiome()
+
+      The biome of the impact site.

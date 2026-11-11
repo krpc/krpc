@@ -986,4 +986,5 @@ API Reference
    cpp/api/docking-camera
    cpp/api/trajectories
    cpp/api/mechjeb
+   cpp/api/kerbal-engineer-redux
    cpp/api/debug

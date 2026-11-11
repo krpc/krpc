@@ -1,0 +1,21 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::KerbalEngineerRedux
+
+Burn Time
+=========
+
+
+.. namespace:: krpc::services::KerbalEngineerRedux
+.. struct:: BurnTime
+
+   The time to burn a delta-v at full thrust, staging as each stage runs dry.
+
+
+   .. member:: double duration
+
+      The duration of the burn, in seconds.
+
+   .. member:: double half_duration
+
+      The time to burn half the delta-v, in seconds.

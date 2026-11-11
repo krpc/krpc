@@ -1,0 +1,40 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.KerbalEngineerRedux
+
+Impact
+======
+
+
+.. struct:: Impact
+
+   The point where the vessel's orbit meets the terrain.
+
+   .. function:: Impact(double uT, double timeTo, double latitude, double longitude, double elevation, string biome)
+
+      Construct a Impact from the values of its fields.
+
+
+   .. property:: double UT { get; }
+
+      The universal time of impact, in seconds.
+
+   .. property:: double TimeTo { get; }
+
+      The time until impact, in seconds.
+
+   .. property:: double Latitude { get; }
+
+      The latitude of the impact site, in degrees.
+
+   .. property:: double Longitude { get; }
+
+      The longitude of the impact site, in degrees.
+
+   .. property:: double Elevation { get; }
+
+      The elevation of the terrain at the impact site above sea level, in meters.
+
+   .. property:: string Biome { get; }
+
+      The biome of the impact site.

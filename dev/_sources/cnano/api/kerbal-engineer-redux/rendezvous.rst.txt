@@ -1,0 +1,43 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Rendezvous
+==========
+
+
+.. type:: krpc_KerbalEngineerRedux_Rendezvous_t
+
+   Angles and times for a transfer to the vessel's target.
+
+   .. note::
+
+      When the vessel and target orbit different bodies, these are for the orbits of the bodies
+      that share a parent.
+   .. member:: double phase_angle
+
+      The angle from the vessel to the target, around the vessel's orbit, in radians.
+
+   .. member:: double intercept_angle
+
+      The phase angle at which to start a Hohmann transfer to the target, in radians.
+
+   .. member:: double time_to_intercept_angle
+
+      The time until the phase angle equals the intercept angle, in seconds.
+
+   .. member:: double angle_to_ascending_node
+
+      The angle to the ascending node with the target's orbit, in radians.
+
+   .. member:: double angle_to_descending_node
+
+      The angle to the descending node with the target's orbit, in radians.
+
+   .. member:: double time_to_ascending_node
+
+      The time until the ascending node with the target's orbit, in seconds.
+
+   .. member:: double time_to_descending_node
+
+      The time until the descending node with the target's orbit, in seconds.

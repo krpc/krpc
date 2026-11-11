@@ -1,0 +1,49 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: KerbalEngineerRedux
+
+Suicide Burn
+============
+
+
+.. class:: SuicideBurn(ut, time_to, altitude, delta_v, distance, duration)
+
+   The latest burn at full thrust, against the surface velocity, that stops the vessel at
+   the terrain.
+
+
+   .. attribute:: ut
+
+      The universal time at which the burn starts, in seconds.
+
+      :rtype: float
+
+   .. attribute:: time_to
+
+      The time until the burn starts, in seconds.
+
+      :rtype: float
+
+   .. attribute:: altitude
+
+      The altitude above sea level at which the burn starts, in meters.
+
+      :rtype: float
+
+   .. attribute:: delta_v
+
+      The delta-v of the burn, in :math:`\mathrm{m/s}`.
+
+      :rtype: float
+
+   .. attribute:: distance
+
+      The distance along the orbit to the start of the burn, in meters.
+
+      :rtype: float
+
+   .. attribute:: duration
+
+      The duration of the burn, in seconds.
+
+      :rtype: float

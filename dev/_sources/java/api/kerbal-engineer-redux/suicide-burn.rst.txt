@@ -1,0 +1,41 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.KerbalEngineerRedux
+
+Suicide Burn
+============
+
+
+.. type:: public class SuicideBurn
+
+   The latest burn at full thrust, against the surface velocity, that stops the vessel at
+   the terrain.
+
+   .. constructor:: public SuicideBurn(double uT, double timeTo, double altitude, double deltaV, double distance, double duration)
+
+      Construct a SuicideBurn from the values of its fields.
+
+
+   .. method:: double getUT()
+
+      The universal time at which the burn starts, in seconds.
+
+   .. method:: double getTimeTo()
+
+      The time until the burn starts, in seconds.
+
+   .. method:: double getAltitude()
+
+      The altitude above sea level at which the burn starts, in meters.
+
+   .. method:: double getDeltaV()
+
+      The delta-v of the burn, in :math:`\mathrm{m/s}`.
+
+   .. method:: double getDistance()
+
+      The distance along the orbit to the start of the burn, in meters.
+
+   .. method:: double getDuration()
+
+      The duration of the burn, in seconds.

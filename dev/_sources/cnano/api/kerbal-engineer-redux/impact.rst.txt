@@ -1,0 +1,36 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Impact
+======
+
+
+.. type:: krpc_KerbalEngineerRedux_Impact_t
+
+   The point where the vessel's orbit meets the terrain.
+
+
+   .. member:: double ut
+
+      The universal time of impact, in seconds.
+
+   .. member:: double time_to
+
+      The time until impact, in seconds.
+
+   .. member:: double latitude
+
+      The latitude of the impact site, in degrees.
+
+   .. member:: double longitude
+
+      The longitude of the impact site, in degrees.
+
+   .. member:: double elevation
+
+      The elevation of the terrain at the impact site above sea level, in meters.
+
+   .. member:: char * biome
+
+      The biome of the impact site.

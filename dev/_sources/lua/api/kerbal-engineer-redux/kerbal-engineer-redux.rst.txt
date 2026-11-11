@@ -1,0 +1,102 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: KerbalEngineerRedux
+
+KerbalEngineerRedux
+===================
+
+
+.. module:: KerbalEngineerRedux
+
+This service provides the flight readouts of
+`Kerbal Engineer Redux <https://forum.kerbalspaceprogram.com/topic/17833-kerbal-engineer-redux/>`_.
+
+.. note::
+
+   The flight readouts are for the active vessel only. A procedure that needs the vessel
+   simulation waits for a result that started after the vessel last changed: a switch, a
+   stage or a change in its parts. Other changes, such as shutting down an engine, show in
+   the next result.
+
+
+
+.. attribute:: available: boolean
+
+   Whether Kerbal Engineer Redux is available.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. staticmethod:: impact(vessel: SpaceCenter.Vessel): KerbalEngineerRedux.Impact | nil
+
+   The impact of the vessel with the terrain, or ``nil`` if its orbit does not meet
+   the terrain. Throws an exception if the vessel is not the active vessel.
+
+   :param vessel: The active vessel.
+
+
+
+
+.. staticmethod:: suicide_burn(vessel: SpaceCenter.Vessel): KerbalEngineerRedux.SuicideBurn | nil
+
+   The suicide burn that stops the vessel at the terrain, or ``nil`` if its orbit
+   does not meet the terrain or its thrust cannot overcome gravity. Throws an exception
+   if the vessel is not the active vessel.
+
+   :param vessel: The active vessel.
+
+
+
+
+.. staticmethod:: stages(vessel: SpaceCenter.Vessel): List
+
+   The stages of the vessel, lowest stage number first. Throws an exception if the
+   vessel is not the active vessel.
+
+   :param vessel: The active vessel.
+
+   .. note::
+
+      The last is the current stage. The thrust and thrust-to-weight ratios are for the
+      pressure and gravity at the vessel's altitude.
+
+
+
+
+.. staticmethod:: editor_stages(body: SpaceCenter.CelestialBody, altitude?: number, mach?: number): List
+
+   The stages of the vessel in the editor, lowest stage number first.
+
+   :param body: The body to launch from.
+   :param altitude: The altitude for the atmospheric pressure, in meters. Defaults to ``0.0``.
+   :param mach: The Mach number, for engines whose thrust depends on it. Defaults to ``0.0``.
+
+   .. note::
+
+      The last is the first stage to activate, and the list is empty when the editor has no
+      vessel. The thrust-to-weight ratios are for the gravity at the body's surface. The
+      masses leave out the crew.
+
+
+
+
+.. staticmethod:: burn_time(vessel: SpaceCenter.Vessel, delta_v: number): KerbalEngineerRedux.BurnTime | nil
+
+   The time to burn a delta-v, or ``nil`` if the vessel has too little delta-v.
+   Throws an exception if the vessel is not the active vessel.
+
+   :param vessel: The active vessel.
+   :param delta_v: The delta-v, in :math:`\mathrm{m/s}`.
+
+
+
+
+.. staticmethod:: rendezvous(vessel: SpaceCenter.Vessel): KerbalEngineerRedux.Rendezvous | nil
+
+   The transfer to the vessel's target, or ``nil`` if it has no target, or the
+   target is the body it orbits. Throws an exception if the vessel is not the active
+   vessel.
+
+   :param vessel: The active vessel.

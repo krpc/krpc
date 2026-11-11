@@ -1,0 +1,20 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Burn Time
+=========
+
+
+.. type:: krpc_KerbalEngineerRedux_BurnTime_t
+
+   The time to burn a delta-v at full thrust, staging as each stage runs dry.
+
+
+   .. member:: double duration
+
+      The duration of the burn, in seconds.
+
+   .. member:: double half_duration
+
+      The time to burn half the delta-v, in seconds.

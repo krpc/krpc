@@ -1,0 +1,113 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::KerbalEngineerRedux
+
+KerbalEngineerRedux
+===================
+
+
+.. namespace:: krpc::services
+.. class:: KerbalEngineerRedux : public krpc::Service
+
+   This service provides the flight readouts of
+   `Kerbal Engineer Redux <https://forum.kerbalspaceprogram.com/topic/17833-kerbal-engineer-redux/>`_.
+
+   .. note::
+
+      The flight readouts are for the active vessel only. A procedure that needs the vessel
+      simulation waits for a result that started after the vessel last changed: a switch, a
+      stage or a change in its parts. Other changes, such as shutting down an engine, show in
+      the next result.
+
+   .. function:: KerbalEngineerRedux(krpc::Client& client)
+
+      Construct an instance of this service.
+
+   .. function:: bool available()
+
+      Whether Kerbal Engineer Redux is available.
+
+   
+
+   .. function:: std::optional<Impact> impact(SpaceCenter::Vessel vessel)
+
+      The impact of the vessel with the terrain, or ``NULL`` if its orbit does not meet
+      the terrain. Throws an exception if the vessel is not the active vessel.
+
+      :Parameters:
+
+       * **vessel** -- The active vessel.
+
+      :Game Scenes: Flight
+
+   .. function:: std::optional<SuicideBurn> suicide_burn(SpaceCenter::Vessel vessel)
+
+      The suicide burn that stops the vessel at the terrain, or ``NULL`` if its orbit
+      does not meet the terrain or its thrust cannot overcome gravity. Throws an exception
+      if the vessel is not the active vessel.
+
+      :Parameters:
+
+       * **vessel** -- The active vessel.
+
+      :Game Scenes: Flight
+
+   .. function:: std::vector<Stage> stages(SpaceCenter::Vessel vessel)
+
+      The stages of the vessel, lowest stage number first. Throws an exception if the
+      vessel is not the active vessel.
+
+      :Parameters:
+
+       * **vessel** -- The active vessel.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The last is the current stage. The thrust and thrust-to-weight ratios are for the
+         pressure and gravity at the vessel's altitude.
+
+   .. function:: std::vector<Stage> editor_stages(SpaceCenter::CelestialBody body, double altitude = 0.0, double mach = 0.0)
+
+      The stages of the vessel in the editor, lowest stage number first.
+
+      :Parameters:
+
+       * **body** -- The body to launch from.
+       * **altitude** -- The altitude for the atmospheric pressure, in meters.
+       * **mach** -- The Mach number, for engines whose thrust depends on it.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         The last is the first stage to activate, and the list is empty when the editor has no
+         vessel. The thrust-to-weight ratios are for the gravity at the body's surface. The
+         masses leave out the crew.
+
+   .. function:: std::optional<BurnTime> burn_time(SpaceCenter::Vessel vessel, double delta_v)
+
+      The time to burn a delta-v, or ``NULL`` if the vessel has too little delta-v.
+      Throws an exception if the vessel is not the active vessel.
+
+      :Parameters:
+
+       * **vessel** -- The active vessel.
+       * **delta_v** -- The delta-v, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. function:: std::optional<Rendezvous> rendezvous(SpaceCenter::Vessel vessel)
+
+      The transfer to the vessel's target, or ``NULL`` if it has no target, or the
+      target is the body it orbits. Throws an exception if the vessel is not the active
+      vessel.
+
+      :Parameters:
+
+       * **vessel** -- The active vessel.
+
+      :Game Scenes: Flight

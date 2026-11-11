@@ -1,0 +1,125 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.KerbalEngineerRedux
+
+Stage
+=====
+
+
+.. type:: public class Stage
+
+   A stage of the vessel, from the simulation of Kerbal Engineer Redux.
+
+   .. constructor:: public Stage(int number, double deltaV, double totalDeltaV, double specificImpulse, double thrust, double availableThrust, double tWR, double availableTWR, double maxTWR, double startMass, double massLost, double resourceMass, double burnTime, double totalBurnTime, double availableThrustTorque, double thrustOffsetAngle, double rCSSpecificImpulse, double rCSThrust, double rCSStartDeltaV, double rCSEndDeltaV, double rCSStartTWR, double rCSEndTWR, double rCSBurnTime, double startCost, double costLost, int startPartCount, int droppedPartCount)
+
+      Construct a Stage from the values of its fields.
+
+
+   .. method:: int getNumber()
+
+      The stage number.
+
+   .. method:: double getDeltaV()
+
+      The delta-v of the stage, in :math:`\mathrm{m/s}`.
+
+   .. method:: double getTotalDeltaV()
+
+      The delta-v of the stage and the stages after it, in :math:`\mathrm{m/s}`.
+
+   .. method:: double getSpecificImpulse()
+
+      The specific impulse of the stage, in seconds.
+
+   .. method:: double getThrust()
+
+      The thrust of the stage at the current throttle, in Newtons.
+
+   .. method:: double getAvailableThrust()
+
+      The thrust of the stage at full throttle, in Newtons.
+
+   .. method:: double getTWR()
+
+      The thrust-to-weight ratio at the start of the stage, at the current throttle.
+
+   .. method:: double getAvailableTWR()
+
+      The thrust-to-weight ratio at the start of the stage, at full throttle.
+
+   .. method:: double getMaxTWR()
+
+      The highest thrust-to-weight ratio during the stage, at full throttle.
+
+   .. method:: double getStartMass()
+
+      The mass of the vessel at the start of the stage, in kilograms.
+
+   .. method:: double getMassLost()
+
+      The mass the vessel loses over the stage, in kilograms.
+
+   .. method:: double getResourceMass()
+
+      The mass of the resources the stage burns, in kilograms.
+
+   .. method:: double getBurnTime()
+
+      The burn time of the stage at full throttle, in seconds.
+
+   .. method:: double getTotalBurnTime()
+
+      The burn time of the stage and the stages after it, in seconds.
+
+   .. method:: double getAvailableThrustTorque()
+
+      The torque from the thrust at full throttle about the center of mass at the start
+      of the stage, in :math:`\mathrm{N \cdot m}`.
+
+   .. method:: double getThrustOffsetAngle()
+
+      The angle between the thrust and the direction to the center of mass, in degrees.
+
+   .. method:: double getRCSSpecificImpulse()
+
+      The specific impulse of the RCS thrusters, in seconds.
+
+   .. method:: double getRCSThrust()
+
+      The thrust of the RCS thrusters, in Newtons.
+
+   .. method:: double getRCSStartDeltaV()
+
+      The RCS delta-v at the start of the stage, in :math:`\mathrm{m/s}`.
+
+   .. method:: double getRCSEndDeltaV()
+
+      The RCS delta-v at the end of the stage, in :math:`\mathrm{m/s}`.
+
+   .. method:: double getRCSStartTWR()
+
+      The RCS thrust-to-weight ratio at the start of the stage.
+
+   .. method:: double getRCSEndTWR()
+
+      The RCS thrust-to-weight ratio at the end of the stage.
+
+   .. method:: double getRCSBurnTime()
+
+      The burn time of the RCS thrusters, in seconds.
+
+   .. method:: double getStartCost()
+
+      The cost of the vessel at the start of the stage.
+
+   .. method:: double getCostLost()
+
+      The cost the vessel loses over the stage.
+
+   .. method:: int getStartPartCount()
+
+      The number of parts at the start of the stage.
+
+   .. method:: int getDroppedPartCount()
+
+      The number of parts the stage drops.

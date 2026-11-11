@@ -1,0 +1,24 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.KerbalEngineerRedux
+
+Burn Time
+=========
+
+
+.. struct:: BurnTime
+
+   The time to burn a delta-v at full thrust, staging as each stage runs dry.
+
+   .. function:: BurnTime(double duration, double halfDuration)
+
+      Construct a BurnTime from the values of its fields.
+
+
+   .. property:: double Duration { get; }
+
+      The duration of the burn, in seconds.
+
+   .. property:: double HalfDuration { get; }
+
+      The time to burn half the delta-v, in seconds.

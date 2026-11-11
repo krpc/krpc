@@ -1,0 +1,27 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+
+Kerbal Engineer Redux API
+=========================
+
+Provides functionality to interact with the `Kerbal Engineer Redux
+<https://github.com/jrbudda/KerbalEngineer>`_ mod.
+
+.. toctree::
+   :includehidden:
+   :maxdepth: 1
+
+   kerbal-engineer-redux/kerbal-engineer-redux
+   kerbal-engineer-redux/impact
+   kerbal-engineer-redux/suicide-burn
+   kerbal-engineer-redux/stage
+   kerbal-engineer-redux/burn-time
+   kerbal-engineer-redux/rendezvous
+
+Example
+-------
+
+The following example prints the delta-v and thrust-to-weight ratio of each stage of the active
+vessel, from the current stage onward, then the time to burn 500 m/s:
+
+.. literalinclude:: /scripts/api/kerbal-engineer-redux/KerbalEngineerReduxExample.cpp

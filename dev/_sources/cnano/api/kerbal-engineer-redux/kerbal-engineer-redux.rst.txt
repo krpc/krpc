@@ -1,0 +1,129 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+KerbalEngineerRedux
+===================
+
+
+This service provides the flight readouts of
+`Kerbal Engineer Redux <https://forum.kerbalspaceprogram.com/topic/17833-kerbal-engineer-redux/>`_.
+
+.. note::
+
+   The flight readouts are for the active vessel only. A procedure that needs the vessel
+   simulation waits for a result that started after the vessel last changed: a switch, a
+   stage or a change in its parts. Other changes, such as shutting down an engine, show in
+   the next result.
+
+
+
+.. function:: krpc_error_t krpc_KerbalEngineerRedux_Available(krpc_connection_t connection, bool * returnValue)
+
+   Whether Kerbal Engineer Redux is available.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_KerbalEngineerRedux_Impact(krpc_connection_t connection, krpc_KerbalEngineerRedux_Impact_t * returnValue, bool * returnValueIsNull, krpc_SpaceCenter_Vessel_t vessel)
+
+   The impact of the vessel with the terrain, or ``nullptr`` if its orbit does not meet
+   the terrain. Throws an exception if the vessel is not the active vessel.
+
+   :Parameters:
+
+    * **vessel** -- The active vessel.
+
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: krpc_error_t krpc_KerbalEngineerRedux_SuicideBurn(krpc_connection_t connection, krpc_KerbalEngineerRedux_SuicideBurn_t * returnValue, bool * returnValueIsNull, krpc_SpaceCenter_Vessel_t vessel)
+
+   The suicide burn that stops the vessel at the terrain, or ``nullptr`` if its orbit
+   does not meet the terrain or its thrust cannot overcome gravity. Throws an exception
+   if the vessel is not the active vessel.
+
+   :Parameters:
+
+    * **vessel** -- The active vessel.
+
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: krpc_error_t krpc_KerbalEngineerRedux_Stages(krpc_connection_t connection, krpc_list_KerbalEngineerRedux_Stage_t * returnValue, krpc_SpaceCenter_Vessel_t vessel)
+
+   The stages of the vessel, lowest stage number first. Throws an exception if the
+   vessel is not the active vessel.
+
+   :Parameters:
+
+    * **vessel** -- The active vessel.
+
+   :Game Scenes: Flight
+
+
+   .. note::
+
+      The last is the current stage. The thrust and thrust-to-weight ratios are for the
+      pressure and gravity at the vessel's altitude.
+
+
+
+
+.. function:: krpc_error_t krpc_KerbalEngineerRedux_EditorStages(krpc_connection_t connection, krpc_list_KerbalEngineerRedux_Stage_t * returnValue, krpc_SpaceCenter_CelestialBody_t body, double altitude, double mach)
+
+   The stages of the vessel in the editor, lowest stage number first.
+
+   :Parameters:
+
+    * **body** -- The body to launch from.
+    * **altitude** -- The altitude for the atmospheric pressure, in meters.
+    * **mach** -- The Mach number, for engines whose thrust depends on it.
+
+   :Game Scenes: Editor Vab, Editor Sph
+
+
+   .. note::
+
+      The last is the first stage to activate, and the list is empty when the editor has no
+      vessel. The thrust-to-weight ratios are for the gravity at the body's surface. The
+      masses leave out the crew.
+
+
+
+
+.. function:: krpc_error_t krpc_KerbalEngineerRedux_BurnTime(krpc_connection_t connection, krpc_KerbalEngineerRedux_BurnTime_t * returnValue, bool * returnValueIsNull, krpc_SpaceCenter_Vessel_t vessel, double deltaV)
+
+   The time to burn a delta-v, or ``nullptr`` if the vessel has too little delta-v.
+   Throws an exception if the vessel is not the active vessel.
+
+   :Parameters:
+
+    * **vessel** -- The active vessel.
+    * **deltaV** -- The delta-v, in :math:`\mathrm{m/s}`.
+
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: krpc_error_t krpc_KerbalEngineerRedux_Rendezvous(krpc_connection_t connection, krpc_KerbalEngineerRedux_Rendezvous_t * returnValue, bool * returnValueIsNull, krpc_SpaceCenter_Vessel_t vessel)
+
+   The transfer to the vessel's target, or ``nullptr`` if it has no target, or the
+   target is the body it orbits. Throws an exception if the vessel is not the active
+   vessel.
+
+   :Parameters:
+
+    * **vessel** -- The active vessel.
+
+   :Game Scenes: Flight

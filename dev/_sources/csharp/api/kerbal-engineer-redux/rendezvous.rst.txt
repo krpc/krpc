@@ -1,0 +1,49 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.KerbalEngineerRedux
+
+Rendezvous
+==========
+
+
+.. struct:: Rendezvous
+
+   Angles and times for a transfer to the vessel's target.
+
+   .. note::
+
+      When the vessel and target orbit different bodies, these are for the orbits of the bodies
+      that share a parent.
+
+   .. function:: Rendezvous(double phaseAngle, double interceptAngle, double timeToInterceptAngle, double angleToAscendingNode, double angleToDescendingNode, double timeToAscendingNode, double timeToDescendingNode)
+
+      Construct a Rendezvous from the values of its fields.
+
+
+   .. property:: double PhaseAngle { get; }
+
+      The angle from the vessel to the target, around the vessel's orbit, in radians.
+
+   .. property:: double InterceptAngle { get; }
+
+      The phase angle at which to start a Hohmann transfer to the target, in radians.
+
+   .. property:: double TimeToInterceptAngle { get; }
+
+      The time until the phase angle equals the intercept angle, in seconds.
+
+   .. property:: double AngleToAscendingNode { get; }
+
+      The angle to the ascending node with the target's orbit, in radians.
+
+   .. property:: double AngleToDescendingNode { get; }
+
+      The angle to the descending node with the target's orbit, in radians.
+
+   .. property:: double TimeToAscendingNode { get; }
+
+      The time until the ascending node with the target's orbit, in seconds.
+
+   .. property:: double TimeToDescendingNode { get; }
+
+      The time until the descending node with the target's orbit, in seconds.

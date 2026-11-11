@@ -178,6 +178,12 @@ MechJeb service
 * Add the MechJeb service, ported from Genhis' kRPC.MechJeb and updated for MechJeb 2.15.4.0 (:issue:`1326`)
 
 
+Kerbal Engineer Redux service
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Add the Kerbal Engineer Redux service, with impact and suicide burn predictions, the staged vessel simulation in flight and the editor, burn times and rendezvous angles (:issue:`1327`)
+
+
 C-nano client
 ^^^^^^^^^^^^^
 

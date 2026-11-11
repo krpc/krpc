@@ -1,0 +1,41 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.KerbalEngineerRedux
+
+Suicide Burn
+============
+
+
+.. struct:: SuicideBurn
+
+   The latest burn at full thrust, against the surface velocity, that stops the vessel at
+   the terrain.
+
+   .. function:: SuicideBurn(double uT, double timeTo, double altitude, double deltaV, double distance, double duration)
+
+      Construct a SuicideBurn from the values of its fields.
+
+
+   .. property:: double UT { get; }
+
+      The universal time at which the burn starts, in seconds.
+
+   .. property:: double TimeTo { get; }
+
+      The time until the burn starts, in seconds.
+
+   .. property:: double Altitude { get; }
+
+      The altitude above sea level at which the burn starts, in meters.
+
+   .. property:: double DeltaV { get; }
+
+      The delta-v of the burn, in :math:`\mathrm{m/s}`.
+
+   .. property:: double Distance { get; }
+
+      The distance along the orbit to the start of the burn, in meters.
+
+   .. property:: double Duration { get; }
+
+      The duration of the burn, in seconds.

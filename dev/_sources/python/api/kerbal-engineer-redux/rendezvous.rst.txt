@@ -1,0 +1,57 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: KerbalEngineerRedux
+
+Rendezvous
+==========
+
+
+.. class:: Rendezvous(phase_angle, intercept_angle, time_to_intercept_angle, angle_to_ascending_node, angle_to_descending_node, time_to_ascending_node, time_to_descending_node)
+
+   Angles and times for a transfer to the vessel's target.
+
+   .. note::
+
+      When the vessel and target orbit different bodies, these are for the orbits of the bodies
+      that share a parent.
+   .. attribute:: phase_angle
+
+      The angle from the vessel to the target, around the vessel's orbit, in radians.
+
+      :rtype: float
+
+   .. attribute:: intercept_angle
+
+      The phase angle at which to start a Hohmann transfer to the target, in radians.
+
+      :rtype: float
+
+   .. attribute:: time_to_intercept_angle
+
+      The time until the phase angle equals the intercept angle, in seconds.
+
+      :rtype: float
+
+   .. attribute:: angle_to_ascending_node
+
+      The angle to the ascending node with the target's orbit, in radians.
+
+      :rtype: float
+
+   .. attribute:: angle_to_descending_node
+
+      The angle to the descending node with the target's orbit, in radians.
+
+      :rtype: float
+
+   .. attribute:: time_to_ascending_node
+
+      The time until the ascending node with the target's orbit, in seconds.
+
+      :rtype: float
+
+   .. attribute:: time_to_descending_node
+
+      The time until the descending node with the target's orbit, in seconds.
+
+      :rtype: float

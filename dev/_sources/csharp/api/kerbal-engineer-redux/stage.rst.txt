@@ -1,0 +1,125 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.KerbalEngineerRedux
+
+Stage
+=====
+
+
+.. struct:: Stage
+
+   A stage of the vessel, from the simulation of Kerbal Engineer Redux.
+
+   .. function:: Stage(int number, double deltaV, double totalDeltaV, double specificImpulse, double thrust, double availableThrust, double tWR, double availableTWR, double maxTWR, double startMass, double massLost, double resourceMass, double burnTime, double totalBurnTime, double availableThrustTorque, double thrustOffsetAngle, double rCSSpecificImpulse, double rCSThrust, double rCSStartDeltaV, double rCSEndDeltaV, double rCSStartTWR, double rCSEndTWR, double rCSBurnTime, double startCost, double costLost, int startPartCount, int droppedPartCount)
+
+      Construct a Stage from the values of its fields.
+
+
+   .. property:: int Number { get; }
+
+      The stage number.
+
+   .. property:: double DeltaV { get; }
+
+      The delta-v of the stage, in :math:`\mathrm{m/s}`.
+
+   .. property:: double TotalDeltaV { get; }
+
+      The delta-v of the stage and the stages after it, in :math:`\mathrm{m/s}`.
+
+   .. property:: double SpecificImpulse { get; }
+
+      The specific impulse of the stage, in seconds.
+
+   .. property:: double Thrust { get; }
+
+      The thrust of the stage at the current throttle, in Newtons.
+
+   .. property:: double AvailableThrust { get; }
+
+      The thrust of the stage at full throttle, in Newtons.
+
+   .. property:: double TWR { get; }
+
+      The thrust-to-weight ratio at the start of the stage, at the current throttle.
+
+   .. property:: double AvailableTWR { get; }
+
+      The thrust-to-weight ratio at the start of the stage, at full throttle.
+
+   .. property:: double MaxTWR { get; }
+
+      The highest thrust-to-weight ratio during the stage, at full throttle.
+
+   .. property:: double StartMass { get; }
+
+      The mass of the vessel at the start of the stage, in kilograms.
+
+   .. property:: double MassLost { get; }
+
+      The mass the vessel loses over the stage, in kilograms.
+
+   .. property:: double ResourceMass { get; }
+
+      The mass of the resources the stage burns, in kilograms.
+
+   .. property:: double BurnTime { get; }
+
+      The burn time of the stage at full throttle, in seconds.
+
+   .. property:: double TotalBurnTime { get; }
+
+      The burn time of the stage and the stages after it, in seconds.
+
+   .. property:: double AvailableThrustTorque { get; }
+
+      The torque from the thrust at full throttle about the center of mass at the start
+      of the stage, in :math:`\mathrm{N \cdot m}`.
+
+   .. property:: double ThrustOffsetAngle { get; }
+
+      The angle between the thrust and the direction to the center of mass, in degrees.
+
+   .. property:: double RCSSpecificImpulse { get; }
+
+      The specific impulse of the RCS thrusters, in seconds.
+
+   .. property:: double RCSThrust { get; }
+
+      The thrust of the RCS thrusters, in Newtons.
+
+   .. property:: double RCSStartDeltaV { get; }
+
+      The RCS delta-v at the start of the stage, in :math:`\mathrm{m/s}`.
+
+   .. property:: double RCSEndDeltaV { get; }
+
+      The RCS delta-v at the end of the stage, in :math:`\mathrm{m/s}`.
+
+   .. property:: double RCSStartTWR { get; }
+
+      The RCS thrust-to-weight ratio at the start of the stage.
+
+   .. property:: double RCSEndTWR { get; }
+
+      The RCS thrust-to-weight ratio at the end of the stage.
+
+   .. property:: double RCSBurnTime { get; }
+
+      The burn time of the RCS thrusters, in seconds.
+
+   .. property:: double StartCost { get; }
+
+      The cost of the vessel at the start of the stage.
+
+   .. property:: double CostLost { get; }
+
+      The cost the vessel loses over the stage.
+
+   .. property:: int StartPartCount { get; }
+
+      The number of parts at the start of the stage.
+
+   .. property:: int DroppedPartCount { get; }
+
+      The number of parts the stage drops.

@@ -1,0 +1,121 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: KerbalEngineerRedux
+
+KerbalEngineerRedux
+===================
+
+
+.. module:: KerbalEngineerRedux
+
+This service provides the flight readouts of
+`Kerbal Engineer Redux <https://forum.kerbalspaceprogram.com/topic/17833-kerbal-engineer-redux/>`_.
+
+.. note::
+
+   The flight readouts are for the active vessel only. A procedure that needs the vessel
+   simulation waits for a result that started after the vessel last changed: a switch, a
+   stage or a change in its parts. Other changes, such as shutting down an engine, show in
+   the next result.
+
+
+
+.. attribute:: available
+
+   Whether Kerbal Engineer Redux is available.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: bool
+   
+
+
+
+
+.. staticmethod:: impact(vessel)
+
+   The impact of the vessel with the terrain, or ``None`` if its orbit does not meet
+   the terrain. Throws an exception if the vessel is not the active vessel.
+
+   :param SpaceCenter.Vessel vessel: The active vessel.
+   :rtype: :class:`Impact` or None
+   :Game Scenes: Flight
+
+
+
+
+
+.. staticmethod:: suicide_burn(vessel)
+
+   The suicide burn that stops the vessel at the terrain, or ``None`` if its orbit
+   does not meet the terrain or its thrust cannot overcome gravity. Throws an exception
+   if the vessel is not the active vessel.
+
+   :param SpaceCenter.Vessel vessel: The active vessel.
+   :rtype: :class:`SuicideBurn` or None
+   :Game Scenes: Flight
+
+
+
+
+
+.. staticmethod:: stages(vessel)
+
+   The stages of the vessel, lowest stage number first. Throws an exception if the
+   vessel is not the active vessel.
+
+   :param SpaceCenter.Vessel vessel: The active vessel.
+   :rtype: list(:class:`Stage`)
+   :Game Scenes: Flight
+
+
+   .. note::
+
+      The last is the current stage. The thrust and thrust-to-weight ratios are for the
+      pressure and gravity at the vessel's altitude.
+
+
+
+
+.. staticmethod:: editor_stages(body, [altitude = 0.0], [mach = 0.0])
+
+   The stages of the vessel in the editor, lowest stage number first.
+
+   :param SpaceCenter.CelestialBody body: The body to launch from.
+   :param float altitude: The altitude for the atmospheric pressure, in meters.
+   :param float mach: The Mach number, for engines whose thrust depends on it.
+   :rtype: list(:class:`Stage`)
+   :Game Scenes: Editor Vab, Editor Sph
+
+
+   .. note::
+
+      The last is the first stage to activate, and the list is empty when the editor has no
+      vessel. The thrust-to-weight ratios are for the gravity at the body's surface. The
+      masses leave out the crew.
+
+
+
+
+.. staticmethod:: burn_time(vessel, delta_v)
+
+   The time to burn a delta-v, or ``None`` if the vessel has too little delta-v.
+   Throws an exception if the vessel is not the active vessel.
+
+   :param SpaceCenter.Vessel vessel: The active vessel.
+   :param float delta_v: The delta-v, in :math:`\mathrm{m/s}`.
+   :rtype: :class:`BurnTime` or None
+   :Game Scenes: Flight
+
+
+
+
+
+.. staticmethod:: rendezvous(vessel)
+
+   The transfer to the vessel's target, or ``None`` if it has no target, or the
+   target is the body it orbits. Throws an exception if the vessel is not the active
+   vessel.
+
+   :param SpaceCenter.Vessel vessel: The active vessel.
+   :rtype: :class:`Rendezvous` or None
+   :Game Scenes: Flight
