@@ -2441,6 +2441,8 @@ DockingCamera.ImageFormat.JPEG
 Trajectories
 Trajectories.Available
 Trajectories.ImpactPatch
+Trajectories.ImpactPosition
+Trajectories.ImpactVelocity
 Trajectories.Patches
 Trajectories.PlannedDirection
 Trajectories.CorrectedDirection

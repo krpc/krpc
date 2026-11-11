@@ -49,6 +49,36 @@ namespace KRPC.Trajectories
         }
 
         /// <summary>
+        /// The position of the impact, or <c>null</c> without one.
+        /// </summary>
+        /// <remarks>
+        /// In a reference frame that rotates with the body, the position includes the
+        /// rotation of the body until the impact.
+        /// </remarks>
+        /// <param name="referenceFrame">The reference frame for the position.</param>
+        [KRPCProcedure(Nullable = true)]
+        public static Tuple3 ImpactPosition(ReferenceFrame referenceFrame)
+        {
+            var patch = API.Trajectory.PatchAt(API.Trajectory.ImpactPatchIndex());
+            return patch == null ? null : Patch.ImpactPosition(patch, referenceFrame);
+        }
+
+        /// <summary>
+        /// The velocity at the impact, or <c>null</c> without one.
+        /// </summary>
+        /// <remarks>
+        /// In a reference frame that rotates with the body, the velocity includes the
+        /// rotation of the body until the impact.
+        /// </remarks>
+        /// <param name="referenceFrame">The reference frame for the velocity.</param>
+        [KRPCProcedure(Nullable = true)]
+        public static Tuple3 ImpactVelocity(ReferenceFrame referenceFrame)
+        {
+            var patch = API.Trajectory.PatchAt(API.Trajectory.ImpactPatchIndex());
+            return patch == null ? null : Patch.ImpactVelocity(patch, referenceFrame);
+        }
+
+        /// <summary>
         /// Trajectory patches
         /// </summary>
         [KRPCProcedure]
