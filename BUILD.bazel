@@ -142,6 +142,7 @@ pkg_zip(
         "//service/Trajectories",
         "//service/MechJeb",
         "//service/KerbalEngineerRedux",
+        "//service/ScanSat",
         # Module Manager
         "@module_manager//file",
         # Schema
@@ -200,6 +201,9 @@ pkg_zip(
         "service/KerbalEngineerRedux/KRPC.KerbalEngineerRedux/net472/": "GameData/kRPC/",
         "service/KerbalEngineerRedux/": "GameData/kRPC/",
         "service/KerbalEngineerRedux/CHANGELOG.md": "GameData/kRPC/CHANGELOG.KerbalEngineerRedux.md",
+        "service/ScanSat/KRPC.ScanSat/net472/": "GameData/kRPC/",
+        "service/ScanSat/": "GameData/kRPC/",
+        "service/ScanSat/CHANGELOG.md": "GameData/kRPC/CHANGELOG.ScanSat.md",
         # Module Manager
         "../+http_file+module_manager/file/ModuleManager.4.2.3.dll": "GameData/ModuleManager.4.2.3.dll",
         # Schema
@@ -250,6 +254,7 @@ py_test(
         "//service/LiDAR:csproj-srcs",
         "//service/MechJeb:csproj-srcs",
         "//service/RemoteTech:csproj-srcs",
+        "//service/ScanSat:csproj-srcs",
         "//service/SpaceCenter:csproj-srcs",
         "//service/Trajectories:csproj-srcs",
         "//service/UI:csproj-srcs",
@@ -288,6 +293,7 @@ test_suite(
         "//service/KerbalEngineerRedux:test",
         "//service/MechJeb:test",
         "//service/RemoteTech:test",
+        "//service/ScanSat:test",
         "//service/SpaceCenter:test",
         "//service/Trajectories:test",
         "//service/UI:test",
@@ -325,6 +331,7 @@ filegroup(
         "//service/LiDAR",
         "//service/MechJeb",
         "//service/RemoteTech",
+        "//service/ScanSat",
         "//service/SpaceCenter",
         "//service/UI",
         "//tools/ServiceDefinitions",

@@ -96,7 +96,7 @@ its own target:
 * ``//service/SpaceCenter``, ``//service/Debug``, ``//service/Drawing``, ``//service/UI``,
   ``//service/DockingCamera``, ``//service/InfernalRobotics``, ``//service/KerbalAlarmClock``,
   ``//service/KerbalEngineerRedux``, ``//service/LiDAR``, ``//service/MechJeb``,
-  ``//service/RemoteTech``, ``//service/Trajectories`` - the services.
+  ``//service/RemoteTech``, ``//service/ScanSat``, ``//service/Trajectories`` - the services.
 * ``//client/python``, ``//client/csharp``, ``//client/cpp``, ``//client/cnano``,
   ``//client/java``, ``//client/lua`` - the client libraries.
 * ``//protobuf:csharp``, ``//protobuf:java``, ``//protobuf:lua``, ``//protobuf:python`` - the

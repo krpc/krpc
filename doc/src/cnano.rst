@@ -742,4 +742,5 @@ API Reference
    cnano/api/trajectories
    cnano/api/mechjeb
    cnano/api/kerbal-engineer-redux
+   cnano/api/scansat
    cnano/api/debug

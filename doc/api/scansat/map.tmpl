@@ -1,0 +1,13 @@
+.. default-domain:: {{ domain.sphinxname }}
+.. highlight:: {{ domain.highlight }}
+{{ domain.currentmodule('ScanSat') }}
+{% import domain.macros as macros with context %}
+
+Map
+===
+
+{{ macros.enumeration(services['ScanSat'].enumerations['MapType']) }}
+
+{{ macros.enumeration(services['ScanSat'].enumerations['MapProjection']) }}
+
+{{ macros.enumeration(services['ScanSat'].enumerations['ImageFormat']) }}

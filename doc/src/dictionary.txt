@@ -1,4 +1,5 @@
 Aeris
+altimetry
 Arduino
 Autotools
 Bazel
@@ -12,16 +13,19 @@ apsis
 coplanar
 differentially
 ephemeron
+Equirectangular
 Ferram
 GameData
 Genhis
 Goliath
 Gradle
+grayscale
 Heatshields
 Hohmann
 IDisposable
 Javascript
 Jeb
+Kavrayskiy
 Kerbal
 Kerbals
 Kerbin

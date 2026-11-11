@@ -90,6 +90,17 @@ _FAR_SOURCE = _GITHUB + (
 _FAR_SHA256 = "422c6b404e7d050844f9b41218205d0bb85aed1a6e66941019d55b0ed0a30e8e"
 
 
+class KSPTextureLoader(Mod):
+    """Loads the body textures SCANsat's visual maps are drawn from."""
+
+    name = "KSPTextureLoader"
+    source = _GITHUB + (
+        "Phantomical/KSPTextureLoader/releases/download/v1.0.41/KSPTextureLoader.zip"
+    )
+    sha256 = "8d34d60c69e2c13e331d267c6eb14362c5dc9319eb013acbd67f59d6deabe382"
+    folders = ("KSPTextureLoader",)
+
+
 class ModularFlightIntegrator(Mod):
     """Lets several mods hook the flight integrator. KSP does not load FAR without it. It
     has no release of its own, so it comes from the FAR archive."""
@@ -255,6 +266,17 @@ class KerbalEngineerRedux(_ServiceMod):
     sha256 = "821e5b8a4af1c4af87b1e6aadd02ee9662be78ab3343844f9711c324aa3c2a3a"
     folders = ("KerbalEngineer",)
     service = "kerbal_engineer_redux"
+
+
+class ScanSat(_ServiceMod):
+    name = "SCANsat"
+    source = _GITHUB + (
+        "KSPModStewards/SCANsat/releases/download/v22.1/SCANsat-22.1.zip"
+    )
+    sha256 = "34cabb87618d61934fcc4dd6332294f62cf183ba3828e092c07d67608821bd4a"
+    folders = ("SCANsat",)
+    requires = ("KSPTextureLoader",)
+    service = "scan_sat"
 
 
 class RealChute(_PartMod):
@@ -504,6 +526,7 @@ MODS = [
     ClickThroughBlocker,
     ToolbarControl,
     SpaceTuxLibrary,
+    KSPTextureLoader,
     ModularFlightIntegrator,
     KSPBurst,
     RealFuelsStock,
@@ -518,6 +541,7 @@ MODS = [
     DockingCamera,
     MechJeb,
     KerbalEngineerRedux,
+    ScanSat,
     RealChute,
     DMagic,
     AGExt,

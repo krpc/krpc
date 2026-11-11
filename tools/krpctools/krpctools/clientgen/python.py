@@ -39,6 +39,7 @@ SHIPPED_MODULES = {
     "Trajectories": "krpc.ksp.trajectories",
     "MechJeb": "krpc.ksp.mechjeb",
     "KerbalEngineerRedux": "krpc.ksp.kerbalengineerredux",
+    "ScanSat": "krpc.ksp.scansat",
     "Debug": "krpc.ksp.debug",
 }
 

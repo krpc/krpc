@@ -987,4 +987,5 @@ API Reference
    cpp/api/trajectories
    cpp/api/mechjeb
    cpp/api/kerbal-engineer-redux
+   cpp/api/scansat
    cpp/api/debug

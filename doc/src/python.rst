@@ -1134,4 +1134,5 @@ API Reference
    python/api/trajectories
    python/api/mechjeb
    python/api/kerbal-engineer-redux
+   python/api/scansat
    python/api/debug
