@@ -23,6 +23,7 @@ component's unreleased section.
 - [RemoteTech](service/RemoteTech/CHANGELOG.md)
 - [LiDAR](service/LiDAR/CHANGELOG.md)
 - [DockingCamera](service/DockingCamera/CHANGELOG.md)
+- [Trajectories](service/Trajectories/CHANGELOG.md)
 
 ## Clients
 

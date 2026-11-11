@@ -971,4 +971,5 @@ API Reference
    cpp/api/remote-tech
    cpp/api/lidar
    cpp/api/docking-camera
+   cpp/api/trajectories
    cpp/api/debug

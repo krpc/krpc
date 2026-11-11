@@ -1,0 +1,10 @@
+.. default-domain:: {{ domain.sphinxname }}
+.. highlight:: {{ domain.highlight }}
+{{ domain.currentmodule('Trajectories') }}
+{% import domain.macros as macros with context %}
+
+DescentProfileNode
+==================
+
+{{ macros.class(services['Trajectories'].classes['DescentProfileNode']) }}
+{{ macros.enumeration(services['Trajectories'].enumerations['DescentProfileMode']) }}
