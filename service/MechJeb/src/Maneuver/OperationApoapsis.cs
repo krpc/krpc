@@ -1,40 +1,39 @@
 using System;
-using System.Reflection;
-
-using KRPC.MechJeb.ExtensionMethods;
 using KRPC.Service.Attributes;
 
-namespace KRPC.MechJeb.Maneuver {
-	/// <summary>
-	/// Create a maneuver to set a new apoapsis
-	/// </summary>
-	[KRPCClass(Service = "MechJeb")]
-	public class OperationApoapsis : TimedOperation {
-		internal new const string MechJebType = "MuMech.OperationApoapsis";
+namespace KRPC.MechJeb.Maneuver
+{
+    /// <summary>
+    /// Change the apoapsis.
+    /// </summary>
+    [KRPCClass (Service = "MechJeb")]
+    public sealed class OperationApoapsis : TimedOperation
+    {
+        static Func<object, object> timeSelector;
+        static Value<double> newApoapsis;
 
-		// Fields and methods
-		private static FieldInfo newApAField;
-		private static FieldInfo timeSelector;
+        internal static new void Load ()
+        {
+            var type = Reflection.Type ("MuMech.OperationApoapsis");
+            timeSelector = TimeSelectorField (type);
+            newApoapsis = Reflection.EditableDouble (type, "NewApA");
+        }
 
-		// Instance objects
-		private object newApA;
+        internal OperationApoapsis () : base ("OperationApoapsis")
+        {
+        }
 
-		internal static new void InitType(Type type) {
-			newApAField = type.GetCheckedField("newApA");
-			timeSelector = GetTimeSelectorField(type);
-		}
+        internal override object TimeSelectorInstance {
+            get { return timeSelector (Instance); }
+        }
 
-		protected internal override void InitInstance(object instance) {
-			base.InitInstance(instance);
-
-			this.newApA = newApAField.GetInstanceValue(instance);
-			this.InitTimeSelector(timeSelector);
-		}
-
-		[KRPCProperty]
-		public double NewApoapsis {
-			get => EditableDouble.Get(this.newApA);
-			set => EditableDouble.Set(this.newApA, value);
-		}
-	}
+        /// <summary>
+        /// The new apoapsis altitude, in meters.
+        /// </summary>
+        [KRPCProperty]
+        public double NewApoapsis {
+            get { return newApoapsis.Get (Instance); }
+            set { newApoapsis.Set (Instance, value); }
+        }
+    }
 }

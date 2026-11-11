@@ -1,28 +1,32 @@
-using System;
-using System.Reflection;
-
-using KRPC.MechJeb.ExtensionMethods;
 using KRPC.Service.Attributes;
 
-namespace KRPC.MechJeb.Maneuver {
-	/// <summary>
-	/// Create a maneuver to transfer to another planet
-	/// </summary>
-	[KRPCClass(Service = "MechJeb")]
-	public class OperationInterplanetaryTransfer : Operation {
-		internal new const string MechJebType = "MuMech.OperationInterplanetaryTransfer";
+namespace KRPC.MechJeb.Maneuver
+{
+    /// <summary>
+    /// Transfer to another planet.
+    /// </summary>
+    [KRPCClass (Service = "MechJeb")]
+    public sealed class OperationInterplanetaryTransfer : Operation
+    {
+        static Value<bool> waitForPhaseAngle;
 
-		// Fields and methods
-		private static FieldInfo waitForPhaseAngle;
+        internal static new void Load ()
+        {
+            var type = Reflection.Type ("MuMech.OperationInterplanetaryTransfer");
+            waitForPhaseAngle = Reflection.Field<bool> (type, "WaitForPhaseAngle");
+        }
 
-		internal static new void InitType(Type type) {
-			waitForPhaseAngle = type.GetCheckedField("waitForPhaseAngle", BindingFlags.NonPublic | BindingFlags.Instance);
-		}
+        internal OperationInterplanetaryTransfer () : base ("OperationInterplanetaryTransfer")
+        {
+        }
 
-		[KRPCProperty]
-		public bool WaitForPhaseAngle {
-			get => (bool)waitForPhaseAngle.GetValue(this.instance);
-			set => waitForPhaseAngle.SetValue(this.instance, value);
-		}
-	}
+        /// <summary>
+        /// Whether to wait for the optimal phase angle. Otherwise the transfer happens now.
+        /// </summary>
+        [KRPCProperty]
+        public bool WaitForPhaseAngle {
+            get { return waitForPhaseAngle.Get (Instance); }
+            set { waitForPhaseAngle.Set (Instance, value); }
+        }
+    }
 }

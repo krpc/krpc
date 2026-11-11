@@ -1,40 +1,39 @@
 using System;
-using System.Reflection;
-
-using KRPC.MechJeb.ExtensionMethods;
 using KRPC.Service.Attributes;
 
-namespace KRPC.MechJeb.Maneuver {
-	/// <summary>
-	/// Create a maneuver to set a new semi-major axis
-	/// </summary>
-	[KRPCClass(Service = "MechJeb")]
-	public class OperationSemiMajor : TimedOperation {
-		internal new const string MechJebType = "MuMech.OperationSemiMajor";
+namespace KRPC.MechJeb.Maneuver
+{
+    /// <summary>
+    /// Change the semi-major axis.
+    /// </summary>
+    [KRPCClass (Service = "MechJeb")]
+    public sealed class OperationSemiMajor : TimedOperation
+    {
+        static Func<object, object> timeSelector;
+        static Value<double> newSemiMajorAxis;
 
-		// Fields and methods
-		private static FieldInfo newSMAField;
-		private static FieldInfo timeSelector;
+        internal static new void Load ()
+        {
+            var type = Reflection.Type ("MuMech.OperationSemiMajor");
+            timeSelector = TimeSelectorField (type);
+            newSemiMajorAxis = Reflection.EditableDouble (type, "NewSma");
+        }
 
-		// Instance objects
-		private object newSMA;
+        internal OperationSemiMajor () : base ("OperationSemiMajor")
+        {
+        }
 
-		internal static new void InitType(Type type) {
-			newSMAField = type.GetCheckedField("newSMA");
-			timeSelector = GetTimeSelectorField(type);
-		}
+        internal override object TimeSelectorInstance {
+            get { return timeSelector (Instance); }
+        }
 
-		protected internal override void InitInstance(object instance) {
-			base.InitInstance(instance);
-
-			this.newSMA = newSMAField.GetInstanceValue(instance);
-			this.InitTimeSelector(timeSelector);
-		}
-
-		[KRPCProperty]
-		public double NewSemiMajorAxis {
-			get => EditableDouble.Get(this.newSMA);
-			set => EditableDouble.Set(this.newSMA, value);
-		}
-	}
+        /// <summary>
+        /// The new semi-major axis, in meters.
+        /// </summary>
+        [KRPCProperty]
+        public double NewSemiMajorAxis {
+            get { return newSemiMajorAxis.Get (Instance); }
+            set { newSemiMajorAxis.Set (Instance, value); }
+        }
+    }
 }

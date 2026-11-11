@@ -1,70 +1,55 @@
 using System;
-using System.Reflection;
-
-using KRPC.MechJeb.ExtensionMethods;
 using KRPC.Service.Attributes;
 
-namespace KRPC.MechJeb.Maneuver {
-	/// <summary>
-	/// Bi-impulsive (Hohmann) transfer to target.
-	/// 
-	/// This option is used to plan transfer to target in single sphere of influence. It is suitable for rendezvous with other vessels or moons.
-	/// Contrary to the name, the transfer is often uni-impulsive. You can select when you want the manevuer to happen or select optimum time.
-	/// </summary>
-	[KRPCClass(Service = "MechJeb")]
-	public class OperationTransfer : TimedOperation {
-		internal new const string MechJebType = "MuMech.OperationGeneric";
+namespace KRPC.MechJeb.Maneuver
+{
+    /// <summary>
+    /// A bi-impulsive (Hohmann) transfer to the target, within one sphere of influence. It
+    /// suits a rendezvous with a vessel or a transfer to a moon.
+    /// </summary>
+    /// <remarks>
+    /// Despite the name, the transfer is often uni-impulsive. It happens at the selected time,
+    /// or at the optimum time.
+    /// </remarks>
+    [KRPCClass (Service = "MechJeb")]
+    public sealed class OperationTransfer : TimedOperation
+    {
+        static Func<object, object> timeSelector;
+        static Value<bool> capture;
+        static Value<bool> coplanar;
 
-		// Fields and methods
-		private static FieldInfo interceptOnly;
-		private static FieldInfo periodOffsetField;
-		private static FieldInfo simpleTransfer;
-		private static FieldInfo timeSelector;
+        internal static new void Load ()
+        {
+            var type = Reflection.Type ("MuMech.OperationGeneric");
+            timeSelector = TimeSelectorField (type);
+            capture = Reflection.Field<bool> (type, "Capture");
+            coplanar = Reflection.Field<bool> (type, "Coplanar");
+        }
 
-		// Instance objects
-		private object periodOffset;
+        internal OperationTransfer () : base ("OperationGeneric")
+        {
+        }
 
-		internal static new void InitType(Type type) {
-			interceptOnly = type.GetCheckedField("intercept_only");
-			periodOffsetField = type.GetCheckedField("periodOffset");
-			simpleTransfer = type.GetCheckedField("simpleTransfer");
-			timeSelector = GetTimeSelectorField(type);
-		}
+        internal override object TimeSelectorInstance {
+            get { return timeSelector (Instance); }
+        }
 
-		protected internal override void InitInstance(object instance) {
-			base.InitInstance(instance);
+        /// <summary>
+        /// Whether to plan only the intercept, with no capture burn, for an impact or a flyby.
+        /// </summary>
+        [KRPCProperty]
+        public bool InterceptOnly {
+            get { return !capture.Get (Instance); }
+            set { capture.Set (Instance, !value); }
+        }
 
-			this.periodOffset = periodOffsetField.GetInstanceValue(instance);
-			this.InitTimeSelector(timeSelector);
-		}
-
-		/// <summary>
-		/// Intercept only, no capture burn (impact/flyby)
-		/// </summary>
-		[KRPCProperty]
-		public bool InterceptOnly {
-			get => (bool)interceptOnly.GetValue(this.instance);
-			set => interceptOnly.SetValue(this.instance, value);
-		}
-
-		/// <summary>
-		/// Fractional target period offset
-		/// </summary>
-		[KRPCProperty]
-		public double PeriodOffset {
-			get => EditableDouble.Get(this.periodOffset);
-			set => EditableDouble.Set(this.periodOffset, value);
-		}
-
-		/// <summary>
-		/// Simple coplanar Hohmann transfer.
-		/// Set it to true if you are used to the old version of transfer maneuver.
-		/// </summary>
-		/// <remarks>If set to true, TimeSelector property is ignored.</remarks>
-		[KRPCProperty]
-		public bool SimpleTransfer {
-			get => (bool)simpleTransfer.GetValue(this.instance);
-			set => simpleTransfer.SetValue(this.instance, value);
-		}
-	}
+        /// <summary>
+        /// Whether the transfer is coplanar.
+        /// </summary>
+        [KRPCProperty]
+        public bool SimpleTransfer {
+            get { return coplanar.Get (Instance); }
+            set { coplanar.Set (Instance, value); }
+        }
+    }
 }

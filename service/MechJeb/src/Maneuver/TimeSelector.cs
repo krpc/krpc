@@ -1,144 +1,157 @@
 using System;
-using System.Reflection;
-
-using KRPC.MechJeb.ExtensionMethods;
 using KRPC.Service.Attributes;
 
-namespace KRPC.MechJeb.Maneuver {
-	[KRPCEnum(Service = "MechJeb")]
-	public enum TimeReference {
-		/// <summary>
-		/// At the optimum time.
-		/// </summary>
-		Computed,
+namespace KRPC.MechJeb.Maneuver
+{
+    /// <summary>
+    /// The time of a maneuver.
+    /// </summary>
+    [KRPCClass (Service = "MechJeb")]
+    public sealed class TimeSelector
+    {
+        static Value<Array> allowedTimeRef;
+        static Value<int> currentTimeRef;
+        static Value<double> leadTime;
+        static Value<double> circularizeAltitude;
 
-		/// <summary>
-		/// After a fixed <see cref="TimeSelector.LeadTime" />.
-		/// </summary>
-		XFromNow,
+        internal static void Load ()
+        {
+            var type = Reflection.Type ("MuMech.TimeSelector");
+            allowedTimeRef = Reflection.Field<Array> (type, "_allowedTimeRef");
+            currentTimeRef = Reflection.Field<int> (type, "_currentTimeRef");
+            leadTime = Reflection.EditableDouble (type, "LeadTime");
+            circularizeAltitude = Reflection.EditableDouble (type, "CircularizeAltitude");
+        }
 
-		/// <summary>
-		/// At the next apoapsis.
-		/// </summary>
-		Apoapsis,
+        readonly TimedOperation operation;
 
-		/// <summary>
-		/// At the next periapsis.
-		/// </summary>
-		Periapsis,
+        internal TimeSelector (TimedOperation timedOperation)
+        {
+            operation = timedOperation;
+        }
 
-		/// <summary>
-		/// At the selected <see cref="TimeSelector.CircularizeAltitude" />.
-		/// </summary>
-		Altitude,
+        object Instance {
+            get { return operation.TimeSelectorInstance; }
+        }
 
-		/// <summary>
-		/// At the equatorial ascending node.
-		/// </summary>
-		EqAscending,
+        /// <summary>
+        /// The time reference. Throws an exception if set to a reference the operation does
+        /// not allow.
+        /// </summary>
+        [KRPCProperty]
+        public TimeReference TimeReference {
+            get {
+                var instance = Instance;
+                return (TimeReference)(int)allowedTimeRef.Get (instance).GetValue (currentTimeRef.Get (instance));
+            }
+            set {
+                var instance = Instance;
+                var allowed = allowedTimeRef.Get (instance);
+                for (int i = 0; i < allowed.Length; i++) {
+                    if ((int)allowed.GetValue (i) == (int)value) {
+                        currentTimeRef.Set (instance, i);
+                        return;
+                    }
+                }
+                throw new OperationException ("This TimeReference is not allowed: " + value);
+            }
+        }
 
-		/// <summary>
-		/// At the equatorial descending node.
-		/// </summary>
-		EqDescending,
+        /// <summary>
+        /// The time from now, in seconds.
+        /// </summary>
+        /// <remarks>Applies to <see cref="TimeReference.XFromNow"/>.</remarks>
+        [KRPCProperty]
+        public double LeadTime {
+            get { return leadTime.Get (Instance); }
+            set { leadTime.Set (Instance, value); }
+        }
 
-		/// <summary>
-		/// At the next ascending node with the target.
-		/// </summary>
-		RelAscending,
+        /// <summary>
+        /// The altitude, in meters.
+        /// </summary>
+        /// <remarks>Applies to <see cref="TimeReference.Altitude"/>.</remarks>
+        [KRPCProperty]
+        public double CircularizeAltitude {
+            get { return circularizeAltitude.Get (Instance); }
+            set { circularizeAltitude.Set (Instance, value); }
+        }
+    }
 
-		/// <summary>
-		/// At the next descending node with the target.
-		/// </summary>
-		RelDescending,
+    /// <summary>
+    /// The time reference of a maneuver. See <see cref="TimeSelector.TimeReference"/>.
+    /// </summary>
+    [KRPCEnum (Service = "MechJeb")]
+    public enum TimeReference
+    {
+        /// <summary>
+        /// At the optimum time.
+        /// </summary>
+        Computed,
 
-		/// <summary>
-		/// At the closest approach to the target.
-		/// </summary>
-		ClosestApproach,
+        /// <summary>
+        /// After <see cref="TimeSelector.LeadTime"/>.
+        /// </summary>
+        XFromNow,
 
-		/// <summary>
-		/// At the cheapest equatorial AN/DN.
-		/// </summary>
-		EqHighestAd,
+        /// <summary>
+        /// At the next apoapsis.
+        /// </summary>
+        Apoapsis,
 
-		/// <summary>
-		/// At the nearest equatorial AN/DN.
-		/// </summary>
-		EqNearestAd,
+        /// <summary>
+        /// At the next periapsis.
+        /// </summary>
+        Periapsis,
 
-		/// <summary>
-		/// At the cheapest AN/DN with the target.
-		/// </summary>
-		RelHighestAd,
+        /// <summary>
+        /// At <see cref="TimeSelector.CircularizeAltitude"/>.
+        /// </summary>
+        Altitude,
 
-		/// <summary>
-		/// At the nearest AN/DN with the target.
-		/// </summary>
-		RelNearestAd
-	}
+        /// <summary>
+        /// At the equatorial ascending node.
+        /// </summary>
+        EqAscending,
 
-	[KRPCClass(Service = "MechJeb")]
-	public class TimeSelector {
-		internal const string MechJebType = "MuMech.TimeSelector";
+        /// <summary>
+        /// At the equatorial descending node.
+        /// </summary>
+        EqDescending,
 
-		// Fields and methods
-		private static FieldInfo allowedTimeRefField;
-		private static FieldInfo currentTimeRef;
-		private static FieldInfo leadTimeField;
-		private static FieldInfo circularizeAltitudeField;
+        /// <summary>
+        /// At the next ascending node with the target.
+        /// </summary>
+        RelAscending,
 
-		// Instance objects
-		internal object instance;
+        /// <summary>
+        /// At the next descending node with the target.
+        /// </summary>
+        RelDescending,
 
-		private int[] allowedTimeRef; //MuMech.TimeReference enum
-		private object leadTime;
-		private object circularizeAltitude;
+        /// <summary>
+        /// At the closest approach to the target.
+        /// </summary>
+        ClosestApproach,
 
-		internal static void InitType(Type type) {
-			allowedTimeRefField = type.GetCheckedField("allowedTimeRef", BindingFlags.NonPublic | BindingFlags.Instance);
-			currentTimeRef = type.GetCheckedField("currentTimeRef", BindingFlags.NonPublic | BindingFlags.Instance);
-			leadTimeField = type.GetCheckedField("leadTime");
-			circularizeAltitudeField = type.GetCheckedField("circularizeAltitude");
-		}
+        /// <summary>
+        /// At the cheaper of the equatorial ascending and descending nodes.
+        /// </summary>
+        EqHighestAd,
 
-		protected internal void InitInstance(object instance) {
-			this.instance = instance;
+        /// <summary>
+        /// At the nearer of the equatorial ascending and descending nodes.
+        /// </summary>
+        EqNearestAd,
 
-			this.allowedTimeRef = (int[])allowedTimeRefField.GetInstanceValue(instance);
-			this.leadTime = leadTimeField.GetInstanceValue(instance);
-			this.circularizeAltitude = circularizeAltitudeField.GetInstanceValue(instance);
-		}
+        /// <summary>
+        /// At the cheaper of the ascending and descending nodes with the target.
+        /// </summary>
+        RelHighestAd,
 
-		[KRPCProperty]
-		public TimeReference TimeReference {
-			get => (TimeReference)this.allowedTimeRef[(int)currentTimeRef.GetValue(this.instance)];
-			set => currentTimeRef.SetValue(this.instance, this.GetTimeRefIndex(value));
-		}
-
-		private int GetTimeRefIndex(TimeReference timeRef) {
-			for(int i = 0; i < this.allowedTimeRef.Length; i++)
-				if(this.allowedTimeRef[i] == (int)timeRef)
-					return i;
-			throw new OperationException("This TimeReference is not allowed: " + timeRef);
-		}
-
-		/// <summary>
-		/// To be used with <see cref="TimeReference.XFromNow" />.
-		/// </summary>
-		[KRPCProperty]
-		public double LeadTime {
-			get => EditableDouble.Get(this.leadTime);
-			set => EditableDouble.Set(this.leadTime, value);
-		}
-
-		/// <summary>
-		/// To be used with <see cref="TimeReference.Altitude" />.
-		/// </summary>
-		[KRPCProperty]
-		public double CircularizeAltitude {
-			get => EditableDouble.Get(this.circularizeAltitude);
-			set => EditableDouble.Set(this.circularizeAltitude, value);
-		}
-	}
+        /// <summary>
+        /// At the nearer of the ascending and descending nodes with the target.
+        /// </summary>
+        RelNearestAd
+    }
 }

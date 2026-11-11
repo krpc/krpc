@@ -1,26 +1,28 @@
 using System;
-using System.Reflection;
-
 using KRPC.Service.Attributes;
 
-namespace KRPC.MechJeb.Maneuver {
-	/// <summary>
-	/// Create a maneuver to match planes with target
-	/// </summary>
-	[KRPCClass(Service = "MechJeb")]
-	public class OperationPlane : TimedOperation {
-		internal new const string MechJebType = "MuMech.OperationPlane";
+namespace KRPC.MechJeb.Maneuver
+{
+    /// <summary>
+    /// Match planes with the target.
+    /// </summary>
+    [KRPCClass (Service = "MechJeb")]
+    public sealed class OperationPlane : TimedOperation
+    {
+        static Func<object, object> timeSelector;
 
-		// Fields and methods
-		private static FieldInfo timeSelector;
+        internal static new void Load ()
+        {
+            var type = Reflection.Type ("MuMech.OperationPlane");
+            timeSelector = TimeSelectorField (type);
+        }
 
-		internal static new void InitType(Type type) {
-			timeSelector = GetTimeSelectorField(type);
-		}
+        internal OperationPlane () : base ("OperationPlane")
+        {
+        }
 
-		protected internal override void InitInstance(object instance) {
-			base.InitInstance(instance);
-			this.InitTimeSelector(timeSelector);
-		}
-	}
+        internal override object TimeSelectorInstance {
+            get { return timeSelector (Instance); }
+        }
+    }
 }

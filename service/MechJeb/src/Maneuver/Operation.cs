@@ -1,134 +1,182 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
-
-using KRPC.MechJeb.ExtensionMethods;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.Services;
+using KRPC.Utils;
 
-namespace KRPC.MechJeb.Maneuver {
-	/// <summary>
-	/// This exception is thrown when there is something wrong with the operation (e.g. the target is not set when the operation needs it).
-	/// </summary>
-	[KRPCException(Service = "MechJeb")]
-	public class OperationException : Exception {
-		internal const string MechJebType = "MuMech.OperationException";
+namespace KRPC.MechJeb.Maneuver
+{
+    /// <summary>
+    /// Thrown when an operation cannot make its nodes, such as when it needs a target and
+    /// there is none.
+    /// </summary>
+    [KRPCException (Service = "MechJeb")]
+    public sealed class OperationException : Exception
+    {
+        /// <summary>
+        /// Create the exception.
+        /// </summary>
+        public OperationException ()
+        {
+        }
 
-		internal static Type type;
+        /// <summary>
+        /// Create the exception with a message.
+        /// </summary>
+        public OperationException (string message) : base (message)
+        {
+        }
 
-		public OperationException(string message) : base(message) { }
+        /// <summary>
+        /// Create the exception with a message and an inner exception.
+        /// </summary>
+        public OperationException (string message, Exception innerException) : base (message, innerException)
+        {
+        }
+    }
 
-		internal static void InitType(Type t) {
-			type = t;
-		}
-	}
+    /// <summary>
+    /// An operation of the maneuver planner.
+    /// </summary>
+    public abstract class Operation
+    {
+        static Type operationException;
+        static Func<object, string> errorMessage;
+        static Func<object, global::Orbit, double, object, IEnumerable> makeNodesImpl;
+        static Func<global::Vessel, global::Orbit, Vector3d, double, ManeuverNode> placeManeuverNode;
+        static Value<Vector3d> dV;
+        static Value<double> uT;
 
-	public abstract class Operation {
-		internal const string MechJebType = "MuMech.Operation";
+        internal static void Load ()
+        {
+            operationException = Reflection.Type ("MuMech.OperationException");
+            var type = Reflection.Type ("MuMech.Operation");
+            errorMessage = Reflection.Method<Func<object, string>> (type, "GetErrorMessage");
+            makeNodesImpl = Reflection.Method<Func<object, global::Orbit, double, object, IEnumerable>> (type, "MakeNodesImpl");
+            placeManeuverNode = Reflection.Method<Func<global::Vessel, global::Orbit, Vector3d, double, ManeuverNode>> (
+                Reflection.Type ("MuMech.VesselExtensions"), "PlaceManeuverNode");
+            var parameters = Reflection.Type ("MuMech.ManeuverParameters");
+            dV = Reflection.Field<Vector3d> (parameters, "dV");
+            uT = Reflection.Field<double> (parameters, "UT");
+            OperationApoapsis.Load ();
+            OperationCircularize.Load ();
+            OperationCourseCorrection.Load ();
+            OperationEllipticize.Load ();
+            OperationInclination.Load ();
+            OperationInterplanetaryTransfer.Load ();
+            OperationKillRelVel.Load ();
+            OperationLambert.Load ();
+            OperationLan.Load ();
+            OperationLongitude.Load ();
+            OperationMoonReturn.Load ();
+            OperationPeriapsis.Load ();
+            OperationPlane.Load ();
+            OperationResonantOrbit.Load ();
+            OperationSemiMajor.Load ();
+            OperationTransfer.Load ();
+        }
 
-		// Fields and methods
-		private static MethodInfo errorMessage;
-		private static MethodInfo makeNodesImpl;
+        readonly string operationName;
 
-		// Instance objects
-		protected internal object instance;
+        internal Operation (string name)
+        {
+            operationName = name;
+        }
 
-		internal static void InitType(Type type) {
-			errorMessage = type.GetCheckedMethod("getErrorMessage");
-			makeNodesImpl = type.GetCheckedMethod("MakeNodesImpl");
-		}
+        /// <summary>
+        /// The MechJeb operation, which MechJeb shares between vessels.
+        /// </summary>
+        internal object Instance {
+            get {
+                MechJeb.CheckAPI ();
+                return ManeuverPlanner.Operation (operationName);
+            }
+        }
 
-		protected internal virtual void InitInstance(object instance) {
-			this.instance = instance;
-		}
+        /// <summary>
+        /// The warning from the last call to <c>MakeNodes</c>, or an empty string.
+        /// </summary>
+        [KRPCProperty]
+        public string ErrorMessage {
+            get { return errorMessage (Instance); }
+        }
 
-		/// <summary>
-		/// A warning may be stored there during MakeNode() call.
-		/// </summary>
-		[KRPCProperty]
-		public string ErrorMessage => (string)errorMessage.Invoke(this.instance, null);
+        /// <summary>
+        /// Make the maneuver nodes of the operation, and return the first one.
+        /// </summary>
+        /// <returns>The first maneuver node.</returns>
+        [KRPCMethod]
+        [Obsolete ("Use <c>MakeNodes</c> instead.")]
+        public Node MakeNode ()
+        {
+            return MakeNodes () [0];
+        }
 
-		/// <summary>
-		/// Execute the operation and create appropriate maneuver nodes.
-		/// A warning may be stored in ErrorMessage during this process; so it may be useful to check its value.
-		/// 
-		/// OperationException is thrown when there is something wrong with the operation.
-		/// MJServiceException - Internal service error.
-		/// </summary>
-		/// <returns>The first maneuver node necessary to perform this operation.</returns>
-		/// <remarks>This method is deprecated, use MakeNodes instead.</remarks>
-		[KRPCMethod, Obsolete("Replaced with MakeNodes")]
-		public Node MakeNode() {
-			return this.MakeNodes()[0];
-		}
+        /// <summary>
+        /// Make the maneuver nodes of the operation. Throws an <see cref="OperationException"/>
+        /// if the operation cannot make them.
+        /// </summary>
+        /// <returns>The maneuver nodes.</returns>
+        /// <remarks>
+        /// A warning may be left in <c>ErrorMessage</c>.
+        /// </remarks>
+        [KRPCMethod]
+        public IList<Node> MakeNodes ()
+        {
+            var instance = Instance;
+            var targetController = MechJeb.TargetController;
+            targetController.Update ();
+            var vessel = FlightGlobals.ActiveVessel;
+            IEnumerable parameters;
+            try {
+                parameters = makeNodesImpl (instance, vessel.orbit, Planetarium.GetUniversalTime (), targetController.Instance);
+            } catch (Exception exn) {
+                if (operationException != null && operationException.IsInstanceOfType (exn))
+                    throw new OperationException (exn.Message);
+                throw new MJServiceException (exn.Message, exn);
+            }
+            var nodes = new List<Node> ();
+            foreach (var parameter in parameters)
+                nodes.Add (new Node (vessel, placeManeuverNode (vessel, vessel.orbit, dV.Get (parameter), uT.Get (parameter))));
+            return nodes;
+        }
+    }
 
-		/// <summary>
-		/// Execute the operation and create appropriate maneuver nodes.
-		/// A warning may be stored in ErrorMessage during this process; so it may be useful to check its value.
-		/// 
-		/// OperationException is thrown when there is something wrong with the operation.
-		/// MJServiceException - Internal service error.
-		/// </summary>
-		/// <returns>A list of maneuver nodes necessary to perform this operation</returns>
-		[KRPCMethod]
-		public List<Node> MakeNodes() {
-			try {
-				// If a target is set using kRPC API, MechJeb will become aware of it only in the next frame.
-				// We need to call TargetController.OnFixedUpdate() to force the target update.
-				MechJeb.TargetController.OnFixedUpdate();
+    /// <summary>
+    /// An operation of the maneuver planner that happens at a selected time.
+    /// </summary>
+    public abstract class TimedOperation : Operation
+    {
+        internal TimedOperation (string name) : base (name)
+        {
+            TimeSelector = new TimeSelector (this);
+        }
 
-				Vessel vessel = FlightGlobals.ActiveVessel;
-				IEnumerable<object> parameters = (IEnumerable<object>)makeNodesImpl.Invoke(this.instance, new object[] { vessel.orbit, Planetarium.GetUniversalTime(), MechJeb.TargetController.instance });
-				// A warning may be stored in ErrorMessage property (if it's an error, we will throw an exception)
+        /// <summary>
+        /// A getter for the time selector of an operation type. MechJeb holds it in a static
+        /// field for most operations, and in an instance field for the others.
+        /// </summary>
+        internal static Func<object, object> TimeSelectorField (Type type)
+        {
+            if (type == null)
+                return Reflection.Field<object> (null, "_timeSelector").Get;
+            var field = Accessor.Getter<object, object> (type, "_timeSelector");
+            if (field != null)
+                return field;
+            var staticField = Reflection.Static<object> (type, "_timeSelector");
+            return instance => staticField ();
+        }
 
-				//vessel.RemoveAllManeuverNodes(); // This implementation supports only one active ManeuverOperation; removing the other maneuver nodess to prevent bugs
+        /// <summary>
+        /// The MechJeb time selector of the operation.
+        /// </summary>
+        internal abstract object TimeSelectorInstance { get; }
 
-				List<Node> nodes = new List<Node>();
-				foreach(object param in parameters)
-					nodes.Add(new Node(vessel, vessel.PlaceManeuverNode(vessel.orbit, (Vector3d)ManeuverParameters.dV.GetValue(param), (double)ManeuverParameters.uT.GetValue(param))));
-				return nodes;
-			}
-			catch(Exception ex) {
-				if(ex is TargetInvocationException)
-					ex = ex.InnerException;
-
-				if(ex.GetType() == OperationException.type)
-					throw new OperationException(ex.Message);
-
-				Logger.Severe("An error occured while creating a new ManeuverNode", ex);
-				throw new MJServiceException(ex.Message);
-			}
-		}
-
-		private static class ManeuverParameters {
-			internal const string MechJebType = "MuMech.ManeuverParameters";
-
-			// Fields and methods
-			internal static FieldInfo dV;
-			internal static FieldInfo uT;
-
-			internal static void InitType(Type type) {
-				dV = type.GetCheckedField("dV");
-				uT = type.GetCheckedField("UT");
-			}
-		}
-	}
-
-	public abstract class TimedOperation : Operation {
-		protected TimedOperation() {
-			this.TimeSelector = new TimeSelector();
-		}
-
-		protected static FieldInfo GetTimeSelectorField(Type type) {
-			// Need to do it this way because MechJeb does not have a separate TimedOperation class. Instead, the field is duplicated where needed.
-			return type.GetCheckedField("timeSelector", BindingFlags.NonPublic | BindingFlags.Instance);
-		}
-
-		protected void InitTimeSelector(FieldInfo timeSelector) {
-			this.TimeSelector.InitInstance(timeSelector.GetInstanceValue(this.instance));
-		}
-
-		[KRPCProperty]
-		public TimeSelector TimeSelector { get; }
-	}
+        /// <summary>
+        /// The time of the maneuver.
+        /// </summary>
+        [KRPCProperty]
+        public TimeSelector TimeSelector { get; private set; }
+    }
 }

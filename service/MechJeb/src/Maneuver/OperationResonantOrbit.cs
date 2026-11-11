@@ -1,51 +1,55 @@
 using System;
-using System.Reflection;
-
-using KRPC.MechJeb.ExtensionMethods;
 using KRPC.Service.Attributes;
 
-namespace KRPC.MechJeb.Maneuver {
-	/// <summary>
-	/// Resonant orbit is useful for placing satellites to a constellation. This mode should be used starting from a orbit in the desired orbital plane. Important parameter to this mode is the desired orbital ratio, which is the ratio between period of your current orbit and the new orbit.
-	/// To deploy satellites, set the denominator to number of satellites you want to have in the constellation. Setting the nominator to one less than denominator is the most efficient, but not necessary the fastest. To successfully deploy all satellites, make sure the numbers are incommensurable.
-	/// </summary>
-	[KRPCClass(Service = "MechJeb")]
-	public class OperationResonantOrbit : TimedOperation {
-		internal new const string MechJebType = "MuMech.OperationResonantOrbit";
+namespace KRPC.MechJeb.Maneuver
+{
+    /// <summary>
+    /// Change to a resonant orbit, to place satellites in a constellation.
+    /// </summary>
+    /// <remarks>
+    /// Start from an orbit in the plane of the constellation. To deploy satellites, set the
+    /// denominator to their number. A numerator one less than the denominator is the cheapest,
+    /// though not the fastest. The two numbers must have no common factor.
+    /// </remarks>
+    [KRPCClass (Service = "MechJeb")]
+    public sealed class OperationResonantOrbit : TimedOperation
+    {
+        static Func<object, object> timeSelector;
+        static Value<int> resonanceNumerator;
+        static Value<int> resonanceDenominator;
 
-		// Fields and methods
-		private static FieldInfo resonanceNumeratorField;
-		private static FieldInfo resonanceDenominatorField;
-		private static FieldInfo timeSelector;
+        internal static new void Load ()
+        {
+            var type = Reflection.Type ("MuMech.OperationResonantOrbit");
+            timeSelector = TimeSelectorField (type);
+            resonanceNumerator = Reflection.EditableInt (type, "ResonanceNumerator");
+            resonanceDenominator = Reflection.EditableInt (type, "ResonanceDenominator");
+        }
 
-		// Instance objects
-		private object resonanceNumerator;
-		private object resonanceDenominator;
+        internal OperationResonantOrbit () : base ("OperationResonantOrbit")
+        {
+        }
 
-		internal static new void InitType(Type type) {
-			resonanceNumeratorField = type.GetCheckedField("resonanceNumerator");
-			resonanceDenominatorField = type.GetCheckedField("resonanceDenominator");
-			timeSelector = GetTimeSelectorField(type);
-		}
+        internal override object TimeSelectorInstance {
+            get { return timeSelector (Instance); }
+        }
 
-		protected internal override void InitInstance(object instance) {
-			base.InitInstance(instance);
+        /// <summary>
+        /// The numerator of the ratio of the new orbital period to the current one.
+        /// </summary>
+        [KRPCProperty]
+        public int ResonanceNumerator {
+            get { return resonanceNumerator.Get (Instance); }
+            set { resonanceNumerator.Set (Instance, value); }
+        }
 
-			this.resonanceNumerator = resonanceNumeratorField.GetInstanceValue(instance);
-			this.resonanceDenominator = resonanceDenominatorField.GetInstanceValue(instance);
-			this.InitTimeSelector(timeSelector);
-		}
-
-		[KRPCProperty]
-		public int ResonanceNumerator {
-			get => EditableInt.Get(this.resonanceNumerator);
-			set => EditableInt.Set(this.resonanceNumerator, value);
-		}
-
-		[KRPCProperty]
-		public int ResonanceDenominator {
-			get => EditableInt.Get(this.resonanceDenominator);
-			set => EditableInt.Set(this.resonanceDenominator, value);
-		}
-	}
+        /// <summary>
+        /// The denominator of the ratio of the new orbital period to the current one.
+        /// </summary>
+        [KRPCProperty]
+        public int ResonanceDenominator {
+            get { return resonanceDenominator.Get (Instance); }
+            set { resonanceDenominator.Set (Instance, value); }
+        }
+    }
 }

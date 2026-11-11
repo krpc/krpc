@@ -1,40 +1,39 @@
 using System;
-using System.Reflection;
-
-using KRPC.MechJeb.ExtensionMethods;
 using KRPC.Service.Attributes;
 
-namespace KRPC.MechJeb.Maneuver {
-	/// <summary>
-	/// Create a maneuver to change inclination
-	/// </summary>
-	[KRPCClass(Service = "MechJeb")]
-	public class OperationInclination : TimedOperation {
-		internal new const string MechJebType = "MuMech.OperationInclination";
+namespace KRPC.MechJeb.Maneuver
+{
+    /// <summary>
+    /// Change the inclination.
+    /// </summary>
+    [KRPCClass (Service = "MechJeb")]
+    public sealed class OperationInclination : TimedOperation
+    {
+        static Func<object, object> timeSelector;
+        static Value<double> newInclination;
 
-		// Fields and methods
-		private static FieldInfo newIncField;
-		private static FieldInfo timeSelector;
+        internal static new void Load ()
+        {
+            var type = Reflection.Type ("MuMech.OperationInclination");
+            timeSelector = TimeSelectorField (type);
+            newInclination = Reflection.EditableDouble (type, "NewInc");
+        }
 
-		// Instance objects
-		private object newInc;
+        internal OperationInclination () : base ("OperationInclination")
+        {
+        }
 
-		internal static new void InitType(Type type) {
-			newIncField = type.GetCheckedField("newInc");
-			timeSelector = GetTimeSelectorField(type);
-		}
+        internal override object TimeSelectorInstance {
+            get { return timeSelector (Instance); }
+        }
 
-		protected internal override void InitInstance(object instance) {
-			base.InitInstance(instance);
-
-			this.newInc = newIncField.GetInstanceValue(instance);
-			this.InitTimeSelector(timeSelector);
-		}
-
-		[KRPCProperty]
-		public double NewInclination {
-			get => EditableDouble.Get(this.newInc);
-			set => EditableDouble.Set(this.newInc, value);
-		}
-	}
+        /// <summary>
+        /// The new inclination, in degrees.
+        /// </summary>
+        [KRPCProperty]
+        public double NewInclination {
+            get { return newInclination.Get (Instance); }
+            set { newInclination.Set (Instance, value); }
+        }
+    }
 }

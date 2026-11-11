@@ -1,111 +1,184 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-
-using KRPC.MechJeb.ExtensionMethods;
 using KRPC.MechJeb.Maneuver;
 using KRPC.Service.Attributes;
 
-namespace KRPC.MechJeb {
-	[KRPCClass(Service = "MechJeb")]
-	public class ManeuverPlanner : Module {
-		internal const string MechJebType = "MuMech.MechJebModuleManeuverPlanner";
+namespace KRPC.MechJeb
+{
+    /// <summary>
+    /// The maneuver planner, which makes maneuver nodes for its operations.
+    /// </summary>
+    /// <remarks>
+    /// MechJeb shares the operations, and most of their settings, between vessels.
+    /// </remarks>
+    [KRPCClass (Service = "MechJeb")]
+    public sealed class ManeuverPlanner
+    {
+        static Func<Array> operations;
 
-		// Fields and methods
-		private static FieldInfo operationsField;
+        readonly OperationApoapsis operationApoapsis = new OperationApoapsis ();
+        readonly OperationCircularize operationCircularize = new OperationCircularize ();
+        readonly OperationCourseCorrection operationCourseCorrection = new OperationCourseCorrection ();
+        readonly OperationEllipticize operationEllipticize = new OperationEllipticize ();
+        readonly OperationInclination operationInclination = new OperationInclination ();
+        readonly OperationInterplanetaryTransfer operationInterplanetaryTransfer = new OperationInterplanetaryTransfer ();
+        readonly OperationKillRelVel operationKillRelVel = new OperationKillRelVel ();
+        readonly OperationLambert operationLambert = new OperationLambert ();
+        readonly OperationLan operationLan = new OperationLan ();
+        readonly OperationLongitude operationLongitude = new OperationLongitude ();
+        readonly OperationMoonReturn operationMoonReturn = new OperationMoonReturn ();
+        readonly OperationPeriapsis operationPeriapsis = new OperationPeriapsis ();
+        readonly OperationPlane operationPlane = new OperationPlane ();
+        readonly OperationResonantOrbit operationResonantOrbit = new OperationResonantOrbit ();
+        readonly OperationSemiMajor operationSemiMajor = new OperationSemiMajor ();
+        readonly OperationTransfer operationTransfer = new OperationTransfer ();
 
-		// Instance objects
-		private readonly Dictionary<string, Operation> operations = new Dictionary<string, Operation>();
+        internal static void Load ()
+        {
+            operations = Reflection.Static<Array> (Reflection.Type ("MuMech.MechJebModuleManeuverPlanner"), "_operation");
+        }
 
-		public ManeuverPlanner() {
-			this.operations.Add("OperationApoapsis", new OperationApoapsis());
-			this.operations.Add("OperationCircularize", new OperationCircularize());
-			this.operations.Add("OperationCourseCorrection", new OperationCourseCorrection());
-			this.operations.Add("OperationEllipticize", new OperationEllipticize());
-			this.operations.Add("OperationInclination", new OperationInclination());
-			this.operations.Add("OperationInterplanetaryTransfer", new OperationInterplanetaryTransfer());
-			this.operations.Add("OperationKillRelVel", new OperationKillRelVel());
-			this.operations.Add("OperationLambert", new OperationLambert());
-			this.operations.Add("OperationLan", new OperationLan());
-			this.operations.Add("OperationLongitude", new OperationLongitude());
-			this.operations.Add("OperationMoonReturn", new OperationMoonReturn());
-			this.operations.Add("OperationPeriapsis", new OperationPeriapsis());
-			this.operations.Add("OperationPlane", new OperationPlane());
-			this.operations.Add("OperationResonantOrbit", new OperationResonantOrbit());
-			this.operations.Add("OperationSemiMajor", new OperationSemiMajor());
-			this.operations.Add("OperationGeneric", new OperationTransfer());
-		}
+        internal ManeuverPlanner ()
+        {
+        }
 
-		internal static void InitType(Type type) {
-			operationsField = type.GetCheckedField("operation", BindingFlags.NonPublic | BindingFlags.Instance);
-		}
+        /// <summary>
+        /// The MechJeb operation of the given type name, such as <c>OperationApoapsis</c>.
+        /// </summary>
+        internal static object Operation (string name)
+        {
+            foreach (var operation in operations ()) {
+                if (operation.GetType ().Name == name)
+                    return operation;
+            }
+            throw new MJServiceException ("MechJeb operation " + name + " not found");
+        }
 
-		protected internal override void InitInstance(object instance) {
-			Dictionary<string, object> operations = instance != null ? ((object[])operationsField.GetValue(instance)).ToDictionary(el => el.GetType().FullName, el => el) : new Dictionary<string, object>();
+        /// <summary>
+        /// The operation that changes the apoapsis.
+        /// </summary>
+        [KRPCProperty]
+        public OperationApoapsis OperationApoapsis {
+            get { return operationApoapsis; }
+        }
 
-			foreach(KeyValuePair<string, Operation> p in this.operations) {
-				string operationType = "MuMech." + p.Key;
-				if(instance == null)
-					p.Value.InitInstance(null);
-				else if(operations.TryGetValue(operationType, out object operationInstance))
-					p.Value.InitInstance(operationInstance);
-				else {
-					string error = "Operation " + p.Value.GetType().Name + " cannot be initialized";
-					Logger.Severe(error + ": " + operationType + " not found");
-					MechJeb.errors.Add(error);
-				}
-			}
-		}
+        /// <summary>
+        /// The operation that circularizes the orbit.
+        /// </summary>
+        [KRPCProperty]
+        public OperationCircularize OperationCircularize {
+            get { return operationCircularize; }
+        }
 
-		//TODO: OperationAdvancedTransfer
+        /// <summary>
+        /// The operation that fine tunes the closest approach to the target.
+        /// </summary>
+        [KRPCProperty]
+        public OperationCourseCorrection OperationCourseCorrection {
+            get { return operationCourseCorrection; }
+        }
 
-		[KRPCProperty]
-		public OperationApoapsis OperationApoapsis => (OperationApoapsis)this.operations["OperationApoapsis"];
+        /// <summary>
+        /// The operation that changes both the periapsis and the apoapsis.
+        /// </summary>
+        [KRPCProperty]
+        public OperationEllipticize OperationEllipticize {
+            get { return operationEllipticize; }
+        }
 
-		[KRPCProperty]
-		public OperationCircularize OperationCircularize => (OperationCircularize)this.operations["OperationCircularize"];
+        /// <summary>
+        /// The operation that changes the inclination.
+        /// </summary>
+        [KRPCProperty]
+        public OperationInclination OperationInclination {
+            get { return operationInclination; }
+        }
 
-		[KRPCProperty]
-		public OperationCourseCorrection OperationCourseCorrection => (OperationCourseCorrection)this.operations["OperationCourseCorrection"];
+        /// <summary>
+        /// The operation that transfers to another planet.
+        /// </summary>
+        [KRPCProperty]
+        public OperationInterplanetaryTransfer OperationInterplanetaryTransfer {
+            get { return operationInterplanetaryTransfer; }
+        }
 
-		[KRPCProperty]
-		public OperationEllipticize OperationEllipticize => (OperationEllipticize)this.operations["OperationEllipticize"];
+        /// <summary>
+        /// The operation that matches velocities with the target.
+        /// </summary>
+        [KRPCProperty]
+        public OperationKillRelVel OperationKillRelVel {
+            get { return operationKillRelVel; }
+        }
 
-		[KRPCProperty]
-		public OperationInclination OperationInclination => (OperationInclination)this.operations["OperationInclination"];
+        /// <summary>
+        /// The operation that intercepts the target at a chosen time.
+        /// </summary>
+        [KRPCProperty]
+        public OperationLambert OperationLambert {
+            get { return operationLambert; }
+        }
 
-		[KRPCProperty]
-		public OperationInterplanetaryTransfer OperationInterplanetaryTransfer => (OperationInterplanetaryTransfer)this.operations["OperationInterplanetaryTransfer"];
+        /// <summary>
+        /// The operation that changes the longitude of the ascending node.
+        /// </summary>
+        [KRPCProperty]
+        public OperationLan OperationLan {
+            get { return operationLan; }
+        }
 
-		[KRPCProperty]
-		public OperationKillRelVel OperationKillRelVel => (OperationKillRelVel)this.operations["OperationKillRelVel"];
+        /// <summary>
+        /// The operation that changes the surface longitude of the apsis.
+        /// </summary>
+        [KRPCProperty]
+        public OperationLongitude OperationLongitude {
+            get { return operationLongitude; }
+        }
 
-		[KRPCProperty]
-		public OperationLambert OperationLambert => (OperationLambert)this.operations["OperationLambert"];
+        /// <summary>
+        /// The operation that returns from a moon.
+        /// </summary>
+        [KRPCProperty]
+        public OperationMoonReturn OperationMoonReturn {
+            get { return operationMoonReturn; }
+        }
 
-		[KRPCProperty]
-		public OperationLan OperationLan => (OperationLan)this.operations["OperationLan"];
+        /// <summary>
+        /// The operation that changes the periapsis.
+        /// </summary>
+        [KRPCProperty]
+        public OperationPeriapsis OperationPeriapsis {
+            get { return operationPeriapsis; }
+        }
 
-		[KRPCProperty]
-		public OperationLongitude OperationLongitude => (OperationLongitude)this.operations["OperationLongitude"];
+        /// <summary>
+        /// The operation that matches planes with the target.
+        /// </summary>
+        [KRPCProperty]
+        public OperationPlane OperationPlane {
+            get { return operationPlane; }
+        }
 
-		[KRPCProperty]
-		public OperationMoonReturn OperationMoonReturn => (OperationMoonReturn)this.operations["OperationMoonReturn"];
+        /// <summary>
+        /// The operation that changes to a resonant orbit.
+        /// </summary>
+        [KRPCProperty]
+        public OperationResonantOrbit OperationResonantOrbit {
+            get { return operationResonantOrbit; }
+        }
 
-		[KRPCProperty]
-		public OperationPeriapsis OperationPeriapsis => (OperationPeriapsis)this.operations["OperationPeriapsis"];
+        /// <summary>
+        /// The operation that changes the semi-major axis.
+        /// </summary>
+        [KRPCProperty]
+        public OperationSemiMajor OperationSemiMajor {
+            get { return operationSemiMajor; }
+        }
 
-		[KRPCProperty]
-		public OperationPlane OperationPlane => (OperationPlane)this.operations["OperationPlane"];
-
-		[KRPCProperty]
-		public OperationResonantOrbit OperationResonantOrbit => (OperationResonantOrbit)this.operations["OperationResonantOrbit"];
-
-		[KRPCProperty]
-		public OperationSemiMajor OperationSemiMajor => (OperationSemiMajor)this.operations["OperationSemiMajor"];
-
-		[KRPCProperty]
-		public OperationTransfer OperationTransfer => (OperationTransfer)this.operations["OperationGeneric"];
-	}
+        /// <summary>
+        /// The operation that transfers to the target.
+        /// </summary>
+        [KRPCProperty]
+        public OperationTransfer OperationTransfer {
+            get { return operationTransfer; }
+        }
+    }
 }

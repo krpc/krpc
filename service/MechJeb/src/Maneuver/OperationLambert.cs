@@ -1,40 +1,39 @@
 using System;
-using System.Reflection;
-
-using KRPC.MechJeb.ExtensionMethods;
 using KRPC.Service.Attributes;
 
-namespace KRPC.MechJeb.Maneuver {
-	/// <summary>
-	/// Create a maneuver to set the chosen time
-	/// </summary>
-	[KRPCClass(Service = "MechJeb")]
-	public class OperationLambert : TimedOperation {
-		internal new const string MechJebType = "MuMech.OperationLambert";
+namespace KRPC.MechJeb.Maneuver
+{
+    /// <summary>
+    /// Intercept the target at a chosen time.
+    /// </summary>
+    [KRPCClass (Service = "MechJeb")]
+    public sealed class OperationLambert : TimedOperation
+    {
+        static Func<object, object> timeSelector;
+        static Value<double> interceptInterval;
 
-		// Fields and methods
-		private static FieldInfo interceptIntervalField;
-		private static FieldInfo timeSelector;
+        internal static new void Load ()
+        {
+            var type = Reflection.Type ("MuMech.OperationLambert");
+            timeSelector = TimeSelectorField (type);
+            interceptInterval = Reflection.EditableDouble (type, "InterceptInterval");
+        }
 
-		// Instance objects
-		private object interceptInterval;
+        internal OperationLambert () : base ("OperationLambert")
+        {
+        }
 
-		internal static new void InitType(Type type) {
-			interceptIntervalField = type.GetCheckedField("interceptInterval");
-			timeSelector = GetTimeSelectorField(type);
-		}
+        internal override object TimeSelectorInstance {
+            get { return timeSelector (Instance); }
+        }
 
-		protected internal override void InitInstance(object instance) {
-			base.InitInstance(instance);
-
-			this.interceptInterval = interceptIntervalField.GetInstanceValue(instance);
-			this.InitTimeSelector(timeSelector);
-		}
-
-		[KRPCProperty]
-		public double InterceptInterval {
-			get => EditableDouble.Get(this.interceptInterval);
-			set => EditableDouble.Set(this.interceptInterval, value);
-		}
-	}
+        /// <summary>
+        /// The time from the maneuver to the intercept, in seconds.
+        /// </summary>
+        [KRPCProperty]
+        public double InterceptInterval {
+            get { return interceptInterval.Get (Instance); }
+            set { interceptInterval.Set (Instance, value); }
+        }
+    }
 }

@@ -1,50 +1,50 @@
 using System;
-using System.Reflection;
-
-using KRPC.MechJeb.ExtensionMethods;
 using KRPC.Service.Attributes;
 
-namespace KRPC.MechJeb.Maneuver {
-	/// <summary>
-	/// Create a maneuver to change both periapsis and apoapsis
-	/// </summary>
-	[KRPCClass(Service = "MechJeb")]
-	public class OperationEllipticize : TimedOperation {
-		internal new const string MechJebType = "MuMech.OperationEllipticize";
+namespace KRPC.MechJeb.Maneuver
+{
+    /// <summary>
+    /// Change both the periapsis and the apoapsis.
+    /// </summary>
+    [KRPCClass (Service = "MechJeb")]
+    public sealed class OperationEllipticize : TimedOperation
+    {
+        static Func<object, object> timeSelector;
+        static Value<double> newApoapsis;
+        static Value<double> newPeriapsis;
 
-		// Fields and methods
-		private static FieldInfo newApAField;
-		private static FieldInfo newPeAField;
-		private static FieldInfo timeSelector;
+        internal static new void Load ()
+        {
+            var type = Reflection.Type ("MuMech.OperationEllipticize");
+            timeSelector = TimeSelectorField (type);
+            newApoapsis = Reflection.EditableDouble (type, "NewApA");
+            newPeriapsis = Reflection.EditableDouble (type, "NewPeA");
+        }
 
-		// Instance objects
-		private object newApA;
-		private object newPeA;
+        internal OperationEllipticize () : base ("OperationEllipticize")
+        {
+        }
 
-		internal static new void InitType(Type type) {
-			newApAField = type.GetCheckedField("newApA");
-			newPeAField = type.GetCheckedField("newPeA");
-			timeSelector = GetTimeSelectorField(type);
-		}
+        internal override object TimeSelectorInstance {
+            get { return timeSelector (Instance); }
+        }
 
-		protected internal override void InitInstance(object instance) {
-			base.InitInstance(instance);
+        /// <summary>
+        /// The new apoapsis altitude, in meters.
+        /// </summary>
+        [KRPCProperty]
+        public double NewApoapsis {
+            get { return newApoapsis.Get (Instance); }
+            set { newApoapsis.Set (Instance, value); }
+        }
 
-			this.newApA = newApAField.GetInstanceValue(instance);
-			this.newPeA = newPeAField.GetInstanceValue(instance);
-			this.InitTimeSelector(timeSelector);
-		}
-
-		[KRPCProperty]
-		public double NewApoapsis {
-			get => EditableDouble.Get(this.newApA);
-			set => EditableDouble.Set(this.newApA, value);
-		}
-
-		[KRPCProperty]
-		public double NewPeriapsis {
-			get => EditableDouble.Get(this.newPeA);
-			set => EditableDouble.Set(this.newPeA, value);
-		}
-	}
+        /// <summary>
+        /// The new periapsis altitude, in meters.
+        /// </summary>
+        [KRPCProperty]
+        public double NewPeriapsis {
+            get { return newPeriapsis.Get (Instance); }
+            set { newPeriapsis.Set (Instance, value); }
+        }
+    }
 }

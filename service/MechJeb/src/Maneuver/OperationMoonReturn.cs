@@ -1,39 +1,32 @@
-using System;
-using System.Reflection;
-using KRPC.MechJeb.ExtensionMethods;
 using KRPC.Service.Attributes;
 
-namespace KRPC.MechJeb.Maneuver {
-	/// <summary>
-	/// Create a maneuver to return from a moon approximately at the specified altitude
-	/// </summary>
-	[KRPCClass(Service = "MechJeb")]
-	public class OperationMoonReturn : Operation {
-		internal new const string MechJebType = "MuMech.OperationMoonReturn";
+namespace KRPC.MechJeb.Maneuver
+{
+    /// <summary>
+    /// Return from a moon to the body it orbits.
+    /// </summary>
+    [KRPCClass (Service = "MechJeb")]
+    public sealed class OperationMoonReturn : Operation
+    {
+        static Value<double> moonReturnAltitude;
 
-		// Fields and methods
-		private static FieldInfo moonReturnAltitudeField;
+        internal static new void Load ()
+        {
+            var type = Reflection.Type ("MuMech.OperationMoonReturn");
+            moonReturnAltitude = Reflection.EditableDouble (type, "MoonReturnAltitude");
+        }
 
-		// Instance objects
-		private object moonReturnAltitude;
+        internal OperationMoonReturn () : base ("OperationMoonReturn")
+        {
+        }
 
-		internal static new void InitType(Type type) {
-			moonReturnAltitudeField = type.GetCheckedField("moonReturnAltitude");
-		}
-
-		protected internal override void InitInstance(object instance) {
-			base.InitInstance(instance);
-
-			this.moonReturnAltitude = moonReturnAltitudeField.GetInstanceValue(instance);
-		}
-
-		/// <summary>
-		/// Approximate return altitude from a moon (from an orbiting body to the parent body).
-		/// </summary>
-		[KRPCProperty]
-		public double MoonReturnAltitude {
-			get => EditableDouble.Get(this.moonReturnAltitude);
-			set => EditableDouble.Set(this.moonReturnAltitude, value);
-		}
-	}
+        /// <summary>
+        /// The approximate periapsis altitude at the body, in meters.
+        /// </summary>
+        [KRPCProperty]
+        public double MoonReturnAltitude {
+            get { return moonReturnAltitude.Get (Instance); }
+            set { moonReturnAltitude.Set (Instance, value); }
+        }
+    }
 }

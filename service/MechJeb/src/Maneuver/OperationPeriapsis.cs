@@ -1,40 +1,39 @@
 using System;
-using System.Reflection;
-
-using KRPC.MechJeb.ExtensionMethods;
 using KRPC.Service.Attributes;
 
-namespace KRPC.MechJeb.Maneuver {
-	/// <summary>
-	/// Create a maneuver to set a new periapsis
-	/// </summary>
-	[KRPCClass(Service = "MechJeb")]
-	public class OperationPeriapsis : TimedOperation {
-		internal new const string MechJebType = "MuMech.OperationPeriapsis";
+namespace KRPC.MechJeb.Maneuver
+{
+    /// <summary>
+    /// Change the periapsis.
+    /// </summary>
+    [KRPCClass (Service = "MechJeb")]
+    public sealed class OperationPeriapsis : TimedOperation
+    {
+        static Func<object, object> timeSelector;
+        static Value<double> newPeriapsis;
 
-		// Fields and methods
-		private static FieldInfo newPeAField;
-		private static FieldInfo timeSelector;
+        internal static new void Load ()
+        {
+            var type = Reflection.Type ("MuMech.OperationPeriapsis");
+            timeSelector = TimeSelectorField (type);
+            newPeriapsis = Reflection.EditableDouble (type, "NewPeA");
+        }
 
-		// Instance objects
-		private object newPeA;
+        internal OperationPeriapsis () : base ("OperationPeriapsis")
+        {
+        }
 
-		internal static new void InitType(Type type) {
-			newPeAField = type.GetCheckedField("newPeA");
-			timeSelector = GetTimeSelectorField(type);
-		}
+        internal override object TimeSelectorInstance {
+            get { return timeSelector (Instance); }
+        }
 
-		protected internal override void InitInstance(object instance) {
-			base.InitInstance(instance);
-
-			this.newPeA = newPeAField.GetInstanceValue(instance);
-			this.InitTimeSelector(timeSelector);
-		}
-
-		[KRPCProperty]
-		public double NewPeriapsis {
-			get => EditableDouble.Get(this.newPeA);
-			set => EditableDouble.Set(this.newPeA, value);
-		}
-	}
+        /// <summary>
+        /// The new periapsis altitude, in meters.
+        /// </summary>
+        [KRPCProperty]
+        public double NewPeriapsis {
+            get { return newPeriapsis.Get (Instance); }
+            set { newPeriapsis.Set (Instance, value); }
+        }
+    }
 }

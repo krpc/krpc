@@ -1,47 +1,43 @@
-using System;
-using System.Reflection;
-
-using KRPC.MechJeb.ExtensionMethods;
 using KRPC.Service.Attributes;
 
-namespace KRPC.MechJeb.Maneuver {
-	/// <summary>
-	/// Create a maneuver to fine-tune closest approach to target
-	/// </summary>
-	[KRPCClass(Service = "MechJeb")]
-	public class OperationCourseCorrection : Operation {
-		internal new const string MechJebType = "MuMech.OperationCourseCorrection";
+namespace KRPC.MechJeb.Maneuver
+{
+    /// <summary>
+    /// Fine tune the closest approach to the target.
+    /// </summary>
+    [KRPCClass (Service = "MechJeb")]
+    public sealed class OperationCourseCorrection : Operation
+    {
+        static Value<double> courseCorrectFinalPeA;
+        static Value<double> interceptDistance;
 
-		// Fields and methods
-		private static FieldInfo courseCorrectFinalPeAField;
-		private static FieldInfo interceptDistanceField;
+        internal static new void Load ()
+        {
+            var type = Reflection.Type ("MuMech.OperationCourseCorrection");
+            courseCorrectFinalPeA = Reflection.EditableDouble (type, "CourseCorrectFinalPeA");
+            interceptDistance = Reflection.EditableDouble (type, "InterceptDistance");
+        }
 
-		// Instance objects
-		private object courseCorrectFinalPeA;
-		private object interceptDistance;
+        internal OperationCourseCorrection () : base ("OperationCourseCorrection")
+        {
+        }
 
-		internal static new void InitType(Type type) {
-			courseCorrectFinalPeAField = type.GetCheckedField("courseCorrectFinalPeA");
-			interceptDistanceField = type.GetCheckedField("interceptDistance");
-		}
+        /// <summary>
+        /// The periapsis altitude at a target body, in meters.
+        /// </summary>
+        [KRPCProperty]
+        public double CourseCorrectFinalPeA {
+            get { return courseCorrectFinalPeA.Get (Instance); }
+            set { courseCorrectFinalPeA.Set (Instance, value); }
+        }
 
-		protected internal override void InitInstance(object instance) {
-			base.InitInstance(instance);
-
-			this.courseCorrectFinalPeA = courseCorrectFinalPeAField.GetInstanceValue(instance);
-			this.interceptDistance = interceptDistanceField.GetInstanceValue(instance);
-		}
-
-		[KRPCProperty]
-		public double CourseCorrectFinalPeA {
-			get => EditableDouble.Get(this.courseCorrectFinalPeA);
-			set => EditableDouble.Set(this.courseCorrectFinalPeA, value);
-		}
-
-		[KRPCProperty]
-		public double InterceptDistance {
-			get => EditableDouble.Get(this.interceptDistance);
-			set => EditableDouble.Set(this.interceptDistance, value);
-		}
-	}
+        /// <summary>
+        /// The closest approach distance to a target vessel, in meters.
+        /// </summary>
+        [KRPCProperty]
+        public double InterceptDistance {
+            get { return interceptDistance.Get (Instance); }
+            set { interceptDistance.Set (Instance, value); }
+        }
+    }
 }

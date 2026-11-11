@@ -1,40 +1,40 @@
 using System;
-using System.Reflection;
-
-using KRPC.MechJeb.ExtensionMethods;
 using KRPC.Service.Attributes;
 
-namespace KRPC.MechJeb.Maneuver {
-	/**
-	 * <summary>Change surface longitude of apsis</summary>
-	 */
-	[KRPCClass(Service = "MechJeb")]
-	public class OperationLongitude : TimedOperation {
-		internal new const string MechJebType = "MuMech.OperationLongitude";
+namespace KRPC.MechJeb.Maneuver
+{
+    /// <summary>
+    /// Change the surface longitude of the apsis.
+    /// </summary>
+    [KRPCClass (Service = "MechJeb")]
+    public sealed class OperationLongitude : TimedOperation
+    {
+        static Func<object, object> timeSelector;
 
-		// Fields and methods
-		private static FieldInfo newLANField;
-		private static FieldInfo timeSelector;
+        internal static new void Load ()
+        {
+            timeSelector = TimeSelectorField (Reflection.Type ("MuMech.OperationLongitude"));
+        }
 
-		// Instance objects
-		private object newLAN;
+        internal OperationLongitude () : base ("OperationLongitude")
+        {
+        }
 
-		internal static new void InitType(Type type) {
-			newLANField = type.GetCheckedField("newLAN");
-			timeSelector = GetTimeSelectorField(type);
-		}
+        internal override object TimeSelectorInstance {
+            get { return timeSelector (Instance); }
+        }
 
-		protected internal override void InitInstance(object instance) {
-			base.InitInstance(instance);
-
-			this.newLAN = newLANField.GetInstanceValue(instance);
-			this.InitTimeSelector(timeSelector);
-		}
-
-		[KRPCProperty]
-		public double NewSurfaceLongitude {
-			get => EditableDouble.Get(this.newLAN);
-			set => EditableDouble.Set(this.newLAN, value);
-		}
-	}
+        /// <summary>
+        /// The new surface longitude of the apsis after one orbit, in degrees.
+        /// </summary>
+        /// <remarks>
+        /// MechJeb holds this value in the target controller of each vessel, as the longitude of
+        /// the position target. Setting it also moves the position target.
+        /// </remarks>
+        [KRPCProperty]
+        public double NewSurfaceLongitude {
+            get { return MechJeb.TargetController.TargetLongitude; }
+            set { MechJeb.TargetController.TargetLongitude = value; }
+        }
+    }
 }
