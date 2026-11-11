@@ -280,6 +280,7 @@ test_suite(
         "//service/Drawing:test",
         "//service/InfernalRobotics:test",
         "//service/KerbalAlarmClock:test",
+        "//service/MechJeb:test",
         "//service/RemoteTech:test",
         "//service/SpaceCenter:test",
         "//service/Trajectories:test",

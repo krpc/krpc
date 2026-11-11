@@ -232,6 +232,21 @@ class DockingCamera(_ServiceMod):
     service = "docking_camera"
 
 
+class MechJeb(Mod):
+    """MechJeb, wrapped by the MechJeb service. The service is for the flight scene only, so
+    we find the mod by MechJebCore, the part module it adds to every command part."""
+
+    name = "MechJeb"
+    source = _GITHUB + (
+        "MuMech/MechJeb2/releases/download/2.15.4.0/MechJeb2-2.15.4.0.zip"
+    )
+    sha256 = "658c30132b00f4df972b1d39ecd3e046749ebb7544a619a15620becaf5aa1c86"
+    folders = ("MechJeb2",)
+
+    def present(self, game, conn):
+        return conn.testing_tools.part_module_available("MechJebCore")
+
+
 class RealChute(_PartMod):
     """Wrapped by the SpaceCenter Parachute class. Its part modules do not register without
     ClickThroughBlocker and ToolbarControl."""
@@ -491,6 +506,7 @@ MODS = [
     InfernalRobotics,
     KerbalAlarmClock,
     DockingCamera,
+    MechJeb,
     RealChute,
     DMagic,
     AGExt,
