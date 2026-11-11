@@ -446,6 +446,19 @@ class KOS(_PartMod):
     part = "kOSMachine1m"
 
 
+class Trajectories(Mod):
+    """Trajectories, trajectory predictions accounting for atmospheric drag and lift."""
+
+    name = "Trajectories"
+    source = (
+        _GITHUB
+        + "linuxgurugamer/KSPTrajectories/releases/download/2.4.5.5/Trajectories-1.12.5-2.4.5.5.zip"
+    )
+    sha256 = "92d9670da884e40608193200a876bafcf70ea59869b5bc1b3fbf31d541313b16"
+    folders = ("Trajectories",)
+    requires = ("ClickThroughBlocker", "ToolbarControl", "SpaceTuxLibrary")
+
+
 class TweakScaleRescaled(_AssemblyMod):
     """TweakScale Rescaled, which scales parts and the stats of their modules."""
 
@@ -493,4 +506,5 @@ MODS = [
     KSPCommunityPartModules04,
     KOS,
     TweakScaleRescaled,
+    Trajectories,
 ]

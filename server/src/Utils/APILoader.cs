@@ -46,7 +46,7 @@ namespace KRPC.Utils
             }
 
             // Load the API methods
-            var apiMethods = type.GetMethods ();
+            var apiMethods = type.GetMethods (System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
             foreach (var property in api.GetProperties()) {
                 // Skip the property if it does not return a delegate
                 if (!property.GetGetMethod ().ReturnType.IsSubclassOf (typeof(Delegate)))
@@ -62,7 +62,7 @@ namespace KRPC.Utils
                 property.SetValue (null, f, null);
             }
 
-            Logger.WriteLine ("Load API: Successfully loaded " + assemblyName + " version " + version);
+            Logger.WriteLine ("Load API: Successfully loaded " + assemblyName + " " + apiName + " version " + version);
             return type;
         }
 

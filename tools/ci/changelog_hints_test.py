@@ -117,6 +117,13 @@ class TestHints(unittest.TestCase):
             "don't edit `service/SpaceCenter/CHANGELOG.md` directly", found[0]
         )
 
+    def test_new_component_changelog(self):
+        files = [
+            File("service/Trajectories/src/Trajectories.cs", "added"),
+            File("service/Trajectories/CHANGELOG.md", "added"),
+        ]
+        self.assertEqual([], texts(pull_request(files)))
+
     def test_release_preparation(self):
         files = [
             File("service/SpaceCenter/CHANGELOG.md", "modified"),

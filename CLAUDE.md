@@ -408,6 +408,9 @@ by directory, holding entries in the `CHANGELOG.md` syntax:
    the projects under `experimental/` are not among them, and edit their `CHANGELOG.md` directly.
  * A new component goes in `COMPONENTS`, with its `CHANGELOG.md` in `//doc:changelog`. The docs page
    and the release notes take their component names and order from `COMPONENTS`.
+ * The PR that adds a component writes its entries in the new `CHANGELOG.md`, under a
+   `## [vX.Y.Z] - unreleased` header, in place of a fragment. No other PR edits that file, so
+   it cannot conflict.
  * The docs page and release notes merge the fragments into each component's unreleased section. A
    topic merges with the topic of the same text. `//:changelog-fragments-test` checks the format.
  * Commit the fragment with the change it describes. A PR with no user-facing change adds none.

@@ -144,11 +144,21 @@ def hints(pr):
     removes_fragment = any(
         is_fragment(f.filename) and f.status == "removed" for f in pr.files
     )
-    edits_changelog = sorted(
-        f.filename
+    component_changelogs = [
+        f
         for f in pr.files
         if f.filename.endswith("/CHANGELOG.md")
         and f.filename[: -len("/CHANGELOG.md")] in changelog.COMPONENTS
+    ]
+    # A new component adds its CHANGELOG.md with its entries in place of a fragment
+    new_components = {
+        f.filename[: -len("/CHANGELOG.md")]
+        for f in component_changelogs
+        if f.status == "added"
+    }
+    changed_components = [c for c in changed_components if c not in new_components]
+    edits_changelog = sorted(
+        f.filename for f in component_changelogs if f.status != "added"
     )
 
     fragments = []

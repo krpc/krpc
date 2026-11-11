@@ -39,6 +39,7 @@ COMPONENTS = {
     "service/RemoteTech": "RemoteTech service",
     "service/LiDAR": "LIDAR service",
     "service/DockingCamera": "DockingCamera service",
+    "service/Trajectories": "Trajectories service",
     "service/Debug": "Debug service",
     "client/cnano": "C-nano client",
     "client/csharp": "C# client",
