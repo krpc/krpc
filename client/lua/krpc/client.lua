@@ -383,8 +383,8 @@ end
 --- Construct an error description from a KRPC.Error object
 function Client:_error_message(err)
    local msg = err.description
-  if err.service ~= '' and err.name ~= '' then
-    msg = err.service .. '.' .. err.name .. ': ' .. msg
+  if err.service ~= '' and err.exception ~= '' then
+    msg = err.service .. '.' .. err.exception .. ': ' .. msg
   end
   if err.stack_trace ~= '' then
     msg = msg .. '\nServer stack trace:\n' .. err.stack_trace

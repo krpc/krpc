@@ -137,6 +137,29 @@ def _nullable_protobuf_type(protobuf_type: KRPC.Type, nullable: bool) -> KRPC.Ty
     return result
 
 
+def clear_type_ids(services: KRPC.Services) -> KRPC.Services:
+    """Clear the ids of the types in the given service definitions, in place. The client names
+    types by their names, and a type is compared with the types it builds itself."""
+    for service in services.services:
+        for procedure in service.procedures:
+            for parameter in procedure.parameters:
+                _clear_ids(parameter.type)
+            # Clearing a field of an unset return type would set it
+            if procedure.HasField("return_type"):
+                _clear_ids(procedure.return_type)
+        for struct in service.structs:
+            for field in struct.fields:
+                _clear_ids(field.type)
+    return services
+
+
+def _clear_ids(protobuf_type: KRPC.Type) -> None:
+    protobuf_type.ClearField("service_id")
+    protobuf_type.ClearField("id")
+    for typ in protobuf_type.types:
+        _clear_ids(typ)
+
+
 class Types:
     """A type store. Used to obtain type objects from protocol buffer type
     strings, and stores python types for services and service defined

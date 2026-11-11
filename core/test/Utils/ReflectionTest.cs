@@ -23,8 +23,8 @@ namespace KRPC.Test.Utils
         public void GetTypesWithAttribute ()
         {
             Assert.AreEqual (6, Reflection.GetTypesWith<KRPCServiceAttribute> ().Count ());
-            Assert.AreEqual (9, Reflection.GetTypesWith<KRPCClassAttribute> ().Count ());
-            Assert.AreEqual (10, Reflection.GetTypesWith<KRPCStructAttribute> ().Count ());
+            Assert.AreEqual (11, Reflection.GetTypesWith<KRPCClassAttribute> ().Count ());
+            Assert.AreEqual (11, Reflection.GetTypesWith<KRPCStructAttribute> ().Count ());
             Assert.AreEqual (0, Reflection.GetTypesWith<KRPCPropertyAttribute> ().Count ());
         }
 

@@ -53,13 +53,13 @@ class RPCFailed(Exception):
 
     def __init__(self, error: KRPC.Error) -> None:
         message = error.description
-        if error.name:
-            message = "%s.%s: %s" % (error.service, error.name, message)
+        if error.exception:
+            message = "%s.%s: %s" % (error.service, error.exception, message)
         if error.stack_trace:
             message += "\nServer stack trace:\n" + error.stack_trace
         super().__init__(message)
         self.service = error.service
-        self.name = error.name
+        self.name = error.exception
 
 
 class Connection:

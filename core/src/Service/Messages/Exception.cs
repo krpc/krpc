@@ -6,6 +6,8 @@ namespace KRPC.Service.Messages
     {
         public string Name { get; private set; }
 
+        public uint Id { get; private set; }
+
         public string Documentation { get; set; }
 
         public bool Deprecated { get; set; }
@@ -14,9 +16,10 @@ namespace KRPC.Service.Messages
 
         public string MappedType { get; set; }
 
-        public Exception (string name)
+        public Exception (string name, uint id)
         {
             Name = name;
+            Id = id;
             Documentation = string.Empty;
             DeprecatedReason = string.Empty;
             MappedType = string.Empty;

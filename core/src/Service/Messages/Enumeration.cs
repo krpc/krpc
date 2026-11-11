@@ -7,6 +7,8 @@ namespace KRPC.Service.Messages
     {
         public string Name { get; private set; }
 
+        public uint Id { get; private set; }
+
         public IList<EnumerationValue> Values { get; private set; }
 
         public string Documentation { get; set; }
@@ -17,9 +19,10 @@ namespace KRPC.Service.Messages
 
         public bool Flags { get; set; }
 
-        public Enumeration (string name)
+        public Enumeration (string name, uint id)
         {
             Name = name;
+            Id = id;
             Values = new List<EnumerationValue> ();
             Documentation = string.Empty;
             DeprecatedReason = string.Empty;

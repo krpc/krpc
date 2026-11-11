@@ -1024,7 +1024,10 @@ def argument_error_of(server, call):
     with, having checked the other two ran."""
     valid = raw.procedure_call("TestService", "Int32ToString", b"\x02")
     first, failed, last = raw.request(server, valid, call, valid)
-    assert (failed.error.service, failed.error.name) == ("KRPC", "ArgumentException")
+    assert (failed.error.service, failed.error.exception) == (
+        "KRPC",
+        "ArgumentException",
+    )
     assert not first.HasField("error") and first.value == b"\x011"
     assert not last.HasField("error") and last.value == b"\x011"
     return failed.error

@@ -232,8 +232,8 @@ static bool krpc_decode_callback_error(pb_istream_t *stream, const pb_field_t *f
   krpc_error_message[0] = '\0';
   error.service.funcs.decode = &krpc_decode_callback_error_string;
   error.service.arg = (void *)"";
-  error.name.funcs.decode = &krpc_decode_callback_error_string;
-  error.name.arg = (void *)".";
+  error.exception.funcs.decode = &krpc_decode_callback_error_string;
+  error.exception.arg = (void *)".";
   error.description.funcs.decode = &krpc_decode_callback_error_string;
   error.description.arg = (void *)": ";
   error.stack_trace.funcs.decode = &krpc_decode_callback_error_string;

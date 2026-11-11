@@ -39,6 +39,7 @@ from krpc.types import (
     StreamType,
     TypeBase,
     Types,
+    clear_type_ids,
     warn_deprecated,
 )
 from krpc.utils import snake_case
@@ -167,9 +168,11 @@ class Client:
             raise
 
     def _load_services(self) -> None:
-        services = cast(
-            KRPC.Services,
-            self._invoke("KRPC", "GetServices", [], [], self._types.services_type),
+        services = clear_type_ids(
+            cast(
+                KRPC.Services,
+                self._invoke("KRPC", "GetServices", [], [], self._types.services_type),
+            )
         ).services
         # Register the types of every service before creating any of them: a service's
         # procedures are built from types that any service may define, and a default value
@@ -625,9 +628,9 @@ class Client:
         can be thrown to the calling code"""
         # TODO: modify the stack trace of the thrown exception so it looks like
         #       it came from the local call
-        if error.service and error.name:
+        if error.service and error.exception:
             service_name = snake_case(error.service)
-            type_name = error.name
+            type_name = error.exception
             # The service is missing if this client does not know it, and the member is an
             # exception class only for an exception the service declares. Report the error
             # itself, named by its type on the server, so that the failure to build an

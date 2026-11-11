@@ -45,8 +45,8 @@ namespace KRPC.Test.Service
         {
             var service = services.ServicesList.First (x => x.Name == "TestService2");
             Assert.AreEqual (2, service.Procedures.Count);
-            Assert.AreEqual (0, service.Classes.Count);
-            Assert.AreEqual (0, service.Enumerations.Count);
+            Assert.AreEqual (1, service.Classes.Count);
+            Assert.AreEqual (1, service.Enumerations.Count);
             Assert.AreEqual ("<doc>\n<summary>\nTestService2 documentation.\n</summary>\n</doc>", service.Documentation);
         }
 
@@ -55,8 +55,8 @@ namespace KRPC.Test.Service
         {
             var service = services.ServicesList.First (x => x.Name == "TestService3Name");
             Assert.AreEqual (10, service.Procedures.Count);
-            Assert.AreEqual (4, service.Classes.Count);
-            Assert.AreEqual (0, service.Enumerations.Count);
+            Assert.AreEqual (5, service.Classes.Count);
+            Assert.AreEqual (1, service.Enumerations.Count);
             Assert.AreEqual (string.Empty, service.Documentation);
             MessageAssert.IsNotDeprecated (service);
         }
@@ -151,6 +151,52 @@ namespace KRPC.Test.Service
                 errors [0]);
             Assert.Throws<global::KRPC.Service.ServiceException> (
                 () => global::KRPC.Service.Scanner.Scanner.CheckProcedureIds (service, null));
+        }
+
+        [Test]
+        public void TypeIdsFromNames ()
+        {
+            var krpc = global::KRPC.Service.Services.Instance.Signatures ["KRPC"];
+            Assert.AreEqual (1727780136, krpc.Exceptions ["ArgumentException"].Id);
+            Assert.AreEqual (4251095244, krpc.Enumerations ["GameScene"].Id);
+            Assert.AreEqual (3155522758, krpc.Classes ["Expression"].Id);
+            Assert.AreEqual (1932373256, krpc.Structs ["ServerStatus"].Id);
+        }
+
+        [Test]
+        public void TypeIdsSetInTheAttribute ()
+        {
+            var service = global::KRPC.Service.Services.Instance.Signatures ["TestService3Name"];
+            Assert.AreEqual (20, service.Classes ["TestClassWithAnId3"].Id);
+            Assert.AreEqual (21, service.Enumerations ["TestEnumWithAnId3"].Id);
+            Assert.AreEqual (22, service.Structs ["TestStructWithAnId3"].Id);
+            Assert.AreEqual (23, service.Exceptions ["TestExceptionWithAnId3"].Id);
+        }
+
+        [Test]
+        public void TypeNamesShared ()
+        {
+            var service = new global::KRPC.Service.Scanner.ServiceSignature ("TestTypes", 1);
+            service.AddClass (typeof(TestClass3));
+            service.AddEnum (typeof(TESTCLASS3));
+            var errors = new List<string> ();
+            global::KRPC.Service.Scanner.Scanner.CheckTypes (service, errors);
+            Assert.AreEqual (1, errors.Count);
+            StringAssert.Contains ("TestTypes.TESTCLASS3, TestTypes.TestClass3 share a name", errors [0]);
+            Assert.Throws<global::KRPC.Service.ServiceException> (
+                () => global::KRPC.Service.Scanner.Scanner.CheckTypes (service, null));
+        }
+
+        [Test]
+        public void TypeIdsShared ()
+        {
+            var service = new global::KRPC.Service.Scanner.ServiceSignature ("TestTypes", 1);
+            service.AddClass (typeof(TestClassSharingAnId3));
+            service.AddEnum (typeof(TestEnumWithAnId3));
+            var errors = new List<string> ();
+            global::KRPC.Service.Scanner.Scanner.CheckTypes (service, errors);
+            Assert.AreEqual (1, errors.Count);
+            StringAssert.Contains ("TestTypes.TestClassSharingAnId3, TestTypes.TestEnumWithAnId3 share the id 21", errors [0]);
         }
 
         [Test]

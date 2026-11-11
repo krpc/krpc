@@ -14,5 +14,10 @@ namespace KRPC.Service.Attributes
         /// Name of the service in which the structure is declared.
         /// </summary>
         public string Service { get; set; }
+
+        /// <summary>
+        /// The id of the structure, which defaults to a hash of its name.
+        /// </summary>
+        public uint Id { get; set; }
     }
 }

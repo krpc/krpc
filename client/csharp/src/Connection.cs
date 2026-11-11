@@ -1138,8 +1138,8 @@ namespace KRPC.Client
             var message = error.Description;
             if (error.StackTrace.Length > 0)
                 message += "\nServer stack trace:\n" + error.StackTrace;
-            if (error.Service.Length > 0 && error.Name.Length > 0) {
-                var key = error.Service + "." + error.Name;
+            if (error.Service.Length > 0 && error.Exception.Length > 0) {
+                var key = error.Service + "." + error.Exception;
                 if (key == "KRPC.InvalidOperationException")
                     return new InvalidOperationException (message);
                 if (key == "KRPC.ArgumentException")

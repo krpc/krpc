@@ -5,7 +5,11 @@ namespace KRPC.Service.Messages
     {
         public string Service { get; private set; }
 
-        public string Name { get; private set; }
+        public string Exception { get; private set; }
+
+        public uint ServiceId { get; private set; }
+
+        public uint ExceptionId { get; private set; }
 
         public string Description { get; private set; }
 
@@ -14,23 +18,17 @@ namespace KRPC.Service.Messages
         public Error (string description, string stackTrace)
         {
             Service = string.Empty;
-            Name = string.Empty;
+            Exception = string.Empty;
             Description = description;
             StackTrace = stackTrace;
         }
 
-        public Error (string service, string name, string description)
+        public Error (string service, string exception, uint serviceId, uint exceptionId, string description, string stackTrace)
         {
             Service = service;
-            Name = name;
-            Description = description;
-            StackTrace = string.Empty;
-        }
-
-        public Error (string service, string name, string description, string stackTrace)
-        {
-            Service = service;
-            Name = name;
+            Exception = exception;
+            ServiceId = serviceId;
+            ExceptionId = exceptionId;
             Description = description;
             StackTrace = stackTrace;
         }

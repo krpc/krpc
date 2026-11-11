@@ -733,7 +733,7 @@ namespace KRPC
         /// </summary>
         static void LogStreamEnded (IClient<Request,Response> client, ulong id, Error error)
         {
-            var finished = error.Service == "KRPC" && error.Name == "StreamRemovedException";
+            var finished = error.Service == "KRPC" && error.Exception == "StreamRemovedException";
             var text = new StringBuilder ("Removed stream " + id + " for client " + client.Label () + ": ");
             if (finished) {
                 text.Append (error.Description);
@@ -1048,7 +1048,7 @@ namespace KRPC
         /// </summary>
         static string Describe (Error error)
         {
-            return string.IsNullOrEmpty (error.Name) ? error.Description : error.Name + ": " + error.Description;
+            return string.IsNullOrEmpty (error.Exception) ? error.Description : error.Exception + ": " + error.Description;
         }
 
         /// <summary>

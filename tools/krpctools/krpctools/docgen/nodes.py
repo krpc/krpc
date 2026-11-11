@@ -5,6 +5,11 @@ from krpc.attributes import Attributes
 from ..utils import as_type, decode_default_value
 
 
+def _without_id(info):
+    """The definition of a type, without its id, which the docs leave out"""
+    return {key: value for key, value in info.items() if key != "id"}
+
+
 class Appendable:
     def __init__(self):
         self._appended = []
@@ -78,20 +83,25 @@ class Service(Appendable):
 
         self.classes = {
             cname: Class(
-                name, cname, cprocedures[cname], sort=sort, types=types, **cinfo
+                name,
+                cname,
+                cprocedures[cname],
+                sort=sort,
+                types=types,
+                **_without_id(cinfo),
             )
             for (cname, cinfo) in classes.items()
         }
         self.enumerations = {
-            ename: Enumeration(name, ename, sort=sort, **einfo)
+            ename: Enumeration(name, ename, sort=sort, **_without_id(einfo))
             for (ename, einfo) in enumerations.items()
         }
         self.structs = {
-            sname: Struct(name, sname, types=types, **sinfo)
+            sname: Struct(name, sname, types=types, **_without_id(sinfo))
             for (sname, sinfo) in (structs or {}).items()
         }
         self.exceptions = {
-            ename: ExceptionNode(name, ename, **einfo)
+            ename: ExceptionNode(name, ename, **_without_id(einfo))
             for (ename, einfo) in exceptions.items()
         }
 

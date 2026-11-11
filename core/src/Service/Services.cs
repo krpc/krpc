@@ -475,7 +475,7 @@ namespace KRPC.Service
         internal static bool IsHeld (Error error)
         {
             return error.Service == "KRPC" &&
-                (error.Name == "ObjectNotLoadedException" || error.Name == "UnsupportedSceneException");
+                (error.Exception == "ObjectNotLoadedException" || error.Exception == "UnsupportedSceneException");
         }
 
         /// <summary>
@@ -492,9 +492,16 @@ namespace KRPC.Service
             var mappedType = GetMappedExceptionType(exn.GetType());
             var type = mappedType ?? exn.GetType();
             Error error;
-            if (Reflection.HasAttribute<KRPCExceptionAttribute>(type))
-                error = new Error(TypeUtils.GetExceptionServiceName(type), type.Name, message, stackTrace);
-            else
+            if (Reflection.HasAttribute<KRPCExceptionAttribute>(type)) {
+                var serviceName = TypeUtils.GetExceptionServiceName(type);
+                ServiceSignature service;
+                ExceptionSignature exception;
+                if (Signatures.TryGetValue(serviceName, out service) &&
+                    service.Exceptions.TryGetValue(type.Name, out exception))
+                    error = new Error(serviceName, type.Name, service.Id, exception.Id, message, stackTrace);
+                else
+                    error = new Error(serviceName, type.Name, 0, 0, message, stackTrace);
+            } else
                 error = new Error(message, stackTrace);
             return error;
         }
