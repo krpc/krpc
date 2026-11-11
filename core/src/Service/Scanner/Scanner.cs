@@ -31,6 +31,8 @@ namespace KRPC.Service.Scanner
             foreach (var serviceType in serviceTypes) {
                 try {
                     CurrentAssembly = serviceType.Assembly;
+                    if (!CheckServiceNotDeclared (signatures, serviceType, errors))
+                        continue;
                     var serviceId = TypeUtils.GetServiceId (serviceType);
                     if (serviceId == 0)
                         HandleError(errors, "service " + TypeUtils.GetServiceName(serviceType), "Service has id 0");
@@ -38,10 +40,7 @@ namespace KRPC.Service.Scanner
                         HandleError(errors, "service " + TypeUtils.GetServiceName(serviceType), "Service id clashes with another service");
                     serviceIds.Add (serviceId);
                     var service = new ServiceSignature (serviceType, serviceId);
-                    if (signatures.ContainsKey (service.Name))
-                        service = signatures [service.Name];
-                    else
-                        signatures [service.Name] = service;
+                    signatures [service.Name] = service;
                     // Add procedures
                     foreach (var method in Reflection.GetMethodsWith<KRPCProcedureAttribute> (serviceType)) {
                         try {
@@ -183,6 +182,20 @@ namespace KRPC.Service.Scanner
                         "Procedures " + string.Join (", ", names.ToArray ()) + " share the id " + group.Key);
                 }
             }
+        }
+
+        /// <summary>
+        /// Check that no other class declares the service the given class declares.
+        /// </summary>
+        internal static bool CheckServiceNotDeclared (IDictionary<string, ServiceSignature> signatures, Type serviceType, IList<string> errors)
+        {
+            var name = TypeUtils.GetServiceName (serviceType);
+            ServiceSignature existing;
+            if (!signatures.TryGetValue (name, out existing))
+                return true;
+            HandleError (errors, "service " + name,
+                "Service is declared by both " + existing.UnderlyingType + " and " + serviceType);
+            return false;
         }
 
         /// <summary>

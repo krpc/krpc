@@ -24,6 +24,11 @@ namespace KRPC.Service.Scanner
         public uint Id { get; private set; }
 
         /// <summary>
+        /// The static class that declares the service, or null for a service created by name.
+        /// </summary>
+        public Type UnderlyingType { get; private set; }
+
+        /// <summary>
         /// Documentation for the service
         /// </summary>
         public string Documentation { get; private set; }
@@ -82,6 +87,7 @@ namespace KRPC.Service.Scanner
             TypeUtils.ValidateKRPCService (type);
             Name = TypeUtils.GetServiceName (type);
             Id = id;
+            UnderlyingType = type;
             Documentation = DocumentationUtils.ResolveCrefs (type.GetDocumentation ());
             Classes = new Dictionary<string, ClassSignature> ();
             Enumerations = new Dictionary<string, EnumerationSignature> ();

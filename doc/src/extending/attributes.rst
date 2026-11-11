@@ -25,11 +25,8 @@ to add functionality to the kRPC server.
    This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ is applied to a static
    class, to indicate that all methods, properties and classes declared within it are part of the
    the same service. The name of the service is set to the name of the class, or -- if present --
-   the ``Name`` parameter. Service names are unique, compared case-insensitively.
-
-   Multiple services with the same name can be declared, as long the classes, procedures and methods
-   they contain have unique names. The classes will be merged to appear as a single service on the
-   server.
+   the ``Name`` parameter. One class declares each service. Service names are unique, compared
+   case-insensitively.
 
    The type to which this attribute is applied must satisfy the following criteria:
 
@@ -152,9 +149,8 @@ to add functionality to the kRPC server.
    :cs:attr:`KRPCProcedure`. However, it would be restrictive if the class had to be declared as
    a nested class inside a class with the :cs:attr:`KRPCService` attribute. Therefore, a
    :cs:attr:`KRPCClass` can be declared outside of any service if it has the ``Service``
-   parameter set to the name of the service that it is part of. Also, the service that the
-   ``Service`` parameter refers to does not have to exist. If it does not exist, a service with the
-   given name is created.
+   parameter set to the name of the service that it is part of. That service must be declared by a
+   :cs:attr:`KRPCService`.
 
    A class' methods and properties can be configured to be available in specific :ref:`game scenes
    <service-api-game-scenes>` via the ``GameScene`` parameter on the class. If the ``GameScene``

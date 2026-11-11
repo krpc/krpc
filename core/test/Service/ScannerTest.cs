@@ -216,6 +216,23 @@ namespace KRPC.Test.Service
         }
 
         [Test]
+        public void ServiceDeclaredTwice ()
+        {
+            var signatures = new Dictionary<string, global::KRPC.Service.Scanner.ServiceSignature> ();
+            Assert.IsTrue (global::KRPC.Service.Scanner.Scanner.CheckServiceNotDeclared (signatures, typeof(TestService3), null));
+            // TestService declares the name that TestService3 declares
+            signatures ["TestService3Name"] = new global::KRPC.Service.Scanner.ServiceSignature (typeof(TestService), 1);
+            var errors = new List<string> ();
+            Assert.IsFalse (global::KRPC.Service.Scanner.Scanner.CheckServiceNotDeclared (signatures, typeof(TestService3), errors));
+            Assert.AreEqual (1, errors.Count);
+            StringAssert.Contains (
+                "In service TestService3Name: Service is declared by both KRPC.Test.Service.TestService and KRPC.Test.Service.TestService3",
+                errors [0]);
+            Assert.Throws<global::KRPC.Service.ServiceException> (
+                () => global::KRPC.Service.Scanner.Scanner.CheckServiceNotDeclared (signatures, typeof(TestService3), null));
+        }
+
+        [Test]
         public void TypeNamedAsItsService ()
         {
             var service = new global::KRPC.Service.Scanner.ServiceSignature ("TESTCLASS3", 1);
