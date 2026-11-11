@@ -305,6 +305,7 @@ namespace KRPC.Trajectories.API
         //public static Action<CelestialBody, Vector3d> SetFromWorldPos { get; internal set; }
 
         public static Action Clear { get; internal set; }
+        public static Action Save { get; internal set; }
     }
 
     /// <summary>

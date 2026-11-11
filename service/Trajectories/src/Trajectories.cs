@@ -129,6 +129,7 @@ namespace KRPC.Trajectories
 
             Vector3d localPos = targetBody.ReferenceFrame.PositionFromWorldSpace(worldPos);
             API.TargetProfile.SetFromLocalPos(targetBody.InternalBody, localPos);
+            API.TargetProfile.Save();
         }
 
         /// <summary>
@@ -173,6 +174,7 @@ namespace KRPC.Trajectories
         public static void ClearTarget()
         {
             API.API.ClearTarget();
+            API.TargetProfile.Save();
         }
 
         /// <summary>
