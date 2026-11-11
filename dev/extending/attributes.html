@@ -570,10 +570,8 @@ will be available in all game scenes.</p></li>
 <p>This <a class="reference external" href="https://msdn.microsoft.com/en-us/library/aa287992.aspx">attribute</a> is applied to a static
 class, to indicate that all methods, properties and classes declared within it are part of the
 the same service. The name of the service is set to the name of the class, or – if present –
-the <code class="docutils literal notranslate"><span class="pre">Name</span></code> parameter.</p>
-<p>Multiple services with the same name can be declared, as long the classes, procedures and methods
-they contain have unique names. The classes will be merged to appear as a single service on the
-server.</p>
+the <code class="docutils literal notranslate"><span class="pre">Name</span></code> parameter. One class declares each service. Service names are unique, compared
+case-insensitively.</p>
 <p>The type to which this attribute is applied must satisfy the following criteria:</p>
 <ul class="simple">
 <li><p>The type must be a class.</p></li>
@@ -688,14 +686,13 @@ another type of the service.</p></li>
 non-static classes. It adds the class to the server, so that references to instances of the class
 can be passed between client and server.</p>
 <p>The classes, enumerations, structures and exceptions of a service have unique names, compared
-case-insensitively.</p>
+case-insensitively. Their names also differ from the name of the service, ignoring case.</p>
 <p>A <a class="reference internal" href="#attribute-KRPCClass" title="attribute: KRPCClass"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a> must be part of a service, just like a
 <a class="reference internal" href="#attribute-KRPCProcedure" title="attribute: KRPCProcedure"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCProcedure</span></code></a>. However, it would be restrictive if the class had to be declared as
 a nested class inside a class with the <a class="reference internal" href="#attribute-KRPCService" title="attribute: KRPCService"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCService</span></code></a> attribute. Therefore, a
 <a class="reference internal" href="#attribute-KRPCClass" title="attribute: KRPCClass"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a> can be declared outside of any service if it has the <code class="docutils literal notranslate"><span class="pre">Service</span></code>
-parameter set to the name of the service that it is part of. Also, the service that the
-<code class="docutils literal notranslate"><span class="pre">Service</span></code> parameter refers to does not have to exist. If it does not exist, a service with the
-given name is created.</p>
+parameter set to the name of the service that it is part of. That service must be declared by a
+<a class="reference internal" href="#attribute-KRPCService" title="attribute: KRPCService"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCService</span></code></a>.</p>
 <p>A class’ methods and properties can be configured to be available in specific <a class="reference internal" href="game-scenes.html#service-api-game-scenes"><span class="std std-ref">game scenes</span></a> via the <code class="docutils literal notranslate"><span class="pre">GameScene</span></code> parameter on the class. If the <code class="docutils literal notranslate"><span class="pre">GameScene</span></code>
 parameter is not specified, the class’ methods and properties are available in the same game
 scenes as the service the class is defined in. Individual class methods and properties can
