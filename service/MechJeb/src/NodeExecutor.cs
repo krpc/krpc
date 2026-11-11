@@ -1,78 +1,85 @@
 using System;
-using System.Reflection;
-
-using KRPC.MechJeb.ExtensionMethods;
 using KRPC.Service.Attributes;
 
-namespace KRPC.MechJeb {
-	[KRPCClass(Service = "MechJeb")]
-	public class NodeExecutor : ComputerModule {
-		internal new const string MechJebType = "MuMech.MechJebModuleNodeExecutor";
+namespace KRPC.MechJeb
+{
+    /// <summary>
+    /// The maneuver node executor.
+    /// </summary>
+    [KRPCClass (Service = "MechJeb")]
+    public sealed class NodeExecutor : ComputerModule
+    {
+        static Value<bool> autowarp;
+        static Value<double> leadTime;
+        static Action<object, object> executeOneNode;
+        static Action<object, object> executeAllNodes;
+        static Action<object> abort;
 
-		// Fields and methods
-		private static FieldInfo autowarp;
-		private static FieldInfo leadTimeField;
-		private static FieldInfo toleranceField;
+        internal static new void Load ()
+        {
+            var type = Reflection.Type ("MuMech.MechJebModuleNodeExecutor");
+            autowarp = Reflection.Field<bool> (type, "Autowarp");
+            leadTime = Reflection.EditableDouble (type, "LeadTime");
+            executeOneNode = Reflection.Method<Action<object, object>> (type, "ExecuteOneNode");
+            executeAllNodes = Reflection.Method<Action<object, object>> (type, "ExecuteAllNodes");
+            abort = Reflection.Method<Action<object>> (type, "Abort");
+        }
 
-		private static MethodInfo executeOneNode;
-		private static MethodInfo executeAllNodes;
-		private static MethodInfo abort;
+        internal NodeExecutor () : base ("MechJebModuleNodeExecutor")
+        {
+        }
 
-		// Instance objects
-		private object leadTime;
-		private object tolerance;
+        /// <summary>
+        /// Whether the executor is running.
+        /// </summary>
+        [KRPCProperty]
+        public override bool Enabled {
+            get { return base.Enabled; }
+        }
 
-		internal static new void InitType(Type type) {
-			autowarp = type.GetCheckedField("autowarp");
-			leadTimeField = type.GetCheckedField("leadTime");
-			toleranceField = type.GetCheckedField("tolerance");
+        /// <summary>
+        /// Whether the executor warps to the burn.
+        /// </summary>
+        [KRPCProperty]
+        public bool Autowarp {
+            get { return autowarp.Get (Instance); }
+            set { autowarp.Set (Instance, value); }
+        }
 
-			executeOneNode = type.GetCheckedMethod("ExecuteOneNode");
-			executeAllNodes = type.GetCheckedMethod("ExecuteAllNodes");
-			abort = type.GetCheckedMethod("Abort");
-		}
+        /// <summary>
+        /// The time before the burn at which time warp stops, in seconds.
+        /// </summary>
+        [KRPCProperty]
+        public double LeadTime {
+            get { return leadTime.Get (Instance); }
+            set { leadTime.Set (Instance, value); }
+        }
 
-		protected internal override void InitInstance(object instance) {
-			base.InitInstance(instance);
+        /// <summary>
+        /// Execute the next maneuver node.
+        /// </summary>
+        [KRPCMethod]
+        public void ExecuteOneNode ()
+        {
+            executeOneNode (Instance, this);
+        }
 
-			this.leadTime = leadTimeField.GetInstanceValue(instance);
-			this.tolerance = toleranceField.GetInstanceValue(instance);
-		}
+        /// <summary>
+        /// Execute all the maneuver nodes.
+        /// </summary>
+        [KRPCMethod]
+        public void ExecuteAllNodes ()
+        {
+            executeAllNodes (Instance, this);
+        }
 
-		[KRPCProperty]
-		public override bool Enabled => base.Enabled;
-
-		[KRPCProperty]
-		public bool Autowarp {
-			get => (bool)autowarp.GetValue(this.instance);
-			set => autowarp.SetValue(this.instance, value);
-		}
-
-		[KRPCProperty]
-		public double LeadTime {
-			get => EditableDouble.Get(this.leadTime);
-			set => EditableDouble.Set(this.leadTime, value);
-		}
-
-		[KRPCProperty]
-		public double Tolerance {
-			get => EditableDouble.Get(this.tolerance);
-			set => EditableDouble.Set(this.tolerance, value);
-		}
-
-		[KRPCMethod]
-		public void ExecuteOneNode() {
-			executeOneNode.Invoke(this.instance, new object[] { this });
-		}
-
-		[KRPCMethod]
-		public void ExecuteAllNodes() {
-			executeAllNodes.Invoke(this.instance, new object[] { this });
-		}
-
-		[KRPCMethod]
-		public void Abort() {
-			abort.Invoke(this.instance, null);
-		}
-	}
+        /// <summary>
+        /// Stop executing the maneuver nodes.
+        /// </summary>
+        [KRPCMethod]
+        public void Abort ()
+        {
+            abort (Instance);
+        }
+    }
 }

@@ -1,61 +1,66 @@
 using System;
-using System.Reflection;
-
-using KRPC.MechJeb.ExtensionMethods;
 using KRPC.Service.Attributes;
 
-namespace KRPC.MechJeb {
-	[KRPCClass(Service = "MechJeb")]
-	public class DeployableController : ComputerModule {
-		internal new const string MechJebType = "MuMech.MechJebModuleDeployableController";
+namespace KRPC.MechJeb
+{
+    /// <summary>
+    /// The controller of one kind of deployable part, such as antennas or solar panels.
+    /// </summary>
+    [KRPCClass (Service = "MechJeb")]
+    public sealed class DeployableController : ComputerModule
+    {
+        static Value<bool> autoDeploy;
+        static Action<object> extendAll;
+        static Action<object> retractAll;
+        static Func<object, bool> allRetracted;
 
-		// Fields and methods
-		private static FieldInfo autoDeploy;
+        internal static new void Load ()
+        {
+            var type = Reflection.Type ("MuMech.MechJebModuleDeployableController");
+            autoDeploy = Reflection.Field<bool> (type, "autoDeploy");
+            extendAll = Reflection.Method<Action<object>> (type, "ExtendAll");
+            retractAll = Reflection.Method<Action<object>> (type, "RetractAll");
+            allRetracted = Reflection.Method<Func<object, bool>> (type, "AllRetracted");
+        }
 
-		private static MethodInfo extendAll;
-		private static MethodInfo retractAll;
-		private static MethodInfo allRetracted;
+        internal DeployableController (string name) : base (name)
+        {
+        }
 
-		internal static new void InitType(Type type) {
-			autoDeploy = type.GetCheckedField("autoDeploy");
+        /// <summary>
+        /// Whether a MechJeb autopilot deploys the parts.
+        /// </summary>
+        [KRPCProperty]
+        public bool AutoDeploy {
+            get { return autoDeploy.Get (Instance); }
+            set { autoDeploy.Set (Instance, value); }
+        }
 
-			extendAll = type.GetCheckedMethod("ExtendAll");
-			retractAll = type.GetCheckedMethod("RetractAll");
-			allRetracted = type.GetCheckedMethod("AllRetracted");
-		}
+        /// <summary>
+        /// Extend all the parts.
+        /// </summary>
+        [KRPCMethod]
+        public void ExtendAll ()
+        {
+            extendAll (Instance);
+        }
 
-		/// <summary>
-		/// Automatically deploy modules of this type when controlled by a MechJeb autopilot
-		/// </summary>
-		[KRPCProperty]
-		public bool AutoDeploy {
-			get => (bool)autoDeploy.GetValue(this.instance);
-			set => autoDeploy.SetValue(this.instance, value);
-		}
+        /// <summary>
+        /// Retract all the parts.
+        /// </summary>
+        [KRPCMethod]
+        public void RetractAll ()
+        {
+            retractAll (Instance);
+        }
 
-		/// <summary>
-		/// Extend all deployable modules of this type.
-		/// </summary>
-		[KRPCMethod]
-		public void ExtendAll() {
-			extendAll.Invoke(this.instance, null);
-		}
-
-		/// <summary>
-		/// Retract all deployable modules of this type.
-		/// </summary>
-		[KRPCMethod]
-		public void RetractAll() {
-			retractAll.Invoke(this.instance, null);
-		}
-
-		/// <summary>
-		/// Check if all deployable modules of this type are retracted.
-		/// </summary>
-		/// <returns>True if all modules are retracted; False otherwise</returns>
-		[KRPCMethod]
-		public bool AllRetracted() {
-			return (bool)allRetracted.Invoke(this.instance, null);
-		}
-	}
+        /// <summary>
+        /// Whether all the parts are retracted.
+        /// </summary>
+        [KRPCMethod]
+        public bool AllRetracted ()
+        {
+            return allRetracted (Instance);
+        }
+    }
 }

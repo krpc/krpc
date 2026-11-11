@@ -1,49 +1,53 @@
-using System;
-using System.Reflection;
-
-using KRPC.MechJeb.ExtensionMethods;
 using KRPC.Service.Attributes;
 
-namespace KRPC.MechJeb {
-	[KRPCClass(Service = "MechJeb")]
-	public class RendezvousAutopilot : KRPCComputerModule {
-		internal new const string MechJebType = "MuMech.MechJebModuleRendezvousAutopilot";
+namespace KRPC.MechJeb
+{
+    /// <summary>
+    /// The rendezvous autopilot, which brings the vessel close to the target vessel.
+    /// </summary>
+    [KRPCClass (Service = "MechJeb")]
+    public sealed class RendezvousAutopilot : KRPCComputerModule
+    {
+        static Value<double> desiredDistance;
+        static Value<double> maxPhasingOrbits;
+        static Value<string> status;
 
-		// Fields and methods
-		private static FieldInfo desiredDistanceField;
-		private static FieldInfo maxPhasingOrbitsField;
-		private static FieldInfo status;
+        internal static new void Load ()
+        {
+            var type = Reflection.Type ("MuMech.MechJebModuleRendezvousAutopilot");
+            desiredDistance = Reflection.EditableDouble (type, "desiredDistance");
+            maxPhasingOrbits = Reflection.EditableDouble (type, "maxPhasingOrbits");
+            status = Reflection.Field<string> (type, "status");
+        }
 
-		// Instance objects
-		private object desiredDistance;
-		private object maxPhasingOrbits;
+        internal RendezvousAutopilot () : base ("MechJebModuleRendezvousAutopilot")
+        {
+        }
 
-		internal static new void InitType(Type type) {
-			desiredDistanceField = type.GetCheckedField("desiredDistance");
-			maxPhasingOrbitsField = type.GetCheckedField("maxPhasingOrbits");
-			status = type.GetCheckedField("status");
-		}
+        /// <summary>
+        /// The final distance from the target, in meters.
+        /// </summary>
+        [KRPCProperty]
+        public double DesiredDistance {
+            get { return desiredDistance.Get (Instance); }
+            set { desiredDistance.Set (Instance, value); }
+        }
 
-		protected internal override void InitInstance(object instance) {
-			base.InitInstance(instance);
+        /// <summary>
+        /// The largest number of orbits to wait for the phase angle.
+        /// </summary>
+        [KRPCProperty]
+        public double MaxPhasingOrbits {
+            get { return maxPhasingOrbits.Get (Instance); }
+            set { maxPhasingOrbits.Set (Instance, value); }
+        }
 
-			this.desiredDistance = desiredDistanceField.GetInstanceValue(instance);
-			this.maxPhasingOrbits = maxPhasingOrbitsField.GetInstanceValue(instance);
-		}
-
-		[KRPCProperty]
-		public double DesiredDistance {
-			get => EditableDouble.Get(this.desiredDistance);
-			set => EditableDouble.Set(this.desiredDistance, value);
-		}
-
-		[KRPCProperty]
-		public double MaxPhasingOrbits {
-			get => EditableDouble.Get(this.maxPhasingOrbits);
-			set => EditableDouble.Set(this.maxPhasingOrbits, value);
-		}
-
-		[KRPCProperty]
-		public string Status => status.GetValue(this.instance).ToString();
-	}
+        /// <summary>
+        /// The status of the autopilot.
+        /// </summary>
+        [KRPCProperty]
+        public string Status {
+            get { return status.Get (Instance); }
+        }
+    }
 }

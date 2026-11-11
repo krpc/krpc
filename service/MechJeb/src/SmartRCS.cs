@@ -1,50 +1,82 @@
 using System;
-using System.Reflection;
-
-using KRPC.MechJeb.ExtensionMethods;
 using KRPC.Service.Attributes;
 
-namespace KRPC.MechJeb {
-	[KRPCClass(Service = "MechJeb")]
-	public class SmartRCS : DisplayModule {
-		internal const string MechJebType = "MuMech.MechJebModuleSmartRcs";
+namespace KRPC.MechJeb
+{
+    /// <summary>
+    /// The Smart RCS window, which holds a velocity with RCS.
+    /// </summary>
+    [KRPCClass (Service = "MechJeb")]
+    public sealed class SmartRCS : DisplayModule
+    {
+        static Value<int> target;
+        static Value<bool> autoDisableSmartRCS;
+        static Action<object> engage;
 
-		// Fields and methods
-		private static FieldInfo target;
-		private static FieldInfo autoDisableSmartRCS;
+        internal static new void Load ()
+        {
+            var type = Reflection.Type ("MuMech.MechJebModuleSmartRcs");
+            target = Reflection.Field<int> (type, "target");
+            autoDisableSmartRCS = Reflection.Field<bool> (type, "autoDisableSmartRCS");
+            engage = Reflection.Method<Action<object>> (type, "Engage");
+        }
 
-		private static MethodInfo engage;
+        internal SmartRCS () : base ("MechJebModuleSmartRcs")
+        {
+        }
 
-		internal static new void InitType(Type type) {
-			target = type.GetCheckedField("target");
-			autoDisableSmartRCS = type.GetCheckedField("autoDisableSmartRCS");
+        /// <summary>
+        /// Whether Smart RCS turns off when an autopilot takes control.
+        /// </summary>
+        [KRPCProperty]
+        public bool AutoDisableSmartRCS {
+            get { return autoDisableSmartRCS.Get (Instance); }
+            set { autoDisableSmartRCS.Set (Instance, value); }
+        }
 
-			engage = type.GetCheckedMethod("Engage");
-		}
+        /// <summary>
+        /// The mode. Throws an exception if set to <see cref="SmartRCSMode.ZeroVelocity"/>,
+        /// which MechJeb 2.15 removed.
+        /// </summary>
+        [KRPCProperty]
+        public SmartRCSMode Mode {
+            get { return (SmartRCSMode)target.Get (Instance); }
+            set {
+                if (value == SmartRCSMode.ZeroVelocity)
+                    throw new MJServiceException ("MechJeb has no ZeroVelocity mode");
+                target.Set (Instance, (int)value);
+                engage (Instance);
+            }
+        }
 
-		[KRPCProperty]
-		public bool AutoDisableSmartRCS {
-			get => (bool)autoDisableSmartRCS.GetValue(this.instance);
-			set => autoDisableSmartRCS.SetValue(this.instance, value);
-		}
+        /// <summary>
+        /// The RCS controller. The same as <see cref="MechJeb.RCSController"/>.
+        /// </summary>
+        [KRPCProperty]
+        public RCSController RCSController {
+            get { return MechJeb.RCSController; }
+        }
+    }
 
-		[KRPCProperty]
-		public SmartRCSMode Mode {
-			get => (SmartRCSMode)target.GetValue(this.instance);
-			set {
-				target.SetValue(this.instance, (int)value);
-				engage.Invoke(this.instance, null);
-			}
-		}
+    /// <summary>
+    /// The mode of Smart RCS. See <see cref="SmartRCS.Mode"/>.
+    /// </summary>
+    [KRPCEnum (Service = "MechJeb")]
+    public enum SmartRCSMode
+    {
+        /// <summary>
+        /// Off.
+        /// </summary>
+        Off,
 
-		[KRPCProperty]
-		public RCSController RCSController => MechJeb.RCSController;
-	}
+        /// <summary>
+        /// Hold zero velocity relative to the target.
+        /// </summary>
+        ZeroRelativeVelocity,
 
-	[KRPCEnum(Service = "MechJeb")]
-	public enum SmartRCSMode {
-		Off,
-		ZeroRelativeVelocity,
-		ZeroVelocity
-	}
+        /// <summary>
+        /// Hold zero velocity. MechJeb 2.15 removed this mode.
+        /// </summary>
+        ZeroVelocity
+    }
 }

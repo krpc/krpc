@@ -1,139 +1,134 @@
-using System;
-using System.Reflection;
-
-using KRPC.MechJeb.ExtensionMethods;
 using KRPC.Service.Attributes;
 
-namespace KRPC.MechJeb {
-	[KRPCClass(Service = "MechJeb")]
-	public class StagingController : KRPCComputerModule {
-		internal new const string MechJebType = "MuMech.MechJebModuleStagingController";
+namespace KRPC.MechJeb
+{
+    /// <summary>
+    /// The staging controller, which stages when a stage runs out of fuel.
+    /// </summary>
+    [KRPCClass (Service = "MechJeb")]
+    public sealed class StagingController : KRPCComputerModule
+    {
+        static Value<double> autostagePreDelay;
+        static Value<double> autostagePostDelay;
+        static Value<int> autostageLimit;
+        static Value<double> fairingMaxDynamicPressure;
+        static Value<double> fairingMinAltitude;
+        static Value<double> clampAutoStageThrustPct;
+        static Value<double> fairingMaxAerothermalFlux;
+        static Value<bool> hotStaging;
+        static Value<double> hotStagingLeadTime;
+        static Value<bool> autostagingOnce;
 
-		// Fields and methods
-		private static FieldInfo autostagePreDelayField;
-		private static FieldInfo autostagePostDelayField;
-		private static FieldInfo autostageLimitField;
-		private static FieldInfo fairingMaxDynamicPressureField;
-		private static FieldInfo fairingMinAltitudeField;
-		private static FieldInfo clampAutoStageThrustPctField;
-		private static FieldInfo fairingMaxAerothermalFluxField;
+        internal static new void Load ()
+        {
+            var type = Reflection.Type ("MuMech.MechJebModuleStagingController");
+            autostagePreDelay = Reflection.EditableDouble (type, "AutostagePreDelay");
+            autostagePostDelay = Reflection.EditableDouble (type, "AutostagePostDelay");
+            autostageLimit = Reflection.EditableInt (type, "AutostageLimit");
+            fairingMaxDynamicPressure = Reflection.EditableDouble (type, "FairingMaxDynamicPressure");
+            fairingMinAltitude = Reflection.EditableDouble (type, "FairingMinAltitude");
+            clampAutoStageThrustPct = Reflection.EditableDouble (type, "ClampAutoStageThrustPct");
+            fairingMaxAerothermalFlux = Reflection.EditableDouble (type, "FairingMaxAerothermalFlux");
+            hotStaging = Reflection.Field<bool> (type, "HotStaging");
+            hotStagingLeadTime = Reflection.EditableDouble (type, "HotStagingLeadTime");
+            autostagingOnce = Reflection.Field<bool> (type, "AutostagingOnce");
+        }
 
-		private static FieldInfo hotStaging;
-		private static FieldInfo hotStagingLeadTimeField;
+        internal StagingController () : base ("MechJebModuleStagingController")
+        {
+        }
 
-		private static FieldInfo autostagingOnce;
+        /// <summary>
+        /// The delay before each staging, in seconds.
+        /// </summary>
+        [KRPCProperty]
+        public double AutostagePreDelay {
+            get { return autostagePreDelay.Get (Instance); }
+            set { autostagePreDelay.Set (Instance, value); }
+        }
 
-		// Instance objects
-		private object autostagePreDelay;
-		private object autostagePostDelay;
-		private object autostageLimit;
-		private object fairingMaxDynamicPressure;
-		private object fairingMinAltitude;
-		private object clampAutoStageThrustPct;
-		private object fairingMaxAerothermalFlux;
+        /// <summary>
+        /// The delay after each staging, in seconds.
+        /// </summary>
+        [KRPCProperty]
+        public double AutostagePostDelay {
+            get { return autostagePostDelay.Get (Instance); }
+            set { autostagePostDelay.Set (Instance, value); }
+        }
 
-		private object hotStagingLeadTime;
+        /// <summary>
+        /// The last stage the controller activates.
+        /// </summary>
+        [KRPCProperty]
+        public int AutostageLimit {
+            get { return autostageLimit.Get (Instance); }
+            set { autostageLimit.Set (Instance, value); }
+        }
 
-		internal static new void InitType(Type type) {
-			autostagePreDelayField = type.GetCheckedField("autostagePreDelay");
-			autostagePostDelayField = type.GetCheckedField("autostagePostDelay");
-			autostageLimitField = type.GetCheckedField("autostageLimit");
-			fairingMaxDynamicPressureField = type.GetCheckedField("fairingMaxDynamicPressure");
-			fairingMinAltitudeField = type.GetCheckedField("fairingMinAltitude");
-			clampAutoStageThrustPctField = type.GetCheckedField("clampAutoStageThrustPct");
-			fairingMaxAerothermalFluxField = type.GetCheckedField("fairingMaxAerothermalFlux");
+        /// <summary>
+        /// The largest dynamic pressure at which the controller jettisons a fairing, in pascals.
+        /// </summary>
+        [KRPCProperty]
+        public double FairingMaxDynamicPressure {
+            get { return fairingMaxDynamicPressure.Get (Instance); }
+            set { fairingMaxDynamicPressure.Set (Instance, value); }
+        }
 
-			hotStaging = type.GetCheckedField("hotStaging");
-			hotStagingLeadTimeField = type.GetCheckedField("hotStagingLeadTime");
+        /// <summary>
+        /// The lowest altitude at which the controller jettisons a fairing, in meters.
+        /// </summary>
+        [KRPCProperty]
+        public double FairingMinAltitude {
+            get { return fairingMinAltitude.Get (Instance); }
+            set { fairingMinAltitude.Set (Instance, value); }
+        }
 
-			autostagingOnce = type.GetCheckedField("autostagingOnce");
-		}
+        /// <summary>
+        /// The fraction of full thrust at which the controller releases the launch clamps.
+        /// </summary>
+        [KRPCProperty]
+        public double ClampAutoStageThrustPct {
+            get { return clampAutoStageThrustPct.Get (Instance); }
+            set { clampAutoStageThrustPct.Set (Instance, value); }
+        }
 
-		protected internal override void InitInstance(object instance) {
-			base.InitInstance(instance);
+        /// <summary>
+        /// The largest aerothermal flux at which the controller jettisons a fairing, in
+        /// <unit>W/m^2</unit>.
+        /// </summary>
+        [KRPCProperty]
+        public double FairingMaxAerothermalFlux {
+            get { return fairingMaxAerothermalFlux.Get (Instance); }
+            set { fairingMaxAerothermalFlux.Set (Instance, value); }
+        }
 
-			this.autostagePreDelay = autostagePreDelayField.GetInstanceValue(instance);
-			this.autostagePostDelay = autostagePostDelayField.GetInstanceValue(instance);
-			this.autostageLimit = autostageLimitField.GetInstanceValue(instance);
-			this.fairingMaxDynamicPressure = fairingMaxDynamicPressureField.GetInstanceValue(instance);
-			this.fairingMinAltitude = fairingMinAltitudeField.GetInstanceValue(instance);
-			this.clampAutoStageThrustPct = clampAutoStageThrustPctField.GetInstanceValue(instance);
-			this.fairingMaxAerothermalFlux = fairingMaxAerothermalFluxField.GetInstanceValue(instance);
+        /// <summary>
+        /// Whether the controller ignites the next stage before the current one burns out.
+        /// </summary>
+        [KRPCProperty]
+        public bool HotStaging {
+            get { return hotStaging.Get (Instance); }
+            set { hotStaging.Set (Instance, value); }
+        }
 
-			this.hotStagingLeadTime = hotStagingLeadTimeField.GetInstanceValue(instance);
-		}
+        /// <summary>
+        /// The time before burnout at which a hot staging happens, in seconds.
+        /// </summary>
+        /// <remarks>Requires <see cref="HotStaging"/>.</remarks>
+        [KRPCProperty]
+        public double HotStagingLeadTime {
+            get { return hotStagingLeadTime.Get (Instance); }
+            set { hotStagingLeadTime.Set (Instance, value); }
+        }
 
-		/// <summary>
-		/// The autopilot will pause the actual staging before ? seconds for each stage.
-		/// </summary>
-		[KRPCProperty]
-		public double AutostagePreDelay {
-			get => EditableDouble.Get(this.autostagePreDelay);
-			set => EditableDouble.Set(this.autostagePreDelay, value);
-		}
-
-		/// <summary>
-		/// The autopilot will pause the actual staging after ? seconds for each stage.
-		/// </summary>
-		[KRPCProperty]
-		public double AutostagePostDelay {
-			get => EditableDouble.Get(this.autostagePostDelay);
-			set => EditableDouble.Set(this.autostagePostDelay, value);
-		}
-
-		/// <summary>
-		/// Stop at the selected stage - staging will not occur beyond this stage number.
-		/// </summary>
-		[KRPCProperty]
-		public int AutostageLimit {
-			get => EditableInt.Get(this.autostageLimit);
-			set => EditableInt.Set(this.autostageLimit, value);
-		}
-
-		[KRPCProperty]
-		public double FairingMaxDynamicPressure {
-			get => EditableDouble.Get(this.fairingMaxDynamicPressure);
-			set => EditableDouble.Set(this.fairingMaxDynamicPressure, value);
-		}
-
-		[KRPCProperty]
-		public double FairingMinAltitude {
-			get => EditableDouble.Get(this.fairingMinAltitude);
-			set => EditableDouble.Set(this.fairingMinAltitude, value);
-		}
-
-		[KRPCProperty]
-		public double ClampAutoStageThrustPct {
-			get => EditableDouble.Get(this.clampAutoStageThrustPct);
-			set => EditableDouble.Set(this.clampAutoStageThrustPct, value);
-		}
-
-		[KRPCProperty]
-		public double FairingMaxAerothermalFlux {
-			get => EditableDouble.Get(this.fairingMaxAerothermalFlux);
-			set => EditableDouble.Set(this.fairingMaxAerothermalFlux, value);
-		}
-
-		[KRPCProperty]
-		public bool HotStaging {
-			get => (bool)hotStaging.GetValue(this.instance);
-			set => hotStaging.SetValue(this.instance, value);
-		}
-
-		[KRPCProperty]
-		public double HotStagingLeadTime {
-			get => EditableDouble.Get(this.hotStagingLeadTime);
-			set => EditableDouble.Set(this.hotStagingLeadTime, value);
-		}
-
-		/// <summary>
-		/// The autostaging mode. If set to true, it will automatically disable itself after one staging action.
-		/// </summary>
-		/// <remarks>The controller needs to be enabled for this to work.</remarks>
-		[KRPCProperty]
-		public bool AutostagingOnce {
-			get => (bool)autostagingOnce.GetValue(this.instance);
-			set => autostagingOnce.SetValue(this.instance, value);
-		}
-	}
+        /// <summary>
+        /// Whether the controller disables itself after one staging.
+        /// </summary>
+        /// <remarks>Requires the controller to be enabled.</remarks>
+        [KRPCProperty]
+        public bool AutostagingOnce {
+            get { return autostagingOnce.Get (Instance); }
+            set { autostagingOnce.Set (Instance, value); }
+        }
+    }
 }

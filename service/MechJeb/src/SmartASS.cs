@@ -1,383 +1,456 @@
 using System;
-using System.Reflection;
-
-using KRPC.MechJeb.ExtensionMethods;
 using KRPC.MechJeb.Util;
 using KRPC.Service.Attributes;
 
-namespace KRPC.MechJeb {
-	/// <summary>
-	/// The Smart A.S.S. module provides aids for vessel pitch control.
-	/// </summary>
-	[KRPCClass(Service = "MechJeb")]
-	public class SmartASS : DisplayModule {
-		internal new const string MechJebType = "MuMech.MechJebModuleSmartASS";
-
-		// Fields and methods
-		private static FieldInfo mode;
-		private static FieldInfo target;
-
-		private static FieldInfo forceRol;
-		private static FieldInfo forcePitch;
-		private static FieldInfo forceYaw;
-
-		private static FieldInfo srfHdg;
-		private static FieldInfo srfPit;
-		private static FieldInfo srfRol;
-
-		private static FieldInfo srfVelYaw;
-		private static FieldInfo srfVelPit;
-		private static FieldInfo srfVelRol;
-
-		private static FieldInfo advReference;
-		private static FieldInfo advDirection;
-
-		private static MethodInfo engage;
-
-		internal static new void InitType(Type type) {
-			mode = type.GetCheckedField("mode");
-			target = type.GetCheckedField("target");
-
-			forceRol = type.GetCheckedField("forceRol");
-			forcePitch = type.GetCheckedField("forcePitch");
-			forceYaw = type.GetCheckedField("forceYaw");
-
-			srfHdg = type.GetCheckedField("srfHdg");
-			srfPit = type.GetCheckedField("srfPit");
-			srfRol = type.GetCheckedField("srfRol");
-
-			srfVelYaw = type.GetCheckedField("srfVelYaw");
-			srfVelPit = type.GetCheckedField("srfVelPit");
-			srfVelRol = type.GetCheckedField("srfVelRol");
-
-			advReference = type.GetCheckedField("advReference");
-			advDirection = type.GetCheckedField("advDirection");
-
-			engage = type.GetCheckedMethod("Engage");
-		}
-
-		/// <summary>
-		/// GUI mode; doesn't do anything except changing SmartASS GUI buttons to a specified mode.
-		/// </summary>
-		[KRPCProperty]
-		public SmartASSInterfaceMode InterfaceMode {
-			get => (SmartASSInterfaceMode)mode.GetValue(this.instance);
-			set {
-				if(value == SmartASSInterfaceMode.Automatic)
-					throw new MJServiceException("Cannot set SmartASSInterfaceMode to Automatic");
-
-				mode.SetValue(this.instance, (int)value);
-			}
-		}
-
-		/// <summary>
-		/// Current autopilot mode.
-		/// </summary>
-		[KRPCProperty]
-		public SmartASSAutopilotMode AutopilotMode {
-			get => (SmartASSAutopilotMode)target.GetValue(this.instance);
-			set {
-				if(value == SmartASSAutopilotMode.Automatic)
-					throw new MJServiceException("Cannot set SmartASSAutopilotMode to Automatic");
-
-				target.SetValue(this.instance, (int)value);
-			}
-		}
-
-		/// <summary>
-		/// Enable yaw control for <see cref="SmartASS.SurfaceHeading" />, <see cref="SmartASSAutopilotMode.SurfacePrograde" /> and <see cref="SmartASSAutopilotMode.SurfaceRetrograde" />.
-		/// </summary>
-		[KRPCProperty]
-		public bool ForceYaw {
-			get => (bool)forceYaw.GetValue(this.instance);
-			set => forceYaw.SetValue(this.instance, value);
-		}
-
-		/// <summary>
-		/// Enable pitch control for <see cref="SmartASS.SurfacePitch" />, <see cref="SmartASSAutopilotMode.SurfacePrograde" /> and <see cref="SmartASSAutopilotMode.SurfaceRetrograde" />.
-		/// </summary>
-		[KRPCProperty]
-		public bool ForcePitch {
-			get => (bool)forcePitch.GetValue(this.instance);
-			set => forcePitch.SetValue(this.instance, value);
-		}
-
-		/// <summary>
-		/// Enable roll control.
-		/// </summary>
-		[KRPCProperty]
-		public bool ForceRoll {
-			get => (bool)forceRol.GetValue(this.instance);
-			set => forceRol.SetValue(this.instance, value);
-		}
-
-		/// <summary>
-		/// Heading; Also called or azimuth, or the direction where you want to go.
-		/// </summary>
-		/// <remarks>Works only in <see cref="SmartASSAutopilotMode.Surface" /> mode.</remarks>
-		[KRPCProperty]
-		public double SurfaceHeading {
-			get => EditableDouble.Get(srfHdg, this.instance);
-			set => EditableDouble.Set(srfHdg, this.instance, value);
-		}
-
-		/// <summary>
-		/// Pitch or inclination; 0 is horizontal and 90 is straight up. Can be negative.
-		/// </summary>
-		/// <remarks>Works only in <see cref="SmartASSAutopilotMode.Surface" /> mode.</remarks>
-		[KRPCProperty]
-		public double SurfacePitch {
-			get => EditableDouble.Get(srfPit, this.instance);
-			set => EditableDouble.Set(srfPit, this.instance, value);
-		}
-
-		/// <summary>
-		/// Roll; 0 is top side up.
-		/// </summary>
-		/// <remarks>Works only in <see cref="SmartASSAutopilotMode.Surface" /> mode.</remarks>
-		[KRPCProperty]
-		public double SurfaceRoll {
-			get => EditableDouble.Get(srfRol, this.instance);
-			set => EditableDouble.Set(srfRol, this.instance, value);
-		}
-
-		/// <remarks>Works only in <see cref="SmartASSAutopilotMode.SurfacePrograde" /> and <see cref="SmartASSAutopilotMode.SurfaceRetrograde" /> mode.</remarks>
-		[KRPCProperty]
-		public double SurfaceVelYaw {
-			get => EditableDouble.Get(srfVelYaw, this.instance);
-			set => EditableDouble.Set(srfVelYaw, this.instance, value);
-		}
-
-		/// <summary>
-		/// Pitch or inclination; 0 is horizontal and 90 is straight up. Can be negative.
-		/// </summary>
-		/// <remarks>Works only in <see cref="SmartASSAutopilotMode.SurfacePrograde" /> and <see cref="SmartASSAutopilotMode.SurfaceRetrograde" /> mode.</remarks>
-		[KRPCProperty]
-		public double SurfaceVelPitch {
-			get => EditableDouble.Get(srfVelPit, this.instance);
-			set => EditableDouble.Set(srfVelPit, this.instance, value);
-		}
-
-		/// <summary>
-		/// Roll; 0 is top side up.
-		/// </summary>
-		/// <remarks>Works only in <see cref="SmartASSAutopilotMode.SurfacePrograde" /> and <see cref="SmartASSAutopilotMode.SurfaceRetrograde" /> mode.</remarks>
-		[KRPCProperty]
-		public double SurfaceVelRoll {
-			get => EditableDouble.Get(srfVelRol, this.instance);
-			set => EditableDouble.Set(srfVelRol, this.instance, value);
-		}
-
-		/// <remarks>Works only in <see cref="SmartASSAutopilotMode.Advanced" /> mode.</remarks>
-		[KRPCProperty]
-		public AttitudeReference AdvancedReference {
-			get => (AttitudeReference)advReference.GetValue(this.instance);
-			set => advReference.SetValue(this.instance, (int)value);
-		}
-
-		/// <remarks>Works only in <see cref="SmartASSAutopilotMode.Advanced" /> mode.</remarks>
-		[KRPCProperty]
-		public Vector6.Direction AdvancedDirection {
-			get => (Vector6.Direction)advDirection.GetValue(this.instance);
-			set => advDirection.SetValue(this.instance, (int)value);
-		}
-
-		/// <summary>
-		/// Update SmartASS position to use new values.
-		/// </summary>
-		/// <param name="resetPID">False most of the time, use true only if it doesn't work.</param>
-		[KRPCMethod]
-		public void Update(bool resetPID) {
-			engage.Invoke(this.instance, new object[] { resetPID });
-		}
-
-		[KRPCEnum(Service = "MechJeb")]
-		public enum SmartASSInterfaceMode {
-			Orbital,
-			Surface,
-			Target,
-			Advanced,
-
-			/// <summary>
-			/// Internal mode, do not set.
-			/// </summary>
-			Automatic
-		}
-
-		[KRPCEnum(Service = "MechJeb")]
-		public enum SmartASSAutopilotMode {
-			/// <summary>
-			/// Switch off Smart A.S.S.
-			/// </summary>
-			Off,
-
-			/// <summary>
-			/// "Kill" the spacecraft's rotation (counters rotation/tumbling).
-			/// </summary>
-			KillRot,
-
-			/// <summary>
-			/// Point the vessel to a maneuver node.
-			/// </summary>
-			Node,
-
-			/// <summary>
-			/// SURFACE: Orient the vessel in specific direction relative to surface.
-			/// </summary>
-			Surface,
-
-			/// <summary>
-			/// ORBIT: Orient to orbital prograde.
-			/// </summary>
-			Prograde,
-
-			/// <summary>
-			/// ORBIT: Orient to orbital retrograde.
-			/// </summary>
-			Retrograde,
-
-			/// <summary>
-			/// ORBIT: Orient to orbital normal (change inclination).
-			/// </summary>
-			NormalPlus,
-
-			/// <summary>
-			/// ORBIT: Orient to orbital anti-normal (change inclination).
-			/// </summary>
-			NormalMinus,
-
-			/// <summary>
-			/// ORBIT: Orient to radial outward (away from SOI).
-			/// </summary>
-			RadialPlus,
-
-			/// <summary>
-			/// ORBIT: Orient to radial inward (towards SOI).
-			/// </summary>
-			RadialMinus,
-
-			/// <summary>
-			/// TARGET: Orient toward your relative velocity. Burning this direction will increase your relative velocity.
-			/// </summary>
-			RelativePlus,
-
-			/// <summary>
-			/// TARGET: Orient away from your relative velocity. Burning this direction will decrease your relative velocity.
-			/// </summary>
-			RelativeMinus,
-
-			/// <summary>
-			/// TARGET: Orient towards the target.
-			/// </summary>
-			TargetPlus,
-
-			/// <summary>
-			/// TARGET: Orient away from the target.
-			/// </summary>
-			TargetMinus,
-
-			/// <summary>
-			/// TARGET: Orient parallel to the target's orientation. If the target is a docking node it orients the ship along the docking axis, pointing away from the node.
-			/// </summary>
-			ParallelPlus,
-
-			/// <summary>
-			/// TARGET: Orient antiparallel to the target's orientation. If the target is a docking node it orients the ship along the docking axis, pointing toward the node.
-			/// </summary>
-			ParallelMinus,
-
-			/// <summary>
-			/// Advanced mode.
-			/// </summary>
-			Advanced,
-
-			/// <summary>
-			/// Automatic mode (internal mode, only for getting status).
-			/// </summary>
-			Automatic,
-
-			/// <summary>
-			/// SURFACE: Orient in the direction of movement relative to the ground. Useful during lift-off for rockets which don't have fins or are otherwise instable.
-			/// </summary>
-			SurfacePrograde,
-
-			/// <summary>
-			/// SURFACE: Orient in the opposite direction of movement relative to the ground. Useful during reentry or aerobraking with an aerodynamically unstable craft.
-			/// </summary>
-			SurfaceRetrograde,
-
-			/// <summary>
-			/// SURFACE: Orient in the direction of horizontal movement relative to the ground.
-			/// </summary>
-			HorizontalPlus,
-
-			/// <summary>
-			/// SURFACE: Orient in the opposite direction of horizontal movement relative to the ground.
-			/// </summary>
-			HorizontalMinus,
-
-			/// <summary>
-			/// SURFACE: Orient "up", perpendicular to the surface.
-			/// </summary>
-			VerticalPlus
-		}
-
-		[KRPCEnum(Service = "MechJeb")]
-		public enum AttitudeReference {
-			/// <summary>
-			/// World coordinate system.
-			/// </summary>
-			Inertial,
-
-			/// <summary>
-			/// forward = prograde, left = normal plus, up = radial plus
-			/// </summary>
-			Orbit,
-
-			/// <summary>
-			/// forward = surface projection of orbit velocity, up = surface normal
-			/// </summary>
-			OrbitHorizontal,
-
-			/// <summary>
-			/// forward = north, left = west, up = surface normal
-			/// </summary>
-			SurfaceNorth,
-
-			/// <summary>
-			/// forward = surface frame vessel velocity, up = perpendicular component of surface normal
-			/// </summary>
-			SurfaceVelocity,
-
-			/// <summary>
-			/// forward = toward target, up = perpendicular component of vessel heading
-			/// </summary>
-			Target,
-
-			/// <summary>
-			/// forward = toward relative velocity direction, up = tbd
-			/// </summary>
-			RelativeVelocity,
-
-			/// <summary>
-			/// forward = direction target is facing, up = target up
-			/// </summary>
-			TargetOrientation,
-
-			/// <summary>
-			/// forward = next maneuver node direction, up = tbd
-			/// </summary>
-			ManeuverNode,
-
-			/// <summary>
-			/// forward = orbit velocity of the parent body orbiting the sun, up = radial plus of that orbit
-			/// </summary>
-			Sun,
-
-			/// <summary>
-			/// forward = surface velocity horizontal component, up = surface normal
-			/// </summary>
-			SurfaceHorizontal
-		}
-	}
+namespace KRPC.MechJeb
+{
+    /// <summary>
+    /// The Smart A.S.S. window, which points the vessel in a chosen direction.
+    /// </summary>
+    [KRPCClass (Service = "MechJeb")]
+    public sealed class SmartASS : DisplayModule
+    {
+        // MechJeb's names of the attitude references, in the order of AttitudeReference
+        static readonly string [] attitudeReferenceNames = {
+            "INERTIAL", "ORBIT", "ORBIT_HORIZONTAL", "SURFACE_NORTH", "SURFACE_VELOCITY", "TARGET",
+            "RELATIVE_VELOCITY", "TARGET_ORIENTATION", "MANEUVER_NODE", "SUN", "SURFACE_HORIZONTAL"
+        };
+
+        static Value<int> mode;
+        static Value<int> target;
+        static Value<bool> forceRol;
+        static Value<bool> forcePitch;
+        static Value<bool> forceYaw;
+        static Value<double> srfHdg;
+        static Value<double> srfPit;
+        static Value<double> srfRol;
+        static Value<double> srfVelYaw;
+        static Value<double> srfVelPit;
+        static Value<double> srfVelRol;
+        static Value<int> advReference;
+        static Value<int> advDirection;
+        static Action<object, bool> engage;
+        static int [] attitudeReferences;
+
+        internal static new void Load ()
+        {
+            var type = Reflection.Type ("MuMech.MechJebModuleSmartASS");
+            mode = Reflection.Field<int> (type, "mode");
+            target = Reflection.Field<int> (type, "target");
+            forceRol = Reflection.Field<bool> (type, "forceRol");
+            forcePitch = Reflection.Field<bool> (type, "forcePitch");
+            forceYaw = Reflection.Field<bool> (type, "forceYaw");
+            srfHdg = Reflection.EditableDouble (type, "srfHdg");
+            srfPit = Reflection.EditableDouble (type, "srfPit");
+            srfRol = Reflection.EditableDouble (type, "srfRol");
+            srfVelYaw = Reflection.EditableDouble (type, "srfVelYaw");
+            srfVelPit = Reflection.EditableDouble (type, "srfVelPit");
+            srfVelRol = Reflection.EditableDouble (type, "srfVelRol");
+            advReference = Reflection.Field<int> (type, "advReference");
+            advDirection = Reflection.Field<int> (type, "advDirection");
+            engage = Reflection.Method<Action<object, bool>> (type, "Engage");
+            var reference = Reflection.Type ("MuMech.AttitudeReference");
+            attitudeReferences = reference == null ? null :
+                Array.ConvertAll (attitudeReferenceNames, name => (int)Enum.Parse (reference, name));
+        }
+
+        internal SmartASS () : base ("MechJebModuleSmartASS")
+        {
+        }
+
+        /// <summary>
+        /// The mode of the window, which selects its buttons and nothing else.
+        /// Throws an exception if set to <see cref="SmartASSInterfaceMode.Automatic"/>.
+        /// </summary>
+        [KRPCProperty]
+        public SmartASSInterfaceMode InterfaceMode {
+            get { return (SmartASSInterfaceMode)mode.Get (Instance); }
+            set {
+                if (value == SmartASSInterfaceMode.Automatic)
+                    throw new MJServiceException ("Cannot set SmartASSInterfaceMode to Automatic");
+                mode.Set (Instance, (int)value);
+            }
+        }
+
+        /// <summary>
+        /// The autopilot mode. Throws an exception if set to
+        /// <see cref="SmartASSAutopilotMode.Automatic"/>.
+        /// </summary>
+        /// <remarks>Call <see cref="Update"/> to apply a change.</remarks>
+        [KRPCProperty]
+        public SmartASSAutopilotMode AutopilotMode {
+            get { return (SmartASSAutopilotMode)target.Get (Instance); }
+            set {
+                if (value == SmartASSAutopilotMode.Automatic)
+                    throw new MJServiceException ("Cannot set SmartASSAutopilotMode to Automatic");
+                target.Set (Instance, (int)value);
+            }
+        }
+
+        /// <summary>
+        /// Whether the autopilot controls the yaw in the <see cref="SmartASSAutopilotMode.Surface"/>,
+        /// <see cref="SmartASSAutopilotMode.SurfacePrograde"/> and
+        /// <see cref="SmartASSAutopilotMode.SurfaceRetrograde"/> modes.
+        /// </summary>
+        [KRPCProperty]
+        public bool ForceYaw {
+            get { return forceYaw.Get (Instance); }
+            set { forceYaw.Set (Instance, value); }
+        }
+
+        /// <summary>
+        /// Whether the autopilot controls the pitch in the <see cref="SmartASSAutopilotMode.Surface"/>,
+        /// <see cref="SmartASSAutopilotMode.SurfacePrograde"/> and
+        /// <see cref="SmartASSAutopilotMode.SurfaceRetrograde"/> modes.
+        /// </summary>
+        [KRPCProperty]
+        public bool ForcePitch {
+            get { return forcePitch.Get (Instance); }
+            set { forcePitch.Set (Instance, value); }
+        }
+
+        /// <summary>
+        /// Whether the autopilot controls the roll.
+        /// </summary>
+        [KRPCProperty]
+        public bool ForceRoll {
+            get { return forceRol.Get (Instance); }
+            set { forceRol.Set (Instance, value); }
+        }
+
+        /// <summary>
+        /// The heading, in degrees.
+        /// </summary>
+        /// <remarks>Applies in the <see cref="SmartASSAutopilotMode.Surface"/> mode.</remarks>
+        [KRPCProperty]
+        public double SurfaceHeading {
+            get { return srfHdg.Get (Instance); }
+            set { srfHdg.Set (Instance, value); }
+        }
+
+        /// <summary>
+        /// The pitch above the horizon, in degrees. 90 is straight up.
+        /// </summary>
+        /// <remarks>Applies in the <see cref="SmartASSAutopilotMode.Surface"/> mode.</remarks>
+        [KRPCProperty]
+        public double SurfacePitch {
+            get { return srfPit.Get (Instance); }
+            set { srfPit.Set (Instance, value); }
+        }
+
+        /// <summary>
+        /// The roll, in degrees. 0 is top side up.
+        /// </summary>
+        /// <remarks>Applies in the <see cref="SmartASSAutopilotMode.Surface"/> mode.</remarks>
+        [KRPCProperty]
+        public double SurfaceRoll {
+            get { return srfRol.Get (Instance); }
+            set { srfRol.Set (Instance, value); }
+        }
+
+        /// <summary>
+        /// The yaw from the surface velocity, in degrees.
+        /// </summary>
+        /// <remarks>
+        /// Applies in the <see cref="SmartASSAutopilotMode.SurfacePrograde"/> and
+        /// <see cref="SmartASSAutopilotMode.SurfaceRetrograde"/> modes.
+        /// </remarks>
+        [KRPCProperty]
+        public double SurfaceVelYaw {
+            get { return srfVelYaw.Get (Instance); }
+            set { srfVelYaw.Set (Instance, value); }
+        }
+
+        /// <summary>
+        /// The pitch from the surface velocity, in degrees.
+        /// </summary>
+        /// <remarks>
+        /// Applies in the <see cref="SmartASSAutopilotMode.SurfacePrograde"/> and
+        /// <see cref="SmartASSAutopilotMode.SurfaceRetrograde"/> modes.
+        /// </remarks>
+        [KRPCProperty]
+        public double SurfaceVelPitch {
+            get { return srfVelPit.Get (Instance); }
+            set { srfVelPit.Set (Instance, value); }
+        }
+
+        /// <summary>
+        /// The roll, in degrees. 0 is top side up.
+        /// </summary>
+        /// <remarks>
+        /// Applies in the <see cref="SmartASSAutopilotMode.SurfacePrograde"/> and
+        /// <see cref="SmartASSAutopilotMode.SurfaceRetrograde"/> modes.
+        /// </remarks>
+        [KRPCProperty]
+        public double SurfaceVelRoll {
+            get { return srfVelRol.Get (Instance); }
+            set { srfVelRol.Set (Instance, value); }
+        }
+
+        /// <summary>
+        /// The reference frame of <see cref="AdvancedDirection"/>. Throws an exception if
+        /// MechJeb uses a reference this enumeration lacks.
+        /// </summary>
+        /// <remarks>Applies in the <see cref="SmartASSAutopilotMode.Advanced"/> mode.</remarks>
+        [KRPCProperty]
+        public AttitudeReference AdvancedReference {
+            get {
+                var index = Array.IndexOf (References, advReference.Get (Instance));
+                if (index < 0)
+                    throw new MJServiceException ("MechJeb's attitude reference has no equivalent in AttitudeReference");
+                return (AttitudeReference)index;
+            }
+            set { advReference.Set (Instance, References [(int)value]); }
+        }
+
+        static int [] References {
+            get {
+                if (attitudeReferences == null)
+                    throw new MissingMemberException ("MechJeb has no AttitudeReference");
+                return attitudeReferences;
+            }
+        }
+
+        /// <summary>
+        /// The direction in <see cref="AdvancedReference"/>.
+        /// </summary>
+        /// <remarks>Applies in the <see cref="SmartASSAutopilotMode.Advanced"/> mode.</remarks>
+        [KRPCProperty]
+        public Vector6.Direction AdvancedDirection {
+            get { return (Vector6.Direction)advDirection.Get (Instance); }
+            set { advDirection.Set (Instance, (int)value); }
+        }
+
+        /// <summary>
+        /// Apply the settings.
+        /// </summary>
+        /// <param name="resetPID">Whether to reset the attitude controller. Use it only if the
+        /// vessel does not follow the new settings.</param>
+        [KRPCMethod]
+        public void Update (bool resetPID)
+        {
+            engage (Instance, resetPID);
+        }
+    }
+
+    /// <summary>
+    /// The mode of the Smart A.S.S. window. See <see cref="SmartASS.InterfaceMode"/>.
+    /// </summary>
+    [KRPCEnum (Service = "MechJeb")]
+    public enum SmartASSInterfaceMode
+    {
+        /// <summary>
+        /// The orbital modes.
+        /// </summary>
+        Orbital,
+
+        /// <summary>
+        /// The surface modes.
+        /// </summary>
+        Surface,
+
+        /// <summary>
+        /// The target modes.
+        /// </summary>
+        Target,
+
+        /// <summary>
+        /// The advanced mode.
+        /// </summary>
+        Advanced,
+
+        /// <summary>
+        /// Set by MechJeb's autopilots. Cannot be set.
+        /// </summary>
+        Automatic
+    }
+
+    /// <summary>
+    /// The autopilot mode of Smart A.S.S. See <see cref="SmartASS.AutopilotMode"/>.
+    /// </summary>
+    [KRPCEnum (Service = "MechJeb")]
+    public enum SmartASSAutopilotMode
+    {
+        /// <summary>
+        /// Off.
+        /// </summary>
+        Off,
+
+        /// <summary>
+        /// Stop the vessel's rotation.
+        /// </summary>
+        KillRot,
+
+        /// <summary>
+        /// Point at the next maneuver node.
+        /// </summary>
+        Node,
+
+        /// <summary>
+        /// Point in the direction set by <see cref="SmartASS.SurfaceHeading"/>,
+        /// <see cref="SmartASS.SurfacePitch"/> and <see cref="SmartASS.SurfaceRoll"/>.
+        /// </summary>
+        Surface,
+
+        /// <summary>
+        /// Point orbital prograde.
+        /// </summary>
+        Prograde,
+
+        /// <summary>
+        /// Point orbital retrograde.
+        /// </summary>
+        Retrograde,
+
+        /// <summary>
+        /// Point orbit normal.
+        /// </summary>
+        NormalPlus,
+
+        /// <summary>
+        /// Point orbit anti-normal.
+        /// </summary>
+        NormalMinus,
+
+        /// <summary>
+        /// Point radially outward.
+        /// </summary>
+        RadialPlus,
+
+        /// <summary>
+        /// Point radially inward.
+        /// </summary>
+        RadialMinus,
+
+        /// <summary>
+        /// Point along the velocity relative to the target.
+        /// </summary>
+        RelativePlus,
+
+        /// <summary>
+        /// Point against the velocity relative to the target.
+        /// </summary>
+        RelativeMinus,
+
+        /// <summary>
+        /// Point at the target.
+        /// </summary>
+        TargetPlus,
+
+        /// <summary>
+        /// Point away from the target.
+        /// </summary>
+        TargetMinus,
+
+        /// <summary>
+        /// Point parallel to the target's orientation. For a docking port, along its axis
+        /// and away from it.
+        /// </summary>
+        ParallelPlus,
+
+        /// <summary>
+        /// Point antiparallel to the target's orientation. For a docking port, along its axis
+        /// and toward it.
+        /// </summary>
+        ParallelMinus,
+
+        /// <summary>
+        /// Point in the direction set by <see cref="SmartASS.AdvancedReference"/> and
+        /// <see cref="SmartASS.AdvancedDirection"/>.
+        /// </summary>
+        Advanced,
+
+        /// <summary>
+        /// Set by MechJeb's autopilots. Cannot be set.
+        /// </summary>
+        Automatic,
+
+        /// <summary>
+        /// Point along the surface velocity.
+        /// </summary>
+        SurfacePrograde,
+
+        /// <summary>
+        /// Point against the surface velocity.
+        /// </summary>
+        SurfaceRetrograde,
+
+        /// <summary>
+        /// Point along the horizontal surface velocity.
+        /// </summary>
+        HorizontalPlus,
+
+        /// <summary>
+        /// Point against the horizontal surface velocity.
+        /// </summary>
+        HorizontalMinus,
+
+        /// <summary>
+        /// Point up, normal to the surface.
+        /// </summary>
+        VerticalPlus
+    }
+
+    /// <summary>
+    /// A reference frame of Smart A.S.S. See <see cref="SmartASS.AdvancedReference"/>.
+    /// </summary>
+    [KRPCEnum (Service = "MechJeb")]
+    public enum AttitudeReference
+    {
+        /// <summary>
+        /// The world coordinate system.
+        /// </summary>
+        Inertial,
+
+        /// <summary>
+        /// Forward is prograde, left is normal and up is radial out.
+        /// </summary>
+        Orbit,
+
+        /// <summary>
+        /// Forward is the orbital velocity projected onto the surface, and up is the surface normal.
+        /// </summary>
+        OrbitHorizontal,
+
+        /// <summary>
+        /// Forward is north, left is west and up is the surface normal.
+        /// </summary>
+        SurfaceNorth,
+
+        /// <summary>
+        /// Forward is the surface velocity, and up is the surface normal perpendicular to it.
+        /// </summary>
+        SurfaceVelocity,
+
+        /// <summary>
+        /// Forward is toward the target, and up is the vessel's heading perpendicular to it.
+        /// </summary>
+        Target,
+
+        /// <summary>
+        /// Forward is the velocity relative to the target.
+        /// </summary>
+        RelativeVelocity,
+
+        /// <summary>
+        /// Forward is the direction the target faces, and up is the target's up.
+        /// </summary>
+        TargetOrientation,
+
+        /// <summary>
+        /// Forward is the burn direction of the next maneuver node.
+        /// </summary>
+        ManeuverNode,
+
+        /// <summary>
+        /// Forward is the orbital velocity of the body that orbits the sun, and up is radial
+        /// out of that orbit.
+        /// </summary>
+        Sun,
+
+        /// <summary>
+        /// Forward is the horizontal surface velocity, and up is the surface normal.
+        /// </summary>
+        SurfaceHorizontal
+    }
 }

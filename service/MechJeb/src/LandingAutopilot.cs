@@ -1,104 +1,121 @@
 using System;
-using System.Reflection;
-
-using KRPC.MechJeb.ExtensionMethods;
 using KRPC.Service.Attributes;
 
-namespace KRPC.MechJeb {
-	/// <summary>
-	/// The Landing Guidance module provides targeted and non-targeted landing autopilot.
-	/// </summary>
-	[KRPCClass(Service = "MechJeb")]
-	public class LandingAutopilot : AutopilotModule {
-		internal new const string MechJebType = "MuMech.MechJebModuleLandingAutopilot";
+namespace KRPC.MechJeb
+{
+    /// <summary>
+    /// The landing autopilot, which lands at a target or wherever the vessel comes down.
+    /// </summary>
+    [KRPCClass (Service = "MechJeb")]
+    public sealed class LandingAutopilot : AutopilotModule
+    {
+        static Value<double> touchdownSpeed;
+        static Value<bool> deployGears;
+        static Value<int> limitGearsStage;
+        static Value<bool> deployChutes;
+        static Value<int> limitChutesStage;
+        static Value<bool> rcsAdjustment;
+        static Action<object, object> landAtPositionTarget;
+        static Action<object, object> landUntargeted;
+        static Action<object> stopLanding;
 
-		// Fields and methods
-		private static FieldInfo touchdownSpeedField;
-		private static FieldInfo deployGears;
-		private static FieldInfo limitGearsStageField;
-		private static FieldInfo deployChutes;
-		private static FieldInfo limitChutesStageField;
-		private static FieldInfo rcsAdjustment;
+        internal static new void Load ()
+        {
+            var type = Reflection.Type ("MuMech.MechJebModuleLandingAutopilot");
+            touchdownSpeed = Reflection.EditableDouble (type, "TouchdownSpeed");
+            deployGears = Reflection.Field<bool> (type, "DeployGears");
+            limitGearsStage = Reflection.EditableInt (type, "LimitGearsStage");
+            deployChutes = Reflection.Field<bool> (type, "DeployChutes");
+            limitChutesStage = Reflection.EditableInt (type, "LimitChutesStage");
+            rcsAdjustment = Reflection.Field<bool> (type, "RCSAdjustment");
+            landAtPositionTarget = Reflection.Method<Action<object, object>> (type, "LandAtPositionTarget");
+            landUntargeted = Reflection.Method<Action<object, object>> (type, "LandUntargeted");
+            stopLanding = Reflection.Method<Action<object>> (type, "StopLanding");
+        }
 
-		private static MethodInfo landAtPositionTarget;
-		private static MethodInfo landUntargeted;
-		private static MethodInfo stopLanding;
+        internal LandingAutopilot () : base ("MechJebModuleLandingAutopilot")
+        {
+        }
 
-		// Instance objects
-		private object touchdownSpeed;
-		private object limitGearsStage;
-		private object limitChutesStage;
+        /// <summary>
+        /// The speed at touchdown, in <unit>m/s</unit>.
+        /// </summary>
+        [KRPCProperty]
+        public double TouchdownSpeed {
+            get { return touchdownSpeed.Get (Instance); }
+            set { touchdownSpeed.Set (Instance, value); }
+        }
 
-		internal static new void InitType(Type type) {
-			touchdownSpeedField = type.GetCheckedField("touchdownSpeed");
-			deployGears = type.GetCheckedField("deployGears");
-			limitGearsStageField = type.GetCheckedField("limitGearsStage");
-			deployChutes = type.GetCheckedField("deployChutes");
-			limitChutesStageField = type.GetCheckedField("limitChutesStage");
-			rcsAdjustment = type.GetCheckedField("rcsAdjustment");
+        /// <summary>
+        /// Whether the autopilot deploys the landing gear.
+        /// </summary>
+        [KRPCProperty]
+        public bool DeployGears {
+            get { return deployGears.Get (Instance); }
+            set { deployGears.Set (Instance, value); }
+        }
 
-			landAtPositionTarget = type.GetCheckedMethod("LandAtPositionTarget");
-			landUntargeted = type.GetCheckedMethod("LandUntargeted");
-			stopLanding = type.GetCheckedMethod("StopLanding");
-		}
+        /// <summary>
+        /// The last stage in which the autopilot deploys the landing gear.
+        /// </summary>
+        [KRPCProperty]
+        public int LimitGearsStage {
+            get { return limitGearsStage.Get (Instance); }
+            set { limitGearsStage.Set (Instance, value); }
+        }
 
-		protected internal override void InitInstance(object instance) {
-			base.InitInstance(instance);
+        /// <summary>
+        /// Whether the autopilot deploys the parachutes.
+        /// </summary>
+        [KRPCProperty]
+        public bool DeployChutes {
+            get { return deployChutes.Get (Instance); }
+            set { deployChutes.Set (Instance, value); }
+        }
 
-			this.touchdownSpeed = touchdownSpeedField.GetInstanceValue(instance);
-			this.limitGearsStage = limitGearsStageField.GetInstanceValue(instance);
-			this.limitChutesStage = limitChutesStageField.GetInstanceValue(instance);
-		}
+        /// <summary>
+        /// The last stage in which the autopilot deploys the parachutes.
+        /// </summary>
+        [KRPCProperty]
+        public int LimitChutesStage {
+            get { return limitChutesStage.Get (Instance); }
+            set { limitChutesStage.Set (Instance, value); }
+        }
 
-		[KRPCProperty]
-		public double TouchdownSpeed {
-			get => EditableDouble.Get(this.touchdownSpeed);
-			set => EditableDouble.Set(this.touchdownSpeed, value);
-		}
+        /// <summary>
+        /// Whether the autopilot corrects its course with RCS.
+        /// </summary>
+        [KRPCProperty]
+        public bool RcsAdjustment {
+            get { return rcsAdjustment.Get (Instance); }
+            set { rcsAdjustment.Set (Instance, value); }
+        }
 
-		[KRPCProperty]
-		public bool DeployGears {
-			get => (bool)deployGears.GetValue(this.instance);
-			set => deployGears.SetValue(this.instance, value);
-		}
+        /// <summary>
+        /// Land at the position target. See <see cref="TargetController.SetPositionTarget"/>.
+        /// </summary>
+        [KRPCMethod]
+        public void LandAtPositionTarget ()
+        {
+            landAtPositionTarget (Instance, this);
+        }
 
-		[KRPCProperty]
-		public int LimitGearsStage {
-			get => EditableInt.Get(this.limitGearsStage);
-			set => EditableInt.Set(this.limitGearsStage, value);
-		}
+        /// <summary>
+        /// Land wherever the vessel comes down.
+        /// </summary>
+        [KRPCMethod]
+        public void LandUntargeted ()
+        {
+            landUntargeted (Instance, this);
+        }
 
-		[KRPCProperty]
-		public bool DeployChutes {
-			get => (bool)deployChutes.GetValue(this.instance);
-			set => deployChutes.SetValue(this.instance, value);
-		}
-
-		[KRPCProperty]
-		public int LimitChutesStage {
-			get => EditableInt.Get(this.limitChutesStage);
-			set => EditableInt.Set(this.limitChutesStage, value);
-		}
-
-		[KRPCProperty]
-		public bool RcsAdjustment {
-			get => (bool)rcsAdjustment.GetValue(this.instance);
-			set => rcsAdjustment.SetValue(this.instance, value);
-		}
-
-		[KRPCMethod]
-		public void LandAtPositionTarget() {
-			landAtPositionTarget.Invoke(this.instance, new object[] { this });
-		}
-
-		[KRPCMethod]
-		public void LandUntargeted() {
-			landUntargeted.Invoke(this.instance, new object[] { this });
-		}
-
-		[KRPCMethod]
-		public void StopLanding() {
-			stopLanding.Invoke(this.instance, null);
-		}
-	}
+        /// <summary>
+        /// Stop the landing.
+        /// </summary>
+        [KRPCMethod]
+        public void StopLanding ()
+        {
+            stopLanding (Instance);
+        }
+    }
 }

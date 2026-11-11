@@ -1,292 +1,318 @@
-using System;
-using System.Reflection;
-
-using KRPC.MechJeb.ExtensionMethods;
 using KRPC.Service.Attributes;
 
-namespace KRPC.MechJeb {
+namespace KRPC.MechJeb
+{
+    /// <summary>
+    /// The airplane autopilot, which holds a heading, altitude, vertical speed, roll and speed.
+    /// </summary>
+    [KRPCClass (Service = "MechJeb")]
+    public sealed class AirplaneAutopilot : KRPCComputerModule
+    {
+        static Value<bool> headingHoldEnabled;
+        static Value<bool> altitudeHoldEnabled;
+        static Value<bool> vertSpeedHoldEnabled;
+        static Value<bool> rollHoldEnabled;
+        static Value<bool> speedHoldEnabled;
+        static Value<double> altitudeTarget;
+        static Value<double> headingTarget;
+        static Value<double> rollTarget;
+        static Value<double> speedTarget;
+        static Value<double> vertSpeedTarget;
+        static Value<double> bankAngle;
+        static Value<double> accKp;
+        static Value<double> accKi;
+        static Value<double> accKd;
+        static Value<double> pitKp;
+        static Value<double> pitKi;
+        static Value<double> pitKd;
+        static Value<double> rolKp;
+        static Value<double> rolKi;
+        static Value<double> rolKd;
+        static Value<double> yawKp;
+        static Value<double> yawKi;
+        static Value<double> yawKd;
+        static Value<double> yawLimit;
+        static Value<double> rollLimit;
+        static Value<double> pitchUpLimit;
+        static Value<double> pitchDownLimit;
 
-	[KRPCClass(Service = "MechJeb")]
-	public class AirplaneAutopilot : KRPCComputerModule {
-		internal new const string MechJebType = "MuMech.MechJebModuleAirplaneAutopilot";
+        internal static new void Load ()
+        {
+            var type = Reflection.Type ("MuMech.MechJebModuleAirplaneAutopilot");
+            headingHoldEnabled = Reflection.Field<bool> (type, "HeadingHoldEnabled");
+            altitudeHoldEnabled = Reflection.Field<bool> (type, "AltitudeHoldEnabled");
+            vertSpeedHoldEnabled = Reflection.Field<bool> (type, "VertSpeedHoldEnabled");
+            rollHoldEnabled = Reflection.Field<bool> (type, "RollHoldEnabled");
+            speedHoldEnabled = Reflection.Field<bool> (type, "SpeedHoldEnabled");
+            altitudeTarget = Reflection.Field<double> (type, "AltitudeTarget");
+            headingTarget = Reflection.Field<double> (type, "HeadingTarget");
+            rollTarget = Reflection.Field<double> (type, "RollTarget");
+            speedTarget = Reflection.Field<double> (type, "SpeedTarget");
+            vertSpeedTarget = Reflection.Field<double> (type, "VertSpeedTarget");
+            bankAngle = Reflection.Field<double> (type, "BankAngle");
+            accKp = Reflection.EditableDouble (type, "AccKp");
+            accKi = Reflection.EditableDouble (type, "AccKi");
+            accKd = Reflection.EditableDouble (type, "AccKd");
+            pitKp = Reflection.EditableDouble (type, "PitKp");
+            pitKi = Reflection.EditableDouble (type, "PitKi");
+            pitKd = Reflection.EditableDouble (type, "PitKd");
+            rolKp = Reflection.EditableDouble (type, "RolKp");
+            rolKi = Reflection.EditableDouble (type, "RolKi");
+            rolKd = Reflection.EditableDouble (type, "RolKd");
+            yawKp = Reflection.EditableDouble (type, "YawKp");
+            yawKi = Reflection.EditableDouble (type, "YawKi");
+            yawKd = Reflection.EditableDouble (type, "YawKd");
+            yawLimit = Reflection.EditableDouble (type, "YawLimit");
+            rollLimit = Reflection.EditableDouble (type, "RollLimit");
+            pitchUpLimit = Reflection.EditableDouble (type, "PitchUpLimit");
+            pitchDownLimit = Reflection.EditableDouble (type, "PitchDownLimit");
+        }
 
-		// Fields and methods
-		private static FieldInfo headingHoldEnabled;
-		private static FieldInfo altitudeHoldEnabled;
-		private static FieldInfo vertSpeedHoldEnabled;
-		private static FieldInfo rollHoldEnabled;
-		private static FieldInfo speedHoldEnabled;
+        internal AirplaneAutopilot () : base ("MechJebModuleAirplaneAutopilot")
+        {
+        }
 
-		private static FieldInfo altitudeTarget;
-		private static FieldInfo headingTarget;
-		private static FieldInfo rollTarget;
-		private static FieldInfo speedTarget;
-		private static FieldInfo vertSpeedTarget;
-		private static FieldInfo bankAngle;
+        /// <summary>
+        /// Whether the autopilot holds the heading.
+        /// </summary>
+        [KRPCProperty]
+        public bool HeadingHoldEnabled {
+            get { return headingHoldEnabled.Get (Instance); }
+            set { headingHoldEnabled.Set (Instance, value); }
+        }
 
-		private static FieldInfo accKpField;
-		private static FieldInfo accKiField;
-		private static FieldInfo accKdField;
+        /// <summary>
+        /// Whether the autopilot holds the altitude.
+        /// </summary>
+        [KRPCProperty]
+        public bool AltitudeHoldEnabled {
+            get { return altitudeHoldEnabled.Get (Instance); }
+            set { altitudeHoldEnabled.Set (Instance, value); }
+        }
 
-		private static FieldInfo pitKpField;
-		private static FieldInfo pitKiField;
-		private static FieldInfo pitKdField;
+        /// <summary>
+        /// Whether the autopilot holds the vertical speed.
+        /// </summary>
+        [KRPCProperty]
+        public bool VertSpeedHoldEnabled {
+            get { return vertSpeedHoldEnabled.Get (Instance); }
+            set { vertSpeedHoldEnabled.Set (Instance, value); }
+        }
 
-		private static FieldInfo rolKpField;
-		private static FieldInfo rolKiField;
-		private static FieldInfo rolKdField;
+        /// <summary>
+        /// Whether the autopilot holds the roll.
+        /// </summary>
+        [KRPCProperty]
+        public bool RollHoldEnabled {
+            get { return rollHoldEnabled.Get (Instance); }
+            set { rollHoldEnabled.Set (Instance, value); }
+        }
 
-		private static FieldInfo yawKpField;
-		private static FieldInfo yawKiField;
-		private static FieldInfo yawKdField;
+        /// <summary>
+        /// Whether the autopilot holds the speed.
+        /// </summary>
+        [KRPCProperty]
+        public bool SpeedHoldEnabled {
+            get { return speedHoldEnabled.Get (Instance); }
+            set { speedHoldEnabled.Set (Instance, value); }
+        }
 
-		private static FieldInfo yawLimitField;
-		private static FieldInfo rollLimitField;
-		private static FieldInfo pitchUpLimitField;
-		private static FieldInfo pitchDownLimitField;
+        /// <summary>
+        /// The target altitude, in meters.
+        /// </summary>
+        [KRPCProperty]
+        public double AltitudeTarget {
+            get { return altitudeTarget.Get (Instance); }
+            set { altitudeTarget.Set (Instance, value); }
+        }
 
-		// Instance objects
-		private object accKp;
-		private object accKi;
-		private object accKd;
+        /// <summary>
+        /// The target heading, in degrees.
+        /// </summary>
+        [KRPCProperty]
+        public double HeadingTarget {
+            get { return headingTarget.Get (Instance); }
+            set { headingTarget.Set (Instance, value); }
+        }
 
-		private object pitKp;
-		private object pitKi;
-		private object pitKd;
+        /// <summary>
+        /// The target roll, in degrees.
+        /// </summary>
+        [KRPCProperty]
+        public double RollTarget {
+            get { return rollTarget.Get (Instance); }
+            set { rollTarget.Set (Instance, value); }
+        }
 
-		private object rolKp;
-		private object rolKi;
-		private object rolKd;
+        /// <summary>
+        /// The target speed, in <unit>m/s</unit>.
+        /// </summary>
+        [KRPCProperty]
+        public double SpeedTarget {
+            get { return speedTarget.Get (Instance); }
+            set { speedTarget.Set (Instance, value); }
+        }
 
-		private object yawKp;
-		private object yawKi;
-		private object yawKd;
+        /// <summary>
+        /// The target vertical speed, in <unit>m/s</unit>.
+        /// </summary>
+        [KRPCProperty]
+        public double VertSpeedTarget {
+            get { return vertSpeedTarget.Get (Instance); }
+            set { vertSpeedTarget.Set (Instance, value); }
+        }
 
-		private object yawLimit;
-		private object rollLimit;
-		private object pitchUpLimit;
-		private object pitchDownLimit;
+        /// <summary>
+        /// The bank angle of a turn, in degrees.
+        /// </summary>
+        [KRPCProperty]
+        public double BankAngle {
+            get { return bankAngle.Get (Instance); }
+            set { bankAngle.Set (Instance, value); }
+        }
 
-		internal static new void InitType(Type type) {
-			headingHoldEnabled = type.GetCheckedField("HeadingHoldEnabled");
-			altitudeHoldEnabled = type.GetCheckedField("AltitudeHoldEnabled");
-			vertSpeedHoldEnabled = type.GetCheckedField("VertSpeedHoldEnabled");
-			rollHoldEnabled = type.GetCheckedField("RollHoldEnabled");
-			speedHoldEnabled = type.GetCheckedField("SpeedHoldEnabled");
+        /// <summary>
+        /// The proportional gain of the speed controller.
+        /// </summary>
+        [KRPCProperty]
+        public double AccKp {
+            get { return accKp.Get (Instance); }
+            set { accKp.Set (Instance, value); }
+        }
 
-			altitudeTarget = type.GetCheckedField("AltitudeTarget");
-			headingTarget = type.GetCheckedField("HeadingTarget");
-			rollTarget = type.GetCheckedField("RollTarget");
-			speedTarget = type.GetCheckedField("SpeedTarget");
-			vertSpeedTarget = type.GetCheckedField("VertSpeedTarget");
-			bankAngle = type.GetCheckedField("BankAngle");
+        /// <summary>
+        /// The integral gain of the speed controller.
+        /// </summary>
+        [KRPCProperty]
+        public double AccKi {
+            get { return accKi.Get (Instance); }
+            set { accKi.Set (Instance, value); }
+        }
 
-			accKpField = type.GetCheckedField("AccKp");
-			accKiField = type.GetCheckedField("AccKi");
-			accKdField = type.GetCheckedField("AccKd");
+        /// <summary>
+        /// The derivative gain of the speed controller.
+        /// </summary>
+        [KRPCProperty]
+        public double AccKd {
+            get { return accKd.Get (Instance); }
+            set { accKd.Set (Instance, value); }
+        }
 
-			pitKpField = type.GetCheckedField("PitKp");
-			pitKiField = type.GetCheckedField("PitKi");
-			pitKdField = type.GetCheckedField("PitKd");
+        /// <summary>
+        /// The proportional gain of the pitch controller.
+        /// </summary>
+        [KRPCProperty]
+        public double PitKp {
+            get { return pitKp.Get (Instance); }
+            set { pitKp.Set (Instance, value); }
+        }
 
-			rolKpField = type.GetCheckedField("RolKp");
-			rolKiField = type.GetCheckedField("RolKi");
-			rolKdField = type.GetCheckedField("RolKd");
+        /// <summary>
+        /// The integral gain of the pitch controller.
+        /// </summary>
+        [KRPCProperty]
+        public double PitKi {
+            get { return pitKi.Get (Instance); }
+            set { pitKi.Set (Instance, value); }
+        }
 
-			yawKpField = type.GetCheckedField("YawKp");
-			yawKiField = type.GetCheckedField("YawKi");
-			yawKdField = type.GetCheckedField("YawKd");
+        /// <summary>
+        /// The derivative gain of the pitch controller.
+        /// </summary>
+        [KRPCProperty]
+        public double PitKd {
+            get { return pitKd.Get (Instance); }
+            set { pitKd.Set (Instance, value); }
+        }
 
-			yawLimitField = type.GetCheckedField("YawLimit");
-			rollLimitField = type.GetCheckedField("RollLimit");
-			pitchUpLimitField = type.GetCheckedField("PitchUpLimit");
-			pitchDownLimitField = type.GetCheckedField("PitchDownLimit");
-		}
+        /// <summary>
+        /// The proportional gain of the roll controller.
+        /// </summary>
+        [KRPCProperty]
+        public double RolKp {
+            get { return rolKp.Get (Instance); }
+            set { rolKp.Set (Instance, value); }
+        }
 
-		protected internal override void InitInstance(object instance) {
-			base.InitInstance(instance);
-			this.accKp = accKpField.GetInstanceValue(instance);
-			this.accKi = accKiField.GetInstanceValue(instance);
-			this.accKd = accKdField.GetInstanceValue(instance);
+        /// <summary>
+        /// The integral gain of the roll controller.
+        /// </summary>
+        [KRPCProperty]
+        public double RolKi {
+            get { return rolKi.Get (Instance); }
+            set { rolKi.Set (Instance, value); }
+        }
 
-			this.pitKp = pitKpField.GetInstanceValue(instance);
-			this.pitKi = pitKiField.GetInstanceValue(instance);
-			this.pitKd = pitKdField.GetInstanceValue(instance);
+        /// <summary>
+        /// The derivative gain of the roll controller.
+        /// </summary>
+        [KRPCProperty]
+        public double RolKd {
+            get { return rolKd.Get (Instance); }
+            set { rolKd.Set (Instance, value); }
+        }
 
-			this.rolKp = rolKpField.GetInstanceValue(instance);
-			this.rolKi = rolKiField.GetInstanceValue(instance);
-			this.rolKd = rolKdField.GetInstanceValue(instance);
+        /// <summary>
+        /// The proportional gain of the yaw controller.
+        /// </summary>
+        [KRPCProperty]
+        public double YawKp {
+            get { return yawKp.Get (Instance); }
+            set { yawKp.Set (Instance, value); }
+        }
 
-			this.yawKp = yawKpField.GetInstanceValue(instance);
-			this.yawKi = yawKiField.GetInstanceValue(instance);
-			this.yawKd = yawKdField.GetInstanceValue(instance);
+        /// <summary>
+        /// The integral gain of the yaw controller.
+        /// </summary>
+        [KRPCProperty]
+        public double YawKi {
+            get { return yawKi.Get (Instance); }
+            set { yawKi.Set (Instance, value); }
+        }
 
-			this.yawLimit = yawLimitField.GetInstanceValue(instance);
-			this.rollLimit = rollLimitField.GetInstanceValue(instance);
-			this.pitchUpLimit = pitchUpLimitField.GetInstanceValue(instance);
-			this.pitchDownLimit = pitchDownLimitField.GetInstanceValue(instance);
-		}
+        /// <summary>
+        /// The derivative gain of the yaw controller.
+        /// </summary>
+        [KRPCProperty]
+        public double YawKd {
+            get { return yawKd.Get (Instance); }
+            set { yawKd.Set (Instance, value); }
+        }
 
-		[KRPCProperty]
-		public bool HeadingHoldEnabled {
-			get => (bool)headingHoldEnabled.GetValue(this.instance);
-			set => headingHoldEnabled.SetValue(this.instance, value);
-		}
+        /// <summary>
+        /// The largest yaw, in degrees.
+        /// </summary>
+        [KRPCProperty]
+        public double YawLimit {
+            get { return yawLimit.Get (Instance); }
+            set { yawLimit.Set (Instance, value); }
+        }
 
-		[KRPCProperty]
-		public bool AltitudeHoldEnabled {
-			get => (bool)altitudeHoldEnabled.GetValue(this.instance);
-			set => altitudeHoldEnabled.SetValue(this.instance, value);
-		}
+        /// <summary>
+        /// The largest roll, in degrees.
+        /// </summary>
+        [KRPCProperty]
+        public double RollLimit {
+            get { return rollLimit.Get (Instance); }
+            set { rollLimit.Set (Instance, value); }
+        }
 
-		[KRPCProperty]
-		public bool VertSpeedHoldEnabled {
-			get => (bool)vertSpeedHoldEnabled.GetValue(this.instance);
-			set => vertSpeedHoldEnabled.SetValue(this.instance, value);
-		}
+        /// <summary>
+        /// The largest pitch up, in degrees.
+        /// </summary>
+        [KRPCProperty]
+        public double PitchUpLimit {
+            get { return pitchUpLimit.Get (Instance); }
+            set { pitchUpLimit.Set (Instance, value); }
+        }
 
-		[KRPCProperty]
-		public bool RollHoldEnabled {
-			get => (bool)rollHoldEnabled.GetValue(this.instance);
-			set => rollHoldEnabled.SetValue(this.instance, value);
-		}
-
-		[KRPCProperty]
-		public bool SpeedHoldEnabled {
-			get => (bool)speedHoldEnabled.GetValue(this.instance);
-			set => speedHoldEnabled.SetValue(this.instance, value);
-		}
-
-		[KRPCProperty]
-		public double AltitudeTarget {
-			get => (double)altitudeTarget.GetValue(this.instance);
-			set => altitudeTarget.SetValue(this.instance, value);
-		}
-
-		[KRPCProperty]
-		public double HeadingTarget {
-			get => (double)headingTarget.GetValue(this.instance);
-			set => headingTarget.SetValue(this.instance, value);
-		}
-
-		[KRPCProperty]
-		public double RollTarget {
-			get => (double)rollTarget.GetValue(this.instance);
-			set => rollTarget.SetValue(this.instance, value);
-		}
-
-		[KRPCProperty]
-		public double SpeedTarget {
-			get => (double)speedTarget.GetValue(this.instance);
-			set => speedTarget.SetValue(this.instance, value);
-		}
-
-		[KRPCProperty]
-		public double VertSpeedTarget {
-			get => (double)vertSpeedTarget.GetValue(this.instance);
-			set => vertSpeedTarget.SetValue(this.instance, value);
-		}
-
-		[KRPCProperty]
-		public double BankAngle {
-			get => (double)bankAngle.GetValue(this.instance);
-			set => bankAngle.SetValue(this.instance, value);
-		}
-
-		[KRPCProperty]
-		public double AccKp {
-			get => EditableDouble.Get(this.accKp);
-			set => EditableDouble.Set(this.accKp, value);
-		}
-
-		[KRPCProperty]
-		public double AccKi {
-			get => EditableDouble.Get(this.accKi);
-			set => EditableDouble.Set(this.accKi, value);
-		}
-
-		[KRPCProperty]
-		public double AccKd {
-			get => EditableDouble.Get(this.accKd);
-			set => EditableDouble.Set(this.accKd, value);
-		}
-
-		[KRPCProperty]
-		public double PitKp {
-			get => EditableDouble.Get(this.pitKp);
-			set => EditableDouble.Set(this.pitKp, value);
-		}
-
-		[KRPCProperty]
-		public double PitKi {
-			get => EditableDouble.Get(this.pitKi);
-			set => EditableDouble.Set(this.pitKi, value);
-		}
-
-		[KRPCProperty]
-		public double PitKd {
-			get => EditableDouble.Get(this.pitKd);
-			set => EditableDouble.Set(this.pitKd, value);
-		}
-
-		[KRPCProperty]
-		public double RolKp {
-			get => EditableDouble.Get(this.rolKp);
-			set => EditableDouble.Set(this.rolKp, value);
-		}
-
-		[KRPCProperty]
-		public double RolKi {
-			get => EditableDouble.Get(this.rolKi);
-			set => EditableDouble.Set(this.rolKi, value);
-		}
-
-		[KRPCProperty]
-		public double RolKd {
-			get => EditableDouble.Get(this.rolKd);
-			set => EditableDouble.Set(this.rolKd, value);
-		}
-
-		[KRPCProperty]
-		public double YawKp {
-			get => EditableDouble.Get(this.yawKp);
-			set => EditableDouble.Set(this.yawKp, value);
-		}
-
-		[KRPCProperty]
-		public double YawKi {
-			get => EditableDouble.Get(this.yawKi);
-			set => EditableDouble.Set(this.yawKi, value);
-		}
-
-		[KRPCProperty]
-		public double YawKd {
-			get => EditableDouble.Get(this.yawKd);
-			set => EditableDouble.Set(this.yawKd, value);
-		}
-
-		[KRPCProperty]
-		public double YawLimit {
-			get => EditableDouble.Get(this.yawLimit);
-			set => EditableDouble.Set(this.yawLimit, value);
-		}
-
-		[KRPCProperty]
-		public double RollLimit {
-			get => EditableDouble.Get(this.rollLimit);
-			set => EditableDouble.Set(this.rollLimit, value);
-		}
-
-		[KRPCProperty]
-		public double PitchUpLimit {
-			get => EditableDouble.Get(this.pitchUpLimit);
-			set => EditableDouble.Set(this.pitchUpLimit, value);
-		}
-
-		[KRPCProperty]
-		public double PitchDownLimit {
-			get => EditableDouble.Get(this.pitchDownLimit);
-			set => EditableDouble.Set(this.pitchDownLimit, value);
-		}
-	}
+        /// <summary>
+        /// The largest pitch down, in degrees.
+        /// </summary>
+        [KRPCProperty]
+        public double PitchDownLimit {
+            get { return pitchDownLimit.Get (Instance); }
+            set { pitchDownLimit.Set (Instance, value); }
+        }
+    }
 }

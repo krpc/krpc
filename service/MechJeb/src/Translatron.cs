@@ -1,104 +1,120 @@
 using System;
-using System.Reflection;
-
-using KRPC.MechJeb.ExtensionMethods;
 using KRPC.Service.Attributes;
 
-namespace KRPC.MechJeb {
-	/// <summary>
-	/// The Translatron module controls the vessel's throttle/velocity.
-	/// </summary>
-	[KRPCClass(Service = "MechJeb")]
-	public class Translatron : DisplayModule {
-		internal new const string MechJebType = "MuMech.MechJebModuleTranslatron";
+namespace KRPC.MechJeb
+{
+    /// <summary>
+    /// The Translatron window, which holds a speed.
+    /// </summary>
+    [KRPCClass (Service = "MechJeb")]
+    public sealed class Translatron : DisplayModule
+    {
+        // MechJeb's value of the DIRECT mode, which comes after KeepVertical
+        const int direct = 4;
 
-		// Fields and methods
-		private static FieldInfo transSpd;
+        static Value<double> transSpd;
+        static Action<object, int> setMode;
+        static Action<object> panicSwitch;
 
-		private static MethodInfo setMode;
-		private static MethodInfo panicSwitch;
+        internal static new void Load ()
+        {
+            var type = Reflection.Type ("MuMech.MechJebModuleTranslatron");
+            transSpd = Reflection.EditableDouble (type, "trans_spd");
+            setMode = Reflection.Method<Action<object, int>> (type, "SetMode");
+            panicSwitch = Reflection.Method<Action<object>> (type, "PanicSwitch");
+        }
 
-		internal static new void InitType(Type type) {
-			transSpd = type.GetCheckedField("trans_spd");
+        internal Translatron () : base ("MechJebModuleTranslatron")
+        {
+        }
 
-			setMode = type.GetCheckedMethod("SetMode");
-			panicSwitch = type.GetCheckedMethod("PanicSwitch");
-		}
+        static object Thrust {
+            get { return MechJeb.ThrustController.Instance; }
+        }
 
-		/// <summary>
-		/// Speed which trasnlatron will hold
-		/// </summary>
-		[KRPCProperty]
-		public double TranslationSpeed {
-			get => EditableDouble.Get(transSpd, this.instance);
-			set {
-				EditableDouble.Set(transSpd, this.instance, value);
-				ThrustController.transSpdAct.SetValue(MechJeb.ThrustController.instance, (float)value);
-			}
-		}
+        /// <summary>
+        /// The speed to hold, in <unit>m/s</unit>.
+        /// </summary>
+        [KRPCProperty]
+        public double TranslationSpeed {
+            get { return transSpd.Get (Instance); }
+            set {
+                transSpd.Set (Instance, value);
+                ThrustController.TransSpdAct.Set (Thrust, (float)value);
+            }
+        }
 
-		/// <summary>
-		/// Kill horizontal speed
-		/// </summary>
-		[KRPCProperty]
-		public bool KillHorizontalSpeed {
-			get => (bool)ThrustController.transKillH.GetValue(MechJeb.ThrustController.instance);
-			set => ThrustController.transKillH.SetValue(MechJeb.ThrustController.instance, value);
-		}
+        /// <summary>
+        /// Whether to cancel the horizontal speed.
+        /// </summary>
+        [KRPCProperty]
+        public bool KillHorizontalSpeed {
+            get { return ThrustController.TransKillH.Get (Thrust); }
+            set { ThrustController.TransKillH.Set (Thrust, value); }
+        }
 
-		/// <summary>
-		/// Current translatron mode.
-		/// </summary>
-		[KRPCProperty]
-		public TranslatronMode Mode {
-			get => (TranslatronMode)ThrustController.tMode.GetValue(MechJeb.ThrustController.instance, null);
-			set {
-				if(value == TranslatronMode.KeepRelative || value == TranslatronMode.Direct)
-					throw new MJServiceException("Cannot set TranslatronMode to internal values");
+        /// <summary>
+        /// The mode. Throws an exception if set to <see cref="TranslatronMode.KeepRelative"/>
+        /// or <see cref="TranslatronMode.Direct"/>.
+        /// </summary>
+        [KRPCProperty]
+        public TranslatronMode Mode {
+            get {
+                var mode = ThrustController.TMode.Get (Thrust);
+                return mode == direct ? TranslatronMode.Direct : (TranslatronMode)mode;
+            }
+            set {
+                if (value == TranslatronMode.KeepRelative || value == TranslatronMode.Direct)
+                    throw new MJServiceException ("Cannot set TranslatronMode to internal values");
+                setMode (Instance, (int)value);
+            }
+        }
 
-				setMode.Invoke(this.instance, new object[] { (int)value });
-			}
-		}
+        /// <summary>
+        /// Abort: separate all but the last stage and engage the landing autopilot. A call
+        /// during an abort cancels it.
+        /// </summary>
+        [KRPCMethod]
+        public void PanicSwitch ()
+        {
+            panicSwitch (Instance);
+        }
+    }
 
-		/// <summary>
-		/// Abort mission by seperating all but the last stage and activating landing autopilot.
-		/// </summary>
-		[KRPCMethod]
-		public void PanicSwitch() {
-			panicSwitch.Invoke(this.instance, null);
-		}
+    /// <summary>
+    /// The mode of Translatron. See <see cref="Translatron.Mode"/>.
+    /// </summary>
+    [KRPCEnum (Service = "MechJeb")]
+    public enum TranslatronMode
+    {
+        /// <summary>
+        /// Off.
+        /// </summary>
+        Off,
 
-		[KRPCEnum(Service = "MechJeb")]
-		public enum TranslatronMode {
-			/// <summary>
-			/// Switch off Translatron.
-			/// </summary>
-			Off,
+        /// <summary>
+        /// Hold the orbital speed.
+        /// </summary>
+        KeepOrbital,
 
-			/// <summary>
-			/// Keep orbital velocity.
-			/// </summary>
-			KeepOrbital,
+        /// <summary>
+        /// Hold the surface speed.
+        /// </summary>
+        KeepSurface,
 
-			/// <summary>
-			/// Keep surface velocity.
-			/// </summary>
-			KeepSurface,
+        /// <summary>
+        /// Hold the vertical speed.
+        /// </summary>
+        KeepVertical,
 
-			/// <summary>
-			/// Keep vertical velocity (climb/descent speed).
-			/// </summary>
-			KeepVertical,
+        /// <summary>
+        /// Unused. MechJeb 2.15 has no such mode.
+        /// </summary>
+        KeepRelative,
 
-			/// <summary>
-			/// Internal mode, do not set.
-			/// </summary>
-			KeepRelative,
-
-			/// <summary>
-			/// Internal mode, do not set.
-			/// </summary>
-			Direct
-		}
-	}
+        /// <summary>
+        /// Set by MechJeb's autopilots. Cannot be set.
+        /// </summary>
+        Direct
+    }
 }
