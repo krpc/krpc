@@ -1,41 +1,47 @@
 using System;
-using System.Reflection;
 
-using KRPC.MechJeb.ExtensionMethods;
+namespace KRPC.MechJeb
+{
+    /// <summary>
+    /// The vessel state of the active vessel's MechJeb.
+    /// </summary>
+    static class VesselState
+    {
+        static Func<object, object> instance;
+        static Value<double> time;
+        static Value<double> celestialLongitude;
+        static Value<double> latitude;
+        static Value<double> longitude;
 
-namespace KRPC.MechJeb {
-	internal class VesselState {
-		internal const string MechJebType = "MuMech.VesselState";
+        internal static void Load (Type core)
+        {
+            instance = Reflection.Field<object> (core, "VesselState").Get;
+            var type = Reflection.Type ("MuMech.VesselState");
+            time = Reflection.Field<double> (type, "time");
+            // Moving averages, which convert to their value
+            celestialLongitude = Reflection.Field<double> (type, "celestialLongitude");
+            latitude = Reflection.Field<double> (type, "latitude");
+            longitude = Reflection.Field<double> (type, "longitude");
+        }
 
-		// Fields and methods
-		private static FieldInfo time;
-		private static FieldInfo celestialLongitudeField;
-		private static FieldInfo latitudeField;
-		private static FieldInfo longitudeField;
+        static object Instance {
+            get { return instance (MechJeb.Core); }
+        }
 
-		// Instance objects
-		private object instance;
-		private object celestialLongitude;
-		private object latitude;
-		private object longitude;
+        public static double Time {
+            get { return time.Get (Instance); }
+        }
 
-		internal static void InitType(Type type) {
-			time = type.GetCheckedField("time");
-			celestialLongitudeField = type.GetCheckedField("celestialLongitude");
-			latitudeField = type.GetCheckedField("latitude");
-			longitudeField = type.GetCheckedField("longitude");
-		}
+        public static double CelestialLongitude {
+            get { return celestialLongitude.Get (Instance); }
+        }
 
-		internal void InitInstance(object instance) {
-			this.instance = instance;
-			this.celestialLongitude = celestialLongitudeField.GetInstanceValue(instance);
-			this.latitude = latitudeField.GetInstanceValue(instance);
-			this.longitude = longitudeField.GetInstanceValue(instance);
-		}
+        public static double Latitude {
+            get { return latitude.Get (Instance); }
+        }
 
-		public double Time => (double)time.GetInstanceValue(this.instance);
-		public double CelestialLongitude => MovingAverage.Get(this.celestialLongitude);
-		public double Latitude => MovingAverage.Get(this.latitude);
-		public double Longitude => MovingAverage.Get(this.longitude);
-	}
+        public static double Longitude {
+            get { return longitude.Get (Instance); }
+        }
+    }
 }

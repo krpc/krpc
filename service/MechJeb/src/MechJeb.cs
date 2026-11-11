@@ -1,224 +1,290 @@
 using System;
-using System.Collections.Generic;
-using System.Reflection;
-
-using KRPC.MechJeb.ExtensionMethods;
+using KRPC.MechJeb.Maneuver;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 
-using UnityEngine;
+namespace KRPC.MechJeb
+{
+    /// <summary>
+    /// This service provides functionality to interact with MechJeb 2.
+    /// </summary>
+    /// <remarks>
+    /// The objects act on the MechJeb of the active vessel, and stay valid after the active
+    /// vessel changes.
+    /// </remarks>
+    [KRPCService (GameScene = GameScene.Flight)]
+    public static class MechJeb
+    {
+        static Func<global::Vessel, object> getMasterMechJeb;
+        static Func<object, string, object> getComputerModule;
 
-namespace KRPC.MechJeb {
-	/// <summary>
-	/// This service provides functionality to interact with <a href="https://github.com/MuMech/MechJeb2">MechJeb 2</a>.
-	/// </summary>
-	[KRPCService(GameScene = Service.GameScene.Flight)]
-	public static class MechJeb {
-		internal const string MechJebType = "MuMech.MechJebCore";
+        static readonly AirplaneAutopilot airplaneAutopilot = new AirplaneAutopilot ();
+        static readonly AscentAutopilot ascentAutopilot = new AscentAutopilot ();
+        static readonly DockingAutopilot dockingAutopilot = new DockingAutopilot ();
+        static readonly LandingAutopilot landingAutopilot = new LandingAutopilot ();
+        static readonly RendezvousAutopilot rendezvousAutopilot = new RendezvousAutopilot ();
+        static readonly ManeuverPlanner maneuverPlanner = new ManeuverPlanner ();
+        static readonly SmartASS smartASS = new SmartASS ();
+        static readonly SmartRCS smartRCS = new SmartRCS ();
+        static readonly Translatron translatron = new Translatron ();
+        static readonly DeployableController antennaController = new DeployableController ("MechJebModuleDeployableAntennaController");
+        static readonly NodeExecutor nodeExecutor = new NodeExecutor ();
+        static readonly RCSController rcsController = new RCSController ();
+        static readonly StagingController stagingController = new StagingController ();
+        static readonly DeployableController solarPanelController = new DeployableController ("MechJebModuleSolarPanelController");
+        static readonly TargetController targetController = new TargetController ();
+        static readonly ThrustController thrustController = new ThrustController ();
 
-		internal static List<string> errors = new List<string>();
+        /// <summary>
+        /// Whether MechJeb is installed, and its members bound.
+        /// </summary>
+        internal static bool Loaded { get; private set; }
 
-		private static Type type;
-		private static FieldInfo vesselStateField;
-		private static MethodInfo getComputerModule;
+        internal static void Load ()
+        {
+            Reflection.Load ();
+            var core = Reflection.Type ("MuMech.MechJebCore");
+            var extensions = Reflection.Type ("MuMech.VesselExtensions");
+            if (core == null || extensions == null) {
+                Loaded = false;
+                return;
+            }
+            getMasterMechJeb = Reflection.Method<Func<global::Vessel, object>> (extensions, "GetMasterMechJeb");
+            getComputerModule = Reflection.Method<Func<object, string, object>> (core, "GetComputerModule");
+            ComputerModule.Load ();
+            AutopilotModule.Load ();
+            VesselState.Load (core);
+            AirplaneAutopilot.Load ();
+            AscentAutopilot.Load ();
+            AscentClassic.Load ();
+            AscentPVG.Load ();
+            DeployableController.Load ();
+            DockingAutopilot.Load ();
+            LandingAutopilot.Load ();
+            ManeuverPlanner.Load ();
+            NodeExecutor.Load ();
+            RCSController.Load ();
+            RendezvousAutopilot.Load ();
+            SmartASS.Load ();
+            SmartRCS.Load ();
+            StagingController.Load ();
+            TargetController.Load ();
+            ThrustController.Load ();
+            Translatron.Load ();
+            Operation.Load ();
+            TimeSelector.Load ();
+            Reflection.LogMissing ();
+            Loaded = true;
+        }
 
-		internal static readonly VesselState vesselState = new VesselState();
-		private static readonly Dictionary<string, Module> modules = new Dictionary<string, Module>();
+        /// <summary>
+        /// The MechJeb core of the active vessel, or null if it has none.
+        /// </summary>
+        static object MasterMechJeb {
+            get {
+                var vessel = FlightGlobals.ActiveVessel;
+                return Loaded && vessel != null ? getMasterMechJeb (vessel) : null;
+            }
+        }
 
-		internal static bool InitTypes() {
-			try {
-				// Scan the project assembly for MechJeb 2 reflection classes
-				Dictionary<string, Type> mechjebTypes = new Dictionary<string, Type>();
-				foreach(Type t in Assembly.GetExecutingAssembly().GetTypes()) {
-					FieldInfo mechjebTypeField = t.GetField("MechJebType", BindingFlags.NonPublic | BindingFlags.Static);
-					if(mechjebTypeField != null) {
-						string mechjebType = (string)mechjebTypeField.GetValue(null);
-						Logger.Debug("Found class " + t.Name + " wanting to use " + mechjebType);
-						mechjebTypes.Add(mechjebType, t);
-					}
-				}
+        internal static void CheckAPI ()
+        {
+            if (!Loaded)
+                throw new InvalidOperationException ("MechJeb is not available");
+        }
 
-				// Scan all assemblies to match kRPC classes to MechJeb 2
-				AssemblyLoader.loadedAssemblies.TypeOperation(mechjebType => {
-					if(mechjebTypes.TryGetValue(mechjebType.FullName, out Type internalType)) {
-						try {
-							Logger.Debug("Loading class " + internalType.Name + " using " + mechjebType.FullName);
-							internalType.GetMethod("InitType", BindingFlags.NonPublic | BindingFlags.Static).Invoke(null, new object[] { mechjebType });
-							mechjebTypes.Remove(mechjebType.FullName);
-						}
-						catch(Exception ex) {
-							string error = "Cannot load class " + internalType.Name;
-							Logger.Severe(error, ex);
-							errors.Add(error);
-						}
-					}
-				});
+        /// <summary>
+        /// The MechJeb core of the active vessel. Throws an exception if it has none.
+        /// </summary>
+        internal static object Core {
+            get {
+                CheckAPI ();
+                var core = MasterMechJeb;
+                if (core == null)
+                    throw new InvalidOperationException ("The active vessel has no MechJeb");
+                return core;
+            }
+        }
 
-				// Check if all classes have been initialized
-				foreach(KeyValuePair<string, Type> p in mechjebTypes) {
-					string error = "Cannot load class " + p.Value.Name;
-					Logger.Severe(error + " because " + p.Key + " was not found");
-					errors.Add(error);
-				}
-			}
-			catch(Exception ex) {
-				Logger.Severe("InitTypes() failed", ex);
-				errors.Clear();
-				errors.Add("kRPC.MechJeb failed to initialize: " + ex.Message);
-				type = null;
-			}
+        /// <summary>
+        /// The computer module of the given type name, of the active vessel's MechJeb.
+        /// </summary>
+        internal static object Module (string name)
+        {
+            var module = getComputerModule (Core, name);
+            if (module == null)
+                throw new MJServiceException ("MechJeb module " + name + " not found");
+            return module;
+        }
 
-			return type != null;
-		}
+        static T Checked<T> (T module)
+        {
+            CheckAPI ();
+            return module;
+        }
 
-		internal static void InitType(Type t) {
-			type = t;
-			vesselStateField = t.GetCheckedField("vesselState");
-			getComputerModule = t.GetCheckedMethod("GetComputerModule", new Type[] { typeof(string) });
+        /// <summary>
+        /// Whether MechJeb is installed and the active vessel has MechJeb.
+        /// </summary>
+        [KRPCProperty]
+        public static bool APIReady {
+            get { return MasterMechJeb != null; }
+        }
 
-			// MechJeb found, create module instances
-			modules.Add("AirplaneAutopilot", new AirplaneAutopilot());
-			modules.Add("AscentAutopilot", new AscentAutopilot());
-			modules.Add("DockingAutopilot", new DockingAutopilot());
-			modules.Add("LandingAutopilot", new LandingAutopilot());
-			modules.Add("RendezvousAutopilot", new RendezvousAutopilot());
+        /// <summary>
+        /// The airplane autopilot.
+        /// </summary>
+        [KRPCProperty]
+        public static AirplaneAutopilot AirplaneAutopilot {
+            get { return Checked (airplaneAutopilot); }
+        }
 
-			modules.Add("ManeuverPlanner", new ManeuverPlanner());
-			modules.Add("SmartASS", new SmartASS());
-			modules.Add("SmartRCS", new SmartRCS());
-			modules.Add("Translatron", new Translatron());
+        /// <summary>
+        /// The ascent autopilot.
+        /// </summary>
+        [KRPCProperty]
+        public static AscentAutopilot AscentAutopilot {
+            get { return Checked (ascentAutopilot); }
+        }
 
-			modules.Add("DeployableAntennaController", new DeployableController());
-			modules.Add("NodeExecutor", new NodeExecutor());
-			modules.Add("RCSController", new RCSController());
-			modules.Add("StagingController", new StagingController());
-			modules.Add("SolarPanelController", new DeployableController());
-			modules.Add("TargetController", new TargetController());
-			modules.Add("ThrustController", new ThrustController());
-		}
+        /// <summary>
+        /// The docking autopilot.
+        /// </summary>
+        [KRPCProperty]
+        public static DockingAutopilot DockingAutopilot {
+            get { return Checked (dockingAutopilot); }
+        }
 
-		internal static bool InitInstance() {
-			//assume all MechJeb types are loaded
+        /// <summary>
+        /// The landing autopilot.
+        /// </summary>
+        [KRPCProperty]
+        public static LandingAutopilot LandingAutopilot {
+            get { return Checked (landingAutopilot); }
+        }
 
-			APIReady = false;
-			try {
-				MasterInstance = FlightGlobals.ActiveVessel.GetMasterMechJeb();
-				if(MasterInstance == null)
-					return false;
+        /// <summary>
+        /// The rendezvous autopilot.
+        /// </summary>
+        [KRPCProperty]
+        public static RendezvousAutopilot RendezvousAutopilot {
+            get { return Checked (rendezvousAutopilot); }
+        }
 
-				vesselState.InitInstance(vesselStateField.GetInstanceValue(MasterInstance));
+        /// <summary>
+        /// The maneuver planner.
+        /// </summary>
+        [KRPCProperty]
+        public static ManeuverPlanner ManeuverPlanner {
+            get { return Checked (maneuverPlanner); }
+        }
 
-				// Set module instances to MechJeb objects
-				foreach(KeyValuePair<string, Module> p in modules) {
-					string error = "Cannot initialize class " + p.Value.GetType().Name + " with " + p.Key;
-					try {
-						object moduleInstance = GetComputerModule(p.Key);
-						if(moduleInstance != null)
-							p.Value.InitInstance(moduleInstance);
-						else
-							errors.Add(error);
-					}
-					catch(Exception ex) {
-						Logger.Severe(error, ex);
-						errors.Add(error);
-					}
-				}
+        /// <summary>
+        /// The Smart A.S.S. window.
+        /// </summary>
+        [KRPCProperty]
+        public static SmartASS SmartASS {
+            get { return Checked (smartASS); }
+        }
 
-				APIReady = true;
-			}
-			catch(Exception ex) {
-				Logger.Severe("InitInstance() failed", ex);
-				errors.Clear();
-				errors.Add("kRPC.MechJeb failed to initialize: " + ex.Message);
-			}
+        /// <summary>
+        /// The Smart RCS window.
+        /// </summary>
+        [KRPCProperty]
+        public static SmartRCS SmartRCS {
+            get { return Checked (smartRCS); }
+        }
 
-			return APIReady;
-		}
+        /// <summary>
+        /// The Translatron window.
+        /// </summary>
+        [KRPCProperty]
+        public static Translatron Translatron {
+            get { return Checked (translatron); }
+        }
 
-		internal static void ShowErrors() {
-			if(errors.Count != 0) {
-				PopupDialog.SpawnPopupDialog(new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), "MechJebChecker", "kRPC.MechJeb may not work properly", string.Join("\n", errors.ToArray()), "OK", false, HighLogic.UISkin);
-				errors.Clear();
-			}
-		}
+        /// <summary>
+        /// The controller of the deployable antennas.
+        /// </summary>
+        [KRPCProperty]
+        public static DeployableController AntennaController {
+            get { return Checked (antennaController); }
+        }
 
-		internal static object GetComputerModule(string moduleType) {
-			object module = getComputerModule.Invoke(MasterInstance, new object[] { "MechJebModule" + moduleType });
-			if(module == null)
-				Logger.Severe("MechJeb module " + moduleType + " not found");
+        /// <summary>
+        /// The maneuver node executor.
+        /// </summary>
+        [KRPCProperty]
+        public static NodeExecutor NodeExecutor {
+            get { return Checked (nodeExecutor); }
+        }
 
-			return module;
-		}
+        /// <summary>
+        /// The RCS controller.
+        /// </summary>
+        [KRPCProperty]
+        public static RCSController RCSController {
+            get { return Checked (rcsController); }
+        }
 
-		internal static PartModule MasterInstance { get; private set; }
+        /// <summary>
+        /// The staging controller.
+        /// </summary>
+        [KRPCProperty]
+        public static StagingController StagingController {
+            get { return Checked (stagingController); }
+        }
 
-		public static bool TypesLoaded => type != null;
+        /// <summary>
+        /// The controller of the deployable solar panels.
+        /// </summary>
+        [KRPCProperty]
+        public static DeployableController SolarPanelController {
+            get { return Checked (solarPanelController); }
+        }
 
-		/// <summary>
-		/// A value indicating whether the service is available.
-		/// </summary>
-		[KRPCProperty]
-		public static bool APIReady { get; private set; }
+        /// <summary>
+        /// The target controller.
+        /// </summary>
+        [KRPCProperty]
+        public static TargetController TargetController {
+            get { return Checked (targetController); }
+        }
 
-		// AUTOPILOTS
+        /// <summary>
+        /// The thrust controller.
+        /// </summary>
+        [KRPCProperty]
+        public static ThrustController ThrustController {
+            get { return Checked (thrustController); }
+        }
+    }
 
-		[KRPCProperty]
-		public static AirplaneAutopilot AirplaneAutopilot => (AirplaneAutopilot)modules["AirplaneAutopilot"];
+    /// <summary>
+    /// A general error in the service.
+    /// </summary>
+    [KRPCException (Service = "MechJeb")]
+    public sealed class MJServiceException : Exception
+    {
+        /// <summary>
+        /// Create the exception.
+        /// </summary>
+        public MJServiceException ()
+        {
+        }
 
-		[KRPCProperty]
-		public static AscentAutopilot AscentAutopilot => (AscentAutopilot)modules["AscentAutopilot"];
+        /// <summary>
+        /// Create the exception with a message.
+        /// </summary>
+        public MJServiceException (string message) : base (message)
+        {
+        }
 
-		[KRPCProperty]
-		public static DockingAutopilot DockingAutopilot => (DockingAutopilot)modules["DockingAutopilot"];
-
-		[KRPCProperty]
-		public static LandingAutopilot LandingAutopilot => (LandingAutopilot)modules["LandingAutopilot"];
-
-		[KRPCProperty]
-		public static RendezvousAutopilot RendezvousAutopilot => (RendezvousAutopilot)modules["RendezvousAutopilot"];
-
-		// WINDOWS
-
-		[KRPCProperty]
-		public static ManeuverPlanner ManeuverPlanner => (ManeuverPlanner)modules["ManeuverPlanner"];
-
-		[KRPCProperty]
-		public static SmartASS SmartASS => (SmartASS)modules["SmartASS"];
-
-		[KRPCProperty]
-		public static SmartRCS SmartRCS => (SmartRCS)modules["SmartRCS"];
-
-		[KRPCProperty]
-		public static Translatron Translatron => (Translatron)modules["Translatron"];
-
-		// CONTROLLERS
-
-		[KRPCProperty]
-		public static DeployableController AntennaController => (DeployableController)modules["DeployableAntennaController"];
-
-		[KRPCProperty]
-		public static NodeExecutor NodeExecutor => (NodeExecutor)modules["NodeExecutor"];
-
-		[KRPCProperty]
-		public static RCSController RCSController => (RCSController)modules["RCSController"];
-
-		[KRPCProperty]
-		public static StagingController StagingController => (StagingController)modules["StagingController"];
-
-		[KRPCProperty]
-		public static DeployableController SolarPanelController => (DeployableController)modules["SolarPanelController"];
-
-		[KRPCProperty]
-		public static TargetController TargetController => (TargetController)modules["TargetController"];
-
-		[KRPCProperty]
-		public static ThrustController ThrustController => (ThrustController)modules["ThrustController"];
-	}
-
-	/// <summary>
-	/// General exception for errors in the service.
-	/// </summary>
-	[KRPCException(Service = "MechJeb")]
-	public class MJServiceException : Exception {
-		public MJServiceException(string message) : base(message) { }
-	}
+        /// <summary>
+        /// Create the exception with a message and an inner exception.
+        /// </summary>
+        public MJServiceException (string message, Exception innerException) : base (message, innerException)
+        {
+        }
+    }
 }
