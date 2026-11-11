@@ -140,6 +140,7 @@ pkg_zip(
         "//service/LiDAR",
         "//service/DockingCamera",
         "//service/Trajectories",
+        "//service/MechJeb",
         # Module Manager
         "@module_manager//file",
         # Schema
@@ -192,6 +193,9 @@ pkg_zip(
         "service/DockingCamera/KRPC.DockingCamera/net472/": "GameData/kRPC/",
         "service/DockingCamera/": "GameData/kRPC/",
         "service/DockingCamera/CHANGELOG.md": "GameData/kRPC/CHANGELOG.DockingCamera.md",
+        "service/MechJeb/KRPC.MechJeb/net472/": "GameData/kRPC/",
+        "service/MechJeb/": "GameData/kRPC/",
+        "service/MechJeb/CHANGELOG.md": "GameData/kRPC/CHANGELOG.MechJeb.md",
         # Module Manager
         "../+http_file+module_manager/file/ModuleManager.4.2.3.dll": "GameData/ModuleManager.4.2.3.dll",
         # Schema
@@ -239,6 +243,7 @@ py_test(
         "//service/InfernalRobotics:csproj-srcs",
         "//service/KerbalAlarmClock:csproj-srcs",
         "//service/LiDAR:csproj-srcs",
+        "//service/MechJeb:csproj-srcs",
         "//service/RemoteTech:csproj-srcs",
         "//service/SpaceCenter:csproj-srcs",
         "//service/Trajectories:csproj-srcs",
@@ -310,6 +315,7 @@ filegroup(
         "//service/InfernalRobotics",
         "//service/KerbalAlarmClock",
         "//service/LiDAR",
+        "//service/MechJeb",
         "//service/RemoteTech",
         "//service/SpaceCenter",
         "//service/UI",

@@ -37,6 +37,7 @@ SHIPPED_MODULES = {
     "LIDAR": "krpc.ksp.lidar",
     "DockingCamera": "krpc.ksp.dockingcamera",
     "Trajectories": "krpc.ksp.trajectories",
+    "MechJeb": "krpc.ksp.mechjeb",
     "Debug": "krpc.ksp.debug",
 }
 

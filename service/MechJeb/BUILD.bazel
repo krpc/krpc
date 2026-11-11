@@ -1,0 +1,65 @@
+load("//:config.bzl", "assembly_version", "author")
+load("//service:build.bzl", "service_deps")
+load("//tools/build:assembly_info.bzl", "csharp_assembly_info")
+load("//tools/build:csharp.bzl", "csharp_library")
+load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
+
+exports_files(["CHANGELOG.md"])
+
+filegroup(
+    name = "MechJeb",
+    srcs = [
+        "CHANGELOG.md",
+        ":KRPC.MechJeb",
+        ":ServiceDefinitions",
+    ],
+    visibility = ["//:__pkg__"],
+)
+
+csharp_assembly_info(
+    name = "AssemblyInfo",
+    cls_compliant = False,
+    copyright = "Genhis, " + author,
+    description = "MechJeb API for kRPC",
+    title = "KRPC.MechJeb",
+    version = assembly_version,
+    visibility = [
+        "//:__pkg__",  # Make visible to //:csproj-deps so it can copy AssemblyInfo.cs to generated_deps
+    ],
+)
+
+srcs = [":AssemblyInfo"] + glob(["src/**/*.cs"])
+
+deps = service_deps + ["//service/SpaceCenter:KRPC.SpaceCenter"]
+
+csharp_library(
+    name = "KRPC.MechJeb",
+    srcs = srcs,
+    target_frameworks = ["net472"],
+    treat_warnings_as_errors = True,
+    visibility = ["//visibility:public"],
+    warning_level = 4,
+    deps = deps,
+)
+
+service_definitions(
+    name = "ServiceDefinitions",
+    out = "KRPC.MechJeb.json",
+    assemblies = [
+        ":KRPC.MechJeb",
+        "//service/SpaceCenter:KRPC.SpaceCenter",
+        "//server:KRPC",
+    ],
+    service = "MechJeb",
+    visibility = ["//visibility:public"],
+)
+
+# Sources for //:csproj-test, which checks them against the .csproj file lists.
+filegroup(
+    name = "csproj-srcs",
+    srcs = glob([
+        "**/*.cs",
+        "**/*.csproj",
+    ]),
+    visibility = ["//:__pkg__"],
+)
