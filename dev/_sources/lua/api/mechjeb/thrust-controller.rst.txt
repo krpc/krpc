@@ -1,0 +1,168 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: MechJeb
+
+ThrustController
+================
+
+
+.. class:: ThrustController
+
+   The thrust controller, which limits the throttle.
+
+   .. attribute:: differential_throttle: boolean
+
+      Whether the controller throttles the engines differentially to steer.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: differential_throttle_status: MechJeb.DifferentialThrottleStatus
+
+      The result of the differential throttle.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: electric_throttle: boolean
+
+      Whether to limit the throttle of electric engines to the available power.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: electric_throttle_hi: number
+
+      The charge level at which electric engines run at full throttle, between 0 and 1.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.ThrustController.electric_throttle`.
+
+   .. attribute:: electric_throttle_lo: number
+
+      The charge level at which electric engines stop, between 0 and 1.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.ThrustController.electric_throttle`.
+
+   .. attribute:: flameout_safety_pct: number
+
+      The safety margin of the jet engines' air intake, as a percentage.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.ThrustController.limit_to_prevent_flameout`.
+
+   .. attribute:: limit_acceleration: boolean
+
+      Whether to limit the acceleration.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: limit_dynamic_pressure: boolean
+
+      Whether to limit the dynamic pressure.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: limit_throttle: boolean
+
+      Whether to limit the throttle.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: limit_to_prevent_flameout: boolean
+
+      Whether to limit the throttle to keep jet engines from flaming out.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: limit_to_prevent_overheats: boolean
+
+      Whether to limit the throttle to keep parts from overheating.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: limiter_min_throttle: boolean
+
+      Whether to keep the throttle above :attr:`MechJeb.ThrustController.min_throttle`.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: manage_intakes: boolean
+
+      Whether the controller opens and closes the air intakes.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: max_acceleration: number
+
+      The largest acceleration, in :math:`\mathrm{m/s^{2}}`.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.ThrustController.limit_acceleration`.
+
+   .. attribute:: max_dynamic_pressure: number
+
+      The largest dynamic pressure, in pascals.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.ThrustController.limit_dynamic_pressure`.
+
+   .. attribute:: max_throttle: number
+
+      The largest throttle, between 0 and 1.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.ThrustController.limit_throttle`.
+
+   .. attribute:: min_throttle: number
+
+      The smallest throttle, between 0 and 1.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.ThrustController.limiter_min_throttle`.
+
+
+
+.. class:: DifferentialThrottleStatus
+
+   The result of the differential throttle. See
+   :attr:`MechJeb.ThrustController.differential_throttle_status`.
+
+
+   .. data:: all_engines_off
+
+      All the engines are off.
+
+
+   .. data:: more_engines_required
+
+      The vessel needs more engines.
+
+
+   .. data:: solver_failed
+
+      The solver found no solution.
+
+
+   .. data:: success
+
+      The throttles balance the thrust.

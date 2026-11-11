@@ -1,0 +1,179 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: MechJeb
+
+AirplaneAutopilot
+=================
+
+
+.. class:: AirplaneAutopilot
+
+   The airplane autopilot, which holds a heading, altitude, vertical speed, roll and speed.
+
+   .. attribute:: enabled: boolean
+
+      Whether the module is enabled.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: altitude_hold_enabled: boolean
+
+      Whether the autopilot holds the altitude.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: altitude_target: number
+
+      The target altitude, in meters.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: bank_angle: number
+
+      The bank angle of a turn, in degrees.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: heading_hold_enabled: boolean
+
+      Whether the autopilot holds the heading.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: heading_target: number
+
+      The target heading, in degrees.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: roll_hold_enabled: boolean
+
+      Whether the autopilot holds the roll.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: roll_target: number
+
+      The target roll, in degrees.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: speed_hold_enabled: boolean
+
+      Whether the autopilot holds the speed.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: speed_target: number
+
+      The target speed, in :math:`\mathrm{m/s}`.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: vert_speed_hold_enabled: boolean
+
+      Whether the autopilot holds the vertical speed.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: vert_speed_target: number
+
+      The target vertical speed, in :math:`\mathrm{m/s}`.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: acc_kd: number
+
+      The derivative gain of the speed controller.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: acc_ki: number
+
+      The integral gain of the speed controller.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: acc_kp: number
+
+      The proportional gain of the speed controller.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: pit_kd: number
+
+      The derivative gain of the pitch controller.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: pit_ki: number
+
+      The integral gain of the pitch controller.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: pit_kp: number
+
+      The proportional gain of the pitch controller.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: rol_kd: number
+
+      The derivative gain of the roll controller.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: rol_ki: number
+
+      The integral gain of the roll controller.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: rol_kp: number
+
+      The proportional gain of the roll controller.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: yaw_kd: number
+
+      The derivative gain of the yaw controller.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: yaw_ki: number
+
+      The integral gain of the yaw controller.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: yaw_kp: number
+
+      The proportional gain of the yaw controller.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: pitch_down_limit: number
+
+      The largest pitch down, in degrees.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: pitch_up_limit: number
+
+      The largest pitch up, in degrees.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: roll_limit: number
+
+      The largest roll, in degrees.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: yaw_limit: number
+
+      The largest yaw, in degrees.
+
+      :Attribute: Can be read or written

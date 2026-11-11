@@ -1,0 +1,78 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::MechJeb
+
+Translatron
+===========
+
+
+.. class:: Translatron
+
+   The Translatron window, which holds a speed.
+
+   .. function:: TranslatronMode mode()
+   .. function:: void set_mode(TranslatronMode value)
+
+      The mode. Throws an exception if set to :enumerator:`TranslatronMode::keep_relative`
+      or :enumerator:`TranslatronMode::direct`.
+
+      :Game Scenes: Flight
+
+   .. function:: double translation_speed()
+   .. function:: void set_translation_speed(double value)
+
+      The speed to hold, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. function:: bool kill_horizontal_speed()
+   .. function:: void set_kill_horizontal_speed(bool value)
+
+      Whether to cancel the horizontal speed.
+
+      :Game Scenes: Flight
+
+   .. function:: void panic_switch()
+
+      Abort: separate all but the last stage and engage the landing autopilot. A call
+      during an abort cancels it.
+
+
+      :Game Scenes: Flight
+
+
+
+.. namespace:: krpc::services::MechJeb
+.. enum-struct:: TranslatronMode
+
+   The mode of Translatron. See :func:`Translatron::mode`.
+
+
+   .. enumerator:: off
+
+      Off.
+
+
+   .. enumerator:: keep_orbital
+
+      Hold the orbital speed.
+
+
+   .. enumerator:: keep_surface
+
+      Hold the surface speed.
+
+
+   .. enumerator:: keep_vertical
+
+      Hold the vertical speed.
+
+
+   .. enumerator:: keep_relative
+
+      Unused. MechJeb 2.15 has no such mode.
+
+
+   .. enumerator:: direct
+
+      Set by MechJeb's autopilots. Cannot be set.

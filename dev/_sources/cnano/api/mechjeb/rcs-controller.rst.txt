@@ -1,0 +1,25 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+RCSController
+=============
+
+
+.. type:: krpc_MechJeb_RCSController_t
+
+   The RCS controller.
+
+   .. function:: krpc_error_t krpc_MechJeb_RCSController_RCSForRotation(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_RCSController_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_RCSController_set_RCSForRotation(krpc_connection_t connection, krpc_MechJeb_RCSController_t instance, bool value)
+
+      Whether the controller uses RCS to rotate the vessel.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_RCSController_RCSThrottle(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_RCSController_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_RCSController_set_RCSThrottle(krpc_connection_t connection, krpc_MechJeb_RCSController_t instance, bool value)
+
+      Whether the controller throttles the RCS thrusters.
+
+      :Game Scenes: Flight

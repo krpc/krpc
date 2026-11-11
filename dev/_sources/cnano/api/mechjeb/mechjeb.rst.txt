@@ -1,0 +1,191 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+MechJeb
+=======
+
+
+This service provides functionality to interact with MechJeb 2.
+
+.. note::
+
+   The objects act on the MechJeb of the active vessel, and stay valid after the active
+   vessel changes.
+
+
+
+.. function:: krpc_error_t krpc_MechJeb_APIReady(krpc_connection_t connection, bool * returnValue)
+
+   Whether MechJeb is installed and the active vessel has MechJeb.
+
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: krpc_error_t krpc_MechJeb_AirplaneAutopilot(krpc_connection_t connection, krpc_MechJeb_AirplaneAutopilot_t * returnValue)
+
+   The airplane autopilot.
+
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: krpc_error_t krpc_MechJeb_AntennaController(krpc_connection_t connection, krpc_MechJeb_DeployableController_t * returnValue)
+
+   The controller of the deployable antennas.
+
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: krpc_error_t krpc_MechJeb_AscentAutopilot(krpc_connection_t connection, krpc_MechJeb_AscentAutopilot_t * returnValue)
+
+   The ascent autopilot.
+
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: krpc_error_t krpc_MechJeb_DockingAutopilot(krpc_connection_t connection, krpc_MechJeb_DockingAutopilot_t * returnValue)
+
+   The docking autopilot.
+
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: krpc_error_t krpc_MechJeb_LandingAutopilot(krpc_connection_t connection, krpc_MechJeb_LandingAutopilot_t * returnValue)
+
+   The landing autopilot.
+
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: krpc_error_t krpc_MechJeb_ManeuverPlanner(krpc_connection_t connection, krpc_MechJeb_ManeuverPlanner_t * returnValue)
+
+   The maneuver planner.
+
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: krpc_error_t krpc_MechJeb_NodeExecutor(krpc_connection_t connection, krpc_MechJeb_NodeExecutor_t * returnValue)
+
+   The maneuver node executor.
+
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: krpc_error_t krpc_MechJeb_RCSController(krpc_connection_t connection, krpc_MechJeb_RCSController_t * returnValue)
+
+   The RCS controller.
+
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: krpc_error_t krpc_MechJeb_RendezvousAutopilot(krpc_connection_t connection, krpc_MechJeb_RendezvousAutopilot_t * returnValue)
+
+   The rendezvous autopilot.
+
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: krpc_error_t krpc_MechJeb_SmartASS(krpc_connection_t connection, krpc_MechJeb_SmartASS_t * returnValue)
+
+   The Smart A.S.S. window.
+
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: krpc_error_t krpc_MechJeb_SmartRCS(krpc_connection_t connection, krpc_MechJeb_SmartRCS_t * returnValue)
+
+   The Smart RCS window.
+
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: krpc_error_t krpc_MechJeb_SolarPanelController(krpc_connection_t connection, krpc_MechJeb_DeployableController_t * returnValue)
+
+   The controller of the deployable solar panels.
+
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: krpc_error_t krpc_MechJeb_StagingController(krpc_connection_t connection, krpc_MechJeb_StagingController_t * returnValue)
+
+   The staging controller.
+
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: krpc_error_t krpc_MechJeb_TargetController(krpc_connection_t connection, krpc_MechJeb_TargetController_t * returnValue)
+
+   The target controller.
+
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: krpc_error_t krpc_MechJeb_ThrustController(krpc_connection_t connection, krpc_MechJeb_ThrustController_t * returnValue)
+
+   The thrust controller.
+
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: krpc_error_t krpc_MechJeb_Translatron(krpc_connection_t connection, krpc_MechJeb_Translatron_t * returnValue)
+
+   The Translatron window.
+
+   :Game Scenes: Flight
+
+
+
+
+
+
+Exception class MJServiceException
+
+A general error in the service.

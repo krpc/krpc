@@ -1,0 +1,29 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: MechJeb
+
+DeployableController
+====================
+
+
+.. class:: DeployableController
+
+   The controller of one kind of deployable part, such as antennas or solar panels.
+
+   .. method:: all_retracted(): boolean
+
+      Whether all the parts are retracted.
+
+   .. attribute:: auto_deploy: boolean
+
+      Whether a MechJeb autopilot deploys the parts.
+
+      :Attribute: Can be read or written
+
+   .. method:: extend_all()
+
+      Extend all the parts.
+
+   .. method:: retract_all()
+
+      Retract all the parts.

@@ -1,0 +1,128 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.MechJeb
+
+TargetController
+================
+
+
+.. class:: TargetController
+
+   The target controller, which holds MechJeb's target.
+
+   .. note::
+
+      Positions and directions are in world space, the coordinate system of the game's
+      physics.
+
+   .. property:: bool CanAlign { get; }
+
+      Whether the vessel can align with the target, which it can with a docking port.
+
+      :Game Scenes: Flight
+
+   .. property:: float Distance { get; }
+
+      The distance to the target, in meters.
+
+      :Game Scenes: Flight
+
+   .. property:: System.Tuple<double,double,double> DockingAxis { get; }
+
+      The world space docking axis of the target.
+
+      :Game Scenes: Flight
+
+   .. function:: System.Tuple<double,double,double> GetPositionTargetPosition()
+
+      The world space position of the position target.
+
+
+      :Game Scenes: Flight
+
+   .. function:: string GetPositionTargetString()
+
+      The position target as text.
+
+
+      :Game Scenes: Flight
+
+   .. property:: bool NormalTargetExists { get; }
+
+      Whether there is a target that is a vessel, a body or a direction target.
+
+      :Game Scenes: Flight
+
+   .. function:: void PickPositionTargetOnMap()
+
+      Let the player pick the position target on the map.
+
+
+      :Game Scenes: Flight
+
+   .. property:: System.Tuple<double,double,double> Position { get; }
+
+      The world space position of the target.
+
+      :Game Scenes: Flight
+
+   .. property:: bool PositionTargetExists { get; }
+
+      Whether there is a target that is a position or a vessel.
+
+      :Game Scenes: Flight
+
+   .. property:: System.Tuple<double,double,double> RelativePosition { get; }
+
+      The world space position of the vessel relative to the target.
+
+      :Game Scenes: Flight
+
+   .. property:: System.Tuple<double,double,double> RelativeVelocity { get; }
+
+      The world space velocity of the vessel relative to the target, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. function:: void SetDirectionTarget(string name)
+
+      Set the target to a direction.
+
+      :parameters:
+
+       * **name** -- The name of the target.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Set the direction with :meth:`TargetController.UpdateDirectionTarget`.
+
+   .. function:: void SetPositionTarget(SpaceCenter.CelestialBody body, double latitude, double longitude)
+
+      Set the target to a position on the surface of a body.
+
+      :parameters:
+
+       * **body** -- The body.
+       * **latitude** -- The latitude, in degrees.
+       * **longitude** -- The longitude, in degrees.
+
+      :Game Scenes: Flight
+
+   .. property:: SpaceCenter.Orbit TargetOrbit { get; }
+
+      The orbit of the target.
+
+      :Game Scenes: Flight
+
+   .. function:: void UpdateDirectionTarget(System.Tuple<double,double,double> direction)
+
+      Set the direction of the direction target.
+
+      :parameters:
+
+       * **direction** -- The world space direction.
+
+      :Game Scenes: Flight

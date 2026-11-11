@@ -1,0 +1,471 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::MechJeb
+
+AscentAutopilot
+===============
+
+
+.. class:: AscentAutopilot
+
+   The ascent autopilot.
+
+   .. note::
+
+      See the `MechJeb wiki <https://github.com/MuMech/MechJeb2/wiki/Ascent-Guidance>`_
+      for how to set up this autopilot.
+
+   .. function:: bool enabled()
+   .. function:: void set_enabled(bool value)
+
+      Whether the autopilot is enabled. Enabling it engages the autopilot of the selected
+      ascent path, and disabling it disengages the autopilots of both paths.
+
+      :Game Scenes: Flight
+
+   .. function:: std::string status()
+
+      The autopilot status, which depends on the selected ascent path.
+
+      :Game Scenes: Flight
+
+   .. function:: int32_t ascent_path_index()
+   .. function:: void set_ascent_path_index(int32_t value)
+
+      The selected ascent path: 0 for :class:`AscentClassic` or 2 for
+      :class:`AscentPVG`.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         MechJeb 2.15 removed the stock-style gravity turn path, which was 1. Setting any other
+         value throws an exception.
+
+   .. function:: AscentClassic ascent_path_classic()
+
+      The settings of the classic ascent profile.
+
+      :Game Scenes: Flight
+
+   .. function:: AscentPVG ascent_path_pvg()
+
+      The settings of the Primer Vector Guidance (RSS/RO) profile.
+
+      :Game Scenes: Flight
+
+   .. function:: double desired_inclination()
+   .. function:: void set_desired_inclination(double value)
+
+      The inclination of the final circular orbit, in degrees.
+
+      :Game Scenes: Flight
+
+   .. function:: double desired_orbit_altitude()
+   .. function:: void set_desired_orbit_altitude(double value)
+
+      The altitude of the final circular orbit, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: ThrustController thrust_controller()
+
+      The thrust controller. The same as :func:`thrust_controller`.
+
+      :Game Scenes: Flight
+
+   .. function:: bool force_roll()
+   .. function:: void set_force_roll(bool value)
+
+      Whether the autopilot controls the roll.
+
+      :Game Scenes: Flight
+
+   .. function:: double turn_roll()
+   .. function:: void set_turn_roll(double value)
+
+      The roll during the turn, in degrees.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`AscentAutopilot::force_roll`.
+
+   .. function:: double vertical_roll()
+   .. function:: void set_vertical_roll(double value)
+
+      The roll during the vertical climb, in degrees.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`AscentAutopilot::force_roll`.
+
+   .. function:: bool limit_ao_a()
+   .. function:: void set_limit_ao_a(bool value)
+
+      Whether to limit the angle of attack.
+
+      :Game Scenes: Flight
+
+   .. function:: double max_ao_a()
+   .. function:: void set_max_ao_a(double value)
+
+      The largest angle of attack, in degrees.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`AscentAutopilot::limit_ao_a`.
+
+   .. function:: double ao_a_limit_fadeout_pressure()
+   .. function:: void set_ao_a_limit_fadeout_pressure(double value)
+
+      The dynamic pressure below which the angle of attack limit fades out, in pascals.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`AscentAutopilot::limit_ao_a`.
+
+   .. function:: bool corrective_steering()
+   .. function:: void set_corrective_steering(bool value)
+
+      Whether the autopilot steers by the velocity vector rather than the position vector.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         It is more accurate, though large craft may do better without it.
+
+   .. function:: double corrective_steering_gain()
+   .. function:: void set_corrective_steering_gain(double value)
+
+      The gain of the corrective steering.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`AscentAutopilot::corrective_steering`.
+
+   .. function:: bool autostage()
+   .. function:: void set_autostage(bool value)
+
+      Whether the autopilot stages when the current stage runs out of fuel.
+
+      :Game Scenes: Flight
+
+   .. function:: StagingController staging_controller()
+
+      The staging controller. The same as :func:`staging_controller`.
+
+      :Game Scenes: Flight
+
+   .. function:: bool autodeploy_solar_panels()
+   .. function:: void set_autodeploy_solar_panels(bool value)
+
+      Whether to deploy the solar panels when the ascent finishes.
+
+      :Game Scenes: Flight
+
+   .. function:: bool auto_deploy_antennas()
+   .. function:: void set_auto_deploy_antennas(bool value)
+
+      Whether to deploy the antennas when the ascent finishes.
+
+      :Game Scenes: Flight
+
+   .. function:: bool skip_circularization()
+   .. function:: void set_skip_circularization(bool value)
+
+      Whether to skip the circularization burn.
+
+      :Game Scenes: Flight
+
+   .. function:: int32_t warp_count_down()
+   .. function:: void set_warp_count_down(int32_t value)
+
+      The time before a timed launch at which time warp stops, in seconds.
+
+      :Game Scenes: Flight
+
+   .. function:: double launch_lan_difference()
+   .. function:: void set_launch_lan_difference(double value)
+
+      The difference from the target's longitude of the ascending node of a launch into the
+      target's plane, in degrees.
+
+      :Game Scenes: Flight
+
+   .. function:: double launch_phase_angle()
+   .. function:: void set_launch_phase_angle(double value)
+
+      The phase angle to the target of a launch to rendezvous, in degrees.
+
+      :Game Scenes: Flight
+
+   .. function:: AscentLaunchMode launch_mode()
+
+      The launch mode, which gives whether the autopilot is waiting for a timed launch.
+
+      :Game Scenes: Flight
+
+   .. function:: void abort_timed_launch()
+
+      Abort a timed launch that has not started yet. Throws an exception if the launch mode
+      is :enumerator:`AscentLaunchMode::unknown`.
+
+
+      :Game Scenes: Flight
+
+   .. function:: void launch_to_rendezvous()
+
+      Launch to rendezvous with the target. Throws an exception if there is no target, or
+      the ascent path is PVG.
+
+
+      :Game Scenes: Flight
+
+   .. function:: void launch_to_target_plane()
+
+      Launch into the plane of the target. Throws an exception if there is no target.
+
+
+      :Game Scenes: Flight
+
+
+
+.. namespace:: krpc::services::MechJeb
+.. enum-struct:: AscentLaunchMode
+
+   The launch mode of the ascent autopilot. See :func:`AscentAutopilot::launch_mode`.
+
+
+   .. enumerator:: normal
+
+      The autopilot is not performing a timed launch.
+
+
+   .. enumerator:: rendezvous
+
+      A timed launch to rendezvous with the target vessel.
+
+
+   .. enumerator:: target_plane
+
+      A timed launch into the plane of the target.
+
+
+   .. enumerator:: unknown
+
+      A timed launch of another kind, started from MechJeb's window.
+
+
+
+AscentClassic
+-------------
+
+
+.. class:: AscentClassic
+
+   The classic ascent profile.
+
+   .. function:: bool auto_path()
+   .. function:: void set_auto_path(bool value)
+
+      Whether the autopilot chooses the turn altitudes and speed.
+
+      :Game Scenes: Flight
+
+   .. function:: float auto_turn_percent()
+   .. function:: void set_auto_turn_percent(float value)
+
+      The altitude at which an automatic turn starts, as a fraction of the height of the
+      atmosphere.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`AscentClassic::auto_path`.
+
+   .. function:: float auto_turn_speed_factor()
+   .. function:: void set_auto_turn_speed_factor(float value)
+
+      The factor that sets the speed at which an automatic turn starts.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`AscentClassic::auto_path`.
+
+   .. function:: double auto_turn_start_altitude()
+
+      The altitude at which an automatic turn starts, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: double auto_turn_start_velocity()
+
+      The speed at which an automatic turn starts, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. function:: double auto_turn_end_altitude()
+
+      The altitude at which an automatic turn ends, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: double turn_start_altitude()
+   .. function:: void set_turn_start_altitude(double value)
+
+      The altitude at which the turn starts, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: double turn_start_velocity()
+   .. function:: void set_turn_start_velocity(double value)
+
+      The speed at which the turn starts, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. function:: double turn_end_altitude()
+   .. function:: void set_turn_end_altitude(double value)
+
+      The altitude at which the turn ends, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: double turn_end_angle()
+   .. function:: void set_turn_end_angle(double value)
+
+      The final flight path angle, in degrees.
+
+      :Game Scenes: Flight
+
+   .. function:: double turn_shape_exponent()
+   .. function:: void set_turn_shape_exponent(double value)
+
+      The steepness of the turn, between 0 and 1.
+
+      :Game Scenes: Flight
+
+
+
+AscentPVG
+---------
+
+
+.. class:: AscentPVG
+
+   The Primer Vector Guidance (RSS/RO) profile.
+
+   .. function:: bool attach_alt_flag()
+   .. function:: void set_attach_alt_flag(bool value)
+
+      Whether the orbit is attached at :func:`AscentPVG::desired_attach_alt`.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         MechJeb reads this setting only when its PVG settings window has an early shutoff
+         stage. Without one, MechJeb always attaches the orbit.
+
+   .. function:: double desired_apoapsis()
+   .. function:: void set_desired_apoapsis(double value)
+
+      The target apoapsis, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: double desired_attach_alt()
+   .. function:: void set_desired_attach_alt(double value)
+
+      The altitude at which the orbit is attached, in meters.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`AscentPVG::attach_alt_flag`, unless MechJeb's PVG settings window has no early
+         shutoff stage.
+
+   .. function:: double dynamic_pressure_trigger()
+   .. function:: void set_dynamic_pressure_trigger(double value)
+
+      The dynamic pressure below which guidance starts, in pascals.
+
+      :Game Scenes: Flight
+
+   .. function:: bool fixed_coast()
+   .. function:: void set_fixed_coast(bool value)
+
+      Whether the coast has a fixed length.
+
+      :Game Scenes: Flight
+
+   .. function:: double fixed_coast_length()
+   .. function:: void set_fixed_coast_length(double value)
+
+      The length of the coast, in seconds.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`AscentPVG::fixed_coast`.
+
+   .. function:: double pitch_rate()
+   .. function:: void set_pitch_rate(double value)
+
+      The pitch rate of the booster, in :math:`\mathrm{deg/s}`.
+
+      :Game Scenes: Flight
+
+   .. function:: double pitch_start_velocity()
+   .. function:: void set_pitch_start_velocity(double value)
+
+      The speed at which the booster starts to pitch over, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. function:: int32_t staging_trigger()
+   .. function:: void set_staging_trigger(int32_t value)
+
+      The stage after which guidance starts.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`AscentPVG::staging_trigger_flag`.
+
+   .. function:: bool staging_trigger_flag()
+   .. function:: void set_staging_trigger_flag(bool value)
+
+      Whether guidance starts after :func:`AscentPVG::staging_trigger`.
+
+      :Game Scenes: Flight

@@ -1,0 +1,209 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: MechJeb
+
+ThrustController
+================
+
+
+.. class:: ThrustController
+
+   The thrust controller, which limits the throttle.
+
+   .. attribute:: differential_throttle
+
+      Whether the controller throttles the engines differentially to steer.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: differential_throttle_status
+
+      The result of the differential throttle.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`DifferentialThrottleStatus`
+      :Game Scenes: Flight
+
+   .. attribute:: electric_throttle
+
+      Whether to limit the throttle of electric engines to the available power.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: electric_throttle_hi
+
+      The charge level at which electric engines run at full throttle, between 0 and 1.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :attr:`ThrustController.electric_throttle`.
+
+   .. attribute:: electric_throttle_lo
+
+      The charge level at which electric engines stop, between 0 and 1.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :attr:`ThrustController.electric_throttle`.
+
+   .. attribute:: flameout_safety_pct
+
+      The safety margin of the jet engines' air intake, as a percentage.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :attr:`ThrustController.limit_to_prevent_flameout`.
+
+   .. attribute:: limit_acceleration
+
+      Whether to limit the acceleration.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: limit_dynamic_pressure
+
+      Whether to limit the dynamic pressure.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: limit_throttle
+
+      Whether to limit the throttle.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: limit_to_prevent_flameout
+
+      Whether to limit the throttle to keep jet engines from flaming out.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: limit_to_prevent_overheats
+
+      Whether to limit the throttle to keep parts from overheating.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: limiter_min_throttle
+
+      Whether to keep the throttle above :attr:`ThrustController.min_throttle`.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: manage_intakes
+
+      Whether the controller opens and closes the air intakes.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: max_acceleration
+
+      The largest acceleration, in :math:`\mathrm{m/s^{2}}`.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :attr:`ThrustController.limit_acceleration`.
+
+   .. attribute:: max_dynamic_pressure
+
+      The largest dynamic pressure, in pascals.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :attr:`ThrustController.limit_dynamic_pressure`.
+
+   .. attribute:: max_throttle
+
+      The largest throttle, between 0 and 1.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :attr:`ThrustController.limit_throttle`.
+
+   .. attribute:: min_throttle
+
+      The smallest throttle, between 0 and 1.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :attr:`ThrustController.limiter_min_throttle`.
+
+
+
+.. class:: DifferentialThrottleStatus
+
+   The result of the differential throttle. See
+   :attr:`ThrustController.differential_throttle_status`.
+
+
+   .. data:: all_engines_off
+
+      All the engines are off.
+
+
+   .. data:: more_engines_required
+
+      The vessel needs more engines.
+
+
+   .. data:: solver_failed
+
+      The solver found no solution.
+
+
+   .. data:: success
+
+      The throttles balance the thrust.

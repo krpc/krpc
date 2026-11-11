@@ -1,0 +1,235 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: MechJeb
+
+AirplaneAutopilot
+=================
+
+
+.. class:: AirplaneAutopilot
+
+   The airplane autopilot, which holds a heading, altitude, vertical speed, roll and speed.
+
+   .. attribute:: enabled
+
+      Whether the module is enabled.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: altitude_hold_enabled
+
+      Whether the autopilot holds the altitude.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: altitude_target
+
+      The target altitude, in meters.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: bank_angle
+
+      The bank angle of a turn, in degrees.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: heading_hold_enabled
+
+      Whether the autopilot holds the heading.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: heading_target
+
+      The target heading, in degrees.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: roll_hold_enabled
+
+      Whether the autopilot holds the roll.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: roll_target
+
+      The target roll, in degrees.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: speed_hold_enabled
+
+      Whether the autopilot holds the speed.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: speed_target
+
+      The target speed, in :math:`\mathrm{m/s}`.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: vert_speed_hold_enabled
+
+      Whether the autopilot holds the vertical speed.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: vert_speed_target
+
+      The target vertical speed, in :math:`\mathrm{m/s}`.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: acc_kd
+
+      The derivative gain of the speed controller.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: acc_ki
+
+      The integral gain of the speed controller.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: acc_kp
+
+      The proportional gain of the speed controller.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: pit_kd
+
+      The derivative gain of the pitch controller.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: pit_ki
+
+      The integral gain of the pitch controller.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: pit_kp
+
+      The proportional gain of the pitch controller.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: rol_kd
+
+      The derivative gain of the roll controller.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: rol_ki
+
+      The integral gain of the roll controller.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: rol_kp
+
+      The proportional gain of the roll controller.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: yaw_kd
+
+      The derivative gain of the yaw controller.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: yaw_ki
+
+      The integral gain of the yaw controller.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: yaw_kp
+
+      The proportional gain of the yaw controller.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: pitch_down_limit
+
+      The largest pitch down, in degrees.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: pitch_up_limit
+
+      The largest pitch up, in degrees.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: roll_limit
+
+      The largest roll, in degrees.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: yaw_limit
+
+      The largest yaw, in degrees.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight

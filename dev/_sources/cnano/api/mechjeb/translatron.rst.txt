@@ -1,0 +1,77 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Translatron
+===========
+
+
+.. type:: krpc_MechJeb_Translatron_t
+
+   The Translatron window, which holds a speed.
+
+   .. function:: krpc_error_t krpc_MechJeb_Translatron_Mode(krpc_connection_t connection, krpc_MechJeb_TranslatronMode_t * returnValue, krpc_MechJeb_Translatron_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_Translatron_set_Mode(krpc_connection_t connection, krpc_MechJeb_Translatron_t instance, krpc_MechJeb_TranslatronMode_t value)
+
+      The mode. Throws an exception if set to :macro:`KRPC_MECHJEB_TRANSLATRONMODE_KEEPRELATIVE`
+      or :macro:`KRPC_MECHJEB_TRANSLATRONMODE_DIRECT`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_Translatron_TranslationSpeed(krpc_connection_t connection, double * returnValue, krpc_MechJeb_Translatron_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_Translatron_set_TranslationSpeed(krpc_connection_t connection, krpc_MechJeb_Translatron_t instance, double value)
+
+      The speed to hold, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_Translatron_KillHorizontalSpeed(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_Translatron_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_Translatron_set_KillHorizontalSpeed(krpc_connection_t connection, krpc_MechJeb_Translatron_t instance, bool value)
+
+      Whether to cancel the horizontal speed.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_Translatron_PanicSwitch(krpc_connection_t connection, krpc_MechJeb_Translatron_t instance)
+
+      Abort: separate all but the last stage and engage the landing autopilot. A call
+      during an abort cancels it.
+
+
+      :Game Scenes: Flight
+
+
+
+.. type:: krpc_MechJeb_TranslatronMode_t
+
+   The mode of Translatron. See :func:`krpc_MechJeb_Translatron_Mode`.
+
+
+   .. macro:: KRPC_MECHJEB_TRANSLATRONMODE_OFF
+
+      Off.
+
+
+   .. macro:: KRPC_MECHJEB_TRANSLATRONMODE_KEEPORBITAL
+
+      Hold the orbital speed.
+
+
+   .. macro:: KRPC_MECHJEB_TRANSLATRONMODE_KEEPSURFACE
+
+      Hold the surface speed.
+
+
+   .. macro:: KRPC_MECHJEB_TRANSLATRONMODE_KEEPVERTICAL
+
+      Hold the vertical speed.
+
+
+   .. macro:: KRPC_MECHJEB_TRANSLATRONMODE_KEEPRELATIVE
+
+      Unused. MechJeb 2.15 has no such mode.
+
+
+   .. macro:: KRPC_MECHJEB_TRANSLATRONMODE_DIRECT
+
+      Set by MechJeb's autopilots. Cannot be set.

@@ -1,0 +1,522 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: MechJeb
+
+AscentAutopilot
+===============
+
+
+.. class:: AscentAutopilot
+
+   The ascent autopilot.
+
+   .. note::
+
+      See the `MechJeb wiki <https://github.com/MuMech/MechJeb2/wiki/Ascent-Guidance>`_
+      for how to set up this autopilot.
+
+   .. attribute:: enabled
+
+      Whether the autopilot is enabled. Enabling it engages the autopilot of the selected
+      ascent path, and disabling it disengages the autopilots of both paths.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: status
+
+      The autopilot status, which depends on the selected ascent path.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: str
+      :Game Scenes: Flight
+
+   .. attribute:: ascent_path_index
+
+      The selected ascent path: 0 for :class:`AscentClassic` or 2 for
+      :class:`AscentPVG`.
+
+      :Attribute: Can be read or written
+      :rtype: int
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         MechJeb 2.15 removed the stock-style gravity turn path, which was 1. Setting any other
+         value throws an exception.
+
+   .. attribute:: ascent_path_classic
+
+      The settings of the classic ascent profile.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`AscentClassic`
+      :Game Scenes: Flight
+
+   .. attribute:: ascent_path_pvg
+
+      The settings of the Primer Vector Guidance (RSS/RO) profile.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`AscentPVG`
+      :Game Scenes: Flight
+
+   .. attribute:: desired_inclination
+
+      The inclination of the final circular orbit, in degrees.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: desired_orbit_altitude
+
+      The altitude of the final circular orbit, in meters.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: thrust_controller
+
+      The thrust controller. The same as :attr:`thrust_controller`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`ThrustController`
+      :Game Scenes: Flight
+
+   .. attribute:: force_roll
+
+      Whether the autopilot controls the roll.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: turn_roll
+
+      The roll during the turn, in degrees.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :attr:`AscentAutopilot.force_roll`.
+
+   .. attribute:: vertical_roll
+
+      The roll during the vertical climb, in degrees.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :attr:`AscentAutopilot.force_roll`.
+
+   .. attribute:: limit_ao_a
+
+      Whether to limit the angle of attack.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: max_ao_a
+
+      The largest angle of attack, in degrees.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :attr:`AscentAutopilot.limit_ao_a`.
+
+   .. attribute:: ao_a_limit_fadeout_pressure
+
+      The dynamic pressure below which the angle of attack limit fades out, in pascals.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :attr:`AscentAutopilot.limit_ao_a`.
+
+   .. attribute:: corrective_steering
+
+      Whether the autopilot steers by the velocity vector rather than the position vector.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         It is more accurate, though large craft may do better without it.
+
+   .. attribute:: corrective_steering_gain
+
+      The gain of the corrective steering.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :attr:`AscentAutopilot.corrective_steering`.
+
+   .. attribute:: autostage
+
+      Whether the autopilot stages when the current stage runs out of fuel.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: staging_controller
+
+      The staging controller. The same as :attr:`staging_controller`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`StagingController`
+      :Game Scenes: Flight
+
+   .. attribute:: autodeploy_solar_panels
+
+      Whether to deploy the solar panels when the ascent finishes.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: auto_deploy_antennas
+
+      Whether to deploy the antennas when the ascent finishes.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: skip_circularization
+
+      Whether to skip the circularization burn.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: warp_count_down
+
+      The time before a timed launch at which time warp stops, in seconds.
+
+      :Attribute: Can be read or written
+      :rtype: int
+      :Game Scenes: Flight
+
+   .. attribute:: launch_lan_difference
+
+      The difference from the target's longitude of the ascending node of a launch into the
+      target's plane, in degrees.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: launch_phase_angle
+
+      The phase angle to the target of a launch to rendezvous, in degrees.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: launch_mode
+
+      The launch mode, which gives whether the autopilot is waiting for a timed launch.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`AscentLaunchMode`
+      :Game Scenes: Flight
+
+   .. method:: abort_timed_launch()
+
+      Abort a timed launch that has not started yet. Throws an exception if the launch mode
+      is :attr:`AscentLaunchMode.unknown`.
+
+      :Game Scenes: Flight
+
+   .. method:: launch_to_rendezvous()
+
+      Launch to rendezvous with the target. Throws an exception if there is no target, or
+      the ascent path is PVG.
+
+      :Game Scenes: Flight
+
+   .. method:: launch_to_target_plane()
+
+      Launch into the plane of the target. Throws an exception if there is no target.
+
+      :Game Scenes: Flight
+
+
+
+.. class:: AscentLaunchMode
+
+   The launch mode of the ascent autopilot. See :attr:`AscentAutopilot.launch_mode`.
+
+
+   .. data:: normal
+
+      The autopilot is not performing a timed launch.
+
+
+   .. data:: rendezvous
+
+      A timed launch to rendezvous with the target vessel.
+
+
+   .. data:: target_plane
+
+      A timed launch into the plane of the target.
+
+
+   .. data:: unknown
+
+      A timed launch of another kind, started from MechJeb's window.
+
+
+
+AscentClassic
+-------------
+
+
+.. class:: AscentClassic
+
+   The classic ascent profile.
+
+   .. attribute:: auto_path
+
+      Whether the autopilot chooses the turn altitudes and speed.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: auto_turn_percent
+
+      The altitude at which an automatic turn starts, as a fraction of the height of the
+      atmosphere.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :attr:`AscentClassic.auto_path`.
+
+   .. attribute:: auto_turn_speed_factor
+
+      The factor that sets the speed at which an automatic turn starts.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :attr:`AscentClassic.auto_path`.
+
+   .. attribute:: auto_turn_start_altitude
+
+      The altitude at which an automatic turn starts, in meters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: auto_turn_start_velocity
+
+      The speed at which an automatic turn starts, in :math:`\mathrm{m/s}`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: auto_turn_end_altitude
+
+      The altitude at which an automatic turn ends, in meters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: turn_start_altitude
+
+      The altitude at which the turn starts, in meters.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: turn_start_velocity
+
+      The speed at which the turn starts, in :math:`\mathrm{m/s}`.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: turn_end_altitude
+
+      The altitude at which the turn ends, in meters.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: turn_end_angle
+
+      The final flight path angle, in degrees.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: turn_shape_exponent
+
+      The steepness of the turn, between 0 and 1.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+
+
+AscentPVG
+---------
+
+
+.. class:: AscentPVG
+
+   The Primer Vector Guidance (RSS/RO) profile.
+
+   .. attribute:: attach_alt_flag
+
+      Whether the orbit is attached at :attr:`AscentPVG.desired_attach_alt`.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         MechJeb reads this setting only when its PVG settings window has an early shutoff
+         stage. Without one, MechJeb always attaches the orbit.
+
+   .. attribute:: desired_apoapsis
+
+      The target apoapsis, in meters.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: desired_attach_alt
+
+      The altitude at which the orbit is attached, in meters.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :attr:`AscentPVG.attach_alt_flag`, unless MechJeb's PVG settings window has no early
+         shutoff stage.
+
+   .. attribute:: dynamic_pressure_trigger
+
+      The dynamic pressure below which guidance starts, in pascals.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: fixed_coast
+
+      Whether the coast has a fixed length.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: fixed_coast_length
+
+      The length of the coast, in seconds.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :attr:`AscentPVG.fixed_coast`.
+
+   .. attribute:: pitch_rate
+
+      The pitch rate of the booster, in :math:`\mathrm{deg/s}`.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: pitch_start_velocity
+
+      The speed at which the booster starts to pitch over, in :math:`\mathrm{m/s}`.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: staging_trigger
+
+      The stage after which guidance starts.
+
+      :Attribute: Can be read or written
+      :rtype: int
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :attr:`AscentPVG.staging_trigger_flag`.
+
+   .. attribute:: staging_trigger_flag
+
+      Whether guidance starts after :attr:`AscentPVG.staging_trigger`.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight

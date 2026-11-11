@@ -1,0 +1,1000 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: MechJeb
+
+ManeuverPlanner
+===============
+
+
+.. class:: ManeuverPlanner
+
+   The maneuver planner, which makes maneuver nodes for its operations.
+
+   .. note::
+
+      MechJeb shares the operations, and most of their settings, between vessels.
+
+   .. attribute:: operation_apoapsis: MechJeb.OperationApoapsis
+
+      The operation that changes the apoapsis.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: operation_circularize: MechJeb.OperationCircularize
+
+      The operation that circularizes the orbit.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: operation_course_correction: MechJeb.OperationCourseCorrection
+
+      The operation that fine tunes the closest approach to the target.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: operation_ellipticize: MechJeb.OperationEllipticize
+
+      The operation that changes both the periapsis and the apoapsis.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: operation_inclination: MechJeb.OperationInclination
+
+      The operation that changes the inclination.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: operation_interplanetary_transfer: MechJeb.OperationInterplanetaryTransfer
+
+      The operation that transfers to another planet.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: operation_kill_rel_vel: MechJeb.OperationKillRelVel
+
+      The operation that matches velocities with the target.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: operation_lambert: MechJeb.OperationLambert
+
+      The operation that intercepts the target at a chosen time.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: operation_lan: MechJeb.OperationLan
+
+      The operation that changes the longitude of the ascending node.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: operation_longitude: MechJeb.OperationLongitude
+
+      The operation that changes the surface longitude of the apsis.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: operation_moon_return: MechJeb.OperationMoonReturn
+
+      The operation that returns from a moon.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: operation_periapsis: MechJeb.OperationPeriapsis
+
+      The operation that changes the periapsis.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: operation_plane: MechJeb.OperationPlane
+
+      The operation that matches planes with the target.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: operation_resonant_orbit: MechJeb.OperationResonantOrbit
+
+      The operation that changes to a resonant orbit.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: operation_semi_major: MechJeb.OperationSemiMajor
+
+      The operation that changes the semi-major axis.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: operation_transfer: MechJeb.OperationTransfer
+
+      The operation that transfers to the target.
+
+      :Attribute: Read-only, cannot be set
+
+
+
+.. class:: OperationException
+
+   Thrown when an operation cannot make its nodes, such as when it needs a target and
+   there is none.
+
+
+
+TimeSelector
+------------
+
+
+.. class:: TimeSelector
+
+   The time of a maneuver.
+
+   .. attribute:: circularize_altitude: number
+
+      The altitude, in meters.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Applies to :data:`MechJeb.TimeReference.altitude`.
+
+   .. attribute:: lead_time: number
+
+      The time from now, in seconds.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Applies to :data:`MechJeb.TimeReference.x_from_now`.
+
+   .. attribute:: time_reference: MechJeb.TimeReference
+
+      The time reference. Throws an exception if set to a reference the operation does
+      not allow.
+
+      :Attribute: Can be read or written
+
+
+
+.. class:: TimeReference
+
+   The time reference of a maneuver. See :attr:`MechJeb.TimeSelector.time_reference`.
+
+
+   .. data:: altitude
+
+      At :attr:`MechJeb.TimeSelector.circularize_altitude`.
+
+
+   .. data:: apoapsis
+
+      At the next apoapsis.
+
+
+   .. data:: closest_approach
+
+      At the closest approach to the target.
+
+
+   .. data:: computed
+
+      At the optimum time.
+
+
+   .. data:: eq_ascending
+
+      At the equatorial ascending node.
+
+
+   .. data:: eq_descending
+
+      At the equatorial descending node.
+
+
+   .. data:: eq_highest_ad
+
+      At the cheaper of the equatorial ascending and descending nodes.
+
+
+   .. data:: eq_nearest_ad
+
+      At the nearer of the equatorial ascending and descending nodes.
+
+
+   .. data:: periapsis
+
+      At the next periapsis.
+
+
+   .. data:: rel_ascending
+
+      At the next ascending node with the target.
+
+
+   .. data:: rel_descending
+
+      At the next descending node with the target.
+
+
+   .. data:: rel_highest_ad
+
+      At the cheaper of the ascending and descending nodes with the target.
+
+
+   .. data:: rel_nearest_ad
+
+      At the nearer of the ascending and descending nodes with the target.
+
+
+   .. data:: x_from_now
+
+      After :attr:`MechJeb.TimeSelector.lead_time`.
+
+
+
+Operations
+----------
+
+OperationApoapsis
+^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationApoapsis
+
+   Change the apoapsis.
+
+   .. attribute:: error_message: string
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Attribute: Read-only, cannot be set
+
+   .. method:: make_node(): SpaceCenter.Node
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+      :returns: The first maneuver node.
+
+   .. method:: make_nodes(): List
+
+      Make the maneuver nodes of the operation. Throws an :class:`MechJeb.OperationException`
+      if the operation cannot make them.
+
+      :returns: The maneuver nodes.
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. attribute:: new_apoapsis: number
+
+      The new apoapsis altitude, in meters.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: time_selector: MechJeb.TimeSelector
+
+      The time of the maneuver.
+
+      :Attribute: Read-only, cannot be set
+
+
+
+OperationCircularize
+^^^^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationCircularize
+
+   Circularize the orbit.
+
+   .. note::
+
+      To raise the periapsis to the apoapsis, set the time to :data:`MechJeb.TimeReference.apoapsis`, and to lower the apoapsis to the periapsis, set it to :data:`MechJeb.TimeReference.periapsis`. These are the cheapest.
+
+   .. attribute:: error_message: string
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Attribute: Read-only, cannot be set
+
+   .. method:: make_node(): SpaceCenter.Node
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+      :returns: The first maneuver node.
+
+   .. method:: make_nodes(): List
+
+      Make the maneuver nodes of the operation. Throws an :class:`MechJeb.OperationException`
+      if the operation cannot make them.
+
+      :returns: The maneuver nodes.
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. attribute:: time_selector: MechJeb.TimeSelector
+
+      The time of the maneuver.
+
+      :Attribute: Read-only, cannot be set
+
+
+
+OperationCourseCorrection
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationCourseCorrection
+
+   Fine tune the closest approach to the target.
+
+   .. attribute:: course_correct_final_pe_a: number
+
+      The periapsis altitude at a target body, in meters.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: error_message: string
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: intercept_distance: number
+
+      The closest approach distance to a target vessel, in meters.
+
+      :Attribute: Can be read or written
+
+   .. method:: make_node(): SpaceCenter.Node
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+      :returns: The first maneuver node.
+
+   .. method:: make_nodes(): List
+
+      Make the maneuver nodes of the operation. Throws an :class:`MechJeb.OperationException`
+      if the operation cannot make them.
+
+      :returns: The maneuver nodes.
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+
+
+OperationEllipticize
+^^^^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationEllipticize
+
+   Change both the periapsis and the apoapsis.
+
+   .. attribute:: error_message: string
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Attribute: Read-only, cannot be set
+
+   .. method:: make_node(): SpaceCenter.Node
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+      :returns: The first maneuver node.
+
+   .. method:: make_nodes(): List
+
+      Make the maneuver nodes of the operation. Throws an :class:`MechJeb.OperationException`
+      if the operation cannot make them.
+
+      :returns: The maneuver nodes.
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. attribute:: new_apoapsis: number
+
+      The new apoapsis altitude, in meters.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: new_periapsis: number
+
+      The new periapsis altitude, in meters.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: time_selector: MechJeb.TimeSelector
+
+      The time of the maneuver.
+
+      :Attribute: Read-only, cannot be set
+
+
+
+OperationInclination
+^^^^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationInclination
+
+   Change the inclination.
+
+   .. attribute:: error_message: string
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Attribute: Read-only, cannot be set
+
+   .. method:: make_node(): SpaceCenter.Node
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+      :returns: The first maneuver node.
+
+   .. method:: make_nodes(): List
+
+      Make the maneuver nodes of the operation. Throws an :class:`MechJeb.OperationException`
+      if the operation cannot make them.
+
+      :returns: The maneuver nodes.
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. attribute:: new_inclination: number
+
+      The new inclination, in degrees.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: time_selector: MechJeb.TimeSelector
+
+      The time of the maneuver.
+
+      :Attribute: Read-only, cannot be set
+
+
+
+OperationInterplanetaryTransfer
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationInterplanetaryTransfer
+
+   Transfer to another planet.
+
+   .. attribute:: error_message: string
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Attribute: Read-only, cannot be set
+
+   .. method:: make_node(): SpaceCenter.Node
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+      :returns: The first maneuver node.
+
+   .. method:: make_nodes(): List
+
+      Make the maneuver nodes of the operation. Throws an :class:`MechJeb.OperationException`
+      if the operation cannot make them.
+
+      :returns: The maneuver nodes.
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. attribute:: wait_for_phase_angle: boolean
+
+      Whether to wait for the optimal phase angle. Otherwise the transfer happens now.
+
+      :Attribute: Can be read or written
+
+
+
+OperationKillRelVel
+^^^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationKillRelVel
+
+   Match velocities with the target.
+
+   .. attribute:: error_message: string
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Attribute: Read-only, cannot be set
+
+   .. method:: make_node(): SpaceCenter.Node
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+      :returns: The first maneuver node.
+
+   .. method:: make_nodes(): List
+
+      Make the maneuver nodes of the operation. Throws an :class:`MechJeb.OperationException`
+      if the operation cannot make them.
+
+      :returns: The maneuver nodes.
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. attribute:: time_selector: MechJeb.TimeSelector
+
+      The time of the maneuver.
+
+      :Attribute: Read-only, cannot be set
+
+
+
+OperationLambert
+^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationLambert
+
+   Intercept the target at a chosen time.
+
+   .. attribute:: error_message: string
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: intercept_interval: number
+
+      The time from the maneuver to the intercept, in seconds.
+
+      :Attribute: Can be read or written
+
+   .. method:: make_node(): SpaceCenter.Node
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+      :returns: The first maneuver node.
+
+   .. method:: make_nodes(): List
+
+      Make the maneuver nodes of the operation. Throws an :class:`MechJeb.OperationException`
+      if the operation cannot make them.
+
+      :returns: The maneuver nodes.
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. attribute:: time_selector: MechJeb.TimeSelector
+
+      The time of the maneuver.
+
+      :Attribute: Read-only, cannot be set
+
+
+
+OperationLan
+^^^^^^^^^^^^
+
+
+.. class:: OperationLan
+
+   Change the longitude of the ascending node.
+
+   .. attribute:: error_message: string
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Attribute: Read-only, cannot be set
+
+   .. method:: make_node(): SpaceCenter.Node
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+      :returns: The first maneuver node.
+
+   .. method:: make_nodes(): List
+
+      Make the maneuver nodes of the operation. Throws an :class:`MechJeb.OperationException`
+      if the operation cannot make them.
+
+      :returns: The maneuver nodes.
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. attribute:: new_lan: number
+
+      The new longitude of the ascending node, in degrees.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         MechJeb holds this value in the target controller of each vessel, as the longitude of
+         the position target. Setting it also moves the position target.
+
+   .. attribute:: time_selector: MechJeb.TimeSelector
+
+      The time of the maneuver.
+
+      :Attribute: Read-only, cannot be set
+
+
+
+OperationLongitude
+^^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationLongitude
+
+   Change the surface longitude of the apsis.
+
+   .. attribute:: error_message: string
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Attribute: Read-only, cannot be set
+
+   .. method:: make_node(): SpaceCenter.Node
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+      :returns: The first maneuver node.
+
+   .. method:: make_nodes(): List
+
+      Make the maneuver nodes of the operation. Throws an :class:`MechJeb.OperationException`
+      if the operation cannot make them.
+
+      :returns: The maneuver nodes.
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. attribute:: new_surface_longitude: number
+
+      The new surface longitude of the apsis after one orbit, in degrees.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         MechJeb holds this value in the target controller of each vessel, as the longitude of
+         the position target. Setting it also moves the position target.
+
+   .. attribute:: time_selector: MechJeb.TimeSelector
+
+      The time of the maneuver.
+
+      :Attribute: Read-only, cannot be set
+
+
+
+OperationMoonReturn
+^^^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationMoonReturn
+
+   Return from a moon to the body it orbits.
+
+   .. attribute:: error_message: string
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Attribute: Read-only, cannot be set
+
+   .. method:: make_node(): SpaceCenter.Node
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+      :returns: The first maneuver node.
+
+   .. method:: make_nodes(): List
+
+      Make the maneuver nodes of the operation. Throws an :class:`MechJeb.OperationException`
+      if the operation cannot make them.
+
+      :returns: The maneuver nodes.
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. attribute:: moon_return_altitude: number
+
+      The approximate periapsis altitude at the body, in meters.
+
+      :Attribute: Can be read or written
+
+
+
+OperationPeriapsis
+^^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationPeriapsis
+
+   Change the periapsis.
+
+   .. attribute:: error_message: string
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Attribute: Read-only, cannot be set
+
+   .. method:: make_node(): SpaceCenter.Node
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+      :returns: The first maneuver node.
+
+   .. method:: make_nodes(): List
+
+      Make the maneuver nodes of the operation. Throws an :class:`MechJeb.OperationException`
+      if the operation cannot make them.
+
+      :returns: The maneuver nodes.
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. attribute:: new_periapsis: number
+
+      The new periapsis altitude, in meters.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: time_selector: MechJeb.TimeSelector
+
+      The time of the maneuver.
+
+      :Attribute: Read-only, cannot be set
+
+
+
+OperationPlane
+^^^^^^^^^^^^^^
+
+
+.. class:: OperationPlane
+
+   Match planes with the target.
+
+   .. attribute:: error_message: string
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Attribute: Read-only, cannot be set
+
+   .. method:: make_node(): SpaceCenter.Node
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+      :returns: The first maneuver node.
+
+   .. method:: make_nodes(): List
+
+      Make the maneuver nodes of the operation. Throws an :class:`MechJeb.OperationException`
+      if the operation cannot make them.
+
+      :returns: The maneuver nodes.
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. attribute:: time_selector: MechJeb.TimeSelector
+
+      The time of the maneuver.
+
+      :Attribute: Read-only, cannot be set
+
+
+
+OperationResonantOrbit
+^^^^^^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationResonantOrbit
+
+   Change to a resonant orbit, to place satellites in a constellation.
+
+   .. note::
+
+      Start from an orbit in the plane of the constellation. To deploy satellites, set the
+      denominator to their number. A numerator one less than the denominator is the cheapest,
+      though not the fastest. The two numbers must have no common factor.
+
+   .. attribute:: error_message: string
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Attribute: Read-only, cannot be set
+
+   .. method:: make_node(): SpaceCenter.Node
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+      :returns: The first maneuver node.
+
+   .. method:: make_nodes(): List
+
+      Make the maneuver nodes of the operation. Throws an :class:`MechJeb.OperationException`
+      if the operation cannot make them.
+
+      :returns: The maneuver nodes.
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. attribute:: resonance_denominator: number
+
+      The denominator of the ratio of the new orbital period to the current one.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: resonance_numerator: number
+
+      The numerator of the ratio of the new orbital period to the current one.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: time_selector: MechJeb.TimeSelector
+
+      The time of the maneuver.
+
+      :Attribute: Read-only, cannot be set
+
+
+
+OperationSemiMajor
+^^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationSemiMajor
+
+   Change the semi-major axis.
+
+   .. attribute:: error_message: string
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Attribute: Read-only, cannot be set
+
+   .. method:: make_node(): SpaceCenter.Node
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+      :returns: The first maneuver node.
+
+   .. method:: make_nodes(): List
+
+      Make the maneuver nodes of the operation. Throws an :class:`MechJeb.OperationException`
+      if the operation cannot make them.
+
+      :returns: The maneuver nodes.
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. attribute:: new_semi_major_axis: number
+
+      The new semi-major axis, in meters.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: time_selector: MechJeb.TimeSelector
+
+      The time of the maneuver.
+
+      :Attribute: Read-only, cannot be set
+
+
+
+OperationTransfer
+^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationTransfer
+
+   A bi-impulsive (Hohmann) transfer to the target, within one sphere of influence. It
+   suits a rendezvous with a vessel or a transfer to a moon.
+
+   .. note::
+
+      Despite the name, the transfer is often uni-impulsive. It happens at the selected time,
+      or at the optimum time.
+
+   .. attribute:: error_message: string
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Attribute: Read-only, cannot be set
+
+   .. method:: make_node(): SpaceCenter.Node
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+      :returns: The first maneuver node.
+
+   .. method:: make_nodes(): List
+
+      Make the maneuver nodes of the operation. Throws an :class:`MechJeb.OperationException`
+      if the operation cannot make them.
+
+      :returns: The maneuver nodes.
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. attribute:: intercept_only: boolean
+
+      Whether to plan only the intercept, with no capture burn, for an impact or a flyby.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: simple_transfer: boolean
+
+      Whether the transfer is coplanar.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: time_selector: MechJeb.TimeSelector
+
+      The time of the maneuver.
+
+      :Attribute: Read-only, cannot be set

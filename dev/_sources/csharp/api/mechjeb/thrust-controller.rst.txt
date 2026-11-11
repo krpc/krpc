@@ -1,0 +1,175 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.MechJeb
+
+ThrustController
+================
+
+
+.. class:: ThrustController
+
+   The thrust controller, which limits the throttle.
+
+   .. property:: bool DifferentialThrottle { get; set; }
+
+      Whether the controller throttles the engines differentially to steer.
+
+      :Game Scenes: Flight
+
+   .. property:: DifferentialThrottleStatus DifferentialThrottleStatus { get; }
+
+      The result of the differential throttle.
+
+      :Game Scenes: Flight
+
+   .. property:: bool ElectricThrottle { get; set; }
+
+      Whether to limit the throttle of electric engines to the available power.
+
+      :Game Scenes: Flight
+
+   .. property:: double ElectricThrottleHi { get; set; }
+
+      The charge level at which electric engines run at full throttle, between 0 and 1.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :prop:`ThrustController.ElectricThrottle`.
+
+   .. property:: double ElectricThrottleLo { get; set; }
+
+      The charge level at which electric engines stop, between 0 and 1.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :prop:`ThrustController.ElectricThrottle`.
+
+   .. property:: double FlameoutSafetyPct { get; set; }
+
+      The safety margin of the jet engines' air intake, as a percentage.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :prop:`ThrustController.LimitToPreventFlameout`.
+
+   .. property:: bool LimitAcceleration { get; set; }
+
+      Whether to limit the acceleration.
+
+      :Game Scenes: Flight
+
+   .. property:: bool LimitDynamicPressure { get; set; }
+
+      Whether to limit the dynamic pressure.
+
+      :Game Scenes: Flight
+
+   .. property:: bool LimitThrottle { get; set; }
+
+      Whether to limit the throttle.
+
+      :Game Scenes: Flight
+
+   .. property:: bool LimitToPreventFlameout { get; set; }
+
+      Whether to limit the throttle to keep jet engines from flaming out.
+
+      :Game Scenes: Flight
+
+   .. property:: bool LimitToPreventOverheats { get; set; }
+
+      Whether to limit the throttle to keep parts from overheating.
+
+      :Game Scenes: Flight
+
+   .. property:: bool LimiterMinThrottle { get; set; }
+
+      Whether to keep the throttle above :prop:`ThrustController.MinThrottle`.
+
+      :Game Scenes: Flight
+
+   .. property:: bool ManageIntakes { get; set; }
+
+      Whether the controller opens and closes the air intakes.
+
+      :Game Scenes: Flight
+
+   .. property:: double MaxAcceleration { get; set; }
+
+      The largest acceleration, in :math:`\mathrm{m/s^{2}}`.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :prop:`ThrustController.LimitAcceleration`.
+
+   .. property:: double MaxDynamicPressure { get; set; }
+
+      The largest dynamic pressure, in pascals.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :prop:`ThrustController.LimitDynamicPressure`.
+
+   .. property:: double MaxThrottle { get; set; }
+
+      The largest throttle, between 0 and 1.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :prop:`ThrustController.LimitThrottle`.
+
+   .. property:: double MinThrottle { get; set; }
+
+      The smallest throttle, between 0 and 1.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :prop:`ThrustController.LimiterMinThrottle`.
+
+
+
+.. enum:: DifferentialThrottleStatus
+
+   The result of the differential throttle. See
+   :prop:`ThrustController.DifferentialThrottleStatus`.
+
+
+   .. enumerator:: AllEnginesOff
+
+      All the engines are off.
+
+
+   .. enumerator:: MoreEnginesRequired
+
+      The vessel needs more engines.
+
+
+   .. enumerator:: SolverFailed
+
+      The solver found no solution.
+
+
+   .. enumerator:: Success
+
+      The throttles balance the thrust.

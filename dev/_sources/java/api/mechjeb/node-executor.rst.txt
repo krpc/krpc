@@ -1,0 +1,52 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.MechJeb
+
+NodeExecutor
+============
+
+
+.. type:: public class NodeExecutor
+
+   The maneuver node executor.
+
+   .. method:: boolean getEnabled()
+
+
+      Whether the executor is running.
+
+      :Game Scenes: Flight
+
+   .. method:: void abort()
+
+      Stop executing the maneuver nodes.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getAutowarp()
+
+   .. method:: void setAutowarp(boolean value)
+
+      Whether the executor warps to the burn.
+
+      :Game Scenes: Flight
+
+   .. method:: void executeAllNodes()
+
+      Execute all the maneuver nodes.
+
+      :Game Scenes: Flight
+
+   .. method:: void executeOneNode()
+
+      Execute the next maneuver node.
+
+      :Game Scenes: Flight
+
+   .. method:: double getLeadTime()
+
+   .. method:: void setLeadTime(double value)
+
+      The time before the burn at which time warp stops, in seconds.
+
+      :Game Scenes: Flight

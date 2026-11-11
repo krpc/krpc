@@ -1,0 +1,43 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: MechJeb
+
+RendezvousAutopilot
+===================
+
+
+.. class:: RendezvousAutopilot
+
+   The rendezvous autopilot, which brings the vessel close to the target vessel.
+
+   .. attribute:: enabled
+
+      Whether the module is enabled.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: status
+
+      The status of the autopilot.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: str
+      :Game Scenes: Flight
+
+   .. attribute:: desired_distance
+
+      The final distance from the target, in meters.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: max_phasing_orbits
+
+      The largest number of orbits to wait for the phase angle.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight

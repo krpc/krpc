@@ -1,0 +1,89 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: MechJeb
+
+DockingAutopilot
+================
+
+
+.. class:: DockingAutopilot
+
+   The docking autopilot, which docks with the target docking port.
+
+   .. attribute:: enabled: boolean
+
+      Whether the module is enabled.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: status: string
+
+      The status of the autopilot.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: speed_limit: number
+
+      The largest speed relative to the target, in :math:`\mathrm{m/s}`.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: override_safe_distance: boolean
+
+      Whether :attr:`MechJeb.DockingAutopilot.overriden_safe_distance` replaces the computed safe distance.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: overriden_safe_distance: number
+
+      The safe distance from the target, in meters.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.DockingAutopilot.override_safe_distance`.
+
+   .. attribute:: override_target_size: boolean
+
+      Whether :attr:`MechJeb.DockingAutopilot.overriden_target_size` replaces the computed size of the target.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: overriden_target_size: number
+
+      The size of the target, in meters.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.DockingAutopilot.override_target_size`.
+
+   .. attribute:: safe_distance: number
+
+      The safe distance from the target that the autopilot uses, in meters.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: target_size: number
+
+      The size of the target that the autopilot uses, in meters.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: force_roll: boolean
+
+      Whether the autopilot controls the roll.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: roll: number
+
+      The roll, in degrees.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.DockingAutopilot.force_roll`.

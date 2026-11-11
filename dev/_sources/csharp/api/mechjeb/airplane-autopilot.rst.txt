@@ -1,0 +1,179 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.MechJeb
+
+AirplaneAutopilot
+=================
+
+
+.. class:: AirplaneAutopilot
+
+   The airplane autopilot, which holds a heading, altitude, vertical speed, roll and speed.
+
+   .. property:: bool Enabled { get; set; }
+
+      Whether the module is enabled.
+
+      :Game Scenes: Flight
+
+   .. property:: bool AltitudeHoldEnabled { get; set; }
+
+      Whether the autopilot holds the altitude.
+
+      :Game Scenes: Flight
+
+   .. property:: double AltitudeTarget { get; set; }
+
+      The target altitude, in meters.
+
+      :Game Scenes: Flight
+
+   .. property:: double BankAngle { get; set; }
+
+      The bank angle of a turn, in degrees.
+
+      :Game Scenes: Flight
+
+   .. property:: bool HeadingHoldEnabled { get; set; }
+
+      Whether the autopilot holds the heading.
+
+      :Game Scenes: Flight
+
+   .. property:: double HeadingTarget { get; set; }
+
+      The target heading, in degrees.
+
+      :Game Scenes: Flight
+
+   .. property:: bool RollHoldEnabled { get; set; }
+
+      Whether the autopilot holds the roll.
+
+      :Game Scenes: Flight
+
+   .. property:: double RollTarget { get; set; }
+
+      The target roll, in degrees.
+
+      :Game Scenes: Flight
+
+   .. property:: bool SpeedHoldEnabled { get; set; }
+
+      Whether the autopilot holds the speed.
+
+      :Game Scenes: Flight
+
+   .. property:: double SpeedTarget { get; set; }
+
+      The target speed, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. property:: bool VertSpeedHoldEnabled { get; set; }
+
+      Whether the autopilot holds the vertical speed.
+
+      :Game Scenes: Flight
+
+   .. property:: double VertSpeedTarget { get; set; }
+
+      The target vertical speed, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. property:: double AccKd { get; set; }
+
+      The derivative gain of the speed controller.
+
+      :Game Scenes: Flight
+
+   .. property:: double AccKi { get; set; }
+
+      The integral gain of the speed controller.
+
+      :Game Scenes: Flight
+
+   .. property:: double AccKp { get; set; }
+
+      The proportional gain of the speed controller.
+
+      :Game Scenes: Flight
+
+   .. property:: double PitKd { get; set; }
+
+      The derivative gain of the pitch controller.
+
+      :Game Scenes: Flight
+
+   .. property:: double PitKi { get; set; }
+
+      The integral gain of the pitch controller.
+
+      :Game Scenes: Flight
+
+   .. property:: double PitKp { get; set; }
+
+      The proportional gain of the pitch controller.
+
+      :Game Scenes: Flight
+
+   .. property:: double RolKd { get; set; }
+
+      The derivative gain of the roll controller.
+
+      :Game Scenes: Flight
+
+   .. property:: double RolKi { get; set; }
+
+      The integral gain of the roll controller.
+
+      :Game Scenes: Flight
+
+   .. property:: double RolKp { get; set; }
+
+      The proportional gain of the roll controller.
+
+      :Game Scenes: Flight
+
+   .. property:: double YawKd { get; set; }
+
+      The derivative gain of the yaw controller.
+
+      :Game Scenes: Flight
+
+   .. property:: double YawKi { get; set; }
+
+      The integral gain of the yaw controller.
+
+      :Game Scenes: Flight
+
+   .. property:: double YawKp { get; set; }
+
+      The proportional gain of the yaw controller.
+
+      :Game Scenes: Flight
+
+   .. property:: double PitchDownLimit { get; set; }
+
+      The largest pitch down, in degrees.
+
+      :Game Scenes: Flight
+
+   .. property:: double PitchUpLimit { get; set; }
+
+      The largest pitch up, in degrees.
+
+      :Game Scenes: Flight
+
+   .. property:: double RollLimit { get; set; }
+
+      The largest roll, in degrees.
+
+      :Game Scenes: Flight
+
+   .. property:: double YawLimit { get; set; }
+
+      The largest yaw, in degrees.
+
+      :Game Scenes: Flight

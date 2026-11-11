@@ -1,0 +1,87 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+LandingAutopilot
+================
+
+
+.. type:: krpc_MechJeb_LandingAutopilot_t
+
+   The landing autopilot, which lands at a target or wherever the vessel comes down.
+
+   .. function:: krpc_error_t krpc_MechJeb_LandingAutopilot_Enabled(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_LandingAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_LandingAutopilot_set_Enabled(krpc_connection_t connection, krpc_MechJeb_LandingAutopilot_t instance, bool value)
+
+      Whether the module is enabled.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_LandingAutopilot_Status(krpc_connection_t connection, char * * returnValue, krpc_MechJeb_LandingAutopilot_t instance)
+
+      The status of the autopilot.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_LandingAutopilot_DeployChutes(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_LandingAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_LandingAutopilot_set_DeployChutes(krpc_connection_t connection, krpc_MechJeb_LandingAutopilot_t instance, bool value)
+
+      Whether the autopilot deploys the parachutes.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_LandingAutopilot_DeployGears(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_LandingAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_LandingAutopilot_set_DeployGears(krpc_connection_t connection, krpc_MechJeb_LandingAutopilot_t instance, bool value)
+
+      Whether the autopilot deploys the landing gear.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_LandingAutopilot_LandAtPositionTarget(krpc_connection_t connection, krpc_MechJeb_LandingAutopilot_t instance)
+
+      Land at the position target. See :func:`krpc_MechJeb_TargetController_SetPositionTarget`.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_LandingAutopilot_LandUntargeted(krpc_connection_t connection, krpc_MechJeb_LandingAutopilot_t instance)
+
+      Land wherever the vessel comes down.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_LandingAutopilot_LimitChutesStage(krpc_connection_t connection, int32_t * returnValue, krpc_MechJeb_LandingAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_LandingAutopilot_set_LimitChutesStage(krpc_connection_t connection, krpc_MechJeb_LandingAutopilot_t instance, int32_t value)
+
+      The last stage in which the autopilot deploys the parachutes.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_LandingAutopilot_LimitGearsStage(krpc_connection_t connection, int32_t * returnValue, krpc_MechJeb_LandingAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_LandingAutopilot_set_LimitGearsStage(krpc_connection_t connection, krpc_MechJeb_LandingAutopilot_t instance, int32_t value)
+
+      The last stage in which the autopilot deploys the landing gear.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_LandingAutopilot_RcsAdjustment(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_LandingAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_LandingAutopilot_set_RcsAdjustment(krpc_connection_t connection, krpc_MechJeb_LandingAutopilot_t instance, bool value)
+
+      Whether the autopilot corrects its course with RCS.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_LandingAutopilot_StopLanding(krpc_connection_t connection, krpc_MechJeb_LandingAutopilot_t instance)
+
+      Stop the landing.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_LandingAutopilot_TouchdownSpeed(krpc_connection_t connection, double * returnValue, krpc_MechJeb_LandingAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_LandingAutopilot_set_TouchdownSpeed(krpc_connection_t connection, krpc_MechJeb_LandingAutopilot_t instance, double value)
+
+      The speed at touchdown, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight

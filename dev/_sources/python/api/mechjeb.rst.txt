@@ -1,0 +1,39 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: MechJeb
+
+MechJeb API
+===========
+
+Provides functionality to interact with the `MechJeb <https://github.com/MuMech/MechJeb2>`_ mod.
+Originally written by `Genhis <https://github.com/Genhis/KRPC.MechJeb>`_.
+The service acts on the MechJeb of the active vessel, which needs a part with MechJeb.
+
+.. toctree::
+   :includehidden:
+   :maxdepth: 1
+
+   mechjeb/mechjeb
+   mechjeb/airplane-autopilot
+   mechjeb/ascent-autopilot
+   mechjeb/docking-autopilot
+   mechjeb/landing-autopilot
+   mechjeb/rendezvous-autopilot
+   mechjeb/maneuver-planner
+   mechjeb/smart-ass
+   mechjeb/smart-rcs
+   mechjeb/translatron
+   mechjeb/deployable-controller
+   mechjeb/node-executor
+   mechjeb/rcs-controller
+   mechjeb/staging-controller
+   mechjeb/target-controller
+   mechjeb/thrust-controller
+
+Example
+-------
+
+The following example launches the active vessel into a 100 km orbit with the ascent
+autopilot, and waits for the ascent to finish:
+
+.. literalinclude:: /scripts/api/mechjeb/MechJebExample.py

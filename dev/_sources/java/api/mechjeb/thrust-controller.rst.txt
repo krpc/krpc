@@ -1,0 +1,208 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.MechJeb
+
+ThrustController
+================
+
+
+.. type:: public class ThrustController
+
+   The thrust controller, which limits the throttle.
+
+   .. method:: boolean getDifferentialThrottle()
+
+   .. method:: void setDifferentialThrottle(boolean value)
+
+      Whether the controller throttles the engines differentially to steer.
+
+      :Game Scenes: Flight
+
+   .. method:: DifferentialThrottleStatus getDifferentialThrottleStatus()
+
+
+      The result of the differential throttle.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getElectricThrottle()
+
+   .. method:: void setElectricThrottle(boolean value)
+
+      Whether to limit the throttle of electric engines to the available power.
+
+      :Game Scenes: Flight
+
+   .. method:: double getElectricThrottleHi()
+
+   .. method:: void setElectricThrottleHi(double value)
+
+      The charge level at which electric engines run at full throttle, between 0 and 1.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`ThrustController.getElectricThrottle()`.
+
+   .. method:: double getElectricThrottleLo()
+
+   .. method:: void setElectricThrottleLo(double value)
+
+      The charge level at which electric engines stop, between 0 and 1.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`ThrustController.getElectricThrottle()`.
+
+   .. method:: double getFlameoutSafetyPct()
+
+   .. method:: void setFlameoutSafetyPct(double value)
+
+      The safety margin of the jet engines' air intake, as a percentage.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`ThrustController.getLimitToPreventFlameout()`.
+
+   .. method:: boolean getLimitAcceleration()
+
+   .. method:: void setLimitAcceleration(boolean value)
+
+      Whether to limit the acceleration.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getLimitDynamicPressure()
+
+   .. method:: void setLimitDynamicPressure(boolean value)
+
+      Whether to limit the dynamic pressure.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getLimitThrottle()
+
+   .. method:: void setLimitThrottle(boolean value)
+
+      Whether to limit the throttle.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getLimitToPreventFlameout()
+
+   .. method:: void setLimitToPreventFlameout(boolean value)
+
+      Whether to limit the throttle to keep jet engines from flaming out.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getLimitToPreventOverheats()
+
+   .. method:: void setLimitToPreventOverheats(boolean value)
+
+      Whether to limit the throttle to keep parts from overheating.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getLimiterMinThrottle()
+
+   .. method:: void setLimiterMinThrottle(boolean value)
+
+      Whether to keep the throttle above :meth:`ThrustController.getMinThrottle()`.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getManageIntakes()
+
+   .. method:: void setManageIntakes(boolean value)
+
+      Whether the controller opens and closes the air intakes.
+
+      :Game Scenes: Flight
+
+   .. method:: double getMaxAcceleration()
+
+   .. method:: void setMaxAcceleration(double value)
+
+      The largest acceleration, in :math:`\mathrm{m/s^{2}}`.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`ThrustController.getLimitAcceleration()`.
+
+   .. method:: double getMaxDynamicPressure()
+
+   .. method:: void setMaxDynamicPressure(double value)
+
+      The largest dynamic pressure, in pascals.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`ThrustController.getLimitDynamicPressure()`.
+
+   .. method:: double getMaxThrottle()
+
+   .. method:: void setMaxThrottle(double value)
+
+      The largest throttle, between 0 and 1.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`ThrustController.getLimitThrottle()`.
+
+   .. method:: double getMinThrottle()
+
+   .. method:: void setMinThrottle(double value)
+
+      The smallest throttle, between 0 and 1.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`ThrustController.getLimiterMinThrottle()`.
+
+
+
+.. type:: public enum DifferentialThrottleStatus
+
+   The result of the differential throttle. See
+   :meth:`ThrustController.getDifferentialThrottleStatus()`.
+
+
+   .. field:: public DifferentialThrottleStatus ALL_ENGINES_OFF
+
+      All the engines are off.
+
+
+   .. field:: public DifferentialThrottleStatus MORE_ENGINES_REQUIRED
+
+      The vessel needs more engines.
+
+
+   .. field:: public DifferentialThrottleStatus SOLVER_FAILED
+
+      The solver found no solution.
+
+
+   .. field:: public DifferentialThrottleStatus SUCCESS
+
+      The throttles balance the thrust.

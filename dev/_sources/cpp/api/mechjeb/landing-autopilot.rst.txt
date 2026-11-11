@@ -1,0 +1,87 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::MechJeb
+
+LandingAutopilot
+================
+
+
+.. class:: LandingAutopilot
+
+   The landing autopilot, which lands at a target or wherever the vessel comes down.
+
+   .. function:: bool enabled()
+   .. function:: void set_enabled(bool value)
+
+      Whether the module is enabled.
+
+      :Game Scenes: Flight
+
+   .. function:: std::string status()
+
+      The status of the autopilot.
+
+      :Game Scenes: Flight
+
+   .. function:: bool deploy_chutes()
+   .. function:: void set_deploy_chutes(bool value)
+
+      Whether the autopilot deploys the parachutes.
+
+      :Game Scenes: Flight
+
+   .. function:: bool deploy_gears()
+   .. function:: void set_deploy_gears(bool value)
+
+      Whether the autopilot deploys the landing gear.
+
+      :Game Scenes: Flight
+
+   .. function:: void land_at_position_target()
+
+      Land at the position target. See :func:`TargetController::set_position_target`.
+
+
+      :Game Scenes: Flight
+
+   .. function:: void land_untargeted()
+
+      Land wherever the vessel comes down.
+
+
+      :Game Scenes: Flight
+
+   .. function:: int32_t limit_chutes_stage()
+   .. function:: void set_limit_chutes_stage(int32_t value)
+
+      The last stage in which the autopilot deploys the parachutes.
+
+      :Game Scenes: Flight
+
+   .. function:: int32_t limit_gears_stage()
+   .. function:: void set_limit_gears_stage(int32_t value)
+
+      The last stage in which the autopilot deploys the landing gear.
+
+      :Game Scenes: Flight
+
+   .. function:: bool rcs_adjustment()
+   .. function:: void set_rcs_adjustment(bool value)
+
+      Whether the autopilot corrects its course with RCS.
+
+      :Game Scenes: Flight
+
+   .. function:: void stop_landing()
+
+      Stop the landing.
+
+
+      :Game Scenes: Flight
+
+   .. function:: double touchdown_speed()
+   .. function:: void set_touchdown_speed(double value)
+
+      The speed at touchdown, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight

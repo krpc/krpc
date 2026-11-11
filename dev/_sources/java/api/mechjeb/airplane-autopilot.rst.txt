@@ -1,0 +1,235 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.MechJeb
+
+AirplaneAutopilot
+=================
+
+
+.. type:: public class AirplaneAutopilot
+
+   The airplane autopilot, which holds a heading, altitude, vertical speed, roll and speed.
+
+   .. method:: boolean getEnabled()
+
+   .. method:: void setEnabled(boolean value)
+
+      Whether the module is enabled.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getAltitudeHoldEnabled()
+
+   .. method:: void setAltitudeHoldEnabled(boolean value)
+
+      Whether the autopilot holds the altitude.
+
+      :Game Scenes: Flight
+
+   .. method:: double getAltitudeTarget()
+
+   .. method:: void setAltitudeTarget(double value)
+
+      The target altitude, in meters.
+
+      :Game Scenes: Flight
+
+   .. method:: double getBankAngle()
+
+   .. method:: void setBankAngle(double value)
+
+      The bank angle of a turn, in degrees.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getHeadingHoldEnabled()
+
+   .. method:: void setHeadingHoldEnabled(boolean value)
+
+      Whether the autopilot holds the heading.
+
+      :Game Scenes: Flight
+
+   .. method:: double getHeadingTarget()
+
+   .. method:: void setHeadingTarget(double value)
+
+      The target heading, in degrees.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getRollHoldEnabled()
+
+   .. method:: void setRollHoldEnabled(boolean value)
+
+      Whether the autopilot holds the roll.
+
+      :Game Scenes: Flight
+
+   .. method:: double getRollTarget()
+
+   .. method:: void setRollTarget(double value)
+
+      The target roll, in degrees.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getSpeedHoldEnabled()
+
+   .. method:: void setSpeedHoldEnabled(boolean value)
+
+      Whether the autopilot holds the speed.
+
+      :Game Scenes: Flight
+
+   .. method:: double getSpeedTarget()
+
+   .. method:: void setSpeedTarget(double value)
+
+      The target speed, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getVertSpeedHoldEnabled()
+
+   .. method:: void setVertSpeedHoldEnabled(boolean value)
+
+      Whether the autopilot holds the vertical speed.
+
+      :Game Scenes: Flight
+
+   .. method:: double getVertSpeedTarget()
+
+   .. method:: void setVertSpeedTarget(double value)
+
+      The target vertical speed, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. method:: double getAccKd()
+
+   .. method:: void setAccKd(double value)
+
+      The derivative gain of the speed controller.
+
+      :Game Scenes: Flight
+
+   .. method:: double getAccKi()
+
+   .. method:: void setAccKi(double value)
+
+      The integral gain of the speed controller.
+
+      :Game Scenes: Flight
+
+   .. method:: double getAccKp()
+
+   .. method:: void setAccKp(double value)
+
+      The proportional gain of the speed controller.
+
+      :Game Scenes: Flight
+
+   .. method:: double getPitKd()
+
+   .. method:: void setPitKd(double value)
+
+      The derivative gain of the pitch controller.
+
+      :Game Scenes: Flight
+
+   .. method:: double getPitKi()
+
+   .. method:: void setPitKi(double value)
+
+      The integral gain of the pitch controller.
+
+      :Game Scenes: Flight
+
+   .. method:: double getPitKp()
+
+   .. method:: void setPitKp(double value)
+
+      The proportional gain of the pitch controller.
+
+      :Game Scenes: Flight
+
+   .. method:: double getRolKd()
+
+   .. method:: void setRolKd(double value)
+
+      The derivative gain of the roll controller.
+
+      :Game Scenes: Flight
+
+   .. method:: double getRolKi()
+
+   .. method:: void setRolKi(double value)
+
+      The integral gain of the roll controller.
+
+      :Game Scenes: Flight
+
+   .. method:: double getRolKp()
+
+   .. method:: void setRolKp(double value)
+
+      The proportional gain of the roll controller.
+
+      :Game Scenes: Flight
+
+   .. method:: double getYawKd()
+
+   .. method:: void setYawKd(double value)
+
+      The derivative gain of the yaw controller.
+
+      :Game Scenes: Flight
+
+   .. method:: double getYawKi()
+
+   .. method:: void setYawKi(double value)
+
+      The integral gain of the yaw controller.
+
+      :Game Scenes: Flight
+
+   .. method:: double getYawKp()
+
+   .. method:: void setYawKp(double value)
+
+      The proportional gain of the yaw controller.
+
+      :Game Scenes: Flight
+
+   .. method:: double getPitchDownLimit()
+
+   .. method:: void setPitchDownLimit(double value)
+
+      The largest pitch down, in degrees.
+
+      :Game Scenes: Flight
+
+   .. method:: double getPitchUpLimit()
+
+   .. method:: void setPitchUpLimit(double value)
+
+      The largest pitch up, in degrees.
+
+      :Game Scenes: Flight
+
+   .. method:: double getRollLimit()
+
+   .. method:: void setRollLimit(double value)
+
+      The largest roll, in degrees.
+
+      :Game Scenes: Flight
+
+   .. method:: double getYawLimit()
+
+   .. method:: void setYawLimit(double value)
+
+      The largest yaw, in degrees.
+
+      :Game Scenes: Flight

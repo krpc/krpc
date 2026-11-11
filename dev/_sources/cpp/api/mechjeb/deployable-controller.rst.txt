@@ -1,0 +1,39 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::MechJeb
+
+DeployableController
+====================
+
+
+.. class:: DeployableController
+
+   The controller of one kind of deployable part, such as antennas or solar panels.
+
+   .. function:: bool all_retracted()
+
+      Whether all the parts are retracted.
+
+
+      :Game Scenes: Flight
+
+   .. function:: bool auto_deploy()
+   .. function:: void set_auto_deploy(bool value)
+
+      Whether a MechJeb autopilot deploys the parts.
+
+      :Game Scenes: Flight
+
+   .. function:: void extend_all()
+
+      Extend all the parts.
+
+
+      :Game Scenes: Flight
+
+   .. function:: void retract_all()
+
+      Retract all the parts.
+
+
+      :Game Scenes: Flight

@@ -1,0 +1,54 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::MechJeb
+
+SmartRCS
+========
+
+
+.. class:: SmartRCS
+
+   The Smart RCS window, which holds a velocity with RCS.
+
+   .. function:: bool auto_disable_smart_rcs()
+   .. function:: void set_auto_disable_smart_rcs(bool value)
+
+      Whether Smart RCS turns off when an autopilot takes control.
+
+      :Game Scenes: Flight
+
+   .. function:: SmartRCSMode mode()
+   .. function:: void set_mode(SmartRCSMode value)
+
+      The mode. Throws an exception if set to :enumerator:`SmartRCSMode::zero_velocity`,
+      which MechJeb 2.15 removed.
+
+      :Game Scenes: Flight
+
+   .. function:: RCSController rcs_controller()
+
+      The RCS controller. The same as :func:`rcs_controller`.
+
+      :Game Scenes: Flight
+
+
+
+.. namespace:: krpc::services::MechJeb
+.. enum-struct:: SmartRCSMode
+
+   The mode of Smart RCS. See :func:`SmartRCS::mode`.
+
+
+   .. enumerator:: off
+
+      Off.
+
+
+   .. enumerator:: zero_relative_velocity
+
+      Hold zero velocity relative to the target.
+
+
+   .. enumerator:: zero_velocity
+
+      Hold zero velocity. MechJeb 2.15 removed this mode.

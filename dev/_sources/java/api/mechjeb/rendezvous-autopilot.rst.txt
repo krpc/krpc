@@ -1,0 +1,42 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.MechJeb
+
+RendezvousAutopilot
+===================
+
+
+.. type:: public class RendezvousAutopilot
+
+   The rendezvous autopilot, which brings the vessel close to the target vessel.
+
+   .. method:: boolean getEnabled()
+
+   .. method:: void setEnabled(boolean value)
+
+      Whether the module is enabled.
+
+      :Game Scenes: Flight
+
+   .. method:: String getStatus()
+
+
+      The status of the autopilot.
+
+      :Game Scenes: Flight
+
+   .. method:: double getDesiredDistance()
+
+   .. method:: void setDesiredDistance(double value)
+
+      The final distance from the target, in meters.
+
+      :Game Scenes: Flight
+
+   .. method:: double getMaxPhasingOrbits()
+
+   .. method:: void setMaxPhasingOrbits(double value)
+
+      The largest number of orbits to wait for the phase angle.
+
+      :Game Scenes: Flight

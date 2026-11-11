@@ -1,0 +1,71 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: MechJeb
+
+LandingAutopilot
+================
+
+
+.. class:: LandingAutopilot
+
+   The landing autopilot, which lands at a target or wherever the vessel comes down.
+
+   .. attribute:: enabled: boolean
+
+      Whether the module is enabled.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: status: string
+
+      The status of the autopilot.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: deploy_chutes: boolean
+
+      Whether the autopilot deploys the parachutes.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: deploy_gears: boolean
+
+      Whether the autopilot deploys the landing gear.
+
+      :Attribute: Can be read or written
+
+   .. method:: land_at_position_target()
+
+      Land at the position target. See :meth:`MechJeb.TargetController.set_position_target`.
+
+   .. method:: land_untargeted()
+
+      Land wherever the vessel comes down.
+
+   .. attribute:: limit_chutes_stage: number
+
+      The last stage in which the autopilot deploys the parachutes.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: limit_gears_stage: number
+
+      The last stage in which the autopilot deploys the landing gear.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: rcs_adjustment: boolean
+
+      Whether the autopilot corrects its course with RCS.
+
+      :Attribute: Can be read or written
+
+   .. method:: stop_landing()
+
+      Stop the landing.
+
+   .. attribute:: touchdown_speed: number
+
+      The speed at touchdown, in :math:`\mathrm{m/s}`.
+
+      :Attribute: Can be read or written

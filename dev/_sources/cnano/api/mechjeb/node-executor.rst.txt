@@ -1,0 +1,52 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+NodeExecutor
+============
+
+
+.. type:: krpc_MechJeb_NodeExecutor_t
+
+   The maneuver node executor.
+
+   .. function:: krpc_error_t krpc_MechJeb_NodeExecutor_Enabled(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_NodeExecutor_t instance)
+
+      Whether the executor is running.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_NodeExecutor_Abort(krpc_connection_t connection, krpc_MechJeb_NodeExecutor_t instance)
+
+      Stop executing the maneuver nodes.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_NodeExecutor_Autowarp(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_NodeExecutor_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_NodeExecutor_set_Autowarp(krpc_connection_t connection, krpc_MechJeb_NodeExecutor_t instance, bool value)
+
+      Whether the executor warps to the burn.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_NodeExecutor_ExecuteAllNodes(krpc_connection_t connection, krpc_MechJeb_NodeExecutor_t instance)
+
+      Execute all the maneuver nodes.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_NodeExecutor_ExecuteOneNode(krpc_connection_t connection, krpc_MechJeb_NodeExecutor_t instance)
+
+      Execute the next maneuver node.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_NodeExecutor_LeadTime(krpc_connection_t connection, double * returnValue, krpc_MechJeb_NodeExecutor_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_NodeExecutor_set_LeadTime(krpc_connection_t connection, krpc_MechJeb_NodeExecutor_t instance, double value)
+
+      The time before the burn at which time warp stops, in seconds.
+
+      :Game Scenes: Flight

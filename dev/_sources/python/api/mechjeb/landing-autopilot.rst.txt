@@ -1,0 +1,93 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: MechJeb
+
+LandingAutopilot
+================
+
+
+.. class:: LandingAutopilot
+
+   The landing autopilot, which lands at a target or wherever the vessel comes down.
+
+   .. attribute:: enabled
+
+      Whether the module is enabled.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: status
+
+      The status of the autopilot.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: str
+      :Game Scenes: Flight
+
+   .. attribute:: deploy_chutes
+
+      Whether the autopilot deploys the parachutes.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: deploy_gears
+
+      Whether the autopilot deploys the landing gear.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. method:: land_at_position_target()
+
+      Land at the position target. See :meth:`TargetController.set_position_target`.
+
+      :Game Scenes: Flight
+
+   .. method:: land_untargeted()
+
+      Land wherever the vessel comes down.
+
+      :Game Scenes: Flight
+
+   .. attribute:: limit_chutes_stage
+
+      The last stage in which the autopilot deploys the parachutes.
+
+      :Attribute: Can be read or written
+      :rtype: int
+      :Game Scenes: Flight
+
+   .. attribute:: limit_gears_stage
+
+      The last stage in which the autopilot deploys the landing gear.
+
+      :Attribute: Can be read or written
+      :rtype: int
+      :Game Scenes: Flight
+
+   .. attribute:: rcs_adjustment
+
+      Whether the autopilot corrects its course with RCS.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. method:: stop_landing()
+
+      Stop the landing.
+
+      :Game Scenes: Flight
+
+   .. attribute:: touchdown_speed
+
+      The speed at touchdown, in :math:`\mathrm{m/s}`.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight

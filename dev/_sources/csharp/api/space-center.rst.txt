@@ -64,6 +64,7 @@ some functionality requires one of them, and the docs note where it does.
 These services cover other mods:
 
 * :doc:`Kerbal Alarm Clock <kerbal-alarm-clock>`
+* :doc:`MechJeb <mechjeb>`
 * :doc:`RemoteTech <remote-tech>`
 * :doc:`Infernal Robotics Next <infernal-robotics>`
 * :doc:`Docking Camera (KURS) <docking-camera>`

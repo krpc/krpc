@@ -1,0 +1,51 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: MechJeb
+
+SmartRCS
+========
+
+
+.. class:: SmartRCS
+
+   The Smart RCS window, which holds a velocity with RCS.
+
+   .. attribute:: auto_disable_smart_rcs: boolean
+
+      Whether Smart RCS turns off when an autopilot takes control.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: mode: MechJeb.SmartRCSMode
+
+      The mode. Throws an exception if set to :data:`MechJeb.SmartRCSMode.zero_velocity`,
+      which MechJeb 2.15 removed.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: rcs_controller: MechJeb.RCSController
+
+      The RCS controller. The same as :attr:`MechJeb.rcs_controller`.
+
+      :Attribute: Read-only, cannot be set
+
+
+
+.. class:: SmartRCSMode
+
+   The mode of Smart RCS. See :attr:`MechJeb.SmartRCS.mode`.
+
+
+   .. data:: off
+
+      Off.
+
+
+   .. data:: zero_relative_velocity
+
+      Hold zero velocity relative to the target.
+
+
+   .. data:: zero_velocity
+
+      Hold zero velocity. MechJeb 2.15 removed this mode.

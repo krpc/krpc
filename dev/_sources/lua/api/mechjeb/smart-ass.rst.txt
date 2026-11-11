@@ -1,0 +1,395 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: MechJeb
+
+SmartASS
+========
+
+
+.. class:: SmartASS
+
+   The Smart A.S.S. window, which points the vessel in a chosen direction.
+
+   .. attribute:: interface_mode: MechJeb.SmartASSInterfaceMode
+
+      The mode of the window, which selects its buttons and nothing else.
+      Throws an exception if set to :data:`MechJeb.SmartASSInterfaceMode.automatic`.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: autopilot_mode: MechJeb.SmartASSAutopilotMode
+
+      The autopilot mode. Throws an exception if set to
+      :data:`MechJeb.SmartASSAutopilotMode.automatic`.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Call :meth:`MechJeb.SmartASS.update` to apply a change.
+
+   .. method:: update(reset_pid: boolean)
+
+      Apply the settings.
+
+      :param reset_pid: Whether to reset the attitude controller. Use it only if the vessel does not follow the new settings.
+
+   .. attribute:: force_yaw: boolean
+
+      Whether the autopilot controls the yaw in the :data:`MechJeb.SmartASSAutopilotMode.surface`,
+      :data:`MechJeb.SmartASSAutopilotMode.surface_prograde` and
+      :data:`MechJeb.SmartASSAutopilotMode.surface_retrograde` modes.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: force_pitch: boolean
+
+      Whether the autopilot controls the pitch in the :data:`MechJeb.SmartASSAutopilotMode.surface`,
+      :data:`MechJeb.SmartASSAutopilotMode.surface_prograde` and
+      :data:`MechJeb.SmartASSAutopilotMode.surface_retrograde` modes.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: force_roll: boolean
+
+      Whether the autopilot controls the roll.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: surface_heading: number
+
+      The heading, in degrees.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Applies in the :data:`MechJeb.SmartASSAutopilotMode.surface` mode.
+
+   .. attribute:: surface_pitch: number
+
+      The pitch above the horizon, in degrees. 90 is straight up.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Applies in the :data:`MechJeb.SmartASSAutopilotMode.surface` mode.
+
+   .. attribute:: surface_roll: number
+
+      The roll, in degrees. 0 is top side up.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Applies in the :data:`MechJeb.SmartASSAutopilotMode.surface` mode.
+
+   .. attribute:: surface_vel_yaw: number
+
+      The yaw from the surface velocity, in degrees.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Applies in the :data:`MechJeb.SmartASSAutopilotMode.surface_prograde` and
+         :data:`MechJeb.SmartASSAutopilotMode.surface_retrograde` modes.
+
+   .. attribute:: surface_vel_pitch: number
+
+      The pitch from the surface velocity, in degrees.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Applies in the :data:`MechJeb.SmartASSAutopilotMode.surface_prograde` and
+         :data:`MechJeb.SmartASSAutopilotMode.surface_retrograde` modes.
+
+   .. attribute:: surface_vel_roll: number
+
+      The roll, in degrees. 0 is top side up.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Applies in the :data:`MechJeb.SmartASSAutopilotMode.surface_prograde` and
+         :data:`MechJeb.SmartASSAutopilotMode.surface_retrograde` modes.
+
+   .. attribute:: advanced_reference: MechJeb.AttitudeReference
+
+      The reference frame of :attr:`MechJeb.SmartASS.advanced_direction`. Throws an exception if
+      MechJeb uses a reference this enumeration lacks.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Applies in the :data:`MechJeb.SmartASSAutopilotMode.advanced` mode.
+
+   .. attribute:: advanced_direction: MechJeb.Direction
+
+      The direction in :attr:`MechJeb.SmartASS.advanced_reference`.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Applies in the :data:`MechJeb.SmartASSAutopilotMode.advanced` mode.
+
+
+
+.. class:: SmartASSInterfaceMode
+
+   The mode of the Smart A.S.S. window. See :attr:`MechJeb.SmartASS.interface_mode`.
+
+
+   .. data:: orbital
+
+      The orbital modes.
+
+
+   .. data:: surface
+
+      The surface modes.
+
+
+   .. data:: target
+
+      The target modes.
+
+
+   .. data:: advanced
+
+      The advanced mode.
+
+
+   .. data:: automatic
+
+      Set by MechJeb's autopilots. Cannot be set.
+
+
+
+.. class:: SmartASSAutopilotMode
+
+   The autopilot mode of Smart A.S.S. See :attr:`MechJeb.SmartASS.autopilot_mode`.
+
+
+   .. data:: off
+
+      Off.
+
+
+   .. data:: kill_rot
+
+      Stop the vessel's rotation.
+
+
+   .. data:: node
+
+      Point at the next maneuver node.
+
+
+   .. data:: advanced
+
+      Point in the direction set by :attr:`MechJeb.SmartASS.advanced_reference` and
+      :attr:`MechJeb.SmartASS.advanced_direction`.
+
+
+   .. data:: automatic
+
+      Set by MechJeb's autopilots. Cannot be set.
+
+
+   .. data:: prograde
+
+      Point orbital prograde.
+
+
+   .. data:: retrograde
+
+      Point orbital retrograde.
+
+
+   .. data:: normal_plus
+
+      Point orbit normal.
+
+
+   .. data:: normal_minus
+
+      Point orbit anti-normal.
+
+
+   .. data:: radial_plus
+
+      Point radially outward.
+
+
+   .. data:: radial_minus
+
+      Point radially inward.
+
+
+   .. data:: surface_prograde
+
+      Point along the surface velocity.
+
+
+   .. data:: surface_retrograde
+
+      Point against the surface velocity.
+
+
+   .. data:: horizontal_plus
+
+      Point along the horizontal surface velocity.
+
+
+   .. data:: horizontal_minus
+
+      Point against the horizontal surface velocity.
+
+
+   .. data:: surface
+
+      Point in the direction set by :attr:`MechJeb.SmartASS.surface_heading`,
+      :attr:`MechJeb.SmartASS.surface_pitch` and :attr:`MechJeb.SmartASS.surface_roll`.
+
+
+   .. data:: vertical_plus
+
+      Point up, normal to the surface.
+
+
+   .. data:: target_plus
+
+      Point at the target.
+
+
+   .. data:: target_minus
+
+      Point away from the target.
+
+
+   .. data:: relative_plus
+
+      Point along the velocity relative to the target.
+
+
+   .. data:: relative_minus
+
+      Point against the velocity relative to the target.
+
+
+   .. data:: parallel_plus
+
+      Point parallel to the target's orientation. For a docking port, along its axis
+      and away from it.
+
+
+   .. data:: parallel_minus
+
+      Point antiparallel to the target's orientation. For a docking port, along its axis
+      and toward it.
+
+
+
+.. class:: AttitudeReference
+
+   A reference frame of Smart A.S.S. See :attr:`MechJeb.SmartASS.advanced_reference`.
+
+
+   .. data:: inertial
+
+      The world coordinate system.
+
+
+   .. data:: orbit
+
+      Forward is prograde, left is normal and up is radial out.
+
+
+   .. data:: orbit_horizontal
+
+      Forward is the orbital velocity projected onto the surface, and up is the surface normal.
+
+
+   .. data:: surface_north
+
+      Forward is north, left is west and up is the surface normal.
+
+
+   .. data:: surface_velocity
+
+      Forward is the surface velocity, and up is the surface normal perpendicular to it.
+
+
+   .. data:: target
+
+      Forward is toward the target, and up is the vessel's heading perpendicular to it.
+
+
+   .. data:: relative_velocity
+
+      Forward is the velocity relative to the target.
+
+
+   .. data:: target_orientation
+
+      Forward is the direction the target faces, and up is the target's up.
+
+
+   .. data:: maneuver_node
+
+      Forward is the burn direction of the next maneuver node.
+
+
+   .. data:: sun
+
+      Forward is the orbital velocity of the body that orbits the sun, and up is radial
+      out of that orbit.
+
+
+   .. data:: surface_horizontal
+
+      Forward is the horizontal surface velocity, and up is the surface normal.
+
+
+
+.. class:: Direction
+
+   A direction of Smart A.S.S. See :attr:`MechJeb.SmartASS.advanced_direction`.
+
+
+   .. data:: forward
+
+      Forward.
+
+
+   .. data:: back
+
+      Back.
+
+
+   .. data:: up
+
+      Up.
+
+
+   .. data:: down
+
+      Down.
+
+
+   .. data:: right
+
+      Right.
+
+
+   .. data:: left
+
+      Left.

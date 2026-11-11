@@ -1,0 +1,411 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: MechJeb
+
+AscentAutopilot
+===============
+
+
+.. class:: AscentAutopilot
+
+   The ascent autopilot.
+
+   .. note::
+
+      See the `MechJeb wiki <https://github.com/MuMech/MechJeb2/wiki/Ascent-Guidance>`_
+      for how to set up this autopilot.
+
+   .. attribute:: enabled: boolean
+
+      Whether the autopilot is enabled. Enabling it engages the autopilot of the selected
+      ascent path, and disabling it disengages the autopilots of both paths.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: status: string
+
+      The autopilot status, which depends on the selected ascent path.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: ascent_path_index: number
+
+      The selected ascent path: 0 for :class:`MechJeb.AscentClassic` or 2 for
+      :class:`MechJeb.AscentPVG`.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         MechJeb 2.15 removed the stock-style gravity turn path, which was 1. Setting any other
+         value throws an exception.
+
+   .. attribute:: ascent_path_classic: MechJeb.AscentClassic
+
+      The settings of the classic ascent profile.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: ascent_path_pvg: MechJeb.AscentPVG
+
+      The settings of the Primer Vector Guidance (RSS/RO) profile.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: desired_inclination: number
+
+      The inclination of the final circular orbit, in degrees.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: desired_orbit_altitude: number
+
+      The altitude of the final circular orbit, in meters.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: thrust_controller: MechJeb.ThrustController
+
+      The thrust controller. The same as :attr:`MechJeb.thrust_controller`.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: force_roll: boolean
+
+      Whether the autopilot controls the roll.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: turn_roll: number
+
+      The roll during the turn, in degrees.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.AscentAutopilot.force_roll`.
+
+   .. attribute:: vertical_roll: number
+
+      The roll during the vertical climb, in degrees.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.AscentAutopilot.force_roll`.
+
+   .. attribute:: limit_ao_a: boolean
+
+      Whether to limit the angle of attack.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: max_ao_a: number
+
+      The largest angle of attack, in degrees.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.AscentAutopilot.limit_ao_a`.
+
+   .. attribute:: ao_a_limit_fadeout_pressure: number
+
+      The dynamic pressure below which the angle of attack limit fades out, in pascals.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.AscentAutopilot.limit_ao_a`.
+
+   .. attribute:: corrective_steering: boolean
+
+      Whether the autopilot steers by the velocity vector rather than the position vector.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         It is more accurate, though large craft may do better without it.
+
+   .. attribute:: corrective_steering_gain: number
+
+      The gain of the corrective steering.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.AscentAutopilot.corrective_steering`.
+
+   .. attribute:: autostage: boolean
+
+      Whether the autopilot stages when the current stage runs out of fuel.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: staging_controller: MechJeb.StagingController
+
+      The staging controller. The same as :attr:`MechJeb.staging_controller`.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: autodeploy_solar_panels: boolean
+
+      Whether to deploy the solar panels when the ascent finishes.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: auto_deploy_antennas: boolean
+
+      Whether to deploy the antennas when the ascent finishes.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: skip_circularization: boolean
+
+      Whether to skip the circularization burn.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: warp_count_down: number
+
+      The time before a timed launch at which time warp stops, in seconds.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: launch_lan_difference: number
+
+      The difference from the target's longitude of the ascending node of a launch into the
+      target's plane, in degrees.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: launch_phase_angle: number
+
+      The phase angle to the target of a launch to rendezvous, in degrees.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: launch_mode: MechJeb.AscentLaunchMode
+
+      The launch mode, which gives whether the autopilot is waiting for a timed launch.
+
+      :Attribute: Read-only, cannot be set
+
+   .. method:: abort_timed_launch()
+
+      Abort a timed launch that has not started yet. Throws an exception if the launch mode
+      is :data:`MechJeb.AscentLaunchMode.unknown`.
+
+   .. method:: launch_to_rendezvous()
+
+      Launch to rendezvous with the target. Throws an exception if there is no target, or
+      the ascent path is PVG.
+
+   .. method:: launch_to_target_plane()
+
+      Launch into the plane of the target. Throws an exception if there is no target.
+
+
+
+.. class:: AscentLaunchMode
+
+   The launch mode of the ascent autopilot. See :attr:`MechJeb.AscentAutopilot.launch_mode`.
+
+
+   .. data:: normal
+
+      The autopilot is not performing a timed launch.
+
+
+   .. data:: rendezvous
+
+      A timed launch to rendezvous with the target vessel.
+
+
+   .. data:: target_plane
+
+      A timed launch into the plane of the target.
+
+
+   .. data:: unknown
+
+      A timed launch of another kind, started from MechJeb's window.
+
+
+
+AscentClassic
+-------------
+
+
+.. class:: AscentClassic
+
+   The classic ascent profile.
+
+   .. attribute:: auto_path: boolean
+
+      Whether the autopilot chooses the turn altitudes and speed.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: auto_turn_percent: number
+
+      The altitude at which an automatic turn starts, as a fraction of the height of the
+      atmosphere.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.AscentClassic.auto_path`.
+
+   .. attribute:: auto_turn_speed_factor: number
+
+      The factor that sets the speed at which an automatic turn starts.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.AscentClassic.auto_path`.
+
+   .. attribute:: auto_turn_start_altitude: number
+
+      The altitude at which an automatic turn starts, in meters.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: auto_turn_start_velocity: number
+
+      The speed at which an automatic turn starts, in :math:`\mathrm{m/s}`.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: auto_turn_end_altitude: number
+
+      The altitude at which an automatic turn ends, in meters.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: turn_start_altitude: number
+
+      The altitude at which the turn starts, in meters.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: turn_start_velocity: number
+
+      The speed at which the turn starts, in :math:`\mathrm{m/s}`.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: turn_end_altitude: number
+
+      The altitude at which the turn ends, in meters.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: turn_end_angle: number
+
+      The final flight path angle, in degrees.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: turn_shape_exponent: number
+
+      The steepness of the turn, between 0 and 1.
+
+      :Attribute: Can be read or written
+
+
+
+AscentPVG
+---------
+
+
+.. class:: AscentPVG
+
+   The Primer Vector Guidance (RSS/RO) profile.
+
+   .. attribute:: attach_alt_flag: boolean
+
+      Whether the orbit is attached at :attr:`MechJeb.AscentPVG.desired_attach_alt`.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         MechJeb reads this setting only when its PVG settings window has an early shutoff
+         stage. Without one, MechJeb always attaches the orbit.
+
+   .. attribute:: desired_apoapsis: number
+
+      The target apoapsis, in meters.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: desired_attach_alt: number
+
+      The altitude at which the orbit is attached, in meters.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.AscentPVG.attach_alt_flag`, unless MechJeb's PVG settings window has no early
+         shutoff stage.
+
+   .. attribute:: dynamic_pressure_trigger: number
+
+      The dynamic pressure below which guidance starts, in pascals.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: fixed_coast: boolean
+
+      Whether the coast has a fixed length.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: fixed_coast_length: number
+
+      The length of the coast, in seconds.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.AscentPVG.fixed_coast`.
+
+   .. attribute:: pitch_rate: number
+
+      The pitch rate of the booster, in :math:`\mathrm{deg/s}`.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: pitch_start_velocity: number
+
+      The speed at which the booster starts to pitch over, in :math:`\mathrm{m/s}`.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: staging_trigger: number
+
+      The stage after which guidance starts.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.AscentPVG.staging_trigger_flag`.
+
+   .. attribute:: staging_trigger_flag: boolean
+
+      Whether guidance starts after :attr:`MechJeb.AscentPVG.staging_trigger`.
+
+      :Attribute: Can be read or written

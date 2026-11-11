@@ -1,0 +1,50 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.MechJeb
+
+NodeExecutor
+============
+
+
+.. class:: NodeExecutor
+
+   The maneuver node executor.
+
+   .. property:: bool Enabled { get; }
+
+      Whether the executor is running.
+
+      :Game Scenes: Flight
+
+   .. function:: void Abort()
+
+      Stop executing the maneuver nodes.
+
+
+      :Game Scenes: Flight
+
+   .. property:: bool Autowarp { get; set; }
+
+      Whether the executor warps to the burn.
+
+      :Game Scenes: Flight
+
+   .. function:: void ExecuteAllNodes()
+
+      Execute all the maneuver nodes.
+
+
+      :Game Scenes: Flight
+
+   .. function:: void ExecuteOneNode()
+
+      Execute the next maneuver node.
+
+
+      :Game Scenes: Flight
+
+   .. property:: double LeadTime { get; set; }
+
+      The time before the burn at which time warp stops, in seconds.
+
+      :Game Scenes: Flight

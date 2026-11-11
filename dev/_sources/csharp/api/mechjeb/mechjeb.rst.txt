@@ -1,0 +1,124 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.MechJeb
+
+MechJeb
+=======
+
+
+.. class:: MechJeb
+
+   This service provides functionality to interact with MechJeb 2.
+
+   .. note::
+
+      The objects act on the MechJeb of the active vessel, and stay valid after the active
+      vessel changes.
+
+   .. property:: bool APIReady { get; }
+
+      Whether MechJeb is installed and the active vessel has MechJeb.
+
+      :Game Scenes: Flight
+
+   .. property:: AirplaneAutopilot AirplaneAutopilot { get; }
+
+      The airplane autopilot.
+
+      :Game Scenes: Flight
+
+   .. property:: DeployableController AntennaController { get; }
+
+      The controller of the deployable antennas.
+
+      :Game Scenes: Flight
+
+   .. property:: AscentAutopilot AscentAutopilot { get; }
+
+      The ascent autopilot.
+
+      :Game Scenes: Flight
+
+   .. property:: DockingAutopilot DockingAutopilot { get; }
+
+      The docking autopilot.
+
+      :Game Scenes: Flight
+
+   .. property:: LandingAutopilot LandingAutopilot { get; }
+
+      The landing autopilot.
+
+      :Game Scenes: Flight
+
+   .. property:: ManeuverPlanner ManeuverPlanner { get; }
+
+      The maneuver planner.
+
+      :Game Scenes: Flight
+
+   .. property:: NodeExecutor NodeExecutor { get; }
+
+      The maneuver node executor.
+
+      :Game Scenes: Flight
+
+   .. property:: RCSController RCSController { get; }
+
+      The RCS controller.
+
+      :Game Scenes: Flight
+
+   .. property:: RendezvousAutopilot RendezvousAutopilot { get; }
+
+      The rendezvous autopilot.
+
+      :Game Scenes: Flight
+
+   .. property:: SmartASS SmartASS { get; }
+
+      The Smart A.S.S. window.
+
+      :Game Scenes: Flight
+
+   .. property:: SmartRCS SmartRCS { get; }
+
+      The Smart RCS window.
+
+      :Game Scenes: Flight
+
+   .. property:: DeployableController SolarPanelController { get; }
+
+      The controller of the deployable solar panels.
+
+      :Game Scenes: Flight
+
+   .. property:: StagingController StagingController { get; }
+
+      The staging controller.
+
+      :Game Scenes: Flight
+
+   .. property:: TargetController TargetController { get; }
+
+      The target controller.
+
+      :Game Scenes: Flight
+
+   .. property:: ThrustController ThrustController { get; }
+
+      The thrust controller.
+
+      :Game Scenes: Flight
+
+   .. property:: Translatron Translatron { get; }
+
+      The Translatron window.
+
+      :Game Scenes: Flight
+
+
+
+.. class:: MJServiceException
+
+   A general error in the service.

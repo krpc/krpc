@@ -1,0 +1,51 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.MechJeb
+
+SmartRCS
+========
+
+
+.. class:: SmartRCS
+
+   The Smart RCS window, which holds a velocity with RCS.
+
+   .. property:: bool AutoDisableSmartRCS { get; set; }
+
+      Whether Smart RCS turns off when an autopilot takes control.
+
+      :Game Scenes: Flight
+
+   .. property:: SmartRCSMode Mode { get; set; }
+
+      The mode. Throws an exception if set to :value:`SmartRCSMode.ZeroVelocity`,
+      which MechJeb 2.15 removed.
+
+      :Game Scenes: Flight
+
+   .. property:: RCSController RCSController { get; }
+
+      The RCS controller. The same as :prop:`MechJeb.RCSController <MechJeb.MechJeb.RCSController>`.
+
+      :Game Scenes: Flight
+
+
+
+.. enum:: SmartRCSMode
+
+   The mode of Smart RCS. See :prop:`SmartRCS.Mode`.
+
+
+   .. enumerator:: Off
+
+      Off.
+
+
+   .. enumerator:: ZeroRelativeVelocity
+
+      Hold zero velocity relative to the target.
+
+
+   .. enumerator:: ZeroVelocity
+
+      Hold zero velocity. MechJeb 2.15 removed this mode.

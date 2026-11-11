@@ -1,0 +1,52 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::MechJeb
+
+NodeExecutor
+============
+
+
+.. class:: NodeExecutor
+
+   The maneuver node executor.
+
+   .. function:: bool enabled()
+
+      Whether the executor is running.
+
+      :Game Scenes: Flight
+
+   .. function:: void abort()
+
+      Stop executing the maneuver nodes.
+
+
+      :Game Scenes: Flight
+
+   .. function:: bool autowarp()
+   .. function:: void set_autowarp(bool value)
+
+      Whether the executor warps to the burn.
+
+      :Game Scenes: Flight
+
+   .. function:: void execute_all_nodes()
+
+      Execute all the maneuver nodes.
+
+
+      :Game Scenes: Flight
+
+   .. function:: void execute_one_node()
+
+      Execute the next maneuver node.
+
+
+      :Game Scenes: Flight
+
+   .. function:: double lead_time()
+   .. function:: void set_lead_time(double value)
+
+      The time before the burn at which time warp stops, in seconds.
+
+      :Game Scenes: Flight

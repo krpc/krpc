@@ -1,0 +1,128 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+TargetController
+================
+
+
+.. type:: krpc_MechJeb_TargetController_t
+
+   The target controller, which holds MechJeb's target.
+
+   .. note::
+
+      Positions and directions are in world space, the coordinate system of the game's
+      physics.
+
+   .. function:: krpc_error_t krpc_MechJeb_TargetController_CanAlign(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_TargetController_t instance)
+
+      Whether the vessel can align with the target, which it can with a docking port.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_TargetController_Distance(krpc_connection_t connection, float * returnValue, krpc_MechJeb_TargetController_t instance)
+
+      The distance to the target, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_TargetController_DockingAxis(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_MechJeb_TargetController_t instance)
+
+      The world space docking axis of the target.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_TargetController_GetPositionTargetPosition(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_MechJeb_TargetController_t instance)
+
+      The world space position of the position target.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_TargetController_GetPositionTargetString(krpc_connection_t connection, char * * returnValue, krpc_MechJeb_TargetController_t instance)
+
+      The position target as text.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_TargetController_NormalTargetExists(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_TargetController_t instance)
+
+      Whether there is a target that is a vessel, a body or a direction target.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_TargetController_PickPositionTargetOnMap(krpc_connection_t connection, krpc_MechJeb_TargetController_t instance)
+
+      Let the player pick the position target on the map.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_TargetController_Position(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_MechJeb_TargetController_t instance)
+
+      The world space position of the target.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_TargetController_PositionTargetExists(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_TargetController_t instance)
+
+      Whether there is a target that is a position or a vessel.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_TargetController_RelativePosition(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_MechJeb_TargetController_t instance)
+
+      The world space position of the vessel relative to the target.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_TargetController_RelativeVelocity(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_MechJeb_TargetController_t instance)
+
+      The world space velocity of the vessel relative to the target, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_TargetController_SetDirectionTarget(krpc_connection_t connection, krpc_MechJeb_TargetController_t instance, const char * name)
+
+      Set the target to a direction.
+
+      :Parameters:
+
+       * **name** -- The name of the target.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Set the direction with :func:`krpc_MechJeb_TargetController_UpdateDirectionTarget`.
+
+   .. function:: krpc_error_t krpc_MechJeb_TargetController_SetPositionTarget(krpc_connection_t connection, krpc_MechJeb_TargetController_t instance, krpc_SpaceCenter_CelestialBody_t body, double latitude, double longitude)
+
+      Set the target to a position on the surface of a body.
+
+      :Parameters:
+
+       * **body** -- The body.
+       * **latitude** -- The latitude, in degrees.
+       * **longitude** -- The longitude, in degrees.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_TargetController_TargetOrbit(krpc_connection_t connection, krpc_SpaceCenter_Orbit_t * returnValue, krpc_MechJeb_TargetController_t instance)
+
+      The orbit of the target.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_TargetController_UpdateDirectionTarget(krpc_connection_t connection, krpc_MechJeb_TargetController_t instance, const krpc_tuple_double_double_double_t * direction)
+
+      Set the direction of the direction target.
+
+      :Parameters:
+
+       * **direction** -- The world space direction.
+
+      :Game Scenes: Flight

@@ -1,0 +1,27 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.MechJeb
+
+RCSController
+=============
+
+
+.. type:: public class RCSController
+
+   The RCS controller.
+
+   .. method:: boolean getRCSForRotation()
+
+   .. method:: void setRCSForRotation(boolean value)
+
+      Whether the controller uses RCS to rotate the vessel.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getRCSThrottle()
+
+   .. method:: void setRCSThrottle(boolean value)
+
+      Whether the controller throttles the RCS thrusters.
+
+      :Game Scenes: Flight

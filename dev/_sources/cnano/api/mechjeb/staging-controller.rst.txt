@@ -1,0 +1,99 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+StagingController
+=================
+
+
+.. type:: krpc_MechJeb_StagingController_t
+
+   The staging controller, which stages when a stage runs out of fuel.
+
+   .. function:: krpc_error_t krpc_MechJeb_StagingController_Enabled(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_StagingController_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_StagingController_set_Enabled(krpc_connection_t connection, krpc_MechJeb_StagingController_t instance, bool value)
+
+      Whether the module is enabled.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_StagingController_AutostagingOnce(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_StagingController_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_StagingController_set_AutostagingOnce(krpc_connection_t connection, krpc_MechJeb_StagingController_t instance, bool value)
+
+      Whether the controller disables itself after one staging.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires the controller to be enabled.
+
+   .. function:: krpc_error_t krpc_MechJeb_StagingController_AutostageLimit(krpc_connection_t connection, int32_t * returnValue, krpc_MechJeb_StagingController_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_StagingController_set_AutostageLimit(krpc_connection_t connection, krpc_MechJeb_StagingController_t instance, int32_t value)
+
+      The last stage the controller activates.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_StagingController_AutostagePostDelay(krpc_connection_t connection, double * returnValue, krpc_MechJeb_StagingController_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_StagingController_set_AutostagePostDelay(krpc_connection_t connection, krpc_MechJeb_StagingController_t instance, double value)
+
+      The delay after each staging, in seconds.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_StagingController_AutostagePreDelay(krpc_connection_t connection, double * returnValue, krpc_MechJeb_StagingController_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_StagingController_set_AutostagePreDelay(krpc_connection_t connection, krpc_MechJeb_StagingController_t instance, double value)
+
+      The delay before each staging, in seconds.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_StagingController_ClampAutoStageThrustPct(krpc_connection_t connection, double * returnValue, krpc_MechJeb_StagingController_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_StagingController_set_ClampAutoStageThrustPct(krpc_connection_t connection, krpc_MechJeb_StagingController_t instance, double value)
+
+      The fraction of full thrust at which the controller releases the launch clamps.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_StagingController_FairingMaxAerothermalFlux(krpc_connection_t connection, double * returnValue, krpc_MechJeb_StagingController_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_StagingController_set_FairingMaxAerothermalFlux(krpc_connection_t connection, krpc_MechJeb_StagingController_t instance, double value)
+
+      The largest aerothermal flux at which the controller jettisons a fairing, in
+      :math:`\mathrm{W/m^{2}}`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_StagingController_FairingMaxDynamicPressure(krpc_connection_t connection, double * returnValue, krpc_MechJeb_StagingController_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_StagingController_set_FairingMaxDynamicPressure(krpc_connection_t connection, krpc_MechJeb_StagingController_t instance, double value)
+
+      The largest dynamic pressure at which the controller jettisons a fairing, in pascals.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_StagingController_FairingMinAltitude(krpc_connection_t connection, double * returnValue, krpc_MechJeb_StagingController_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_StagingController_set_FairingMinAltitude(krpc_connection_t connection, krpc_MechJeb_StagingController_t instance, double value)
+
+      The lowest altitude at which the controller jettisons a fairing, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_StagingController_HotStaging(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_StagingController_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_StagingController_set_HotStaging(krpc_connection_t connection, krpc_MechJeb_StagingController_t instance, bool value)
+
+      Whether the controller ignites the next stage before the current one burns out.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_StagingController_HotStagingLeadTime(krpc_connection_t connection, double * returnValue, krpc_MechJeb_StagingController_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_StagingController_set_HotStagingLeadTime(krpc_connection_t connection, krpc_MechJeb_StagingController_t instance, double value)
+
+      The time before burnout at which a hot staging happens, in seconds.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`krpc_MechJeb_StagingController_HotStaging`.

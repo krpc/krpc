@@ -1,0 +1,111 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.MechJeb
+
+DockingAutopilot
+================
+
+
+.. type:: public class DockingAutopilot
+
+   The docking autopilot, which docks with the target docking port.
+
+   .. method:: boolean getEnabled()
+
+   .. method:: void setEnabled(boolean value)
+
+      Whether the module is enabled.
+
+      :Game Scenes: Flight
+
+   .. method:: String getStatus()
+
+
+      The status of the autopilot.
+
+      :Game Scenes: Flight
+
+   .. method:: double getSpeedLimit()
+
+   .. method:: void setSpeedLimit(double value)
+
+      The largest speed relative to the target, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getOverrideSafeDistance()
+
+   .. method:: void setOverrideSafeDistance(boolean value)
+
+      Whether :meth:`DockingAutopilot.getOverridenSafeDistance()` replaces the computed safe distance.
+
+      :Game Scenes: Flight
+
+   .. method:: double getOverridenSafeDistance()
+
+   .. method:: void setOverridenSafeDistance(double value)
+
+      The safe distance from the target, in meters.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`DockingAutopilot.getOverrideSafeDistance()`.
+
+   .. method:: boolean getOverrideTargetSize()
+
+   .. method:: void setOverrideTargetSize(boolean value)
+
+      Whether :meth:`DockingAutopilot.getOverridenTargetSize()` replaces the computed size of the target.
+
+      :Game Scenes: Flight
+
+   .. method:: double getOverridenTargetSize()
+
+   .. method:: void setOverridenTargetSize(double value)
+
+      The size of the target, in meters.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`DockingAutopilot.getOverrideTargetSize()`.
+
+   .. method:: float getSafeDistance()
+
+
+      The safe distance from the target that the autopilot uses, in meters.
+
+      :Game Scenes: Flight
+
+   .. method:: float getTargetSize()
+
+
+      The size of the target that the autopilot uses, in meters.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getForceRoll()
+
+   .. method:: void setForceRoll(boolean value)
+
+      Whether the autopilot controls the roll.
+
+      :Game Scenes: Flight
+
+   .. method:: double getRoll()
+
+   .. method:: void setRoll(double value)
+
+      The roll, in degrees.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`DockingAutopilot.getForceRoll()`.

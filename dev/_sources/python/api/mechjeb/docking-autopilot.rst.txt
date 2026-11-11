@@ -1,0 +1,114 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: MechJeb
+
+DockingAutopilot
+================
+
+
+.. class:: DockingAutopilot
+
+   The docking autopilot, which docks with the target docking port.
+
+   .. attribute:: enabled
+
+      Whether the module is enabled.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: status
+
+      The status of the autopilot.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: str
+      :Game Scenes: Flight
+
+   .. attribute:: speed_limit
+
+      The largest speed relative to the target, in :math:`\mathrm{m/s}`.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: override_safe_distance
+
+      Whether :attr:`DockingAutopilot.overriden_safe_distance` replaces the computed safe distance.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: overriden_safe_distance
+
+      The safe distance from the target, in meters.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :attr:`DockingAutopilot.override_safe_distance`.
+
+   .. attribute:: override_target_size
+
+      Whether :attr:`DockingAutopilot.overriden_target_size` replaces the computed size of the target.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: overriden_target_size
+
+      The size of the target, in meters.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :attr:`DockingAutopilot.override_target_size`.
+
+   .. attribute:: safe_distance
+
+      The safe distance from the target that the autopilot uses, in meters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: target_size
+
+      The size of the target that the autopilot uses, in meters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: force_roll
+
+      Whether the autopilot controls the roll.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: roll
+
+      The roll, in degrees.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :attr:`DockingAutopilot.force_roll`.

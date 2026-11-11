@@ -1,0 +1,99 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::MechJeb
+
+StagingController
+=================
+
+
+.. class:: StagingController
+
+   The staging controller, which stages when a stage runs out of fuel.
+
+   .. function:: bool enabled()
+   .. function:: void set_enabled(bool value)
+
+      Whether the module is enabled.
+
+      :Game Scenes: Flight
+
+   .. function:: bool autostaging_once()
+   .. function:: void set_autostaging_once(bool value)
+
+      Whether the controller disables itself after one staging.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires the controller to be enabled.
+
+   .. function:: int32_t autostage_limit()
+   .. function:: void set_autostage_limit(int32_t value)
+
+      The last stage the controller activates.
+
+      :Game Scenes: Flight
+
+   .. function:: double autostage_post_delay()
+   .. function:: void set_autostage_post_delay(double value)
+
+      The delay after each staging, in seconds.
+
+      :Game Scenes: Flight
+
+   .. function:: double autostage_pre_delay()
+   .. function:: void set_autostage_pre_delay(double value)
+
+      The delay before each staging, in seconds.
+
+      :Game Scenes: Flight
+
+   .. function:: double clamp_auto_stage_thrust_pct()
+   .. function:: void set_clamp_auto_stage_thrust_pct(double value)
+
+      The fraction of full thrust at which the controller releases the launch clamps.
+
+      :Game Scenes: Flight
+
+   .. function:: double fairing_max_aerothermal_flux()
+   .. function:: void set_fairing_max_aerothermal_flux(double value)
+
+      The largest aerothermal flux at which the controller jettisons a fairing, in
+      :math:`\mathrm{W/m^{2}}`.
+
+      :Game Scenes: Flight
+
+   .. function:: double fairing_max_dynamic_pressure()
+   .. function:: void set_fairing_max_dynamic_pressure(double value)
+
+      The largest dynamic pressure at which the controller jettisons a fairing, in pascals.
+
+      :Game Scenes: Flight
+
+   .. function:: double fairing_min_altitude()
+   .. function:: void set_fairing_min_altitude(double value)
+
+      The lowest altitude at which the controller jettisons a fairing, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: bool hot_staging()
+   .. function:: void set_hot_staging(bool value)
+
+      Whether the controller ignites the next stage before the current one burns out.
+
+      :Game Scenes: Flight
+
+   .. function:: double hot_staging_lead_time()
+   .. function:: void set_hot_staging_lead_time(double value)
+
+      The time before burnout at which a hot staging happens, in seconds.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`StagingController::hot_staging`.

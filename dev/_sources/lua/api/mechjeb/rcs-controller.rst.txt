@@ -1,0 +1,23 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: MechJeb
+
+RCSController
+=============
+
+
+.. class:: RCSController
+
+   The RCS controller.
+
+   .. attribute:: rcs_for_rotation: boolean
+
+      Whether the controller uses RCS to rotate the vessel.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: rcs_throttle: boolean
+
+      Whether the controller throttles the RCS thrusters.
+
+      :Attribute: Can be read or written

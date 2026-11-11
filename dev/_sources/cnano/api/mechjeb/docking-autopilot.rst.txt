@@ -1,0 +1,100 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+DockingAutopilot
+================
+
+
+.. type:: krpc_MechJeb_DockingAutopilot_t
+
+   The docking autopilot, which docks with the target docking port.
+
+   .. function:: krpc_error_t krpc_MechJeb_DockingAutopilot_Enabled(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_DockingAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_DockingAutopilot_set_Enabled(krpc_connection_t connection, krpc_MechJeb_DockingAutopilot_t instance, bool value)
+
+      Whether the module is enabled.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_DockingAutopilot_Status(krpc_connection_t connection, char * * returnValue, krpc_MechJeb_DockingAutopilot_t instance)
+
+      The status of the autopilot.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_DockingAutopilot_SpeedLimit(krpc_connection_t connection, double * returnValue, krpc_MechJeb_DockingAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_DockingAutopilot_set_SpeedLimit(krpc_connection_t connection, krpc_MechJeb_DockingAutopilot_t instance, double value)
+
+      The largest speed relative to the target, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_DockingAutopilot_OverrideSafeDistance(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_DockingAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_DockingAutopilot_set_OverrideSafeDistance(krpc_connection_t connection, krpc_MechJeb_DockingAutopilot_t instance, bool value)
+
+      Whether :func:`krpc_MechJeb_DockingAutopilot_OverridenSafeDistance` replaces the computed safe distance.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_DockingAutopilot_OverridenSafeDistance(krpc_connection_t connection, double * returnValue, krpc_MechJeb_DockingAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_DockingAutopilot_set_OverridenSafeDistance(krpc_connection_t connection, krpc_MechJeb_DockingAutopilot_t instance, double value)
+
+      The safe distance from the target, in meters.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`krpc_MechJeb_DockingAutopilot_OverrideSafeDistance`.
+
+   .. function:: krpc_error_t krpc_MechJeb_DockingAutopilot_OverrideTargetSize(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_DockingAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_DockingAutopilot_set_OverrideTargetSize(krpc_connection_t connection, krpc_MechJeb_DockingAutopilot_t instance, bool value)
+
+      Whether :func:`krpc_MechJeb_DockingAutopilot_OverridenTargetSize` replaces the computed size of the target.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_DockingAutopilot_OverridenTargetSize(krpc_connection_t connection, double * returnValue, krpc_MechJeb_DockingAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_DockingAutopilot_set_OverridenTargetSize(krpc_connection_t connection, krpc_MechJeb_DockingAutopilot_t instance, double value)
+
+      The size of the target, in meters.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`krpc_MechJeb_DockingAutopilot_OverrideTargetSize`.
+
+   .. function:: krpc_error_t krpc_MechJeb_DockingAutopilot_SafeDistance(krpc_connection_t connection, float * returnValue, krpc_MechJeb_DockingAutopilot_t instance)
+
+      The safe distance from the target that the autopilot uses, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_DockingAutopilot_TargetSize(krpc_connection_t connection, float * returnValue, krpc_MechJeb_DockingAutopilot_t instance)
+
+      The size of the target that the autopilot uses, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_DockingAutopilot_ForceRoll(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_DockingAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_DockingAutopilot_set_ForceRoll(krpc_connection_t connection, krpc_MechJeb_DockingAutopilot_t instance, bool value)
+
+      Whether the autopilot controls the roll.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_DockingAutopilot_Roll(krpc_connection_t connection, double * returnValue, krpc_MechJeb_DockingAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_DockingAutopilot_set_Roll(krpc_connection_t connection, krpc_MechJeb_DockingAutopilot_t instance, double value)
+
+      The roll, in degrees.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`krpc_MechJeb_DockingAutopilot_ForceRoll`.

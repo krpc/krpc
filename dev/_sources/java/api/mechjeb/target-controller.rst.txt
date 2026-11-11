@@ -1,0 +1,125 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.MechJeb
+
+TargetController
+================
+
+
+.. type:: public class TargetController
+
+   The target controller, which holds MechJeb's target.
+
+   .. note::
+
+      Positions and directions are in world space, the coordinate system of the game's
+      physics.
+
+   .. method:: boolean getCanAlign()
+
+
+      Whether the vessel can align with the target, which it can with a docking port.
+
+      :Game Scenes: Flight
+
+   .. method:: float getDistance()
+
+
+      The distance to the target, in meters.
+
+      :Game Scenes: Flight
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getDockingAxis()
+
+
+      The world space docking axis of the target.
+
+      :Game Scenes: Flight
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getPositionTargetPosition()
+
+      The world space position of the position target.
+
+      :Game Scenes: Flight
+
+   .. method:: String getPositionTargetString()
+
+      The position target as text.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getNormalTargetExists()
+
+
+      Whether there is a target that is a vessel, a body or a direction target.
+
+      :Game Scenes: Flight
+
+   .. method:: void pickPositionTargetOnMap()
+
+      Let the player pick the position target on the map.
+
+      :Game Scenes: Flight
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getPosition()
+
+
+      The world space position of the target.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getPositionTargetExists()
+
+
+      Whether there is a target that is a position or a vessel.
+
+      :Game Scenes: Flight
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getRelativePosition()
+
+
+      The world space position of the vessel relative to the target.
+
+      :Game Scenes: Flight
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getRelativeVelocity()
+
+
+      The world space velocity of the vessel relative to the target, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. method:: void setDirectionTarget(String name)
+
+      Set the target to a direction.
+
+      :param String name: The name of the target.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Set the direction with :meth:`TargetController.updateDirectionTarget(org.javatuples.Triplet<Double,Double,Double>)`.
+
+   .. method:: void setPositionTarget(SpaceCenter.CelestialBody body, double latitude, double longitude)
+
+      Set the target to a position on the surface of a body.
+
+      :param SpaceCenter.CelestialBody body: The body.
+      :param double latitude: The latitude, in degrees.
+      :param double longitude: The longitude, in degrees.
+      :Game Scenes: Flight
+
+   .. method:: SpaceCenter.Orbit getTargetOrbit()
+
+
+      The orbit of the target.
+
+      :Game Scenes: Flight
+
+   .. method:: void updateDirectionTarget(org.javatuples.Triplet<Double,Double,Double> direction)
+
+      Set the direction of the direction target.
+
+      :param org.javatuples.Triplet<Double,Double,Double> direction: The world space direction.
+      :Game Scenes: Flight

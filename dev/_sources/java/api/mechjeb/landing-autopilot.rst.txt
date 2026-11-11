@@ -1,0 +1,92 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.MechJeb
+
+LandingAutopilot
+================
+
+
+.. type:: public class LandingAutopilot
+
+   The landing autopilot, which lands at a target or wherever the vessel comes down.
+
+   .. method:: boolean getEnabled()
+
+   .. method:: void setEnabled(boolean value)
+
+      Whether the module is enabled.
+
+      :Game Scenes: Flight
+
+   .. method:: String getStatus()
+
+
+      The status of the autopilot.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getDeployChutes()
+
+   .. method:: void setDeployChutes(boolean value)
+
+      Whether the autopilot deploys the parachutes.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getDeployGears()
+
+   .. method:: void setDeployGears(boolean value)
+
+      Whether the autopilot deploys the landing gear.
+
+      :Game Scenes: Flight
+
+   .. method:: void landAtPositionTarget()
+
+      Land at the position target. See :meth:`TargetController.setPositionTarget(SpaceCenter.CelestialBody, double, double)`.
+
+      :Game Scenes: Flight
+
+   .. method:: void landUntargeted()
+
+      Land wherever the vessel comes down.
+
+      :Game Scenes: Flight
+
+   .. method:: int getLimitChutesStage()
+
+   .. method:: void setLimitChutesStage(int value)
+
+      The last stage in which the autopilot deploys the parachutes.
+
+      :Game Scenes: Flight
+
+   .. method:: int getLimitGearsStage()
+
+   .. method:: void setLimitGearsStage(int value)
+
+      The last stage in which the autopilot deploys the landing gear.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getRcsAdjustment()
+
+   .. method:: void setRcsAdjustment(boolean value)
+
+      Whether the autopilot corrects its course with RCS.
+
+      :Game Scenes: Flight
+
+   .. method:: void stopLanding()
+
+      Stop the landing.
+
+      :Game Scenes: Flight
+
+   .. method:: double getTouchdownSpeed()
+
+   .. method:: void setTouchdownSpeed(double value)
+
+      The speed at touchdown, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight

@@ -1,0 +1,192 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::MechJeb
+
+ThrustController
+================
+
+
+.. class:: ThrustController
+
+   The thrust controller, which limits the throttle.
+
+   .. function:: bool differential_throttle()
+   .. function:: void set_differential_throttle(bool value)
+
+      Whether the controller throttles the engines differentially to steer.
+
+      :Game Scenes: Flight
+
+   .. function:: DifferentialThrottleStatus differential_throttle_status()
+
+      The result of the differential throttle.
+
+      :Game Scenes: Flight
+
+   .. function:: bool electric_throttle()
+   .. function:: void set_electric_throttle(bool value)
+
+      Whether to limit the throttle of electric engines to the available power.
+
+      :Game Scenes: Flight
+
+   .. function:: double electric_throttle_hi()
+   .. function:: void set_electric_throttle_hi(double value)
+
+      The charge level at which electric engines run at full throttle, between 0 and 1.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`ThrustController::electric_throttle`.
+
+   .. function:: double electric_throttle_lo()
+   .. function:: void set_electric_throttle_lo(double value)
+
+      The charge level at which electric engines stop, between 0 and 1.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`ThrustController::electric_throttle`.
+
+   .. function:: double flameout_safety_pct()
+   .. function:: void set_flameout_safety_pct(double value)
+
+      The safety margin of the jet engines' air intake, as a percentage.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`ThrustController::limit_to_prevent_flameout`.
+
+   .. function:: bool limit_acceleration()
+   .. function:: void set_limit_acceleration(bool value)
+
+      Whether to limit the acceleration.
+
+      :Game Scenes: Flight
+
+   .. function:: bool limit_dynamic_pressure()
+   .. function:: void set_limit_dynamic_pressure(bool value)
+
+      Whether to limit the dynamic pressure.
+
+      :Game Scenes: Flight
+
+   .. function:: bool limit_throttle()
+   .. function:: void set_limit_throttle(bool value)
+
+      Whether to limit the throttle.
+
+      :Game Scenes: Flight
+
+   .. function:: bool limit_to_prevent_flameout()
+   .. function:: void set_limit_to_prevent_flameout(bool value)
+
+      Whether to limit the throttle to keep jet engines from flaming out.
+
+      :Game Scenes: Flight
+
+   .. function:: bool limit_to_prevent_overheats()
+   .. function:: void set_limit_to_prevent_overheats(bool value)
+
+      Whether to limit the throttle to keep parts from overheating.
+
+      :Game Scenes: Flight
+
+   .. function:: bool limiter_min_throttle()
+   .. function:: void set_limiter_min_throttle(bool value)
+
+      Whether to keep the throttle above :func:`ThrustController::min_throttle`.
+
+      :Game Scenes: Flight
+
+   .. function:: bool manage_intakes()
+   .. function:: void set_manage_intakes(bool value)
+
+      Whether the controller opens and closes the air intakes.
+
+      :Game Scenes: Flight
+
+   .. function:: double max_acceleration()
+   .. function:: void set_max_acceleration(double value)
+
+      The largest acceleration, in :math:`\mathrm{m/s^{2}}`.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`ThrustController::limit_acceleration`.
+
+   .. function:: double max_dynamic_pressure()
+   .. function:: void set_max_dynamic_pressure(double value)
+
+      The largest dynamic pressure, in pascals.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`ThrustController::limit_dynamic_pressure`.
+
+   .. function:: double max_throttle()
+   .. function:: void set_max_throttle(double value)
+
+      The largest throttle, between 0 and 1.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`ThrustController::limit_throttle`.
+
+   .. function:: double min_throttle()
+   .. function:: void set_min_throttle(double value)
+
+      The smallest throttle, between 0 and 1.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`ThrustController::limiter_min_throttle`.
+
+
+
+.. namespace:: krpc::services::MechJeb
+.. enum-struct:: DifferentialThrottleStatus
+
+   The result of the differential throttle. See
+   :func:`ThrustController::differential_throttle_status`.
+
+
+   .. enumerator:: all_engines_off
+
+      All the engines are off.
+
+
+   .. enumerator:: more_engines_required
+
+      The vessel needs more engines.
+
+
+   .. enumerator:: solver_failed
+
+      The solver found no solution.
+
+
+   .. enumerator:: success
+
+      The throttles balance the thrust.

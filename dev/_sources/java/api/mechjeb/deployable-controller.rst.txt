@@ -1,0 +1,37 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.MechJeb
+
+DeployableController
+====================
+
+
+.. type:: public class DeployableController
+
+   The controller of one kind of deployable part, such as antennas or solar panels.
+
+   .. method:: boolean allRetracted()
+
+      Whether all the parts are retracted.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getAutoDeploy()
+
+   .. method:: void setAutoDeploy(boolean value)
+
+      Whether a MechJeb autopilot deploys the parts.
+
+      :Game Scenes: Flight
+
+   .. method:: void extendAll()
+
+      Extend all the parts.
+
+      :Game Scenes: Flight
+
+   .. method:: void retractAll()
+
+      Retract all the parts.
+
+      :Game Scenes: Flight

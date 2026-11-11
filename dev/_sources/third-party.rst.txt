@@ -20,12 +20,6 @@ Clients
 * `Go client <https://github.com/nathan-boulestin/krpc/tree/main/client/go>`_
 * `Using the plugin in F# <http://fssnip.net/7Pi>`_
 
-Services
---------
-
-* `kRPC.MechJeb <https://genhis.github.io/KRPC.MechJeb>`_ -- remote procedures to interact with
-  MechJeb (an up-to-date service based on `krpcmj <https://github.com/artwhaley/krpcmj>`_)
-
 Scripts/Tools/Libraries etc.
 ----------------------------
 

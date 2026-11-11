@@ -1,0 +1,176 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: MechJeb
+
+MechJeb
+=======
+
+
+.. module:: MechJeb
+
+This service provides functionality to interact with MechJeb 2.
+
+.. note::
+
+   The objects act on the MechJeb of the active vessel, and stay valid after the active
+   vessel changes.
+
+
+
+.. attribute:: api_ready: boolean
+
+   Whether MechJeb is installed and the active vessel has MechJeb.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: airplane_autopilot: MechJeb.AirplaneAutopilot
+
+   The airplane autopilot.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: antenna_controller: MechJeb.DeployableController
+
+   The controller of the deployable antennas.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: ascent_autopilot: MechJeb.AscentAutopilot
+
+   The ascent autopilot.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: docking_autopilot: MechJeb.DockingAutopilot
+
+   The docking autopilot.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: landing_autopilot: MechJeb.LandingAutopilot
+
+   The landing autopilot.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: maneuver_planner: MechJeb.ManeuverPlanner
+
+   The maneuver planner.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: node_executor: MechJeb.NodeExecutor
+
+   The maneuver node executor.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: rcs_controller: MechJeb.RCSController
+
+   The RCS controller.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: rendezvous_autopilot: MechJeb.RendezvousAutopilot
+
+   The rendezvous autopilot.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: smart_ass: MechJeb.SmartASS
+
+   The Smart A.S.S. window.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: smart_rcs: MechJeb.SmartRCS
+
+   The Smart RCS window.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: solar_panel_controller: MechJeb.DeployableController
+
+   The controller of the deployable solar panels.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: staging_controller: MechJeb.StagingController
+
+   The staging controller.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: target_controller: MechJeb.TargetController
+
+   The target controller.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: thrust_controller: MechJeb.ThrustController
+
+   The thrust controller.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: translatron: MechJeb.Translatron
+
+   The Translatron window.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+
+.. class:: MJServiceException
+
+   A general error in the service.

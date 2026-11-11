@@ -1,0 +1,57 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: MechJeb
+
+SmartRCS
+========
+
+
+.. class:: SmartRCS
+
+   The Smart RCS window, which holds a velocity with RCS.
+
+   .. attribute:: auto_disable_smart_rcs
+
+      Whether Smart RCS turns off when an autopilot takes control.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: mode
+
+      The mode. Throws an exception if set to :attr:`SmartRCSMode.zero_velocity`,
+      which MechJeb 2.15 removed.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`SmartRCSMode`
+      :Game Scenes: Flight
+
+   .. attribute:: rcs_controller
+
+      The RCS controller. The same as :attr:`rcs_controller`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`RCSController`
+      :Game Scenes: Flight
+
+
+
+.. class:: SmartRCSMode
+
+   The mode of Smart RCS. See :attr:`SmartRCS.mode`.
+
+
+   .. data:: off
+
+      Off.
+
+
+   .. data:: zero_relative_velocity
+
+      Hold zero velocity relative to the target.
+
+
+   .. data:: zero_velocity
+
+      Hold zero velocity. MechJeb 2.15 removed this mode.

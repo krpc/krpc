@@ -1,0 +1,421 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+SmartASS
+========
+
+
+.. type:: krpc_MechJeb_SmartASS_t
+
+   The Smart A.S.S. window, which points the vessel in a chosen direction.
+
+   .. function:: krpc_error_t krpc_MechJeb_SmartASS_InterfaceMode(krpc_connection_t connection, krpc_MechJeb_SmartASSInterfaceMode_t * returnValue, krpc_MechJeb_SmartASS_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_SmartASS_set_InterfaceMode(krpc_connection_t connection, krpc_MechJeb_SmartASS_t instance, krpc_MechJeb_SmartASSInterfaceMode_t value)
+
+      The mode of the window, which selects its buttons and nothing else.
+      Throws an exception if set to :macro:`KRPC_MECHJEB_SMARTASSINTERFACEMODE_AUTOMATIC`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_SmartASS_AutopilotMode(krpc_connection_t connection, krpc_MechJeb_SmartASSAutopilotMode_t * returnValue, krpc_MechJeb_SmartASS_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_SmartASS_set_AutopilotMode(krpc_connection_t connection, krpc_MechJeb_SmartASS_t instance, krpc_MechJeb_SmartASSAutopilotMode_t value)
+
+      The autopilot mode. Throws an exception if set to
+      :macro:`KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_AUTOMATIC`.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Call :func:`krpc_MechJeb_SmartASS_Update` to apply a change.
+
+   .. function:: krpc_error_t krpc_MechJeb_SmartASS_Update(krpc_connection_t connection, krpc_MechJeb_SmartASS_t instance, bool resetPID)
+
+      Apply the settings.
+
+      :Parameters:
+
+       * **resetPID** -- Whether to reset the attitude controller. Use it only if the vessel does not follow the new settings.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_SmartASS_ForceYaw(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_SmartASS_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_SmartASS_set_ForceYaw(krpc_connection_t connection, krpc_MechJeb_SmartASS_t instance, bool value)
+
+      Whether the autopilot controls the yaw in the :macro:`KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_SURFACE`,
+      :macro:`KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_SURFACEPROGRADE` and
+      :macro:`KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_SURFACERETROGRADE` modes.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_SmartASS_ForcePitch(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_SmartASS_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_SmartASS_set_ForcePitch(krpc_connection_t connection, krpc_MechJeb_SmartASS_t instance, bool value)
+
+      Whether the autopilot controls the pitch in the :macro:`KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_SURFACE`,
+      :macro:`KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_SURFACEPROGRADE` and
+      :macro:`KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_SURFACERETROGRADE` modes.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_SmartASS_ForceRoll(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_SmartASS_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_SmartASS_set_ForceRoll(krpc_connection_t connection, krpc_MechJeb_SmartASS_t instance, bool value)
+
+      Whether the autopilot controls the roll.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_SmartASS_SurfaceHeading(krpc_connection_t connection, double * returnValue, krpc_MechJeb_SmartASS_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_SmartASS_set_SurfaceHeading(krpc_connection_t connection, krpc_MechJeb_SmartASS_t instance, double value)
+
+      The heading, in degrees.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Applies in the :macro:`KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_SURFACE` mode.
+
+   .. function:: krpc_error_t krpc_MechJeb_SmartASS_SurfacePitch(krpc_connection_t connection, double * returnValue, krpc_MechJeb_SmartASS_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_SmartASS_set_SurfacePitch(krpc_connection_t connection, krpc_MechJeb_SmartASS_t instance, double value)
+
+      The pitch above the horizon, in degrees. 90 is straight up.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Applies in the :macro:`KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_SURFACE` mode.
+
+   .. function:: krpc_error_t krpc_MechJeb_SmartASS_SurfaceRoll(krpc_connection_t connection, double * returnValue, krpc_MechJeb_SmartASS_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_SmartASS_set_SurfaceRoll(krpc_connection_t connection, krpc_MechJeb_SmartASS_t instance, double value)
+
+      The roll, in degrees. 0 is top side up.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Applies in the :macro:`KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_SURFACE` mode.
+
+   .. function:: krpc_error_t krpc_MechJeb_SmartASS_SurfaceVelYaw(krpc_connection_t connection, double * returnValue, krpc_MechJeb_SmartASS_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_SmartASS_set_SurfaceVelYaw(krpc_connection_t connection, krpc_MechJeb_SmartASS_t instance, double value)
+
+      The yaw from the surface velocity, in degrees.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Applies in the :macro:`KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_SURFACEPROGRADE` and
+         :macro:`KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_SURFACERETROGRADE` modes.
+
+   .. function:: krpc_error_t krpc_MechJeb_SmartASS_SurfaceVelPitch(krpc_connection_t connection, double * returnValue, krpc_MechJeb_SmartASS_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_SmartASS_set_SurfaceVelPitch(krpc_connection_t connection, krpc_MechJeb_SmartASS_t instance, double value)
+
+      The pitch from the surface velocity, in degrees.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Applies in the :macro:`KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_SURFACEPROGRADE` and
+         :macro:`KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_SURFACERETROGRADE` modes.
+
+   .. function:: krpc_error_t krpc_MechJeb_SmartASS_SurfaceVelRoll(krpc_connection_t connection, double * returnValue, krpc_MechJeb_SmartASS_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_SmartASS_set_SurfaceVelRoll(krpc_connection_t connection, krpc_MechJeb_SmartASS_t instance, double value)
+
+      The roll, in degrees. 0 is top side up.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Applies in the :macro:`KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_SURFACEPROGRADE` and
+         :macro:`KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_SURFACERETROGRADE` modes.
+
+   .. function:: krpc_error_t krpc_MechJeb_SmartASS_AdvancedReference(krpc_connection_t connection, krpc_MechJeb_AttitudeReference_t * returnValue, krpc_MechJeb_SmartASS_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_SmartASS_set_AdvancedReference(krpc_connection_t connection, krpc_MechJeb_SmartASS_t instance, krpc_MechJeb_AttitudeReference_t value)
+
+      The reference frame of :func:`krpc_MechJeb_SmartASS_AdvancedDirection`. Throws an exception if
+      MechJeb uses a reference this enumeration lacks.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Applies in the :macro:`KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_ADVANCED` mode.
+
+   .. function:: krpc_error_t krpc_MechJeb_SmartASS_AdvancedDirection(krpc_connection_t connection, krpc_MechJeb_Direction_t * returnValue, krpc_MechJeb_SmartASS_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_SmartASS_set_AdvancedDirection(krpc_connection_t connection, krpc_MechJeb_SmartASS_t instance, krpc_MechJeb_Direction_t value)
+
+      The direction in :func:`krpc_MechJeb_SmartASS_AdvancedReference`.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Applies in the :macro:`KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_ADVANCED` mode.
+
+
+
+.. type:: krpc_MechJeb_SmartASSInterfaceMode_t
+
+   The mode of the Smart A.S.S. window. See :func:`krpc_MechJeb_SmartASS_InterfaceMode`.
+
+
+   .. macro:: KRPC_MECHJEB_SMARTASSINTERFACEMODE_ORBITAL
+
+      The orbital modes.
+
+
+   .. macro:: KRPC_MECHJEB_SMARTASSINTERFACEMODE_SURFACE
+
+      The surface modes.
+
+
+   .. macro:: KRPC_MECHJEB_SMARTASSINTERFACEMODE_TARGET
+
+      The target modes.
+
+
+   .. macro:: KRPC_MECHJEB_SMARTASSINTERFACEMODE_ADVANCED
+
+      The advanced mode.
+
+
+   .. macro:: KRPC_MECHJEB_SMARTASSINTERFACEMODE_AUTOMATIC
+
+      Set by MechJeb's autopilots. Cannot be set.
+
+
+
+.. type:: krpc_MechJeb_SmartASSAutopilotMode_t
+
+   The autopilot mode of Smart A.S.S. See :func:`krpc_MechJeb_SmartASS_AutopilotMode`.
+
+
+   .. macro:: KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_OFF
+
+      Off.
+
+
+   .. macro:: KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_KILLROT
+
+      Stop the vessel's rotation.
+
+
+   .. macro:: KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_NODE
+
+      Point at the next maneuver node.
+
+
+   .. macro:: KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_ADVANCED
+
+      Point in the direction set by :func:`krpc_MechJeb_SmartASS_AdvancedReference` and
+      :func:`krpc_MechJeb_SmartASS_AdvancedDirection`.
+
+
+   .. macro:: KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_AUTOMATIC
+
+      Set by MechJeb's autopilots. Cannot be set.
+
+
+   .. macro:: KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_PROGRADE
+
+      Point orbital prograde.
+
+
+   .. macro:: KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_RETROGRADE
+
+      Point orbital retrograde.
+
+
+   .. macro:: KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_NORMALPLUS
+
+      Point orbit normal.
+
+
+   .. macro:: KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_NORMALMINUS
+
+      Point orbit anti-normal.
+
+
+   .. macro:: KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_RADIALPLUS
+
+      Point radially outward.
+
+
+   .. macro:: KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_RADIALMINUS
+
+      Point radially inward.
+
+
+   .. macro:: KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_SURFACEPROGRADE
+
+      Point along the surface velocity.
+
+
+   .. macro:: KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_SURFACERETROGRADE
+
+      Point against the surface velocity.
+
+
+   .. macro:: KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_HORIZONTALPLUS
+
+      Point along the horizontal surface velocity.
+
+
+   .. macro:: KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_HORIZONTALMINUS
+
+      Point against the horizontal surface velocity.
+
+
+   .. macro:: KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_SURFACE
+
+      Point in the direction set by :func:`krpc_MechJeb_SmartASS_SurfaceHeading`,
+      :func:`krpc_MechJeb_SmartASS_SurfacePitch` and :func:`krpc_MechJeb_SmartASS_SurfaceRoll`.
+
+
+   .. macro:: KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_VERTICALPLUS
+
+      Point up, normal to the surface.
+
+
+   .. macro:: KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_TARGETPLUS
+
+      Point at the target.
+
+
+   .. macro:: KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_TARGETMINUS
+
+      Point away from the target.
+
+
+   .. macro:: KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_RELATIVEPLUS
+
+      Point along the velocity relative to the target.
+
+
+   .. macro:: KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_RELATIVEMINUS
+
+      Point against the velocity relative to the target.
+
+
+   .. macro:: KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_PARALLELPLUS
+
+      Point parallel to the target's orientation. For a docking port, along its axis
+      and away from it.
+
+
+   .. macro:: KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_PARALLELMINUS
+
+      Point antiparallel to the target's orientation. For a docking port, along its axis
+      and toward it.
+
+
+
+.. type:: krpc_MechJeb_AttitudeReference_t
+
+   A reference frame of Smart A.S.S. See :func:`krpc_MechJeb_SmartASS_AdvancedReference`.
+
+
+   .. macro:: KRPC_MECHJEB_ATTITUDEREFERENCE_INERTIAL
+
+      The world coordinate system.
+
+
+   .. macro:: KRPC_MECHJEB_ATTITUDEREFERENCE_ORBIT
+
+      Forward is prograde, left is normal and up is radial out.
+
+
+   .. macro:: KRPC_MECHJEB_ATTITUDEREFERENCE_ORBITHORIZONTAL
+
+      Forward is the orbital velocity projected onto the surface, and up is the surface normal.
+
+
+   .. macro:: KRPC_MECHJEB_ATTITUDEREFERENCE_SURFACENORTH
+
+      Forward is north, left is west and up is the surface normal.
+
+
+   .. macro:: KRPC_MECHJEB_ATTITUDEREFERENCE_SURFACEVELOCITY
+
+      Forward is the surface velocity, and up is the surface normal perpendicular to it.
+
+
+   .. macro:: KRPC_MECHJEB_ATTITUDEREFERENCE_TARGET
+
+      Forward is toward the target, and up is the vessel's heading perpendicular to it.
+
+
+   .. macro:: KRPC_MECHJEB_ATTITUDEREFERENCE_RELATIVEVELOCITY
+
+      Forward is the velocity relative to the target.
+
+
+   .. macro:: KRPC_MECHJEB_ATTITUDEREFERENCE_TARGETORIENTATION
+
+      Forward is the direction the target faces, and up is the target's up.
+
+
+   .. macro:: KRPC_MECHJEB_ATTITUDEREFERENCE_MANEUVERNODE
+
+      Forward is the burn direction of the next maneuver node.
+
+
+   .. macro:: KRPC_MECHJEB_ATTITUDEREFERENCE_SUN
+
+      Forward is the orbital velocity of the body that orbits the sun, and up is radial
+      out of that orbit.
+
+
+   .. macro:: KRPC_MECHJEB_ATTITUDEREFERENCE_SURFACEHORIZONTAL
+
+      Forward is the horizontal surface velocity, and up is the surface normal.
+
+
+
+.. type:: krpc_MechJeb_Direction_t
+
+   A direction of Smart A.S.S. See :func:`krpc_MechJeb_SmartASS_AdvancedDirection`.
+
+
+   .. macro:: KRPC_MECHJEB_DIRECTION_FORWARD
+
+      Forward.
+
+
+   .. macro:: KRPC_MECHJEB_DIRECTION_BACK
+
+      Back.
+
+
+   .. macro:: KRPC_MECHJEB_DIRECTION_UP
+
+      Up.
+
+
+   .. macro:: KRPC_MECHJEB_DIRECTION_DOWN
+
+      Down.
+
+
+   .. macro:: KRPC_MECHJEB_DIRECTION_RIGHT
+
+      Right.
+
+
+   .. macro:: KRPC_MECHJEB_DIRECTION_LEFT
+
+      Left.

@@ -1,0 +1,110 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: MechJeb
+
+StagingController
+=================
+
+
+.. class:: StagingController
+
+   The staging controller, which stages when a stage runs out of fuel.
+
+   .. attribute:: enabled
+
+      Whether the module is enabled.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: autostaging_once
+
+      Whether the controller disables itself after one staging.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires the controller to be enabled.
+
+   .. attribute:: autostage_limit
+
+      The last stage the controller activates.
+
+      :Attribute: Can be read or written
+      :rtype: int
+      :Game Scenes: Flight
+
+   .. attribute:: autostage_post_delay
+
+      The delay after each staging, in seconds.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: autostage_pre_delay
+
+      The delay before each staging, in seconds.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: clamp_auto_stage_thrust_pct
+
+      The fraction of full thrust at which the controller releases the launch clamps.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: fairing_max_aerothermal_flux
+
+      The largest aerothermal flux at which the controller jettisons a fairing, in
+      :math:`\mathrm{W/m^{2}}`.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: fairing_max_dynamic_pressure
+
+      The largest dynamic pressure at which the controller jettisons a fairing, in pascals.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: fairing_min_altitude
+
+      The lowest altitude at which the controller jettisons a fairing, in meters.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: hot_staging
+
+      Whether the controller ignites the next stage before the current one burns out.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: hot_staging_lead_time
+
+      The time before burnout at which a hot staging happens, in seconds.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :attr:`StagingController.hot_staging`.

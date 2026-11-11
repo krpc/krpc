@@ -1,0 +1,1084 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.MechJeb
+
+ManeuverPlanner
+===============
+
+
+.. class:: ManeuverPlanner
+
+   The maneuver planner, which makes maneuver nodes for its operations.
+
+   .. note::
+
+      MechJeb shares the operations, and most of their settings, between vessels.
+
+   .. property:: OperationApoapsis OperationApoapsis { get; }
+
+      The operation that changes the apoapsis.
+
+      :Game Scenes: Flight
+
+   .. property:: OperationCircularize OperationCircularize { get; }
+
+      The operation that circularizes the orbit.
+
+      :Game Scenes: Flight
+
+   .. property:: OperationCourseCorrection OperationCourseCorrection { get; }
+
+      The operation that fine tunes the closest approach to the target.
+
+      :Game Scenes: Flight
+
+   .. property:: OperationEllipticize OperationEllipticize { get; }
+
+      The operation that changes both the periapsis and the apoapsis.
+
+      :Game Scenes: Flight
+
+   .. property:: OperationInclination OperationInclination { get; }
+
+      The operation that changes the inclination.
+
+      :Game Scenes: Flight
+
+   .. property:: OperationInterplanetaryTransfer OperationInterplanetaryTransfer { get; }
+
+      The operation that transfers to another planet.
+
+      :Game Scenes: Flight
+
+   .. property:: OperationKillRelVel OperationKillRelVel { get; }
+
+      The operation that matches velocities with the target.
+
+      :Game Scenes: Flight
+
+   .. property:: OperationLambert OperationLambert { get; }
+
+      The operation that intercepts the target at a chosen time.
+
+      :Game Scenes: Flight
+
+   .. property:: OperationLan OperationLan { get; }
+
+      The operation that changes the longitude of the ascending node.
+
+      :Game Scenes: Flight
+
+   .. property:: OperationLongitude OperationLongitude { get; }
+
+      The operation that changes the surface longitude of the apsis.
+
+      :Game Scenes: Flight
+
+   .. property:: OperationMoonReturn OperationMoonReturn { get; }
+
+      The operation that returns from a moon.
+
+      :Game Scenes: Flight
+
+   .. property:: OperationPeriapsis OperationPeriapsis { get; }
+
+      The operation that changes the periapsis.
+
+      :Game Scenes: Flight
+
+   .. property:: OperationPlane OperationPlane { get; }
+
+      The operation that matches planes with the target.
+
+      :Game Scenes: Flight
+
+   .. property:: OperationResonantOrbit OperationResonantOrbit { get; }
+
+      The operation that changes to a resonant orbit.
+
+      :Game Scenes: Flight
+
+   .. property:: OperationSemiMajor OperationSemiMajor { get; }
+
+      The operation that changes the semi-major axis.
+
+      :Game Scenes: Flight
+
+   .. property:: OperationTransfer OperationTransfer { get; }
+
+      The operation that transfers to the target.
+
+      :Game Scenes: Flight
+
+
+
+.. class:: OperationException
+
+   Thrown when an operation cannot make its nodes, such as when it needs a target and
+   there is none.
+
+
+
+TimeSelector
+------------
+
+
+.. class:: TimeSelector
+
+   The time of a maneuver.
+
+   .. property:: double CircularizeAltitude { get; set; }
+
+      The altitude, in meters.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Applies to :value:`TimeReference.Altitude`.
+
+   .. property:: double LeadTime { get; set; }
+
+      The time from now, in seconds.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Applies to :value:`TimeReference.XFromNow`.
+
+   .. property:: TimeReference TimeReference { get; set; }
+
+      The time reference. Throws an exception if set to a reference the operation does
+      not allow.
+
+      :Game Scenes: Flight
+
+
+
+.. enum:: TimeReference
+
+   The time reference of a maneuver. See :prop:`TimeSelector.TimeReference`.
+
+
+   .. enumerator:: Altitude
+
+      At :prop:`TimeSelector.CircularizeAltitude`.
+
+
+   .. enumerator:: Apoapsis
+
+      At the next apoapsis.
+
+
+   .. enumerator:: ClosestApproach
+
+      At the closest approach to the target.
+
+
+   .. enumerator:: Computed
+
+      At the optimum time.
+
+
+   .. enumerator:: EqAscending
+
+      At the equatorial ascending node.
+
+
+   .. enumerator:: EqDescending
+
+      At the equatorial descending node.
+
+
+   .. enumerator:: EqHighestAd
+
+      At the cheaper of the equatorial ascending and descending nodes.
+
+
+   .. enumerator:: EqNearestAd
+
+      At the nearer of the equatorial ascending and descending nodes.
+
+
+   .. enumerator:: Periapsis
+
+      At the next periapsis.
+
+
+   .. enumerator:: RelAscending
+
+      At the next ascending node with the target.
+
+
+   .. enumerator:: RelDescending
+
+      At the next descending node with the target.
+
+
+   .. enumerator:: RelHighestAd
+
+      At the cheaper of the ascending and descending nodes with the target.
+
+
+   .. enumerator:: RelNearestAd
+
+      At the nearer of the ascending and descending nodes with the target.
+
+
+   .. enumerator:: XFromNow
+
+      After :prop:`TimeSelector.LeadTime`.
+
+
+
+Operations
+----------
+
+OperationApoapsis
+^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationApoapsis
+
+   Change the apoapsis.
+
+   .. property:: string ErrorMessage { get; }
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Game Scenes: Flight
+
+   .. function:: SpaceCenter.Node MakeNode()
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+
+      :returns: The first maneuver node.
+      :Game Scenes: Flight
+
+   .. function:: System.Collections.Generic.IList<SpaceCenter.Node> MakeNodes()
+
+      Make the maneuver nodes of the operation. Throws an :type:`OperationException`
+      if the operation cannot make them.
+
+
+      :returns: The maneuver nodes.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. property:: double NewApoapsis { get; set; }
+
+      The new apoapsis altitude, in meters.
+
+      :Game Scenes: Flight
+
+   .. property:: TimeSelector TimeSelector { get; }
+
+      The time of the maneuver.
+
+      :Game Scenes: Flight
+
+
+
+OperationCircularize
+^^^^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationCircularize
+
+   Circularize the orbit.
+
+   .. note::
+
+      To raise the periapsis to the apoapsis, set the time to :value:`TimeReference.Apoapsis`, and to lower the apoapsis to the periapsis, set it to :value:`TimeReference.Periapsis`. These are the cheapest.
+
+   .. property:: string ErrorMessage { get; }
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Game Scenes: Flight
+
+   .. function:: SpaceCenter.Node MakeNode()
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+
+      :returns: The first maneuver node.
+      :Game Scenes: Flight
+
+   .. function:: System.Collections.Generic.IList<SpaceCenter.Node> MakeNodes()
+
+      Make the maneuver nodes of the operation. Throws an :type:`OperationException`
+      if the operation cannot make them.
+
+
+      :returns: The maneuver nodes.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. property:: TimeSelector TimeSelector { get; }
+
+      The time of the maneuver.
+
+      :Game Scenes: Flight
+
+
+
+OperationCourseCorrection
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationCourseCorrection
+
+   Fine tune the closest approach to the target.
+
+   .. property:: double CourseCorrectFinalPeA { get; set; }
+
+      The periapsis altitude at a target body, in meters.
+
+      :Game Scenes: Flight
+
+   .. property:: string ErrorMessage { get; }
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Game Scenes: Flight
+
+   .. property:: double InterceptDistance { get; set; }
+
+      The closest approach distance to a target vessel, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: SpaceCenter.Node MakeNode()
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+
+      :returns: The first maneuver node.
+      :Game Scenes: Flight
+
+   .. function:: System.Collections.Generic.IList<SpaceCenter.Node> MakeNodes()
+
+      Make the maneuver nodes of the operation. Throws an :type:`OperationException`
+      if the operation cannot make them.
+
+
+      :returns: The maneuver nodes.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+
+
+OperationEllipticize
+^^^^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationEllipticize
+
+   Change both the periapsis and the apoapsis.
+
+   .. property:: string ErrorMessage { get; }
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Game Scenes: Flight
+
+   .. function:: SpaceCenter.Node MakeNode()
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+
+      :returns: The first maneuver node.
+      :Game Scenes: Flight
+
+   .. function:: System.Collections.Generic.IList<SpaceCenter.Node> MakeNodes()
+
+      Make the maneuver nodes of the operation. Throws an :type:`OperationException`
+      if the operation cannot make them.
+
+
+      :returns: The maneuver nodes.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. property:: double NewApoapsis { get; set; }
+
+      The new apoapsis altitude, in meters.
+
+      :Game Scenes: Flight
+
+   .. property:: double NewPeriapsis { get; set; }
+
+      The new periapsis altitude, in meters.
+
+      :Game Scenes: Flight
+
+   .. property:: TimeSelector TimeSelector { get; }
+
+      The time of the maneuver.
+
+      :Game Scenes: Flight
+
+
+
+OperationInclination
+^^^^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationInclination
+
+   Change the inclination.
+
+   .. property:: string ErrorMessage { get; }
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Game Scenes: Flight
+
+   .. function:: SpaceCenter.Node MakeNode()
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+
+      :returns: The first maneuver node.
+      :Game Scenes: Flight
+
+   .. function:: System.Collections.Generic.IList<SpaceCenter.Node> MakeNodes()
+
+      Make the maneuver nodes of the operation. Throws an :type:`OperationException`
+      if the operation cannot make them.
+
+
+      :returns: The maneuver nodes.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. property:: double NewInclination { get; set; }
+
+      The new inclination, in degrees.
+
+      :Game Scenes: Flight
+
+   .. property:: TimeSelector TimeSelector { get; }
+
+      The time of the maneuver.
+
+      :Game Scenes: Flight
+
+
+
+OperationInterplanetaryTransfer
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationInterplanetaryTransfer
+
+   Transfer to another planet.
+
+   .. property:: string ErrorMessage { get; }
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Game Scenes: Flight
+
+   .. function:: SpaceCenter.Node MakeNode()
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+
+      :returns: The first maneuver node.
+      :Game Scenes: Flight
+
+   .. function:: System.Collections.Generic.IList<SpaceCenter.Node> MakeNodes()
+
+      Make the maneuver nodes of the operation. Throws an :type:`OperationException`
+      if the operation cannot make them.
+
+
+      :returns: The maneuver nodes.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. property:: bool WaitForPhaseAngle { get; set; }
+
+      Whether to wait for the optimal phase angle. Otherwise the transfer happens now.
+
+      :Game Scenes: Flight
+
+
+
+OperationKillRelVel
+^^^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationKillRelVel
+
+   Match velocities with the target.
+
+   .. property:: string ErrorMessage { get; }
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Game Scenes: Flight
+
+   .. function:: SpaceCenter.Node MakeNode()
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+
+      :returns: The first maneuver node.
+      :Game Scenes: Flight
+
+   .. function:: System.Collections.Generic.IList<SpaceCenter.Node> MakeNodes()
+
+      Make the maneuver nodes of the operation. Throws an :type:`OperationException`
+      if the operation cannot make them.
+
+
+      :returns: The maneuver nodes.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. property:: TimeSelector TimeSelector { get; }
+
+      The time of the maneuver.
+
+      :Game Scenes: Flight
+
+
+
+OperationLambert
+^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationLambert
+
+   Intercept the target at a chosen time.
+
+   .. property:: string ErrorMessage { get; }
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Game Scenes: Flight
+
+   .. property:: double InterceptInterval { get; set; }
+
+      The time from the maneuver to the intercept, in seconds.
+
+      :Game Scenes: Flight
+
+   .. function:: SpaceCenter.Node MakeNode()
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+
+      :returns: The first maneuver node.
+      :Game Scenes: Flight
+
+   .. function:: System.Collections.Generic.IList<SpaceCenter.Node> MakeNodes()
+
+      Make the maneuver nodes of the operation. Throws an :type:`OperationException`
+      if the operation cannot make them.
+
+
+      :returns: The maneuver nodes.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. property:: TimeSelector TimeSelector { get; }
+
+      The time of the maneuver.
+
+      :Game Scenes: Flight
+
+
+
+OperationLan
+^^^^^^^^^^^^
+
+
+.. class:: OperationLan
+
+   Change the longitude of the ascending node.
+
+   .. property:: string ErrorMessage { get; }
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Game Scenes: Flight
+
+   .. function:: SpaceCenter.Node MakeNode()
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+
+      :returns: The first maneuver node.
+      :Game Scenes: Flight
+
+   .. function:: System.Collections.Generic.IList<SpaceCenter.Node> MakeNodes()
+
+      Make the maneuver nodes of the operation. Throws an :type:`OperationException`
+      if the operation cannot make them.
+
+
+      :returns: The maneuver nodes.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. property:: double NewLAN { get; set; }
+
+      The new longitude of the ascending node, in degrees.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         MechJeb holds this value in the target controller of each vessel, as the longitude of
+         the position target. Setting it also moves the position target.
+
+   .. property:: TimeSelector TimeSelector { get; }
+
+      The time of the maneuver.
+
+      :Game Scenes: Flight
+
+
+
+OperationLongitude
+^^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationLongitude
+
+   Change the surface longitude of the apsis.
+
+   .. property:: string ErrorMessage { get; }
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Game Scenes: Flight
+
+   .. function:: SpaceCenter.Node MakeNode()
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+
+      :returns: The first maneuver node.
+      :Game Scenes: Flight
+
+   .. function:: System.Collections.Generic.IList<SpaceCenter.Node> MakeNodes()
+
+      Make the maneuver nodes of the operation. Throws an :type:`OperationException`
+      if the operation cannot make them.
+
+
+      :returns: The maneuver nodes.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. property:: double NewSurfaceLongitude { get; set; }
+
+      The new surface longitude of the apsis after one orbit, in degrees.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         MechJeb holds this value in the target controller of each vessel, as the longitude of
+         the position target. Setting it also moves the position target.
+
+   .. property:: TimeSelector TimeSelector { get; }
+
+      The time of the maneuver.
+
+      :Game Scenes: Flight
+
+
+
+OperationMoonReturn
+^^^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationMoonReturn
+
+   Return from a moon to the body it orbits.
+
+   .. property:: string ErrorMessage { get; }
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Game Scenes: Flight
+
+   .. function:: SpaceCenter.Node MakeNode()
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+
+      :returns: The first maneuver node.
+      :Game Scenes: Flight
+
+   .. function:: System.Collections.Generic.IList<SpaceCenter.Node> MakeNodes()
+
+      Make the maneuver nodes of the operation. Throws an :type:`OperationException`
+      if the operation cannot make them.
+
+
+      :returns: The maneuver nodes.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. property:: double MoonReturnAltitude { get; set; }
+
+      The approximate periapsis altitude at the body, in meters.
+
+      :Game Scenes: Flight
+
+
+
+OperationPeriapsis
+^^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationPeriapsis
+
+   Change the periapsis.
+
+   .. property:: string ErrorMessage { get; }
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Game Scenes: Flight
+
+   .. function:: SpaceCenter.Node MakeNode()
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+
+      :returns: The first maneuver node.
+      :Game Scenes: Flight
+
+   .. function:: System.Collections.Generic.IList<SpaceCenter.Node> MakeNodes()
+
+      Make the maneuver nodes of the operation. Throws an :type:`OperationException`
+      if the operation cannot make them.
+
+
+      :returns: The maneuver nodes.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. property:: double NewPeriapsis { get; set; }
+
+      The new periapsis altitude, in meters.
+
+      :Game Scenes: Flight
+
+   .. property:: TimeSelector TimeSelector { get; }
+
+      The time of the maneuver.
+
+      :Game Scenes: Flight
+
+
+
+OperationPlane
+^^^^^^^^^^^^^^
+
+
+.. class:: OperationPlane
+
+   Match planes with the target.
+
+   .. property:: string ErrorMessage { get; }
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Game Scenes: Flight
+
+   .. function:: SpaceCenter.Node MakeNode()
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+
+      :returns: The first maneuver node.
+      :Game Scenes: Flight
+
+   .. function:: System.Collections.Generic.IList<SpaceCenter.Node> MakeNodes()
+
+      Make the maneuver nodes of the operation. Throws an :type:`OperationException`
+      if the operation cannot make them.
+
+
+      :returns: The maneuver nodes.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. property:: TimeSelector TimeSelector { get; }
+
+      The time of the maneuver.
+
+      :Game Scenes: Flight
+
+
+
+OperationResonantOrbit
+^^^^^^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationResonantOrbit
+
+   Change to a resonant orbit, to place satellites in a constellation.
+
+   .. note::
+
+      Start from an orbit in the plane of the constellation. To deploy satellites, set the
+      denominator to their number. A numerator one less than the denominator is the cheapest,
+      though not the fastest. The two numbers must have no common factor.
+
+   .. property:: string ErrorMessage { get; }
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Game Scenes: Flight
+
+   .. function:: SpaceCenter.Node MakeNode()
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+
+      :returns: The first maneuver node.
+      :Game Scenes: Flight
+
+   .. function:: System.Collections.Generic.IList<SpaceCenter.Node> MakeNodes()
+
+      Make the maneuver nodes of the operation. Throws an :type:`OperationException`
+      if the operation cannot make them.
+
+
+      :returns: The maneuver nodes.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. property:: int ResonanceDenominator { get; set; }
+
+      The denominator of the ratio of the new orbital period to the current one.
+
+      :Game Scenes: Flight
+
+   .. property:: int ResonanceNumerator { get; set; }
+
+      The numerator of the ratio of the new orbital period to the current one.
+
+      :Game Scenes: Flight
+
+   .. property:: TimeSelector TimeSelector { get; }
+
+      The time of the maneuver.
+
+      :Game Scenes: Flight
+
+
+
+OperationSemiMajor
+^^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationSemiMajor
+
+   Change the semi-major axis.
+
+   .. property:: string ErrorMessage { get; }
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Game Scenes: Flight
+
+   .. function:: SpaceCenter.Node MakeNode()
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+
+      :returns: The first maneuver node.
+      :Game Scenes: Flight
+
+   .. function:: System.Collections.Generic.IList<SpaceCenter.Node> MakeNodes()
+
+      Make the maneuver nodes of the operation. Throws an :type:`OperationException`
+      if the operation cannot make them.
+
+
+      :returns: The maneuver nodes.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. property:: double NewSemiMajorAxis { get; set; }
+
+      The new semi-major axis, in meters.
+
+      :Game Scenes: Flight
+
+   .. property:: TimeSelector TimeSelector { get; }
+
+      The time of the maneuver.
+
+      :Game Scenes: Flight
+
+
+
+OperationTransfer
+^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationTransfer
+
+   A bi-impulsive (Hohmann) transfer to the target, within one sphere of influence. It
+   suits a rendezvous with a vessel or a transfer to a moon.
+
+   .. note::
+
+      Despite the name, the transfer is often uni-impulsive. It happens at the selected time,
+      or at the optimum time.
+
+   .. property:: string ErrorMessage { get; }
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Game Scenes: Flight
+
+   .. function:: SpaceCenter.Node MakeNode()
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+
+      :returns: The first maneuver node.
+      :Game Scenes: Flight
+
+   .. function:: System.Collections.Generic.IList<SpaceCenter.Node> MakeNodes()
+
+      Make the maneuver nodes of the operation. Throws an :type:`OperationException`
+      if the operation cannot make them.
+
+
+      :returns: The maneuver nodes.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. property:: bool InterceptOnly { get; set; }
+
+      Whether to plan only the intercept, with no capture burn, for an impact or a flyby.
+
+      :Game Scenes: Flight
+
+   .. property:: bool SimpleTransfer { get; set; }
+
+      Whether the transfer is coplanar.
+
+      :Game Scenes: Flight
+
+   .. property:: TimeSelector TimeSelector { get; }
+
+      The time of the maneuver.
+
+      :Game Scenes: Flight

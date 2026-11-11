@@ -1,0 +1,227 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: MechJeb
+
+MechJeb
+=======
+
+
+.. module:: MechJeb
+
+This service provides functionality to interact with MechJeb 2.
+
+.. note::
+
+   The objects act on the MechJeb of the active vessel, and stay valid after the active
+   vessel changes.
+
+
+
+.. attribute:: api_ready
+
+   Whether MechJeb is installed and the active vessel has MechJeb.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: bool
+   :Game Scenes: Flight
+
+
+
+
+
+.. attribute:: airplane_autopilot
+
+   The airplane autopilot.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: :class:`AirplaneAutopilot`
+   :Game Scenes: Flight
+
+
+
+
+
+.. attribute:: antenna_controller
+
+   The controller of the deployable antennas.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: :class:`DeployableController`
+   :Game Scenes: Flight
+
+
+
+
+
+.. attribute:: ascent_autopilot
+
+   The ascent autopilot.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: :class:`AscentAutopilot`
+   :Game Scenes: Flight
+
+
+
+
+
+.. attribute:: docking_autopilot
+
+   The docking autopilot.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: :class:`DockingAutopilot`
+   :Game Scenes: Flight
+
+
+
+
+
+.. attribute:: landing_autopilot
+
+   The landing autopilot.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: :class:`LandingAutopilot`
+   :Game Scenes: Flight
+
+
+
+
+
+.. attribute:: maneuver_planner
+
+   The maneuver planner.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: :class:`ManeuverPlanner`
+   :Game Scenes: Flight
+
+
+
+
+
+.. attribute:: node_executor
+
+   The maneuver node executor.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: :class:`NodeExecutor`
+   :Game Scenes: Flight
+
+
+
+
+
+.. attribute:: rcs_controller
+
+   The RCS controller.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: :class:`RCSController`
+   :Game Scenes: Flight
+
+
+
+
+
+.. attribute:: rendezvous_autopilot
+
+   The rendezvous autopilot.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: :class:`RendezvousAutopilot`
+   :Game Scenes: Flight
+
+
+
+
+
+.. attribute:: smart_ass
+
+   The Smart A.S.S. window.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: :class:`SmartASS`
+   :Game Scenes: Flight
+
+
+
+
+
+.. attribute:: smart_rcs
+
+   The Smart RCS window.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: :class:`SmartRCS`
+   :Game Scenes: Flight
+
+
+
+
+
+.. attribute:: solar_panel_controller
+
+   The controller of the deployable solar panels.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: :class:`DeployableController`
+   :Game Scenes: Flight
+
+
+
+
+
+.. attribute:: staging_controller
+
+   The staging controller.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: :class:`StagingController`
+   :Game Scenes: Flight
+
+
+
+
+
+.. attribute:: target_controller
+
+   The target controller.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: :class:`TargetController`
+   :Game Scenes: Flight
+
+
+
+
+
+.. attribute:: thrust_controller
+
+   The thrust controller.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: :class:`ThrustController`
+   :Game Scenes: Flight
+
+
+
+
+
+.. attribute:: translatron
+
+   The Translatron window.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: :class:`Translatron`
+   :Game Scenes: Flight
+
+
+
+
+
+
+.. class:: MJServiceException
+
+   A general error in the service.

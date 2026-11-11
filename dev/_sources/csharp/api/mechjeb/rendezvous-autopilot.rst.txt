@@ -1,0 +1,35 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.MechJeb
+
+RendezvousAutopilot
+===================
+
+
+.. class:: RendezvousAutopilot
+
+   The rendezvous autopilot, which brings the vessel close to the target vessel.
+
+   .. property:: bool Enabled { get; set; }
+
+      Whether the module is enabled.
+
+      :Game Scenes: Flight
+
+   .. property:: string Status { get; }
+
+      The status of the autopilot.
+
+      :Game Scenes: Flight
+
+   .. property:: double DesiredDistance { get; set; }
+
+      The final distance from the target, in meters.
+
+      :Game Scenes: Flight
+
+   .. property:: double MaxPhasingOrbits { get; set; }
+
+      The largest number of orbits to wait for the phase angle.
+
+      :Game Scenes: Flight

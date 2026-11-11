@@ -1,0 +1,39 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+DeployableController
+====================
+
+
+.. type:: krpc_MechJeb_DeployableController_t
+
+   The controller of one kind of deployable part, such as antennas or solar panels.
+
+   .. function:: krpc_error_t krpc_MechJeb_DeployableController_AllRetracted(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_DeployableController_t instance)
+
+      Whether all the parts are retracted.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_DeployableController_AutoDeploy(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_DeployableController_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_DeployableController_set_AutoDeploy(krpc_connection_t connection, krpc_MechJeb_DeployableController_t instance, bool value)
+
+      Whether a MechJeb autopilot deploys the parts.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_DeployableController_ExtendAll(krpc_connection_t connection, krpc_MechJeb_DeployableController_t instance)
+
+      Extend all the parts.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_DeployableController_RetractAll(krpc_connection_t connection, krpc_MechJeb_DeployableController_t instance)
+
+      Retract all the parts.
+
+
+      :Game Scenes: Flight

@@ -1,0 +1,23 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.MechJeb
+
+RCSController
+=============
+
+
+.. class:: RCSController
+
+   The RCS controller.
+
+   .. property:: bool RCSForRotation { get; set; }
+
+      Whether the controller uses RCS to rotate the vessel.
+
+      :Game Scenes: Flight
+
+   .. property:: bool RCSThrottle { get; set; }
+
+      Whether the controller throttles the RCS thrusters.
+
+      :Game Scenes: Flight

@@ -1,0 +1,136 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: MechJeb
+
+TargetController
+================
+
+
+.. class:: TargetController
+
+   The target controller, which holds MechJeb's target.
+
+   .. note::
+
+      Positions and directions are in world space, the coordinate system of the game's
+      physics.
+
+   .. attribute:: can_align
+
+      Whether the vessel can align with the target, which it can with a docking port.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: distance
+
+      The distance to the target, in meters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: docking_axis
+
+      The world space docking axis of the target.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+   .. method:: get_position_target_position()
+
+      The world space position of the position target.
+
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+   .. method:: get_position_target_string()
+
+      The position target as text.
+
+      :rtype: str
+      :Game Scenes: Flight
+
+   .. attribute:: normal_target_exists
+
+      Whether there is a target that is a vessel, a body or a direction target.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. method:: pick_position_target_on_map()
+
+      Let the player pick the position target on the map.
+
+      :Game Scenes: Flight
+
+   .. attribute:: position
+
+      The world space position of the target.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+   .. attribute:: position_target_exists
+
+      Whether there is a target that is a position or a vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: relative_position
+
+      The world space position of the vessel relative to the target.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+   .. attribute:: relative_velocity
+
+      The world space velocity of the vessel relative to the target, in :math:`\mathrm{m/s}`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+   .. method:: set_direction_target(name)
+
+      Set the target to a direction.
+
+      :param str name: The name of the target.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Set the direction with :meth:`TargetController.update_direction_target`.
+
+   .. method:: set_position_target(body, latitude, longitude)
+
+      Set the target to a position on the surface of a body.
+
+      :param SpaceCenter.CelestialBody body: The body.
+      :param float latitude: The latitude, in degrees.
+      :param float longitude: The longitude, in degrees.
+      :Game Scenes: Flight
+
+   .. attribute:: target_orbit
+
+      The orbit of the target.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.Orbit`
+      :Game Scenes: Flight
+
+   .. method:: update_direction_target(direction)
+
+      Set the direction of the direction target.
+
+      :param tuple direction: The world space direction.
+      :Game Scenes: Flight

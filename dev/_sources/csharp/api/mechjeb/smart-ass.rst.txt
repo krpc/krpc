@@ -1,0 +1,408 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.MechJeb
+
+SmartASS
+========
+
+
+.. class:: SmartASS
+
+   The Smart A.S.S. window, which points the vessel in a chosen direction.
+
+   .. property:: SmartASSInterfaceMode InterfaceMode { get; set; }
+
+      The mode of the window, which selects its buttons and nothing else.
+      Throws an exception if set to :value:`SmartASSInterfaceMode.Automatic`.
+
+      :Game Scenes: Flight
+
+   .. property:: SmartASSAutopilotMode AutopilotMode { get; set; }
+
+      The autopilot mode. Throws an exception if set to
+      :value:`SmartASSAutopilotMode.Automatic`.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Call :meth:`SmartASS.Update` to apply a change.
+
+   .. function:: void Update(bool resetPID)
+
+      Apply the settings.
+
+      :parameters:
+
+       * **resetPID** -- Whether to reset the attitude controller. Use it only if the vessel does not follow the new settings.
+
+      :Game Scenes: Flight
+
+   .. property:: bool ForceYaw { get; set; }
+
+      Whether the autopilot controls the yaw in the :value:`SmartASSAutopilotMode.Surface`,
+      :value:`SmartASSAutopilotMode.SurfacePrograde` and
+      :value:`SmartASSAutopilotMode.SurfaceRetrograde` modes.
+
+      :Game Scenes: Flight
+
+   .. property:: bool ForcePitch { get; set; }
+
+      Whether the autopilot controls the pitch in the :value:`SmartASSAutopilotMode.Surface`,
+      :value:`SmartASSAutopilotMode.SurfacePrograde` and
+      :value:`SmartASSAutopilotMode.SurfaceRetrograde` modes.
+
+      :Game Scenes: Flight
+
+   .. property:: bool ForceRoll { get; set; }
+
+      Whether the autopilot controls the roll.
+
+      :Game Scenes: Flight
+
+   .. property:: double SurfaceHeading { get; set; }
+
+      The heading, in degrees.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Applies in the :value:`SmartASSAutopilotMode.Surface` mode.
+
+   .. property:: double SurfacePitch { get; set; }
+
+      The pitch above the horizon, in degrees. 90 is straight up.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Applies in the :value:`SmartASSAutopilotMode.Surface` mode.
+
+   .. property:: double SurfaceRoll { get; set; }
+
+      The roll, in degrees. 0 is top side up.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Applies in the :value:`SmartASSAutopilotMode.Surface` mode.
+
+   .. property:: double SurfaceVelYaw { get; set; }
+
+      The yaw from the surface velocity, in degrees.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Applies in the :value:`SmartASSAutopilotMode.SurfacePrograde` and
+         :value:`SmartASSAutopilotMode.SurfaceRetrograde` modes.
+
+   .. property:: double SurfaceVelPitch { get; set; }
+
+      The pitch from the surface velocity, in degrees.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Applies in the :value:`SmartASSAutopilotMode.SurfacePrograde` and
+         :value:`SmartASSAutopilotMode.SurfaceRetrograde` modes.
+
+   .. property:: double SurfaceVelRoll { get; set; }
+
+      The roll, in degrees. 0 is top side up.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Applies in the :value:`SmartASSAutopilotMode.SurfacePrograde` and
+         :value:`SmartASSAutopilotMode.SurfaceRetrograde` modes.
+
+   .. property:: AttitudeReference AdvancedReference { get; set; }
+
+      The reference frame of :prop:`SmartASS.AdvancedDirection`. Throws an exception if
+      MechJeb uses a reference this enumeration lacks.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Applies in the :value:`SmartASSAutopilotMode.Advanced` mode.
+
+   .. property:: Direction AdvancedDirection { get; set; }
+
+      The direction in :prop:`SmartASS.AdvancedReference`.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Applies in the :value:`SmartASSAutopilotMode.Advanced` mode.
+
+
+
+.. enum:: SmartASSInterfaceMode
+
+   The mode of the Smart A.S.S. window. See :prop:`SmartASS.InterfaceMode`.
+
+
+   .. enumerator:: Orbital
+
+      The orbital modes.
+
+
+   .. enumerator:: Surface
+
+      The surface modes.
+
+
+   .. enumerator:: Target
+
+      The target modes.
+
+
+   .. enumerator:: Advanced
+
+      The advanced mode.
+
+
+   .. enumerator:: Automatic
+
+      Set by MechJeb's autopilots. Cannot be set.
+
+
+
+.. enum:: SmartASSAutopilotMode
+
+   The autopilot mode of Smart A.S.S. See :prop:`SmartASS.AutopilotMode`.
+
+
+   .. enumerator:: Off
+
+      Off.
+
+
+   .. enumerator:: KillRot
+
+      Stop the vessel's rotation.
+
+
+   .. enumerator:: Node
+
+      Point at the next maneuver node.
+
+
+   .. enumerator:: Advanced
+
+      Point in the direction set by :prop:`SmartASS.AdvancedReference` and
+      :prop:`SmartASS.AdvancedDirection`.
+
+
+   .. enumerator:: Automatic
+
+      Set by MechJeb's autopilots. Cannot be set.
+
+
+   .. enumerator:: Prograde
+
+      Point orbital prograde.
+
+
+   .. enumerator:: Retrograde
+
+      Point orbital retrograde.
+
+
+   .. enumerator:: NormalPlus
+
+      Point orbit normal.
+
+
+   .. enumerator:: NormalMinus
+
+      Point orbit anti-normal.
+
+
+   .. enumerator:: RadialPlus
+
+      Point radially outward.
+
+
+   .. enumerator:: RadialMinus
+
+      Point radially inward.
+
+
+   .. enumerator:: SurfacePrograde
+
+      Point along the surface velocity.
+
+
+   .. enumerator:: SurfaceRetrograde
+
+      Point against the surface velocity.
+
+
+   .. enumerator:: HorizontalPlus
+
+      Point along the horizontal surface velocity.
+
+
+   .. enumerator:: HorizontalMinus
+
+      Point against the horizontal surface velocity.
+
+
+   .. enumerator:: Surface
+
+      Point in the direction set by :prop:`SmartASS.SurfaceHeading`,
+      :prop:`SmartASS.SurfacePitch` and :prop:`SmartASS.SurfaceRoll`.
+
+
+   .. enumerator:: VerticalPlus
+
+      Point up, normal to the surface.
+
+
+   .. enumerator:: TargetPlus
+
+      Point at the target.
+
+
+   .. enumerator:: TargetMinus
+
+      Point away from the target.
+
+
+   .. enumerator:: RelativePlus
+
+      Point along the velocity relative to the target.
+
+
+   .. enumerator:: RelativeMinus
+
+      Point against the velocity relative to the target.
+
+
+   .. enumerator:: ParallelPlus
+
+      Point parallel to the target's orientation. For a docking port, along its axis
+      and away from it.
+
+
+   .. enumerator:: ParallelMinus
+
+      Point antiparallel to the target's orientation. For a docking port, along its axis
+      and toward it.
+
+
+
+.. enum:: AttitudeReference
+
+   A reference frame of Smart A.S.S. See :prop:`SmartASS.AdvancedReference`.
+
+
+   .. enumerator:: Inertial
+
+      The world coordinate system.
+
+
+   .. enumerator:: Orbit
+
+      Forward is prograde, left is normal and up is radial out.
+
+
+   .. enumerator:: OrbitHorizontal
+
+      Forward is the orbital velocity projected onto the surface, and up is the surface normal.
+
+
+   .. enumerator:: SurfaceNorth
+
+      Forward is north, left is west and up is the surface normal.
+
+
+   .. enumerator:: SurfaceVelocity
+
+      Forward is the surface velocity, and up is the surface normal perpendicular to it.
+
+
+   .. enumerator:: Target
+
+      Forward is toward the target, and up is the vessel's heading perpendicular to it.
+
+
+   .. enumerator:: RelativeVelocity
+
+      Forward is the velocity relative to the target.
+
+
+   .. enumerator:: TargetOrientation
+
+      Forward is the direction the target faces, and up is the target's up.
+
+
+   .. enumerator:: ManeuverNode
+
+      Forward is the burn direction of the next maneuver node.
+
+
+   .. enumerator:: Sun
+
+      Forward is the orbital velocity of the body that orbits the sun, and up is radial
+      out of that orbit.
+
+
+   .. enumerator:: SurfaceHorizontal
+
+      Forward is the horizontal surface velocity, and up is the surface normal.
+
+
+
+.. enum:: Direction
+
+   A direction of Smart A.S.S. See :prop:`SmartASS.AdvancedDirection`.
+
+
+   .. enumerator:: Forward
+
+      Forward.
+
+
+   .. enumerator:: Back
+
+      Back.
+
+
+   .. enumerator:: Up
+
+      Up.
+
+
+   .. enumerator:: Down
+
+      Down.
+
+
+   .. enumerator:: Right
+
+      Right.
+
+
+   .. enumerator:: Left
+
+      Left.

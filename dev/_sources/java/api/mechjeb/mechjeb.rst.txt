@@ -1,0 +1,141 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.MechJeb
+
+MechJeb
+=======
+
+
+.. type:: public class MechJeb
+
+   This service provides functionality to interact with MechJeb 2.
+
+   .. note::
+
+      The objects act on the MechJeb of the active vessel, and stay valid after the active
+      vessel changes.
+
+   .. method:: boolean getAPIReady()
+
+
+      Whether MechJeb is installed and the active vessel has MechJeb.
+
+      :Game Scenes: Flight
+
+   .. method:: AirplaneAutopilot getAirplaneAutopilot()
+
+
+      The airplane autopilot.
+
+      :Game Scenes: Flight
+
+   .. method:: DeployableController getAntennaController()
+
+
+      The controller of the deployable antennas.
+
+      :Game Scenes: Flight
+
+   .. method:: AscentAutopilot getAscentAutopilot()
+
+
+      The ascent autopilot.
+
+      :Game Scenes: Flight
+
+   .. method:: DockingAutopilot getDockingAutopilot()
+
+
+      The docking autopilot.
+
+      :Game Scenes: Flight
+
+   .. method:: LandingAutopilot getLandingAutopilot()
+
+
+      The landing autopilot.
+
+      :Game Scenes: Flight
+
+   .. method:: ManeuverPlanner getManeuverPlanner()
+
+
+      The maneuver planner.
+
+      :Game Scenes: Flight
+
+   .. method:: NodeExecutor getNodeExecutor()
+
+
+      The maneuver node executor.
+
+      :Game Scenes: Flight
+
+   .. method:: RCSController getRCSController()
+
+
+      The RCS controller.
+
+      :Game Scenes: Flight
+
+   .. method:: RendezvousAutopilot getRendezvousAutopilot()
+
+
+      The rendezvous autopilot.
+
+      :Game Scenes: Flight
+
+   .. method:: SmartASS getSmartASS()
+
+
+      The Smart A.S.S. window.
+
+      :Game Scenes: Flight
+
+   .. method:: SmartRCS getSmartRCS()
+
+
+      The Smart RCS window.
+
+      :Game Scenes: Flight
+
+   .. method:: DeployableController getSolarPanelController()
+
+
+      The controller of the deployable solar panels.
+
+      :Game Scenes: Flight
+
+   .. method:: StagingController getStagingController()
+
+
+      The staging controller.
+
+      :Game Scenes: Flight
+
+   .. method:: TargetController getTargetController()
+
+
+      The target controller.
+
+      :Game Scenes: Flight
+
+   .. method:: ThrustController getThrustController()
+
+
+      The thrust controller.
+
+      :Game Scenes: Flight
+
+   .. method:: Translatron getTranslatron()
+
+
+      The Translatron window.
+
+      :Game Scenes: Flight
+
+
+
+.. type:: public class MJServiceException
+
+   A general error in the service.

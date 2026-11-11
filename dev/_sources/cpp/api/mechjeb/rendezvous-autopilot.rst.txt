@@ -1,0 +1,38 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::MechJeb
+
+RendezvousAutopilot
+===================
+
+
+.. class:: RendezvousAutopilot
+
+   The rendezvous autopilot, which brings the vessel close to the target vessel.
+
+   .. function:: bool enabled()
+   .. function:: void set_enabled(bool value)
+
+      Whether the module is enabled.
+
+      :Game Scenes: Flight
+
+   .. function:: std::string status()
+
+      The status of the autopilot.
+
+      :Game Scenes: Flight
+
+   .. function:: double desired_distance()
+   .. function:: void set_desired_distance(double value)
+
+      The final distance from the target, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: double max_phasing_orbits()
+   .. function:: void set_max_phasing_orbits(double value)
+
+      The largest number of orbits to wait for the phase angle.
+
+      :Game Scenes: Flight

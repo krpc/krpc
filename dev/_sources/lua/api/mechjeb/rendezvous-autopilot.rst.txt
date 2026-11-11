@@ -1,0 +1,35 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: MechJeb
+
+RendezvousAutopilot
+===================
+
+
+.. class:: RendezvousAutopilot
+
+   The rendezvous autopilot, which brings the vessel close to the target vessel.
+
+   .. attribute:: enabled: boolean
+
+      Whether the module is enabled.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: status: string
+
+      The status of the autopilot.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: desired_distance: number
+
+      The final distance from the target, in meters.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: max_phasing_orbits: number
+
+      The largest number of orbits to wait for the phase angle.
+
+      :Attribute: Can be read or written

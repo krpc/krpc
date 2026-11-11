@@ -1,0 +1,1106 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::MechJeb
+
+ManeuverPlanner
+===============
+
+
+.. class:: ManeuverPlanner
+
+   The maneuver planner, which makes maneuver nodes for its operations.
+
+   .. note::
+
+      MechJeb shares the operations, and most of their settings, between vessels.
+
+   .. function:: OperationApoapsis operation_apoapsis()
+
+      The operation that changes the apoapsis.
+
+      :Game Scenes: Flight
+
+   .. function:: OperationCircularize operation_circularize()
+
+      The operation that circularizes the orbit.
+
+      :Game Scenes: Flight
+
+   .. function:: OperationCourseCorrection operation_course_correction()
+
+      The operation that fine tunes the closest approach to the target.
+
+      :Game Scenes: Flight
+
+   .. function:: OperationEllipticize operation_ellipticize()
+
+      The operation that changes both the periapsis and the apoapsis.
+
+      :Game Scenes: Flight
+
+   .. function:: OperationInclination operation_inclination()
+
+      The operation that changes the inclination.
+
+      :Game Scenes: Flight
+
+   .. function:: OperationInterplanetaryTransfer operation_interplanetary_transfer()
+
+      The operation that transfers to another planet.
+
+      :Game Scenes: Flight
+
+   .. function:: OperationKillRelVel operation_kill_rel_vel()
+
+      The operation that matches velocities with the target.
+
+      :Game Scenes: Flight
+
+   .. function:: OperationLambert operation_lambert()
+
+      The operation that intercepts the target at a chosen time.
+
+      :Game Scenes: Flight
+
+   .. function:: OperationLan operation_lan()
+
+      The operation that changes the longitude of the ascending node.
+
+      :Game Scenes: Flight
+
+   .. function:: OperationLongitude operation_longitude()
+
+      The operation that changes the surface longitude of the apsis.
+
+      :Game Scenes: Flight
+
+   .. function:: OperationMoonReturn operation_moon_return()
+
+      The operation that returns from a moon.
+
+      :Game Scenes: Flight
+
+   .. function:: OperationPeriapsis operation_periapsis()
+
+      The operation that changes the periapsis.
+
+      :Game Scenes: Flight
+
+   .. function:: OperationPlane operation_plane()
+
+      The operation that matches planes with the target.
+
+      :Game Scenes: Flight
+
+   .. function:: OperationResonantOrbit operation_resonant_orbit()
+
+      The operation that changes to a resonant orbit.
+
+      :Game Scenes: Flight
+
+   .. function:: OperationSemiMajor operation_semi_major()
+
+      The operation that changes the semi-major axis.
+
+      :Game Scenes: Flight
+
+   .. function:: OperationTransfer operation_transfer()
+
+      The operation that transfers to the target.
+
+      :Game Scenes: Flight
+
+
+
+.. namespace:: krpc::services::MechJeb
+.. class:: OperationException
+
+   Thrown when an operation cannot make its nodes, such as when it needs a target and
+   there is none.
+
+
+
+TimeSelector
+------------
+
+
+.. class:: TimeSelector
+
+   The time of a maneuver.
+
+   .. function:: double circularize_altitude()
+   .. function:: void set_circularize_altitude(double value)
+
+      The altitude, in meters.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Applies to :enumerator:`TimeReference::altitude`.
+
+   .. function:: double lead_time()
+   .. function:: void set_lead_time(double value)
+
+      The time from now, in seconds.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Applies to :enumerator:`TimeReference::x_from_now`.
+
+   .. function:: TimeReference time_reference()
+   .. function:: void set_time_reference(TimeReference value)
+
+      The time reference. Throws an exception if set to a reference the operation does
+      not allow.
+
+      :Game Scenes: Flight
+
+
+
+.. namespace:: krpc::services::MechJeb
+.. enum-struct:: TimeReference
+
+   The time reference of a maneuver. See :func:`TimeSelector::time_reference`.
+
+
+   .. enumerator:: altitude
+
+      At :func:`TimeSelector::circularize_altitude`.
+
+
+   .. enumerator:: apoapsis
+
+      At the next apoapsis.
+
+
+   .. enumerator:: closest_approach
+
+      At the closest approach to the target.
+
+
+   .. enumerator:: computed
+
+      At the optimum time.
+
+
+   .. enumerator:: eq_ascending
+
+      At the equatorial ascending node.
+
+
+   .. enumerator:: eq_descending
+
+      At the equatorial descending node.
+
+
+   .. enumerator:: eq_highest_ad
+
+      At the cheaper of the equatorial ascending and descending nodes.
+
+
+   .. enumerator:: eq_nearest_ad
+
+      At the nearer of the equatorial ascending and descending nodes.
+
+
+   .. enumerator:: periapsis
+
+      At the next periapsis.
+
+
+   .. enumerator:: rel_ascending
+
+      At the next ascending node with the target.
+
+
+   .. enumerator:: rel_descending
+
+      At the next descending node with the target.
+
+
+   .. enumerator:: rel_highest_ad
+
+      At the cheaper of the ascending and descending nodes with the target.
+
+
+   .. enumerator:: rel_nearest_ad
+
+      At the nearer of the ascending and descending nodes with the target.
+
+
+   .. enumerator:: x_from_now
+
+      After :func:`TimeSelector::lead_time`.
+
+
+
+Operations
+----------
+
+OperationApoapsis
+^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationApoapsis
+
+   Change the apoapsis.
+
+   .. function:: std::string error_message()
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Game Scenes: Flight
+
+   .. function:: SpaceCenter::Node make_node()
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+
+      :returns: The first maneuver node.
+      :Game Scenes: Flight
+
+   .. function:: std::vector<SpaceCenter::Node> make_nodes()
+
+      Make the maneuver nodes of the operation. Throws an :class:`OperationException`
+      if the operation cannot make them.
+
+
+      :returns: The maneuver nodes.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. function:: double new_apoapsis()
+   .. function:: void set_new_apoapsis(double value)
+
+      The new apoapsis altitude, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: TimeSelector time_selector()
+
+      The time of the maneuver.
+
+      :Game Scenes: Flight
+
+
+
+OperationCircularize
+^^^^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationCircularize
+
+   Circularize the orbit.
+
+   .. note::
+
+      To raise the periapsis to the apoapsis, set the time to :enumerator:`TimeReference::apoapsis`, and to lower the apoapsis to the periapsis, set it to :enumerator:`TimeReference::periapsis`. These are the cheapest.
+
+   .. function:: std::string error_message()
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Game Scenes: Flight
+
+   .. function:: SpaceCenter::Node make_node()
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+
+      :returns: The first maneuver node.
+      :Game Scenes: Flight
+
+   .. function:: std::vector<SpaceCenter::Node> make_nodes()
+
+      Make the maneuver nodes of the operation. Throws an :class:`OperationException`
+      if the operation cannot make them.
+
+
+      :returns: The maneuver nodes.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. function:: TimeSelector time_selector()
+
+      The time of the maneuver.
+
+      :Game Scenes: Flight
+
+
+
+OperationCourseCorrection
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationCourseCorrection
+
+   Fine tune the closest approach to the target.
+
+   .. function:: double course_correct_final_pe_a()
+   .. function:: void set_course_correct_final_pe_a(double value)
+
+      The periapsis altitude at a target body, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: std::string error_message()
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Game Scenes: Flight
+
+   .. function:: double intercept_distance()
+   .. function:: void set_intercept_distance(double value)
+
+      The closest approach distance to a target vessel, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: SpaceCenter::Node make_node()
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+
+      :returns: The first maneuver node.
+      :Game Scenes: Flight
+
+   .. function:: std::vector<SpaceCenter::Node> make_nodes()
+
+      Make the maneuver nodes of the operation. Throws an :class:`OperationException`
+      if the operation cannot make them.
+
+
+      :returns: The maneuver nodes.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+
+
+OperationEllipticize
+^^^^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationEllipticize
+
+   Change both the periapsis and the apoapsis.
+
+   .. function:: std::string error_message()
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Game Scenes: Flight
+
+   .. function:: SpaceCenter::Node make_node()
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+
+      :returns: The first maneuver node.
+      :Game Scenes: Flight
+
+   .. function:: std::vector<SpaceCenter::Node> make_nodes()
+
+      Make the maneuver nodes of the operation. Throws an :class:`OperationException`
+      if the operation cannot make them.
+
+
+      :returns: The maneuver nodes.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. function:: double new_apoapsis()
+   .. function:: void set_new_apoapsis(double value)
+
+      The new apoapsis altitude, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: double new_periapsis()
+   .. function:: void set_new_periapsis(double value)
+
+      The new periapsis altitude, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: TimeSelector time_selector()
+
+      The time of the maneuver.
+
+      :Game Scenes: Flight
+
+
+
+OperationInclination
+^^^^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationInclination
+
+   Change the inclination.
+
+   .. function:: std::string error_message()
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Game Scenes: Flight
+
+   .. function:: SpaceCenter::Node make_node()
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+
+      :returns: The first maneuver node.
+      :Game Scenes: Flight
+
+   .. function:: std::vector<SpaceCenter::Node> make_nodes()
+
+      Make the maneuver nodes of the operation. Throws an :class:`OperationException`
+      if the operation cannot make them.
+
+
+      :returns: The maneuver nodes.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. function:: double new_inclination()
+   .. function:: void set_new_inclination(double value)
+
+      The new inclination, in degrees.
+
+      :Game Scenes: Flight
+
+   .. function:: TimeSelector time_selector()
+
+      The time of the maneuver.
+
+      :Game Scenes: Flight
+
+
+
+OperationInterplanetaryTransfer
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationInterplanetaryTransfer
+
+   Transfer to another planet.
+
+   .. function:: std::string error_message()
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Game Scenes: Flight
+
+   .. function:: SpaceCenter::Node make_node()
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+
+      :returns: The first maneuver node.
+      :Game Scenes: Flight
+
+   .. function:: std::vector<SpaceCenter::Node> make_nodes()
+
+      Make the maneuver nodes of the operation. Throws an :class:`OperationException`
+      if the operation cannot make them.
+
+
+      :returns: The maneuver nodes.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. function:: bool wait_for_phase_angle()
+   .. function:: void set_wait_for_phase_angle(bool value)
+
+      Whether to wait for the optimal phase angle. Otherwise the transfer happens now.
+
+      :Game Scenes: Flight
+
+
+
+OperationKillRelVel
+^^^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationKillRelVel
+
+   Match velocities with the target.
+
+   .. function:: std::string error_message()
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Game Scenes: Flight
+
+   .. function:: SpaceCenter::Node make_node()
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+
+      :returns: The first maneuver node.
+      :Game Scenes: Flight
+
+   .. function:: std::vector<SpaceCenter::Node> make_nodes()
+
+      Make the maneuver nodes of the operation. Throws an :class:`OperationException`
+      if the operation cannot make them.
+
+
+      :returns: The maneuver nodes.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. function:: TimeSelector time_selector()
+
+      The time of the maneuver.
+
+      :Game Scenes: Flight
+
+
+
+OperationLambert
+^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationLambert
+
+   Intercept the target at a chosen time.
+
+   .. function:: std::string error_message()
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Game Scenes: Flight
+
+   .. function:: double intercept_interval()
+   .. function:: void set_intercept_interval(double value)
+
+      The time from the maneuver to the intercept, in seconds.
+
+      :Game Scenes: Flight
+
+   .. function:: SpaceCenter::Node make_node()
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+
+      :returns: The first maneuver node.
+      :Game Scenes: Flight
+
+   .. function:: std::vector<SpaceCenter::Node> make_nodes()
+
+      Make the maneuver nodes of the operation. Throws an :class:`OperationException`
+      if the operation cannot make them.
+
+
+      :returns: The maneuver nodes.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. function:: TimeSelector time_selector()
+
+      The time of the maneuver.
+
+      :Game Scenes: Flight
+
+
+
+OperationLan
+^^^^^^^^^^^^
+
+
+.. class:: OperationLan
+
+   Change the longitude of the ascending node.
+
+   .. function:: std::string error_message()
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Game Scenes: Flight
+
+   .. function:: SpaceCenter::Node make_node()
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+
+      :returns: The first maneuver node.
+      :Game Scenes: Flight
+
+   .. function:: std::vector<SpaceCenter::Node> make_nodes()
+
+      Make the maneuver nodes of the operation. Throws an :class:`OperationException`
+      if the operation cannot make them.
+
+
+      :returns: The maneuver nodes.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. function:: double new_lan()
+   .. function:: void set_new_lan(double value)
+
+      The new longitude of the ascending node, in degrees.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         MechJeb holds this value in the target controller of each vessel, as the longitude of
+         the position target. Setting it also moves the position target.
+
+   .. function:: TimeSelector time_selector()
+
+      The time of the maneuver.
+
+      :Game Scenes: Flight
+
+
+
+OperationLongitude
+^^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationLongitude
+
+   Change the surface longitude of the apsis.
+
+   .. function:: std::string error_message()
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Game Scenes: Flight
+
+   .. function:: SpaceCenter::Node make_node()
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+
+      :returns: The first maneuver node.
+      :Game Scenes: Flight
+
+   .. function:: std::vector<SpaceCenter::Node> make_nodes()
+
+      Make the maneuver nodes of the operation. Throws an :class:`OperationException`
+      if the operation cannot make them.
+
+
+      :returns: The maneuver nodes.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. function:: double new_surface_longitude()
+   .. function:: void set_new_surface_longitude(double value)
+
+      The new surface longitude of the apsis after one orbit, in degrees.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         MechJeb holds this value in the target controller of each vessel, as the longitude of
+         the position target. Setting it also moves the position target.
+
+   .. function:: TimeSelector time_selector()
+
+      The time of the maneuver.
+
+      :Game Scenes: Flight
+
+
+
+OperationMoonReturn
+^^^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationMoonReturn
+
+   Return from a moon to the body it orbits.
+
+   .. function:: std::string error_message()
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Game Scenes: Flight
+
+   .. function:: SpaceCenter::Node make_node()
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+
+      :returns: The first maneuver node.
+      :Game Scenes: Flight
+
+   .. function:: std::vector<SpaceCenter::Node> make_nodes()
+
+      Make the maneuver nodes of the operation. Throws an :class:`OperationException`
+      if the operation cannot make them.
+
+
+      :returns: The maneuver nodes.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. function:: double moon_return_altitude()
+   .. function:: void set_moon_return_altitude(double value)
+
+      The approximate periapsis altitude at the body, in meters.
+
+      :Game Scenes: Flight
+
+
+
+OperationPeriapsis
+^^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationPeriapsis
+
+   Change the periapsis.
+
+   .. function:: std::string error_message()
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Game Scenes: Flight
+
+   .. function:: SpaceCenter::Node make_node()
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+
+      :returns: The first maneuver node.
+      :Game Scenes: Flight
+
+   .. function:: std::vector<SpaceCenter::Node> make_nodes()
+
+      Make the maneuver nodes of the operation. Throws an :class:`OperationException`
+      if the operation cannot make them.
+
+
+      :returns: The maneuver nodes.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. function:: double new_periapsis()
+   .. function:: void set_new_periapsis(double value)
+
+      The new periapsis altitude, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: TimeSelector time_selector()
+
+      The time of the maneuver.
+
+      :Game Scenes: Flight
+
+
+
+OperationPlane
+^^^^^^^^^^^^^^
+
+
+.. class:: OperationPlane
+
+   Match planes with the target.
+
+   .. function:: std::string error_message()
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Game Scenes: Flight
+
+   .. function:: SpaceCenter::Node make_node()
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+
+      :returns: The first maneuver node.
+      :Game Scenes: Flight
+
+   .. function:: std::vector<SpaceCenter::Node> make_nodes()
+
+      Make the maneuver nodes of the operation. Throws an :class:`OperationException`
+      if the operation cannot make them.
+
+
+      :returns: The maneuver nodes.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. function:: TimeSelector time_selector()
+
+      The time of the maneuver.
+
+      :Game Scenes: Flight
+
+
+
+OperationResonantOrbit
+^^^^^^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationResonantOrbit
+
+   Change to a resonant orbit, to place satellites in a constellation.
+
+   .. note::
+
+      Start from an orbit in the plane of the constellation. To deploy satellites, set the
+      denominator to their number. A numerator one less than the denominator is the cheapest,
+      though not the fastest. The two numbers must have no common factor.
+
+   .. function:: std::string error_message()
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Game Scenes: Flight
+
+   .. function:: SpaceCenter::Node make_node()
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+
+      :returns: The first maneuver node.
+      :Game Scenes: Flight
+
+   .. function:: std::vector<SpaceCenter::Node> make_nodes()
+
+      Make the maneuver nodes of the operation. Throws an :class:`OperationException`
+      if the operation cannot make them.
+
+
+      :returns: The maneuver nodes.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. function:: int32_t resonance_denominator()
+   .. function:: void set_resonance_denominator(int32_t value)
+
+      The denominator of the ratio of the new orbital period to the current one.
+
+      :Game Scenes: Flight
+
+   .. function:: int32_t resonance_numerator()
+   .. function:: void set_resonance_numerator(int32_t value)
+
+      The numerator of the ratio of the new orbital period to the current one.
+
+      :Game Scenes: Flight
+
+   .. function:: TimeSelector time_selector()
+
+      The time of the maneuver.
+
+      :Game Scenes: Flight
+
+
+
+OperationSemiMajor
+^^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationSemiMajor
+
+   Change the semi-major axis.
+
+   .. function:: std::string error_message()
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Game Scenes: Flight
+
+   .. function:: SpaceCenter::Node make_node()
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+
+      :returns: The first maneuver node.
+      :Game Scenes: Flight
+
+   .. function:: std::vector<SpaceCenter::Node> make_nodes()
+
+      Make the maneuver nodes of the operation. Throws an :class:`OperationException`
+      if the operation cannot make them.
+
+
+      :returns: The maneuver nodes.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. function:: double new_semi_major_axis()
+   .. function:: void set_new_semi_major_axis(double value)
+
+      The new semi-major axis, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: TimeSelector time_selector()
+
+      The time of the maneuver.
+
+      :Game Scenes: Flight
+
+
+
+OperationTransfer
+^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationTransfer
+
+   A bi-impulsive (Hohmann) transfer to the target, within one sphere of influence. It
+   suits a rendezvous with a vessel or a transfer to a moon.
+
+   .. note::
+
+      Despite the name, the transfer is often uni-impulsive. It happens at the selected time,
+      or at the optimum time.
+
+   .. function:: std::string error_message()
+
+      The warning from the last call to ``MakeNodes``, or an empty string.
+
+      :Game Scenes: Flight
+
+   .. function:: SpaceCenter::Node make_node()
+
+      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+
+      Make the maneuver nodes of the operation, and return the first one.
+
+
+      :returns: The first maneuver node.
+      :Game Scenes: Flight
+
+   .. function:: std::vector<SpaceCenter::Node> make_nodes()
+
+      Make the maneuver nodes of the operation. Throws an :class:`OperationException`
+      if the operation cannot make them.
+
+
+      :returns: The maneuver nodes.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A warning may be left in ``ErrorMessage``.
+
+   .. function:: bool intercept_only()
+   .. function:: void set_intercept_only(bool value)
+
+      Whether to plan only the intercept, with no capture burn, for an impact or a flyby.
+
+      :Game Scenes: Flight
+
+   .. function:: bool simple_transfer()
+   .. function:: void set_simple_transfer(bool value)
+
+      Whether the transfer is coplanar.
+
+      :Game Scenes: Flight
+
+   .. function:: TimeSelector time_selector()
+
+      The time of the maneuver.
+
+      :Game Scenes: Flight

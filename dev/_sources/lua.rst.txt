@@ -429,4 +429,5 @@ API Reference
    lua/api/lidar
    lua/api/docking-camera
    lua/api/trajectories
+   lua/api/mechjeb
    lua/api/debug

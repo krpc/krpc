@@ -1,0 +1,38 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.MechJeb
+
+DeployableController
+====================
+
+
+.. class:: DeployableController
+
+   The controller of one kind of deployable part, such as antennas or solar panels.
+
+   .. function:: bool AllRetracted()
+
+      Whether all the parts are retracted.
+
+
+      :Game Scenes: Flight
+
+   .. property:: bool AutoDeploy { get; set; }
+
+      Whether a MechJeb autopilot deploys the parts.
+
+      :Game Scenes: Flight
+
+   .. function:: void ExtendAll()
+
+      Extend all the parts.
+
+
+      :Game Scenes: Flight
+
+   .. function:: void RetractAll()
+
+      Retract all the parts.
+
+
+      :Game Scenes: Flight

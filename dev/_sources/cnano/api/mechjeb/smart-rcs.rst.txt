@@ -1,0 +1,53 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+SmartRCS
+========
+
+
+.. type:: krpc_MechJeb_SmartRCS_t
+
+   The Smart RCS window, which holds a velocity with RCS.
+
+   .. function:: krpc_error_t krpc_MechJeb_SmartRCS_AutoDisableSmartRCS(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_SmartRCS_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_SmartRCS_set_AutoDisableSmartRCS(krpc_connection_t connection, krpc_MechJeb_SmartRCS_t instance, bool value)
+
+      Whether Smart RCS turns off when an autopilot takes control.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_SmartRCS_Mode(krpc_connection_t connection, krpc_MechJeb_SmartRCSMode_t * returnValue, krpc_MechJeb_SmartRCS_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_SmartRCS_set_Mode(krpc_connection_t connection, krpc_MechJeb_SmartRCS_t instance, krpc_MechJeb_SmartRCSMode_t value)
+
+      The mode. Throws an exception if set to :macro:`KRPC_MECHJEB_SMARTRCSMODE_ZEROVELOCITY`,
+      which MechJeb 2.15 removed.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_SmartRCS_RCSController(krpc_connection_t connection, krpc_MechJeb_RCSController_t * returnValue, krpc_MechJeb_SmartRCS_t instance)
+
+      The RCS controller. The same as :func:`krpc_MechJeb_RCSController`.
+
+      :Game Scenes: Flight
+
+
+
+.. type:: krpc_MechJeb_SmartRCSMode_t
+
+   The mode of Smart RCS. See :func:`krpc_MechJeb_SmartRCS_Mode`.
+
+
+   .. macro:: KRPC_MECHJEB_SMARTRCSMODE_OFF
+
+      Off.
+
+
+   .. macro:: KRPC_MECHJEB_SMARTRCSMODE_ZERORELATIVEVELOCITY
+
+      Hold zero velocity relative to the target.
+
+
+   .. macro:: KRPC_MECHJEB_SMARTRCSMODE_ZEROVELOCITY
+
+      Hold zero velocity. MechJeb 2.15 removed this mode.

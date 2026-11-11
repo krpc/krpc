@@ -1,0 +1,25 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::MechJeb
+
+RCSController
+=============
+
+
+.. class:: RCSController
+
+   The RCS controller.
+
+   .. function:: bool rcs_for_rotation()
+   .. function:: void set_rcs_for_rotation(bool value)
+
+      Whether the controller uses RCS to rotate the vessel.
+
+      :Game Scenes: Flight
+
+   .. function:: bool rcs_throttle()
+   .. function:: void set_rcs_throttle(bool value)
+
+      Whether the controller throttles the RCS thrusters.
+
+      :Game Scenes: Flight

@@ -1,0 +1,88 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.MechJeb
+
+StagingController
+=================
+
+
+.. class:: StagingController
+
+   The staging controller, which stages when a stage runs out of fuel.
+
+   .. property:: bool Enabled { get; set; }
+
+      Whether the module is enabled.
+
+      :Game Scenes: Flight
+
+   .. property:: bool AutostagingOnce { get; set; }
+
+      Whether the controller disables itself after one staging.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires the controller to be enabled.
+
+   .. property:: int AutostageLimit { get; set; }
+
+      The last stage the controller activates.
+
+      :Game Scenes: Flight
+
+   .. property:: double AutostagePostDelay { get; set; }
+
+      The delay after each staging, in seconds.
+
+      :Game Scenes: Flight
+
+   .. property:: double AutostagePreDelay { get; set; }
+
+      The delay before each staging, in seconds.
+
+      :Game Scenes: Flight
+
+   .. property:: double ClampAutoStageThrustPct { get; set; }
+
+      The fraction of full thrust at which the controller releases the launch clamps.
+
+      :Game Scenes: Flight
+
+   .. property:: double FairingMaxAerothermalFlux { get; set; }
+
+      The largest aerothermal flux at which the controller jettisons a fairing, in
+      :math:`\mathrm{W/m^{2}}`.
+
+      :Game Scenes: Flight
+
+   .. property:: double FairingMaxDynamicPressure { get; set; }
+
+      The largest dynamic pressure at which the controller jettisons a fairing, in pascals.
+
+      :Game Scenes: Flight
+
+   .. property:: double FairingMinAltitude { get; set; }
+
+      The lowest altitude at which the controller jettisons a fairing, in meters.
+
+      :Game Scenes: Flight
+
+   .. property:: bool HotStaging { get; set; }
+
+      Whether the controller ignites the next stage before the current one burns out.
+
+      :Game Scenes: Flight
+
+   .. property:: double HotStagingLeadTime { get; set; }
+
+      The time before burnout at which a hot staging happens, in seconds.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :prop:`StagingController.HotStaging`.

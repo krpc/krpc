@@ -1,0 +1,130 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::MechJeb
+
+MechJeb
+=======
+
+
+.. namespace:: krpc::services
+.. class:: MechJeb : public krpc::Service
+
+   This service provides functionality to interact with MechJeb 2.
+
+   .. note::
+
+      The objects act on the MechJeb of the active vessel, and stay valid after the active
+      vessel changes.
+
+   .. function:: MechJeb(krpc::Client& client)
+
+      Construct an instance of this service.
+
+   .. function:: bool api_ready()
+
+      Whether MechJeb is installed and the active vessel has MechJeb.
+
+      :Game Scenes: Flight
+
+   .. function:: AirplaneAutopilot airplane_autopilot()
+
+      The airplane autopilot.
+
+      :Game Scenes: Flight
+
+   .. function:: DeployableController antenna_controller()
+
+      The controller of the deployable antennas.
+
+      :Game Scenes: Flight
+
+   .. function:: AscentAutopilot ascent_autopilot()
+
+      The ascent autopilot.
+
+      :Game Scenes: Flight
+
+   .. function:: DockingAutopilot docking_autopilot()
+
+      The docking autopilot.
+
+      :Game Scenes: Flight
+
+   .. function:: LandingAutopilot landing_autopilot()
+
+      The landing autopilot.
+
+      :Game Scenes: Flight
+
+   .. function:: ManeuverPlanner maneuver_planner()
+
+      The maneuver planner.
+
+      :Game Scenes: Flight
+
+   .. function:: NodeExecutor node_executor()
+
+      The maneuver node executor.
+
+      :Game Scenes: Flight
+
+   .. function:: RCSController rcs_controller()
+
+      The RCS controller.
+
+      :Game Scenes: Flight
+
+   .. function:: RendezvousAutopilot rendezvous_autopilot()
+
+      The rendezvous autopilot.
+
+      :Game Scenes: Flight
+
+   .. function:: SmartASS smart_ass()
+
+      The Smart A.S.S. window.
+
+      :Game Scenes: Flight
+
+   .. function:: SmartRCS smart_rcs()
+
+      The Smart RCS window.
+
+      :Game Scenes: Flight
+
+   .. function:: DeployableController solar_panel_controller()
+
+      The controller of the deployable solar panels.
+
+      :Game Scenes: Flight
+
+   .. function:: StagingController staging_controller()
+
+      The staging controller.
+
+      :Game Scenes: Flight
+
+   .. function:: TargetController target_controller()
+
+      The target controller.
+
+      :Game Scenes: Flight
+
+   .. function:: ThrustController thrust_controller()
+
+      The thrust controller.
+
+      :Game Scenes: Flight
+
+   .. function:: Translatron translatron()
+
+      The Translatron window.
+
+      :Game Scenes: Flight
+
+
+
+.. namespace:: krpc::services::MechJeb
+.. class:: MJServiceException
+
+   A general error in the service.

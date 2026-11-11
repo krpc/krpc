@@ -172,6 +172,12 @@ Trajectories service
 * Add Trajectories service
 
 
+MechJeb service
+^^^^^^^^^^^^^^^
+
+* Add the MechJeb service, ported from Genhis' kRPC.MechJeb and updated for MechJeb 2.15.4.0 (:issue:`1326`)
+
+
 C-nano client
 ^^^^^^^^^^^^^
 

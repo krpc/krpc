@@ -1,0 +1,86 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: MechJeb
+
+StagingController
+=================
+
+
+.. class:: StagingController
+
+   The staging controller, which stages when a stage runs out of fuel.
+
+   .. attribute:: enabled: boolean
+
+      Whether the module is enabled.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: autostaging_once: boolean
+
+      Whether the controller disables itself after one staging.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires the controller to be enabled.
+
+   .. attribute:: autostage_limit: number
+
+      The last stage the controller activates.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: autostage_post_delay: number
+
+      The delay after each staging, in seconds.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: autostage_pre_delay: number
+
+      The delay before each staging, in seconds.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: clamp_auto_stage_thrust_pct: number
+
+      The fraction of full thrust at which the controller releases the launch clamps.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: fairing_max_aerothermal_flux: number
+
+      The largest aerothermal flux at which the controller jettisons a fairing, in
+      :math:`\mathrm{W/m^{2}}`.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: fairing_max_dynamic_pressure: number
+
+      The largest dynamic pressure at which the controller jettisons a fairing, in pascals.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: fairing_min_altitude: number
+
+      The lowest altitude at which the controller jettisons a fairing, in meters.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: hot_staging: boolean
+
+      Whether the controller ignites the next stage before the current one burns out.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: hot_staging_lead_time: number
+
+      The time before burnout at which a hot staging happens, in seconds.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.StagingController.hot_staging`.

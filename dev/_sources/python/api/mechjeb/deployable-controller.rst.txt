@@ -1,0 +1,38 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: MechJeb
+
+DeployableController
+====================
+
+
+.. class:: DeployableController
+
+   The controller of one kind of deployable part, such as antennas or solar panels.
+
+   .. method:: all_retracted()
+
+      Whether all the parts are retracted.
+
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: auto_deploy
+
+      Whether a MechJeb autopilot deploys the parts.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. method:: extend_all()
+
+      Extend all the parts.
+
+      :Game Scenes: Flight
+
+   .. method:: retract_all()
+
+      Retract all the parts.
+
+      :Game Scenes: Flight

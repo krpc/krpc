@@ -1,0 +1,41 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: MechJeb
+
+NodeExecutor
+============
+
+
+.. class:: NodeExecutor
+
+   The maneuver node executor.
+
+   .. attribute:: enabled: boolean
+
+      Whether the executor is running.
+
+      :Attribute: Read-only, cannot be set
+
+   .. method:: abort()
+
+      Stop executing the maneuver nodes.
+
+   .. attribute:: autowarp: boolean
+
+      Whether the executor warps to the burn.
+
+      :Attribute: Can be read or written
+
+   .. method:: execute_all_nodes()
+
+      Execute all the maneuver nodes.
+
+   .. method:: execute_one_node()
+
+      Execute the next maneuver node.
+
+   .. attribute:: lead_time: number
+
+      The time before the burn at which time warp stops, in seconds.
+
+      :Attribute: Can be read or written
