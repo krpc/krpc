@@ -1,0 +1,158 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: Trajectories
+
+Trajectories
+=============
+
+
+.. module:: Trajectories
+
+Provides functionality to interact with Trajectories.
+
+.. note::
+
+   Trajectories predicts the trajectory of the active vessel only.
+
+
+
+.. attribute:: available: boolean
+
+   Whether Trajectories is available.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. staticmethod:: impact_patch(): Trajectories.Patch | nil
+
+   The patch of the trajectory that ends in an impact.
+
+   :returns: The patch, or ``nil`` without an impact.
+
+
+
+
+.. staticmethod:: impact_position(reference_frame: SpaceCenter.ReferenceFrame): Tuple | nil
+
+   The position of the impact, or ``nil`` without one.
+
+   :param reference_frame: The reference frame for the position.
+
+   .. note::
+
+      In a reference frame that rotates with the body, the position includes the
+      rotation of the body until the impact.
+
+
+
+
+.. staticmethod:: impact_velocity(reference_frame: SpaceCenter.ReferenceFrame): Tuple | nil
+
+   The velocity at the impact, or ``nil`` without one.
+
+   :param reference_frame: The reference frame for the velocity.
+
+   .. note::
+
+      In a reference frame that rotates with the body, the velocity includes the
+      rotation of the body until the impact.
+
+
+
+
+.. staticmethod:: patches(): List
+
+   The patches of the trajectory.
+
+
+
+
+
+.. staticmethod:: planned_direction(reference_frame: SpaceCenter.ReferenceFrame): Tuple | nil
+
+   The direction that the descent profile sets for the vessel.
+
+   :param reference_frame: The reference frame for the direction.
+   :returns: The direction, or ``nil`` without a target.
+
+
+
+
+.. staticmethod:: corrected_direction(reference_frame: SpaceCenter.ReferenceFrame): Tuple | nil
+
+   The :meth:`Trajectories.planned_direction`, corrected to steer towards the target.
+
+   :param reference_frame: The reference frame for the direction.
+   :returns: The direction, or ``nil`` without a target.
+
+   .. note::
+
+      Suitable as the target direction of the auto-pilot.
+
+
+
+
+.. staticmethod:: set_target(reference_frame: SpaceCenter.ReferenceFrame, position: Tuple, body?: SpaceCenter.CelestialBody | Types.none)
+
+   Sets the target.
+
+   :param reference_frame: The reference frame for the position.
+   :param position: The position of the target.
+   :param body: The body of the target, by default the body the active vessel orbits.
+
+
+
+
+.. attribute:: target_body: SpaceCenter.CelestialBody | nil
+
+   The body of the target, or ``nil`` without a target.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. staticmethod:: target_position(reference_frame: SpaceCenter.ReferenceFrame): Tuple | nil
+
+   The position of the target, or ``nil`` without a target.
+
+   :param reference_frame: The reference frame for the position.
+
+
+
+
+.. staticmethod:: clear_target()
+
+   Clears the target.
+
+
+
+
+
+.. attribute:: descent_profile: Trajectories.DescentProfile
+
+   The descent profile.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: always_update: boolean
+
+   Whether Trajectories updates the trajectory continuously.
+
+   :Attribute: Can be read or written
+
+   .. note::
+
+      When ``False``, :meth:`Trajectories.update_trajectory` updates the trajectory.
+
+
+
+
+.. staticmethod:: update_trajectory()
+
+   Updates the trajectory.

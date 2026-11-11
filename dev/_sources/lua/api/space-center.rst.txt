@@ -67,6 +67,7 @@ These services cover other mods:
 * :doc:`RemoteTech <remote-tech>`
 * :doc:`Infernal Robotics Next <infernal-robotics>`
 * :doc:`Docking Camera (KURS) <docking-camera>`
+* :doc:`Trajectories <trajectories>`
 
 .. _Ferram Aerospace Research: https://github.com/KSPModStewards/Ferram-Aerospace-Research
 .. _Extended Action Groups: https://github.com/linuxgurugamer/AGExt

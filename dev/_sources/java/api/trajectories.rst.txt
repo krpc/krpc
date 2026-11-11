@@ -1,0 +1,16 @@
+.. default-domain:: java
+.. highlight:: java
+
+Trajectories API
+================
+
+Provides functionality to interact with the `Trajectories <https://github.com/linuxgurugamer/KSPTrajectories>`_ mod.
+
+.. toctree::
+   :includehidden:
+   :maxdepth: 1
+
+   trajectories/trajectories
+   trajectories/patch
+   trajectories/descent-profile
+   trajectories/descent-profile-node

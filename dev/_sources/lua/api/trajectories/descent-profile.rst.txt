@@ -1,0 +1,55 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: Trajectories
+
+DescentProfile
+==============
+
+
+.. class:: DescentProfile
+
+   The descent profile, which sets the attitude of the vessel during the descent.
+
+   .. note::
+
+      Each node covers a band of altitude, as a percentage of the height of the atmosphere.
+      A body without an atmosphere uses :attr:`Trajectories.DescentProfile.final_approach` throughout.
+
+   .. attribute:: entry: Trajectories.DescentProfileNode
+
+      The node for atmospheric entry, from 50% to 100% of the height of the atmosphere.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: high_altitude: Trajectories.DescentProfileNode
+
+      The node for high altitude, from 25% to 50% of the height of the atmosphere.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: low_altitude: Trajectories.DescentProfileNode
+
+      The node for low altitude, from 5% to 25% of the height of the atmosphere.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: final_approach: Trajectories.DescentProfileNode
+
+      The node for the final approach, below 5% of the height of the atmosphere.
+
+      :Attribute: Read-only, cannot be set
+
+   .. staticmethod:: save()
+
+      Saves the descent profile to the active vessel.
+
+
+      .. note::
+
+         A change to a node applies without saving. Saving keeps it in the saved game.
+
+   .. staticmethod:: reset(aoa?: number)
+
+      Sets every node to an angle of attack, and saves the descent profile.
+
+      :param aoa: The angle of attack in degrees. The default, 180, is retrograde. Defaults to ``180.0``.

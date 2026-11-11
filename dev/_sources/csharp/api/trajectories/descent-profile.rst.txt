@@ -1,0 +1,62 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.Trajectories
+
+DescentProfile
+==============
+
+
+.. class:: DescentProfile
+
+   The descent profile, which sets the attitude of the vessel during the descent.
+
+   .. note::
+
+      Each node covers a band of altitude, as a percentage of the height of the atmosphere.
+      A body without an atmosphere uses :prop:`DescentProfile.FinalApproach` throughout.
+
+   .. property:: DescentProfileNode Entry { get; }
+
+      The node for atmospheric entry, from 50% to 100% of the height of the atmosphere.
+
+      :Game Scenes: Flight
+
+   .. property:: DescentProfileNode HighAltitude { get; }
+
+      The node for high altitude, from 25% to 50% of the height of the atmosphere.
+
+      :Game Scenes: Flight
+
+   .. property:: DescentProfileNode LowAltitude { get; }
+
+      The node for low altitude, from 5% to 25% of the height of the atmosphere.
+
+      :Game Scenes: Flight
+
+   .. property:: DescentProfileNode FinalApproach { get; }
+
+      The node for the final approach, below 5% of the height of the atmosphere.
+
+      :Game Scenes: Flight
+
+   .. function:: static void Save(IConnection connection)
+
+      Saves the descent profile to the active vessel.
+
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A change to a node applies without saving. Saving keeps it in the saved game.
+
+   .. function:: static void Reset(IConnection connection, double aoa = 180.0)
+
+      Sets every node to an angle of attack, and saves the descent profile.
+
+      :parameters:
+
+       * **aoa** -- The angle of attack in degrees. The default, 180, is retrograde.
+
+      :Game Scenes: Flight

@@ -1,0 +1,66 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: Trajectories
+
+DescentProfile
+==============
+
+
+.. class:: DescentProfile
+
+   The descent profile, which sets the attitude of the vessel during the descent.
+
+   .. note::
+
+      Each node covers a band of altitude, as a percentage of the height of the atmosphere.
+      A body without an atmosphere uses :attr:`DescentProfile.final_approach` throughout.
+
+   .. attribute:: entry
+
+      The node for atmospheric entry, from 50% to 100% of the height of the atmosphere.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`DescentProfileNode`
+      :Game Scenes: Flight
+
+   .. attribute:: high_altitude
+
+      The node for high altitude, from 25% to 50% of the height of the atmosphere.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`DescentProfileNode`
+      :Game Scenes: Flight
+
+   .. attribute:: low_altitude
+
+      The node for low altitude, from 5% to 25% of the height of the atmosphere.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`DescentProfileNode`
+      :Game Scenes: Flight
+
+   .. attribute:: final_approach
+
+      The node for the final approach, below 5% of the height of the atmosphere.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`DescentProfileNode`
+      :Game Scenes: Flight
+
+   .. staticmethod:: save()
+
+      Saves the descent profile to the active vessel.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A change to a node applies without saving. Saving keeps it in the saved game.
+
+   .. staticmethod:: reset([aoa = 180.0])
+
+      Sets every node to an angle of attack, and saves the descent profile.
+
+      :param float aoa: The angle of attack in degrees. The default, 180, is retrograde.
+      :Game Scenes: Flight

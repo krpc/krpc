@@ -1,0 +1,43 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: Trajectories
+
+DescentProfileNode
+==================
+
+
+.. class:: DescentProfileNode
+
+   A node of the descent profile.
+
+   .. attribute:: angle
+
+      The angle in degrees, from -180 to 180.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: mode
+
+      Whether :attr:`DescentProfileNode.angle` is the angle of attack or the angle from the horizon.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`DescentProfileMode`
+      :Game Scenes: Flight
+
+
+
+.. class:: DescentProfileMode
+
+   The reference for the angle of a descent profile node.
+
+
+   .. data:: angle_of_attack
+
+      The angle of attack, from prograde.
+
+
+   .. data:: horizon
+
+      The angle from the horizon.

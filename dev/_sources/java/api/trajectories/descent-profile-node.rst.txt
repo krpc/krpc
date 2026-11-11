@@ -1,0 +1,43 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.Trajectories
+
+DescentProfileNode
+==================
+
+
+.. type:: public class DescentProfileNode
+
+   A node of the descent profile.
+
+   .. method:: double getAngle()
+
+   .. method:: void setAngle(double value)
+
+      The angle in degrees, from -180 to 180.
+
+      :Game Scenes: Flight
+
+   .. method:: DescentProfileMode getMode()
+
+   .. method:: void setMode(DescentProfileMode value)
+
+      Whether :meth:`DescentProfileNode.getAngle()` is the angle of attack or the angle from the horizon.
+
+      :Game Scenes: Flight
+
+
+
+.. type:: public enum DescentProfileMode
+
+   The reference for the angle of a descent profile node.
+
+
+   .. field:: public DescentProfileMode ANGLE_OF_ATTACK
+
+      The angle of attack, from prograde.
+
+
+   .. field:: public DescentProfileMode HORIZON
+
+      The angle from the horizon.

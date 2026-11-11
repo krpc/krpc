@@ -1,0 +1,99 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Patch
+=====
+
+
+.. type:: krpc_Trajectories_Patch_t
+
+   A patch of the trajectory, at its position in :func:`krpc_Trajectories_Patches`.
+
+   .. note::
+
+      Trajectories computes the trajectory again as the vessel flies, and the patch reads
+      the latest one. Throws an exception if the trajectory has fewer patches.
+
+   .. function:: krpc_error_t krpc_Trajectories_Patch_Position(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, bool * returnValueIsNull, krpc_Trajectories_Patch_t instance, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      The position of the impact, or ``nullptr`` without one.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame for the position.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         In a reference frame that rotates with :func:`krpc_Trajectories_Patch_Body`, the position includes
+         the rotation of the body until the impact.
+
+   .. function:: krpc_error_t krpc_Trajectories_Patch_Velocity(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, bool * returnValueIsNull, krpc_Trajectories_Patch_t instance, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      The velocity at the impact, or ``nullptr`` without one.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame for the velocity.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         In a reference frame that rotates with :func:`krpc_Trajectories_Patch_Body`, the velocity includes
+         the rotation of the body until the impact.
+
+   .. function:: krpc_error_t krpc_Trajectories_Patch_Body(krpc_connection_t connection, krpc_SpaceCenter_CelestialBody_t * returnValue, krpc_Trajectories_Patch_t instance)
+
+      The celestial body that the patch is relative to.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_Trajectories_Patch_StartUT(krpc_connection_t connection, double * returnValue, krpc_Trajectories_Patch_t instance)
+
+      The universal time at the start of the patch, in seconds.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_Trajectories_Patch_EndUT(krpc_connection_t connection, double * returnValue, krpc_Trajectories_Patch_t instance)
+
+      The universal time at the end of the patch, in seconds.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         For a patch that ends in an impact, this is the time of the impact.
+
+   .. function:: krpc_error_t krpc_Trajectories_Patch_Atmospheric(krpc_connection_t connection, bool * returnValue, krpc_Trajectories_Patch_t instance)
+
+      Whether the patch is inside an atmosphere.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_Trajectories_Patch_AtmosphericTrajectory(krpc_connection_t connection, krpc_list_tuple_double_double_double_double_t * returnValue, bool * returnValueIsNull, krpc_Trajectories_Patch_t instance, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      The points of an atmospheric patch, or ``nullptr`` for a patch in space.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame for the positions.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Each point is a tuple ``(ut, x, y, z)``. In a reference frame that rotates with
+         :func:`krpc_Trajectories_Patch_Body`, the positions include the rotation of the body until each point.
+
+   .. function:: krpc_error_t krpc_Trajectories_Patch_OrbitalTrajectory(krpc_connection_t connection, krpc_SpaceCenter_Orbit_t * returnValue, krpc_Trajectories_Patch_t instance)
+
+      The orbit of a patch in space, or ``nullptr`` for an atmospheric patch.
+
+      :Game Scenes: Flight

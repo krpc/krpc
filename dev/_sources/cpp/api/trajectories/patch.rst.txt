@@ -1,0 +1,99 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::Trajectories
+
+Patch
+=====
+
+
+.. class:: Patch
+
+   A patch of the trajectory, at its position in :func:`patches`.
+
+   .. note::
+
+      Trajectories computes the trajectory again as the vessel flies, and the patch reads
+      the latest one. Throws an exception if the trajectory has fewer patches.
+
+   .. function:: std::optional<std::tuple<double, double, double>> position(SpaceCenter::ReferenceFrame reference_frame)
+
+      The position of the impact, or ``NULL`` without one.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame for the position.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         In a reference frame that rotates with :func:`Patch::body`, the position includes
+         the rotation of the body until the impact.
+
+   .. function:: std::optional<std::tuple<double, double, double>> velocity(SpaceCenter::ReferenceFrame reference_frame)
+
+      The velocity at the impact, or ``NULL`` without one.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame for the velocity.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         In a reference frame that rotates with :func:`Patch::body`, the velocity includes
+         the rotation of the body until the impact.
+
+   .. function:: SpaceCenter::CelestialBody body()
+
+      The celestial body that the patch is relative to.
+
+      :Game Scenes: Flight
+
+   .. function:: double start_ut()
+
+      The universal time at the start of the patch, in seconds.
+
+      :Game Scenes: Flight
+
+   .. function:: double end_ut()
+
+      The universal time at the end of the patch, in seconds.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         For a patch that ends in an impact, this is the time of the impact.
+
+   .. function:: bool atmospheric()
+
+      Whether the patch is inside an atmosphere.
+
+      :Game Scenes: Flight
+
+   .. function:: std::optional<std::vector<std::tuple<double, double, double, double>>> atmospheric_trajectory(SpaceCenter::ReferenceFrame reference_frame)
+
+      The points of an atmospheric patch, or ``NULL`` for a patch in space.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame for the positions.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Each point is a tuple ``(ut, x, y, z)``. In a reference frame that rotates with
+         :func:`Patch::body`, the positions include the rotation of the body until each point.
+
+   .. function:: std::optional<SpaceCenter::Orbit> orbital_trajectory()
+
+      The orbit of a patch in space, or ``NULL`` for an atmospheric patch.
+
+      :Game Scenes: Flight

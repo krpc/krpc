@@ -1,0 +1,154 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.Trajectories
+
+Trajectories
+=============
+
+
+.. class:: Trajectories
+
+   Provides functionality to interact with Trajectories.
+
+   .. note::
+
+      Trajectories predicts the trajectory of the active vessel only.
+
+   .. property:: bool Available { get; }
+
+      Whether Trajectories is available.
+
+      :Game Scenes: Flight
+
+   .. function:: Patch ImpactPatch()
+
+      The patch of the trajectory that ends in an impact.
+
+
+      :returns: The patch, or ``null`` without an impact.
+      :Game Scenes: Flight
+
+   .. function:: System.Tuple<double,double,double> ImpactPosition(SpaceCenter.ReferenceFrame referenceFrame)
+
+      The position of the impact, or ``null`` without one.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame for the position.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         In a reference frame that rotates with the body, the position includes the
+         rotation of the body until the impact.
+
+   .. function:: System.Tuple<double,double,double> ImpactVelocity(SpaceCenter.ReferenceFrame referenceFrame)
+
+      The velocity at the impact, or ``null`` without one.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame for the velocity.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         In a reference frame that rotates with the body, the velocity includes the
+         rotation of the body until the impact.
+
+   .. function:: System.Collections.Generic.IList<Patch> Patches()
+
+      The patches of the trajectory.
+
+
+      :Game Scenes: Flight
+
+   .. function:: System.Tuple<double,double,double> PlannedDirection(SpaceCenter.ReferenceFrame referenceFrame)
+
+      The direction that the descent profile sets for the vessel.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame for the direction.
+
+      :returns: The direction, or ``null`` without a target.
+      :Game Scenes: Flight
+
+   .. function:: System.Tuple<double,double,double> CorrectedDirection(SpaceCenter.ReferenceFrame referenceFrame)
+
+      The :meth:`Trajectories.PlannedDirection <Trajectories.Trajectories.PlannedDirection>`, corrected to steer towards the target.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame for the direction.
+
+      :returns: The direction, or ``null`` without a target.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Suitable as the target direction of the auto-pilot.
+
+   .. function:: void SetTarget(SpaceCenter.ReferenceFrame referenceFrame, System.Tuple<double,double,double> position, SpaceCenter.CelestialBody body = null)
+
+      Sets the target.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame for the position.
+       * **position** -- The position of the target.
+       * **body** -- The body of the target, by default the body the active vessel orbits.
+
+      :Game Scenes: Flight
+
+   .. property:: SpaceCenter.CelestialBody TargetBody { get; }
+
+      The body of the target, or ``null`` without a target.
+
+      :Game Scenes: Flight
+
+   .. function:: System.Tuple<double,double,double> TargetPosition(SpaceCenter.ReferenceFrame referenceFrame)
+
+      The position of the target, or ``null`` without a target.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame for the position.
+
+      :Game Scenes: Flight
+
+   .. function:: void ClearTarget()
+
+      Clears the target.
+
+
+      :Game Scenes: Flight
+
+   .. property:: DescentProfile DescentProfile { get; }
+
+      The descent profile.
+
+      :Game Scenes: Flight
+
+   .. property:: bool AlwaysUpdate { get; set; }
+
+      Whether Trajectories updates the trajectory continuously.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         When ``false``, :meth:`Trajectories.UpdateTrajectory <Trajectories.Trajectories.UpdateTrajectory>` updates the trajectory.
+
+   .. function:: void UpdateTrajectory()
+
+      Updates the trajectory.
+
+
+      :Game Scenes: Flight

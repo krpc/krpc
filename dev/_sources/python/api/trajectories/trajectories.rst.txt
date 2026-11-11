@@ -1,0 +1,197 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: Trajectories
+
+Trajectories
+=============
+
+
+.. module:: Trajectories
+
+Provides functionality to interact with Trajectories.
+
+.. note::
+
+   Trajectories predicts the trajectory of the active vessel only.
+
+
+
+.. attribute:: available
+
+   Whether Trajectories is available.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: bool
+   :Game Scenes: Flight
+
+
+
+
+
+.. staticmethod:: impact_patch()
+
+   The patch of the trajectory that ends in an impact.
+
+   :returns: The patch, or ``None`` without an impact.
+   :rtype: :class:`Patch` or None
+   :Game Scenes: Flight
+
+
+
+
+
+.. staticmethod:: impact_position(reference_frame)
+
+   The position of the impact, or ``None`` without one.
+
+   :param SpaceCenter.ReferenceFrame reference_frame: The reference frame for the position.
+   :rtype: tuple(float, float, float) or None
+   :Game Scenes: Flight
+
+
+   .. note::
+
+      In a reference frame that rotates with the body, the position includes the
+      rotation of the body until the impact.
+
+
+
+
+.. staticmethod:: impact_velocity(reference_frame)
+
+   The velocity at the impact, or ``None`` without one.
+
+   :param SpaceCenter.ReferenceFrame reference_frame: The reference frame for the velocity.
+   :rtype: tuple(float, float, float) or None
+   :Game Scenes: Flight
+
+
+   .. note::
+
+      In a reference frame that rotates with the body, the velocity includes the
+      rotation of the body until the impact.
+
+
+
+
+.. staticmethod:: patches()
+
+   The patches of the trajectory.
+
+   :rtype: list(:class:`Patch`)
+   :Game Scenes: Flight
+
+
+
+
+
+.. staticmethod:: planned_direction(reference_frame)
+
+   The direction that the descent profile sets for the vessel.
+
+   :param SpaceCenter.ReferenceFrame reference_frame: The reference frame for the direction.
+   :returns: The direction, or ``None`` without a target.
+   :rtype: tuple(float, float, float) or None
+   :Game Scenes: Flight
+
+
+
+
+
+.. staticmethod:: corrected_direction(reference_frame)
+
+   The :meth:`planned_direction`, corrected to steer towards the target.
+
+   :param SpaceCenter.ReferenceFrame reference_frame: The reference frame for the direction.
+   :returns: The direction, or ``None`` without a target.
+   :rtype: tuple(float, float, float) or None
+   :Game Scenes: Flight
+
+
+   .. note::
+
+      Suitable as the target direction of the auto-pilot.
+
+
+
+
+.. staticmethod:: set_target(reference_frame, position, [body = None])
+
+   Sets the target.
+
+   :param SpaceCenter.ReferenceFrame reference_frame: The reference frame for the position.
+   :param tuple position: The position of the target.
+   :param SpaceCenter.CelestialBody or None body: The body of the target, by default the body the active vessel orbits.
+   :Game Scenes: Flight
+
+
+
+
+
+.. attribute:: target_body
+
+   The body of the target, or ``None`` without a target.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: :class:`SpaceCenter.CelestialBody` or None
+   :Game Scenes: Flight
+
+
+
+
+
+.. staticmethod:: target_position(reference_frame)
+
+   The position of the target, or ``None`` without a target.
+
+   :param SpaceCenter.ReferenceFrame reference_frame: The reference frame for the position.
+   :rtype: tuple(float, float, float) or None
+   :Game Scenes: Flight
+
+
+
+
+
+.. staticmethod:: clear_target()
+
+   Clears the target.
+
+   :Game Scenes: Flight
+
+
+
+
+
+.. attribute:: descent_profile
+
+   The descent profile.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: :class:`DescentProfile`
+   :Game Scenes: Flight
+
+
+
+
+
+.. attribute:: always_update
+
+   Whether Trajectories updates the trajectory continuously.
+
+   :Attribute: Can be read or written
+   :rtype: bool
+   :Game Scenes: Flight
+
+
+   .. note::
+
+      When ``False``, :meth:`update_trajectory` updates the trajectory.
+
+
+
+
+.. staticmethod:: update_trajectory()
+
+   Updates the trajectory.
+
+   :Game Scenes: Flight

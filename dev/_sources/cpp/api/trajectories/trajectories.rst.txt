@@ -1,0 +1,160 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::Trajectories
+
+Trajectories
+=============
+
+
+.. namespace:: krpc::services
+.. class:: Trajectories : public krpc::Service
+
+   Provides functionality to interact with Trajectories.
+
+   .. note::
+
+      Trajectories predicts the trajectory of the active vessel only.
+
+   .. function:: Trajectories(krpc::Client& client)
+
+      Construct an instance of this service.
+
+   .. function:: bool available()
+
+      Whether Trajectories is available.
+
+      :Game Scenes: Flight
+
+   .. function:: std::optional<Patch> impact_patch()
+
+      The patch of the trajectory that ends in an impact.
+
+
+      :returns: The patch, or ``NULL`` without an impact.
+      :Game Scenes: Flight
+
+   .. function:: std::optional<std::tuple<double, double, double>> impact_position(SpaceCenter::ReferenceFrame reference_frame)
+
+      The position of the impact, or ``NULL`` without one.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame for the position.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         In a reference frame that rotates with the body, the position includes the
+         rotation of the body until the impact.
+
+   .. function:: std::optional<std::tuple<double, double, double>> impact_velocity(SpaceCenter::ReferenceFrame reference_frame)
+
+      The velocity at the impact, or ``NULL`` without one.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame for the velocity.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         In a reference frame that rotates with the body, the velocity includes the
+         rotation of the body until the impact.
+
+   .. function:: std::vector<Patch> patches()
+
+      The patches of the trajectory.
+
+
+      :Game Scenes: Flight
+
+   .. function:: std::optional<std::tuple<double, double, double>> planned_direction(SpaceCenter::ReferenceFrame reference_frame)
+
+      The direction that the descent profile sets for the vessel.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame for the direction.
+
+      :returns: The direction, or ``NULL`` without a target.
+      :Game Scenes: Flight
+
+   .. function:: std::optional<std::tuple<double, double, double>> corrected_direction(SpaceCenter::ReferenceFrame reference_frame)
+
+      The :func:`planned_direction`, corrected to steer towards the target.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame for the direction.
+
+      :returns: The direction, or ``NULL`` without a target.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Suitable as the target direction of the auto-pilot.
+
+   .. function:: void set_target(SpaceCenter::ReferenceFrame reference_frame, std::tuple<double, double, double> position, std::optional<SpaceCenter::CelestialBody> body = std::optional<SpaceCenter::CelestialBody>())
+
+      Sets the target.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame for the position.
+       * **position** -- The position of the target.
+       * **body** -- The body of the target, by default the body the active vessel orbits.
+
+      :Game Scenes: Flight
+
+   .. function:: std::optional<SpaceCenter::CelestialBody> target_body()
+
+      The body of the target, or ``NULL`` without a target.
+
+      :Game Scenes: Flight
+
+   .. function:: std::optional<std::tuple<double, double, double>> target_position(SpaceCenter::ReferenceFrame reference_frame)
+
+      The position of the target, or ``NULL`` without a target.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame for the position.
+
+      :Game Scenes: Flight
+
+   .. function:: void clear_target()
+
+      Clears the target.
+
+
+      :Game Scenes: Flight
+
+   .. function:: DescentProfile descent_profile()
+
+      The descent profile.
+
+      :Game Scenes: Flight
+
+   .. function:: bool always_update()
+   .. function:: void set_always_update(bool value)
+
+      Whether Trajectories updates the trajectory continuously.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         When ``false``, :func:`update_trajectory` updates the trajectory.
+
+   .. function:: void update_trajectory()
+
+      Updates the trajectory.
+
+
+      :Game Scenes: Flight

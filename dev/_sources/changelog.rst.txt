@@ -166,6 +166,12 @@ DockingCamera service
 * :breaking:`Breaking` ``Camera.Image`` is a method taking an ``ImageFormat`` and a JPEG quality (:issue:`1317`)
 
 
+Trajectories service
+^^^^^^^^^^^^^^^^^^^^
+
+* Add Trajectories service
+
+
 C-nano client
 ^^^^^^^^^^^^^
 

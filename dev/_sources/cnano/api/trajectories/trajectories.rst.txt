@@ -1,0 +1,203 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Trajectories
+=============
+
+
+Provides functionality to interact with Trajectories.
+
+.. note::
+
+   Trajectories predicts the trajectory of the active vessel only.
+
+
+
+.. function:: krpc_error_t krpc_Trajectories_Available(krpc_connection_t connection, bool * returnValue)
+
+   Whether Trajectories is available.
+
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: krpc_error_t krpc_Trajectories_ImpactPatch(krpc_connection_t connection, krpc_Trajectories_Patch_t * returnValue)
+
+   The patch of the trajectory that ends in an impact.
+
+
+   :returns: The patch, or ``nullptr`` without an impact.
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: krpc_error_t krpc_Trajectories_ImpactPosition(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, bool * returnValueIsNull, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+   The position of the impact, or ``nullptr`` without one.
+
+   :Parameters:
+
+    * **referenceFrame** -- The reference frame for the position.
+
+   :Game Scenes: Flight
+
+
+   .. note::
+
+      In a reference frame that rotates with the body, the position includes the
+      rotation of the body until the impact.
+
+
+
+
+.. function:: krpc_error_t krpc_Trajectories_ImpactVelocity(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, bool * returnValueIsNull, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+   The velocity at the impact, or ``nullptr`` without one.
+
+   :Parameters:
+
+    * **referenceFrame** -- The reference frame for the velocity.
+
+   :Game Scenes: Flight
+
+
+   .. note::
+
+      In a reference frame that rotates with the body, the velocity includes the
+      rotation of the body until the impact.
+
+
+
+
+.. function:: krpc_error_t krpc_Trajectories_Patches(krpc_connection_t connection, krpc_list_object_t * returnValue)
+
+   The patches of the trajectory.
+
+
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: krpc_error_t krpc_Trajectories_PlannedDirection(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, bool * returnValueIsNull, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+   The direction that the descent profile sets for the vessel.
+
+   :Parameters:
+
+    * **referenceFrame** -- The reference frame for the direction.
+
+   :returns: The direction, or ``nullptr`` without a target.
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: krpc_error_t krpc_Trajectories_CorrectedDirection(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, bool * returnValueIsNull, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+   The :func:`krpc_Trajectories_PlannedDirection`, corrected to steer towards the target.
+
+   :Parameters:
+
+    * **referenceFrame** -- The reference frame for the direction.
+
+   :returns: The direction, or ``nullptr`` without a target.
+   :Game Scenes: Flight
+
+
+   .. note::
+
+      Suitable as the target direction of the auto-pilot.
+
+
+
+
+.. function:: krpc_error_t krpc_Trajectories_SetTarget(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t referenceFrame, const krpc_tuple_double_double_double_t * position, krpc_SpaceCenter_CelestialBody_t body)
+
+   Sets the target.
+
+   :Parameters:
+
+    * **referenceFrame** -- The reference frame for the position.
+    * **position** -- The position of the target.
+    * **body** -- The body of the target, by default the body the active vessel orbits.
+
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: krpc_error_t krpc_Trajectories_TargetBody(krpc_connection_t connection, krpc_SpaceCenter_CelestialBody_t * returnValue)
+
+   The body of the target, or ``nullptr`` without a target.
+
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: krpc_error_t krpc_Trajectories_TargetPosition(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, bool * returnValueIsNull, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+   The position of the target, or ``nullptr`` without a target.
+
+   :Parameters:
+
+    * **referenceFrame** -- The reference frame for the position.
+
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: krpc_error_t krpc_Trajectories_ClearTarget(krpc_connection_t connection)
+
+   Clears the target.
+
+
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: krpc_error_t krpc_Trajectories_DescentProfile(krpc_connection_t connection, krpc_Trajectories_DescentProfile_t * returnValue)
+
+   The descent profile.
+
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: krpc_error_t krpc_Trajectories_AlwaysUpdate(krpc_connection_t connection, bool * returnValue)
+.. function:: krpc_error_t krpc_Trajectories_set_AlwaysUpdate(krpc_connection_t connection, bool value)
+
+   Whether Trajectories updates the trajectory continuously.
+
+   :Game Scenes: Flight
+
+
+   .. note::
+
+      When ``false``, :func:`krpc_Trajectories_UpdateTrajectory` updates the trajectory.
+
+
+
+
+.. function:: krpc_error_t krpc_Trajectories_UpdateTrajectory(krpc_connection_t connection)
+
+   Updates the trajectory.
+
+
+   :Game Scenes: Flight

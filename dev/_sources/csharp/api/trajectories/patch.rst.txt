@@ -1,0 +1,99 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.Trajectories
+
+Patch
+=====
+
+
+.. class:: Patch
+
+   A patch of the trajectory, at its position in :meth:`Trajectories.Patches <Trajectories.Trajectories.Patches>`.
+
+   .. note::
+
+      Trajectories computes the trajectory again as the vessel flies, and the patch reads
+      the latest one. Throws an exception if the trajectory has fewer patches.
+
+   .. function:: System.Tuple<double,double,double> Position(SpaceCenter.ReferenceFrame referenceFrame)
+
+      The position of the impact, or ``null`` without one.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame for the position.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         In a reference frame that rotates with :prop:`Patch.Body`, the position includes
+         the rotation of the body until the impact.
+
+   .. function:: System.Tuple<double,double,double> Velocity(SpaceCenter.ReferenceFrame referenceFrame)
+
+      The velocity at the impact, or ``null`` without one.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame for the velocity.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         In a reference frame that rotates with :prop:`Patch.Body`, the velocity includes
+         the rotation of the body until the impact.
+
+   .. property:: SpaceCenter.CelestialBody Body { get; }
+
+      The celestial body that the patch is relative to.
+
+      :Game Scenes: Flight
+
+   .. property:: double StartUT { get; }
+
+      The universal time at the start of the patch, in seconds.
+
+      :Game Scenes: Flight
+
+   .. property:: double EndUT { get; }
+
+      The universal time at the end of the patch, in seconds.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         For a patch that ends in an impact, this is the time of the impact.
+
+   .. property:: bool Atmospheric { get; }
+
+      Whether the patch is inside an atmosphere.
+
+      :Game Scenes: Flight
+
+   .. function:: System.Collections.Generic.IList<System.Tuple<double,double,double,double>> AtmosphericTrajectory(SpaceCenter.ReferenceFrame referenceFrame)
+
+      The points of an atmospheric patch, or ``null`` for a patch in space.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame for the positions.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Each point is a tuple ``(ut, x, y, z)``. In a reference frame that rotates with
+         :prop:`Patch.Body`, the positions include the rotation of the body until each point.
+
+   .. property:: SpaceCenter.Orbit OrbitalTrajectory { get; }
+
+      The orbit of a patch in space, or ``null`` for an atmospheric patch.
+
+      :Game Scenes: Flight

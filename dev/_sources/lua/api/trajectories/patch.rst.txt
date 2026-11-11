@@ -1,0 +1,83 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: Trajectories
+
+Patch
+=====
+
+
+.. class:: Patch
+
+   A patch of the trajectory, at its position in :meth:`Trajectories.patches`.
+
+   .. note::
+
+      Trajectories computes the trajectory again as the vessel flies, and the patch reads
+      the latest one. Throws an exception if the trajectory has fewer patches.
+
+   .. method:: position(reference_frame: SpaceCenter.ReferenceFrame): Tuple | nil
+
+      The position of the impact, or ``nil`` without one.
+
+      :param reference_frame: The reference frame for the position.
+
+      .. note::
+
+         In a reference frame that rotates with :attr:`Trajectories.Patch.body`, the position includes
+         the rotation of the body until the impact.
+
+   .. method:: velocity(reference_frame: SpaceCenter.ReferenceFrame): Tuple | nil
+
+      The velocity at the impact, or ``nil`` without one.
+
+      :param reference_frame: The reference frame for the velocity.
+
+      .. note::
+
+         In a reference frame that rotates with :attr:`Trajectories.Patch.body`, the velocity includes
+         the rotation of the body until the impact.
+
+   .. attribute:: body: SpaceCenter.CelestialBody
+
+      The celestial body that the patch is relative to.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: start_ut: number
+
+      The universal time at the start of the patch, in seconds.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: end_ut: number
+
+      The universal time at the end of the patch, in seconds.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         For a patch that ends in an impact, this is the time of the impact.
+
+   .. attribute:: atmospheric: boolean
+
+      Whether the patch is inside an atmosphere.
+
+      :Attribute: Read-only, cannot be set
+
+   .. method:: atmospheric_trajectory(reference_frame: SpaceCenter.ReferenceFrame): List | nil
+
+      The points of an atmospheric patch, or ``nil`` for a patch in space.
+
+      :param reference_frame: The reference frame for the positions.
+
+      .. note::
+
+         Each point is a tuple ``(ut, x, y, z)``. In a reference frame that rotates with
+         :attr:`Trajectories.Patch.body`, the positions include the rotation of the body until each point.
+
+   .. attribute:: orbital_trajectory: SpaceCenter.Orbit | nil
+
+      The orbit of a patch in space, or ``nil`` for an atmospheric patch.
+
+      :Attribute: Read-only, cannot be set
