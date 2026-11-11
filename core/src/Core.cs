@@ -256,14 +256,29 @@ namespace KRPC
         }
 
         /// <summary>
-        /// Start all servers.
+        /// Start every server that is not running.
         /// </summary>
+        /// <remarks>
+        /// A server that fails to start leaves the others to start. Throws a
+        /// <see cref="ServerException"/> naming each failed server, once every server has been tried.
+        /// </remarks>
         public void StartAll ()
         {
+            var failures = new List<KeyValuePair<Server.Server, ServerException>> ();
             foreach (var server in Servers) {
-                if (!server.Running)
+                if (server.Running)
+                    continue;
+                try {
                     server.Start ();
+                } catch (ServerException exn) {
+                    failures.Add (new KeyValuePair<Server.Server, ServerException> (server, exn));
+                }
             }
+            if (failures.Count == 0)
+                return;
+            var message = string.Join (
+                "; ", failures.Select (x => "Failed to start server '" + x.Key.Name + "': " + x.Value.Message).ToArray ());
+            throw new ServerException (message, failures [0].Value);
         }
 
         /// <summary>
