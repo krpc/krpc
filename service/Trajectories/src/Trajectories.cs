@@ -11,18 +11,18 @@ using Tuple3 = System.Tuple<double, double, double>;
 namespace KRPC.Trajectories
 {
     /// <summary>
-    /// This service provides functionality to interact with
-    /// <a href="https://forum.kerbalspaceprogram.com/topic/162324-112x-trajectories-v245-2023-08-22-atmospheric-predictions/">Trajectories</a>.
-    /// 
-    /// Trajectories calculates using active vessel, doing other vessels is not supported.
+    /// Provides functionality to interact with Trajectories.
     /// </summary>
+    /// <remarks>
+    /// Trajectories predicts the trajectory of the active vessel only.
+    /// </remarks>
     [KRPCService(Id = 13, GameScene = GameScene.Flight)]
     public static class Trajectories
     {
         private static DescentProfile descentProfile;
 
         /// <summary>
-        /// Check if the Trajectories API is available.
+        /// Whether Trajectories is available.
         /// </summary>
         [KRPCProperty]
         public static bool Available
@@ -36,11 +36,9 @@ namespace KRPC.Trajectories
         }
 
         /// <summary>
-        /// Calculated impact patch of the trajectory.
+        /// The patch of the trajectory that ends in an impact.
         /// </summary>
-        /// <returns>
-        /// <see cref="KRPC.Trajectories.Patch"/> or <c>null</c> if no impact.
-        /// </returns>
+        /// <returns>The patch, or <c>null</c> without an impact.</returns>
         [KRPCProcedure(Nullable = true)]
         public static Patch ImpactPatch()
         {
@@ -79,7 +77,7 @@ namespace KRPC.Trajectories
         }
 
         /// <summary>
-        /// Trajectory patches
+        /// The patches of the trajectory.
         /// </summary>
         [KRPCProcedure]
         public static IList<Patch> Patches()
@@ -92,12 +90,10 @@ namespace KRPC.Trajectories
         }
 
         /// <summary>
-        /// Direction vessel should be pointing in according to descent profile.
+        /// The direction that the descent profile sets for the vessel.
         /// </summary>
-        /// <returns>
-        /// Planned direction or <c>null</c> if no set target.
-        /// </returns>
-        /// <param name="referenceFrame">Reference frame to use</param>
+        /// <returns>The direction, or <c>null</c> without a target.</returns>
+        /// <param name="referenceFrame">The reference frame for the direction.</param>
         [KRPCProcedure(Nullable = true)]
         public static Tuple3 PlannedDirection(ReferenceFrame referenceFrame)
         {
@@ -113,12 +109,13 @@ namespace KRPC.Trajectories
         }
 
         /// <summary>
-        /// <see cref="PlannedDirection"/> with correction to steer towards target. This can be used as input to autopilot target direction.
+        /// The <see cref="PlannedDirection"/>, corrected to steer towards the target.
         /// </summary>
-        /// <returns>
-        /// Corrected direction or <c>null</c> if no set target.
-        /// </returns>
-        /// <param name="referenceFrame">Reference frame to use</param>
+        /// <remarks>
+        /// Suitable as the target direction of the auto-pilot.
+        /// </remarks>
+        /// <returns>The direction, or <c>null</c> without a target.</returns>
+        /// <param name="referenceFrame">The reference frame for the direction.</param>
         [KRPCProcedure(Nullable = true)]
         public static Tuple3 CorrectedDirection(ReferenceFrame referenceFrame)
         {
@@ -134,11 +131,12 @@ namespace KRPC.Trajectories
         }
 
         /// <summary>
-        /// Set Trajectories target.
+        /// Sets the target.
         /// </summary>
-        /// <param name="body">A <see cref="KRPC.SpaceCenter.Services.CelestialBody"/>, if <c>null</c> uses what's currently influencing the active vessel.</param>
-        /// <param name="referenceFrame"><see cref="ReferenceFrame"/> to use for <paramref name="position"/></param>
-        /// <param name="position">Target position</param>
+        /// <param name="referenceFrame">The reference frame for the position.</param>
+        /// <param name="position">The position of the target.</param>
+        /// <param name="body">The body of the target, by default the body the active vessel
+        /// orbits.</param>
         [KRPCProcedure]
         public static void SetTarget(ReferenceFrame referenceFrame, Tuple3 position, KRPC.SpaceCenter.Services.CelestialBody body = null)
         {
@@ -156,7 +154,7 @@ namespace KRPC.Trajectories
         }
 
         /// <summary>
-        /// Trajectories target <see cref="KRPC.SpaceCenter.Services.CelestialBody"/>.
+        /// The body of the target, or <c>null</c> without a target.
         /// </summary>
         [KRPCProperty(Nullable = true)]
         public static KRPC.SpaceCenter.Services.CelestialBody TargetBody
@@ -173,9 +171,9 @@ namespace KRPC.Trajectories
         }
 
         /// <summary>
-        /// Trajectories target position.
+        /// The position of the target, or <c>null</c> without a target.
         /// </summary>
-        /// <param name="referenceFrame"><see cref="ReferenceFrame"/> to use</param>
+        /// <param name="referenceFrame">The reference frame for the position.</param>
         [KRPCProcedure(Nullable = true)]
         public static Tuple3 TargetPosition(ReferenceFrame referenceFrame)
         {
@@ -191,7 +189,7 @@ namespace KRPC.Trajectories
         }
 
         /// <summary>
-        /// Clears the Trajectories target.
+        /// Clears the target.
         /// </summary>
         [KRPCProcedure]
         public static void ClearTarget()
@@ -201,7 +199,7 @@ namespace KRPC.Trajectories
         }
 
         /// <summary>
-        /// Descent profile
+        /// The descent profile.
         /// </summary>
         [KRPCProperty]
         public static DescentProfile DescentProfile 
@@ -216,10 +214,10 @@ namespace KRPC.Trajectories
         }
 
         /// <summary>
-        /// Automatically update the trajectory.
+        /// Whether Trajectories updates the trajectory continuously.
         /// </summary>
         /// <remarks>
-        /// If <c>false</c> then <see cref="UpdateTrajectory"/> must be called to update the predicted trajectory.
+        /// When <c>false</c>, <see cref="UpdateTrajectory"/> updates the trajectory.
         /// </remarks>
         [KRPCProperty]
         public static bool AlwaysUpdate
@@ -235,7 +233,7 @@ namespace KRPC.Trajectories
         }
 
         /// <summary>
-        /// Triggers a recalculation of the trajectory.
+        /// Updates the trajectory.
         /// </summary>
         [KRPCProcedure]
         public static void UpdateTrajectory()

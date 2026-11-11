@@ -6,7 +6,7 @@ using System;
 namespace KRPC.Trajectories
 {
     /// <summary>
-    /// Trajectories descent profile node.
+    /// A node of the descent profile.
     /// </summary>
     [KRPCClass(Service = "Trajectories")]
     public class DescentProfileNode : Equatable<DescentProfileNode>
@@ -19,10 +19,12 @@ namespace KRPC.Trajectories
         }
 
         /// <summary>
-        /// Angle in degrees from prograde, <see cref="KRPC.Trajectories.DescentProfileMode"/> determines if this is angle of attack or angle from horizon.
-        /// 
-        /// Default is 180 degrees aka retrograde.
+        /// The angle in degrees, from -180 to 180.
         /// </summary>
+        /// <remarks>
+        /// <see cref="Mode"/> sets what the angle is measured from. The default, 180, is
+        /// retrograde.
+        /// </remarks>
         [KRPCProperty]
         public double Angle 
         {
@@ -44,7 +46,7 @@ namespace KRPC.Trajectories
         }
 
         /// <summary>
-        /// Use angle of attack or angle from horizon for <see cref="Angle"/>.
+        /// Whether <see cref="Angle"/> is the angle of attack or the angle from the horizon.
         /// </summary>
         [KRPCProperty]
         public DescentProfileMode Mode 
@@ -60,7 +62,7 @@ namespace KRPC.Trajectories
         }
 
         /// <summary>
-        /// Check that nodes are the same.
+        /// Whether the nodes are the same.
         /// </summary>
         public override bool Equals(DescentProfileNode other)
         {
@@ -68,7 +70,7 @@ namespace KRPC.Trajectories
         }
 
         /// <summary>
-        /// Hash the Node.
+        /// Hash the node.
         /// </summary>
         public override int GetHashCode()
         {

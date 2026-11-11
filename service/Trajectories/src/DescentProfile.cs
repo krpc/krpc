@@ -5,13 +5,12 @@ using KRPC.Utils;
 namespace KRPC.Trajectories
 {
     /// <summary>
-    /// Trajectories descent profile.
-    /// 
-    /// 
-    /// Body atmosphere depth is defined as vessel altitude between equatorial radius and max atmosphere height.
-    /// 
-    /// On bodies without an atmosphere <see cref="KRPC.Trajectories.DescentProfile.FinalApproach"/> is always used.
+    /// The descent profile, which sets the attitude of the vessel during the descent.
     /// </summary>
+    /// <remarks>
+    /// Each node covers a band of altitude, as a percentage of the height of the atmosphere.
+    /// A body without an atmosphere uses <see cref="FinalApproach"/> throughout.
+    /// </remarks>
     [KRPCClass(Service = "Trajectories")]
     public class DescentProfile : Equatable<DescentProfile>
     {
@@ -21,7 +20,7 @@ namespace KRPC.Trajectories
         private static DescentProfileNode finalApproach;
 
         /// <summary>
-        /// Atmospheric entry, 50 to 100% of body atmosphere depth
+        /// The node for atmospheric entry, from 50% to 100% of the height of the atmosphere.
         /// </summary>
         [KRPCProperty]
         public DescentProfileNode Entry
@@ -36,7 +35,7 @@ namespace KRPC.Trajectories
         }
 
         /// <summary>
-        /// High Altitude, 25 to 50% of body atmosphere depth
+        /// The node for high altitude, from 25% to 50% of the height of the atmosphere.
         /// </summary>
         [KRPCProperty]
         public DescentProfileNode HighAltitude
@@ -51,7 +50,7 @@ namespace KRPC.Trajectories
         }
 
         /// <summary>
-        /// Low Altitude, 5 to 25% of body atmosphere depth
+        /// The node for low altitude, from 5% to 25% of the height of the atmosphere.
         /// </summary>
         [KRPCProperty]
         public DescentProfileNode LowAltitude
@@ -66,7 +65,7 @@ namespace KRPC.Trajectories
         }
 
         /// <summary>
-        /// Final Approach, under 5% of body atmosphere depth or non-atmospheric Body
+        /// The node for the final approach, below 5% of the height of the atmosphere.
         /// </summary>
         [KRPCProperty]
         public DescentProfileNode FinalApproach
@@ -81,10 +80,11 @@ namespace KRPC.Trajectories
         }
 
         /// <summary>
-        /// Saves the current descent profile to vessel.
-        /// 
-        /// You don't need to call this after changing angles/modes, only use to include current descent profile in save file. 
+        /// Saves the descent profile to the active vessel.
         /// </summary>
+        /// <remarks>
+        /// A change to a node applies without saving. Saving keeps it in the saved game.
+        /// </remarks>
         [KRPCMethod]
         public static void Save()
         {
@@ -92,9 +92,9 @@ namespace KRPC.Trajectories
         }
 
         /// <summary>
-        /// Resets all to the passed angle of attack in degrees from prograde.
+        /// Sets every node to an angle of attack, and saves the descent profile.
         /// </summary>
-        /// <param name="aoa">Angle of attack in degrees, default value is retrograde (180 degrees)</param>
+        /// <param name="aoa">The angle of attack in degrees. The default, 180, is retrograde.</param>
         [KRPCMethod]
         public static void Reset(double aoa = 180.0)
         {
@@ -102,7 +102,7 @@ namespace KRPC.Trajectories
         }
 
         /// <summary>
-        /// Check that DescentProfile is the same.
+        /// Whether the descent profiles are the same.
         /// </summary>
         public override bool Equals(DescentProfile other)
         {
@@ -110,7 +110,7 @@ namespace KRPC.Trajectories
         }
 
         /// <summary>
-        /// Hash the Node.
+        /// Hash the descent profile.
         /// </summary>
         public override int GetHashCode()
         {

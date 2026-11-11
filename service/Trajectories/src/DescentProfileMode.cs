@@ -4,18 +4,18 @@ using System;
 namespace KRPC.Trajectories
 {
     /// <summary>
-    /// Trajectories descent mode. See <see cref="DescentProfileNode.Mode"/>.
+    /// The reference for the angle of a descent profile node.
     /// </summary>
     [Serializable]
     [KRPCEnum(Service = "Trajectories")]
     public enum DescentProfileMode
     {
         /// <summary>
-        /// Angle of attack mode.
+        /// The angle of attack, from prograde.
         /// </summary>
         AngleOfAttack,
         /// <summary>
-        /// Angle from horizon mode.
+        /// The angle from the horizon.
         /// </summary>
         Horizon
     }

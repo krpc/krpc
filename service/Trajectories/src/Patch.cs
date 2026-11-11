@@ -114,11 +114,13 @@ namespace KRPC.Trajectories
         }
 
         /// <summary>
-        /// Impact position, <c>null</c> if no impact.
-        /// 
-        /// If the reference frame rotates with <see cref="Patch.Body"/>, such as its own reference frame, then position includes rotation with time.
+        /// The position of the impact, or <c>null</c> without one.
         /// </summary>
-        /// <param name="referenceFrame">Reference frame to use</param>
+        /// <remarks>
+        /// In a reference frame that rotates with <see cref="Body"/>, the position includes
+        /// the rotation of the body until the impact.
+        /// </remarks>
+        /// <param name="referenceFrame">The reference frame for the position.</param>
         [KRPCMethod(Nullable = true)]
         public Tuple3 Position(ReferenceFrame referenceFrame)
         {
@@ -126,11 +128,13 @@ namespace KRPC.Trajectories
         }
 
         /// <summary>
-        /// Impact velocity, <c>null</c> if no impact.
-        /// 
-        /// If the reference frame rotates with <see cref="Patch.Body"/>, such as its own reference frame, then velocity includes rotation with time.
+        /// The velocity at the impact, or <c>null</c> without one.
         /// </summary>
-        /// <param name="referenceFrame">Reference frame to use</param>
+        /// <remarks>
+        /// In a reference frame that rotates with <see cref="Body"/>, the velocity includes
+        /// the rotation of the body until the impact.
+        /// </remarks>
+        /// <param name="referenceFrame">The reference frame for the velocity.</param>
         [KRPCMethod(Nullable = true)]
         public Tuple3 Velocity(ReferenceFrame referenceFrame)
         {
@@ -138,7 +142,7 @@ namespace KRPC.Trajectories
         }
 
         /// <summary>
-        /// <see cref="KRPC.SpaceCenter.Services.CelestialBody"/> used for calculation.
+        /// The celestial body that the patch is relative to.
         /// </summary>
         [KRPCProperty]
         public KRPC.SpaceCenter.Services.CelestialBody Body
@@ -150,7 +154,7 @@ namespace KRPC.Trajectories
         }
 
         /// <summary>
-        /// Start of patch in UT.
+        /// The universal time at the start of the patch, in seconds.
         /// </summary>
         [KRPCProperty]
         public double StartUT
@@ -162,10 +166,11 @@ namespace KRPC.Trajectories
         }
 
         /// <summary>
-        /// End of patch in UT.
-        /// 
-        /// For impact this also happens to be the impact time.
+        /// The universal time at the end of the patch, in seconds.
         /// </summary>
+        /// <remarks>
+        /// For a patch that ends in an impact, this is the time of the impact.
+        /// </remarks>
         [KRPCProperty]
         public double EndUT
         {
@@ -176,7 +181,7 @@ namespace KRPC.Trajectories
         }
 
         /// <summary>
-        /// If atmospheric.
+        /// Whether the patch is inside an atmosphere.
         /// </summary>
         [KRPCProperty]
         public bool Atmospheric
@@ -188,11 +193,13 @@ namespace KRPC.Trajectories
         }
 
         /// <summary>
-        /// Array of trajectory points, <c>null</c> if <see cref="Atmospheric"/> is <c>false</c>.
-        /// 
-        /// If the reference frame rotates with <see cref="Patch.Body"/>, such as its own reference frame, then position includes rotation with time.
+        /// The points of an atmospheric patch, or <c>null</c> for a patch in space.
         /// </summary>
-        /// <param name="referenceFrame">Reference frame to use</param>
+        /// <remarks>
+        /// Each point is a tuple <c>(ut, x, y, z)</c>. In a reference frame that rotates with
+        /// <see cref="Body"/>, the positions include the rotation of the body until each point.
+        /// </remarks>
+        /// <param name="referenceFrame">The reference frame for the positions.</param>
         [KRPCMethod(Nullable = true)]
         public IList<Tuple4> AtmosphericTrajectory(ReferenceFrame referenceFrame)
         {
@@ -220,9 +227,7 @@ namespace KRPC.Trajectories
         }
 
         /// <summary>
-        /// <see cref="KRPC.SpaceCenter.Services.Orbit"/> containing orbital trajectory, <c>null</c> if <see cref="Atmospheric"/> is <c>true</c>.
-        /// 
-        /// Unlike all other properties it does not depend on a <see cref="ReferenceFrame"/>.
+        /// The orbit of a patch in space, or <c>null</c> for an atmospheric patch.
         /// </summary>
         [KRPCProperty(Nullable = true)]
         public KRPC.SpaceCenter.Services.Orbit OrbitalTrajectory
