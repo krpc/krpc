@@ -75,6 +75,15 @@ Core
 * Add ``flags`` to the ``Enumeration`` message, set for a flags enumeration (:issue:`1311`)
 * Combine flags enumeration values in server side functions with ``KRPC.Expression.And``, ``Or`` and ``ExclusiveOr`` (:issue:`1311`)
 * Take a flags enumeration value in ``KRPC.Expression.Not``, which gives the declared values it does not hold (:issue:`1313`)
+* Type ids
+
+  * Give each class, enumeration, structure and exception an id, a hash of its name (:issue:`1324`)
+  * Add ``Id`` to ``KRPCClass``, ``KRPCEnum``, ``KRPCStruct`` and ``KRPCException``, to resolve an id clash (:issue:`1324`)
+  * Add ``id`` to the ``Class``, ``Enumeration``, ``Struct`` and ``Exception`` messages that ``KRPC.GetServices`` returns, and ``service_id`` and ``id`` to the ``Type`` message (:issue:`1324`)
+  * Add ``service_id`` and ``exception_id`` to the ``Error`` message (:issue:`1324`)
+  * :breaking:`Breaking` Rename ``name`` in the ``Error`` message to ``exception`` (:issue:`1324`)
+  * :breaking:`Breaking` Reject two types of a service with the same name, ignoring case (:issue:`1324`)
+
 
 
 Server

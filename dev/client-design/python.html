@@ -613,6 +613,8 @@ Each client has its own classes, in its <code class="docutils literal notranslat
 <li><p>A connect registers the types of every service, then builds the services. The types come first as
 a procedure can use a type from any service. A parameter’s default value can also be an
 enumeration value, which cannot be decoded until that enumeration is registered.</p></li>
+<li><p>The client clears the type identifiers from the <code class="docutils literal notranslate"><span class="pre">Type</span></code> messages in <code class="docutils literal notranslate"><span class="pre">GetServices</span></code>. It names a
+type by its service and name, and keys its types on the <code class="docutils literal notranslate"><span class="pre">Type</span></code> messages it builds from them.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">clientgen</span></code> and <code class="docutils literal notranslate"><span class="pre">python.tmpl</span></code> in <code class="docutils literal notranslate"><span class="pre">krpctools</span></code> generate a module per service. Its
 enumerations, structures and exceptions are real classes, and its classes and services are
 declarations whose members raise <code class="docutils literal notranslate"><span class="pre">TypeError</span></code>. <code class="docutils literal notranslate"><span class="pre">clientgen</span></code> runs the client without the modules.</p></li>

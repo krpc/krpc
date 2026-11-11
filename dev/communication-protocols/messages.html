@@ -775,6 +775,9 @@ identifier is as stable as the name it comes from.</p>
 <a class="reference internal" href="#communication-protocol-get-services"><span class="std std-ref">GetServices</span></a> reports every identifier, hashed or set by hand.
 Service identifiers 1 to 255 are reserved for the services that ship with kRPC, which keeps them
 short on the wire.</p>
+<p>The classes, enumerations, structures and exceptions of a service have identifiers by the same
+rule, from the type’s name. They share one identifier space per service, apart from the
+procedures. An error and a <code class="docutils literal notranslate"><span class="pre">Type</span></code> message carry the identifiers next to the names.</p>
 <p>A parameter can have a default value, listed in the procedure’s
 <a class="reference internal" href="#communication-protocol-service-description-message"><span class="std std-ref">description</span></a>. A call can leave out the
 <code class="docutils literal notranslate"><span class="pre">Argument</span></code> for such a parameter, and the procedure runs with the default. The <code class="docutils literal notranslate"><span class="pre">position</span></code> field
@@ -797,7 +800,9 @@ says which parameter each of the remaining arguments is for.</p>
 
 <span class="kd">message</span><span class="w"> </span><span class="nc">Error</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="kd">service</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">exception</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">uint32</span><span class="w"> </span><span class="na">service_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">uint32</span><span class="w"> </span><span class="na">exception_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">stack_trace</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
 <span class="p">}</span>
@@ -816,7 +821,9 @@ whole sets the <code class="docutils literal notranslate"><span class="pre">erro
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">service</span></code> - The service that defines the exception type, when the error is one of the
 exceptions a service lists. Empty otherwise.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code> - The name of that exception type. Empty otherwise.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">exception</span></code> - The name of that exception type. Empty otherwise.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">service_id</span></code> - The identifier of that service. 0 otherwise.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">exception_id</span></code> - The identifier of that exception type. 0 otherwise.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">description</span></code> - A description of the error.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">stack_trace</span></code> - The stack trace on the server. Empty unless the server’s verbose errors
 setting is on.</p></li>
@@ -1200,6 +1207,7 @@ streams, events and server side functions. The services a client library exposes
 <p>Details about each <a class="reference internal" href="../extending/attributes.html#attribute-KRPCClass" title="attribute: KRPCClass"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a> are specified in a <code class="docutils literal notranslate"><span class="pre">Class</span></code> message, with the format:</p>
 <div class="highlight-protobuf notranslate"><div class="highlight"><pre><span></span><span class="kd">message</span><span class="w"> </span><span class="nc">Class</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">uint32</span><span class="w"> </span><span class="na">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">documentation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="na">deprecated</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">deprecated_reason</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
@@ -1209,6 +1217,7 @@ streams, events and server side functions. The services a client library exposes
 <p>The fields are:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">name</span></code> - The name of the class.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">id</span></code> - The identifier of the class.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">documentation</span></code> - Documentation for the class.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">deprecated</span></code> - Whether the class is deprecated.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">deprecated_reason</span></code> - The reason for the deprecation.</p></li>
@@ -1220,6 +1229,7 @@ streams, events and server side functions. The services a client library exposes
 format:</p>
 <div class="highlight-protobuf notranslate"><div class="highlight"><pre><span></span><span class="kd">message</span><span class="w"> </span><span class="nc">Enumeration</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">uint32</span><span class="w"> </span><span class="na">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">7</span><span class="p">;</span>
 <span class="w">  </span><span class="k">repeated</span><span class="w"> </span><span class="n">EnumerationValue</span><span class="w"> </span><span class="na">values</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">documentation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="na">deprecated</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
@@ -1239,6 +1249,7 @@ format:</p>
 <p>The fields are:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">name</span></code> - The name of the enumeration.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">id</span></code> - The identifier of the enumeration.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">values</span></code> - A list of <code class="docutils literal notranslate"><span class="pre">EnumerationValue</span></code> messages, indicating the values that the enumeration
 can be assigned. The fields are:</p>
 <ul>
@@ -1263,6 +1274,7 @@ other enumeration is one of the values it declares.</p></li>
 each <a class="reference internal" href="../extending/attributes.html#attribute-KRPCStruct" title="attribute: KRPCStruct"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCStruct</span></code></a> are specified in a <code class="docutils literal notranslate"><span class="pre">Struct</span></code> message, with the format:</p>
 <div class="highlight-protobuf notranslate"><div class="highlight"><pre><span></span><span class="kd">message</span><span class="w"> </span><span class="nc">Struct</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">uint32</span><span class="w"> </span><span class="na">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span>
 <span class="w">  </span><span class="k">repeated</span><span class="w"> </span><span class="n">StructField</span><span class="w"> </span><span class="na">fields</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">documentation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="na">deprecated</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
@@ -1281,6 +1293,7 @@ each <a class="reference internal" href="../extending/attributes.html#attribute-
 <p>The fields are:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">name</span></code> - The name of the structure.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">id</span></code> - The identifier of the structure.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">fields</span></code> - A list of <code class="docutils literal notranslate"><span class="pre">StructField</span></code> messages, one for each field of the structure, in the
 order their values are encoded in. The fields are:</p>
 <ul>
@@ -1310,6 +1323,7 @@ of the field types. The field names appear only in the definition above.</p>
 format:</p>
 <div class="highlight-protobuf notranslate"><div class="highlight"><pre><span></span><span class="kd">message</span><span class="w"> </span><span class="nc">Exception</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">uint32</span><span class="w"> </span><span class="na">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">documentation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="na">deprecated</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">deprecated_reason</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
@@ -1320,6 +1334,7 @@ format:</p>
 <p>The fields are:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">name</span></code> - The name of the exception type.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">id</span></code> - The identifier of the exception type, as in the <code class="docutils literal notranslate"><span class="pre">exception_id</span></code> field of an error.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">documentation</span></code> - Documentation for the exception.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">deprecated</span></code> - Whether the exception is deprecated.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">deprecated_reason</span></code> - The reason for the deprecation.</p></li>
@@ -1352,6 +1367,8 @@ therefore be used to split the name into its constituent parts.</p>
 <span class="w">  </span><span class="n">TypeCode</span><span class="w"> </span><span class="na">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="kd">service</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">uint32</span><span class="w"> </span><span class="na">service_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">uint32</span><span class="w"> </span><span class="na">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">7</span><span class="p">;</span>
 <span class="w">  </span><span class="k">repeated</span><span class="w"> </span><span class="n">Type</span><span class="w"> </span><span class="na">types</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="na">nullable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
 
@@ -1393,8 +1410,9 @@ therefore be used to split the name into its constituent parts.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">code</span></code> field specifies the type. <code class="docutils literal notranslate"><span class="pre">NONE</span></code> is the code of an unset type, such as the return
 type of a procedure that returns no value.</p>
 <p>For <code class="docutils literal notranslate"><span class="pre">CLASS</span></code>, <code class="docutils literal notranslate"><span class="pre">ENUMERATION</span></code> and <code class="docutils literal notranslate"><span class="pre">STRUCT</span></code> types the <code class="docutils literal notranslate"><span class="pre">service</span></code> and <code class="docutils literal notranslate"><span class="pre">name</span></code> fields specify the
-service that defines the class, enumeration or structure and its name. For all other types these
-fields are empty.</p>
+service that defines the class, enumeration or structure and its name. The <code class="docutils literal notranslate"><span class="pre">service_id</span></code> and
+<code class="docutils literal notranslate"><span class="pre">id</span></code> fields hold their identifiers. For all other types the names are empty and the identifiers
+are 0.</p>
 <p>For collection types the <code class="docutils literal notranslate"><span class="pre">types</span></code> repeated field will contain the sub-types:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">TUPLE</span></code> types contain one or more types in the <code class="docutils literal notranslate"><span class="pre">types</span></code> field.</p></li>

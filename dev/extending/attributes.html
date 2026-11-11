@@ -669,7 +669,7 @@ and an optional description, and returns a <code class="docutils literal notrans
 
 <dl class="cs attribute">
 <dt class="sig sig-object cs" id="attribute-KRPCClass">
-<span class="sig-name descname"><span class="pre">KRPCClass</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="n"><span class="pre">Service</span></span>, <a class="reference internal" href="game-scenes.html#enum-KRPC.Service.GameScene" title="enum: KRPC.Service.GameScene"><span class="pre">KRPC.Service.GameScene</span></a><span class="w"> </span><span class="n"><span class="pre">GameScene</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">KRPC.Service.GameScene.Inherit</span></span><span class="sig-paren">)</span><a class="headerlink" href="#attribute-KRPCClass" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">KRPCClass</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="n"><span class="pre">Service</span></span>, <a class="reference internal" href="game-scenes.html#enum-KRPC.Service.GameScene" title="enum: KRPC.Service.GameScene"><span class="pre">KRPC.Service.GameScene</span></a><span class="w"> </span><span class="n"><span class="pre">GameScene</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">KRPC.Service.GameScene.Inherit</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a><span class="w"> </span><span class="n"><span class="pre">Id</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span><span class="sig-paren">)</span><a class="headerlink" href="#attribute-KRPCClass" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -677,12 +677,18 @@ and an optional description, and returns a <code class="docutils literal notrans
 added to the service that contains its definition.</p></li>
 <li><p><strong>GameScene</strong> – The game scenes in which the class’ methods and properties are
 available. Defaults to inherit this setting from the service the class is defined in.</p></li>
+<li><p><strong>Id</strong> – Optional integer identifier for the class. If omitted or set to 0, an identifier
+is generated from a hash of the class name. The classes, enumerations, structures and
+exceptions of a service share one set of identifiers. Set it only to resolve a clash with
+another type of the service.</p></li>
 </ul>
 </dd>
 </dl>
 <p>This <a class="reference external" href="https://msdn.microsoft.com/en-us/library/aa287992.aspx">attribute</a> is applied to
 non-static classes. It adds the class to the server, so that references to instances of the class
 can be passed between client and server.</p>
+<p>The classes, enumerations, structures and exceptions of a service have unique names, compared
+case-insensitively.</p>
 <p>A <a class="reference internal" href="#attribute-KRPCClass" title="attribute: KRPCClass"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a> must be part of a service, just like a
 <a class="reference internal" href="#attribute-KRPCProcedure" title="attribute: KRPCProcedure"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCProcedure</span></code></a>. However, it would be restrictive if the class had to be declared as
 a nested class inside a class with the <a class="reference internal" href="#attribute-KRPCService" title="attribute: KRPCService"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCService</span></code></a> attribute. Therefore, a
@@ -890,12 +896,13 @@ not a <a class="reference internal" href="#attribute-KRPCClass" title="attribute
 
 <dl class="cs attribute">
 <dt class="sig sig-object cs" id="attribute-KRPCEnum">
-<span class="sig-name descname"><span class="pre">KRPCEnum</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="n"><span class="pre">Service</span></span><span class="sig-paren">)</span><a class="headerlink" href="#attribute-KRPCEnum" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">KRPCEnum</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="n"><span class="pre">Service</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a><span class="w"> </span><span class="n"><span class="pre">Id</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span><span class="sig-paren">)</span><a class="headerlink" href="#attribute-KRPCEnum" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>Service</strong> – Optional name of the service to add this enum to. If omitted, the enum is added
 to the service that contains its definition.</p></li>
+<li><p><strong>Id</strong> – Optional integer identifier for the enumeration, as for <a class="reference internal" href="#attribute-KRPCClass" title="attribute: KRPCClass"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -957,12 +964,13 @@ also satisfy the following criteria:</p>
 
 <dl class="cs attribute">
 <dt class="sig sig-object cs" id="attribute-KRPCStruct">
-<span class="sig-name descname"><span class="pre">KRPCStruct</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="n"><span class="pre">Service</span></span><span class="sig-paren">)</span><a class="headerlink" href="#attribute-KRPCStruct" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">KRPCStruct</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="n"><span class="pre">Service</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a><span class="w"> </span><span class="n"><span class="pre">Id</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span><span class="sig-paren">)</span><a class="headerlink" href="#attribute-KRPCStruct" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>Service</strong> – Optional name of the service to add this structure to. If omitted, the
 structure is added to the service that contains its definition.</p></li>
+<li><p><strong>Id</strong> – Optional integer identifier for the structure, as for <a class="reference internal" href="#attribute-KRPCClass" title="attribute: KRPCClass"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1044,7 +1052,7 @@ annotation.</p>
 
 <dl class="cs attribute">
 <dt class="sig sig-object cs" id="attribute-KRPCException">
-<span class="sig-name descname"><span class="pre">KRPCException</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="n"><span class="pre">Service</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Type" title="type: msdn ~&gt; System.Type"><span class="pre">Type</span></a><span class="w"> </span><span class="n"><span class="pre">MappedException</span></span><span class="sig-paren">)</span><a class="headerlink" href="#attribute-KRPCException" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">KRPCException</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="n"><span class="pre">Service</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Type" title="type: msdn ~&gt; System.Type"><span class="pre">Type</span></a><span class="w"> </span><span class="n"><span class="pre">MappedException</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a><span class="w"> </span><span class="n"><span class="pre">Id</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span><span class="sig-paren">)</span><a class="headerlink" href="#attribute-KRPCException" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1052,6 +1060,7 @@ annotation.</p>
 to the service that contains its definition.</p></li>
 <li><p><strong>MappedException</strong> – Optional type of an exception to map to this exception. For example,
 can be used to map a built-in C# exception type onto this kRPC exception type.</p></li>
+<li><p><strong>Id</strong> – Optional integer identifier for the exception, as for <a class="reference internal" href="#attribute-KRPCClass" title="attribute: KRPCClass"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a>.</p></li>
 </ul>
 </dd>
 </dl>
