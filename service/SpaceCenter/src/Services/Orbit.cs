@@ -20,6 +20,10 @@ namespace KRPC.SpaceCenter.Services
         readonly Vessel ownerVessel;
         readonly CelestialBody ownerBody;
         readonly Node ownerNode;
+        // The owner and lookup of an orbit that another service names, such as a mod's
+        // predicted trajectory, which rebuilds its KSP orbits as it likes
+        readonly object owner;
+        readonly Func<global::Orbit> lookup;
         // The KSP orbit, held only for an orbit that cannot be looked up again: a patch, or
         // an orbit a caller handed in. An orbit that has an owner is looked up on the
         // owner, because the game builds a new one whenever it builds the owner, and the
@@ -65,6 +69,23 @@ namespace KRPC.SpaceCenter.Services
             patch = orbit;
         }
 
+        /// <summary>
+        /// Construct an orbit that looks up its KSP orbit on each use.
+        /// </summary>
+        /// <param name="owner">The object the orbit belongs to. Orbits with equal owners
+        /// are equal, and an owner that implements <see cref="IGameObjectState"/> gives
+        /// the orbit its state.</param>
+        /// <param name="lookup">Returns the KSP orbit, or throws if the owner has none.</param>
+        public Orbit (object owner, Func<global::Orbit> lookup)
+        {
+            if (ReferenceEquals (owner, null))
+                throw new ArgumentNullException (nameof (owner));
+            if (lookup == null)
+                throw new ArgumentNullException (nameof (lookup));
+            this.owner = owner;
+            this.lookup = lookup;
+        }
+
         // Construct an orbit from a KSP orbit object, inheriting the owner of an
         // existing orbit (used for a patch that follows a sphere-of-influence change,
         // which belongs to the same object).
@@ -74,6 +95,8 @@ namespace KRPC.SpaceCenter.Services
             ownerVessel = owner.ownerVessel;
             ownerBody = owner.ownerBody;
             ownerNode = owner.ownerNode;
+            this.owner = owner.owner;
+            lookup = owner.lookup;
         }
 
         /// <summary>
@@ -89,6 +112,9 @@ namespace KRPC.SpaceCenter.Services
                     return ownerVessel.GameObjectState;
                 if (ownerNode != null)
                     return ownerNode.GameObjectState;
+                var ownerState = owner as IGameObjectState;
+                if (ownerState != null)
+                    return ownerState.GameObjectState;
                 return GameObjectState.Live;
             }
         }
@@ -157,7 +183,7 @@ namespace KRPC.SpaceCenter.Services
             if (!ReferenceEquals (patch, null) || !ReferenceEquals (other.patch, null))
                 return ReferenceEquals (patch, other.patch);
             return ownerVessel == other.ownerVessel && ownerBody == other.ownerBody &&
-            ownerNode == other.ownerNode;
+            ownerNode == other.ownerNode && Equals (owner, other.owner);
         }
 
         /// <summary>
@@ -167,7 +193,7 @@ namespace KRPC.SpaceCenter.Services
         {
             if (!ReferenceEquals (patch, null))
                 return RuntimeHelpers.GetHashCode (patch);
-            return Hash.Of (ownerVessel).And (ownerBody).And (ownerNode);
+            return Hash.Of (ownerVessel).And (ownerBody).And (ownerNode).And (owner);
         }
 
         /// <summary>
@@ -185,6 +211,8 @@ namespace KRPC.SpaceCenter.Services
                     return ownerVessel.InternalVessel.GetOrbit ();
                 if (ownerBody != null)
                     return ownerBody.InternalBody.GetOrbit ();
+                if (lookup != null)
+                    return lookup ();
                 return ownerNode.InternalNode.nextPatch;
             }
         }

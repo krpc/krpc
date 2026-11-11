@@ -229,11 +229,24 @@ namespace KRPC.Trajectories
         {
             get
             {
-                var patch = InternalPatch;
-                if (!patch.IsAtmospheric)
-                    return new KRPC.SpaceCenter.Services.Orbit(patch.SpaceOrbit);
-                else
+                if (InternalPatch.IsAtmospheric)
                     return null;
+                return new KRPC.SpaceCenter.Services.Orbit(this, () => SpaceOrbit);
+            }
+        }
+
+        /// <summary>
+        /// The orbit of the patch at this position, which throws if it is atmospheric.
+        /// </summary>
+        global::Orbit SpaceOrbit
+        {
+            get
+            {
+                var patch = InternalPatch;
+                if (patch.IsAtmospheric)
+                    throw new InvalidOperationException(
+                        "The patch at index " + index + " is atmospheric, and has no orbit");
+                return patch.SpaceOrbit;
             }
         }
 
