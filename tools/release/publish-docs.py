@@ -74,6 +74,7 @@ CONTENT_PATHS = (
     "service/RemoteTech/src",
     "service/LiDAR/src",
     "service/DockingCamera/src",
+    "service/MechJeb/src",
 )
 
 # The per-component CHANGELOG.md files the unified changelog page is merged from.

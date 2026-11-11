@@ -1,0 +1,20 @@
+.. default-domain:: {{ domain.sphinxname }}
+.. highlight:: {{ domain.highlight }}
+{{ domain.currentmodule('MechJeb') }}
+{% import domain.macros as macros with context %}
+
+AscentAutopilot
+===============
+
+{{ macros.class(services['MechJeb'].classes['AscentAutopilot']) }}
+{{ macros.enumeration(services['MechJeb'].enumerations['AscentLaunchMode']) }}
+
+AscentClassic
+-------------
+
+{{ macros.class(services['MechJeb'].classes['AscentClassic']) }}
+
+AscentPVG
+---------
+
+{{ macros.class(services['MechJeb'].classes['AscentPVG']) }}

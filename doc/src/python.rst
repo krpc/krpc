@@ -1132,4 +1132,5 @@ API Reference
    python/api/lidar
    python/api/docking-camera
    python/api/trajectories
+   python/api/mechjeb
    python/api/debug

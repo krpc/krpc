@@ -24,6 +24,7 @@ component's unreleased section.
 - [LiDAR](service/LiDAR/CHANGELOG.md)
 - [DockingCamera](service/DockingCamera/CHANGELOG.md)
 - [Trajectories](service/Trajectories/CHANGELOG.md)
+- [MechJeb](service/MechJeb/CHANGELOG.md)
 
 ## Clients
 

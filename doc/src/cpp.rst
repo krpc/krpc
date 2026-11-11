@@ -985,4 +985,5 @@ API Reference
    cpp/api/lidar
    cpp/api/docking-camera
    cpp/api/trajectories
+   cpp/api/mechjeb
    cpp/api/debug

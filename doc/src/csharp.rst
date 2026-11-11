@@ -1021,4 +1021,5 @@ API Reference
    csharp/api/lidar
    csharp/api/docking-camera
    csharp/api/trajectories
+   csharp/api/mechjeb
    csharp/api/debug

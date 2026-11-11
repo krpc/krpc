@@ -1,0 +1,99 @@
+.. default-domain:: {{ domain.sphinxname }}
+.. highlight:: {{ domain.highlight }}
+{{ domain.currentmodule('MechJeb') }}
+{% import domain.macros as macros with context %}
+
+ManeuverPlanner
+===============
+
+{{ macros.class(services['MechJeb'].classes['ManeuverPlanner']) }}
+{{ macros.exception(services['MechJeb'].exceptions['OperationException']) }}
+
+TimeSelector
+------------
+
+{{ macros.class(services['MechJeb'].classes['TimeSelector']) }}
+{{ macros.enumeration(services['MechJeb'].enumerations['TimeReference']) }}
+
+Operations
+----------
+
+OperationApoapsis
+^^^^^^^^^^^^^^^^^
+
+{{ macros.class(services['MechJeb'].classes['OperationApoapsis']) }}
+
+OperationCircularize
+^^^^^^^^^^^^^^^^^^^^
+
+{{ macros.class(services['MechJeb'].classes['OperationCircularize']) }}
+
+OperationCourseCorrection
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+{{ macros.class(services['MechJeb'].classes['OperationCourseCorrection']) }}
+
+OperationEllipticize
+^^^^^^^^^^^^^^^^^^^^
+
+{{ macros.class(services['MechJeb'].classes['OperationEllipticize']) }}
+
+OperationInclination
+^^^^^^^^^^^^^^^^^^^^
+
+{{ macros.class(services['MechJeb'].classes['OperationInclination']) }}
+
+OperationInterplanetaryTransfer
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+{{ macros.class(services['MechJeb'].classes['OperationInterplanetaryTransfer']) }}
+
+OperationKillRelVel
+^^^^^^^^^^^^^^^^^^^
+
+{{ macros.class(services['MechJeb'].classes['OperationKillRelVel']) }}
+
+OperationLambert
+^^^^^^^^^^^^^^^^
+
+{{ macros.class(services['MechJeb'].classes['OperationLambert']) }}
+
+OperationLan
+^^^^^^^^^^^^
+
+{{ macros.class(services['MechJeb'].classes['OperationLan']) }}
+
+OperationLongitude
+^^^^^^^^^^^^^^^^^^
+
+{{ macros.class(services['MechJeb'].classes['OperationLongitude']) }}
+
+OperationMoonReturn
+^^^^^^^^^^^^^^^^^^^
+
+{{ macros.class(services['MechJeb'].classes['OperationMoonReturn']) }}
+
+OperationPeriapsis
+^^^^^^^^^^^^^^^^^^
+
+{{ macros.class(services['MechJeb'].classes['OperationPeriapsis']) }}
+
+OperationPlane
+^^^^^^^^^^^^^^
+
+{{ macros.class(services['MechJeb'].classes['OperationPlane']) }}
+
+OperationResonantOrbit
+^^^^^^^^^^^^^^^^^^^^^^
+
+{{ macros.class(services['MechJeb'].classes['OperationResonantOrbit']) }}
+
+OperationSemiMajor
+^^^^^^^^^^^^^^^^^^
+
+{{ macros.class(services['MechJeb'].classes['OperationSemiMajor']) }}
+
+OperationTransfer
+^^^^^^^^^^^^^^^^^
+
+{{ macros.class(services['MechJeb'].classes['OperationTransfer']) }}

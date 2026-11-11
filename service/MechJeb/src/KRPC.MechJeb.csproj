@@ -1,0 +1,84 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <AssemblyName>KRPC.MechJeb</AssemblyName>
+    <RootNamespace>KRPC.MechJeb</RootNamespace>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <Deterministic>true</Deterministic>
+    <DocumentationFile>bin\$(Configuration)\KRPC.MechJeb.xml</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+  </ItemGroup>
+  <Import Project="$(SolutionDir)tools\build\msbuild\ksplibs.props" />
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\server\src\KRPC.csproj">
+      <Project>{3707639F-5EA3-461B-B939-587E51A25CCA}</Project>
+      <Name>KRPC</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\core\src\KRPC.Core.csproj">
+      <Project>{2ABFAF25-93F4-4AD2-A85B-6B92786E26E9}</Project>
+      <Name>KRPC.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SpaceCenter\src\KRPC.SpaceCenter.csproj">
+      <Project>{48205F2E-3CEE-4480-873A-DEAFCD291407}</Project>
+      <Name>KRPC.SpaceCenter</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Google.Protobuf">
+      <HintPath>$(bazel-bin)\tools\build\ksp\Google.Protobuf.dll</HintPath>
+    </Reference>
+    <Reference Include="KRPC.IO.Ports">
+      <HintPath>$(bazel-bin)\tools\build\ksp\KRPC.IO.Ports.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="$(bazel-bin)\service\MechJeb\AssemblyInfo.cs">
+      <Link>AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="Addon.cs" />
+    <Compile Include="AirplaneAutopilot.cs" />
+    <Compile Include="AscentAutopilot.cs" />
+    <Compile Include="AscentClassic.cs" />
+    <Compile Include="AscentPVG.cs" />
+    <Compile Include="ComputerModule.cs" />
+    <Compile Include="DeployableController.cs" />
+    <Compile Include="DockingAutopilot.cs" />
+    <Compile Include="LandingAutopilot.cs" />
+    <Compile Include="ManeuverPlanner.cs" />
+    <Compile Include="MechJeb.cs" />
+    <Compile Include="NodeExecutor.cs" />
+    <Compile Include="RCSController.cs" />
+    <Compile Include="Reflection.cs" />
+    <Compile Include="RendezvousAutopilot.cs" />
+    <Compile Include="SmartASS.cs" />
+    <Compile Include="SmartRCS.cs" />
+    <Compile Include="StagingController.cs" />
+    <Compile Include="TargetController.cs" />
+    <Compile Include="ThrustController.cs" />
+    <Compile Include="Translatron.cs" />
+    <Compile Include="VesselState.cs" />
+    <Compile Include="Maneuver\Operation.cs" />
+    <Compile Include="Maneuver\OperationApoapsis.cs" />
+    <Compile Include="Maneuver\OperationCircularize.cs" />
+    <Compile Include="Maneuver\OperationCourseCorrection.cs" />
+    <Compile Include="Maneuver\OperationEllipticize.cs" />
+    <Compile Include="Maneuver\OperationInclination.cs" />
+    <Compile Include="Maneuver\OperationInterplanetaryTransfer.cs" />
+    <Compile Include="Maneuver\OperationKillRelVel.cs" />
+    <Compile Include="Maneuver\OperationLambert.cs" />
+    <Compile Include="Maneuver\OperationLan.cs" />
+    <Compile Include="Maneuver\OperationLongitude.cs" />
+    <Compile Include="Maneuver\OperationMoonReturn.cs" />
+    <Compile Include="Maneuver\OperationPeriapsis.cs" />
+    <Compile Include="Maneuver\OperationPlane.cs" />
+    <Compile Include="Maneuver\OperationResonantOrbit.cs" />
+    <Compile Include="Maneuver\OperationSemiMajor.cs" />
+    <Compile Include="Maneuver\OperationTransfer.cs" />
+    <Compile Include="Maneuver\TimeSelector.cs" />
+    <Compile Include="Util\Vector6.cs" />
+  </ItemGroup>
+</Project>
