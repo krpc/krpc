@@ -134,7 +134,7 @@ namespace KRPC.Trajectories.API
         /// <summary>
         /// APILoader wrapper for Trajectories Patch
         /// </summary>
-        public class Patch : Equatable<Patch>
+        public class Patch
         {
             private object internalObj;
 
@@ -245,41 +245,47 @@ namespace KRPC.Trajectories.API
                     return ImpactVelocityProp(internalObj);
                 }
             }
-
-            /// <summary>
-            /// Check that patches are the same.
-            /// </summary>
-            public override bool Equals(Patch other)
-            {
-                return !ReferenceEquals(other, null) && internalObj == other.internalObj;
-            }
-
-            /// <summary>
-            /// Hash the Patch.
-            /// </summary>
-            public override int GetHashCode()
-            {
-                return internalObj.GetHashCode();
-            }
         }
 
         public static Func<IEnumerable> get_Patches { get; internal set; }
 
-        public static List<Patch> PatchesList
+        /// <summary>
+        /// The number of patches in the current trajectory.
+        /// </summary>
+        public static int PatchCount
         {
             get
             {
-                var origList = get_Patches();
-                if (origList == null)
-                    return null;
-
-                var list = new List<Patch>();
-                foreach (var orig in origList)
-                {
-                    list.Add(new Patch(orig));
-                }
-                return list;
+                var patches = get_Patches() as IList;
+                return patches == null ? 0 : patches.Count;
             }
+        }
+
+        /// <summary>
+        /// The patch at the index in the current trajectory, or null without one.
+        /// </summary>
+        public static Patch PatchAt(int index)
+        {
+            var patches = get_Patches() as IList;
+            if (patches == null || index < 0 || index >= patches.Count)
+                return null;
+            return new Patch(patches[index]);
+        }
+
+        /// <summary>
+        /// The index of the first patch that ends in an impact, or -1 without one.
+        /// </summary>
+        public static int ImpactPatchIndex()
+        {
+            var patches = get_Patches() as IList;
+            if (patches == null)
+                return -1;
+            for (int i = 0; i < patches.Count; i++)
+            {
+                if (new Patch(patches[i]).RawImpactPosition.HasValue)
+                    return i;
+            }
+            return -1;
         }
     }
 

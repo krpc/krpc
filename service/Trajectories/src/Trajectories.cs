@@ -44,13 +44,8 @@ namespace KRPC.Trajectories
         [KRPCProcedure(Nullable = true)]
         public static Patch ImpactPatch()
         {
-            foreach (API.Trajectory.Patch patch in API.Trajectory.PatchesList)
-            {
-                if (patch.RawImpactPosition != null)
-                    return new Patch(patch);
-            }
-
-            return null;
+            int index = API.Trajectory.ImpactPatchIndex();
+            return index < 0 ? null : new Patch(index);
         }
 
         /// <summary>
@@ -60,11 +55,9 @@ namespace KRPC.Trajectories
         public static IList<Patch> Patches()
         {
             IList<Patch> patches = new List<Patch>();
-
-            foreach (API.Trajectory.Patch patch in API.Trajectory.PatchesList)
-            {
-                patches.Add(new Patch(patch));
-            }
+            int count = API.Trajectory.PatchCount;
+            for (int i = 0; i < count; i++)
+                patches.Add(new Patch(i));
             return patches;
         }
 
