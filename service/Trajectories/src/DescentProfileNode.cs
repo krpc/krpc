@@ -28,7 +28,10 @@ namespace KRPC.Trajectories
         {
             get
             {
-                return GeometryExtensions.ClampAngle180(InternalNode.AngleDeg);
+                // The mod converts from radians with a float factor, so 180 degrees can
+                // read just past 180
+                double angle = Math.Max(-180d, Math.Min(180d, InternalNode.AngleDeg));
+                return angle <= -180d ? 180d : angle;
             }
             set
             {
