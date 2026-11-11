@@ -200,6 +200,33 @@ namespace KRPC.Test.Service
         }
 
         [Test]
+        public void ServiceNamesShared ()
+        {
+            var services = new [] {
+                new global::KRPC.Service.Scanner.ServiceSignature ("TestServices", 1),
+                new global::KRPC.Service.Scanner.ServiceSignature ("TESTSERVICES", 2),
+                new global::KRPC.Service.Scanner.ServiceSignature ("OtherService", 3)
+            };
+            var errors = new List<string> ();
+            global::KRPC.Service.Scanner.Scanner.CheckServiceNames (services, errors);
+            Assert.AreEqual (1, errors.Count);
+            StringAssert.Contains ("Services TESTSERVICES, TestServices share a name", errors [0]);
+            Assert.Throws<global::KRPC.Service.ServiceException> (
+                () => global::KRPC.Service.Scanner.Scanner.CheckServiceNames (services, null));
+        }
+
+        [Test]
+        public void TypeNamedAsItsService ()
+        {
+            var service = new global::KRPC.Service.Scanner.ServiceSignature ("TESTCLASS3", 1);
+            service.AddClass (typeof(TestClass3));
+            var errors = new List<string> ();
+            global::KRPC.Service.Scanner.Scanner.CheckTypes (service, errors);
+            Assert.AreEqual (1, errors.Count);
+            StringAssert.Contains ("Type TESTCLASS3.TestClass3 has the name of its service", errors [0]);
+        }
+
+        [Test]
         public void TestServiceDeprecated ()
         {
             var service = services.ServicesList.First (x => x.Name == "TestServiceDeprecated");

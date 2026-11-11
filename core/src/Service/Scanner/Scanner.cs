@@ -160,6 +160,7 @@ namespace KRPC.Service.Scanner
             if (!signatures.ContainsKey ("KRPC"))
                 HandleError(errors, string.Empty, "KRPC service could not be found");
 
+            CheckServiceNames (signatures.Values, errors);
             foreach (var service in signatures.Values) {
                 CheckProcedureIds (service, errors);
                 CheckTypes (service, errors);
@@ -185,8 +186,21 @@ namespace KRPC.Service.Scanner
         }
 
         /// <summary>
+        /// Check that the services have unique names, compared case-insensitively.
+        /// </summary>
+        internal static void CheckServiceNames (IEnumerable<ServiceSignature> services, IList<string> errors)
+        {
+            foreach (var group in services.GroupBy (x => x.Name.ToUpperInvariant ()).OrderBy (x => x.Key, StringComparer.Ordinal)) {
+                var names = group.Select (x => x.Name).OrderBy (x => x, StringComparer.Ordinal).ToList ();
+                if (names.Count > 1)
+                    HandleError (errors, string.Empty, "Services " + string.Join (", ", names.ToArray ()) + " share a name, compared case-insensitively");
+            }
+        }
+
+        /// <summary>
         /// Check that the classes, enumerations, structures and exceptions of the service have
-        /// unique names, compared case-insensitively, and unique ids, none of them 0.
+        /// unique names, compared case-insensitively, none of them the name of the service, and
+        /// unique ids, none of them 0.
         /// </summary>
         internal static void CheckTypes (ServiceSignature service, IList<string> errors)
         {
@@ -196,6 +210,8 @@ namespace KRPC.Service.Scanner
                 .Concat (service.Exceptions.Values.Select (x => new { x.Name, x.FullyQualifiedName, x.Id }))
                 .ToList ();
             var context = "service " + service.Name;
+            foreach (var type in types.Where (x => string.Equals (x.Name, service.Name, StringComparison.OrdinalIgnoreCase)).OrderBy (x => x.Name, StringComparer.Ordinal))
+                HandleError (errors, context, "Type " + type.FullyQualifiedName + " has the name of its service, compared case-insensitively");
             foreach (var group in types.GroupBy (x => x.Name.ToUpperInvariant ()).OrderBy (x => x.Key, StringComparer.Ordinal)) {
                 var names = group.Select (x => x.FullyQualifiedName).OrderBy (x => x, StringComparer.Ordinal).ToList ();
                 if (names.Count > 1)
