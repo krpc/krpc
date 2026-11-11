@@ -431,4 +431,5 @@ API Reference
    lua/api/trajectories
    lua/api/mechjeb
    lua/api/kerbal-engineer-redux
+   lua/api/scansat
    lua/api/debug

@@ -1,0 +1,70 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Map
+===
+
+
+.. type:: krpc_ScanSat_MapType_t
+
+   The type of a map. See :func:`krpc_ScanSat_Map`.
+
+
+   .. macro:: KRPC_SCANSAT_MAPTYPE_ALTIMETRY
+
+      Terrain height, from the altimetry scans.
+
+
+   .. macro:: KRPC_SCANSAT_MAPTYPE_SLOPE
+
+      Terrain slope, from the altimetry scans.
+
+
+   .. macro:: KRPC_SCANSAT_MAPTYPE_BIOME
+
+      Biomes, from the biome scan, over the terrain height.
+
+
+   .. macro:: KRPC_SCANSAT_MAPTYPE_VISUAL
+
+      The surface as seen from orbit, from the visual scans.
+
+
+
+
+.. type:: krpc_ScanSat_MapProjection_t
+
+   The projection of a map. See :func:`krpc_ScanSat_Map`.
+
+
+   .. macro:: KRPC_SCANSAT_MAPPROJECTION_RECTANGULAR
+
+      Equirectangular: longitude and latitude map linearly to the horizontal and vertical.
+
+
+   .. macro:: KRPC_SCANSAT_MAPPROJECTION_KAVRAYSKIYVII
+
+      Kavrayskiy VII, a compromise projection with less distortion at the poles.
+
+
+   .. macro:: KRPC_SCANSAT_MAPPROJECTION_POLAR
+
+      Two polar views side by side, the southern hemisphere on the left.
+
+
+
+
+.. type:: krpc_ScanSat_ImageFormat_t
+
+   The file format of an image.
+
+
+   .. macro:: KRPC_SCANSAT_IMAGEFORMAT_PNG
+
+      PNG, which is lossless.
+
+
+   .. macro:: KRPC_SCANSAT_IMAGEFORMAT_JPEG
+
+      JPEG, which is lossy, and smaller and faster to encode than PNG.

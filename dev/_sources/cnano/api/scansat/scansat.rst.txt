@@ -1,0 +1,379 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+ScanSat
+=======
+
+
+This service provides the scan data, scanners and maps of
+`SCANsat <https://github.com/KSPModStewards/SCANsat>`_.
+
+.. note::
+
+   The readouts at a position return ``nullptr`` where the scans they need have not
+   covered it, as the maps of the mod show nothing there.
+
+
+
+.. function:: krpc_error_t krpc_ScanSat_Available(krpc_connection_t connection, bool * returnValue)
+
+   Whether SCANsat is available.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_ScanSat_Coverage(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_CelestialBody_t body, krpc_ScanSat_ScanType_t type)
+
+   The fraction of a body covered by scan types, between 0 and 1. For a combination,
+   the mean coverage of its scan types, so 1 only once every one of them is complete.
+   SCANsat reports at most 0.999 until the coverage is complete.
+   Throws an exception if no scan types are given.
+
+   :Parameters:
+
+    * **body** -- The body.
+    * **type** -- The scan types.
+
+   :Game Scenes: Space Center, Flight, Tracking Station
+
+
+
+
+
+.. function:: krpc_error_t krpc_ScanSat_IsCovered(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_CelestialBody_t body, double latitude, double longitude, krpc_ScanSat_ScanType_t type)
+
+   Whether at least one of the scan types covers a position on a body. For a
+   combination, this is ``true`` where any one of its scan types covers the position,
+   and not only where all of them do.
+   Throws an exception if no scan types are given.
+
+   :Parameters:
+
+    * **body** -- The body.
+    * **latitude** -- The latitude, in degrees.
+    * **longitude** -- The longitude, in degrees.
+    * **type** -- The scan types.
+
+   :Game Scenes: Space Center, Flight, Tracking Station
+
+
+
+
+
+.. function:: krpc_error_t krpc_ScanSat_Elevation(krpc_connection_t connection, double * returnValue, bool * returnValueIsNull, krpc_SpaceCenter_CelestialBody_t body, double latitude, double longitude)
+
+   The height of the terrain relative to sea level at a position, in meters, or
+   ``nullptr`` if no altimetry scan covers it. It is negative over the sea floor. With
+   low resolution altimetry only, the height is rounded toward zero to a multiple of
+   500 meters.
+
+   :Parameters:
+
+    * **body** -- The body.
+    * **latitude** -- The latitude, in degrees.
+    * **longitude** -- The longitude, in degrees.
+
+   :Game Scenes: Space Center, Flight, Tracking Station
+
+
+
+
+
+.. function:: krpc_error_t krpc_ScanSat_Slope(krpc_connection_t connection, double * returnValue, bool * returnValueIsNull, krpc_SpaceCenter_CelestialBody_t body, double latitude, double longitude)
+
+   The terrain slope at a position, in degrees, or ``nullptr`` if high resolution
+   altimetry does not cover it. The slope is averaged over points 5 meters apart.
+
+   :Parameters:
+
+    * **body** -- The body.
+    * **latitude** -- The latitude, in degrees.
+    * **longitude** -- The longitude, in degrees.
+
+   :Game Scenes: Space Center, Flight, Tracking Station
+
+
+
+
+
+.. function:: krpc_error_t krpc_ScanSat_Biome(krpc_connection_t connection, char * * returnValue, bool * returnValueIsNull, krpc_SpaceCenter_CelestialBody_t body, double latitude, double longitude)
+
+   The name of the biome at a position, or ``nullptr`` if the biome scan does not
+   cover it.
+   Throws an exception if the body has no biomes.
+
+   :Parameters:
+
+    * **body** -- The body.
+    * **latitude** -- The latitude, in degrees.
+    * **longitude** -- The longitude, in degrees.
+
+   :Game Scenes: Space Center, Flight, Tracking Station
+
+
+
+
+
+.. function:: krpc_error_t krpc_ScanSat_ResourceAbundance(krpc_connection_t connection, double * returnValue, bool * returnValueIsNull, krpc_SpaceCenter_CelestialBody_t body, double latitude, double longitude, const char * resource)
+
+   The abundance of a resource at a position, between 0 and 1, or ``nullptr`` if no
+   resource scan covers it. With the low resolution scan only, the abundance is rounded
+   down to a multiple of 0.05.
+   Throws an exception if SCANsat's resource scanning is off, or SCANsat does not map
+   the resource.
+
+   :Parameters:
+
+    * **body** -- The body.
+    * **latitude** -- The latitude, in degrees.
+    * **longitude** -- The longitude, in degrees.
+    * **resource** -- The name of the resource. See :func:`krpc_ScanSat_Resources`.
+
+   :Game Scenes: Space Center, Flight, Tracking Station
+
+
+
+
+
+.. function:: krpc_error_t krpc_ScanSat_Anomalies(krpc_connection_t connection, krpc_list_ScanSat_Anomaly_t * returnValue, krpc_SpaceCenter_CelestialBody_t body)
+
+   The anomalies on a body found by either anomaly scan.
+
+   :Parameters:
+
+    * **body** -- The body.
+
+   :Game Scenes: Space Center, Flight, Tracking Station
+
+
+
+
+
+.. function:: krpc_error_t krpc_ScanSat_Resources(krpc_connection_t connection, krpc_list_string_t * returnValue)
+
+   The names of the resources SCANsat maps. Empty if SCANsat's resource scanning
+   is off.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_ScanSat_Map(krpc_connection_t connection, krpc_bytes_t * returnValue, krpc_SpaceCenter_CelestialBody_t body, krpc_ScanSat_MapType_t type, int32_t width, krpc_ScanSat_MapProjection_t projection, bool color, const char * resource, krpc_ScanSat_ImageFormat_t format, int32_t quality)
+
+   A map of a body from the scan data, as an image. The map is half as high as it is
+   wide. Building it takes several game frames.
+   Throws an exception if SCANsat cannot render the map, as when its visual maps are
+   switched off.
+
+   :Parameters:
+
+    * **body** -- The body.
+    * **type** -- The type of map.
+    * **width** -- The width of the image in pixels, between 360 and 1440.
+    * **projection** -- The projection.
+    * **color** -- Whether the map is in color, or in grayscale.
+    * **resource** -- The name of a resource to overlay, or an empty string for none. See :func:`krpc_ScanSat_Resources`.
+    * **format** -- The format of the image.
+    * **quality** -- The quality of a JPEG image, from 1 to 100.
+
+   :Game Scenes: Space Center, Flight, Tracking Station
+
+
+
+
+
+.. function:: krpc_error_t krpc_ScanSat_Scanner(krpc_connection_t connection, krpc_ScanSat_Scanner_t * returnValue, krpc_SpaceCenter_Part_t part)
+
+   The scanner on a part.
+   Throws an exception if the part has no SCANsat scanner.
+
+   :Parameters:
+
+    * **part** -- The part.
+
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: krpc_error_t krpc_ScanSat_Scanners(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_SpaceCenter_Vessel_t vessel)
+
+   The SCANsat scanners on a vessel.
+
+   :Parameters:
+
+    * **vessel** -- The vessel.
+
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: krpc_error_t krpc_ScanSat_BackgroundScanning(krpc_connection_t connection, bool * returnValue)
+
+   Whether scanners scan while their vessel is not the active vessel. A setting of
+   SCANsat.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_ScanSat_DaylightCheck(krpc_connection_t connection, bool * returnValue)
+
+   Whether scanners that need light stop scanning in darkness. A setting of SCANsat.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_ScanSat_InstantResourceScan(krpc_connection_t connection, bool * returnValue)
+
+   Whether the stock orbital survey fills the high resolution resource scan of a body
+   at once. A setting of SCANsat.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_ScanSat_StockResourceScan(krpc_connection_t connection, bool * returnValue)
+
+   Whether the stock resource scanners work. A setting of SCANsat.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_ScanSat_BiomeLock(krpc_connection_t connection, bool * returnValue)
+
+   Whether resource abundances are approximate until a surface sample is taken in the
+   biome. A setting of SCANsat.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_ScanSat_RequireNarrowBand(krpc_connection_t connection, bool * returnValue)
+
+   Whether a narrow-band scanner is needed on the vessel for exact resource
+   abundances. A setting of SCANsat.
+
+   
+
+
+
+
+
+
+.. type:: krpc_ScanSat_ScanType_t
+
+   A set of scan types. Each scan type has its own coverage of a body.
+
+   .. note::
+
+      The values may be combined.   A flags enumeration. :std:ref:`cnano-client-flags` shows how to combine its values.
+
+
+   .. macro:: KRPC_SCANSAT_SCANTYPE_NONE
+
+      No scan types.
+
+
+   .. macro:: KRPC_SCANSAT_SCANTYPE_ALTIMETRYLORES
+
+      Low resolution altimetry, the terrain height in steps of 500 meters.
+
+
+   .. macro:: KRPC_SCANSAT_SCANTYPE_ALTIMETRYHIRES
+
+      High resolution altimetry, the terrain height and slope.
+
+
+   .. macro:: KRPC_SCANSAT_SCANTYPE_VISUALLORES
+
+      Low resolution visual imaging.
+
+
+   .. macro:: KRPC_SCANSAT_SCANTYPE_VISUALHIRES
+
+      High resolution visual imaging.
+
+
+   .. macro:: KRPC_SCANSAT_SCANTYPE_BIOME
+
+      Biomes.
+
+
+   .. macro:: KRPC_SCANSAT_SCANTYPE_ANOMALY
+
+      The positions of anomalies.
+
+
+   .. macro:: KRPC_SCANSAT_SCANTYPE_ANOMALYDETAIL
+
+      The positions and names of anomalies, from close range.
+
+
+   .. macro:: KRPC_SCANSAT_SCANTYPE_RESOURCELORES
+
+      Low resolution resource abundance, in steps of 5%.
+
+
+   .. macro:: KRPC_SCANSAT_SCANTYPE_RESOURCEHIRES
+
+      High resolution resource abundance.
+
+
+   .. macro:: KRPC_SCANSAT_SCANTYPE_ALTIMETRY
+
+      Both altimetry scans.
+
+
+   .. macro:: KRPC_SCANSAT_SCANTYPE_VISUAL
+
+      Both visual scans.
+
+
+   .. macro:: KRPC_SCANSAT_SCANTYPE_ANOMALIES
+
+      Both anomaly scans.
+
+
+   .. macro:: KRPC_SCANSAT_SCANTYPE_RESOURCES
+
+      Both resource scans.
+
+
+   .. macro:: KRPC_SCANSAT_SCANTYPE_ALL
+
+      Every scan type.
+
+
+
+
+.. type:: krpc_ScanSat_Anomaly_t
+
+   An anomaly found by either anomaly scan. See :func:`krpc_ScanSat_Anomalies`.
+
+
+   .. member:: krpc_nullable_string_t name
+
+      The name of the anomaly, or ``nullptr`` until the anomaly detail scan covers it.
+
+   .. member:: double latitude
+
+      The latitude of the anomaly, in degrees.
+
+   .. member:: double longitude
+
+      The longitude of the anomaly, in degrees.

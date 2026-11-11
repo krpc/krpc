@@ -1,0 +1,70 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.ScanSat
+
+Map
+===
+
+
+.. type:: public enum MapType
+
+   The type of a map. See :meth:`ScanSat.map(SpaceCenter.CelestialBody, MapType, int, MapProjection, boolean, String, ImageFormat, int)`.
+
+
+   .. field:: public MapType ALTIMETRY
+
+      Terrain height, from the altimetry scans.
+
+
+   .. field:: public MapType SLOPE
+
+      Terrain slope, from the altimetry scans.
+
+
+   .. field:: public MapType BIOME
+
+      Biomes, from the biome scan, over the terrain height.
+
+
+   .. field:: public MapType VISUAL
+
+      The surface as seen from orbit, from the visual scans.
+
+
+
+
+.. type:: public enum MapProjection
+
+   The projection of a map. See :meth:`ScanSat.map(SpaceCenter.CelestialBody, MapType, int, MapProjection, boolean, String, ImageFormat, int)`.
+
+
+   .. field:: public MapProjection RECTANGULAR
+
+      Equirectangular: longitude and latitude map linearly to the horizontal and vertical.
+
+
+   .. field:: public MapProjection KAVRAYSKIY_VII
+
+      Kavrayskiy VII, a compromise projection with less distortion at the poles.
+
+
+   .. field:: public MapProjection POLAR
+
+      Two polar views side by side, the southern hemisphere on the left.
+
+
+
+
+.. type:: public enum ImageFormat
+
+   The file format of an image.
+
+
+   .. field:: public ImageFormat PNG
+
+      PNG, which is lossless.
+
+
+   .. field:: public ImageFormat JPEG
+
+      JPEG, which is lossy, and smaller and faster to encode than PNG.

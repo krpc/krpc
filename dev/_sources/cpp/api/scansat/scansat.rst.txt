@@ -1,0 +1,323 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::ScanSat
+
+ScanSat
+=======
+
+
+.. namespace:: krpc::services
+.. class:: ScanSat : public krpc::Service
+
+   This service provides the scan data, scanners and maps of
+   `SCANsat <https://github.com/KSPModStewards/SCANsat>`_.
+
+   .. note::
+
+      The readouts at a position return ``NULL`` where the scans they need have not
+      covered it, as the maps of the mod show nothing there.
+
+   .. function:: ScanSat(krpc::Client& client)
+
+      Construct an instance of this service.
+
+   .. function:: bool available()
+
+      Whether SCANsat is available.
+
+   
+
+   .. function:: double coverage(SpaceCenter::CelestialBody body, ScanType type)
+
+      The fraction of a body covered by scan types, between 0 and 1. For a combination,
+      the mean coverage of its scan types, so 1 only once every one of them is complete.
+      SCANsat reports at most 0.999 until the coverage is complete.
+      Throws an exception if no scan types are given.
+
+      :Parameters:
+
+       * **body** -- The body.
+       * **type** -- The scan types.
+
+      :Game Scenes: Space Center, Flight, Tracking Station
+
+   .. function:: bool is_covered(SpaceCenter::CelestialBody body, double latitude, double longitude, ScanType type)
+
+      Whether at least one of the scan types covers a position on a body. For a
+      combination, this is ``true`` where any one of its scan types covers the position,
+      and not only where all of them do.
+      Throws an exception if no scan types are given.
+
+      :Parameters:
+
+       * **body** -- The body.
+       * **latitude** -- The latitude, in degrees.
+       * **longitude** -- The longitude, in degrees.
+       * **type** -- The scan types.
+
+      :Game Scenes: Space Center, Flight, Tracking Station
+
+   .. function:: std::optional<double> elevation(SpaceCenter::CelestialBody body, double latitude, double longitude)
+
+      The height of the terrain relative to sea level at a position, in meters, or
+      ``NULL`` if no altimetry scan covers it. It is negative over the sea floor. With
+      low resolution altimetry only, the height is rounded toward zero to a multiple of
+      500 meters.
+
+      :Parameters:
+
+       * **body** -- The body.
+       * **latitude** -- The latitude, in degrees.
+       * **longitude** -- The longitude, in degrees.
+
+      :Game Scenes: Space Center, Flight, Tracking Station
+
+   .. function:: std::optional<double> slope(SpaceCenter::CelestialBody body, double latitude, double longitude)
+
+      The terrain slope at a position, in degrees, or ``NULL`` if high resolution
+      altimetry does not cover it. The slope is averaged over points 5 meters apart.
+
+      :Parameters:
+
+       * **body** -- The body.
+       * **latitude** -- The latitude, in degrees.
+       * **longitude** -- The longitude, in degrees.
+
+      :Game Scenes: Space Center, Flight, Tracking Station
+
+   .. function:: std::optional<std::string> biome(SpaceCenter::CelestialBody body, double latitude, double longitude)
+
+      The name of the biome at a position, or ``NULL`` if the biome scan does not
+      cover it.
+      Throws an exception if the body has no biomes.
+
+      :Parameters:
+
+       * **body** -- The body.
+       * **latitude** -- The latitude, in degrees.
+       * **longitude** -- The longitude, in degrees.
+
+      :Game Scenes: Space Center, Flight, Tracking Station
+
+   .. function:: std::optional<double> resource_abundance(SpaceCenter::CelestialBody body, double latitude, double longitude, std::string resource)
+
+      The abundance of a resource at a position, between 0 and 1, or ``NULL`` if no
+      resource scan covers it. With the low resolution scan only, the abundance is rounded
+      down to a multiple of 0.05.
+      Throws an exception if SCANsat's resource scanning is off, or SCANsat does not map
+      the resource.
+
+      :Parameters:
+
+       * **body** -- The body.
+       * **latitude** -- The latitude, in degrees.
+       * **longitude** -- The longitude, in degrees.
+       * **resource** -- The name of the resource. See :func:`resources`.
+
+      :Game Scenes: Space Center, Flight, Tracking Station
+
+   .. function:: std::vector<Anomaly> anomalies(SpaceCenter::CelestialBody body)
+
+      The anomalies on a body found by either anomaly scan.
+
+      :Parameters:
+
+       * **body** -- The body.
+
+      :Game Scenes: Space Center, Flight, Tracking Station
+
+   .. function:: std::vector<std::string> resources()
+
+      The names of the resources SCANsat maps. Empty if SCANsat's resource scanning
+      is off.
+
+   
+
+   .. function:: std::string map(SpaceCenter::CelestialBody body, MapType type, int32_t width = 720, MapProjection projection = MapProjection::rectangular, bool color = true, std::string resource = "", ImageFormat format = ImageFormat::png, int32_t quality = 75)
+
+      A map of a body from the scan data, as an image. The map is half as high as it is
+      wide. Building it takes several game frames.
+      Throws an exception if SCANsat cannot render the map, as when its visual maps are
+      switched off.
+
+      :Parameters:
+
+       * **body** -- The body.
+       * **type** -- The type of map.
+       * **width** -- The width of the image in pixels, between 360 and 1440.
+       * **projection** -- The projection.
+       * **color** -- Whether the map is in color, or in grayscale.
+       * **resource** -- The name of a resource to overlay, or an empty string for none. See :func:`resources`.
+       * **format** -- The format of the image.
+       * **quality** -- The quality of a JPEG image, from 1 to 100.
+
+      :Game Scenes: Space Center, Flight, Tracking Station
+
+   .. function:: Scanner scanner(SpaceCenter::Part part)
+
+      The scanner on a part.
+      Throws an exception if the part has no SCANsat scanner.
+
+      :Parameters:
+
+       * **part** -- The part.
+
+      :Game Scenes: Flight
+
+   .. function:: std::vector<Scanner> scanners(SpaceCenter::Vessel vessel)
+
+      The SCANsat scanners on a vessel.
+
+      :Parameters:
+
+       * **vessel** -- The vessel.
+
+      :Game Scenes: Flight
+
+   .. function:: bool background_scanning()
+
+      Whether scanners scan while their vessel is not the active vessel. A setting of
+      SCANsat.
+
+   
+
+   .. function:: bool daylight_check()
+
+      Whether scanners that need light stop scanning in darkness. A setting of SCANsat.
+
+   
+
+   .. function:: bool instant_resource_scan()
+
+      Whether the stock orbital survey fills the high resolution resource scan of a body
+      at once. A setting of SCANsat.
+
+   
+
+   .. function:: bool stock_resource_scan()
+
+      Whether the stock resource scanners work. A setting of SCANsat.
+
+   
+
+   .. function:: bool biome_lock()
+
+      Whether resource abundances are approximate until a surface sample is taken in the
+      biome. A setting of SCANsat.
+
+   
+
+   .. function:: bool require_narrow_band()
+
+      Whether a narrow-band scanner is needed on the vessel for exact resource
+      abundances. A setting of SCANsat.
+
+   
+
+
+
+
+.. namespace:: krpc::services::ScanSat
+.. enum-struct:: ScanType
+
+   A set of scan types. Each scan type has its own coverage of a body.
+
+   .. note::
+
+      The values may be combined.   A flags enumeration. :std:ref:`cpp-client-flags` shows how to combine its values.
+
+
+   .. enumerator:: none
+
+      No scan types.
+
+
+   .. enumerator:: altimetry_lo_res
+
+      Low resolution altimetry, the terrain height in steps of 500 meters.
+
+
+   .. enumerator:: altimetry_hi_res
+
+      High resolution altimetry, the terrain height and slope.
+
+
+   .. enumerator:: visual_lo_res
+
+      Low resolution visual imaging.
+
+
+   .. enumerator:: visual_hi_res
+
+      High resolution visual imaging.
+
+
+   .. enumerator:: biome
+
+      Biomes.
+
+
+   .. enumerator:: anomaly
+
+      The positions of anomalies.
+
+
+   .. enumerator:: anomaly_detail
+
+      The positions and names of anomalies, from close range.
+
+
+   .. enumerator:: resource_lo_res
+
+      Low resolution resource abundance, in steps of 5%.
+
+
+   .. enumerator:: resource_hi_res
+
+      High resolution resource abundance.
+
+
+   .. enumerator:: altimetry
+
+      Both altimetry scans.
+
+
+   .. enumerator:: visual
+
+      Both visual scans.
+
+
+   .. enumerator:: anomalies
+
+      Both anomaly scans.
+
+
+   .. enumerator:: resources
+
+      Both resource scans.
+
+
+   .. enumerator:: all
+
+      Every scan type.
+
+
+
+
+.. namespace:: krpc::services::ScanSat
+.. struct:: Anomaly
+
+   An anomaly found by either anomaly scan. See :func:`anomalies`.
+
+
+   .. member:: std::optional<std::string> name
+
+      The name of the anomaly, or ``NULL`` until the anomaly detail scan covers it.
+
+   .. member:: double latitude
+
+      The latitude of the anomaly, in degrees.
+
+   .. member:: double longitude
+
+      The longitude of the anomaly, in degrees.

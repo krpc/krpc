@@ -1,0 +1,116 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.ScanSat
+
+Scanner
+=======
+
+
+.. type:: public class Scanner
+
+   A SCANsat scanner on a part. Obtained by calling :meth:`ScanSat.scanner(SpaceCenter.Part)` or
+   :meth:`ScanSat.scanners(SpaceCenter.Vessel)`.
+
+   .. method:: SpaceCenter.Part getPart()
+
+
+      The part containing this scanner.
+
+      :Game Scenes: Flight
+
+   .. method:: ScanType getScanTypes()
+
+
+      The scan types of the scanner.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getActive()
+
+   .. method:: void setActive(boolean value)
+
+      Returns whether the scanner is switched on, and switches it on or off, as the buttons
+      of the part do.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A resource scanner only switches on when :meth:`ScanSat.getInstantResourceScan()`
+         is off, or :meth:`ScanSat.getStockResourceScan()` is off.
+
+   .. method:: float getFieldOfView()
+
+
+      The field of view of the scanner at its best altitude, in degrees.
+
+      :Game Scenes: Flight
+
+   .. method:: float getMinAltitude()
+
+
+      The lowest altitude the scanner scans at, in meters.
+
+      :Game Scenes: Flight
+
+   .. method:: float getBestAltitude()
+
+
+      The lowest altitude for the full field of view, in meters.
+
+      :Game Scenes: Flight
+
+   .. method:: float getMaxAltitude()
+
+
+      The highest altitude the scanner scans at, in meters.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getRequiresLight()
+
+
+      Whether the scanner only scans in daylight, when :meth:`ScanSat.getDaylightCheck()`
+      is on.
+
+      :Game Scenes: Flight
+
+   .. method:: ScannerState getState()
+
+
+      The state of the scanner.
+
+      :Game Scenes: Flight
+
+
+
+
+.. type:: public enum ScannerState
+
+   The state of a scanner. See :meth:`Scanner.getState()`.
+
+
+   .. field:: public ScannerState OFF
+
+      Switched off.
+
+
+   .. field:: public ScannerState OUT_OF_RANGE
+
+      Switched on, and outside its minimum and maximum altitudes.
+
+
+   .. field:: public ScannerState IN_DARKNESS
+
+      Switched on, and paused as it needs light and the ground below it is in darkness.
+
+
+   .. field:: public ScannerState IN_RANGE
+
+      Scanning between its minimum and best altitudes, with a reduced field of view.
+
+
+   .. field:: public ScannerState IN_BEST_RANGE
+
+      Scanning between its best and maximum altitudes, with its full field of view.

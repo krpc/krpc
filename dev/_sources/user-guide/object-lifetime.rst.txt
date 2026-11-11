@@ -137,8 +137,8 @@ destroyed by their own removal, by the service's ``Clear``, or by a scene change
 to. The server also removes what a client created when that client disconnects.
 
 An object for something carried by a part lives as long as that part. A RemoteTech antenna, an
-Infernal Robotics servo, a LaserDist laser and a docking camera are destroyed once their part
-is destroyed, or once the part loses the module that provides them.
+Infernal Robotics servo, a LaserDist laser, a docking camera and a SCANsat scanner are destroyed
+once their part is destroyed, or once the part loses the module that provides them.
 
 An Infernal Robotics servo group is identified by its vessel and the group's name. Renaming a
 group destroys every object for it, exactly as renaming a kerbal does, and the group has to be

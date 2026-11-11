@@ -819,4 +819,5 @@ API Reference
    java/api/trajectories
    java/api/mechjeb
    java/api/kerbal-engineer-redux
+   java/api/scansat
    java/api/debug

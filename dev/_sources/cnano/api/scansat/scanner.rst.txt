@@ -1,0 +1,107 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Scanner
+=======
+
+
+.. type:: krpc_ScanSat_Scanner_t
+
+   A SCANsat scanner on a part. Obtained by calling :func:`krpc_ScanSat_Scanner` or
+   :func:`krpc_ScanSat_Scanners`.
+
+   .. function:: krpc_error_t krpc_ScanSat_Scanner_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_ScanSat_Scanner_t instance)
+
+      The part containing this scanner.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_ScanSat_Scanner_ScanTypes(krpc_connection_t connection, krpc_ScanSat_ScanType_t * returnValue, krpc_ScanSat_Scanner_t instance)
+
+      The scan types of the scanner.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_ScanSat_Scanner_Active(krpc_connection_t connection, bool * returnValue, krpc_ScanSat_Scanner_t instance)
+   .. function:: krpc_error_t krpc_ScanSat_Scanner_set_Active(krpc_connection_t connection, krpc_ScanSat_Scanner_t instance, bool value)
+
+      Returns whether the scanner is switched on, and switches it on or off, as the buttons
+      of the part do.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A resource scanner only switches on when :func:`krpc_ScanSat_InstantResourceScan`
+         is off, or :func:`krpc_ScanSat_StockResourceScan` is off.
+
+   .. function:: krpc_error_t krpc_ScanSat_Scanner_FieldOfView(krpc_connection_t connection, float * returnValue, krpc_ScanSat_Scanner_t instance)
+
+      The field of view of the scanner at its best altitude, in degrees.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_ScanSat_Scanner_MinAltitude(krpc_connection_t connection, float * returnValue, krpc_ScanSat_Scanner_t instance)
+
+      The lowest altitude the scanner scans at, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_ScanSat_Scanner_BestAltitude(krpc_connection_t connection, float * returnValue, krpc_ScanSat_Scanner_t instance)
+
+      The lowest altitude for the full field of view, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_ScanSat_Scanner_MaxAltitude(krpc_connection_t connection, float * returnValue, krpc_ScanSat_Scanner_t instance)
+
+      The highest altitude the scanner scans at, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_ScanSat_Scanner_RequiresLight(krpc_connection_t connection, bool * returnValue, krpc_ScanSat_Scanner_t instance)
+
+      Whether the scanner only scans in daylight, when :func:`krpc_ScanSat_DaylightCheck`
+      is on.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_ScanSat_Scanner_State(krpc_connection_t connection, krpc_ScanSat_ScannerState_t * returnValue, krpc_ScanSat_Scanner_t instance)
+
+      The state of the scanner.
+
+      :Game Scenes: Flight
+
+
+
+
+.. type:: krpc_ScanSat_ScannerState_t
+
+   The state of a scanner. See :func:`krpc_ScanSat_Scanner_State`.
+
+
+   .. macro:: KRPC_SCANSAT_SCANNERSTATE_OFF
+
+      Switched off.
+
+
+   .. macro:: KRPC_SCANSAT_SCANNERSTATE_OUTOFRANGE
+
+      Switched on, and outside its minimum and maximum altitudes.
+
+
+   .. macro:: KRPC_SCANSAT_SCANNERSTATE_INDARKNESS
+
+      Switched on, and paused as it needs light and the ground below it is in darkness.
+
+
+   .. macro:: KRPC_SCANSAT_SCANNERSTATE_INRANGE
+
+      Scanning between its minimum and best altitudes, with a reduced field of view.
+
+
+   .. macro:: KRPC_SCANSAT_SCANNERSTATE_INBESTRANGE
+
+      Scanning between its best and maximum altitudes, with its full field of view.

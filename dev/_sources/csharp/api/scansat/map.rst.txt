@@ -1,0 +1,70 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.ScanSat
+
+Map
+===
+
+
+.. enum:: MapType
+
+   The type of a map. See :meth:`ScanSat.Map <ScanSat.ScanSat.Map>`.
+
+
+   .. enumerator:: Altimetry
+
+      Terrain height, from the altimetry scans.
+
+
+   .. enumerator:: Slope
+
+      Terrain slope, from the altimetry scans.
+
+
+   .. enumerator:: Biome
+
+      Biomes, from the biome scan, over the terrain height.
+
+
+   .. enumerator:: Visual
+
+      The surface as seen from orbit, from the visual scans.
+
+
+
+
+.. enum:: MapProjection
+
+   The projection of a map. See :meth:`ScanSat.Map <ScanSat.ScanSat.Map>`.
+
+
+   .. enumerator:: Rectangular
+
+      Equirectangular: longitude and latitude map linearly to the horizontal and vertical.
+
+
+   .. enumerator:: KavrayskiyVII
+
+      Kavrayskiy VII, a compromise projection with less distortion at the poles.
+
+
+   .. enumerator:: Polar
+
+      Two polar views side by side, the southern hemisphere on the left.
+
+
+
+
+.. enum:: ImageFormat
+
+   The file format of an image.
+
+
+   .. enumerator:: PNG
+
+      PNG, which is lossless.
+
+
+   .. enumerator:: JPEG
+
+      JPEG, which is lossy, and smaller and faster to encode than PNG.

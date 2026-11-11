@@ -1,0 +1,298 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.ScanSat
+
+ScanSat
+=======
+
+
+.. type:: public class ScanSat
+
+   This service provides the scan data, scanners and maps of
+   `SCANsat <https://github.com/KSPModStewards/SCANsat>`_.
+
+   .. note::
+
+      The readouts at a position return ``null`` where the scans they need have not
+      covered it, as the maps of the mod show nothing there.
+
+   .. method:: boolean getAvailable()
+
+
+      Whether SCANsat is available.
+
+   
+
+   .. method:: double coverage(SpaceCenter.CelestialBody body, ScanType type)
+
+      The fraction of a body covered by scan types, between 0 and 1. For a combination,
+      the mean coverage of its scan types, so 1 only once every one of them is complete.
+      SCANsat reports at most 0.999 until the coverage is complete.
+      Throws an exception if no scan types are given.
+
+      :param SpaceCenter.CelestialBody body: The body.
+      :param ScanType type: The scan types.
+      :Game Scenes: Space Center, Flight, Tracking Station
+
+   .. method:: boolean isCovered(SpaceCenter.CelestialBody body, double latitude, double longitude, ScanType type)
+
+      Whether at least one of the scan types covers a position on a body. For a
+      combination, this is ``true`` where any one of its scan types covers the position,
+      and not only where all of them do.
+      Throws an exception if no scan types are given.
+
+      :param SpaceCenter.CelestialBody body: The body.
+      :param double latitude: The latitude, in degrees.
+      :param double longitude: The longitude, in degrees.
+      :param ScanType type: The scan types.
+      :Game Scenes: Space Center, Flight, Tracking Station
+
+   .. method:: Double elevation(SpaceCenter.CelestialBody body, double latitude, double longitude)
+
+      The height of the terrain relative to sea level at a position, in meters, or
+      ``null`` if no altimetry scan covers it. It is negative over the sea floor. With
+      low resolution altimetry only, the height is rounded toward zero to a multiple of
+      500 meters.
+
+      :param SpaceCenter.CelestialBody body: The body.
+      :param double latitude: The latitude, in degrees.
+      :param double longitude: The longitude, in degrees.
+      :Game Scenes: Space Center, Flight, Tracking Station
+
+   .. method:: Double slope(SpaceCenter.CelestialBody body, double latitude, double longitude)
+
+      The terrain slope at a position, in degrees, or ``null`` if high resolution
+      altimetry does not cover it. The slope is averaged over points 5 meters apart.
+
+      :param SpaceCenter.CelestialBody body: The body.
+      :param double latitude: The latitude, in degrees.
+      :param double longitude: The longitude, in degrees.
+      :Game Scenes: Space Center, Flight, Tracking Station
+
+   .. method:: String biome(SpaceCenter.CelestialBody body, double latitude, double longitude)
+
+      The name of the biome at a position, or ``null`` if the biome scan does not
+      cover it.
+      Throws an exception if the body has no biomes.
+
+      :param SpaceCenter.CelestialBody body: The body.
+      :param double latitude: The latitude, in degrees.
+      :param double longitude: The longitude, in degrees.
+      :Game Scenes: Space Center, Flight, Tracking Station
+
+   .. method:: Double resourceAbundance(SpaceCenter.CelestialBody body, double latitude, double longitude, String resource)
+
+      The abundance of a resource at a position, between 0 and 1, or ``null`` if no
+      resource scan covers it. With the low resolution scan only, the abundance is rounded
+      down to a multiple of 0.05.
+      Throws an exception if SCANsat's resource scanning is off, or SCANsat does not map
+      the resource.
+
+      :param SpaceCenter.CelestialBody body: The body.
+      :param double latitude: The latitude, in degrees.
+      :param double longitude: The longitude, in degrees.
+      :param String resource: The name of the resource. See :meth:`ScanSat.getResources()`.
+      :Game Scenes: Space Center, Flight, Tracking Station
+
+   .. method:: java.util.List<Anomaly> anomalies(SpaceCenter.CelestialBody body)
+
+      The anomalies on a body found by either anomaly scan.
+
+      :param SpaceCenter.CelestialBody body: The body.
+      :Game Scenes: Space Center, Flight, Tracking Station
+
+   .. method:: java.util.List<String> getResources()
+
+
+      The names of the resources SCANsat maps. Empty if SCANsat's resource scanning
+      is off.
+
+   
+
+   .. method:: byte[] map(SpaceCenter.CelestialBody body, MapType type, int width, MapProjection projection, boolean color, String resource, ImageFormat format, int quality)
+
+      A map of a body from the scan data, as an image. The map is half as high as it is
+      wide. Building it takes several game frames.
+      Throws an exception if SCANsat cannot render the map, as when its visual maps are
+      switched off.
+
+      :param SpaceCenter.CelestialBody body: The body.
+      :param MapType type: The type of map.
+      :param int width: The width of the image in pixels, between 360 and 1440.
+      :param MapProjection projection: The projection.
+      :param boolean color: Whether the map is in color, or in grayscale.
+      :param String resource: The name of a resource to overlay, or an empty string for none. See :meth:`ScanSat.getResources()`.
+      :param ImageFormat format: The format of the image.
+      :param int quality: The quality of a JPEG image, from 1 to 100.
+      :Game Scenes: Space Center, Flight, Tracking Station
+
+   .. method:: Scanner scanner(SpaceCenter.Part part)
+
+      The scanner on a part.
+      Throws an exception if the part has no SCANsat scanner.
+
+      :param SpaceCenter.Part part: The part.
+      :Game Scenes: Flight
+
+   .. method:: java.util.List<Scanner> scanners(SpaceCenter.Vessel vessel)
+
+      The SCANsat scanners on a vessel.
+
+      :param SpaceCenter.Vessel vessel: The vessel.
+      :Game Scenes: Flight
+
+   .. method:: boolean getBackgroundScanning()
+
+
+      Whether scanners scan while their vessel is not the active vessel. A setting of
+      SCANsat.
+
+   
+
+   .. method:: boolean getDaylightCheck()
+
+
+      Whether scanners that need light stop scanning in darkness. A setting of SCANsat.
+
+   
+
+   .. method:: boolean getInstantResourceScan()
+
+
+      Whether the stock orbital survey fills the high resolution resource scan of a body
+      at once. A setting of SCANsat.
+
+   
+
+   .. method:: boolean getStockResourceScan()
+
+
+      Whether the stock resource scanners work. A setting of SCANsat.
+
+   
+
+   .. method:: boolean getBiomeLock()
+
+
+      Whether resource abundances are approximate until a surface sample is taken in the
+      biome. A setting of SCANsat.
+
+   
+
+   .. method:: boolean getRequireNarrowBand()
+
+
+      Whether a narrow-band scanner is needed on the vessel for exact resource
+      abundances. A setting of SCANsat.
+
+   
+
+
+
+
+.. type:: public static final class ScanType
+
+   A set of scan types. Each scan type has its own coverage of a body.
+
+   .. note::
+
+      The values may be combined.   A flags enumeration. :std:ref:`java-client-flags` shows how to combine its values.
+
+
+   .. field:: public static final ScanType NONE
+
+      No scan types.
+
+
+   .. field:: public static final ScanType ALTIMETRY_LO_RES
+
+      Low resolution altimetry, the terrain height in steps of 500 meters.
+
+
+   .. field:: public static final ScanType ALTIMETRY_HI_RES
+
+      High resolution altimetry, the terrain height and slope.
+
+
+   .. field:: public static final ScanType VISUAL_LO_RES
+
+      Low resolution visual imaging.
+
+
+   .. field:: public static final ScanType VISUAL_HI_RES
+
+      High resolution visual imaging.
+
+
+   .. field:: public static final ScanType BIOME
+
+      Biomes.
+
+
+   .. field:: public static final ScanType ANOMALY
+
+      The positions of anomalies.
+
+
+   .. field:: public static final ScanType ANOMALY_DETAIL
+
+      The positions and names of anomalies, from close range.
+
+
+   .. field:: public static final ScanType RESOURCE_LO_RES
+
+      Low resolution resource abundance, in steps of 5%.
+
+
+   .. field:: public static final ScanType RESOURCE_HI_RES
+
+      High resolution resource abundance.
+
+
+   .. field:: public static final ScanType ALTIMETRY
+
+      Both altimetry scans.
+
+
+   .. field:: public static final ScanType VISUAL
+
+      Both visual scans.
+
+
+   .. field:: public static final ScanType ANOMALIES
+
+      Both anomaly scans.
+
+
+   .. field:: public static final ScanType RESOURCES
+
+      Both resource scans.
+
+
+   .. field:: public static final ScanType ALL
+
+      Every scan type.
+
+
+
+
+.. type:: public class Anomaly
+
+   An anomaly found by either anomaly scan. See :meth:`ScanSat.anomalies(SpaceCenter.CelestialBody)`.
+
+   .. constructor:: public Anomaly(String name, double latitude, double longitude)
+
+      Construct a Anomaly from the values of its fields.
+
+
+   .. method:: String getName()
+
+      The name of the anomaly, or ``null`` until the anomaly detail scan covers it.
+
+   .. method:: double getLatitude()
+
+      The latitude of the anomaly, in degrees.
+
+   .. method:: double getLongitude()
+
+      The longitude of the anomaly, in degrees.

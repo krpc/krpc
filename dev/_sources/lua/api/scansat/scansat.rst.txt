@@ -1,0 +1,333 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: ScanSat
+
+ScanSat
+=======
+
+
+.. module:: ScanSat
+
+This service provides the scan data, scanners and maps of
+`SCANsat <https://github.com/KSPModStewards/SCANsat>`_.
+
+.. note::
+
+   The readouts at a position return ``nil`` where the scans they need have not
+   covered it, as the maps of the mod show nothing there.
+
+
+
+.. attribute:: available: boolean
+
+   Whether SCANsat is available.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. staticmethod:: coverage(body: SpaceCenter.CelestialBody, type: ScanSat.ScanType): number
+
+   The fraction of a body covered by scan types, between 0 and 1. For a combination,
+   the mean coverage of its scan types, so 1 only once every one of them is complete.
+   SCANsat reports at most 0.999 until the coverage is complete.
+   Throws an exception if no scan types are given.
+
+   :param body: The body.
+   :param type: The scan types.
+
+
+
+
+.. staticmethod:: is_covered(body: SpaceCenter.CelestialBody, latitude: number, longitude: number, type: ScanSat.ScanType): boolean
+
+   Whether at least one of the scan types covers a position on a body. For a
+   combination, this is ``True`` where any one of its scan types covers the position,
+   and not only where all of them do.
+   Throws an exception if no scan types are given.
+
+   :param body: The body.
+   :param latitude: The latitude, in degrees.
+   :param longitude: The longitude, in degrees.
+   :param type: The scan types.
+
+
+
+
+.. staticmethod:: elevation(body: SpaceCenter.CelestialBody, latitude: number, longitude: number): number | nil
+
+   The height of the terrain relative to sea level at a position, in meters, or
+   ``nil`` if no altimetry scan covers it. It is negative over the sea floor. With
+   low resolution altimetry only, the height is rounded toward zero to a multiple of
+   500 meters.
+
+   :param body: The body.
+   :param latitude: The latitude, in degrees.
+   :param longitude: The longitude, in degrees.
+
+
+
+
+.. staticmethod:: slope(body: SpaceCenter.CelestialBody, latitude: number, longitude: number): number | nil
+
+   The terrain slope at a position, in degrees, or ``nil`` if high resolution
+   altimetry does not cover it. The slope is averaged over points 5 meters apart.
+
+   :param body: The body.
+   :param latitude: The latitude, in degrees.
+   :param longitude: The longitude, in degrees.
+
+
+
+
+.. staticmethod:: biome(body: SpaceCenter.CelestialBody, latitude: number, longitude: number): string | nil
+
+   The name of the biome at a position, or ``nil`` if the biome scan does not
+   cover it.
+   Throws an exception if the body has no biomes.
+
+   :param body: The body.
+   :param latitude: The latitude, in degrees.
+   :param longitude: The longitude, in degrees.
+
+
+
+
+.. staticmethod:: resource_abundance(body: SpaceCenter.CelestialBody, latitude: number, longitude: number, resource: string): number | nil
+
+   The abundance of a resource at a position, between 0 and 1, or ``nil`` if no
+   resource scan covers it. With the low resolution scan only, the abundance is rounded
+   down to a multiple of 0.05.
+   Throws an exception if SCANsat's resource scanning is off, or SCANsat does not map
+   the resource.
+
+   :param body: The body.
+   :param latitude: The latitude, in degrees.
+   :param longitude: The longitude, in degrees.
+   :param resource: The name of the resource. See :attr:`ScanSat.resources`.
+
+
+
+
+.. staticmethod:: anomalies(body: SpaceCenter.CelestialBody): List
+
+   The anomalies on a body found by either anomaly scan.
+
+   :param body: The body.
+
+
+
+
+.. attribute:: resources: List
+
+   The names of the resources SCANsat maps. Empty if SCANsat's resource scanning
+   is off.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. staticmethod:: map(body: SpaceCenter.CelestialBody, type: ScanSat.MapType, width?: number, projection?: ScanSat.MapProjection, color?: boolean, resource?: string, format?: ScanSat.ImageFormat, quality?: number): string
+
+   A map of a body from the scan data, as an image. The map is half as high as it is
+   wide. Building it takes several game frames.
+   Throws an exception if SCANsat cannot render the map, as when its visual maps are
+   switched off.
+
+   :param body: The body.
+   :param type: The type of map.
+   :param width: The width of the image in pixels, between 360 and 1440. Defaults to ``720``.
+   :param projection: The projection. Defaults to ``ScanSat.MapProjection.rectangular``.
+   :param color: Whether the map is in color, or in grayscale. Defaults to ``true``.
+   :param resource: The name of a resource to overlay, or an empty string for none. See :attr:`ScanSat.resources`. Defaults to ``''``.
+   :param format: The format of the image. Defaults to ``ScanSat.ImageFormat.png``.
+   :param quality: The quality of a JPEG image, from 1 to 100. Defaults to ``75``.
+
+
+
+
+.. staticmethod:: scanner(part: SpaceCenter.Part): ScanSat.Scanner
+
+   The scanner on a part.
+   Throws an exception if the part has no SCANsat scanner.
+
+   :param part: The part.
+
+
+
+
+.. staticmethod:: scanners(vessel: SpaceCenter.Vessel): List
+
+   The SCANsat scanners on a vessel.
+
+   :param vessel: The vessel.
+
+
+
+
+.. attribute:: background_scanning: boolean
+
+   Whether scanners scan while their vessel is not the active vessel. A setting of
+   SCANsat.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: daylight_check: boolean
+
+   Whether scanners that need light stop scanning in darkness. A setting of SCANsat.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: instant_resource_scan: boolean
+
+   Whether the stock orbital survey fills the high resolution resource scan of a body
+   at once. A setting of SCANsat.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: stock_resource_scan: boolean
+
+   Whether the stock resource scanners work. A setting of SCANsat.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: biome_lock: boolean
+
+   Whether resource abundances are approximate until a surface sample is taken in the
+   biome. A setting of SCANsat.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: require_narrow_band: boolean
+
+   Whether a narrow-band scanner is needed on the vessel for exact resource
+   abundances. A setting of SCANsat.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+
+
+.. class:: ScanType
+
+   A set of scan types. Each scan type has its own coverage of a body.
+
+   .. note::
+
+      The values may be combined.   A flags enumeration. :std:ref:`lua-client-flags` shows how to combine its values.
+
+
+   .. data:: none
+
+      No scan types.
+
+
+   .. data:: altimetry_lo_res
+
+      Low resolution altimetry, the terrain height in steps of 500 meters.
+
+
+   .. data:: altimetry_hi_res
+
+      High resolution altimetry, the terrain height and slope.
+
+
+   .. data:: visual_lo_res
+
+      Low resolution visual imaging.
+
+
+   .. data:: visual_hi_res
+
+      High resolution visual imaging.
+
+
+   .. data:: biome
+
+      Biomes.
+
+
+   .. data:: anomaly
+
+      The positions of anomalies.
+
+
+   .. data:: anomaly_detail
+
+      The positions and names of anomalies, from close range.
+
+
+   .. data:: resource_lo_res
+
+      Low resolution resource abundance, in steps of 5%.
+
+
+   .. data:: resource_hi_res
+
+      High resolution resource abundance.
+
+
+   .. data:: altimetry
+
+      Both altimetry scans.
+
+
+   .. data:: visual
+
+      Both visual scans.
+
+
+   .. data:: anomalies
+
+      Both anomaly scans.
+
+
+   .. data:: resources
+
+      Both resource scans.
+
+
+   .. data:: all
+
+      Every scan type.
+
+
+
+
+.. class:: Anomaly
+
+   An anomaly found by either anomaly scan. See :meth:`ScanSat.anomalies`.
+
+
+   .. attribute:: name: string | Types.none
+
+      The name of the anomaly, or ``nil`` until the anomaly detail scan covers it.
+
+
+   .. attribute:: latitude: number
+
+      The latitude of the anomaly, in degrees.
+
+
+   .. attribute:: longitude: number
+
+      The longitude of the anomaly, in degrees.

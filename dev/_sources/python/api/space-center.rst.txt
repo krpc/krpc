@@ -70,6 +70,7 @@ These services cover other mods:
 * :doc:`Infernal Robotics Next <infernal-robotics>`
 * :doc:`Docking Camera (KURS) <docking-camera>`
 * :doc:`Trajectories <trajectories>`
+* :doc:`SCANsat <scansat>`
 
 .. _Ferram Aerospace Research: https://github.com/KSPModStewards/Ferram-Aerospace-Research
 .. _Extended Action Groups: https://github.com/linuxgurugamer/AGExt

@@ -1,0 +1,73 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::ScanSat
+
+Map
+===
+
+
+.. namespace:: krpc::services::ScanSat
+.. enum-struct:: MapType
+
+   The type of a map. See :func:`map`.
+
+
+   .. enumerator:: altimetry
+
+      Terrain height, from the altimetry scans.
+
+
+   .. enumerator:: slope
+
+      Terrain slope, from the altimetry scans.
+
+
+   .. enumerator:: biome
+
+      Biomes, from the biome scan, over the terrain height.
+
+
+   .. enumerator:: visual
+
+      The surface as seen from orbit, from the visual scans.
+
+
+
+
+.. namespace:: krpc::services::ScanSat
+.. enum-struct:: MapProjection
+
+   The projection of a map. See :func:`map`.
+
+
+   .. enumerator:: rectangular
+
+      Equirectangular: longitude and latitude map linearly to the horizontal and vertical.
+
+
+   .. enumerator:: kavrayskiy_vii
+
+      Kavrayskiy VII, a compromise projection with less distortion at the poles.
+
+
+   .. enumerator:: polar
+
+      Two polar views side by side, the southern hemisphere on the left.
+
+
+
+
+.. namespace:: krpc::services::ScanSat
+.. enum-struct:: ImageFormat
+
+   The file format of an image.
+
+
+   .. enumerator:: png
+
+      PNG, which is lossless.
+
+
+   .. enumerator:: jpeg
+
+      JPEG, which is lossy, and smaller and faster to encode than PNG.

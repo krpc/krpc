@@ -1,0 +1,124 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: ScanSat
+
+Scanner
+=======
+
+
+.. class:: Scanner
+
+   A SCANsat scanner on a part. Obtained by calling :meth:`scanner` or
+   :meth:`scanners`.
+
+   .. attribute:: part
+
+      The part containing this scanner.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.Part`
+      :Game Scenes: Flight
+
+   .. attribute:: scan_types
+
+      The scan types of the scanner.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`ScanType`
+      :Game Scenes: Flight
+
+   .. attribute:: active
+
+      Returns whether the scanner is switched on, and switches it on or off, as the buttons
+      of the part do.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A resource scanner only switches on when :attr:`instant_resource_scan`
+         is off, or :attr:`stock_resource_scan` is off.
+
+   .. attribute:: field_of_view
+
+      The field of view of the scanner at its best altitude, in degrees.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: min_altitude
+
+      The lowest altitude the scanner scans at, in meters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: best_altitude
+
+      The lowest altitude for the full field of view, in meters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: max_altitude
+
+      The highest altitude the scanner scans at, in meters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: requires_light
+
+      Whether the scanner only scans in daylight, when :attr:`daylight_check`
+      is on.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: state
+
+      The state of the scanner.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`ScannerState`
+      :Game Scenes: Flight
+
+
+
+
+.. class:: ScannerState
+
+   The state of a scanner. See :attr:`Scanner.state`.
+
+
+   .. data:: off
+
+      Switched off.
+
+
+   .. data:: out_of_range
+
+      Switched on, and outside its minimum and maximum altitudes.
+
+
+   .. data:: in_darkness
+
+      Switched on, and paused as it needs light and the ground below it is in darkness.
+
+
+   .. data:: in_range
+
+      Scanning between its minimum and best altitudes, with a reduced field of view.
+
+
+   .. data:: in_best_range
+
+      Scanning between its best and maximum altitudes, with its full field of view.

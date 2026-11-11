@@ -1,0 +1,108 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::ScanSat
+
+Scanner
+=======
+
+
+.. class:: Scanner
+
+   A SCANsat scanner on a part. Obtained by calling :func:`scanner` or
+   :func:`scanners`.
+
+   .. function:: SpaceCenter::Part part()
+
+      The part containing this scanner.
+
+      :Game Scenes: Flight
+
+   .. function:: ScanType scan_types()
+
+      The scan types of the scanner.
+
+      :Game Scenes: Flight
+
+   .. function:: bool active()
+   .. function:: void set_active(bool value)
+
+      Returns whether the scanner is switched on, and switches it on or off, as the buttons
+      of the part do.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A resource scanner only switches on when :func:`instant_resource_scan`
+         is off, or :func:`stock_resource_scan` is off.
+
+   .. function:: float field_of_view()
+
+      The field of view of the scanner at its best altitude, in degrees.
+
+      :Game Scenes: Flight
+
+   .. function:: float min_altitude()
+
+      The lowest altitude the scanner scans at, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: float best_altitude()
+
+      The lowest altitude for the full field of view, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: float max_altitude()
+
+      The highest altitude the scanner scans at, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: bool requires_light()
+
+      Whether the scanner only scans in daylight, when :func:`daylight_check`
+      is on.
+
+      :Game Scenes: Flight
+
+   .. function:: ScannerState state()
+
+      The state of the scanner.
+
+      :Game Scenes: Flight
+
+
+
+
+.. namespace:: krpc::services::ScanSat
+.. enum-struct:: ScannerState
+
+   The state of a scanner. See :func:`Scanner::state`.
+
+
+   .. enumerator:: off
+
+      Switched off.
+
+
+   .. enumerator:: out_of_range
+
+      Switched on, and outside its minimum and maximum altitudes.
+
+
+   .. enumerator:: in_darkness
+
+      Switched on, and paused as it needs light and the ground below it is in darkness.
+
+
+   .. enumerator:: in_range
+
+      Scanning between its minimum and best altitudes, with a reduced field of view.
+
+
+   .. enumerator:: in_best_range
+
+      Scanning between its best and maximum altitudes, with its full field of view.
