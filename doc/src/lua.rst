@@ -430,4 +430,5 @@ API Reference
    lua/api/docking-camera
    lua/api/trajectories
    lua/api/mechjeb
+   lua/api/kerbal-engineer-redux
    lua/api/debug

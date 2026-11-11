@@ -247,6 +247,16 @@ class MechJeb(Mod):
         return conn.testing_tools.part_module_available("MechJebCore")
 
 
+class KerbalEngineerRedux(_ServiceMod):
+    name = "KerbalEngineerRedux"
+    source = _GITHUB + (
+        "jrbudda/KerbalEngineer/releases/download/1.1.9.5/KerbalEngineer-1.1.9.5.zip"
+    )
+    sha256 = "821e5b8a4af1c4af87b1e6aadd02ee9662be78ab3343844f9711c324aa3c2a3a"
+    folders = ("KerbalEngineer",)
+    service = "kerbal_engineer_redux"
+
+
 class RealChute(_PartMod):
     """Wrapped by the SpaceCenter Parachute class. Its part modules do not register without
     ClickThroughBlocker and ToolbarControl."""
@@ -507,6 +517,7 @@ MODS = [
     KerbalAlarmClock,
     DockingCamera,
     MechJeb,
+    KerbalEngineerRedux,
     RealChute,
     DMagic,
     AGExt,

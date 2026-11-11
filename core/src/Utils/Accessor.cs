@@ -43,6 +43,23 @@ namespace KRPC.Utils
         }
 
         /// <summary>
+        /// A setter for a static field or property of <paramref name="type"/>. Returns null for
+        /// a read-only field or property.
+        /// </summary>
+        public static Action<TValue> StaticSetter<TValue> (Type type, string name)
+        {
+            var value = Expression.Parameter (typeof (TValue), "value");
+            var member = Member (null, type, name);
+            if (member == null || !CanWrite (member.Member))
+                return null;
+            var converted = Convert (value, member.Type);
+            if (converted == null)
+                return null;
+            var body = Expression.Assign (member, converted);
+            return Expression.Lambda<Action<TValue>> (body, value).Compile ();
+        }
+
+        /// <summary>
         /// A setter for a field or property of <typeparamref name="TInstance"/>.
         /// </summary>
         public static Action<TInstance, TValue> Setter<TInstance, TValue> (string name)

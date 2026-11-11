@@ -741,4 +741,5 @@ API Reference
    cnano/api/docking-camera
    cnano/api/trajectories
    cnano/api/mechjeb
+   cnano/api/kerbal-engineer-redux
    cnano/api/debug

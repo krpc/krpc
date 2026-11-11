@@ -141,6 +141,7 @@ pkg_zip(
         "//service/DockingCamera",
         "//service/Trajectories",
         "//service/MechJeb",
+        "//service/KerbalEngineerRedux",
         # Module Manager
         "@module_manager//file",
         # Schema
@@ -196,6 +197,9 @@ pkg_zip(
         "service/MechJeb/KRPC.MechJeb/net472/": "GameData/kRPC/",
         "service/MechJeb/": "GameData/kRPC/",
         "service/MechJeb/CHANGELOG.md": "GameData/kRPC/CHANGELOG.MechJeb.md",
+        "service/KerbalEngineerRedux/KRPC.KerbalEngineerRedux/net472/": "GameData/kRPC/",
+        "service/KerbalEngineerRedux/": "GameData/kRPC/",
+        "service/KerbalEngineerRedux/CHANGELOG.md": "GameData/kRPC/CHANGELOG.KerbalEngineerRedux.md",
         # Module Manager
         "../+http_file+module_manager/file/ModuleManager.4.2.3.dll": "GameData/ModuleManager.4.2.3.dll",
         # Schema
@@ -242,6 +246,7 @@ py_test(
         "//service/Drawing:csproj-srcs",
         "//service/InfernalRobotics:csproj-srcs",
         "//service/KerbalAlarmClock:csproj-srcs",
+        "//service/KerbalEngineerRedux:csproj-srcs",
         "//service/LiDAR:csproj-srcs",
         "//service/MechJeb:csproj-srcs",
         "//service/RemoteTech:csproj-srcs",
@@ -280,6 +285,7 @@ test_suite(
         "//service/Drawing:test",
         "//service/InfernalRobotics:test",
         "//service/KerbalAlarmClock:test",
+        "//service/KerbalEngineerRedux:test",
         "//service/MechJeb:test",
         "//service/RemoteTech:test",
         "//service/SpaceCenter:test",
@@ -315,6 +321,7 @@ filegroup(
         "//service/Drawing",
         "//service/InfernalRobotics",
         "//service/KerbalAlarmClock",
+        "//service/KerbalEngineerRedux",
         "//service/LiDAR",
         "//service/MechJeb",
         "//service/RemoteTech",

@@ -21,6 +21,7 @@ namespace KRPC.Test.Utils
 #pragma warning disable 0649, 0169, 0414
         int number = 42;
         static string label = "base";
+        static int count = 1;
 #pragma warning restore 0649, 0169, 0414
 
         protected Shade shade = Shade.Dark;
@@ -171,6 +172,17 @@ namespace KRPC.Test.Utils
             Assert.AreEqual ("base", Accessor.StaticGetter<string> (typeof (Base), "label") ());
             Assert.IsTrue (Accessor.StaticGetter<bool> (typeof (Base), "Ready") ());
             Assert.IsNull (Accessor.StaticGetter<int> (typeof (Base), "number"));
+        }
+
+        [Test]
+        public void StaticSetter ()
+        {
+            var get = Accessor.StaticGetter<int> (typeof (Base), "count");
+            Accessor.StaticSetter<int> (typeof (Base), "count") (5);
+            Assert.AreEqual (5, get ());
+            Accessor.StaticSetter<int> (typeof (Base), "count") (1);
+            Assert.IsNull (Accessor.StaticSetter<bool> (typeof (Base), "Ready"));
+            Assert.IsNull (Accessor.StaticSetter<int> (typeof (Base), "missing"));
         }
 
         [Test]

@@ -107,9 +107,9 @@ The whole game is in that one assembly, and the listing is millions of lines —
 ### Reflection
 
 Access a non-public game member, or a member of another mod, through `KRPC.Utils.Accessor`
-(`Getter`, `Setter`, `Field`, `StaticGetter`, `Method`, `Constructor`), not `FieldInfo` or
-`MethodInfo`. It compiles a typed delegate, so a call costs one delegate invocation, with no
-boxing.
+(`Getter`, `Setter`, `Field`, `StaticGetter`, `StaticSetter`, `Method`, `Constructor`), not
+`FieldInfo` or `MethodInfo`. It compiles a typed delegate, so a call costs one delegate
+invocation, with no boxing.
 
  * Build each delegate once: in a static field, or per type with `DictionaryExtensions.GetOrAdd`
    when the declaring type is only known at run time, such as a mod's subclass of a part module.
