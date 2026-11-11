@@ -1,0 +1,13 @@
+.. default-domain:: {{ domain.sphinxname }}
+.. highlight:: {{ domain.highlight }}
+{{ domain.currentmodule('MechJeb') }}
+{% import domain.macros as macros with context %}
+
+SmartASS
+========
+
+{{ macros.class(services['MechJeb'].classes['SmartASS']) }}
+{{ macros.enumeration(services['MechJeb'].enumerations['SmartASSInterfaceMode']) }}
+{{ macros.enumeration(services['MechJeb'].enumerations['SmartASSAutopilotMode']) }}
+{{ macros.enumeration(services['MechJeb'].enumerations['AttitudeReference']) }}
+{{ macros.enumeration(services['MechJeb'].enumerations['Direction']) }}

@@ -1,0 +1,10 @@
+.. default-domain:: {{ domain.sphinxname }}
+.. highlight:: {{ domain.highlight }}
+{{ domain.currentmodule('MechJeb') }}
+{% import domain.macros as macros with context %}
+
+SmartRCS
+========
+
+{{ macros.class(services['MechJeb'].classes['SmartRCS']) }}
+{{ macros.enumeration(services['MechJeb'].enumerations['SmartRCSMode']) }}

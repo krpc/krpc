@@ -1,0 +1,9 @@
+.. default-domain:: {{ domain.sphinxname }}
+.. highlight:: {{ domain.highlight }}
+{{ domain.currentmodule('MechJeb') }}
+{% import domain.macros as macros with context %}
+
+NodeExecutor
+============
+
+{{ macros.class(services['MechJeb'].classes['NodeExecutor']) }}

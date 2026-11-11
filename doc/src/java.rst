@@ -817,4 +817,5 @@ API Reference
    java/api/lidar
    java/api/docking-camera
    java/api/trajectories
+   java/api/mechjeb
    java/api/debug

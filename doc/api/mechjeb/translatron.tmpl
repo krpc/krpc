@@ -1,0 +1,10 @@
+.. default-domain:: {{ domain.sphinxname }}
+.. highlight:: {{ domain.highlight }}
+{{ domain.currentmodule('MechJeb') }}
+{% import domain.macros as macros with context %}
+
+Translatron
+===========
+
+{{ macros.class(services['MechJeb'].classes['Translatron']) }}
+{{ macros.enumeration(services['MechJeb'].enumerations['TranslatronMode']) }}

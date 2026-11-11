@@ -740,4 +740,5 @@ API Reference
    cnano/api/lidar
    cnano/api/docking-camera
    cnano/api/trajectories
+   cnano/api/mechjeb
    cnano/api/debug

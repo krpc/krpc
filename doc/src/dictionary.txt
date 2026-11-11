@@ -6,12 +6,19 @@ Bitwise
 CMake
 Cnano
 Config
+aerothermal
+antiparallel
+apsis
+coplanar
+differentially
 ephemeron
 Ferram
 GameData
+Genhis
 Goliath
 Gradle
 Heatshields
+Hohmann
 IDisposable
 Javascript
 Jeb
@@ -32,6 +39,7 @@ NaN
 Olex
 PID
 RemoteTech
+Translatron
 Tron
 Wheesley
 accelerometers
