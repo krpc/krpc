@@ -1,431 +1,470 @@
 using System;
-using System.Reflection;
-
-using KRPC.MechJeb.ExtensionMethods;
-using KRPC.MechJeb.Util;
 using KRPC.Service.Attributes;
 
-namespace KRPC.MechJeb {
-	internal static class AscentGuidance {
-		internal new const string MechJebType = "MuMech.MechJebModuleAscentGuidance";
+namespace KRPC.MechJeb
+{
+    /// <summary>
+    /// The ascent autopilot.
+    /// </summary>
+    /// <remarks>
+    /// See the <a href="https://github.com/MuMech/MechJeb2/wiki/Ascent-Guidance">MechJeb wiki</a>
+    /// for how to set up this autopilot.
+    /// </remarks>
+    [KRPCClass (Service = "MechJeb")]
+    public sealed class AscentAutopilot : KRPCComputerModule
+    {
+        const string settingsName = "MechJebModuleAscentSettings";
+        const string classicName = "MechJebModuleAscentClassicAutopilot";
+        const string pvgName = "MechJebModuleAscentPVGAutopilot";
+        // The values of MechJeb's AscentType
+        const int classic = 0;
+        const int pvg = 1;
 
-		// Fields and methods
-		internal static FieldInfo desiredInclination;
-		internal static FieldInfo launchingToPlane;
-		internal static FieldInfo launchingToRendezvous;
+        static Func<object, object> autopilot;
+        static Value<string> status;
+        static Value<bool> timedLaunch;
+        static Action<object, double> startCountdown;
+        static Func<double, CelestialBody, double, global::Orbit, double> timeToPhaseAngle;
+        static Func<double, double, double, double, double, double> timeToPlane;
 
-		internal static void InitType(Type type) {
-			desiredInclination = type.GetField("desiredInclination");
-			launchingToPlane = type.GetField("launchingToPlane");
-			launchingToRendezvous = type.GetField("launchingToRendezvous");
-		}
-	}
+        static Value<int> ascentType;
+        static Value<double> desiredOrbitAltitude;
+        static Value<double> desiredInclination;
+        static Value<bool> correctiveSteering;
+        static Value<double> correctiveSteeringGain;
+        static Value<bool> forceRoll;
+        static Value<double> verticalRoll;
+        static Value<double> turnRoll;
+        static Value<bool> autodeploySolarPanels;
+        static Value<bool> autoDeployAntennas;
+        static Value<bool> skipCircularization;
+        static Value<bool> autostage;
+        static Value<bool> limitAoA;
+        static Value<double> maxAoA;
+        static Value<double> aoaLimitFadeoutPressure;
+        static Value<double> launchPhaseAngle;
+        static Value<double> launchLANDifference;
+        static Value<int> warpCountDown;
+        static Value<bool> launchingToPlane;
+        static Value<bool> launchingToRendezvous;
+        static Value<bool> launchingToMatchLan;
+        static Value<bool> launchingToLan;
 
-	/// <summary>
-	/// This module controls the Ascent Guidance in MechJeb 2.
-	/// </summary>
-	/// <remarks>
-	/// See <a href="https://github.com/MuMech/MechJeb2/wiki/Ascent-Guidance#initial-pitch-over-issues">MechJeb2 wiki</a> for more guidance on how to optimally set up this autopilot.
-	/// </remarks>
-	[KRPCClass(Service = "MechJeb")]
-	public class AscentAutopilot : KRPCComputerModule {
-		internal new const string MechJebType = "MuMech.MechJebModuleAscentAutopilot";
+        internal static new void Load ()
+        {
+            var settings = Reflection.Type ("MuMech." + settingsName);
+            autopilot = Reflection.Field<object> (settings, "AscentAutopilot").Get;
+            var type = Reflection.Type ("MuMech.MechJebModuleAscentBaseAutopilot");
+            status = Reflection.Field<string> (type, "Status");
+            timedLaunch = Reflection.Field<bool> (type, "TimedLaunch");
+            startCountdown = Reflection.Method<Action<object, double>> (type, "StartCountdown");
+            timeToPhaseAngle = Reflection.Method<Func<double, CelestialBody, double, global::Orbit, double>> (
+                Reflection.Type ("MuMech.MechJebModuleAscentMenu"), "TimeToPhaseAngle");
+            timeToPlane = Reflection.Method<Func<double, double, double, double, double, double>> (
+                Reflection.Type ("MechJebLib.Functions.Astro"), "TimeToPlane");
 
-		// Fields and methods
-		private static FieldInfo status;
-		private static PropertyInfo ascentPathIdx;
-		private static FieldInfo desiredOrbitAltitudeField;
-		private static FieldInfo autoThrottle;
-		private static FieldInfo correctiveSteering;
-		private static FieldInfo correctiveSteeringGainField;
-		private static FieldInfo forceRoll;
-		private static FieldInfo verticalRollField;
-		private static FieldInfo turnRollField;
-		private static FieldInfo autodeploySolarPanels;
-		private static FieldInfo autoDeployAntennas;
-		private static FieldInfo skipCircularization;
-		private static PropertyInfo autostage;
-		private static FieldInfo limitAoA;
-		private static FieldInfo maxAoAField;
-		private static FieldInfo aoALimitFadeoutPressureField;
-		private static FieldInfo launchPhaseAngleField;
-		private static FieldInfo launchLANDifferenceField;
-		private static FieldInfo warpCountDownField;
+            ascentType = Reflection.Field<int> (settings, "AscentType");
+            desiredOrbitAltitude = Reflection.EditableDouble (settings, "DesiredOrbitAltitude");
+            desiredInclination = Reflection.EditableDouble (settings, "DesiredInclination");
+            correctiveSteering = Reflection.Field<bool> (settings, "CorrectiveSteering");
+            correctiveSteeringGain = Reflection.EditableDouble (settings, "CorrectiveSteeringGain");
+            forceRoll = Reflection.Field<bool> (settings, "ForceRoll");
+            verticalRoll = Reflection.EditableDouble (settings, "VerticalRoll");
+            turnRoll = Reflection.EditableDouble (settings, "TurnRoll");
+            autodeploySolarPanels = Reflection.Field<bool> (settings, "AutodeploySolarPanels");
+            autoDeployAntennas = Reflection.Field<bool> (settings, "AutoDeployAntennas");
+            skipCircularization = Reflection.Field<bool> (settings, "SkipCircularization");
+            autostage = Reflection.Field<bool> (settings, "Autostage");
+            limitAoA = Reflection.Field<bool> (settings, "LimitAoA");
+            maxAoA = Reflection.EditableDouble (settings, "MaxAoA");
+            aoaLimitFadeoutPressure = Reflection.EditableDouble (settings, "AOALimitFadeoutPressure");
+            launchPhaseAngle = Reflection.EditableDouble (settings, "LaunchPhaseAngle");
+            launchLANDifference = Reflection.EditableDouble (settings, "LaunchLANDifference");
+            warpCountDown = Reflection.EditableInt (settings, "WarpCountDown");
+            launchingToPlane = Reflection.Field<bool> (settings, "LaunchingToPlane");
+            launchingToRendezvous = Reflection.Field<bool> (settings, "LaunchingToRendezvous");
+            launchingToMatchLan = Reflection.Field<bool> (settings, "LaunchingToMatchLan");
+            launchingToLan = Reflection.Field<bool> (settings, "LaunchingToLan");
+        }
 
-		private static FieldInfo timedLaunch;
-		private static MethodInfo startCountdown;
+        internal AscentAutopilot () : base (settingsName)
+        {
+            AscentPathClassic = new AscentClassic ();
+            AscentPathPVG = new AscentPVG ();
+        }
 
-		// Instance objects
-		private object guiInstance;
+        /// <summary>
+        /// The ascent settings, which hold the settings of every ascent path.
+        /// </summary>
+        internal static object Settings {
+            get { return MechJeb.Module (settingsName); }
+        }
 
-		private object desiredOrbitAltitude;
-		private object correctiveSteeringGain;
-		private object verticalRoll;
-		private object turnRoll;
-		private object maxAoA;
-		private object aoALimitFadeoutPressure;
-		private object launchPhaseAngle;
-		private object launchLANDifference;
-		private object warpCountDown;
+        /// <summary>
+        /// The autopilot of the selected ascent path.
+        /// </summary>
+        internal override object Instance {
+            get { return autopilot (Settings); }
+        }
 
-		internal static new void InitType(Type type) {
-			status = type.GetCheckedField("status");
-			ascentPathIdx = type.GetCheckedProperty("ascentPathIdxPublic");
-			desiredOrbitAltitudeField = type.GetCheckedField("desiredOrbitAltitude");
-			autoThrottle = type.GetCheckedField("autoThrottle");
-			correctiveSteering = type.GetCheckedField("correctiveSteering");
-			correctiveSteeringGainField = type.GetCheckedField("correctiveSteeringGain");
-			forceRoll = type.GetCheckedField("forceRoll");
-			verticalRollField = type.GetCheckedField("verticalRoll");
-			turnRollField = type.GetCheckedField("turnRoll");
-			autodeploySolarPanels = type.GetCheckedField("autodeploySolarPanels");
-			autoDeployAntennas = type.GetCheckedField("autoDeployAntennas");
-			skipCircularization = type.GetCheckedField("skipCircularization");
-			autostage = type.GetCheckedProperty("autostage");
-			limitAoA = type.GetCheckedField("limitAoA");
-			maxAoAField = type.GetCheckedField("maxAoA");
-			aoALimitFadeoutPressureField = type.GetCheckedField("aoALimitFadeoutPressure");
-			launchPhaseAngleField = type.GetCheckedField("launchPhaseAngle");
-			launchLANDifferenceField = type.GetCheckedField("launchLANDifference");
-			warpCountDownField = type.GetCheckedField("warpCountDown");
+        /// <summary>
+        /// Whether the autopilot is enabled. Enabling it engages the autopilot of the selected
+        /// ascent path, and disabling it disengages the autopilots of both paths.
+        /// </summary>
+        [KRPCProperty]
+        public override bool Enabled {
+            get { return base.Enabled; }
+            set {
+                if (value) {
+                    base.Enabled = true;
+                } else {
+                    // The path may have changed since the autopilot was enabled
+                    SetEnabled (MechJeb.Module (classicName), false);
+                    SetEnabled (MechJeb.Module (pvgName), false);
+                }
+            }
+        }
 
-			timedLaunch = type.GetCheckedField("timedLaunch");
-			startCountdown = type.GetCheckedMethod("StartCountdown");
-		}
+        /// <summary>
+        /// The autopilot status, which depends on the selected ascent path.
+        /// </summary>
+        [KRPCProperty]
+        public string Status {
+            get { return status.Get (Instance); }
+        }
 
-		protected internal override void InitInstance(object instance) {
-			base.InitInstance(instance);
-			this.guiInstance = MechJeb.GetComputerModule("AscentGuidance");
+        /// <summary>
+        /// The selected ascent path: 0 for <see cref="AscentClassic"/> or 2 for
+        /// <see cref="AscentPVG"/>.
+        /// </summary>
+        /// <remarks>
+        /// MechJeb 2.15 removed the stock-style gravity turn path, which was 1. Setting any other
+        /// value throws an exception.
+        /// </remarks>
+        [KRPCProperty]
+        public int AscentPathIndex {
+            get { return ascentType.Get (Settings) == pvg ? 2 : 0; }
+            set {
+                if (value != 0 && value != 2)
+                    throw new ArgumentOutOfRangeException (nameof (value), "The ascent path must be 0 (classic) or 2 (PVG)");
+                ascentType.Set (Settings, value == 2 ? pvg : classic);
+                // MechJeb disables the other path's autopilot without removing its users
+                SetEnabled (MechJeb.Module (value == 2 ? classicName : pvgName), false);
+            }
+        }
 
-			this.desiredOrbitAltitude = desiredOrbitAltitudeField.GetInstanceValue(instance);
-			this.correctiveSteeringGain = correctiveSteeringGainField.GetInstanceValue(instance);
-			this.verticalRoll = verticalRollField.GetInstanceValue(instance);
-			this.turnRoll = turnRollField.GetInstanceValue(instance);
-			this.maxAoA = maxAoAField.GetInstanceValue(instance);
-			this.aoALimitFadeoutPressure = aoALimitFadeoutPressureField.GetInstanceValue(instance);
-			this.launchPhaseAngle = launchPhaseAngleField.GetInstanceValue(instance);
-			this.launchLANDifference = launchLANDifferenceField.GetInstanceValue(instance);
-			this.warpCountDown = warpCountDownField.GetInstanceValue(instance);
+        /// <summary>
+        /// The settings of the classic ascent profile.
+        /// </summary>
+        [KRPCProperty]
+        public AscentClassic AscentPathClassic { get; private set; }
 
-			this.AscentPathClassic.InitInstance(MechJeb.GetComputerModule("AscentClassic"));
-			this.AscentPathGT.InitInstance(MechJeb.GetComputerModule("AscentGT"));
-			this.AscentPathPVG.InitInstance(MechJeb.GetComputerModule("AscentPVG"));
+        /// <summary>
+        /// The settings of the Primer Vector Guidance (RSS/RO) profile.
+        /// </summary>
+        [KRPCProperty]
+        public AscentPVG AscentPathPVG { get; private set; }
 
-			// Retrieve the current path index set in mechjeb and enable the path representing that index.
-			// It fixes the issue with AscentAutopilot reporting empty status due to a disabled path.
-			if(instance != null)
-				this.AscentPathIndex = this.AscentPathIndex;
-		}
+        /// <summary>
+        /// The altitude of the final circular orbit, in meters.
+        /// </summary>
+        [KRPCProperty]
+        public double DesiredOrbitAltitude {
+            get { return desiredOrbitAltitude.Get (Settings); }
+            set { desiredOrbitAltitude.Set (Settings, value); }
+        }
 
-		public AscentAutopilot() {
-			this.AscentPathClassic = new AscentClassic();
-			this.AscentPathGT = new AscentGT();
-			this.AscentPathPVG = new AscentPVG();
-		}
+        /// <summary>
+        /// The inclination of the final circular orbit, in degrees.
+        /// </summary>
+        [KRPCProperty]
+        public double DesiredInclination {
+            get { return desiredInclination.Get (Settings); }
+            set { desiredInclination.Set (Settings, value); }
+        }
 
-		/// <summary>
-		/// The autopilot status; it depends on the selected ascent path.
-		/// </summary>
-		[KRPCProperty]
-		public string Status => status.GetValue(this.instance).ToString();
+        /// <summary>
+        /// The thrust controller. The same as <see cref="MechJeb.ThrustController"/>.
+        /// </summary>
+        [KRPCProperty]
+        public ThrustController ThrustController {
+            get { return MechJeb.ThrustController; }
+        }
 
-		/// <summary>
-		/// The selected ascent path.
-		/// 
-		/// 0 = <see cref="AscentClassic" /> (Classic Ascent Profile)
-		/// 
-		/// 1 = <see cref="AscentGT" /> (Stock-style GravityTurn)
-		/// 
-		/// 2 = <see cref="AscentPVG" /> (Primer Vector Guidance (RSS/RO))
-		/// </summary>
-		[KRPCProperty]
-		public int AscentPathIndex {
-			get => (int)ascentPathIdx.GetValue(this.instance, null);
-			set {
-				if(value < 0 || value > 2)
-					return;
+        /// <summary>
+        /// Whether the autopilot steers by the velocity vector rather than the position vector.
+        /// </summary>
+        /// <remarks>
+        /// It is more accurate, though large craft may do better without it.
+        /// </remarks>
+        [KRPCProperty]
+        public bool CorrectiveSteering {
+            get { return correctiveSteering.Get (Settings); }
+            set { correctiveSteering.Set (Settings, value); }
+        }
 
-				ascentPathIdx.SetValue(this.instance, value, null);
-			}
-		}
+        /// <summary>
+        /// The gain of the corrective steering.
+        /// </summary>
+        /// <remarks>Requires <see cref="CorrectiveSteering"/>.</remarks>
+        [KRPCProperty]
+        public double CorrectiveSteeringGain {
+            get { return correctiveSteeringGain.Get (Settings); }
+            set { correctiveSteeringGain.Set (Settings, value); }
+        }
 
-		/// <summary>
-		/// Get Classic Ascent Profile settings.
-		/// </summary>
-		[KRPCProperty]
-		public AscentClassic AscentPathClassic { get; }
+        /// <summary>
+        /// Whether the autopilot controls the roll.
+        /// </summary>
+        [KRPCProperty]
+        public bool ForceRoll {
+            get { return forceRoll.Get (Settings); }
+            set { forceRoll.Set (Settings, value); }
+        }
 
-		/// <summary>
-		/// Get Stock-style GravityTurn profile settings.
-		/// </summary>
-		[KRPCProperty]
-		public AscentGT AscentPathGT { get; }
+        /// <summary>
+        /// The roll during the vertical climb, in degrees.
+        /// </summary>
+        /// <remarks>Requires <see cref="ForceRoll"/>.</remarks>
+        [KRPCProperty]
+        public double VerticalRoll {
+            get { return verticalRoll.Get (Settings); }
+            set { verticalRoll.Set (Settings, value); }
+        }
 
-		/// <summary>
-		/// Get Powered Explicit Guidance (RSS/RO) profile settings.
-		/// </summary>
-		[KRPCProperty]
-		public AscentPVG AscentPathPVG { get; }
+        /// <summary>
+        /// The roll during the turn, in degrees.
+        /// </summary>
+        /// <remarks>Requires <see cref="ForceRoll"/>.</remarks>
+        [KRPCProperty]
+        public double TurnRoll {
+            get { return turnRoll.Get (Settings); }
+            set { turnRoll.Set (Settings, value); }
+        }
 
-		/// <summary>
-		/// The desired altitude in kilometres for the final circular orbit.
-		/// </summary>
-		[KRPCProperty]
-		public double DesiredOrbitAltitude {
-			get => EditableDouble.Get(this.desiredOrbitAltitude);
-			set => EditableDouble.Set(this.desiredOrbitAltitude, value);
-		}
+        /// <summary>
+        /// Whether to deploy the solar panels when the ascent finishes.
+        /// </summary>
+        [KRPCProperty]
+        public bool AutodeploySolarPanels {
+            get { return autodeploySolarPanels.Get (Settings); }
+            set { autodeploySolarPanels.Set (Settings, value); }
+        }
 
-		/// <summary>
-		/// The desired inclination in degrees for the final circular orbit.
-		/// </summary>
-		[KRPCProperty]
-		public double DesiredInclination {
-			// We need to get desiredInclinationGUI value here because it may change over time.
-			get => EditableDouble.Get(AscentGuidance.desiredInclination, this.guiInstance);
-			set => EditableDouble.Set(AscentGuidance.desiredInclination, this.guiInstance, value);
-		}
+        /// <summary>
+        /// Whether to deploy the antennas when the ascent finishes.
+        /// </summary>
+        [KRPCProperty]
+        public bool AutoDeployAntennas {
+            get { return autoDeployAntennas.Get (Settings); }
+            set { autoDeployAntennas.Set (Settings, value); }
+        }
 
-		/// <remarks>Equivalent to <see cref="MechJeb.ThrustController" />.</remarks>
-		[KRPCProperty]
-		public ThrustController ThrustController => MechJeb.ThrustController;
+        /// <summary>
+        /// Whether to skip the circularization burn.
+        /// </summary>
+        [KRPCProperty]
+        public bool SkipCircularization {
+            get { return skipCircularization.Get (Settings); }
+            set { skipCircularization.Set (Settings, value); }
+        }
 
-		/// <summary>
-		/// Will cause the craft to steer based on the more accurate velocity vector rather than positional vector (large craft may actually perform better with this box unchecked).
-		/// </summary>
-		[KRPCProperty]
-		public bool CorrectiveSteering {
-			get => (bool)correctiveSteering.GetValue(this.instance);
-			set => correctiveSteering.SetValue(this.instance, value);
-		}
+        /// <summary>
+        /// Whether the autopilot stages when the current stage runs out of fuel.
+        /// </summary>
+        /// <remarks><see cref="StagingController"/> holds the staging settings.</remarks>
+        [KRPCProperty]
+        public bool Autostage {
+            get { return autostage.Get (Settings); }
+            set { autostage.Set (Settings, value); }
+        }
 
-		/// <summary>
-		/// The gain of corrective steering used by the autopilot.
-		/// </summary>
-		/// <remarks><see cref="CorrectiveSteering" /> needs to be enabled.</remarks>
-		[KRPCProperty]
-		public double CorrectiveSteeringGain {
-			get => EditableDouble.Get(this.correctiveSteeringGain);
-			set => EditableDouble.Set(this.correctiveSteeringGain, value);
-		}
+        /// <summary>
+        /// The staging controller. The same as <see cref="MechJeb.StagingController"/>.
+        /// </summary>
+        [KRPCProperty]
+        public StagingController StagingController {
+            get { return MechJeb.StagingController; }
+        }
 
-		/// <summary>
-		/// The state of force roll.
-		/// </summary>
-		[KRPCProperty]
-		public bool ForceRoll {
-			get => (bool)forceRoll.GetValue(this.instance);
-			set => forceRoll.SetValue(this.instance, value);
-		}
+        /// <summary>
+        /// Whether to limit the angle of attack.
+        /// </summary>
+        [KRPCProperty]
+        public bool LimitAoA {
+            get { return limitAoA.Get (Settings); }
+            set { limitAoA.Set (Settings, value); }
+        }
 
-		/// <summary>
-		/// The vertical/climb roll used by the autopilot.
-		/// </summary>
-		/// <remarks><see cref="ForceRoll" /> needs to be enabled.</remarks>
-		[KRPCProperty]
-		public double VerticalRoll {
-			get => EditableDouble.Get(this.verticalRoll);
-			set => EditableDouble.Set(this.verticalRoll, value);
-		}
+        /// <summary>
+        /// The largest angle of attack, in degrees.
+        /// </summary>
+        /// <remarks>Requires <see cref="LimitAoA"/>.</remarks>
+        [KRPCProperty]
+        public double MaxAoA {
+            get { return maxAoA.Get (Settings); }
+            set { maxAoA.Set (Settings, value); }
+        }
 
-		/// <summary>
-		/// The turn roll used by the autopilot.
-		/// </summary>
-		/// <remarks><see cref="ForceRoll" /> needs to be enabled.</remarks>
-		[KRPCProperty]
-		public double TurnRoll {
-			get => EditableDouble.Get(this.turnRoll);
-			set => EditableDouble.Set(this.turnRoll, value);
-		}
+        /// <summary>
+        /// The dynamic pressure below which the angle of attack limit fades out, in pascals.
+        /// </summary>
+        /// <remarks>Requires <see cref="LimitAoA"/>.</remarks>
+        [KRPCProperty]
+        public double AoALimitFadeoutPressure {
+            get { return aoaLimitFadeoutPressure.Get (Settings); }
+            set { aoaLimitFadeoutPressure.Set (Settings, value); }
+        }
 
-		/// <summary>
-		/// Whether to deploy solar panels automatically when the ascent finishes.
-		/// </summary>
-		[KRPCProperty]
-		public bool AutodeploySolarPanels {
-			get => (bool)autodeploySolarPanels.GetValue(this.instance);
-			set => autodeploySolarPanels.SetValue(this.instance, value);
-		}
+        /// <summary>
+        /// The phase angle to the target of a launch to rendezvous, in degrees.
+        /// </summary>
+        [KRPCProperty]
+        public double LaunchPhaseAngle {
+            get { return launchPhaseAngle.Get (Settings); }
+            set { launchPhaseAngle.Set (Settings, value); }
+        }
 
-		/// <summary>
-		/// Whether to deploy antennas automatically when the ascent finishes.
-		/// </summary>
-		[KRPCProperty]
-		public bool AutoDeployAntennas {
-			get => (bool)autoDeployAntennas.GetValue(this.instance);
-			set => autoDeployAntennas.SetValue(this.instance, value);
-		}
+        /// <summary>
+        /// The difference from the target's longitude of the ascending node of a launch into the
+        /// target's plane, in degrees.
+        /// </summary>
+        [KRPCProperty]
+        public double LaunchLANDifference {
+            get { return launchLANDifference.Get (Settings); }
+            set { launchLANDifference.Set (Settings, value); }
+        }
 
-		/// <summary>
-		/// Whether to skip circularization burn and do only the ascent.
-		/// </summary>
-		[KRPCProperty]
-		public bool SkipCircularization {
-			get => (bool)skipCircularization.GetValue(this.instance);
-			set => skipCircularization.SetValue(this.instance, value);
-		}
+        /// <summary>
+        /// The time before a timed launch at which time warp stops, in seconds.
+        /// </summary>
+        [KRPCProperty]
+        public int WarpCountDown {
+            get { return warpCountDown.Get (Settings); }
+            set { warpCountDown.Set (Settings, value); }
+        }
 
-		/// <summary>
-		/// The autopilot will automatically stage when the current stage has run out of fuel.
-		/// Paramethers can be set in <see cref="KRPC.MechJeb.StagingController" />.
-		/// </summary>
-		[KRPCProperty]
-		public bool Autostage {
-			get => (bool)autostage.GetValue(this.instance, null);
-			set => autostage.SetValue(this.instance, value, null);
-		}
+        /// <summary>
+        /// The launch mode, which gives whether the autopilot is waiting for a timed launch.
+        /// </summary>
+        [KRPCProperty]
+        public AscentLaunchMode LaunchMode {
+            get {
+                var settings = Settings;
+                if (!timedLaunch.Get (Instance))
+                    return AscentLaunchMode.Normal;
+                if (launchingToRendezvous.Get (settings))
+                    return AscentLaunchMode.Rendezvous;
+                if (launchingToPlane.Get (settings))
+                    return AscentLaunchMode.TargetPlane;
+                return AscentLaunchMode.Unknown;
+            }
+        }
 
-		/// <remarks>Equivalent to <see cref="MechJeb.StagingController" />.</remarks>
-		[KRPCProperty]
-		public StagingController StagingController => MechJeb.StagingController;
+        /// <summary>
+        /// Abort a timed launch that has not started yet. Throws an exception if the launch mode
+        /// is <see cref="AscentLaunchMode.Unknown"/>.
+        /// </summary>
+        [KRPCMethod]
+        public void AbortTimedLaunch ()
+        {
+            if (LaunchMode == AscentLaunchMode.Unknown)
+                throw new InvalidOperationException ("There is an unknown timed launch ongoing which can't be aborted");
+            var settings = Settings;
+            launchingToPlane.Set (settings, false);
+            launchingToRendezvous.Set (settings, false);
+            launchingToMatchLan.Set (settings, false);
+            launchingToLan.Set (settings, false);
+            timedLaunch.Set (Instance, false);
+        }
 
-		/// <summary>
-		/// Whether to limit angle of attack.
-		/// </summary>
-		[KRPCProperty]
-		public bool LimitAoA {
-			get => (bool)limitAoA.GetValue(this.instance);
-			set => limitAoA.SetValue(this.instance, value);
-		}
+        void StartCountdown (double timeOffset)
+        {
+            startCountdown (Instance, VesselState.Time + timeOffset);
+        }
 
-		/// <summary>
-		/// The maximal angle of attack used by the autopilot.
-		/// </summary>
-		/// <remarks><see cref="LimitAoA" /> needs to be enabled</remarks>
-		[KRPCProperty]
-		public double MaxAoA {
-			get => EditableDouble.Get(this.maxAoA);
-			set => EditableDouble.Set(this.maxAoA, value);
-		}
+        /// <summary>
+        /// Launch to rendezvous with the target. Throws an exception if there is no target, or
+        /// the ascent path is PVG.
+        /// </summary>
+        [KRPCMethod]
+        public void LaunchToRendezvous ()
+        {
+            if (!MechJeb.TargetController.NormalTargetExists)
+                throw new InvalidOperationException ("Invalid target");
+            if (AscentPathIndex == 2)
+                throw new InvalidOperationException ("This action can't be performed in PVG path mode");
 
-		/// <summary>
-		/// The pressure value when AoA limit is automatically deactivated.
-		/// </summary>
-		/// <remarks><see cref="LimitAoA" /> needs to be enabled</remarks>
-		[KRPCProperty]
-		public double AoALimitFadeoutPressure {
-			get => EditableDouble.Get(this.aoALimitFadeoutPressure);
-			set => EditableDouble.Set(this.aoALimitFadeoutPressure, value);
-		}
+            AbortTimedLaunch ();
+            try {
+                launchingToRendezvous.Set (Settings, true);
+                StartCountdown (timeToPhaseAngle (
+                    LaunchPhaseAngle, FlightGlobals.ActiveVessel.mainBody, VesselState.Longitude,
+                    MechJeb.TargetController.InternalTargetOrbit));
+            } catch (Exception) {
+                AbortTimedLaunch ();
+                throw;
+            }
+        }
 
-		[KRPCProperty]
-		public double LaunchPhaseAngle {
-			get => EditableDouble.Get(this.launchPhaseAngle);
-			set => EditableDouble.Set(this.launchPhaseAngle, value);
-		}
+        /// <summary>
+        /// Launch into the plane of the target. Throws an exception if there is no target.
+        /// </summary>
+        [KRPCMethod]
+        public void LaunchToTargetPlane ()
+        {
+            if (!MechJeb.TargetController.NormalTargetExists)
+                throw new InvalidOperationException ("Invalid target");
 
-		[KRPCProperty]
-		public double LaunchLANDifference {
-			get => EditableDouble.Get(this.launchLANDifference);
-			set => EditableDouble.Set(this.launchLANDifference, value);
-		}
+            AbortTimedLaunch ();
+            try {
+                var target = MechJeb.TargetController.InternalTargetOrbit;
+                launchingToPlane.Set (Settings, true);
+                // The sooner of the launches north and south into the plane
+                var lan = target.LAN - LaunchLANDifference;
+                var inclination = Math.Abs (target.inclination);
+                var north = TimeToPlane (lan, inclination);
+                var south = TimeToPlane (lan, -inclination);
+                StartCountdown (Math.Min (north, south));
+                DesiredInclination = north < south ? inclination : -inclination;
+            } catch (Exception) {
+                AbortTimedLaunch ();
+                throw;
+            }
+        }
 
-		[KRPCProperty]
-		public int WarpCountDown {
-			get => EditableInt.Get(this.warpCountDown);
-			set => EditableInt.Set(this.warpCountDown, value);
-		}
+        static double TimeToPlane (double lan, double inclination)
+        {
+            return timeToPlane (
+                FlightGlobals.ActiveVessel.mainBody.rotationPeriod, VesselState.Latitude,
+                VesselState.CelestialLongitude, lan, inclination);
+        }
+    }
 
-		/// <summary>
-		/// Current autopilot mode. Useful for determining whether the autopilot is performing a timed launch or not.
-		/// </summary>
-		[KRPCProperty]
-		public AscentLaunchMode LaunchMode {
-			get {
-				if(!(bool)timedLaunch.GetValue(this.instance))
-					return AscentLaunchMode.Normal;
-				if((bool)AscentGuidance.launchingToRendezvous.GetValue(this.guiInstance))
-					return AscentLaunchMode.Rendezvous;
-				if((bool)AscentGuidance.launchingToPlane.GetValue(this.guiInstance))
-					return AscentLaunchMode.TargetPlane;
-				return AscentLaunchMode.Unknown;
-			}
-		}
+    /// <summary>
+    /// The launch mode of the ascent autopilot. See <see cref="AscentAutopilot.LaunchMode"/>.
+    /// </summary>
+    [KRPCEnum (Service = "MechJeb")]
+    public enum AscentLaunchMode
+    {
+        /// <summary>
+        /// The autopilot is not performing a timed launch.
+        /// </summary>
+        Normal,
 
-		/// <summary>
-		/// Abort a known timed launch when it has not started yet
-		/// </summary>
-		[KRPCMethod]
-		public void AbortTimedLaunch() {
-			if(this.LaunchMode == AscentLaunchMode.Unknown)
-				throw new InvalidOperationException("There is an unknown timed launch ongoing which can't be aborted");
+        /// <summary>
+        /// A timed launch to rendezvous with the target vessel.
+        /// </summary>
+        Rendezvous,
 
-			AscentGuidance.launchingToPlane.SetValue(this.guiInstance, false);
-			AscentGuidance.launchingToRendezvous.SetValue(this.guiInstance, false);
-			timedLaunch.SetValue(this.instance, false);
-		}
+        /// <summary>
+        /// A timed launch into the plane of the target.
+        /// </summary>
+        TargetPlane,
 
-		private void StartCountdown(double timeOffset) {
-			startCountdown.Invoke(this.instance, new object[] { MechJeb.vesselState.Time + timeOffset });
-		}
-
-		/// <summary>
-		/// Launch to rendezvous with the selected target.
-		/// </summary>
-		[KRPCMethod]
-		public void LaunchToRendezvous() {
-			if(!MechJeb.TargetController.NormalTargetExists)
-				throw new InvalidOperationException("Invalid target");
-			if(this.AscentPathIndex == 2)
-				throw new InvalidOperationException("This action can't be performed in PVG path mode");
-
-			this.AbortTimedLaunch();
-			try {
-				AscentGuidance.launchingToRendezvous.SetValue(this.guiInstance, true);
-				this.StartCountdown(LaunchTiming.TimeToPhaseAngle(this.LaunchPhaseAngle));
-			}
-			catch(Exception) {
-				this.AbortTimedLaunch();
-				throw;
-			}
-		}
-
-		/// <summary>
-		/// Launch into the plane of the selected target.
-		/// </summary>
-		[KRPCMethod]
-		public void LaunchToTargetPlane() {
-			if(!MechJeb.TargetController.NormalTargetExists)
-				throw new InvalidOperationException("Invalid target");
-
-			this.AbortTimedLaunch();
-			try {
-				Orbit target = MechJeb.TargetController.InternalTargetOrbit;
-				AscentGuidance.launchingToPlane.SetValue(this.guiInstance, true);
-
-				Tuple<double, double> item = MathFunctions.MinimumTimeToPlane(target.LAN - this.LaunchLANDifference, target.inclination);
-				this.StartCountdown(item.Item1);
-				this.DesiredInclination = item.Item2;
-			}
-			catch(Exception) {
-				this.AbortTimedLaunch();
-				throw;
-			}
-		}
-
-		[KRPCEnum(Service = "MechJeb")]
-		public enum AscentLaunchMode {
-			/// <summary>
-			/// The autopilot is not performing a timed launch.
-			/// </summary>
-			Normal,
-
-			/// <summary>
-			/// The autopilot is performing a timed launch to rendezvous with the target vessel.
-			/// </summary>
-			Rendezvous,
-
-			/// <summary>
-			/// The autopilot is performing a timed launch to target plane.
-			/// </summary>
-			TargetPlane,
-
-			/// <summary>
-			/// The autopilot is performing an unknown timed launch.
-			/// </summary>
-			Unknown = 99
-		}
-	}
-
-	public abstract class AscentBase : ComputerModule { }
+        /// <summary>
+        /// A timed launch of another kind, started from MechJeb's window.
+        /// </summary>
+        Unknown = 99
+    }
 }

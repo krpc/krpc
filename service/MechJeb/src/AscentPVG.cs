@@ -1,124 +1,146 @@
-using System;
-using System.Reflection;
-
-using KRPC.MechJeb.ExtensionMethods;
 using KRPC.Service.Attributes;
 
-namespace KRPC.MechJeb {
-	/// <summary>
-	/// The Primer Vector Guidance (RSS/RO) profile.
-	/// </summary>
-	[KRPCClass(Service = "MechJeb")]
-	public class AscentPVG : AscentBase {
-		internal new const string MechJebType = "MuMech.MechJebModuleAscentPVG";
+namespace KRPC.MechJeb
+{
+    /// <summary>
+    /// The Primer Vector Guidance (RSS/RO) profile.
+    /// </summary>
+    [KRPCClass (Service = "MechJeb")]
+    public sealed class AscentPVG : AscentBase
+    {
+        static Value<double> pitchStartVelocity;
+        static Value<double> pitchRate;
+        static Value<double> desiredApoapsis;
+        static Value<bool> attachAltFlag;
+        static Value<double> desiredAttachAlt;
+        static Value<double> desiredAttachAltFixed;
+        static Value<int> optimizeStage;
+        static Value<double> dynamicPressureTrigger;
+        static Value<int> stagingTrigger;
+        static Value<bool> stagingTriggerFlag;
+        static Value<bool> fixedCoast;
+        static Value<double> fixedCoastLength;
 
-		// Fields and methods
-		private static FieldInfo pitchStartVelocityField;
-		private static FieldInfo pitchRateField;
-		private static FieldInfo desiredApoapsisField;
-		private static FieldInfo attachAltFlag;
-		private static FieldInfo desiredAttachAltField;
-		private static FieldInfo dynamicPressureTriggerField;
-		private static FieldInfo stagingTriggerField;
-		private static FieldInfo stagingTriggerFlag;
-		private static FieldInfo fixedCoast;
-		private static FieldInfo fixedCoastLengthField;
+        internal static new void Load ()
+        {
+            var type = Reflection.Type ("MuMech.MechJebModuleAscentSettings");
+            pitchStartVelocity = Reflection.EditableDouble (type, "PitchStartVelocity");
+            pitchRate = Reflection.EditableDouble (type, "PitchRate");
+            desiredApoapsis = Reflection.EditableDouble (type, "DesiredApoapsis");
+            attachAltFlag = Reflection.Field<bool> (type, "AttachAltFlag");
+            desiredAttachAlt = Reflection.EditableDouble (type, "DesiredAttachAlt");
+            desiredAttachAltFixed = Reflection.EditableDouble (type, "DesiredAttachAltFixed");
+            optimizeStage = Reflection.Field<int> (type, "OptimizeStage");
+            dynamicPressureTrigger = Reflection.EditableDouble (type, "DynamicPressureTrigger");
+            stagingTrigger = Reflection.EditableInt (type, "StagingTrigger");
+            stagingTriggerFlag = Reflection.Field<bool> (type, "StagingTriggerFlag");
+            fixedCoast = Reflection.Field<bool> (type, "FixedCoast");
+            fixedCoastLength = Reflection.EditableDouble (type, "FixedCoastLength");
+        }
 
-		// Instance objects
-		private object pitchStartVelocity;
-		private object pitchRate;
-		private object desiredApoapsis;
-		private object desiredAttachAlt;
-		private object dynamicPressureTrigger;
-		private object stagingTrigger;
-		private object fixedCoastLength;
+        /// <summary>
+        /// The speed at which the booster starts to pitch over, in <unit>m/s</unit>.
+        /// </summary>
+        [KRPCProperty]
+        public double PitchStartVelocity {
+            get { return pitchStartVelocity.Get (Instance); }
+            set { pitchStartVelocity.Set (Instance, value); }
+        }
 
-		internal static new void InitType(Type type) {
-			pitchStartVelocityField = type.GetCheckedField("PitchStartVelocity");
-			pitchRateField = type.GetCheckedField("PitchRate");
-			desiredApoapsisField = type.GetCheckedField("DesiredApoapsis");
-			attachAltFlag = type.GetCheckedField("AttachAltFlag");
-			desiredAttachAltField = type.GetCheckedField("DesiredAttachAlt");
-			dynamicPressureTriggerField = type.GetCheckedField("DynamicPressureTrigger");
-			stagingTriggerField = type.GetCheckedField("StagingTrigger");
-			stagingTriggerFlag = type.GetCheckedField("StagingTriggerFlag");
-			fixedCoast = type.GetCheckedField("FixedCoast");
-			fixedCoastLengthField = type.GetCheckedField("FixedCoastLength");
-		}
+        /// <summary>
+        /// The pitch rate of the booster, in <unit>deg/s</unit>.
+        /// </summary>
+        [KRPCProperty]
+        public double PitchRate {
+            get { return pitchRate.Get (Instance); }
+            set { pitchRate.Set (Instance, value); }
+        }
 
-		protected internal override void InitInstance(object instance) {
-			base.InitInstance(instance);
+        /// <summary>
+        /// The target apoapsis, in meters.
+        /// </summary>
+        [KRPCProperty]
+        public double DesiredApoapsis {
+            get { return desiredApoapsis.Get (Instance); }
+            set { desiredApoapsis.Set (Instance, value); }
+        }
 
-			this.pitchStartVelocity = pitchStartVelocityField.GetInstanceValue(instance);
-			this.pitchRate = pitchRateField.GetInstanceValue(instance);
-			this.desiredApoapsis = desiredApoapsisField.GetInstanceValue(instance);
-			this.desiredAttachAlt = desiredAttachAltField.GetInstanceValue(instance);
-			this.dynamicPressureTrigger = dynamicPressureTriggerField.GetInstanceValue(instance);
-			this.stagingTrigger = stagingTriggerField.GetInstanceValue(instance);
-			this.fixedCoastLength = fixedCoastLengthField.GetInstanceValue(instance);
-		}
+        /// <summary>
+        /// Whether the orbit is attached at <see cref="DesiredAttachAlt"/>.
+        /// </summary>
+        /// <remarks>
+        /// MechJeb reads this setting only when its PVG settings window has an early shutoff
+        /// stage. Without one, MechJeb always attaches the orbit.
+        /// </remarks>
+        [KRPCProperty]
+        public bool AttachAltFlag {
+            get { return attachAltFlag.Get (Instance); }
+            set { attachAltFlag.Set (Instance, value); }
+        }
 
-		[KRPCProperty]
-		public double PitchStartVelocity {
-			get => EditableDouble.Get(this.pitchStartVelocity);
-			set => EditableDouble.Set(this.pitchStartVelocity, value);
-		}
+        /// <summary>
+        /// The altitude at which the orbit is attached, in meters.
+        /// </summary>
+        /// <remarks>
+        /// Requires <see cref="AttachAltFlag"/>, unless MechJeb's PVG settings window has no early
+        /// shutoff stage.
+        /// </remarks>
+        [KRPCProperty]
+        public double DesiredAttachAlt {
+            get { return AttachAltitude.Get (Instance); }
+            set { AttachAltitude.Set (Instance, value); }
+        }
 
-		[KRPCProperty]
-		public double PitchRate {
-			get => EditableDouble.Get(this.pitchRate);
-			set => EditableDouble.Set(this.pitchRate, value);
-		}
+        // MechJeb keeps a separate attach altitude for an ascent with no early shutoff stage
+        Value<double> AttachAltitude {
+            get { return optimizeStage.Get (Instance) < 0 ? desiredAttachAltFixed : desiredAttachAlt; }
+        }
 
-		/// <summary>
-		/// The target apoapsis in meters.
-		/// </summary>
-		[KRPCProperty]
-		public double DesiredApoapsis {
-			get => EditableDouble.Get(this.desiredApoapsis);
-			set => EditableDouble.Set(this.desiredApoapsis, value);
-		}
+        /// <summary>
+        /// The dynamic pressure below which guidance starts, in pascals.
+        /// </summary>
+        [KRPCProperty]
+        public double DynamicPressureTrigger {
+            get { return dynamicPressureTrigger.Get (Instance); }
+            set { dynamicPressureTrigger.Set (Instance, value); }
+        }
 
-		[KRPCProperty]
-		public bool AttachAltFlag {
-			get => (bool)attachAltFlag.GetValue(this.instance);
-			set => attachAltFlag.SetValue(this.instance, value);
-		}
+        /// <summary>
+        /// The stage after which guidance starts.
+        /// </summary>
+        /// <remarks>Requires <see cref="StagingTriggerFlag"/>.</remarks>
+        [KRPCProperty]
+        public int StagingTrigger {
+            get { return stagingTrigger.Get (Instance); }
+            set { stagingTrigger.Set (Instance, value); }
+        }
 
-		[KRPCProperty]
-		public double DesiredAttachAlt {
-			get => EditableDouble.Get(this.desiredAttachAlt);
-			set => EditableDouble.Set(this.desiredAttachAlt, value);
-		}
+        /// <summary>
+        /// Whether guidance starts after <see cref="StagingTrigger"/>.
+        /// </summary>
+        [KRPCProperty]
+        public bool StagingTriggerFlag {
+            get { return stagingTriggerFlag.Get (Instance); }
+            set { stagingTriggerFlag.Set (Instance, value); }
+        }
 
-		[KRPCProperty]
-		public double DynamicPressureTrigger {
-			get => EditableDouble.Get(this.dynamicPressureTrigger);
-			set => EditableDouble.Set(this.dynamicPressureTrigger, value);
-		}
+        /// <summary>
+        /// Whether the coast has a fixed length.
+        /// </summary>
+        [KRPCProperty]
+        public bool FixedCoast {
+            get { return fixedCoast.Get (Instance); }
+            set { fixedCoast.Set (Instance, value); }
+        }
 
-		[KRPCProperty]
-		public int StagingTrigger {
-			get => EditableInt.Get(this.stagingTrigger);
-			set => EditableInt.Set(this.stagingTrigger, value);
-		}
-
-		[KRPCProperty]
-		public bool StagingTriggerFlag {
-			get => (bool)stagingTriggerFlag.GetValue(this.instance);
-			set => stagingTriggerFlag.SetValue(this.instance, value);
-		}
-
-		[KRPCProperty]
-		public bool FixedCoast {
-			get => (bool)fixedCoast.GetValue(this.instance);
-			set => fixedCoast.SetValue(this.instance, value);
-		}
-
-		[KRPCProperty]
-		public double FixedCoastLength {
-			get => EditableDouble.Get(this.fixedCoastLength);
-			set => EditableDouble.Set(this.fixedCoastLength, value);
-		}
-	}
+        /// <summary>
+        /// The length of the coast, in seconds.
+        /// </summary>
+        /// <remarks>Requires <see cref="FixedCoast"/>.</remarks>
+        [KRPCProperty]
+        public double FixedCoastLength {
+            get { return fixedCoastLength.Get (Instance); }
+            set { fixedCoastLength.Set (Instance, value); }
+        }
+    }
 }
