@@ -58,9 +58,21 @@ namespace KRPC.Trajectories
         }
 
         /// <summary>
+        /// Whether the reference frame turns at the rate of the body, to within 1%, such as
+        /// the body's own frame or a frame fixed to its surface.
+        /// </summary>
+        bool RotatesWithBody(ReferenceFrame referenceFrame)
+        {
+            Vector3d bodyAngularVelocity = InternalPatch.StartingState.ReferenceBody.angularVelocity;
+            // Relative, as the frame of a landed vessel takes its angular velocity from physics
+            return (referenceFrame.AngularVelocity - bodyAngularVelocity).magnitude <=
+                0.01 * bodyAngularVelocity.magnitude;
+        }
+
+        /// <summary>
         /// Impact position, <c>null</c> if no impact.
         /// 
-        /// If <see cref="Patch.Body"/> rotating frame is used then position includes rotation with time.
+        /// If the reference frame rotates with <see cref="Patch.Body"/>, such as its own reference frame, then position includes rotation with time.
         /// </summary>
         /// <param name="referenceFrame">Reference frame to use</param>
         [KRPCMethod(Nullable = true)]
@@ -70,8 +82,7 @@ namespace KRPC.Trajectories
 
             if (localPos.HasValue)
             {
-                // Rotating reference frame
-                if (referenceFrame.Equals(Body.ReferenceFrame))
+                if (RotatesWithBody(referenceFrame))
                 {
                     Vector3d worldPos = patchFrame.Position + CalculateRotatedVector(Body.InternalBody, localPos.Value, EndUT);
                     return referenceFrame.PositionFromWorldSpace(worldPos).ToTuple();
@@ -86,7 +97,7 @@ namespace KRPC.Trajectories
         /// <summary>
         /// Impact velocity, <c>null</c> if no impact.
         /// 
-        /// If <see cref="Patch.Body"/> rotating frame is used then velocity includes rotation with time.
+        /// If the reference frame rotates with <see cref="Patch.Body"/>, such as its own reference frame, then velocity includes rotation with time.
         /// </summary>
         /// <param name="referenceFrame">Reference frame to use</param>
         [KRPCMethod(Nullable = true)]
@@ -97,8 +108,7 @@ namespace KRPC.Trajectories
 
             if (localVel.HasValue)
             {
-                // Rotating reference frame
-                if (referenceFrame.Equals(Body.ReferenceFrame))
+                if (RotatesWithBody(referenceFrame))
                 {
                     Vector3d worldPos = patchFrame.Position + CalculateRotatedVector(Body.InternalBody, localPos.Value, EndUT);
                     Vector3d worldVel = patchFrame.Velocity + CalculateRotatedVector(Body.InternalBody, localVel.Value, EndUT);
@@ -167,7 +177,7 @@ namespace KRPC.Trajectories
         /// <summary>
         /// Array of trajectory points, <c>null</c> if <see cref="Atmospheric"/> is <c>false</c>.
         /// 
-        /// If <see cref="Patch.Body"/> rotating frame is used then position includes rotation with time.
+        /// If the reference frame rotates with <see cref="Patch.Body"/>, such as its own reference frame, then position includes rotation with time.
         /// </summary>
         /// <param name="referenceFrame">Reference frame to use</param>
         [KRPCMethod(Nullable = true)]
@@ -184,7 +194,7 @@ namespace KRPC.Trajectories
                     Vector3d worldPos;
 
                     // When BodyFixedMode is enabled positions are stored with rotation
-                    if (referenceFrame.Equals(Body.ReferenceFrame))
+                    if (RotatesWithBody(referenceFrame))
                         if (API.Settings.get_BodyFixedMode())
                             worldPos = patchFrame.Position + point.pos;
                         else
