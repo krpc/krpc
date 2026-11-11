@@ -2469,6 +2469,7 @@ Trajectories.Patch.OrbitalTrajectory
 Trajectories.DescentProfileNode
 Trajectories.DescentProfileNode.Angle
 Trajectories.DescentProfileNode.Mode
+Trajectories.DescentProfileMode
 Trajectories.DescentProfileMode.AngleOfAttack
 Trajectories.DescentProfileMode.Horizon
 Debug
