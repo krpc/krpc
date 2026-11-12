@@ -41,8 +41,8 @@ Lifetime
 * The connection closes on ``close()``, on a transport or protocol failure, or when the socket is
   collected.
 * ``close()`` closes the sending side of the socket, then drains it for up to a second.
-* After a close or a failure, ``Connection._error`` holds the text, and a call through any holder
-  raises it. A second ``close()`` does nothing.
+* After a close or a failure, ``Connection._error`` holds the ``ConnectionError``, and a call
+  through any holder raises it. A second ``close()`` does nothing.
 * ``Connection`` has no ``__gc`` or ``__close``. luasocket's finalizer closes a collected socket,
   including at the end of the program, and sends no ``disconnect``. An orderly close needs
   ``close()``.
@@ -155,8 +155,15 @@ Mapping the Spec to Lua
 
    * - Spec
      - Lua
-   * - Connection or server error
-     - A string, with no type. A server error reads ``Service.Name: description``
+   * - Remote error
+     - An object of a ``pl.class`` class from ``krpc/error.lua``: ``RemoteError``, and
+       ``ConnectionError``, ``ServerError`` and ``EncodingError`` deriving it. Raised with
+       ``error(err, 0)``, so the message has no source position. Lua 5.1 prints an uncaught error
+       object as "(error object is not a string)"
+   * - Server exception with a mapped type
+     - ``ServerError``, with its ``service`` and ``name``, as Lua has no native error types
+   * - Argument error
+     - A string
    * - Named arguments
      - Unsupported. ``nil`` skips a position
    * - List, tuple, set, dictionary

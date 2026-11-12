@@ -16,14 +16,19 @@ local function unix_socket()
   local found, unix = pcall(require, 'socket.unix')
   if not found then
     error('This luasocket has no socket.unix module, so it cannot open a unix domain ' ..
-          'socket. Connect over TCP/IP with krpc.connect instead')
+          'socket. Connect over TCP/IP with krpc.connect instead', 0)
   end
   return unix()
 end
 
 function LocalTransport:_open()
   self._socket = unix_socket()
-  return self._socket:connect(self._path)
+  local result, err = self._socket:connect(self._path)
+  -- luasocket checks the path fits the socket address before connecting
+  if err == 'path too long' then
+    error("bad argument #2 to 'connect_local' (the socket path is too long)", 0)
+  end
+  return result, err
 end
 
 return LocalTransport

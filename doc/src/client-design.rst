@@ -339,7 +339,7 @@ Each client signals the use of a deprecated member with the language's own mecha
      - Streams and calls, which name their method in a string
    * - Lua
      - A warning on standard error, once per member on a connection
-     - Exceptions, which the client does not expose, and structure fields
+     - Exceptions, which have no Lua type, and structure fields
 
 A stream, and the call a server side function makes, use a procedure too. Python and Lua warn when
 the client builds the call. In C++ and C-nano, the ``_stream`` and ``_call`` functions carry the

@@ -10,6 +10,7 @@ local register_definitions = Service.register_definitions
 
 local protobuf = require 'krpc.protobuf'
 local Transport = require 'krpc.transport'
+local errors = require 'krpc.error'
 
 local Connection = class()
 
@@ -26,11 +27,16 @@ function Connection:_init(transport)
   -- Set up the main KRPC service
   local services = self:_invoke('KRPC', 'GetServices', nil, nil, self._types:services_type()).services
 
+  -- The exceptions the services define, by qualified name
+  self._exceptions = {}
   -- Register the types of every service before creating any of them, as a service's procedures
   -- are built from types that any service may define
   for _, service in ipairs(services) do
     Service.inherit_deprecation(service)
     register_definitions(self._types, service)
+    for _, exception in ipairs(service.exceptions) do
+      self._exceptions[service.name .. '.' .. exception.name] = true
+    end
   end
 
   -- Set up services
@@ -69,7 +75,7 @@ function Connection:close()
     self._transport:close()
     return
   end
-  self._error = 'Connection closed'
+  self._error = errors.ConnectionError('Connection closed')
   pcall(function()
     self._transport:send(encoder.encode_in_message('Disconnect', {
       reason = protobuf.enum('Disconnect.Reason', 'CLOSED')
@@ -82,7 +88,7 @@ end
 --- End the connection on a message the server should not have sent, or one that fails to
 --- parse, sending the server a disconnect with the given reason, PROTOCOL_ERROR by default
 function Connection:_protocol_error(text, reason)
-  self._error = text
+  self._error = errors.ConnectionError(text)
   pcall(function()
     self._transport:send(encoder.encode_in_message('Disconnect', {
       reason = protobuf.enum('Disconnect.Reason', reason or 'PROTOCOL_ERROR'),
@@ -91,7 +97,7 @@ function Connection:_protocol_error(text, reason)
     self._transport:half_close_and_close()
   end)
   self._transport:close()
-  error(text)
+  error(self._error, 0)
 end
 
 --- Read from or write to the connection. A failure ends the connection, and every later call
@@ -99,9 +105,9 @@ end
 function Connection:_io(operation, ...)
   local ok, result = pcall(operation, self._transport, ...)
   if not ok then
-    self._error = tostring(result)
+    self._error = errors.ConnectionError('Connection failed', result)
     self._transport:close()
-    error(result, 0)
+    error(self._error, 0)
   end
   return result
 end
@@ -114,9 +120,9 @@ function Connection:_receive_response(id, return_type)
     if not ok and data == Transport.MALFORMED_SIZE then
       self:_protocol_error(data, 'MALFORMED_MESSAGE')
     elseif not ok then
-      self._error = tostring(data)
+      self._error = errors.ConnectionError('Connection failed', data)
       self._transport:close()
-      error(data, 0)
+      error(self._error, 0)
     end
     local message, value = decoder.decode_message_and_value(data, return_type)
     if message == nil then
@@ -137,9 +143,9 @@ function Connection:_receive_response(id, return_type)
       if disconnect.message ~= '' then
         text = text .. ': ' .. disconnect.message
       end
-      self._error = text
+      self._error = errors.ConnectionError(text, nil, nil, reason)
       self._transport:close()
-      error(text)
+      error(self._error, 0)
     end
     if message.request ~= nil or message.stream_update ~= nil or
        message.connection_request ~= nil or message.connection_response ~= nil then
@@ -160,7 +166,7 @@ function Connection:_invoke(service, procedure, args, param_types, return_type, 
   param_types = param_types or List{}
 
   if self._error ~= nil then
-    error(self._error)
+    error(self._error, 0)
   end
 
   -- Build the request
@@ -174,12 +180,12 @@ function Connection:_invoke(service, procedure, args, param_types, return_type, 
 
   -- Check for an error response
   if response.error ~= nil then
-    error(self:_error_message(response.error))
+    error(self:_server_error(response.error), 0)
   end
 
   local result = response.results[1]
   if result.error ~= nil then
-    error(self:_error_message(result.error))
+    error(self:_server_error(result.error), 0)
   end
 
   -- Return the (optional) result
@@ -187,7 +193,8 @@ function Connection:_invoke(service, procedure, args, param_types, return_type, 
     -- A null result is signaled out-of-band by is_null; the value field is unset
     if result.is_null then
       if not return_type.nullable then
-        error(string.format('%s.%s() returned null, for a result that cannot be null', service, procedure))
+        error(errors.EncodingError(string.format(
+          '%s.%s() returned null, for a result that cannot be null', service, procedure)), 0)
       end
       return nil
     end
@@ -380,16 +387,22 @@ function Connection:run(func, ...)
   return decoder.decode(data, return_type)
 end
 
---- Construct an error description from a KRPC.Error object
-function Connection:_error_message(err)
-   local msg = err.description
-  if err.service ~= '' and err.exception ~= '' then
-    msg = err.service .. '.' .. err.exception .. ': ' .. msg
-  end
+--- The ServerError for a KRPC.Error object
+function Connection:_server_error(err)
+  local msg = err.description
   if err.stack_trace ~= '' then
     msg = msg .. '\nServer stack trace:\n' .. err.stack_trace
   end
-  return msg
+  local service, name
+  if err.service ~= '' and err.exception ~= '' then
+    service, name = err.service, err.exception
+    -- An exception the definitions leave out is named in the message too
+    local qualified = service .. '.' .. name
+    if self._exceptions == nil or not self._exceptions[qualified] then
+      msg = qualified .. ': ' .. msg
+    end
+  end
+  return errors.ServerError(msg, service, name)
 end
 
 return Connection

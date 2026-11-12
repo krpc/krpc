@@ -269,6 +269,8 @@ def test_remote_error(client, server, category):
     conventions file. This covers the connection, server, stream and encoding errors, and a
     service's exception types. A mapped exception and the language's own errors, such as its
     argument error, do not derive it."""
+    if category == "stream" and not client.has_profile("streams"):
+        pytest.skip("%s has no streams" % client.name)
     error = remote_error_of(client, server, category)
     assert_remote_error(client, error)
 

@@ -7,7 +7,11 @@ import time
 import pytest
 import testee_pb2 as pb
 from driver import profile, raw, section, should, values
-from driver.errors import assert_argument_error, assert_interrupt_error
+from driver.errors import (
+    assert_argument_error,
+    assert_error_kind,
+    assert_interrupt_error,
+)
 from driver.framing import encode_sint32, encode_size
 from driver.helpers import create
 from driver.scripted import ScriptedServer, definitions, is_call, serve_definitions
@@ -806,6 +810,27 @@ def test_undefined_type(client, server, scripted_server, case):
         assert client.invoke("Later", "Known", values.sint32(1)) == ""
     finally:
         client.close()
+
+
+@profile("definitions")
+@pytest.mark.parametrize("case", ["list-element-types", "structure-twice"])
+def test_malformed_definitions(client, server, scripted_server, case):
+    """Service definitions the client cannot build its services from, such as a list type
+    with two element types or a structure defined twice, make the connect raise the
+    connection error."""
+    service = KRPC.Service(name="Later")
+    sint32 = KRPC.Type(code=KRPC.Type.SINT32)
+    if case == "list-element-types":
+        service.procedures.add(
+            name="Broken",
+            return_type=KRPC.Type(code=KRPC.Type.LIST, types=[sint32] * 2),
+        )
+    else:
+        service.structs.add(name="Thing").fields.add(name="Value", type=sint32)
+        service.structs.add(name="Thing").fields.add(name="Other", type=sint32)
+    with pytest.raises(TesteeError) as info:
+        with_definitions(client, server, scripted_server, service)
+    assert_error_kind(client, info.value.error, pb.Error.CONNECTION)
 
 
 @profile("definitions")

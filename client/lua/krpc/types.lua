@@ -464,7 +464,7 @@ Types.ValueType = class(Types.TypeBase)
 
 function Types.ValueType:_init(protobuf_type)
   if not VALUE_TYPES:get(protobuf_type.code) then
-    error('Not a value type')
+    error('Not a value type', 0)
   end
   self:super(protobuf_type, VALUE_TYPES:get(protobuf_type.code), CODE_TO_STRING:get(protobuf_type.code))
 end
@@ -473,13 +473,13 @@ Types.ClassType = class(Types.TypeBase)
 
 function Types.ClassType:_init(protobuf_type)
   if protobuf_type.code ~= Types.CLASS then
-    error('Not a class type')
+    error('Not a class type', 0)
   end
   if protobuf_type.service == '' then
-    error('Class type has no service name')
+    error('Class type has no service name', 0)
   end
   if protobuf_type.name == '' then
-    error('Class type has no class name')
+    error('Class type has no class name', 0)
   end
   self._service_name = protobuf_type.service
   self._class_name = protobuf_type.name
@@ -492,13 +492,13 @@ Types.EnumerationType = class(Types.TypeBase)
 
 function Types.EnumerationType:_init(protobuf_type)
   if protobuf_type.code ~= Types.ENUMERATION then
-    error('Not an enumeration type')
+    error('Not an enumeration type', 0)
   end
   if protobuf_type.service == '' then
-    error('Enumeration type has no service name')
+    error('Enumeration type has no service name', 0)
   end
   if protobuf_type.name == '' then
-    error('Enumeration type has no class name')
+    error('Enumeration type has no class name', 0)
   end
   self._service_name = protobuf_type.service
   self._class_name = protobuf_type.name
@@ -520,13 +520,13 @@ Types.StructType = class(Types.TypeBase)
 
 function Types.StructType:_init(protobuf_type)
   if protobuf_type.code ~= Types.STRUCT then
-    error('Not a struct type')
+    error('Not a struct type', 0)
   end
   if protobuf_type.service == '' then
-    error('Struct type has no service name')
+    error('Struct type has no service name', 0)
   end
   if protobuf_type.name == '' then
-    error('Struct type has no struct name')
+    error('Struct type has no struct name', 0)
   end
   self._service_name = protobuf_type.service
   self._struct_name = protobuf_type.name
@@ -562,10 +562,10 @@ Types.TupleType = class(Types.TypeBase)
 
 function Types.TupleType:_init(protobuf_type, types)
   if protobuf_type.code ~= Types.TUPLE then
-    error('Not a tuple type')
+    error('Not a tuple type', 0)
   end
   if #(protobuf_type.types) == 0 then
-    error('Wrong number of sub-types for tuple type')
+    error('Wrong number of sub-types for tuple type', 0)
   end
   self.value_types = List{}
   local parts = List{}
@@ -582,10 +582,10 @@ Types.ListType = class(Types.TypeBase)
 
 function Types.ListType:_init(protobuf_type, types)
   if protobuf_type.code ~= Types.LIST then
-    error('Not a list type')
+    error('Not a list type', 0)
   end
   if #(protobuf_type.types) ~= 1 then
-    error('Wrong number of sub-types for list type')
+    error('Wrong number of sub-types for list type', 0)
   end
   self.value_type = types:as_type(protobuf_type.types[1])
   local type_string = 'List(' .. self.value_type._string .. ')'
@@ -596,10 +596,10 @@ Types.SetType = class(Types.TypeBase)
 
 function Types.SetType:_init(protobuf_type, types)
   if protobuf_type.code ~= Types.SET then
-    error('Not a set type')
+    error('Not a set type', 0)
   end
   if #(protobuf_type.types) ~= 1 then
-    error('Wrong number of sub-types for set type')
+    error('Wrong number of sub-types for set type', 0)
   end
   self.value_type = types:as_type(protobuf_type.types[1])
   local type_string = 'Set(' .. self.value_type._string .. ')'
@@ -610,10 +610,10 @@ Types.DictionaryType = class(Types.TypeBase)
 
 function Types.DictionaryType:_init(protobuf_type, types)
   if protobuf_type.code ~= Types.DICTIONARY then
-    error('Not a dictionary type')
+    error('Not a dictionary type', 0)
   end
   if #(protobuf_type.types) ~= 2 then
-    error('Wrong number of sub-types for dictionary type')
+    error('Wrong number of sub-types for dictionary type', 0)
   end
   self.key_type = types:as_type(protobuf_type.types[1])
   self.value_type = types:as_type(protobuf_type.types[2])
@@ -626,7 +626,7 @@ Types.StreamType = class(Types.TypeBase)
 
 function Types.StreamType:_init(protobuf_type)
   if protobuf_type.code ~= Types.STREAM and protobuf_type.code ~= Types.EVENT then
-    error('Not a stream type')
+    error('Not a stream type', 0)
   end
   self:super(protobuf_type, 'number', CODE_TO_STRING:get(protobuf_type.code))
 end
@@ -635,7 +635,7 @@ Types.MessageType = class(Types.TypeBase)
 
 function Types.MessageType:_init(protobuf_type)
   if not MESSAGE_TYPES:get(protobuf_type.code) then
-    error('Not a message type')
+    error('Not a message type', 0)
   end
   -- A message is a table, of the named type in the krpc.schema package
   self.message_type = MESSAGE_TYPES:get(protobuf_type.code)

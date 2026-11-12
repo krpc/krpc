@@ -76,7 +76,7 @@ optional comment:
 
 .. code-block:: none
 
-   test_errors.py::test_exception_name  # RPC errors carry only a message
+   test_errors.py::test_exception_name  # Server errors carry only a message
    test_streams.py::test_wait_timeout_values[nan]
 
 A listed test must fail, or the run fails, so the list cannot go stale. A test of a timing

@@ -42,6 +42,18 @@
   - Throw `EncodingException` for a tuple with too few items (#1333)
   - Give an `EncodingException` the message of its cause (#1333)
 
+## client/lua
+
+- Errors
+  - **Breaking:** Raise errors as objects of the new classes `krpc.RemoteError`,
+    `krpc.ConnectionError`, `krpc.ServerError` and `krpc.EncodingError`, in place of strings.
+    An argument the client rejects still raises a string (#1333)
+  - **Breaking:** Drop the source position and the `Service.Name:` prefix from the message of
+    an error, which the error's fields now carry (#1333)
+  - **Breaking:** Raise `ConnectionError` for malformed service definitions (#1333)
+  - **Breaking:** Raise `bad argument #2 to 'connect_local'` for a local socket path that is too
+    long (#1333)
+
 ## client/python
 
 - Errors
