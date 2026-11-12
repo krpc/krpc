@@ -712,6 +712,19 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         raise _declaration("KRPC", "Expression")
 
     @staticmethod
+    def constant_enum_by_id(service_id: int, enumeration_id: int, value: int) -> Expression:
+        """
+        A constant value of an enumeration a service defines, named by ids.
+
+        :param service_id: The id of the service the enumeration is defined in.
+
+        :param enumeration_id: The id of the enumeration.
+
+        :param value: The value of the member of the enumeration.
+        """
+        raise _declaration("KRPC", "Expression")
+
+    @staticmethod
     def constant_float(value: float) -> Expression:
         """
         A constant value of single precision floating point type.
@@ -1119,6 +1132,22 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         :param arg: The structure.
 
         :param name: The name of the field to access.
+        """
+        raise _declaration("KRPC", "Expression")
+
+    @staticmethod
+    def get_field_by_index(arg: Expression, index: int) -> Expression:
+        """
+        The value of a field of a structure, named by its position. Throws an exception if
+        the value is not a structure, or the index is out of range.
+
+        The fields are numbered from 0, in the order the structure defines them.
+
+        :returns: The value of the field.
+
+        :param arg: The structure.
+
+        :param index: The position of the field to access.
         """
         raise _declaration("KRPC", "Expression")
 
@@ -1905,6 +1934,22 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         raise _declaration("KRPC", "Expression")
 
     @staticmethod
+    def throw_by_id(service_id: int, exception_id: int, message: Expression) -> Expression:
+        """
+        A throw statement, which raises the exception with the given ids.
+
+        Raises the exception as :meth:`krpc.services.krpc.Expression.throw` does. Throws an exception if the
+        service does not declare it.
+
+        :param service_id: The id of the service the exception is defined in.
+
+        :param exception_id: The id of the exception.
+
+        :param message: The message of the exception.
+        """
+        raise _declaration("KRPC", "Expression")
+
+    @staticmethod
     def to_list(arg: Expression) -> Expression:
         """
         A collection as a list.
@@ -1958,6 +2003,26 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         :param message: A string variable assigned the exception's message, or null.
 
         :param handler: The statement evaluated when an exception is caught.
+        """
+        raise _declaration("KRPC", "Expression")
+
+    @staticmethod
+    def try_catch_by_id(body: Expression, service_id: int, exception_id: int, message: Optional[Expression], handler: Expression) -> Expression:
+        """
+        A try-catch statement that handles the exception with the given ids.
+
+        Handles the exception as :meth:`krpc.services.krpc.Expression.try_catch` does. Throws an exception if the
+        service does not declare it.
+
+        :param body: The statement to evaluate.
+
+        :param service_id: The id of the service the exception is defined in.
+
+        :param exception_id: The id of the exception.
+
+        :param message: A string variable assigned the exception's message, or null.
+
+        :param handler: The statement evaluated when the exception is caught.
         """
         raise _declaration("KRPC", "Expression")
 
@@ -2125,6 +2190,17 @@ class Type(DeclaredObject, metaclass=DeclaredClass):
         raise _declaration("KRPC", "Type")
 
     @staticmethod
+    def class_type_by_id(service_id: int, class_id: int) -> Type:
+        """
+        The type of a class defined by a service, named by ids.
+
+        :param service_id: The id of the service the class is defined in.
+
+        :param class_id: The id of the class.
+        """
+        raise _declaration("KRPC", "Type")
+
+    @staticmethod
     def dictionary_type(key_type: Type, value_type: Type) -> Type:
         """
         A dictionary type. Throws an exception if the key type is nullable or not a valid
@@ -2151,6 +2227,17 @@ class Type(DeclaredObject, metaclass=DeclaredClass):
         :param service: The name of the service the enumeration is defined in.
 
         :param name: The name of the enumeration.
+        """
+        raise _declaration("KRPC", "Type")
+
+    @staticmethod
+    def enumeration_type_by_id(service_id: int, enumeration_id: int) -> Type:
+        """
+        The type of an enumeration defined by a service, named by ids.
+
+        :param service_id: The id of the service the enumeration is defined in.
+
+        :param enumeration_id: The id of the enumeration.
         """
         raise _declaration("KRPC", "Type")
 
@@ -2217,6 +2304,17 @@ class Type(DeclaredObject, metaclass=DeclaredClass):
         :param service: The name of the service the structure is defined in.
 
         :param name: The name of the structure.
+        """
+        raise _declaration("KRPC", "Type")
+
+    @staticmethod
+    def struct_type_by_id(service_id: int, struct_id: int) -> Type:
+        """
+        The type of a structure defined by a service, named by ids.
+
+        :param service_id: The id of the service the structure is defined in.
+
+        :param struct_id: The id of the structure.
         """
         raise _declaration("KRPC", "Type")
 

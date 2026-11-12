@@ -158,12 +158,7 @@ namespace KRPC.Service.KRPC
         [KRPCMethod]
         public static Type EnumerationType (string service, string name)
         {
-            var serviceSignature = GetServiceSignature (service);
-            EnumerationSignature enm;
-            if (!serviceSignature.Enumerations.TryGetValue (name, out enm))
-                throw new ArgumentException (
-                    "Enumeration \"" + name + "\" not found in service \"" + service + "\"");
-            return new Type (enm.UnderlyingType);
+            return new Type (GetEnumeration (service, name).UnderlyingType);
         }
 
         /// <summary>
@@ -179,6 +174,49 @@ namespace KRPC.Service.KRPC
             if (!serviceSignature.Structs.TryGetValue (name, out str))
                 throw new ArgumentException (
                     "Structure \"" + name + "\" not found in service \"" + service + "\"");
+            return new Type (str.UnderlyingType);
+        }
+
+        /// <summary>
+        /// The type of a class defined by a service, named by ids.
+        /// </summary>
+        /// <param name="serviceId">The id of the service the class is defined in.</param>
+        /// <param name="classId">The id of the class.</param>
+        [KRPCMethod]
+        public static Type ClassTypeById (uint serviceId, uint classId)
+        {
+            var service = Services.Instance.GetServiceSignature (serviceId);
+            var cls = service.Classes.Values.FirstOrDefault (x => x.Id == classId);
+            if (cls == null)
+                throw new ArgumentException (
+                    "Class with id " + classId + " not found in service \"" + service.Name + "\"");
+            return new Type (cls.UnderlyingType);
+        }
+
+        /// <summary>
+        /// The type of an enumeration defined by a service, named by ids.
+        /// </summary>
+        /// <param name="serviceId">The id of the service the enumeration is defined in.</param>
+        /// <param name="enumerationId">The id of the enumeration.</param>
+        [KRPCMethod]
+        public static Type EnumerationTypeById (uint serviceId, uint enumerationId)
+        {
+            return new Type (GetEnumeration (serviceId, enumerationId).UnderlyingType);
+        }
+
+        /// <summary>
+        /// The type of a structure defined by a service, named by ids.
+        /// </summary>
+        /// <param name="serviceId">The id of the service the structure is defined in.</param>
+        /// <param name="structId">The id of the structure.</param>
+        [KRPCMethod]
+        public static Type StructTypeById (uint serviceId, uint structId)
+        {
+            var service = Services.Instance.GetServiceSignature (serviceId);
+            var str = service.Structs.Values.FirstOrDefault (x => x.Id == structId);
+            if (str == null)
+                throw new ArgumentException (
+                    "Structure with id " + structId + " not found in service \"" + service.Name + "\"");
             return new Type (str.UnderlyingType);
         }
 
@@ -379,6 +417,26 @@ namespace KRPC.Service.KRPC
             if (!Services.Instance.Signatures.TryGetValue (service, out signature))
                 throw new ArgumentException ("Service \"" + service + "\" not found");
             return signature;
+        }
+
+        internal static EnumerationSignature GetEnumeration (string service, string name)
+        {
+            EnumerationSignature enumeration;
+            if (!GetServiceSignature (service).Enumerations.TryGetValue (name, out enumeration))
+                throw new ArgumentException (
+                    "Enumeration \"" + name + "\" not found in service \"" + service + "\"");
+            return enumeration;
+        }
+
+        internal static EnumerationSignature GetEnumeration (uint serviceId, uint enumerationId)
+        {
+            var service = Services.Instance.GetServiceSignature (serviceId);
+            var enumeration = service.Enumerations.Values.FirstOrDefault (x => x.Id == enumerationId);
+            if (enumeration == null)
+                throw new ArgumentException (
+                    "Enumeration with id " + enumerationId + " not found in service \"" +
+                    service.Name + "\"");
+            return enumeration;
         }
     }
 }

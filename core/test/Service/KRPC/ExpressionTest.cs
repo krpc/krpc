@@ -369,6 +369,22 @@ namespace KRPC.Test.Service.KRPC
         }
 
         [Test]
+        public void ConstantEnumById ()
+        {
+            var service = global::KRPC.Service.Services.Instance.Signatures ["TestService"];
+            var enumId = service.Enumerations ["TestEnum"].Id;
+            Assert.AreSame (
+                Expression.ConstantEnum ("TestService", "TestEnum", 1),
+                Expression.ConstantEnumById (service.Id, enumId, 1));
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Expression.ConstantEnumById (0, enumId, 1));
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Expression.ConstantEnumById (service.Id, service.Classes ["TestClass"].Id, 1));
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Expression.ConstantEnumById (service.Id, enumId, 99));
+        }
+
+        [Test]
         public void ConstantEnumErrors ()
         {
             Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (

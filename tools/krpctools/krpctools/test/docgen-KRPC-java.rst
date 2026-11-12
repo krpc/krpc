@@ -399,6 +399,15 @@
       :param int value: The value of the member of the enumeration.
    
 
+   .. method:: static Expression constantEnumById(Connection connection, int serviceId, int enumerationId, int value)
+
+      A constant value of an enumeration a service defines, named by ids.
+
+      :param int serviceId: The id of the service the enumeration is defined in.
+      :param int enumerationId: The id of the enumeration.
+      :param int value: The value of the member of the enumeration.
+   
+
    .. method:: static Expression constantFloat(Connection connection, float value)
 
       A constant value of single precision floating point type.
@@ -737,6 +746,20 @@
       :param String name: The name of the field to access.
       :returns: The value of the field.
    
+
+   .. method:: static Expression getFieldByIndex(Connection connection, Expression arg, int index)
+
+      The value of a field of a structure, named by its position. Throws an exception if
+      the value is not a structure, or the index is out of range.
+
+      :param Expression arg: The structure.
+      :param int index: The position of the field to access.
+      :returns: The value of the field.
+   
+
+      .. note::
+
+         The fields are numbered from 0, in the order the structure defines them.
 
    .. method:: static Expression greaterThan(Connection connection, Expression arg0, Expression arg1)
 
@@ -1416,6 +1439,20 @@
          ``Error`` raise :type:`Error`. Throws an exception if the service does not
          declare it.
 
+   .. method:: static Expression throwById(Connection connection, int serviceId, int exceptionId, Expression message)
+
+      A throw statement, which raises the exception with the given ids.
+
+      :param int serviceId: The id of the service the exception is defined in.
+      :param int exceptionId: The id of the exception.
+      :param Expression message: The message of the exception.
+   
+
+      .. note::
+
+         Raises the exception as :meth:`Expression.throw_(String, String, Expression)` does. Throws an exception if the
+         service does not declare it.
+
    .. method:: static Expression toList(Connection connection, Expression arg)
 
       A collection as a list.
@@ -1460,6 +1497,22 @@
       :param Expression message: A string variable assigned the exception's message, or null.
       :param Expression handler: The statement evaluated when an exception is caught.
    
+
+   .. method:: static Expression tryCatchById(Connection connection, Expression body, int serviceId, int exceptionId, Expression message, Expression handler)
+
+      A try-catch statement that handles the exception with the given ids.
+
+      :param Expression body: The statement to evaluate.
+      :param int serviceId: The id of the service the exception is defined in.
+      :param int exceptionId: The id of the exception.
+      :param Expression message: A string variable assigned the exception's message, or null.
+      :param Expression handler: The statement evaluated when the exception is caught.
+   
+
+      .. note::
+
+         Handles the exception as :meth:`Expression.tryCatch(Expression, String, String, Expression, Expression)` does. Throws an exception if the
+         service does not declare it.
 
    .. method:: static Expression tryFinally(Connection connection, Expression body, Expression finalizer)
 
@@ -1562,6 +1615,14 @@
       :param String name: The name of the class.
    
 
+   .. method:: static Type classTypeById(Connection connection, int serviceId, int classId)
+
+      The type of a class defined by a service, named by ids.
+
+      :param int serviceId: The id of the service the class is defined in.
+      :param int classId: The id of the class.
+   
+
    .. method:: TypeCode getCode()
 
 
@@ -1590,6 +1651,14 @@
 
       :param String service: The name of the service the enumeration is defined in.
       :param String name: The name of the enumeration.
+   
+
+   .. method:: static Type enumerationTypeById(Connection connection, int serviceId, int enumerationId)
+
+      The type of an enumeration defined by a service, named by ids.
+
+      :param int serviceId: The id of the service the enumeration is defined in.
+      :param int enumerationId: The id of the enumeration.
    
 
    .. method:: static Type float_(Connection connection)
@@ -1669,6 +1738,14 @@
 
       :param String service: The name of the service the structure is defined in.
       :param String name: The name of the structure.
+   
+
+   .. method:: static Type structTypeById(Connection connection, int serviceId, int structId)
+
+      The type of a structure defined by a service, named by ids.
+
+      :param int serviceId: The id of the service the structure is defined in.
+      :param int structId: The id of the structure.
    
 
    .. method:: static Type tupleType(Connection connection, java.util.List<Type> valueTypes)

@@ -480,6 +480,18 @@
 
    
 
+   .. function:: static Expression constant_enum_by_id(krpc::Connection& connection, uint32_t service_id, uint32_t enumeration_id, int32_t value)
+
+      A constant value of an enumeration a service defines, named by ids.
+
+      :Parameters:
+
+       * **service_id** -- The id of the service the enumeration is defined in.
+       * **enumeration_id** -- The id of the enumeration.
+       * **value** -- The value of the member of the enumeration.
+
+   
+
    .. function:: static Expression constant_float(krpc::Connection& connection, float value)
 
       A constant value of single precision floating point type.
@@ -915,6 +927,23 @@
 
       :returns: The value of the field.
    
+
+   .. function:: static Expression get_field_by_index(krpc::Connection& connection, Expression arg, int32_t index)
+
+      The value of a field of a structure, named by its position. Throws an exception if
+      the value is not a structure, or the index is out of range.
+
+      :Parameters:
+
+       * **arg** -- The structure.
+       * **index** -- The position of the field to access.
+
+      :returns: The value of the field.
+   
+
+      .. note::
+
+         The fields are numbered from 0, in the order the structure defines them.
 
    .. function:: static Expression greater_than(krpc::Connection& connection, Expression arg0, Expression arg1)
 
@@ -1766,6 +1795,23 @@
          ``Error`` raise :class:`Error`. Throws an exception if the service does not
          declare it.
 
+   .. function:: static Expression throw_by_id(krpc::Connection& connection, uint32_t service_id, uint32_t exception_id, Expression message)
+
+      A throw statement, which raises the exception with the given ids.
+
+      :Parameters:
+
+       * **service_id** -- The id of the service the exception is defined in.
+       * **exception_id** -- The id of the exception.
+       * **message** -- The message of the exception.
+
+   
+
+      .. note::
+
+         Raises the exception as :func:`Expression::throw_` does. Throws an exception if the
+         service does not declare it.
+
    .. function:: static Expression to_list(krpc::Connection& connection, Expression arg)
 
       A collection as a list.
@@ -1822,6 +1868,25 @@
        * **handler** -- The statement evaluated when an exception is caught.
 
    
+
+   .. function:: static Expression try_catch_by_id(krpc::Connection& connection, Expression body, uint32_t service_id, uint32_t exception_id, std::optional<Expression> message, Expression handler)
+
+      A try-catch statement that handles the exception with the given ids.
+
+      :Parameters:
+
+       * **body** -- The statement to evaluate.
+       * **service_id** -- The id of the service the exception is defined in.
+       * **exception_id** -- The id of the exception.
+       * **message** -- A string variable assigned the exception's message, or null.
+       * **handler** -- The statement evaluated when the exception is caught.
+
+   
+
+      .. note::
+
+         Handles the exception as :func:`Expression::try_catch` does. Throws an exception if the
+         service does not declare it.
 
    .. function:: static Expression try_finally(krpc::Connection& connection, Expression body, Expression finalizer)
 
@@ -1947,6 +2012,17 @@
 
    
 
+   .. function:: static Type class_type_by_id(krpc::Connection& connection, uint32_t service_id, uint32_t class_id)
+
+      The type of a class defined by a service, named by ids.
+
+      :Parameters:
+
+       * **service_id** -- The id of the service the class is defined in.
+       * **class_id** -- The id of the class.
+
+   
+
    .. function:: TypeCode code()
 
       The kind of the type.
@@ -1980,6 +2056,17 @@
 
        * **service** -- The name of the service the enumeration is defined in.
        * **name** -- The name of the enumeration.
+
+   
+
+   .. function:: static Type enumeration_type_by_id(krpc::Connection& connection, uint32_t service_id, uint32_t enumeration_id)
+
+      The type of an enumeration defined by a service, named by ids.
+
+      :Parameters:
+
+       * **service_id** -- The id of the service the enumeration is defined in.
+       * **enumeration_id** -- The id of the enumeration.
 
    
 
@@ -2072,6 +2159,17 @@
 
        * **service** -- The name of the service the structure is defined in.
        * **name** -- The name of the structure.
+
+   
+
+   .. function:: static Type struct_type_by_id(krpc::Connection& connection, uint32_t service_id, uint32_t struct_id)
+
+      The type of a structure defined by a service, named by ids.
+
+      :Parameters:
+
+       * **service_id** -- The id of the service the structure is defined in.
+       * **struct_id** -- The id of the structure.
 
    
 

@@ -66,6 +66,56 @@ namespace KRPC.Test.Service.KRPC
             Assert.AreEqual ("caught boom", Eval<string> (expr));
         }
 
+        static uint KRPCServiceId {
+            get { return global::KRPC.Service.Services.Instance.Signatures ["KRPC"].Id; }
+        }
+
+        static uint KRPCExceptionId (string name)
+        {
+            return global::KRPC.Service.Services.Instance.Signatures ["KRPC"].Exceptions [name].Id;
+        }
+
+        [Test]
+        public void ThrowById ()
+        {
+            var expr = Expression.ThrowById (
+                KRPCServiceId, KRPCExceptionId ("InvalidOperationException"),
+                Expression.ConstantString ("boom"));
+            var exn = Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                () => expr.Evaluate ());
+            Assert.AreEqual ("boom", exn.Message);
+        }
+
+        [Test]
+        public void ThrowByIdRejectsAnUnknownException ()
+        {
+            var id = KRPCExceptionId ("InvalidOperationException");
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Expression.ThrowById (KRPCServiceId, 0, Expression.ConstantString ("boom")));
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Expression.ThrowById (0, id, Expression.ConstantString ("boom")));
+        }
+
+        [Test]
+        public void TryCatchByIdCatchesTheMappedException ()
+        {
+            var expr = Expression.TryCatchById (
+                ThrowArgumentOutOfRange (),
+                KRPCServiceId, KRPCExceptionId ("ArgumentOutOfRangeException"), null,
+                Expression.ConstantString ("caught"));
+            Assert.DoesNotThrow (() => expr.Evaluate ());
+        }
+
+        [Test]
+        public void TryCatchByIdDoesNotCatchAnotherException ()
+        {
+            var expr = Expression.TryCatchById (
+                ThrowArgumentOutOfRange (),
+                KRPCServiceId, KRPCExceptionId ("ObjectDestroyedException"), null,
+                Expression.ConstantString ("caught"));
+            Assert.Throws<System.ArgumentOutOfRangeException> (() => expr.Evaluate ());
+        }
+
         // A call to a procedure that throws a System.ArgumentOutOfRangeException
         static Expression ThrowArgumentOutOfRange ()
         {

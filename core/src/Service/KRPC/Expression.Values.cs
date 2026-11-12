@@ -391,19 +391,51 @@ namespace KRPC.Service.KRPC
         [KRPCMethod]
         public static Expression GetField (Expression arg, string name)
         {
-            if (ReferenceEquals (arg, null))
-                throw new ArgumentNullException (nameof (arg));
-            var structure = UnwrapNullable (arg, "The structure");
-            var argType = structure.Type;
-            if (!TypeUtils.IsAStructType (argType))
-                throw new ArgumentException (argType + " is not a structure type");
-            var field = TypeUtils.GetStructFields (argType)
+            var structure = StructOperand (arg);
+            var field = TypeUtils.GetStructFields (structure.Type)
                 .FirstOrDefault (property => property.Name == name);
             if (field == null)
                 throw new ArgumentException (
-                    argType + " does not have a field called \"" + name + "\"");
+                    structure.Type + " does not have a field called \"" + name + "\"");
+            return GetField (structure, field);
+        }
+
+        /// <summary>
+        /// The value of a field of a structure, named by its position. Throws an exception if
+        /// the value is not a structure, or the index is out of range.
+        /// </summary>
+        /// <remarks>
+        /// The fields are numbered from 0, in the order the structure defines them.
+        /// </remarks>
+        /// <returns>The value of the field.</returns>
+        /// <param name="arg">The structure.</param>
+        /// <param name="index">The position of the field to access.</param>
+        [KRPCMethod]
+        public static Expression GetFieldByIndex (Expression arg, int index)
+        {
+            var structure = StructOperand (arg);
+            var fields = TypeUtils.GetStructFields (structure.Type);
+            if (index < 0 || index >= fields.Count)
+                throw new ArgumentOutOfRangeException (
+                    structure.Type + " does not have a field at index " + index);
+            return GetField (structure, fields [index]);
+        }
+
+        static LinqExpression StructOperand (Expression arg)
+        {
+            if (ReferenceEquals (arg, null))
+                throw new ArgumentNullException (nameof (arg));
+            var structure = UnwrapNullable (arg, "The structure");
+            if (!TypeUtils.IsAStructType (structure.Type))
+                throw new ArgumentException (structure.Type + " is not a structure type");
+            return structure;
+        }
+
+        static Expression GetField (LinqExpression structure, PropertyInfo field)
+        {
             return new Expression (
-                LinqExpression.Property (structure, field), TypeUtils.GetStructFieldSpec (argType, field));
+                LinqExpression.Property (structure, field),
+                TypeUtils.GetStructFieldSpec (structure.Type, field));
         }
     }
 }

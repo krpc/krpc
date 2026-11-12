@@ -437,6 +437,17 @@ first run, then passes it an argument:
 
 :func:`krpc_compile_function` makes the first run as fast as later ones.
 
+A server side function names a class, an enumeration, a structure or an exception by its ids.
+Each has a macro holding the pair, such as :macro:`KRPC_CLASS_SPACECENTER_ENGINE`, which the
+``ById`` procedures take:
+
+.. code-block:: c
+
+   krpc_KRPC_Type_ClassTypeById(conn, &engine_type, KRPC_CLASS_SPACECENTER_ENGINE);
+
+:func:`krpc_KRPC_Expression_GetFieldByIndex` reads a field by its position in the structure.
+Each field has a macro holding its position, such as :macro:`KRPC_FIELD_SPACECENTER_COMMNODE_NAME`.
+
 Streams and Events
 ------------------
 

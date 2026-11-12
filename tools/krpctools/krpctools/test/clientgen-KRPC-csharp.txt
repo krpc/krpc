@@ -45,10 +45,10 @@ namespace KRPC.Client.Services.KRPC
         internal static readonly global::KRPC.Client.TypeSpec Spec7 = global::KRPC.Client.TypeSpec.For (typeof(double));
         internal static readonly global::KRPC.Client.TypeSpec Spec8 = global::KRPC.Client.TypeSpec.For (typeof(string));
         internal static readonly global::KRPC.Client.TypeSpec Spec9 = global::KRPC.Client.TypeSpec.For (typeof(int));
-        internal static readonly global::KRPC.Client.TypeSpec Spec10 = global::KRPC.Client.TypeSpec.For (typeof(float));
-        internal static readonly global::KRPC.Client.TypeSpec Spec11 = global::KRPC.Client.TypeSpec.For (typeof(long));
-        internal static readonly global::KRPC.Client.TypeSpec Spec12 = global::KRPC.Client.TypeSpec.For (typeof(ulong));
-        internal static readonly global::KRPC.Client.TypeSpec Spec13 = global::KRPC.Client.TypeSpec.For (typeof(uint));
+        internal static readonly global::KRPC.Client.TypeSpec Spec10 = global::KRPC.Client.TypeSpec.For (typeof(uint));
+        internal static readonly global::KRPC.Client.TypeSpec Spec11 = global::KRPC.Client.TypeSpec.For (typeof(float));
+        internal static readonly global::KRPC.Client.TypeSpec Spec12 = global::KRPC.Client.TypeSpec.For (typeof(long));
+        internal static readonly global::KRPC.Client.TypeSpec Spec13 = global::KRPC.Client.TypeSpec.For (typeof(ulong));
         internal static readonly global::KRPC.Client.TypeSpec Spec14 = global::KRPC.Client.TypeSpec.For (typeof(genericCollectionsAlias::ISet<global::KRPC.Client.Services.KRPC.Expression>));
         internal static readonly global::KRPC.Client.TypeSpec Spec15 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IDictionary<string,global::KRPC.Client.Services.KRPC.Expression>));
         internal static readonly global::KRPC.Client.TypeSpec Spec16 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.Expression>>));
@@ -258,7 +258,7 @@ namespace KRPC.Client.Services.KRPC
         public uint GameStateLoads {
             get {
                 var _result = connection.Invoke ("KRPC", "get_GameStateLoads");
-                return (uint)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec13, connection);
+                return (uint)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec10, connection);
             }
         }
 
@@ -1801,6 +1801,27 @@ namespace KRPC.Client.Services.KRPC
         }
 
         /// <summary>
+        /// A constant value of an enumeration a service defines, named by ids.
+        /// </summary>
+        /// <param name="serviceId">The id of the service the enumeration is defined in.</param>
+        /// <param name="enumerationId">The id of the enumeration.</param>
+        /// <param name="value">The value of the member of the enumeration.</param>
+        /// <param name="connection">A connection object.</param>
+        [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_ConstantEnumById", typeof(TypeSpecs))]
+        public static global::KRPC.Client.Services.KRPC.Expression ConstantEnumById (IConnection connection, uint serviceId, uint enumerationId, int value)
+        {
+            if (connection == null)
+                throw new ArgumentNullException (nameof (connection));
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (serviceId, TypeSpecs.Spec10),
+                global::KRPC.Client.Encoder.Encode (enumerationId, TypeSpecs.Spec10),
+                global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec9)
+            };
+            var _result = connection.Invoke ("KRPC", "Expression_static_ConstantEnumById", _args);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+        }
+
+        /// <summary>
         /// A constant value of single precision floating point type.
         /// </summary>
         /// <param name="value">The value.</param>
@@ -1811,7 +1832,7 @@ namespace KRPC.Client.Services.KRPC
             if (connection == null)
                 throw new ArgumentNullException (nameof (connection));
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec10)
+                global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec11)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_ConstantFloat", _args);
             return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
@@ -1845,7 +1866,7 @@ namespace KRPC.Client.Services.KRPC
             if (connection == null)
                 throw new ArgumentNullException (nameof (connection));
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec11)
+                global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec12)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_ConstantLong", _args);
             return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
@@ -1885,7 +1906,7 @@ namespace KRPC.Client.Services.KRPC
             if (connection == null)
                 throw new ArgumentNullException (nameof (connection));
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec12)
+                global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec13)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_ConstantObject", _args);
             return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
@@ -1919,7 +1940,7 @@ namespace KRPC.Client.Services.KRPC
             if (connection == null)
                 throw new ArgumentNullException (nameof (connection));
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec13)
+                global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec10)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_ConstantUInt", _args);
             return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
@@ -1936,7 +1957,7 @@ namespace KRPC.Client.Services.KRPC
             if (connection == null)
                 throw new ArgumentNullException (nameof (connection));
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec12)
+                global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec13)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_ConstantULong", _args);
             return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
@@ -2464,6 +2485,30 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (name, TypeSpecs.Spec8)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_GetField", _args);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+        }
+
+        /// <summary>
+        /// The value of a field of a structure, named by its position. Throws an exception if
+        /// the value is not a structure, or the index is out of range.
+        /// </summary>
+        /// <remarks>
+        /// The fields are numbered from 0, in the order the structure defines them.
+        /// </remarks>
+        /// <returns>The value of the field.</returns>
+        /// <param name="arg">The structure.</param>
+        /// <param name="index">The position of the field to access.</param>
+        /// <param name="connection">A connection object.</param>
+        [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_GetFieldByIndex", typeof(TypeSpecs))]
+        public static global::KRPC.Client.Services.KRPC.Expression GetFieldByIndex (IConnection connection, global::KRPC.Client.Services.KRPC.Expression arg, int index)
+        {
+            if (connection == null)
+                throw new ArgumentNullException (nameof (connection));
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (arg, TypeSpecs.Spec0),
+                global::KRPC.Client.Encoder.Encode (index, TypeSpecs.Spec9)
+            };
+            var _result = connection.Invoke ("KRPC", "Expression_static_GetFieldByIndex", _args);
             return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
@@ -3715,6 +3760,31 @@ namespace KRPC.Client.Services.KRPC
         }
 
         /// <summary>
+        /// A throw statement, which raises the exception with the given ids.
+        /// </summary>
+        /// <remarks>
+        /// Raises the exception as <see cref="global::KRPC.Client.Services.KRPC.Expression.Throw" /> does. Throws an exception if the
+        /// service does not declare it.
+        /// </remarks>
+        /// <param name="serviceId">The id of the service the exception is defined in.</param>
+        /// <param name="exceptionId">The id of the exception.</param>
+        /// <param name="message">The message of the exception.</param>
+        /// <param name="connection">A connection object.</param>
+        [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_ThrowById", typeof(TypeSpecs))]
+        public static global::KRPC.Client.Services.KRPC.Expression ThrowById (IConnection connection, uint serviceId, uint exceptionId, global::KRPC.Client.Services.KRPC.Expression message)
+        {
+            if (connection == null)
+                throw new ArgumentNullException (nameof (connection));
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (serviceId, TypeSpecs.Spec10),
+                global::KRPC.Client.Encoder.Encode (exceptionId, TypeSpecs.Spec10),
+                global::KRPC.Client.Encoder.Encode (message, TypeSpecs.Spec0)
+            };
+            var _result = connection.Invoke ("KRPC", "Expression_static_ThrowById", _args);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+        }
+
+        /// <summary>
         /// A collection as a list.
         /// </summary>
         /// <returns>The collection as a list.</returns>
@@ -3800,6 +3870,35 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (handler, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_TryCatchAll", _args);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+        }
+
+        /// <summary>
+        /// A try-catch statement that handles the exception with the given ids.
+        /// </summary>
+        /// <remarks>
+        /// Handles the exception as <see cref="global::KRPC.Client.Services.KRPC.Expression.TryCatch" /> does. Throws an exception if the
+        /// service does not declare it.
+        /// </remarks>
+        /// <param name="body">The statement to evaluate.</param>
+        /// <param name="serviceId">The id of the service the exception is defined in.</param>
+        /// <param name="exceptionId">The id of the exception.</param>
+        /// <param name="message">A string variable assigned the exception's message, or null.</param>
+        /// <param name="handler">The statement evaluated when the exception is caught.</param>
+        /// <param name="connection">A connection object.</param>
+        [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_TryCatchById", typeof(TypeSpecs))]
+        public static global::KRPC.Client.Services.KRPC.Expression TryCatchById (IConnection connection, global::KRPC.Client.Services.KRPC.Expression body, uint serviceId, uint exceptionId, global::KRPC.Client.Services.KRPC.Expression message, global::KRPC.Client.Services.KRPC.Expression handler)
+        {
+            if (connection == null)
+                throw new ArgumentNullException (nameof (connection));
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (body, TypeSpecs.Spec0),
+                global::KRPC.Client.Encoder.Encode (serviceId, TypeSpecs.Spec10),
+                global::KRPC.Client.Encoder.Encode (exceptionId, TypeSpecs.Spec10),
+                global::KRPC.Client.Encoder.Encode (message, TypeSpecs.Spec0),
+                global::KRPC.Client.Encoder.Encode (handler, TypeSpecs.Spec0)
+            };
+            var _result = connection.Invoke ("KRPC", "Expression_static_TryCatchById", _args);
             return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
@@ -4289,6 +4388,18 @@ namespace KRPC.Client.Services.KRPC
             }
 
             /// <summary>
+            /// A constant value of an enumeration a service defines, named by ids.
+            /// </summary>
+            /// <param name="serviceId">The id of the service the enumeration is defined in.</param>
+            /// <param name="enumerationId">The id of the enumeration.</param>
+            /// <param name="value">The value of the member of the enumeration.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_ConstantEnumById", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression ConstantEnumById (uint serviceId, uint enumerationId, int value)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.ConstantEnumById (connection, serviceId, enumerationId, value);
+            }
+
+            /// <summary>
             /// A constant value of single precision floating point type.
             /// </summary>
             /// <param name="value">The value.</param>
@@ -4711,6 +4822,22 @@ namespace KRPC.Client.Services.KRPC
             public global::KRPC.Client.Services.KRPC.Expression GetField (global::KRPC.Client.Services.KRPC.Expression arg, string name)
             {
                 return global::KRPC.Client.Services.KRPC.Expression.GetField (connection, arg, name);
+            }
+
+            /// <summary>
+            /// The value of a field of a structure, named by its position. Throws an exception if
+            /// the value is not a structure, or the index is out of range.
+            /// </summary>
+            /// <remarks>
+            /// The fields are numbered from 0, in the order the structure defines them.
+            /// </remarks>
+            /// <returns>The value of the field.</returns>
+            /// <param name="arg">The structure.</param>
+            /// <param name="index">The position of the field to access.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_GetFieldByIndex", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression GetFieldByIndex (global::KRPC.Client.Services.KRPC.Expression arg, int index)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.GetFieldByIndex (connection, arg, index);
             }
 
             /// <summary>
@@ -5502,6 +5629,22 @@ namespace KRPC.Client.Services.KRPC
             }
 
             /// <summary>
+            /// A throw statement, which raises the exception with the given ids.
+            /// </summary>
+            /// <remarks>
+            /// Raises the exception as <see cref="global::KRPC.Client.Services.KRPC.Expression.Throw" /> does. Throws an exception if the
+            /// service does not declare it.
+            /// </remarks>
+            /// <param name="serviceId">The id of the service the exception is defined in.</param>
+            /// <param name="exceptionId">The id of the exception.</param>
+            /// <param name="message">The message of the exception.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_ThrowById", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression ThrowById (uint serviceId, uint exceptionId, global::KRPC.Client.Services.KRPC.Expression message)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.ThrowById (connection, serviceId, exceptionId, message);
+            }
+
+            /// <summary>
             /// A collection as a list.
             /// </summary>
             /// <returns>The collection as a list.</returns>
@@ -5554,6 +5697,24 @@ namespace KRPC.Client.Services.KRPC
             public global::KRPC.Client.Services.KRPC.Expression TryCatchAll (global::KRPC.Client.Services.KRPC.Expression body, global::KRPC.Client.Services.KRPC.Expression message, global::KRPC.Client.Services.KRPC.Expression handler)
             {
                 return global::KRPC.Client.Services.KRPC.Expression.TryCatchAll (connection, body, message, handler);
+            }
+
+            /// <summary>
+            /// A try-catch statement that handles the exception with the given ids.
+            /// </summary>
+            /// <remarks>
+            /// Handles the exception as <see cref="global::KRPC.Client.Services.KRPC.Expression.TryCatch" /> does. Throws an exception if the
+            /// service does not declare it.
+            /// </remarks>
+            /// <param name="body">The statement to evaluate.</param>
+            /// <param name="serviceId">The id of the service the exception is defined in.</param>
+            /// <param name="exceptionId">The id of the exception.</param>
+            /// <param name="message">A string variable assigned the exception's message, or null.</param>
+            /// <param name="handler">The statement evaluated when the exception is caught.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_TryCatchById", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression TryCatchById (global::KRPC.Client.Services.KRPC.Expression body, uint serviceId, uint exceptionId, global::KRPC.Client.Services.KRPC.Expression message, global::KRPC.Client.Services.KRPC.Expression handler)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.TryCatchById (connection, body, serviceId, exceptionId, message, handler);
             }
 
             /// <summary>
@@ -5759,6 +5920,25 @@ namespace KRPC.Client.Services.KRPC
         }
 
         /// <summary>
+        /// The type of a class defined by a service, named by ids.
+        /// </summary>
+        /// <param name="serviceId">The id of the service the class is defined in.</param>
+        /// <param name="classId">The id of the class.</param>
+        /// <param name="connection">A connection object.</param>
+        [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Type_static_ClassTypeById", typeof(TypeSpecs))]
+        public static global::KRPC.Client.Services.KRPC.Type ClassTypeById (IConnection connection, uint serviceId, uint classId)
+        {
+            if (connection == null)
+                throw new ArgumentNullException (nameof (connection));
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (serviceId, TypeSpecs.Spec10),
+                global::KRPC.Client.Encoder.Encode (classId, TypeSpecs.Spec10)
+            };
+            var _result = connection.Invoke ("KRPC", "Type_static_ClassTypeById", _args);
+            return (global::KRPC.Client.Services.KRPC.Type)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
+        }
+
+        /// <summary>
         /// A dictionary type. Throws an exception if the key type is nullable or not a valid
         /// key type.
         /// </summary>
@@ -5807,6 +5987,25 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (name, TypeSpecs.Spec8)
             };
             var _result = connection.Invoke ("KRPC", "Type_static_EnumerationType", _args);
+            return (global::KRPC.Client.Services.KRPC.Type)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
+        }
+
+        /// <summary>
+        /// The type of an enumeration defined by a service, named by ids.
+        /// </summary>
+        /// <param name="serviceId">The id of the service the enumeration is defined in.</param>
+        /// <param name="enumerationId">The id of the enumeration.</param>
+        /// <param name="connection">A connection object.</param>
+        [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Type_static_EnumerationTypeById", typeof(TypeSpecs))]
+        public static global::KRPC.Client.Services.KRPC.Type EnumerationTypeById (IConnection connection, uint serviceId, uint enumerationId)
+        {
+            if (connection == null)
+                throw new ArgumentNullException (nameof (connection));
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (serviceId, TypeSpecs.Spec10),
+                global::KRPC.Client.Encoder.Encode (enumerationId, TypeSpecs.Spec10)
+            };
+            var _result = connection.Invoke ("KRPC", "Type_static_EnumerationTypeById", _args);
             return (global::KRPC.Client.Services.KRPC.Type)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
         }
 
@@ -5933,6 +6132,25 @@ namespace KRPC.Client.Services.KRPC
         }
 
         /// <summary>
+        /// The type of a structure defined by a service, named by ids.
+        /// </summary>
+        /// <param name="serviceId">The id of the service the structure is defined in.</param>
+        /// <param name="structId">The id of the structure.</param>
+        /// <param name="connection">A connection object.</param>
+        [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Type_static_StructTypeById", typeof(TypeSpecs))]
+        public static global::KRPC.Client.Services.KRPC.Type StructTypeById (IConnection connection, uint serviceId, uint structId)
+        {
+            if (connection == null)
+                throw new ArgumentNullException (nameof (connection));
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (serviceId, TypeSpecs.Spec10),
+                global::KRPC.Client.Encoder.Encode (structId, TypeSpecs.Spec10)
+            };
+            var _result = connection.Invoke ("KRPC", "Type_static_StructTypeById", _args);
+            return (global::KRPC.Client.Services.KRPC.Type)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
+        }
+
+        /// <summary>
         /// A tuple type. Throws an exception if there are no element types or more than seven.
         /// </summary>
         /// <param name="valueTypes">The types of the elements of the tuple.</param>
@@ -6029,6 +6247,17 @@ namespace KRPC.Client.Services.KRPC
             }
 
             /// <summary>
+            /// The type of a class defined by a service, named by ids.
+            /// </summary>
+            /// <param name="serviceId">The id of the service the class is defined in.</param>
+            /// <param name="classId">The id of the class.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Type_static_ClassTypeById", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Type ClassTypeById (uint serviceId, uint classId)
+            {
+                return global::KRPC.Client.Services.KRPC.Type.ClassTypeById (connection, serviceId, classId);
+            }
+
+            /// <summary>
             /// A dictionary type. Throws an exception if the key type is nullable or not a valid
             /// key type.
             /// </summary>
@@ -6058,6 +6287,17 @@ namespace KRPC.Client.Services.KRPC
             public global::KRPC.Client.Services.KRPC.Type EnumerationType (string service, string name)
             {
                 return global::KRPC.Client.Services.KRPC.Type.EnumerationType (connection, service, name);
+            }
+
+            /// <summary>
+            /// The type of an enumeration defined by a service, named by ids.
+            /// </summary>
+            /// <param name="serviceId">The id of the service the enumeration is defined in.</param>
+            /// <param name="enumerationId">The id of the enumeration.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Type_static_EnumerationTypeById", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Type EnumerationTypeById (uint serviceId, uint enumerationId)
+            {
+                return global::KRPC.Client.Services.KRPC.Type.EnumerationTypeById (connection, serviceId, enumerationId);
             }
 
             /// <summary>
@@ -6135,6 +6375,17 @@ namespace KRPC.Client.Services.KRPC
             public global::KRPC.Client.Services.KRPC.Type StructType (string service, string name)
             {
                 return global::KRPC.Client.Services.KRPC.Type.StructType (connection, service, name);
+            }
+
+            /// <summary>
+            /// The type of a structure defined by a service, named by ids.
+            /// </summary>
+            /// <param name="serviceId">The id of the service the structure is defined in.</param>
+            /// <param name="structId">The id of the structure.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Type_static_StructTypeById", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Type StructTypeById (uint serviceId, uint structId)
+            {
+                return global::KRPC.Client.Services.KRPC.Type.StructTypeById (connection, serviceId, structId);
             }
 
             /// <summary>

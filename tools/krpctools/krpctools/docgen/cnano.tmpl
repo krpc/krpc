@@ -28,6 +28,10 @@
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
 
 {% endif %}
+   .. macro:: KRPC_CLASS_{{ x.service_name | upper }}_{{ x.name | upper }}
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
 {% for member in x.members.values() %}
 {% if member.member_type == 'class_method' %}
 {{ class_method(x.service_name, x.name, member) | indent }}
@@ -140,6 +144,11 @@
 {% if x.flags %}   A flags enumeration. :std:ref:`cnano-client-flags` shows how to combine its values.
 
 {% endif %}
+   .. macro:: KRPC_ENUMERATION_{{ x.service_name | upper }}_{{ x.name | upper }}
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
 {% for value in x.values.values() %}{{ mark_documented(value) }}
    .. macro:: KRPC_{{ x.service_name | upper }}_{{ x.name | upper }}_{{ value.name | upper }}
 
@@ -161,6 +170,10 @@
 {{ gendoc(x.documentation) | indent }}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}{% endif %}
+   .. macro:: KRPC_STRUCT_{{ x.service_name | upper }}_{{ x.name | upper }}
+
+      The service and structure ids of the structure, for :func:`krpc_KRPC_Type_StructTypeById`.
+
 {% for field in x.fields.values() %}{{ mark_documented(field) }}
    .. member:: {{ domain.field_type(field).ctype }} {{ field.name | snakecase }}
 
@@ -168,6 +181,11 @@
 
 {% endif %}
 {{ gendoc(field.documentation) | indent(width=6) }}
+
+      .. macro:: KRPC_FIELD_{{ x.service_name | upper }}_{{ x.name | upper }}_{{ field.name | upper }}
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 {% endfor %}
 {% endmacro %}
 

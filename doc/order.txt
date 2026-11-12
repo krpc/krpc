@@ -67,6 +67,7 @@ KRPC.Expression.ConstantBool
 KRPC.Expression.ConstantString
 KRPC.Expression.ConstantBytes
 KRPC.Expression.ConstantEnum
+KRPC.Expression.ConstantEnumById
 KRPC.Expression.ConstantNull
 KRPC.Expression.ConstantObject
 KRPC.Expression.Call
@@ -114,7 +115,9 @@ KRPC.Expression.Continue
 KRPC.Expression.Return
 KRPC.Expression.ReturnNothing
 KRPC.Expression.Throw
+KRPC.Expression.ThrowById
 KRPC.Expression.TryCatch
+KRPC.Expression.TryCatchById
 KRPC.Expression.TryCatchAll
 KRPC.Expression.TryFinally
 KRPC.Expression.CreateTuple
@@ -137,6 +140,7 @@ KRPC.Expression.ToSet
 KRPC.Expression.BuildDictionary
 KRPC.Expression.Get
 KRPC.Expression.GetField
+KRPC.Expression.GetFieldByIndex
 KRPC.Expression.ConvertToString
 KRPC.Expression.StringConcat
 KRPC.Expression.StringLength
@@ -197,6 +201,9 @@ KRPC.Type.Bytes
 KRPC.Type.ClassType
 KRPC.Type.EnumerationType
 KRPC.Type.StructType
+KRPC.Type.ClassTypeById
+KRPC.Type.EnumerationTypeById
+KRPC.Type.StructTypeById
 KRPC.Type.TupleType
 KRPC.Type.ListType
 KRPC.Type.SetType

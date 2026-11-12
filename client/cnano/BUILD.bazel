@@ -334,7 +334,11 @@ client_test(
 cc_binary(
     name = "cnanotest-tcpip",
     testonly = True,
-    srcs = ["test/test_client.cpp"],
+    srcs = [
+        "test/test_client.cpp",
+        ":services-testservice",
+    ],
+    includes = ["test"],
     deps = [
         ":krpc_cnano_error_messages",
         "@cpp_googletest//:gtest",

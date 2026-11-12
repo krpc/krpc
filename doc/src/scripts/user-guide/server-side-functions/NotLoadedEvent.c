@@ -32,9 +32,9 @@ int main() {
   krpc_KRPC_Expression_t no, assign_false, try_catch;
   krpc_KRPC_Expression_ConstantBool(conn, &no, false);
   krpc_KRPC_Expression_Assign(conn, &assign_false, above, no);
-  krpc_KRPC_Expression_TryCatch(conn, &try_catch, assign_above, "KRPC",
-                                "ObjectNotLoadedException", KRPC_NULL,
-                                assign_false);
+  krpc_KRPC_Expression_TryCatchById(
+      conn, &try_catch, assign_above,
+      KRPC_EXCEPTION_KRPC_OBJECTNOTLOADEDEXCEPTION, KRPC_NULL, assign_false);
 
   krpc_KRPC_Expression_t variable_items[1] = {above};
   krpc_KRPC_Expression_t statement_items[2] = {try_catch, above};

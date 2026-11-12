@@ -36,8 +36,8 @@ class TestClientGenCNano(ClientGenTestCase, unittest.TestCase):
                     }
                 },
                 "classes": {
-                    "Thing": {"documentation": ""},
-                    "Widget": {"documentation": ""},
+                    "Thing": {"id": 1, "documentation": ""},
+                    "Widget": {"id": 2, "documentation": ""},
                 },
                 "enumerations": {},
                 "exceptions": {},

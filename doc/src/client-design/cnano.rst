@@ -40,6 +40,10 @@ as no public procedure uses that type.
 * **That code has its own file**, ``src/procedure_call.c``, so a static link without functions
   leaves it out.
 * **There are no function streams or events**, as the client has no streams.
+* **A function names definitions by ids.** The names would go in flash. The stubs define
+  ``KRPC_CLASS_``, ``KRPC_ENUMERATION_`` and ``KRPC_STRUCT_`` macros as the pair of ids, as for
+  exceptions, which the ``ById`` procedures take. ``GetFieldByIndex`` names a field by its
+  position, which a ``KRPC_FIELD_`` macro holds, so a program never writes the number.
 
 Errors
 ------
