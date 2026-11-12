@@ -53,7 +53,8 @@ Windows runs everything Linux runs, except these:
   build. Windows tests its serial backend against a stand-in, in
   `//client/cnano:communication-serialio`.
 - **clang-tidy.** It needs the libc++ headers that only the LLVM toolchain supplies.
-- **`//tools/build/python:requirements.test`.** The Python lock file is resolved on Linux.
+- **`//tools/build/python:requirements.test`.** The Python lock file is resolved on Linux, so the
+  target is Linux-only and `//tools/build:test` skips it elsewhere.
 - **The C++ CMake fetch scenario.** It builds protobuf and abseil from source, and on Windows
   that build is uncached and takes the job past 30 minutes. Windows builds the system scenario,
   which shows the client compiles there.
@@ -245,6 +246,8 @@ Runs share one concurrency group and never cancel each other, as a release moves
 
 ## Changing CI
 
+- The jobs name their Bazel targets by hand, mostly a package's `:test` suite. A new test goes in
+  its package's suite. A new suite goes in `//:test` and in a job.
 - A new job goes in the `needs` of `all-checks-passed`. A new artifact goes in the list in
   `copy-artifacts`.
 - A cache that later runs restore must be saved by the push run on `main`.
