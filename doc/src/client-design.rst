@@ -47,6 +47,182 @@ Clients
      - No
      - Dynamic
 
+Names
+-----
+
+The base class of each kind of generated type is named ``Remote<Kind>``: ``RemoteObject``,
+``RemoteEnum``, ``RemoteFlags``, ``RemoteStruct`` and ``RemoteService``. A client keeps its
+language's own form where it has one, such as an enum and a struct in C++ and C#, and a
+``NamedTuple`` for a Python structure.
+
+Stream and Call Forms
+---------------------
+
+A program adding a stream needs to name a remote procedure without calling it. The same applies when
+it gets a call as a value, such as to use in an expression. The clients do this in two ways:
+
+* Python, C# and Java have one method for each purpose, ``add_stream`` and ``get_call`` or their
+  equivalents. It takes any property or method, and works out the procedure at run time. Lua has
+  only ``get_call``, as it has no streams.
+* C++ and C-nano cannot look up a method at run time. Their generated stubs instead have extra
+  functions for each procedure. C++ adds ones ending in ``_stream`` and ``_call``. C-nano has no
+  streams, so it adds only ``_call``.
+
+For the ``MeanAltitude`` property of a ``Flight`` object:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Client
+     - Stream
+     - Procedure call
+   * - Python
+     - ``conn.add_stream(getattr, flight, "mean_altitude")``
+     - ``conn.get_call(getattr, flight, "mean_altitude")``
+   * - C#
+     - ``connection.AddStream (() => flight.MeanAltitude)``
+     - ``Connection.GetCall (() => flight.MeanAltitude)``
+   * - C++
+     - ``flight.mean_altitude_stream()``
+     - ``flight.mean_altitude_call()``
+   * - C-nano
+     - None
+     - ``krpc_SpaceCenter_Flight_MeanAltitude_call(&call, flight)``
+   * - Java
+     - ``connection.addStream(flight, "getMeanAltitude")``
+     - ``connection.getCall(flight, "getMeanAltitude")``
+   * - Lua
+     - None
+     - ``conn:get_call(flight.get_mean_altitude, flight)``
+
+In Python, C# and Java, the stream runs on the connection the method is called on, whichever
+connection the object came from. In C++, it runs on the object's client, or for a static method the
+client passed to it.
+
+Static Methods
+--------------
+
+A static method takes its connection from one place, the one its language gives a class:
+
+* In Python and Lua a class is a value. Each connection builds its own, and a static method runs
+  on the connection of the service the class is reached through.
+* In C#, Java and C++ a class is a type. The connection is the static method's first argument. In
+  C-nano, every function takes the connection first.
+
+A stream or call message of a static method never takes the connection a second time. In C# and
+Java, a stream runs on the connection its ``AddStream`` is called on, and the connection named in
+the call is not used. A call message holds no connection.
+
+C#, Java and C++ also generate ``Bind`` on each class with static methods. It returns a ``Bound``
+object holding the connection, with each static method minus that parameter. It is the counterpart
+of ``conn.krpc.Expression`` in Python, and shortens an expression tree that passes the connection
+at every node. The ``Bound`` methods carry the RPC attribute of the static method, so a C# lambda
+or a Java ``addStream`` takes them as it takes a service's methods. A C++ ``Bound`` is a shorthand
+for the calls that build large expression trees. It has no ``_stream`` or ``_call`` forms, which
+stay on the static method.
+
+Errors
+------
+
+The :doc:`specification </client-spec/errors>` gives the kinds of error and the situations that
+raise each. The clients name them alike:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Error
+     - Raised for
+   * - ``RemoteError``
+     - Never raised itself. The base of the others
+   * - ``ConnectionError``
+     - The connection error
+   * - ``ServerError``
+     - The server error, when the language has no type for the exception
+   * - ``StreamError``
+     - The stream error
+   * - ``EncodingError``
+     - The encoding error
+   * - ``CompilationError``
+     - Code that does not compile into a server side function, in Python and C#
+
+C++ uses these names in ``krpc::``. C# and Java end each with ``Exception`` in place of ``Error``,
+as their conventions do. Lua has no ``StreamError``, as it has no streams. C-nano returns a code
+per kind.
+
+* **The base follows the generated bases.** ``RemoteError`` is named as ``RemoteObject`` and
+  ``RemoteService`` are. A program catches every error of the client's own with it.
+* **The server error is named for where it comes from.** A server error reaches the program through
+  a call, a stream or an event, so a name for one of them would mislead. It can still be the
+  program's mistake, such as ``KRPC.ArgumentException``.
+* **A mapped server exception is only the language's own type.** It is caught as the same failure
+  in local code would be. Deriving ``ServerError`` as well would take multiple inheritance in
+  Python and C++, which C# and Java lack. A program that handles every error uses the language's
+  catch-all.
+* **No generated class stands for a mapped exception the client never raises.** A ``catch`` naming
+  such a class would never fire. C# and Java generate no class, and C++ generates an alias of the
+  native type. A mapped exception with no native type in a language is a generated class deriving
+  ``ServerError``.
+* **Misuse is the language's own error.** An argument the client rejects raises the language's
+  argument error. A call in a state the client rejects raises its state error, such as Python's
+  ``TypeError`` for calling a declaration. Neither derives ``RemoteError``, as nothing remote has
+  failed.
+
+Deprecation
+-----------
+
+Each client signals the use of a deprecated member with the language's own mechanism:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Client
+     - Signal
+     - Kinds with no signal
+   * - Python
+     - ``DeprecationWarning`` at run time, and ``@deprecated`` for type checkers
+     -
+   * - C#
+     - ``[Obsolete]``
+     -
+   * - C++
+     - ``[[deprecated]]``
+     -
+   * - C-nano
+     - ``KRPC_DEPRECATED``
+     - Services and exceptions, which have no C type
+   * - Java
+     - ``@Deprecated``, which holds no reason
+     - Streams and calls, which name their method in a string
+   * - Lua
+     - A warning on standard error, once per member on a connection
+     - Exceptions, which have no Lua type, and structure fields
+
+A stream, and the call a server side function makes, use a procedure too. Python and Lua warn when
+the client builds the call. In C++ and C-nano, the ``_stream`` and ``_call`` functions carry the
+attribute. In C#, the lambda that names the procedure warns.
+
+A member of a deprecated service, class, enumeration or structure is deprecated. A member with no
+reason of its own takes the reason of its nearest deprecated container. ``clientgen`` and the Python
+and Lua clients apply this to their copy of the definitions when they read them. The protocol and
+``docgen`` keep the attributes as declared, so the API reference has one notice per page.
+
+A deprecated service is marked too: the C# extension method and service class, and the C++, Java
+and Python service class. The Python and Lua clients keep it out of the client's attributes, so
+that reading it reaches the attribute-miss hook, which warns.
+
+Generated C++ and C-nano code uses the deprecated declarations it makes, so each header suppresses
+the warning around its own contents. The suppression goes by the location of the use, so a use in a
+program still warns.
+
+Single-Threaded Clients
+-----------------------
+
+A call writes its request, then reads until the response with its id. Only a call reads the socket.
+These clients have no streams or events, as a stream update needs a thread to read it between calls.
+
+The read loop skips a message case it does not know, and fails the call on a ``disconnect``. Lua and
+C-nano treat any other message as a protocol error, including a ``stream_update``.
+
 Threaded Clients
 ----------------
 
@@ -218,135 +394,6 @@ dispatcher thread, from a callback:
    dispatcher thread when the closing thread holds a stream's condition, as a callback can be
    waiting for that condition.
 
-Single-Threaded Clients
------------------------
-
-A call writes its request, then reads until the response with its id. Only a call reads the socket.
-These clients have no streams or events, as a stream update needs a thread to read it between calls.
-
-The read loop skips a message case it does not know, and fails the call on a ``disconnect``. Lua and
-C-nano treat any other message as a protocol error, including a ``stream_update``.
-
-Stream and Call Forms
----------------------
-
-A program adding a stream needs to name a remote procedure without calling it. The same applies when
-it gets a call as a value, such as to use in an expression. The clients do this in two ways:
-
-* Python, C# and Java have one method for each purpose, ``add_stream`` and ``get_call`` or their
-  equivalents. It takes any property or method, and works out the procedure at run time. Lua has
-  only ``get_call``, as it has no streams.
-* C++ and C-nano cannot look up a method at run time. Their generated stubs instead have extra
-  functions for each procedure. C++ adds ones ending in ``_stream`` and ``_call``. C-nano has no
-  streams, so it adds only ``_call``.
-
-For the ``MeanAltitude`` property of a ``Flight`` object:
-
-.. list-table::
-   :header-rows: 1
-
-   * - Client
-     - Stream
-     - Procedure call
-   * - Python
-     - ``conn.add_stream(getattr, flight, "mean_altitude")``
-     - ``conn.get_call(getattr, flight, "mean_altitude")``
-   * - C#
-     - ``connection.AddStream (() => flight.MeanAltitude)``
-     - ``Connection.GetCall (() => flight.MeanAltitude)``
-   * - C++
-     - ``flight.mean_altitude_stream()``
-     - ``flight.mean_altitude_call()``
-   * - C-nano
-     - None
-     - ``krpc_SpaceCenter_Flight_MeanAltitude_call(&call, flight)``
-   * - Java
-     - ``connection.addStream(flight, "getMeanAltitude")``
-     - ``connection.getCall(flight, "getMeanAltitude")``
-   * - Lua
-     - None
-     - ``conn:get_call(flight.get_mean_altitude, flight)``
-
-In Python, C# and Java, the stream runs on the connection the method is called on, whichever
-connection the object came from. In C++, it runs on the object's client, or for a static method the
-client passed to it.
-
-Static Methods
---------------
-
-A static method takes its connection from one place, the one its language gives a class:
-
-* In Python and Lua a class is a value. Each connection builds its own, and a static method runs
-  on the connection of the service the class is reached through.
-* In C#, Java and C++ a class is a type. The connection is the static method's first argument. In
-  C-nano, every function takes the connection first.
-
-A stream or call message of a static method never takes the connection a second time. In C# and
-Java, a stream runs on the connection its ``AddStream`` is called on, and the connection named in
-the call is not used. A call message holds no connection.
-
-C#, Java and C++ also generate ``Bind`` on each class with static methods. It returns a ``Bound``
-object holding the connection, with each static method minus that parameter. It is the counterpart
-of ``conn.krpc.Expression`` in Python, and shortens an expression tree that passes the connection
-at every node. The ``Bound`` methods carry the RPC attribute of the static method, so a C# lambda
-or a Java ``addStream`` takes them as it takes a service's methods. A C++ ``Bound`` is a shorthand
-for the calls that build large expression trees. It has no ``_stream`` or ``_call`` forms, which
-stay on the static method.
-
-Names
------
-
-The base class of each kind of generated type is named ``Remote<Kind>``: ``RemoteObject``,
-``RemoteEnum``, ``RemoteFlags``, ``RemoteStruct`` and ``RemoteService``. A client keeps its
-language's own form where it has one, such as an enum and a struct in C++ and C#, and a
-``NamedTuple`` for a Python structure.
-
-Errors
-------
-
-The :doc:`specification </client-spec/errors>` gives the kinds of error and the situations that
-raise each. The clients name them alike:
-
-.. list-table::
-   :header-rows: 1
-
-   * - Error
-     - Raised for
-   * - ``RemoteError``
-     - Never raised itself. The base of the others
-   * - ``ConnectionError``
-     - The connection error
-   * - ``ServerError``
-     - The server error, when the language has no type for the exception
-   * - ``StreamError``
-     - The stream error
-   * - ``EncodingError``
-     - The encoding error
-   * - ``CompilationError``
-     - Code that does not compile into a server side function, in Python and C#
-
-C++ uses these names in ``krpc::``. C# and Java end each with ``Exception`` in place of ``Error``,
-as their conventions do. Lua has no ``StreamError``, as it has no streams. C-nano returns a code
-per kind.
-
-* **The base follows the generated bases.** ``RemoteError`` is named as ``RemoteObject`` and
-  ``RemoteService`` are. A program catches every error of the client's own with it.
-* **The server error is named for where it comes from.** A server error reaches the program through
-  a call, a stream or an event, so a name for one of them would mislead. It can still be the
-  program's mistake, such as ``KRPC.ArgumentException``.
-* **A mapped server exception is only the language's own type.** It is caught as the same failure
-  in local code would be. Deriving ``ServerError`` as well would take multiple inheritance in
-  Python and C++, which C# and Java lack. A program that handles every error uses the language's
-  catch-all.
-* **No generated class stands for a mapped exception the client never raises.** A ``catch`` naming
-  such a class would never fire. C# and Java generate no class, and C++ generates an alias of the
-  native type. A mapped exception with no native type in a language is a generated class deriving
-  ``ServerError``.
-* **Misuse is the language's own error.** An argument the client rejects raises the language's
-  argument error. A call in a state the client rejects raises its state error, such as Python's
-  ``TypeError`` for calling a declaration. Neither derives ``RemoteError``, as nothing remote has
-  failed.
-
 .. toctree::
    :hidden:
 
@@ -356,50 +403,3 @@ per kind.
    client-design/cnano
    client-design/java
    client-design/lua
-
-Deprecation
------------
-
-Each client signals the use of a deprecated member with the language's own mechanism:
-
-.. list-table::
-   :header-rows: 1
-
-   * - Client
-     - Signal
-     - Kinds with no signal
-   * - Python
-     - ``DeprecationWarning`` at run time, and ``@deprecated`` for type checkers
-     -
-   * - C#
-     - ``[Obsolete]``
-     -
-   * - C++
-     - ``[[deprecated]]``
-     -
-   * - C-nano
-     - ``KRPC_DEPRECATED``
-     - Services and exceptions, which have no C type
-   * - Java
-     - ``@Deprecated``, which holds no reason
-     - Streams and calls, which name their method in a string
-   * - Lua
-     - A warning on standard error, once per member on a connection
-     - Exceptions, which have no Lua type, and structure fields
-
-A stream, and the call a server side function makes, use a procedure too. Python and Lua warn when
-the client builds the call. In C++ and C-nano, the ``_stream`` and ``_call`` functions carry the
-attribute. In C#, the lambda that names the procedure warns.
-
-A member of a deprecated service, class, enumeration or structure is deprecated. A member with no
-reason of its own takes the reason of its nearest deprecated container. ``clientgen`` and the Python
-and Lua clients apply this to their copy of the definitions when they read them. The protocol and
-``docgen`` keep the attributes as declared, so the API reference has one notice per page.
-
-A deprecated service is marked too: the C# extension method and service class, and the C++, Java
-and Python service class. The Python and Lua clients keep it out of the client's attributes, so
-that reading it reaches the attribute-miss hook, which warns.
-
-Generated C++ and C-nano code uses the deprecated declarations it makes, so each header suppresses
-the warning around its own contents. The suppression goes by the location of the use, so a use in a
-program still warns.
