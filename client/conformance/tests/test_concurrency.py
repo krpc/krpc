@@ -310,6 +310,32 @@ def test_held_stream_ending_before_value(client, server, scripted_server):
         client.close()
 
 
+@profile("streams", "conditions", "concurrency")
+def test_held_read_before_value(client, server, scripted_server):
+    """A read of a stream with no value blocks until the first value arrives, on a thread
+    holding the stream's condition too. The read waits on the condition, which lets it go
+    while it waits."""
+
+    def script(scripted: ScriptedServer) -> None:
+        scripted.accept()
+        scripted.serve()
+
+    scripted = scripted_server(script)
+    scripted.services = definitions(server, "KRPC", "TestService")
+    client.connect(scripted.endpoint())
+    try:
+        stream = counter(client, "scripted")
+        reading = client.start(
+            "reader", condition=stream.handle, get=pb.Get(stream=stream.handle)
+        )
+        time.sleep(SETTLE)
+        assert not reading.done()
+        scripted.send_update([(1, encode_sint32(1))])
+        assert reading.result() == 1
+    finally:
+        client.close()
+
+
 @profile("streams", "conditions")
 def test_wait_for_unread_value(connected, control, request):
     """A wait returns only for a value newer than the last one the thread read,

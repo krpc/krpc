@@ -231,8 +231,8 @@ def test_service_exceptions(connected, service):
         assert_raises_type(error, "KRPC", "ObjectDestroyedException")
 
 
-# The categories of error the client's remote error type covers
-REMOTE_ERRORS = ["connection", "server", "stream", "encoding"]
+# The categories of error the client's remote error type covers, apart from the stream error
+REMOTE_ERRORS = ["connection", "server", "encoding"]
 
 
 def remote_error_of(client, server, category):
@@ -247,13 +247,6 @@ def remote_error_of(client, server, category):
     try:
         if category == "server":
             return raised(client, "TestService", "ThrowCustomException")
-        if category == "stream":
-            stream = client.add_stream("TestService", "Int32ToString", values.sint32(1))
-            stream.get()
-            stream.remove()
-            with pytest.raises(TesteeError) as info:
-                stream.get()
-            return info.value.error
         # A varint cut short
         with pytest.raises(TesteeError) as info:
             client.decode("sint32", bytes.fromhex("ff"))
@@ -266,13 +259,22 @@ def remote_error_of(client, server, category):
 @pytest.mark.parametrize("category", REMOTE_ERRORS)
 def test_remote_error(client, server, category):
     """Every error of the client's own derives one type, its remote error type, named in the
-    conventions file. This covers the connection, server, stream and encoding errors, and a
+    conventions file. This covers the connection, server and encoding errors, and a
     service's exception types. A mapped exception and the language's own errors, such as its
     argument error, do not derive it."""
-    if category == "stream" and not client.has_profile("streams"):
-        pytest.skip("%s has no streams" % client.name)
     error = remote_error_of(client, server, category)
     assert_remote_error(client, error)
+
+
+@profile("error-types", "streams")
+def test_stream_remote_error(connected):
+    """The stream error derives the client's remote error type."""
+    stream = connected.add_stream("TestService", "Int32ToString", values.sint32(1))
+    stream.get()
+    stream.remove()
+    with pytest.raises(TesteeError) as info:
+        stream.get()
+    assert_remote_error(connected, info.value.error)
 
 
 section("Messages")
