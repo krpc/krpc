@@ -36,7 +36,7 @@ namespace KRPC.Client.Test
             Assert.IsTrue (spec.At (0).Nullable);
             var data = Google.Protobuf.ByteString.CopyFrom (0x0a, 0x03, 0x01, 0x01, 0x61, 0x0a, 0x01, 0x00);
             CollectionAssert.AreEqual (
-                new [] { "a", null }, (IList<string>)Encoder.Decode (data, spec, null));
+                new [] { "a", null }, (IList<string>)Decoder.Decode (data, spec, null));
             // A value type element takes its own
             var ints = Described (Schema.KRPC.Type.Types.TypeCode.List);
             ints.Types_.Add (Described (Schema.KRPC.Type.Types.TypeCode.Sint32, true));

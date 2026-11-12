@@ -877,7 +877,7 @@ public class Connection implements AutoCloseable {
     if (returnType == null) {
       return null;
     }
-    return (T) Encoder.decode(ByteString.copyFrom(data), returnType, this);
+    return (T) Decoder.decode(ByteString.copyFrom(data), returnType, this);
   }
 
   /**

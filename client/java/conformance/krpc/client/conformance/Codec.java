@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import krpc.client.Connection;
+import krpc.client.Decoder;
 import krpc.client.Encoder;
 import krpc.client.Types;
 import krpc.client.services.TestService.TestClass;
@@ -173,6 +174,6 @@ final class Codec {
 
   static Value decode(Connection connection, Decode command) {
     Entry entry = find(command.getType());
-    return entry.result.apply(Encoder.decode(command.getData(), entry.type, connection));
+    return entry.result.apply(Decoder.decode(command.getData(), entry.type, connection));
   }
 }

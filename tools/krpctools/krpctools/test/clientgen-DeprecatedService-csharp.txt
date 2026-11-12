@@ -88,7 +88,7 @@ namespace KRPC.Client.Services.DeprecatedService
         public string Procedure ()
         {
             var _result = connection.Invoke ("DeprecatedService", "Procedure");
-            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec1, connection);
+            return (string)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec1, connection);
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace KRPC.Client.Services.DeprecatedService
         public global::KRPC.Client.Services.DeprecatedService.ServiceStruct StructProcedure ()
         {
             var _result = connection.Invoke ("DeprecatedService", "StructProcedure");
-            return (global::KRPC.Client.Services.DeprecatedService.ServiceStruct)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec2, connection);
+            return (global::KRPC.Client.Services.DeprecatedService.ServiceStruct)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec2, connection);
         }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace KRPC.Client.Services.DeprecatedService
         public string Property {
             get {
                 var _result = connection.Invoke ("DeprecatedService", "get_Property");
-                return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec1, connection);
+                return (string)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec1, connection);
             }
             set {
                 var _args = new ByteString[] {
@@ -309,7 +309,7 @@ namespace KRPC.Client.Services.DeprecatedService
             if (connection == null)
                 throw new ArgumentNullException (nameof (connection));
             var _result = connection.Invoke ("DeprecatedService", "ReasonedClass_static_StaticMethod");
-            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec1, connection);
+            return (string)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec1, connection);
         }
 
         /// <summary>
@@ -372,7 +372,7 @@ namespace KRPC.Client.Services.DeprecatedService
                 global::KRPC.Client.Encoder.Encode (this, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("DeprecatedService", "ServiceClass_Method", _args);
-            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec1, connection);
+            return (string)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec1, connection);
         }
 
         /// <summary>
@@ -386,7 +386,7 @@ namespace KRPC.Client.Services.DeprecatedService
             if (connection == null)
                 throw new ArgumentNullException (nameof (connection));
             var _result = connection.Invoke ("DeprecatedService", "ServiceClass_static_StaticMethod");
-            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec1, connection);
+            return (string)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec1, connection);
         }
 
         /// <summary>

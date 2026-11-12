@@ -19,7 +19,7 @@ var _args = new ByteString[] {
 if (_result.IsNull)
     return null;
 {% endif %}
-return ({{type}})global::KRPC.Client.Encoder.Decode (_result.Value, {{spec}}, connection);
+return ({{type}})global::KRPC.Client.Decoder.Decode (_result.Value, {{spec}}, connection);
 {% endmacro %}
 {% macro sig_parameters(parameters) %}
 {% for x in parameters %}{{x.type}} {{x.name}}{% if 'default_value' in x %} = {{x.default_value}}{%- endif %}{% if not loop.last %}, {% endif %}{% endfor %}

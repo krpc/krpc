@@ -3,6 +3,7 @@ package krpc.client.services;
 import com.google.protobuf.ByteString;
 
 import krpc.client.Connection;
+import krpc.client.Decoder;
 import krpc.client.Encoder;
 import krpc.client.RemoteEnum;
 import krpc.client.RemoteFlags;

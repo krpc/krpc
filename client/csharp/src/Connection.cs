@@ -557,7 +557,7 @@ namespace KRPC.Client
                         " cannot hold. Use a nullable type for the result.");
                 return default (TResult);
             }
-            return (TResult)Encoder.Decode (ByteString.CopyFrom (data), spec, this);
+            return (TResult)Decoder.Decode (ByteString.CopyFrom (data), spec, this);
         }
 
         /// <summary>
@@ -761,7 +761,7 @@ namespace KRPC.Client
                 type = typeof (IList<>).MakeGenericType (type.GetGenericArguments ());
             var spec = TypeSpec.For (type);
             try {
-                Encoder.BuildDecoders (spec);
+                Decoder.BuildDecoders (spec);
             } catch (ArgumentException exception) {
                 throw new FunctionCompilationException (
                     "The function evaluates to a " + type + ", which cannot be received from " +
@@ -782,7 +782,7 @@ namespace KRPC.Client
             if (!TypeSpec.HoldsAReference (spec.Type))
                 return spec;
             var described = TypeSpec.FromDescribed (spec.Type, IntrospectReturnType (function));
-            Encoder.BuildDecoders (described);
+            Decoder.BuildDecoders (described);
             return described;
         }
 

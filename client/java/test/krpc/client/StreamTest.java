@@ -23,7 +23,7 @@ public class StreamTest {
       Type uint32 = Type.newBuilder().setCode(Type.TypeCode.UINT32).build();
       ProcedureResult result = conn.invoke(
           "TestService", "OnTimer", Encoder.encode(60000, uint32), Encoder.encode(1, uint32));
-      long id = Encoder.decodeUint64(result.getValue());
+      long id = Decoder.decodeUint64(result.getValue());
       assertTrue(conn.streamManager.isRegistered(id));
     } finally {
       conn.close();

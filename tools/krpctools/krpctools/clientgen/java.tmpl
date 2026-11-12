@@ -16,7 +16,7 @@ if (_data.getIsNull()) {
   return null;
 }
 {% endif %}
-return ({{type.name}}) Encoder.decode(_data.getValue(), {{type.spec}}, {% if is_static %}connection{% else %}this.connection{% endif %});
+return ({{type.name}}) Decoder.decode(_data.getValue(), {{type.spec}}, {% if is_static %}connection{% else %}this.connection{% endif %});
 {% endmacro %}
 {% macro sig_parameters(parameters) %}
 {% for x in parameters %}{{x.type.name}} {{x.name}}{% if not loop.last %}, {% endif %}{% endfor %}
@@ -25,6 +25,7 @@ return ({{type.name}}) Encoder.decode(_data.getValue(), {{type.spec}}, {% if is_
 import com.google.protobuf.ByteString;
 
 import krpc.client.Connection;
+import krpc.client.Decoder;
 import krpc.client.Encoder;
 import krpc.client.RemoteEnum;
 import krpc.client.RemoteFlags;

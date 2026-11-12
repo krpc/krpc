@@ -310,7 +310,7 @@ class StreamManager {
       ending = connection.buildException(result.getError());
     } else if (!result.getIsNull() && !Stream.hasNoValue(stream.getReturnType())) {
       try {
-        value = Encoder.decode(result.getValue(), stream.getReturnType(), connection);
+        value = Decoder.decode(result.getValue(), stream.getReturnType(), connection);
       } catch (RuntimeException exn) {
         undecodable = true;
       }

@@ -88,15 +88,15 @@ Generics and Generated Stubs
 ----------------------------
 
 Erasure removes the element type of a ``List<Integer>`` at run time. Generated stubs therefore pass
-a ``krpc.schema.KRPC.Type`` descriptor to ``Encoder.encode`` and ``Encoder.decode``, and cast the
+a ``krpc.schema.KRPC.Type`` descriptor to ``Encoder.encode`` and ``Decoder.decode``, and cast the
 result.
 
 ``clientgen`` writes one class per service in the fixed package ``krpc.client.services``, and the
 jar includes the stubs of the shipped services.
 
-* ``Encoder`` finds a class by the name ``krpc.client.services.<Service>$<Name>``, and calls its
-  constructor, ``fromValue``, ``fieldTypes`` or ``fromFieldValues`` by reflection. A wire type names
-  a structure and omits its fields, so the generated class supplies them.
+* ``Encoder`` and ``Decoder`` find a class by the name ``krpc.client.services.<Service>$<Name>``,
+  and call its constructor, ``fromValue``, ``fieldTypes`` or ``fromFieldValues`` by reflection. A
+  wire type names a structure and omits its fields, so the generated class supplies them.
 * ``addStream`` and ``getCall`` find a method by name and the run-time classes of its arguments.
   ``@RPCInfo`` names the ``_Types`` class holding its descriptors. ``T`` is unchecked, so a wrong
   ``T`` throws ``ClassCastException`` at the assignment.
@@ -140,7 +140,7 @@ Mapping the Spec to Java
    * - Static method
      - ``Class.method(connection, ...)``, or ``Class.bind(connection).method(...)``. ``addStream`` and ``getCall`` take the method's other arguments, as the call runs on their connection. The deprecated form, with the connection first, drops that connection unchecked
    * - Flags enumeration
-     - A final class of constants extending ``RemoteFlags``, as an ``enum`` cannot hold a combination. One type names it in every signature, and ``Encoder`` decodes it through ``fromValue`` as any enumeration. An ``EnumSet`` would need its own encoding and a different signature
+     - A final class of constants extending ``RemoteFlags``, as an ``enum`` cannot hold a combination. One type names it in every signature, and ``Decoder`` decodes it through ``fromValue`` as any enumeration. An ``EnumSet`` would need its own encoding and a different signature
    * - Scoped stream or event
      - Try-with-resources. ``close()`` calls ``remove()``, and declares ``RPCException``. The language keeps the block's exception, with the exception from ``close()`` suppressed
 

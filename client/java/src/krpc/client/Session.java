@@ -689,7 +689,7 @@ class Session {
       return null;
     }
     try {
-      return Encoder.decodeUint64(result.getValue());
+      return Decoder.decodeUint64(result.getValue());
     } catch (IOException exn) {
       // The call has succeeded, and its caller decodes the value
       return null;
