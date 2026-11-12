@@ -7,12 +7,7 @@ from krpctools.game.ksp import TestCase
 class TestPartsLight(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        active_vessel = cls.connect().space_center.active_vessel
-        if active_vessel is None or active_vessel.name != "Parts":
-            cls.launch_vessel_from_vab("Parts")
-            cls.remove_other_vessels()
-        parts = cls.connect().space_center.active_vessel.parts
+        parts = cls.launch("Parts").parts
         cls.light = parts.with_name("spotLight1")[0].light
 
     def test_light(self):

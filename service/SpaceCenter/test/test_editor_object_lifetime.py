@@ -14,8 +14,7 @@ class EditorObjectLifetimeTest(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("Basic")
+        cls.launch("Basic")
         cls.enter_editor("VAB", craft=cls.craft)
         cls.conn = cls.connect()
         cls.space_center = cls.conn.space_center

@@ -11,12 +11,9 @@ class TestVesselWithoutControlPoint(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("PartsDecoupler")
-        cls.remove_other_vessels()
+        cls.vessel = cls.launch("PartsDecoupler")
         cls.set_circular_orbit("Kerbin", 250000)
         cls.space_center = cls.connect().space_center
-        cls.vessel = cls.space_center.active_vessel
         decoupler = cls.vessel.parts.with_name("Decoupler.1")[0].decoupler
         cls.debris = decoupler.decouple()
         cls.wait(1)
@@ -69,13 +66,8 @@ class TestVesselWithCrewlessCommandPod(TestCase):
         cls.space_center = cls.connect().space_center
         if cls.space_center.get_kerbal("Solo Kerman") is None:
             cls.space_center.create_kerbal("Solo Kerman", "Pilot", True)
-        cls._stage_craft("CrewlessCommandPod", "VAB", None)
-        cls.space_center.launch_vessel(
-            "VAB", "CrewlessCommandPod", "LaunchPad", ["Solo Kerman"]
-        )
-        cls.remove_other_vessels()
+        cls.vessel = cls.launch("CrewlessCommandPod", crew=["Solo Kerman"], save=None)
         cls.set_circular_orbit("Kerbin", 250000)
-        cls.vessel = cls.space_center.active_vessel
         # The TS-12 is an omni-decoupler, detaching at both ends, so staging it leaves the
         # separator on its own as well as the stack below it. The stack below is the one
         # with the crewless pod on it.

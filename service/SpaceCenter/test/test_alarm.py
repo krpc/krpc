@@ -88,18 +88,13 @@ class TestAlarm(TestCase):
 class TestAlarmEventOffset(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
         # The game only adds a burn time to a maneuver alarm for a vessel with an engine
-        cls.launch_vessel_from_vab("Basic")
-        cls.remove_other_vessels()
+        cls.vessel = cls.launch("Basic")
         conn = cls.connect()
         cls.set_orbit("Kerbin", 1000000, 0.1, 0, 0, 0, 1, conn.space_center.ut)
         cls.conn = conn
         cls.space_center = cls.conn.space_center
         cls.alarm_manager = cls.space_center.alarm_manager
-        vessel = cls.space_center.active_vessel
-        assert vessel is not None
-        cls.vessel = vessel
 
     def tearDown(self):
         for alarm in list(self.alarm_manager.alarms):

@@ -31,12 +31,9 @@ class TestServerSideFunctions(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("Basic")
-        cls.remove_other_vessels()
+        cls.vessel = cls.launch("Basic")
         cls.conn = cls.connect()
         cls.sc = cls.conn.space_center
-        cls.vessel = cls.sc.active_vessel
 
     def tearDown(self):
         control = self.vessel.control

@@ -6,11 +6,8 @@ from krpctools.game.ksp import TestCase
 class TestPartsDecoupler(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("PartsDecoupler")
-        cls.remove_other_vessels()
+        cls.vessel = cls.launch("PartsDecoupler")
         cls.space_center = cls.connect().space_center
-        cls.vessel = cls.space_center.active_vessel
         # Look parts up by language-independent internal name (part.name), not the
         # localized title. Decoupler.1 = "TD-12 Decoupler" (was "TR-18A Stack
         # Decoupler"), Separator.1 = "TS-12 Stack Separator" (was "TR-18D Stack
@@ -86,11 +83,8 @@ class TestPartsOmniDecoupler(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("PartsDecoupler")
-        cls.remove_other_vessels()
+        cls.vessel = cls.launch("PartsDecoupler")
         cls.set_circular_orbit("Kerbin", 250000)
-        cls.vessel = cls.connect().space_center.active_vessel
         cls.separator = cls.vessel.parts.with_name("Separator.1")[0].decoupler
 
     def test_decouple_returns_the_separated_vessel(self):

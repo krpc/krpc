@@ -134,12 +134,7 @@ class RCSTest(RCSTestBase):
 class TestPartsRCS(RCSTestBase, TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        active_vessel = cls.connect().space_center.active_vessel
-        if active_vessel is None or active_vessel.name != "PartsRCS":
-            cls.launch_vessel_from_vab("PartsRCS")
-            cls.remove_other_vessels()
-        cls.vessel = cls.connect().space_center.active_vessel
+        cls.vessel = cls.launch("PartsRCS")
         cls.control = cls.vessel.control
         cls.parts = cls.vessel.parts
 
@@ -531,10 +526,7 @@ class TestPartsRCS(RCSTestBase, TestCase):
 class TestPartsRCSMSL(RCSTest, TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("PartsRCS")
-        cls.remove_other_vessels()
-        cls.vessel = cls.connect().space_center.active_vessel
+        cls.vessel = cls.launch("PartsRCS")
         cls.control = cls.vessel.control
         cls.parts = cls.vessel.parts
         cls.add_rcs_data(
@@ -570,11 +562,8 @@ class TestPartsRCSMSL(RCSTest, TestCase):
 class TestPartsRCSVacuum(RCSTest, TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("PartsRCS")
-        cls.remove_other_vessels()
+        cls.vessel = cls.launch("PartsRCS")
         cls.set_circular_orbit("Kerbin", 250000)
-        cls.vessel = cls.connect().space_center.active_vessel
         cls.control = cls.vessel.control
         cls.parts = cls.vessel.parts
         cls.add_rcs_data(

@@ -30,14 +30,11 @@ def parse(text):
 class TestAutoPilotUpdateMode(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.remove_other_vessels()
-        cls.launch_vessel_from_vab("AutoPilot")
+        cls.vessel = cls.launch("AutoPilot")
         # In orbit: the loop writes no rows while the vessel is held on the launch clamps.
         cls.set_orbit("Eve", 1070000, 0.15, 16.2, 70.5, 180.8, 1.83, 251.1)
         cls.conn = cls.connect()
         cls.space_center = cls.conn.space_center
-        cls.vessel = cls.space_center.active_vessel
         cls.ap = cls.vessel.auto_pilot
         cls.mode = cls.space_center.AutoPilotUpdateMode
 

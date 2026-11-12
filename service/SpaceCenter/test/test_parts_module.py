@@ -6,12 +6,7 @@ from krpctools.game.ksp import TestCase
 class TestPartsModule(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        active_vessel = cls.connect().space_center.active_vessel
-        if active_vessel is None or active_vessel.name != "Parts":
-            cls.launch_vessel_from_vab("Parts")
-            cls.remove_other_vessels()
-        cls.vessel = cls.connect().space_center.active_vessel
+        cls.vessel = cls.launch("Parts")
         cls.parts = cls.vessel.parts
 
     @staticmethod

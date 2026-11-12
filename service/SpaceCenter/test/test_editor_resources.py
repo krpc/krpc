@@ -85,9 +85,7 @@ class TestEditorResourcesMatchFlight(TestCase):
             name: vessel.resources.max(name) for name in cls.editor_names
         }
         cls.leave_editor()
-        cls.launch_vessel_from_vab("Resources")
-        cls.remove_other_vessels()
-        cls.resources = cls.connect().space_center.active_vessel.resources
+        cls.resources = cls.launch("Resources", save=None).resources
 
     def test_same_names(self):
         self.assertEqual(self.editor_names, sorted(self.resources.names))

@@ -38,14 +38,8 @@ class ReferenceCraft(BenchmarkTestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        active_vessel = cls.connect().space_center.active_vessel
-        if active_vessel is None or active_vessel.name != "Parts":
-            cls.launch_vessel_from_vab("Parts", directory=CRAFT_DIRECTORY)
-            cls.remove_other_vessels()
-            cls.set_circular_orbit("Kerbin", 100000)
-        cls.vessel = cls.connect().space_center.active_vessel
-        assert cls.vessel is not None
+        cls.vessel = cls.launch("Parts", directory=CRAFT_DIRECTORY)
+        cls.set_circular_orbit("Kerbin", 100000)
         cls.parts = cls.vessel.parts
         cls.part = cls.parts.root
         cls.module = cls.part.modules[-1]

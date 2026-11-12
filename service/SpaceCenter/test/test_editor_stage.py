@@ -202,9 +202,7 @@ class TestEditorStageMatchesFlight(TestCase):
         cls.editor_delta_v = [stage.vacuum_delta_v for stage in vessel.stages]
         cls.editor_numbers = [stage.number for stage in vessel.stages]
         cls.leave_editor()
-        cls.launch_vessel_from_vab("Staging")
-        cls.remove_other_vessels()
-        cls.vessel = cls.connect().space_center.active_vessel
+        cls.vessel = cls.launch("Staging", save=None)
 
     def test_same_stages(self):
         self.assertEqual(

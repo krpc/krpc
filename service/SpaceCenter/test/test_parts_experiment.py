@@ -11,9 +11,7 @@ class TestPartsExperiment(TestCase):
     # consistent with the contract-title case in test_contracts.py.
 
     def setUp(self):
-        self.new_save("krpctest_career", always_load=True)
-        self.launch_vessel_from_vab("PartsExperiment")
-        self.remove_other_vessels()
+        self.launch("PartsExperiment", save="krpctest_career", always_load=True)
         self.sc = self.connect().space_center
         self.parts = self.sc.active_vessel.parts
         self.pod = self.parts.with_name("mk1pod.v2")[0].experiment

@@ -17,9 +17,7 @@ class TestAutoPilotUnload(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("Multi")
-        cls.remove_other_vessels()
+        cls.launch("Multi")
         cls.set_circular_orbit("Kerbin", 100000)
         cls.space_center = cls.connect().space_center
         next(iter(cls.space_center.active_vessel.parts.docking_ports)).undock()

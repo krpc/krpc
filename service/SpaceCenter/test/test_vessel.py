@@ -6,14 +6,11 @@ from krpctools.game.ksp import TestCase
 class TestVessel(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("Vessel")
-        cls.remove_other_vessels()
+        cls.vessel = cls.launch("Vessel")
         cls.set_circular_orbit("Kerbin", 100000)
         cls.space_center = cls.connect().space_center
         cls.Type = cls.space_center.VesselType
         cls.Situation = cls.space_center.VesselSituation
-        cls.vessel = cls.space_center.active_vessel
         cls.far = cls.space_center.far_available
 
     def test_name(self):
@@ -281,11 +278,8 @@ class TestVessel(TestCase):
 class TestVesselEngines(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("PartsEngine")
-        cls.remove_other_vessels()
+        cls.vessel = cls.launch("PartsEngine")
         cls.set_circular_orbit("Kerbin", 100000)
-        cls.vessel = cls.connect().space_center.active_vessel
         cls.control = cls.vessel.control
 
         cls.engines = []

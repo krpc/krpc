@@ -8,13 +8,8 @@ from krpctools.game.ksp import TestCase
 class TestPartsPart(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        active_vessel = cls.connect().space_center.active_vessel
-        if active_vessel is None or active_vessel.name != "Parts":
-            cls.launch_vessel_from_vab("Parts")
-            cls.remove_other_vessels()
+        cls.vessel = cls.launch("Parts")
         cls.sc = cls.connect().space_center
-        cls.vessel = cls.sc.active_vessel
         cls.wait_for_rest(cls.vessel.parts.root)
         cls.parts = cls.vessel.parts
         cls.far_available = cls.sc.far_available
@@ -846,12 +841,7 @@ class TestPartsPart(TestCase):
 class TestPartsPartDecoupleStage(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        active_vessel = cls.connect().space_center.active_vessel
-        if active_vessel is None or active_vessel.name != "PartsDecoupleStage":
-            cls.launch_vessel_from_vab("PartsDecoupleStage")
-            cls.remove_other_vessels()
-        cls.vessel = cls.connect().space_center.active_vessel
+        cls.vessel = cls.launch("PartsDecoupleStage")
         cls.parts = cls.vessel.parts
 
     def check(self, part, name, stage, decouple_stage):
@@ -910,10 +900,7 @@ class TestPartsPartDecoupleStage(TestCase):
 class TestPartsPartForce(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("Basic")
-        cls.remove_other_vessels()
-        cls.vessel = cls.connect().space_center.active_vessel
+        cls.vessel = cls.launch("Basic")
         cls.part = cls.vessel.parts.root
 
     def test_the_deprecated_force_members(self):

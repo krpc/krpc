@@ -21,14 +21,8 @@ class Station(BenchmarkTestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        active_vessel = cls.connect().space_center.active_vessel
-        if active_vessel is None or active_vessel.name != "Station300":
-            cls.launch_vessel_from_vab("Station300")
-            cls.remove_other_vessels()
-            cls.set_circular_orbit("Kerbin", 100000)
-        cls.vessel = cls.connect().space_center.active_vessel
-        assert cls.vessel is not None
+        cls.vessel = cls.launch("Station300")
+        cls.set_circular_orbit("Kerbin", 100000)
         cls.parts = cls.vessel.parts
         cls.part = cls.parts.root
         cls.scenario = "Station300 (%d parts)" % len(cls.parts.all)

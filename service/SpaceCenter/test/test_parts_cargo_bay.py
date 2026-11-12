@@ -6,11 +6,8 @@ from krpctools.game.ksp import TestCase
 class TestPartsCargoBay(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("PartsCargoBay")
-        cls.remove_other_vessels()
+        vessel = cls.launch("PartsCargoBay")
         sc = cls.connect().space_center
-        vessel = sc.active_vessel
         cls.control = vessel.control
         cls.parts = vessel.parts
         cls.state = sc.DeployableState

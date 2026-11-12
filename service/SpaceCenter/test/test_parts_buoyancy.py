@@ -23,14 +23,9 @@ class TestPartsBuoyancy(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
+        cls.vessel = cls.launch("Buoyancy")
         cls.space_center = cls.connect().space_center
-        active_vessel = cls.space_center.active_vessel
-        if active_vessel is None or active_vessel.name != "Buoyancy":
-            cls.launch_vessel_from_vab("Buoyancy")
-            cls.remove_other_vessels()
         cls.kerbin = cls.space_center.bodies["Kerbin"]
-        cls.vessel = cls.space_center.active_vessel
 
     def ocean_point(self):
         for latitude, longitude in OCEAN_CANDIDATES:

@@ -250,12 +250,9 @@ class ControlMixin(Mixin):
 class TestControlActiveVessel(ControlMixin, TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("Basic")
-        cls.remove_other_vessels()
+        cls.vessel = cls.launch("Basic")
         cls.set_circular_orbit("Kerbin", 100000)
         cls.space_center = cls.connect().space_center
-        cls.vessel = cls.space_center.active_vessel
         cls.control = cls.vessel.control
         cls.auto_pilot = cls.vessel.auto_pilot
         cls.orbital_flight = cls.vessel.flight(cls.vessel.orbital_reference_frame)
@@ -309,9 +306,7 @@ class TestControlActiveVessel(ControlMixin, TestCase):
 class TestControlNonActiveVessel(ControlMixin, TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("Multi")
-        cls.remove_other_vessels()
+        cls.launch("Multi")
         cls.set_circular_orbit("Kerbin", 100000)
         cls.space_center = cls.connect().space_center
         # Decouple the two vessels
@@ -350,11 +345,9 @@ class TestControlStaging(TestCase):
         cls.new_save()
 
     def setUp(self):
-        self.launch_vessel_from_vab("Staging")
-        self.remove_other_vessels()
+        self.control = self.launch("Staging", save=None).control
         self.set_circular_orbit("Kerbin", 100000)
         self.space_center = self.connect().space_center
-        self.control = self.space_center.active_vessel.control
 
     def test_state(self):
         self.assertEqual(self.space_center.ControlState.full, self.control.state)
@@ -397,11 +390,8 @@ class TestControlStaging(TestCase):
 class TestControlRover(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("Rover")
-        cls.remove_other_vessels()
+        cls.vessel = cls.launch("Rover")
         cls.space_center = cls.connect().space_center
-        cls.vessel = cls.space_center.active_vessel
         cls.control = cls.vessel.control
         cls.flight = cls.vessel.flight(cls.vessel.orbit.body.reference_frame)
         # A freshly spawned rover creeps for a few seconds while its suspension
@@ -554,11 +544,8 @@ class TestControlRover(TestCase):
 class TestControlProbe(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("Probe")
-        cls.remove_other_vessels()
+        cls.vessel = cls.launch("Probe")
         cls.space_center = cls.connect().space_center
-        cls.vessel = cls.space_center.active_vessel
         cls.control = cls.vessel.control
 
     def test_state(self):
@@ -569,12 +556,9 @@ class TestControlProbe(TestCase):
 class TestControlProbePartialControl(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("Probe")
-        cls.remove_other_vessels()
+        cls.vessel = cls.launch("Probe")
         cls.set_circular_orbit("Jool", 20000000)
         cls.space_center = cls.connect().space_center
-        cls.vessel = cls.space_center.active_vessel
         cls.control = cls.vessel.control
 
     def test_state(self):
@@ -585,9 +569,7 @@ class TestControlProbePartialControl(TestCase):
 class TestActionGroupActions(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("ActionGroups")
-        cls.remove_other_vessels()
+        cls.launch("ActionGroups")
         cls.set_circular_orbit("Kerbin", 100000)
         cls.space_center = cls.connect().space_center
         cls.control = cls.space_center.active_vessel.control
@@ -632,9 +614,7 @@ class TestControlCustomAxes(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("Multi")
-        cls.remove_other_vessels()
+        cls.launch("Multi")
         cls.set_circular_orbit("Kerbin", 100000)
         cls.sc = cls.connect().space_center
         # Decouple into two vessels, one active and one not

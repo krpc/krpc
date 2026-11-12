@@ -4,10 +4,7 @@ from krpctools.game.ksp import TestCase
 class TestStage(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("Staging")
-        cls.remove_other_vessels()
-        cls.vessel = cls.connect().space_center.active_vessel
+        cls.vessel = cls.launch("Staging")
         cls.space_center = cls.connect().space_center
 
     def test_stages_count(self):
@@ -104,9 +101,7 @@ class TestStageRevertToLaunch(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.remove_other_vessels()
-        cls.launch_vessel_from_vab("Staging")
+        cls.launch("Staging")
 
     def wait_for_flight(self):
         conn = self.connect()
@@ -194,11 +189,8 @@ class TestStageDeltaVJettisoned(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("Staging")
-        cls.remove_other_vessels()
+        cls.vessel = cls.launch("Staging")
         cls.space_center = cls.connect().space_center
-        cls.vessel = cls.space_center.active_vessel
         cls.set_circular_orbit("Kerbin", 250000)
         # The first few stages ignite engines without separating anything, so keep going
         # until one leaves a vessel behind.
@@ -231,12 +223,7 @@ class TestStageDeltaVWithoutEngines(TestCase):
         cls.space_center = cls.connect().space_center
         if cls.space_center.get_kerbal("Solo Kerman") is None:
             cls.space_center.create_kerbal("Solo Kerman", "Pilot", True)
-        cls._stage_craft("CrewlessCommandPod", "VAB", None)
-        cls.space_center.launch_vessel(
-            "VAB", "CrewlessCommandPod", "LaunchPad", ["Solo Kerman"]
-        )
-        cls.remove_other_vessels()
-        cls.vessel = cls.space_center.active_vessel
+        cls.vessel = cls.launch("CrewlessCommandPod", crew=["Solo Kerman"], save=None)
 
     def test_figures_are_zero(self):
         self.assertTrue(self.vessel.delta_v_ready)

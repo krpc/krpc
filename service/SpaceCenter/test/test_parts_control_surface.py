@@ -8,9 +8,7 @@ class TestPartsControlSurface(TestCase):
     def setUpClass(cls):
         active_vessel = cls.connect().space_center.active_vessel
         if active_vessel is None or active_vessel.name != "PartsControlSurface":
-            cls.new_save()
-            cls.launch_vessel_from_vab("PartsControlSurface")
-            cls.remove_other_vessels()
+            cls.launch("PartsControlSurface")
         parts = cls.connect().space_center.active_vessel.parts
         cls.wait_for_rest(parts.root)
         cls.ctrlsrf = parts.with_name("airlinerCtrlSrf")[0].control_surface
@@ -245,13 +243,10 @@ class TestPartsControlSurface(TestCase):
 class TestPartsControlSurfaceFlight(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.remove_other_vessels()
         # The elevators sit well off the centerline, which a torque estimate scaled
         # by the lever arm along the pitch axis would inflate
-        cls.launch_vessel_from_sph("Mallard")
+        cls.vessel = cls.launch("Mallard", editor="SPH")
         cls.conn = cls.connect()
-        cls.vessel = cls.conn.space_center.active_vessel
 
     def fly(self, pitch):
         """The pitch torque the game applies to the vessel, and the fraction of its

@@ -6,13 +6,8 @@ from krpctools.game.ksp import TestCase
 class TestPartsLeg(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        active_vessel = cls.connect().space_center.active_vessel
-        if active_vessel is None or active_vessel.name != "PartsLegs":
-            cls.launch_vessel_from_vab("PartsLegs")
-            cls.remove_other_vessels()
+        vessel = cls.launch("PartsLegs")
         cls.State = cls.connect().space_center.DeployableState
-        vessel = cls.connect().space_center.active_vessel
         cls.legs = vessel.parts.legs
         cls.leg = vessel.parts.with_name("miniLandingLeg")[0].leg
         cls.control = vessel.control

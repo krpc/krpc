@@ -55,7 +55,8 @@ exactly those mods and the mods they require:
 vessel. It takes the craft from a ``craft`` directory beside the test file, or from the game's
 stock craft. ``directory`` names another directory, and ``editor="SPH"`` launches onto the runway.
 The craft takes its default crew, or the Kerbals named in ``crew``, and its crew become pilots.
-``save=None`` launches in the current save.
+``save=None`` launches in the current save, and ``keep_other_vessels=True`` keeps the vessels
+already there.
 The ``TestCase`` also places a vessel in orbit, on the ground or in flight, and has assertions
 with a tolerance. ``krpctools.game.images`` checks the PNG and JPEG images an RPC returns.
 

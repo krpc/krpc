@@ -190,9 +190,7 @@ class TestEditorPartsMatchFlight(TestCase):
         cls.editor_root = cls.editor_parts.root.name
         cls.editor_stages = sorted(part.stage for part in cls.editor_parts.all)
         cls.leave_editor()
-        cls.launch_vessel_from_vab("Staging")
-        cls.remove_other_vessels()
-        cls.flight_parts = cls.connect().space_center.active_vessel.parts
+        cls.flight_parts = cls.launch("Staging", save=None).parts
 
     def test_same_parts(self):
         self.assertEqual(

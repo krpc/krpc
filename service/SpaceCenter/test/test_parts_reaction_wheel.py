@@ -6,12 +6,7 @@ from krpctools.game.ksp import TestCase
 class TestPartsReactionWheel(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        name = cls.connect().space_center.active_vessel.name
-        if name != "PartsReactionWheel":
-            cls.launch_vessel_from_vab("PartsReactionWheel")
-            cls.remove_other_vessels()
-        vessel = cls.connect().space_center.active_vessel
+        vessel = cls.launch("PartsReactionWheel")
         parts = vessel.parts
         cls.control = vessel.control
         cls.wheels = parts.reaction_wheels

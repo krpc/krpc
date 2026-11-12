@@ -11,13 +11,10 @@ class TestPartsResourceHarvester(TestCase):
         # Launch from the VAB and teleport the craft to the Greater Flats on Minmus,
         # a flat expanse with good ore concentration where the drills can actually
         # extract (the KSC launchpad has negligible ore).
-        cls.new_save(always_load=True)
-        space_center = cls.connect().space_center
-        cls.launch_vessel_from_vab("PartsHarvester")
+        cls.vessel = cls.launch("PartsHarvester", always_load=True)
         cls.set_landed("Minmus", -4.794139, -11.575088)
-        cls.remove_other_vessels()
+        space_center = cls.connect().space_center
         cls.state = space_center.DeployableState
-        cls.vessel = space_center.active_vessel
         parts = cls.vessel.parts
         cls.control = cls.vessel.control
         cls.drills = parts.resource_harvesters
