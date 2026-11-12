@@ -270,7 +270,7 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
    .. staticmethod:: break(): KRPC.Expression
 
-      A break statement, which ends the enclosing loop.
+      A break statement, which ends the enclosing loop or :meth:`KRPC.Expression.switch`.
 
    .. staticmethod:: build_dictionary(arg: KRPC.Expression, key_func: KRPC.Expression, value_func: KRPC.Expression): KRPC.Expression
 
@@ -831,6 +831,19 @@ Main kRPC service, used by clients to interact with basic server functionality.
       :param arg0: The first operand.
       :param arg1: The second operand.
 
+   .. staticmethod:: match(value: KRPC.Expression, cases: List, bodies: List): KRPC.Expression
+
+      A match statement, which evaluates the first matching case.
+
+      :param value: The value to match.
+      :param cases: The test values of each case.
+      :param bodies: The statement of each case.
+
+      .. note::
+
+         Test values compare as for :meth:`KRPC.Expression.equal`, and a case with none is the default.
+         A :meth:`KRPC.Expression.break` in a body ends the enclosing loop.
+
    .. staticmethod:: max(arg: KRPC.Expression): KRPC.Expression
 
       The largest value of a collection.
@@ -1259,6 +1272,19 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
       :param arg: The list or set.
       :returns: The sum of the elements in the collection.
+
+   .. staticmethod:: switch(value: KRPC.Expression, cases: List, bodies: List): KRPC.Expression
+
+      A switch statement, which evaluates from the first matching case on.
+
+      :param value: The value to match.
+      :param cases: The test values of each case.
+      :param bodies: The statement of each case.
+
+      .. note::
+
+         Test values compare as for :meth:`KRPC.Expression.equal`, and a case with none is the default.
+         A :meth:`KRPC.Expression.break` in a body ends the switch.
 
    .. staticmethod:: take(arg: KRPC.Expression, count: KRPC.Expression): KRPC.Expression
 

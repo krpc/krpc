@@ -559,7 +559,7 @@ class KRPC : public ::krpc::RemoteService {
     static KRPC::Expression block_with_variables(::krpc::Connection& connection, std::vector<KRPC::Expression> variables, std::vector<KRPC::Expression> statements);
 
     /**
-     * A break statement, which ends the enclosing loop.
+     * A break statement, which ends the enclosing loop or krpc::services::KRPC::Expression::switch_().
      */
     static KRPC::Expression break_(::krpc::Connection& connection);
 
@@ -1120,6 +1120,18 @@ class KRPC : public ::krpc::RemoteService {
     static KRPC::Expression less_than_or_equal(::krpc::Connection& connection, KRPC::Expression arg0, KRPC::Expression arg1);
 
     /**
+     * A match statement, which evaluates the first matching case.
+     *
+     * Test values compare as for krpc::services::KRPC::Expression::equal(), and a case with none is the default.
+     * A krpc::services::KRPC::Expression::break_() in a body ends the enclosing loop.
+     * @param connection A connection object.
+     * @param value The value to match.
+     * @param cases The test values of each case.
+     * @param bodies The statement of each case.
+     */
+    static KRPC::Expression match(::krpc::Connection& connection, KRPC::Expression value, std::vector<std::vector<KRPC::Expression> > cases, std::vector<KRPC::Expression> bodies);
+
+    /**
      * The largest value of a collection.
      *
      * Throws an exception if the collection is empty and its values are not nullable.
@@ -1526,6 +1538,18 @@ class KRPC : public ::krpc::RemoteService {
     static KRPC::Expression sum(::krpc::Connection& connection, KRPC::Expression arg);
 
     /**
+     * A switch statement, which evaluates from the first matching case on.
+     *
+     * Test values compare as for krpc::services::KRPC::Expression::equal(), and a case with none is the default.
+     * A krpc::services::KRPC::Expression::break_() in a body ends the switch.
+     * @param connection A connection object.
+     * @param value The value to match.
+     * @param cases The test values of each case.
+     * @param bodies The statement of each case.
+     */
+    static KRPC::Expression switch_(::krpc::Connection& connection, KRPC::Expression value, std::vector<std::vector<KRPC::Expression> > cases, std::vector<KRPC::Expression> bodies);
+
+    /**
      * The first count values of a collection.
      *
      * The result is lazily evaluated. krpc::services::KRPC::Expression::to_list() makes it concrete.
@@ -1823,6 +1847,8 @@ class KRPC : public ::krpc::RemoteService {
 
     static ::krpc::Stream<KRPC::Expression> less_than_or_equal_stream(::krpc::Connection& connection, KRPC::Expression arg0, KRPC::Expression arg1);
 
+    static ::krpc::Stream<KRPC::Expression> match_stream(::krpc::Connection& connection, KRPC::Expression value, std::vector<std::vector<KRPC::Expression> > cases, std::vector<KRPC::Expression> bodies);
+
     static ::krpc::Stream<KRPC::Expression> max_stream(::krpc::Connection& connection, KRPC::Expression arg);
 
     static ::krpc::Stream<KRPC::Expression> max_by_stream(::krpc::Connection& connection, KRPC::Expression arg, KRPC::Expression key);
@@ -1906,6 +1932,8 @@ class KRPC : public ::krpc::RemoteService {
     static ::krpc::Stream<KRPC::Expression> subtract_stream(::krpc::Connection& connection, KRPC::Expression arg0, KRPC::Expression arg1);
 
     static ::krpc::Stream<KRPC::Expression> sum_stream(::krpc::Connection& connection, KRPC::Expression arg);
+
+    static ::krpc::Stream<KRPC::Expression> switch__stream(::krpc::Connection& connection, KRPC::Expression value, std::vector<std::vector<KRPC::Expression> > cases, std::vector<KRPC::Expression> bodies);
 
     static ::krpc::Stream<KRPC::Expression> take_stream(::krpc::Connection& connection, KRPC::Expression arg, KRPC::Expression count);
 
@@ -2079,6 +2107,8 @@ class KRPC : public ::krpc::RemoteService {
 
     static ::krpc::schema::ProcedureCall less_than_or_equal_call(::krpc::Connection& connection, KRPC::Expression arg0, KRPC::Expression arg1);
 
+    static ::krpc::schema::ProcedureCall match_call(::krpc::Connection& connection, KRPC::Expression value, std::vector<std::vector<KRPC::Expression> > cases, std::vector<KRPC::Expression> bodies);
+
     static ::krpc::schema::ProcedureCall max_call(::krpc::Connection& connection, KRPC::Expression arg);
 
     static ::krpc::schema::ProcedureCall max_by_call(::krpc::Connection& connection, KRPC::Expression arg, KRPC::Expression key);
@@ -2162,6 +2192,8 @@ class KRPC : public ::krpc::RemoteService {
     static ::krpc::schema::ProcedureCall subtract_call(::krpc::Connection& connection, KRPC::Expression arg0, KRPC::Expression arg1);
 
     static ::krpc::schema::ProcedureCall sum_call(::krpc::Connection& connection, KRPC::Expression arg);
+
+    static ::krpc::schema::ProcedureCall switch__call(::krpc::Connection& connection, KRPC::Expression value, std::vector<std::vector<KRPC::Expression> > cases, std::vector<KRPC::Expression> bodies);
 
     static ::krpc::schema::ProcedureCall take_call(::krpc::Connection& connection, KRPC::Expression arg, KRPC::Expression count);
 
@@ -2298,7 +2330,7 @@ class KRPC : public ::krpc::RemoteService {
       KRPC::Expression block_with_variables(std::vector<KRPC::Expression> variables, std::vector<KRPC::Expression> statements) const;
 
       /**
-       * A break statement, which ends the enclosing loop.
+       * A break statement, which ends the enclosing loop or krpc::services::KRPC::Expression::switch_().
        */
       KRPC::Expression break_() const;
 
@@ -2801,6 +2833,17 @@ class KRPC : public ::krpc::RemoteService {
       KRPC::Expression less_than_or_equal(KRPC::Expression arg0, KRPC::Expression arg1) const;
 
       /**
+       * A match statement, which evaluates the first matching case.
+       *
+       * Test values compare as for krpc::services::KRPC::Expression::equal(), and a case with none is the default.
+       * A krpc::services::KRPC::Expression::break_() in a body ends the enclosing loop.
+       * @param value The value to match.
+       * @param cases The test values of each case.
+       * @param bodies The statement of each case.
+       */
+      KRPC::Expression match(KRPC::Expression value, std::vector<std::vector<KRPC::Expression> > cases, std::vector<KRPC::Expression> bodies) const;
+
+      /**
        * The largest value of a collection.
        *
        * Throws an exception if the collection is empty and its values are not nullable.
@@ -3164,6 +3207,17 @@ class KRPC : public ::krpc::RemoteService {
        * @param arg The list or set.
        */
       KRPC::Expression sum(KRPC::Expression arg) const;
+
+      /**
+       * A switch statement, which evaluates from the first matching case on.
+       *
+       * Test values compare as for krpc::services::KRPC::Expression::equal(), and a case with none is the default.
+       * A krpc::services::KRPC::Expression::break_() in a body ends the switch.
+       * @param value The value to match.
+       * @param cases The test values of each case.
+       * @param bodies The statement of each case.
+       */
+      KRPC::Expression switch_(KRPC::Expression value, std::vector<std::vector<KRPC::Expression> > cases, std::vector<KRPC::Expression> bodies) const;
 
       /**
        * The first count values of a collection.
@@ -5353,6 +5407,19 @@ inline KRPC::Expression KRPC::Expression::less_than_or_equal(::krpc::Connection&
   return _result;
 }
 
+inline KRPC::Expression KRPC::Expression::match(::krpc::Connection& _connection, KRPC::Expression value, std::vector<std::vector<KRPC::Expression> > cases, std::vector<KRPC::Expression> bodies) {
+    std::vector<krpc::encoder::Value> _args;
+  _args.reserve(3);
+  _args.push_back(encoder::encode_arg(value));
+  _args.push_back(encoder::encode_arg(cases));
+  _args.push_back(encoder::encode_arg(bodies));
+  auto _data = _connection.invoke("KRPC", "Expression_static_Match", _args, ::krpc::Connection::Returns::value);
+    KRPC::Expression _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), &_connection);
+  return _result;
+}
+
 inline KRPC::Expression KRPC::Expression::max(::krpc::Connection& _connection, KRPC::Expression arg) {
     std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
@@ -5836,6 +5903,19 @@ inline KRPC::Expression KRPC::Expression::sum(::krpc::Connection& _connection, K
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(arg));
   auto _data = _connection.invoke("KRPC", "Expression_static_Sum", _args, ::krpc::Connection::Returns::value);
+    KRPC::Expression _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), &_connection);
+  return _result;
+}
+
+inline KRPC::Expression KRPC::Expression::switch_(::krpc::Connection& _connection, KRPC::Expression value, std::vector<std::vector<KRPC::Expression> > cases, std::vector<KRPC::Expression> bodies) {
+    std::vector<krpc::encoder::Value> _args;
+  _args.reserve(3);
+  _args.push_back(encoder::encode_arg(value));
+  _args.push_back(encoder::encode_arg(cases));
+  _args.push_back(encoder::encode_arg(bodies));
+  auto _data = _connection.invoke("KRPC", "Expression_static_Switch", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), &_connection);
@@ -6549,6 +6629,15 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::less_than_or_equal_str
   return ::krpc::Stream<KRPC::Expression>(_connection, _connection.build_call("KRPC", "Expression_static_LessThanOrEqual", _args));
 }
 
+inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::match_stream(::krpc::Connection& _connection, KRPC::Expression value, std::vector<std::vector<KRPC::Expression> > cases, std::vector<KRPC::Expression> bodies) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(3);
+  _args.push_back(encoder::encode_arg(value));
+  _args.push_back(encoder::encode_arg(cases));
+  _args.push_back(encoder::encode_arg(bodies));
+  return ::krpc::Stream<KRPC::Expression>(_connection, _connection.build_call("KRPC", "Expression_static_Match", _args));
+}
+
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::max_stream(::krpc::Connection& _connection, KRPC::Expression arg) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
@@ -6868,6 +6957,15 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::sum_stream(::krpc::Con
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(arg));
   return ::krpc::Stream<KRPC::Expression>(_connection, _connection.build_call("KRPC", "Expression_static_Sum", _args));
+}
+
+inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::switch__stream(::krpc::Connection& _connection, KRPC::Expression value, std::vector<std::vector<KRPC::Expression> > cases, std::vector<KRPC::Expression> bodies) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(3);
+  _args.push_back(encoder::encode_arg(value));
+  _args.push_back(encoder::encode_arg(cases));
+  _args.push_back(encoder::encode_arg(bodies));
+  return ::krpc::Stream<KRPC::Expression>(_connection, _connection.build_call("KRPC", "Expression_static_Switch", _args));
 }
 
 inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::take_stream(::krpc::Connection& _connection, KRPC::Expression arg, KRPC::Expression count) {
@@ -7529,6 +7627,15 @@ inline ::krpc::schema::ProcedureCall KRPC::Expression::less_than_or_equal_call(:
   return _connection.build_call("KRPC", "Expression_static_LessThanOrEqual", _args);
 }
 
+inline ::krpc::schema::ProcedureCall KRPC::Expression::match_call(::krpc::Connection& _connection, KRPC::Expression value, std::vector<std::vector<KRPC::Expression> > cases, std::vector<KRPC::Expression> bodies) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(3);
+  _args.push_back(encoder::encode_arg(value));
+  _args.push_back(encoder::encode_arg(cases));
+  _args.push_back(encoder::encode_arg(bodies));
+  return _connection.build_call("KRPC", "Expression_static_Match", _args);
+}
+
 inline ::krpc::schema::ProcedureCall KRPC::Expression::max_call(::krpc::Connection& _connection, KRPC::Expression arg) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
@@ -7848,6 +7955,15 @@ inline ::krpc::schema::ProcedureCall KRPC::Expression::sum_call(::krpc::Connecti
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(arg));
   return _connection.build_call("KRPC", "Expression_static_Sum", _args);
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::switch__call(::krpc::Connection& _connection, KRPC::Expression value, std::vector<std::vector<KRPC::Expression> > cases, std::vector<KRPC::Expression> bodies) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(3);
+  _args.push_back(encoder::encode_arg(value));
+  _args.push_back(encoder::encode_arg(cases));
+  _args.push_back(encoder::encode_arg(bodies));
+  return _connection.build_call("KRPC", "Expression_static_Switch", _args);
 }
 
 inline ::krpc::schema::ProcedureCall KRPC::Expression::take_call(::krpc::Connection& _connection, KRPC::Expression arg, KRPC::Expression count) {
@@ -8237,6 +8353,10 @@ inline KRPC::Expression KRPC::Expression::Bound::less_than_or_equal(KRPC::Expres
   return KRPC::Expression::less_than_or_equal(_connection, arg0, arg1);
 }
 
+inline KRPC::Expression KRPC::Expression::Bound::match(KRPC::Expression value, std::vector<std::vector<KRPC::Expression> > cases, std::vector<KRPC::Expression> bodies) const {
+  return KRPC::Expression::match(_connection, value, cases, bodies);
+}
+
 inline KRPC::Expression KRPC::Expression::Bound::max(KRPC::Expression arg) const {
   return KRPC::Expression::max(_connection, arg);
 }
@@ -8403,6 +8523,10 @@ inline KRPC::Expression KRPC::Expression::Bound::subtract(KRPC::Expression arg0,
 
 inline KRPC::Expression KRPC::Expression::Bound::sum(KRPC::Expression arg) const {
   return KRPC::Expression::sum(_connection, arg);
+}
+
+inline KRPC::Expression KRPC::Expression::Bound::switch_(KRPC::Expression value, std::vector<std::vector<KRPC::Expression> > cases, std::vector<KRPC::Expression> bodies) const {
+  return KRPC::Expression::switch_(_connection, value, cases, bodies);
 }
 
 inline KRPC::Expression KRPC::Expression::Bound::take(KRPC::Expression arg, KRPC::Expression count) const {

@@ -157,7 +157,18 @@ namespace KRPC.Test.Service.KRPC
             { "TryCatch", () => new object [] {
                 Expression.ConstantInt (1), "KRPC", "InvalidOperationException", null, Expression.ConstantInt (2) } },
             { "TryCatchAll", () => new object [] { Expression.ConstantInt (1), null, Expression.ConstantInt (2) } },
+            { "Match", CaseArguments },
+            { "Switch", CaseArguments },
         };
+
+        static object[] CaseArguments ()
+        {
+            return new object [] {
+                Expression.ConstantInt (1),
+                new List<IList<Expression>> { Values (Expression.ConstantInt (1)) },
+                Values (Expression.ConstantInt (2))
+            };
+        }
 
         // RPCs whose valid arguments name a procedure or a structure type, covered by their own tests
         static readonly ISet<string> notSampled = new HashSet<string> {

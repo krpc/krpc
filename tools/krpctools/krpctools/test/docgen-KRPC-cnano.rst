@@ -328,7 +328,7 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
    .. function:: krpc_error_t krpc_KRPC_Expression_Break(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue)
 
-      A break statement, which ends the enclosing loop.
+      A break statement, which ends the enclosing loop or :func:`krpc_KRPC_Expression_Switch`.
 
 
    
@@ -1127,6 +1127,23 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
    
 
+   .. function:: krpc_error_t krpc_KRPC_Expression_Match(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t value, const krpc_list_list_object_t * cases, const krpc_list_object_t * bodies)
+
+      A match statement, which evaluates the first matching case.
+
+      :Parameters:
+
+       * **value** -- The value to match.
+       * **cases** -- The test values of each case.
+       * **bodies** -- The statement of each case.
+
+   
+
+      .. note::
+
+         Test values compare as for :func:`krpc_KRPC_Expression_Equal`, and a case with none is the default.
+         A :func:`krpc_KRPC_Expression_Break` in a body ends the enclosing loop.
+
    .. function:: krpc_error_t krpc_KRPC_Expression_Max(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg)
 
       The largest value of a collection.
@@ -1722,6 +1739,23 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
       :returns: The sum of the elements in the collection.
    
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_Switch(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t value, const krpc_list_list_object_t * cases, const krpc_list_object_t * bodies)
+
+      A switch statement, which evaluates from the first matching case on.
+
+      :Parameters:
+
+       * **value** -- The value to match.
+       * **cases** -- The test values of each case.
+       * **bodies** -- The statement of each case.
+
+   
+
+      .. note::
+
+         Test values compare as for :func:`krpc_KRPC_Expression_Equal`, and a case with none is the default.
+         A :func:`krpc_KRPC_Expression_Break` in a body ends the switch.
 
    .. function:: krpc_error_t krpc_KRPC_Expression_Take(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg, krpc_KRPC_Expression_t count)
 

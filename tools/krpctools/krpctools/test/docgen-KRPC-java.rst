@@ -261,7 +261,7 @@
 
    .. method:: static Expression break_(Connection connection)
 
-      A break statement, which ends the enclosing loop.
+      A break statement, which ends the enclosing loop or :meth:`Expression.switch_(Expression, java.util.List<java.util.List<Expression>>, java.util.List<Expression>)`.
 
    
 
@@ -885,6 +885,20 @@
       :param Expression arg1: The second operand.
    
 
+   .. method:: static Expression match(Connection connection, Expression value, java.util.List<java.util.List<Expression>> cases, java.util.List<Expression> bodies)
+
+      A match statement, which evaluates the first matching case.
+
+      :param Expression value: The value to match.
+      :param java.util.List<java.util.List<Expression>> cases: The test values of each case.
+      :param java.util.List<Expression> bodies: The statement of each case.
+   
+
+      .. note::
+
+         Test values compare as for :meth:`Expression.equal(Expression, Expression)`, and a case with none is the default.
+         A :meth:`Expression.break_()` in a body ends the enclosing loop.
+
    .. method:: static Expression max(Connection connection, Expression arg)
 
       The largest value of a collection.
@@ -1358,6 +1372,20 @@
       :param Expression arg: The list or set.
       :returns: The sum of the elements in the collection.
    
+
+   .. method:: static Expression switch_(Connection connection, Expression value, java.util.List<java.util.List<Expression>> cases, java.util.List<Expression> bodies)
+
+      A switch statement, which evaluates from the first matching case on.
+
+      :param Expression value: The value to match.
+      :param java.util.List<java.util.List<Expression>> cases: The test values of each case.
+      :param java.util.List<Expression> bodies: The statement of each case.
+   
+
+      .. note::
+
+         Test values compare as for :meth:`Expression.equal(Expression, Expression)`, and a case with none is the default.
+         A :meth:`Expression.break_()` in a body ends the switch.
 
    .. method:: static Expression take(Connection connection, Expression arg, Expression count)
 

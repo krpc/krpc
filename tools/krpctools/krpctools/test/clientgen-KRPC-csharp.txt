@@ -51,12 +51,13 @@ namespace KRPC.Client.Services.KRPC
         internal static readonly global::KRPC.Client.TypeSpec Spec13 = global::KRPC.Client.TypeSpec.For (typeof(uint));
         internal static readonly global::KRPC.Client.TypeSpec Spec14 = global::KRPC.Client.TypeSpec.For (typeof(genericCollectionsAlias::ISet<global::KRPC.Client.Services.KRPC.Expression>));
         internal static readonly global::KRPC.Client.TypeSpec Spec15 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IDictionary<string,global::KRPC.Client.Services.KRPC.Expression>));
-        internal static readonly global::KRPC.Client.TypeSpec Spec16 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.Type>));
-        internal static readonly global::KRPC.Client.TypeSpec Spec17 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.KRPC.GameScene));
-        internal static readonly global::KRPC.Client.TypeSpec Spec18 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Schema.KRPC.Services));
-        internal static readonly global::KRPC.Client.TypeSpec Spec19 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.KRPC.ServerStatus));
-        internal static readonly global::KRPC.Client.TypeSpec Spec20 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.ClientInfo>));
-        internal static readonly global::KRPC.Client.TypeSpec Spec21 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.KRPC.TypeCode));
+        internal static readonly global::KRPC.Client.TypeSpec Spec16 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.Expression>>));
+        internal static readonly global::KRPC.Client.TypeSpec Spec17 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.Type>));
+        internal static readonly global::KRPC.Client.TypeSpec Spec18 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.KRPC.GameScene));
+        internal static readonly global::KRPC.Client.TypeSpec Spec19 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Schema.KRPC.Services));
+        internal static readonly global::KRPC.Client.TypeSpec Spec20 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.KRPC.ServerStatus));
+        internal static readonly global::KRPC.Client.TypeSpec Spec21 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.ClientInfo>));
+        internal static readonly global::KRPC.Client.TypeSpec Spec22 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.KRPC.TypeCode));
 
         // The procedures whose values a C# type cannot describe on its own, which a call
         // built from an expression looks up by name
@@ -140,7 +141,7 @@ namespace KRPC.Client.Services.KRPC
         public global::KRPC.Schema.KRPC.Services GetServices ()
         {
             var _result = connection.Invoke ("KRPC", "GetServices");
-            return (global::KRPC.Schema.KRPC.Services)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec18, connection);
+            return (global::KRPC.Schema.KRPC.Services)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec19, connection);
         }
 
         /// <summary>
@@ -150,7 +151,7 @@ namespace KRPC.Client.Services.KRPC
         public global::KRPC.Client.Services.KRPC.ServerStatus GetStatus ()
         {
             var _result = connection.Invoke ("KRPC", "GetStatus");
-            return (global::KRPC.Client.Services.KRPC.ServerStatus)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec19, connection);
+            return (global::KRPC.Client.Services.KRPC.ServerStatus)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec20, connection);
         }
 
         /// <summary>
@@ -217,7 +218,7 @@ namespace KRPC.Client.Services.KRPC
         public global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.ClientInfo> Clients {
             get {
                 var _result = connection.Invoke ("KRPC", "get_Clients");
-                return (global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.ClientInfo>)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec20, connection);
+                return (global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.ClientInfo>)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec21, connection);
             }
         }
 
@@ -237,11 +238,11 @@ namespace KRPC.Client.Services.KRPC
         public global::KRPC.Client.Services.KRPC.GameScene GameScene {
             get {
                 var _result = connection.Invoke ("KRPC", "get_GameScene");
-                return (global::KRPC.Client.Services.KRPC.GameScene)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec17, connection);
+                return (global::KRPC.Client.Services.KRPC.GameScene)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec18, connection);
             }
             set {
                 var _args = new ByteString[] {
-                    global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec17)
+                    global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec18)
                 };
                 connection.Invoke ("KRPC", "set_GameScene", _args);
             }
@@ -1518,7 +1519,7 @@ namespace KRPC.Client.Services.KRPC
         }
 
         /// <summary>
-        /// A break statement, which ends the enclosing loop.
+        /// A break statement, which ends the enclosing loop or <see cref="global::KRPC.Client.Services.KRPC.Expression.Switch" />.
         /// </summary>
         /// <param name="connection">A connection object.</param>
         [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Break", typeof(TypeSpecs))]
@@ -2738,6 +2739,31 @@ namespace KRPC.Client.Services.KRPC
         }
 
         /// <summary>
+        /// A match statement, which evaluates the first matching case.
+        /// </summary>
+        /// <remarks>
+        /// Test values compare as for <see cref="global::KRPC.Client.Services.KRPC.Expression.Equal" />, and a case with none is the default.
+        /// A <see cref="global::KRPC.Client.Services.KRPC.Expression.Break" /> in a body ends the enclosing loop.
+        /// </remarks>
+        /// <param name="value">The value to match.</param>
+        /// <param name="cases">The test values of each case.</param>
+        /// <param name="bodies">The statement of each case.</param>
+        /// <param name="connection">A connection object.</param>
+        [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Match", typeof(TypeSpecs))]
+        public static global::KRPC.Client.Services.KRPC.Expression Match (IConnection connection, global::KRPC.Client.Services.KRPC.Expression value, global::System.Collections.Generic.IList<global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.Expression>> cases, global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.Expression> bodies)
+        {
+            if (connection == null)
+                throw new ArgumentNullException (nameof (connection));
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec0),
+                global::KRPC.Client.Encoder.Encode (cases, TypeSpecs.Spec16),
+                global::KRPC.Client.Encoder.Encode (bodies, TypeSpecs.Spec1)
+            };
+            var _result = connection.Invoke ("KRPC", "Expression_static_Match", _args);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+        }
+
+        /// <summary>
         /// The largest value of a collection.
         /// </summary>
         /// <remarks>
@@ -3614,6 +3640,31 @@ namespace KRPC.Client.Services.KRPC
         }
 
         /// <summary>
+        /// A switch statement, which evaluates from the first matching case on.
+        /// </summary>
+        /// <remarks>
+        /// Test values compare as for <see cref="global::KRPC.Client.Services.KRPC.Expression.Equal" />, and a case with none is the default.
+        /// A <see cref="global::KRPC.Client.Services.KRPC.Expression.Break" /> in a body ends the switch.
+        /// </remarks>
+        /// <param name="value">The value to match.</param>
+        /// <param name="cases">The test values of each case.</param>
+        /// <param name="bodies">The statement of each case.</param>
+        /// <param name="connection">A connection object.</param>
+        [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Switch", typeof(TypeSpecs))]
+        public static global::KRPC.Client.Services.KRPC.Expression Switch (IConnection connection, global::KRPC.Client.Services.KRPC.Expression value, global::System.Collections.Generic.IList<global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.Expression>> cases, global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.Expression> bodies)
+        {
+            if (connection == null)
+                throw new ArgumentNullException (nameof (connection));
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec0),
+                global::KRPC.Client.Encoder.Encode (cases, TypeSpecs.Spec16),
+                global::KRPC.Client.Encoder.Encode (bodies, TypeSpecs.Spec1)
+            };
+            var _result = connection.Invoke ("KRPC", "Expression_static_Switch", _args);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+        }
+
+        /// <summary>
         /// The first count values of a collection.
         /// </summary>
         /// <remarks>
@@ -4062,7 +4113,7 @@ namespace KRPC.Client.Services.KRPC
             }
 
             /// <summary>
-            /// A break statement, which ends the enclosing loop.
+            /// A break statement, which ends the enclosing loop or <see cref="global::KRPC.Client.Services.KRPC.Expression.Switch" />.
             /// </summary>
             [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Break", typeof(TypeSpecs))]
             public global::KRPC.Client.Services.KRPC.Expression Break ()
@@ -4831,6 +4882,22 @@ namespace KRPC.Client.Services.KRPC
             }
 
             /// <summary>
+            /// A match statement, which evaluates the first matching case.
+            /// </summary>
+            /// <remarks>
+            /// Test values compare as for <see cref="global::KRPC.Client.Services.KRPC.Expression.Equal" />, and a case with none is the default.
+            /// A <see cref="global::KRPC.Client.Services.KRPC.Expression.Break" /> in a body ends the enclosing loop.
+            /// </remarks>
+            /// <param name="value">The value to match.</param>
+            /// <param name="cases">The test values of each case.</param>
+            /// <param name="bodies">The statement of each case.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Match", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Match (global::KRPC.Client.Services.KRPC.Expression value, global::System.Collections.Generic.IList<global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.Expression>> cases, global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.Expression> bodies)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Match (connection, value, cases, bodies);
+            }
+
+            /// <summary>
             /// The largest value of a collection.
             /// </summary>
             /// <remarks>
@@ -5386,6 +5453,22 @@ namespace KRPC.Client.Services.KRPC
             }
 
             /// <summary>
+            /// A switch statement, which evaluates from the first matching case on.
+            /// </summary>
+            /// <remarks>
+            /// Test values compare as for <see cref="global::KRPC.Client.Services.KRPC.Expression.Equal" />, and a case with none is the default.
+            /// A <see cref="global::KRPC.Client.Services.KRPC.Expression.Break" /> in a body ends the switch.
+            /// </remarks>
+            /// <param name="value">The value to match.</param>
+            /// <param name="cases">The test values of each case.</param>
+            /// <param name="bodies">The statement of each case.</param>
+            [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_Switch", typeof(TypeSpecs))]
+            public global::KRPC.Client.Services.KRPC.Expression Switch (global::KRPC.Client.Services.KRPC.Expression value, global::System.Collections.Generic.IList<global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.Expression>> cases, global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.Expression> bodies)
+            {
+                return global::KRPC.Client.Services.KRPC.Expression.Switch (connection, value, cases, bodies);
+            }
+
+            /// <summary>
             /// The first count values of a collection.
             /// </summary>
             /// <remarks>
@@ -5593,7 +5676,7 @@ namespace KRPC.Client.Services.KRPC
                     global::KRPC.Client.Encoder.Encode (this, TypeSpecs.Spec0)
                 };
                 var _result = connection.Invoke ("KRPC", "Expression_get_ParameterTypes", _args);
-                return (global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.Type>)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec16, connection);
+                return (global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.Type>)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec17, connection);
             }
         }
 
@@ -5860,7 +5943,7 @@ namespace KRPC.Client.Services.KRPC
             if (connection == null)
                 throw new ArgumentNullException (nameof (connection));
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (valueTypes, TypeSpecs.Spec16)
+                global::KRPC.Client.Encoder.Encode (valueTypes, TypeSpecs.Spec17)
             };
             var _result = connection.Invoke ("KRPC", "Type_static_TupleType", _args);
             return (global::KRPC.Client.Services.KRPC.Type)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
@@ -6093,7 +6176,7 @@ namespace KRPC.Client.Services.KRPC
                     global::KRPC.Client.Encoder.Encode (this, TypeSpecs.Spec4)
                 };
                 var _result = connection.Invoke ("KRPC", "Type_get_Code", _args);
-                return (global::KRPC.Client.Services.KRPC.TypeCode)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec21, connection);
+                return (global::KRPC.Client.Services.KRPC.TypeCode)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec22, connection);
             }
         }
 
@@ -6157,7 +6240,7 @@ namespace KRPC.Client.Services.KRPC
                     global::KRPC.Client.Encoder.Encode (this, TypeSpecs.Spec4)
                 };
                 var _result = connection.Invoke ("KRPC", "Type_get_Types", _args);
-                return (global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.Type>)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec16, connection);
+                return (global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.Type>)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec17, connection);
             }
         }
     }

@@ -304,8 +304,8 @@ namespace KRPC.Service.KRPC
         }
 
         // Markers for break, continue and return statements. They are replaced with
-        // jumps when the enclosing loop or function is created. Expressions are built
-        // from the innermost node outwards, so a marker binds to the nearest
+        // jumps when the enclosing loop, switch or function is created. Expressions are
+        // built from the innermost node outwards, so a marker binds to the nearest
         // enclosing construct. Check rejects an unbound marker, so none is evaluated
         internal static void BreakMarker ()
         {
@@ -325,7 +325,7 @@ namespace KRPC.Service.KRPC
         }
 
         /// <summary>
-        /// A break statement, which ends the enclosing loop.
+        /// A break statement, which ends the enclosing loop or <see cref="Switch"/>.
         /// </summary>
         [KRPCMethod]
         public static Expression Break ()
@@ -428,7 +428,7 @@ namespace KRPC.Service.KRPC
                 var method = node.Method;
                 if (method.DeclaringType == typeof (Expression)) {
                     if (method.Name == nameof (BreakMarker))
-                        throw new InvalidOperationException ("A break statement must be inside a loop");
+                        throw new InvalidOperationException ("A break statement must be inside a loop or a switch");
                     if (method.Name == nameof (ContinueMarker))
                         throw new InvalidOperationException ("A continue statement must be inside a loop");
                     if (method.Name == nameof (ReturnMarker) || method.Name == nameof (ReturnVoidMarker))
@@ -544,6 +544,110 @@ namespace KRPC.Service.KRPC
                     ? collection : LinqExpression.Convert (collection, listType)),
                 LinqExpression.Assign (index, LinqExpression.Constant (0)),
                 loop);
+        }
+
+        /// <summary>
+        /// A match statement, which evaluates the first matching case.
+        /// </summary>
+        /// <remarks>
+        /// Test values compare as for <see cref="Equal"/>, and a case with none is the default.
+        /// A <see cref="Break"/> in a body ends the enclosing loop.
+        /// </remarks>
+        /// <param name="value">The value to match.</param>
+        /// <param name="cases">The test values of each case.</param>
+        /// <param name="bodies">The statement of each case.</param>
+        [KRPCMethod]
+        public static Expression Match (Expression value, IList<IList<Expression>> cases, IList<Expression> bodies)
+        {
+            ParameterExpression variable;
+            int defaultCase;
+            var conditions = CaseConditions ("match", value, cases, bodies, out variable, out defaultCase);
+            LinqExpression chain = defaultCase < 0
+                ? LinqExpression.Empty () : AsStatement (bodies [defaultCase]);
+            for (int i = cases.Count - 1; i >= 0; i--) {
+                if (i != defaultCase)
+                    chain = LinqExpression.IfThenElse (conditions [i], AsStatement (bodies [i]), chain);
+            }
+            return new Expression (LinqExpression.Block (
+                typeof (void), new [] { variable }, LinqExpression.Assign (variable, value), chain));
+        }
+
+        /// <summary>
+        /// A switch statement, which evaluates from the first matching case on.
+        /// </summary>
+        /// <remarks>
+        /// Test values compare as for <see cref="Equal"/>, and a case with none is the default.
+        /// A <see cref="Break"/> in a body ends the switch.
+        /// </remarks>
+        /// <param name="value">The value to match.</param>
+        /// <param name="cases">The test values of each case.</param>
+        /// <param name="bodies">The statement of each case.</param>
+        [KRPCMethod]
+        public static Expression Switch (Expression value, IList<IList<Expression>> cases, IList<Expression> bodies)
+        {
+            ParameterExpression variable;
+            int defaultCase;
+            var conditions = CaseConditions ("switch", value, cases, bodies, out variable, out defaultCase);
+            var end = LinqExpression.Label ();
+            var labels = cases.Select (x => LinqExpression.Label ()).ToList ();
+            var statements = new List<LinqExpression> { LinqExpression.Assign (variable, value) };
+            // Jump to the first matching case, then the default, then the end
+            for (int i = 0; i < cases.Count; i++) {
+                if (i != defaultCase)
+                    statements.Add (LinqExpression.IfThen (conditions [i], LinqExpression.Goto (labels [i])));
+            }
+            statements.Add (LinqExpression.Goto (defaultCase < 0 ? end : labels [defaultCase]));
+            var rewriter = new MarkerRewriter (end, null, null);
+            for (int i = 0; i < cases.Count; i++) {
+                statements.Add (LinqExpression.Label (labels [i]));
+                statements.Add (rewriter.Visit (AsStatement (bodies [i])));
+            }
+            statements.Add (LinqExpression.Label (end));
+            return new Expression (LinqExpression.Block (typeof (void), new [] { variable }, statements));
+        }
+
+        /// <summary>
+        /// Checks the arguments of a match or switch, and builds the condition of each case
+        /// except the default, which compares a variable holding the value with the case's test
+        /// values.
+        /// </summary>
+        static IList<LinqExpression> CaseConditions (
+            string statement, Expression value, IList<IList<Expression>> cases, IList<Expression> bodies,
+            out ParameterExpression variable, out int defaultCase)
+        {
+            if (ReferenceEquals (value, null))
+                throw new ArgumentNullException (nameof (value));
+            if (ReferenceEquals (cases, null))
+                throw new ArgumentNullException (nameof (cases));
+            if (ReferenceEquals (bodies, null))
+                throw new ArgumentNullException (nameof (bodies));
+            CheckHasValue (value, "The value of a " + statement);
+            if (cases.Count != bodies.Count)
+                throw new ArgumentException ("A " + statement + " must have one body for each case");
+            CheckNoNullElements (bodies, "bodies of a " + statement);
+            variable = LinqExpression.Variable (value.Type, statement);
+            var held = new Expression (variable, value.Spec);
+            var conditions = new List<LinqExpression> ();
+            defaultCase = -1;
+            for (int i = 0; i < cases.Count; i++) {
+                var testValues = cases [i];
+                if (ReferenceEquals (testValues, null))
+                    throw new ArgumentException ("The cases of a " + statement + " cannot be null");
+                CheckNoNullElements (testValues, "test values of a " + statement);
+                CheckEachHasValue (testValues, "A test value of a " + statement);
+                if (testValues.Count == 0) {
+                    if (defaultCase >= 0)
+                        throw new ArgumentException ("A " + statement + " can have at most one default case");
+                    defaultCase = i;
+                    conditions.Add (null);
+                    continue;
+                }
+                // OrElse evaluates a test value only when the earlier ones did not match
+                conditions.Add (testValues
+                    .Select (x => BooleanCondition (Equal (held, x)))
+                    .Aggregate (LinqExpression.OrElse));
+            }
+            return conditions;
         }
     }
 }
