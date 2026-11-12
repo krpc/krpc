@@ -63,6 +63,22 @@ py_binary(
     srcs = ["write_zip.py"],
 )
 
+test_suite(
+    name = "test",
+    tests = [
+        ":pyright",
+        ":ruff",
+        "//tools/build/dotnet:pyright",
+        "//tools/build/dotnet:ruff",
+        "//tools/build/dotnet:versions-test",
+        "//tools/build/protobuf:pyright",
+        "//tools/build/protobuf:ruff",
+        "//tools/build/python:pyright",
+        "//tools/build/python:requirements.test",
+        "//tools/build/python:ruff",
+    ],
+)
+
 py_ruff_test(
     name = "ruff",
     size = "small",
