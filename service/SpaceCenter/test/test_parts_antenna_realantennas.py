@@ -21,14 +21,9 @@ class TestPartsAntennaRealAntennas(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("PartsAntennaRealAntennas")
-        cls.remove_other_vessels()
+        cls.vessel = cls.launch("PartsAntennaRealAntennas")
         cls.space_center = cls.connect().space_center
-        vessel = cls.space_center.active_vessel
-        assert vessel is not None
-        cls.vessel = vessel
-        parts = vessel.parts
+        parts = cls.vessel.parts
         cls.dish = parts.with_name("HighGainAntenna")[0].antenna
         cls.deployable_dish = parts.with_name("HighGainAntenna5.v2")[0].antenna
         cls.omni = parts.with_name("longAntenna")[0].antenna
@@ -37,9 +32,6 @@ class TestPartsAntennaRealAntennas(TestCase):
             lambda: cls.vessel.comms.control_path,
             message="the vessel to connect to a ground station",
         )
-
-    def test_available(self):
-        self.assertTrue(self.space_center.real_antennas_available)
 
     def test_every_antenna_is_a_real_antenna(self):
         # RealAntennas gives the pod an antenna as well

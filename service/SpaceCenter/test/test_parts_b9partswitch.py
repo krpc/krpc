@@ -68,10 +68,7 @@ class TestPartsB9PartSwitchEditor(B9PartSwitchTestCase):
 class TestPartsB9PartSwitchFlight(B9PartSwitchTestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("PartsB9PartSwitch")
-        cls.remove_other_vessels()
-        vessel = cls.connect().space_center.active_vessel
+        vessel = cls.launch("PartsB9PartSwitch")
         cls.tank = vessel.parts.with_name("b9PartSwitchTest")[0]
 
     def test_saved_subtype(self):

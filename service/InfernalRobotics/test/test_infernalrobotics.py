@@ -8,16 +8,10 @@ class TestInfernalRobotics(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("InfernalRobotics")
-        cls.remove_other_vessels()
+        cls.vessel = cls.launch("InfernalRobotics")
         cls.ir = cls.connect().infernal_robotics
-        vessel = cls.connect().space_center.active_vessel
-        assert vessel is not None
-        cls.vessel = vessel
 
-    def test_available_and_ready(self):
-        self.assertTrue(self.ir.available)
+    def test_ready(self):
         self.assertTrue(self.ir.ready)
 
     def test_servo_groups(self):

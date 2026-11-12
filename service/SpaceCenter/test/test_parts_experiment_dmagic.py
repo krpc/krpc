@@ -13,11 +13,11 @@ class TestPartsExperimentDMagic(TestCase):
     mods = ["DMagic"]
 
     def setUp(self):
-        self.new_save("krpctest_career", always_load=True)
-        self.launch_vessel_from_vab("PartsExperimentDMagic")
-        self.remove_other_vessels()
+        vessel = self.launch(
+            "PartsExperimentDMagic", save="krpctest_career", always_load=True
+        )
         self.sc = self.connect().space_center
-        self.parts = self.sc.active_vessel.parts
+        self.parts = vessel.parts
         self.experiment = self.parts.with_name("dmagicSensorTest")[0].experiment
 
     def test_experiment(self):

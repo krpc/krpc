@@ -15,10 +15,7 @@ class TestPartsRealChute(TestCase):
     mods = ["RealChute"]
 
     def setUp(self):
-        self.new_save()
-        self.launch_vessel_from_vab("PartsRealChute")
-        self.remove_other_vessels()
-        self.vessel = self.connect().space_center.active_vessel
+        self.vessel = self.launch("PartsRealChute")
         self.control = self.vessel.control
         self.state = self.connect().space_center.ParachuteState
         self.parachutes = self.vessel.parts.parachutes

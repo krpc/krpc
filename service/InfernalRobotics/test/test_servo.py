@@ -8,13 +8,8 @@ class TestServo(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("InfernalRobotics")
-        cls.remove_other_vessels()
+        cls.vessel = cls.launch("InfernalRobotics")
         cls.ir = cls.connect().infernal_robotics
-        vessel = cls.connect().space_center.active_vessel
-        assert vessel is not None
-        cls.vessel = vessel
         cls.Mode = cls.connect().infernal_robotics.ServoMode
 
     def _recenter(self, servo):

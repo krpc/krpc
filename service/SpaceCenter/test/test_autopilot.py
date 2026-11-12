@@ -1669,7 +1669,7 @@ def _make_autopilot_launch_test_class(  # noqa: PLR0913
         def tearDown(self):
             self.ap.show_info_ui = False
 
-        def launch(self):
+        def lift_off(self):
             self.vessel.control.sas = False
             self.vessel.control.rcs = False
             self.vessel.control.throttle = throttle
@@ -1705,7 +1705,7 @@ def _make_autopilot_launch_test_class(  # noqa: PLR0913
         def test_launch(self):
             # Launch, holding vertical, and assert the actuators have settled to a
             # smooth hold with little oscillation.
-            self.launch()
+            self.lift_off()
             self.wait(launch_settle_delay)
             self.ap.diagnostic_logging = True
             self.wait(10)
@@ -1715,7 +1715,7 @@ def _make_autopilot_launch_test_class(  # noqa: PLR0913
         def test_sharp_turn(self):
             # Launch, hold vertical for 10 seconds, pitch over 5 degrees, then assert
             # the actuators have settled to a smooth hold with little oscillation.
-            self.launch()
+            self.lift_off()
             self.wait(10)
             self.ap.target_pitch_and_heading(85, 90)
             self.wait(pitch_settle_delay)
@@ -1729,7 +1729,7 @@ def _make_autopilot_launch_test_class(  # noqa: PLR0913
             # 10Hz update to the vessel pitch control.
             # Assert the actuators have settled to a smooth hold with little
             # oscillation from 10 second onwards.
-            self.launch()
+            self.lift_off()
             self.wait(10)
             self.ap.diagnostic_logging = True
             for i in range(200):
@@ -1743,7 +1743,7 @@ def _make_autopilot_launch_test_class(  # noqa: PLR0913
             # using target_smoothing_time control
             # Assert the actuators have settled to a smooth hold with little
             # oscillation from 10 second onwards.
-            self.launch()
+            self.lift_off()
             self.wait(10)
             self.ap.diagnostic_logging = True
             self.ap.target_smoothing_time = 20

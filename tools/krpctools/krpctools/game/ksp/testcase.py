@@ -13,6 +13,7 @@ from .. import testcase
 
 if TYPE_CHECKING:
     from krpc.ksp import KSPConnection as Connection
+    from krpc.ksp.spacecenter import Vessel
 
     from .game import KSP
 
@@ -150,6 +151,36 @@ class TestCase(testcase.TestCase):
             space_center.launch_vessel("SPH", name, launch_site)
         # Ensure the crew are all pilots, for full control
         cls.set_crew_to_pilot()
+
+    @classmethod
+    def launch(
+        cls,
+        craft: str,
+        directory: str | None = None,
+        editor: str = "VAB",
+        crew: list[str] | None = None,
+        save: str | None = "krpctest",
+        always_load: bool = False,
+    ) -> "Vessel":
+        """Launch craft from the editor ("VAB" or "SPH"), remove the other vessels, and
+        return the active vessel. The craft is found as for launch_vessel_from_vab.
+
+        The vessel takes the craft's default crew, or the Kerbals named in crew, and its
+        crew become pilots. An empty crew launches it with none. It launches in a new save,
+        loaded as for new_save, or in the current save when save is None."""
+        if editor not in ("VAB", "SPH"):
+            raise ValueError("editor must be VAB or SPH, got %r" % editor)
+        if save is not None:
+            cls.new_save(save, always_load=always_load)
+        cls._stage_craft(craft, editor, directory)
+        site = "LaunchPad" if editor == "VAB" else "Runway"
+        cls.connect().space_center.launch_vessel(editor, craft, site, crew)
+        cls.set_crew_to_pilot()
+        cls.remove_other_vessels()
+        vessel = cls.connect().space_center.active_vessel
+        if vessel is None:
+            raise RuntimeError("No active vessel after launching %s" % craft)
+        return vessel
 
     @classmethod
     def _set_game_scene(cls, scene, timeout=120):

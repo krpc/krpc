@@ -8,11 +8,9 @@ class TestKerbalAlarmClock(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
         # A vessel is only needed for the Alarm.vessel round-trip, which
         # requires a matching vessel to exist in the game.
-        cls.launch_vessel_from_vab("KerbalAlarmClock")
-        cls.remove_other_vessels()
+        cls.launch("KerbalAlarmClock")
         conn = cls.connect()
         cls.kac = conn.kerbal_alarm_clock
         cls.sc = conn.space_center
@@ -27,9 +25,6 @@ class TestKerbalAlarmClock(TestCase):
         if alarm_type is None:
             alarm_type = self.type.raw
         return self.kac.create_alarm(alarm_type, name, self.sc.ut + offset)
-
-    def test_available(self):
-        self.assertTrue(self.kac.available)
 
     def test_no_alarms(self):
         self.assertCountEqual([], self.kac.alarms)

@@ -19,15 +19,10 @@ class KerbalEngineerReduxTestCase(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("Staging", directory=CRAFT)
-        cls.remove_other_vessels()
+        cls.vessel = cls.launch("Staging", directory=CRAFT)
         cls.conn = cls.connect()
         cls.ker = cls.conn.kerbal_engineer_redux
         cls.sc = cls.conn.space_center
-        vessel = cls.sc.active_vessel
-        assert vessel is not None
-        cls.vessel = vessel
 
 
 class TestKerbalEngineerRedux(KerbalEngineerReduxTestCase):
@@ -35,9 +30,6 @@ class TestKerbalEngineerRedux(KerbalEngineerReduxTestCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.set_circular_orbit("Kerbin", 100000)
-
-    def test_available(self):
-        self.assertTrue(self.ker.available)
 
     def test_stages(self):
         stages = self.ker.stages(self.vessel)

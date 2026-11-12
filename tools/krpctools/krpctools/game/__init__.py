@@ -10,6 +10,7 @@ The core is game-agnostic:
  * :mod:`krpctools.game.testcase` - the ``TestCase`` base class.
  * :mod:`krpctools.game.assertions`, :mod:`krpctools.game.geometry` - assertions and vector
    math.
+ * :mod:`krpctools.game.images` - checking and writing PNG and JPEG images.
  * :mod:`krpctools.game.pytest_plugin` - the pytest plugin, and :mod:`krpctools.game.cli`
    the krpc-game command.
 

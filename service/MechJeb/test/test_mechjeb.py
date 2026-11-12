@@ -20,15 +20,10 @@ class MechJebTestCase(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("Basic", directory=CRAFT)
-        cls.remove_other_vessels()
+        cls.vessel = cls.launch("Basic", directory=CRAFT)
         cls.conn = cls.connect()
         cls.mj = cls.conn.mech_jeb
         cls.sc = cls.conn.space_center
-        vessel = cls.sc.active_vessel
-        assert vessel is not None
-        cls.vessel = vessel
         cls.wait_until(lambda: cls.mj.ready)
 
 
