@@ -1,5 +1,6 @@
 {
   "remote_error": null,
+  "server_error": null,
   "native_types": {
     "System.InvalidOperationException": null,
     "System.ArgumentException": null,

@@ -5,16 +5,18 @@ own mapping fails the suite.
 
   {
     "remote_error": "krpc.error.RemoteError",
+    "server_error": "krpc.error.ServerError",
     "native_types": {"System.ArgumentException": "ValueError", ...},
     "naming": {"case": "snake", "accessors": false, "exceptions": true}
   }
 
 remote_error names the type every error of the client's own derives, as the testee reports it.
-It is null for a client whose errors are codes, with no type to derive.
+It is null for a client whose errors are codes, with no type to derive. server_error names the type
+the client's exception types derive, and is null for such a client too.
 A key of native_types is the mapped type of a KRPC exception, the .NET exception it stands for.
 A null value is an exception the client raises only as a type of its own.
-A client with the error-types profile needs remote_error and native_types, and one with the
-definitions profile needs naming.
+A client with the error-types profile needs remote_error, server_error and native_types, and
+one with the definitions profile needs naming.
 """
 
 from __future__ import annotations
@@ -28,12 +30,13 @@ from krpc.utils import snake_case
 # The profile each section of the file is for
 SECTIONS = {
     "remote_error": "error-types",
+    "server_error": "error-types",
     "native_types": "error-types",
     "naming": "definitions",
 }
 
 # The sections a client with the profile can set to null
-NULLABLE = {"remote_error"}
+NULLABLE = {"remote_error", "server_error"}
 
 # The function that converts a name to each case
 CASES: dict[str, Callable[[str], str]] = {"snake": snake_case}
@@ -56,6 +59,7 @@ class Naming:
 @dataclass(frozen=True)
 class Conventions:
     remote_error: str | None = None
+    server_error: str | None = None
     native_types: dict[str, str | None] | None = None
     naming: Naming | None = None
     # The sections the file holds, null ones included
@@ -74,6 +78,7 @@ def read(path: str) -> Conventions:
     naming = content.get("naming")
     return Conventions(
         remote_error=content.get("remote_error"),
+        server_error=content.get("server_error"),
         native_types=content.get("native_types"),
         naming=None if naming is None else _naming(path, naming),
         sections=frozenset(content),

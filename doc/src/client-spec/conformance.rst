@@ -121,6 +121,7 @@ a JSON file, passed with ``--conventions``:
 
    {
      "remote_error": "krpc.error.RemoteError",
+     "server_error": "krpc.error.ServerError",
      "native_types": {
        "System.ArgumentException": "ValueError",
        "System.InvalidOperationException": "RuntimeError"
@@ -128,12 +129,13 @@ a JSON file, passed with ``--conventions``:
      "naming": {"case": "snake", "accessors": false, "exceptions": true}
    }
 
-``remote_error`` and ``native_types`` are for the ``error-types`` profile. ``remote_error`` names
-the type every error of the client's own derives, as the testee reports it. It is ``null`` for a
-client whose errors are codes, with no type to derive. ``native_types`` gives the native error type
-the client raises for each mapped exception, by the exception's mapped type, and needs an entry for
-each one. A ``null`` entry is an exception the client raises only as a type of its own. ``naming``
-is for the ``definitions`` profile. It gives the case of member names, whether a property is a pair
-of ``get_`` and ``set_`` functions, and whether the client exposes exception types. The case is
+``remote_error``, ``server_error`` and ``native_types`` are for the ``error-types`` profile.
+``remote_error`` names the type every error of the client's own derives, as the testee reports it,
+and ``server_error`` the type a service's exception types derive. Both are ``null`` for a client
+whose errors are codes, with no type to derive. ``native_types`` gives the native error type the
+client raises for each mapped exception, by the exception's mapped type, and needs an entry for each
+one. A ``null`` entry is an exception the client raises only as a type of its own. ``naming`` is for
+the ``definitions`` profile. It gives the case of member names, whether a property is a pair of
+``get_`` and ``set_`` functions, and whether the client exposes exception types. The case is
 ``snake``, the one case the driver converts names to. The run stops if the file lacks a section a
 profile needs.

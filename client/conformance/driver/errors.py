@@ -29,6 +29,8 @@ def assert_argument_error(client: Client, error: pb.Error) -> None:
     server = (error.service, error.name) == ("KRPC", "ArgumentException")
     if not server:
         assert_error_kind(client, error, pb.Error.ARGUMENT)
+        if error_types(client) and not error_codes(client):
+            assert remote_error(client) not in error.native_types, error
 
 
 def is_removed_error(client: Client, error: pb.Error) -> bool:
@@ -55,6 +57,19 @@ def remote_error(client: Client) -> str:
     remote = client.conventions.remote_error
     assert remote is not None
     return remote
+
+
+def server_error(client: Client) -> str:
+    """The type the client's exception types derive, from its conventions."""
+    server = client.conventions.server_error
+    assert server is not None
+    return server
+
+
+def assert_server_error_type(client: Client, error: pb.Error) -> None:
+    """For a client with error types, the error derives the client's server error type."""
+    if error_types(client) and not error_codes(client):
+        assert server_error(client) in error.native_types, error
 
 
 def assert_remote_error(client: Client, error: pb.Error) -> None:
@@ -108,8 +123,7 @@ def assert_native_error(
         native = native_type(client, control, name)
         if native is None:
             assert (error.service, error.name) == ("KRPC", name), error
-            if not error_codes(client):
-                assert remote_error(client) in error.native_types, error
+            assert_server_error_type(client, error)
         else:
             assert native in error.native_types, error
             assert remote_error(client) not in error.native_types, error

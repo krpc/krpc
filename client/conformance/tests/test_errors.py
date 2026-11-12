@@ -6,6 +6,7 @@ from driver import profile, raw, section, should, values
 from driver.errors import (
     assert_native_error,
     assert_remote_error,
+    assert_server_error_type,
     error_codes,
     message_prefix,
     native_type,
@@ -86,10 +87,12 @@ def assert_cut(message, full, prefix):
     assert message or not full
 
 
-def assert_raises_type(error, service, name):
-    """The error is the client's type for an exception a service lists."""
+def assert_raises_type(client, error, service, name):
+    """The error is the client's type for an exception a service lists, which derives the
+    client's server error type."""
     assert error.kind == pb.Error.SERVER
     assert (error.service, error.name) == (service, name)
+    assert_server_error_type(client, error)
 
 
 def erroring_server(server, scripted_server, response_error=None, result_error=None):
@@ -222,14 +225,14 @@ def test_service_exceptions(connected, service):
     ``ObjectDestroyedException``."""
     if service == "custom":
         error = raised(connected, "TestService", "ThrowCustomException")
-        assert_raises_type(error, "TestService", "CustomException")
+        assert_raises_type(connected, error, "TestService", "CustomException")
     else:
         obj = connected.invoke(
             "TestService", "CreateTestObject", values.string("alpha")
         )
         connected.invoke("TestService", "RemoveTestObject", values.obj(obj))
         error = raised(connected, "TestService", "TestClass_GetValue", values.obj(obj))
-        assert_raises_type(error, "KRPC", "ObjectDestroyedException")
+        assert_raises_type(connected, error, "KRPC", "ObjectDestroyedException")
 
 
 # The categories of error the client's remote error type covers, apart from the stream error

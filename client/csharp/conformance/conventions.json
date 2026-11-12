@@ -1,5 +1,6 @@
 {
   "remote_error": "KRPC.Client.RemoteException",
+  "server_error": "KRPC.Client.ServerException",
   "native_types": {
     "System.InvalidOperationException": "System.InvalidOperationException",
     "System.ArgumentException": "System.ArgumentException",

@@ -1,5 +1,6 @@
 {
   "remote_error": "krpc.RemoteError",
+  "server_error": "krpc.ServerError",
   "native_types": {
     "System.InvalidOperationException": null,
     "System.ArgumentException": null,
