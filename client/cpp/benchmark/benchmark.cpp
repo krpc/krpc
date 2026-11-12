@@ -71,7 +71,7 @@ int port(const char* name, int fallback) {
 
 // Connect over whichever transport the runner started the server with, named by socket path or
 // by port. Both are measured, as the transport is part of what a call costs.
-krpc::Client connect_to_server() {
+krpc::Connection connect_to_server() {
   const char* path = std::getenv("KRPC_TEST_LOCALSOCKET_PATH");
   if (path != nullptr) return krpc::connect_local("cpp_client_benchmark", path);
   return krpc::connect("cpp_client_benchmark", "localhost", port("KRPC_TEST_TCPIP_PORT", 50000));
@@ -159,7 +159,7 @@ void emit(const std::vector<Case>& cases) {
 }  // namespace
 
 int main() {
-  krpc::Client conn = connect_to_server();
+  krpc::Connection conn = connect_to_server();
   krpc::services::TestService test_service(conn);
 
   std::vector<int32_t> values;

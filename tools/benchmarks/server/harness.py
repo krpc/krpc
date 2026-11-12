@@ -63,7 +63,7 @@ class BenchmarkTestCase(TestCase):
     def measure_call(self, name, call):
         """Measure what the server pays for a remote procedure call.
 
-        ``call`` is a ``KRPC.ProcedureCall``, built with ``Client.get_call``, so any procedure
+        ``call`` is a ``KRPC.ProcedureCall``, built with ``Connection.get_call``, so any procedure
         of any service can be measured from here. There is no empty case to subtract: the loop
         overhead is single-digit nanoseconds against a call that costs hundreds, and there is
         no delegate shape to match it against.

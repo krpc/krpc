@@ -130,7 +130,7 @@ client_test(
 )
 
 test_srcs = [
-    "test/test_client.cpp",
+    "test/test_connection.cpp",
     "test/test_event.cpp",
     "test/test_function_stream.cpp",
     "test/test_stream.cpp",

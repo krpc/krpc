@@ -122,7 +122,7 @@ class InterruptingLock:
             raise KeyboardInterrupt
 
 
-def connect(server: ScriptedServer) -> krpc.Client:
+def connect(server: ScriptedServer) -> krpc.Connection:
     return krpc.connect(
         name="session_test",
         port=server.port,
@@ -131,7 +131,7 @@ def connect(server: ScriptedServer) -> krpc.Client:
     )
 
 
-def status_request(conn: krpc.Client) -> object:
+def status_request(conn: krpc.Connection) -> object:
     return conn._invoke("KRPC", "GetClientName", [], [], conn._types.string_type)
 
 

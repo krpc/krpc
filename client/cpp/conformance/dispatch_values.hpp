@@ -182,15 +182,15 @@ const Value& not_null(Value&&) = delete;
 // an arg and a result function. The generated dispatch composes them for a collection, and
 // generates a tag for each struct.
 
-#define KRPC_CONFORMANCE_SCALAR(Tag, Type, field)                                          \
-  struct Tag {                                                                             \
-    using type = Type;                                                                     \
-    static type arg(krpc::Client&, const Value& value) { return not_null(value).field(); } \
-    static Value result(const type& x) {                                                   \
-      Value value;                                                                         \
-      value.set_##field(x);                                                                \
-      return value;                                                                        \
-    }                                                                                      \
+#define KRPC_CONFORMANCE_SCALAR(Tag, Type, field)                                              \
+  struct Tag {                                                                                 \
+    using type = Type;                                                                         \
+    static type arg(krpc::Connection&, const Value& value) { return not_null(value).field(); } \
+    static Value result(const type& x) {                                                       \
+      Value value;                                                                             \
+      value.set_##field(x);                                                                    \
+      return value;                                                                            \
+    }                                                                                          \
   };
 
 KRPC_CONFORMANCE_SCALAR(Double, double, double_)
@@ -208,10 +208,10 @@ KRPC_CONFORMANCE_SCALAR(Bytes, std::string, bytes)
 template <typename T>
 struct Object {
   using type = T;
-  static type arg(krpc::Client& client, const Value& value) {
+  static type arg(krpc::Connection& connection, const Value& value) {
     if (value.value_case() != Value::kObject) return T();
     // A handle of 0 asks for an object of the class with the given id
-    if (value.object().handle() == 0) return T(client, value.object().id());
+    if (value.object().handle() == 0) return T(connection, value.object().id());
     return std::any_cast<T>(Handles::instance().object(value.object().handle()).value);
   }
   static Value result(const type& x) { return result_object(x); }
@@ -241,7 +241,7 @@ struct Message {
 template <typename T>
 struct Enum {
   using type = T;
-  static type arg(krpc::Client&, const Value& value) {
+  static type arg(krpc::Connection&, const Value& value) {
     return static_cast<T>(not_null(value).enum_().value());
   }
   static Value result(const type& x) {
@@ -254,10 +254,10 @@ struct Enum {
 template <typename Tag>
 struct Optional {
   using type = std::optional<typename Tag::type>;
-  static type arg(krpc::Client& client, const Value& value) {
+  static type arg(krpc::Connection& connection, const Value& value) {
     if (value.value_case() == Value::VALUE_NOT_SET || value.value_case() == Value::kNull)
       return std::nullopt;
-    return Tag::arg(client, value);
+    return Tag::arg(connection, value);
   }
   static Value result(const type& x) { return x ? Tag::result(*x) : result_null(); }
 };
@@ -265,9 +265,9 @@ struct Optional {
 template <typename Tag>
 struct List {
   using type = std::vector<typename Tag::type>;
-  static type arg(krpc::Client& client, const Value& value) {
+  static type arg(krpc::Connection& connection, const Value& value) {
     type result;
-    for (const auto& x : not_null(value).list().items()) result.push_back(Tag::arg(client, x));
+    for (const auto& x : not_null(value).list().items()) result.push_back(Tag::arg(connection, x));
     return result;
   }
   static Value result(const type& x) {
@@ -281,9 +281,9 @@ struct List {
 template <typename Tag>
 struct Set {
   using type = std::set<typename Tag::type>;
-  static type arg(krpc::Client& client, const Value& value) {
+  static type arg(krpc::Connection& connection, const Value& value) {
     type result;
-    for (const auto& x : not_null(value).set().items()) result.insert(Tag::arg(client, x));
+    for (const auto& x : not_null(value).set().items()) result.insert(Tag::arg(connection, x));
     return result;
   }
   static Value result(const type& x) {
@@ -297,10 +297,10 @@ struct Set {
 template <typename Key, typename Item>
 struct Dictionary {
   using type = std::map<typename Key::type, typename Item::type>;
-  static type arg(krpc::Client& client, const Value& value) {
+  static type arg(krpc::Connection& connection, const Value& value) {
     type result;
     for (const auto& x : not_null(value).dictionary().entries())
-      result[Key::arg(client, x.key())] = Item::arg(client, x.value());
+      result[Key::arg(connection, x.key())] = Item::arg(connection, x.value());
     return result;
   }
   static Value result(const type& x) {
@@ -318,8 +318,8 @@ struct Dictionary {
 template <typename... Items>
 struct Tuple {
   using type = std::tuple<typename Items::type...>;
-  static type arg(krpc::Client& client, const Value& value) {
-    return arg(client, value, std::index_sequence_for<Items...>());
+  static type arg(krpc::Connection& connection, const Value& value) {
+    return arg(connection, value, std::index_sequence_for<Items...>());
   }
   static Value result(const type& x) {
     Value value;
@@ -331,8 +331,8 @@ struct Tuple {
 
  private:
   template <std::size_t... I>
-  static type arg(krpc::Client& client, const Value& value, std::index_sequence<I...>) {
-    return type(Items::arg(client, not_null(value).tuple().items(static_cast<int>(I)))...);
+  static type arg(krpc::Connection& connection, const Value& value, std::index_sequence<I...>) {
+    return type(Items::arg(connection, not_null(value).tuple().items(static_cast<int>(I)))...);
   }
 };
 

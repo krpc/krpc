@@ -13,7 +13,7 @@ from krpc.test.servertestcase import ServerTestCase
 from krpc.types import DocEnum
 
 
-class TestClient(ServerTestCase, unittest.TestCase):
+class TestConnection(ServerTestCase, unittest.TestCase):
     def test_extension_members_are_per_connection(self) -> None:
         # Each connection builds its own classes, so a member a mod adds goes through the
         # connection the object was reached through
@@ -22,7 +22,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
             obj = other.test_service.create_test_object("alpha")
             self.assertEqual("value=alpha", obj.extension_property)  # pyright: ignore[reportAttributeAccessIssue]
             obj2 = obj.extension_method_returning_class_from_other_service()  # pyright: ignore[reportAttributeAccessIssue]
-            self.assertIs(other, obj2._client)
+            self.assertIs(other, obj2._connection)
             self.assertIn("extension_method", dir(other.test_service.TestClass))
         finally:
             other.close()
@@ -49,18 +49,18 @@ class TestClient(ServerTestCase, unittest.TestCase):
         with self.assertRaises(testservice.CustomException):
             service.throw_custom_exception()
 
-    def test_connect_with_the_client_type_of_a_service(self) -> None:
-        conn = krpc.connect[testservice.TestServiceClient](
+    def test_connect_with_the_connection_type_of_a_service(self) -> None:
+        conn = krpc.connect[testservice.TestServiceConnection](
             name="python_client_test", address="localhost", port=self.tcpip_port()
         )
         try:
-            self.assertIsInstance(conn, testservice.TestServiceClient)
+            self.assertIsInstance(conn, testservice.TestServiceConnection)
             self.assertEqual("42", conn.test_service.int32_to_string(42))
         finally:
             conn.close()
 
     def test_connect_functions_have_their_signatures(self) -> None:
-        for connect in (krpc.connect, krpc.connect[krpc.Client]):
+        for connect in (krpc.connect, krpc.connect[krpc.Connection]):
             parameters = list(inspect.signature(connect).parameters)
             self.assertEqual(["name", "address", "port"], parameters[:3])
             self.assertEqual("connect", connect.__name__)

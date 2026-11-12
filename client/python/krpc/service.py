@@ -42,7 +42,7 @@ from krpc.types import (
 from krpc.utils import snake_case
 
 if TYPE_CHECKING:
-    from krpc.client import Client
+    from krpc.connection import Connection
 
 
 def _as_literal(value: object, typ: TypeBase) -> str:
@@ -194,7 +194,7 @@ def _wrap_deprecated(
         warn_deprecated(message)
         return func(*args, **kwargs)
 
-    # Client.get_call warns with it, as building a call skips the wrapper
+    # Connection.get_call warns with it, as building a call skips the wrapper
     wrapper._deprecation = message  # pyright: ignore[reportAttributeAccessIssue]
     return wrapper
 
@@ -451,7 +451,7 @@ def _skipping_unknown_types(
         warnings.warn("Skipping %s: %s" % (what, exn), stacklevel=2)
 
 
-def create_service(client: Client, service: KRPC.Service) -> object:
+def create_service(connection: Connection, service: KRPC.Service) -> object:
     """Create a new service type"""
     doc = _parse_documentation(service.documentation)
     if service.deprecated:
@@ -462,7 +462,7 @@ def create_service(client: Client, service: KRPC.Service) -> object:
             str(service.name),
             (ServiceBase,),
             {
-                "_client": client,
+                "_connection": connection,
                 "_name": service.name,
                 "_service_name": service.name,
                 "_class_name": None,
@@ -485,7 +485,7 @@ def create_service(client: Client, service: KRPC.Service) -> object:
 
     # Add structure types to service
     for struct in service.structs:
-        if client._types.struct_type(service.name, struct.name).has_fields:
+        if connection._types.struct_type(service.name, struct.name).has_fields:
             cls._add_service_struct(struct)
 
     # Add procedures. An internal procedure is for the client library only, which calls it
@@ -588,7 +588,7 @@ class ServiceBase(DynamicType):
     """Base class for service objects, created at runtime
     using information received from the server."""
 
-    _client: Client
+    _connection: Connection
     _name: str
 
     # The types a service defines are registered from its definitions, before any service is
@@ -608,13 +608,13 @@ class ServiceBase(DynamicType):
     @classmethod
     def _add_service_class(cls, remote_cls: KRPC.Class) -> None:
         """Add a class type"""
-        class_type = cls._client._types.class_type(cls._name, remote_cls.name)
+        class_type = cls._connection._types.class_type(cls._name, remote_cls.name)
         cls._add_service_type(remote_cls, class_type.python_type)
 
     @classmethod
     def _add_service_enumeration(cls, enumeration: KRPC.Enumeration) -> None:
         """Add an enum type"""
-        enumeration_type = cls._client._types.enumeration_type(
+        enumeration_type = cls._connection._types.enumeration_type(
             cls._name, enumeration.name
         )
         cls._add_service_type(enumeration, enumeration_type.python_type)
@@ -622,13 +622,13 @@ class ServiceBase(DynamicType):
     @classmethod
     def _add_service_struct(cls, struct: KRPC.Struct) -> None:
         """Add a structure type"""
-        struct_type = cls._client._types.struct_type(cls._name, struct.name)
+        struct_type = cls._connection._types.struct_type(cls._name, struct.name)
         cls._add_service_type(struct, struct_type.python_type)
 
     @classmethod
     def _add_service_exception(cls, exception: KRPC.Exception) -> None:
         """Add an exception type"""
-        exception_type = cls._client._types.exception_type(
+        exception_type = cls._connection._types.exception_type(
             cls._name, exception.name, mapped_type=exception.mapped_type
         )
         cls._add_service_type(exception, exception_type)
@@ -645,11 +645,11 @@ class ServiceBase(DynamicType):
     ]:
         param_names = [snake_case(param.name) for param in procedure.parameters]
         param_types = [
-            cls._client._types.as_type(param.type) for param in procedure.parameters
+            cls._connection._types.as_type(param.type) for param in procedure.parameters
         ]
         return_type: TypeBase | None = None
         if not Types.is_none_type(procedure.return_type):
-            return_type = cls._client._types.as_type(procedure.return_type)
+            return_type = cls._connection._types.as_type(procedure.return_type)
         # Checked before anything is built from the types, so that a procedure naming a
         # structure whose definition was skipped is skipped along with it
         for typ in param_types:
@@ -667,7 +667,7 @@ class ServiceBase(DynamicType):
                 )
                 param_default.append(
                     decode_default_value(
-                        cls._client, param.default_value, typ, location
+                        cls._connection, param.default_value, typ, location
                     )
                 )
             else:
@@ -681,7 +681,7 @@ class ServiceBase(DynamicType):
             cls._parse_procedure(procedure)
         )
         func = _construct_func(
-            cls._client._invoke,
+            cls._connection._invoke,
             cls._name,
             procedure.name,
             ["cls"],
@@ -692,7 +692,7 @@ class ServiceBase(DynamicType):
             return_type,
         )
         build_call = _construct_func(
-            cls._client._build_call,
+            cls._connection._build_call,
             cls._name,
             procedure.name,
             ["cls"],
@@ -738,7 +738,7 @@ class ServiceBase(DynamicType):
             getter_name = getter.name
             _, _, _, _, return_type = cls._parse_procedure(getter)
             getter_fn = _construct_func(
-                cls._client._invoke,
+                cls._connection._invoke,
                 cls._name,
                 getter_name,
                 ["self"],
@@ -753,7 +753,7 @@ class ServiceBase(DynamicType):
                     getter_fn, qualified_name, getter.deprecated_reason, cls._name
                 )
             build_call = _construct_func(
-                cls._client._build_call,
+                cls._connection._build_call,
                 cls._name,
                 getter_name,
                 ["self"],
@@ -771,7 +771,7 @@ class ServiceBase(DynamicType):
         if setter:
             param_names, param_types, _, _, _ = cls._parse_procedure(setter)
             setter_fn = _construct_func(
-                cls._client._invoke,
+                cls._connection._invoke,
                 cls._name,
                 setter.name,
                 ["self"],
@@ -786,7 +786,7 @@ class ServiceBase(DynamicType):
                     setter_fn, qualified_name, setter.deprecated_reason, cls._name
                 )
             build_set_call = _construct_func(
-                cls._client._build_call,
+                cls._connection._build_call,
                 cls._name,
                 setter.name,
                 ["self"],
@@ -806,7 +806,7 @@ class ServiceBase(DynamicType):
         """Add a method to a class"""
         class_cls = cast(
             DynamicClassBase,
-            cls._client._types.class_type(cls._name, class_name).python_type,
+            cls._connection._types.class_type(cls._name, class_name).python_type,
         )
         param_names, param_types, param_required, param_default, return_type = (
             cls._parse_procedure(procedure)
@@ -815,7 +815,7 @@ class ServiceBase(DynamicType):
         if "self" not in param_names:
             param_names[0] = "self"
         func = _construct_func(
-            cls._client._invoke,
+            cls._connection._invoke,
             cls._name,
             procedure.name,
             [],
@@ -826,7 +826,7 @@ class ServiceBase(DynamicType):
             return_type,
         )
         build_call = _construct_func(
-            cls._client._build_call,
+            cls._connection._build_call,
             cls._name,
             procedure.name,
             [],
@@ -857,13 +857,13 @@ class ServiceBase(DynamicType):
         """Add a static method to a class"""
         class_cls = cast(
             DynamicClassBase,
-            cls._client._types.class_type(cls._name, class_name).python_type,
+            cls._connection._types.class_type(cls._name, class_name).python_type,
         )
         param_names, param_types, param_required, param_default, return_type = (
             cls._parse_procedure(procedure)
         )
         func = _construct_func(
-            cls._client._invoke,
+            cls._connection._invoke,
             cls._name,
             procedure.name,
             ["cls"],
@@ -874,7 +874,7 @@ class ServiceBase(DynamicType):
             return_type,
         )
         build_call = _construct_func(
-            cls._client._build_call,
+            cls._connection._build_call,
             cls._name,
             procedure.name,
             ["cls"],
@@ -909,7 +909,7 @@ class ServiceBase(DynamicType):
         """Add a property to a class"""
         class_cls = cast(
             DynamicClassBase,
-            cls._client._types.class_type(cls._name, class_name).python_type,
+            cls._connection._types.class_type(cls._name, class_name).python_type,
         )
         member_name = _member_name(property_name)
         qualified_name = cls._name + "." + class_name + "." + member_name
@@ -931,7 +931,7 @@ class ServiceBase(DynamicType):
             if "self" not in param_names:
                 param_names[0] = "self"
             getter_fn = _construct_func(
-                cls._client._invoke,
+                cls._connection._invoke,
                 cls._name,
                 getter_name,
                 [],
@@ -946,7 +946,7 @@ class ServiceBase(DynamicType):
                     getter_fn, qualified_name, getter.deprecated_reason, cls._name
                 )
             build_call = _construct_func(
-                cls._client._build_call,
+                cls._connection._build_call,
                 cls._name,
                 getter_name,
                 [],
@@ -966,7 +966,7 @@ class ServiceBase(DynamicType):
             if "self" not in param_names:
                 param_names[0] = "self"
             setter_fn = _construct_func(
-                cls._client._invoke,
+                cls._connection._invoke,
                 cls._name,
                 setter.name,
                 [],
@@ -981,7 +981,7 @@ class ServiceBase(DynamicType):
                     setter_fn, qualified_name, setter.deprecated_reason, cls._name
                 )
             build_set_call = _construct_func(
-                cls._client._build_call,
+                cls._connection._build_call,
                 cls._name,
                 setter.name,
                 [],

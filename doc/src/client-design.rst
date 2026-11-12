@@ -75,7 +75,7 @@ These clients divide their work into the same parts, with a class for each:
      - Class
    * - Entry point
      - The object the program makes calls through
-     - ``Client`` in C++ and Python, ``Connection`` in C# and Java
+     - ``Connection``
    * - Framing
      - Splits the bytes on the socket into messages, each prefixed with its length
      - ``Transport`` in C++ and Python, ``MessageReader`` in C# and Java

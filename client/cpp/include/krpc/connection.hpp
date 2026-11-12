@@ -26,9 +26,9 @@ struct function_type_cache;
 
 namespace detail {
 
-/** The exception types services register, keyed by service and name. Shared by a client's state
-    and its stream manager. Services register their throwers as they are constructed, on any
-    thread, while errors are thrown on the calling threads and the reader. */
+/** The exception types services register, keyed by service and name. Shared by a connection's
+    state and its stream manager. Services register their throwers as they are constructed, on
+    any thread, while errors are thrown on the calling threads and the reader. */
 class ExceptionThrowers {
  public:
   void add(const std::string& service, const std::string& name,
@@ -45,22 +45,22 @@ class ExceptionThrowers {
 
 /** A connection to the server. Every copy shares the connection, as does every service, object,
     stream and event made from one. The connection closes on close(), or when the last of them is
-    destroyed. A default-constructed client is not connected. */
-class Client {
+    destroyed. A default-constructed connection is not connected. */
+class Connection {
  public:
-  Client() = default;
-  Client(const std::string& name, const std::string& address, unsigned int port = 50000,
-         std::chrono::milliseconds timeout = std::chrono::milliseconds::zero(),
-         std::chrono::milliseconds handshake_timeout = std::chrono::seconds(5),
-         std::chrono::milliseconds stall_timeout = std::chrono::seconds(30));
-  /** Perform the connection handshake over the given connection, which has been built but not
+  Connection() = default;
+  Connection(const std::string& name, const std::string& address, unsigned int port = 50000,
+             std::chrono::milliseconds timeout = std::chrono::milliseconds::zero(),
+             std::chrono::milliseconds handshake_timeout = std::chrono::seconds(5),
+             std::chrono::milliseconds stall_timeout = std::chrono::seconds(30));
+  /** Perform the connection handshake over the given transport, which has been built but not
       yet opened. The handshake is the same whatever carries it. Gives up after
       handshake_timeout of waiting for the server to accept the connection, or waits
       indefinitely if it is zero. Fails the connection when a message from the server receives
       no new byte for stall_timeout once it has started to arrive, or never if it is zero. */
-  Client(const std::string& name, const std::shared_ptr<Transport>& transport,
-         std::chrono::milliseconds handshake_timeout = std::chrono::seconds(5),
-         std::chrono::milliseconds stall_timeout = std::chrono::seconds(30));
+  Connection(const std::string& name, const std::shared_ptr<Transport>& transport,
+             std::chrono::milliseconds handshake_timeout = std::chrono::seconds(5),
+             std::chrono::milliseconds stall_timeout = std::chrono::seconds(30));
 
   /** Invoke the calls of a request, and return the result of the first. The first call fetches
       the server's list of services, to find the procedures that return a new stream or event.
@@ -129,7 +129,7 @@ class Client {
    * message has finished being processed.
    */
   Condition& get_stream_update_condition() const;
-  /** Lock on the condition's mutex, which is re-entrant. Every copy of the client shares the
+  /** Lock on the condition's mutex, which is re-entrant. Every copy of the connection shares the
       lock, so it is used by one thread. */
   std::unique_lock<RecursiveMutex>& get_stream_update_condition_lock() const;
   /** Lock the condition's mutex */

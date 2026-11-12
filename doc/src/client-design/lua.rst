@@ -8,7 +8,7 @@ the :doc:`Lua guide </lua>`. Paths are relative to ``client/lua/``.
 Ownership
 ---------
 
-``krpc.connect`` returns a ``Client`` table. The garbage collector tracks every holder, and an
+``krpc.connect`` returns a ``Connection`` table. The garbage collector tracks every holder, and an
 object holds its client through the methods of its class:
 
 .. code-block:: lua
@@ -29,8 +29,8 @@ Each connection has its own ``Types``, and so its own class tables. ``==`` compa
 across connections. An object passed to another connection is rebuilt in that connection's class.
 
 The objects the program keeps also hold the client. An ``Object`` holds its class tables, whose
-method closures hold the ``Client``. A service instance holds its service class, which also holds
-the ``Client``.
+method closures hold the ``Connection``. A service instance holds its service class, which also
+holds the ``Connection``.
 
 The cycles are collected together. The socket's finalizer is the only finalizer among these objects.
 Enumeration values hold no client. A structure holds one only through a field holding an object.
@@ -41,9 +41,9 @@ Lifetime
 * The connection closes on ``close()``, on a transport or protocol failure, or when the socket is
   collected.
 * ``close()`` closes the sending side of the socket, then drains it for up to a second.
-* After a close or a failure, ``Client._error`` holds the text, and a call through any holder raises
-  it. A second ``close()`` does nothing.
-* ``Client`` has no ``__gc`` or ``__close``. luasocket's finalizer closes a collected socket,
+* After a close or a failure, ``Connection._error`` holds the text, and a call through any holder
+  raises it. A second ``close()`` does nothing.
+* ``Connection`` has no ``__gc`` or ``__close``. luasocket's finalizer closes a collected socket,
   including at the end of the program, and sends no ``disconnect``. An orderly close needs
   ``close()``.
 
@@ -61,8 +61,8 @@ has no polling and no ``socket.select``.
 Dynamic Stubs
 -------------
 
-The client has no generated code. ``Client:_init`` calls ``KRPC.GetServices``, registers the types
-of every service, then builds each service, as a procedure can name a type from any service.
+The client has no generated code. ``Connection:_init`` calls ``KRPC.GetServices``, registers the
+types of every service, then builds each service, as a procedure can name a type from any service.
 
 * ``_construct_func`` compiles each procedure with ``load``, into a function with fixed parameters.
   Arguments are read by position, so a ``nil`` leaves a hole and the later ones are still sent.
@@ -164,7 +164,7 @@ Mapping the Spec to Lua
    * - Protobuf message result
      - A plain table
    * - Getting a call as a value
-     - ``Client:get_call``, given a stub
+     - ``Connection:get_call``, given a stub
    * - Value type of a server side function
      - The function's own type, read from the server
    * - Enumeration value

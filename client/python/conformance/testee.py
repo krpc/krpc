@@ -26,7 +26,7 @@ from google.protobuf.message import Message
 import krpc
 import krpc.error
 from krpc.attributes import Attributes
-from krpc.client import Client
+from krpc.connection import Connection
 from krpc.decoder import Decoder
 from krpc.encoder import Encoder
 from krpc.event import Event
@@ -136,7 +136,7 @@ class Testee:
         self._output = output
         self._lock = threading.Lock()
         # The connections, by the driver's name for each
-        self._conns: dict[str, Client] = {}
+        self._conns: dict[str, Connection] = {}
         # The name of the connection the command a thread is running is for
         self._local = threading.local()
         self._next_handle = 1
@@ -443,7 +443,7 @@ class Testee:
         with self._lock:
             self._conns[name] = conn
 
-    def _connection(self) -> Client:
+    def _connection(self) -> Connection:
         name = getattr(self._local, "connection", "")
         with self._lock:
             if name not in self._conns:

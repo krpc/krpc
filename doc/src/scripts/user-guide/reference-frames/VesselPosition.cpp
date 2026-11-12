@@ -4,7 +4,7 @@
 #include <krpc/services/space_center.hpp>
 
 int main() {
-  krpc::Client conn = krpc::connect();
+  krpc::Connection conn = krpc::connect();
   krpc::services::SpaceCenter spaceCenter(conn);
   auto vessel = spaceCenter.active_vessel().value();
   auto position = vessel.position(vessel.orbit().body().reference_frame());

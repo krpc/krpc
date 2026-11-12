@@ -21,7 +21,7 @@ from krpc.types import (
 )
 
 if TYPE_CHECKING:
-    from krpc.client import Client
+    from krpc.connection import Connection
 
 
 CLASS = "class"
@@ -137,7 +137,7 @@ def topological_order(
 
 
 def decode_default_value(
-    client: Client | None, value: bytes, typ: TypeBase, location: str
+    connection: Connection | None, value: bytes, typ: TypeBase, location: str
 ) -> object:
     """Decode the default value of a parameter from the encoded form a definition carries it in.
 
@@ -146,7 +146,7 @@ def decode_default_value(
     cannot be decoded."""
     _check_registered(typ, location)
     try:
-        return Decoder.decode(client, value, typ)
+        return Decoder.decode(connection, value, typ)
     except (ValueError, EncodingError) as exn:
         raise RuntimeError("%s: %s" % (location, exn)) from exn
 

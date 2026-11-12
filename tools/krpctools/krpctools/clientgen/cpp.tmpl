@@ -8,19 +8,19 @@ _args.push_back(encoder::encode_arg({{x.name}}));
 {% endfor %}
 {% endmacro %}
 {% macro call(service, procedure, return_type, returns, has_args, is_static=False) %}
-{% if return_type != 'void' %}auto _data = {% endif %}{% if is_static %}_client.{% else %}this->_client.{% endif %}invoke("{{service}}", "{{procedure}}", {% if has_args %}_args{% else %}{}{% endif %}, ::krpc::Client::Returns::{{ "value" if returns == "value" else "stream" }});
+{% if return_type != 'void' %}auto _data = {% endif %}{% if is_static %}_connection.{% else %}this->_connection.{% endif %}invoke("{{service}}", "{{procedure}}", {% if has_args %}_args{% else %}{}{% endif %}, ::krpc::Connection::Returns::{{ "value" if returns == "value" else "stream" }});
 {% endmacro %}
 {% macro return(type, set_client, is_static=False) %}
 {{type}} _result{};
 if (!_data.is_null())
-  decoder::decode(_result, _data.value(), &{% if is_static %}_client{% else %}this->_client{% endif %});
+  decoder::decode(_result, _data.value(), &{% if is_static %}_connection{% else %}this->_connection{% endif %});
 return _result;
 {% endmacro %}
 {% macro stream(service, procedure, type, has_args, is_static=False) %}
-return ::krpc::Stream<{{ type }}>({% if is_static %}_client{% else %}this->_client{% endif %}, {% if is_static %}_client.{% else %}this->_client.{% endif %}build_call("{{service}}", "{{procedure}}"{% if has_args %}, _args{% endif %}));
+return ::krpc::Stream<{{ type }}>({% if is_static %}_connection{% else %}this->_connection{% endif %}, {% if is_static %}_connection.{% else %}this->_connection.{% endif %}build_call("{{service}}", "{{procedure}}"{% if has_args %}, _args{% endif %}));
 {% endmacro %}
 {% macro procedure_call(service, procedure, type, has_args, is_static=False) %}
-return {% if is_static %}_client.{% else %}this->_client.{% endif %}build_call("{{service}}", "{{procedure}}"{% if has_args %}, _args{% endif %});
+return {% if is_static %}_connection.{% else %}this->_connection.{% endif %}build_call("{{service}}", "{{procedure}}"{% if has_args %}, _args{% endif %});
 {% endmacro %}
 {% macro sig_parameters(parameters) %}
 {% for x in parameters %}{{x.type}} {{x.name}}{% if not loop.last %}, {% endif %}{% endfor %}
@@ -69,7 +69,7 @@ namespace services {
 
 class {% if service_deprecated %}[[deprecated{% if service_deprecated_reason %}("{{ service_deprecated_reason | string_literal }}"){% endif %}]] {% endif %}{{ service_name }} : public Service {
  public:
-  explicit {{ service_name }}(const Client& client);
+  explicit {{ service_name }}(const ::krpc::Connection& connection);
   {% if classes | length > 0 %}
 
   // Class forward declarations
@@ -180,7 +180,7 @@ class {% if service_deprecated %}[[deprecated{% if service_deprecated_reason %}(
   class {% if cls.deprecated %}[[deprecated{% if cls.deprecated_reason %}("{{ cls.deprecated_reason | string_literal }}"){% endif %}]] {% endif %}{{ class_name }} : public krpc::Object<{{ class_name }}> {
    public:
     {{ class_name }}();
-    {{ class_name }}(const Client& client, uint64_t id);
+    {{ class_name }}(const ::krpc::Connection& connection, uint64_t id);
     {% for method_name,method in cls.methods.items() %}
 
 {% if method.documentation %}{{ method.documentation | indent(width=4) }}
@@ -195,7 +195,7 @@ class {% if service_deprecated %}[[deprecated{% if service_deprecated_reason %}(
 {% endif %}
 {% if method.deprecated %}    [[deprecated{% if method.deprecated_reason %}("{{ method.deprecated_reason | string_literal }}"){% endif %}]]
 {% endif %}
-    static {{ method.return_type }} {{ method_name }}({{ sig_parameters([{'type': 'Client&', 'name': 'client'}] + method.parameters) }});
+    static {{ method.return_type }} {{ method_name }}({{ sig_parameters([{'type': '::krpc::Connection&', 'name': 'connection'}] + method.parameters) }});
     {% endfor %}
     {% for property_name,property in cls.properties.items() %}
 
@@ -211,7 +211,7 @@ class {% if service_deprecated %}[[deprecated{% if service_deprecated_reason %}(
     {% endfor %}
     {% for method_name,method in cls.static_methods.items() %}
 
-    {{ deprecated_attribute(method) }}static ::krpc::Stream<{{ method.return_type }}> {{ method_name }}_stream({{ sig_parameters([{'type': 'Client&', 'name': 'client'}] + method.parameters) }});
+    {{ deprecated_attribute(method) }}static ::krpc::Stream<{{ method.return_type }}> {{ method_name }}_stream({{ sig_parameters([{'type': '::krpc::Connection&', 'name': 'connection'}] + method.parameters) }});
     {% endfor %}
     {% for property_name,property in cls.properties.items() %}
     {% if property.return_type != 'void' %}
@@ -225,7 +225,7 @@ class {% if service_deprecated %}[[deprecated{% if service_deprecated_reason %}(
     {% endfor %}
     {% for method_name,method in cls.static_methods.items() %}
 
-    {{ deprecated_attribute(method) }}static ::krpc::schema::ProcedureCall {{ method_name }}_call({{ sig_parameters([{'type': 'Client&', 'name': 'client'}] + method.parameters) }});
+    {{ deprecated_attribute(method) }}static ::krpc::schema::ProcedureCall {{ method_name }}_call({{ sig_parameters([{'type': '::krpc::Connection&', 'name': 'connection'}] + method.parameters) }});
     {% endfor %}
     {% for property_name,property in cls.properties.items() %}
 
@@ -234,11 +234,11 @@ class {% if service_deprecated %}[[deprecated{% if service_deprecated_reason %}(
     {% if cls.static_methods %}
 
     /**
-     * The static methods of {{ service_name }}::{{ class_name }}, bound to a client.
+     * The static methods of {{ service_name }}::{{ class_name }}, bound to a connection.
      */
     class Bound {
      public:
-      explicit Bound(const Client& client);
+      explicit Bound(const ::krpc::Connection& connection);
       {% for method_name,method in cls.static_methods.items() %}
 
 {% if method.bound_documentation %}{{ method.bound_documentation | indent(width=6) }}
@@ -249,15 +249,15 @@ class {% if service_deprecated %}[[deprecated{% if service_deprecated_reason %}(
       {% endfor %}
 
      private:
-      mutable Client _client;
+      mutable ::krpc::Connection _connection;
     };
 
     /**
-     * Binds the static methods of {{ service_name }}::{{ class_name }} to a client.
-     * @param client The client the methods are called on.
+     * Binds the static methods of {{ service_name }}::{{ class_name }} to a connection.
+     * @param connection The connection the methods are called on.
      * @return The bound methods.
      */
-    static Bound bind(const Client& client);
+    static Bound bind(const ::krpc::Connection& connection);
     {% endif %}
   };
   {% endfor %}
@@ -343,9 +343,9 @@ namespace encoder {
 namespace decoder {
   {% for enum_name,enm in enumerations.items() %}
 
-  inline void decode(services::{{ service_name }}::{{ enum_name }}& value, const std::string& data, Client* client) {
+  inline void decode(services::{{ service_name }}::{{ enum_name }}& value, const std::string& data, ::krpc::Connection* connection) {
     int32_t x;
-    decode(x, data, client);
+    decode(x, data, connection);
     value = static_cast<services::{{ service_name }}::{{ enum_name }}>(x);
   }
   {% endfor %}
@@ -353,13 +353,13 @@ namespace decoder {
 
   // Fields are only ever appended to a structure, so a value from a newer server may carry
   // more items than this client knows about, and those are ignored.
-  inline void decode(services::{{ service_name }}::{{ struct_name }}& value, const std::string& data, Client* client) {
+  inline void decode(services::{{ service_name }}::{{ struct_name }}& value, const std::string& data, ::krpc::Connection* connection) {
     static thread_local krpc::schema::Tuple structMessage;
     if (!structMessage.ParseFromString(data)) throw EncodingError("Failed to decode message");
     if (structMessage.items_size() < {{ struct['fields'] | length }})
       throw EncodingError("Value for {{ struct_name }} does not have all of its fields");
     {% for field in struct['fields'] %}
-    decode_item(value.{{ field.name }}, structMessage.items({{ loop.index0 }}), client);
+    decode_item(value.{{ field.name }}, structMessage.items({{ loop.index0 }}), connection);
     {% endfor %}
   }
   {% endfor %}
@@ -394,10 +394,10 @@ namespace services {
 
 namespace services {
 
-inline {{ service_name }}::{{ service_name }}(const Client& client):
-  Service(client) {
+inline {{ service_name }}::{{ service_name }}(const ::krpc::Connection& connection):
+  Service(connection) {
   {% for exception_name,exception in exceptions.items() %}
-  _client.add_exception_thrower(
+  _connection.add_exception_thrower(
     "{{ service_name }}", "{{ exception_name }}",
     [] (const std::string& msg) { throw {{ exception_name }}(msg); });
   {% endfor %}
@@ -435,8 +435,8 @@ inline ::krpc::schema::ProcedureCall {{ service_name }}::{{ procedure_name }}_ca
 inline {{ service_name }}::{{ class_name }}::{{ class_name }}():
   Object("{{ service_name }}::{{ class_name }}") {}
 
-inline {{ service_name }}::{{ class_name }}::{{ class_name }}(const Client& client, uint64_t id):
-  Object(client, "{{ service_name }}::{{ class_name }}", id) {}
+inline {{ service_name }}::{{ class_name }}::{{ class_name }}(const ::krpc::Connection& connection, uint64_t id):
+  Object(connection, "{{ service_name }}::{{ class_name }}", id) {}
 {% for method_name,method in cls.methods.items()|list + cls.properties.items()|list %}
 
 inline {{ method.return_type }} {{ service_name }}::{{ class_name }}::{{ method_name }}({{ impl_parameters(method.parameters) }}) {
@@ -448,7 +448,7 @@ inline {{ method.return_type }} {{ service_name }}::{{ class_name }}::{{ method_
 {% endfor %}
 {% for method_name,method in cls.static_methods.items() %}
 
-inline {{ method.return_type }} {{ service_name }}::{{ class_name }}::{{ method_name }}({{ impl_parameters([{'type': 'Client&', 'name': '_client'}] + method.parameters) }}) {
+inline {{ method.return_type }} {{ service_name }}::{{ class_name }}::{{ method_name }}({{ impl_parameters([{'type': '::krpc::Connection&', 'name': '_connection'}] + method.parameters) }}) {
 {% if method.parameters | length > 0 %}  {{ args(method.parameters) | indent(width=2) }}
 {% endif %}
 {{ call(service_name, method.remote_name, method.return_type, method.returns, method.parameters | length > 0, True) | indent(width=2) }}
@@ -467,7 +467,7 @@ inline ::krpc::Stream<{{ method.return_type }}> {{ service_name }}::{{ class_nam
 {% endfor %}
 {% for method_name,method in cls.static_methods.items() %}
 
-inline ::krpc::Stream<{{ method.return_type }}> {{ service_name }}::{{ class_name }}::{{ method_name }}_stream({{ impl_parameters([{'type': 'Client&', 'name': '_client'}] + method.parameters) }}) {
+inline ::krpc::Stream<{{ method.return_type }}> {{ service_name }}::{{ class_name }}::{{ method_name }}_stream({{ impl_parameters([{'type': '::krpc::Connection&', 'name': '_connection'}] + method.parameters) }}) {
 {% if method.parameters | length > 0 %}{{ args(method.parameters) | indent(width=2) }}
 {% endif %}
 {{ stream(service_name, method.remote_name, method.return_type, method.parameters | length > 0, True) | indent(width=2) }}
@@ -482,7 +482,7 @@ inline ::krpc::schema::ProcedureCall {{ service_name }}::{{ class_name }}::{{ me
 {% endfor %}
 {% for method_name,method in cls.static_methods.items() %}
 
-inline ::krpc::schema::ProcedureCall {{ service_name }}::{{ class_name }}::{{ method_name }}_call({{ impl_parameters([{'type': 'Client&', 'name': '_client'}] + method.parameters) }}) {
+inline ::krpc::schema::ProcedureCall {{ service_name }}::{{ class_name }}::{{ method_name }}_call({{ impl_parameters([{'type': '::krpc::Connection&', 'name': '_connection'}] + method.parameters) }}) {
 {% if method.parameters | length > 0 %}{{ args(method.parameters) | indent(width=2) }}
 {% endif %}
 {{ procedure_call(service_name, method.remote_name, method.return_type, method.parameters | length > 0, True) | indent(width=2) }}
@@ -490,17 +490,17 @@ inline ::krpc::schema::ProcedureCall {{ service_name }}::{{ class_name }}::{{ me
 {% endfor %}
 {% if cls.static_methods %}
 
-inline {{ service_name }}::{{ class_name }}::Bound::Bound(const Client& client):
-  _client(client) {}
+inline {{ service_name }}::{{ class_name }}::Bound::Bound(const ::krpc::Connection& connection):
+  _connection(connection) {}
 {% for method_name,method in cls.static_methods.items() %}
 
 inline {{ method.return_type }} {{ service_name }}::{{ class_name }}::Bound::{{ method_name }}({{ impl_parameters(method.parameters) }}) const {
-  {{ 'return ' if method.return_type != 'void' else '' }}{{ service_name }}::{{ class_name }}::{{ method_name }}({{ (['_client'] + method.parameters | map(attribute='name') | list) | join(', ') }});
+  {{ 'return ' if method.return_type != 'void' else '' }}{{ service_name }}::{{ class_name }}::{{ method_name }}({{ (['_connection'] + method.parameters | map(attribute='name') | list) | join(', ') }});
 }
 {% endfor %}
 
-inline {{ service_name }}::{{ class_name }}::Bound {{ service_name }}::{{ class_name }}::bind(const Client& client) {
-  return Bound(client);
+inline {{ service_name }}::{{ class_name }}::Bound {{ service_name }}::{{ class_name }}::bind(const ::krpc::Connection& connection) {
+  return Bound(connection);
 }
 {% endif %}
 {% endfor %}

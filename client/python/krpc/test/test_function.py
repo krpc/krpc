@@ -93,7 +93,7 @@ class TestFunction(ServerTestCase, unittest.TestCase):
 
         # The helpers ask the server for the type of a value the compiler did not
         # track, and treat the function as valueless only when it has no value
-        with mock.patch("krpc.client.compile_function_with_type", without_type):
+        with mock.patch("krpc.connection.compile_function_with_type", without_type):
             self.assertEqual([4], self.conn.run(lambda: [obj.int_property]))
             with self.conn.add_stream(lambda: [obj.int_property]) as stream:
                 self.assertEqual([4], stream())
@@ -148,7 +148,7 @@ class TestFunction(ServerTestCase, unittest.TestCase):
         obj.int_property = 3
         function = self.conn.compile(lambda: obj.int_property * 2)
         with mock.patch(
-            "krpc.client._type_message", side_effect=AssertionError("introspected")
+            "krpc.connection._type_message", side_effect=AssertionError("introspected")
         ):
             self.assertEqual(6, self.conn.run(function))
 
@@ -182,7 +182,7 @@ class TestFunction(ServerTestCase, unittest.TestCase):
         # Rejected before the return type is introspected
         self.conn._expression_return_types.pop(function._object_id, None)
         with mock.patch(
-            "krpc.client._type_message", side_effect=AssertionError("introspected")
+            "krpc.connection._type_message", side_effect=AssertionError("introspected")
         ):
             for add in (self.conn.add_stream, self.conn.add_event):
                 with self.assertRaisesRegex(StreamError, "takes parameters"):

@@ -13,7 +13,7 @@ from krpc.error import EncodingError
 if TYPE_CHECKING:
     from typing_extensions import TypeIs
 
-    from krpc.client import Client
+    from krpc.connection import Connection
     from krpc.event import Event
     from krpc.services.krpc import Expression
     from krpc.types import TypeBase
@@ -22,9 +22,9 @@ if TYPE_CHECKING:
 class InternalProcedures:
     """Calls the internal procedures of the KRPC service for a client"""
 
-    def __init__(self, client: Client) -> None:
-        self._client = client
-        self._types = client._types
+    def __init__(self, connection: Connection) -> None:
+        self._connection = connection
+        self._types = connection._types
 
     @functools.cached_property
     def expression_type(self) -> TypeBase:
@@ -62,7 +62,7 @@ class InternalProcedures:
     def remove_stream_request(self, stream_id: int) -> KRPC.Request:
         """A request to remove a stream, which the session sends itself"""
         request = KRPC.Request()
-        self._client._encode_call(
+        self._connection._encode_call(
             request.calls.add(),
             "KRPC",
             "RemoveStream",
@@ -113,7 +113,9 @@ class InternalProcedures:
         param_types: Iterable[TypeBase],
         return_type: TypeBase | None = None,
     ) -> object:
-        return self._client._invoke("KRPC", procedure, args, param_types, return_type)
+        return self._connection._invoke(
+            "KRPC", procedure, args, param_types, return_type
+        )
 
 
 def _non_null(value: object) -> object:

@@ -681,7 +681,7 @@ class CppDispatchGenerator(DispatchGenerator):
         return self.language.parse_name(name)
 
     def call(self, kind, cls, name, parameters, suffix=""):
-        service = "::krpc::services::%s(client)" % self._service
+        service = "::krpc::services::%s(connection)" % self._service
         if kind == PROCEDURE:
             return "%s.%s%s(%s)" % (
                 service,
@@ -694,7 +694,7 @@ class CppDispatchGenerator(DispatchGenerator):
         if kind == SETTER:
             return "%s.set_%s(a0)" % (service, self._name(name))
         if kind == STATIC_METHOD:
-            args = ", ".join(["client"] + [x["name"] for x in parameters])
+            args = ", ".join(["connection"] + [x["name"] for x in parameters])
             return "%s::%s%s(%s)" % (
                 self.class_type(self._service, cls),
                 self._name(name),
@@ -714,7 +714,7 @@ class CppDispatchGenerator(DispatchGenerator):
         return self.call(kind, cls, name, parameters, "_call")
 
     def bound_call(self, cls, name, parameters):
-        return "%s::bind(client).%s(%s)" % (
+        return "%s::bind(connection).%s(%s)" % (
             self.class_type(self._service, cls),
             self._name(name),
             _arguments(parameters),

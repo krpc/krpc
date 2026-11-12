@@ -34,7 +34,7 @@ double angle_between_vectors(const vector3& u, const vector3& v) {
 }
 
 int main() {
-  krpc::Client conn = krpc::connect("Pitch/Heading/Roll");
+  krpc::Connection conn = krpc::connect("Pitch/Heading/Roll");
   krpc::services::SpaceCenter space_center(conn);
   auto vessel = space_center.active_vessel().value();
 

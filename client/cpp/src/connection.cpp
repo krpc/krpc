@@ -1,4 +1,4 @@
-#include "krpc/client.hpp"
+#include "krpc/connection.hpp"
 
 #include <exception>
 #include <locale>
@@ -81,7 +81,7 @@ void handshake(Transport* transport, const std::string& name, std::chrono::milli
 
 }  // namespace
 
-struct Client::State {
+struct Connection::State {
   // Guards listed
   std::mutex lock;
   // The procedures that return a new stream or event, from the server's list of services, keyed
@@ -98,14 +98,16 @@ struct Client::State {
   std::shared_ptr<StreamManager> stream_manager;
 };
 
-Client::Client(const std::string& name, const std::string& address, unsigned int port,
-               std::chrono::milliseconds timeout, std::chrono::milliseconds handshake_timeout,
-               std::chrono::milliseconds stall_timeout)
-    : Client(name, std::make_shared<TCPIPTransport>(address, port, timeout), handshake_timeout,
-             stall_timeout) {}
+Connection::Connection(const std::string& name, const std::string& address, unsigned int port,
+                       std::chrono::milliseconds timeout,
+                       std::chrono::milliseconds handshake_timeout,
+                       std::chrono::milliseconds stall_timeout)
+    : Connection(name, std::make_shared<TCPIPTransport>(address, port, timeout), handshake_timeout,
+                 stall_timeout) {}
 
-Client::Client(const std::string& name, const std::shared_ptr<Transport>& transport,
-               std::chrono::milliseconds handshake_timeout, std::chrono::milliseconds stall_timeout)
+Connection::Connection(const std::string& name, const std::shared_ptr<Transport>& transport,
+                       std::chrono::milliseconds handshake_timeout,
+                       std::chrono::milliseconds stall_timeout)
     : state(std::make_shared<State>()) {
   if (handshake_timeout.count() < 0)
     throw std::invalid_argument("The handshake timeout must not be negative");
@@ -130,15 +132,15 @@ Client::Client(const std::string& name, const std::shared_ptr<Transport>& transp
   services::KRPC krpc_service(*this);
 }
 
-void Client::close() {
+void Connection::close() {
   if (state) state->stream_manager->close();
 }
 
-schema::ProcedureResult Client::invoke(const schema::Request& request) {
+schema::ProcedureResult Connection::invoke(const schema::Request& request) {
   return this->send_request(request);
 }
 
-schema::ProcedureResult Client::invoke(const schema::ProcedureCall& call) {
+schema::ProcedureResult Connection::invoke(const schema::ProcedureCall& call) {
   schema::Request request;
   // Copied because the call is received by const reference and a Request owns its calls, so it
   // cannot be moved in. CopyFrom also stays correct if ProcedureCall gains fields.
@@ -146,19 +148,20 @@ schema::ProcedureResult Client::invoke(const schema::ProcedureCall& call) {
   return this->send_request(std::move(request));
 }
 
-schema::ProcedureResult Client::invoke(std::string_view service, std::string_view procedure,
-                                       const std::vector<encoder::Value>& args) {
+schema::ProcedureResult Connection::invoke(std::string_view service, std::string_view procedure,
+                                           const std::vector<encoder::Value>& args) {
   return this->send_request(build_request(service, procedure, args));
 }
 
-schema::ProcedureResult Client::invoke(std::string_view service, std::string_view procedure,
-                                       const std::vector<encoder::Value>& args, Returns returns) {
+schema::ProcedureResult Connection::invoke(std::string_view service, std::string_view procedure,
+                                           const std::vector<encoder::Value>& args,
+                                           Returns returns) {
   return this->send_request(build_request(service, procedure, args), &returns);
 }
 
 // Send a request and return the result it is answered by. The reader registers a stream or an
 // event a call adds before it reads the stream's first update.
-schema::ProcedureResult Client::send_request(schema::Request request, const Returns* returns) {
+schema::ProcedureResult Connection::send_request(schema::Request request, const Returns* returns) {
   check_connected();
   std::vector<Session::Adds> adds;
   auto to_adds = [](Returns value) {
@@ -184,7 +187,8 @@ schema::ProcedureResult Client::send_request(schema::Request request, const Retu
 
 // What a procedure returns, from the server's list of services, which is fetched by the first
 // call.
-Client::Returns Client::lookup_returns(const std::string& service, const std::string& procedure) {
+Connection::Returns Connection::lookup_returns(const std::string& service,
+                                               const std::string& procedure) {
   bool listed;
   {
     std::lock_guard<std::mutex> lock_guard(state->lock);
@@ -204,7 +208,7 @@ Client::Returns Client::lookup_returns(const std::string& service, const std::st
 }
 
 // The procedures the server lists that return a new stream or event
-Client::ReturnsByProcedure Client::list_returns() {
+Connection::ReturnsByProcedure Connection::list_returns() {
   ReturnsByProcedure result;
   schema::Response response;
   try {
@@ -226,7 +230,8 @@ Client::ReturnsByProcedure Client::list_returns() {
   return result;
 }
 
-void Client::add_arguments(schema::ProcedureCall* call, const std::vector<encoder::Value>& args) {
+void Connection::add_arguments(schema::ProcedureCall* call,
+                               const std::vector<encoder::Value>& args) {
   for (unsigned int i = 0; i < args.size(); i++) {
     schema::Argument* arg = call->add_arguments();
     arg->set_position(i);
@@ -238,8 +243,8 @@ void Client::add_arguments(schema::ProcedureCall* call, const std::vector<encode
   }
 }
 
-schema::Request Client::build_request(std::string_view service, std::string_view procedure,
-                                      const std::vector<encoder::Value>& args) {
+schema::Request Connection::build_request(std::string_view service, std::string_view procedure,
+                                          const std::vector<encoder::Value>& args) {
   schema::Request request;
   schema::ProcedureCall* call = request.add_calls();
   call->set_service(service);
@@ -248,8 +253,8 @@ schema::Request Client::build_request(std::string_view service, std::string_view
   return request;
 }
 
-schema::ProcedureCall Client::build_call(std::string_view service, std::string_view procedure,
-                                         const std::vector<encoder::Value>& args) {
+schema::ProcedureCall Connection::build_call(std::string_view service, std::string_view procedure,
+                                             const std::vector<encoder::Value>& args) {
   schema::ProcedureCall call;
   call.set_service(service);
   call.set_procedure(procedure);
@@ -257,12 +262,12 @@ schema::ProcedureCall Client::build_call(std::string_view service, std::string_v
   return call;
 }
 
-void Client::add_exception_thrower(const std::string& service, const std::string& name,
-                                   const std::function<void(std::string)>& thrower) {
+void Connection::add_exception_thrower(const std::string& service, const std::string& name,
+                                       const std::function<void(std::string)>& thrower) {
   if (state) state->throwers->add(service, name, thrower);
 }
 
-bool Client::get_function_return_type(uint64_t id, schema::Type* type) const {
+bool Connection::get_function_return_type(uint64_t id, schema::Type* type) const {
   check_connected();
   std::lock_guard<std::mutex> guard(state->function_types_lock);
   auto entry = state->function_return_types.find(id);
@@ -271,12 +276,12 @@ bool Client::get_function_return_type(uint64_t id, schema::Type* type) const {
   return true;
 }
 
-void Client::set_function_return_type(uint64_t id, const schema::Type& type) const {
+void Connection::set_function_return_type(uint64_t id, const schema::Type& type) const {
   std::lock_guard<std::mutex> guard(state->function_types_lock);
   state->function_return_types[id] = type;
 }
 
-bool Client::get_function_parameter_types(uint64_t id, std::vector<schema::Type>* types) const {
+bool Connection::get_function_parameter_types(uint64_t id, std::vector<schema::Type>* types) const {
   check_connected();
   std::lock_guard<std::mutex> guard(state->function_types_lock);
   auto entry = state->function_parameter_types.find(id);
@@ -285,8 +290,8 @@ bool Client::get_function_parameter_types(uint64_t id, std::vector<schema::Type>
   return true;
 }
 
-void Client::set_function_parameter_types(uint64_t id,
-                                          const std::vector<schema::Type>& types) const {
+void Connection::set_function_parameter_types(uint64_t id,
+                                              const std::vector<schema::Type>& types) const {
   std::lock_guard<std::mutex> guard(state->function_types_lock);
   state->function_parameter_types[id] = types;
 }
@@ -320,36 +325,38 @@ void detail::ExceptionThrowers::throw_exception(const schema::Error& error) cons
   }
 }
 
-void Client::check_connected() const {
+void Connection::check_connected() const {
   if (!state) throw ConnectionError("Not connected to a server");
 }
 
-StreamManager& Client::streams() const {
+StreamManager& Connection::streams() const {
   check_connected();
   return *state->stream_manager;
 }
 
-std::shared_ptr<StreamImpl> Client::add_stream(const schema::ProcedureCall& call) {
+std::shared_ptr<StreamImpl> Connection::add_stream(const schema::ProcedureCall& call) {
   check_connected();
   uint64_t id = internal_procedures::add_stream(this, call);
   return streams().get_stream(*this, id);
 }
 
-std::shared_ptr<StreamImpl> Client::get_stream(uint64_t id) {
+std::shared_ptr<StreamImpl> Connection::get_stream(uint64_t id) {
   return streams().get_stream(*this, id);
 }
 
-Condition& Client::get_stream_update_condition() const { return streams().get_update_condition(); }
+Condition& Connection::get_stream_update_condition() const {
+  return streams().get_update_condition();
+}
 
-std::unique_lock<RecursiveMutex>& Client::get_stream_update_condition_lock() const {
+std::unique_lock<RecursiveMutex>& Connection::get_stream_update_condition_lock() const {
   return streams().get_update_condition_lock();
 }
 
-void Client::acquire_stream_update() { streams().acquire_update(); }
+void Connection::acquire_stream_update() { streams().acquire_update(); }
 
-void Client::release_stream_update() { streams().release_update(); }
+void Connection::release_stream_update() { streams().release_update(); }
 
-void Client::wait_for_stream_update(double timeout) {
+void Connection::wait_for_stream_update(double timeout) {
   // Set before the close wakes the waiters, so a wait that starts after the wake returns
   if (streams().is_closed()) return;
   if (timeout < 0) {
@@ -360,10 +367,10 @@ void Client::wait_for_stream_update(double timeout) {
   }
 }
 
-int Client::add_stream_update_callback(const Callback& callback) {
+int Connection::add_stream_update_callback(const Callback& callback) {
   return streams().add_update_callback(callback);
 }
 
-void Client::remove_stream_update_callback(int tag) { streams().remove_update_callback(tag); }
+void Connection::remove_stream_update_callback(int tag) { streams().remove_update_callback(tag); }
 
 }  // namespace krpc

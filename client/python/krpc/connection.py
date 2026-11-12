@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING, Any, TypeGuard, TypeVar, cast
 import krpc.schema.KRPC_pb2 as KRPC
 import krpc.stream
 from krpc import limits
-from krpc.declarations import client_lookup
+from krpc.declarations import connection_lookup
 from krpc.decoder import Decoder
 from krpc.definitions import register_all
 from krpc.encoder import Encoder
@@ -44,7 +44,7 @@ from krpc.types import (
 )
 from krpc.utils import snake_case
 
-_ClientT = TypeVar("_ClientT", bound="Client")
+_ConnectionT = TypeVar("_ConnectionT", bound="Connection")
 
 
 def _type_message(remote_type: RemoteType) -> KRPC.Type:
@@ -104,7 +104,7 @@ if TYPE_CHECKING:
     from krpc.services.krpc import Type as RemoteType
 
 
-class Client:
+class Connection:
     """
     A kRPC client, through which all Remote Procedure Calls are made.
     Services provided by the server that the client connects
@@ -112,7 +112,7 @@ class Client:
     client.ServiceName.ProcedureName(parameter)
     """
 
-    # A client type a generated module declares adds its service, and any other service is Any
+    # A connection type a generated module declares adds its service, and any other service is Any
     # to type checkers
     def __getattr__(self, name: str) -> Any:
         """A deprecated service, which is kept out of the client's attributes so that reading it
@@ -179,7 +179,7 @@ class Client:
         # cannot be decoded before the definition of the enumeration it belongs to has been
         # registered
         definitions = []
-        lookup = client_lookup(type(self))
+        lookup = connection_lookup(type(self))
         for service_info in services:
             inherit_deprecation(service_info)
             definitions.extend(service_definitions(service_info, lookup))
@@ -210,7 +210,7 @@ class Client:
         if deferred is not None:
             raise deferred
 
-    def __enter__(self: _ClientT) -> _ClientT:
+    def __enter__(self: _ConnectionT) -> _ConnectionT:
         return self
 
     def __exit__(
@@ -270,7 +270,7 @@ class Client:
     ) -> Stream:
         """Deprecated. Use add_stream in a with statement."""
         warnings.warn(
-            "Client.stream is deprecated: use add_stream in a with statement",
+            "Connection.stream is deprecated: use add_stream in a with statement",
             DeprecationWarning,
             stacklevel=2,
         )

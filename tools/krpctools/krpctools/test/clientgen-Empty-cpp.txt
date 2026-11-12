@@ -34,15 +34,15 @@ namespace services {
 
 class EmptyService : public Service {
  public:
-  explicit EmptyService(const Client& client);
+  explicit EmptyService(const ::krpc::Connection& connection);
 };
 
 }  // namespace services
 
 namespace services {
 
-inline EmptyService::EmptyService(const Client& client):
-  Service(client) {
+inline EmptyService::EmptyService(const ::krpc::Connection& connection):
+  Service(connection) {
 }
 }  // namespace services
 

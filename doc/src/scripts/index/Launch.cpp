@@ -5,7 +5,7 @@
 #include <krpc/services/space_center.hpp>
 
 int main() {
-  krpc::Client conn = krpc::connect("Launch");
+  krpc::Connection conn = krpc::connect("Launch");
   krpc::services::SpaceCenter space_center(conn);
   auto vessel = space_center.active_vessel().value();
   auto flight = vessel.flight();

@@ -54,7 +54,7 @@ class TestClientGenCpp(ClientGenTestCase, unittest.TestCase):
             ("GetValue", "value"),
         ):
             self.assertIn(
-                'invoke("ServiceA", "%s", {}, ::krpc::Client::Returns::%s);'
+                'invoke("ServiceA", "%s", {}, ::krpc::Connection::Returns::%s);'
                 % (name, returns),
                 actual,
             )

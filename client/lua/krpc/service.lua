@@ -12,7 +12,7 @@ local service = {}
 
 -- The service and procedure each function a service or class is built with calls, the number of
 -- leading parameters it does not send, and the warning for a deprecated one, by function.
--- Client:get_call reads it. The keys are weak
+-- Connection:get_call reads it. The keys are weak
 -- and the values hold no types, as Lua 5.1 and LuaJIT have no ephemeron tables.
 service.procedures = setmetatable({}, { __mode = 'k' })
 
@@ -86,7 +86,7 @@ local function _construct_func(svc, procedure_name, prefix_param_names, param_na
   service.procedures[result] = {
     service = service_name, procedure = procedure_name, skip = #prefix_param_names
   }
-  svc._client._procedure_parameters[service_name .. '.' .. procedure_name] = {
+  svc._connection._procedure_parameters[service_name .. '.' .. procedure_name] = {
     types = param_types, required = param_required
   }
   return result
@@ -169,7 +169,7 @@ function ServiceBase:_deprecating(member, qualified_name, func)
   if not member.deprecated then
     return func
   end
-  local types = self._client._types
+  local types = self._connection._types
   local message = service.deprecation_warning(member, self._name, self._name .. '.' .. qualified_name)
   local deprecating = function(...)
     types:warn_deprecated(message)
@@ -201,10 +201,10 @@ end
 function ServiceBase:_parse_procedure(procedure)
 
   local param_names = seq.copy(seq.map(function (x) return service.to_snake_case(x.name) end, procedure.parameters))
-  local param_types = seq.copy(seq.map(function (x) return self._client._types:as_type(x.type) end, procedure.parameters))
+  local param_types = seq.copy(seq.map(function (x) return self._connection._types:as_type(x.type) end, procedure.parameters))
   local return_type = nil
   if procedure.return_type ~= nil then
-    return_type = self._client._types:as_type(procedure.return_type)
+    return_type = self._connection._types:as_type(procedure.return_type)
   end
   -- Checked before anything is built from the types, so that a procedure naming a structure
   -- whose definition was skipped is skipped along with it
@@ -263,17 +263,17 @@ end
 
 --- Add a class type
 function ServiceBase:_add_service_class(cls)
-  self:_add_service_type(cls, self._client._types:class_type(self._name, cls.name).lua_type)
+  self:_add_service_type(cls, self._connection._types:class_type(self._name, cls.name).lua_type)
 end
 
 --- Add an enumeration type
 function ServiceBase:_add_service_enumeration(enum)
-  self:_add_service_type(enum, self._client._types:enumeration_type(self._name, enum.name).lua_type)
+  self:_add_service_type(enum, self._connection._types:enumeration_type(self._name, enum.name).lua_type)
 end
 
 --- Add a structure type
 function ServiceBase:_add_service_struct(struct)
-  self:_add_service_type(struct, self._client._types:struct_type(self._name, struct.name).lua_type)
+  self:_add_service_type(struct, self._connection._types:struct_type(self._name, struct.name).lua_type)
 end
 
 --- Add a procedure
@@ -304,7 +304,7 @@ end
 
 --- Add a method to a class
 function ServiceBase:_add_service_class_method(class_name, method_name, procedure)
-  local class_cls = self._client._types:class_type(self._name, class_name).lua_type
+  local class_cls = self._connection._types:class_type(self._name, class_name).lua_type
   local param_names, param_types, param_required, return_type = self:_parse_procedure(procedure)
   -- Rename this to self if it doesn't cause a name clash
   --if 'self' not in param_names:
@@ -317,7 +317,7 @@ end
 
 --- Add a static method to a class
 function ServiceBase:_add_service_class_static_method(class_name, method_name, procedure)
-  local class_cls = self._client._types:class_type(self._name, class_name).lua_type
+  local class_cls = self._connection._types:class_type(self._name, class_name).lua_type
   local param_names, param_types, param_required, return_type = self:_parse_procedure(procedure)
   local func = _construct_func(self, procedure.name, nil, param_names, param_types, param_required, return_type)
   --local build_request = ...
@@ -327,7 +327,7 @@ end
 
 --- Add a property to a class
 function ServiceBase:_add_service_class_property(class_name, property_name, getter, setter)
-  local class_cls = self._client._types:class_type(self._name, class_name).lua_type
+  local class_cls = self._connection._types:class_type(self._name, class_name).lua_type
   local qualified_name = class_name .. '.' .. service.to_snake_case(property_name)
   if getter then
     local getter_name = getter.name
@@ -363,11 +363,11 @@ local function _skipping_unknown_types(what, build)
 end
 
 --- Create a new service type
-function service.create_service(client, svc)
+function service.create_service(connection, svc)
   local cls = class(ServiceBase)
-  cls._client = client
+  cls._connection = connection
   cls._name = svc.name
-  cls._invoke = bind1(client._invoke, client)
+  cls._invoke = bind1(connection._invoke, connection)
 
   -- The deprecated types of the service, which warn when read
   local deprecated_members = {}
@@ -376,7 +376,7 @@ function service.create_service(client, svc)
   cls.__index = function(t, key)
     local member = deprecated_members[key]
     if member ~= nil then
-      client._types:warn_deprecated(member.message)
+      connection._types:warn_deprecated(member.message)
       return member.value
     end
     return index(t, key)
@@ -394,7 +394,7 @@ function service.create_service(client, svc)
 
   -- Add structure types to svc
   for _,struct in ipairs(svc.structs) do
-    if client._types:struct_type(svc.name, struct.name).lua_type ~= nil then
+    if connection._types:struct_type(svc.name, struct.name).lua_type ~= nil then
       cls:_add_service_struct(struct)
     end
   end

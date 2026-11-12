@@ -51,7 +51,7 @@ class Session {
   Session& operator=(const Session&) = delete;
 
   /** Start the threads. The dispatcher thread holds keep_alive until it exits, as a callback
-      can still be running once the last client is released. */
+      can still be running once the last connection is released. */
   void start(StreamManager* manager, std::shared_ptr<void> keep_alive);
   /** Queue work for the dispatcher thread. */
   void dispatch(std::function<void()> work);
@@ -149,7 +149,7 @@ class Session {
   std::deque<std::function<void()>> queue;
   bool queue_stopped = false;
   // Work dispatched once the queue has stopped, destroyed by the join or with the session. It can
-  // hold the last copy of a callback, and so of the client.
+  // hold the last copy of a callback, and so of the connection.
   std::vector<std::function<void()>> discarded;
   std::thread reader;
   std::thread dispatcher;

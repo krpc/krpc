@@ -10,11 +10,11 @@
 
 namespace krpc {
 
-class Client;
+class Connection;
 
 Event::Event() {}
 
-Event::Event(Client& client, uint64_t stream_id) : _stream(client, stream_id) {}
+Event::Event(Connection& connection, uint64_t stream_id) : _stream(connection, stream_id) {}
 
 Condition& Event::get_condition() const { return _stream.get_condition(); }
 

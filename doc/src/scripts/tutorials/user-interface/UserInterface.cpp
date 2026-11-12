@@ -6,7 +6,7 @@
 #include <thread>
 
 int main() {
-  krpc::Client conn = krpc::connect("User Interface Example");
+  krpc::Connection conn = krpc::connect("User Interface Example");
   krpc::services::SpaceCenter space_center(conn);
   krpc::services::UI ui(conn);
   auto canvas = ui.stock_canvas();

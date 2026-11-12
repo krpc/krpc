@@ -18,7 +18,7 @@ import krpc.schema.KRPC_pb2 as KRPC
 if TYPE_CHECKING:
     from typing_extensions import deprecated as deprecated
 
-    from krpc.client import Client
+    from krpc.connection import Connection
 else:
 
     def deprecated(message, /, *, category=None, stacklevel=1):
@@ -401,7 +401,7 @@ class Types:
                 typ.python_type._service_name == value_type._service_name  # pyright: ignore[reportAttributeAccessIssue]
                 and typ.python_type._class_name == value_type._class_name  # pyright: ignore[reportAttributeAccessIssue]
             ):
-                return typ.python_type(value._client, value._object_id)
+                return typ.python_type(value._connection, value._object_id)
         # Collection types
         try:
             # Coerce tuples to lists
@@ -780,8 +780,8 @@ class DynamicType:
 class ClassBase(DynamicType):
     """Base class for service-defined class types"""
 
-    def __init__(self, client: Client, object_id: int) -> None:
-        self._client = client
+    def __init__(self, connection: Connection, object_id: int) -> None:
+        self._connection = connection
         self._object_id = object_id
 
     def __eq__(self, other: object) -> bool:

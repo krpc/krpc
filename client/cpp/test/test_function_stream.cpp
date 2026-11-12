@@ -25,7 +25,7 @@ typedef krpc::services::KRPC::Expression Expr;
 typedef krpc::services::KRPC::Type KType;
 
 // A function that returns its one parameter, of the given type
-static Expr identity(krpc::Client& conn, const KType& type) {
+static Expr identity(krpc::Connection& conn, const KType& type) {
   auto x = Expr::parameter(conn, "x", type);
   return Expr::lambda(conn, {x}, x);
 }

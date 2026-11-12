@@ -11,9 +11,9 @@ local register_definitions = Service.register_definitions
 local protobuf = require 'krpc.protobuf'
 local Transport = require 'krpc.transport'
 
-local Client = class()
+local Connection = class()
 
-function Client:_init(transport)
+function Connection:_init(transport)
   self._types = Types()
   self._transport = transport
   -- The id of the next request, which starts at 1
@@ -50,21 +50,21 @@ function Client:_init(transport)
 end
 
 -- A deprecated service is left out of the client's table, so that reading it reaches here and warns
-Client.__index = function(client, key)
-  local value = Client[key]
+Connection.__index = function(connection, key)
+  local value = Connection[key]
   if value ~= nil then
     return value
   end
-  local deprecated = rawget(client, '_deprecated_services')
+  local deprecated = rawget(connection, '_deprecated_services')
   local service = deprecated and deprecated[key]
   if service ~= nil then
-    client._types:warn_deprecated(service.message)
+    connection._types:warn_deprecated(service.message)
     return service.value
   end
 end
 
 --- Tell the server the connection is closing, then close it
-function Client:close()
+function Connection:close()
   if self._error ~= nil then
     self._transport:close()
     return
@@ -81,7 +81,7 @@ end
 
 --- End the connection on a message the server should not have sent, or one that fails to
 --- parse, sending the server a disconnect with the given reason, PROTOCOL_ERROR by default
-function Client:_protocol_error(text, reason)
+function Connection:_protocol_error(text, reason)
   self._error = text
   pcall(function()
     self._transport:send(encoder.encode_in_message('Disconnect', {
@@ -96,7 +96,7 @@ end
 
 --- Read from or write to the connection. A failure ends the connection, and every later call
 --- raises the same error.
-function Client:_io(operation, ...)
+function Connection:_io(operation, ...)
   local ok, result = pcall(operation, self._transport, ...)
   if not ok then
     self._error = tostring(result)
@@ -108,7 +108,7 @@ end
 
 --- Read messages until the response with the given id arrives, and return it and the value of
 --- its result
-function Client:_receive_response(id, return_type)
+function Connection:_receive_response(id, return_type)
   while true do
     local ok, data = pcall(self._transport.receive_message_data, self._transport)
     if not ok and data == Transport.MALFORMED_SIZE then
@@ -155,7 +155,7 @@ end
 --- Execute an RPC. A nil argument is left out, so that the parameter takes its default. At a
 --- parameter with no default, a nil argument is a null if the parameter can be null, and an error
 --- otherwise.
-function Client:_invoke(service, procedure, args, param_types, return_type, param_required)
+function Connection:_invoke(service, procedure, args, param_types, return_type, param_required)
   args = args or List{}
   param_types = param_types or List{}
 
@@ -203,7 +203,7 @@ end
 
 --- Encode the arguments of a procedure call, coerced to the types of their parameters, with
 --- Types.none for a null argument and nil for an argument left out
-function Client:_encode_arguments(service, procedure, args, param_types, param_required)
+function Connection:_encode_arguments(service, procedure, args, param_types, param_required)
   local arguments = {}
 
   for i,typ in ipairs(param_types) do
@@ -244,7 +244,7 @@ function Client:_encode_arguments(service, procedure, args, param_types, param_r
 end
 
 --- Build the bytes of the request carrying a procedure call, ready to send
-function Client:_build_request(id, service, procedure, args, param_types, param_required)
+function Connection:_build_request(id, service, procedure, args, param_types, param_required)
   local arguments = self:_encode_arguments(service, procedure, args, param_types, param_required)
   return encoder.encode_request(id, service, procedure, arguments, #param_types)
 end
@@ -253,7 +253,7 @@ end
 --- a KRPC.ProcedureCall message to pass to KRPC.Expression.call. A property is read through its
 --- getter, get_<name>, and set through its setter, set_<name>, each given the object or the
 --- service as its first argument.
-function Client:get_call(procedure, ...)
+function Connection:get_call(procedure, ...)
   local info = Service.procedures[procedure]
   if info == nil then
     error('get_call expects a procedure of a service or a class', 2)
@@ -288,12 +288,12 @@ function Client:get_call(procedure, ...)
 end
 
 --- The type of a server side function, a KRPC.Expression object
-function Client:_expression_type()
+function Connection:_expression_type()
   return self._types:class_type('KRPC', 'Expression')
 end
 
 --- Raise an error for a value that is not a KRPC.Expression object
-function Client:_check_function(func)
+function Connection:_check_function(func)
   if not (Types.ClassBase:class_of(func) and func._service_name == 'KRPC' and
           func._class_name == 'Expression') then
     error('Expected a KRPC.Expression object, got ' .. tostring(func), 3)
@@ -325,7 +325,7 @@ end
 --- The types of a server side function's parameters, which of them are required, and the type of
 --- its value or false for a function with no value. Each is introspected on the server once per
 --- function.
-function Client:_function_types(func)
+function Connection:_function_types(func)
   local cached = self._function_type_cache[func._object_id]
   if cached ~= nil then
     return cached.param_types, cached.param_required, cached.return_type
@@ -349,7 +349,7 @@ end
 
 --- Compile a server side function built with the expression API, a KRPC.Expression object, on
 --- the server, so that its first run does not compile it, and return it.
-function Client:compile(func)
+function Connection:compile(func)
   self:_check_function(func)
   self:_invoke('KRPC', 'CompileFunction', List{func}, List{self:_expression_type()})
   return func
@@ -358,7 +358,7 @@ end
 --- Run a server side function, a KRPC.Expression object, within a single physics tick, and
 --- return its value. The arguments are passed to the function's parameters, in order. The
 --- value is nil when the function has no value or its value is null.
-function Client:run(func, ...)
+function Connection:run(func, ...)
   self:_check_function(func)
   -- A function from another connection reads its types through this one
   func = self._types:coerce_to(func, self:_expression_type())
@@ -368,7 +368,7 @@ function Client:run(func, ...)
     error(string.format('The function takes %d argument%s, got %d', #param_types,
                         #param_types == 1 and '' or 's', count), 2)
   end
-  local arguments = List(self:_encode_arguments('Client', 'run', {...}, param_types, param_required))
+  local arguments = List(self:_encode_arguments('Connection', 'run', {...}, param_types, param_required))
   local bytes = self._types:bytes_type()
   local data = self:_invoke('KRPC', 'RunFunction', List{func, arguments},
                             List{self:_expression_type(), self._types:list_type(self._types:nullable(bytes))},
@@ -381,7 +381,7 @@ function Client:run(func, ...)
 end
 
 --- Construct an error description from a KRPC.Error object
-function Client:_error_message(err)
+function Connection:_error_message(err)
    local msg = err.description
   if err.service ~= '' and err.exception ~= '' then
     msg = err.service .. '.' .. err.exception .. ': ' .. msg
@@ -392,4 +392,4 @@ function Client:_error_message(err)
   return msg
 end
 
-return Client
+return Connection

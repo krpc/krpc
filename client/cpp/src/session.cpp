@@ -50,7 +50,7 @@ Session::~Session() {
     ended = true;
   }
   idle.notify_all();
-  // Destroyed on the dispatcher thread when a callback releases the last client
+  // Destroyed on the dispatcher thread when a callback releases the last connection
   for (auto* thread : {&reader, &dispatcher}) {
     if (!thread->joinable()) continue;
     if (thread->get_id() == std::this_thread::get_id())
@@ -375,7 +375,7 @@ void Session::join(bool join_dispatcher) {
   auto current = std::this_thread::get_id();
   if (reader.joinable() && reader.get_id() != current) reader.join();
   if (join_dispatcher && dispatcher.joinable() && dispatcher.get_id() != current) dispatcher.join();
-  // Work that arrives after the stop can hold a stream, and with it the client that holds this
+  // Work that arrives after the stop can hold a stream, and with it the connection that holds this
   // session
   std::vector<std::function<void()>> dropped;
   std::lock_guard<std::mutex> guard(queue_lock);

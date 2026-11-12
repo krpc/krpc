@@ -239,9 +239,9 @@ def clientgen_python_bundle(name, game, template, out):
         out = out,
         substitutions = {
             "{IMPORTS}": "\n".join(sorted([
-                "from krpc.%s.%s import %sClient" % (package, s.name.lower(), s.name)
+                "from krpc.%s.%s import %sConnection" % (package, s.name.lower(), s.name)
                 for s, package in services
             ])),
-            "{BASES}": "\n    ".join(["%sClient," % s.name for s, _ in services]),
+            "{BASES}": "\n    ".join(["%sConnection," % s.name for s, _ in services]),
         },
     )

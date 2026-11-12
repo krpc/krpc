@@ -1,4 +1,4 @@
-local Client = require 'krpc.client'
+local Connection = require 'krpc.connection'
 local TCPIPTransport = require 'krpc.tcpiptransport'
 local LocalTransport = require 'krpc.localtransport'
 local limits = require 'krpc.limits'
@@ -109,7 +109,7 @@ local function connect_using(transport, name, handshake_timeout)
   end
 
   -- The session has started, so a client that fails to set up tells the server it is closing
-  local created, client = pcall(Client, transport)
+  local created, connection = pcall(Connection, transport)
   if not created then
     pcall(function()
       transport:send(encoder.encode_in_message('Disconnect', {
@@ -118,9 +118,9 @@ local function connect_using(transport, name, handshake_timeout)
       transport:half_close_and_close()
     end)
     transport:close()
-    error(client, 0)
+    error(connection, 0)
   end
-  return client
+  return connection
 end
 
 function krpc.connect(name, address, port, handshake_timeout)

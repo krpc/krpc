@@ -12,7 +12,7 @@ from krpc.types import TypeBase
 if TYPE_CHECKING:
     from types import TracebackType
 
-    from krpc.client import Client
+    from krpc.connection import Connection
     from krpc.streammanager import StreamImpl
 
 
@@ -36,18 +36,18 @@ class Stream:
 
     @classmethod
     def from_stream_id(
-        cls, client: Client, stream_id: int, return_type: TypeBase
+        cls, connection: Connection, stream_id: int, return_type: TypeBase
     ) -> Stream:
         """Create a stream from an existing stream id on the server"""
-        stream = client._stream_manager.get_stream(return_type, stream_id)
+        stream = connection._stream_manager.get_stream(return_type, stream_id)
         return cls(stream)
 
     @classmethod
     def from_call(
-        cls, client: Client, return_type: TypeBase, call: KRPC.ProcedureCall
+        cls, connection: Connection, return_type: TypeBase, call: KRPC.ProcedureCall
     ) -> Stream:
         """Create a stream from a remote procedure call"""
-        stream = client._stream_manager.add_stream(return_type, call)
+        stream = connection._stream_manager.add_stream(return_type, call)
         return cls(stream)
 
     @property

@@ -11,11 +11,11 @@ namespace krpc_conformance {
 
 struct {{ service_name }}_{{ struct.name }} {
   using type = {{ struct.class }};
-  static type arg(::krpc::Client& client, const Value& value) {
+  static type arg(::krpc::Connection& connection, const Value& value) {
     const auto& fields = not_null(value).struct_().fields();
     return type(
       {% for field in struct.fields %}
-      {{ field.tag }}::arg(client, fields.Get({{ loop.index0 }})){% if not loop.last %},{% endif %}
+      {{ field.tag }}::arg(connection, fields.Get({{ loop.index0 }})){% if not loop.last %},{% endif %}
 
       {% endfor %}
     );
@@ -32,13 +32,13 @@ struct {{ service_name }}_{{ struct.name }} {
 };
 {% endfor %}
 
-inline Value invoke_{{ service_name | snake_case }}(::krpc::Client& client, const std::string& procedure,
+inline Value invoke_{{ service_name | snake_case }}(::krpc::Connection& connection, const std::string& procedure,
                        const Arguments& args, [[maybe_unused]] bool bound) {
   {% for member in members %}
   {% for variant in member.variants %}
   if (procedure == "{{ member.remote_name }}" && args.size() == {{ variant.count }}) {
     {% for p in variant.parameters %}
-    auto {{ p.name }} = {{ p.tag }}::arg(client, args.Get({{ p.index }}));
+    auto {{ p.name }} = {{ p.tag }}::arg(connection, args.Get({{ p.index }}));
     {% endfor %}
     {% if variant.bound_call %}
     if (bound) {
@@ -63,13 +63,13 @@ inline Value invoke_{{ service_name | snake_case }}(::krpc::Client& client, cons
                               std::to_string(args.size()) + " arguments");
 }
 
-inline StreamHandle add_stream_{{ service_name | snake_case }}(::krpc::Client& client,
+inline StreamHandle add_stream_{{ service_name | snake_case }}(::krpc::Connection& connection,
                                   const std::string& procedure, const Arguments& args) {
   {% for member in members if member.stream %}
   {% for variant in member.variants %}
   if (procedure == "{{ member.remote_name }}" && args.size() == {{ variant.count }}) {
     {% for p in variant.parameters %}
-    auto {{ p.name }} = {{ p.tag }}::arg(client, args.Get({{ p.index }}));
+    auto {{ p.name }} = {{ p.tag }}::arg(connection, args.Get({{ p.index }}));
     {% endfor %}
     {% if member.result %}
     return result_stream({{ variant.stream }}, [](const auto& x) { return {{ member.result.tag }}::result(x); });
@@ -83,13 +83,13 @@ inline StreamHandle add_stream_{{ service_name | snake_case }}(::krpc::Client& c
                               std::to_string(args.size()) + " arguments");
 }
 
-inline ::krpc::schema::ProcedureCall call_{{ service_name | snake_case }}(::krpc::Client& client,
+inline ::krpc::schema::ProcedureCall call_{{ service_name | snake_case }}(::krpc::Connection& connection,
                                   const std::string& procedure, const Arguments& args) {
   {% for member in members if member.stream %}
   {% for variant in member.variants %}
   if (procedure == "{{ member.remote_name }}" && args.size() == {{ variant.count }}) {
     {% for p in variant.parameters %}
-    auto {{ p.name }} = {{ p.tag }}::arg(client, args.Get({{ p.index }}));
+    auto {{ p.name }} = {{ p.tag }}::arg(connection, args.Get({{ p.index }}));
     {% endfor %}
     return {{ variant.procedure_call }};
   }

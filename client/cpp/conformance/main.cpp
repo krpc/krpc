@@ -702,12 +702,13 @@ class Testee {
       }
       case Command::kAddUpdateCallback: {
         auto callback = command.add_update_callback().callback();
-        auto& client = connected();
+        auto& connection = connected();
         auto behavior = command.add_update_callback().behavior();
-        int tag = client.add_stream_update_callback([this, callback, behavior]() {
+        int tag = connection.add_stream_update_callback([this, callback, behavior]() {
           call_back(callback, behavior, [](krpc::conformance::Notification*) {});
         });
-        add_removal(callback, [&client, tag]() { client.remove_stream_update_callback(tag); });
+        add_removal(callback,
+                    [&connection, tag]() { connection.remove_stream_update_callback(tag); });
         *reply->mutable_value() = result_none();
         break;
       }
@@ -718,9 +719,9 @@ class Testee {
       case Command::kHoldCondition: {
         auto handle = command.hold_condition().stream();
         if (handle == 0) {
-          krpc::Client client = connected();
-          client.acquire_stream_update();
-          held().push_back([client](uint64_t) mutable { client.release_stream_update(); });
+          krpc::Connection connection = connected();
+          connection.acquire_stream_update();
+          held().push_back([connection](uint64_t) mutable { connection.release_stream_update(); });
         } else {
           auto holding = std::make_shared<Holding>(handle);
           held().push_back([holding](uint64_t through) mutable {
@@ -739,16 +740,16 @@ class Testee {
         break;
       }
       case Command::kWaitForUpdate: {
-        krpc::Client client = connected();
+        krpc::Connection connection = connected();
         const auto& wait = command.wait_for_update();
-        client.acquire_stream_update();
+        connection.acquire_stream_update();
         try {
-          client.wait_for_stream_update(wait.has_timeout() ? wait.timeout() : -1);
+          connection.wait_for_stream_update(wait.has_timeout() ? wait.timeout() : -1);
         } catch (...) {
-          client.release_stream_update();
+          connection.release_stream_update();
           throw;
         }
-        client.release_stream_update();
+        connection.release_stream_update();
         *reply->mutable_value() = result_none();
         break;
       }
@@ -911,12 +912,12 @@ class Testee {
 
   /** Destroys the client of a connection, which closes it unless a handle holds it. */
   void destroy(const std::string& name) {
-    std::shared_ptr<krpc::Client> client;
+    std::shared_ptr<krpc::Connection> connection;
     {
       std::lock_guard<std::mutex> lock(clients_mutex);
       auto entry = clients.find(name);
       if (entry == clients.end()) return;
-      client = std::move(entry->second);
+      connection = std::move(entry->second);
       clients.erase(entry);
     }
   }
@@ -929,7 +930,7 @@ class Testee {
         removals.clear();
         releases.clear();
       }
-      std::map<std::string, std::shared_ptr<krpc::Client>> closed;
+      std::map<std::string, std::shared_ptr<krpc::Connection>> closed;
       {
         std::lock_guard<std::mutex> lock(clients_mutex);
         closed.swap(clients);
@@ -939,32 +940,32 @@ class Testee {
     } else {
       destroy(name);
     }
-    std::shared_ptr<krpc::Client> client;
+    std::shared_ptr<krpc::Connection> connection;
     std::chrono::milliseconds handshake_timeout = std::chrono::seconds(5);
     if (command.has_handshake_timeout())
       handshake_timeout = to_timeout(command.handshake_timeout());
     std::chrono::milliseconds stall_timeout = std::chrono::seconds(30);
     if (command.has_stall_timeout()) stall_timeout = to_timeout(command.stall_timeout());
     if (command.protocol() == "localsocket") {
-      client = std::make_shared<krpc::Client>(
+      connection = std::make_shared<krpc::Connection>(
           krpc::connect_local(command.name(), command.path(), handshake_timeout, stall_timeout));
     } else if (command.protocol() == "tcpip") {
       std::string address = command.address().empty() ? "127.0.0.1" : command.address();
       unsigned int port = command.port() > 0 ? command.port() : 50000;
-      client = std::make_shared<krpc::Client>(krpc::connect(command.name(), address, port,
-                                                            std::chrono::milliseconds::zero(),
-                                                            handshake_timeout, stall_timeout));
+      connection = std::make_shared<krpc::Connection>(
+          krpc::connect(command.name(), address, port, std::chrono::milliseconds::zero(),
+                        handshake_timeout, stall_timeout));
     } else {
       throw std::invalid_argument("Unknown protocol " + command.protocol());
     }
     std::lock_guard<std::mutex> lock(clients_mutex);
-    clients[name] = std::move(client);
+    clients[name] = std::move(connection);
   }
 
   /** The client of the command this thread runs. The command holds it from its first use, as a
       program making a call holds a copy, so a close on another thread leaves the client open
       until the command returns. */
-  krpc::Client& connected() {
+  krpc::Connection& connected() {
     auto& held = held_clients.back();
     if (!held) {
       std::lock_guard<std::mutex> lock(clients_mutex);
@@ -1012,12 +1013,12 @@ class Testee {
   Writer* output;
   // The clients, by the driver's name for each connection
   std::mutex clients_mutex;
-  std::map<std::string, std::shared_ptr<krpc::Client>> clients;
+  std::map<std::string, std::shared_ptr<krpc::Connection>> clients;
   // The name of the connection the command this thread runs is for
   static thread_local std::string current_connection;
   // The client each command this thread runs holds, innermost last, as a callback can run a
   // command inside another
-  static thread_local std::vector<std::shared_ptr<krpc::Client>> held_clients;
+  static thread_local std::vector<std::shared_ptr<krpc::Connection>> held_clients;
   struct HeldClient {
     HeldClient() { held_clients.emplace_back(); }
     ~HeldClient() { held_clients.pop_back(); }
@@ -1032,7 +1033,7 @@ class Testee {
 };
 
 thread_local std::string Testee::current_connection;
-thread_local std::vector<std::shared_ptr<krpc::Client>> Testee::held_clients;
+thread_local std::vector<std::shared_ptr<krpc::Connection>> Testee::held_clients;
 
 }  // namespace krpc_conformance
 

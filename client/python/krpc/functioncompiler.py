@@ -65,7 +65,7 @@ from krpc.stream import Stream
 from krpc.types import ClassBase, ClassType, EnumerationType, StructType, TypeBase
 
 if TYPE_CHECKING:
-    from krpc.client import Client
+    from krpc.connection import Connection
     from krpc.services.krpc import Expression
     from krpc.services.krpc import Type as RemoteType
 
@@ -87,7 +87,7 @@ class Parameters(NamedTuple):
 
 
 def compile_function(
-    client: Client,
+    connection: Connection,
     func: Callable[..., object],
     streamed: bool = False,
 ) -> Expression:
@@ -98,7 +98,7 @@ def compile_function(
     client. A streamed function must make a remote procedure call or use a
     state variable, as one that does neither has the same value on every
     update. It cannot take parameters."""
-    return compile_function_with_type(client, func, streamed)[0]
+    return compile_function_with_type(connection, func, streamed)[0]
 
 
 # A variable, by the position of the function body that declares it and its name.
@@ -110,7 +110,7 @@ NO_VALUE = KRPC.Type()
 
 
 def compile_function_with_type(
-    client: Client,
+    connection: Connection,
     func: Callable[..., object],
     streamed: bool = False,
 ) -> tuple[Expression, KRPC.Type | None, Parameters]:
@@ -124,7 +124,7 @@ def compile_function_with_type(
     variable_types: dict[_VariableKey, KRPC.Type] = {}
     client_values: dict[tuple[int, ...], object] = {}
     while True:
-        compiler = _Compiler(client, func, variable_types, client_values)
+        compiler = _Compiler(connection, func, variable_types, client_values)
         try:
             result = compiler.compile(streamed)
         except Recompile:
@@ -376,11 +376,11 @@ _SENT_CALLS = threading.local()
 _SENT_CALLS_LOCK = threading.Lock()
 
 
-def _count_sent_calls(client: Client) -> None:
+def _count_sent_calls(connection: Connection) -> None:
     """Count the remote procedure calls each thread sends through a client's
     connection, so a client side function called when compiling can be checked
     for one."""
-    transport = client._transport
+    transport = connection._transport
     with _SENT_CALLS_LOCK:
         if getattr(transport, "_counts_sent_calls", False):
             return
@@ -425,14 +425,14 @@ class _Untyped(FunctionCompilationError):
 class _Compiler:
     def __init__(
         self,
-        client: Client,
+        connection: Connection,
         func: Callable[..., object],
         variable_types: dict[_VariableKey, KRPC.Type] | None = None,
         client_values: dict[tuple[int, ...], object] | None = None,
     ):
-        self._client = client
-        self._expr = client._krpc.Expression
-        self._type = client._krpc.Type
+        self._connection = connection
+        self._expr = connection._krpc.Expression
+        self._type = connection._krpc.Type
         self._func = func
         # The types the function's parameter and return annotations name, by
         # name, as Python evaluated them where the function is defined
@@ -458,13 +458,15 @@ class _Compiler:
         self._valueless_calls: list[Expression] = []
         # The node being compiled, which an error converting a value names
         self._node: ast.AST | None = None
-        if client._expression_metadata is None:
-            client._expression_metadata = Metadata(client)
-        _count_sent_calls(client)
-        self._metadata: Metadata = client._expression_metadata
+        if connection._expression_metadata is None:
+            connection._expression_metadata = Metadata(connection)
+        _count_sent_calls(connection)
+        self._metadata: Metadata = connection._expression_metadata
         # Naming a type is a round trip, so the objects naming them are shared
         # by every function compiled for this connection
-        self._remote_types: dict[bytes, RemoteType] = client._expression_remote_types
+        self._remote_types: dict[bytes, RemoteType] = (
+            connection._expression_remote_types
+        )
         # (function body, variable name) -> the type a variable is declared with,
         # where a value assigned to it after the first can be None. A name of None
         # is the return type
@@ -584,7 +586,7 @@ class _Compiler:
                 raise self._error(node, self._empty_kind_message(value, kind))
         elif value is not None:
             try:
-                Encoder.encode(value, self._client._types.as_type(ptype))
+                Encoder.encode(value, self._connection._types.as_type(ptype))
                 # The encoder writes any int as a varint, whatever its size
                 bounds = _INTEGER_RANGES.get(ptype.code)
                 valid = (
@@ -807,7 +809,7 @@ class _Compiler:
                     raise self._error(
                         node, "'%s' is a remote method, which needs a call" % node.attr
                     )
-                call = self._client.get_call(getattr, value, node.attr)
+                call = self._connection.get_call(getattr, value, node.attr)
                 # The service definitions say where the value can be None
                 procedure = self._metadata.procedures.get(
                     (call.service, call.procedure)
@@ -1357,7 +1359,7 @@ class _Compiler:
         """Whether a type is a flags enumeration."""
         if ptype.code != KRPC.Type.ENUMERATION:
             return False
-        typ = self._client._types.as_type(with_nullable(ptype, False))
+        typ = self._connection._types.as_type(with_nullable(ptype, False))
         python_type = typ.python_type if isinstance(typ, EnumerationType) else None
         return isinstance(python_type, type) and issubclass(python_type, Flag)
 
@@ -4225,7 +4227,7 @@ class _Compiler:
             ptype = self._enum_ptype(type(value))
             # A generated value takes the server's number for its name
             try:
-                types = self._client._types
+                types = self._connection._types
                 member = cast(Enum, types.coerce_to(value, types.as_type(ptype)))
                 number = cast(int, member.value)
             except ValueError as exn:
@@ -4646,7 +4648,7 @@ class _Compiler:
         name = getattr(python_type, "_class_name", None)
         if service_name is None or name is None:
             return None
-        for typ in self._client._types._types.values():
+        for typ in self._connection._types._types.values():
             if (
                 isinstance(typ, kind)
                 and typ.protobuf_type.service == service_name
@@ -4658,7 +4660,7 @@ class _Compiler:
     def _class_ptype(self, python_type: type) -> KRPC.Type:
         # A class accessed through a service is a subclass of the registered one
         for base in python_type.__mro__:
-            for typ in self._client._types._types.values():
+            for typ in self._connection._types._types.values():
                 if isinstance(typ, ClassType) and typ.python_type is base:
                     return typ.protobuf_type
         typ = self._named_type(ClassType, python_type)
@@ -4669,7 +4671,7 @@ class _Compiler:
         )
 
     def _enum_ptype(self, python_type: type) -> KRPC.Type:
-        for typ in self._client._types._types.values():
+        for typ in self._connection._types._types.values():
             if isinstance(typ, EnumerationType) and typ.python_type is python_type:
                 return typ.protobuf_type
         typ = self._named_type(EnumerationType, python_type)
@@ -4682,7 +4684,7 @@ class _Compiler:
 
     def _struct_type_of(self, node: ast.AST | None, python_type: type) -> StructType:
         """The structure type a value of the given Python type belongs to."""
-        for typ in self._client._types._types.values():
+        for typ in self._connection._types._types.values():
             if isinstance(typ, StructType) and typ.python_type is python_type:
                 return self._known_struct_type(node, typ)
         typ = self._named_type(StructType, python_type)
@@ -4696,7 +4698,7 @@ class _Compiler:
         self, node: ast.AST | None, service: str, name: str
     ) -> StructType:
         return self._known_struct_type(
-            node, self._client._types.struct_type(service, name)
+            node, self._connection._types.struct_type(service, name)
         )
 
     def _known_struct_type(self, node: ast.AST | None, typ: StructType) -> StructType:
@@ -4717,7 +4719,7 @@ class _Compiler:
         return isinstance(value, type) and (
             any(
                 isinstance(typ, StructType) and typ.python_type is value
-                for typ in self._client._types._types.values()
+                for typ in self._connection._types._types.values()
             )
             or self._named_type(StructType, value) is not None
         )

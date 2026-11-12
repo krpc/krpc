@@ -9,7 +9,7 @@
 
    Service documentation string.
 
-   .. function:: TestService(krpc::Client& client)
+   .. function:: TestService(krpc::Connection& connection)
 
       Construct an instance of this service.
 
@@ -1184,7 +1184,7 @@
 
    
 
-   .. function:: static std::string inherited_static_method(Client& connection)
+   .. function:: static std::string inherited_static_method(krpc::Connection& connection)
 
       Static method with no deprecation of its own documentation string.
 
@@ -1262,7 +1262,7 @@
 
    
 
-   .. function:: static std::string static_method(Client& connection, std::string a = "", std::string b = "")
+   .. function:: static std::string static_method(krpc::Connection& connection, std::string a = "", std::string b = "")
 
       Returns static followed by *a* and *b*.
 
@@ -1274,7 +1274,7 @@
       :returns: The strings joined.
    
 
-   .. function:: static std::optional<TestClass> static_nullable_object(Client& connection, std::optional<TestClass> value)
+   .. function:: static std::optional<TestClass> static_nullable_object(krpc::Connection& connection, std::optional<TestClass> value)
 
 
 
@@ -1284,7 +1284,7 @@
 
    
 
-   .. function:: static std::string static_optional_arguments(Client& connection, std::string x, std::string y = "foo", std::string z = "bar", std::optional<TestClass> obj = std::optional<TestClass>())
+   .. function:: static std::string static_optional_arguments(krpc::Connection& connection, std::string x, std::string y = "foo", std::string z = "bar", std::optional<TestClass> obj = std::optional<TestClass>())
 
 
 

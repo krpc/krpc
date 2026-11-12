@@ -1,15 +1,15 @@
 #pragma once
 
-#include "krpc/client.hpp"
+#include "krpc/connection.hpp"
 
 namespace krpc {
 
 class Service {
  public:
-  explicit Service(const Client& client) : _client(client) {}
+  explicit Service(const Connection& connection) : _connection(connection) {}
 
  protected:
-  Client _client;
+  Connection _connection;
 };
 
 }  // namespace krpc

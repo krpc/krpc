@@ -10,7 +10,7 @@
 #include <utility>
 #include <vector>
 
-#include "krpc/client.hpp"
+#include "krpc/connection.hpp"
 #include "krpc/error.hpp"
 #include "krpc/krpc.pb.hpp"
 
@@ -22,44 +22,44 @@ class MessageLite;
 
 namespace krpc {
 
-class Client;
+class Connection;
 class Event;
 template <typename T>
 class Object;
 
 namespace decoder {
 
-void decode(double& value, const std::string& data, Client* client = nullptr);
-void decode(float& value, const std::string& data, Client* client = nullptr);
-void decode(int32_t& value, const std::string& data, Client* client = nullptr);
-void decode(int64_t& value, const std::string& data, Client* client = nullptr);
-void decode(uint32_t& value, const std::string& data, Client* client = nullptr);
-void decode(uint64_t& value, const std::string& data, Client* client = nullptr);
-void decode(bool& value, const std::string& data, Client* client = nullptr);
-void decode(std::string& value, const std::string& data, Client* client = nullptr);
-void decode(Event& event, const std::string& data, Client* client = nullptr);
+void decode(double& value, const std::string& data, Connection* connection = nullptr);
+void decode(float& value, const std::string& data, Connection* connection = nullptr);
+void decode(int32_t& value, const std::string& data, Connection* connection = nullptr);
+void decode(int64_t& value, const std::string& data, Connection* connection = nullptr);
+void decode(uint32_t& value, const std::string& data, Connection* connection = nullptr);
+void decode(uint64_t& value, const std::string& data, Connection* connection = nullptr);
+void decode(bool& value, const std::string& data, Connection* connection = nullptr);
+void decode(std::string& value, const std::string& data, Connection* connection = nullptr);
+void decode(Event& event, const std::string& data, Connection* connection = nullptr);
 void decode(google::protobuf::MessageLite& message, const std::string& data,
-            Client* client = nullptr);
+            Connection* connection = nullptr);
 
 template <typename T>
-void decode(Object<T>& object, const std::string& data, Client* client = nullptr);
+void decode(Object<T>& object, const std::string& data, Connection* connection = nullptr);
 
 template <typename... Ts>
-void decode(std::tuple<Ts...>& tuple, const std::string& data, Client* client = nullptr);
+void decode(std::tuple<Ts...>& tuple, const std::string& data, Connection* connection = nullptr);
 
 template <typename T>
-void decode(std::optional<T>& value, const std::string& data, Client* client = nullptr);
+void decode(std::optional<T>& value, const std::string& data, Connection* connection = nullptr);
 template <typename T>
-void decode(std::vector<T>& list, const std::string& data, Client* client = nullptr);
+void decode(std::vector<T>& list, const std::string& data, Connection* connection = nullptr);
 template <typename T>
-void decode(std::set<T>& set, const std::string& data, Client* client = nullptr);
+void decode(std::set<T>& set, const std::string& data, Connection* connection = nullptr);
 template <typename K, typename V>
-void decode(std::map<K, V>& dictionary, const std::string& data, Client* client = nullptr);
+void decode(std::map<K, V>& dictionary, const std::string& data, Connection* connection = nullptr);
 
 template <typename T>
-void decode_item(std::optional<T>& value, const std::string& data, Client* client);
+void decode_item(std::optional<T>& value, const std::string& data, Connection* connection);
 template <typename T>
-void decode_item(T& value, const std::string& data, Client* client);
+void decode_item(T& value, const std::string& data, Connection* connection);
 
 uint32_t decode_size(const std::string& data);
 
@@ -68,38 +68,39 @@ uint32_t decode_size(const std::string& data);
 bool decode_size_prefix(const char* data, size_t length, uint32_t* size, size_t* prefix_length);
 
 template <typename T>
-inline void decode(Object<T>& object, const std::string& data, Client* client) {
+inline void decode(Object<T>& object, const std::string& data, Connection* connection) {
   uint64_t id;
-  decode(id, data, client);
-  object._client = client != nullptr ? *client : Client();
+  decode(id, data, connection);
+  object._connection = connection != nullptr ? *connection : Connection();
   object._id = id;
 }
 
 template <typename... Ts>
-inline void decode(std::tuple<Ts...>& tuple, const std::string& data, Client* client) {
+inline void decode(std::tuple<Ts...>& tuple, const std::string& data, Connection* connection) {
   // See the note on the list below for why the message this arrives in is kept between calls.
   static thread_local krpc::schema::Tuple tupleMessage;
   if (!tupleMessage.ParseFromString(data)) throw EncodingError("Failed to decode message");
   if (tupleMessage.items_size() != static_cast<int>(sizeof...(Ts)))
     throw EncodingError("Tuple has the wrong number of items");
   int index = 0;
-  std::apply([&](Ts&... args) { (decode_item(args, tupleMessage.items(index++), client), ...); },
-             tuple);
+  std::apply(
+      [&](Ts&... args) { (decode_item(args, tupleMessage.items(index++), connection), ...); },
+      tuple);
 }
 
 template <typename T>
-inline void decode(std::optional<T>& value, const std::string& data, Client* client) {
+inline void decode(std::optional<T>& value, const std::string& data, Connection* connection) {
   // Only called for a present value; a null value is signaled by is_null and leaves the
   // optional empty.
   T inner;
-  decode(inner, data, client);
+  decode(inner, data, connection);
   value = inner;
 }
 
 // Decode one of the values a collection or a structure holds, where a nullable position is
 // a std::optional.
 template <typename T>
-inline void decode_item(std::optional<T>& value, const std::string& data, Client* client) {
+inline void decode_item(std::optional<T>& value, const std::string& data, Connection* connection) {
   // The presence bool is one byte, as a bool value always is, and is read from it directly
   // rather than through a copy of it
   if (data.empty()) throw EncodingError("Failed to decode message");
@@ -108,13 +109,13 @@ inline void decode_item(std::optional<T>& value, const std::string& data, Client
     return;
   }
   T inner;
-  decode(inner, data.substr(1), client);
+  decode(inner, data.substr(1), connection);
   value = inner;
 }
 
 template <typename T>
-inline void decode_item(T& value, const std::string& data, Client* client) {
-  decode(value, data, client);
+inline void decode_item(T& value, const std::string& data, Connection* connection) {
+  decode(value, data, connection);
 }
 
 // A collection arrives as a message holding its items, one encoded value each. That message is
@@ -125,7 +126,7 @@ inline void decode_item(T& value, const std::string& data, Client* client) {
 // reuse: reaching this function again while it is running takes a collection of itself, which
 // is not a type that can be written.
 template <typename T>
-inline void decode(std::vector<T>& list, const std::string& data, Client* client) {
+inline void decode(std::vector<T>& list, const std::string& data, Connection* connection) {
   static thread_local krpc::schema::List listMessage;
   if (!listMessage.ParseFromString(data)) throw EncodingError("Failed to decode message");
   list.clear();
@@ -134,25 +135,25 @@ inline void decode(std::vector<T>& list, const std::string& data, Client* client
   list.reserve(listMessage.items_size());
   for (int i = 0; i < listMessage.items_size(); i++) {
     T value;
-    decode_item(value, listMessage.items(i), client);
+    decode_item(value, listMessage.items(i), connection);
     list.push_back(std::move(value));
   }
 }
 
 template <typename T>
-inline void decode(std::set<T>& set, const std::string& data, Client* client) {
+inline void decode(std::set<T>& set, const std::string& data, Connection* connection) {
   static thread_local krpc::schema::Set setMessage;
   if (!setMessage.ParseFromString(data)) throw EncodingError("Failed to decode message");
   set.clear();
   for (int i = 0; i < setMessage.items_size(); i++) {
     T value;
-    decode(value, setMessage.items(i), client);
+    decode(value, setMessage.items(i), connection);
     set.insert(std::move(value));
   }
 }
 
 template <typename K, typename V>
-inline void decode(std::map<K, V>& dictionary, const std::string& data, Client* client) {
+inline void decode(std::map<K, V>& dictionary, const std::string& data, Connection* connection) {
   static thread_local krpc::schema::Dictionary dictionaryMessage;
   if (!dictionaryMessage.ParseFromString(data)) throw EncodingError("Failed to decode message");
   dictionary.clear();
@@ -160,8 +161,8 @@ inline void decode(std::map<K, V>& dictionary, const std::string& data, Client* 
     const schema::DictionaryEntry& entry = dictionaryMessage.entries(i);
     K key;
     V value;
-    decode(key, entry.key(), client);
-    decode_item(value, entry.value(), client);
+    decode(key, entry.key(), connection);
+    decode_item(value, entry.value(), connection);
     dictionary[std::move(key)] = std::move(value);
   }
 }

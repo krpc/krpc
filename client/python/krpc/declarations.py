@@ -98,12 +98,12 @@ def registered(service_name: str, name: str) -> type | None:
 Lookup = Callable[[str, str], "type | None"]
 
 
-def client_lookup(client_type: type) -> Lookup:
-    """The lookup for a client of the given type. A service whose client type is a base of it
-    takes its classes from that client type's module, where the first base in the MRO wins.
+def connection_lookup(connection_type: type) -> Lookup:
+    """The lookup for a connection of the given type. A service whose connection type is a base of it
+    takes its classes from that connection type's module, where the first base in the MRO wins.
     Any other service takes them from the registry."""
     modules: dict[str, dict[str, Any]] = {}
-    for cls in reversed(client_type.__mro__):
+    for cls in reversed(connection_type.__mro__):
         service_name = vars(cls).get("_declares_service")
         module = sys.modules.get(cls.__module__)
         # A module loaded outside sys.modules is found only through the registry

@@ -5,7 +5,7 @@
 #include <stdexcept>
 #include <string>
 
-#include "krpc/client.hpp"
+#include "krpc/connection.hpp"
 
 namespace krpc {
 
@@ -13,7 +13,7 @@ template <typename T>
 class Object {
  public:
   explicit Object(const std::string& name);
-  Object(const Client& client, const std::string& name, uint64_t id);
+  Object(const Connection& connection, const std::string& name, uint64_t id);
   template <typename U>
   friend std::ostream& operator<<(std::ostream&, const Object<U>&);
   template <typename U>
@@ -23,7 +23,7 @@ class Object {
   // Public because the encoder and decoder need them. Granting access with 'friend' would
   // introduce a circular dependency between this header and theirs. Mutable as a client is a
   // handle, which a const object calls through.
-  mutable Client _client;
+  mutable Connection _connection;
   uint64_t _id;
 
  private:
@@ -44,8 +44,8 @@ template <typename T>
 inline Object<T>::Object(const std::string& name) : _id(0), _name(name) {}
 
 template <typename T>
-inline Object<T>::Object(const Client& client, const std::string& name, uint64_t id)
-    : _client(client), _id(id), _name(name) {}
+inline Object<T>::Object(const Connection& connection, const std::string& name, uint64_t id)
+    : _connection(connection), _id(id), _name(name) {}
 
 template <typename T>
 inline uint64_t get_object_id(const Object<T>& object) {

@@ -34,7 +34,7 @@ from krpc.types import (
 )
 
 if TYPE_CHECKING:
-    from krpc.client import Client
+    from krpc.connection import Connection
 
 
 # protobuf's varint reader and zigzag decoder are internal and carry no types, so they are
@@ -101,7 +101,9 @@ class Decoder:
     _types = Types()
 
     @classmethod
-    def decode(cls, client: Client | None, data: bytes, typ: TypeBase) -> object:
+    def decode(
+        cls, connection: Connection | None, data: bytes, typ: TypeBase
+    ) -> object:
         """Given a python type, and serialized data, decode the value.
 
         This decodes a value at a slot, where a null is carried by the is_null flag of the
@@ -119,32 +121,32 @@ class Decoder:
         if isinstance(typ, ClassType):
             object_id_typ = cls._types.uint64_type
             object_id = cls._decode_value(data, object_id_typ)
-            return typ.python_type(client, object_id)
+            return typ.python_type(connection, object_id)
         if isinstance(typ, StreamType):
             return cls._decode_value(data, cls._types.uint64_type)
         if isinstance(typ, EventType):
             stream_id = cast(int, cls._decode_value(data, cls._types.uint64_type))
-            return Event(cast("Client", client), stream_id)
+            return Event(cast("Connection", connection), stream_id)
         msg: object
         if isinstance(typ, ListType):
             msg = cast(KRPC.List, cls.decode_message(data, KRPC.List))
-            decode_item = cls._item_decoder(client, typ.value_type)
+            decode_item = cls._item_decoder(connection, typ.value_type)
             return [decode_item(item) for item in msg.items]
         if isinstance(typ, DictionaryType):
             msg = cast(KRPC.Dictionary, cls.decode_message(data, KRPC.Dictionary))
-            decode_key = cls._item_decoder(client, typ.key_type)
-            decode_value = cls._item_decoder(client, typ.value_type)
+            decode_key = cls._item_decoder(connection, typ.key_type)
+            decode_value = cls._item_decoder(connection, typ.value_type)
             return dict(
                 (decode_key(entry.key), decode_value(entry.value))
                 for entry in msg.entries
             )
         if isinstance(typ, SetType):
             msg = cast(KRPC.Set, cls.decode_message(data, KRPC.Set))
-            decode_item = cls._item_decoder(client, typ.value_type)
+            decode_item = cls._item_decoder(connection, typ.value_type)
             return set(decode_item(item) for item in msg.items)
         if isinstance(typ, TupleType):
             msg = cast(KRPC.Tuple, cls.decode_message(data, KRPC.Tuple))
-            return tuple(cls._decode_items(client, msg.items, typ.value_types))
+            return tuple(cls._decode_items(connection, msg.items, typ.value_types))
         if isinstance(typ, StructType):
             # A structure is encoded as the values of its fields in order, which is the
             # same encoding as a tuple of those values
@@ -156,7 +158,7 @@ class Decoder:
                     % (len(typ.field_types), len(msg.items))
                 )
             return typ.python_type(
-                *cls._decode_items(client, msg.items, typ.field_types)
+                *cls._decode_items(connection, msg.items, typ.field_types)
             )
         if isinstance(typ, NoValueType):
             return None
@@ -180,19 +182,21 @@ class Decoder:
     @classmethod
     def _decode_items(
         cls,
-        client: Client | None,
+        connection: Connection | None,
         items: Iterable[bytes],
         types: Iterable[TypeBase],
     ) -> list[object]:
         """The decoded value of each item of a tuple or a structure"""
-        return [cls._item_decoder(client, typ)(item) for item, typ in zip(items, types)]
+        return [
+            cls._item_decoder(connection, typ)(item) for item, typ in zip(items, types)
+        ]
 
     @classmethod
     def _item_decoder(
-        cls, client: Client | None, typ: TypeBase
+        cls, connection: Connection | None, typ: TypeBase
     ) -> Callable[[bytes], object]:
         """A function that decodes one value at a position of the given type"""
-        decode = cls._value_decoder(client, typ)
+        decode = cls._value_decoder(connection, typ)
         if not typ.nullable:
             return decode
 
@@ -207,7 +211,7 @@ class Decoder:
 
     @classmethod
     def _value_decoder(
-        cls, client: Client | None, typ: TypeBase
+        cls, connection: Connection | None, typ: TypeBase
     ) -> Callable[[bytes], object]:
         """A function that decodes one value of the given type.
 
@@ -223,12 +227,12 @@ class Decoder:
         if isinstance(typ, ClassType):
             decode_id = _VALUE_DECODERS[cls._types.uint64_type.code]
             python_type = typ.python_type
-            return lambda data: python_type(client, decode_id(data))
+            return lambda data: python_type(connection, decode_id(data))
         if isinstance(typ, EnumerationType):
             decode_value = _VALUE_DECODERS[cls._types.sint32_type.code]
             enum_type = typ.python_type
             return lambda data: _enum_value(enum_type, cast(int, decode_value(data)))
-        return lambda data: cls.decode(client, data, typ)
+        return lambda data: cls.decode(connection, data, typ)
 
     @classmethod
     def _decode_value(cls, data: bytes, typ: TypeBase) -> object:

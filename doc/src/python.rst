@@ -39,7 +39,7 @@ Over TCP/IP
 ^^^^^^^^^^^
 
 Select "Protobuf over TCP/IP" as the server's protocol. :func:`~krpc.connect` connects to it, and
-returns a :class:`krpc.client.Client`. You make every call through this object. The following
+returns a :class:`krpc.Connection`. You make every call through this object. The following
 connects to a server with the default settings, address ``127.0.0.1`` and port 50000, and prints
 its version:
 
@@ -57,7 +57,7 @@ Over a Local Socket
 ^^^^^^^^^^^^^^^^^^^
 
 Select "Protobuf over local socket" as the server's protocol. :func:`~krpc.connect_local` connects
-to it, and returns a :class:`krpc.client.Client` as :func:`~krpc.connect` does. The following
+to it, and returns a :class:`krpc.Connection` as :func:`~krpc.connect` does. The following
 connects to a server with the default settings, at the default socket path for your platform, and
 prints its version:
 
@@ -76,7 +76,7 @@ Use the connection in a ``with`` statement to close it at the end of the block:
 
 .. literalinclude:: /scripts/python/Connecting3.py
 
-:meth:`~krpc.client.Client.close` closes a connection explicitly. A connection you do not close stays
+:meth:`~krpc.Connection.close` closes a connection explicitly. A connection you do not close stays
 open until your program exits, even when your program no longer holds it.
 
 Calling Remote Procedures
@@ -184,7 +184,7 @@ Calling Methods
 
 You call a method on an object of its class. A *static* method needs no object, and you call it on
 the class itself. Reach the class through the connection's service. Pass the method to
-:meth:`~krpc.client.Client.add_stream` to stream it:
+:meth:`~krpc.Connection.add_stream` to stream it:
 
 .. literalinclude:: /scripts/python/StaticMethods.py
 
@@ -208,14 +208,14 @@ The following does the same as above using a stream:
 
 .. literalinclude:: /scripts/python/Streaming2.py
 
-:meth:`~krpc.client.Client.add_stream` creates the stream from the method and its arguments, and
+:meth:`~krpc.Connection.add_stream` creates the stream from the method and its arguments, and
 returns a :class:`krpc.stream.Stream`. Calling it returns the stream's latest value.
 
 A property is streamed with ``getattr`` and the property's name:
 
 .. literalinclude:: /scripts/python/Streaming4.py
 
-Each call to :meth:`~krpc.client.Client.add_stream` creates another stream. A stream of a
+Each call to :meth:`~krpc.Connection.add_stream` creates another stream. A stream of a
 procedure with no return value, or of a property setter passed with ``setattr``, runs the call on
 each update for its effects. Its value is ``None``.
 
@@ -311,7 +311,7 @@ side functions guide <server-side-functions>` shows how to build larger function
 Running a Function
 ^^^^^^^^^^^^^^^^^^
 
-:meth:`~krpc.client.Client.run` runs a function once, and returns its value. The server runs the
+:meth:`~krpc.Connection.run` runs a function once, and returns its value. The server runs the
 whole function within one physics tick, so every value it reads comes from the same moment in the
 game. In the example, the altitude and the speed are consistent with each other, which two
 separate calls cannot guarantee.
@@ -319,7 +319,7 @@ separate calls cannot guarantee.
 Streaming a Function
 ^^^^^^^^^^^^^^^^^^^^
 
-Pass a function to :meth:`~krpc.client.Client.add_stream` to stream its value. The server
+Pass a function to :meth:`~krpc.Connection.add_stream` to stream its value. The server
 evaluates the function on each update, within one physics tick. The following streams the
 vessel's altitude in kilometers:
 
@@ -348,7 +348,7 @@ until the vessel's altitude exceeds 1000 meters:
 
 .. literalinclude:: /scripts/python/CompiledEvent.py
 
-:meth:`~krpc.client.Client.add_event` creates the event, and :meth:`~krpc.event.Event.wait` waits
+:meth:`~krpc.Connection.add_event` creates the event, and :meth:`~krpc.event.Event.wait` waits
 for it to fire. The server checks the condition every physics tick, so the event catches a
 condition that holds for only a moment, which a loop of calls can miss.
 
@@ -427,8 +427,8 @@ Writing Server Side Functions
 -----------------------------
 
 The client includes a compiler, which converts a Python function or lambda into a server side
-function automatically when you pass it to :meth:`~krpc.client.Client.run`,
-:meth:`~krpc.client.Client.add_stream` or :meth:`~krpc.client.Client.add_event`. This section
+function automatically when you pass it to :meth:`~krpc.Connection.run`,
+:meth:`~krpc.Connection.add_stream` or :meth:`~krpc.Connection.add_event`. This section
 describes what a function can contain, and how to compile one ahead of time.
 
 Remote Calls and Constants
@@ -456,10 +456,10 @@ when compiling, where you would expect it to run on every evaluation:
 * Reading a stream inside a function, as the stream would be read once.
 * A call to a client side function written as a statement, such as ``time.sleep(1)``. The
   builtins under :ref:`python-client-builtins`, such as ``print``, run on the server instead.
-* A Python function passed to :meth:`~krpc.client.Client.add_event` or
-  :meth:`~krpc.client.Client.add_stream` that makes no remote procedure call and uses no state
+* A Python function passed to :meth:`~krpc.Connection.add_event` or
+  :meth:`~krpc.Connection.add_stream` that makes no remote procedure call and uses no state
   variable, as its value is the same on every update. A function compiled with
-  :meth:`~krpc.client.Client.compile` first is not checked.
+  :meth:`~krpc.Connection.compile` first is not checked.
 
 Operators
 ^^^^^^^^^
@@ -667,23 +667,23 @@ with server side arguments.
 Compiling Ahead of Time
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-Pass a Python function or lambda to :meth:`~krpc.client.Client.compile` to compile it into a server
-side function. :meth:`~krpc.client.Client.add_event`, :meth:`~krpc.client.Client.add_stream` and
-:meth:`~krpc.client.Client.run` take the result, and run it without compiling it again. The
+Pass a Python function or lambda to :meth:`~krpc.Connection.compile` to compile it into a server
+side function. :meth:`~krpc.Connection.add_event`, :meth:`~krpc.Connection.add_stream` and
+:meth:`~krpc.Connection.run` take the result, and run it without compiling it again. The
 following compiles a function once, and runs it every second:
 
 .. literalinclude:: /scripts/python/CompiledFunction.py
 
-Given a Python function or lambda, :meth:`~krpc.client.Client.add_event`,
-:meth:`~krpc.client.Client.add_stream` and :meth:`~krpc.client.Client.run` compile it again on every
+Given a Python function or lambda, :meth:`~krpc.Connection.add_event`,
+:meth:`~krpc.Connection.add_stream` and :meth:`~krpc.Connection.run` compile it again on every
 call, so its captured variables take their current values. A compiled function keeps the values from
 when it was compiled. Compiling makes a remote procedure call per node.
 
-To use a function repeatedly, compile it once with :meth:`~krpc.client.Client.compile` and pass the
-result. :meth:`~krpc.client.Client.compile` also compiles the function on the server, so its first
+To use a function repeatedly, compile it once with :meth:`~krpc.Connection.compile` and pass the
+result. :meth:`~krpc.Connection.compile` also compiles the function on the server, so its first
 run is as fast as later ones.
 
-:meth:`~krpc.client.Client.compile` also works as a decorator, which replaces the function with
+:meth:`~krpc.Connection.compile` also works as a decorator, which replaces the function with
 its compiled form:
 
 .. literalinclude:: /scripts/python/CompileDecorator.py
@@ -694,7 +694,7 @@ its compiled form:
 Parameters
 ^^^^^^^^^^
 
-A ``def`` can take parameters, each with a type annotation. :meth:`~krpc.client.Client.run` passes
+A ``def`` can take parameters, each with a type annotation. :meth:`~krpc.Connection.run` passes
 its arguments to them, with defaults and keyword arguments as in Python:
 
 .. literalinclude:: /scripts/python/CompiledFunctionArguments.py
@@ -703,7 +703,7 @@ its arguments to them, with defaults and keyword arguments as in Python:
    :end-before: [/docs]
 
 Only a ``def`` takes parameters. An event or a function stream runs its function with no arguments.
-Passing :meth:`~krpc.client.Client.add_event` or :meth:`~krpc.client.Client.add_stream` a ``def``
+Passing :meth:`~krpc.Connection.add_event` or :meth:`~krpc.Connection.add_stream` a ``def``
 with parameters raises :class:`krpc.error.FunctionCompilationError`, and a compiled function with
 parameters raises ``StreamError``.
 
@@ -712,7 +712,7 @@ parameters raises ``StreamError``.
 Type Checking
 -------------
 
-:func:`krpc.connect` returns a ``krpc.ksp.KSPClient``, which declares every service the client
+:func:`krpc.connect` returns a ``krpc.ksp.KSPConnection``, which declares every service the client
 ships with for Kerbal Space Program, including ``krpc``. A type checker then knows the type of each
 member:
 
@@ -724,18 +724,18 @@ member:
    vessel = conn.space_center.active_vessel  # Vessel | None
 
 The client builds each service from the definitions the server sends when you connect, so it has
-the procedures of that server. ``krpc.connect[T](...)`` connects with the client type ``T`` in
-place of ``KSPClient``.
+the procedures of that server. ``krpc.connect[T](...)`` connects with the connection type ``T`` in
+place of ``KSPConnection``.
 
-Each service's module, such as ``krpc.ksp.spacecenter``, declares a client type with only that
-service, such as ``SpaceCenterClient``. A function can take the client type of the services it
-uses:
+Each service's module, such as ``krpc.ksp.spacecenter``, declares a connection type with only that
+service, such as ``SpaceCenterConnection``. A function can take the connection type of the services
+it uses:
 
 .. code-block:: python
 
-   from krpc.ksp.spacecenter import SpaceCenterClient
+   from krpc.ksp.spacecenter import SpaceCenterConnection
 
-   def stage(conn: SpaceCenterClient) -> None:
+   def stage(conn: SpaceCenterConnection) -> None:
        vessel = conn.space_center.active_vessel
        if vessel is not None:
            vessel.control.activate_next_stage()
@@ -770,29 +770,29 @@ type with the others you use:
 .. code-block:: python
 
    import krpc
-   from krpc.ksp import KSPClient
-   from mymod_services import MyModClient
+   from krpc.ksp import KSPConnection
+   from mymod_services import MyModConnection
 
-   class Connection(KSPClient, MyModClient):
+   class MyConnection(KSPConnection, MyModConnection):
        pass
 
-   conn = krpc.connect[Connection]()
+   conn = krpc.connect[MyConnection]()
    conn.my_mod.get_mode()
 
 A module generated for a newer server replaces the shipped module of the same service. Combine its
-client type with those of the other services you use, as it cannot combine with ``KSPClient``,
-which has the shipped one:
+connection type with those of the other services you use, as it cannot combine with
+``KSPConnection``, which has the shipped one:
 
 .. code-block:: python
 
-   from krpc.ksp.spacecenter import SpaceCenterClient
-   from newer_services.ui import UIClient
+   from krpc.ksp.spacecenter import SpaceCenterConnection
+   from newer_services.ui import UIConnection
 
-   class Connection(UIClient, SpaceCenterClient):
+   class MyConnection(UIConnection, SpaceCenterConnection):
        pass
 
-A client uses the enumerations, structures and exceptions of the modules its client type names,
-where the server's definitions match them. For a service its client type does not name, it uses
+A client uses the enumerations, structures and exceptions of the modules its connection type names,
+where the server's definitions match them. For a service its connection type does not name, it uses
 those of the module imported last.
 
 .. _python-client-reference:
@@ -802,8 +802,8 @@ Client API Reference
 
 .. function:: krpc.connect([name=None], [address='127.0.0.1'], [port=50000], [timeout=None], [handshake_timeout=5], [stall_timeout=30])
 
-   Connects to a kRPC server, and returns a ``krpc.ksp.KSPClient``. ``krpc.connect[T](...)``
-   returns a client of the client type ``T``, as in :ref:`python-type-checking`.
+   Connects to a kRPC server, and returns a ``krpc.ksp.KSPConnection``. ``krpc.connect[T](...)``
+   returns a connection of the connection type ``T``, as in :ref:`python-type-checking`.
 
    :param str name: A name for the connection, shown in the server window in the game.
    :param str address: The address of the server, as a host name or an IP address. Defaults to
@@ -825,8 +825,8 @@ Client API Reference
 .. function:: krpc.connect_local([name=None], [path], [handshake_timeout=5], [stall_timeout=30])
 
    Connects to a kRPC server on the same machine over a local socket, and returns a
-   ``krpc.ksp.KSPClient``. The server must use the local socket protocol.
-   ``krpc.connect_local[T](...)`` returns a client of type ``T``, as for :func:`krpc.connect`.
+   ``krpc.ksp.KSPConnection``. The server must use the local socket protocol.
+   ``krpc.connect_local[T](...)`` returns a connection of type ``T``, as for :func:`krpc.connect`.
 
    A script that makes many calls in quick succession completes more of them per physics update
    than over TCP/IP. A script that makes a call and then waits runs at the game's update rate
@@ -851,7 +851,7 @@ Client API Reference
    :param obj: The remote object.
    :rtype: int
 
-.. class:: krpc.client.Client
+.. class:: krpc.Connection
 
    A connection to the server, with an attribute for each of the server's services. Obtain one
    by calling :func:`krpc.connect`. It can be used in a ``with`` statement, which closes it at the

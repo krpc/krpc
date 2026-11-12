@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import Tuple, Set, Dict, List, NamedTuple, Optional, TYPE_CHECKING
-import krpc.client
+import krpc.connection
 import krpc.limits
 from krpc.declarations import DeclaredClass, DeclaredObject, declaration_error as _declaration, register as _register
 from krpc.event import Event
@@ -37,10 +37,10 @@ class ServiceA(metaclass=DeclaredClass):
         raise _declaration("ServiceA", None)
 
 
-class ServiceAClient(krpc.client.Client):
+class ServiceAConnection(krpc.connection.Connection):
     """
-    A client with the ServiceA service, as ``krpc.connect[ServiceAClient]()``
-    connects. Combine it with the client types of other services in a subclass of them all.
+    A connection with the ServiceA service, as ``krpc.connect[ServiceAConnection]()``
+    connects. Combine it with the connection types of other services in a subclass of them all.
     """
 
     _declares_service = "ServiceA"

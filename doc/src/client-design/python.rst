@@ -8,7 +8,7 @@ the :doc:`Python guide </python>`. Paths are relative to ``client/python/``.
 Ownership
 ---------
 
-Services, objects and streams hold the ``Client`` strongly. Letting go of them closes nothing:
+Services, objects and streams hold the ``Connection`` strongly. Letting go of them closes nothing:
 
 .. code-block:: python
 
@@ -24,11 +24,11 @@ The client holds its ``Transport``, ``Session``, ``StreamManager``, ``Types`` re
 services.
 
 The objects the program keeps also hold the client. A ``Service``, ``Object`` or ``StreamImpl``
-holds the ``Client``, and a ``Stream`` holds its ``StreamImpl``.
+holds the ``Connection``, and a ``Stream`` holds its ``StreamImpl``.
 
-The threads keep the client alive. The reader and dispatcher threads hold the ``Session``, which
-holds the ``StreamManager``, which holds the ``Client``. An unclosed client is therefore never
-collected. The threads end on a close or a connection failure.
+The threads keep the connection alive. The reader and dispatcher threads hold the ``Session``, which
+holds the ``StreamManager``, which holds the ``Connection``. An unclosed connection is therefore
+never collected. The threads end on a close or a connection failure.
 
 The stream manager holds each open ``StreamImpl`` strongly, so a stream outlives its handles and its
 callbacks keep running. It holds every registered ``StreamImpl`` weakly, which keeps nothing alive.
@@ -45,8 +45,8 @@ Lifetime
   closes the socket.
 * After ``close()``, the client and its objects stay valid. Calls raise ``ConnectionError``, and
   streams and events end. A second ``close()`` has no further effect.
-* Lifetime is explicit. ``Client``, objects, ``Stream`` and ``Event`` have no finalizer. An object
-  is an id and a client, and sends no release to the server.
+* Lifetime is explicit. ``Connection``, objects, ``Stream`` and ``Event`` have no finalizer. An
+  object is an id and a client, and sends no release to the server.
 * ``Stream`` and ``Event`` are handles to one ``StreamImpl``, which runs until a ``remove()``
   through any handle, a server ending or the close. Both are context managers, whose exit calls
   ``remove()``. An exception from ``remove()`` is dropped when the block raised one.
@@ -90,8 +90,8 @@ Each client has its own classes, in its ``Types``, so a static method is a closu
   on its names and values, a structure on its field names in order, an exception on its name and
   the builtin it derives from. These classes hold no client, so every client shares them. A
   generated class is never changed to fit a server, as every client shares it.
-* The client type picks the module of each service it declares, from the ``<Service>Client`` bases
-  in its MRO, and the first wins. Any other service takes the registered classes. A module
+* The connection type picks the module of each service it declares, from the ``<Service>Connection``
+  bases in its MRO, and the first wins. Any other service takes the registered classes. A module
   generated for a newer server then applies only to the connections typed with it.
 * Otherwise the client builds its own class. A value of the module's enumeration converts to the
   built one by its number, as the other clients send it, since a client and a server of different
@@ -101,18 +101,18 @@ Each client has its own classes, in its ``Types``, so a static method is a closu
 * A built class does not derive from its declaration, which would show members a server lacks.
   ``DeclaredClass``, the metaclass of a declaration, compares the service and class names for
   ``isinstance`` and ``issubclass``.
-* Python has no declaration merging, so a module cannot add its service to ``Client``. It declares
-  ``<Service>Client``, a subclass of ``Client`` with the service as an attribute. A program combines
-  them, and ``connect[T]`` builds the client as ``T``. ``krpc.ksp.KSPClient`` combines the core
-  and KSP services.
-* ``Client`` declares no service, only a ``__getattr__`` returning ``Any`` for type checkers. The
-  core services, ``KRPC`` and ``StdLib``, have client types like the others, so a module generated
-  for a newer server replaces them the same way. A program with a client type that lacks a service
-  then type checks, and a misspelled service is not reported.
-* The client's own calls to ``KRPC`` go through ``Client._krpc``, a property typed with the shipped
-  declaration.
-* ``connect`` with no client type connects with ``KSPClient``, so a program written for KSP type
-  checks with no client type. It imports ``krpc.ksp`` on the first connect, which keeps
+* Python has no declaration merging, so a module cannot add its service to ``Connection``. It
+  declares ``<Service>Connection``, a subclass of ``Connection`` with the service as an attribute. A
+  program combines them, and ``connect[T]`` builds the connection as ``T``.
+  ``krpc.ksp.KSPConnection`` combines the core and KSP services.
+* ``Connection`` declares no service, only a ``__getattr__`` returning ``Any`` for type checkers.
+  The core services, ``KRPC`` and ``StdLib``, have connection types like the others, so a module
+  generated for a newer server replaces them the same way. A program with a connection type that
+  lacks a service then type checks, and a misspelled service is not reported.
+* The client's own calls to ``KRPC`` go through ``Connection._krpc``, a property typed with the
+  shipped declaration.
+* ``connect`` with no connection type connects with ``KSPConnection``, so a program written for KSP
+  type checks with no connection type. It imports ``krpc.ksp`` on the first connect, which keeps
   ``import krpc`` free of generated modules.
 
 Deprecated Members
@@ -164,7 +164,7 @@ Mapping the Spec to Python
    * - Spec
      - Python
    * - Closing a connection
-     - ``Client.close()``, or the end of a ``with`` block
+     - ``Connection.close()``, or the end of a ``with`` block
    * - Connection, stream, encoding error
      - ``ConnectionError``, ``StreamError``, ``EncodingError`` in ``krpc.error``
    * - Server error with no mapped type
