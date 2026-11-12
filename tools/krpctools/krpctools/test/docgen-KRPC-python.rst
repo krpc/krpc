@@ -311,7 +311,7 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
    .. staticmethod:: break_()
 
-      A break statement, which ends the enclosing loop.
+      A break statement, which ends the enclosing loop or :meth:`Expression.switch`.
 
       :rtype: :class:`Expression`
    
@@ -996,6 +996,21 @@ Main kRPC service, used by clients to interact with basic server functionality.
       :rtype: :class:`Expression`
    
 
+   .. staticmethod:: match(value, cases, bodies)
+
+      A match statement, which evaluates the first matching case.
+
+      :param Expression value: The value to match.
+      :param list cases: The test values of each case.
+      :param list bodies: The statement of each case.
+      :rtype: :class:`Expression`
+   
+
+      .. note::
+
+         Test values compare as for :meth:`Expression.equal`, and a case with none is the default.
+         A :meth:`Expression.break_` in a body ends the enclosing loop.
+
    .. staticmethod:: max(arg)
 
       The largest value of a collection.
@@ -1513,6 +1528,21 @@ Main kRPC service, used by clients to interact with basic server functionality.
       :returns: The sum of the elements in the collection.
       :rtype: :class:`Expression`
    
+
+   .. staticmethod:: switch(value, cases, bodies)
+
+      A switch statement, which evaluates from the first matching case on.
+
+      :param Expression value: The value to match.
+      :param list cases: The test values of each case.
+      :param list bodies: The statement of each case.
+      :rtype: :class:`Expression`
+   
+
+      .. note::
+
+         Test values compare as for :meth:`Expression.equal`, and a case with none is the default.
+         A :meth:`Expression.break_` in a body ends the switch.
 
    .. staticmethod:: take(arg, count)
 

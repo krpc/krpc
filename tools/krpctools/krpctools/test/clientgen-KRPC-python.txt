@@ -546,7 +546,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
     @staticmethod
     def break_() -> Expression:
         """
-        A break statement, which ends the enclosing loop.
+        A break statement, which ends the enclosing loop or :meth:`krpc.services.krpc.Expression.switch`.
         """
         raise _declaration("KRPC", "Expression")
 
@@ -1289,6 +1289,22 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         raise _declaration("KRPC", "Expression")
 
     @staticmethod
+    def match(value: Expression, cases: List[List[Expression]], bodies: List[Expression]) -> Expression:
+        """
+        A match statement, which evaluates the first matching case.
+
+        Test values compare as for :meth:`krpc.services.krpc.Expression.equal`, and a case with none is the default.
+        A :meth:`krpc.services.krpc.Expression.break_` in a body ends the enclosing loop.
+
+        :param value: The value to match.
+
+        :param cases: The test values of each case.
+
+        :param bodies: The statement of each case.
+        """
+        raise _declaration("KRPC", "Expression")
+
+    @staticmethod
     def max(arg: Expression) -> Expression:
         """
         The largest value of a collection.
@@ -1836,6 +1852,22 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         :returns: The sum of the elements in the collection.
 
         :param arg: The list or set.
+        """
+        raise _declaration("KRPC", "Expression")
+
+    @staticmethod
+    def switch(value: Expression, cases: List[List[Expression]], bodies: List[Expression]) -> Expression:
+        """
+        A switch statement, which evaluates from the first matching case on.
+
+        Test values compare as for :meth:`krpc.services.krpc.Expression.equal`, and a case with none is the default.
+        A :meth:`krpc.services.krpc.Expression.break_` in a body ends the switch.
+
+        :param value: The value to match.
+
+        :param cases: The test values of each case.
+
+        :param bodies: The statement of each case.
         """
         raise _declaration("KRPC", "Expression")
 

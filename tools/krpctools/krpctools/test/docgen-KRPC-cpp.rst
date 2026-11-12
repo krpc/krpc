@@ -302,7 +302,7 @@
 
    .. function:: static Expression break_(krpc::Connection& connection)
 
-      A break statement, which ends the enclosing loop.
+      A break statement, which ends the enclosing loop or :func:`Expression::switch_`.
 
 
    
@@ -1101,6 +1101,23 @@
 
    
 
+   .. function:: static Expression match(krpc::Connection& connection, Expression value, std::vector<std::vector<Expression>> cases, std::vector<Expression> bodies)
+
+      A match statement, which evaluates the first matching case.
+
+      :Parameters:
+
+       * **value** -- The value to match.
+       * **cases** -- The test values of each case.
+       * **bodies** -- The statement of each case.
+
+   
+
+      .. note::
+
+         Test values compare as for :func:`Expression::equal`, and a case with none is the default.
+         A :func:`Expression::break_` in a body ends the enclosing loop.
+
    .. function:: static Expression max(krpc::Connection& connection, Expression arg)
 
       The largest value of a collection.
@@ -1696,6 +1713,23 @@
 
       :returns: The sum of the elements in the collection.
    
+
+   .. function:: static Expression switch_(krpc::Connection& connection, Expression value, std::vector<std::vector<Expression>> cases, std::vector<Expression> bodies)
+
+      A switch statement, which evaluates from the first matching case on.
+
+      :Parameters:
+
+       * **value** -- The value to match.
+       * **cases** -- The test values of each case.
+       * **bodies** -- The statement of each case.
+
+   
+
+      .. note::
+
+         Test values compare as for :func:`Expression::equal`, and a case with none is the default.
+         A :func:`Expression::break_` in a body ends the switch.
 
    .. function:: static Expression take(krpc::Connection& connection, Expression arg, Expression count)
 

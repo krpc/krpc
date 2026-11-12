@@ -1507,7 +1507,7 @@ public class KRPC extends RemoteService {
         }
 
         /**
-         * A break statement, which ends the enclosing loop.
+         * A break statement, which ends the enclosing loop or {@link KRPC.Expression#switch_}.
          */
         @SuppressWarnings({ "unchecked" })
         @RPCInfo(service = "KRPC", procedure = "Expression_static_Break", types = _Types.class)
@@ -2581,6 +2581,28 @@ public class KRPC extends RemoteService {
         }
 
         /**
+         * A match statement, which evaluates the first matching case.
+         *
+         * Test values compare as for {@link KRPC.Expression#equal}, and a case with none is the default.
+         * A {@link KRPC.Expression#break_} in a body ends the enclosing loop.
+         * @param value The value to match.
+         * @param cases The test values of each case.
+         * @param bodies The statement of each case.
+         */
+        @SuppressWarnings({ "unchecked" })
+        @RPCInfo(service = "KRPC", procedure = "Expression_static_Match", types = _Types.class)
+        public static krpc.client.services.KRPC.Expression match(Connection connection, krpc.client.services.KRPC.Expression value, java.util.List<java.util.List<krpc.client.services.KRPC.Expression>> cases, java.util.List<krpc.client.services.KRPC.Expression> bodies)
+        {
+            ByteString[] _args = new ByteString[] {
+                Encoder.encode(value, krpc.client.Types.createClass("KRPC", "Expression")),
+                Encoder.encode(cases, krpc.client.Types.createList(krpc.client.Types.createList(krpc.client.Types.createClass("KRPC", "Expression")))),
+                Encoder.encode(bodies, krpc.client.Types.createList(krpc.client.Types.createClass("KRPC", "Expression")))
+            };
+            krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Match", _args);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+        }
+
+        /**
          * The largest value of a collection.
          *
          * Throws an exception if the collection is empty and its values are not nullable.
@@ -3351,6 +3373,28 @@ public class KRPC extends RemoteService {
         }
 
         /**
+         * A switch statement, which evaluates from the first matching case on.
+         *
+         * Test values compare as for {@link KRPC.Expression#equal}, and a case with none is the default.
+         * A {@link KRPC.Expression#break_} in a body ends the switch.
+         * @param value The value to match.
+         * @param cases The test values of each case.
+         * @param bodies The statement of each case.
+         */
+        @SuppressWarnings({ "unchecked" })
+        @RPCInfo(service = "KRPC", procedure = "Expression_static_Switch", types = _Types.class)
+        public static krpc.client.services.KRPC.Expression switch_(Connection connection, krpc.client.services.KRPC.Expression value, java.util.List<java.util.List<krpc.client.services.KRPC.Expression>> cases, java.util.List<krpc.client.services.KRPC.Expression> bodies)
+        {
+            ByteString[] _args = new ByteString[] {
+                Encoder.encode(value, krpc.client.Types.createClass("KRPC", "Expression")),
+                Encoder.encode(cases, krpc.client.Types.createList(krpc.client.Types.createList(krpc.client.Types.createClass("KRPC", "Expression")))),
+                Encoder.encode(bodies, krpc.client.Types.createList(krpc.client.Types.createClass("KRPC", "Expression")))
+            };
+            krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Switch", _args);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+        }
+
+        /**
          * The first count values of a collection.
          *
          * The result is lazily evaluated. {@link KRPC.Expression#toList} makes it concrete.
@@ -3757,7 +3801,7 @@ public class KRPC extends RemoteService {
             }
 
             /**
-             * A break statement, which ends the enclosing loop.
+             * A break statement, which ends the enclosing loop or {@link KRPC.Expression#switch_}.
              */
             @RPCInfo(service = "KRPC", procedure = "Expression_static_Break", types = _Types.class)
             public krpc.client.services.KRPC.Expression break_()
@@ -4500,6 +4544,21 @@ public class KRPC extends RemoteService {
             }
 
             /**
+             * A match statement, which evaluates the first matching case.
+             *
+             * Test values compare as for {@link KRPC.Expression#equal}, and a case with none is the default.
+             * A {@link KRPC.Expression#break_} in a body ends the enclosing loop.
+             * @param value The value to match.
+             * @param cases The test values of each case.
+             * @param bodies The statement of each case.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Match", types = _Types.class)
+            public krpc.client.services.KRPC.Expression match(krpc.client.services.KRPC.Expression value, java.util.List<java.util.List<krpc.client.services.KRPC.Expression>> cases, java.util.List<krpc.client.services.KRPC.Expression> bodies)
+            {
+                return krpc.client.services.KRPC.Expression.match(connection, value, cases, bodies);
+            }
+
+            /**
              * The largest value of a collection.
              *
              * Throws an exception if the collection is empty and its values are not nullable.
@@ -5030,6 +5089,21 @@ public class KRPC extends RemoteService {
             public krpc.client.services.KRPC.Expression sum(krpc.client.services.KRPC.Expression arg)
             {
                 return krpc.client.services.KRPC.Expression.sum(connection, arg);
+            }
+
+            /**
+             * A switch statement, which evaluates from the first matching case on.
+             *
+             * Test values compare as for {@link KRPC.Expression#equal}, and a case with none is the default.
+             * A {@link KRPC.Expression#break_} in a body ends the switch.
+             * @param value The value to match.
+             * @param cases The test values of each case.
+             * @param bodies The statement of each case.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_Switch", types = _Types.class)
+            public krpc.client.services.KRPC.Expression switch_(krpc.client.services.KRPC.Expression value, java.util.List<java.util.List<krpc.client.services.KRPC.Expression>> cases, java.util.List<krpc.client.services.KRPC.Expression> bodies)
+            {
+                return krpc.client.services.KRPC.Expression.switch_(connection, value, cases, bodies);
             }
 
             /**
@@ -5901,6 +5975,8 @@ public class KRPC extends RemoteService {
             PARAMETER_TYPES.put("Expression_static_LessThan", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createClass("KRPC", "Expression") });
             RETURN_TYPES.put("Expression_static_LessThanOrEqual", krpc.client.Types.createClass("KRPC", "Expression"));
             PARAMETER_TYPES.put("Expression_static_LessThanOrEqual", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createClass("KRPC", "Expression") });
+            RETURN_TYPES.put("Expression_static_Match", krpc.client.Types.createClass("KRPC", "Expression"));
+            PARAMETER_TYPES.put("Expression_static_Match", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createList(krpc.client.Types.createList(krpc.client.Types.createClass("KRPC", "Expression"))), krpc.client.Types.createList(krpc.client.Types.createClass("KRPC", "Expression")) });
             RETURN_TYPES.put("Expression_static_Max", krpc.client.Types.createClass("KRPC", "Expression"));
             PARAMETER_TYPES.put("Expression_static_Max", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression") });
             RETURN_TYPES.put("Expression_static_MaxBy", krpc.client.Types.createClass("KRPC", "Expression"));
@@ -5925,11 +6001,11 @@ public class KRPC extends RemoteService {
             PARAMETER_TYPES.put("Expression_static_OrderBy", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createClass("KRPC", "Expression") });
             RETURN_TYPES.put("Expression_static_Parameter", krpc.client.Types.createClass("KRPC", "Expression"));
             PARAMETER_TYPES.put("Expression_static_Parameter", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createClass("KRPC", "Type") });
-            RETURN_TYPES.put("Expression_static_Power", krpc.client.Types.createClass("KRPC", "Expression"));
-            PARAMETER_TYPES.put("Expression_static_Power", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createClass("KRPC", "Expression") });
         }
 
         private static void initTypes2() {
+            RETURN_TYPES.put("Expression_static_Power", krpc.client.Types.createClass("KRPC", "Expression"));
+            PARAMETER_TYPES.put("Expression_static_Power", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createClass("KRPC", "Expression") });
             RETURN_TYPES.put("Expression_static_Remove", krpc.client.Types.createClass("KRPC", "Expression"));
             PARAMETER_TYPES.put("Expression_static_Remove", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createClass("KRPC", "Expression") });
             RETURN_TYPES.put("Expression_static_RemoveAt", krpc.client.Types.createClass("KRPC", "Expression"));
@@ -5988,6 +6064,8 @@ public class KRPC extends RemoteService {
             PARAMETER_TYPES.put("Expression_static_Subtract", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createClass("KRPC", "Expression") });
             RETURN_TYPES.put("Expression_static_Sum", krpc.client.Types.createClass("KRPC", "Expression"));
             PARAMETER_TYPES.put("Expression_static_Sum", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression") });
+            RETURN_TYPES.put("Expression_static_Switch", krpc.client.Types.createClass("KRPC", "Expression"));
+            PARAMETER_TYPES.put("Expression_static_Switch", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createList(krpc.client.Types.createList(krpc.client.Types.createClass("KRPC", "Expression"))), krpc.client.Types.createList(krpc.client.Types.createClass("KRPC", "Expression")) });
             RETURN_TYPES.put("Expression_static_Take", krpc.client.Types.createClass("KRPC", "Expression"));
             PARAMETER_TYPES.put("Expression_static_Take", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createClass("KRPC", "Expression") });
             RETURN_TYPES.put("Expression_static_Throw", krpc.client.Types.createClass("KRPC", "Expression"));
@@ -6026,13 +6104,13 @@ public class KRPC extends RemoteService {
             PARAMETER_TYPES.put("Type_static_Bool", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("Type_static_Bytes", krpc.client.Types.createClass("KRPC", "Type"));
             PARAMETER_TYPES.put("Type_static_Bytes", new krpc.schema.KRPC.Type[] {  });
+        }
+
+        private static void initTypes3() {
             RETURN_TYPES.put("Type_static_ClassType", krpc.client.Types.createClass("KRPC", "Type"));
             PARAMETER_TYPES.put("Type_static_ClassType", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
             RETURN_TYPES.put("Type_static_DictionaryType", krpc.client.Types.createClass("KRPC", "Type"));
             PARAMETER_TYPES.put("Type_static_DictionaryType", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Type"), krpc.client.Types.createClass("KRPC", "Type") });
-        }
-
-        private static void initTypes3() {
             RETURN_TYPES.put("Type_static_Double", krpc.client.Types.createClass("KRPC", "Type"));
             PARAMETER_TYPES.put("Type_static_Double", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("Type_static_EnumerationType", krpc.client.Types.createClass("KRPC", "Type"));

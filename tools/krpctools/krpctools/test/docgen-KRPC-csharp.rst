@@ -305,7 +305,7 @@
 
    .. function:: static Expression Break(IConnection connection)
 
-      A break statement, which ends the enclosing loop.
+      A break statement, which ends the enclosing loop or :meth:`Expression.Switch`.
 
 
       :Game Scenes: All
@@ -1131,6 +1131,24 @@
 
       :Game Scenes: All
 
+   .. function:: static Expression Match(IConnection connection, Expression value, System.Collections.Generic.IList<System.Collections.Generic.IList<Expression>> cases, System.Collections.Generic.IList<Expression> bodies)
+
+      A match statement, which evaluates the first matching case.
+
+      :parameters:
+
+       * **value** -- The value to match.
+       * **cases** -- The test values of each case.
+       * **bodies** -- The statement of each case.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Test values compare as for :meth:`Expression.Equal`, and a case with none is the default.
+         A :meth:`Expression.Break` in a body ends the enclosing loop.
+
    .. function:: static Expression Max(IConnection connection, Expression arg)
 
       The largest value of a collection.
@@ -1750,6 +1768,24 @@
 
       :returns: The sum of the elements in the collection.
       :Game Scenes: All
+
+   .. function:: static Expression Switch(IConnection connection, Expression value, System.Collections.Generic.IList<System.Collections.Generic.IList<Expression>> cases, System.Collections.Generic.IList<Expression> bodies)
+
+      A switch statement, which evaluates from the first matching case on.
+
+      :parameters:
+
+       * **value** -- The value to match.
+       * **cases** -- The test values of each case.
+       * **bodies** -- The statement of each case.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Test values compare as for :meth:`Expression.Equal`, and a case with none is the default.
+         A :meth:`Expression.Break` in a body ends the switch.
 
    .. function:: static Expression Take(IConnection connection, Expression arg, Expression count)
 

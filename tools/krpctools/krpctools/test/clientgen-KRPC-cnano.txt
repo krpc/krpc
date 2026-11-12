@@ -201,6 +201,46 @@ static inline krpc_error_t krpc_decode_list_KRPC_ClientInfo(
 
 #endif  // KRPC_TYPE_LIST_KRPC_CLIENTINFO
 
+#ifndef KRPC_TYPE_LIST_OBJECT
+#define KRPC_TYPE_LIST_OBJECT
+
+typedef struct krpc_list_object_s krpc_list_object_t;
+struct krpc_list_object_s {
+  size_t size;
+  krpc_object_t * items;
+};
+
+static inline krpc_error_t krpc_encode_list_object(
+  pb_ostream_t * stream, const krpc_list_object_t * value);
+static inline krpc_error_t krpc_encode_size_list_object(
+  size_t * size, const krpc_list_object_t * value);
+static inline bool krpc_encode_callback_list_object(
+  pb_ostream_t * stream, const pb_field_t * field, void * const * arg);
+static inline krpc_error_t krpc_decode_list_object(
+  pb_istream_t * stream, krpc_list_object_t * value);
+
+#endif  // KRPC_TYPE_LIST_OBJECT
+
+#ifndef KRPC_TYPE_LIST_LIST_OBJECT
+#define KRPC_TYPE_LIST_LIST_OBJECT
+
+typedef struct krpc_list_list_object_s krpc_list_list_object_t;
+struct krpc_list_list_object_s {
+  size_t size;
+  krpc_list_object_t * items;
+};
+
+static inline krpc_error_t krpc_encode_list_list_object(
+  pb_ostream_t * stream, const krpc_list_list_object_t * value);
+static inline krpc_error_t krpc_encode_size_list_list_object(
+  size_t * size, const krpc_list_list_object_t * value);
+static inline bool krpc_encode_callback_list_list_object(
+  pb_ostream_t * stream, const pb_field_t * field, void * const * arg);
+static inline krpc_error_t krpc_decode_list_list_object(
+  pb_istream_t * stream, krpc_list_list_object_t * value);
+
+#endif  // KRPC_TYPE_LIST_LIST_OBJECT
+
 #ifndef KRPC_TYPE_NULLABLE_BYTES
 #define KRPC_TYPE_NULLABLE_BYTES
 
@@ -240,26 +280,6 @@ static inline krpc_error_t krpc_decode_list_nullable_bytes(
   pb_istream_t * stream, krpc_list_nullable_bytes_t * value);
 
 #endif  // KRPC_TYPE_LIST_NULLABLE_BYTES
-
-#ifndef KRPC_TYPE_LIST_OBJECT
-#define KRPC_TYPE_LIST_OBJECT
-
-typedef struct krpc_list_object_s krpc_list_object_t;
-struct krpc_list_object_s {
-  size_t size;
-  krpc_object_t * items;
-};
-
-static inline krpc_error_t krpc_encode_list_object(
-  pb_ostream_t * stream, const krpc_list_object_t * value);
-static inline krpc_error_t krpc_encode_size_list_object(
-  size_t * size, const krpc_list_object_t * value);
-static inline bool krpc_encode_callback_list_object(
-  pb_ostream_t * stream, const pb_field_t * field, void * const * arg);
-static inline krpc_error_t krpc_decode_list_object(
-  pb_istream_t * stream, krpc_list_object_t * value);
-
-#endif  // KRPC_TYPE_LIST_OBJECT
 
 #ifndef KRPC_TYPE_SET_OBJECT
 #define KRPC_TYPE_SET_OBJECT
@@ -865,7 +885,7 @@ static inline krpc_error_t krpc_KRPC_Expression_BlockWithVariables(krpc_connecti
 static inline krpc_error_t krpc_KRPC_Expression_BlockWithVariables_call(krpc_schema_ProcedureCall * procedureCall, const krpc_list_object_t * variables, const krpc_list_object_t * statements);
 
 /**
- * A break statement, which ends the enclosing loop.
+ * A break statement, which ends the enclosing loop or krpc_KRPC_Expression_Switch().
  */
 static inline krpc_error_t krpc_KRPC_Expression_Break(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue);
 
@@ -1817,6 +1837,25 @@ static inline krpc_error_t krpc_KRPC_Expression_LessThanOrEqual(krpc_connection_
 static inline krpc_error_t krpc_KRPC_Expression_LessThanOrEqual_call(krpc_schema_ProcedureCall * procedureCall, krpc_KRPC_Expression_t arg0, krpc_KRPC_Expression_t arg1);
 
 /**
+ * A match statement, which evaluates the first matching case.
+ *
+ * Test values compare as for krpc_KRPC_Expression_Equal(), and a case with none is the default.
+ * A krpc_KRPC_Expression_Break() in a body ends the enclosing loop.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
+ * @param value The value to match.
+ * @param cases The test values of each case.
+ * @param bodies The statement of each case.
+ */
+static inline krpc_error_t krpc_KRPC_Expression_Match(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t value, const krpc_list_list_object_t * cases, const krpc_list_object_t * bodies);
+
+/**
+ * Fills in the call krpc_KRPC_Expression_Match() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_KRPC_Expression_Match_call(krpc_schema_ProcedureCall * procedureCall, krpc_KRPC_Expression_t value, const krpc_list_list_object_t * cases, const krpc_list_object_t * bodies);
+
+/**
  * The largest value of a collection.
  *
  * Throws an exception if the collection is empty and its values are not nullable.
@@ -2483,6 +2522,25 @@ static inline krpc_error_t krpc_KRPC_Expression_Sum(krpc_connection_t connection
  * krpc_free_procedure_call().
  */
 static inline krpc_error_t krpc_KRPC_Expression_Sum_call(krpc_schema_ProcedureCall * procedureCall, krpc_KRPC_Expression_t arg);
+
+/**
+ * A switch statement, which evaluates from the first matching case on.
+ *
+ * Test values compare as for krpc_KRPC_Expression_Equal(), and a case with none is the default.
+ * A krpc_KRPC_Expression_Break() in a body ends the switch.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
+ * @param value The value to match.
+ * @param cases The test values of each case.
+ * @param bodies The statement of each case.
+ */
+static inline krpc_error_t krpc_KRPC_Expression_Switch(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t value, const krpc_list_list_object_t * cases, const krpc_list_object_t * bodies);
+
+/**
+ * Fills in the call krpc_KRPC_Expression_Switch() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_KRPC_Expression_Switch_call(krpc_schema_ProcedureCall * procedureCall, krpc_KRPC_Expression_t value, const krpc_list_list_object_t * cases, const krpc_list_object_t * bodies);
 
 /**
  * The first count values of a collection.
@@ -3991,6 +4049,168 @@ static inline krpc_error_t krpc_decode_list_KRPC_ClientInfo(
 
 #endif  // KRPC_IMPL_TYPE_LIST_KRPC_CLIENTINFO
 
+#ifndef KRPC_IMPL_TYPE_LIST_OBJECT
+#define KRPC_IMPL_TYPE_LIST_OBJECT
+
+static inline bool krpc_encode_callback_items_list_object(
+  pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
+  const krpc_list_object_t * value = (const krpc_list_object_t*)(*arg);
+  size_t i = 0;
+  for (; i < value->size; i++) {
+    if (!pb_encode_tag_for_field(stream, field))
+      KRPC_CALLBACK_RETURN_ERROR("encoding tag for list item");
+    size_t size;
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_object(&size, value->items[i]));
+    if (!pb_encode_varint(stream, size))
+      KRPC_CALLBACK_RETURN_ERROR("encoding size for list item");
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_object(stream, value->items[i]));
+  }
+  return true;
+}
+
+static inline krpc_error_t krpc_encode_list_object(
+  pb_ostream_t * stream, const krpc_list_object_t * value) {
+  krpc_schema_List message = krpc_schema_List_init_default;
+  message.items.funcs.encode = &krpc_encode_callback_items_list_object;
+  message.items.arg = (krpc_list_object_t*)value;
+  KRPC_RETURN_ON_ERROR(krpc_encode_message_List(stream, &message));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_encode_size_list_object(
+  size_t * size, const krpc_list_object_t * value) {
+  pb_ostream_t stream = PB_OSTREAM_SIZING;
+  KRPC_RETURN_ON_ERROR(krpc_encode_list_object(&stream, value));
+  *size = stream.bytes_written;
+  return KRPC_OK;
+}
+
+static inline bool krpc_encode_callback_list_object(
+  pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
+  if (!pb_encode_tag_for_field(stream, field))
+    KRPC_CALLBACK_RETURN_ERROR("encoding tag for list_object");
+  krpc_list_object_t * value = (krpc_list_object_t*)(*arg);
+  size_t size;
+  KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_list_object(&size, value));
+  if (!pb_encode_varint(stream, size))
+    KRPC_CALLBACK_RETURN_ERROR("encoding size for list_object");
+  KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_list_object(stream, value));
+  return true;
+}
+
+static inline bool krpc_decode_callback_item_list_object(
+  pb_istream_t * stream, const pb_field_t * field, void ** arg) {
+  typedef struct State { size_t capacity; krpc_list_object_t * value; } State;
+  State * state = (State*)(*arg);
+  size_t i = state->value->size;
+  state->value->size++;
+  if (state->capacity > 0 && state->value->size > state->capacity) {
+    state->value->items = (krpc_object_t*)krpc_recalloc(state->value->items, state->capacity, KRPC_ALLOC_BLOCK_SIZE, sizeof(krpc_object_t));
+    state->capacity += KRPC_ALLOC_BLOCK_SIZE;
+  }
+  KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_object(stream, &state->value->items[i]));
+  return true;
+}
+
+static inline krpc_error_t krpc_decode_list_object(
+  pb_istream_t * stream, krpc_list_object_t * value) {
+  typedef struct State { size_t capacity; krpc_list_object_t * value; } State;
+  State state = { 0, value };
+  value->size = 0;
+  if (value->items == NULL) {
+    value->items = (krpc_object_t*)krpc_calloc(KRPC_ALLOC_BLOCK_SIZE, sizeof(krpc_object_t));
+    state.capacity = KRPC_ALLOC_BLOCK_SIZE;
+  }
+  krpc_schema_List message = krpc_schema_List_init_default;
+  message.items.funcs.decode = &krpc_decode_callback_item_list_object;
+  message.items.arg = &state;
+  KRPC_RETURN_ON_ERROR(krpc_decode_message_List(stream, &message));
+  return KRPC_OK;
+}
+
+#endif  // KRPC_IMPL_TYPE_LIST_OBJECT
+
+#ifndef KRPC_IMPL_TYPE_LIST_LIST_OBJECT
+#define KRPC_IMPL_TYPE_LIST_LIST_OBJECT
+
+static inline bool krpc_encode_callback_items_list_list_object(
+  pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
+  const krpc_list_list_object_t * value = (const krpc_list_list_object_t*)(*arg);
+  size_t i = 0;
+  for (; i < value->size; i++) {
+    if (!pb_encode_tag_for_field(stream, field))
+      KRPC_CALLBACK_RETURN_ERROR("encoding tag for list item");
+    size_t size;
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_list_object(&size, &value->items[i]));
+    if (!pb_encode_varint(stream, size))
+      KRPC_CALLBACK_RETURN_ERROR("encoding size for list item");
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_list_object(stream, &value->items[i]));
+  }
+  return true;
+}
+
+static inline krpc_error_t krpc_encode_list_list_object(
+  pb_ostream_t * stream, const krpc_list_list_object_t * value) {
+  krpc_schema_List message = krpc_schema_List_init_default;
+  message.items.funcs.encode = &krpc_encode_callback_items_list_list_object;
+  message.items.arg = (krpc_list_list_object_t*)value;
+  KRPC_RETURN_ON_ERROR(krpc_encode_message_List(stream, &message));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_encode_size_list_list_object(
+  size_t * size, const krpc_list_list_object_t * value) {
+  pb_ostream_t stream = PB_OSTREAM_SIZING;
+  KRPC_RETURN_ON_ERROR(krpc_encode_list_list_object(&stream, value));
+  *size = stream.bytes_written;
+  return KRPC_OK;
+}
+
+static inline bool krpc_encode_callback_list_list_object(
+  pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
+  if (!pb_encode_tag_for_field(stream, field))
+    KRPC_CALLBACK_RETURN_ERROR("encoding tag for list_list_object");
+  krpc_list_list_object_t * value = (krpc_list_list_object_t*)(*arg);
+  size_t size;
+  KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_list_list_object(&size, value));
+  if (!pb_encode_varint(stream, size))
+    KRPC_CALLBACK_RETURN_ERROR("encoding size for list_list_object");
+  KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_list_list_object(stream, value));
+  return true;
+}
+
+static inline bool krpc_decode_callback_item_list_list_object(
+  pb_istream_t * stream, const pb_field_t * field, void ** arg) {
+  typedef struct State { size_t capacity; krpc_list_list_object_t * value; } State;
+  State * state = (State*)(*arg);
+  size_t i = state->value->size;
+  state->value->size++;
+  if (state->capacity > 0 && state->value->size > state->capacity) {
+    state->value->items = (krpc_list_object_t*)krpc_recalloc(state->value->items, state->capacity, KRPC_ALLOC_BLOCK_SIZE, sizeof(krpc_list_object_t));
+    state->capacity += KRPC_ALLOC_BLOCK_SIZE;
+  }
+  KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_list_object(stream, &state->value->items[i]));
+  return true;
+}
+
+static inline krpc_error_t krpc_decode_list_list_object(
+  pb_istream_t * stream, krpc_list_list_object_t * value) {
+  typedef struct State { size_t capacity; krpc_list_list_object_t * value; } State;
+  State state = { 0, value };
+  value->size = 0;
+  if (value->items == NULL) {
+    value->items = (krpc_list_object_t*)krpc_calloc(KRPC_ALLOC_BLOCK_SIZE, sizeof(krpc_list_object_t));
+    state.capacity = KRPC_ALLOC_BLOCK_SIZE;
+  }
+  krpc_schema_List message = krpc_schema_List_init_default;
+  message.items.funcs.decode = &krpc_decode_callback_item_list_list_object;
+  message.items.arg = &state;
+  KRPC_RETURN_ON_ERROR(krpc_decode_message_List(stream, &message));
+  return KRPC_OK;
+}
+
+#endif  // KRPC_IMPL_TYPE_LIST_LIST_OBJECT
+
 #ifndef KRPC_IMPL_TYPE_NULLABLE_BYTES
 #define KRPC_IMPL_TYPE_NULLABLE_BYTES
 
@@ -4119,87 +4339,6 @@ static inline krpc_error_t krpc_decode_list_nullable_bytes(
 }
 
 #endif  // KRPC_IMPL_TYPE_LIST_NULLABLE_BYTES
-
-#ifndef KRPC_IMPL_TYPE_LIST_OBJECT
-#define KRPC_IMPL_TYPE_LIST_OBJECT
-
-static inline bool krpc_encode_callback_items_list_object(
-  pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
-  const krpc_list_object_t * value = (const krpc_list_object_t*)(*arg);
-  size_t i = 0;
-  for (; i < value->size; i++) {
-    if (!pb_encode_tag_for_field(stream, field))
-      KRPC_CALLBACK_RETURN_ERROR("encoding tag for list item");
-    size_t size;
-    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_object(&size, value->items[i]));
-    if (!pb_encode_varint(stream, size))
-      KRPC_CALLBACK_RETURN_ERROR("encoding size for list item");
-    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_object(stream, value->items[i]));
-  }
-  return true;
-}
-
-static inline krpc_error_t krpc_encode_list_object(
-  pb_ostream_t * stream, const krpc_list_object_t * value) {
-  krpc_schema_List message = krpc_schema_List_init_default;
-  message.items.funcs.encode = &krpc_encode_callback_items_list_object;
-  message.items.arg = (krpc_list_object_t*)value;
-  KRPC_RETURN_ON_ERROR(krpc_encode_message_List(stream, &message));
-  return KRPC_OK;
-}
-
-static inline krpc_error_t krpc_encode_size_list_object(
-  size_t * size, const krpc_list_object_t * value) {
-  pb_ostream_t stream = PB_OSTREAM_SIZING;
-  KRPC_RETURN_ON_ERROR(krpc_encode_list_object(&stream, value));
-  *size = stream.bytes_written;
-  return KRPC_OK;
-}
-
-static inline bool krpc_encode_callback_list_object(
-  pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
-  if (!pb_encode_tag_for_field(stream, field))
-    KRPC_CALLBACK_RETURN_ERROR("encoding tag for list_object");
-  krpc_list_object_t * value = (krpc_list_object_t*)(*arg);
-  size_t size;
-  KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_list_object(&size, value));
-  if (!pb_encode_varint(stream, size))
-    KRPC_CALLBACK_RETURN_ERROR("encoding size for list_object");
-  KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_list_object(stream, value));
-  return true;
-}
-
-static inline bool krpc_decode_callback_item_list_object(
-  pb_istream_t * stream, const pb_field_t * field, void ** arg) {
-  typedef struct State { size_t capacity; krpc_list_object_t * value; } State;
-  State * state = (State*)(*arg);
-  size_t i = state->value->size;
-  state->value->size++;
-  if (state->capacity > 0 && state->value->size > state->capacity) {
-    state->value->items = (krpc_object_t*)krpc_recalloc(state->value->items, state->capacity, KRPC_ALLOC_BLOCK_SIZE, sizeof(krpc_object_t));
-    state->capacity += KRPC_ALLOC_BLOCK_SIZE;
-  }
-  KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_object(stream, &state->value->items[i]));
-  return true;
-}
-
-static inline krpc_error_t krpc_decode_list_object(
-  pb_istream_t * stream, krpc_list_object_t * value) {
-  typedef struct State { size_t capacity; krpc_list_object_t * value; } State;
-  State state = { 0, value };
-  value->size = 0;
-  if (value->items == NULL) {
-    value->items = (krpc_object_t*)krpc_calloc(KRPC_ALLOC_BLOCK_SIZE, sizeof(krpc_object_t));
-    state.capacity = KRPC_ALLOC_BLOCK_SIZE;
-  }
-  krpc_schema_List message = krpc_schema_List_init_default;
-  message.items.funcs.decode = &krpc_decode_callback_item_list_object;
-  message.items.arg = &state;
-  KRPC_RETURN_ON_ERROR(krpc_decode_message_List(stream, &message));
-  return KRPC_OK;
-}
-
-#endif  // KRPC_IMPL_TYPE_LIST_OBJECT
 
 #ifndef KRPC_IMPL_TYPE_SET_OBJECT
 #define KRPC_IMPL_TYPE_SET_OBJECT
@@ -6313,6 +6452,33 @@ static inline krpc_error_t krpc_KRPC_Expression_LessThanOrEqual_call(krpc_schema
   return KRPC_OK;
 }
 
+static inline krpc_error_t krpc_KRPC_Expression_Match(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t value, const krpc_list_list_object_t * cases, const krpc_list_object_t * bodies) {
+  krpc_call_t _call;
+  krpc_argument_t _arguments[3];
+  KRPC_CHECK(krpc_call(&_call, 1, 3400470103, 3, _arguments));
+  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_object, &value));
+  KRPC_CHECK(krpc_add_argument(&_call, 1, &krpc_encode_callback_list_list_object, cases));
+  KRPC_CHECK(krpc_add_argument(&_call, 2, &krpc_encode_callback_list_object, bodies));
+  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
+  KRPC_CHECK(krpc_init_result(&_result));
+  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
+  if (returnValue) {
+    pb_istream_t _stream;
+    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+    KRPC_CHECK(krpc_decode_object(&_stream, returnValue));
+  }
+  KRPC_CHECK(krpc_free_result(&_result));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_KRPC_Expression_Match_call(krpc_schema_ProcedureCall * procedureCall, krpc_KRPC_Expression_t value, const krpc_list_list_object_t * cases, const krpc_list_object_t * bodies) {
+  KRPC_CHECK(krpc_procedure_call(procedureCall, 1, 3400470103, 3));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_object, &value));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 1, &krpc_encode_callback_list_list_object, cases));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 2, &krpc_encode_callback_list_object, bodies));
+  return KRPC_OK;
+}
+
 static inline krpc_error_t krpc_KRPC_Expression_Max(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
@@ -7333,6 +7499,33 @@ static inline krpc_error_t krpc_KRPC_Expression_Sum(krpc_connection_t connection
 static inline krpc_error_t krpc_KRPC_Expression_Sum_call(krpc_schema_ProcedureCall * procedureCall, krpc_KRPC_Expression_t arg) {
   KRPC_CHECK(krpc_procedure_call(procedureCall, 1, 770661817, 1));
   KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_object, &arg));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_KRPC_Expression_Switch(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t value, const krpc_list_list_object_t * cases, const krpc_list_object_t * bodies) {
+  krpc_call_t _call;
+  krpc_argument_t _arguments[3];
+  KRPC_CHECK(krpc_call(&_call, 1, 3730488420, 3, _arguments));
+  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_object, &value));
+  KRPC_CHECK(krpc_add_argument(&_call, 1, &krpc_encode_callback_list_list_object, cases));
+  KRPC_CHECK(krpc_add_argument(&_call, 2, &krpc_encode_callback_list_object, bodies));
+  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
+  KRPC_CHECK(krpc_init_result(&_result));
+  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
+  if (returnValue) {
+    pb_istream_t _stream;
+    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+    KRPC_CHECK(krpc_decode_object(&_stream, returnValue));
+  }
+  KRPC_CHECK(krpc_free_result(&_result));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_KRPC_Expression_Switch_call(krpc_schema_ProcedureCall * procedureCall, krpc_KRPC_Expression_t value, const krpc_list_list_object_t * cases, const krpc_list_object_t * bodies) {
+  KRPC_CHECK(krpc_procedure_call(procedureCall, 1, 3730488420, 3));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_object, &value));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 1, &krpc_encode_callback_list_list_object, cases));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 2, &krpc_encode_callback_list_object, bodies));
   return KRPC_OK;
 }
 

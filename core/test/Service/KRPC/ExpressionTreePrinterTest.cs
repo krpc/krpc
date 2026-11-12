@@ -193,6 +193,106 @@ namespace KRPC.Test.Service.KRPC
         }
 
         [Test]
+        public void Match ()
+        {
+            // The value is held in a variable, and the cases become a chain of conditionals
+            // ending with the default
+            var x = Expression.Variable ("x", Type.Int ());
+            Check (
+                "Block<System.Void> (match#0: System.Int32)\n" +
+                "  Assign<System.Int32>\n" +
+                "    Parameter<System.Int32> match#0\n" +
+                "    Parameter<System.Int32> x#1\n" +
+                "  Conditional<System.Void>\n" +
+                "    OrElse<System.Boolean>\n" +
+                "      Equal<System.Boolean>\n" +
+                "        Parameter<System.Int32> match#0\n" +
+                "        Constant<System.Int32> 1\n" +
+                "      Equal<System.Boolean>\n" +
+                "        Parameter<System.Int32> match#0\n" +
+                "        Constant<System.Int32> 2\n" +
+                "    Block<System.Void>\n" +
+                "      Assign<System.Int32>\n" +
+                "        Parameter<System.Int32> x#1\n" +
+                "        Constant<System.Int32> 10\n" +
+                "    Conditional<System.Void>\n" +
+                "      Equal<System.Boolean>\n" +
+                "        Parameter<System.Int32> match#0\n" +
+                "        Constant<System.Int32> 3\n" +
+                "      Block<System.Void>\n" +
+                "        Assign<System.Int32>\n" +
+                "          Parameter<System.Int32> x#1\n" +
+                "          Constant<System.Int32> 30\n" +
+                "      Block<System.Void>\n" +
+                "        Assign<System.Int32>\n" +
+                "          Parameter<System.Int32> x#1\n" +
+                "          Constant<System.Int32> 20\n",
+                Expression.Match (
+                    x,
+                    new List<IList<Expression>> {
+                        new List<Expression> { Expression.ConstantInt (1), Expression.ConstantInt (2) },
+                        new List<Expression> (),
+                        new List<Expression> { Expression.ConstantInt (3) }
+                    },
+                    new List<Expression> {
+                        Expression.Assign (x, Expression.ConstantInt (10)),
+                        Expression.Assign (x, Expression.ConstantInt (20)),
+                        Expression.Assign (x, Expression.ConstantInt (30))
+                    }));
+        }
+
+        [Test]
+        public void Switch ()
+        {
+            // The conditions jump to a label before each body, and the break marker is
+            // rewritten to a goto targeting the end label
+            var x = Expression.Variable ("x", Type.Int ());
+            Check (
+                "Block<System.Void> (switch#0: System.Int32)\n" +
+                "  Assign<System.Int32>\n" +
+                "    Parameter<System.Int32> switch#0\n" +
+                "    Parameter<System.Int32> x#1\n" +
+                "  Conditional<System.Void>\n" +
+                "    Equal<System.Boolean>\n" +
+                "      Parameter<System.Int32> switch#0\n" +
+                "      Constant<System.Int32> 1\n" +
+                "    Goto<System.Void> Goto label#0\n" +
+                "    Default<System.Void>\n" +
+                "  Conditional<System.Void>\n" +
+                "    Equal<System.Boolean>\n" +
+                "      Parameter<System.Int32> switch#0\n" +
+                "      Constant<System.Int32> 2\n" +
+                "    Goto<System.Void> Goto label#1\n" +
+                "    Default<System.Void>\n" +
+                "  Goto<System.Void> Goto label#2\n" +
+                "  Label<System.Void> label#0\n" +
+                "  Block<System.Void>\n" +
+                "    Assign<System.Int32>\n" +
+                "      Parameter<System.Int32> x#1\n" +
+                "      Constant<System.Int32> 10\n" +
+                "  Label<System.Void> label#2\n" +
+                "  Goto<System.Void> Break label#3\n" +
+                "  Label<System.Void> label#1\n" +
+                "  Block<System.Void>\n" +
+                "    Assign<System.Int32>\n" +
+                "      Parameter<System.Int32> x#1\n" +
+                "      Constant<System.Int32> 20\n" +
+                "  Label<System.Void> label#3\n",
+                Expression.Switch (
+                    x,
+                    new List<IList<Expression>> {
+                        new List<Expression> { Expression.ConstantInt (1) },
+                        new List<Expression> (),
+                        new List<Expression> { Expression.ConstantInt (2) }
+                    },
+                    new List<Expression> {
+                        Expression.Assign (x, Expression.ConstantInt (10)),
+                        Expression.Break (),
+                        Expression.Assign (x, Expression.ConstantInt (20))
+                    }));
+        }
+
+        [Test]
         public void FunctionWithReturn ()
         {
             // An early return becomes a marker, rewritten to a goto. The function's

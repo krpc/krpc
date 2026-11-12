@@ -107,6 +107,8 @@ KRPC.Expression.IfThen
 KRPC.Expression.IfThenElse
 KRPC.Expression.While
 KRPC.Expression.ForEach
+KRPC.Expression.Match
+KRPC.Expression.Switch
 KRPC.Expression.Break
 KRPC.Expression.Continue
 KRPC.Expression.Return
