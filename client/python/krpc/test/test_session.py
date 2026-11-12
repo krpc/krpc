@@ -162,13 +162,13 @@ class TestSession(unittest.TestCase):
             session, lambda: called.is_set() and session._callers == 0
         )
         session._lock = lock  # pyright: ignore[reportAttributeAccessIssue]
-        send_request = session._connection.send_request
+        send_request = session._transport.send_request
 
         def send_and_mark(request: KRPC.Request) -> None:
             send_request(request)
             called.set()
 
-        session._connection.send_request = send_and_mark
+        session._transport.send_request = send_and_mark
         with self.assertRaises(KeyboardInterrupt):
             status_request(conn)
         self.assertFalse(lock.armed)

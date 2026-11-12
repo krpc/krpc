@@ -17,7 +17,7 @@
 
 namespace krpc {
 
-class Connection;
+class Transport;
 class StreamManager;
 class StreamImpl;
 namespace function_stream_detail {
@@ -58,7 +58,7 @@ class Client {
       handshake_timeout of waiting for the server to accept the connection, or waits
       indefinitely if it is zero. Fails the connection when a message from the server receives
       no new byte for stall_timeout once it has started to arrive, or never if it is zero. */
-  Client(const std::string& name, const std::shared_ptr<Connection>& connection,
+  Client(const std::string& name, const std::shared_ptr<Transport>& transport,
          std::chrono::milliseconds handshake_timeout = std::chrono::seconds(5),
          std::chrono::milliseconds stall_timeout = std::chrono::seconds(30));
 

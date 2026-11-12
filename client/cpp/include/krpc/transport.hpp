@@ -22,13 +22,13 @@ class MessageLite;
 
 namespace krpc {
 
-class Connection {
+/** The socket to the server, and the size-prefixed messages sent and received over it. Each
+    subclass opens the socket over one protocol. */
+class Transport {
  public:
-  Connection(const std::string& address, unsigned int port,
-             std::chrono::milliseconds timeout = std::chrono::milliseconds::zero());
-  virtual ~Connection() = default;
+  virtual ~Transport() = default;
   /** Open the connection to the server. */
-  virtual void connect();
+  virtual void connect() = 0;
   /** Close the connection. Sending or receiving on it afterwards reports the failure. */
   void close();
   /** Close the write side of the connection, leaving the read side open. */
@@ -68,8 +68,9 @@ class Connection {
   bool readable() { return poll(0); }
 
  protected:
+  Transport();
   asio::io_context io_context;
-  // A protocol agnostic socket, so that the same connection can carry either a TCP
+  // A protocol agnostic socket, so that the same transport can carry either a TCP
   // or a unix domain socket and everything above it is unchanged
   asio::generic::stream_protocol::socket socket;
 
@@ -92,11 +93,6 @@ class Connection {
   /** Poll the socket for data, for up to the given milliseconds, or indefinitely if -1. */
   bool poll(int milliseconds);
 
-  const std::string address;
-  const unsigned int port;
-  // The time to wait for the connection to be made. Zero waits indefinitely.
-  const std::chrono::milliseconds timeout;
-  asio::ip::tcp::resolver resolver;
   // Data read from the socket, how much of it there is and how much has been consumed. Reads
   // are made a block at a time, so that a message costs one read and not one per byte of its
   // size prefix plus one for its body.
@@ -113,11 +109,25 @@ class TimeoutError : public std::runtime_error {
   inline explicit TimeoutError(const std::string& msg) : std::runtime_error(msg) {}
 };
 
-/** A connection to a server on the same machine, over a unix domain socket. Only opening
-    the socket differs from a TCP connection, so that is all this replaces. */
-class LocalConnection : public Connection {
+/** A transport to a server over TCP/IP. */
+class TCPIPTransport : public Transport {
  public:
-  explicit LocalConnection(const std::string& path);
+  TCPIPTransport(const std::string& address, unsigned int port,
+                 std::chrono::milliseconds timeout = std::chrono::milliseconds::zero());
+  void connect() override;
+
+ private:
+  const std::string address;
+  const unsigned int port;
+  // The time to wait for the connection to be made. Zero waits indefinitely.
+  const std::chrono::milliseconds timeout;
+  asio::ip::tcp::resolver resolver;
+};
+
+/** A transport to a server on the same machine, over a unix domain socket. */
+class LocalTransport : public Transport {
+ public:
+  explicit LocalTransport(const std::string& path);
   void connect() override;
 
  private:

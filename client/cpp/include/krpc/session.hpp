@@ -19,7 +19,7 @@
 
 namespace krpc {
 
-class Connection;
+class Transport;
 class StreamManager;
 
 /** The messages of one connection.
@@ -43,7 +43,7 @@ class Session {
   enum class Adds : uint8_t { nothing, stream };
 
   /** A stall timeout of zero waits indefinitely. */
-  Session(std::shared_ptr<Connection> connection,
+  Session(std::shared_ptr<Transport> transport,
           std::function<schema::Request(uint64_t)> remove_stream_request,
           std::chrono::milliseconds stall_timeout = default_stall_timeout);
   ~Session();
@@ -113,7 +113,7 @@ class Session {
   std::exception_ptr protocol_error(schema::Disconnect::Reason reason, const std::string& text);
   void disconnect(schema::Disconnect::Reason reason, const std::string& text);
 
-  std::shared_ptr<Connection> connection;
+  std::shared_ptr<Transport> transport;
   std::function<schema::Request(uint64_t)> remove_stream_request;
   std::chrono::milliseconds stall_timeout;
   StreamManager* manager = nullptr;

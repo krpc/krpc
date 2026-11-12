@@ -22,7 +22,7 @@ object holds its client through the methods of its class:
 References
 ^^^^^^^^^^
 
-The client holds its ``Connection``, ``Types`` and service instances. The ``Connection`` holds the
+The client holds its ``Transport``, ``Types`` and service instances. The ``Transport`` holds the
 luasocket socket, and ``Types`` holds the class, enumeration and structure tables.
 
 Each connection has its own ``Types``, and so its own class tables. ``==`` compares object ids
@@ -136,7 +136,8 @@ lua-protobuf
 Transports
 ----------
 
-``LocalConnection`` replaces only ``_open`` of the TCP/IP ``Connection``.
+``Transport`` holds the socket and the message framing. ``TCPIPTransport`` and ``LocalTransport``
+derive from it and differ only in ``_open``.
 
 * ``socket.unix`` is required when the socket opens, so a luasocket without it still connects over
   TCP/IP. Stock luasocket lacks it on Windows, pending

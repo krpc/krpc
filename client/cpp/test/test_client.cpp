@@ -16,9 +16,9 @@
 
 #include "gtest/gtest.h"
 #include "krpc/client.hpp"
-#include "krpc/connection.hpp"
 #include "krpc/error.hpp"
 #include "krpc/stream.hpp"
+#include "krpc/transport.hpp"
 #include "server_test.hpp"
 #include "services/test_service.hpp"
 
@@ -237,8 +237,8 @@ TEST_F(test_client, test_a_callback_of_a_stream_the_server_ends_does_not_keep_th
 
 // A connection failure ends the streams, so it destroys their callbacks and the update callbacks
 TEST_F(test_client, test_a_callback_does_not_keep_a_failed_connection) {
-  auto connection = std::make_shared<krpc::Connection>("localhost", get_port());
-  auto client = std::make_unique<krpc::Client>("C++ClientTest", connection);
+  auto transport = std::make_shared<krpc::TCPIPTransport>("localhost", get_port());
+  auto client = std::make_unique<krpc::Client>("C++ClientTest", transport);
   auto released = track(*client);
   std::promise<void> ended;
   {
@@ -250,7 +250,7 @@ TEST_F(test_client, test_a_callback_does_not_keep_a_failed_connection) {
     stream->add_callback([stream](int) { (void)stream; });
     stream->add_end_callback([&ended](const std::exception_ptr&) { ended.set_value(); });
   }
-  connection->shutdown_both();
+  transport->shutdown_both();
   ASSERT_EQ(std::future_status::ready, ended.get_future().wait_for(std::chrono::seconds(10)));
   client.reset();
   ASSERT_TRUE(eventually([&released] { return released.expired(); }));

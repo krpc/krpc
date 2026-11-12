@@ -20,7 +20,7 @@ Services, objects and streams hold the ``Client`` strongly. Letting go of them c
 References
 ^^^^^^^^^^
 
-The client holds its ``Connection``, ``Session``, ``StreamManager``, ``Types`` registry and
+The client holds its ``Transport``, ``Session``, ``StreamManager``, ``Types`` registry and
 services.
 
 The objects the program keeps also hold the client. A ``Service``, ``Object`` or ``StreamImpl``
@@ -147,8 +147,9 @@ would keep the values it first captured.
 Transports
 ----------
 
-``Connection`` is TCP/IP, and ``LocalConnection`` is a unix domain socket. They differ only in
-``_open``, and there are no WebSockets or serial transports. Windows CPython has no
+``Transport`` holds the socket and the message framing. ``TCPIPTransport`` and
+``LocalTransport``, a unix domain socket, derive from it and differ only in ``_open``. There are no
+WebSockets or serial transports. Windows CPython has no
 ``socket.AF_UNIX``, so ``krpc/winsock.py`` opens that socket through Winsock directly.
 
 ``timeout`` bounds a TCP/IP connect only. ``handshake_timeout`` covers the whole handshake response.

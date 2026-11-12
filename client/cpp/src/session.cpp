@@ -11,11 +11,11 @@
 #include <utility>
 #include <vector>
 
-#include "krpc/connection.hpp"
 #include "krpc/decoder.hpp"
 #include "krpc/encoder.hpp"
 #include "krpc/error.hpp"
 #include "krpc/stream_manager.hpp"
+#include "krpc/transport.hpp"
 
 namespace krpc {
 
@@ -32,10 +32,10 @@ std::exception_ptr connection_error(const std::string& text, const std::string& 
 
 constexpr std::chrono::milliseconds Session::default_stall_timeout;
 
-Session::Session(std::shared_ptr<Connection> connection,
+Session::Session(std::shared_ptr<Transport> transport,
                  std::function<schema::Request(uint64_t)> remove_stream_request,
                  std::chrono::milliseconds stall_timeout)
-    : connection(std::move(connection)),
+    : transport(std::move(transport)),
       remove_stream_request(std::move(remove_stream_request)),
       stall_timeout(stall_timeout) {}
 
@@ -63,7 +63,7 @@ Session::~Session() {
 void Session::start(StreamManager* stream_manager, std::shared_ptr<void> keep_alive) {
   manager = stream_manager;
   // A session with no connection, as the tests use, has nothing to read
-  if (connection) reader = std::thread(&Session::run_reader, this);
+  if (transport) reader = std::thread(&Session::run_reader, this);
   // Releasing keep_alive can destroy this session, so nothing is touched after it
   dispatcher = std::thread([this, keep_alive = std::move(keep_alive)]() mutable {
     run_dispatcher();
@@ -108,7 +108,7 @@ void Session::run_dispatcher() {
 }
 
 schema::Response Session::call(schema::Request request, std::vector<Adds> adds) {
-  if (!connection) throw ConnectionError("Not connected to a server");
+  if (!transport) throw ConnectionError("Not connected to a server");
   auto slot = std::make_shared<Slot>();
   for (auto add : adds)
     if (add != Adds::nothing) slot->adds_streams = true;
@@ -171,7 +171,7 @@ bool Session::read_until(Slot* slot, bool returning) {
     schema::Response parsed;
     // Handle every whole message already buffered before we stop reading. The reader thread
     // waits for data on the socket, which a message left in the buffer does not wake.
-    while (!slot->done || (!slot->error && connection->message_buffered())) {
+    while (!slot->done || (!slot->error && transport->message_buffered())) {
       auto [data, size] = receive_data();
       // A Message holding a response is the tag of field 2, then the response's size and bytes,
       // so the response is parsed where it lies
@@ -281,7 +281,7 @@ void Session::write_request(schema::Request* request) {
     *data++ = 0x0a;
     data = CodedOutputStream::WriteVarint64ToArray(size, data);
     (void)request->SerializeWithCachedSizesToArray(data);
-    connection->send(send_buffer);
+    transport->send(send_buffer);
   } catch (const std::exception& exn) {
     try {
       end(connection_error(std::string("Connection failed: ") + exn.what()));
@@ -292,7 +292,7 @@ void Session::write_request(schema::Request* request) {
 }
 
 void Session::write(const schema::Message& message) {
-  connection->send(encoder::encode_message_with_size(message));
+  transport->send(encoder::encode_message_with_size(message));
 }
 
 void Session::fail(const std::exception_ptr& exn) {
@@ -311,7 +311,7 @@ void Session::fail_locked(const std::exception_ptr& exn) {
 }
 
 void Session::close() {
-  if (!connection) {
+  if (!transport) {
     fail(connection_error("Connection closed"));
     return;
   }
@@ -330,7 +330,7 @@ void Session::close() {
       schema::Message message;
       message.mutable_disconnect()->set_reason(schema::Disconnect::CLOSED);
       write(message);
-      connection->shutdown_send();
+      transport->shutdown_send();
     } catch (const std::exception&) {  // NOLINT(bugprone-empty-catch)
       // The connection can already have failed
     }
@@ -347,7 +347,7 @@ void Session::close() {
     if (to_drain) reading = true;
   }
   if (to_drain) drain(deadline);
-  connection->shutdown_both();
+  transport->shutdown_both();
   fail(connection_error("Connection closed"));
   {
     std::lock_guard<std::mutex> guard(state_lock);
@@ -362,7 +362,7 @@ void Session::drain(std::chrono::steady_clock::time_point deadline) {
   while (true) {
     auto remaining = std::chrono::duration_cast<std::chrono::milliseconds>(
         deadline - std::chrono::steady_clock::now());
-    if (remaining <= std::chrono::milliseconds::zero() || !connection->discard(remaining)) return;
+    if (remaining <= std::chrono::milliseconds::zero() || !transport->discard(remaining)) return;
   }
 }
 
@@ -413,7 +413,7 @@ void Session::end(std::exception_ptr cause) {
       queue_stopped = true;
       queue_condition.notify_all();
     }
-    connection->shutdown_both();
+    transport->shutdown_both();
     idle.notify_all();
   }
   throw Ended();
@@ -432,9 +432,9 @@ void Session::run_reader() {
     // Wait for data without being the reader, so a call can take over. The buffer is only
     // looked at by the reader. The wait is bounded by the stall timeout, so that part of a
     // message a call leaves in the buffer is timed.
-    if (!connection->buffered()) {
+    if (!transport->buffered()) {
       stop_reading();
-      bool readable = connection->wait_readable(stall_timeout);
+      bool readable = transport->wait_readable(stall_timeout);
       {
         std::lock_guard<std::mutex> guard(state_lock);
         if (ended) return;
@@ -442,7 +442,7 @@ void Session::run_reader() {
         reading = true;
       }
       // A call can read the data between the wait and taking the role
-      if (!connection->buffered() && !(readable && connection->readable())) {
+      if (!transport->buffered() && !(readable && transport->readable())) {
         stop_reading();
         continue;
       }
@@ -482,7 +482,7 @@ void Session::parse(const char* data, size_t size, google::protobuf::MessageLite
 std::pair<const char*, size_t> Session::receive_data() {
   std::exception_ptr cause;
   try {
-    return connection->receive_message_data(std::chrono::milliseconds::zero(), stall_timeout);
+    return transport->receive_message_data(std::chrono::milliseconds::zero(), stall_timeout);
   } catch (const TimeoutError&) {
     cause = protocol_error(schema::Disconnect::TIMEOUT,
                            "A message from the server stalled for more than " +
@@ -571,7 +571,7 @@ void Session::disconnect(schema::Disconnect::Reason reason, const std::string& t
     message.mutable_disconnect()->set_reason(reason);
     message.mutable_disconnect()->set_message(text);
     write(message);
-    connection->shutdown_send();
+    transport->shutdown_send();
   } catch (const std::exception&) {  // NOLINT(bugprone-empty-catch)
     // The connection has failed already
   }

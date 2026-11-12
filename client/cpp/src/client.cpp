@@ -10,7 +10,6 @@
 #include <utility>
 #include <vector>
 
-#include "krpc/connection.hpp"
 #include "krpc/decoder.hpp"
 #include "krpc/encoder.hpp"
 #include "krpc/error.hpp"
@@ -18,6 +17,7 @@
 #include "krpc/services/krpc.hpp"
 #include "krpc/session.hpp"
 #include "krpc/stream_manager.hpp"
+#include "krpc/transport.hpp"
 
 namespace krpc {
 
@@ -37,15 +37,15 @@ std::string format_seconds(std::chrono::milliseconds duration) {
 }
 
 /** Send the connection request, and check the server's response to it. */
-void handshake(Connection* connection, const std::string& name, std::chrono::milliseconds timeout) {
+void handshake(Transport* transport, const std::string& name, std::chrono::milliseconds timeout) {
   schema::Message request;
   request.mutable_connection_request()->set_client_name(name);
   request.mutable_connection_request()->set_protocol_version(PROTOCOL_VERSION);
-  connection->send(encoder::encode_message_with_size(request));
+  transport->send(encoder::encode_message_with_size(request));
   schema::Message message;
   try {
     // The stall timeout applies from the next message
-    connection->receive_message(message, timeout, std::chrono::milliseconds::zero());
+    transport->receive_message(message, timeout, std::chrono::milliseconds::zero());
   } catch (const TimeoutError&) {
     throw ConnectionError("The server did not answer the connection request within " +
                           format_seconds(timeout));
@@ -101,10 +101,10 @@ struct Client::State {
 Client::Client(const std::string& name, const std::string& address, unsigned int port,
                std::chrono::milliseconds timeout, std::chrono::milliseconds handshake_timeout,
                std::chrono::milliseconds stall_timeout)
-    : Client(name, std::make_shared<Connection>(address, port, timeout), handshake_timeout,
+    : Client(name, std::make_shared<TCPIPTransport>(address, port, timeout), handshake_timeout,
              stall_timeout) {}
 
-Client::Client(const std::string& name, const std::shared_ptr<Connection>& connection,
+Client::Client(const std::string& name, const std::shared_ptr<Transport>& transport,
                std::chrono::milliseconds handshake_timeout, std::chrono::milliseconds stall_timeout)
     : state(std::make_shared<State>()) {
   if (handshake_timeout.count() < 0)
@@ -112,7 +112,7 @@ Client::Client(const std::string& name, const std::shared_ptr<Connection>& conne
   if (stall_timeout.count() < 0)
     throw std::invalid_argument("The stall timeout must not be negative");
   try {
-    connection->connect();
+    transport->connect();
   } catch (const ConnectionError&) {
     throw;
   } catch (const std::exception& exn) {
@@ -120,12 +120,12 @@ Client::Client(const std::string& name, const std::shared_ptr<Connection>& conne
         ConnectionError(std::string("Failed to connect to the server: ") + exn.what()));
   }
   try {
-    handshake(connection.get(), name, handshake_timeout);
+    handshake(transport.get(), name, handshake_timeout);
   } catch (...) {
-    connection->close();
+    transport->close();
     throw;
   }
-  state->stream_manager = StreamManager::create(state->throwers, connection, stall_timeout);
+  state->stream_manager = StreamManager::create(state->throwers, transport, stall_timeout);
   // Constructing the KRPC service registers its exception types
   services::KRPC krpc_service(*this);
 }

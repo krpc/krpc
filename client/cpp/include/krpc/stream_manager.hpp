@@ -17,7 +17,7 @@
 namespace krpc {
 
 class Client;
-class Connection;
+class Transport;
 namespace schema {
 class Error;
 class ProcedureCall;
@@ -31,7 +31,7 @@ class StreamManager {
       handshake has been made on the connection. A client's state holds the pointer returned,
       and releasing it closes the connection. */
   static std::shared_ptr<StreamManager> create(std::shared_ptr<detail::ExceptionThrowers> throwers,
-                                               const std::shared_ptr<Connection>& connection,
+                                               const std::shared_ptr<Transport>& transport,
                                                std::chrono::milliseconds stall_timeout);
   ~StreamManager();
   StreamManager(const StreamManager&) = delete;
@@ -87,7 +87,7 @@ class StreamManager {
 
  private:
   StreamManager(std::shared_ptr<detail::ExceptionThrowers> throwers,
-                const std::shared_ptr<Connection>& connection,
+                const std::shared_ptr<Transport>& transport,
                 std::chrono::milliseconds stall_timeout);
   /** A change for the dispatcher to apply to a stream: a new value, or an ending. */
   struct Change {

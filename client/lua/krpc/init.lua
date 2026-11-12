@@ -1,6 +1,6 @@
 local Client = require 'krpc.client'
-local Connection = require 'krpc.connection'
-local LocalConnection = require 'krpc.localconnection'
+local TCPIPTransport = require 'krpc.tcpiptransport'
+local LocalTransport = require 'krpc.localtransport'
 local limits = require 'krpc.limits'
 local protobuf = require 'krpc.protobuf'
 local Types = require 'krpc.types'
@@ -45,12 +45,12 @@ local function default_path()
 end
 
 -- Send the connection request, and return the server's response to it
-local function handshake(connection, name, handshake_timeout)
-  connection:send(encoder.encode_in_message('ConnectionRequest', {
+local function handshake(transport, name, handshake_timeout)
+  transport:send(encoder.encode_in_message('ConnectionRequest', {
     client_name = name,
     protocol_version = PROTOCOL_VERSION
   }))
-  local ok, data = pcall(connection.receive_message_data, connection, handshake_timeout)
+  local ok, data = pcall(transport.receive_message_data, transport, handshake_timeout)
   if not ok then
     if tostring(data):find('timeout', 1, true) then
       error('Failed to connect: the server did not answer the connection request within ' ..
@@ -78,7 +78,7 @@ end
 -- The handshake is the same whatever carries it. The handshake timeout is in seconds, 5 if it
 -- is nil, and false waits indefinitely, such as for a server that asks the player to approve
 -- each connection.
-local function connect_using(connection, name, handshake_timeout)
+local function connect_using(transport, name, handshake_timeout)
   name = name or ''
   if handshake_timeout == nil then
     handshake_timeout = DEFAULT_HANDSHAKE_TIMEOUT
@@ -86,14 +86,14 @@ local function connect_using(connection, name, handshake_timeout)
     handshake_timeout = nil
   end
 
-  connection:connect()
-  local ok, response = pcall(handshake, connection, name, handshake_timeout)
+  transport:connect()
+  local ok, response = pcall(handshake, transport, name, handshake_timeout)
   if not ok then
-    connection:close()
+    transport:close()
     error(response, 0)
   end
   if response.status ~= protobuf.enum('ConnectionResponse.Status', 'OK') then
-    connection:close()
+    transport:close()
     local status = protobuf.enum('ConnectionResponse.Status', response.status)
     local text = 'Failed to connect: the server refused the connection (' ..
       tostring(status or response.status) .. ')'
@@ -103,21 +103,21 @@ local function connect_using(connection, name, handshake_timeout)
     error(text, 0)
   end
   if response.protocol_version ~= PROTOCOL_VERSION then
-    connection:close()
+    transport:close()
     error('Failed to connect: the server does not support protocol version ' .. PROTOCOL_VERSION ..
           '. Use a client from the same kRPC release as the server.', 0)
   end
 
   -- The session has started, so a client that fails to set up tells the server it is closing
-  local created, client = pcall(Client, connection)
+  local created, client = pcall(Client, transport)
   if not created then
     pcall(function()
-      connection:send(encoder.encode_in_message('Disconnect', {
+      transport:send(encoder.encode_in_message('Disconnect', {
         reason = protobuf.enum('Disconnect.Reason', 'CLOSED')
       }))
-      connection:half_close_and_close()
+      transport:half_close_and_close()
     end)
-    connection:close()
+    transport:close()
     error(client, 0)
   end
   return client
@@ -126,14 +126,14 @@ end
 function krpc.connect(name, address, port, handshake_timeout)
   address = address or DEFAULT_ADDRESS
   port = port or DEFAULT_PORT
-  return connect_using(Connection(address, port), name, handshake_timeout)
+  return connect_using(TCPIPTransport(address, port), name, handshake_timeout)
 end
 
 -- Connect to a server on the same machine, over a unix domain socket named by the given
 -- path. The path defaults to the one the server uses.
 function krpc.connect_local(name, path, handshake_timeout)
   path = path or default_path()
-  return connect_using(LocalConnection(path), name, handshake_timeout)
+  return connect_using(LocalTransport(path), name, handshake_timeout)
 end
 
 -- The identifier of a remote object on the server, e.g. to pass to Expression.constant_object

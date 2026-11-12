@@ -3,8 +3,8 @@
 #include <chrono>
 #include <functional>
 #include <krpc.hpp>
-#include <krpc/connection.hpp>
 #include <krpc/services/krpc.hpp>
+#include <krpc/transport.hpp>
 #include <memory>
 #include <string>
 #include <thread>
@@ -33,8 +33,8 @@ inline krpc::Client server_test::connect(const std::string& name) {
 }
 
 inline std::unique_ptr<krpc::Client> server_test::connect_client() {
-  auto connection = std::make_shared<krpc::Connection>("localhost", get_port());
-  return std::make_unique<krpc::Client>("C++ClientTest", connection);
+  auto transport = std::make_shared<krpc::TCPIPTransport>("localhost", get_port());
+  return std::make_unique<krpc::Client>("C++ClientTest", transport);
 }
 
 inline bool server_test::eventually(const std::function<bool()>& condition) {

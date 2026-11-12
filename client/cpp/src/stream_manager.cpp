@@ -13,7 +13,6 @@
 #include <vector>
 
 #include "krpc/client.hpp"
-#include "krpc/connection.hpp"
 #include "krpc/encoder.hpp"
 #include "krpc/error.hpp"
 #include "krpc/internal_procedures.hpp"
@@ -21,6 +20,7 @@
 #include "krpc/race_point.hpp"
 #include "krpc/session.hpp"
 #include "krpc/stream_impl.hpp"
+#include "krpc/transport.hpp"
 
 namespace krpc {
 
@@ -51,7 +51,7 @@ std::exception_ptr closed_error(const std::exception_ptr& cause) {
 }  // namespace
 
 StreamManager::StreamManager(std::shared_ptr<detail::ExceptionThrowers> throwers,
-                             const std::shared_ptr<Connection>& connection,
+                             const std::shared_ptr<Transport>& transport,
                              std::chrono::milliseconds stall_timeout)
     : throwers(std::move(throwers)),
       update_lock(new std::recursive_mutex),
@@ -61,7 +61,7 @@ StreamManager::StreamManager(std::shared_ptr<detail::ExceptionThrowers> throwers
       closed(false),
       close_requested(false) {
   session = std::make_unique<Session>(
-      connection,
+      transport,
       [](uint64_t id) {
         return Client::build_request("KRPC", "RemoveStream", {encoder::encode(id)});
       },
@@ -70,9 +70,9 @@ StreamManager::StreamManager(std::shared_ptr<detail::ExceptionThrowers> throwers
 
 std::shared_ptr<StreamManager> StreamManager::create(
     std::shared_ptr<detail::ExceptionThrowers> throwers,
-    const std::shared_ptr<Connection>& connection, std::chrono::milliseconds stall_timeout) {
+    const std::shared_ptr<Transport>& transport, std::chrono::milliseconds stall_timeout) {
   std::shared_ptr<StreamManager> manager(
-      new StreamManager(std::move(throwers), connection, stall_timeout));
+      new StreamManager(std::move(throwers), transport, stall_timeout));
   manager->self = manager;
   manager->session->start(manager.get(), manager);
   // The client state's pointer, whose release closes the manager

@@ -10,8 +10,8 @@
 #include <unistd.h>
 #endif
 
-#include "krpc/connection.hpp"
 #include "krpc/error.hpp"
+#include "krpc/transport.hpp"
 
 namespace krpc {
 
@@ -73,7 +73,7 @@ std::string default_path() {
 Client connect_local(const std::string& name, const std::string& path,
                      std::chrono::milliseconds handshake_timeout,
                      std::chrono::milliseconds stall_timeout) {
-  return Client(name, std::make_shared<LocalConnection>(path.empty() ? default_path() : path),
+  return Client(name, std::make_shared<LocalTransport>(path.empty() ? default_path() : path),
                 handshake_timeout, stall_timeout);
 }
 

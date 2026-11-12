@@ -1,4 +1,4 @@
-#include "krpc/connection.hpp"
+#include "krpc/transport.hpp"
 
 #include <google/protobuf/message_lite.h>
 
@@ -29,9 +29,11 @@
 
 namespace krpc {
 
-Connection::Connection(const std::string& address, unsigned int port,
-                       std::chrono::milliseconds timeout)
-    : socket(io_context), address(address), port(port), timeout(timeout), resolver(io_context) {}
+Transport::Transport() : socket(io_context) {}
+
+TCPIPTransport::TCPIPTransport(const std::string& address, unsigned int port,
+                               std::chrono::milliseconds timeout)
+    : address(address), port(port), timeout(timeout), resolver(io_context) {}
 
 // The socket is protocol agnostic, so it is connected through an endpoint of the same kind,
 // which holds the address of any protocol as the system lays it out. The socket takes its
@@ -78,7 +80,7 @@ static void connect_generic(asio::io_context& io_context,
   if (connect_error) throw asio::system_error(connect_error);
 }
 
-void Connection::connect() {
+void TCPIPTransport::connect() {
   std::ostringstream port_str;
   port_str << port;
   auto endpoints = resolver.resolve(asio::ip::tcp::v4(), address, port_str.str());
@@ -110,16 +112,16 @@ void Connection::connect() {
   throw ConnectionError("could not resolve " + address);
 }
 
-LocalConnection::LocalConnection(const std::string& path) : Connection(path, 0), path(path) {}
+LocalTransport::LocalTransport(const std::string& path) : path(path) {}
 
-void LocalConnection::connect() {
+void LocalTransport::connect() {
   // The generic endpoint copies the address in as raw bytes, which the analyzer cannot follow, so
   // it takes the address family it later reads back to be uninitialized.
   // NOLINTNEXTLINE(clang-analyzer-core.uninitialized.UndefReturn)
   connect_generic(socket, asio::local::stream_protocol::endpoint(path));
 }
 
-void Connection::close() {
+void Transport::close() {
   // A connection that was never opened, or has already been closed, has no socket to close
   if (socket.is_open()) socket.close();
   // Bytes read but not consumed belong to a connection that is gone, so they are dropped
@@ -128,7 +130,7 @@ void Connection::close() {
   consumed = 0;
 }
 
-void Connection::shutdown_send() {
+void Transport::shutdown_send() {
   try {
     socket.shutdown(asio::socket_base::shutdown_send);
   } catch (const asio::system_error&) {  // NOLINT(bugprone-empty-catch)
@@ -136,7 +138,7 @@ void Connection::shutdown_send() {
   }
 }
 
-void Connection::shutdown_both() {
+void Transport::shutdown_both() {
   try {
     socket.shutdown(asio::socket_base::shutdown_both);
   } catch (const asio::system_error&) {  // NOLINT(bugprone-empty-catch)
@@ -144,42 +146,42 @@ void Connection::shutdown_both() {
   }
 }
 
-void Connection::send(const char* data, size_t length) {
+void Transport::send(const char* data, size_t length) {
   detail::reach_write_fault();
   asio::write(socket, asio::buffer(data, length));
 }
 
-void Connection::send(const std::string& data) {
+void Transport::send(const std::string& data) {
   detail::reach_write_fault();
   asio::write(socket, asio::buffer(data));
 }
 
-std::string Connection::receive_message() {
+std::string Transport::receive_message() {
   auto [data, size] = this->buffered_message();
   return std::string(data, size);
 }
 
-void Connection::receive_message(google::protobuf::MessageLite& message) {
+void Transport::receive_message(google::protobuf::MessageLite& message) {
   auto [data, size] = this->buffered_message();
   if (!message.ParseFromArray(data, static_cast<int>(size)))
     throw EncodingError("Failed to decode message");
 }
 
-void Connection::receive_message(google::protobuf::MessageLite& message,
-                                 std::chrono::milliseconds timeout,
-                                 std::chrono::milliseconds stall_timeout) {
+void Transport::receive_message(google::protobuf::MessageLite& message,
+                                std::chrono::milliseconds timeout,
+                                std::chrono::milliseconds stall_timeout) {
   auto [data, size] = this->buffered_message(timeout, stall_timeout);
   if (!message.ParseFromArray(data, static_cast<int>(size)))
     throw EncodingError("Failed to decode message");
 }
 
-bool Connection::wait_readable(std::chrono::milliseconds timeout) {
+bool Transport::wait_readable(std::chrono::milliseconds timeout) {
   return poll(timeout == std::chrono::milliseconds::zero()
                   ? -1
                   : static_cast<int>(std::min<int64_t>(timeout.count(), INT_MAX)));
 }
 
-bool Connection::poll(int milliseconds) {
+bool Transport::poll(int milliseconds) {
   // A failed wait counts as readable, and the read that follows finds the failure
 #ifdef _WIN32
   WSAPOLLFD fd = {socket.native_handle(), POLLRDNORM, 0};
@@ -190,7 +192,7 @@ bool Connection::poll(int milliseconds) {
 #endif
 }
 
-bool Connection::message_buffered() const {
+bool Transport::message_buffered() const {
   uint32_t size = 0;
   size_t prefix_length = 0;
   try {
@@ -203,7 +205,7 @@ bool Connection::message_buffered() const {
   }
 }
 
-bool Connection::discard(std::chrono::milliseconds timeout) {
+bool Transport::discard(std::chrono::milliseconds timeout) {
   filled = 0;
   consumed = 0;
   try {
@@ -213,7 +215,7 @@ bool Connection::discard(std::chrono::milliseconds timeout) {
   }
 }
 
-std::pair<const char*, size_t> Connection::buffered_message(
+std::pair<const char*, size_t> Transport::buffered_message(
     std::chrono::milliseconds timeout, std::chrono::milliseconds stall_timeout) {
   // Read until the buffer holds a size prefix and the whole message it describes. A message
   // longer than a read is read through the buffer as well: the extra copy costs one memcpy,
@@ -257,7 +259,7 @@ std::pair<const char*, size_t> Connection::buffered_message(
   return {message, size};
 }
 
-void Connection::fill() {
+void Transport::fill() {
   // Move what is left to the front, so the buffer does not grow with every read. In the
   // ordinary case nothing is left and this moves nothing.
   if (consumed > 0) {
@@ -270,7 +272,7 @@ void Connection::fill() {
   progress = std::chrono::steady_clock::now();
 }
 
-bool Connection::fill(std::chrono::milliseconds timeout) {
+bool Transport::fill(std::chrono::milliseconds timeout) {
   if (consumed > 0) {
     std::memmove(buffer.data(), buffer.data() + consumed, available());
     filled -= consumed;

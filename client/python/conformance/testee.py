@@ -27,11 +27,11 @@ import krpc
 import krpc.error
 from krpc.attributes import Attributes
 from krpc.client import Client
-from krpc.connection import Connection
 from krpc.decoder import Decoder
 from krpc.encoder import Encoder
 from krpc.event import Event
 from krpc.service import ServiceBase
+from krpc.transport import Transport
 from krpc.types import ClassBase, TypeBase
 from krpc.utils import snake_case
 
@@ -458,14 +458,14 @@ class Testee:
         if case != "fail_write":
             raise RuntimeError("The client has no race points")
         message = command.fail_write.message
-        writes = (Connection.send_request, Connection.send_message)
+        writes = (Transport.send_request, Transport.send_message)
 
         def fail(*_: object) -> None:
-            Connection.send_request, Connection.send_message = writes
+            Transport.send_request, Transport.send_message = writes
             raise OSError(message)
 
-        Connection.send_request = fail  # pyright: ignore[reportAttributeAccessIssue]
-        Connection.send_message = fail  # pyright: ignore[reportAttributeAccessIssue]
+        Transport.send_request = fail  # pyright: ignore[reportAttributeAccessIssue]
+        Transport.send_message = fail  # pyright: ignore[reportAttributeAccessIssue]
 
     def _resolve(self, command: pb.Invoke) -> tuple[Callable[..., Any], list[Any]]:
         """The callable for a procedure, and the arguments to call it with. Getters and

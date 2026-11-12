@@ -9,7 +9,6 @@ from collections.abc import Callable
 from typing import TYPE_CHECKING, Concatenate, Generic, ParamSpec, TypeVar, cast
 
 from krpc.client import Client
-from krpc.connection import Connection, LocalConnection, MalformedSize, ReadTimeout
 from krpc.decoder import Decoder
 from krpc.encoder import Encoder
 from krpc.error import ConnectionError
@@ -19,6 +18,13 @@ from krpc.schema.KRPC_pb2 import (
     Message,
 )
 from krpc.session import DEFAULT_STALL_TIMEOUT, disconnect_reason_name
+from krpc.transport import (
+    LocalTransport,
+    MalformedSize,
+    ReadTimeout,
+    TCPIPTransport,
+    Transport,
+)
 from krpc.types import ClassBase
 from krpc.version import __version__
 
@@ -68,8 +74,8 @@ def _connect_tcpip(
     """
 
     _check_timeouts(handshake_timeout, stall_timeout)
-    connection = Connection(address, port, timeout)
-    return _connect(client_type, name, connection, handshake_timeout, stall_timeout)
+    transport = TCPIPTransport(address, port, timeout)
+    return _connect(client_type, name, transport, handshake_timeout, stall_timeout)
 
 
 def _connect_local(
@@ -89,8 +95,8 @@ def _connect_local(
     """
 
     _check_timeouts(handshake_timeout, stall_timeout)
-    connection = LocalConnection(path or _default_path())
-    return _connect(client_type, name, connection, handshake_timeout, stall_timeout)
+    transport = LocalTransport(path or _default_path())
+    return _connect(client_type, name, transport, handshake_timeout, stall_timeout)
 
 
 _ClientT = TypeVar("_ClientT", bound=Client)
@@ -175,23 +181,23 @@ def _check_timeouts(
 def _connect(
     client_type: type[Client],
     name: str | None,
-    connection: Connection,
+    transport: Transport,
     handshake_timeout: float | None,
     stall_timeout: float | None,
 ) -> Client:
     """Perform the connection handshake over an already built connection. The
     handshake is the same whatever carries it."""
     try:
-        connection.connect()
+        transport.connect()
     except OSError as exn:
         raise ConnectionError("Failed to connect to the server: %s" % exn) from exn
     try:
-        response = _handshake(name, connection, handshake_timeout)
+        response = _handshake(name, transport, handshake_timeout)
     except BaseException:
-        connection.close()
+        transport.close()
         raise
     if response.status != ConnectionResponse.OK:
-        connection.close()
+        transport.close()
         try:
             status = ConnectionResponse.Status.Name(response.status)
         except ValueError:
@@ -201,21 +207,21 @@ def _connect(
             message += ": " + response.message
         raise ConnectionError(message, status=status)
     if response.protocol_version != PROTOCOL_VERSION:
-        connection.close()
+        transport.close()
         raise ConnectionError(
             f"The server does not support protocol version {PROTOCOL_VERSION}. Use a "
             "client from the same kRPC release as the server."
         )
     try:
-        return client_type(connection, stall_timeout)
+        return client_type(transport, stall_timeout)
     except BaseException:
-        connection.close()
+        transport.close()
         raise
 
 
 def _handshake(
     name: str | None,
-    connection: Connection,
+    transport: Transport,
     timeout: float | None,
 ) -> ConnectionResponse:
     """Send the connection request, and read the server's response to it."""
@@ -223,11 +229,11 @@ def _handshake(
     request.protocol_version = PROTOCOL_VERSION
     if name is not None:
         request.client_name = name
-    connection.send_message(Message(connection_request=request))
+    transport.send_message(Message(connection_request=request))
     # The handshake timeout covers the whole response, and the stall timeout applies
     # from the next message
     try:
-        data = connection.receive_message_data(timeout)
+        data = transport.receive_message_data(timeout)
     except ReadTimeout as exn:
         raise ConnectionError(
             "The server did not answer the connection request within %g seconds"

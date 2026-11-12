@@ -53,11 +53,11 @@ def _readable(sock: socket.socket, timeout: float | None) -> bool:
     return bool(poller.poll(None if timeout is None else math.ceil(timeout * 1000)))
 
 
-class Connection:
-    def __init__(self, address: str, port: int, timeout: float | None = None) -> None:
-        self._address = address
-        self._port = port
-        self._timeout = timeout
+class Transport:
+    """The socket to the server, and the size-prefixed messages sent and received over it.
+    Each subclass opens the socket over one protocol."""
+
+    def __init__(self) -> None:
         self._socket: socket.socket = None  # pyright: ignore[reportAttributeAccessIssue]
         # Data read from the socket that has not been consumed yet
         self._buffer = bytearray()
@@ -68,19 +68,8 @@ class Connection:
         self._socket = self._open()
 
     def _open(self) -> socket.socket:
-        """Open a socket to the server. Everything above this is transport agnostic,
-        so a different transport only has to replace this."""
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        # A network that drops a connection attempt instead of refusing it leaves the
-        # client waiting, so bound the wait where one was asked for.
-        sock.settimeout(self._timeout)
-        sock.connect((self._address, self._port))
-        # Whatever bound was put on connecting, sending and receiving block
-        sock.settimeout(None)
-        # A message is sent as soon as it is written, so waiting for more data to
-        # coalesce with can only add latency
-        sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
-        return sock
+        """Open a socket to the server."""
+        raise NotImplementedError
 
     def close(self) -> None:
         """Close the socket. A thread blocked reading it returns."""
@@ -195,17 +184,41 @@ class Connection:
         self._buffer.clear()
 
 
-class LocalConnection(Connection):
-    """A connection to a server on the same machine, over a unix domain socket."""
+class TCPIPTransport(Transport):
+    """A transport to a server over TCP/IP."""
+
+    def __init__(self, address: str, port: int, timeout: float | None = None) -> None:
+        super().__init__()
+        self._address = address
+        self._port = port
+        self._timeout = timeout
+
+    def _open(self) -> socket.socket:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # A network that drops a connection attempt instead of refusing it leaves the
+        # client waiting, so bound the wait where one was asked for.
+        sock.settimeout(self._timeout)
+        sock.connect((self._address, self._port))
+        # Whatever bound was put on connecting, sending and receiving block
+        sock.settimeout(None)
+        # A message is sent as soon as it is written, so waiting for more data to
+        # coalesce with can only add latency
+        sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+        return sock
+
+
+class LocalTransport(Transport):
+    """A transport to a server on the same machine, over a unix domain socket."""
 
     def __init__(self, path: str) -> None:
-        super().__init__(path, 0)
+        super().__init__()
+        self._path = path
 
     def _open(self) -> socket.socket:
         # Windows has the address family but the socket module does not expose it, so there
         # the socket is opened by calling winsock directly.
         if not hasattr(socket, "AF_UNIX"):
-            return winsock.connect(self._address)
+            return winsock.connect(self._path)
         sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-        sock.connect(self._address)
+        sock.connect(self._path)
         return sock

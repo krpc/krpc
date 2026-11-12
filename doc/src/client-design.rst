@@ -78,7 +78,7 @@ These clients divide their work into the same parts, with a class for each:
      - ``Client`` in C++ and Python, ``Connection`` in C# and Java
    * - Framing
      - Splits the bytes on the socket into messages, each prefixed with its length
-     - ``Connection`` in C++ and Python, ``MessageReader`` in C# and Java
+     - ``Transport`` in C++ and Python, ``MessageReader`` in C# and Java
    * - Session
      - Matches responses to calls, chooses the thread that reads, and owns the threads and the close
      - ``Session``

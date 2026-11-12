@@ -10,7 +10,6 @@ from typing import TYPE_CHECKING, Any, TypeGuard, TypeVar, cast
 import krpc.schema.KRPC_pb2 as KRPC
 import krpc.stream
 from krpc import limits
-from krpc.connection import Connection
 from krpc.declarations import client_lookup
 from krpc.decoder import Decoder
 from krpc.definitions import register_all
@@ -32,6 +31,7 @@ from krpc.service import (
 from krpc.session import DEFAULT_STALL_TIMEOUT, Session
 from krpc.stream import Stream
 from krpc.streammanager import StreamManager
+from krpc.transport import Transport
 from krpc.types import (
     DefaultArgument,
     EnumerationValueError,
@@ -136,14 +136,14 @@ class Client:
 
     def __init__(
         self,
-        connection: Connection,
+        transport: Transport,
         stall_timeout: float | None = DEFAULT_STALL_TIMEOUT,
     ) -> None:
         self._types = Types()
         self._internal = InternalProcedures(self)
-        self._connection = connection
+        self._transport = transport
         self._session = Session(
-            connection, self._internal.remove_stream_request, stall_timeout
+            transport, self._internal.remove_stream_request, stall_timeout
         )
         self._stream_manager = StreamManager(self, self._session.dispatch)
         self._session.start(self._stream_manager)
