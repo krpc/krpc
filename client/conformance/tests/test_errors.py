@@ -5,7 +5,7 @@ import testee_pb2 as pb
 from driver import profile, raw, section, should, values
 from driver.errors import (
     assert_native_error,
-    assert_server_error_kind,
+    assert_remote_error,
     error_types,
     native_type,
 )
@@ -87,7 +87,7 @@ def assert_cut(message, full, prefix):
 
 def assert_raises_type(error, service, name):
     """The error is the client's type for an exception a service lists."""
-    assert error.kind == pb.Error.RPC
+    assert error.kind == pb.Error.SERVER
     assert (error.service, error.name) == (service, name)
 
 
@@ -128,10 +128,10 @@ section("Server Errors")
 
 
 @pytest.mark.parametrize("name", ["InvalidOperationException", "CustomException"])
-def test_rpc_error(connected, name):
-    """A call that fails on the server raises the RPC error."""
+def test_server_error(connected, name):
+    """A call that fails on the server raises the server error."""
     procedure, args = EXCEPTIONS[name]
-    assert raised(connected, "TestService", procedure, *args).kind == pb.Error.RPC
+    assert raised(connected, "TestService", procedure, *args).kind == pb.Error.SERVER
 
 
 @should
@@ -157,27 +157,27 @@ def test_setter_error(connected, control):
 )
 def test_unknown_exception(client, server, scripted_server, service, name):
     """A server error naming a service or exception absent from the client's definitions
-    raises the RPC error. The message carries the description and the ``Service.Name`` of
+    raises the server error. The message carries the description and the ``Service.Name`` of
     the error. This includes an absent exception of a service the client has, and a name the
     service gives to a class."""
     sent = KRPC.Error(service=service, exception=name, description="Oops")
     error = scripted_error(
         client, erroring_server(server, scripted_server, result_error=sent)
     )
-    assert error.kind == pb.Error.RPC
+    assert error.kind == pb.Error.SERVER
     assert "%s.%s" % (service, name) in error.message
     assert "Oops" in error.message
     assert error.name in ("", name)
 
 
 def test_request_error(client, server, scripted_server):
-    """An error for the whole request raises the RPC error. The message is the
+    """An error for the whole request raises the server error. The message is the
     description."""
     sent = KRPC.Error(description="Oops")
     error = scripted_error(
         client, erroring_server(server, scripted_server, response_error=sent)
     )
-    assert error.kind == pb.Error.RPC
+    assert error.kind == pb.Error.SERVER
     assert error.message == "Oops"
     assert error.name == ""
 
@@ -199,20 +199,18 @@ section(
 @profile("error-types")
 @pytest.mark.parametrize("name", sorted(MAPPED_EXCEPTIONS))
 def test_mapped_exceptions(connected, control, name):
-    """A mapped exception raises the language's native error type for it. The client may
-    raise a type of its own for the exception instead, derived from the native type."""
+    """A mapped exception raises the language's native error type for it, which does not
+    derive the client's remote error type. A client may raise a class of its own for the
+    exception, with the native type as its only base. An exception with no native type in
+    the language raises the client's type for it, which derives the server error."""
     procedure, args = MAPPED_EXCEPTIONS[name]
     error = raised(connected, "TestService", procedure, *args)
-    assert_server_error_kind(error, name)
-    native = native_type(connected, control, name)
+    assert_native_error(connected, control, error, name)
     if error.name:
         # A client that gives its own type for the exception names it
         assert (error.service, error.name) == ("KRPC", name)
-        if native is not None:
-            assert native in error.native_types
-    else:
-        # A client that gives the native type itself gives exactly that type
-        assert error.native_types[0] == native
+    if native_type(connected, control, name) is None:
+        assert error.kind == pb.Error.SERVER, error
 
 
 @profile("error-types")
@@ -231,6 +229,48 @@ def test_service_exceptions(connected, service):
         connected.invoke("TestService", "RemoveTestObject", values.obj(obj))
         error = raised(connected, "TestService", "TestClass_GetValue", values.obj(obj))
         assert_raises_type(error, "KRPC", "ObjectDestroyedException")
+
+
+# The categories of error the client's remote error type covers
+REMOTE_ERRORS = ["connection", "server", "stream", "encoding"]
+
+
+def remote_error_of(client, server, category):
+    """The error of a category, from a client connected to the server."""
+    if category == "connection":
+        client.connect(server)
+        client.close()
+        with pytest.raises(TesteeError) as info:
+            client.invoke("KRPC", "GetClientName")
+        return info.value.error
+    client.connect(server)
+    try:
+        if category == "server":
+            return raised(client, "TestService", "ThrowCustomException")
+        if category == "stream":
+            stream = client.add_stream("TestService", "Int32ToString", values.sint32(1))
+            stream.get()
+            stream.remove()
+            with pytest.raises(TesteeError) as info:
+                stream.get()
+            return info.value.error
+        # A varint cut short
+        with pytest.raises(TesteeError) as info:
+            client.decode("sint32", bytes.fromhex("ff"))
+        return info.value.error
+    finally:
+        client.close()
+
+
+@profile("error-types")
+@pytest.mark.parametrize("category", REMOTE_ERRORS)
+def test_remote_error(client, server, category):
+    """Every error of the client's own derives one type, its remote error type, named in the
+    conventions file. This covers the connection, server, stream and encoding errors, and a
+    service's exception types. A mapped exception and the language's own errors, such as its
+    argument error, do not derive it."""
+    error = remote_error_of(client, server, category)
+    assert_remote_error(client, error)
 
 
 section("Messages")

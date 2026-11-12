@@ -65,7 +65,7 @@ void write(const Output& message) { write_line(message); }
 Error to_error(const std::exception& exn) {
   Error error;
   error.set_message(exn.what());
-  error.set_kind(Error::RPC);
+  error.set_kind(Error::SERVER);
   if (dynamic_cast<const Unsupported*>(&exn) != nullptr) error.set_kind(Error::UNSUPPORTED);
   if (auto client_error = dynamic_cast<const ClientError*>(&exn)) {
     switch (client_error->code) {

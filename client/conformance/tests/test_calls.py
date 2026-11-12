@@ -7,7 +7,7 @@ import time
 import pytest
 import testee_pb2 as pb
 from driver import profile, raw, section, should, values
-from driver.errors import assert_argument_error
+from driver.errors import assert_argument_error, assert_interrupt_error
 from driver.framing import encode_sint32, encode_size
 from driver.helpers import create
 from driver.scripted import ScriptedServer, definitions, is_call, serve_definitions
@@ -1102,8 +1102,8 @@ def test_match_by_id(client, server, scripted_server):
 @should
 @profile("concurrency")
 def test_abandoned_id(client, server, scripted_server):
-    """A call interrupted while waiting abandons its id. The client discards the
-    response to that id."""
+    """A call interrupted while waiting abandons its id, and raises the language's error for
+    an interrupted thread. The client discards the response to that id."""
     held = []
     scripted = scripted_server(held_calls(server, 2, list, held))
     client.connect(scripted.endpoint())
@@ -1111,7 +1111,7 @@ def test_abandoned_id(client, server, scripted_server):
         abandoned = client.start("abandoned", invoke=to_string(1))
         assert wait_until(lambda: len(held) == 1)
         client.interrupt("abandoned")
-        abandoned.error()
+        assert_interrupt_error(client, abandoned.error())
         # The response to the abandoned call arrives first
         assert client.invoke("TestService", "Int32ToString", values.sint32(2)) == "2"
     finally:

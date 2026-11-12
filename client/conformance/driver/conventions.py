@@ -1,17 +1,19 @@
-"""A client's conventions file: the native error type the client raises for each mapped server
-exception, and how a client that builds its services names what it exposes. The file is kept
-apart from the client, as the listings are, so a change to the client's own mapping fails the
-suite.
+"""A client's conventions file: the base type of the client's own errors, the native error type the
+client raises for each mapped server exception, and how a client that builds its services names what
+it exposes. The file is kept apart from the client, as the listings are, so a change to the client's
+own mapping fails the suite.
 
   {
+    "remote_error": "krpc.error.RemoteError",
     "native_types": {"System.ArgumentException": "ValueError", ...},
     "naming": {"case": "snake", "accessors": false, "exceptions": true}
   }
 
+remote_error names the type every error of the client's own derives, as the testee reports it.
 A key of native_types is the mapped type of a KRPC exception, the .NET exception it stands for.
 A null value is an exception the client raises only as a type of its own.
-A client with the error-types profile needs native_types, and one with the definitions
-profile needs naming.
+A client with the error-types profile needs remote_error and native_types, and one with the
+definitions profile needs naming.
 """
 
 from __future__ import annotations
@@ -23,7 +25,11 @@ from dataclasses import dataclass
 from krpc.utils import snake_case
 
 # The profile each section of the file is for
-SECTIONS = {"native_types": "error-types", "naming": "definitions"}
+SECTIONS = {
+    "remote_error": "error-types",
+    "native_types": "error-types",
+    "naming": "definitions",
+}
 
 # The function that converts a name to each case
 CASES: dict[str, Callable[[str], str]] = {"snake": snake_case}
@@ -45,6 +51,7 @@ class Naming:
 
 @dataclass(frozen=True)
 class Conventions:
+    remote_error: str | None = None
     native_types: dict[str, str | None] | None = None
     naming: Naming | None = None
 
@@ -60,6 +67,7 @@ def read(path: str) -> Conventions:
         raise ValueError("%s has unknown keys: %s" % (path, ", ".join(sorted(unknown))))
     naming = content.get("naming")
     return Conventions(
+        remote_error=content.get("remote_error"),
         native_types=content.get("native_types"),
         naming=None if naming is None else _naming(path, naming),
     )

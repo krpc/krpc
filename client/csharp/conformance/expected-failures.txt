@@ -72,3 +72,28 @@ test_concurrency.py::test_held_stream_ending_before_value  # A read on the threa
 test_concurrency.py::test_held_stream_ending @flaky  # Fails now and then: a thread that takes the condition after the first value is stored, but before the dispatcher thread announces it, reads "Stream has no value"
 test_concurrency.py::test_spurious_wake[stream] @flaky  # Fails now and then: a read before the dispatcher thread announces the first value returns it, and the late announcement wakes the wait, which then returns true before the timeout
 test_connection.py::test_lost[no-disconnect]@localsocket @flaky  # Fails now and then, seen only on Windows CI: the call does not raise within the reply timeout once the connection ends, cause unknown
+test_concurrency.py::test_remove_event_while_holding  # A removed stream raises KRPC.StreamRemovedException, not the stream error
+test_concurrency.py::test_remove_stream_from_callback  # A removed stream raises KRPC.StreamRemovedException, not the stream error
+test_concurrency.py::test_remove_while_holding  # A removed stream raises KRPC.StreamRemovedException, not the stream error
+test_errors.py::test_remote_error[connection]  # The client has no remote error type
+test_errors.py::test_remote_error[encoding]  # The client has no remote error type
+test_errors.py::test_remote_error[server]  # The client has no remote error type
+test_errors.py::test_remote_error[stream]  # The client has no remote error type
+test_events.py::test_end_callback[remove]  # A stream or event the server removes raises KRPC.StreamRemovedException, not the stream error
+test_events.py::test_end_callback[server]  # A stream or event the server removes raises KRPC.StreamRemovedException, not the stream error
+test_events.py::test_ended_without_firing  # A stream or event the server removes raises KRPC.StreamRemovedException, not the stream error
+test_events.py::test_remove[none-event]  # A stream or event the server removes raises KRPC.StreamRemovedException, not the stream error
+test_events.py::test_remove[none-stream]  # A stream or event the server removes raises KRPC.StreamRemovedException, not the stream error
+test_events.py::test_remove[unseen-event]  # A stream or event the server removes raises KRPC.StreamRemovedException, not the stream error
+test_events.py::test_remove[unseen-stream]  # A stream or event the server removes raises KRPC.StreamRemovedException, not the stream error
+test_events.py::test_server_end  # A stream or event the server removes raises KRPC.StreamRemovedException, not the stream error
+test_events.py::test_wake_waiter[remove]  # A stream or event the server removes raises KRPC.StreamRemovedException, not the stream error
+test_functions.py::test_two_streams_of_one_function  # A removed stream raises KRPC.StreamRemovedException, not the stream error
+test_streams.py::test_add_twice[after-remove]  # A removed stream raises KRPC.StreamRemovedException, not the stream error
+test_streams.py::test_add_twice[together]  # A removed stream raises KRPC.StreamRemovedException, not the stream error
+test_streams.py::test_end_callback[remove]  # A removed stream raises KRPC.StreamRemovedException, not the stream error
+test_streams.py::test_late_end_callback[remove]  # A removed stream raises KRPC.StreamRemovedException, not the stream error
+test_streams.py::test_remove  # A removed stream raises KRPC.StreamRemovedException, not the stream error
+test_streams.py::test_update_after_remove[after-response]  # A removed stream raises KRPC.StreamRemovedException, not the stream error
+test_streams.py::test_update_after_remove[in-flight]  # A removed stream raises KRPC.StreamRemovedException, not the stream error
+test_streams.py::test_wake_waiter[remove]  # A removed stream raises KRPC.StreamRemovedException, not the stream error

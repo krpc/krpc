@@ -273,7 +273,7 @@ Error to_error(const std::exception& exn) {
     // An argument the client rejects before it makes the call
     error.set_kind(Error::ARGUMENT);
   } else {
-    error.set_kind(Error::RPC);
+    error.set_kind(Error::SERVER);
     if (!name_error_krpc(exn, &error)) name_error_test_service(exn, &error);
   }
   return error;

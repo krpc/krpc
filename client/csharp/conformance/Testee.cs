@@ -591,12 +591,14 @@ namespace KRPC.Client.Conformance
                         Disconnect.Descriptor.EnumTypes [0], (int)connectionException.Reason.Value);
             } else if (exn is EncodingException) {
                 error.Kind = Error.Types.Kind.Encoding;
+            } else if (exn is ThreadInterruptedException) {
+                error.Kind = Error.Types.Kind.Interrupt;
             } else if (exn is ArgumentException) {
                 // The client's argument error, which is also the type of a server
                 // ArgumentException
                 error.Kind = Error.Types.Kind.Argument;
             } else {
-                error.Kind = Error.Types.Kind.Rpc;
+                error.Kind = Error.Types.Kind.Server;
                 // A generated exception type is named after the server's, in a namespace named
                 // after its service
                 const string prefix = "KRPC.Client.Services.";

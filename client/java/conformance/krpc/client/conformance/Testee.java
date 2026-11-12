@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.Semaphore;
 import java.util.function.Consumer;
 import java.util.function.IntConsumer;
@@ -596,11 +597,13 @@ final class Testee {
       error.setKind(Error.Kind.STREAM);
     } else if (exn instanceof EncodingException) {
       error.setKind(Error.Kind.ENCODING);
+    } else if (exn instanceof CancellationException) {
+      error.setKind(Error.Kind.INTERRUPT);
     } else if (exn instanceof IllegalArgumentException) {
       // The client's argument error, which is also the type of a server ArgumentException
       error.setKind(Error.Kind.ARGUMENT);
     } else {
-      error.setKind(Error.Kind.RPC);
+      error.setKind(Error.Kind.SERVER);
       // A generated exception type is nested in the class of its service
       Class<?> outer = exn.getClass().getEnclosingClass();
       if (exn instanceof RPCException && outer != null

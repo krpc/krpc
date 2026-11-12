@@ -1,4 +1,5 @@
 {
+  "remote_error": "krpc::RemoteError",
   "native_types": {
     "System.InvalidOperationException": "std::logic_error",
     "System.ArgumentException": "std::invalid_argument",
@@ -7,6 +8,9 @@
     "System.Collections.Generic.KeyNotFoundException": "std::out_of_range",
     "System.IndexOutOfRangeException": "std::out_of_range",
     "System.DivideByZeroException": "std::domain_error",
-    "System.OverflowException": "std::overflow_error"
+    "System.OverflowException": "std::overflow_error",
+    "System.NullReferenceException": null,
+    "System.NotSupportedException": null,
+    "System.TimeoutException": null
   }
 }

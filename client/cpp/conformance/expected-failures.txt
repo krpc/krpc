@@ -1,7 +1,5 @@
 # The conformance tests the C++ client fails, one per line, with the reason as a comment
-test_errors.py::test_mapped_exceptions[ArgumentException]  # The testee names std::logic_error before std::invalid_argument
-test_errors.py::test_mapped_exceptions[ArgumentNullException]  # As above
-test_errors.py::test_mapped_exceptions[NotSupportedException]  # The conventions file has no native type for the exception
+test_errors.py::test_mapped_exceptions[NotSupportedException]  # The client has no remote error type
 test_errors.py::test_mapped_exceptions[NullReferenceException]  # As above
 test_errors.py::test_mapped_exceptions[TimeoutException]  # As above
 test_calls.py::test_class_extension_members  # The testee dispatch covers KRPC and TestService only
@@ -30,3 +28,11 @@ test_concurrency.py::test_held_stream_ending_before_value  # A read on the threa
 test_concurrency.py::test_held_stream_ending @flaky  # Fails now and then, seen only on CI: a read on the thread that takes the condition raises "Stream has no value"
 test_concurrency.py::test_value_read_before_wake @flaky  # Fails now and then, seen only on CI: the read made while the update is paused returns the earlier value
 test_concurrency.py::test_wake_update_waiter[connection-failure] @flaky  # Fails now and then, seen only on CI: the waiting thread is not woken within the reply timeout
+test_connection.py::test_localsocket_path_too_long  # A path too long raises the connection error, not the argument error
+test_errors.py::test_remote_error[connection]  # The client has no remote error type
+test_errors.py::test_remote_error[encoding]  # The client has no remote error type
+test_errors.py::test_remote_error[server]  # The client has no remote error type
+test_errors.py::test_remote_error[stream]  # The client has no remote error type
+test_events.py::test_end_callback[server]  # A stream or event the server removes raises KRPC.StreamRemovedException, not the stream error
+test_events.py::test_ended_without_firing  # A stream or event the server removes raises KRPC.StreamRemovedException, not the stream error
+test_events.py::test_server_end  # A stream or event the server removes raises KRPC.StreamRemovedException, not the stream error

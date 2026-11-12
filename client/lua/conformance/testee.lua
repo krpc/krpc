@@ -543,7 +543,7 @@ local function run(command)
     reply.error = { kind = 'UNSUPPORTED', message = result.unsupported }
   else
     -- A failed connect, and a call once the connection has ended, fail with the connection
-    local kind = 'RPC'
+    local kind = 'SERVER'
     if type(result) == 'table' and result.unsupported ~= nil then
       kind = 'UNSUPPORTED'
       result = result.unsupported

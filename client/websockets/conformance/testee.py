@@ -304,7 +304,7 @@ def to_error(exn: Exception) -> pb.Error:
         error.status = exn.status
         error.reason = exn.reason
     elif isinstance(exn, RPCFailed):
-        error.kind = pb.Error.RPC
+        error.kind = pb.Error.SERVER
         error.service = exn.service
         error.name = exn.name
     elif isinstance(exn, EncodingFailed):

@@ -19,6 +19,7 @@ from driver import (
     untested,
     values,
 )
+from driver.errors import assert_error_kind
 from driver.framing import CLIENT_IDENTIFIER, PROTOCOL_VERSION, encode_size, frame
 from driver.scripted import ScriptedServer, definitions, is_call
 from driver.testee import (
@@ -383,8 +384,8 @@ SOCKET_PATH_SIZE = 104 if sys.platform == "darwin" else 108
 
 
 def test_localsocket_path_too_long(client, server, scripted_dir):
-    """A local socket path too long for a socket address raises the connection error or the
-    argument error. The client does not connect to the socket a leading part of the
+    """A local socket path too long for a socket address raises the argument error. The
+    client does not connect to the socket a leading part of the
     path names."""
     if "localsocket" not in client.testee.hello.protocols:
         pytest.skip("%s has no local socket protocol" % client.name)
@@ -399,8 +400,7 @@ def test_localsocket_path_too_long(client, server, scripted_dir):
         endpoint = Endpoint("localsocket", path=path + "q" * 64)
         with pytest.raises(TesteeError) as info:
             client.connect(endpoint)
-        kind = info.value.error.kind
-        assert kind in (pb.Error.CONNECTION, pb.Error.ARGUMENT), info.value.error
+        assert_error_kind(client, info.value.error, pb.Error.ARGUMENT)
         with pytest.raises(BlockingIOError):
             listener.accept()
     finally:
@@ -587,11 +587,12 @@ def test_handshake_lost(client, scripted_server):
 
 
 def test_handshake_failed_write(client, server):
-    """A ``connection_request`` that fails to be written raises the connection error,
-    which carries the error of the write in its message or as its cause."""
+    """A ``connection_request`` that fails to be written raises the connection error. Its
+    message carries the message of the write's error, which is also its cause in a language
+    that chains errors."""
     client.fail_write("Failed by the test")
     error = connection_error(lambda: client.connect(server))
-    assert "Failed by the test" in error.message + error.cause
+    assert "Failed by the test" in error.message, error
 
 
 def test_handshake_malformed_size(client, server, scripted_server):
@@ -1072,11 +1073,12 @@ def test_lost_pending_calls(client, server, scripted_server):
 
 def test_failed_write(connected):
     """A call whose request fails to be written fails the connection. The call raises the
-    connection error, which carries the error of the write in its message or as its cause.
-    A later call raises the connection error at once."""
+    connection error. Its message carries the message of the write's error, which is also
+    its cause in a language that chains errors. A later call raises the connection error at
+    once."""
     connected.fail_write("Failed by the test")
     error = connection_error(lambda: get_client_name(connected))
-    assert "Failed by the test" in error.message + error.cause
+    assert "Failed by the test" in error.message, error
     start = time.perf_counter()
     connection_error(lambda: get_client_name(connected))
     assert time.perf_counter() - start < AT_ONCE

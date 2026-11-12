@@ -76,3 +76,17 @@ test_streams.py::test_wake_waiter[close] @flaky  # As test_streams.py::test_wake
 test_concurrency.py::test_wake_waiter_holding_another[close] @flaky  # As test_streams.py::test_wake_waiter[remove]
 test_streams.py::test_wake_waiter[connection-failure] @flaky  # As test_streams.py::test_wake_waiter[remove]
 test_concurrency.py::test_wake_waiter_holding_another[connection-failure] @flaky  # As test_streams.py::test_wake_waiter[remove]
+test_codec.py::test_extra_items[tuple]  # A tuple of the wrong length raises the encoding error, not the argument error
+test_codec.py::test_out_of_range[uint64]  # A negative unsigned value raises the encoding error, not the argument error
+test_connection.py::test_localsocket_path_too_long  # A path too long raises the connection error, not the argument error
+test_errors.py::test_remote_error[connection]  # The client has no remote error type
+test_errors.py::test_remote_error[encoding]  # The client has no remote error type
+test_errors.py::test_remote_error[server]  # The client has no remote error type
+test_errors.py::test_remote_error[stream]  # The client has no remote error type
+test_events.py::test_end_callback[server]  # A stream or event the server removes raises KRPC.StreamRemovedException, not the stream error
+test_events.py::test_ended_without_firing  # A stream or event the server removes raises KRPC.StreamRemovedException, not the stream error
+test_events.py::test_server_end  # A stream or event the server removes raises KRPC.StreamRemovedException, not the stream error
+test_values.py::test_out_of_range[uint32-negative]  # A negative unsigned value raises the encoding error, not the argument error
+test_values.py::test_out_of_range[uint64-negative]  # A negative unsigned value raises the encoding error, not the argument error
+test_values.py::test_wrong_sized_tuple[too-few]  # A tuple of the wrong length raises the encoding error, not the argument error
+test_values.py::test_wrong_sized_tuple[too-many]  # A tuple of the wrong length raises the encoding error, not the argument error

@@ -17,7 +17,7 @@ def error_types(client: Client) -> bool:
 
 
 def assert_error_kind(client: Client, error: pb.Error, *kinds: int) -> None:
-    """The error is of one of the kinds. A client without error types reports only RPC and
+    """The error is of one of the kinds. A client without error types reports only server and
     connection errors, so for it the check is only that the call raised."""
     if error_types(client):
         assert error.kind in kinds, error
@@ -32,13 +32,29 @@ def assert_argument_error(client: Client, error: pb.Error) -> None:
 
 
 def is_removed_error(client: Client, error: pb.Error) -> bool:
-    """Whether an error is the one for a removed stream: the KRPC exception for it, or the
-    client's stream error. A client without error types reports it as an RPC error."""
-    if error.name:
-        return (error.service, error.name) == ("KRPC", "StreamRemovedException")
+    """Whether an error is the client's stream error, the one for a removed stream. A client
+    without error types can report it as a server error."""
     if error_types(client):
         return error.kind == pb.Error.STREAM
-    return error.kind == pb.Error.RPC
+    return error.kind in (pb.Error.STREAM, pb.Error.SERVER)
+
+
+def remote_error(client: Client) -> str:
+    """The base type of the client's own errors, from its conventions."""
+    remote = client.conventions.remote_error
+    assert remote is not None
+    return remote
+
+
+def assert_remote_error(client: Client, error: pb.Error) -> None:
+    """For a client with error types, the error derives the client's remote error type."""
+    if error_types(client):
+        assert remote_error(client) in error.native_types, error
+
+
+def assert_interrupt_error(client: Client, error: pb.Error) -> None:
+    """The error is the language's error for an interrupted thread."""
+    assert_error_kind(client, error, pb.Error.INTERRUPT)
 
 
 @functools.cache
@@ -61,9 +77,9 @@ def native_type(client: Client, control: Any, name: str) -> str | None:
 
 
 def assert_server_error_kind(error: pb.Error, name: str) -> None:
-    """The error for the KRPC exception of the given name is an RPC error. The native type of
-    an argument exception can also be the client's argument error type."""
-    kinds = [pb.Error.RPC]
+    """The error for the KRPC exception of the given name is a server error. The native type
+    of an argument exception can also be the client's argument error type."""
+    kinds = [pb.Error.SERVER]
     if name.startswith("Argument"):
         kinds.append(pb.Error.ARGUMENT)
     assert error.kind in kinds, error
@@ -72,14 +88,18 @@ def assert_server_error_kind(error: pb.Error, name: str) -> None:
 def assert_native_error(
     client: Client, control: Any, error: pb.Error, name: str
 ) -> None:
-    """The error is the native error type for the KRPC exception of the given name. A client
-    without error types starts the message with ``KRPC.Name:``."""
+    """The error is the native error type for the KRPC exception of the given name, and does
+    not derive the client's remote error type. An exception with no native type is the
+    client's type for it, deriving the remote error type. A client without error types starts
+    the message with ``KRPC.Name:``."""
     assert_server_error_kind(error, name)
     if error_types(client):
         native = native_type(client, control, name)
         if native is None:
             assert (error.service, error.name) == ("KRPC", name), error
+            assert remote_error(client) in error.native_types, error
         else:
             assert native in error.native_types, error
+            assert remote_error(client) not in error.native_types, error
     else:
         assert error.message.startswith("KRPC.%s: " % name)

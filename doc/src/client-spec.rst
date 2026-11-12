@@ -87,7 +87,8 @@ A client implements the ``core`` profile, and any of the others:
    * - ``core``
      - Connecting, calls, values, errors and objects
    * - ``error-types``
-     - Reporting each exception a service lists with a type of its own
+     - Error types: a remote error type the client's own errors derive, and a type for each
+       exception a service lists
    * - ``dynamic``
      - Checking and converting arguments at run time, and calls a static type system rules out
    * - ``definitions``

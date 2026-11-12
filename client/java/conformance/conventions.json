@@ -1,4 +1,5 @@
 {
+  "remote_error": "krpc.client.RemoteException",
   "native_types": {
     "System.InvalidOperationException": "java.lang.IllegalStateException",
     "System.ArgumentException": "java.lang.IllegalArgumentException",

@@ -68,3 +68,23 @@ test_concurrency.py::test_wait_holding_another @skip  # The dispatcher thread wa
 test_concurrency.py::test_held_stream_ending_before_value  # A read on the thread holding the condition raises "Stream has no value", as the ending is announced only once the condition is free
 test_connection.py::test_close_interrupted@localsocket @flaky  # Fails now and then, seen only on Windows CI: the close aborts the connection, so the server reads an abort, not the end of the stream
 test_concurrency.py::test_held_stream_ending @flaky  # Fails now and then: a thread that takes the condition after the first value is stored, but before the dispatcher thread announces it, reads "Stream has no value"
+test_calls.py::test_abandoned_id  # An interrupted call raises RPCException, not CancellationException
+test_concurrency.py::test_interrupted_wait[event]  # An interrupted wait raises StreamException, not CancellationException
+test_concurrency.py::test_interrupted_wait[stream]  # An interrupted wait raises StreamException, not CancellationException
+test_connection.py::test_localsocket_path_too_long  # A path too long raises the connection error, not the argument error
+test_errors.py::test_mapped_exceptions[TimeoutException]  # The generated class extends the checked RPCException
+test_errors.py::test_remote_error[connection]  # The client has no remote error type
+test_errors.py::test_remote_error[encoding]  # The client has no remote error type
+test_errors.py::test_remote_error[server]  # The client has no remote error type
+test_errors.py::test_remote_error[stream]  # The client has no remote error type
+test_events.py::test_end_callback[server]  # A stream or event the server removes raises KRPC.StreamRemovedException, not the stream error
+test_events.py::test_ended_without_firing  # A stream or event the server removes raises KRPC.StreamRemovedException, not the stream error
+test_events.py::test_server_end  # A stream or event the server removes raises KRPC.StreamRemovedException, not the stream error
+test_values.py::test_null_in_non_nullable_slot[dictionary-key]  # A null item raises the encoding error, not the argument error
+test_values.py::test_null_in_non_nullable_slot[dictionary-value]  # A null item raises the encoding error, not the argument error
+test_values.py::test_null_in_non_nullable_slot[list-element]  # A null item raises the encoding error, not the argument error
+test_values.py::test_null_in_non_nullable_slot[nested-element]  # A null item raises the encoding error, not the argument error
+test_values.py::test_null_in_non_nullable_slot[object-element]  # A null item raises the encoding error, not the argument error
+test_values.py::test_null_in_non_nullable_slot[set-element]  # A null item raises the encoding error, not the argument error
+test_values.py::test_null_in_non_nullable_slot[string-element]  # A null item raises the encoding error, not the argument error
+test_values.py::test_null_in_non_nullable_slot[tuple-item]  # A null item raises the encoding error, not the argument error

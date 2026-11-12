@@ -285,8 +285,7 @@ section("Ending")
 @profile("events")
 def test_server_end(fixture):
     """Waiting on an event the server ends returns for an unseen firing first. Later waits
-    raise the error for an event the server ended: ``KRPC.StreamRemovedException``, or the
-    stream error."""
+    raise the stream error."""
     fixture.service.trigger_event(fixture.name)
     fixture.end()
     # The firing is seen before the end
@@ -307,7 +306,7 @@ def test_ended_without_firing(fixture):
 @pytest.mark.parametrize("firing", ["none", "unseen"])
 def test_remove(fixture, firing, through):
     """Waiting on an event the client removed, through the event or through its stream,
-    raises the error for a removed stream, at once. An unseen firing is discarded."""
+    raises the stream error, at once. An unseen firing is discarded."""
     if firing == "unseen":
         fixture.trigger()
     if through == "event":
@@ -450,7 +449,7 @@ def test_two_waiters(fixture):
 @pytest.mark.parametrize("end", ["remove", "close", "connection-failure"])
 def test_wake_waiter(fixture, request, end):
     """A wait on an event ends when the event is removed, the connection closes or the
-    connection fails. The wait raises the error for a removed stream, or the
+    connection fails. The wait raises the stream error, or the
     connection error, with the reason for a failure."""
     waiting = start_wait(fixture, "waiter")
     time.sleep(SETTLE)
