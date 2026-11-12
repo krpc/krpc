@@ -7,6 +7,7 @@ import krpc.client.Encoder;
 import krpc.client.RemoteEnum;
 import krpc.client.RemoteFlags;
 import krpc.client.RemoteObject;
+import krpc.client.RemoteService;
 import krpc.client.RemoteStruct;
 import krpc.client.RPCInfo;
 import krpc.client.RPCException;
@@ -16,16 +17,14 @@ import krpc.client.Types;
 // exception types), so suppress the deprecation warnings within this class.
 @SuppressWarnings("deprecation")
 @Deprecated
-public class DeprecatedService {
+public class DeprecatedService extends RemoteService {
 
     public static DeprecatedService newInstance(Connection connection) {
         return new DeprecatedService(connection);
     }
 
-    private Connection connection;
-
     private DeprecatedService(Connection connection) {
-        this.connection = connection;
+        super(connection);
         addExceptionTypes(connection);
     }
 

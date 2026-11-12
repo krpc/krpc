@@ -43,6 +43,7 @@
     <Compile Include="ProcedureSpecs.cs" />
     <Compile Include="RPCException.cs" />
     <Compile Include="RemoteObject.cs" />
+    <Compile Include="RemoteService.cs" />
     <Compile Include="Stream.cs" />
     <Compile Include="Session.cs" />
     <Compile Include="StreamImpl.cs" />

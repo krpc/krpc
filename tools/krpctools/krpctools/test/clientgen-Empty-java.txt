@@ -7,6 +7,7 @@ import krpc.client.Encoder;
 import krpc.client.RemoteEnum;
 import krpc.client.RemoteFlags;
 import krpc.client.RemoteObject;
+import krpc.client.RemoteService;
 import krpc.client.RemoteStruct;
 import krpc.client.RPCInfo;
 import krpc.client.RPCException;
@@ -15,16 +16,14 @@ import krpc.client.Types;
 // Generated code references its own deprecated members (e.g. when registering
 // exception types), so suppress the deprecation warnings within this class.
 @SuppressWarnings("deprecation")
-public class EmptyService {
+public class EmptyService extends RemoteService {
 
     public static EmptyService newInstance(Connection connection) {
         return new EmptyService(connection);
     }
 
-    private Connection connection;
-
     private EmptyService(Connection connection) {
-        this.connection = connection;
+        super(connection);
     }
 
     private void addExceptionTypes(Connection connection) {

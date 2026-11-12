@@ -84,13 +84,10 @@ namespace KRPC.Client.Services.KRPC
     /// <summary>
     /// KRPC service.
     /// </summary>
-    public class Service
+    public class Service : global::KRPC.Client.RemoteService
     {
-        global::KRPC.Client.IConnection connection;
-
-        internal Service (global::KRPC.Client.IConnection serverConnection)
+        internal Service (global::KRPC.Client.IConnection serverConnection) : base (serverConnection)
         {
-            connection = serverConnection;
             AddExceptionTypes (serverConnection);
         }
 
