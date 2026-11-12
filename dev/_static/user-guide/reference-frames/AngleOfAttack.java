@@ -1,15 +1,12 @@
 import krpc.client.Connection;
-import krpc.client.RPCException;
 import krpc.client.services.SpaceCenter;
 
 import org.javatuples.Triplet;
 
-import java.io.IOException;
 import java.lang.Math;
 
 public class AngleOfAttack {
-    public static void main(String[] args)
-        throws IOException, RPCException, InterruptedException {
+    public static void main(String[] args) throws InterruptedException {
         Connection connection = Connection.newInstance("Angle of attack");
         SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
         SpaceCenter.Vessel vessel = spaceCenter.getActiveVessel();

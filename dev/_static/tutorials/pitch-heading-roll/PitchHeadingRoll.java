@@ -1,10 +1,8 @@
 import krpc.client.Connection;
-import krpc.client.RPCException;
 import krpc.client.services.SpaceCenter;
 
 import org.javatuples.Triplet;
 
-import java.io.IOException;
 import java.lang.Math;
 
 public class PitchHeadingRoll {
@@ -41,8 +39,7 @@ public class PitchHeadingRoll {
         return Math.acos(dp / (um * vm)) * (180f / Math.PI);
     }
 
-    public static void main(String[] args)
-        throws IOException, RPCException, InterruptedException {
+    public static void main(String[] args) throws InterruptedException {
         Connection connection = Connection.newInstance();
         SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
         SpaceCenter.Vessel vessel = spaceCenter.getActiveVessel();

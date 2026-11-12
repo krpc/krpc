@@ -442,6 +442,8 @@ Main kRPC service, used by clients to interact with basic server functionality.
    A method call was made to a method that is invalid
    given the current state of the object.
 
+   A subclass of the builtin ``RuntimeError`` alone.
+
 
 
 .. class:: ArgumentException
@@ -449,11 +451,15 @@ Main kRPC service, used by clients to interact with basic server functionality.
    A method was invoked where at least one of the passed arguments does not
    meet the parameter specification of the method.
 
+   A subclass of the builtin ``ValueError`` alone.
+
 
 
 .. class:: ArgumentNullException
 
    A null reference was passed to a method that does not accept it as a valid argument.
+
+   A subclass of the builtin ``ValueError`` alone.
 
 
 
@@ -461,11 +467,15 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
    The value of an argument is outside the allowable range of values as defined by the invoked method.
 
+   A subclass of the builtin ``ValueError`` alone.
+
 
 
 .. class:: NullReferenceException
 
    A value was null where its type does not allow one.
+
+   A subclass of the builtin ``TypeError`` alone.
 
 
 
@@ -473,11 +483,15 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
    A key was not found in a dictionary.
 
+   A subclass of the builtin ``KeyError`` alone.
+
 
 
 .. class:: IndexOutOfRangeException
 
    An index was outside the bounds of a collection, string or array.
+
+   A subclass of the builtin ``IndexError`` alone.
 
 
 
@@ -485,11 +499,15 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
    An integer was divided by zero.
 
+   A subclass of the builtin ``ZeroDivisionError`` alone.
+
 
 
 .. class:: NotSupportedException
 
    A method was invoked that is not supported.
+
+   A subclass of the builtin ``NotImplementedError`` alone.
 
 
 
@@ -497,11 +515,15 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
    An operation did not complete in the time allotted to it.
 
+   A subclass of the builtin ``TimeoutError`` alone.
+
 
 
 .. class:: OverflowException
 
    An arithmetic or conversion operation overflowed.
+
+   A subclass of the builtin ``OverflowError`` alone.
 
 
 
@@ -510,6 +532,8 @@ Main kRPC service, used by clients to interact with basic server functionality.
    The game object that a service object refers to no longer exists,
    so the object cannot be used. For example, the part it represents
    was destroyed, or the vessel it belongs to was recovered.
+
+   A subclass of :class:`krpc.error.ServerError`.
 
    .. note::
 
@@ -521,6 +545,8 @@ Main kRPC service, used by clients to interact with basic server functionality.
    The game object that a service object refers to exists, but is not loaded.
    For example, the game is loading, or the vessel carrying the part is unloaded.
 
+   A subclass of :class:`krpc.error.ServerError`.
+
    .. note::
 
       See :class:`ObjectDestroyedException` for a game object that no longer exists.
@@ -529,14 +555,20 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
    The procedure is not available in the current game scene.
 
+   A subclass of :class:`krpc.error.ServerError`.
+
 
 
 .. class:: StreamRemovedException
 
    A stream was removed by the server, e.g. an event that has finished.
 
+   An alias of :class:`krpc.error.StreamError`.
+
 
 
 .. class:: Error
 
    A general error, described by its message.
+
+   A subclass of :class:`krpc.error.ServerError`.

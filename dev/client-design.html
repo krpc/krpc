@@ -596,6 +596,199 @@ lists where it departs from this page.</p>
 </table>
 </div>
 </section>
+<section id="names">
+<h2>Names<a class="headerlink" href="#names" title="Link to this heading">#</a></h2>
+<p>The base class of each kind of generated type is named <code class="docutils literal notranslate"><span class="pre">Remote&lt;Kind&gt;</span></code>: <code class="docutils literal notranslate"><span class="pre">RemoteObject</span></code>,
+<code class="docutils literal notranslate"><span class="pre">RemoteEnum</span></code>, <code class="docutils literal notranslate"><span class="pre">RemoteFlags</span></code>, <code class="docutils literal notranslate"><span class="pre">RemoteStruct</span></code> and <code class="docutils literal notranslate"><span class="pre">RemoteService</span></code>. A client keeps its
+language’s own form where it has one, such as an enum and a struct in C++ and C#, and a
+<code class="docutils literal notranslate"><span class="pre">NamedTuple</span></code> for a Python structure.</p>
+</section>
+<section id="stream-and-call-forms">
+<h2>Stream and Call Forms<a class="headerlink" href="#stream-and-call-forms" title="Link to this heading">#</a></h2>
+<p>A program adding a stream needs to name a remote procedure without calling it. The same applies when
+it gets a call as a value, such as to use in an expression. The clients do this in two ways:</p>
+<ul class="simple">
+<li><p>Python, C# and Java have one method for each purpose, <code class="docutils literal notranslate"><span class="pre">add_stream</span></code> and <code class="docutils literal notranslate"><span class="pre">get_call</span></code> or their
+equivalents. It takes any property or method, and works out the procedure at run time. Lua has
+only <code class="docutils literal notranslate"><span class="pre">get_call</span></code>, as it has no streams.</p></li>
+<li><p>C++ and C-nano cannot look up a method at run time. Their generated stubs instead have extra
+functions for each procedure. C++ adds ones ending in <code class="docutils literal notranslate"><span class="pre">_stream</span></code> and <code class="docutils literal notranslate"><span class="pre">_call</span></code>. C-nano has no
+streams, so it adds only <code class="docutils literal notranslate"><span class="pre">_call</span></code>.</p></li>
+</ul>
+<p>For the <code class="docutils literal notranslate"><span class="pre">MeanAltitude</span></code> property of a <code class="docutils literal notranslate"><span class="pre">Flight</span></code> object:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Client</p></th>
+<th class="head"><p>Stream</p></th>
+<th class="head"><p>Procedure call</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Python</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">conn.add_stream(getattr,</span> <span class="pre">flight,</span> <span class="pre">&quot;mean_altitude&quot;)</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">conn.get_call(getattr,</span> <span class="pre">flight,</span> <span class="pre">&quot;mean_altitude&quot;)</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>C#</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">connection.AddStream</span> <span class="pre">(()</span> <span class="pre">=&gt;</span> <span class="pre">flight.MeanAltitude)</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Connection.GetCall</span> <span class="pre">(()</span> <span class="pre">=&gt;</span> <span class="pre">flight.MeanAltitude)</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>C++</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">flight.mean_altitude_stream()</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">flight.mean_altitude_call()</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>C-nano</p></td>
+<td><p>None</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Flight_MeanAltitude_call(&amp;call,</span> <span class="pre">flight)</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Java</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">connection.addStream(flight,</span> <span class="pre">&quot;getMeanAltitude&quot;)</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">connection.getCall(flight,</span> <span class="pre">&quot;getMeanAltitude&quot;)</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Lua</p></td>
+<td><p>None</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">conn:get_call(flight.get_mean_altitude,</span> <span class="pre">flight)</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>In Python, C# and Java, the stream runs on the connection the method is called on, whichever
+connection the object came from. In C++, it runs on the object’s client, or for a static method the
+client passed to it.</p>
+</section>
+<section id="static-methods">
+<h2>Static Methods<a class="headerlink" href="#static-methods" title="Link to this heading">#</a></h2>
+<p>A static method takes its connection from one place, the one its language gives a class:</p>
+<ul class="simple">
+<li><p>In Python and Lua a class is a value. Each connection builds its own, and a static method runs
+on the connection of the service the class is reached through.</p></li>
+<li><p>In C#, Java and C++ a class is a type. The connection is the static method’s first argument. In
+C-nano, every function takes the connection first.</p></li>
+</ul>
+<p>A stream or call message of a static method never takes the connection a second time. In C# and
+Java, a stream runs on the connection its <code class="docutils literal notranslate"><span class="pre">AddStream</span></code> is called on, and the connection named in
+the call is not used. A call message holds no connection.</p>
+<p>C#, Java and C++ also generate <code class="docutils literal notranslate"><span class="pre">Bind</span></code> on each class with static methods. It returns a <code class="docutils literal notranslate"><span class="pre">Bound</span></code>
+object holding the connection, with each static method minus that parameter. It is the counterpart
+of <code class="docutils literal notranslate"><span class="pre">conn.krpc.Expression</span></code> in Python, and shortens an expression tree that passes the connection
+at every node. The <code class="docutils literal notranslate"><span class="pre">Bound</span></code> methods carry the RPC attribute of the static method, so a C# lambda
+or a Java <code class="docutils literal notranslate"><span class="pre">addStream</span></code> takes them as it takes a service’s methods. A C++ <code class="docutils literal notranslate"><span class="pre">Bound</span></code> is a shorthand
+for the calls that build large expression trees. It has no <code class="docutils literal notranslate"><span class="pre">_stream</span></code> or <code class="docutils literal notranslate"><span class="pre">_call</span></code> forms, which
+stay on the static method.</p>
+</section>
+<section id="errors">
+<h2>Errors<a class="headerlink" href="#errors" title="Link to this heading">#</a></h2>
+<p>The <a class="reference internal" href="client-spec/errors.html"><span class="doc">specification</span></a> gives the kinds of error and the situations that
+raise each. The clients name them alike:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Error</p></th>
+<th class="head"><p>Raised for</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RemoteError</span></code></p></td>
+<td><p>Never raised itself. The base of the others</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ConnectionError</span></code></p></td>
+<td><p>The connection error</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ServerError</span></code></p></td>
+<td><p>The server error, when the language has no type for the exception</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">StreamError</span></code></p></td>
+<td><p>The stream error</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">EncodingError</span></code></p></td>
+<td><p>The encoding error</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CompilationError</span></code></p></td>
+<td><p>Code that does not compile into a server side function, in Python and C#</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>C++ uses these names in <code class="docutils literal notranslate"><span class="pre">krpc::</span></code>. C# and Java end each with <code class="docutils literal notranslate"><span class="pre">Exception</span></code> in place of <code class="docutils literal notranslate"><span class="pre">Error</span></code>,
+as their conventions do. Lua has no <code class="docutils literal notranslate"><span class="pre">StreamError</span></code>, as it has no streams. C-nano returns a code
+per kind.</p>
+<ul class="simple">
+<li><p><strong>The base follows the generated bases.</strong> <code class="docutils literal notranslate"><span class="pre">RemoteError</span></code> is named as <code class="docutils literal notranslate"><span class="pre">RemoteObject</span></code> and
+<code class="docutils literal notranslate"><span class="pre">RemoteService</span></code> are. A program catches every error of the client’s own with it.</p></li>
+<li><p><strong>The server error is named for where it comes from.</strong> A server error reaches the program through
+a call, a stream or an event, so a name for one of them would mislead. It can still be the
+program’s mistake, such as <code class="docutils literal notranslate"><span class="pre">KRPC.ArgumentException</span></code>.</p></li>
+<li><p><strong>A mapped server exception is only the language’s own type.</strong> It is caught as the same failure
+in local code would be. Deriving <code class="docutils literal notranslate"><span class="pre">ServerError</span></code> as well would take multiple inheritance in
+Python and C++, which C# and Java lack. A program that handles every error uses the language’s
+catch-all.</p></li>
+<li><p><strong>No generated class stands for a mapped exception the client never raises.</strong> A <code class="docutils literal notranslate"><span class="pre">catch</span></code> naming
+such a class would never fire. C# and Java generate no class, and C++ generates an alias of the
+native type. A mapped exception with no native type in a language is a generated class deriving
+<code class="docutils literal notranslate"><span class="pre">ServerError</span></code>.</p></li>
+<li><p><strong>Misuse is the language’s own error.</strong> An argument the client rejects raises the language’s
+argument error. A call in a state the client rejects raises its state error, such as Python’s
+<code class="docutils literal notranslate"><span class="pre">TypeError</span></code> for calling a declaration. Neither derives <code class="docutils literal notranslate"><span class="pre">RemoteError</span></code>, as nothing remote has
+failed.</p></li>
+</ul>
+</section>
+<section id="deprecation">
+<h2>Deprecation<a class="headerlink" href="#deprecation" title="Link to this heading">#</a></h2>
+<p>Each client signals the use of a deprecated member with the language’s own mechanism:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Client</p></th>
+<th class="head"><p>Signal</p></th>
+<th class="head"><p>Kinds with no signal</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Python</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DeprecationWarning</span></code> at run time, and <code class="docutils literal notranslate"><span class="pre">&#64;deprecated</span></code> for type checkers</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>C#</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">[Obsolete]</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>C++</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">[[deprecated]]</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>C-nano</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">KRPC_DEPRECATED</span></code></p></td>
+<td><p>Services and exceptions, which have no C type</p></td>
+</tr>
+<tr class="row-even"><td><p>Java</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&#64;Deprecated</span></code>, which holds no reason</p></td>
+<td><p>Streams and calls, which name their method in a string</p></td>
+</tr>
+<tr class="row-odd"><td><p>Lua</p></td>
+<td><p>A warning on standard error, once per member on a connection</p></td>
+<td><p>Exceptions, which have no Lua type, and structure fields</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>A stream, and the call a server side function makes, use a procedure too. Python and Lua warn when
+the client builds the call. In C++ and C-nano, the <code class="docutils literal notranslate"><span class="pre">_stream</span></code> and <code class="docutils literal notranslate"><span class="pre">_call</span></code> functions carry the
+attribute. In C#, the lambda that names the procedure warns.</p>
+<p>A member of a deprecated service, class, enumeration or structure is deprecated. A member with no
+reason of its own takes the reason of its nearest deprecated container. <code class="docutils literal notranslate"><span class="pre">clientgen</span></code> and the Python
+and Lua clients apply this to their copy of the definitions when they read them. The protocol and
+<code class="docutils literal notranslate"><span class="pre">docgen</span></code> keep the attributes as declared, so the API reference has one notice per page.</p>
+<p>A deprecated service is marked too: the C# extension method and service class, and the C++, Java
+and Python service class. The Python and Lua clients keep it out of the client’s attributes, so
+that reading it reaches the attribute-miss hook, which warns.</p>
+<p>Generated C++ and C-nano code uses the deprecated declarations it makes, so each header suppresses
+the warning around its own contents. The suppression goes by the location of the use, so a use in a
+program still warns.</p>
+</section>
+<section id="single-threaded-clients">
+<h2>Single-Threaded Clients<a class="headerlink" href="#single-threaded-clients" title="Link to this heading">#</a></h2>
+<p>A call writes its request, then reads until the response with its id. Only a call reads the socket.
+These clients have no streams or events, as a stream update needs a thread to read it between calls.</p>
+<p>The read loop skips a message case it does not know, and fails the call on a <code class="docutils literal notranslate"><span class="pre">disconnect</span></code>. Lua and
+C-nano treat any other message as a protocol error, including a <code class="docutils literal notranslate"><span class="pre">stream_update</span></code>.</p>
+</section>
 <section id="threaded-clients">
 <h2>Threaded Clients<a class="headerlink" href="#threaded-clients" title="Link to this heading">#</a></h2>
 <p>Python, C#, C++ and Java share this design. A connection is one socket, and each call writes a
@@ -780,147 +973,9 @@ write lock stays held past a fixed timeout.</p></li>
 dispatcher thread when the closing thread holds a stream’s condition, as a callback can be
 waiting for that condition.</p></li>
 </ol>
-</section>
-</section>
-<section id="single-threaded-clients">
-<h2>Single-Threaded Clients<a class="headerlink" href="#single-threaded-clients" title="Link to this heading">#</a></h2>
-<p>A call writes its request, then reads until the response with its id. Only a call reads the socket.
-These clients have no streams or events, as a stream update needs a thread to read it between calls.</p>
-<p>The read loop skips a message case it does not know, and fails the call on a <code class="docutils literal notranslate"><span class="pre">disconnect</span></code>. Lua and
-C-nano treat any other message as a protocol error, including a <code class="docutils literal notranslate"><span class="pre">stream_update</span></code>.</p>
-</section>
-<section id="stream-and-call-forms">
-<h2>Stream and Call Forms<a class="headerlink" href="#stream-and-call-forms" title="Link to this heading">#</a></h2>
-<p>A program adding a stream needs to name a remote procedure without calling it. The same applies when
-it gets a call as a value, such as to use in an expression. The clients do this in two ways:</p>
-<ul class="simple">
-<li><p>Python, C# and Java have one method for each purpose, <code class="docutils literal notranslate"><span class="pre">add_stream</span></code> and <code class="docutils literal notranslate"><span class="pre">get_call</span></code> or their
-equivalents. It takes any property or method, and works out the procedure at run time. Lua has
-only <code class="docutils literal notranslate"><span class="pre">get_call</span></code>, as it has no streams.</p></li>
-<li><p>C++ and C-nano cannot look up a method at run time. Their generated stubs instead have extra
-functions for each procedure. C++ adds ones ending in <code class="docutils literal notranslate"><span class="pre">_stream</span></code> and <code class="docutils literal notranslate"><span class="pre">_call</span></code>. C-nano has no
-streams, so it adds only <code class="docutils literal notranslate"><span class="pre">_call</span></code>.</p></li>
-</ul>
-<p>For the <code class="docutils literal notranslate"><span class="pre">MeanAltitude</span></code> property of a <code class="docutils literal notranslate"><span class="pre">Flight</span></code> object:</p>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Client</p></th>
-<th class="head"><p>Stream</p></th>
-<th class="head"><p>Procedure call</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>Python</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">conn.add_stream(getattr,</span> <span class="pre">flight,</span> <span class="pre">&quot;mean_altitude&quot;)</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">conn.get_call(getattr,</span> <span class="pre">flight,</span> <span class="pre">&quot;mean_altitude&quot;)</span></code></p></td>
-</tr>
-<tr class="row-odd"><td><p>C#</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">connection.AddStream</span> <span class="pre">(()</span> <span class="pre">=&gt;</span> <span class="pre">flight.MeanAltitude)</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">Connection.GetCall</span> <span class="pre">(()</span> <span class="pre">=&gt;</span> <span class="pre">flight.MeanAltitude)</span></code></p></td>
-</tr>
-<tr class="row-even"><td><p>C++</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">flight.mean_altitude_stream()</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">flight.mean_altitude_call()</span></code></p></td>
-</tr>
-<tr class="row-odd"><td><p>C-nano</p></td>
-<td><p>None</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Flight_MeanAltitude_call(&amp;call,</span> <span class="pre">flight)</span></code></p></td>
-</tr>
-<tr class="row-even"><td><p>Java</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">connection.addStream(flight,</span> <span class="pre">&quot;getMeanAltitude&quot;)</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">connection.getCall(flight,</span> <span class="pre">&quot;getMeanAltitude&quot;)</span></code></p></td>
-</tr>
-<tr class="row-odd"><td><p>Lua</p></td>
-<td><p>None</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">conn:get_call(flight.get_mean_altitude,</span> <span class="pre">flight)</span></code></p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>In Python, C# and Java, the stream runs on the connection the method is called on, whichever
-connection the object came from. In C++, it runs on the object’s client, or for a static method the
-client passed to it.</p>
-</section>
-<section id="static-methods">
-<h2>Static Methods<a class="headerlink" href="#static-methods" title="Link to this heading">#</a></h2>
-<p>A static method takes its connection from one place, the one its language gives a class:</p>
-<ul class="simple">
-<li><p>In Python and Lua a class is a value. Each connection builds its own, and a static method runs
-on the connection of the service the class is reached through.</p></li>
-<li><p>In C#, Java and C++ a class is a type. The connection is the static method’s first argument. In
-C-nano, every function takes the connection first.</p></li>
-</ul>
-<p>A stream or call message of a static method never takes the connection a second time. In C# and
-Java, a stream runs on the connection its <code class="docutils literal notranslate"><span class="pre">AddStream</span></code> is called on, and the connection named in
-the call is not used. A call message holds no connection.</p>
-<p>C#, Java and C++ also generate <code class="docutils literal notranslate"><span class="pre">Bind</span></code> on each class with static methods. It returns a <code class="docutils literal notranslate"><span class="pre">Bound</span></code>
-object holding the connection, with each static method minus that parameter. It is the counterpart
-of <code class="docutils literal notranslate"><span class="pre">conn.krpc.Expression</span></code> in Python, and shortens an expression tree that passes the connection
-at every node. The <code class="docutils literal notranslate"><span class="pre">Bound</span></code> methods carry the RPC attribute of the static method, so a C# lambda
-or a Java <code class="docutils literal notranslate"><span class="pre">addStream</span></code> takes them as it takes a service’s methods. A C++ <code class="docutils literal notranslate"><span class="pre">Bound</span></code> is a shorthand
-for the calls that build large expression trees. It has no <code class="docutils literal notranslate"><span class="pre">_stream</span></code> or <code class="docutils literal notranslate"><span class="pre">_call</span></code> forms, which
-stay on the static method.</p>
-</section>
-<section id="names">
-<h2>Names<a class="headerlink" href="#names" title="Link to this heading">#</a></h2>
-<p>The base class of each kind of generated type is named <code class="docutils literal notranslate"><span class="pre">Remote&lt;Kind&gt;</span></code>: <code class="docutils literal notranslate"><span class="pre">RemoteObject</span></code>,
-<code class="docutils literal notranslate"><span class="pre">RemoteEnum</span></code>, <code class="docutils literal notranslate"><span class="pre">RemoteFlags</span></code>, <code class="docutils literal notranslate"><span class="pre">RemoteStruct</span></code> and <code class="docutils literal notranslate"><span class="pre">RemoteService</span></code>. A client keeps its
-language’s own form where it has one, such as an enum and a struct in C++ and C#, and a
-<code class="docutils literal notranslate"><span class="pre">NamedTuple</span></code> for a Python structure.</p>
 <div class="toctree-wrapper compound">
 </div>
 </section>
-<section id="deprecation">
-<h2>Deprecation<a class="headerlink" href="#deprecation" title="Link to this heading">#</a></h2>
-<p>Each client signals the use of a deprecated member with the language’s own mechanism:</p>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Client</p></th>
-<th class="head"><p>Signal</p></th>
-<th class="head"><p>Kinds with no signal</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>Python</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">DeprecationWarning</span></code> at run time, and <code class="docutils literal notranslate"><span class="pre">&#64;deprecated</span></code> for type checkers</p></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p>C#</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">[Obsolete]</span></code></p></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p>C++</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">[[deprecated]]</span></code></p></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p>C-nano</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">KRPC_DEPRECATED</span></code></p></td>
-<td><p>Services and exceptions, which have no C type</p></td>
-</tr>
-<tr class="row-even"><td><p>Java</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">&#64;Deprecated</span></code>, which holds no reason</p></td>
-<td><p>Streams and calls, which name their method in a string</p></td>
-</tr>
-<tr class="row-odd"><td><p>Lua</p></td>
-<td><p>A warning on standard error, once per member on a connection</p></td>
-<td><p>Exceptions, which the client does not expose, and structure fields</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>A stream, and the call a server side function makes, use a procedure too. Python and Lua warn when
-the client builds the call. In C++ and C-nano, the <code class="docutils literal notranslate"><span class="pre">_stream</span></code> and <code class="docutils literal notranslate"><span class="pre">_call</span></code> functions carry the
-attribute. In C#, the lambda that names the procedure warns.</p>
-<p>A member of a deprecated service, class, enumeration or structure is deprecated. A member with no
-reason of its own takes the reason of its nearest deprecated container. <code class="docutils literal notranslate"><span class="pre">clientgen</span></code> and the Python
-and Lua clients apply this to their copy of the definitions when they read them. The protocol and
-<code class="docutils literal notranslate"><span class="pre">docgen</span></code> keep the attributes as declared, so the API reference has one notice per page.</p>
-<p>A deprecated service is marked too: the C# extension method and service class, and the C++, Java
-and Python service class. The Python and Lua clients keep it out of the client’s attributes, so
-that reading it reaches the attribute-miss hook, which warns.</p>
-<p>Generated C++ and C-nano code uses the deprecated declarations it makes, so each header suppresses
-the warning around its own contents. The suppression goes by the location of the use, so a use in a
-program still warns.</p>
 </section>
 </section>
 
@@ -972,6 +1027,12 @@ program still warns.</p>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#clients">Clients</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#names">Names</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stream-and-call-forms">Stream and Call Forms</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#static-methods">Static Methods</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#errors">Errors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deprecation">Deprecation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#single-threaded-clients">Single-Threaded Clients</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#threaded-clients">Threaded Clients</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#layers">Layers</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#threads">Threads</a></li>
@@ -981,11 +1042,6 @@ program still warns.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#close-and-failure">Close and Failure</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#single-threaded-clients">Single-Threaded Clients</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stream-and-call-forms">Stream and Call Forms</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#static-methods">Static Methods</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#names">Names</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deprecation">Deprecation</a></li>
 </ul>
   </nav></div>
 

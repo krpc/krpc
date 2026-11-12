@@ -116,10 +116,14 @@ The exception you catch depends on the error:
   ``System`` namespace. The example catches :type:`System.ArgumentException`, which a missing save
   throws.
 * An error particular to a service throws a class of that service, such as
-  :type:`~KRPC.Client.Services.KRPC.ObjectDestroyedException`.
-* An error the client has no class for throws :type:`~KRPC.Client.RPCException`.
+  :type:`~KRPC.Client.Services.KRPC.ObjectDestroyedException`, derived from
+  :type:`~KRPC.Client.ServerException`.
+* An error the client has no class for throws :type:`~KRPC.Client.ServerException`.
 * A call made once the connection has closed or failed throws
   :type:`~KRPC.Client.ConnectionException`.
+
+Every exception of the client's own derives :type:`~KRPC.Client.RemoteException`. A .NET exception
+does not.
 
 .. _csharp-client-values:
 
@@ -298,8 +302,8 @@ the temperature of a part until the part is destroyed:
 
 The exception is the one the procedure threw, or one of the following:
 
-* :type:`~KRPC.Client.Services.KRPC.StreamRemovedException` when the server removes the stream,
-  such as for an :ref:`event <csharp-client-events>` that has finished, or when you remove it.
+* :type:`~KRPC.Client.StreamException` when you or the server remove the stream, such as for an
+  :ref:`event <csharp-client-events>` that has finished.
 * :type:`~KRPC.Client.ConnectionException` when the connection closes or fails.
 
 An exception for an object that is not loaded, or for a procedure not available in the current
@@ -434,7 +438,7 @@ Streams and events can also be used from any thread:
 
 When one thread closes the connection, or the connection fails, the calls and waits of the other
 threads end with :type:`~KRPC.Client.ConnectionException`. A wait on a stream or an event that
-another thread removes ends with :type:`~KRPC.Client.Services.KRPC.StreamRemovedException`.
+another thread removes ends with :type:`~KRPC.Client.StreamException`.
 
 Deprecated Members
 ------------------
@@ -476,7 +480,7 @@ server or becomes a constant:
   too, as a captured variable is. A captured value in a string concatenation is formatted on the
   client, as C# formats it.
 
-The compiler throws :type:`~KRPC.Client.FunctionCompilationException` for code that would run on
+The compiler throws :type:`~KRPC.Client.CompilationException` for code that would run on
 the client, or only once, when compiling, where you would expect it to run on every evaluation:
 
 * A delegate call, and a call to a method, a constructor, a computed property or an operator
@@ -597,7 +601,7 @@ Some results differ from C#'s, as the server computes with its own operations:
 Unsupported Constructs
 ^^^^^^^^^^^^^^^^^^^^^^
 
-A construct with no server side equivalent throws :type:`~KRPC.Client.FunctionCompilationException`
+A construct with no server side equivalent throws :type:`~KRPC.Client.CompilationException`
 naming it. Examples are ``GroupBy``, ``Aggregate``, ``MinBy``, ``MaxBy`` and a format specifier.
 
 Compiling Ahead of Time
@@ -639,7 +643,7 @@ only argument, is the argument of a function with one parameter.
 
 An event or a function stream runs its function with no arguments. Passing
 :meth:`~KRPC.Client.Connection.AddStream` a lambda with parameters throws
-:type:`~KRPC.Client.FunctionCompilationException`.
+:type:`~KRPC.Client.CompilationException`.
 
 Service Stubs
 -------------
@@ -723,13 +727,13 @@ Client API Reference
       :type:`~KRPC.Client.Stream`. Each call creates a new stream. A lambda that makes one remote
       procedure call with fixed arguments streams that call. Any other lambda is compiled into a
       server side function on every call, which the stream evaluates on each update. Throws
-      :type:`~KRPC.Client.FunctionCompilationException` if the lambda cannot be compiled, or makes
+      :type:`~KRPC.Client.CompilationException` if the lambda cannot be compiled, or makes
       no remote procedure call.
 
    .. function:: Stream<TResult> AddStream<TResult>(LambdaExpression expression)
 
       Creates a stream as the overload above does, for a lambda of any delegate type. Throws
-      :type:`~KRPC.Client.FunctionCompilationException` for a lambda with parameters, and an
+      :type:`~KRPC.Client.CompilationException` for a lambda with parameters, and an
       :type:`System.ArgumentException` if ``TResult`` cannot hold the lambda's value.
 
    .. function:: Stream AddStream(Expression<Action> expression)
@@ -738,30 +742,29 @@ Client API Reference
       effects. A lambda that makes one remote procedure call with fixed arguments streams that
       call. Any other lambda is compiled into a server side function on every call. Throws an
       :type:`System.ArgumentException` if the lambda's body has a value, and
-      :type:`~KRPC.Client.FunctionCompilationException` if the lambda cannot be compiled.
+      :type:`~KRPC.Client.CompilationException` if the lambda cannot be compiled.
 
    .. function:: Stream<TResult> AddStream<TResult>(KRPC.Client.Services.KRPC.Expression function)
 
       Creates a stream of the value of a server side function, which takes no arguments. Throws
-      an :type:`System.InvalidOperationException` if the function has no value. Throws an
-      :type:`System.ArgumentException` if the function takes parameters, or ``TResult`` cannot
-      hold its value.
+      an :type:`System.ArgumentException` if the function has no value, takes parameters, or
+      ``TResult`` cannot hold its value.
 
    .. function:: Stream AddStream(KRPC.Client.Services.KRPC.Expression function)
 
       Creates a stream of a server side function with no value, which runs on each update for its
-      effects. Throws an :type:`System.InvalidOperationException` if the function has a value.
+      effects. Throws an :type:`System.ArgumentException` if the function has a value.
 
    .. function:: TResult Run<TResult>(Expression<Func<TResult>> expression)
 
       Runs a lambda expression on the server, within a single physics tick, and returns its
       value. The lambda is compiled into a server side function on every call. Throws
-      :type:`~KRPC.Client.FunctionCompilationException` if the lambda cannot be compiled.
+      :type:`~KRPC.Client.CompilationException` if the lambda cannot be compiled.
 
    .. function:: void Run(Expression<Action> expression)
 
       Runs a lambda expression with no value on the server, within a single physics tick. Throws
-      :type:`~KRPC.Client.FunctionCompilationException` if the lambda cannot be compiled, or makes
+      :type:`~KRPC.Client.CompilationException` if the lambda cannot be compiled, or makes
       no remote procedure call.
 
    .. function:: TResult Run<TResult>(KRPC.Client.Services.KRPC.Expression function, params object[] args)
@@ -770,9 +773,9 @@ Client API Reference
       arguments are passed to the function's parameters. A null value needs a reference type or a
       nullable value type as ``TResult``.
 
-      Throws an :type:`System.InvalidOperationException` if the function has no value. Throws an
-      :type:`System.ArgumentException` if the number of arguments is wrong, a parameter cannot
-      take its argument, or ``TResult`` cannot hold the function's value.
+      Throws an :type:`System.ArgumentException` if the function has no value, the number of
+      arguments is wrong, a parameter cannot take its argument, or ``TResult`` cannot hold the
+      function's value.
 
    .. function:: void Run(KRPC.Client.Services.KRPC.Expression function, params object[] args)
 
@@ -783,7 +786,7 @@ Client API Reference
 
       Creates an event from a lambda expression that evaluates to a boolean value, and returns an
       :type:`~KRPC.Client.Event`. The lambda is compiled into a server side function on every
-      call. Throws :type:`~KRPC.Client.FunctionCompilationException` if the lambda cannot be
+      call. Throws :type:`~KRPC.Client.CompilationException` if the lambda cannot be
       compiled, or makes no remote procedure call.
 
    .. function:: Event AddEvent(KRPC.Client.Services.KRPC.Expression function)
@@ -796,7 +799,7 @@ Client API Reference
 
       Compiles a lambda expression into a server side function. The server compiles the function
       too, so its first run is as fast as later ones. Throws
-      :type:`~KRPC.Client.FunctionCompilationException` for a construct with no server side
+      :type:`~KRPC.Client.CompilationException` for a construct with no server side
       equivalent. See :ref:`csharp-client-compiling-lambdas`.
 
    .. function:: KRPC.Client.Services.KRPC.Expression Compile(Expression<Action> expression)
@@ -974,10 +977,14 @@ Client API Reference
 
       The stream the event is made from.
 
+.. class:: RemoteException
+
+   The base of every exception the client throws of its own.
+
 .. class:: ConnectionException
 
    Thrown when connecting fails or the server refuses the connection, and by each call once the
-   connection has closed or failed.
+   connection has closed or failed. Derives :type:`RemoteException`.
 
    .. property:: KRPC.Schema.KRPC.ConnectionResponse.Types.Status? Status { get; }
 
@@ -987,18 +994,26 @@ Client API Reference
 
       The reason the server gave for ending the connection, such as ``ServerStopped``, or null.
 
-.. class:: RPCException
+.. class:: ServerException
 
-   Thrown for an error from the server that the client has no exception class for.
+   Thrown for an error from the server with no .NET exception type, and the base of each
+   exception class a service declares. Derives :type:`RemoteException`.
+
+.. class:: StreamException
+
+   Thrown by a stream or event that you or the server removed, or that cannot be added. Derives
+   :type:`RemoteException`.
 
 .. class:: EncodingException
 
-   Thrown when the server returns null for a value that cannot be null.
+   Thrown for a value that cannot be encoded or decoded, such as a null for a type that cannot
+   hold one. Derives :type:`RemoteException`.
 
-.. class:: FunctionCompilationException
+.. class:: CompilationException
 
    Thrown when a lambda expression cannot be compiled into a server side function. The message
-   names the unsupported construct. See :ref:`csharp-client-compiling-lambdas`.
+   names the unsupported construct. See :ref:`csharp-client-compiling-lambdas`. Derives
+   :type:`RemoteException`.
 
 .. class:: IConnection
 

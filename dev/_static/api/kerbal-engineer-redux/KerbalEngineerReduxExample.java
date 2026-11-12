@@ -1,16 +1,14 @@
 import krpc.client.Connection;
-import krpc.client.RPCException;
 import krpc.client.services.KerbalEngineerRedux;
 import krpc.client.services.KerbalEngineerRedux.BurnTime;
 import krpc.client.services.KerbalEngineerRedux.Stage;
 import krpc.client.services.SpaceCenter;
 import krpc.client.services.SpaceCenter.Vessel;
 
-import java.io.IOException;
 import java.util.List;
 
 public class KerbalEngineerReduxExample {
-    public static void main(String[] args) throws IOException, RPCException {
+    public static void main(String[] args) {
         Connection connection = Connection.newInstance("Kerbal Engineer Redux Example");
         Vessel vessel = SpaceCenter.newInstance(connection).getActiveVessel();
         KerbalEngineerRedux ker = KerbalEngineerRedux.newInstance(connection);

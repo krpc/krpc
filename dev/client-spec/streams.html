@@ -694,7 +694,7 @@ next update, and does not end.</p>
 <h2>Removing Streams<a class="headerlink" href="#removing-streams" title="Link to this heading">#</a></h2>
 <dl class="simple" id="spec-streams-remove">
 <dt><code class="docutils literal notranslate"><span class="pre">streams-remove</span> <span class="pre">[streams]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Removing a stream through its handle ends it at once, for every copy of the
-handle. Reading it raises the error for a removed stream.</p>
+handle. Reading it raises the stream error.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-streams-remove-twice">
@@ -764,7 +764,7 @@ timeout raises the argument error.</p>
 </dl>
 <dl class="simple" id="spec-streams-wake-waiter">
 <dt><code class="docutils literal notranslate"><span class="pre">streams-wake-waiter</span> <span class="pre">[streams,</span> <span class="pre">concurrency]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A wait on a stream ends when the stream is removed, the connection closes or the
-connection fails. The wait raises the error for a removed stream, or the
+connection fails. The wait raises the stream error, or the
 connection error, with the reason for a failure.</p>
 </dd>
 </dl>
@@ -859,7 +859,7 @@ the add. The add leaves no callback, so later updates do not call it.</p>
 <dl class="simple" id="spec-streams-end-callback">
 <dt><code class="docutils literal notranslate"><span class="pre">streams-end-callback</span> <span class="pre">[streams,</span> <span class="pre">callbacks]</span> <span class="pre">[MUST]</span></code></dt><dd><p>An end callback is called once when the stream ends: by a remove, an error, or a
 close or failure of the connection. The callback receives the error a read of the
-stream then raises: the error for a removed stream, the server’s error, or the
+stream then raises: the stream error, the server’s error, or the
 connection error.</p>
 </dd>
 </dl>

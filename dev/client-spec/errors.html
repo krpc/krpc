@@ -554,15 +554,24 @@ a result type. Each error carries a message, and is of one of these kinds, which
 name throughout:</p>
 <ul class="simple">
 <li><p>The connection error, for a connection that cannot be made, has failed or has closed.</p></li>
-<li><p>The RPC error, for an error the server returns for a call.</p></li>
+<li><p>The server error, for an error the server returns, through a call, a stream or an event.</p></li>
 <li><p>The stream error, for a stream or event that has been removed or cannot be added.</p></li>
-<li><p>The encoding error, for a value that fails to encode or decode.</p></li>
-<li><p>The argument error, for an argument the program passes that the client rejects.</p></li>
+<li><p>The encoding error, for a value of the right type that fails to encode, or a value that fails
+to decode.</p></li>
+<li><p>The argument error, the language’s own, for an argument the program passes that the client
+rejects.</p></li>
+<li><p>The interrupt error, the language’s own, for a thread interrupted in a call or a wait.</p></li>
 </ul>
+<p>In a client with error types, the connection, server, stream and encoding errors derive one type
+of the client’s own, its remote error type. A server exception with a mapped type raises the
+language’s own type for it, which does not derive the remote error type. A client whose errors are
+codes, such as C-nano, has a code per kind and no remote error type. It names a server error’s
+exception by its ids.</p>
+<p>An error that another error caused carries the cause’s message after its own.</p>
 <section id="server-errors">
 <h2>Server Errors<a class="headerlink" href="#server-errors" title="Link to this heading">#</a></h2>
-<dl class="simple" id="spec-errors-rpc-error">
-<dt><code class="docutils literal notranslate"><span class="pre">errors-rpc-error</span> <span class="pre">[core]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A call that fails on the server raises the RPC error.</p>
+<dl class="simple" id="spec-errors-server-error">
+<dt><code class="docutils literal notranslate"><span class="pre">errors-server-error</span> <span class="pre">[core]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A call that fails on the server raises the server error.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-errors-exception-name">
@@ -576,13 +585,13 @@ exception, as any other call does.</p>
 </dl>
 <dl class="simple" id="spec-errors-unknown-exception">
 <dt><code class="docutils literal notranslate"><span class="pre">errors-unknown-exception</span> <span class="pre">[core]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A server error naming a service or exception absent from the client’s definitions
-raises the RPC error. The message carries the description and the <code class="docutils literal notranslate"><span class="pre">Service.Name</span></code> of
+raises the server error. The message carries the description and the <code class="docutils literal notranslate"><span class="pre">Service.Name</span></code> of
 the error. This includes an absent exception of a service the client has, and a name the
 service gives to a class.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-errors-request-error">
-<dt><code class="docutils literal notranslate"><span class="pre">errors-request-error</span> <span class="pre">[core]</span> <span class="pre">[MUST]</span></code></dt><dd><p>An error for the whole request raises the RPC error. The message is the
+<dt><code class="docutils literal notranslate"><span class="pre">errors-request-error</span> <span class="pre">[core]</span> <span class="pre">[MUST]</span></code></dt><dd><p>An error for the whole request raises the server error. The message is the
 description.</p>
 </dd>
 </dl>
@@ -595,8 +604,10 @@ description.</p>
 <h2>Error Types<a class="headerlink" href="#error-types" title="Link to this heading">#</a></h2>
 <p>A client with error types reports each exception a service lists with a type of its own, such as an exception class. A mapped exception is one whose definition, in <code class="docutils literal notranslate"><span class="pre">KRPC.GetServices</span></code>, names a <code class="docutils literal notranslate"><span class="pre">mapped_type</span></code>: the .NET exception it stands for.</p>
 <dl class="simple" id="spec-errors-mapped-exceptions">
-<dt><code class="docutils literal notranslate"><span class="pre">errors-mapped-exceptions</span> <span class="pre">[error-types]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A mapped exception raises the language’s native error type for it. The client may
-raise a type of its own for the exception instead, derived from the native type.</p>
+<dt><code class="docutils literal notranslate"><span class="pre">errors-mapped-exceptions</span> <span class="pre">[error-types]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A mapped exception raises the language’s native error type for it, which does not
+derive the client’s remote error type. A client may raise a class of its own for the
+exception, with the native type as its only base. An exception with no native type in
+the language raises the client’s type for it, which derives the server error.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-errors-service-exceptions">
@@ -605,12 +616,23 @@ for it. This holds for the <code class="docutils literal notranslate"><span clas
 <code class="docutils literal notranslate"><span class="pre">ObjectDestroyedException</span></code>.</p>
 </dd>
 </dl>
+<dl class="simple" id="spec-errors-remote-error">
+<dt><code class="docutils literal notranslate"><span class="pre">errors-remote-error</span> <span class="pre">[error-types]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Every error of the client’s own derives one type, its remote error type, named in the
+conventions file. This covers the connection, server and encoding errors, and a
+service’s exception types. A mapped exception and the language’s own errors, such as its
+argument error, do not derive it. A client whose errors are codes has no such type.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-errors-stream-remote-error">
+<dt><code class="docutils literal notranslate"><span class="pre">errors-stream-remote-error</span> <span class="pre">[error-types,</span> <span class="pre">streams]</span> <span class="pre">[MUST]</span></code></dt><dd><p>The stream error derives the client’s remote error type.</p>
+</dd>
+</dl>
 </section>
 <section id="messages">
 <h2>Messages<a class="headerlink" href="#messages" title="Link to this heading">#</a></h2>
 <dl class="simple" id="spec-errors-message-prefix">
-<dt><code class="docutils literal notranslate"><span class="pre">errors-message-prefix</span> <span class="pre">[core,</span> <span class="pre">without</span> <span class="pre">error-types]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A client without error types starts the message with <code class="docutils literal notranslate"><span class="pre">Service.Name:</span></code>, the
-service and name the error carries.</p>
+<dt><code class="docutils literal notranslate"><span class="pre">errors-message-prefix</span> <span class="pre">[core]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A client without error types, or whose errors are codes in place of types, starts the
+message with <code class="docutils literal notranslate"><span class="pre">Service.Name:</span></code>, the service and name the error carries.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-errors-message">

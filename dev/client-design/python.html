@@ -549,6 +549,80 @@
 <h1>Python Client Design<a class="headerlink" href="#python-client-design" title="Link to this heading">#</a></h1>
 <p>The internal design of the Python client. This page builds on the <a class="reference internal" href="../client-design.html"><span class="doc">shared client design</span></a> and the <a class="reference internal" href="../client-spec.html"><span class="doc">client specification</span></a>. Usage is in
 the <a class="reference internal" href="../python.html"><span class="doc">Python guide</span></a>. Paths are relative to <code class="docutils literal notranslate"><span class="pre">client/python/</span></code>.</p>
+<section id="services-and-declarations">
+<h2>Services and Declarations<a class="headerlink" href="#services-and-declarations" title="Link to this heading">#</a></h2>
+<p>Every service is built at connect from <code class="docutils literal notranslate"><span class="pre">GetServices</span></code>, by <code class="docutils literal notranslate"><span class="pre">create_service</span></code>. The client then has
+the members of the server it connects to, including those another mod adds to a shipped class.
+Each client has its own classes, in its <code class="docutils literal notranslate"><span class="pre">Types</span></code>, so a static method is a closure over its client.</p>
+<ul class="simple">
+<li><p>A connect registers the types of every service, then builds the services. The types come first as
+a procedure can use a type from any service. A parameter’s default value can also be an
+enumeration value, which cannot be decoded until that enumeration is registered.</p></li>
+<li><p>The client clears the type identifiers from the <code class="docutils literal notranslate"><span class="pre">Type</span></code> messages in <code class="docutils literal notranslate"><span class="pre">GetServices</span></code>. It names a
+type by its service and name, and keys its types on the <code class="docutils literal notranslate"><span class="pre">Type</span></code> messages it builds from them.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">clientgen</span></code> and <code class="docutils literal notranslate"><span class="pre">python.tmpl</span></code> in <code class="docutils literal notranslate"><span class="pre">krpctools</span></code> generate a module per service. Its
+enumerations, structures and exceptions are real classes, and its classes and services are
+declarations whose members raise <code class="docutils literal notranslate"><span class="pre">TypeError</span></code>. <code class="docutils literal notranslate"><span class="pre">clientgen</span></code> runs the client without the modules.</p></li>
+<li><p>The modules of the core’s services are in <code class="docutils literal notranslate"><span class="pre">krpc/services/</span></code>, and those of the KSP services in
+<code class="docutils literal notranslate"><span class="pre">krpc/ksp/</span></code>. The paths match the planned split into a base package and a package per game, so
+the split changes no import. <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">krpc</span></code> imports no module.</p></li>
+<li><p>A module registers its enumerations, structures and exceptions in <code class="docutils literal notranslate"><span class="pre">krpc/declarations.py</span></code> on
+import. A later registration replaces an earlier one.</p></li>
+<li><p>At connect, a client uses a generated class where the server’s definition matches: an enumeration
+on its names and values, a structure on its field names in order, an exception on its name and
+the builtin it derives from. These classes hold no client, so every client shares them. A
+generated class is never changed to fit a server, as every client shares it.</p></li>
+<li><p>The connection type picks the module of each service it declares, from the <code class="docutils literal notranslate"><span class="pre">&lt;Service&gt;Connection</span></code>
+bases in its MRO, and the first wins. Any other service takes the registered classes. A module
+generated for a newer server then applies only to the connections typed with it.</p></li>
+<li><p>Otherwise the client builds its own class. A value of the module’s enumeration converts to the
+built one by its number, as the other clients send it, since a client and a server of different
+releases are not supported. A structure decodes using the field types the server declares in
+either case. <code class="docutils literal notranslate"><span class="pre">except</span></code> compares exception classes by identity, so only a shared exception class
+catches a server error.</p></li>
+<li><p>A built class does not derive from its declaration, which would show members a server lacks.
+<code class="docutils literal notranslate"><span class="pre">DeclaredClass</span></code>, the metaclass of a declaration, compares the service and class names for
+<code class="docutils literal notranslate"><span class="pre">isinstance</span></code> and <code class="docutils literal notranslate"><span class="pre">issubclass</span></code>.</p></li>
+<li><p>Python has no declaration merging, so a module cannot add its service to <code class="docutils literal notranslate"><span class="pre">Connection</span></code>. It
+declares <code class="docutils literal notranslate"><span class="pre">&lt;Service&gt;Connection</span></code>, a subclass of <code class="docutils literal notranslate"><span class="pre">Connection</span></code> with the service as an attribute. A
+program combines them, and <code class="docutils literal notranslate"><span class="pre">connect[T]</span></code> builds the connection as <code class="docutils literal notranslate"><span class="pre">T</span></code>.
+<code class="docutils literal notranslate"><span class="pre">krpc.ksp.KSPConnection</span></code> combines the core and KSP services.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Connection</span></code> declares no service, only a <code class="docutils literal notranslate"><span class="pre">__getattr__</span></code> returning <code class="docutils literal notranslate"><span class="pre">Any</span></code> for type checkers.
+The core services, <code class="docutils literal notranslate"><span class="pre">KRPC</span></code> and <code class="docutils literal notranslate"><span class="pre">StdLib</span></code>, have connection types like the others, so a module
+generated for a newer server replaces them the same way. A program with a connection type that
+lacks a service then type checks, and a misspelled service is not reported.</p></li>
+<li><p>The client’s own calls to <code class="docutils literal notranslate"><span class="pre">KRPC</span></code> go through <code class="docutils literal notranslate"><span class="pre">Connection._krpc</span></code>, a property typed with the
+shipped declaration.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">connect</span></code> with no connection type connects with <code class="docutils literal notranslate"><span class="pre">KSPConnection</span></code>, so a program written for KSP
+type checks with no connection type. It imports <code class="docutils literal notranslate"><span class="pre">krpc.ksp</span></code> on the first connect, which keeps
+<code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">krpc</span></code> free of generated modules.</p></li>
+</ul>
+</section>
+<section id="server-side-functions">
+<h2>Server Side Functions<a class="headerlink" href="#server-side-functions" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">compile</span></code>, <code class="docutils literal notranslate"><span class="pre">run</span></code>, <code class="docutils literal notranslate"><span class="pre">add_stream</span></code> and <code class="docutils literal notranslate"><span class="pre">add_event</span></code> take a Python function.
+<code class="docutils literal notranslate"><span class="pre">krpc/functioncompiler.py</span></code> and <code class="docutils literal notranslate"><span class="pre">krpc/functionstatements.py</span></code> compile its source, read with
+<code class="docutils literal notranslate"><span class="pre">inspect</span></code> and <code class="docutils literal notranslate"><span class="pre">ast</span></code>, into a <code class="docutils literal notranslate"><span class="pre">KRPC.Expression</span></code>.</p>
+<p>A function passed directly to <code class="docutils literal notranslate"><span class="pre">run</span></code> or <code class="docutils literal notranslate"><span class="pre">add_stream</span></code> compiles on every call, as a cached function
+would keep the values it first captured.</p>
+</section>
+<section id="deprecated-members">
+<h2>Deprecated Members<a class="headerlink" href="#deprecated-members" title="Link to this heading">#</a></h2>
+<p>A warning fires where a program reads a member, which keeps the cost off other members and off the
+values the client decodes:</p>
+<ul class="simple">
+<li><p>A deprecated enumeration value or structure field is a descriptor on the class, in place of the
+member or the <code class="docutils literal notranslate"><span class="pre">namedtuple</span></code> field getter. The client’s encoder and decoder read neither by name,
+so a value from the server gives no warning. A generated module sets these on its own classes.</p></li>
+<li><p>A deprecated class, enumeration, structure or exception is a descriptor on the service class, in
+place of the type.</p></li>
+</ul>
+<p>A read is the use that warns for a structure field, as the decoder and a program build a structure
+through one constructor.</p>
+<p>The generated modules take the <code class="docutils literal notranslate"><span class="pre">deprecated</span></code> decorator from <code class="docutils literal notranslate"><span class="pre">krpc.types</span></code>. A type checker sees the
+one in <code class="docutils literal notranslate"><span class="pre">typing_extensions</span></code>. At run time it only records the message, as the built service warns,
+and the client depends on no typing package.</p>
+</section>
 <section id="ownership">
 <h2>Ownership<a class="headerlink" href="#ownership" title="Link to this heading">#</a></h2>
 <p>Services, objects and streams hold the <code class="docutils literal notranslate"><span class="pre">Connection</span></code> strongly. Letting go of them closes nothing:</p>
@@ -604,80 +678,6 @@ finishes.</p></li>
 the threads waiting on it, once the condition is free.</p></li>
 </ul>
 </section>
-<section id="services-and-declarations">
-<h2>Services and Declarations<a class="headerlink" href="#services-and-declarations" title="Link to this heading">#</a></h2>
-<p>Every service is built at connect from <code class="docutils literal notranslate"><span class="pre">GetServices</span></code>, by <code class="docutils literal notranslate"><span class="pre">create_service</span></code>. The client then has
-the members of the server it connects to, including those another mod adds to a shipped class.
-Each client has its own classes, in its <code class="docutils literal notranslate"><span class="pre">Types</span></code>, so a static method is a closure over its client.</p>
-<ul class="simple">
-<li><p>A connect registers the types of every service, then builds the services. The types come first as
-a procedure can use a type from any service. A parameter’s default value can also be an
-enumeration value, which cannot be decoded until that enumeration is registered.</p></li>
-<li><p>The client clears the type identifiers from the <code class="docutils literal notranslate"><span class="pre">Type</span></code> messages in <code class="docutils literal notranslate"><span class="pre">GetServices</span></code>. It names a
-type by its service and name, and keys its types on the <code class="docutils literal notranslate"><span class="pre">Type</span></code> messages it builds from them.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">clientgen</span></code> and <code class="docutils literal notranslate"><span class="pre">python.tmpl</span></code> in <code class="docutils literal notranslate"><span class="pre">krpctools</span></code> generate a module per service. Its
-enumerations, structures and exceptions are real classes, and its classes and services are
-declarations whose members raise <code class="docutils literal notranslate"><span class="pre">TypeError</span></code>. <code class="docutils literal notranslate"><span class="pre">clientgen</span></code> runs the client without the modules.</p></li>
-<li><p>The modules of the core’s services are in <code class="docutils literal notranslate"><span class="pre">krpc/services/</span></code>, and those of the KSP services in
-<code class="docutils literal notranslate"><span class="pre">krpc/ksp/</span></code>. The paths match the planned split into a base package and a package per game, so
-the split changes no import. <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">krpc</span></code> imports no module.</p></li>
-<li><p>A module registers its enumerations, structures and exceptions in <code class="docutils literal notranslate"><span class="pre">krpc/declarations.py</span></code> on
-import. A later registration replaces an earlier one.</p></li>
-<li><p>At connect, a client uses a generated class where the server’s definition matches: an enumeration
-on its names and values, a structure on its field names in order, an exception on its name and
-the builtin it derives from. These classes hold no client, so every client shares them. A
-generated class is never changed to fit a server, as every client shares it.</p></li>
-<li><p>The connection type picks the module of each service it declares, from the <code class="docutils literal notranslate"><span class="pre">&lt;Service&gt;Connection</span></code>
-bases in its MRO, and the first wins. Any other service takes the registered classes. A module
-generated for a newer server then applies only to the connections typed with it.</p></li>
-<li><p>Otherwise the client builds its own class. A value of the module’s enumeration converts to the
-built one by its number, as the other clients send it, since a client and a server of different
-releases are not supported. A structure decodes using the field types the server declares in
-either case. <code class="docutils literal notranslate"><span class="pre">except</span></code> compares exception classes by identity, so only a shared exception class
-catches a server error.</p></li>
-<li><p>A built class does not derive from its declaration, which would show members a server lacks.
-<code class="docutils literal notranslate"><span class="pre">DeclaredClass</span></code>, the metaclass of a declaration, compares the service and class names for
-<code class="docutils literal notranslate"><span class="pre">isinstance</span></code> and <code class="docutils literal notranslate"><span class="pre">issubclass</span></code>.</p></li>
-<li><p>Python has no declaration merging, so a module cannot add its service to <code class="docutils literal notranslate"><span class="pre">Connection</span></code>. It
-declares <code class="docutils literal notranslate"><span class="pre">&lt;Service&gt;Connection</span></code>, a subclass of <code class="docutils literal notranslate"><span class="pre">Connection</span></code> with the service as an attribute. A
-program combines them, and <code class="docutils literal notranslate"><span class="pre">connect[T]</span></code> builds the connection as <code class="docutils literal notranslate"><span class="pre">T</span></code>.
-<code class="docutils literal notranslate"><span class="pre">krpc.ksp.KSPConnection</span></code> combines the core and KSP services.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Connection</span></code> declares no service, only a <code class="docutils literal notranslate"><span class="pre">__getattr__</span></code> returning <code class="docutils literal notranslate"><span class="pre">Any</span></code> for type checkers.
-The core services, <code class="docutils literal notranslate"><span class="pre">KRPC</span></code> and <code class="docutils literal notranslate"><span class="pre">StdLib</span></code>, have connection types like the others, so a module
-generated for a newer server replaces them the same way. A program with a connection type that
-lacks a service then type checks, and a misspelled service is not reported.</p></li>
-<li><p>The client’s own calls to <code class="docutils literal notranslate"><span class="pre">KRPC</span></code> go through <code class="docutils literal notranslate"><span class="pre">Connection._krpc</span></code>, a property typed with the
-shipped declaration.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">connect</span></code> with no connection type connects with <code class="docutils literal notranslate"><span class="pre">KSPConnection</span></code>, so a program written for KSP
-type checks with no connection type. It imports <code class="docutils literal notranslate"><span class="pre">krpc.ksp</span></code> on the first connect, which keeps
-<code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">krpc</span></code> free of generated modules.</p></li>
-</ul>
-</section>
-<section id="deprecated-members">
-<h2>Deprecated Members<a class="headerlink" href="#deprecated-members" title="Link to this heading">#</a></h2>
-<p>A warning fires where a program reads a member, which keeps the cost off other members and off the
-values the client decodes:</p>
-<ul class="simple">
-<li><p>A deprecated enumeration value or structure field is a descriptor on the class, in place of the
-member or the <code class="docutils literal notranslate"><span class="pre">namedtuple</span></code> field getter. The client’s encoder and decoder read neither by name,
-so a value from the server gives no warning. A generated module sets these on its own classes.</p></li>
-<li><p>A deprecated class, enumeration, structure or exception is a descriptor on the service class, in
-place of the type.</p></li>
-</ul>
-<p>A read is the use that warns for a structure field, as the decoder and a program build a structure
-through one constructor.</p>
-<p>The generated modules take the <code class="docutils literal notranslate"><span class="pre">deprecated</span></code> decorator from <code class="docutils literal notranslate"><span class="pre">krpc.types</span></code>. A type checker sees the
-one in <code class="docutils literal notranslate"><span class="pre">typing_extensions</span></code>. At run time it only records the message, as the built service warns,
-and the client depends on no typing package.</p>
-</section>
-<section id="server-side-functions">
-<h2>Server Side Functions<a class="headerlink" href="#server-side-functions" title="Link to this heading">#</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">compile</span></code>, <code class="docutils literal notranslate"><span class="pre">run</span></code>, <code class="docutils literal notranslate"><span class="pre">add_stream</span></code> and <code class="docutils literal notranslate"><span class="pre">add_event</span></code> take a Python function.
-<code class="docutils literal notranslate"><span class="pre">krpc/functioncompiler.py</span></code> and <code class="docutils literal notranslate"><span class="pre">krpc/functionstatements.py</span></code> compile its source, read with
-<code class="docutils literal notranslate"><span class="pre">inspect</span></code> and <code class="docutils literal notranslate"><span class="pre">ast</span></code>, into a <code class="docutils literal notranslate"><span class="pre">KRPC.Expression</span></code>.</p>
-<p>A function passed directly to <code class="docutils literal notranslate"><span class="pre">run</span></code> or <code class="docutils literal notranslate"><span class="pre">add_stream</span></code> compiles on every call, as a cached function
-would keep the values it first captured.</p>
-</section>
 <section id="transports">
 <h2>Transports<a class="headerlink" href="#transports" title="Link to this heading">#</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">Transport</span></code> holds the socket and the message framing. <code class="docutils literal notranslate"><span class="pre">TCPIPTransport</span></code> and
@@ -699,28 +699,34 @@ WebSockets or serial transports. Windows CPython has no
 <tr class="row-even"><td><p>Closing a connection</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">Connection.close()</span></code>, or the end of a <code class="docutils literal notranslate"><span class="pre">with</span></code> block</p></td>
 </tr>
-<tr class="row-odd"><td><p>Connection, stream, encoding error</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">ConnectionError</span></code>, <code class="docutils literal notranslate"><span class="pre">StreamError</span></code>, <code class="docutils literal notranslate"><span class="pre">EncodingError</span></code> in <code class="docutils literal notranslate"><span class="pre">krpc.error</span></code></p></td>
+<tr class="row-odd"><td><p>Remote error, and the connection, stream and encoding errors</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">RemoteError</span></code>, a <code class="docutils literal notranslate"><span class="pre">RuntimeError</span></code>, and <code class="docutils literal notranslate"><span class="pre">ConnectionError</span></code>, <code class="docutils literal notranslate"><span class="pre">StreamError</span></code>,
+<code class="docutils literal notranslate"><span class="pre">EncodingError</span></code> deriving it, in <code class="docutils literal notranslate"><span class="pre">krpc.error</span></code>. <code class="docutils literal notranslate"><span class="pre">ConnectionError</span></code> shadows the builtin,
+so every client has one name for it. A program meets it only through <code class="docutils literal notranslate"><span class="pre">krpc</span></code></p></td>
 </tr>
 <tr class="row-even"><td><p>Server error with no mapped type</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">krpc.error.RPCError</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">krpc.error.ServerError</span></code>, the base of each exception class a service declares</p></td>
 </tr>
 <tr class="row-odd"><td><p>Server exception with a mapped type</p></td>
-<td><p>A class on the service, deriving from the builtin in <code class="docutils literal notranslate"><span class="pre">types.NATIVE_EXCEPTIONS</span></code></p></td>
+<td><p>A class on the service, whose only base is the builtin in <code class="docutils literal notranslate"><span class="pre">types.NATIVE_EXCEPTIONS</span></code>.
+The function compiler finds the server exception from the class, so each keeps its own</p></td>
 </tr>
-<tr class="row-even"><td><p>Null object, nullable value</p></td>
+<tr class="row-even"><td><p>Argument error</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ValueError</span></code>, or <code class="docutils literal notranslate"><span class="pre">TypeError</span></code> for a value of the wrong type</p></td>
+</tr>
+<tr class="row-odd"><td><p>Null object, nullable value</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><p>Member names</p></td>
+<tr class="row-even"><td><p>Member names</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">snake_case</span></code>, with <code class="docutils literal notranslate"><span class="pre">_</span></code> appended to a Python keyword</p></td>
 </tr>
-<tr class="row-even"><td><p>Waiting</p></td>
+<tr class="row-odd"><td><p>Waiting</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">threading.Condition</span></code>, held by the caller of <code class="docutils literal notranslate"><span class="pre">wait</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><p>Interrupting a blocked thread</p></td>
+<tr class="row-even"><td><p>Interrupting a blocked thread</p></td>
 <td><p>Unsupported, as only the main thread can be interrupted, by <code class="docutils literal notranslate"><span class="pre">KeyboardInterrupt</span></code></p></td>
 </tr>
-<tr class="row-even"><td><p>Flags enumeration</p></td>
+<tr class="row-odd"><td><p>Flags enumeration</p></td>
 <td><p>A <code class="docutils literal notranslate"><span class="pre">RemoteFlags</span></code>, an <code class="docutils literal notranslate"><span class="pre">enum.Flag</span></code>. A <code class="docutils literal notranslate"><span class="pre">Flag</span></code> reads a negative number as a complement, so the decoder rejects one</p></td>
 </tr>
 </tbody>
@@ -776,15 +782,15 @@ WebSockets or serial transports. Windows CPython has no
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#services-and-declarations">Services and Declarations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#server-side-functions">Server Side Functions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deprecated-members">Deprecated Members</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ownership">Ownership</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lifetime">Lifetime</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#threads">Threads</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#services-and-declarations">Services and Declarations</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deprecated-members">Deprecated Members</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#server-side-functions">Server Side Functions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#transports">Transports</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mapping-the-spec-to-python">Mapping the Spec to Python</a></li>
 </ul>

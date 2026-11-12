@@ -1502,11 +1502,14 @@ the error from loading a save that does not exist:</p>
 <code class="docutils literal notranslate"><span class="pre">System</span></code> namespace. The example catches <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.ArgumentException" title="type: msdn ~&gt; System.ArgumentException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">System.ArgumentException</span></code></a>, which a missing save
 throws.</p></li>
 <li><p>An error particular to a service throws a class of that service, such as
-<a class="reference internal" href="csharp/api/krpc/krpc.html#class-KRPC.Client.Services.KRPC.ObjectDestroyedException" title="class: KRPC.Client.Services.KRPC.ObjectDestroyedException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">ObjectDestroyedException</span></code></a>.</p></li>
-<li><p>An error the client has no class for throws <a class="reference internal" href="#class-KRPC.Client.RPCException" title="class: KRPC.Client.RPCException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">RPCException</span></code></a>.</p></li>
+<a class="reference internal" href="csharp/api/krpc/krpc.html#class-KRPC.Client.Services.KRPC.ObjectDestroyedException" title="class: KRPC.Client.Services.KRPC.ObjectDestroyedException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">ObjectDestroyedException</span></code></a>, derived from
+<a class="reference internal" href="#class-KRPC.Client.ServerException" title="class: KRPC.Client.ServerException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">ServerException</span></code></a>.</p></li>
+<li><p>An error the client has no class for throws <a class="reference internal" href="#class-KRPC.Client.ServerException" title="class: KRPC.Client.ServerException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">ServerException</span></code></a>.</p></li>
 <li><p>A call made once the connection has closed or failed throws
 <a class="reference internal" href="#class-KRPC.Client.ConnectionException" title="class: KRPC.Client.ConnectionException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">ConnectionException</span></code></a>.</p></li>
 </ul>
+<p>Every exception of the client’s own derives <a class="reference internal" href="#class-KRPC.Client.RemoteException" title="class: KRPC.Client.RemoteException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">RemoteException</span></code></a>. A .NET exception
+does not.</p>
 </section>
 <section id="values">
 <span id="csharp-client-values"></span><h2>Values<a class="headerlink" href="#values" title="Link to this heading">#</a></h2>
@@ -1862,8 +1865,8 @@ the temperature of a part until the part is destroyed:</p>
 </div>
 <p>The exception is the one the procedure threw, or one of the following:</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="csharp/api/krpc/krpc.html#class-KRPC.Client.Services.KRPC.StreamRemovedException" title="class: KRPC.Client.Services.KRPC.StreamRemovedException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">StreamRemovedException</span></code></a> when the server removes the stream,
-such as for an <a class="reference internal" href="#csharp-client-events"><span class="std std-ref">event</span></a> that has finished, or when you remove it.</p></li>
+<li><p><a class="reference internal" href="#class-KRPC.Client.StreamException" title="class: KRPC.Client.StreamException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">StreamException</span></code></a> when you or the server remove the stream, such as for an
+<a class="reference internal" href="#csharp-client-events"><span class="std std-ref">event</span></a> that has finished.</p></li>
 <li><p><a class="reference internal" href="#class-KRPC.Client.ConnectionException" title="class: KRPC.Client.ConnectionException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">ConnectionException</span></code></a> when the connection closes or fails.</p></li>
 </ul>
 <p>An exception for an object that is not loaded, or for a procedure not available in the current
@@ -2137,7 +2140,7 @@ statement.</p></li>
 </ul>
 <p>When one thread closes the connection, or the connection fails, the calls and waits of the other
 threads end with <a class="reference internal" href="#class-KRPC.Client.ConnectionException" title="class: KRPC.Client.ConnectionException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">ConnectionException</span></code></a>. A wait on a stream or an event that
-another thread removes ends with <a class="reference internal" href="csharp/api/krpc/krpc.html#class-KRPC.Client.Services.KRPC.StreamRemovedException" title="class: KRPC.Client.Services.KRPC.StreamRemovedException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">StreamRemovedException</span></code></a>.</p>
+another thread removes ends with <a class="reference internal" href="#class-KRPC.Client.StreamException" title="class: KRPC.Client.StreamException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">StreamException</span></code></a>.</p>
 </section>
 <section id="deprecated-members">
 <h2>Deprecated Members<a class="headerlink" href="#deprecated-members" title="Link to this heading">#</a></h2>
@@ -2172,7 +2175,7 @@ once, when the function is compiled, and embedded as constants. An auto-property
 too, as a captured variable is. A captured value in a string concatenation is formatted on the
 client, as C# formats it.</p></li>
 </ul>
-<p>The compiler throws <a class="reference internal" href="#class-KRPC.Client.FunctionCompilationException" title="class: KRPC.Client.FunctionCompilationException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">FunctionCompilationException</span></code></a> for code that would run on
+<p>The compiler throws <a class="reference internal" href="#class-KRPC.Client.CompilationException" title="class: KRPC.Client.CompilationException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">CompilationException</span></code></a> for code that would run on
 the client, or only once, when compiling, where you would expect it to run on every evaluation:</p>
 <ul class="simple">
 <li><p>A delegate call, and a call to a method, a constructor, a computed property or an operator
@@ -2306,7 +2309,7 @@ print fewer digits than the client, as in <code class="docutils literal notransl
 </section>
 <section id="unsupported-constructs">
 <h3>Unsupported Constructs<a class="headerlink" href="#unsupported-constructs" title="Link to this heading">#</a></h3>
-<p>A construct with no server side equivalent throws <a class="reference internal" href="#class-KRPC.Client.FunctionCompilationException" title="class: KRPC.Client.FunctionCompilationException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">FunctionCompilationException</span></code></a>
+<p>A construct with no server side equivalent throws <a class="reference internal" href="#class-KRPC.Client.CompilationException" title="class: KRPC.Client.CompilationException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">CompilationException</span></code></a>
 naming it. Examples are <code class="docutils literal notranslate"><span class="pre">GroupBy</span></code>, <code class="docutils literal notranslate"><span class="pre">Aggregate</span></code>, <code class="docutils literal notranslate"><span class="pre">MinBy</span></code>, <code class="docutils literal notranslate"><span class="pre">MaxBy</span></code> and a format specifier.</p>
 </section>
 <section id="compiling-ahead-of-time">
@@ -2363,7 +2366,7 @@ converts to a <code class="docutils literal notranslate"><span class="pre">ulong
 only argument, is the argument of a function with one parameter.</p>
 <p>An event or a function stream runs its function with no arguments. Passing
 <a class="reference internal" href="#function-KRPC.Client.Connection.AddStream" title="function: KRPC.Client.Connection.AddStream"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">AddStream</span></code></a> a lambda with parameters throws
-<a class="reference internal" href="#class-KRPC.Client.FunctionCompilationException" title="class: KRPC.Client.FunctionCompilationException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">FunctionCompilationException</span></code></a>.</p>
+<a class="reference internal" href="#class-KRPC.Client.CompilationException" title="class: KRPC.Client.CompilationException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">CompilationException</span></code></a>.</p>
 </section>
 </section>
 <section id="service-stubs">
@@ -2451,7 +2454,7 @@ as the constructor does.</p>
 <a class="reference internal" href="#class-KRPC.Client.Stream" title="class: KRPC.Client.Stream"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">Stream</span></code></a>. Each call creates a new stream. A lambda that makes one remote
 procedure call with fixed arguments streams that call. Any other lambda is compiled into a
 server side function on every call, which the stream evaluates on each update. Throws
-<a class="reference internal" href="#class-KRPC.Client.FunctionCompilationException" title="class: KRPC.Client.FunctionCompilationException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">FunctionCompilationException</span></code></a> if the lambda cannot be compiled, or makes
+<a class="reference internal" href="#class-KRPC.Client.CompilationException" title="class: KRPC.Client.CompilationException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">CompilationException</span></code></a> if the lambda cannot be compiled, or makes
 no remote procedure call.</p>
 </dd></dl>
 
@@ -2459,7 +2462,7 @@ no remote procedure call.</p>
 <dt class="sig sig-object cs" id="function-KRPC.Client.Connection.AddStream&lt;TResult&gt;(LambdaExpression)">
 <a class="reference internal" href="#class-KRPC.Client.Stream-1" title="class: KRPC.Client.Stream&lt;TReturnType&gt;"><span class="pre">Stream</span></a><span class="p"><span class="pre">&lt;</span></span><span class="pre">TResult</span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">AddStream</span></span><span class="p"><span class="pre">&lt;</span></span><span class="pre">TResult</span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Linq.Expressions.LambdaExpression" title="type: msdn ~&gt; System.Linq.Expressions.LambdaExpression"><span class="pre">LambdaExpression</span></a><span class="w"> </span><span class="n"><span class="pre">expression</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Connection.AddStream<TResult>(LambdaExpression)" title="Link to this definition">#</a></dt>
 <dd><p>Creates a stream as the overload above does, for a lambda of any delegate type. Throws
-<a class="reference internal" href="#class-KRPC.Client.FunctionCompilationException" title="class: KRPC.Client.FunctionCompilationException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">FunctionCompilationException</span></code></a> for a lambda with parameters, and an
+<a class="reference internal" href="#class-KRPC.Client.CompilationException" title="class: KRPC.Client.CompilationException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">CompilationException</span></code></a> for a lambda with parameters, and an
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.ArgumentException" title="type: msdn ~&gt; System.ArgumentException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">System.ArgumentException</span></code></a> if <code class="docutils literal notranslate"><span class="pre">TResult</span></code> cannot hold the lambda’s value.</p>
 </dd></dl>
 
@@ -2470,23 +2473,22 @@ no remote procedure call.</p>
 effects. A lambda that makes one remote procedure call with fixed arguments streams that
 call. Any other lambda is compiled into a server side function on every call. Throws an
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.ArgumentException" title="type: msdn ~&gt; System.ArgumentException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">System.ArgumentException</span></code></a> if the lambda’s body has a value, and
-<a class="reference internal" href="#class-KRPC.Client.FunctionCompilationException" title="class: KRPC.Client.FunctionCompilationException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">FunctionCompilationException</span></code></a> if the lambda cannot be compiled.</p>
+<a class="reference internal" href="#class-KRPC.Client.CompilationException" title="class: KRPC.Client.CompilationException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">CompilationException</span></code></a> if the lambda cannot be compiled.</p>
 </dd></dl>
 
 <dl class="cs function">
 <dt class="sig sig-object cs" id="function-KRPC.Client.Connection.AddStream&lt;TResult&gt;(KRPC.Client.Services.KRPC.Expression)">
 <a class="reference internal" href="#class-KRPC.Client.Stream-1" title="class: KRPC.Client.Stream&lt;TReturnType&gt;"><span class="pre">Stream</span></a><span class="p"><span class="pre">&lt;</span></span><span class="pre">TResult</span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">AddStream</span></span><span class="p"><span class="pre">&lt;</span></span><span class="pre">TResult</span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference internal" href="csharp/api/krpc/expressions.html#class-KRPC.Client.Services.KRPC.Expression" title="class: KRPC.Client.Services.KRPC.Expression"><span class="pre">KRPC.Client.Services.KRPC.Expression</span></a><span class="w"> </span><span class="n"><span class="pre">function</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Connection.AddStream<TResult>(KRPC.Client.Services.KRPC.Expression)" title="Link to this definition">#</a></dt>
 <dd><p>Creates a stream of the value of a server side function, which takes no arguments. Throws
-an <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.InvalidOperationException" title="type: msdn ~&gt; System.InvalidOperationException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">System.InvalidOperationException</span></code></a> if the function has no value. Throws an
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.ArgumentException" title="type: msdn ~&gt; System.ArgumentException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">System.ArgumentException</span></code></a> if the function takes parameters, or <code class="docutils literal notranslate"><span class="pre">TResult</span></code> cannot
-hold its value.</p>
+an <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.ArgumentException" title="type: msdn ~&gt; System.ArgumentException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">System.ArgumentException</span></code></a> if the function has no value, takes parameters, or
+<code class="docutils literal notranslate"><span class="pre">TResult</span></code> cannot hold its value.</p>
 </dd></dl>
 
 <dl class="cs function">
 <dt class="sig sig-object cs" id="function-KRPC.Client.Connection.AddStream(KRPC.Client.Services.KRPC.Expression)">
 <a class="reference internal" href="#class-KRPC.Client.Stream" title="class: KRPC.Client.Stream"><span class="pre">Stream</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">AddStream</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference internal" href="csharp/api/krpc/expressions.html#class-KRPC.Client.Services.KRPC.Expression" title="class: KRPC.Client.Services.KRPC.Expression"><span class="pre">KRPC.Client.Services.KRPC.Expression</span></a><span class="w"> </span><span class="n"><span class="pre">function</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Connection.AddStream(KRPC.Client.Services.KRPC.Expression)" title="Link to this definition">#</a></dt>
 <dd><p>Creates a stream of a server side function with no value, which runs on each update for its
-effects. Throws an <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.InvalidOperationException" title="type: msdn ~&gt; System.InvalidOperationException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">System.InvalidOperationException</span></code></a> if the function has a value.</p>
+effects. Throws an <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.ArgumentException" title="type: msdn ~&gt; System.ArgumentException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">System.ArgumentException</span></code></a> if the function has a value.</p>
 </dd></dl>
 
 <dl class="cs function">
@@ -2494,14 +2496,14 @@ effects. Throws an <a class="reference external" href="https://learn.microsoft.c
 <span id="function-KRPC.Client.Connection.Run<TResult>(Expression<Func<TResult>>)"></span><span class="pre">TResult</span><span class="w"> </span><span class="sig-name descname"><span class="pre">Run</span></span><span class="p"><span class="pre">&lt;</span></span><span class="pre">TResult</span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Linq.Expressions.Expression-1" title="type: msdn ~&gt; System.Linq.Expressions.Expression"><span class="pre">Expression</span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Func-1" title="type: msdn ~&gt; System.Func"><span class="pre">Func</span></a><span class="p"><span class="pre">&lt;</span></span><span class="pre">TResult</span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n"><span class="pre">expression</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Connection.Run" title="Link to this definition">#</a></dt>
 <dd><p>Runs a lambda expression on the server, within a single physics tick, and returns its
 value. The lambda is compiled into a server side function on every call. Throws
-<a class="reference internal" href="#class-KRPC.Client.FunctionCompilationException" title="class: KRPC.Client.FunctionCompilationException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">FunctionCompilationException</span></code></a> if the lambda cannot be compiled.</p>
+<a class="reference internal" href="#class-KRPC.Client.CompilationException" title="class: KRPC.Client.CompilationException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">CompilationException</span></code></a> if the lambda cannot be compiled.</p>
 </dd></dl>
 
 <dl class="cs function">
 <dt class="sig sig-object cs" id="function-KRPC.Client.Connection.Run(Expression&lt;Action&gt;)">
 <span class="pre">void</span><span class="w"> </span><span class="sig-name descname"><span class="pre">Run</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Linq.Expressions.Expression-1" title="type: msdn ~&gt; System.Linq.Expressions.Expression"><span class="pre">Expression</span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Action" title="type: msdn ~&gt; System.Action"><span class="pre">Action</span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n"><span class="pre">expression</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Connection.Run(Expression<Action>)" title="Link to this definition">#</a></dt>
 <dd><p>Runs a lambda expression with no value on the server, within a single physics tick. Throws
-<a class="reference internal" href="#class-KRPC.Client.FunctionCompilationException" title="class: KRPC.Client.FunctionCompilationException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">FunctionCompilationException</span></code></a> if the lambda cannot be compiled, or makes
+<a class="reference internal" href="#class-KRPC.Client.CompilationException" title="class: KRPC.Client.CompilationException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">CompilationException</span></code></a> if the lambda cannot be compiled, or makes
 no remote procedure call.</p>
 </dd></dl>
 
@@ -2511,9 +2513,9 @@ no remote procedure call.</p>
 <dd><p>Runs a server side function within a single physics tick, and returns its value. The
 arguments are passed to the function’s parameters. A null value needs a reference type or a
 nullable value type as <code class="docutils literal notranslate"><span class="pre">TResult</span></code>.</p>
-<p>Throws an <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.InvalidOperationException" title="type: msdn ~&gt; System.InvalidOperationException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">System.InvalidOperationException</span></code></a> if the function has no value. Throws an
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.ArgumentException" title="type: msdn ~&gt; System.ArgumentException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">System.ArgumentException</span></code></a> if the number of arguments is wrong, a parameter cannot
-take its argument, or <code class="docutils literal notranslate"><span class="pre">TResult</span></code> cannot hold the function’s value.</p>
+<p>Throws an <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.ArgumentException" title="type: msdn ~&gt; System.ArgumentException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">System.ArgumentException</span></code></a> if the function has no value, the number of
+arguments is wrong, a parameter cannot take its argument, or <code class="docutils literal notranslate"><span class="pre">TResult</span></code> cannot hold the
+function’s value.</p>
 </dd></dl>
 
 <dl class="cs function">
@@ -2528,7 +2530,7 @@ passed to the function’s parameters, as for the overload above.</p>
 <span id="function-KRPC.Client.Connection.AddEvent(Expression<Func<bool>>)"></span><a class="reference internal" href="#class-KRPC.Client.Event" title="class: KRPC.Client.Event"><span class="pre">Event</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">AddEvent</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Linq.Expressions.Expression-1" title="type: msdn ~&gt; System.Linq.Expressions.Expression"><span class="pre">Expression</span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Func-1" title="type: msdn ~&gt; System.Func"><span class="pre">Func</span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n"><span class="pre">expression</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Connection.AddEvent" title="Link to this definition">#</a></dt>
 <dd><p>Creates an event from a lambda expression that evaluates to a boolean value, and returns an
 <a class="reference internal" href="#class-KRPC.Client.Event" title="class: KRPC.Client.Event"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">Event</span></code></a>. The lambda is compiled into a server side function on every
-call. Throws <a class="reference internal" href="#class-KRPC.Client.FunctionCompilationException" title="class: KRPC.Client.FunctionCompilationException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">FunctionCompilationException</span></code></a> if the lambda cannot be
+call. Throws <a class="reference internal" href="#class-KRPC.Client.CompilationException" title="class: KRPC.Client.CompilationException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">CompilationException</span></code></a> if the lambda cannot be
 compiled, or makes no remote procedure call.</p>
 </dd></dl>
 
@@ -2545,7 +2547,7 @@ or does not evaluate to a boolean value.</p>
 <span id="function-KRPC.Client.Connection.Compile<TResult>(Expression<Func<TResult>>)"></span><a class="reference internal" href="csharp/api/krpc/expressions.html#class-KRPC.Client.Services.KRPC.Expression" title="class: KRPC.Client.Services.KRPC.Expression"><span class="pre">KRPC.Client.Services.KRPC.Expression</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Compile</span></span><span class="p"><span class="pre">&lt;</span></span><span class="pre">TResult</span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Linq.Expressions.Expression-1" title="type: msdn ~&gt; System.Linq.Expressions.Expression"><span class="pre">Expression</span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Func-1" title="type: msdn ~&gt; System.Func"><span class="pre">Func</span></a><span class="p"><span class="pre">&lt;</span></span><span class="pre">TResult</span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n"><span class="pre">expression</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Connection.Compile" title="Link to this definition">#</a></dt>
 <dd><p>Compiles a lambda expression into a server side function. The server compiles the function
 too, so its first run is as fast as later ones. Throws
-<a class="reference internal" href="#class-KRPC.Client.FunctionCompilationException" title="class: KRPC.Client.FunctionCompilationException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">FunctionCompilationException</span></code></a> for a construct with no server side
+<a class="reference internal" href="#class-KRPC.Client.CompilationException" title="class: KRPC.Client.CompilationException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">CompilationException</span></code></a> for a construct with no server side
 equivalent. See <a class="reference internal" href="#csharp-client-compiling-lambdas"><span class="std std-ref">Writing Server Side Functions</span></a>.</p>
 </dd></dl>
 
@@ -2789,10 +2791,16 @@ A failed connection throws no exception.</p>
 </dd></dl>
 
 <dl class="cs class">
+<dt class="sig sig-object cs" id="class-KRPC.Client.RemoteException">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">RemoteException</span></span><a class="headerlink" href="#class-KRPC.Client.RemoteException" title="Link to this definition">#</a></dt>
+<dd><p>The base of every exception the client throws of its own.</p>
+</dd></dl>
+
+<dl class="cs class">
 <dt class="sig sig-object cs" id="class-KRPC.Client.ConnectionException">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">ConnectionException</span></span><a class="headerlink" href="#class-KRPC.Client.ConnectionException" title="Link to this definition">#</a></dt>
 <dd><p>Thrown when connecting fails or the server refuses the connection, and by each call once the
-connection has closed or failed.</p>
+connection has closed or failed. Derives <a class="reference internal" href="#class-KRPC.Client.RemoteException" title="class: KRPC.Client.RemoteException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">RemoteException</span></code></a>.</p>
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.ConnectionException.Status">
 <span class="pre">KRPC.Schema.KRPC.ConnectionResponse.Types.Status</span><span class="p"><span class="pre">?</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">Status</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.ConnectionException.Status" title="Link to this definition">#</a></dt>
@@ -2808,22 +2816,32 @@ connection has closed or failed.</p>
 </dd></dl>
 
 <dl class="cs class">
-<dt class="sig sig-object cs" id="class-KRPC.Client.RPCException">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">RPCException</span></span><a class="headerlink" href="#class-KRPC.Client.RPCException" title="Link to this definition">#</a></dt>
-<dd><p>Thrown for an error from the server that the client has no exception class for.</p>
+<dt class="sig sig-object cs" id="class-KRPC.Client.ServerException">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">ServerException</span></span><a class="headerlink" href="#class-KRPC.Client.ServerException" title="Link to this definition">#</a></dt>
+<dd><p>Thrown for an error from the server with no .NET exception type, and the base of each
+exception class a service declares. Derives <a class="reference internal" href="#class-KRPC.Client.RemoteException" title="class: KRPC.Client.RemoteException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">RemoteException</span></code></a>.</p>
+</dd></dl>
+
+<dl class="cs class">
+<dt class="sig sig-object cs" id="class-KRPC.Client.StreamException">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">StreamException</span></span><a class="headerlink" href="#class-KRPC.Client.StreamException" title="Link to this definition">#</a></dt>
+<dd><p>Thrown by a stream or event that you or the server removed, or that cannot be added. Derives
+<a class="reference internal" href="#class-KRPC.Client.RemoteException" title="class: KRPC.Client.RemoteException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">RemoteException</span></code></a>.</p>
 </dd></dl>
 
 <dl class="cs class">
 <dt class="sig sig-object cs" id="class-KRPC.Client.EncodingException">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">EncodingException</span></span><a class="headerlink" href="#class-KRPC.Client.EncodingException" title="Link to this definition">#</a></dt>
-<dd><p>Thrown when the server returns null for a value that cannot be null.</p>
+<dd><p>Thrown for a value that cannot be encoded or decoded, such as a null for a type that cannot
+hold one. Derives <a class="reference internal" href="#class-KRPC.Client.RemoteException" title="class: KRPC.Client.RemoteException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">RemoteException</span></code></a>.</p>
 </dd></dl>
 
 <dl class="cs class">
-<dt class="sig sig-object cs" id="class-KRPC.Client.FunctionCompilationException">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">FunctionCompilationException</span></span><a class="headerlink" href="#class-KRPC.Client.FunctionCompilationException" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object cs" id="class-KRPC.Client.CompilationException">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">CompilationException</span></span><a class="headerlink" href="#class-KRPC.Client.CompilationException" title="Link to this definition">#</a></dt>
 <dd><p>Thrown when a lambda expression cannot be compiled into a server side function. The message
-names the unsupported construct. See <a class="reference internal" href="#csharp-client-compiling-lambdas"><span class="std std-ref">Writing Server Side Functions</span></a>.</p>
+names the unsupported construct. See <a class="reference internal" href="#csharp-client-compiling-lambdas"><span class="std std-ref">Writing Server Side Functions</span></a>. Derives
+<a class="reference internal" href="#class-KRPC.Client.RemoteException" title="class: KRPC.Client.RemoteException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">RemoteException</span></code></a>.</p>
 </dd></dl>
 
 <dl class="cs class">

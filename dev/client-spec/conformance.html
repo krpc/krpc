@@ -610,7 +610,7 @@ attribute by reflection, or the compiler’s warnings, which it records when it 
 <h2>Expected Failures<a class="headerlink" href="#expected-failures" title="Link to this heading">#</a></h2>
 <p>A client can list the tests it fails in an expected failures file, one test per line, with an
 optional comment:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>test_errors.py::test_exception_name  # RPC errors carry only a message
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>test_errors.py::test_exception_name  # Server errors carry only a message
 test_streams.py::test_wait_timeout_values[nan]
 </pre></div>
 </div>
@@ -644,6 +644,8 @@ of the testee belongs in the expected failures file.</p>
 <p>A client with the <code class="docutils literal notranslate"><span class="pre">error-types</span></code> or <code class="docutils literal notranslate"><span class="pre">definitions</span></code> profile describes its language’s conventions in
 a JSON file, passed with <code class="docutils literal notranslate"><span class="pre">--conventions</span></code>:</p>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">"remote_error"</span><span class="p">:</span><span class="w"> </span><span class="s2">"krpc.error.RemoteError"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"server_error"</span><span class="p">:</span><span class="w"> </span><span class="s2">"krpc.error.ServerError"</span><span class="p">,</span>
 <span class="w">  </span><span class="nt">"native_types"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nt">"System.ArgumentException"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ValueError"</span><span class="p">,</span>
 <span class="w">    </span><span class="nt">"System.InvalidOperationException"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RuntimeError"</span>
@@ -652,12 +654,16 @@ a JSON file, passed with <code class="docutils literal notranslate"><span class=
 <span class="p">}</span>
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">native_types</span></code> is for the <code class="docutils literal notranslate"><span class="pre">error-types</span></code> profile. It gives the native error type the client
-raises for each mapped exception, by the exception’s mapped type, and needs an entry for each one. A
-<code class="docutils literal notranslate"><span class="pre">null</span></code> entry is an exception the client raises only as a type of its own. <code class="docutils literal notranslate"><span class="pre">naming</span></code> is for the
-<code class="docutils literal notranslate"><span class="pre">definitions</span></code> profile. It gives the case of member names, whether a property is a pair of <code class="docutils literal notranslate"><span class="pre">get_</span></code>
-and <code class="docutils literal notranslate"><span class="pre">set_</span></code> functions, and whether the client exposes exception types. The case is <code class="docutils literal notranslate"><span class="pre">snake</span></code>, the
-one case the driver converts names to. The run stops if the file lacks a section a profile needs.</p>
+<p><code class="docutils literal notranslate"><span class="pre">remote_error</span></code>, <code class="docutils literal notranslate"><span class="pre">server_error</span></code> and <code class="docutils literal notranslate"><span class="pre">native_types</span></code> are for the <code class="docutils literal notranslate"><span class="pre">error-types</span></code> profile.
+<code class="docutils literal notranslate"><span class="pre">remote_error</span></code> names the type every error of the client’s own derives, as the testee reports it,
+and <code class="docutils literal notranslate"><span class="pre">server_error</span></code> the type a service’s exception types derive. Both are <code class="docutils literal notranslate"><span class="pre">null</span></code> for a client
+whose errors are codes, with no type to derive. <code class="docutils literal notranslate"><span class="pre">native_types</span></code> gives the native error type the
+client raises for each mapped exception, by the exception’s mapped type, and needs an entry for each
+one. A <code class="docutils literal notranslate"><span class="pre">null</span></code> entry is an exception the client raises only as a type of its own. <code class="docutils literal notranslate"><span class="pre">naming</span></code> is for
+the <code class="docutils literal notranslate"><span class="pre">definitions</span></code> profile. It gives the case of member names, whether a property is a pair of
+<code class="docutils literal notranslate"><span class="pre">get_</span></code> and <code class="docutils literal notranslate"><span class="pre">set_</span></code> functions, and whether the client exposes exception types. The case is
+<code class="docutils literal notranslate"><span class="pre">snake</span></code>, the one case the driver converts names to. The run stops if the file lacks a section a
+profile needs.</p>
 </section>
 </section>
 

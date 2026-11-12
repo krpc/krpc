@@ -112,10 +112,13 @@ ManeuverPlanner
 
 
 
-Exception class OperationException
+.. macro:: KRPC_EXCEPTION_MECHJEB_OPERATIONEXCEPTION
 
-Thrown when an operation cannot make its nodes, such as when it needs a target and
-there is none.
+   Thrown when an operation cannot make its nodes, such as when it needs a target and
+   there is none.
+
+   The service and exception ids of the exception, for :macro:`KRPC_IS_EXCEPTION`. A call
+   that fails with it returns :macro:`KRPC_ERROR_SERVER`.
 
 
 
@@ -266,7 +269,7 @@ OperationApoapsis
 
    .. function:: krpc_error_t krpc_MechJeb_OperationApoapsis_MakeNodes(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_MechJeb_OperationApoapsis_t instance)
 
-      Make the maneuver nodes of the operation. Throws an ``MechJeb.OperationException``
+      Make the maneuver nodes of the operation. Throws an :macro:`KRPC_EXCEPTION_MECHJEB_OPERATIONEXCEPTION`
       if the operation cannot make them.
 
 
@@ -323,7 +326,7 @@ OperationCircularize
 
    .. function:: krpc_error_t krpc_MechJeb_OperationCircularize_MakeNodes(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_MechJeb_OperationCircularize_t instance)
 
-      Make the maneuver nodes of the operation. Throws an ``MechJeb.OperationException``
+      Make the maneuver nodes of the operation. Throws an :macro:`KRPC_EXCEPTION_MECHJEB_OPERATIONEXCEPTION`
       if the operation cannot make them.
 
 
@@ -383,7 +386,7 @@ OperationCourseCorrection
 
    .. function:: krpc_error_t krpc_MechJeb_OperationCourseCorrection_MakeNodes(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_MechJeb_OperationCourseCorrection_t instance)
 
-      Make the maneuver nodes of the operation. Throws an ``MechJeb.OperationException``
+      Make the maneuver nodes of the operation. Throws an :macro:`KRPC_EXCEPTION_MECHJEB_OPERATIONEXCEPTION`
       if the operation cannot make them.
 
 
@@ -423,7 +426,7 @@ OperationEllipticize
 
    .. function:: krpc_error_t krpc_MechJeb_OperationEllipticize_MakeNodes(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_MechJeb_OperationEllipticize_t instance)
 
-      Make the maneuver nodes of the operation. Throws an ``MechJeb.OperationException``
+      Make the maneuver nodes of the operation. Throws an :macro:`KRPC_EXCEPTION_MECHJEB_OPERATIONEXCEPTION`
       if the operation cannot make them.
 
 
@@ -483,7 +486,7 @@ OperationInclination
 
    .. function:: krpc_error_t krpc_MechJeb_OperationInclination_MakeNodes(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_MechJeb_OperationInclination_t instance)
 
-      Make the maneuver nodes of the operation. Throws an ``MechJeb.OperationException``
+      Make the maneuver nodes of the operation. Throws an :macro:`KRPC_EXCEPTION_MECHJEB_OPERATIONEXCEPTION`
       if the operation cannot make them.
 
 
@@ -536,7 +539,7 @@ OperationInterplanetaryTransfer
 
    .. function:: krpc_error_t krpc_MechJeb_OperationInterplanetaryTransfer_MakeNodes(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_MechJeb_OperationInterplanetaryTransfer_t instance)
 
-      Make the maneuver nodes of the operation. Throws an ``MechJeb.OperationException``
+      Make the maneuver nodes of the operation. Throws an :macro:`KRPC_EXCEPTION_MECHJEB_OPERATIONEXCEPTION`
       if the operation cannot make them.
 
 
@@ -583,7 +586,7 @@ OperationKillRelVel
 
    .. function:: krpc_error_t krpc_MechJeb_OperationKillRelVel_MakeNodes(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_MechJeb_OperationKillRelVel_t instance)
 
-      Make the maneuver nodes of the operation. Throws an ``MechJeb.OperationException``
+      Make the maneuver nodes of the operation. Throws an :macro:`KRPC_EXCEPTION_MECHJEB_OPERATIONEXCEPTION`
       if the operation cannot make them.
 
 
@@ -636,7 +639,7 @@ OperationLambert
 
    .. function:: krpc_error_t krpc_MechJeb_OperationLambert_MakeNodes(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_MechJeb_OperationLambert_t instance)
 
-      Make the maneuver nodes of the operation. Throws an ``MechJeb.OperationException``
+      Make the maneuver nodes of the operation. Throws an :macro:`KRPC_EXCEPTION_MECHJEB_OPERATIONEXCEPTION`
       if the operation cannot make them.
 
 
@@ -682,7 +685,7 @@ OperationLan
 
    .. function:: krpc_error_t krpc_MechJeb_OperationLan_MakeNodes(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_MechJeb_OperationLan_t instance)
 
-      Make the maneuver nodes of the operation. Throws an ``MechJeb.OperationException``
+      Make the maneuver nodes of the operation. Throws an :macro:`KRPC_EXCEPTION_MECHJEB_OPERATIONEXCEPTION`
       if the operation cannot make them.
 
 
@@ -741,7 +744,7 @@ OperationLongitude
 
    .. function:: krpc_error_t krpc_MechJeb_OperationLongitude_MakeNodes(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_MechJeb_OperationLongitude_t instance)
 
-      Make the maneuver nodes of the operation. Throws an ``MechJeb.OperationException``
+      Make the maneuver nodes of the operation. Throws an :macro:`KRPC_EXCEPTION_MECHJEB_OPERATIONEXCEPTION`
       if the operation cannot make them.
 
 
@@ -800,7 +803,7 @@ OperationMoonReturn
 
    .. function:: krpc_error_t krpc_MechJeb_OperationMoonReturn_MakeNodes(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_MechJeb_OperationMoonReturn_t instance)
 
-      Make the maneuver nodes of the operation. Throws an ``MechJeb.OperationException``
+      Make the maneuver nodes of the operation. Throws an :macro:`KRPC_EXCEPTION_MECHJEB_OPERATIONEXCEPTION`
       if the operation cannot make them.
 
 
@@ -847,7 +850,7 @@ OperationPeriapsis
 
    .. function:: krpc_error_t krpc_MechJeb_OperationPeriapsis_MakeNodes(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_MechJeb_OperationPeriapsis_t instance)
 
-      Make the maneuver nodes of the operation. Throws an ``MechJeb.OperationException``
+      Make the maneuver nodes of the operation. Throws an :macro:`KRPC_EXCEPTION_MECHJEB_OPERATIONEXCEPTION`
       if the operation cannot make them.
 
 
@@ -900,7 +903,7 @@ OperationPlane
 
    .. function:: krpc_error_t krpc_MechJeb_OperationPlane_MakeNodes(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_MechJeb_OperationPlane_t instance)
 
-      Make the maneuver nodes of the operation. Throws an ``MechJeb.OperationException``
+      Make the maneuver nodes of the operation. Throws an :macro:`KRPC_EXCEPTION_MECHJEB_OPERATIONEXCEPTION`
       if the operation cannot make them.
 
 
@@ -952,7 +955,7 @@ OperationResonantOrbit
 
    .. function:: krpc_error_t krpc_MechJeb_OperationResonantOrbit_MakeNodes(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_MechJeb_OperationResonantOrbit_t instance)
 
-      Make the maneuver nodes of the operation. Throws an ``MechJeb.OperationException``
+      Make the maneuver nodes of the operation. Throws an :macro:`KRPC_EXCEPTION_MECHJEB_OPERATIONEXCEPTION`
       if the operation cannot make them.
 
 
@@ -1012,7 +1015,7 @@ OperationSemiMajor
 
    .. function:: krpc_error_t krpc_MechJeb_OperationSemiMajor_MakeNodes(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_MechJeb_OperationSemiMajor_t instance)
 
-      Make the maneuver nodes of the operation. Throws an ``MechJeb.OperationException``
+      Make the maneuver nodes of the operation. Throws an :macro:`KRPC_EXCEPTION_MECHJEB_OPERATIONEXCEPTION`
       if the operation cannot make them.
 
 
@@ -1071,7 +1074,7 @@ OperationTransfer
 
    .. function:: krpc_error_t krpc_MechJeb_OperationTransfer_MakeNodes(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_MechJeb_OperationTransfer_t instance)
 
-      Make the maneuver nodes of the operation. Throws an ``MechJeb.OperationException``
+      Make the maneuver nodes of the operation. Throws an :macro:`KRPC_EXCEPTION_MECHJEB_OPERATIONEXCEPTION`
       if the operation cannot make them.
 
 

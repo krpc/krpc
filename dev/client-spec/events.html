@@ -637,8 +637,7 @@ the firing unseen, so a callback added later is called for it.</p>
 <h2>Ending<a class="headerlink" href="#ending" title="Link to this heading">#</a></h2>
 <dl class="simple" id="spec-events-server-end">
 <dt><code class="docutils literal notranslate"><span class="pre">events-server-end</span> <span class="pre">[events]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Waiting on an event the server ends returns for an unseen firing first. Later waits
-raise the error for an event the server ended: <code class="docutils literal notranslate"><span class="pre">KRPC.StreamRemovedException</span></code>, or the
-stream error.</p>
+raise the stream error.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-events-ended-without-firing">
@@ -647,7 +646,7 @@ stream error.</p>
 </dl>
 <dl class="simple" id="spec-events-remove">
 <dt><code class="docutils literal notranslate"><span class="pre">events-remove</span> <span class="pre">[events]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Waiting on an event the client removed, through the event or through its stream,
-raises the error for a removed stream, at once. An unseen firing is discarded.</p>
+raises the stream error, at once. An unseen firing is discarded.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-events-drop-last-handle">
@@ -697,7 +696,7 @@ timeout raises the argument error.</p>
 </dl>
 <dl class="simple" id="spec-events-wake-waiter">
 <dt><code class="docutils literal notranslate"><span class="pre">events-wake-waiter</span> <span class="pre">[events,</span> <span class="pre">concurrency]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A wait on an event ends when the event is removed, the connection closes or the
-connection fails. The wait raises the error for a removed stream, or the
+connection fails. The wait raises the stream error, or the
 connection error, with the reason for a failure.</p>
 </dd>
 </dl>

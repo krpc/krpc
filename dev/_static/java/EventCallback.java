@@ -1,15 +1,12 @@
 import krpc.client.Connection;
 import krpc.client.Event;
-import krpc.client.RPCException;
 import krpc.client.services.KRPC.Expression;
 import krpc.client.services.SpaceCenter;
 import krpc.client.services.SpaceCenter.Flight;
 
-import java.io.IOException;
 
 public class EventCallback {
-  public static void main(String[] args)
-      throws IOException, RPCException, InterruptedException {
+  public static void main(String[] args) throws InterruptedException {
     try (Connection connection = Connection.newInstance()) {
       SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
       Flight flight = spaceCenter.getActiveVessel().flight(null);

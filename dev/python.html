@@ -1455,15 +1455,18 @@ the error from loading a save that does not exist:</p>
 </div>
 <p>The exception you catch depends on the error:</p>
 <ul class="simple">
-<li><p>A standard error, such as an invalid argument, raises a subclass of the matching Python
-exception. The example catches <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>, as a missing save raises
+<li><p>A standard error, such as an invalid argument, raises a class whose only base is the matching
+Python exception. The example catches <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>, as a missing save raises
 <code class="docutils literal notranslate"><span class="pre">conn.krpc.ArgumentException</span></code>.</p></li>
 <li><p>An error particular to a service raises a class of that service, such as
-<code class="docutils literal notranslate"><span class="pre">conn.krpc.ObjectDestroyedException</span></code>.</p></li>
-<li><p>An error the client has no class for raises <a class="reference internal" href="#krpc.error.RPCError" title="krpc.error.RPCError"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.error.RPCError</span></code></a>.</p></li>
+<code class="docutils literal notranslate"><span class="pre">conn.krpc.ObjectDestroyedException</span></code>, derived from <a class="reference internal" href="#krpc.error.ServerError" title="krpc.error.ServerError"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.error.ServerError</span></code></a>.</p></li>
+<li><p>An error the client has no class for raises <a class="reference internal" href="#krpc.error.ServerError" title="krpc.error.ServerError"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.error.ServerError</span></code></a>.</p></li>
 <li><p>A call made once the connection has closed or failed raises
 <a class="reference internal" href="#krpc.error.ConnectionError" title="krpc.error.ConnectionError"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.error.ConnectionError</span></code></a>.</p></li>
+<li><p>An argument the client rejects before sending the call raises <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> or <code class="docutils literal notranslate"><span class="pre">TypeError</span></code>.</p></li>
 </ul>
+<p>Every error of the client’s own derives <a class="reference internal" href="#krpc.error.RemoteError" title="krpc.error.RemoteError"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.error.RemoteError</span></code></a>. A standard error, such as
+<code class="docutils literal notranslate"><span class="pre">conn.krpc.ArgumentException</span></code>, does not.</p>
 </section>
 <section id="values">
 <span id="python-client-values"></span><h2>Values<a class="headerlink" href="#values" title="Link to this heading">#</a></h2>
@@ -1737,9 +1740,8 @@ that ended it. The following streams the temperature of a part until the part is
 </div>
 <p>The exception is the one the procedure raised, or one of the following:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">conn.krpc.StreamRemovedException</span></code> when the server removes the stream, such as for an
+<li><p><a class="reference internal" href="#krpc.error.StreamError" title="krpc.error.StreamError"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.error.StreamError</span></code></a> when you or the server remove the stream, such as for an
 <a class="reference internal" href="#python-client-events"><span class="std std-ref">event</span></a> that has finished.</p></li>
-<li><p><a class="reference internal" href="#krpc.error.StreamError" title="krpc.error.StreamError"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.error.StreamError</span></code></a> when you remove the stream from the client.</p></li>
 <li><p><a class="reference internal" href="#krpc.error.ConnectionError" title="krpc.error.ConnectionError"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.error.ConnectionError</span></code></a> when the connection closes or fails.</p></li>
 </ul>
 <p>An exception for an object that is not loaded, or for a procedure not available in the current
@@ -2009,7 +2011,7 @@ once, when the function is compiled, and embedded as constants. A client side fu
 there is a compile error if it makes a remote procedure call, as the call would run only once,
 when compiling. To use a value read once, read it before the function and capture the variable.</p></li>
 </ul>
-<p>The compiler raises <a class="reference internal" href="#krpc.error.FunctionCompilationError" title="krpc.error.FunctionCompilationError"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.error.FunctionCompilationError</span></code></a> for code that would run only once,
+<p>The compiler raises <a class="reference internal" href="#krpc.error.CompilationError" title="krpc.error.CompilationError"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.error.CompilationError</span></code></a> for code that would run only once,
 when compiling, where you would expect it to run on every evaluation:</p>
 <ul class="simple">
 <li><p>Reading a stream inside a function, as the stream would be read once.</p></li>
@@ -2254,7 +2256,7 @@ formatting, so <code class="docutils literal notranslate"><span class="pre">1.0<
 </section>
 <section id="unsupported-constructs">
 <h3>Unsupported Constructs<a class="headerlink" href="#unsupported-constructs" title="Link to this heading">#</a></h3>
-<p>A construct with no server side equivalent raises <a class="reference internal" href="#krpc.error.FunctionCompilationError" title="krpc.error.FunctionCompilationError"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.error.FunctionCompilationError</span></code></a>
+<p>A construct with no server side equivalent raises <a class="reference internal" href="#krpc.error.CompilationError" title="krpc.error.CompilationError"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.error.CompilationError</span></code></a>
 naming it. Examples are a format specifier, <code class="docutils literal notranslate"><span class="pre">str.format</span></code>, and a call to a client side function
 with server side arguments.</p>
 </section>
@@ -2316,8 +2318,8 @@ its arguments to them, with defaults and keyword arguments as in Python:</p>
 </div>
 <p>Only a <code class="docutils literal notranslate"><span class="pre">def</span></code> takes parameters. An event or a function stream runs its function with no arguments.
 Passing <a class="reference internal" href="#krpc.Connection.add_event" title="krpc.Connection.add_event"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_event()</span></code></a> or <a class="reference internal" href="#krpc.Connection.add_stream" title="krpc.Connection.add_stream"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_stream()</span></code></a> a <code class="docutils literal notranslate"><span class="pre">def</span></code>
-with parameters raises <a class="reference internal" href="#krpc.error.FunctionCompilationError" title="krpc.error.FunctionCompilationError"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.error.FunctionCompilationError</span></code></a>, and a compiled function with
-parameters raises <code class="docutils literal notranslate"><span class="pre">StreamError</span></code>.</p>
+with parameters raises <a class="reference internal" href="#krpc.error.CompilationError" title="krpc.error.CompilationError"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.error.CompilationError</span></code></a>, and a compiled function with
+parameters raises <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>.</p>
 </section>
 </section>
 <section id="type-checking">
@@ -2493,8 +2495,8 @@ is a <code class="docutils literal notranslate"><span class="pre">KRPC.Expressio
 <a class="reference internal" href="#krpc.Connection.compile" title="krpc.Connection.compile"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compile()</span></code></a> on every call. A server side function takes no arguments.</p>
 <p>A call or function with no value runs on each update for its effects, and the stream’s
 value is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
-<p>Raises <a class="reference internal" href="#krpc.error.StreamError" title="krpc.error.StreamError"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.error.StreamError</span></code></a> for arguments passed with a server side function,
-and for a compiled function with parameters. Raises <code class="docutils literal notranslate"><span class="pre">TypeError</span></code> for any other value.</p>
+<p>Raises <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> for arguments passed with a server side function, and for a compiled
+function with parameters. Raises <code class="docutils literal notranslate"><span class="pre">TypeError</span></code> for any other value.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -2549,9 +2551,9 @@ cannot take, naming the argument’s position.</p>
 <dd><p>Creates an event from a server side function that evaluates to a boolean value, and
 returns a <a class="reference internal" href="#krpc.event.Event" title="krpc.event.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.event.Event</span></code></a>. The function can also be a Python function or lambda
 that takes no arguments, which is compiled with <a class="reference internal" href="#krpc.Connection.compile" title="krpc.Connection.compile"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compile()</span></code></a> on every call.</p>
-<p>Raises <code class="docutils literal notranslate"><span class="pre">StreamError</span></code> for a compiled function with parameters. A function that does not
-evaluate to a boolean value raises <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>, and a value that is not a function
-raises <code class="docutils literal notranslate"><span class="pre">TypeError</span></code>.</p>
+<p>Raises <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> for a compiled function with parameters, and for a function that
+does not evaluate to a boolean value. A value that is not a function raises
+<code class="docutils literal notranslate"><span class="pre">TypeError</span></code>.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -2559,7 +2561,7 @@ raises <code class="docutils literal notranslate"><span class="pre">TypeError</s
 <span class="sig-name descname"><span class="pre">compile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.Connection.compile" title="Link to this definition">#</a></dt>
 <dd><p>Compiles a Python function or lambda into a server side function, a <code class="docutils literal notranslate"><span class="pre">KRPC.Expression</span></code>
 object. A <code class="docutils literal notranslate"><span class="pre">def</span></code> can take parameters, each with a type annotation. Can be used as a
-decorator. Raises <a class="reference internal" href="#krpc.error.FunctionCompilationError" title="krpc.error.FunctionCompilationError"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.error.FunctionCompilationError</span></code></a> for a construct with no
+decorator. Raises <a class="reference internal" href="#krpc.error.CompilationError" title="krpc.error.CompilationError"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.error.CompilationError</span></code></a> for a construct with no
 server side equivalent. See <a class="reference internal" href="#python-client-compiling-functions"><span class="std std-ref">Writing Server Side Functions</span></a>. Given a
 <code class="docutils literal notranslate"><span class="pre">KRPC.Expression</span></code> object built with the expression API, compiles it on the server and
 returns it.</p>
@@ -2711,10 +2713,17 @@ called straight away if the event has already ended.</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="krpc.error.RemoteError">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">krpc.error.</span></span><span class="sig-name descname"><span class="pre">RemoteError</span></span><a class="headerlink" href="#krpc.error.RemoteError" title="Link to this definition">#</a></dt>
+<dd><p>The base of every error the client raises of its own. A subclass of <code class="docutils literal notranslate"><span class="pre">RuntimeError</span></code>.</p>
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="krpc.error.ConnectionError">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">krpc.error.</span></span><span class="sig-name descname"><span class="pre">ConnectionError</span></span><a class="headerlink" href="#krpc.error.ConnectionError" title="Link to this definition">#</a></dt>
 <dd><p>Raised when connecting fails, and by each call once the connection has closed or failed. A
-subclass of <code class="docutils literal notranslate"><span class="pre">RuntimeError</span></code>.</p>
+subclass of <a class="reference internal" href="#krpc.error.RemoteError" title="krpc.error.RemoteError"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.error.RemoteError</span></code></a>. It shadows the builtin <code class="docutils literal notranslate"><span class="pre">ConnectionError</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">except</span> <span class="pre">OSError</span></code> does not catch it.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="krpc.error.ConnectionError.status">
 <span class="sig-name descname"><span class="pre">status</span></span><a class="headerlink" href="#krpc.error.ConnectionError.status" title="Link to this definition">#</a></dt>
@@ -2731,30 +2740,32 @@ subclass of <code class="docutils literal notranslate"><span class="pre">Runtime
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="krpc.error.RPCError">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">krpc.error.</span></span><span class="sig-name descname"><span class="pre">RPCError</span></span><a class="headerlink" href="#krpc.error.RPCError" title="Link to this definition">#</a></dt>
-<dd><p>Raised for an error from the server that the client has no exception class for. A subclass
-of <code class="docutils literal notranslate"><span class="pre">RuntimeError</span></code>.</p>
+<dt class="sig sig-object py" id="krpc.error.ServerError">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">krpc.error.</span></span><span class="sig-name descname"><span class="pre">ServerError</span></span><a class="headerlink" href="#krpc.error.ServerError" title="Link to this definition">#</a></dt>
+<dd><p>Raised for an error from the server with no builtin type, and the base of the exception
+classes the services declare. A subclass of <a class="reference internal" href="#krpc.error.RemoteError" title="krpc.error.RemoteError"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.error.RemoteError</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="krpc.error.StreamError">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">krpc.error.</span></span><span class="sig-name descname"><span class="pre">StreamError</span></span><a class="headerlink" href="#krpc.error.StreamError" title="Link to this definition">#</a></dt>
-<dd><p>Raised by a stream or event that you removed, and when a stream cannot be created. A
-subclass of <code class="docutils literal notranslate"><span class="pre">RuntimeError</span></code>.</p>
+<dd><p>Raised by a stream or event that you or the server removed, and when a stream cannot be
+created. A subclass of <a class="reference internal" href="#krpc.error.RemoteError" title="krpc.error.RemoteError"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.error.RemoteError</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="krpc.error.EncodingError">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">krpc.error.</span></span><span class="sig-name descname"><span class="pre">EncodingError</span></span><a class="headerlink" href="#krpc.error.EncodingError" title="Link to this definition">#</a></dt>
-<dd><p>Raised when a value cannot be encoded or decoded. A subclass of <code class="docutils literal notranslate"><span class="pre">RuntimeError</span></code>.</p>
+<dd><p>Raised for a value of the right type that cannot be encoded, and for a value that cannot be
+decoded. A subclass of <a class="reference internal" href="#krpc.error.RemoteError" title="krpc.error.RemoteError"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.error.RemoteError</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="krpc.error.FunctionCompilationError">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">krpc.error.</span></span><span class="sig-name descname"><span class="pre">FunctionCompilationError</span></span><a class="headerlink" href="#krpc.error.FunctionCompilationError" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="krpc.error.CompilationError">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">krpc.error.</span></span><span class="sig-name descname"><span class="pre">CompilationError</span></span><a class="headerlink" href="#krpc.error.CompilationError" title="Link to this definition">#</a></dt>
 <dd><p>Raised when a Python function cannot be compiled into a server side function. The error
-message names the unsupported construct. See <a class="reference internal" href="#python-client-compiling-functions"><span class="std std-ref">Writing Server Side Functions</span></a>.</p>
+message names the unsupported construct. See <a class="reference internal" href="#python-client-compiling-functions"><span class="std std-ref">Writing Server Side Functions</span></a>. A
+subclass of <a class="reference internal" href="#krpc.error.RemoteError" title="krpc.error.RemoteError"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.error.RemoteError</span></code></a>.</p>
 </dd></dl>
 
 <section id="numeric-limits">

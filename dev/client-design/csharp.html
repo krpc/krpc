@@ -549,6 +549,37 @@
 <h1>C# Client Design<a class="headerlink" href="#c-client-design" title="Link to this heading">#</a></h1>
 <p>The internal design of the C# client. This page builds on the <a class="reference internal" href="../client-design.html"><span class="doc">shared client design</span></a> and the <a class="reference internal" href="../client-spec.html"><span class="doc">client specification</span></a>. Usage is in
 the <a class="reference internal" href="../csharp.html"><span class="doc">C# guide</span></a>. Paths are relative to <code class="docutils literal notranslate"><span class="pre">client/csharp/</span></code>.</p>
+<section id="generated-stubs-and-target-framework">
+<h2>Generated Stubs and Target Framework<a class="headerlink" href="#generated-stubs-and-target-framework" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">clientgen</span></code> writes <code class="docutils literal notranslate"><span class="pre">Services/&lt;Service&gt;.cs</span></code> from <code class="docutils literal notranslate"><span class="pre">csharp.tmpl</span></code> in <code class="docutils literal notranslate"><span class="pre">krpctools</span></code>, compiled into
+one <code class="docutils literal notranslate"><span class="pre">netstandard2.0</span></code> assembly. A .NET 5 or later project references it with no compatibility shim.
+<code class="docutils literal notranslate"><span class="pre">UnixEndPoint</span></code> exists because <code class="docutils literal notranslate"><span class="pre">netstandard2.0</span></code> has no endpoint for unix domain sockets. It
+passes the local socket tests on .NET 10, so the client has no separate <code class="docutils literal notranslate"><span class="pre">net10.0</span></code> assembly.
+The tests run on .NET 10, and none run on .NET Framework or Mono.</p>
+<ul class="simple">
+<li><p>A service is an extension method of <code class="docutils literal notranslate"><span class="pre">IConnection</span></code>. Stubs use only that interface.</p></li>
+<li><p>Constructing a service registers its exception types on that connection. <code class="docutils literal notranslate"><span class="pre">Connection</span></code> registers
+the <code class="docutils literal notranslate"><span class="pre">KRPC</span></code> ones itself. Types with a <code class="docutils literal notranslate"><span class="pre">System</span></code> equivalent are a table in <code class="docutils literal notranslate"><span class="pre">GetException</span></code>,
+which adds no public member to <code class="docutils literal notranslate"><span class="pre">IConnection</span></code>. The argument exceptions also take their arguments
+in different orders.</p></li>
+</ul>
+</section>
+<section id="streams-from-expressions">
+<h2>Streams from Expressions<a class="headerlink" href="#streams-from-expressions" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">AddStream</span></code> takes an expression tree, and reads the procedure from the stub’s <code class="docutils literal notranslate"><span class="pre">RPCAttribute</span></code>:</p>
+<ul class="simple">
+<li><p>A single call or property read with fixed arguments streams that call. <code class="docutils literal notranslate"><span class="pre">GetCall</span></code> evaluates the
+object and the arguments once, on the client. Conversions to its own type and multiplications by
+one, which F# units of measure add, still count as a single call.</p></li>
+<li><p>Conversions of a <code class="docutils literal notranslate"><span class="pre">KRPC</span></code> service call run on the client, as a function cannot call that service.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">FunctionCompiler</span></code> translates any other lambda into a server side function, one call per node.</p></li>
+</ul>
+<p>A C# type cannot say that a reference-typed position inside a collection is nullable. <code class="docutils literal notranslate"><span class="pre">GetCall</span></code>
+reads the spec from <code class="docutils literal notranslate"><span class="pre">RPCAttribute.Types</span></code>, the service’s generated <code class="docutils literal notranslate"><span class="pre">TypeSpecs</span></code> class. A compiled
+lambda holding a reference inside a collection or tuple asks the server for its return type.</p>
+<p>Connections carried by the lambda’s objects, its services, a static method’s argument and a
+<code class="docutils literal notranslate"><span class="pre">Bound</span></code> object are not used or checked.</p>
+</section>
 <section id="ownership">
 <h2>Ownership<a class="headerlink" href="#ownership" title="Link to this heading">#</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">Connection</span></code> owns the socket and two threads. Services, objects, streams and events each hold it,
@@ -558,7 +589,7 @@ and stay valid objects after it closes:</p>
 <span class="w">    </span><span class="n">met</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">AddStream</span><span class="w"> </span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">MET</span><span class="p">);</span>
 <span class="p">}</span>
 <span class="n">met</span><span class="p">.</span><span class="n">Get</span><span class="w"> </span><span class="p">();</span><span class="w">     </span><span class="c1">// Throws ConnectionException</span>
-<span class="n">_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">MET</span><span class="p">;</span><span class="w"> </span><span class="c1">// Throws ObjectDisposedException</span>
+<span class="n">_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">MET</span><span class="p">;</span><span class="w"> </span><span class="c1">// Throws ConnectionException</span>
 </pre></div>
 </div>
 <section id="references">
@@ -607,37 +638,6 @@ ends once the holder lets go.</p></li>
 and <code class="docutils literal notranslate"><span class="pre">AddCallback</span> <span class="pre">(Action&lt;T&gt;)</span></code>, so a stream with no value is a plain <code class="docutils literal notranslate"><span class="pre">Stream</span></code>. <code class="docutils literal notranslate"><span class="pre">Event</span></code> holds a
 <code class="docutils literal notranslate"><span class="pre">Stream&lt;bool&gt;</span></code>.</p>
 </section>
-<section id="streams-from-expressions">
-<h2>Streams from Expressions<a class="headerlink" href="#streams-from-expressions" title="Link to this heading">#</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">AddStream</span></code> takes an expression tree, and reads the procedure from the stub’s <code class="docutils literal notranslate"><span class="pre">RPCAttribute</span></code>:</p>
-<ul class="simple">
-<li><p>A single call or property read with fixed arguments streams that call. <code class="docutils literal notranslate"><span class="pre">GetCall</span></code> evaluates the
-object and the arguments once, on the client. Conversions to its own type and multiplications by
-one, which F# units of measure add, still count as a single call.</p></li>
-<li><p>Conversions of a <code class="docutils literal notranslate"><span class="pre">KRPC</span></code> service call run on the client, as a function cannot call that service.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">FunctionCompiler</span></code> translates any other lambda into a server side function, one call per node.</p></li>
-</ul>
-<p>A C# type cannot say that a reference-typed position inside a collection is nullable. <code class="docutils literal notranslate"><span class="pre">GetCall</span></code>
-reads the spec from <code class="docutils literal notranslate"><span class="pre">RPCAttribute.Types</span></code>, the service’s generated <code class="docutils literal notranslate"><span class="pre">TypeSpecs</span></code> class. A compiled
-lambda holding a reference inside a collection or tuple asks the server for its return type.</p>
-<p>Connections carried by the lambda’s objects, its services, a static method’s argument and a
-<code class="docutils literal notranslate"><span class="pre">Bound</span></code> object are not used or checked.</p>
-</section>
-<section id="generated-stubs-and-target-framework">
-<h2>Generated Stubs and Target Framework<a class="headerlink" href="#generated-stubs-and-target-framework" title="Link to this heading">#</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">clientgen</span></code> writes <code class="docutils literal notranslate"><span class="pre">Services/&lt;Service&gt;.cs</span></code> from <code class="docutils literal notranslate"><span class="pre">csharp.tmpl</span></code> in <code class="docutils literal notranslate"><span class="pre">krpctools</span></code>, compiled into
-one <code class="docutils literal notranslate"><span class="pre">netstandard2.0</span></code> assembly. A .NET 5 or later project references it with no compatibility shim.
-<code class="docutils literal notranslate"><span class="pre">UnixEndPoint</span></code> exists because <code class="docutils literal notranslate"><span class="pre">netstandard2.0</span></code> has no endpoint for unix domain sockets. It
-passes the local socket tests on .NET 10, so the client has no separate <code class="docutils literal notranslate"><span class="pre">net10.0</span></code> assembly.
-The tests run on .NET 10, and none run on .NET Framework or Mono.</p>
-<ul class="simple">
-<li><p>A service is an extension method of <code class="docutils literal notranslate"><span class="pre">IConnection</span></code>. Stubs use only that interface.</p></li>
-<li><p>Constructing a service registers its exception types on that connection. <code class="docutils literal notranslate"><span class="pre">Connection</span></code> registers
-the <code class="docutils literal notranslate"><span class="pre">KRPC</span></code> ones itself. Types with a <code class="docutils literal notranslate"><span class="pre">System</span></code> equivalent are a table in <code class="docutils literal notranslate"><span class="pre">GetException</span></code>,
-which adds no public member to <code class="docutils literal notranslate"><span class="pre">IConnection</span></code>. The argument exceptions also take their arguments
-in different orders.</p></li>
-</ul>
-</section>
 <section id="mapping-the-spec-to-c">
 <h2>Mapping the Spec to C#<a class="headerlink" href="#mapping-the-spec-to-c" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="table">
@@ -650,11 +650,18 @@ in different orders.</p></li>
 <tr class="row-even"><td><p>Closing a connection</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">Connection.Dispose</span></code>, or a <code class="docutils literal notranslate"><span class="pre">using</span></code> block</p></td>
 </tr>
-<tr class="row-odd"><td><p>Connection error</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">ConnectionException</span></code></p></td>
+<tr class="row-odd"><td><p>Remote error</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">RemoteException</span></code>, an <code class="docutils literal notranslate"><span class="pre">Exception</span></code></p></td>
 </tr>
-<tr class="row-even"><td><p>Server error with no mapped type</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">RPCException</span></code></p></td>
+<tr class="row-even"><td><p>Connection, stream, encoding error</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ConnectionException</span></code>, <code class="docutils literal notranslate"><span class="pre">StreamException</span></code>, <code class="docutils literal notranslate"><span class="pre">EncodingException</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Server error with no mapped type</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ServerException</span></code>, the base of each exception class a service declares</p></td>
+</tr>
+<tr class="row-even"><td><p>Server exception with a mapped type</p></td>
+<td><p>The .NET exception itself, from the table in <code class="docutils literal notranslate"><span class="pre">lang/csharp.py</span></code> in <code class="docutils literal notranslate"><span class="pre">krpctools</span></code>. The stubs
+generate no class for it, and register a function that creates it</p></td>
 </tr>
 <tr class="row-odd"><td><p>Nullable value</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">T?</span></code> for a value type, and a reference type holds null. A generated <code class="docutils literal notranslate"><span class="pre">TypeSpec</span></code> names the position</p></td>
@@ -728,6 +735,8 @@ bits too</p></td>
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generated-stubs-and-target-framework">Generated Stubs and Target Framework</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#streams-from-expressions">Streams from Expressions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ownership">Ownership</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lifetime">Lifetime</a></li>
@@ -735,8 +744,6 @@ bits too</p></td>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#threads">Threads</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#streams-and-events">Streams and Events</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#streams-from-expressions">Streams from Expressions</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generated-stubs-and-target-framework">Generated Stubs and Target Framework</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mapping-the-spec-to-c">Mapping the Spec to C#</a></li>
 </ul>
   </nav></div>

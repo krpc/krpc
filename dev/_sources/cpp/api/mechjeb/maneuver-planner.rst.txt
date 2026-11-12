@@ -118,6 +118,8 @@ ManeuverPlanner
    Thrown when an operation cannot make its nodes, such as when it needs a target and
    there is none.
 
+   A subclass of :class:`krpc::ServerError`.
+
 
 
 TimeSelector

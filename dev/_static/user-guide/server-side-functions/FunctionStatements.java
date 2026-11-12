@@ -1,13 +1,11 @@
 import krpc.client.Connection;
-import krpc.client.RPCException;
 import krpc.client.services.KRPC.Expression;
 import krpc.client.services.KRPC.Type;
 
-import java.io.IOException;
 import java.util.Arrays;
 
 public class FunctionStatements {
-  public static void main(String[] args) throws IOException, RPCException {
+  public static void main(String[] args) {
     try (Connection connection = Connection.newInstance()) {
       Expression.Bound e = Expression.bind(connection);
       Type.Bound t = Type.bind(connection);

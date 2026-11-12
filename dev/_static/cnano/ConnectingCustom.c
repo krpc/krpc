@@ -14,15 +14,20 @@ typedef struct {
 
 static krpc_error_t link_read(uintptr_t handle, uint8_t *buf, size_t count) {
   link_t *link = (link_t *)handle;
-  if (fread(buf, 1, count, link->in) != count) return KRPC_ERROR_EOF;
+  if (fread(buf, 1, count, link->in) != count) {
+    krpc_set_error_cause("End of the input");
+    return KRPC_ERROR_EOF;
+  }
   return KRPC_OK;
 }
 
 static krpc_error_t link_write(uintptr_t handle, const uint8_t *buf,
                                size_t count) {
   link_t *link = (link_t *)handle;
-  if (fwrite(buf, 1, count, link->out) != count || fflush(link->out) != 0)
+  if (fwrite(buf, 1, count, link->out) != count || fflush(link->out) != 0) {
+    krpc_set_error_cause("Failed to write the output");
     return KRPC_ERROR_IO;
+  }
   return KRPC_OK;
 }
 

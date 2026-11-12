@@ -117,6 +117,8 @@ ManeuverPlanner
    Thrown when an operation cannot make its nodes, such as when it needs a target and
    there is none.
 
+   Raised as a :class:`krpc.ServerError` whose ``service`` and ``name`` are ``'MechJeb'`` and ``'OperationException'``.
+
 
 
 TimeSelector

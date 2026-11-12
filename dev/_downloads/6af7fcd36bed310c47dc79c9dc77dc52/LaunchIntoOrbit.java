@@ -1,8 +1,6 @@
 import krpc.client.Connection;
 import krpc.client.Event;
-import krpc.client.RPCException;
 import krpc.client.Stream;
-import krpc.client.StreamException;
 import krpc.client.services.KRPC.Expression;
 import krpc.client.services.SpaceCenter;
 import krpc.client.services.SpaceCenter.Flight;
@@ -13,12 +11,10 @@ import krpc.schema.KRPC.ProcedureCall;
 
 import org.javatuples.Triplet;
 
-import java.io.IOException;
 import java.lang.Math;
 
 public class LaunchIntoOrbit {
-    public static void main(String[] args)
-        throws IOException, RPCException, InterruptedException, StreamException {
+    public static void main(String[] args) throws InterruptedException {
         Connection connection = Connection.newInstance("Launch into orbit");
         SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
         SpaceCenter.Vessel vessel = spaceCenter.getActiveVessel();

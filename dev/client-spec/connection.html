@@ -584,8 +584,8 @@ is at the local socket path, or no serial port is at the path.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-connection-localsocket-path-too-long">
-<dt><code class="docutils literal notranslate"><span class="pre">connection-localsocket-path-too-long</span> <span class="pre">[core]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A local socket path too long for a socket address raises the connection error or the
-argument error. The client does not connect to the socket a leading part of the
+<dt><code class="docutils literal notranslate"><span class="pre">connection-localsocket-path-too-long</span> <span class="pre">[core]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A local socket path too long for a socket address raises the argument error. The
+client does not connect to the socket a leading part of the
 path names.</p>
 </dd>
 </dl>
@@ -647,8 +647,9 @@ connection error.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-connection-handshake-failed-write">
-<dt><code class="docutils literal notranslate"><span class="pre">connection-handshake-failed-write</span> <span class="pre">[core]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A <code class="docutils literal notranslate"><span class="pre">connection_request</span></code> that fails to be written raises the connection error,
-which carries the error of the write in its message or as its cause.</p>
+<dt><code class="docutils literal notranslate"><span class="pre">connection-handshake-failed-write</span> <span class="pre">[core]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A <code class="docutils literal notranslate"><span class="pre">connection_request</span></code> that fails to be written raises the connection error. Its
+message carries the message of the write’s error, which is also its cause in a language
+that chains errors.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-connection-handshake-malformed-size">
@@ -765,8 +766,9 @@ error.</p>
 </dl>
 <dl class="simple" id="spec-connection-failed-write">
 <dt><code class="docutils literal notranslate"><span class="pre">connection-failed-write</span> <span class="pre">[core]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A call whose request fails to be written fails the connection. The call raises the
-connection error, which carries the error of the write in its message or as its cause.
-A later call raises the connection error at once.</p>
+connection error. Its message carries the message of the write’s error, which is also
+its cause in a language that chains errors. A later call raises the connection error at
+once.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-connection-call-after-end">

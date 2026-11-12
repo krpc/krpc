@@ -1175,18 +1175,15 @@ running, catch the exception in the function:</p>
 </div>
 </div><div aria-labelledby="tab-14-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-14-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Event</span><span class="p">;</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.RPCException</span><span class="p">;</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.StreamException</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.KRPC.Expression</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.KRPC.Type</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter.Flight</span><span class="p">;</span>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">java.io.IOException</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">java.util.Arrays</span><span class="p">;</span>
 
 <span class="n">public</span> <span class="k">class</span><span class="w"> </span><span class="nc">NotLoadedEvent</span> <span class="p">{</span>
-  <span class="n">public</span> <span class="n">static</span> <span class="n">void</span> <span class="n">main</span><span class="p">(</span><span class="n">String</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span> <span class="n">throws</span> <span class="n">IOException</span><span class="p">,</span> <span class="n">RPCException</span><span class="p">,</span> <span class="n">StreamException</span> <span class="p">{</span>
+  <span class="n">public</span> <span class="n">static</span> <span class="n">void</span> <span class="n">main</span><span class="p">(</span><span class="n">String</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">try</span> <span class="p">(</span><span class="n">Connection</span> <span class="n">connection</span> <span class="o">=</span> <span class="n">Connection</span><span class="o">.</span><span class="n">newInstance</span><span class="p">())</span> <span class="p">{</span>
       <span class="n">SpaceCenter</span> <span class="n">spaceCenter</span> <span class="o">=</span> <span class="n">SpaceCenter</span><span class="o">.</span><span class="n">newInstance</span><span class="p">(</span><span class="n">connection</span><span class="p">);</span>
       <span class="n">Flight</span> <span class="n">flight</span> <span class="o">=</span> <span class="n">spaceCenter</span><span class="o">.</span><span class="n">getActiveVessel</span><span class="p">()</span><span class="o">.</span><span class="n">flight</span><span class="p">(</span><span class="n">null</span><span class="p">);</span>
@@ -1467,18 +1464,15 @@ and a comparison:</p>
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-17-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-17-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.RPCException</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Event</span><span class="p">;</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.StreamException</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.KRPC.Expression</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter.Flight</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.schema.KRPC.ProcedureCall</span><span class="p">;</span>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">java.io.IOException</span><span class="p">;</span>
 
 <span class="n">public</span> <span class="k">class</span><span class="w"> </span><span class="nc">CustomEvent</span> <span class="p">{</span>
-  <span class="n">public</span> <span class="n">static</span> <span class="n">void</span> <span class="n">main</span><span class="p">(</span><span class="n">String</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span> <span class="n">throws</span> <span class="n">IOException</span><span class="p">,</span> <span class="n">RPCException</span><span class="p">,</span> <span class="n">StreamException</span> <span class="p">{</span>
+  <span class="n">public</span> <span class="n">static</span> <span class="n">void</span> <span class="n">main</span><span class="p">(</span><span class="n">String</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">try</span> <span class="p">(</span><span class="n">Connection</span> <span class="n">connection</span> <span class="o">=</span> <span class="n">Connection</span><span class="o">.</span><span class="n">newInstance</span><span class="p">())</span> <span class="p">{</span>
       <span class="n">SpaceCenter</span> <span class="n">spaceCenter</span> <span class="o">=</span> <span class="n">SpaceCenter</span><span class="o">.</span><span class="n">newInstance</span><span class="p">(</span><span class="n">connection</span><span class="p">);</span>
       <span class="n">Flight</span> <span class="n">flight</span> <span class="o">=</span> <span class="n">spaceCenter</span><span class="o">.</span><span class="n">getActiveVessel</span><span class="p">()</span><span class="o">.</span><span class="n">flight</span><span class="p">(</span><span class="n">null</span><span class="p">);</span>
@@ -1713,18 +1707,14 @@ streamed too, and runs for its effects, as in <a class="reference internal" href
 <span class="p">}</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-19-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-19-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">java.io.IOException</span><span class="p">;</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.RPCException</span><span class="p">;</span>
+</div><div aria-labelledby="tab-19-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-19-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Stream</span><span class="p">;</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.StreamException</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.KRPC.Expression</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter.Flight</span><span class="p">;</span>
 
 <span class="n">public</span> <span class="k">class</span><span class="w"> </span><span class="nc">FunctionStream</span> <span class="p">{</span>
-  <span class="n">public</span> <span class="n">static</span> <span class="n">void</span> <span class="n">main</span><span class="p">(</span><span class="n">String</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
-      <span class="n">throws</span> <span class="n">IOException</span><span class="p">,</span> <span class="n">RPCException</span><span class="p">,</span> <span class="n">StreamException</span><span class="p">,</span> <span class="n">InterruptedException</span> <span class="p">{</span>
+  <span class="n">public</span> <span class="n">static</span> <span class="n">void</span> <span class="n">main</span><span class="p">(</span><span class="n">String</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span> <span class="n">throws</span> <span class="n">InterruptedException</span> <span class="p">{</span>
     <span class="k">try</span> <span class="p">(</span><span class="n">Connection</span> <span class="n">connection</span> <span class="o">=</span> <span class="n">Connection</span><span class="o">.</span><span class="n">newInstance</span><span class="p">())</span> <span class="p">{</span>
       <span class="n">SpaceCenter</span> <span class="n">spaceCenter</span> <span class="o">=</span> <span class="n">SpaceCenter</span><span class="o">.</span><span class="n">newInstance</span><span class="p">(</span><span class="n">connection</span><span class="p">);</span>
       <span class="n">Flight</span> <span class="n">flight</span> <span class="o">=</span> <span class="n">spaceCenter</span><span class="o">.</span><span class="n">getActiveVessel</span><span class="p">()</span><span class="o">.</span><span class="n">flight</span><span class="p">(</span><span class="n">null</span><span class="p">);</span>
@@ -1929,19 +1919,16 @@ the procedure, so any engine can supply it:</p>
 </div>
 </div><div aria-labelledby="tab-20-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-20-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Event</span><span class="p">;</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.RPCException</span><span class="p">;</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.StreamException</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.KRPC.Expression</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.KRPC.Type</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.schema.KRPC.ProcedureCall</span><span class="p">;</span>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">java.io.IOException</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">java.util.Arrays</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">java.util.Collections</span><span class="p">;</span>
 
 <span class="n">public</span> <span class="k">class</span><span class="w"> </span><span class="nc">CollectionEvent</span> <span class="p">{</span>
-  <span class="n">public</span> <span class="n">static</span> <span class="n">void</span> <span class="n">main</span><span class="p">(</span><span class="n">String</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span> <span class="n">throws</span> <span class="n">IOException</span><span class="p">,</span> <span class="n">RPCException</span><span class="p">,</span> <span class="n">StreamException</span> <span class="p">{</span>
+  <span class="n">public</span> <span class="n">static</span> <span class="n">void</span> <span class="n">main</span><span class="p">(</span><span class="n">String</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">try</span> <span class="p">(</span><span class="n">Connection</span> <span class="n">connection</span> <span class="o">=</span> <span class="n">Connection</span><span class="o">.</span><span class="n">newInstance</span><span class="p">())</span> <span class="p">{</span>
       <span class="n">SpaceCenter</span> <span class="n">spaceCenter</span> <span class="o">=</span> <span class="n">SpaceCenter</span><span class="o">.</span><span class="n">newInstance</span><span class="p">(</span><span class="n">connection</span><span class="p">);</span>
       <span class="n">SpaceCenter</span><span class="o">.</span><span class="n">Vessel</span> <span class="n">vessel</span> <span class="o">=</span> <span class="n">spaceCenter</span><span class="o">.</span><span class="n">getActiveVessel</span><span class="p">();</span>
@@ -2210,15 +2197,13 @@ to <a class="reference internal" href="../python/api/krpc/expressions.html#KRPC.
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-22-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-22-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.RPCException</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.KRPC.Expression</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.KRPC.Type</span><span class="p">;</span>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">java.io.IOException</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">java.util.Arrays</span><span class="p">;</span>
 
 <span class="n">public</span> <span class="k">class</span><span class="w"> </span><span class="nc">FunctionStatements</span> <span class="p">{</span>
-  <span class="n">public</span> <span class="n">static</span> <span class="n">void</span> <span class="n">main</span><span class="p">(</span><span class="n">String</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span> <span class="n">throws</span> <span class="n">IOException</span><span class="p">,</span> <span class="n">RPCException</span> <span class="p">{</span>
+  <span class="n">public</span> <span class="n">static</span> <span class="n">void</span> <span class="n">main</span><span class="p">(</span><span class="n">String</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">try</span> <span class="p">(</span><span class="n">Connection</span> <span class="n">connection</span> <span class="o">=</span> <span class="n">Connection</span><span class="o">.</span><span class="n">newInstance</span><span class="p">())</span> <span class="p">{</span>
       <span class="n">Expression</span><span class="o">.</span><span class="n">Bound</span> <span class="n">e</span> <span class="o">=</span> <span class="n">Expression</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">connection</span><span class="p">);</span>
       <span class="n">Type</span><span class="o">.</span><span class="n">Bound</span> <span class="n">t</span> <span class="o">=</span> <span class="n">Type</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">connection</span><span class="p">);</span>

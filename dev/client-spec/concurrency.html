@@ -608,6 +608,12 @@ returns, and later reads and waits raise the error.</p>
 stream. A read on the thread raises the error.</p>
 </dd>
 </dl>
+<dl class="simple" id="spec-concurrency-held-read-before-value">
+<dt><code class="docutils literal notranslate"><span class="pre">concurrency-held-read-before-value</span> <span class="pre">[streams,</span> <span class="pre">conditions,</span> <span class="pre">concurrency]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A read of a stream with no value blocks until the first value arrives, on a thread
+holding the stream’s condition too. The read waits on the condition, which lets it go
+while it waits.</p>
+</dd>
+</dl>
 <dl class="simple" id="spec-concurrency-wait-for-unread-value">
 <dt><code class="docutils literal notranslate"><span class="pre">concurrency-wait-for-unread-value</span> <span class="pre">[streams,</span> <span class="pre">conditions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A wait returns only for a value newer than the last one the thread read,
 including a value it read without holding the condition.</p>
@@ -668,13 +674,13 @@ condition.</p>
 <h2>Removing and Closing<a class="headerlink" href="#removing-and-closing" title="Link to this heading">#</a></h2>
 <dl class="simple" id="spec-concurrency-remove-while-holding">
 <dt><code class="docutils literal notranslate"><span class="pre">concurrency-remove-while-holding</span> <span class="pre">[streams,</span> <span class="pre">conditions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A thread holding the condition of a stream removes the stream, while updates for
-the stream arrive. A wait by that thread then raises the error for a removed
+the stream arrive. A wait by that thread then raises the stream error for a removed
 stream.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-concurrency-remove-event-while-holding">
 <dt><code class="docutils literal notranslate"><span class="pre">concurrency-remove-event-while-holding</span> <span class="pre">[events,</span> <span class="pre">conditions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A thread holding the condition of an event removes the event, while the event
-fires. A wait by that thread then raises the error for a removed stream, at once.</p>
+fires. A wait by that thread then raises the stream error, at once.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-concurrency-close-while-holding">
@@ -705,8 +711,8 @@ and a read of the stream then raises the connection error.</p>
 </dl>
 <dl class="simple" id="spec-concurrency-interrupted-wait">
 <dt><code class="docutils literal notranslate"><span class="pre">concurrency-interrupted-wait</span> <span class="pre">[streams,</span> <span class="pre">events,</span> <span class="pre">concurrency]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Interrupting a thread that waits on a stream or an event, such as with
-<code class="docutils literal notranslate"><span class="pre">Thread.interrupt</span></code> in Java, ends the wait with an error. The stream or event runs
-on.</p>
+<code class="docutils literal notranslate"><span class="pre">Thread.interrupt</span></code> in Java, ends the wait with the language’s error for an interrupted
+thread. The stream or event runs on.</p>
 </dd>
 </dl>
 </section>
@@ -773,7 +779,7 @@ arrived before the close.</p>
 </dl>
 <dl class="simple" id="spec-concurrency-remove-stream-from-callback">
 <dt><code class="docutils literal notranslate"><span class="pre">concurrency-remove-stream-from-callback</span> <span class="pre">[streams,</span> <span class="pre">callbacks]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A callback removes the stream it is called for. The remove returns, and a read of
-the stream then raises the error for a removed stream.</p>
+the stream then raises the stream error.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-concurrency-remove-callback-from-itself">

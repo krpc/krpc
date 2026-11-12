@@ -1782,7 +1782,7 @@ Antenna
       .. note::
 
          Fixed antennas are always deployed.
-         Throws ``KRPC.InvalidOperationException`` if set on a fixed antenna.
+         Throws :macro:`KRPC_EXCEPTION_KRPC_INVALIDOPERATIONEXCEPTION` if set on a fixed antenna.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Antenna_CanTransmit(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Antenna_t instance)
 
@@ -3500,7 +3500,7 @@ Leg
       .. note::
 
          Fixed landing legs are always deployed.
-         Throws ``KRPC.InvalidOperationException`` if set on a fixed landing leg.
+         Throws :macro:`KRPC_EXCEPTION_KRPC_INVALIDOPERATIONEXCEPTION` if set on a fixed landing leg.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Leg_IsGrounded(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Leg_t instance)
 

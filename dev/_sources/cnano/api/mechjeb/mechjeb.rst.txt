@@ -186,6 +186,9 @@ This service provides functionality to interact with MechJeb 2.
 
 
 
-Exception class MJServiceException
+.. macro:: KRPC_EXCEPTION_MECHJEB_MJSERVICEEXCEPTION
 
-A general error in the service.
+   A general error in the service.
+
+   The service and exception ids of the exception, for :macro:`KRPC_IS_EXCEPTION`. A call
+   that fails with it returns :macro:`KRPC_ERROR_SERVER`.

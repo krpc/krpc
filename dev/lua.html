@@ -1454,14 +1454,17 @@ error from loading a save that does not exist, using <code class="docutils liter
 <span class="kr">end</span>
 </pre></div>
 </div>
-<p>The error is a string describing the failure:</p>
+<p>The error is an object, which <code class="docutils literal notranslate"><span class="pre">tostring</span></code> and <code class="docutils literal notranslate"><span class="pre">..</span></code> turn into its message. Its class says what
+failed, and <code class="docutils literal notranslate"><span class="pre">krpc.RemoteError:class_of(err)</span></code> matches every error of the client’s own:</p>
 <ul class="simple">
-<li><p>A procedure that fails on the server raises an error whose message starts with the server’s
-exception, as in <code class="docutils literal notranslate"><span class="pre">KRPC.ArgumentException:</span> <span class="pre">Failed</span> <span class="pre">to</span> <span class="pre">load</span> <span class="pre">missing</span></code>.</p></li>
-<li><p>A failed connection attempt raises an error. When the server refuses the connection, the message
-names the status it gave, such as <code class="docutils literal notranslate"><span class="pre">DENIED</span></code>. When the server ends the connection, the message
-names the reason, such as <code class="docutils literal notranslate"><span class="pre">SERVER_STOPPED</span></code>.</p></li>
-<li><p>A call made once the connection has closed or failed raises an error.</p></li>
+<li><p>A procedure that fails on the server raises a <a class="reference internal" href="#lua-krpc.ServerError" title="krpc.ServerError"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">krpc.ServerError</span></code></a>. Its <code class="docutils literal notranslate"><span class="pre">service</span></code> and
+<code class="docutils literal notranslate"><span class="pre">name</span></code> fields name the server’s exception, such as <code class="docutils literal notranslate"><span class="pre">KRPC</span></code> and <code class="docutils literal notranslate"><span class="pre">ArgumentException</span></code>.</p></li>
+<li><p>A failed connection attempt raises a <a class="reference internal" href="#lua-krpc.ConnectionError" title="krpc.ConnectionError"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">krpc.ConnectionError</span></code></a>. When the server refuses the
+connection, its <code class="docutils literal notranslate"><span class="pre">status</span></code> field names the status it gave, such as <code class="docutils literal notranslate"><span class="pre">DENIED</span></code>. When the server
+ends the connection, its <code class="docutils literal notranslate"><span class="pre">reason</span></code> field names the reason, such as <code class="docutils literal notranslate"><span class="pre">SERVER_STOPPED</span></code>.</p></li>
+<li><p>A call made once the connection has closed or failed raises a <a class="reference internal" href="#lua-krpc.ConnectionError" title="krpc.ConnectionError"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">krpc.ConnectionError</span></code></a>.</p></li>
+<li><p>A value that fails to decode raises a <a class="reference internal" href="#lua-krpc.EncodingError" title="krpc.EncodingError"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">krpc.EncodingError</span></code></a>.</p></li>
+<li><p>An argument the client rejects raises a string.</p></li>
 </ul>
 </section>
 <section id="values">
@@ -1730,6 +1733,69 @@ Defaults to the path the server uses unless it was configured with another.</p><
 </dl>
 <p>Raises an error as <a class="reference internal" href="#lua-krpc.connect" title="krpc.connect"><code class="xref lua lua-func docutils literal notranslate"><span class="pre">connect()</span></code></a> does, if <code class="docutils literal notranslate"><span class="pre">socket.unix</span></code> is not available, and if no
 <code class="docutils literal notranslate"><span class="pre">path</span></code> is given and the default path cannot be found.</p>
+</dd></dl>
+
+<dl class="lua class">
+<dt class="sig sig-object lua" id="lua-krpc.RemoteError">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">krpc.</span></span><span class="sig-name descname"><span class="pre">RemoteError</span></span><a class="headerlink" href="#lua-krpc.RemoteError" title="Link to this definition">#</a></dt>
+<dd><p>The base of every error the client raises of its own, a <code class="docutils literal notranslate"><span class="pre">pl.class</span></code> class.
+<code class="docutils literal notranslate"><span class="pre">RemoteError:class_of(err)</span></code> checks whether a value is one.</p>
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-krpc.RemoteError.message">
+<span class="sig-name descname"><span class="pre">message</span></span><a class="headerlink" href="#lua-krpc.RemoteError.message" title="Link to this definition">#</a></dt>
+<dd><p>What failed, followed by the message of the cause, if there is one.</p>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-krpc.RemoteError.cause">
+<span class="sig-name descname"><span class="pre">cause</span></span><a class="headerlink" href="#lua-krpc.RemoteError.cause" title="Link to this definition">#</a></dt>
+<dd><p>The error that caused this one, or <code class="docutils literal notranslate"><span class="pre">nil</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="lua class">
+<dt class="sig sig-object lua" id="lua-krpc.ConnectionError">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">krpc.</span></span><span class="sig-name descname"><span class="pre">ConnectionError</span></span><a class="headerlink" href="#lua-krpc.ConnectionError" title="Link to this definition">#</a></dt>
+<dd><p>Raised when connecting fails, and by each call once the connection has closed or failed. A
+subclass of <a class="reference internal" href="#lua-krpc.RemoteError" title="krpc.RemoteError"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">krpc.RemoteError</span></code></a>.</p>
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-krpc.ConnectionError.status">
+<span class="sig-name descname"><span class="pre">status</span></span><a class="headerlink" href="#lua-krpc.ConnectionError.status" title="Link to this definition">#</a></dt>
+<dd><p>The status the server refused the connection with, such as <code class="docutils literal notranslate"><span class="pre">'DENIED'</span></code>, or <code class="docutils literal notranslate"><span class="pre">nil</span></code>.</p>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-krpc.ConnectionError.reason">
+<span class="sig-name descname"><span class="pre">reason</span></span><a class="headerlink" href="#lua-krpc.ConnectionError.reason" title="Link to this definition">#</a></dt>
+<dd><p>The reason the server gave for ending the connection, such as <code class="docutils literal notranslate"><span class="pre">'SERVER_STOPPED'</span></code>, or
+<code class="docutils literal notranslate"><span class="pre">nil</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="lua class">
+<dt class="sig sig-object lua" id="lua-krpc.ServerError">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">krpc.</span></span><span class="sig-name descname"><span class="pre">ServerError</span></span><a class="headerlink" href="#lua-krpc.ServerError" title="Link to this definition">#</a></dt>
+<dd><p>Raised for an error from the server. A subclass of <a class="reference internal" href="#lua-krpc.RemoteError" title="krpc.RemoteError"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">krpc.RemoteError</span></code></a>.</p>
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-krpc.ServerError.service">
+<span class="sig-name descname"><span class="pre">service</span></span><a class="headerlink" href="#lua-krpc.ServerError.service" title="Link to this definition">#</a></dt>
+<dd><p>The service of the server’s exception, such as <code class="docutils literal notranslate"><span class="pre">'KRPC'</span></code>, or <code class="docutils literal notranslate"><span class="pre">nil</span></code>.</p>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-krpc.ServerError.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#lua-krpc.ServerError.name" title="Link to this definition">#</a></dt>
+<dd><p>The name of the server’s exception, such as <code class="docutils literal notranslate"><span class="pre">'ArgumentException'</span></code>, or <code class="docutils literal notranslate"><span class="pre">nil</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="lua class">
+<dt class="sig sig-object lua" id="lua-krpc.EncodingError">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">krpc.</span></span><span class="sig-name descname"><span class="pre">EncodingError</span></span><a class="headerlink" href="#lua-krpc.EncodingError" title="Link to this definition">#</a></dt>
+<dd><p>Raised for a value that fails to decode. A subclass of <a class="reference internal" href="#lua-krpc.RemoteError" title="krpc.RemoteError"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">krpc.RemoteError</span></code></a>.</p>
 </dd></dl>
 
 <dl class="lua function">

@@ -394,6 +394,8 @@ Main kRPC service, used by clients to interact with basic server functionality.
    A method call was made to a method that is invalid
    given the current state of the object.
 
+   Raised as a :class:`krpc.ServerError` whose ``service`` and ``name`` are ``'KRPC'`` and ``'InvalidOperationException'``.
+
 
 
 .. class:: ArgumentException
@@ -401,11 +403,15 @@ Main kRPC service, used by clients to interact with basic server functionality.
    A method was invoked where at least one of the passed arguments does not
    meet the parameter specification of the method.
 
+   Raised as a :class:`krpc.ServerError` whose ``service`` and ``name`` are ``'KRPC'`` and ``'ArgumentException'``.
+
 
 
 .. class:: ArgumentNullException
 
    A null reference was passed to a method that does not accept it as a valid argument.
+
+   Raised as a :class:`krpc.ServerError` whose ``service`` and ``name`` are ``'KRPC'`` and ``'ArgumentNullException'``.
 
 
 
@@ -413,11 +419,15 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
    The value of an argument is outside the allowable range of values as defined by the invoked method.
 
+   Raised as a :class:`krpc.ServerError` whose ``service`` and ``name`` are ``'KRPC'`` and ``'ArgumentOutOfRangeException'``.
+
 
 
 .. class:: NullReferenceException
 
    A value was null where its type does not allow one.
+
+   Raised as a :class:`krpc.ServerError` whose ``service`` and ``name`` are ``'KRPC'`` and ``'NullReferenceException'``.
 
 
 
@@ -425,11 +435,15 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
    A key was not found in a dictionary.
 
+   Raised as a :class:`krpc.ServerError` whose ``service`` and ``name`` are ``'KRPC'`` and ``'KeyNotFoundException'``.
+
 
 
 .. class:: IndexOutOfRangeException
 
    An index was outside the bounds of a collection, string or array.
+
+   Raised as a :class:`krpc.ServerError` whose ``service`` and ``name`` are ``'KRPC'`` and ``'IndexOutOfRangeException'``.
 
 
 
@@ -437,11 +451,15 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
    An integer was divided by zero.
 
+   Raised as a :class:`krpc.ServerError` whose ``service`` and ``name`` are ``'KRPC'`` and ``'DivideByZeroException'``.
+
 
 
 .. class:: NotSupportedException
 
    A method was invoked that is not supported.
+
+   Raised as a :class:`krpc.ServerError` whose ``service`` and ``name`` are ``'KRPC'`` and ``'NotSupportedException'``.
 
 
 
@@ -449,11 +467,15 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
    An operation did not complete in the time allotted to it.
 
+   Raised as a :class:`krpc.ServerError` whose ``service`` and ``name`` are ``'KRPC'`` and ``'TimeoutException'``.
+
 
 
 .. class:: OverflowException
 
    An arithmetic or conversion operation overflowed.
+
+   Raised as a :class:`krpc.ServerError` whose ``service`` and ``name`` are ``'KRPC'`` and ``'OverflowException'``.
 
 
 
@@ -462,6 +484,8 @@ Main kRPC service, used by clients to interact with basic server functionality.
    The game object that a service object refers to no longer exists,
    so the object cannot be used. For example, the part it represents
    was destroyed, or the vessel it belongs to was recovered.
+
+   Raised as a :class:`krpc.ServerError` whose ``service`` and ``name`` are ``'KRPC'`` and ``'ObjectDestroyedException'``.
 
    .. note::
 
@@ -473,6 +497,8 @@ Main kRPC service, used by clients to interact with basic server functionality.
    The game object that a service object refers to exists, but is not loaded.
    For example, the game is loading, or the vessel carrying the part is unloaded.
 
+   Raised as a :class:`krpc.ServerError` whose ``service`` and ``name`` are ``'KRPC'`` and ``'ObjectNotLoadedException'``.
+
    .. note::
 
       See :class:`KRPC.ObjectDestroyedException` for a game object that no longer exists.
@@ -481,14 +507,20 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
    The procedure is not available in the current game scene.
 
+   Raised as a :class:`krpc.ServerError` whose ``service`` and ``name`` are ``'KRPC'`` and ``'UnsupportedSceneException'``.
+
 
 
 .. class:: StreamRemovedException
 
    A stream was removed by the server, e.g. an event that has finished.
 
+   Raised as a :class:`krpc.ServerError` whose ``service`` and ``name`` are ``'KRPC'`` and ``'StreamRemovedException'``.
+
 
 
 .. class:: Error
 
    A general error, described by its message.
+
+   Raised as a :class:`krpc.ServerError` whose ``service`` and ``name`` are ``'KRPC'`` and ``'Error'``.

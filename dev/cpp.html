@@ -1578,14 +1578,19 @@ the error from loading a save that does not exist:</p>
 </div>
 <p>The exception you catch depends on the error:</p>
 <ul class="simple">
-<li><p>A standard error, such as an invalid argument, throws a subclass of the matching standard
-exception. The example catches <code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>, as a missing save throws
-<a class="reference internal" href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC17ArgumentExceptionE" title="krpc::services::KRPC::ArgumentException"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">ArgumentException</span></code></a>.</p></li>
+<li><p>A standard error, such as an invalid argument, throws the matching standard exception. The
+example catches <code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>, as a missing save throws
+<a class="reference internal" href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC17ArgumentExceptionE" title="krpc::services::KRPC::ArgumentException"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">ArgumentException</span></code></a>, an alias of it. The standard exceptions share
+bases, so a <code class="docutils literal notranslate"><span class="pre">catch</span></code> of <code class="docutils literal notranslate"><span class="pre">InvalidOperationException</span></code>, an alias of <code class="docutils literal notranslate"><span class="pre">std::logic_error</span></code>, also
+catches the argument and index exceptions.</p></li>
 <li><p>An error particular to a service throws a class of that service, such as
-<a class="reference internal" href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC24ObjectDestroyedExceptionE" title="krpc::services::KRPC::ObjectDestroyedException"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">ObjectDestroyedException</span></code></a>.</p></li>
-<li><p>An error the client has no class for throws <a class="reference internal" href="#_CPPv4N4krpc8RPCErrorE" title="krpc::RPCError"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">RPCError</span></code></a>.</p></li>
+<a class="reference internal" href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC24ObjectDestroyedExceptionE" title="krpc::services::KRPC::ObjectDestroyedException"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">ObjectDestroyedException</span></code></a>, derived from
+<a class="reference internal" href="#_CPPv4N4krpc11ServerErrorE" title="krpc::ServerError"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">ServerError</span></code></a>.</p></li>
+<li><p>An error the client has no class for throws <a class="reference internal" href="#_CPPv4N4krpc11ServerErrorE" title="krpc::ServerError"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">ServerError</span></code></a>.</p></li>
 <li><p>A call made once the connection has failed throws <a class="reference internal" href="#_CPPv4N4krpc15ConnectionErrorE" title="krpc::ConnectionError"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">ConnectionError</span></code></a>.</p></li>
 </ul>
+<p>Every error of the client’s own derives <a class="reference internal" href="#_CPPv4N4krpc11RemoteErrorE" title="krpc::RemoteError"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">RemoteError</span></code></a>. A standard exception does
+not.</p>
 </section>
 <section id="values">
 <span id="cpp-client-values"></span><h2>Values<a class="headerlink" href="#values" title="Link to this heading">#</a></h2>
@@ -1966,9 +1971,8 @@ that ended it. The following streams the temperature of a part until the part is
 </div>
 <p>The exception is the one the procedure threw, or one of the following:</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC22StreamRemovedExceptionE" title="krpc::services::KRPC::StreamRemovedException"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">StreamRemovedException</span></code></a> when the server removes the stream, such as
-for an <a class="reference internal" href="#cpp-client-events"><span class="std std-ref">event</span></a> that has finished.</p></li>
-<li><p><a class="reference internal" href="#_CPPv4N4krpc11StreamErrorE" title="krpc::StreamError"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">StreamError</span></code></a> when you remove the stream from the client.</p></li>
+<li><p><a class="reference internal" href="#_CPPv4N4krpc11StreamErrorE" title="krpc::StreamError"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">StreamError</span></code></a> when you or the server remove the stream, such as for an
+<a class="reference internal" href="#cpp-client-events"><span class="std std-ref">event</span></a> that has finished.</p></li>
 <li><p><a class="reference internal" href="#_CPPv4N4krpc15ConnectionErrorE" title="krpc::ConnectionError"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">ConnectionError</span></code></a> when the connection closes or fails.</p></li>
 </ul>
 <p>An exception for an object that is not loaded, or for a procedure not available in the current
@@ -2705,10 +2709,16 @@ callback.</p>
 </dd></dl>
 
 <dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc11RemoteErrorE">
+<span id="_CPPv3N4krpc11RemoteErrorE"></span><span id="_CPPv2N4krpc11RemoteErrorE"></span><span id="krpc::RemoteError"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RemoteError</span></span></span><a class="headerlink" href="#_CPPv4N4krpc11RemoteErrorE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The base of every error the client throws of its own. A subclass of <code class="docutils literal notranslate"><span class="pre">std::runtime_error</span></code>.</p>
+</dd></dl>
+
+<dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc15ConnectionErrorE">
 <span id="_CPPv3N4krpc15ConnectionErrorE"></span><span id="_CPPv2N4krpc15ConnectionErrorE"></span><span id="krpc::ConnectionError"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ConnectionError</span></span></span><a class="headerlink" href="#_CPPv4N4krpc15ConnectionErrorE" title="Link to this definition">#</a><br /></dt>
 <dd><p>Thrown when connecting fails, by each call once the connection has failed, and by each call
-on a client that is not connected. A subclass of <code class="docutils literal notranslate"><span class="pre">std::runtime_error</span></code>.</p>
+on a client that is not connected. A subclass of <a class="reference internal" href="#_CPPv4N4krpc11RemoteErrorE" title="krpc::RemoteError"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">RemoteError</span></code></a>.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK4krpc15ConnectionError6statusEv">
 <span id="_CPPv3NK4krpc15ConnectionError6statusEv"></span><span id="_CPPv2NK4krpc15ConnectionError6statusEv"></span><span id="krpc::ConnectionError::statusC"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">status</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4krpc15ConnectionError6statusEv" title="Link to this definition">#</a><br /></dt>
@@ -2725,24 +2735,23 @@ empty.</p>
 </dd></dl>
 
 <dl class="cpp class">
-<dt class="sig sig-object cpp" id="_CPPv4N4krpc8RPCErrorE">
-<span id="_CPPv3N4krpc8RPCErrorE"></span><span id="_CPPv2N4krpc8RPCErrorE"></span><span id="krpc::RPCError"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RPCError</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8RPCErrorE" title="Link to this definition">#</a><br /></dt>
-<dd><p>Thrown for an error from the server that the client has no exception class for. A subclass of
-<code class="docutils literal notranslate"><span class="pre">std::runtime_error</span></code>, and the base class of each service exception with no standard
-equivalent.</p>
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc11ServerErrorE">
+<span id="_CPPv3N4krpc11ServerErrorE"></span><span id="_CPPv2N4krpc11ServerErrorE"></span><span id="krpc::ServerError"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ServerError</span></span></span><a class="headerlink" href="#_CPPv4N4krpc11ServerErrorE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Thrown for an error from the server with no standard exception, and the base class of each
+service exception with no standard equivalent. A subclass of <a class="reference internal" href="#_CPPv4N4krpc11RemoteErrorE" title="krpc::RemoteError"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">RemoteError</span></code></a>.</p>
 </dd></dl>
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc11StreamErrorE">
 <span id="_CPPv3N4krpc11StreamErrorE"></span><span id="_CPPv2N4krpc11StreamErrorE"></span><span id="krpc::StreamError"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">StreamError</span></span></span><a class="headerlink" href="#_CPPv4N4krpc11StreamErrorE" title="Link to this definition">#</a><br /></dt>
-<dd><p>Thrown by a stream or event that you removed, and when a stream cannot be created. A subclass
-of <code class="docutils literal notranslate"><span class="pre">std::runtime_error</span></code>.</p>
+<dd><p>Thrown by a stream or event that you or the server removed, and when a stream cannot be
+created. A subclass of <a class="reference internal" href="#_CPPv4N4krpc11RemoteErrorE" title="krpc::RemoteError"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">RemoteError</span></code></a>.</p>
 </dd></dl>
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc13EncodingErrorE">
 <span id="_CPPv3N4krpc13EncodingErrorE"></span><span id="_CPPv2N4krpc13EncodingErrorE"></span><span id="krpc::EncodingError"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">EncodingError</span></span></span><a class="headerlink" href="#_CPPv4N4krpc13EncodingErrorE" title="Link to this definition">#</a><br /></dt>
-<dd><p>Thrown when a value cannot be encoded or decoded. A subclass of <code class="docutils literal notranslate"><span class="pre">std::runtime_error</span></code>.</p>
+<dd><p>Thrown when a value cannot be encoded or decoded. A subclass of <a class="reference internal" href="#_CPPv4N4krpc11RemoteErrorE" title="krpc::RemoteError"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">RemoteError</span></code></a>.</p>
 </dd></dl>
 
 <dl class="cpp class">

@@ -174,3 +174,5 @@ This service provides functionality to interact with MechJeb 2.
 .. class:: MJServiceException
 
    A general error in the service.
+
+   Raised as a :class:`krpc.ServerError` whose ``service`` and ``name`` are ``'MechJeb'`` and ``'MJServiceException'``.

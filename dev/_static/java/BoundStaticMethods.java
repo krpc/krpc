@@ -1,13 +1,11 @@
 import krpc.client.Connection;
-import krpc.client.RPCException;
 import krpc.client.services.SpaceCenter;
 import krpc.client.services.SpaceCenter.Orbit;
 import krpc.client.services.SpaceCenter.ReferenceFrame;
 
-import java.io.IOException;
 
 public class BoundStaticMethods {
-  public static void main(String[] args) throws IOException, RPCException {
+  public static void main(String[] args) {
     try (Connection connection = Connection.newInstance()) {
       ReferenceFrame frame =
           SpaceCenter.newInstance(connection).getActiveVessel().getReferenceFrame();

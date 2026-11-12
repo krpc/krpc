@@ -577,8 +577,7 @@ number.</p>
 </dl>
 <dl class="simple" id="spec-codec-out-of-range">
 <dt><code class="docutils literal notranslate"><span class="pre">codec-out-of-range</span> <span class="pre">[dynamic]</span> <span class="pre">[MUST]</span></code></dt><dd><p>In a dynamically typed language, encoding an integer outside the range of its type
-raises the encoding or argument error. This includes a negative value for an unsigned
-type.</p>
+raises the argument error. This includes a negative value for an unsigned type.</p>
 </dd>
 </dl>
 </section>
@@ -630,13 +629,13 @@ them.</p>
 <dt><code class="docutils literal notranslate"><span class="pre">codec-extra-items</span> <span class="pre">[core]</span> <span class="pre">[MUST]</span></code></dt><dd><p>An encoded tuple or structure with more items than its type decodes, and the extra
 items are ignored. In a
 dynamically typed language, encoding a tuple or structure value with more items than
-its type raises the encoding or argument error.</p>
+its type raises the argument error.</p>
 </dd>
 </dl>
 <dl class="simple" id="spec-codec-too-few-items">
 <dt><code class="docutils literal notranslate"><span class="pre">codec-too-few-items</span> <span class="pre">[core]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Decoding a tuple or structure with fewer items than its type raises the encoding
 error. In a dynamically typed language, encoding a tuple or structure value with too
-few items raises the encoding or argument error.</p>
+few items raises the argument error.</p>
 </dd>
 </dl>
 </section>

@@ -549,6 +549,28 @@
 <h1>Java Client Design<a class="headerlink" href="#java-client-design" title="Link to this heading">#</a></h1>
 <p>The internal design of the Java client. This page builds on the <a class="reference internal" href="../client-design.html"><span class="doc">shared client design</span></a> and the <a class="reference internal" href="../client-spec.html"><span class="doc">client specification</span></a>. Usage is in
 the <a class="reference internal" href="../java.html"><span class="doc">Java guide</span></a>. Paths are relative to <code class="docutils literal notranslate"><span class="pre">client/java/</span></code>.</p>
+<section id="generics-and-generated-stubs">
+<h2>Generics and Generated Stubs<a class="headerlink" href="#generics-and-generated-stubs" title="Link to this heading">#</a></h2>
+<p>Erasure removes the element type of a <code class="docutils literal notranslate"><span class="pre">List&lt;Integer&gt;</span></code> at run time. Generated stubs therefore pass
+a <code class="docutils literal notranslate"><span class="pre">krpc.schema.KRPC.Type</span></code> descriptor to <code class="docutils literal notranslate"><span class="pre">Encoder.encode</span></code> and <code class="docutils literal notranslate"><span class="pre">Decoder.decode</span></code>, and cast the
+result.</p>
+<p><code class="docutils literal notranslate"><span class="pre">clientgen</span></code> writes one class per service in the fixed package <code class="docutils literal notranslate"><span class="pre">krpc.client.services</span></code>, and the
+jar includes the stubs of the shipped services.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Encoder</span></code> and <code class="docutils literal notranslate"><span class="pre">Decoder</span></code> find a class by the name <code class="docutils literal notranslate"><span class="pre">krpc.client.services.&lt;Service&gt;$&lt;Name&gt;</span></code>,
+and call its constructor, <code class="docutils literal notranslate"><span class="pre">fromValue</span></code>, <code class="docutils literal notranslate"><span class="pre">fieldTypes</span></code> or <code class="docutils literal notranslate"><span class="pre">fromFieldValues</span></code> by reflection. A
+wire type names a structure and omits its fields, so the generated class supplies them.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">addStream</span></code> and <code class="docutils literal notranslate"><span class="pre">getCall</span></code> find a method by name and the run-time classes of its arguments.
+<code class="docutils literal notranslate"><span class="pre">&#64;RPCInfo</span></code> names the <code class="docutils literal notranslate"><span class="pre">_Types</span></code> class holding its descriptors. <code class="docutils literal notranslate"><span class="pre">T</span></code> is unchecked, so a wrong
+<code class="docutils literal notranslate"><span class="pre">T</span></code> throws <code class="docutils literal notranslate"><span class="pre">ClassCastException</span></code> at the assignment.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">_Types</span></code> fills maps in initializers of 50 procedures each, as a single <code class="docutils literal notranslate"><span class="pre">switch</span></code> for a large
+service passes the JVM’s 64 KB method limit.</p></li>
+<li><p>A service’s exception types register on the connection in its <code class="docutils literal notranslate"><span class="pre">newInstance</span></code>. The <code class="docutils literal notranslate"><span class="pre">Connection</span></code>
+constructor does this for <code class="docutils literal notranslate"><span class="pre">KRPC</span></code> only.</p></li>
+<li><p>A stream registers before its first update. The return type in <code class="docutils literal notranslate"><span class="pre">_Types</span></code> shows that a call adds
+one, or one <code class="docutils literal notranslate"><span class="pre">GetServices</span></code> call if the stubs are not loaded.</p></li>
+</ul>
+</section>
 <section id="ownership">
 <h2>Ownership<a class="headerlink" href="#ownership" title="Link to this heading">#</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">krpc.client.Connection</span></code> owns the socket and is <code class="docutils literal notranslate"><span class="pre">AutoCloseable</span></code>. Services, objects, streams and
@@ -557,7 +579,7 @@ events each hold the connection strongly, and none of them owns it:</p>
 <span class="k">try</span><span class="w"> </span><span class="p">(</span><span class="n">Connection</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="na">newInstance</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SpaceCenter</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="n">connection</span><span class="p">).</span><span class="na">getActiveVessel</span><span class="p">();</span>
 <span class="p">}</span>
-<span class="n">vessel</span><span class="p">.</span><span class="na">getMET</span><span class="p">();</span><span class="w">  </span><span class="c1">// Throws RPCException</span>
+<span class="n">vessel</span><span class="p">.</span><span class="na">getMET</span><span class="p">();</span><span class="w">  </span><span class="c1">// Throws ConnectionException</span>
 </pre></div>
 </div>
 <section id="references">
@@ -581,7 +603,7 @@ including one the client removed, and pins no removed stream.</p>
 <li><p>The connection closes on <code class="docutils literal notranslate"><span class="pre">close()</span></code>, on a connection failure, or when the JVM exits.</p></li>
 <li><p>The client has no <code class="docutils literal notranslate"><span class="pre">Cleaner</span></code> or finalizer. An unclosed connection holds two threads, three
 selectors and the socket until the JVM exits, and does not delay that exit.</p></li>
-<li><p>After <code class="docutils literal notranslate"><span class="pre">close()</span></code>, a call throws <code class="docutils literal notranslate"><span class="pre">RPCException</span></code>, and streams and events end. A second
+<li><p>After <code class="docutils literal notranslate"><span class="pre">close()</span></code>, a call throws <code class="docutils literal notranslate"><span class="pre">ConnectionException</span></code>, and streams and events end. A second
 <code class="docutils literal notranslate"><span class="pre">close()</span></code> does nothing.</p></li>
 <li><p>A connection failure closes the channel and selectors and ends both threads, with no <code class="docutils literal notranslate"><span class="pre">close()</span></code>.</p></li>
 <li><p>A stream runs until <code class="docutils literal notranslate"><span class="pre">remove()</span></code>, a server ending or the end of the connection. Dropping every
@@ -615,31 +637,10 @@ is the oldest release with a registered Bazel toolchain.</p>
 <p>The channel turns non-blocking at <code class="docutils literal notranslate"><span class="pre">Session.start</span></code>, as a blocking channel closes when its thread is
 interrupted. Selector waits are capped at 1 s, as closing the channel does not wake a selector.</p>
 <ul class="simple">
-<li><p>An interrupted call abandons its id and throws <code class="docutils literal notranslate"><span class="pre">RPCException</span></code>, and the connection stays open. An
-interrupted wait throws <code class="docutils literal notranslate"><span class="pre">StreamException</span></code>. Both keep the interrupt flag.</p></li>
+<li><p>An interrupted call abandons its id, and an interrupted wait ends. Both throw
+<code class="docutils literal notranslate"><span class="pre">java.util.concurrent.CancellationException</span></code> and keep the interrupt flag, and the connection
+stays open. <code class="docutils literal notranslate"><span class="pre">InterruptedException</span></code> is checked, so the unchecked API cannot throw it.</p></li>
 <li><p>A write holds an interrupt back until it ends, as a partial message breaks the framing.</p></li>
-</ul>
-</section>
-<section id="generics-and-generated-stubs">
-<h2>Generics and Generated Stubs<a class="headerlink" href="#generics-and-generated-stubs" title="Link to this heading">#</a></h2>
-<p>Erasure removes the element type of a <code class="docutils literal notranslate"><span class="pre">List&lt;Integer&gt;</span></code> at run time. Generated stubs therefore pass
-a <code class="docutils literal notranslate"><span class="pre">krpc.schema.KRPC.Type</span></code> descriptor to <code class="docutils literal notranslate"><span class="pre">Encoder.encode</span></code> and <code class="docutils literal notranslate"><span class="pre">Decoder.decode</span></code>, and cast the
-result.</p>
-<p><code class="docutils literal notranslate"><span class="pre">clientgen</span></code> writes one class per service in the fixed package <code class="docutils literal notranslate"><span class="pre">krpc.client.services</span></code>, and the
-jar includes the stubs of the shipped services.</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">Encoder</span></code> and <code class="docutils literal notranslate"><span class="pre">Decoder</span></code> find a class by the name <code class="docutils literal notranslate"><span class="pre">krpc.client.services.&lt;Service&gt;$&lt;Name&gt;</span></code>,
-and call its constructor, <code class="docutils literal notranslate"><span class="pre">fromValue</span></code>, <code class="docutils literal notranslate"><span class="pre">fieldTypes</span></code> or <code class="docutils literal notranslate"><span class="pre">fromFieldValues</span></code> by reflection. A
-wire type names a structure and omits its fields, so the generated class supplies them.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">addStream</span></code> and <code class="docutils literal notranslate"><span class="pre">getCall</span></code> find a method by name and the run-time classes of its arguments.
-<code class="docutils literal notranslate"><span class="pre">&#64;RPCInfo</span></code> names the <code class="docutils literal notranslate"><span class="pre">_Types</span></code> class holding its descriptors. <code class="docutils literal notranslate"><span class="pre">T</span></code> is unchecked, so a wrong
-<code class="docutils literal notranslate"><span class="pre">T</span></code> throws <code class="docutils literal notranslate"><span class="pre">ClassCastException</span></code> at the assignment.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">_Types</span></code> fills maps in initializers of 50 procedures each, as a single <code class="docutils literal notranslate"><span class="pre">switch</span></code> for a large
-service passes the JVM’s 64 KB method limit.</p></li>
-<li><p>A service’s exception types register on the connection in its <code class="docutils literal notranslate"><span class="pre">newInstance</span></code>. The <code class="docutils literal notranslate"><span class="pre">Connection</span></code>
-constructor does this for <code class="docutils literal notranslate"><span class="pre">KRPC</span></code> only.</p></li>
-<li><p>A stream registers before its first update. The return type in <code class="docutils literal notranslate"><span class="pre">_Types</span></code> shows that a call adds
-one, or one <code class="docutils literal notranslate"><span class="pre">GetServices</span></code> call if the stubs are not loaded.</p></li>
 </ul>
 </section>
 <section id="mapping-the-spec-to-java">
@@ -651,23 +652,19 @@ one, or one <code class="docutils literal notranslate"><span class="pre">GetServ
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>Connection error, while connecting</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">ConnectionException</span></code>, a checked <code class="docutils literal notranslate"><span class="pre">IOException</span></code></p></td>
+<tr class="row-even"><td><p>Remote error</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">RemoteException</span></code>, a <code class="docutils literal notranslate"><span class="pre">RuntimeException</span></code>. Every exception is unchecked, as in C# and in
+current Java libraries</p></td>
 </tr>
-<tr class="row-odd"><td><p>Connection error, from a call</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">RPCException</span></code>, with the <code class="docutils literal notranslate"><span class="pre">ConnectionException</span></code> as its cause</p></td>
-</tr>
-<tr class="row-even"><td><p>Connection error, from a stream or event</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">StreamException</span></code>, with the <code class="docutils literal notranslate"><span class="pre">ConnectionException</span></code> as its cause</p></td>
-</tr>
-<tr class="row-odd"><td><p>Stream error, encoding error</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">StreamException</span></code>, checked. <code class="docutils literal notranslate"><span class="pre">EncodingException</span></code>, unchecked</p></td>
+<tr class="row-odd"><td><p>Connection, stream, encoding error</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ConnectionException</span></code>, <code class="docutils literal notranslate"><span class="pre">StreamException</span></code>, <code class="docutils literal notranslate"><span class="pre">EncodingException</span></code></p></td>
 </tr>
 <tr class="row-even"><td><p>Server error with a native type</p></td>
-<td><p>The unchecked JDK type, from <code class="docutils literal notranslate"><span class="pre">lang/java.py</span></code> in <code class="docutils literal notranslate"><span class="pre">krpctools</span></code></p></td>
+<td><p>The JDK type, from <code class="docutils literal notranslate"><span class="pre">lang/java.py</span></code> in <code class="docutils literal notranslate"><span class="pre">krpctools</span></code>. The stubs generate no class for it</p></td>
 </tr>
 <tr class="row-odd"><td><p>Server error of a service, or with no mapped type</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">RPCException</span></code> or a generated subclass, checked</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ServerException</span></code> or a generated subclass. <code class="docutils literal notranslate"><span class="pre">KRPC.TimeoutException</span></code> has a generated
+class, as <code class="docutils literal notranslate"><span class="pre">java.util.concurrent.TimeoutException</span></code> is checked</p></td>
 </tr>
 <tr class="row-even"><td><p>Nullable value</p></td>
 <td><p>The boxed or reference type, with <code class="docutils literal notranslate"><span class="pre">null</span></code></p></td>
@@ -691,14 +688,11 @@ one, or one <code class="docutils literal notranslate"><span class="pre">GetServ
 <td><p>A final class of constants extending <code class="docutils literal notranslate"><span class="pre">RemoteFlags</span></code>, as an <code class="docutils literal notranslate"><span class="pre">enum</span></code> cannot hold a combination. One type names it in every signature, and <code class="docutils literal notranslate"><span class="pre">Decoder</span></code> decodes it through <code class="docutils literal notranslate"><span class="pre">fromValue</span></code> as any enumeration. An <code class="docutils literal notranslate"><span class="pre">EnumSet</span></code> would need its own encoding and a different signature</p></td>
 </tr>
 <tr class="row-odd"><td><p>Scoped stream or event</p></td>
-<td><p>Try-with-resources. <code class="docutils literal notranslate"><span class="pre">close()</span></code> calls <code class="docutils literal notranslate"><span class="pre">remove()</span></code>, and declares <code class="docutils literal notranslate"><span class="pre">RPCException</span></code>. The language keeps the block’s exception, with the exception from <code class="docutils literal notranslate"><span class="pre">close()</span></code> suppressed</p></td>
+<td><p>Try-with-resources. <code class="docutils literal notranslate"><span class="pre">close()</span></code> calls <code class="docutils literal notranslate"><span class="pre">remove()</span></code>. The language keeps the block’s exception, with the exception from <code class="docutils literal notranslate"><span class="pre">close()</span></code> suppressed</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">invoke</span></code> declares only <code class="docutils literal notranslate"><span class="pre">RPCException</span></code>, which is why a connection error is its cause. A server
-timeout throws its generated class, as <code class="docutils literal notranslate"><span class="pre">TimeoutException</span></code> is checked. <code class="docutils literal notranslate"><span class="pre">Consumer</span></code> and
-<code class="docutils literal notranslate"><span class="pre">Runnable</span></code> declare no checked exception, so a callback catches <code class="docutils literal notranslate"><span class="pre">RPCException</span></code> itself.</p>
 </section>
 </section>
 
@@ -749,6 +743,7 @@ timeout throws its generated class, as <code class="docutils literal notranslate
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generics-and-generated-stubs">Generics and Generated Stubs</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ownership">Ownership</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lifetime">Lifetime</a></li>
@@ -756,7 +751,6 @@ timeout throws its generated class, as <code class="docutils literal notranslate
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#threads">Threads</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interrupts-and-transports">Interrupts and Transports</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generics-and-generated-stubs">Generics and Generated Stubs</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mapping-the-spec-to-java">Mapping the Spec to Java</a></li>
 </ul>
   </nav></div>

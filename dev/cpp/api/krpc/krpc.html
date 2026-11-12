@@ -1769,6 +1769,7 @@ or the call yielded.</p>
 <span id="_CPPv3N4krpc8services4KRPC25InvalidOperationExceptionE"></span><span id="_CPPv2N4krpc8services4KRPC25InvalidOperationExceptionE"></span><span id="krpc::services::KRPC::InvalidOperationException"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">InvalidOperationException</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC25InvalidOperationExceptionE" title="Link to this definition">#</a><br /></dt>
 <dd><p>A method call was made to a method that is invalid
 given the current state of the object.</p>
+<p>An alias of <code class="docutils literal notranslate"><span class="pre">std::logic_error</span></code>.</p>
 </dd></dl>
 
 <dl class="cpp class">
@@ -1776,60 +1777,70 @@ given the current state of the object.</p>
 <span id="_CPPv3N4krpc8services4KRPC17ArgumentExceptionE"></span><span id="_CPPv2N4krpc8services4KRPC17ArgumentExceptionE"></span><span id="krpc::services::KRPC::ArgumentException"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ArgumentException</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC17ArgumentExceptionE" title="Link to this definition">#</a><br /></dt>
 <dd><p>A method was invoked where at least one of the passed arguments does not
 meet the parameter specification of the method.</p>
+<p>An alias of <code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>.</p>
 </dd></dl>
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC21ArgumentNullExceptionE">
 <span id="_CPPv3N4krpc8services4KRPC21ArgumentNullExceptionE"></span><span id="_CPPv2N4krpc8services4KRPC21ArgumentNullExceptionE"></span><span id="krpc::services::KRPC::ArgumentNullException"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ArgumentNullException</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC21ArgumentNullExceptionE" title="Link to this definition">#</a><br /></dt>
 <dd><p>A null reference was passed to a method that does not accept it as a valid argument.</p>
+<p>An alias of <code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>.</p>
 </dd></dl>
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC27ArgumentOutOfRangeExceptionE">
 <span id="_CPPv3N4krpc8services4KRPC27ArgumentOutOfRangeExceptionE"></span><span id="_CPPv2N4krpc8services4KRPC27ArgumentOutOfRangeExceptionE"></span><span id="krpc::services::KRPC::ArgumentOutOfRangeException"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ArgumentOutOfRangeException</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC27ArgumentOutOfRangeExceptionE" title="Link to this definition">#</a><br /></dt>
 <dd><p>The value of an argument is outside the allowable range of values as defined by the invoked method.</p>
+<p>An alias of <code class="docutils literal notranslate"><span class="pre">std::out_of_range</span></code>.</p>
 </dd></dl>
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC22NullReferenceExceptionE">
 <span id="_CPPv3N4krpc8services4KRPC22NullReferenceExceptionE"></span><span id="_CPPv2N4krpc8services4KRPC22NullReferenceExceptionE"></span><span id="krpc::services::KRPC::NullReferenceException"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">NullReferenceException</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC22NullReferenceExceptionE" title="Link to this definition">#</a><br /></dt>
 <dd><p>A value was null where its type does not allow one.</p>
+<p>A subclass of <a class="reference internal" href="../../../cpp.html#_CPPv4N4krpc11ServerErrorE" title="krpc::ServerError"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">krpc::ServerError</span></code></a>.</p>
 </dd></dl>
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC20KeyNotFoundExceptionE">
 <span id="_CPPv3N4krpc8services4KRPC20KeyNotFoundExceptionE"></span><span id="_CPPv2N4krpc8services4KRPC20KeyNotFoundExceptionE"></span><span id="krpc::services::KRPC::KeyNotFoundException"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">KeyNotFoundException</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC20KeyNotFoundExceptionE" title="Link to this definition">#</a><br /></dt>
 <dd><p>A key was not found in a dictionary.</p>
+<p>An alias of <code class="docutils literal notranslate"><span class="pre">std::out_of_range</span></code>.</p>
 </dd></dl>
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC24IndexOutOfRangeExceptionE">
 <span id="_CPPv3N4krpc8services4KRPC24IndexOutOfRangeExceptionE"></span><span id="_CPPv2N4krpc8services4KRPC24IndexOutOfRangeExceptionE"></span><span id="krpc::services::KRPC::IndexOutOfRangeException"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IndexOutOfRangeException</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC24IndexOutOfRangeExceptionE" title="Link to this definition">#</a><br /></dt>
 <dd><p>An index was outside the bounds of a collection, string or array.</p>
+<p>An alias of <code class="docutils literal notranslate"><span class="pre">std::out_of_range</span></code>.</p>
 </dd></dl>
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC21DivideByZeroExceptionE">
 <span id="_CPPv3N4krpc8services4KRPC21DivideByZeroExceptionE"></span><span id="_CPPv2N4krpc8services4KRPC21DivideByZeroExceptionE"></span><span id="krpc::services::KRPC::DivideByZeroException"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DivideByZeroException</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC21DivideByZeroExceptionE" title="Link to this definition">#</a><br /></dt>
 <dd><p>An integer was divided by zero.</p>
+<p>An alias of <code class="docutils literal notranslate"><span class="pre">std::domain_error</span></code>.</p>
 </dd></dl>
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC21NotSupportedExceptionE">
 <span id="_CPPv3N4krpc8services4KRPC21NotSupportedExceptionE"></span><span id="_CPPv2N4krpc8services4KRPC21NotSupportedExceptionE"></span><span id="krpc::services::KRPC::NotSupportedException"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">NotSupportedException</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC21NotSupportedExceptionE" title="Link to this definition">#</a><br /></dt>
 <dd><p>A method was invoked that is not supported.</p>
+<p>A subclass of <a class="reference internal" href="../../../cpp.html#_CPPv4N4krpc11ServerErrorE" title="krpc::ServerError"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">krpc::ServerError</span></code></a>.</p>
 </dd></dl>
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC16TimeoutExceptionE">
 <span id="_CPPv3N4krpc8services4KRPC16TimeoutExceptionE"></span><span id="_CPPv2N4krpc8services4KRPC16TimeoutExceptionE"></span><span id="krpc::services::KRPC::TimeoutException"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TimeoutException</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC16TimeoutExceptionE" title="Link to this definition">#</a><br /></dt>
 <dd><p>An operation did not complete in the time allotted to it.</p>
+<p>A subclass of <a class="reference internal" href="../../../cpp.html#_CPPv4N4krpc11ServerErrorE" title="krpc::ServerError"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">krpc::ServerError</span></code></a>.</p>
 </dd></dl>
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC17OverflowExceptionE">
 <span id="_CPPv3N4krpc8services4KRPC17OverflowExceptionE"></span><span id="_CPPv2N4krpc8services4KRPC17OverflowExceptionE"></span><span id="krpc::services::KRPC::OverflowException"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OverflowException</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC17OverflowExceptionE" title="Link to this definition">#</a><br /></dt>
 <dd><p>An arithmetic or conversion operation overflowed.</p>
+<p>An alias of <code class="docutils literal notranslate"><span class="pre">std::overflow_error</span></code>.</p>
 </dd></dl>
 
 <dl class="cpp class">
@@ -1838,6 +1849,7 @@ meet the parameter specification of the method.</p>
 <dd><p>The game object that a service object refers to no longer exists,
 so the object cannot be used. For example, the part it represents
 was destroyed, or the vessel it belongs to was recovered.</p>
+<p>A subclass of <a class="reference internal" href="../../../cpp.html#_CPPv4N4krpc11ServerErrorE" title="krpc::ServerError"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">krpc::ServerError</span></code></a>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>See <a class="reference internal" href="#_CPPv4N4krpc8services4KRPC24ObjectNotLoadedExceptionE" title="krpc::services::KRPC::ObjectNotLoadedException"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">ObjectNotLoadedException</span></code></a> for a game object that exists but is not
@@ -1850,6 +1862,7 @@ loaded.</p>
 <span id="_CPPv3N4krpc8services4KRPC24ObjectNotLoadedExceptionE"></span><span id="_CPPv2N4krpc8services4KRPC24ObjectNotLoadedExceptionE"></span><span id="krpc::services::KRPC::ObjectNotLoadedException"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ObjectNotLoadedException</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC24ObjectNotLoadedExceptionE" title="Link to this definition">#</a><br /></dt>
 <dd><p>The game object that a service object refers to exists, but is not loaded.
 For example, the game is loading, or the vessel carrying the part is unloaded.</p>
+<p>A subclass of <a class="reference internal" href="../../../cpp.html#_CPPv4N4krpc11ServerErrorE" title="krpc::ServerError"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">krpc::ServerError</span></code></a>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>See <a class="reference internal" href="#_CPPv4N4krpc8services4KRPC24ObjectDestroyedExceptionE" title="krpc::services::KRPC::ObjectDestroyedException"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">ObjectDestroyedException</span></code></a> for a game object that no longer exists.</p>
@@ -1860,18 +1873,21 @@ For example, the game is loading, or the vessel carrying the part is unloaded.</
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC25UnsupportedSceneExceptionE">
 <span id="_CPPv3N4krpc8services4KRPC25UnsupportedSceneExceptionE"></span><span id="_CPPv2N4krpc8services4KRPC25UnsupportedSceneExceptionE"></span><span id="krpc::services::KRPC::UnsupportedSceneException"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">UnsupportedSceneException</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC25UnsupportedSceneExceptionE" title="Link to this definition">#</a><br /></dt>
 <dd><p>The procedure is not available in the current game scene.</p>
+<p>A subclass of <a class="reference internal" href="../../../cpp.html#_CPPv4N4krpc11ServerErrorE" title="krpc::ServerError"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">krpc::ServerError</span></code></a>.</p>
 </dd></dl>
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC22StreamRemovedExceptionE">
 <span id="_CPPv3N4krpc8services4KRPC22StreamRemovedExceptionE"></span><span id="_CPPv2N4krpc8services4KRPC22StreamRemovedExceptionE"></span><span id="krpc::services::KRPC::StreamRemovedException"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">StreamRemovedException</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC22StreamRemovedExceptionE" title="Link to this definition">#</a><br /></dt>
 <dd><p>A stream was removed by the server, e.g. an event that has finished.</p>
+<p>An alias of <a class="reference internal" href="../../../cpp.html#_CPPv4N4krpc11StreamErrorE" title="krpc::StreamError"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">krpc::StreamError</span></code></a>.</p>
 </dd></dl>
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC5ErrorE">
 <span id="_CPPv3N4krpc8services4KRPC5ErrorE"></span><span id="_CPPv2N4krpc8services4KRPC5ErrorE"></span><span id="krpc::services::KRPC::Error"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Error</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC5ErrorE" title="Link to this definition">#</a><br /></dt>
 <dd><p>A general error, described by its message.</p>
+<p>A subclass of <a class="reference internal" href="../../../cpp.html#_CPPv4N4krpc11ServerErrorE" title="krpc::ServerError"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">krpc::ServerError</span></code></a>.</p>
 </dd></dl>
 
 </section>

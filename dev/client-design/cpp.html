@@ -657,14 +657,22 @@ waiting on it, once its mutex is free.</p>
 <tr class="row-even"><td><p>Closing a connection</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">Connection::close()</span></code>, or the last release</p></td>
 </tr>
-<tr class="row-odd"><td><p>Connection error</p></td>
+<tr class="row-odd"><td><p>Remote error</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">krpc::RemoteError</span></code>, a <code class="docutils literal notranslate"><span class="pre">std::runtime_error</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Connection error</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">krpc::ConnectionError</span></code></p></td>
 </tr>
-<tr class="row-even"><td><p>Stream error</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">krpc::StreamError</span></code></p></td>
+<tr class="row-odd"><td><p>Stream error</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">krpc::StreamError</span></code>, also for <code class="docutils literal notranslate"><span class="pre">KRPC.StreamRemovedException</span></code>, whose generated name is an
+alias of it</p></td>
 </tr>
-<tr class="row-odd"><td><p>Server error with no mapped type</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">krpc::RPCError</span></code></p></td>
+<tr class="row-even"><td><p>Server error with no mapped type</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">krpc::ServerError</span></code>, the base of each exception class a service declares</p></td>
+</tr>
+<tr class="row-odd"><td><p>Server exception with a mapped type</p></td>
+<td><p>The standard exception itself. The generated name is a <code class="docutils literal notranslate"><span class="pre">using</span></code> alias of it, so the
+server’s message tells apart the exceptions that share a type</p></td>
 </tr>
 <tr class="row-even"><td><p>Nullable value</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">std::optional</span></code>, checked by the compiler where a parameter is not nullable</p></td>

@@ -373,6 +373,8 @@ KRPC
    A method call was made to a method that is invalid
    given the current state of the object.
 
+   The client throws :type:`System.InvalidOperationException` for this exception, and has no class for it.
+
 
 
 .. class:: ArgumentException
@@ -380,11 +382,15 @@ KRPC
    A method was invoked where at least one of the passed arguments does not
    meet the parameter specification of the method.
 
+   The client throws :type:`System.ArgumentException` for this exception, and has no class for it.
+
 
 
 .. class:: ArgumentNullException
 
    A null reference was passed to a method that does not accept it as a valid argument.
+
+   The client throws :type:`System.ArgumentNullException` for this exception, and has no class for it.
 
 
 
@@ -392,11 +398,15 @@ KRPC
 
    The value of an argument is outside the allowable range of values as defined by the invoked method.
 
+   The client throws :type:`System.ArgumentOutOfRangeException` for this exception, and has no class for it.
+
 
 
 .. class:: NullReferenceException
 
    A value was null where its type does not allow one.
+
+   The client throws :type:`System.NullReferenceException` for this exception, and has no class for it.
 
 
 
@@ -404,11 +414,15 @@ KRPC
 
    A key was not found in a dictionary.
 
+   The client throws :type:`System.Collections.Generic.KeyNotFoundException` for this exception, and has no class for it.
+
 
 
 .. class:: IndexOutOfRangeException
 
    An index was outside the bounds of a collection, string or array.
+
+   The client throws :type:`System.IndexOutOfRangeException` for this exception, and has no class for it.
 
 
 
@@ -416,11 +430,15 @@ KRPC
 
    An integer was divided by zero.
 
+   The client throws :type:`System.DivideByZeroException` for this exception, and has no class for it.
+
 
 
 .. class:: NotSupportedException
 
    A method was invoked that is not supported.
+
+   The client throws :type:`System.NotSupportedException` for this exception, and has no class for it.
 
 
 
@@ -428,11 +446,15 @@ KRPC
 
    An operation did not complete in the time allotted to it.
 
+   The client throws :type:`System.TimeoutException` for this exception, and has no class for it.
+
 
 
 .. class:: OverflowException
 
    An arithmetic or conversion operation overflowed.
+
+   The client throws :type:`System.OverflowException` for this exception, and has no class for it.
 
 
 
@@ -441,6 +463,8 @@ KRPC
    The game object that a service object refers to no longer exists,
    so the object cannot be used. For example, the part it represents
    was destroyed, or the vessel it belongs to was recovered.
+
+   A subclass of :type:`KRPC.Client.ServerException`.
 
    .. note::
 
@@ -452,6 +476,8 @@ KRPC
    The game object that a service object refers to exists, but is not loaded.
    For example, the game is loading, or the vessel carrying the part is unloaded.
 
+   A subclass of :type:`KRPC.Client.ServerException`.
+
    .. note::
 
       See :type:`ObjectDestroyedException` for a game object that no longer exists.
@@ -460,14 +486,20 @@ KRPC
 
    The procedure is not available in the current game scene.
 
+   A subclass of :type:`KRPC.Client.ServerException`.
+
 
 
 .. class:: StreamRemovedException
 
    A stream was removed by the server, e.g. an event that has finished.
 
+   The client throws :type:`KRPC.Client.StreamException` for this exception, and has no class for it.
+
 
 
 .. class:: Error
 
    A general error, described by its message.
+
+   A subclass of :type:`KRPC.Client.ServerException`.

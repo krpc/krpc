@@ -1,15 +1,11 @@
 import krpc.client.Connection;
-import krpc.client.RPCException;
 import krpc.client.Stream;
-import krpc.client.StreamException;
 import krpc.client.services.SpaceCenter;
 import krpc.client.services.SpaceCenter.Control;
 
-import java.io.IOException;
 
 public class Callbacks {
-  public static void main(String[] args)
-      throws IOException, RPCException, StreamException, InterruptedException {
+  public static void main(String[] args) throws InterruptedException {
     try (Connection connection = Connection.newInstance()) {
       SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
       Control control = spaceCenter.getActiveVessel().getControl();

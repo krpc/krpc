@@ -1454,9 +1454,12 @@ the error.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">KRPC_ERROR_CHECK_FN</span></code> calls <a class="reference internal" href="#c.krpc_error_handler" title="krpc_error_handler"><code class="xref c c-var docutils literal notranslate"><span class="pre">krpc_error_handler</span></code></a> when an error occurs. Set it to a
 pointer to a function that takes a single parameter of type <a class="reference internal" href="#c.krpc_error_t" title="krpc_error_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_error_t</span></code></a>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">KRPC_PRINT_ERRORS_TO_STDERR</span></code> prints a message describing each error to stderr.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_ERROR_MESSAGES</span></code> stores the message of each error from the server, for
+<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_ERROR_CODES_ONLY</span></code> keeps only the code of each error. By default the library also
+keeps the details of the last error, for <a class="reference internal" href="#c.krpc_get_error_info" title="krpc_get_error_info"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_get_error_info()</span></code></a>, in 16 bytes of RAM on
+AVR.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_ERROR_MESSAGES</span></code> also keeps the message of the last error, for
 <a class="reference internal" href="#c.krpc_get_error_message" title="krpc_get_error_message"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_get_error_message()</span></code></a>. It costs <code class="docutils literal notranslate"><span class="pre">KRPC_ERROR_MESSAGE_LENGTH</span></code> bytes of static
-storage.</p></li>
+storage, and the flash of each message.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">KRPC_ERROR_MESSAGE_LENGTH</span></code> is the size of the buffer for that message, 256 bytes by
 default.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">PB_NO_ERRMSG</span></code> disables the error messages of the nanopb library, which kRPC uses to encode
@@ -1537,7 +1540,7 @@ rate:</p>
 <span class="w">  </span><span class="c1">// Set up communication with the server, retrying while part of an earlier session's message</span>
 <span class="w">  </span><span class="c1">// is on the line</span>
 <span class="w">  </span><span class="n">krpc_error_t</span><span class="w"> </span><span class="n">error</span><span class="p">;</span>
-<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">((</span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc_connect</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"Arduino Example"</span><span class="p">))</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">KRPC_ERROR_CONNECTION_FAILED</span><span class="p">)</span>
+<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">((</span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc_connect</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"Arduino Example"</span><span class="p">))</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">KRPC_ERROR_CONNECTION</span><span class="p">)</span>
 <span class="w">    </span><span class="n">delay</span><span class="p">(</span><span class="mi">3500</span><span class="p">);</span>
 <span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">error</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span>
 <span class="w">    </span><span class="k">return</span><span class="p">;</span>
@@ -1633,15 +1636,20 @@ The following connects over the program’s standard input and output:</p>
 
 <span class="k">static</span><span class="w"> </span><span class="n">krpc_error_t</span><span class="w"> </span><span class="nf">link_read</span><span class="p">(</span><span class="kt">uintptr_t</span><span class="w"> </span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="o">*</span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">count</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">link_t</span><span class="w"> </span><span class="o">*</span><span class="n">link</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">link_t</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">handle</span><span class="p">;</span>
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">fread</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">count</span><span class="p">,</span><span class="w"> </span><span class="n">link</span><span class="o">-&gt;</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">count</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">KRPC_ERROR_EOF</span><span class="p">;</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">fread</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">count</span><span class="p">,</span><span class="w"> </span><span class="n">link</span><span class="o">-&gt;</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">count</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">krpc_set_error_cause</span><span class="p">(</span><span class="s">"End of the input"</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">KRPC_ERROR_EOF</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
 <span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">;</span>
 <span class="p">}</span>
 
 <span class="k">static</span><span class="w"> </span><span class="n">krpc_error_t</span><span class="w"> </span><span class="nf">link_write</span><span class="p">(</span><span class="kt">uintptr_t</span><span class="w"> </span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="o">*</span><span class="n">buf</span><span class="p">,</span>
 <span class="w">                               </span><span class="kt">size_t</span><span class="w"> </span><span class="n">count</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">link_t</span><span class="w"> </span><span class="o">*</span><span class="n">link</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">link_t</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">handle</span><span class="p">;</span>
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">fwrite</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">count</span><span class="p">,</span><span class="w"> </span><span class="n">link</span><span class="o">-&gt;</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">count</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">fflush</span><span class="p">(</span><span class="n">link</span><span class="o">-&gt;</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">fwrite</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">count</span><span class="p">,</span><span class="w"> </span><span class="n">link</span><span class="o">-&gt;</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">count</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">fflush</span><span class="p">(</span><span class="n">link</span><span class="o">-&gt;</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">krpc_set_error_cause</span><span class="p">(</span><span class="s">"Failed to write the output"</span><span class="p">);</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">KRPC_ERROR_IO</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
 <span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">;</span>
 <span class="p">}</span>
 
@@ -1716,8 +1724,9 @@ strings and collections a collection holds before freeing the collection.</p>
 <section id="handling-errors">
 <h2>Handling Errors<a class="headerlink" href="#handling-errors" title="Link to this heading">#</a></h2>
 <p>Each function returns an error code, which is <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_OK</span></code> on success. The following checks
-the error from loading a save that does not exist:</p>
+for the exception the server throws when a save does not exist:</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/krpc.h&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/space_center.h&gt;</span>
 
 <span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
@@ -1726,25 +1735,37 @@ the error from loading a save that does not exist:</p>
 <span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_connect</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"Errors example"</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 
 <span class="w">  </span><span class="n">krpc_error_t</span><span class="w"> </span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc_SpaceCenter_Load</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"missing"</span><span class="p">);</span>
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">error</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">error</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">KRPC_ERROR_SERVER</span><span class="w"> </span><span class="o">&amp;&amp;</span>
+<span class="w">      </span><span class="n">KRPC_IS_EXCEPTION</span><span class="p">(</span><span class="n">KRPC_EXCEPTION_KRPC_ARGUMENTEXCEPTION</span><span class="p">))</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"No such save</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="w">  </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">error</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span>
 <span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"Failed to load the save: %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">krpc_get_error</span><span class="p">(</span><span class="n">error</span><span class="p">));</span>
 
 <span class="w">  </span><span class="n">krpc_disconnect</span><span class="p">(</span><span class="n">conn</span><span class="p">);</span>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p><a class="reference internal" href="#c.krpc_get_error" title="krpc_get_error"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_get_error()</span></code></a> describes an error code. The code depends on the error:</p>
+<p>The code is the kind of error, and <a class="reference internal" href="#c.krpc_get_error" title="krpc_get_error"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_get_error()</span></code></a> names it:</p>
 <ul class="simple">
-<li><p>A procedure that fails on the server returns <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_RPC_FAILED</span></code>. With
-<code class="docutils literal notranslate"><span class="pre">KRPC_ERROR_MESSAGES</span></code> defined, <a class="reference internal" href="#c.krpc_get_error_message" title="krpc_get_error_message"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_get_error_message()</span></code></a> returns the server’s message,
-which names the exception, such as <code class="docutils literal notranslate"><span class="pre">KRPC.ArgumentException</span></code>.</p></li>
-<li><p>A connection that fails to open returns <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_IO</span></code>.</p></li>
-<li><p>A server that denies the connection, or does not support the client’s protocol version, makes
-<a class="reference internal" href="#c.krpc_connect" title="krpc_connect"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_connect()</span></code></a> return <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_CONNECTION_REFUSED</span></code>.</p></li>
-<li><p>A failed read or write returns <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_IO</span></code> or <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_EOF</span></code>.</p></li>
-<li><p>A call made after <a class="reference internal" href="#c.krpc_disconnect" title="krpc_disconnect"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_disconnect()</span></code></a>, after a failed write, or after the server sends a
-disconnect, returns <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_CONNECTION_FAILED</span></code>.</p></li>
+<li><p><code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_CONNECTION</span></code>: connecting failed, or the connection failed or ended. Each call
+after it fails the same way.</p></li>
+<li><p><code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_CONNECTION_REFUSED</span></code>: the server denied the connection, or does not support
+the client’s protocol version.</p></li>
+<li><p><code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_SERVER</span></code>: the procedure failed on the server.</p></li>
+<li><p><code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_ENCODING</span></code>: an argument or a result failed to encode or decode.</p></li>
+<li><p><code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_ARGUMENT</span></code>: the library rejected an argument before sending anything, such
+as a null string.</p></li>
+<li><p><code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_NO_MEMORY</span></code>: an allocation failed.</p></li>
+<li><p><code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_BUFFER_TOO_SMALL</span></code>: bytes did not fit in the buffer you passed.</p></li>
 </ul>
+<p><a class="reference internal" href="#c.krpc_get_error_info" title="krpc_get_error_info"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_get_error_info()</span></code></a> returns the details of the last error. A server error carries the
+ids of its service and exception. <a class="reference internal" href="#c.KRPC_IS_EXCEPTION" title="KRPC_IS_EXCEPTION"><code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_IS_EXCEPTION</span></code></a> compares them with the
+<code class="docutils literal notranslate"><span class="pre">KRPC_EXCEPTION_</span></code> macro of an exception, such as
+<a class="reference internal" href="cnano/api/krpc/krpc.html#c.KRPC_EXCEPTION_KRPC_ARGUMENTEXCEPTION" title="KRPC_EXCEPTION_KRPC_ARGUMENTEXCEPTION"><code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_EXCEPTION_KRPC_ARGUMENTEXCEPTION</span></code></a>. A refused connection carries the server’s status,
+and a connection the server ended carries its reason.</p>
+<p>With <code class="docutils literal notranslate"><span class="pre">KRPC_ERROR_MESSAGES</span></code> defined, <a class="reference internal" href="#c.krpc_get_error_message" title="krpc_get_error_message"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_get_error_message()</span></code></a> returns the message of the
+last error. A server error’s message names the exception, as in
+<code class="docutils literal notranslate"><span class="pre">KRPC.ArgumentException:</span> <span class="pre">Failed</span> <span class="pre">to</span> <span class="pre">load</span> <span class="pre">missing</span></code>.</p>
 <p>The <a class="reference internal" href="#cnano-client-compilation-options"><span class="std std-ref">compilation options</span></a> can instead exit, fail an
 assertion or call a handler on each error from a procedure. The functions that open a connection,
 <a class="reference internal" href="#c.krpc_connect" title="krpc_connect"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_connect()</span></code></a> and <a class="reference internal" href="#c.krpc_disconnect" title="krpc_disconnect"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_disconnect()</span></code></a> always return the error code.</p>
@@ -1852,7 +1873,8 @@ The object holds no copy of the game’s state. It is just a reference to it, an
 <p>Two objects for the same thing in the game compare equal with <code class="docutils literal notranslate"><span class="pre">==</span></code>. <a class="reference internal" href="#c.KRPC_NULL" title="KRPC_NULL"><code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_NULL</span></code></a> is the
 null object.</p>
 <p>Once the thing an object identifies is destroyed, such as a part that explodes, each call through
-it fails with <code class="docutils literal notranslate"><span class="pre">KRPC.ObjectDestroyedException</span></code>, and returns <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_RPC_FAILED</span></code>.</p>
+it fails with <a class="reference internal" href="cnano/api/krpc/krpc.html#c.KRPC_EXCEPTION_KRPC_OBJECTDESTROYEDEXCEPTION" title="KRPC_EXCEPTION_KRPC_OBJECTDESTROYEDEXCEPTION"><code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_EXCEPTION_KRPC_OBJECTDESTROYEDEXCEPTION</span></code></a>, and returns
+<code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_SERVER</span></code>.</p>
 <p>An object for a vessel or a part keeps working when you load a save, quickload or revert, and
 then reads the loaded game. Other objects depend on what they identify. A maneuver node, for
 example, is destroyed by a load.</p>
@@ -2053,7 +2075,7 @@ the server window, such as with <code class="docutils literal notranslate"><span
 <code class="docutils literal notranslate"><span class="pre">krpc_open_serial(&amp;conn,</span> <span class="pre">&amp;Serial,</span> <span class="pre">9600)</span></code>. It starts the port with 8 data bits, no parity and
 1 stop bit, waits for the port to be ready, then opens a connection over it with
 <a class="reference internal" href="#c.krpc_open_stream" title="krpc_open_stream"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_open_stream()</span></code></a>.</p>
-<p>Returns <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_IO</span></code> if the port fails to open.</p>
+<p>Returns <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_CONNECTION</span></code> if the port fails to open.</p>
 </dd></dl>
 
 <dl class="c function">
@@ -2076,8 +2098,8 @@ can take longer to reply.</p>
 <dd><p>Opens a TCP/IP connection to the server at <em>address</em> and <em>port</em>, and writes it into
 <em>connection</em>. The address is a host name or an IP address, and each endpoint it resolves to is
 tried in turn. Windows, Linux and macOS only.</p>
-<p>Returns <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_IO</span></code> if the address does not resolve or no endpoint accepts the
-connection.</p>
+<p>Returns <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_CONNECTION</span></code> if the address does not resolve or no endpoint accepts
+the connection.</p>
 </dd></dl>
 
 <dl class="c function">
@@ -2087,7 +2109,8 @@ connection.</p>
 Windows, Linux and macOS only. On Windows, it needs Windows 10 version 1803 or later, and a
 Windows SDK with <code class="docutils literal notranslate"><span class="pre">afunix.h</span></code>, 10.0.17134 or later. With an older SDK the library leaves it
 out, and a call to it fails to compile.</p>
-<p>Returns <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_IO</span></code> if the path is too long or the connection fails.</p>
+<p>Returns <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_ARGUMENT</span></code> if the path is too long, and
+<code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_CONNECTION</span></code> if the connection fails.</p>
 </dd></dl>
 
 <dl class="c type">
@@ -2104,15 +2127,19 @@ of the transport’s functions.</p>
 <dd><p>A transport, as the functions that carry a connection’s bytes. A structure with the fields:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">krpc_error_t</span> <span class="pre">(*read)(uintptr_t</span> <span class="pre">handle,</span> <span class="pre">uint8_t</span> <span class="pre">*</span> <span class="pre">buf,</span> <span class="pre">size_t</span> <span class="pre">count)</span></code> reads exactly <em>count</em>
-bytes into <em>buf</em>. It returns <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_EOF</span></code> once the connection has ended.</p></li>
+bytes into <em>buf</em>. It returns <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_EOF</span></code> once the connection has ended, and
+<code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_IO</span></code> if the read fails.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">krpc_error_t</span> <span class="pre">(*write)(uintptr_t</span> <span class="pre">handle,</span> <span class="pre">const</span> <span class="pre">uint8_t</span> <span class="pre">*</span> <span class="pre">buf,</span> <span class="pre">size_t</span> <span class="pre">count)</span></code> writes all
-<em>count</em> bytes from <em>buf</em>.</p></li>
+<em>count</em> bytes from <em>buf</em>. It returns <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_IO</span></code> if the write fails.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">krpc_error_t</span> <span class="pre">(*close)(uintptr_t</span> <span class="pre">handle)</span></code> closes the connection. <code class="docutils literal notranslate"><span class="pre">NULL</span></code> for a transport
 with nothing to close.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">bool</span> <span class="pre">resumable</span></code> is whether the link outlives a session, as a serial line does. A client
 that resets can then find part of a message from its earlier session on the link, and
-<a class="reference internal" href="#c.krpc_connect" title="krpc_connect"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_connect()</span></code></a> leaves the connection open after such a failure.</p></li>
+<a class="reference internal" href="#c.krpc_connect" title="krpc_connect"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_connect()</span></code></a> leaves the connection open after a failed handshake.</p></li>
 </ul>
+<p>Before a function returns <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_IO</span></code> or <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_EOF</span></code>, it can give the
+failure’s message with <a class="reference internal" href="#c.krpc_set_error_cause" title="krpc_set_error_cause"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_set_error_cause()</span></code></a>. The call that failed returns
+<code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_CONNECTION</span></code>, with the transport’s code as the cause.</p>
 </dd></dl>
 
 <dl class="c var">
@@ -2147,20 +2174,22 @@ supports one session at a time.</p>
 </ul>
 </dd>
 </dl>
-<p>Returns <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_IO</span></code> for a connection whose open failed. Returns
-<code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_CONNECTION_REFUSED</span></code>, and closes the connection, if the server denies it or
-does not support the client’s protocol version. Over TCP/IP, a local socket, or any transport
-with <code class="docutils literal notranslate"><span class="pre">resumable</span></code> false, any other failure closes the connection too.</p>
+<p>Returns <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_CONNECTION_REFUSED</span></code>, and closes the connection, if the server
+denies it or does not support the client’s protocol version. Returns
+<code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_CONNECTION</span></code> if the connection is not open or the handshake fails. The last
+error holds the server’s status and the reason of a disconnect. Over TCP/IP, a local socket,
+or any transport with <code class="docutils literal notranslate"><span class="pre">resumable</span></code> false, a failed handshake closes the connection too.</p>
 <p>On a resumable transport, such as a serial port, part of a message from an earlier session can
-garble the connection request or its response. This then returns
-<code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_CONNECTION_FAILED</span></code> and leaves the port open. Wait more than 3 seconds, so
-that the server drops the partial message, then call this again.</p>
+garble the connection request or its response. This returns <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_CONNECTION</span></code> and
+leaves the port open. Wait more than 3 seconds, so that the server drops the partial message,
+then call this again.</p>
 </dd></dl>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_disconnect">
 <a class="reference internal" href="#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_disconnect</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_disconnect" title="Link to this definition">#</a><br /></dt>
-<dd><p>Tells the server the session is ending, then closes the connection.</p>
+<dd><p>Tells the server the session is ending, then closes the connection. Returns
+<code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_CONNECTION</span></code> if the connection is not open or fails to close.</p>
 </dd></dl>
 
 <dl class="c function">
@@ -2180,53 +2209,9 @@ that the server drops the partial message, then call this again.</p>
 </dd></dl>
 
 <dl class="c macro">
-<dt class="sig sig-object c" id="c.krpc_error_t.KRPC_ERROR_IO">
-<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ERROR_IO</span></span></span><a class="headerlink" href="#c.krpc_error_t.KRPC_ERROR_IO" title="Link to this definition">#</a><br /></dt>
-<dd><p>Opening, reading from or writing to the connection failed.</p>
-</dd></dl>
-
-<dl class="c macro">
-<dt class="sig sig-object c" id="c.krpc_error_t.KRPC_ERROR_EOF">
-<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ERROR_EOF</span></span></span><a class="headerlink" href="#c.krpc_error_t.KRPC_ERROR_EOF" title="Link to this definition">#</a><br /></dt>
-<dd><p>The connection ended while reading from it. On Arduino, no byte arrived within the
-serial timeout.</p>
-</dd></dl>
-
-<dl class="c macro">
-<dt class="sig sig-object c" id="c.krpc_error_t.KRPC_ERROR_CONNECTION_FAILED">
-<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ERROR_CONNECTION_FAILED</span></span></span><a class="headerlink" href="#c.krpc_error_t.KRPC_ERROR_CONNECTION_FAILED" title="Link to this definition">#</a><br /></dt>
-<dd><p>The session failed to start, or has ended, or the server sent a message that failed
-to decode or was not expected.</p>
-</dd></dl>
-
-<dl class="c macro">
-<dt class="sig sig-object c" id="c.krpc_error_t.KRPC_ERROR_NO_RESULTS">
-<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ERROR_NO_RESULTS</span></span></span><a class="headerlink" href="#c.krpc_error_t.KRPC_ERROR_NO_RESULTS" title="Link to this definition">#</a><br /></dt>
-<dd><p>The response from the server did not hold a single result.</p>
-</dd></dl>
-
-<dl class="c macro">
-<dt class="sig sig-object c" id="c.krpc_error_t.KRPC_ERROR_RPC_FAILED">
-<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ERROR_RPC_FAILED</span></span></span><a class="headerlink" href="#c.krpc_error_t.KRPC_ERROR_RPC_FAILED" title="Link to this definition">#</a><br /></dt>
-<dd><p>The procedure failed on the server.</p>
-</dd></dl>
-
-<dl class="c macro">
-<dt class="sig sig-object c" id="c.krpc_error_t.KRPC_ERROR_ENCODING_FAILED">
-<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ERROR_ENCODING_FAILED</span></span></span><a class="headerlink" href="#c.krpc_error_t.KRPC_ERROR_ENCODING_FAILED" title="Link to this definition">#</a><br /></dt>
-<dd><p>A message failed to encode or to send.</p>
-</dd></dl>
-
-<dl class="c macro">
-<dt class="sig sig-object c" id="c.krpc_error_t.KRPC_ERROR_DECODING_FAILED">
-<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ERROR_DECODING_FAILED</span></span></span><a class="headerlink" href="#c.krpc_error_t.KRPC_ERROR_DECODING_FAILED" title="Link to this definition">#</a><br /></dt>
-<dd><p>The return value from the server failed to decode.</p>
-</dd></dl>
-
-<dl class="c macro">
-<dt class="sig sig-object c" id="c.krpc_error_t.KRPC_ERROR_BUFFER_TOO_SMALL">
-<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ERROR_BUFFER_TOO_SMALL</span></span></span><a class="headerlink" href="#c.krpc_error_t.KRPC_ERROR_BUFFER_TOO_SMALL" title="Link to this definition">#</a><br /></dt>
-<dd><p>A value did not fit in the buffer given to hold it.</p>
+<dt class="sig sig-object c" id="c.krpc_error_t.KRPC_ERROR_CONNECTION">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ERROR_CONNECTION</span></span></span><a class="headerlink" href="#c.krpc_error_t.KRPC_ERROR_CONNECTION" title="Link to this definition">#</a><br /></dt>
+<dd><p>Connecting failed, or the connection failed or ended.</p>
 </dd></dl>
 
 <dl class="c macro">
@@ -2236,24 +2221,114 @@ to decode or was not expected.</p>
 version.</p>
 </dd></dl>
 
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_error_t.KRPC_ERROR_SERVER">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ERROR_SERVER</span></span></span><a class="headerlink" href="#c.krpc_error_t.KRPC_ERROR_SERVER" title="Link to this definition">#</a><br /></dt>
+<dd><p>The procedure failed on the server.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_error_t.KRPC_ERROR_ENCODING">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ERROR_ENCODING</span></span></span><a class="headerlink" href="#c.krpc_error_t.KRPC_ERROR_ENCODING" title="Link to this definition">#</a><br /></dt>
+<dd><p>An argument or a result failed to encode or decode.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_error_t.KRPC_ERROR_ARGUMENT">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ERROR_ARGUMENT</span></span></span><a class="headerlink" href="#c.krpc_error_t.KRPC_ERROR_ARGUMENT" title="Link to this definition">#</a><br /></dt>
+<dd><p>The library rejected an argument before sending anything.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_error_t.KRPC_ERROR_NO_MEMORY">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ERROR_NO_MEMORY</span></span></span><a class="headerlink" href="#c.krpc_error_t.KRPC_ERROR_NO_MEMORY" title="Link to this definition">#</a><br /></dt>
+<dd><p>An allocation failed.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_error_t.KRPC_ERROR_BUFFER_TOO_SMALL">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ERROR_BUFFER_TOO_SMALL</span></span></span><a class="headerlink" href="#c.krpc_error_t.KRPC_ERROR_BUFFER_TOO_SMALL" title="Link to this definition">#</a><br /></dt>
+<dd><p>A value did not fit in the buffer given to hold it.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_error_t.KRPC_ERROR_IO">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ERROR_IO</span></span></span><a class="headerlink" href="#c.krpc_error_t.KRPC_ERROR_IO" title="Link to this definition">#</a><br /></dt>
+<dd><p>A transport’s read or write failed. The call that failed returns
+<a class="reference internal" href="#c.krpc_error_t.KRPC_ERROR_CONNECTION" title="KRPC_ERROR_CONNECTION"><code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_CONNECTION</span></code></a>.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_error_t.KRPC_ERROR_EOF">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ERROR_EOF</span></span></span><a class="headerlink" href="#c.krpc_error_t.KRPC_ERROR_EOF" title="Link to this definition">#</a><br /></dt>
+<dd><p>A transport’s connection ended. On Arduino, no byte arrived within the serial
+timeout. The call that failed returns <a class="reference internal" href="#c.krpc_error_t.KRPC_ERROR_CONNECTION" title="KRPC_ERROR_CONNECTION"><code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_CONNECTION</span></code></a>.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_get_error">
 <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">krpc_get_error</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">error</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_get_error" title="Link to this definition">#</a><br /></dt>
-<dd><p>A short description of an error code, such as <code class="docutils literal notranslate"><span class="pre">rpc</span> <span class="pre">failed</span></code>. Returns an empty string for
-<code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_OK</span></code>.</p>
+<dd><p>The name of an error code, such as <code class="docutils literal notranslate"><span class="pre">server</span> <span class="pre">error</span></code>.</p>
+</dd></dl>
+
+<dl class="c type">
+<dt class="sig sig-object c" id="c.krpc_error_info_t">
+<span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_error_info_t</span></span></span><a class="headerlink" href="#c.krpc_error_info_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>The details of the last error. A structure with the fields:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">krpc_error_t</span> <span class="pre">code</span></code>, the code the failing function returned.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">krpc_error_t</span> <span class="pre">cause</span></code>, <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_IO</span></code> or <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_EOF</span></code> for the
+transport’s failure behind a connection error, else -1.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">uint32_t</span> <span class="pre">service</span></code> and <code class="docutils literal notranslate"><span class="pre">uint32_t</span> <span class="pre">exception</span></code>, the ids of a server error’s exception, else
+0. A server error with no exception has 0 for both.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">int16_t</span> <span class="pre">status</span></code>, the status of a <code class="docutils literal notranslate"><span class="pre">ConnectionResponse</span></code> other than <code class="docutils literal notranslate"><span class="pre">OK</span></code>, else -1.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">int16_t</span> <span class="pre">reason</span></code>, the <code class="docutils literal notranslate"><span class="pre">Disconnect</span></code> reason of a connection the server ended, else -1.</p></li>
+</ul>
+<p>A status or reason the protocol does not define keeps its number.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_get_error_info">
+<span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#c.krpc_error_info_t" title="krpc_error_info_t"><span class="n"><span class="pre">krpc_error_info_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">krpc_get_error_info</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">void</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_get_error_info" title="Link to this definition">#</a><br /></dt>
+<dd><p>The details of the last error. Each failure fills them in, and a success leaves them as they
+were. Not available when the library is built with <code class="docutils literal notranslate"><span class="pre">KRPC_ERROR_CODES_ONLY</span></code> defined.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.KRPC_IS_EXCEPTION">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_IS_EXCEPTION</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">exception</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.KRPC_IS_EXCEPTION" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the last error is the server exception given by its <code class="docutils literal notranslate"><span class="pre">KRPC_EXCEPTION_</span></code> macro, such as
+<code class="docutils literal notranslate"><span class="pre">KRPC_IS_EXCEPTION(KRPC_EXCEPTION_KRPC_ARGUMENTEXCEPTION)</span></code>. Not available when the library is
+built with <code class="docutils literal notranslate"><span class="pre">KRPC_ERROR_CODES_ONLY</span></code> defined.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_is_exception">
+<span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_is_exception</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">service</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">exception</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_is_exception" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the last error is the server exception with the given service and exception ids.</p>
 </dd></dl>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_get_error_message">
 <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">krpc_get_error_message</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">void</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_get_error_message" title="Link to this definition">#</a><br /></dt>
-<dd><p>The message of the most recent error from the server, or an empty string if there has not been
-one. It names the exception and gives its description, as in
+<dd><p>The message of the last error, or an empty string if there has not been one. It is a sentence
+saying what failed, then the message of its cause after a colon, as in
+<code class="docutils literal notranslate"><span class="pre">Connection</span> <span class="pre">failed:</span> <span class="pre">Connection</span> <span class="pre">reset</span> <span class="pre">by</span> <span class="pre">peer</span></code>. A server error names the
+exception and gives its description, as in
 <code class="docutils literal notranslate"><span class="pre">SpaceCenter.InvalidOperationException:</span> <span class="pre">Vessel</span> <span class="pre">does</span> <span class="pre">not</span> <span class="pre">exist</span></code>. The server stack trace
-follows when the server is configured to send one. The message is truncated to fit a buffer of
+follows when the server is configured to send one. The message is cut to fit a buffer of
 <code class="docutils literal notranslate"><span class="pre">KRPC_ERROR_MESSAGE_LENGTH</span></code> bytes.</p>
 <p>Only available when the library is built with <code class="docutils literal notranslate"><span class="pre">KRPC_ERROR_MESSAGES</span></code> defined.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_set_error_cause">
+<span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_set_error_cause</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">message</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_set_error_cause" title="Link to this definition">#</a><br /></dt>
+<dd><p>Gives the message of a transport’s failure, before its function returns
+<code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_IO</span></code> or <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_EOF</span></code>. The library puts it after its own message.
+Does nothing unless the library is built with <code class="docutils literal notranslate"><span class="pre">KRPC_ERROR_MESSAGES</span></code> defined.</p>
 </dd></dl>
 
 <dl class="c var">

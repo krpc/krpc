@@ -1,17 +1,14 @@
 import krpc.client.Connection;
 import krpc.client.Event;
-import krpc.client.RPCException;
-import krpc.client.StreamException;
 import krpc.client.services.KRPC.Expression;
 import krpc.client.services.KRPC.Type;
 import krpc.client.services.SpaceCenter;
 import krpc.client.services.SpaceCenter.Flight;
 
-import java.io.IOException;
 import java.util.Arrays;
 
 public class NotLoadedEvent {
-  public static void main(String[] args) throws IOException, RPCException, StreamException {
+  public static void main(String[] args) {
     try (Connection connection = Connection.newInstance()) {
       SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
       Flight flight = spaceCenter.getActiveVessel().flight(null);

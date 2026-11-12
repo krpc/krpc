@@ -369,6 +369,8 @@ KRPC
    A method call was made to a method that is invalid
    given the current state of the object.
 
+   The client throws :type:`java.lang.IllegalStateException` for this exception, and has no class for it.
+
 
 
 .. type:: public class ArgumentException
@@ -376,11 +378,15 @@ KRPC
    A method was invoked where at least one of the passed arguments does not
    meet the parameter specification of the method.
 
+   The client throws :type:`java.lang.IllegalArgumentException` for this exception, and has no class for it.
+
 
 
 .. type:: public class ArgumentNullException
 
    A null reference was passed to a method that does not accept it as a valid argument.
+
+   The client throws :type:`java.lang.IllegalArgumentException` for this exception, and has no class for it.
 
 
 
@@ -388,11 +394,15 @@ KRPC
 
    The value of an argument is outside the allowable range of values as defined by the invoked method.
 
+   The client throws :type:`java.lang.IllegalArgumentException` for this exception, and has no class for it.
+
 
 
 .. type:: public class NullReferenceException
 
    A value was null where its type does not allow one.
+
+   The client throws :type:`java.lang.NullPointerException` for this exception, and has no class for it.
 
 
 
@@ -400,11 +410,15 @@ KRPC
 
    A key was not found in a dictionary.
 
+   The client throws :type:`java.util.NoSuchElementException` for this exception, and has no class for it.
+
 
 
 .. type:: public class IndexOutOfRangeException
 
    An index was outside the bounds of a collection, string or array.
+
+   The client throws :type:`java.lang.IndexOutOfBoundsException` for this exception, and has no class for it.
 
 
 
@@ -412,11 +426,15 @@ KRPC
 
    An integer was divided by zero.
 
+   The client throws :type:`java.lang.ArithmeticException` for this exception, and has no class for it.
+
 
 
 .. type:: public class NotSupportedException
 
    A method was invoked that is not supported.
+
+   The client throws :type:`java.lang.UnsupportedOperationException` for this exception, and has no class for it.
 
 
 
@@ -424,11 +442,15 @@ KRPC
 
    An operation did not complete in the time allotted to it.
 
+   A subclass of :type:`krpc.client.ServerException`.
+
 
 
 .. type:: public class OverflowException
 
    An arithmetic or conversion operation overflowed.
+
+   The client throws :type:`java.lang.ArithmeticException` for this exception, and has no class for it.
 
 
 
@@ -437,6 +459,8 @@ KRPC
    The game object that a service object refers to no longer exists,
    so the object cannot be used. For example, the part it represents
    was destroyed, or the vessel it belongs to was recovered.
+
+   A subclass of :type:`krpc.client.ServerException`.
 
    .. note::
 
@@ -448,6 +472,8 @@ KRPC
    The game object that a service object refers to exists, but is not loaded.
    For example, the game is loading, or the vessel carrying the part is unloaded.
 
+   A subclass of :type:`krpc.client.ServerException`.
+
    .. note::
 
       See :type:`ObjectDestroyedException` for a game object that no longer exists.
@@ -456,14 +482,20 @@ KRPC
 
    The procedure is not available in the current game scene.
 
+   A subclass of :type:`krpc.client.ServerException`.
+
 
 
 .. type:: public class StreamRemovedException
 
    A stream was removed by the server, e.g. an event that has finished.
 
+   The client throws :type:`krpc.client.StreamException` for this exception, and has no class for it.
+
 
 
 .. type:: public class Error
 
    A general error, described by its message.
+
+   A subclass of :type:`krpc.client.ServerException`.

@@ -1,5 +1,4 @@
 import krpc.client.Connection;
-import krpc.client.RPCException;
 import krpc.client.services.ScanSat;
 import krpc.client.services.ScanSat.ScanType;
 import krpc.client.services.ScanSat.Scanner;
@@ -8,10 +7,8 @@ import krpc.client.services.SpaceCenter.CelestialBody;
 import krpc.client.services.SpaceCenter.Flight;
 import krpc.client.services.SpaceCenter.Vessel;
 
-import java.io.IOException;
-
 public class ScanSatExample {
-    public static void main(String[] args) throws IOException, RPCException {
+    public static void main(String[] args) {
         Connection connection = Connection.newInstance("SCANsat Example");
         Vessel vessel = SpaceCenter.newInstance(connection).getActiveVessel();
         ScanSat scansat = ScanSat.newInstance(connection);

@@ -139,3 +139,5 @@ MechJeb
 .. type:: public class MJServiceException
 
    A general error in the service.
+
+   A subclass of :type:`krpc.client.ServerException`.

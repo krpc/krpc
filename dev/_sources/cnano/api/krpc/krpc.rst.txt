@@ -374,108 +374,154 @@ Main kRPC service, used by clients to interact with basic server functionality.
       The time spent updating streams per update, in seconds.
 
 
-Exception class InvalidOperationException
+.. macro:: KRPC_EXCEPTION_KRPC_INVALIDOPERATIONEXCEPTION
 
-A method call was made to a method that is invalid
-given the current state of the object.
+   A method call was made to a method that is invalid
+   given the current state of the object.
 
-
-
-Exception class ArgumentException
-
-A method was invoked where at least one of the passed arguments does not
-meet the parameter specification of the method.
+   The service and exception ids of the exception, for :macro:`KRPC_IS_EXCEPTION`. A call
+   that fails with it returns :macro:`KRPC_ERROR_SERVER`.
 
 
 
-Exception class ArgumentNullException
+.. macro:: KRPC_EXCEPTION_KRPC_ARGUMENTEXCEPTION
 
-A null reference was passed to a method that does not accept it as a valid argument.
+   A method was invoked where at least one of the passed arguments does not
+   meet the parameter specification of the method.
 
-
-
-Exception class ArgumentOutOfRangeException
-
-The value of an argument is outside the allowable range of values as defined by the invoked method.
+   The service and exception ids of the exception, for :macro:`KRPC_IS_EXCEPTION`. A call
+   that fails with it returns :macro:`KRPC_ERROR_SERVER`.
 
 
 
-Exception class NullReferenceException
+.. macro:: KRPC_EXCEPTION_KRPC_ARGUMENTNULLEXCEPTION
 
-A value was null where its type does not allow one.
+   A null reference was passed to a method that does not accept it as a valid argument.
 
-
-
-Exception class KeyNotFoundException
-
-A key was not found in a dictionary.
+   The service and exception ids of the exception, for :macro:`KRPC_IS_EXCEPTION`. A call
+   that fails with it returns :macro:`KRPC_ERROR_SERVER`.
 
 
 
-Exception class IndexOutOfRangeException
+.. macro:: KRPC_EXCEPTION_KRPC_ARGUMENTOUTOFRANGEEXCEPTION
 
-An index was outside the bounds of a collection, string or array.
+   The value of an argument is outside the allowable range of values as defined by the invoked method.
 
-
-
-Exception class DivideByZeroException
-
-An integer was divided by zero.
+   The service and exception ids of the exception, for :macro:`KRPC_IS_EXCEPTION`. A call
+   that fails with it returns :macro:`KRPC_ERROR_SERVER`.
 
 
 
-Exception class NotSupportedException
+.. macro:: KRPC_EXCEPTION_KRPC_NULLREFERENCEEXCEPTION
 
-A method was invoked that is not supported.
+   A value was null where its type does not allow one.
 
-
-
-Exception class TimeoutException
-
-An operation did not complete in the time allotted to it.
+   The service and exception ids of the exception, for :macro:`KRPC_IS_EXCEPTION`. A call
+   that fails with it returns :macro:`KRPC_ERROR_SERVER`.
 
 
 
-Exception class OverflowException
+.. macro:: KRPC_EXCEPTION_KRPC_KEYNOTFOUNDEXCEPTION
 
-An arithmetic or conversion operation overflowed.
+   A key was not found in a dictionary.
 
-
-
-Exception class ObjectDestroyedException
-
-The game object that a service object refers to no longer exists,
-so the object cannot be used. For example, the part it represents
-was destroyed, or the vessel it belongs to was recovered.
-
-.. note::
-
-   See ``KRPC.ObjectNotLoadedException`` for a game object that exists but is not
-   loaded.
-
-
-Exception class ObjectNotLoadedException
-
-The game object that a service object refers to exists, but is not loaded.
-For example, the game is loading, or the vessel carrying the part is unloaded.
-
-.. note::
-
-   See ``KRPC.ObjectDestroyedException`` for a game object that no longer exists.
-
-
-Exception class UnsupportedSceneException
-
-The procedure is not available in the current game scene.
+   The service and exception ids of the exception, for :macro:`KRPC_IS_EXCEPTION`. A call
+   that fails with it returns :macro:`KRPC_ERROR_SERVER`.
 
 
 
-Exception class StreamRemovedException
+.. macro:: KRPC_EXCEPTION_KRPC_INDEXOUTOFRANGEEXCEPTION
 
-A stream was removed by the server, e.g. an event that has finished.
+   An index was outside the bounds of a collection, string or array.
+
+   The service and exception ids of the exception, for :macro:`KRPC_IS_EXCEPTION`. A call
+   that fails with it returns :macro:`KRPC_ERROR_SERVER`.
 
 
 
-Exception class Error
+.. macro:: KRPC_EXCEPTION_KRPC_DIVIDEBYZEROEXCEPTION
 
-A general error, described by its message.
+   An integer was divided by zero.
+
+   The service and exception ids of the exception, for :macro:`KRPC_IS_EXCEPTION`. A call
+   that fails with it returns :macro:`KRPC_ERROR_SERVER`.
+
+
+
+.. macro:: KRPC_EXCEPTION_KRPC_NOTSUPPORTEDEXCEPTION
+
+   A method was invoked that is not supported.
+
+   The service and exception ids of the exception, for :macro:`KRPC_IS_EXCEPTION`. A call
+   that fails with it returns :macro:`KRPC_ERROR_SERVER`.
+
+
+
+.. macro:: KRPC_EXCEPTION_KRPC_TIMEOUTEXCEPTION
+
+   An operation did not complete in the time allotted to it.
+
+   The service and exception ids of the exception, for :macro:`KRPC_IS_EXCEPTION`. A call
+   that fails with it returns :macro:`KRPC_ERROR_SERVER`.
+
+
+
+.. macro:: KRPC_EXCEPTION_KRPC_OVERFLOWEXCEPTION
+
+   An arithmetic or conversion operation overflowed.
+
+   The service and exception ids of the exception, for :macro:`KRPC_IS_EXCEPTION`. A call
+   that fails with it returns :macro:`KRPC_ERROR_SERVER`.
+
+
+
+.. macro:: KRPC_EXCEPTION_KRPC_OBJECTDESTROYEDEXCEPTION
+
+   The game object that a service object refers to no longer exists,
+   so the object cannot be used. For example, the part it represents
+   was destroyed, or the vessel it belongs to was recovered.
+
+   The service and exception ids of the exception, for :macro:`KRPC_IS_EXCEPTION`. A call
+   that fails with it returns :macro:`KRPC_ERROR_SERVER`.
+
+   .. note::
+
+      See :macro:`KRPC_EXCEPTION_KRPC_OBJECTNOTLOADEDEXCEPTION` for a game object that exists but is not
+      loaded.
+
+.. macro:: KRPC_EXCEPTION_KRPC_OBJECTNOTLOADEDEXCEPTION
+
+   The game object that a service object refers to exists, but is not loaded.
+   For example, the game is loading, or the vessel carrying the part is unloaded.
+
+   The service and exception ids of the exception, for :macro:`KRPC_IS_EXCEPTION`. A call
+   that fails with it returns :macro:`KRPC_ERROR_SERVER`.
+
+   .. note::
+
+      See :macro:`KRPC_EXCEPTION_KRPC_OBJECTDESTROYEDEXCEPTION` for a game object that no longer exists.
+
+.. macro:: KRPC_EXCEPTION_KRPC_UNSUPPORTEDSCENEEXCEPTION
+
+   The procedure is not available in the current game scene.
+
+   The service and exception ids of the exception, for :macro:`KRPC_IS_EXCEPTION`. A call
+   that fails with it returns :macro:`KRPC_ERROR_SERVER`.
+
+
+
+.. macro:: KRPC_EXCEPTION_KRPC_STREAMREMOVEDEXCEPTION
+
+   A stream was removed by the server, e.g. an event that has finished.
+
+   The service and exception ids of the exception, for :macro:`KRPC_IS_EXCEPTION`. A call
+   that fails with it returns :macro:`KRPC_ERROR_SERVER`.
+
+
+
+.. macro:: KRPC_EXCEPTION_KRPC_ERROR
+
+   A general error, described by its message.
+
+   The service and exception ids of the exception, for :macro:`KRPC_IS_EXCEPTION`. A call
+   that fails with it returns :macro:`KRPC_ERROR_SERVER`.
