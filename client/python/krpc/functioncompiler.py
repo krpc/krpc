@@ -31,7 +31,7 @@ from krpc.definiteassignment import (
     nonlocal_names,
 )
 from krpc.encoder import Encoder
-from krpc.error import FunctionCompilationError
+from krpc.error import CompilationError
 from krpc.expressionutils import (
     NUMERIC_CODES,
     NUMERIC_NAMES,
@@ -418,7 +418,7 @@ def _position(node: ast.AST) -> tuple[int, ...]:
     )
 
 
-class _Untyped(FunctionCompilationError):
+class _Untyped(CompilationError):
     """A None or an empty collection with no type to give it."""
 
 
@@ -489,7 +489,7 @@ class _Compiler:
         try:
             return self._compile_function(streamed)
         except RecursionError as exc:
-            raise FunctionCompilationError(
+            raise CompilationError(
                 "Cannot compile expression: expression too deeply nested"
             ) from exc
 
@@ -606,7 +606,7 @@ class _Compiler:
     def _parse(self) -> ast.Lambda | ast.FunctionDef:
         func = self._func
         if not inspect.isfunction(func):
-            raise FunctionCompilationError(
+            raise CompilationError(
                 "Cannot compile %s; only a lambda or a def can be compiled"
                 % type(func).__name__
             )
@@ -615,13 +615,13 @@ class _Compiler:
         try:
             lines, first_line = inspect.getsourcelines(func)
         except (OSError, TypeError) as exc:
-            raise FunctionCompilationError(
+            raise CompilationError(
                 "Cannot get the source code of the function to compile"
             ) from exc
         try:
             tree = ast.parse(textwrap.dedent("".join(lines)))
         except SyntaxError as exc:
-            raise FunctionCompilationError(
+            raise CompilationError(
                 "Cannot parse the source code of the function to compile"
             ) from exc
         # Line numbers in errors count from the start of the file
@@ -632,7 +632,7 @@ class _Compiler:
             if isinstance(n, ast.FunctionDef) and n.name == func.__name__
         ]
         if len(functions) != 1:
-            raise FunctionCompilationError(
+            raise CompilationError(
                 "Cannot identify the definition of the function to compile"
             )
         return functions[0]
@@ -647,11 +647,11 @@ class _Compiler:
             lines, _ = inspect.findsource(code)
             tree = ast.parse("".join(lines))
         except (OSError, TypeError) as exc:
-            raise FunctionCompilationError(
+            raise CompilationError(
                 "Cannot get the source code of the function to compile"
             ) from exc
         except SyntaxError as exc:
-            raise FunctionCompilationError(
+            raise CompilationError(
                 "Cannot parse the source code of the function to compile"
             ) from exc
         arity = code.co_argcount
@@ -679,7 +679,7 @@ class _Compiler:
                     if (node.body.lineno, node.body.col_offset) == start
                 ]
         if len(candidates) != 1:
-            raise FunctionCompilationError(
+            raise CompilationError(
                 "Cannot identify the source code of the lambda to compile"
             )
         return candidates[0]
@@ -4607,7 +4607,7 @@ class _Compiler:
         target: KRPC.Type,
         where: str,
         hint: str,
-    ) -> FunctionCompilationError:
+    ) -> CompilationError:
         message = "no implicit conversion from %s to %s" % (
             NUMERIC_NAMES[source],
             NUMERIC_NAMES[target.code],
@@ -4838,8 +4838,8 @@ class _Compiler:
         self,
         node: ast.AST | None,
         message: str,
-        error: type[FunctionCompilationError] = FunctionCompilationError,
-    ) -> FunctionCompilationError:
+        error: type[CompilationError] = CompilationError,
+    ) -> CompilationError:
         location = ""
         if node is not None and hasattr(node, "lineno"):
             location = " (line %d)" % node.lineno  # pyright: ignore[reportAttributeAccessIssue]

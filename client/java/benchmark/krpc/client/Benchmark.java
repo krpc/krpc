@@ -98,7 +98,7 @@ public final class Benchmark {
 
   /** Something to time, which may throw the way a remote call does. */
   private interface Call {
-    void run() throws RPCException;
+    void run();
   }
 
   private static int port(String name, int fallback) {
@@ -125,7 +125,7 @@ public final class Benchmark {
   }
 
   /** Call for a short while and return the milliseconds one call took. */
-  private static double chunk(Call call) throws RPCException {
+  private static double chunk(Call call) {
     long start = System.nanoTime();
     long calls = 0;
     while (secondsSince(start) < SETTLE_CHUNK_SECONDS) {
@@ -146,7 +146,7 @@ public final class Benchmark {
    * already warmed by the case before it says so within a few chunks. The cost of a call also
    * falls out of the last chunk, which is what sizes the timed loops.
    */
-  private static Settled settle(Call call) throws RPCException {
+  private static Settled settle(Call call) {
     List<Double> chunks = new ArrayList<>();
     chunks.add(chunk(call));
     long start = System.nanoTime();
@@ -179,7 +179,7 @@ public final class Benchmark {
    * Time the call in a loop, several times over, and return milliseconds per call along with
    * whether the case had settled before any of it was measured.
    */
-  private static Timing timedLoop(Call call) throws RPCException {
+  private static Timing timedLoop(Call call) {
     Settled warm = settle(call);
     long iterations = Math.max((long) (TARGET_SECONDS * 1e3 / warm.perCall), 1L);
 
@@ -194,7 +194,7 @@ public final class Benchmark {
     return new Timing(samples, warm.reached);
   }
 
-  private static Case roundTrip(String name, Call call) throws RPCException {
+  private static Case roundTrip(String name, Call call) {
     Timing timing = timedLoop(call);
     return new Case(name, "ms", timing.samples, "calls/s", "", timing.settled);
   }

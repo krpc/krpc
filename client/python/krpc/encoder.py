@@ -114,7 +114,7 @@ class Encoder:
             tuple_msg = KRPC.Tuple()
             tuple_obj = cast(Collection[object], x)
             if len(tuple_obj) != len(typ.value_types):
-                raise EncodingError(
+                raise ValueError(
                     "Tuple has wrong number of elements. "
                     + "Expected %d, got %d." % (len(typ.value_types), len(tuple_obj))
                 )
@@ -126,7 +126,7 @@ class Encoder:
             struct_msg = KRPC.Tuple()
             struct_obj = cast(Collection[object], x)
             if len(struct_obj) != len(typ.field_types):
-                raise EncodingError(
+                raise ValueError(
                     "Struct has wrong number of fields. "
                     + "Expected %d, got %d." % (len(typ.field_types), len(struct_obj))
                 )
@@ -161,7 +161,7 @@ class Encoder:
         """A function that encodes one value at a position of the given type"""
         encode = cls._value_encoder(typ)
         if not typ.nullable:
-            return encode
+            return lambda x: _null_in_slot() if x is None else encode(x)
         # A nullable position carries a presence bool before its value, and holds nothing
         # else when that bool is false
         present = cls._encode_value(True, cls._types.bool_type)
@@ -195,6 +195,11 @@ class Encoder:
         if encode is None:
             raise EncodingError("Invalid type")
         return encode(value)
+
+
+def _null_in_slot() -> bytes:
+    """Reject a null at a position that cannot hold one"""
+    raise ValueError("A null at a position that cannot hold one")
 
 
 class _ValueEncoder:
@@ -234,13 +239,13 @@ class _ValueEncoder:
     @classmethod
     def encode_uint32(cls, value: int) -> bytes:
         if value < 0:
-            raise EncodingError("Value must be non-negative, got %d" % value)
+            raise ValueError("Value must be non-negative, got %d" % value)
         return cls._encode_varint(value)
 
     @classmethod
     def encode_uint64(cls, value: int) -> bytes:
         if value < 0:
-            raise EncodingError("Value must be non-negative, got %d" % value)
+            raise ValueError("Value must be non-negative, got %d" % value)
         return cls._encode_varint(value)
 
     @classmethod

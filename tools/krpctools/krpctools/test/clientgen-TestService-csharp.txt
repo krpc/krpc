@@ -129,8 +129,8 @@ namespace KRPC.Client.Services.TestService
 
         internal static void AddExceptionTypes (global::KRPC.Client.IConnection serverConnection)
         {
-            serverConnection.AddExceptionType ("TestService", "CustomException", typeof (CustomException));
-            serverConnection.AddExceptionType ("TestService", "DeprecatedException", typeof (DeprecatedException));
+            serverConnection.AddExceptionType ("TestService", "CustomException", message => new CustomException (message));
+            serverConnection.AddExceptionType ("TestService", "DeprecatedException", message => new DeprecatedException (message));
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "AddMultipleValues", typeof(TypeSpecs))]
@@ -1205,7 +1205,7 @@ namespace KRPC.Client.Services.TestService
         /// </summary>
         /// <remarks>
         /// Links to each kind of member: <see cref="global::KRPC.Client.Services.TestService.Service" />, <see cref="global::KRPC.Client.Services.TestService.TestClass" />,
-        /// <see cref="global::KRPC.Client.Services.TestService.TestEnum" />, <see cref="global::KRPC.Client.Services.TestService.TestStruct" />, <see cref="global::KRPC.Client.Services.KRPC.InvalidOperationException" />,
+        /// <see cref="global::KRPC.Client.Services.TestService.TestEnum" />, <see cref="global::KRPC.Client.Services.TestService.TestStruct" />, <see cref="global::System.InvalidOperationException" />,
         /// <see cref="global::KRPC.Client.Services.TestService.Service.FloatToString" />, <see cref="global::KRPC.Client.Services.TestService.Service.StringProperty" />,
         /// <see cref="global::KRPC.Client.Services.TestService.Service.StringPropertyPrivateGet" />, <see cref="global::KRPC.Client.Services.TestService.TestClass.FloatToString" />,
         /// <see cref="global::KRPC.Client.Services.TestService.TestClass.StaticMethod" />, <see cref="global::KRPC.Client.Services.TestService.TestClass.IntProperty" />,
@@ -2340,7 +2340,7 @@ namespace KRPC.Client.Services.TestService
     }
 
     [Serializable]
-    public class CustomException : global::KRPC.Client.RPCException
+    public class CustomException : global::KRPC.Client.ServerException
     {
         /// <summary>
         /// Construct an CustomException with no message.
@@ -2378,7 +2378,7 @@ namespace KRPC.Client.Services.TestService
     /// </summary>
     [Serializable]
     [global::System.Obsolete ("Use CustomException instead.")]
-    public class DeprecatedException : global::KRPC.Client.RPCException
+    public class DeprecatedException : global::KRPC.Client.ServerException
     {
         /// <summary>
         /// Construct an DeprecatedException with no message.

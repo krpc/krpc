@@ -1,6 +1,7 @@
 from __future__ import annotations
 from typing import Tuple, Set, Dict, List, NamedTuple, Optional, TYPE_CHECKING
 import krpc.connection
+import krpc.error
 import krpc.limits
 from krpc.declarations import DeclaredClass, DeclaredObject, declaration_error as _declaration, register as _register
 from krpc.event import Event
@@ -43,7 +44,7 @@ deprecate_attribute(ServiceStruct, "field", "DeprecatedService.ServiceStruct.fie
 
 
 @deprecated("Use TestService instead.")
-class ServiceException(RuntimeError):
+class ServiceException(krpc.error.ServerError):
     """
     Deprecated. Use TestService instead.
 

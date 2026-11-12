@@ -1,6 +1,7 @@
 from __future__ import annotations
 from typing import Tuple, Set, Dict, List, NamedTuple, Optional, TYPE_CHECKING
 import krpc.connection
+import krpc.error
 import krpc.limits
 from krpc.declarations import DeclaredClass, DeclaredObject, declaration_error as _declaration, register as _register
 from krpc.event import Event
@@ -173,12 +174,12 @@ class TestNullableStruct(NamedTuple):
     nullable_object_field: Optional[TestClass]
 
 
-class CustomException(RuntimeError):
+class CustomException(krpc.error.ServerError):
     pass
 
 
 @deprecated("Use CustomException instead.")
-class DeprecatedException(RuntimeError):
+class DeprecatedException(krpc.error.ServerError):
     """
     Deprecated. Use CustomException instead.
 

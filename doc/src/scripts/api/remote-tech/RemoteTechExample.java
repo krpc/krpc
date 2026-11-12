@@ -1,5 +1,4 @@
 import krpc.client.Connection;
-import krpc.client.RPCException;
 import krpc.client.services.RemoteTech;
 import krpc.client.services.RemoteTech.Antenna;
 import krpc.client.services.RemoteTech.Comms;
@@ -7,10 +6,9 @@ import krpc.client.services.SpaceCenter;
 import krpc.client.services.SpaceCenter.Part;
 import krpc.client.services.SpaceCenter.Vessel;
 
-import java.io.IOException;
 
 public class RemoteTechExample {
-    public static void main(String[] args) throws IOException, RPCException {
+    public static void main(String[] args) {
         Connection connection = Connection.newInstance("RemoteTech Example");
         SpaceCenter sc = SpaceCenter.newInstance(connection);
         RemoteTech rt = RemoteTech.newInstance(connection);

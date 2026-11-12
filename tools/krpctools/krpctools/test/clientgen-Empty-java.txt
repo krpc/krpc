@@ -11,7 +11,6 @@ import krpc.client.RemoteObject;
 import krpc.client.RemoteService;
 import krpc.client.RemoteStruct;
 import krpc.client.RPCInfo;
-import krpc.client.RPCException;
 import krpc.client.Types;
 
 // Generated code references its own deprecated members (e.g. when registering

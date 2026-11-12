@@ -1,15 +1,13 @@
 import krpc.client.Connection;
-import krpc.client.RPCException;
 import krpc.client.services.SpaceCenter;
 import krpc.client.services.SpaceCenter.Part;
 import krpc.client.services.SpaceCenter.ReferenceFrame;
 
 import org.javatuples.Triplet;
 
-import java.io.IOException;
 
 public class RaycastExample {
-    public static void main(String[] args) throws IOException, RPCException {
+    public static void main(String[] args) {
         Connection connection = Connection.newInstance("Raycast Example");
         SpaceCenter sc = SpaceCenter.newInstance(connection);
         Part part = sc.getActiveVessel().getParts().getRoot();

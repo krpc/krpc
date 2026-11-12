@@ -1,15 +1,13 @@
 import krpc.client.Connection;
-import krpc.client.RPCException;
 import krpc.client.services.InfernalRobotics;
 import krpc.client.services.InfernalRobotics.Servo;
 import krpc.client.services.InfernalRobotics.ServoGroup;
 import krpc.client.services.SpaceCenter;
 import krpc.client.services.SpaceCenter.Vessel;
 
-import java.io.IOException;
 
 public class InfernalRoboticsExample {
-    public static void main(String[] args) throws IOException, RPCException, InterruptedException {
+    public static void main(String[] args) throws InterruptedException {
         Connection connection = Connection.newInstance("InfernalRobotics Example");
         Vessel vessel = SpaceCenter.newInstance(connection).getActiveVessel();
         InfernalRobotics ir = InfernalRobotics.newInstance(connection);

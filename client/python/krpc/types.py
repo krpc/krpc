@@ -14,6 +14,7 @@ from typing import (
 )
 
 import krpc.schema.KRPC_pb2 as KRPC
+from krpc.error import ServerError, StreamError
 
 if TYPE_CHECKING:
     from typing_extensions import deprecated as deprecated
@@ -62,8 +63,8 @@ MESSAGE_TYPES = {
 }
 
 # The builtin each .NET exception a server maps onto a kRPC exception stands for, keyed by the
-# exception's mapped type. The kRPC exception is a subclass of the builtin. One without a
-# builtin is a subclass of RuntimeError
+# exception's mapped type. The kRPC exception's only base is the builtin. One without a
+# builtin is a subclass of ServerError
 NATIVE_EXCEPTIONS: dict[str, type[Exception]] = {
     "System.InvalidOperationException": RuntimeError,
     "System.ArgumentException": ValueError,
@@ -80,8 +81,12 @@ NATIVE_EXCEPTIONS: dict[str, type[Exception]] = {
 
 
 def native_exception(mapped_type: str) -> type[Exception]:
-    """The builtin a kRPC exception with the given mapped type is a subclass of"""
-    return NATIVE_EXCEPTIONS.get(mapped_type, RuntimeError)
+    """The base of a kRPC exception with the given mapped type"""
+    return NATIVE_EXCEPTIONS.get(mapped_type, ServerError)
+
+
+# The server removes a stream with this exception, which is raised as the client's StreamError
+STREAM_REMOVED = ("KRPC", "StreamRemovedException")
 
 
 # Every type code a type object can be built for. A definition from a newer server may name
@@ -877,6 +882,8 @@ def _create_struct_type(
 def _create_exception_type(
     service_name: str, class_name: str, doc: str | None, mapped_type: str
 ) -> type[Exception]:
+    if (service_name, class_name) == STREAM_REMOVED:
+        return StreamError
     return type(
         str(class_name),
         (native_exception(mapped_type),),

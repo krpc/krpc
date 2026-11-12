@@ -1,16 +1,13 @@
 import krpc.client.Connection;
-import krpc.client.RPCException;
 import krpc.client.services.SpaceCenter;
 import krpc.client.services.SpaceCenter.ReferenceFrame;
 import krpc.client.services.SpaceCenter.Vessel;
 
 import org.javatuples.Triplet;
 
-import java.io.IOException;
 
 public class VesselSpeed {
-    public static void main(String[] args)
-        throws IOException, RPCException, InterruptedException {
+    public static void main(String[] args) throws InterruptedException {
         Connection connection = Connection.newInstance("Vessel speed");
         SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
         Vessel vessel = spaceCenter.getActiveVessel();

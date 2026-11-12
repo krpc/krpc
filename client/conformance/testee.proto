@@ -669,21 +669,26 @@ message Object {
 
 message Error {
   enum Kind {
+    reserved 6;
+    reserved "TIMEOUT";
     KIND_UNSPECIFIED = 0;
-    RPC = 1;
+    // An error the server reports, with no native type in the language.
+    SERVER = 1;
     STREAM = 2;
     CONNECTION = 3;
     ENCODING = 4;
+    // The language's own argument error.
     ARGUMENT = 5;
-    TIMEOUT = 6;
     // The client offers no way to do what the command asks, such as a SHOULD it does not
     // implement.
     UNSUPPORTED = 7;
     // The error a callback raised for its fail_fatally behavior.
     FATAL = 8;
+    // The language's own error for a thread interrupted in a call or a wait.
+    INTERRUPT = 9;
   }
   Kind kind = 1;
-  // The service and name of the server exception, for an RPC error the client has a type for.
+  // The service and name of the server exception, for a server error the client has a type for.
   string service = 2;
   string name = 3;
   string message = 4;

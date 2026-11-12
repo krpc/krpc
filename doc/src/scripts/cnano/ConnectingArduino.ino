@@ -13,7 +13,7 @@ void setup() {
   // Set up communication with the server, retrying while part of an earlier session's message
   // is on the line
   krpc_error_t error;
-  while ((error = krpc_connect(conn, "Arduino Example")) == KRPC_ERROR_CONNECTION_FAILED)
+  while ((error = krpc_connect(conn, "Arduino Example")) == KRPC_ERROR_CONNECTION)
     delay(3500);
   if (error != KRPC_OK)
     return;

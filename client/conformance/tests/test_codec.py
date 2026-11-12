@@ -204,14 +204,11 @@ OUT_OF_RANGE = {
 @pytest.mark.parametrize("typ", list(OUT_OF_RANGE))
 def test_out_of_range(connected, typ):
     """In a dynamically typed language, encoding an integer outside the range of its type
-    raises the encoding or argument error. This includes a negative value for an unsigned
-    type."""
+    raises the argument error. This includes a negative value for an unsigned type."""
     for value in OUT_OF_RANGE[typ]:
         with pytest.raises(TesteeError) as info:
             connected.encode(typ, value)
-        assert_error_kind(
-            connected, info.value.error, pb.Error.ENCODING, pb.Error.ARGUMENT
-        )
+        assert_error_kind(connected, info.value.error, pb.Error.ARGUMENT)
 
 
 section("Strings and Bytes")
@@ -473,7 +470,7 @@ def test_extra_items(connected, kind):
     """An encoded tuple or structure with more items than its type decodes, and the extra
     items are ignored. In a
     dynamically typed language, encoding a tuple or structure value with more items than
-    its type raises the encoding or argument error."""
+    its type raises the argument error."""
     typ, data, decoded, value = EXTRA_ITEMS[kind]
     result = connected.decode(typ, bytes.fromhex(data))
     if isinstance(decoded, tuple):
@@ -482,9 +479,7 @@ def test_extra_items(connected, kind):
     if connected.has_profile("dynamic"):
         with pytest.raises(TesteeError) as info:
             connected.encode(typ, value)
-        assert_error_kind(
-            connected, info.value.error, pb.Error.ENCODING, pb.Error.ARGUMENT
-        )
+        assert_error_kind(connected, info.value.error, pb.Error.ARGUMENT)
 
 
 # Encodings with too few items, and a value with too few
@@ -508,7 +503,7 @@ TOO_FEW_ITEMS = {
 def test_too_few_items(connected, kind):
     """Decoding a tuple or structure with fewer items than its type raises the encoding
     error. In a dynamically typed language, encoding a tuple or structure value with too
-    few items raises the encoding or argument error."""
+    few items raises the argument error."""
     typ, encodings, value = TOO_FEW_ITEMS[kind]
     for data in encodings:
         with pytest.raises(TesteeError) as info:
@@ -517,9 +512,7 @@ def test_too_few_items(connected, kind):
     if connected.has_profile("dynamic"):
         with pytest.raises(TesteeError) as info:
             connected.encode(typ, value)
-        assert_error_kind(
-            connected, info.value.error, pb.Error.ENCODING, pb.Error.ARGUMENT
-        )
+        assert_error_kind(connected, info.value.error, pb.Error.ARGUMENT)
 
 
 section("Null")

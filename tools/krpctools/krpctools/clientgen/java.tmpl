@@ -33,7 +33,6 @@ import krpc.client.RemoteObject;
 import krpc.client.RemoteService;
 import krpc.client.RemoteStruct;
 import krpc.client.RPCInfo;
-import krpc.client.RPCException;
 import krpc.client.Types;
 
 // Generated code references its own deprecated members (e.g. when registering
@@ -52,13 +51,13 @@ import krpc.client.Types;
         addExceptionTypes(connection);
         {% endif %}
     }
-    {% for exception_name,exception in exceptions.items() %}
+    {% for exception_name,exception in exceptions.items() if not exception.alias %}
 
 {% if exception.documentation %}{{ exception.documentation | indent(width=4) }}
 {% endif %}
 {% if exception.deprecated %}    @Deprecated
 {% endif %}
-    public static class {{ exception_name }} extends krpc.client.RPCException {
+    public static class {{ exception_name }} extends krpc.client.ServerException {
         private static final long serialVersionUID = {{ exception.serial_version_uid }}L;
 
         public {{ exception_name }}(String message) {
@@ -73,7 +72,7 @@ import krpc.client.Types;
 
     private void addExceptionTypes(Connection connection) {
         {% for exception_name,exception in exceptions.items() %}
-        connection.addExceptionType("{{ service_name }}", "{{ exception_name }}", {{ exception.native or exception_name }}.class);
+        connection.addExceptionType("{{ service_name }}", "{{ exception_name }}", {{ exception.alias or exception_name }}.class);
         {% endfor %}
     }
     {% for procedure_name,procedure in procedures.items()|list + properties.items()|list %}
@@ -84,7 +83,7 @@ import krpc.client.Types;
 {% endif %}
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "{{ service_name }}", procedure = "{{ procedure.remote_name }}", types = _Types.class)
-    public {{ procedure.return_type.name }} {{ procedure_name }}({{ sig_parameters(procedure.parameters) }}) throws RPCException {
+    public {{ procedure.return_type.name }} {{ procedure_name }}({{ sig_parameters(procedure.parameters) }}) {
 {% if procedure.parameters | length > 0 %}{{ args(procedure.parameters) | indent(width=8) }}
 {% endif %}
 {{ call(service_name, procedure.remote_name, procedure.return_type.name != 'void', procedure.parameters | length > 0) | indent(width=8) }}
@@ -282,7 +281,7 @@ import krpc.client.Types;
 {% endif %}
         @SuppressWarnings({ "unchecked" })
         @RPCInfo(service = "{{ service_name }}", procedure = "{{ method.remote_name }}", types = _Types.class)
-        public {{ method.return_type.name }} {{ method_name }}({{ sig_parameters(method.parameters) }}) throws RPCException
+        public {{ method.return_type.name }} {{ method_name }}({{ sig_parameters(method.parameters) }})
         {
 {{ args([{'name': 'this', 'type': {'name': service_name+'.'+class_name, 'spec': 'krpc.client.Types.createClass("'+service_name+'", "'+class_name+'")'}}] + method.parameters) | indent(width=12) }}
 {{ call(service_name, method.remote_name, method.return_type.name != 'void', true) | indent(width=12) }}
@@ -298,7 +297,7 @@ import krpc.client.Types;
 {% endif %}
         @SuppressWarnings({ "unchecked" })
         @RPCInfo(service = "{{ service_name }}", procedure = "{{ method.remote_name }}", types = _Types.class)
-        public static {{ method.return_type.name }} {{ method_name }}({{ sig_parameters([{'type': {'name': 'Connection'}, 'name': 'connection'}] + method.parameters) }}) throws RPCException
+        public static {{ method.return_type.name }} {{ method_name }}({{ sig_parameters([{'type': {'name': 'Connection'}, 'name': 'connection'}] + method.parameters) }})
         {
 {% if method.parameters | length > 0 %}{{ args(method.parameters) | indent(width=12) }}
 {% endif %}
@@ -337,7 +336,7 @@ import krpc.client.Types;
 {% if method.deprecated %}            @Deprecated
 {% endif %}
             @RPCInfo(service = "{{ service_name }}", procedure = "{{ method.remote_name }}", types = _Types.class)
-            public {{ method.return_type.name }} {{ method_name }}({{ sig_parameters(method.parameters) }}) throws RPCException
+            public {{ method.return_type.name }} {{ method_name }}({{ sig_parameters(method.parameters) }})
             {
                 {{ 'return ' if method.return_type.name != 'void' else '' }}krpc.client.services.{{ service_name }}.{{ class_name }}.{{ method_name }}({{ (['connection'] + method.parameters | map(attribute='name') | list) | join(', ') }});
             }

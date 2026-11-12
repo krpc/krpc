@@ -5,6 +5,7 @@ local utils = require 'pl.utils'
 local compat = require 'krpc.compat'
 local protobuf = require 'krpc.protobuf'
 local Types = require 'krpc.types'
+local errors = require 'krpc.error'
 
 local decoder = {}
 
@@ -95,12 +96,12 @@ local function _decode_items(data, tag)
   local length = data:len()
   while position <= length do
     if data:byte(position) ~= tag then
-      error('Unexpected field in an encoded collection')
+      error('Unexpected field in an encoded collection', 0)
     end
     count = count + 1
     items[count], position = _unpack(data, '*s@', position + 1)
     if position == nil then
-      error('Truncated encoded collection')
+      error('Truncated encoded collection', 0)
     end
   end
   return items, count
@@ -122,13 +123,13 @@ local function _decode_entry(data)
     local field
     field, position = _unpack(data, '*s@', position + 1)
     if position == nil then
-      error('Truncated encoded dictionary entry')
+      error('Truncated encoded dictionary entry', 0)
     elseif tag == _ENTRY_KEY then
       key = field
     elseif tag == _ENTRY_VALUE then
       value = field
     else
-      error('Unexpected field in an encoded dictionary entry')
+      error('Unexpected field in an encoded dictionary entry', 0)
     end
   end
   return key, value
@@ -146,7 +147,7 @@ local function _decode_item(data, typ)
   end
   -- The presence bool is one byte, as a bool value always is
   if data:len() == 0 then
-    error('A nullable value carries no presence bool')
+    error('A nullable value carries no presence bool', 0)
   end
   if not _value_decoders[Types.BOOL](data:sub(1, 1)) then
     return Types.none
@@ -203,7 +204,7 @@ function _decode(data, typ)
     local items, count = _decode_items(data, _ITEMS)
     local field_types = typ.field_types
     if count < #field_types then
-      error('Value for ' .. typ._struct_name .. ' does not have all of its fields')
+      error('Value for ' .. typ._struct_name .. ' does not have all of its fields', 0)
     end
     local values = {}
     for i = 1, #field_types do
@@ -213,13 +214,22 @@ function _decode(data, typ)
   elseif typ:is_a(Types.MessageType) then
     return _decode_message(typ.message_type, data)
   end
-  error('Cannot decode type ' .. tostring(typ))
+  error('Cannot decode type ' .. tostring(typ), 0)
+end
+
+-- Decode a value, raising an EncodingError for data that is not a value of the type
+local function _decode_value(data, typ)
+  local ok, value = pcall(_decode, data, typ)
+  if not ok then
+    error(errors.EncodingError('Failed to decode a value of type ' .. tostring(typ), value), 0)
+  end
+  return value
 end
 
 --- Decode a value of the given type, with the client's protobuf state swapped in once for the
---- whole of it
+--- whole of it. Raises an EncodingError for data that is not a value of the type.
 function decoder.decode(data, typ)
-  return protobuf.call(_decode, data, typ)
+  return protobuf.call(_decode_value, data, typ)
 end
 
 -- The Message, and the value of the one result of the response it holds when the given type is
@@ -240,7 +250,7 @@ local function _decode_message_and_value(data, typ)
   if typ == nil or result.error ~= nil or result.is_null then
     return message
   end
-  return message, _decode(result.value, typ)
+  return message, _decode_value(result.value, typ)
 end
 
 --- Decode a Message and the value of the result of the response it holds, with the client's

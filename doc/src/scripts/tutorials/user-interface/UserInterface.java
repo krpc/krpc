@@ -1,7 +1,5 @@
 import krpc.client.Connection;
-import krpc.client.RPCException;
 import krpc.client.Stream;
-import krpc.client.StreamException;
 import krpc.client.services.SpaceCenter;
 import krpc.client.services.SpaceCenter.Vessel;
 import krpc.client.services.StdLib;
@@ -16,11 +14,9 @@ import krpc.client.services.UI.Text;
 
 import org.javatuples.Pair;
 
-import java.io.IOException;
 
 public class UserInterface {
-    public static void main(String[] args)
-        throws IOException, RPCException, InterruptedException, StreamException {
+    public static void main(String[] args) throws InterruptedException {
         Connection connection = Connection.newInstance("User Interface Example");
         SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
         UI ui = UI.newInstance(connection);

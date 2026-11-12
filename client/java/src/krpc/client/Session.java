@@ -8,6 +8,7 @@ import java.nio.channels.ClosedSelectorException;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -152,15 +153,14 @@ class Session {
    * Send a request and wait for its response. Throws the connection error if the connection has
    * failed or fails before the response arrives.
    */
-  KRPC.Response call(KRPC.Request.Builder request, boolean addsStream)
-      throws ConnectionException {
+  KRPC.Response call(KRPC.Request.Builder request, boolean addsStream) {
     Slot slot = new Slot(addsStream, false);
     boolean isReader;
     // The slot is added before the request is written, so a fast response finds it. A caller that
     // finds no thread reading becomes the reader in the same hold of the lock.
     synchronized (stateLock) {
       if (error != null) {
-        throw error;
+        throw error.copy();
       }
       request.setId(nextId);
       pending.put(nextId, slot);
@@ -185,7 +185,10 @@ class Session {
         slot.abandoned = true;
       }
       Thread.currentThread().interrupt();
-      throw new ConnectionException("Interrupted while waiting for a response", exn);
+      CancellationException cancelled =
+          new CancellationException("Interrupted while waiting for a response");
+      cancelled.initCause(exn);
+      throw cancelled;
     } finally {
       if (!returned) {
         synchronized (stateLock) {
@@ -197,7 +200,7 @@ class Session {
       }
     }
     if (slot.error != null) {
-      throw slot.error;
+      throw slot.error.copy();
     }
     return slot.response;
   }

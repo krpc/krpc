@@ -5,6 +5,84 @@ The internal design of the Python client. This page builds on the :doc:`shared c
 </client-design>` and the :doc:`client specification </client-spec>`. Usage is in
 the :doc:`Python guide </python>`. Paths are relative to ``client/python/``.
 
+Services and Declarations
+-------------------------
+
+Every service is built at connect from ``GetServices``, by ``create_service``. The client then has
+the members of the server it connects to, including those another mod adds to a shipped class.
+Each client has its own classes, in its ``Types``, so a static method is a closure over its client.
+
+* A connect registers the types of every service, then builds the services. The types come first as
+  a procedure can use a type from any service. A parameter's default value can also be an
+  enumeration value, which cannot be decoded until that enumeration is registered.
+* The client clears the type identifiers from the ``Type`` messages in ``GetServices``. It names a
+  type by its service and name, and keys its types on the ``Type`` messages it builds from them.
+* ``clientgen`` and ``python.tmpl`` in ``krpctools`` generate a module per service. Its
+  enumerations, structures and exceptions are real classes, and its classes and services are
+  declarations whose members raise ``TypeError``. ``clientgen`` runs the client without the modules.
+* The modules of the core's services are in ``krpc/services/``, and those of the KSP services in
+  ``krpc/ksp/``. The paths match the planned split into a base package and a package per game, so
+  the split changes no import. ``import krpc`` imports no module.
+* A module registers its enumerations, structures and exceptions in ``krpc/declarations.py`` on
+  import. A later registration replaces an earlier one.
+* At connect, a client uses a generated class where the server's definition matches: an enumeration
+  on its names and values, a structure on its field names in order, an exception on its name and
+  the builtin it derives from. These classes hold no client, so every client shares them. A
+  generated class is never changed to fit a server, as every client shares it.
+* The connection type picks the module of each service it declares, from the ``<Service>Connection``
+  bases in its MRO, and the first wins. Any other service takes the registered classes. A module
+  generated for a newer server then applies only to the connections typed with it.
+* Otherwise the client builds its own class. A value of the module's enumeration converts to the
+  built one by its number, as the other clients send it, since a client and a server of different
+  releases are not supported. A structure decodes using the field types the server declares in
+  either case. ``except`` compares exception classes by identity, so only a shared exception class
+  catches a server error.
+* A built class does not derive from its declaration, which would show members a server lacks.
+  ``DeclaredClass``, the metaclass of a declaration, compares the service and class names for
+  ``isinstance`` and ``issubclass``.
+* Python has no declaration merging, so a module cannot add its service to ``Connection``. It
+  declares ``<Service>Connection``, a subclass of ``Connection`` with the service as an attribute. A
+  program combines them, and ``connect[T]`` builds the connection as ``T``.
+  ``krpc.ksp.KSPConnection`` combines the core and KSP services.
+* ``Connection`` declares no service, only a ``__getattr__`` returning ``Any`` for type checkers.
+  The core services, ``KRPC`` and ``StdLib``, have connection types like the others, so a module
+  generated for a newer server replaces them the same way. A program with a connection type that
+  lacks a service then type checks, and a misspelled service is not reported.
+* The client's own calls to ``KRPC`` go through ``Connection._krpc``, a property typed with the
+  shipped declaration.
+* ``connect`` with no connection type connects with ``KSPConnection``, so a program written for KSP
+  type checks with no connection type. It imports ``krpc.ksp`` on the first connect, which keeps
+  ``import krpc`` free of generated modules.
+
+Server Side Functions
+---------------------
+
+``compile``, ``run``, ``add_stream`` and ``add_event`` take a Python function.
+``krpc/functioncompiler.py`` and ``krpc/functionstatements.py`` compile its source, read with
+``inspect`` and ``ast``, into a ``KRPC.Expression``.
+
+A function passed directly to ``run`` or ``add_stream`` compiles on every call, as a cached function
+would keep the values it first captured.
+
+Deprecated Members
+------------------
+
+A warning fires where a program reads a member, which keeps the cost off other members and off the
+values the client decodes:
+
+* A deprecated enumeration value or structure field is a descriptor on the class, in place of the
+  member or the ``namedtuple`` field getter. The client's encoder and decoder read neither by name,
+  so a value from the server gives no warning. A generated module sets these on its own classes.
+* A deprecated class, enumeration, structure or exception is a descriptor on the service class, in
+  place of the type.
+
+A read is the use that warns for a structure field, as the decoder and a program build a structure
+through one constructor.
+
+The generated modules take the ``deprecated`` decorator from ``krpc.types``. A type checker sees the
+one in ``typing_extensions``. At run time it only records the message, as the built service warns,
+and the client depends on no typing package.
+
 Ownership
 ---------
 
@@ -66,84 +144,6 @@ The threads follow the :doc:`shared design </client-design>`, and are named
 * During a close, another thread can hold a stream's condition. A ``krpc-waker`` thread then wakes
   the threads waiting on it, once the condition is free.
 
-Services and Declarations
--------------------------
-
-Every service is built at connect from ``GetServices``, by ``create_service``. The client then has
-the members of the server it connects to, including those another mod adds to a shipped class.
-Each client has its own classes, in its ``Types``, so a static method is a closure over its client.
-
-* A connect registers the types of every service, then builds the services. The types come first as
-  a procedure can use a type from any service. A parameter's default value can also be an
-  enumeration value, which cannot be decoded until that enumeration is registered.
-* The client clears the type identifiers from the ``Type`` messages in ``GetServices``. It names a
-  type by its service and name, and keys its types on the ``Type`` messages it builds from them.
-* ``clientgen`` and ``python.tmpl`` in ``krpctools`` generate a module per service. Its
-  enumerations, structures and exceptions are real classes, and its classes and services are
-  declarations whose members raise ``TypeError``. ``clientgen`` runs the client without the modules.
-* The modules of the core's services are in ``krpc/services/``, and those of the KSP services in
-  ``krpc/ksp/``. The paths match the planned split into a base package and a package per game, so
-  the split changes no import. ``import krpc`` imports no module.
-* A module registers its enumerations, structures and exceptions in ``krpc/declarations.py`` on
-  import. A later registration replaces an earlier one.
-* At connect, a client uses a generated class where the server's definition matches: an enumeration
-  on its names and values, a structure on its field names in order, an exception on its name and
-  the builtin it derives from. These classes hold no client, so every client shares them. A
-  generated class is never changed to fit a server, as every client shares it.
-* The connection type picks the module of each service it declares, from the ``<Service>Connection``
-  bases in its MRO, and the first wins. Any other service takes the registered classes. A module
-  generated for a newer server then applies only to the connections typed with it.
-* Otherwise the client builds its own class. A value of the module's enumeration converts to the
-  built one by its number, as the other clients send it, since a client and a server of different
-  releases are not supported. A structure decodes using the field types the server declares in
-  either case. ``except`` compares exception classes by identity, so only a shared exception class
-  catches a server error.
-* A built class does not derive from its declaration, which would show members a server lacks.
-  ``DeclaredClass``, the metaclass of a declaration, compares the service and class names for
-  ``isinstance`` and ``issubclass``.
-* Python has no declaration merging, so a module cannot add its service to ``Connection``. It
-  declares ``<Service>Connection``, a subclass of ``Connection`` with the service as an attribute. A
-  program combines them, and ``connect[T]`` builds the connection as ``T``.
-  ``krpc.ksp.KSPConnection`` combines the core and KSP services.
-* ``Connection`` declares no service, only a ``__getattr__`` returning ``Any`` for type checkers.
-  The core services, ``KRPC`` and ``StdLib``, have connection types like the others, so a module
-  generated for a newer server replaces them the same way. A program with a connection type that
-  lacks a service then type checks, and a misspelled service is not reported.
-* The client's own calls to ``KRPC`` go through ``Connection._krpc``, a property typed with the
-  shipped declaration.
-* ``connect`` with no connection type connects with ``KSPConnection``, so a program written for KSP
-  type checks with no connection type. It imports ``krpc.ksp`` on the first connect, which keeps
-  ``import krpc`` free of generated modules.
-
-Deprecated Members
-------------------
-
-A warning fires where a program reads a member, which keeps the cost off other members and off the
-values the client decodes:
-
-* A deprecated enumeration value or structure field is a descriptor on the class, in place of the
-  member or the ``namedtuple`` field getter. The client's encoder and decoder read neither by name,
-  so a value from the server gives no warning. A generated module sets these on its own classes.
-* A deprecated class, enumeration, structure or exception is a descriptor on the service class, in
-  place of the type.
-
-A read is the use that warns for a structure field, as the decoder and a program build a structure
-through one constructor.
-
-The generated modules take the ``deprecated`` decorator from ``krpc.types``. A type checker sees the
-one in ``typing_extensions``. At run time it only records the message, as the built service warns,
-and the client depends on no typing package.
-
-Server Side Functions
----------------------
-
-``compile``, ``run``, ``add_stream`` and ``add_event`` take a Python function.
-``krpc/functioncompiler.py`` and ``krpc/functionstatements.py`` compile its source, read with
-``inspect`` and ``ast``, into a ``KRPC.Expression``.
-
-A function passed directly to ``run`` or ``add_stream`` compiles on every call, as a cached function
-would keep the values it first captured.
-
 Transports
 ----------
 
@@ -165,12 +165,17 @@ Mapping the Spec to Python
      - Python
    * - Closing a connection
      - ``Connection.close()``, or the end of a ``with`` block
-   * - Connection, stream, encoding error
-     - ``ConnectionError``, ``StreamError``, ``EncodingError`` in ``krpc.error``
+   * - Remote error, and the connection, stream and encoding errors
+     - ``RemoteError``, a ``RuntimeError``, and ``ConnectionError``, ``StreamError``,
+       ``EncodingError`` deriving it, in ``krpc.error``. ``ConnectionError`` shadows the builtin,
+       so every client has one name for it. A program meets it only through ``krpc``
    * - Server error with no mapped type
-     - ``krpc.error.RPCError``
+     - ``krpc.error.ServerError``, the base of each exception class a service declares
    * - Server exception with a mapped type
-     - A class on the service, deriving from the builtin in ``types.NATIVE_EXCEPTIONS``
+     - A class on the service, whose only base is the builtin in ``types.NATIVE_EXCEPTIONS``.
+       The function compiler finds the server exception from the class, so each keeps its own
+   * - Argument error
+     - ``ValueError``, or ``TypeError`` for a value of the wrong type
    * - Null object, nullable value
      - ``None``
    * - Member names

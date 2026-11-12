@@ -1,15 +1,11 @@
 import krpc.client.Connection;
-import krpc.client.RPCException;
 import krpc.client.Stream;
-import krpc.client.StreamException;
 import krpc.client.services.SpaceCenter;
 import krpc.client.services.SpaceCenter.Part;
 
-import java.io.IOException;
 
 public class EndCallback {
-  public static void main(String[] args)
-      throws IOException, RPCException, StreamException, InterruptedException {
+  public static void main(String[] args) throws InterruptedException {
     try (Connection connection = Connection.newInstance()) {
       SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
       Part part = spaceCenter.getActiveVessel().getParts().getRoot();

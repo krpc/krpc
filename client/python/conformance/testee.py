@@ -859,24 +859,25 @@ def to_error(exn: Exception) -> pb.Error:
     error = pb.Error(message=message)
     if exn.__cause__ is not None:
         error.cause = f"{type(exn.__cause__).__name__}: {exn.__cause__}"
-    error.native_types.extend(
-        cls.__name__
-        for cls in type(exn).__mro__
-        if cls.__module__ == "builtins" and cls not in (object, BaseException)
-    )
+    # The builtin types by name, and the client's error types by qualified name
+    for cls in type(exn).__mro__:
+        if cls.__module__ == "builtins" and cls not in (object, BaseException):
+            error.native_types.append(cls.__name__)
+        elif cls.__module__ == "krpc.error":
+            error.native_types.append(f"krpc.error.{cls.__name__}")
     service = getattr(type(exn), "_service_name", None)
     if isinstance(exn, Unsupported):
         error.kind = pb.Error.UNSUPPORTED
     elif service is not None:
-        error.kind = pb.Error.RPC
+        error.kind = pb.Error.SERVER
         error.service = service
         error.name = type(exn).__name__
     elif isinstance(exn, krpc.error.ConnectionError):
         error.kind = pb.Error.CONNECTION
         error.status = exn.status or ""
         error.reason = exn.reason or ""
-    elif isinstance(exn, krpc.error.RPCError):
-        error.kind = pb.Error.RPC
+    elif isinstance(exn, krpc.error.ServerError):
+        error.kind = pb.Error.SERVER
     elif isinstance(exn, krpc.error.StreamError):
         error.kind = pb.Error.STREAM
     elif isinstance(exn, krpc.error.EncodingError):

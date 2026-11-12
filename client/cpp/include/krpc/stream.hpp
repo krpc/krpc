@@ -218,7 +218,7 @@ inline T Stream<T>::decode_value(const std::string& data, bool is_null, bool nul
     T value{};  // NOLINT(bugprone-invalid-enum-default-initialization)
     if (is_null) {
       if (null_is_an_error)
-        throw std::runtime_error(
+        throw EncodingError(
             "The function produced a null value; use a std::optional for the result");
       return value;
     }

@@ -402,6 +402,96 @@ typedef enum {
 } krpc_KRPC_TypeCode_t;
 
 /**
+ * A method was invoked where at least one of the passed arguments does not
+ * meet the parameter specification of the method.
+ */
+#define KRPC_EXCEPTION_KRPC_ARGUMENTEXCEPTION 1u, 1727780136u
+
+/**
+ * A null reference was passed to a method that does not accept it as a valid argument.
+ */
+#define KRPC_EXCEPTION_KRPC_ARGUMENTNULLEXCEPTION 1u, 1172469918u
+
+/**
+ * The value of an argument is outside the allowable range of values as defined by the invoked method.
+ */
+#define KRPC_EXCEPTION_KRPC_ARGUMENTOUTOFRANGEEXCEPTION 1u, 4281096410u
+
+/**
+ * An integer was divided by zero.
+ */
+#define KRPC_EXCEPTION_KRPC_DIVIDEBYZEROEXCEPTION 1u, 3467427419u
+
+/**
+ * A general error, described by its message.
+ */
+#define KRPC_EXCEPTION_KRPC_ERROR 1u, 3253248084u
+
+/**
+ * An index was outside the bounds of a collection, string or array.
+ */
+#define KRPC_EXCEPTION_KRPC_INDEXOUTOFRANGEEXCEPTION 1u, 4260790485u
+
+/**
+ * A method call was made to a method that is invalid
+ * given the current state of the object.
+ */
+#define KRPC_EXCEPTION_KRPC_INVALIDOPERATIONEXCEPTION 1u, 1783436482u
+
+/**
+ * A key was not found in a dictionary.
+ */
+#define KRPC_EXCEPTION_KRPC_KEYNOTFOUNDEXCEPTION 1u, 4230252410u
+
+/**
+ * A method was invoked that is not supported.
+ */
+#define KRPC_EXCEPTION_KRPC_NOTSUPPORTEDEXCEPTION 1u, 3695119759u
+
+/**
+ * A value was null where its type does not allow one.
+ */
+#define KRPC_EXCEPTION_KRPC_NULLREFERENCEEXCEPTION 1u, 1410242424u
+
+/**
+ * The game object that a service object refers to no longer exists,
+ * so the object cannot be used. For example, the part it represents
+ * was destroyed, or the vessel it belongs to was recovered.
+ *
+ * See #KRPC_EXCEPTION_KRPC_OBJECTNOTLOADEDEXCEPTION for a game object that exists but is not
+ * loaded.
+ */
+#define KRPC_EXCEPTION_KRPC_OBJECTDESTROYEDEXCEPTION 1u, 2627328509u
+
+/**
+ * The game object that a service object refers to exists, but is not loaded.
+ * For example, the game is loading, or the vessel carrying the part is unloaded.
+ *
+ * See #KRPC_EXCEPTION_KRPC_OBJECTDESTROYEDEXCEPTION for a game object that no longer exists.
+ */
+#define KRPC_EXCEPTION_KRPC_OBJECTNOTLOADEDEXCEPTION 1u, 1508195546u
+
+/**
+ * An arithmetic or conversion operation overflowed.
+ */
+#define KRPC_EXCEPTION_KRPC_OVERFLOWEXCEPTION 1u, 627905092u
+
+/**
+ * A stream was removed by the server, e.g. an event that has finished.
+ */
+#define KRPC_EXCEPTION_KRPC_STREAMREMOVEDEXCEPTION 1u, 3610372597u
+
+/**
+ * An operation did not complete in the time allotted to it.
+ */
+#define KRPC_EXCEPTION_KRPC_TIMEOUTEXCEPTION 1u, 3959561168u
+
+/**
+ * The procedure is not available in the current game scene.
+ */
+#define KRPC_EXCEPTION_KRPC_UNSUPPORTEDSCENEEXCEPTION 1u, 873232004u
+
+/**
  * Returns the identifier for the current client.
  */
 static inline krpc_error_t krpc_KRPC_GetClientID(krpc_connection_t connection, krpc_bytes_t * returnValue);
@@ -2416,7 +2506,7 @@ static inline krpc_error_t krpc_KRPC_Expression_Take_call(krpc_schema_ProcedureC
  *
  * The client receives the exception as an error from the function, or from the stream
  * or event evaluating it. For example, the service `KRPC` and the name
- * `Error` raise KRPC.Error. Throws an exception if the service does not
+ * `Error` raise #KRPC_EXCEPTION_KRPC_ERROR. Throws an exception if the service does not
  * declare it.
  * @param connection A connection object.
  * @param returnValue The value returned.
@@ -3061,7 +3151,7 @@ static inline krpc_error_t krpc_decode_KRPC_ServerSettings(
   message.items.arg = &state;
   KRPC_RETURN_ON_ERROR(krpc_decode_message_Tuple(stream, &message));
   if (state.pos < 6)
-    KRPC_RETURN_ERROR(DECODING_FAILED, "too few fields for a KRPC_ServerSettings");
+    KRPC_FAIL(ENCODING, "Too few fields for a KRPC_ServerSettings");
   return KRPC_OK;
 }
 
@@ -3312,7 +3402,7 @@ static inline krpc_error_t krpc_decode_KRPC_ServerStatistics(
   message.items.arg = &state;
   KRPC_RETURN_ON_ERROR(krpc_decode_message_Tuple(stream, &message));
   if (state.pos < 15)
-    KRPC_RETURN_ERROR(DECODING_FAILED, "too few fields for a KRPC_ServerStatistics");
+    KRPC_FAIL(ENCODING, "Too few fields for a KRPC_ServerStatistics");
   return KRPC_OK;
 }
 
@@ -3431,7 +3521,7 @@ static inline krpc_error_t krpc_decode_KRPC_ServerStatus(
   message.items.arg = &state;
   KRPC_RETURN_ON_ERROR(krpc_decode_message_Tuple(stream, &message));
   if (state.pos < 4)
-    KRPC_RETURN_ERROR(DECODING_FAILED, "too few fields for a KRPC_ServerStatus");
+    KRPC_FAIL(ENCODING, "Too few fields for a KRPC_ServerStatus");
   return KRPC_OK;
 }
 
@@ -3814,7 +3904,7 @@ static inline krpc_error_t krpc_decode_KRPC_ClientInfo(
   message.items.arg = &state;
   KRPC_RETURN_ON_ERROR(krpc_decode_message_Tuple(stream, &message));
   if (state.pos < 4)
-    KRPC_RETURN_ERROR(DECODING_FAILED, "too few fields for a KRPC_ClientInfo");
+    KRPC_FAIL(ENCODING, "Too few fields for a KRPC_ClientInfo");
   return KRPC_OK;
 }
 

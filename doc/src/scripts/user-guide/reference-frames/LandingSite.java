@@ -1,13 +1,10 @@
 import krpc.client.Connection;
-import krpc.client.RPCException;
 import krpc.client.services.Drawing;
 import krpc.client.services.SpaceCenter;
 
-import java.io.IOException;
 
 public class LandingSite {
-    public static void main(String[] args)
-        throws IOException, RPCException, InterruptedException {
+    public static void main(String[] args) throws InterruptedException {
         Connection connection = Connection.newInstance("Landing Site");
         SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
         Drawing drawing = Drawing.newInstance(connection);

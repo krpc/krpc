@@ -41,6 +41,17 @@ class JavaDomain(Domain[JavaLanguage]):
     codeext = "java"
     language = JavaLanguage()
 
+    def raised_as(self, exception):
+        alias = self.language.exception_alias(
+            exception.service_name, exception.name, exception.mapped_type
+        )
+        if alias is not None:
+            return (
+                "The client throws :type:`%s` for this exception, and has no class for it."
+                % (alias)
+            )
+        return "A subclass of :type:`krpc.client.ServerException`."
+
     def currentmodule(self, name):
         super().currentmodule(name)
         return ".. package:: krpc.client.services.%s" % name

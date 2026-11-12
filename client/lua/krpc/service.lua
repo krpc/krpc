@@ -356,7 +356,7 @@ local function _skipping_unknown_types(what, build)
   local ok, err = pcall(build)
   if not ok then
     if type(err) ~= 'string' or not err:find(Types.UNKNOWN_TYPE_ERROR, 1, true) then
-      error(err)
+      error(err, 0)
     end
     io.stderr:write('Skipping ' .. what .. ': ' .. tostring(err) .. '\n')
   end

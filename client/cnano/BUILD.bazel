@@ -92,6 +92,9 @@ test_suite(
         ":communication-transport",
         ":conformance",
         ":doxygen",
+        ":errors-codes",
+        ":errors-details",
+        ":errors-messages",
         ":lint",
         ":memory",
     ],
@@ -147,6 +150,35 @@ cc_test(
     ],
 )
 
+# The library keeping only the code of each error
+cc_library(
+    name = "krpc_cnano_codes_only",
+    srcs = srcs + [":protobuf"],
+    hdrs = hdrs + [":protobuf"],
+    defines = ["KRPC_ERROR_CODES_ONLY"],
+    includes = ["include"],
+    linkopts = ws2_32,
+    deps = ["@c_nanopb//:nanopb"],
+)
+
+# The errors at each level of detail the library keeps
+[
+    cc_test(
+        name = "errors-" + level,
+        size = "small",
+        srcs = ["test/test_errors.cpp"],
+        deps = [
+            library,
+            "@cpp_googletest//:gtest",
+        ],
+    )
+    for level, library in [
+        ("codes", ":krpc_cnano_codes_only"),
+        ("details", ":krpc_cnano"),
+        ("messages", ":krpc_cnano_error_messages"),
+    ]
+]
+
 # The library with an allocator a test supplies
 cc_library(
     name = "krpc_cnano_custom_memory",
@@ -183,6 +215,7 @@ cc_test(
         "include/krpc_cnano/communication.h",
         "include/krpc_cnano/error.h",
         "src/communication.c",
+        "src/error.c",
         "src/stream.c",
         "test/Arduino.h",
         "test/test_arduino.cpp",
@@ -267,9 +300,11 @@ cc_binary(
 conformance_test(
     name = "conformance",
     size = "medium",
+    conventions = "conformance/conventions.json",
     expected_failures = "conformance/expected-failures.txt",
     profiles = [
         "core",
+        "error-types",
         "functions",
     ],
     protocols = [
@@ -346,11 +381,15 @@ clang_tidy_test(
         ":communication-socket",
         ":communication-transport",
         ":conformance-testee",
+        ":errors-codes",
+        ":errors-details",
+        ":errors-messages",
         ":memory",
         ":test-consumer",
     ],
     targets = [
         ":krpc_cnano",
+        ":krpc_cnano_codes_only",
         ":krpc_cnano_error_messages",
     ],
 )

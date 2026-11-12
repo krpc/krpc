@@ -1,0 +1,2532 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+
+.. namespace:: krpc::services::KRPC
+
+
+.. namespace:: krpc::services
+.. class:: KRPC : public krpc::RemoteService
+
+   Main kRPC service, used by clients to interact with basic server functionality.
+
+   .. function:: KRPC(krpc::Connection& connection)
+
+      Construct an instance of this service.
+
+   .. function:: std::vector<ClientInfo> clients()
+
+      The clients that are currently connected to the server.
+
+   
+
+   .. function:: GameScene game_scene()
+   .. function:: void set_game_scene(GameScene value)
+
+      The current game scene. Setting this switches the game to the given
+      scene, or opens/closes the corresponding facility for the pseudo-scenes.
+      Scene changes happen asynchronously: setting this property returns
+      immediately, and clients should poll it until it reports the requested
+      scene. Setting it to :enumerator:`GameScene::flight` resumes the save's
+      active vessel, and fails if there is none. Moving between
+      :enumerator:`GameScene::editor_vab` and :enumerator:`GameScene::editor_sph`
+      keeps the vessel that is being constructed, as the game's own switch
+      editor button does. Leaving flight saves the game first, unless the game
+      cannot be saved, e.g. while under acceleration.
+
+   
+
+   .. function:: uint32_t game_state_loads()
+
+      The number of game states that have finished loading.
+
+   
+
+      .. note::
+
+         Increases once a game load, quickload, revert or scene change has finished.
+
+   .. function:: std::string get_client_id()
+
+      Returns the identifier for the current client.
+
+
+   
+
+   .. function:: std::string get_client_name()
+
+      Returns the name of the current client.
+      This is an empty string if the client has no name.
+
+
+   
+
+   .. function:: krpc::schema::Services get_services()
+
+      The services the server provides, with their procedures, classes, enumerations,
+      structures and exceptions.
+
+
+   
+
+   .. function:: ServerStatus get_status()
+
+      Returns the status of the server, with its version, settings and performance statistics.
+
+
+   
+
+   .. function:: void hold_tick()
+
+      Hold the game on its current physics tick until :func:`release_tick` is called
+      or the hold times out. Every call made in between is executed before the game
+      advances, so a read, compute and write all happen in the state of one tick.
+
+
+   
+
+      .. note::
+
+         The game renders no frame, takes no input and runs no physics while the tick is
+         held. Keep a hold as short as possible, and release it even when the code between
+         the two calls fails.
+
+         A tick is held once, so this waits for the next tick when the current one has
+         already been released. One client holds the tick at a time, and only a client
+         making a call can hold it: a stream or an event cannot.
+
+         A hold ends by itself when it times out, when the client disconnects, and when the
+         client calls a procedure that takes more than one tick to finish, such as staging
+         or warping. Stream updates are sent once the tick is released, so waiting for a
+         stream or an event inside a hold waits out the timeout.
+
+   .. function:: void next_tick()
+
+      Let the game move on from the tick being held and hold the one after it, so that a
+      program acts on consecutive physics ticks. Holds the soonest tick it can if no tick
+      is currently being held.
+
+
+   
+
+      .. note::
+
+         A release and a hold made as two separate calls let the game advance between them.
+         This takes the next tick without that gap. Call it at the top of a loop that has to
+         act on every tick, work, and come back to it.
+
+         The game advances one tick per call, so it runs at the rate of the loop for as long
+         as the loop runs. End the loop with :func:`release_tick`.
+
+         Every limit of :func:`hold_tick` applies, the timeout included. A hold lost to
+         the timeout is not reported, and the next call takes whatever tick it lands on.
+
+   .. function:: bool paused()
+   .. function:: void set_paused(bool value)
+
+      Whether the game is paused.
+
+   
+
+   .. function:: void release_tick()
+
+      Let the game move on from the tick that :func:`hold_tick` held it on. Does
+      nothing when no tick is held, which is the case once a hold has timed out.
+
+
+   
+
+
+
+.. class:: Expression
+
+   A server side expression.
+
+   .. note::
+
+      Numeric operands of differing types are converted to a common type.
+
+   .. function:: static Expression add(krpc::Connection& connection, Expression arg0, Expression arg1)
+
+      Numerical addition.
+
+      :Parameters:
+
+       * **arg0** -- The first operand.
+       * **arg1** -- The second operand.
+
+   
+
+   .. function:: static Expression aggregate(krpc::Connection& connection, Expression arg, Expression func)
+
+      The result of applying an accumulator function over a collection.
+
+      :Parameters:
+
+       * **arg** -- The collection.
+       * **func** -- The accumulator function.
+
+      :returns: The accumulated value.
+   
+
+      .. note::
+
+         Throws an exception if the collection is empty.
+
+   .. function:: static Expression aggregate_with_seed(krpc::Connection& connection, Expression arg, Expression seed, Expression func)
+
+      The result of applying an accumulator function over a collection, starting from a seed.
+
+      :Parameters:
+
+       * **arg** -- The collection.
+       * **seed** -- The seed value.
+       * **func** -- The accumulator function.
+
+      :returns: The accumulated value.
+   
+
+      .. note::
+
+         The seed widens to the type of the accumulated value, the function's result.
+
+   .. function:: static Expression all(krpc::Connection& connection, Expression arg, Expression predicate)
+
+      Whether a predicate function returns true for every value of a collection.
+
+      :Parameters:
+
+       * **arg** -- The collection.
+       * **predicate** -- The predicate function.
+
+      :returns: Whether all items satisfy the predicate.
+   
+
+   .. function:: static Expression and_(krpc::Connection& connection, Expression arg0, Expression arg1)
+
+      Logical or bitwise and, which evaluates both operands.
+
+      :Parameters:
+
+       * **arg0** -- The first operand.
+       * **arg1** -- The second operand.
+
+   
+
+      .. note::
+
+         Also takes two values of a flags enumeration, and gives the values they share.
+
+   .. function:: static Expression any(krpc::Connection& connection, Expression arg, Expression predicate)
+
+      Whether a predicate function returns true for any value of a collection.
+
+      :Parameters:
+
+       * **arg** -- The collection.
+       * **predicate** -- The predicate function.
+
+      :returns: Whether any item satisfies the predicate.
+   
+
+   .. function:: static Expression append(krpc::Connection& connection, Expression collection, Expression value)
+
+      A statement adding a value to a list or a set.
+
+      :Parameters:
+
+       * **collection** -- The list or set to add to.
+       * **value** -- The value to add.
+
+   
+
+      .. note::
+
+         The value goes on the end of a list. A set holding the value is left unchanged.
+
+   .. function:: static Expression assign(krpc::Connection& connection, Expression variable, Expression value)
+
+      An assignment to a local variable, state variable or function parameter.
+
+      :Parameters:
+
+       * **variable** -- The variable to assign to.
+       * **value** -- The value to assign.
+
+   
+
+      .. note::
+
+         The value's type must be assignable to the variable's type. A numeric value of a
+         different type is widened, and narrowing it requires a cast.
+
+   .. function:: static Expression average(krpc::Connection& connection, Expression arg)
+
+      The average of the values of a collection.
+
+      :Parameters:
+
+       * **arg** -- The list or set.
+
+      :returns: The average of the elements in the collection.
+   
+
+      .. note::
+
+         Throws an exception if the collection is empty and its values are not nullable.
+
+   .. function:: static Expression block(krpc::Connection& connection, std::vector<Expression> statements)
+
+      A block of statements, whose value is that of its last statement.
+
+      :Parameters:
+
+       * **statements** -- The statements.
+
+   
+
+   .. function:: static Expression block_with_variables(krpc::Connection& connection, std::vector<Expression> variables, std::vector<Expression> statements)
+
+      A block of statements with local variables.
+
+      :Parameters:
+
+       * **variables** -- The local variables of the block.
+       * **statements** -- The statements.
+
+   
+
+      .. note::
+
+         The value of the block is that of its last statement. The variables are in scope
+         for the statements of the block, including within nested functions.
+
+   .. function:: static Expression break_(krpc::Connection& connection)
+
+      A break statement, which ends the enclosing loop.
+
+
+   
+
+   .. function:: static Expression build_dictionary(krpc::Connection& connection, Expression arg, Expression key_func, Expression value_func)
+
+      A dictionary built from a collection, with a key and a value computed from each
+      element.
+
+      :Parameters:
+
+       * **arg** -- The list or set.
+       * **key_func** -- The function computing an element's key.
+       * **value_func** -- The function computing an element's value.
+
+      :returns: The dictionary.
+   
+
+      .. note::
+
+         A repeated key takes the last of its values.
+
+   .. function:: static Expression call(krpc::Connection& connection, krpc::schema::ProcedureCall call)
+
+      An RPC call.
+
+      :Parameters:
+
+       * **call** -- The procedure call.
+
+   
+
+      .. note::
+
+         The instance the call is made on, and the values of its arguments, are fixed
+         when the expression is created. A call to a procedure with no return value is
+         evaluated for its effects, as a statement in a :func:`Expression::block`. A collection the
+         procedure returns is copied, as a client would receive it.
+
+   .. function:: static Expression call_with_arguments(krpc::Connection& connection, krpc::schema::ProcedureCall call, std::map<int32_t, Expression> args)
+
+      An RPC call, where some or all of the arguments are computed by expressions.
+
+      :Parameters:
+
+       * **call** -- The RPC to call.
+       * **args** -- Expressions computing the call's arguments, by position.
+
+   
+
+      .. note::
+
+         Position 0 is the instance of a class method or property. A position with no
+         expression takes the argument encoded in the call, or the parameter's default. A
+         collection the procedure returns is copied, as a client would receive it.
+
+   .. function:: static Expression cast(krpc::Connection& connection, Expression arg, Type type)
+
+      A value cast to the given type.
+
+      :Parameters:
+
+       * **arg** -- The value to cast.
+       * **type** -- Type to cast the argument to.
+
+   
+
+      .. note::
+
+         A tuple or collection is cast element by element.
+
+   .. function:: static Expression clear(krpc::Connection& connection, Expression collection)
+
+      A statement removing every value from a list or a set, or every entry from a dictionary.
+
+      :Parameters:
+
+       * **collection** -- The list, set or dictionary.
+
+   
+
+   .. function:: static Expression concat(krpc::Connection& connection, Expression arg1, Expression arg2)
+
+      The values of one collection followed by those of another.
+
+      :Parameters:
+
+       * **arg1** -- The first collection.
+       * **arg2** -- The second collection.
+
+      :returns: The first collection followed by the second.
+   
+
+      .. note::
+
+         The result is lazily evaluated. :func:`Expression::to_list` makes it concrete.
+
+   .. function:: static Expression conditional(krpc::Connection& connection, Expression condition, Expression if_true, Expression if_false)
+
+      The second argument if the condition is true, and the third argument otherwise.
+
+      :Parameters:
+
+       * **condition** -- The boolean condition.
+       * **if_true** -- The value when the condition is true.
+       * **if_false** -- The value when the condition is false.
+
+   
+
+      .. note::
+
+         Throws an exception if the two values have no common type.
+
+   .. function:: static Expression conditional_and(krpc::Connection& connection, Expression arg0, Expression arg1)
+
+      Logical and, which evaluates the second operand only when the first is true.
+
+      :Parameters:
+
+       * **arg0** -- The first operand.
+       * **arg1** -- The second operand.
+
+   
+
+   .. function:: static Expression conditional_or(krpc::Connection& connection, Expression arg0, Expression arg1)
+
+      Logical or, which evaluates the second operand only when the first is false.
+
+      :Parameters:
+
+       * **arg0** -- The first operand.
+       * **arg1** -- The second operand.
+
+   
+
+   .. function:: static Expression constant_bool(krpc::Connection& connection, bool value)
+
+      A constant value of boolean type.
+
+      :Parameters:
+
+       * **value** -- The value.
+
+   
+
+   .. function:: static Expression constant_bytes(krpc::Connection& connection, std::string value)
+
+      A constant value of bytes type.
+
+      :Parameters:
+
+       * **value** -- The value.
+
+   
+
+   .. function:: static Expression constant_double(krpc::Connection& connection, double value)
+
+      A constant value of double precision floating point type.
+
+      :Parameters:
+
+       * **value** -- The value.
+
+   
+
+   .. function:: static Expression constant_enum(krpc::Connection& connection, std::string service, std::string name, int32_t value)
+
+      A constant value of an enumeration a service defines.
+
+      :Parameters:
+
+       * **service** -- The name of the service the enumeration is defined in.
+       * **name** -- The name of the enumeration.
+       * **value** -- The value of the member of the enumeration.
+
+   
+
+   .. function:: static Expression constant_float(krpc::Connection& connection, float value)
+
+      A constant value of single precision floating point type.
+
+      :Parameters:
+
+       * **value** -- The value.
+
+   
+
+   .. function:: static Expression constant_int(krpc::Connection& connection, int32_t value)
+
+      A constant value of integer type.
+
+      :Parameters:
+
+       * **value** -- The value.
+
+   
+
+   .. function:: static Expression constant_long(krpc::Connection& connection, int64_t value)
+
+      A constant value of long integer type.
+
+      :Parameters:
+
+       * **value** -- The value.
+
+   
+
+   .. function:: static Expression constant_null(krpc::Connection& connection, Type type)
+
+      A null constant of the given type.
+
+      :Parameters:
+
+       * **type** -- The type of the value.
+
+   
+
+      .. note::
+
+         The type is made nullable, as by :func:`Type::nullable_type`.
+
+   .. function:: static Expression constant_object(krpc::Connection& connection, uint64_t value)
+
+      A constant object, an instance of a class a service defines.
+
+      :Parameters:
+
+       * **value** -- The object identifier of the object.
+
+   
+
+      .. note::
+
+         The object is given by its object identifier.
+
+   .. function:: static Expression constant_string(krpc::Connection& connection, std::string value)
+
+      A constant value of string type.
+
+      :Parameters:
+
+       * **value** -- The value.
+
+   
+
+   .. function:: static Expression constant_u_int(krpc::Connection& connection, uint32_t value)
+
+      A constant value of unsigned integer type.
+
+      :Parameters:
+
+       * **value** -- The value.
+
+   
+
+   .. function:: static Expression constant_u_long(krpc::Connection& connection, uint64_t value)
+
+      A constant value of unsigned long integer type.
+
+      :Parameters:
+
+       * **value** -- The value.
+
+   
+
+   .. function:: static Expression contains(krpc::Connection& connection, Expression arg, Expression value)
+
+      Whether a collection contains a value.
+
+      :Parameters:
+
+       * **arg** -- The collection.
+       * **value** -- The value to look for.
+
+      :returns: Whether the collection contains the value.
+   
+
+   .. function:: static Expression contains_key(krpc::Connection& connection, Expression dictionary, Expression key)
+
+      Whether a dictionary contains a key.
+
+      :Parameters:
+
+       * **dictionary** -- The dictionary.
+       * **key** -- The key to look for.
+
+      :returns: Whether the dictionary contains the key.
+   
+
+   .. function:: static Expression continue_(krpc::Connection& connection)
+
+      A continue statement, which skips to the next iteration of the enclosing loop.
+
+
+   
+
+   .. function:: static Expression convert_to_string(krpc::Connection& connection, Expression arg)
+
+      The string representation of a value.
+
+      :Parameters:
+
+       * **arg** -- The value to convert.
+
+      :returns: The string representation of the value.
+   
+
+      .. note::
+
+         A value other than a number, boolean, string or enumeration converts as .NET
+         formats it, which for a collection is the name of its type. Throws an exception if
+         the value is null.
+
+   .. function:: static Expression count(krpc::Connection& connection, Expression arg)
+
+      The number of values in a collection.
+
+      :Parameters:
+
+       * **arg** -- The list, set or dictionary.
+
+      :returns: The number of elements in the collection.
+   
+
+   .. function:: static Expression create_dictionary(krpc::Connection& connection, std::vector<Expression> keys, std::vector<Expression> values)
+
+      A dictionary of the given keys and corresponding values, with numbers widened to
+      their common type. Throws an exception if there are no keys, the counts differ, the
+      keys are not of a valid key type, or a key is null.
+
+      :Parameters:
+
+       * **keys** -- The keys.
+       * **values** -- The values.
+
+      :returns: The dictionary.
+   
+
+      .. note::
+
+         A repeated key takes the last of its values.
+
+   .. function:: static Expression create_empty_dictionary(krpc::Connection& connection, Type key_type, Type value_type)
+
+      An empty dictionary of the given key and value types. Throws an exception if the
+      key type is nullable or not a valid key type.
+
+      :Parameters:
+
+       * **key_type** -- The type of the dictionary's keys.
+       * **value_type** -- The type of the dictionary's values.
+
+      :returns: The empty dictionary.
+   
+
+   .. function:: static Expression create_empty_list(krpc::Connection& connection, Type value_type)
+
+      An empty list of the given value type.
+
+      :Parameters:
+
+       * **value_type** -- The type of the values the list holds.
+
+      :returns: The empty list.
+   
+
+   .. function:: static Expression create_empty_set(krpc::Connection& connection, Type value_type)
+
+      An empty set of the given value type. Throws an exception if the value type is
+      nullable.
+
+      :Parameters:
+
+       * **value_type** -- The type of the values the set holds.
+
+      :returns: The empty set.
+   
+
+   .. function:: static Expression create_list(krpc::Connection& connection, std::vector<Expression> values)
+
+      A list of the given values, with numbers widened to their common type. Throws an
+      exception if there are no values.
+
+      :Parameters:
+
+       * **values** -- The values.
+
+      :returns: The list.
+   
+
+   .. function:: static Expression create_set(krpc::Connection& connection, std::set<Expression> values)
+
+      A set of the given values, with numbers widened to their common type. Throws an
+      exception if there are no values, or a value is null.
+
+      :Parameters:
+
+       * **values** -- The values.
+
+      :returns: The set.
+   
+
+      .. note::
+
+         The values are evaluated in an unspecified order.
+
+   .. function:: static Expression create_struct(krpc::Connection& connection, Type type, std::vector<Expression> field_values)
+
+      A structure with the given field values. Throws an exception if the field values do
+      not match its fields.
+
+      :Parameters:
+
+       * **type** -- The type of the structure.
+       * **field_values** -- The values of the structure's fields, in the order the structure declares them.
+
+      :returns: The structure.
+   
+
+   .. function:: static Expression create_tuple(krpc::Connection& connection, std::vector<Expression> elements)
+
+      A tuple of the given elements. Throws an exception if there are no elements or more
+      than seven.
+
+      :Parameters:
+
+       * **elements** -- The elements.
+
+      :returns: The tuple.
+   
+
+   .. function:: static Expression dictionary_keys(krpc::Connection& connection, Expression dictionary)
+
+      The keys of a dictionary, as a list.
+
+      :Parameters:
+
+       * **dictionary** -- The dictionary.
+
+      :returns: The keys of the dictionary.
+   
+
+      .. note::
+
+         The collection operations take the keys of a dictionary from here, and its values
+         from :func:`Expression::dictionary_values`.
+
+   .. function:: static Expression dictionary_values(krpc::Connection& connection, Expression dictionary)
+
+      The values of a dictionary, as a list.
+
+      :Parameters:
+
+       * **dictionary** -- The dictionary.
+
+      :returns: The values of the dictionary.
+   
+
+   .. function:: static Expression distinct(krpc::Connection& connection, Expression arg)
+
+      The values of a collection with duplicates removed, keeping the first
+      occurrence of each.
+
+      :Parameters:
+
+       * **arg** -- The collection.
+
+      :returns: The distinct values of the collection.
+   
+
+      .. note::
+
+         The result is lazily evaluated. :func:`Expression::to_list` makes it concrete.
+
+   .. function:: static Expression divide(krpc::Connection& connection, Expression arg0, Expression arg1)
+
+      Numerical division.
+
+      :Parameters:
+
+       * **arg0** -- The first operand.
+       * **arg1** -- The second operand.
+
+   
+
+   .. function:: static Expression element_at(krpc::Connection& connection, Expression arg, Expression index)
+
+      The value at the given position in a collection.
+
+      :Parameters:
+
+       * **arg** -- The collection.
+       * **index** -- The position of the value, counting from zero.
+
+      :returns: The value at the given position.
+   
+
+      .. note::
+
+         Throws an exception if the index is out of range.
+
+   .. function:: static Expression equal(krpc::Connection& connection, Expression arg0, Expression arg1)
+
+      Equality comparison.
+
+      :Parameters:
+
+       * **arg0** -- The first operand.
+       * **arg1** -- The second operand.
+
+   
+
+      .. note::
+
+         Collections, tuples, bytes and structures compare by their contents. Throws an
+         exception if the operands are of unrelated types.
+
+   .. function:: static Expression except(krpc::Connection& connection, Expression arg1, Expression arg2)
+
+      The values of the first collection that are not in the second, with
+      duplicates removed.
+
+      :Parameters:
+
+       * **arg1** -- The first collection.
+       * **arg2** -- The second collection.
+
+      :returns: The difference between the two collections.
+   
+
+      .. note::
+
+         The result is lazily evaluated. :func:`Expression::to_list` makes it concrete.
+
+   .. function:: static Expression exclusive_or(krpc::Connection& connection, Expression arg0, Expression arg1)
+
+      Logical or bitwise exclusive or.
+
+      :Parameters:
+
+       * **arg0** -- The first operand.
+       * **arg1** -- The second operand.
+
+   
+
+      .. note::
+
+         Also takes two values of a flags enumeration, and gives the values in only one of them.
+
+   .. function:: static Expression first(krpc::Connection& connection, Expression arg)
+
+      The first value of a collection.
+
+      :Parameters:
+
+       * **arg** -- The collection.
+
+      :returns: The first value.
+   
+
+      .. note::
+
+         Throws an exception if the collection is empty.
+
+   .. function:: static Expression for_each(krpc::Connection& connection, Expression variable, Expression collection, Expression body)
+
+      A loop that evaluates the body once for each value of a collection.
+
+      :Parameters:
+
+       * **variable** -- The loop variable.
+       * **collection** -- The collection to iterate over.
+       * **body** -- The statement evaluated on each iteration.
+
+   
+
+      .. note::
+
+         The loop variable is a local variable declared by an enclosing
+         :func:`Expression::block_with_variables`, or a parameter of an enclosing :func:`Expression::lambda`.
+         A :func:`Expression::break_` or :func:`Expression::continue_` in the body applies to this loop.
+
+   .. function:: static Expression get(krpc::Connection& connection, Expression arg, Expression index)
+
+      An element of a tuple, list or dictionary.
+
+      :Parameters:
+
+       * **arg** -- The tuple, list or dictionary.
+       * **index** -- The index or key of the element.
+
+      :returns: The element.
+   
+
+      .. note::
+
+         A tuple takes a constant integer index, a list a zero indexed integer and a
+         dictionary a key. Throws an exception if the index is out of range or the key is
+         missing, and for a tuple when the expression is created.
+
+   .. function:: static Expression get_field(krpc::Connection& connection, Expression arg, std::string name)
+
+      The value of a field of a structure. Throws an exception if the value is not a
+      structure, or has no field of the given name.
+
+      :Parameters:
+
+       * **arg** -- The structure.
+       * **name** -- The name of the field to access.
+
+      :returns: The value of the field.
+   
+
+   .. function:: static Expression greater_than(krpc::Connection& connection, Expression arg0, Expression arg1)
+
+      Greater than numerical comparison.
+
+      :Parameters:
+
+       * **arg0** -- The first operand.
+       * **arg1** -- The second operand.
+
+   
+
+   .. function:: static Expression greater_than_or_equal(krpc::Connection& connection, Expression arg0, Expression arg1)
+
+      Greater than or equal numerical comparison.
+
+      :Parameters:
+
+       * **arg0** -- The first operand.
+       * **arg1** -- The second operand.
+
+   
+
+   .. function:: static Expression group_by(krpc::Connection& connection, Expression arg, Expression key)
+
+      The values of a collection grouped by the key a function produces for each of them.
+
+      :Parameters:
+
+       * **arg** -- The collection.
+       * **key** -- A function producing the key to group values by.
+
+      :returns: A dictionary of each key to the values that produced it.
+   
+
+   .. function:: bool has_return_type()
+
+      Whether the expression evaluates to a value.
+
+   
+
+      .. note::
+
+         An expression with no value has no :func:`Expression::return_type`. An empty
+         collection and no value both encode to an empty sequence of bytes.
+
+   .. function:: static Expression if_then(krpc::Connection& connection, Expression condition, Expression body)
+
+      An if statement, with no value.
+
+      :Parameters:
+
+       * **condition** -- The boolean condition.
+       * **body** -- The statement evaluated when the condition is true.
+
+   
+
+      .. note::
+
+         Use :func:`Expression::conditional` for an if-then-else that produces a value.
+
+   .. function:: static Expression if_then_else(krpc::Connection& connection, Expression condition, Expression body, Expression else_body)
+
+      An if-else statement, with no value.
+
+      :Parameters:
+
+       * **condition** -- The boolean condition.
+       * **body** -- The statement evaluated when the condition is true.
+       * **else_body** -- The statement evaluated when the condition is false.
+
+   
+
+      .. note::
+
+         Use :func:`Expression::conditional` for an if-then-else that produces a value.
+
+   .. function:: static Expression intersect(krpc::Connection& connection, Expression arg1, Expression arg2)
+
+      The values in both of two collections, with duplicates removed.
+
+      :Parameters:
+
+       * **arg1** -- The first collection.
+       * **arg2** -- The second collection.
+
+      :returns: The intersection of the two collections.
+   
+
+      .. note::
+
+         The result is lazily evaluated. :func:`Expression::to_list` makes it concrete.
+
+   .. function:: static Expression invoke(krpc::Connection& connection, Expression function, std::map<std::string, Expression> args)
+
+      A function call.
+
+      :Parameters:
+
+       * **function** -- The function to call.
+       * **args** -- The arguments to call the function with.
+
+      :returns: A function call.
+   
+
+   .. function:: static Expression is_null(krpc::Connection& connection, Expression value)
+
+      Whether a value is null. Throws an exception if the type of the value cannot be null.
+
+      :Parameters:
+
+       * **value** -- The value.
+
+   
+
+   .. function:: static Expression lambda(krpc::Connection& connection, std::vector<Expression> parameters, Expression body)
+
+      A function with the given parameters and body.
+
+      :Parameters:
+
+       * **parameters** -- The parameters of the function.
+       * **body** -- The body of the function.
+
+      :returns: A function.
+   
+
+      .. note::
+
+         The body is an expression or a block of statements, and a body with no value is
+         evaluated for its effects. A :func:`Expression::return_` or :func:`Expression::return_nothing`
+         statement ends the evaluation.
+
+   .. function:: static Expression last(krpc::Connection& connection, Expression arg)
+
+      The last value of a collection.
+
+      :Parameters:
+
+       * **arg** -- The collection.
+
+      :returns: The last value.
+   
+
+      .. note::
+
+         Throws an exception if the collection is empty.
+
+   .. function:: static Expression left_shift(krpc::Connection& connection, Expression arg0, Expression arg1)
+
+      Bitwise left shift.
+
+      :Parameters:
+
+       * **arg0** -- The first operand.
+       * **arg1** -- The second operand.
+
+   
+
+      .. note::
+
+         Only the low 5 bits of the count are used for a 32-bit value, and the low 6 bits
+         for a 64-bit value.
+
+   .. function:: static Expression less_than(krpc::Connection& connection, Expression arg0, Expression arg1)
+
+      Less than numerical comparison.
+
+      :Parameters:
+
+       * **arg0** -- The first operand.
+       * **arg1** -- The second operand.
+
+   
+
+   .. function:: static Expression less_than_or_equal(krpc::Connection& connection, Expression arg0, Expression arg1)
+
+      Less than or equal numerical comparison.
+
+      :Parameters:
+
+       * **arg0** -- The first operand.
+       * **arg1** -- The second operand.
+
+   
+
+   .. function:: static Expression max(krpc::Connection& connection, Expression arg)
+
+      The largest value of a collection.
+
+      :Parameters:
+
+       * **arg** -- The list or set.
+
+      :returns: The largest value in the collection.
+   
+
+      .. note::
+
+         Throws an exception if the collection is empty and its values are not nullable.
+
+   .. function:: static Expression max_by(krpc::Connection& connection, Expression arg, Expression key)
+
+      The value of a collection with the largest key.
+
+      :Parameters:
+
+       * **arg** -- The collection.
+       * **key** -- A function producing the key to compare values by.
+
+      :returns: The value with the largest key.
+   
+
+      .. note::
+
+         Throws an exception if the collection is empty.
+
+   .. function:: static Expression min(krpc::Connection& connection, Expression arg)
+
+      The smallest value of a collection.
+
+      :Parameters:
+
+       * **arg** -- The list or set.
+
+      :returns: The smallest value in the collection.
+   
+
+      .. note::
+
+         Throws an exception if the collection is empty and its values are not nullable.
+
+   .. function:: static Expression min_by(krpc::Connection& connection, Expression arg, Expression key)
+
+      The value of a collection with the smallest key.
+
+      :Parameters:
+
+       * **arg** -- The collection.
+       * **key** -- A function producing the key to compare values by.
+
+      :returns: The value with the smallest key.
+   
+
+      .. note::
+
+         Throws an exception if the collection is empty.
+
+   .. function:: static Expression modulo(krpc::Connection& connection, Expression arg0, Expression arg1)
+
+      Numerical modulo operator.
+
+      :Parameters:
+
+       * **arg0** -- The first operand.
+       * **arg1** -- The second operand.
+
+      :returns: The remainder of arg0 divided by arg1
+   
+
+   .. function:: static Expression multiply(krpc::Connection& connection, Expression arg0, Expression arg1)
+
+      Numerical multiplication.
+
+      :Parameters:
+
+       * **arg0** -- The first operand.
+       * **arg1** -- The second operand.
+
+   
+
+   .. function:: static Expression negate(krpc::Connection& connection, Expression arg)
+
+      Numerical negation, which negates a uint as a long.
+
+      :Parameters:
+
+       * **arg** -- The operand.
+
+   
+
+   .. function:: static Expression not_(krpc::Connection& connection, Expression arg)
+
+      Logical or bitwise negation.
+
+      :Parameters:
+
+       * **arg** -- The operand.
+
+   
+
+      .. note::
+
+         Also takes a value of a flags enumeration, and gives the declared values it does not hold.
+
+   .. function:: static Expression not_equal(krpc::Connection& connection, Expression arg0, Expression arg1)
+
+      Inequality comparison.
+
+      :Parameters:
+
+       * **arg0** -- The first operand.
+       * **arg1** -- The second operand.
+
+   
+
+      .. note::
+
+         Collections, tuples, bytes and structures compare by their contents. Throws an
+         exception if the operands are of unrelated types.
+
+   .. function:: static Expression or_(krpc::Connection& connection, Expression arg0, Expression arg1)
+
+      Logical or bitwise or, which evaluates both operands.
+
+      :Parameters:
+
+       * **arg0** -- The first operand.
+       * **arg1** -- The second operand.
+
+   
+
+      .. note::
+
+         Also takes two values of a flags enumeration, and gives their combination.
+
+   .. function:: static Expression order_by(krpc::Connection& connection, Expression arg, Expression key)
+
+      The values of a collection ordered by the key a function produces for each of them.
+
+      :Parameters:
+
+       * **arg** -- The collection to order.
+       * **key** -- A function producing the key to order values by.
+
+      :returns: The ordered collection.
+   
+
+      .. note::
+
+         The result is lazily evaluated. :func:`Expression::to_list` makes it concrete.
+
+   .. function:: static Expression parameter(krpc::Connection& connection, std::string name, Type type)
+
+      A named parameter of a function.
+
+      :Parameters:
+
+       * **name** -- The name of the parameter.
+       * **type** -- The type of the parameter.
+
+      :returns: A named parameter.
+   
+
+      .. note::
+
+         A value is bound to it by name with :func:`Expression::invoke`, or by its position in
+         the parameters of a :func:`Expression::lambda`.
+
+   .. function:: std::vector<Type> parameter_types()
+
+      The types of the function's parameters.
+
+   
+
+      .. note::
+
+         Empty for a function that is not created with :func:`Expression::lambda`.
+
+   .. function:: static Expression power(krpc::Connection& connection, Expression arg0, Expression arg1)
+
+      Numerical power operator.
+
+      :Parameters:
+
+       * **arg0** -- The first operand.
+       * **arg1** -- The second operand.
+
+      :returns: arg0 raised to the power of arg1, at the common type of the operands
+   
+
+   .. function:: static Expression remove(krpc::Connection& connection, Expression collection, Expression value)
+
+      A removal of a value from a list or a set, or of an entry from a dictionary.
+
+      :Parameters:
+
+       * **collection** -- The list, set or dictionary.
+       * **value** -- The value to remove, or the key of the entry to remove.
+
+      :returns: Whether the collection held the value.
+   
+
+      .. note::
+
+         The first occurrence is removed from a list.
+
+   .. function:: static Expression remove_at(krpc::Connection& connection, Expression list, Expression index)
+
+      A statement removing the element at an index of a list.
+
+      :Parameters:
+
+       * **list** -- The list.
+       * **index** -- The index of the element, counting from zero.
+
+   
+
+      .. note::
+
+         Throws an exception if the index is out of range.
+
+   .. function:: static Expression return_(krpc::Connection& connection, Expression value)
+
+      A return statement, which ends the enclosing function with a value.
+
+      :Parameters:
+
+       * **value** -- The value to return.
+
+   
+
+   .. function:: static Expression return_nothing(krpc::Connection& connection)
+
+      A return statement, which ends the enclosing function with no value.
+
+
+   
+
+   .. function:: Type return_type()
+
+      The type of the value the expression evaluates to. Throws an exception if the
+      value cannot be sent to a client.
+
+   
+
+      .. note::
+
+         A function created with :func:`Expression::lambda` evaluates to the value it returns. A
+         lazily evaluated collection, such as from :func:`Expression::select`, is sent once
+         converted by :func:`Expression::to_list` or :func:`Expression::to_set`.
+
+   .. function:: static Expression reverse(krpc::Connection& connection, Expression arg)
+
+      The values of a collection in the opposite order.
+
+      :Parameters:
+
+       * **arg** -- The collection.
+
+      :returns: The reversed collection.
+   
+
+      .. note::
+
+         The result is lazily evaluated. :func:`Expression::to_list` makes it concrete.
+
+   .. function:: static Expression right_shift(krpc::Connection& connection, Expression arg0, Expression arg1)
+
+      Bitwise right shift.
+
+      :Parameters:
+
+       * **arg0** -- The first operand.
+       * **arg1** -- The second operand.
+
+   
+
+      .. note::
+
+         Only the low 5 bits of the count are used for a 32-bit value, and the low 6 bits
+         for a 64-bit value.
+
+   .. function:: static Expression select(krpc::Connection& connection, Expression arg, Expression func)
+
+      The result of a function for each value of a collection.
+
+      :Parameters:
+
+       * **arg** -- The list or set.
+       * **func** -- The function, taking an element of the collection.
+
+      :returns: The collection of function results.
+   
+
+      .. note::
+
+         The result is lazily evaluated. :func:`Expression::to_list` makes it concrete.
+
+   .. function:: static Expression select_many(krpc::Connection& connection, Expression arg, Expression func)
+
+      The values of the collections a function returns for each value of a collection,
+      flattened into one.
+
+      :Parameters:
+
+       * **arg** -- The list or set.
+       * **func** -- The function, taking an element of the collection and returning a collection.
+
+      :returns: The flattened collection of function results.
+   
+
+      .. note::
+
+         The result is lazily evaluated. :func:`Expression::to_list` makes it concrete.
+
+   .. function:: static Expression set(krpc::Connection& connection, Expression collection, Expression index, Expression value)
+
+      A statement setting an element of a list, or an entry of a dictionary.
+
+      :Parameters:
+
+       * **collection** -- The list or dictionary.
+       * **index** -- The index of the element, counting from zero, or the key of the entry.
+       * **value** -- The value to set.
+
+   
+
+      .. note::
+
+         A key the dictionary does not hold is added. Throws an exception if the index
+         is out of range for the list.
+
+   .. function:: static Expression skip(krpc::Connection& connection, Expression arg, Expression count)
+
+      A collection without its first count values.
+
+      :Parameters:
+
+       * **arg** -- The collection.
+       * **count** -- The number of values to skip.
+
+      :returns: The collection without its first count values.
+   
+
+      .. note::
+
+         The result is lazily evaluated. :func:`Expression::to_list` makes it concrete.
+
+   .. function:: static Expression state_variable(krpc::Connection& connection, std::string name, Expression initial_value)
+
+      A variable that keeps its value between evaluations of a function.
+
+      :Parameters:
+
+       * **name** -- The name of the variable.
+       * **initial_value** -- The initial value of the variable.
+
+      :returns: A state variable.
+   
+
+      .. note::
+
+         The initial value is evaluated once, when the variable is created, and gives the
+         variable its type. The value belongs to the variable, so every function that
+         contains it shares it.
+
+   .. function:: static Expression string_concat(krpc::Connection& connection, std::vector<Expression> args)
+
+      The concatenation of strings.
+
+      :Parameters:
+
+       * **args** -- The strings to concatenate, in order.
+
+      :returns: The concatenated string.
+   
+
+      .. note::
+
+         Use :func:`Expression::convert_to_string` to convert other values to strings.
+
+   .. function:: static Expression string_contains(krpc::Connection& connection, Expression arg, Expression value)
+
+      Whether one string occurs within another.
+
+      :Parameters:
+
+       * **arg** -- The string to search.
+       * **value** -- The string to search for.
+
+      :returns: Whether the value occurs in the string.
+   
+
+   .. function:: static Expression string_ends_with(krpc::Connection& connection, Expression arg, Expression value)
+
+      Whether a string ends with another.
+
+      :Parameters:
+
+       * **arg** -- The string to test.
+       * **value** -- The string to test for.
+
+      :returns: Whether the string ends with the value.
+   
+
+   .. function:: static Expression string_get(krpc::Connection& connection, Expression arg, Expression index)
+
+      The character at the given position in a string, as a string of length one.
+
+      :Parameters:
+
+       * **arg** -- The string.
+       * **index** -- The position of the character, counting from zero.
+
+      :returns: The character at the given position.
+   
+
+      .. note::
+
+         Throws an exception if the index is out of range.
+
+   .. function:: static Expression string_index_of(krpc::Connection& connection, Expression arg, Expression value)
+
+      The position of the first occurrence of one string within another.
+
+      :Parameters:
+
+       * **arg** -- The string to search.
+       * **value** -- The string to search for.
+
+      :returns: The position of the value, counting from zero, or -1 if it does not occur.
+   
+
+   .. function:: static Expression string_join(krpc::Connection& connection, Expression separator, Expression values)
+
+      Strings joined together, separated by another string.
+
+      :Parameters:
+
+       * **separator** -- The string to put between the values.
+       * **values** -- The strings to join.
+
+      :returns: The joined string.
+   
+
+   .. function:: static Expression string_length(krpc::Connection& connection, Expression arg)
+
+      The number of characters in a string.
+
+      :Parameters:
+
+       * **arg** -- The string.
+
+      :returns: The length of the string.
+   
+
+   .. function:: static Expression string_replace(krpc::Connection& connection, Expression arg, Expression old_value, Expression new_value)
+
+      A string with every occurrence of one string replaced by another.
+
+      :Parameters:
+
+       * **arg** -- The string to search.
+       * **old_value** -- The string to replace.
+       * **new_value** -- The string to replace it with.
+
+      :returns: The string with the replacements made.
+   
+
+      .. note::
+
+         Throws an exception if the string to replace is empty.
+
+   .. function:: static Expression string_split(krpc::Connection& connection, Expression arg, Expression separator)
+
+      The parts of a string separated by another string.
+
+      :Parameters:
+
+       * **arg** -- The string to split.
+       * **separator** -- The string that separates the parts.
+
+      :returns: The parts of the string.
+   
+
+   .. function:: static Expression string_starts_with(krpc::Connection& connection, Expression arg, Expression value)
+
+      Whether a string starts with another.
+
+      :Parameters:
+
+       * **arg** -- The string to test.
+       * **value** -- The string to test for.
+
+      :returns: Whether the string starts with the value.
+   
+
+   .. function:: static Expression string_substring(krpc::Connection& connection, Expression arg, Expression start, Expression length)
+
+      Part of a string.
+
+      :Parameters:
+
+       * **arg** -- The string.
+       * **start** -- The position to start at, counting from zero.
+       * **length** -- The number of characters to take.
+
+      :returns: The substring.
+   
+
+      .. note::
+
+         Throws an exception if the start or the length is out of range.
+
+   .. function:: static Expression string_to_lower(krpc::Connection& connection, Expression arg)
+
+      A string in lower case, independently of the game's language.
+
+      :Parameters:
+
+       * **arg** -- The string.
+
+      :returns: The string in lower case.
+   
+
+   .. function:: static Expression string_to_upper(krpc::Connection& connection, Expression arg)
+
+      A string in upper case, independently of the game's language.
+
+      :Parameters:
+
+       * **arg** -- The string.
+
+      :returns: The string in upper case.
+   
+
+   .. function:: static Expression string_trim(krpc::Connection& connection, Expression arg)
+
+      A string with white space removed from both ends.
+
+      :Parameters:
+
+       * **arg** -- The string.
+
+      :returns: The trimmed string.
+   
+
+   .. function:: static Expression string_trim_end(krpc::Connection& connection, Expression arg)
+
+      A string with white space removed from its end.
+
+      :Parameters:
+
+       * **arg** -- The string.
+
+      :returns: The trimmed string.
+   
+
+   .. function:: static Expression string_trim_start(krpc::Connection& connection, Expression arg)
+
+      A string with white space removed from its start.
+
+      :Parameters:
+
+       * **arg** -- The string.
+
+      :returns: The trimmed string.
+   
+
+   .. function:: static Expression subtract(krpc::Connection& connection, Expression arg0, Expression arg1)
+
+      Numerical subtraction.
+
+      :Parameters:
+
+       * **arg0** -- The first operand.
+       * **arg1** -- The second operand.
+
+   
+
+   .. function:: static Expression sum(krpc::Connection& connection, Expression arg)
+
+      The sum of the values of a collection.
+
+      :Parameters:
+
+       * **arg** -- The list or set.
+
+      :returns: The sum of the elements in the collection.
+   
+
+   .. function:: static Expression take(krpc::Connection& connection, Expression arg, Expression count)
+
+      The first count values of a collection.
+
+      :Parameters:
+
+       * **arg** -- The collection.
+       * **count** -- The number of values to take.
+
+      :returns: The first count values of the collection.
+   
+
+      .. note::
+
+         The result is lazily evaluated. :func:`Expression::to_list` makes it concrete.
+
+   .. function:: static Expression throw_(krpc::Connection& connection, std::string service, std::string name, Expression message)
+
+      A throw statement, which raises the named exception.
+
+      :Parameters:
+
+       * **service** -- The name of the service the exception is defined in.
+       * **name** -- The name of the exception.
+       * **message** -- The message of the exception.
+
+   
+
+      .. note::
+
+         The client receives the exception as an error from the function, or from the stream
+         or event evaluating it. For example, the service ``KRPC`` and the name
+         ``Error`` raise :class:`Error`. Throws an exception if the service does not
+         declare it.
+
+   .. function:: static Expression to_list(krpc::Connection& connection, Expression arg)
+
+      A collection as a list.
+
+      :Parameters:
+
+       * **arg** -- The collection.
+
+      :returns: The collection as a list.
+   
+
+   .. function:: static Expression to_set(krpc::Connection& connection, Expression arg)
+
+      A collection as a set.
+
+      :Parameters:
+
+       * **arg** -- The collection.
+
+      :returns: The collection as a set.
+   
+
+      .. note::
+
+         Throws an exception if a value is null.
+
+   .. function:: static Expression try_catch(krpc::Connection& connection, Expression body, std::string service, std::string name, std::optional<Expression> message, Expression handler)
+
+      A try-catch statement that handles the named exception.
+
+      :Parameters:
+
+       * **body** -- The statement to evaluate.
+       * **service** -- The name of the service the exception is defined in.
+       * **name** -- The name of the exception.
+       * **message** -- A string variable assigned the exception's message, or null.
+       * **handler** -- The statement evaluated when the exception is caught.
+
+   
+
+      .. note::
+
+         Only an exception a service declares can be named, and :func:`Expression::try_catch_all`
+         handles any exception. Throws an exception if the service does not declare it.
+
+   .. function:: static Expression try_catch_all(krpc::Connection& connection, Expression body, std::optional<Expression> message, Expression handler)
+
+      A try-catch statement that handles any exception.
+
+      :Parameters:
+
+       * **body** -- The statement to evaluate.
+       * **message** -- A string variable assigned the exception's message, or null.
+       * **handler** -- The statement evaluated when an exception is caught.
+
+   
+
+   .. function:: static Expression try_finally(krpc::Connection& connection, Expression body, Expression finalizer)
+
+      A try-finally statement.
+
+      :Parameters:
+
+       * **body** -- The statement to evaluate.
+       * **finalizer** -- The statement evaluated after the body.
+
+   
+
+      .. note::
+
+         The finalizer is evaluated after the body, whether or not the body raises an
+         exception. A break, continue or return cannot leave the finalizer.
+
+   .. function:: static Expression union_(krpc::Connection& connection, Expression arg1, Expression arg2)
+
+      The values in either of two collections, with duplicates removed.
+
+      :Parameters:
+
+       * **arg1** -- The first collection.
+       * **arg2** -- The second collection.
+
+      :returns: The union of the two collections.
+   
+
+      .. note::
+
+         The result is lazily evaluated. :func:`Expression::to_list` makes it concrete.
+
+   .. function:: static Expression variable(krpc::Connection& connection, std::string name, Type type)
+
+      A local variable, declared by :func:`Expression::block_with_variables`.
+
+      :Parameters:
+
+       * **name** -- The name of the variable.
+       * **type** -- The type of the variable.
+
+      :returns: A local variable.
+   
+
+   .. function:: static Expression where(krpc::Connection& connection, Expression arg, Expression func)
+
+      The values of a collection for which a predicate function returns true.
+
+      :Parameters:
+
+       * **arg** -- The list or set.
+       * **func** -- The predicate function, taking an element of the collection.
+
+      :returns: The filtered collection.
+   
+
+      .. note::
+
+         The result is lazily evaluated. :func:`Expression::to_list` makes it concrete.
+
+   .. function:: static Expression while_(krpc::Connection& connection, Expression condition, Expression body)
+
+      A while loop, which evaluates the body while the condition is true.
+
+      :Parameters:
+
+       * **condition** -- The boolean condition.
+       * **body** -- The statement evaluated on each iteration.
+
+   
+
+      .. note::
+
+         A :func:`Expression::break_` or :func:`Expression::continue_` in the body applies to this loop.
+
+   .. function:: static Expression zip(krpc::Connection& connection, Expression arg1, Expression arg2, Expression func)
+
+      The results of a function applied to the values of two collections in pairs.
+
+      :Parameters:
+
+       * **arg1** -- The first collection.
+       * **arg2** -- The second collection.
+       * **func** -- A function combining a value from each collection.
+
+      :returns: The combined collection.
+   
+
+      .. note::
+
+         The result is as long as the shorter of the two collections. It is lazily
+         evaluated, and :func:`Expression::to_list` makes it concrete.
+
+
+
+.. class:: Type
+
+   The type of a value a procedure takes or returns.
+
+   .. function:: static Type bool_(krpc::Connection& connection)
+
+      A boolean type.
+
+
+   
+
+   .. function:: static Type bytes(krpc::Connection& connection)
+
+      A byte sequence type.
+
+
+   
+
+   .. function:: static Type class_type(krpc::Connection& connection, std::string service, std::string name)
+
+      The type of a class defined by a service.
+
+      :Parameters:
+
+       * **service** -- The name of the service the class is defined in.
+       * **name** -- The name of the class.
+
+   
+
+   .. function:: TypeCode code()
+
+      The kind of the type.
+
+   
+
+   .. function:: static Type dictionary_type(krpc::Connection& connection, Type key_type, Type value_type)
+
+      A dictionary type. Throws an exception if the key type is nullable or not a valid
+      key type.
+
+      :Parameters:
+
+       * **key_type** -- The type of the keys of the dictionary.
+       * **value_type** -- The type of the values of the dictionary.
+
+   
+
+   .. function:: static Type double_(krpc::Connection& connection)
+
+      A double precision floating point number type.
+
+
+   
+
+   .. function:: static Type enumeration_type(krpc::Connection& connection, std::string service, std::string name)
+
+      The type of an enumeration defined by a service.
+
+      :Parameters:
+
+       * **service** -- The name of the service the enumeration is defined in.
+       * **name** -- The name of the enumeration.
+
+   
+
+   .. function:: static Type float_(krpc::Connection& connection)
+
+      A single precision floating point number type.
+
+
+   
+
+   .. function:: static Type int_(krpc::Connection& connection)
+
+      A signed 32-bit integer type.
+
+
+   
+
+   .. function:: static Type list_type(krpc::Connection& connection, Type value_type)
+
+      A list type.
+
+      :Parameters:
+
+       * **value_type** -- The type of the elements of the list.
+
+   
+
+   .. function:: static Type long_(krpc::Connection& connection)
+
+      A signed 64-bit integer type.
+
+
+   
+
+   .. function:: std::string name()
+
+      The name of a class, enumeration or structure type, or an empty string.
+
+   
+
+   .. function:: bool nullable()
+
+      Whether a value of the type may be null.
+
+   
+
+      .. note::
+
+         Any type can be nullable. A string or class value of a type that is not nullable
+         is never null.
+
+   .. function:: static Type nullable_type(krpc::Connection& connection, Type value_type)
+
+      A nullable type, holding a value of the given type or null.
+
+      :Parameters:
+
+       * **value_type** -- The type of the value.
+
+   
+
+   .. function:: std::string service()
+
+      The service a class, enumeration or structure type is defined in, or an empty string.
+
+   
+
+   .. function:: static Type set_type(krpc::Connection& connection, Type value_type)
+
+      A set type. Throws an exception if the element type is nullable.
+
+      :Parameters:
+
+       * **value_type** -- The type of the elements of the set.
+
+   
+
+   .. function:: static Type string(krpc::Connection& connection)
+
+      A string type.
+
+
+   
+
+   .. function:: static Type struct_type(krpc::Connection& connection, std::string service, std::string name)
+
+      The type of a structure defined by a service.
+
+      :Parameters:
+
+       * **service** -- The name of the service the structure is defined in.
+       * **name** -- The name of the structure.
+
+   
+
+   .. function:: static Type tuple_type(krpc::Connection& connection, std::vector<Type> value_types)
+
+      A tuple type. Throws an exception if there are no element types or more than seven.
+
+      :Parameters:
+
+       * **value_types** -- The types of the elements of the tuple.
+
+   
+
+   .. function:: std::vector<Type> types()
+
+      The types of the elements of a tuple, list, set or dictionary type.
+
+   
+
+      .. note::
+
+         The value types of a tuple, the value type of a list or set, or the key and value
+         types of a dictionary. An empty list for any other type.
+
+   .. function:: static Type u_int(krpc::Connection& connection)
+
+      An unsigned 32-bit integer type.
+
+
+   
+
+   .. function:: static Type u_long(krpc::Connection& connection)
+
+      An unsigned 64-bit integer type.
+
+
+   
+
+
+
+.. namespace:: krpc::services::KRPC
+.. enum-struct:: GameScene
+
+   The game scene. See :func:`game_scene`.
+
+
+   .. enumerator:: administration
+
+      The administration facility. This is a pseudo-scene, shown when the
+      administration facility is open within the space center scene.
+
+
+   .. enumerator:: astronaut_complex
+
+      The astronaut complex. This is a pseudo-scene, shown when the
+      astronaut complex facility is open within the space center scene.
+
+
+   .. enumerator:: editor_sph
+
+      The Space Plane Hangar.
+
+
+   .. enumerator:: editor_vab
+
+      The Vehicle Assembly Building.
+
+
+   .. enumerator:: flight
+
+      The game scene showing a vessel in flight (or on the launchpad/runway).
+
+
+   .. enumerator:: mission_builder
+
+      The mission builder.
+
+
+   .. enumerator:: mission_control
+
+      Mission control. This is a pseudo-scene, shown when the
+      mission control facility is open within the space center scene.
+
+
+   .. enumerator:: research_and_development
+
+      Research and development. This is a pseudo-scene, shown when the
+      research and development facility is open within the space center scene.
+
+
+   .. enumerator:: space_center
+
+      The game scene showing the Kerbal Space Center buildings.
+
+
+   .. enumerator:: tracking_station
+
+      The tracking station.
+
+
+
+.. namespace:: krpc::services::KRPC
+.. enum-struct:: TypeCode
+
+   The kind of a type, with the values of the communication protocol's type codes.
+
+
+   .. enumerator:: bool_
+
+      A boolean.
+
+
+   .. enumerator:: bytes
+
+      A sequence of bytes.
+
+
+   .. enumerator:: class_
+
+      A class defined by a service.
+
+
+   .. enumerator:: dictionary
+
+      A dictionary, with the types of its keys and values in :func:`Type::types`.
+
+
+   .. enumerator:: double_
+
+      A double precision floating point number.
+
+
+   .. enumerator:: enumeration
+
+      An enumeration defined by a service.
+
+
+   .. enumerator:: float_
+
+      A single precision floating point number.
+
+
+   .. enumerator:: list
+
+      A list, with the type of its values in :func:`Type::types`.
+
+
+   .. enumerator:: s_int32
+
+      A signed 32-bit integer.
+
+
+   .. enumerator:: s_int64
+
+      A signed 64-bit integer.
+
+
+   .. enumerator:: set
+
+      A set, with the type of its values in :func:`Type::types`.
+
+
+   .. enumerator:: string
+
+      A string.
+
+
+   .. enumerator:: struct_
+
+      A structure defined by a service.
+
+
+   .. enumerator:: tuple
+
+      A tuple, with the types of its values in :func:`Type::types`.
+
+
+   .. enumerator:: u_int32
+
+      An unsigned 32-bit integer.
+
+
+   .. enumerator:: u_int64
+
+      An unsigned 64-bit integer.
+
+
+
+.. namespace:: krpc::services::KRPC
+.. struct:: ClientInfo
+
+   A client connected to the server.
+
+   .. note::
+
+      See :func:`clients`.
+   .. member:: std::string id
+
+      The identifier of the client.
+
+   .. member:: std::string name
+
+      The name of the client, or an empty string if it has no name.
+
+   .. member:: std::string address
+
+      The address of the client.
+
+   .. member:: uint32_t protocol_version
+
+      The protocol version of the client's connection.
+
+
+.. namespace:: krpc::services::KRPC
+.. struct:: ServerSettings
+
+   The settings that control how the server executes calls.
+
+   .. note::
+
+      See :member:`ServerStatus::settings`.
+   .. member:: bool one_rpc_per_update
+
+      Whether the server executes one call per update.
+
+   .. member:: uint32_t max_time_per_update
+
+      The current maximum time spent executing calls per update, in microseconds.
+
+   .. member:: bool adaptive_rate_control
+
+      Whether the server adjusts :member:`ServerSettings::max_time_per_update` to hold the frame rate.
+
+   .. member:: bool blocking_recv
+
+      Whether the server waits for the next call in an update.
+
+   .. member:: uint32_t recv_timeout
+
+      The time the server waits for the next call, in microseconds.
+
+   .. member:: uint32_t tick_hold_timeout
+
+      The longest time a client may hold the game on one physics tick, in microseconds.
+
+
+.. namespace:: krpc::services::KRPC
+.. struct:: ServerStatistics
+
+   The performance statistics of the server.
+
+   .. note::
+
+      See :member:`ServerStatus::statistics`.
+   .. member:: uint64_t bytes_read
+
+      The number of bytes received from clients.
+
+   .. member:: uint64_t bytes_written
+
+      The number of bytes sent to clients.
+
+   .. member:: float bytes_read_rate
+
+      The rate bytes are received from clients, in bytes per second.
+
+   .. member:: float bytes_written_rate
+
+      The rate bytes are sent to clients, in bytes per second.
+
+   .. member:: uint64_t rpcs_executed
+
+      The number of calls executed.
+
+   .. member:: float rpc_rate
+
+      The number of calls executed per second.
+
+   .. member:: float time_per_rpc_update
+
+      The time spent receiving and executing calls per update, in seconds.
+
+   .. member:: float poll_time_per_rpc_update
+
+      The time spent receiving calls per update, in seconds.
+
+   .. member:: float exec_time_per_rpc_update
+
+      The time spent executing calls per update, in seconds.
+
+   .. member:: uint32_t deferred_calls
+
+      The number of calls left for the next update, because the update ran out of time
+      or the call yielded.
+
+   .. member:: uint32_t streams
+
+      The number of open streams, events included.
+
+   .. member:: uint64_t stream_evaluations
+
+      The number of stream evaluations, one per stream per update.
+
+   .. member:: float stream_evaluation_rate
+
+      The number of stream evaluations per second.
+
+   .. member:: uint64_t stream_updates_sent
+
+      The number of stream updates sent to clients.
+
+   .. member:: float time_per_stream_update
+
+      The time spent updating streams per update, in seconds.
+
+
+.. namespace:: krpc::services::KRPC
+.. struct:: ServerStatus
+
+   The status of the server.
+
+   .. note::
+
+      See :func:`get_status`.
+   .. member:: std::string version
+
+      The version of the server, or ``unknown``.
+
+   .. member:: uint32_t protocol_version
+
+      The protocol version of the connection.
+
+   .. member:: ServerSettings settings
+
+      The settings of the server.
+
+   .. member:: ServerStatistics statistics
+
+      The performance statistics of the server.
+
+
+.. namespace:: krpc::services::KRPC
+.. class:: ArgumentException
+
+   A method was invoked where at least one of the passed arguments does not
+   meet the parameter specification of the method.
+
+   An alias of ``std::invalid_argument``.
+
+
+
+.. namespace:: krpc::services::KRPC
+.. class:: ArgumentNullException
+
+   A null reference was passed to a method that does not accept it as a valid argument.
+
+   An alias of ``std::invalid_argument``.
+
+
+
+.. namespace:: krpc::services::KRPC
+.. class:: ArgumentOutOfRangeException
+
+   The value of an argument is outside the allowable range of values as defined by the invoked method.
+
+   An alias of ``std::out_of_range``.
+
+
+
+.. namespace:: krpc::services::KRPC
+.. class:: DivideByZeroException
+
+   An integer was divided by zero.
+
+   An alias of ``std::domain_error``.
+
+
+
+.. namespace:: krpc::services::KRPC
+.. class:: Error
+
+   A general error, described by its message.
+
+   A subclass of :class:`krpc::ServerError`.
+
+
+
+.. namespace:: krpc::services::KRPC
+.. class:: IndexOutOfRangeException
+
+   An index was outside the bounds of a collection, string or array.
+
+   An alias of ``std::out_of_range``.
+
+
+
+.. namespace:: krpc::services::KRPC
+.. class:: InvalidOperationException
+
+   A method call was made to a method that is invalid
+   given the current state of the object.
+
+   An alias of ``std::logic_error``.
+
+
+
+.. namespace:: krpc::services::KRPC
+.. class:: KeyNotFoundException
+
+   A key was not found in a dictionary.
+
+   An alias of ``std::out_of_range``.
+
+
+
+.. namespace:: krpc::services::KRPC
+.. class:: NotSupportedException
+
+   A method was invoked that is not supported.
+
+   A subclass of :class:`krpc::ServerError`.
+
+
+
+.. namespace:: krpc::services::KRPC
+.. class:: NullReferenceException
+
+   A value was null where its type does not allow one.
+
+   A subclass of :class:`krpc::ServerError`.
+
+
+
+.. namespace:: krpc::services::KRPC
+.. class:: ObjectDestroyedException
+
+   The game object that a service object refers to no longer exists,
+   so the object cannot be used. For example, the part it represents
+   was destroyed, or the vessel it belongs to was recovered.
+
+   A subclass of :class:`krpc::ServerError`.
+
+   .. note::
+
+      See :class:`ObjectNotLoadedException` for a game object that exists but is not
+      loaded.
+
+.. namespace:: krpc::services::KRPC
+.. class:: ObjectNotLoadedException
+
+   The game object that a service object refers to exists, but is not loaded.
+   For example, the game is loading, or the vessel carrying the part is unloaded.
+
+   A subclass of :class:`krpc::ServerError`.
+
+   .. note::
+
+      See :class:`ObjectDestroyedException` for a game object that no longer exists.
+
+.. namespace:: krpc::services::KRPC
+.. class:: OverflowException
+
+   An arithmetic or conversion operation overflowed.
+
+   An alias of ``std::overflow_error``.
+
+
+
+.. namespace:: krpc::services::KRPC
+.. class:: StreamRemovedException
+
+   A stream was removed by the server, e.g. an event that has finished.
+
+   An alias of :class:`krpc::StreamError`.
+
+
+
+.. namespace:: krpc::services::KRPC
+.. class:: TimeoutException
+
+   An operation did not complete in the time allotted to it.
+
+   A subclass of :class:`krpc::ServerError`.
+
+
+
+.. namespace:: krpc::services::KRPC
+.. class:: UnsupportedSceneException
+
+   The procedure is not available in the current game scene.
+
+   A subclass of :class:`krpc::ServerError`.

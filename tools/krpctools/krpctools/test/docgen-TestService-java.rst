@@ -1237,6 +1237,8 @@
 
 
 
+   A subclass of :type:`krpc.client.ServerException`.
+
 
 
 .. type:: public class DeprecatedException
@@ -1244,3 +1246,5 @@
    .. warning:: Deprecated. Use :type:`CustomException` instead.
 
    Deprecated exception documentation string.
+
+   A subclass of :type:`krpc.client.ServerException`.

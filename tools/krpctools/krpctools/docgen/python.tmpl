@@ -199,6 +199,9 @@
 {% endif %}
 {{ gendoc(x.documentation) | indent }}
 
+{% if domain.raised_as(x) %}   {{ domain.raised_as(x) }}
+
+{% endif %}
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}{% endif %}
 {% endmacro %}
 

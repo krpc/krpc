@@ -284,9 +284,10 @@ class CnanoGenerator(Generator[CnanoLanguage]):
     def format_cref(self, target):
         if target.kind == crefs.SERVICE:
             return target.service
-        # An exception has no C type, so it is named as the error message names it
+        # An exception has no C type, so it is named by the macro of its ids, which Doxygen
+        # links only when written with a #
         if target.kind == crefs.EXCEPTION:
-            return target.service + "." + target.type
+            return "#KRPC_EXCEPTION_" + (target.service + "_" + target.type).upper()
         name = "krpc_" + target.service
         if target.type is not None:
             name += "_" + target.type

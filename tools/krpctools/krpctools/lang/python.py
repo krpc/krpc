@@ -3,6 +3,7 @@ import keyword
 from krpc.schema.KRPC_pb2 import Type
 from krpc.types import (
     NATIVE_EXCEPTIONS,
+    STREAM_REMOVED,
     ClassType,
     DictionaryType,
     EnumerationType,
@@ -54,6 +55,12 @@ class PythonLanguage(Language):
     def native_exception(self, mapped_type: str) -> str | None:
         native = NATIVE_EXCEPTIONS.get(mapped_type)
         return native.__name__ if native else None
+
+    def exception_alias(self, service: str, name: str, mapped_type: str) -> str | None:
+        # The server removes a stream with this exception, raised as the client's StreamError
+        if (service, name) == STREAM_REMOVED:
+            return "krpc.error.StreamError"
+        return None
 
     def parse_type(self, typ):
         if isinstance(typ, ValueType):

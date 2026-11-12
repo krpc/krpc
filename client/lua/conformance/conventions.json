@@ -1,4 +1,19 @@
 {
+  "remote_error": "krpc.RemoteError",
+  "server_error": "krpc.ServerError",
+  "native_types": {
+    "System.InvalidOperationException": null,
+    "System.ArgumentException": null,
+    "System.ArgumentNullException": null,
+    "System.ArgumentOutOfRangeException": null,
+    "System.NullReferenceException": null,
+    "System.Collections.Generic.KeyNotFoundException": null,
+    "System.IndexOutOfRangeException": null,
+    "System.DivideByZeroException": null,
+    "System.NotSupportedException": null,
+    "System.TimeoutException": null,
+    "System.OverflowException": null
+  },
   "naming": {
     "case": "snake",
     "accessors": true,

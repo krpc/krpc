@@ -92,6 +92,13 @@ class JavaGenerator(Generator[JavaLanguage]):
         return "\n".join(line.rstrip() for line in lines)
 
     def format_cref(self, target):
+        # An exception with no class of its own is referred to by the type it is thrown as
+        if target.kind == crefs.EXCEPTION:
+            alias = self.language.exception_alias(
+                target.service, target.type, self.mapped_type(target)
+            )
+            if alias is not None:
+                return "{@link %s}" % alias
         name = target.service
         if target.type is not None:
             name += "." + target.type

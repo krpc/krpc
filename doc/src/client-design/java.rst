@@ -5,6 +5,29 @@ The internal design of the Java client. This page builds on the :doc:`shared cli
 </client-design>` and the :doc:`client specification </client-spec>`. Usage is in
 the :doc:`Java guide </java>`. Paths are relative to ``client/java/``.
 
+Generics and Generated Stubs
+----------------------------
+
+Erasure removes the element type of a ``List<Integer>`` at run time. Generated stubs therefore pass
+a ``krpc.schema.KRPC.Type`` descriptor to ``Encoder.encode`` and ``Decoder.decode``, and cast the
+result.
+
+``clientgen`` writes one class per service in the fixed package ``krpc.client.services``, and the
+jar includes the stubs of the shipped services.
+
+* ``Encoder`` and ``Decoder`` find a class by the name ``krpc.client.services.<Service>$<Name>``,
+  and call its constructor, ``fromValue``, ``fieldTypes`` or ``fromFieldValues`` by reflection. A
+  wire type names a structure and omits its fields, so the generated class supplies them.
+* ``addStream`` and ``getCall`` find a method by name and the run-time classes of its arguments.
+  ``@RPCInfo`` names the ``_Types`` class holding its descriptors. ``T`` is unchecked, so a wrong
+  ``T`` throws ``ClassCastException`` at the assignment.
+* ``_Types`` fills maps in initializers of 50 procedures each, as a single ``switch`` for a large
+  service passes the JVM's 64 KB method limit.
+* A service's exception types register on the connection in its ``newInstance``. The ``Connection``
+  constructor does this for ``KRPC`` only.
+* A stream registers before its first update. The return type in ``_Types`` shows that a call adds
+  one, or one ``GetServices`` call if the stubs are not loaded.
+
 Ownership
 ---------
 
@@ -17,7 +40,7 @@ events each hold the connection strongly, and none of them owns it:
    try (Connection connection = Connection.newInstance()) {
      vessel = SpaceCenter.newInstance(connection).getActiveVessel();
    }
-   vessel.getMET();  // Throws RPCException
+   vessel.getMET();  // Throws ConnectionException
 
 References
 ^^^^^^^^^^
@@ -45,7 +68,7 @@ Lifetime
 * The connection closes on ``close()``, on a connection failure, or when the JVM exits.
 * The client has no ``Cleaner`` or finalizer. An unclosed connection holds two threads, three
   selectors and the socket until the JVM exits, and does not delay that exit.
-* After ``close()``, a call throws ``RPCException``, and streams and events end. A second
+* After ``close()``, a call throws ``ConnectionException``, and streams and events end. A second
   ``close()`` does nothing.
 * A connection failure closes the channel and selectors and ends both threads, with no ``close()``.
 * A stream runs until ``remove()``, a server ending or the end of the connection. Dropping every
@@ -80,32 +103,10 @@ is the oldest release with a registered Bazel toolchain.
 The channel turns non-blocking at ``Session.start``, as a blocking channel closes when its thread is
 interrupted. Selector waits are capped at 1 s, as closing the channel does not wake a selector.
 
-* An interrupted call abandons its id and throws ``RPCException``, and the connection stays open. An
-  interrupted wait throws ``StreamException``. Both keep the interrupt flag.
+* An interrupted call abandons its id, and an interrupted wait ends. Both throw
+  ``java.util.concurrent.CancellationException`` and keep the interrupt flag, and the connection
+  stays open. ``InterruptedException`` is checked, so the unchecked API cannot throw it.
 * A write holds an interrupt back until it ends, as a partial message breaks the framing.
-
-Generics and Generated Stubs
-----------------------------
-
-Erasure removes the element type of a ``List<Integer>`` at run time. Generated stubs therefore pass
-a ``krpc.schema.KRPC.Type`` descriptor to ``Encoder.encode`` and ``Decoder.decode``, and cast the
-result.
-
-``clientgen`` writes one class per service in the fixed package ``krpc.client.services``, and the
-jar includes the stubs of the shipped services.
-
-* ``Encoder`` and ``Decoder`` find a class by the name ``krpc.client.services.<Service>$<Name>``,
-  and call its constructor, ``fromValue``, ``fieldTypes`` or ``fromFieldValues`` by reflection. A
-  wire type names a structure and omits its fields, so the generated class supplies them.
-* ``addStream`` and ``getCall`` find a method by name and the run-time classes of its arguments.
-  ``@RPCInfo`` names the ``_Types`` class holding its descriptors. ``T`` is unchecked, so a wrong
-  ``T`` throws ``ClassCastException`` at the assignment.
-* ``_Types`` fills maps in initializers of 50 procedures each, as a single ``switch`` for a large
-  service passes the JVM's 64 KB method limit.
-* A service's exception types register on the connection in its ``newInstance``. The ``Connection``
-  constructor does this for ``KRPC`` only.
-* A stream registers before its first update. The return type in ``_Types`` shows that a call adds
-  one, or one ``GetServices`` call if the stubs are not loaded.
 
 Mapping the Spec to Java
 ------------------------
@@ -115,18 +116,16 @@ Mapping the Spec to Java
 
    * - Spec
      - Java
-   * - Connection error, while connecting
-     - ``ConnectionException``, a checked ``IOException``
-   * - Connection error, from a call
-     - ``RPCException``, with the ``ConnectionException`` as its cause
-   * - Connection error, from a stream or event
-     - ``StreamException``, with the ``ConnectionException`` as its cause
-   * - Stream error, encoding error
-     - ``StreamException``, checked. ``EncodingException``, unchecked
+   * - Remote error
+     - ``RemoteException``, a ``RuntimeException``. Every exception is unchecked, as in C# and in
+       current Java libraries
+   * - Connection, stream, encoding error
+     - ``ConnectionException``, ``StreamException``, ``EncodingException``
    * - Server error with a native type
-     - The unchecked JDK type, from ``lang/java.py`` in ``krpctools``
+     - The JDK type, from ``lang/java.py`` in ``krpctools``. The stubs generate no class for it
    * - Server error of a service, or with no mapped type
-     - ``RPCException`` or a generated subclass, checked
+     - ``ServerException`` or a generated subclass. ``KRPC.TimeoutException`` has a generated
+       class, as ``java.util.concurrent.TimeoutException`` is checked
    * - Nullable value
      - The boxed or reference type, with ``null``
    * - Unsigned integer
@@ -142,8 +141,4 @@ Mapping the Spec to Java
    * - Flags enumeration
      - A final class of constants extending ``RemoteFlags``, as an ``enum`` cannot hold a combination. One type names it in every signature, and ``Decoder`` decodes it through ``fromValue`` as any enumeration. An ``EnumSet`` would need its own encoding and a different signature
    * - Scoped stream or event
-     - Try-with-resources. ``close()`` calls ``remove()``, and declares ``RPCException``. The language keeps the block's exception, with the exception from ``close()`` suppressed
-
-``invoke`` declares only ``RPCException``, which is why a connection error is its cause. A server
-timeout throws its generated class, as ``TimeoutException`` is checked. ``Consumer`` and
-``Runnable`` declare no checked exception, so a callback catches ``RPCException`` itself.
+     - Try-with-resources. ``close()`` calls ``remove()``. The language keeps the block's exception, with the exception from ``close()`` suppressed

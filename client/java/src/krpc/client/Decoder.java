@@ -93,7 +93,7 @@ public class Decoder {
           throw new EncodingException("Failed to decode value");
       }
     } catch (IOException exn) {
-      throw new EncodingException("Failed to decode value", exn);
+      throw new EncodingException("Failed to decode value: " + exn.getMessage(), exn);
     }
   }
 
@@ -115,8 +115,11 @@ public class Decoder {
     }
     try {
       return (T) info.fromFieldValues.invoke(null, (Object) values);
-    } catch (IllegalAccessException | InvocationTargetException exn) {
-      throw new EncodingException("Failed to decode struct", exn);
+    } catch (IllegalAccessException exn) {
+      throw new EncodingException("Failed to decode struct: " + exn.getMessage(), exn);
+    } catch (InvocationTargetException exn) {
+      Throwable cause = exn.getTargetException();
+      throw new EncodingException("Failed to decode struct: " + cause.getMessage(), cause);
     }
   }
 
@@ -175,15 +178,16 @@ public class Decoder {
       Constructor<?> ctor = classType.getConstructor(Connection.class, long.class);
       return (T) ctor.newInstance(connection, id);
     } catch (ClassNotFoundException exn) {
-      throw new EncodingException("Failed to decode object", exn);
+      throw new EncodingException("Failed to decode object: " + exn.getMessage(), exn);
     } catch (NoSuchMethodException exn) {
-      throw new EncodingException("Failed to decode object", exn);
+      throw new EncodingException("Failed to decode object: " + exn.getMessage(), exn);
     } catch (InstantiationException exn) {
-      throw new EncodingException("Failed to decode object", exn);
+      throw new EncodingException("Failed to decode object: " + exn.getMessage(), exn);
     } catch (IllegalAccessException exn) {
-      throw new EncodingException("Failed to decode object", exn);
+      throw new EncodingException("Failed to decode object: " + exn.getMessage(), exn);
     } catch (InvocationTargetException exn) {
-      throw new EncodingException("Failed to decode object", exn);
+      Throwable cause = exn.getTargetException();
+      throw new EncodingException("Failed to decode object: " + cause.getMessage(), cause);
     }
   }
 
@@ -195,15 +199,16 @@ public class Decoder {
           "krpc.client.services." + type.getService() + "$" + type.getName());
       return (T) enumType.getMethod("fromValue", int.class).invoke(null, value);
     } catch (IOException exn) {
-      throw new EncodingException("Failed to decode object", exn);
+      throw new EncodingException("Failed to decode object: " + exn.getMessage(), exn);
     } catch (ClassNotFoundException exn) {
-      throw new EncodingException("Failed to decode object", exn);
+      throw new EncodingException("Failed to decode object: " + exn.getMessage(), exn);
     } catch (NoSuchMethodException exn) {
-      throw new EncodingException("Failed to decode object", exn);
+      throw new EncodingException("Failed to decode object: " + exn.getMessage(), exn);
     } catch (IllegalAccessException exn) {
-      throw new EncodingException("Failed to decode object", exn);
+      throw new EncodingException("Failed to decode object: " + exn.getMessage(), exn);
     } catch (InvocationTargetException exn) {
-      throw new EncodingException("Failed to decode object", exn);
+      Throwable cause = exn.getTargetException();
+      throw new EncodingException("Failed to decode object: " + cause.getMessage(), cause);
     }
   }
 
@@ -211,7 +216,12 @@ public class Decoder {
   static Tuple decodeTuple(ByteString data, List<KRPC.Type> valueTypes, Connection connection)
       throws IOException {
     KRPC.Tuple tupleMessage = KRPC.Tuple.newBuilder().mergeFrom(data).build();
-    int numElements = tupleMessage.getItemsCount();
+    // Items past the type's are ignored, as for a structure
+    int numElements = valueTypes.size();
+    if (tupleMessage.getItemsCount() < numElements) {
+      throw new EncodingException("Tuple has " + tupleMessage.getItemsCount()
+          + " items; expected at least " + numElements);
+    }
     Object[] es = new Object[numElements];
     for (int i = 0; i < numElements; i++) {
       es[i] = decodeItem(tupleMessage.getItems(i), valueTypes.get(i), connection);

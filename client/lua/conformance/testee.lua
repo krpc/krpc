@@ -533,6 +533,42 @@ local function dispatch(command)
   error('Unknown command ' .. tostring(case), 0)
 end
 
+-- The client's error classes, from the most derived, with their kinds and qualified names
+local ERROR_CLASSES = {
+  { krpc.ConnectionError, 'CONNECTION', 'krpc.ConnectionError' },
+  { krpc.ServerError, 'SERVER', 'krpc.ServerError' },
+  { krpc.EncodingError, 'ENCODING', 'krpc.EncodingError' },
+  { krpc.RemoteError, nil, 'krpc.RemoteError' },
+}
+
+-- The error message for an error the client raised. A string is the language's own error, for
+-- an argument or a call the client rejects.
+local function to_error(err)
+  if type(err) ~= 'table' or not krpc.RemoteError:class_of(err) then
+    return { kind = 'ARGUMENT', message = tostring(err) }
+  end
+  local reply_error = { message = err.message, native_types = {} }
+  for _, entry in ipairs(ERROR_CLASSES) do
+    local cls, kind, name = entry[1], entry[2], entry[3]
+    if cls:class_of(err) then
+      table.insert(reply_error.native_types, name)
+      reply_error.kind = reply_error.kind or kind
+    end
+  end
+  if err.cause ~= nil then
+    reply_error.cause = tostring(err.cause)
+  end
+  if err.status ~= nil then
+    reply_error.status = tostring(err.status)
+  end
+  if err.reason ~= nil then
+    reply_error.reason = tostring(err.reason)
+  end
+  reply_error.service = err.service
+  reply_error.name = err.name
+  return reply_error
+end
+
 local function run(command)
   conn = connections[command.connection or '']
   local ok, result = pcall(dispatch, command)
@@ -542,22 +578,14 @@ local function run(command)
   elseif type(result) == 'table' and result.unsupported ~= nil then
     reply.error = { kind = 'UNSUPPORTED', message = result.unsupported }
   else
-    -- A failed connect, and a call once the connection has ended, fail with the connection
-    local kind = 'RPC'
-    if type(result) == 'table' and result.unsupported ~= nil then
-      kind = 'UNSUPPORTED'
-      result = result.unsupported
-    elseif command.command == 'connect' or (conn ~= nil and conn._error ~= nil) then
-      kind = 'CONNECTION'
-    end
-    reply.error = { kind = kind, message = tostring(result) }
+    reply.error = to_error(result)
   end
   write({ reply = reply })
 end
 
 write({ hello = {
   client = 'lua',
-  profiles = { 'core', 'dynamic', 'definitions', 'defaults', 'skipped-arguments', 'functions', 'connections', 'ordering' },
+  profiles = { 'core', 'error-types', 'dynamic', 'definitions', 'defaults', 'skipped-arguments', 'functions', 'connections', 'ordering' },
   protocols = { 'tcpip', 'localsocket' },
 } })
 

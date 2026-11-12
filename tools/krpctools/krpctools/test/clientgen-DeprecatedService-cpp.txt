@@ -48,9 +48,9 @@ class [[deprecated("Use TestService instead.")]] DeprecatedService : public ::kr
    *
    * \deprecated Use TestService instead.
    */
-  class [[deprecated("Use TestService instead.")]] ServiceException : public ::krpc::RPCError {
+  class [[deprecated("Use TestService instead.")]] ServiceException : public ::krpc::ServerError {
    public:
-    inline explicit ServiceException(const std::string& msg) : ::krpc::RPCError(msg) {}
+    inline explicit ServiceException(const std::string& msg) : ::krpc::ServerError(msg) {}
   };
 
   /**

@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import math
+import os
 import select
 import socket
+import sys
 import time
 
 import google.protobuf.message
@@ -16,6 +18,9 @@ from krpc.encoder import Encoder, encode_request_message
 # costs one read and not one per byte of its size prefix plus one for its body.
 _READ_SIZE = 8192
 
+
+# The size of the path field of a unix domain socket address, with its terminating NUL
+_SOCKET_PATH_SIZE = 108 if sys.platform.startswith("linux") else 104
 
 # The longest wait poll and select accept, in seconds. A longer one waits indefinitely.
 _MAXIMUM_WAIT = (2**31 - 1) / 1000
@@ -219,6 +224,12 @@ class LocalTransport(Transport):
         # the socket is opened by calling winsock directly.
         if not hasattr(socket, "AF_UNIX"):
             return winsock.connect(self._path)
+        # A path that does not fit the socket address is the caller's error, as on Windows
+        if len(os.fsencode(self._path)) >= _SOCKET_PATH_SIZE:
+            raise ValueError(
+                "socket path is longer than the %d bytes a socket path may be"
+                % (_SOCKET_PATH_SIZE - 1)
+            )
         sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
         sock.connect(self._path)
         return sock

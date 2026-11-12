@@ -189,7 +189,7 @@ namespace KRPC.Client
         {
             try {
                 Remove ();
-            } catch (System.Exception exn) when (exn is ConnectionException || exn is ObjectDisposedException) {
+            } catch (ConnectionException) {
                 // The server removes the stream with the connection, and an exception here would
                 // replace the one leaving the block
             }
@@ -247,7 +247,7 @@ namespace KRPC.Client
                 return convert (value);
             if (value == null && typeof (TReturnType).IsValueType &&
                 System.Nullable.GetUnderlyingType (typeof (TReturnType)) == null)
-                throw new System.InvalidOperationException (
+                throw new EncodingException (
                     "The stream's value is null, which " + typeof (TReturnType) +
                     " cannot hold. Use a nullable type for the stream.");
             return (TReturnType) value;

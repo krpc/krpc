@@ -1,6 +1,7 @@
 package krpc.client;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
@@ -35,7 +36,7 @@ public class ConnectionTest {
   // A method name is matched by value, so one assembled at runtime resolves the same as an
   // interned literal.
   @Test
-  public void testGetCallWithNonInternedMethodName() throws RPCException {
+  public void testGetCallWithNonInternedMethodName() {
     String name = new StringBuilder("floatToString").toString();
     assertEquals(
         connection.getCall(TestService.class, "floatToString", 3.14159f),
@@ -46,8 +47,23 @@ public class ConnectionTest {
   // number of arguments is not resolved.
   @Test
   public void testGetCallWithWrongArgumentType() {
-    RPCException e = assertThrows(RPCException.class,
+    IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
         () -> connection.getCall(TestService.class, "floatToString", "not a float"));
     assertTrue(e.getMessage().contains("not found"));
+  }
+
+  // Each call after a close throws its own exception, so try-with-resources can suppress the
+  // one a close throws in the one its block throws.
+  @Test
+  public void testCallsAfterCloseThrowSeparateExceptions() throws IOException {
+    TestService service = TestService.newInstance(connection);
+    connection.close();
+    ConnectionException first =
+        assertThrows(ConnectionException.class, () -> service.floatToString(1));
+    ConnectionException second =
+        assertThrows(ConnectionException.class, () -> service.floatToString(1));
+    assertNotSame(first, second);
+    assertEquals(first.getMessage(), second.getMessage());
+    first.addSuppressed(second);
   }
 }

@@ -50,6 +50,9 @@ krpc_connection_t memory_connection(memory_link* link, const krpc_transport_t* t
 // its size
 const uint8_t connection_response_ok[] = {0x06, 0x2a, 0x04, 0x08, 0x00, 0x20, 0x02};
 
+// The same with status DENIED
+const uint8_t connection_response_denied[] = {0x06, 0x2a, 0x04, 0x08, 0x05, 0x20, 0x02};
+
 }  // namespace
 
 TEST(test_transport, test_read_write_close) {
@@ -92,11 +95,11 @@ TEST(test_transport, test_connect) {
 TEST(test_transport, test_not_open) {
   krpc_connection_t connection = {nullptr, 0};
   uint8_t buf[1] = {0};
-  ASSERT_EQ(KRPC_ERROR_IO, krpc_connect(connection, "test"));
+  ASSERT_EQ(KRPC_ERROR_CONNECTION, krpc_connect(connection, "test"));
   ASSERT_EQ(KRPC_ERROR_IO, krpc_read(connection, buf, sizeof(buf)));
   ASSERT_EQ(KRPC_ERROR_IO, krpc_write(connection, buf, sizeof(buf)));
   ASSERT_EQ(KRPC_ERROR_IO, krpc_close(connection));
-  ASSERT_EQ(KRPC_ERROR_IO, krpc_disconnect(connection));
+  ASSERT_EQ(KRPC_ERROR_CONNECTION, krpc_disconnect(connection));
 }
 
 // A failed connect closes a connection that is not resumable, and leaves a resumable one open
@@ -105,12 +108,19 @@ TEST(test_transport, test_connect_failed) {
   const krpc_transport_t resumable = {&memory_read, &memory_write, &memory_close, true};
 
   memory_link closed;
-  ASSERT_EQ(KRPC_ERROR_CONNECTION_FAILED,
+  ASSERT_EQ(KRPC_ERROR_CONNECTION,
             krpc_connect(memory_connection(&closed, &memory_transport), "test"));
   ASSERT_EQ(1, closed.closes);
 
   memory_link kept;
-  ASSERT_EQ(KRPC_ERROR_CONNECTION_FAILED,
-            krpc_connect(memory_connection(&kept, &resumable), "test"));
+  ASSERT_EQ(KRPC_ERROR_CONNECTION, krpc_connect(memory_connection(&kept, &resumable), "test"));
   ASSERT_EQ(0, kept.closes);
+
+  // A refusal closes a resumable connection too, as a retry gets the same answer
+  memory_link refused;
+  refused.incoming.assign(std::begin(connection_response_denied),
+                          std::end(connection_response_denied));
+  ASSERT_EQ(KRPC_ERROR_CONNECTION_REFUSED,
+            krpc_connect(memory_connection(&refused, &resumable), "test"));
+  ASSERT_EQ(1, refused.closes);
 }

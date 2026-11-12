@@ -80,7 +80,7 @@ class StreamImpl {
     return rate;
   }
 
-  public void setRate(float rate) throws RPCException {
+  public void setRate(float rate) {
     // The server has no stream for the id once it ends
     if (ending == null) {
       InternalProcedures.setStreamRate(connection, id, rate);
@@ -92,7 +92,7 @@ class StreamImpl {
    * The latest value, or the last one announced to waiters for a thread holding the condition,
    * which then sees the value change only when its waiters are woken.
    */
-  public Object getValue() throws RPCException, StreamException {
+  public Object getValue() {
     throwIfEnded();
     if (Thread.holdsLock(condition)) {
       if (!announced) {
@@ -119,7 +119,7 @@ class StreamImpl {
    * Returns the most recent value, waiting for the first. Throws the exception that ended the
    * stream, if it has ended.
    */
-  public Object waitForValue() throws RPCException, StreamException {
+  public Object waitForValue() {
     if (!getUpdated()) {
       synchronized (condition) {
         while (!announced && ending == null) {
@@ -176,19 +176,13 @@ class StreamImpl {
    * Throws the exception that ended the stream, if it has ended. A thread holding the condition
    * reads the ending once it is announced.
    */
-  public void throwIfEnded() throws RPCException, StreamException {
+  public void throwIfEnded() {
     Exception exn = ending;
     if (exn == null) {
       return;
     }
     if (exn != announcedEnding && !manager.isClosed() && Thread.holdsLock(condition)) {
       return;
-    }
-    if (exn instanceof RPCException) {
-      throw (RPCException) exn;
-    }
-    if (exn instanceof StreamException) {
-      throw (StreamException) exn;
     }
     if (exn instanceof RuntimeException) {
       throw (RuntimeException) exn;
@@ -594,7 +588,7 @@ class StreamImpl {
     }
   }
 
-  public void remove() throws RPCException {
+  public void remove() {
     manager.removeStream(this);
   }
 }

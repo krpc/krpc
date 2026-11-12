@@ -16,7 +16,7 @@ public class StreamTest {
 
   /** Invoke a procedure that returns an event, and check its stream is registered. */
   private static void assertEventStreamIsRegistered(ClassLoader stubs)
-      throws IOException, RPCException {
+      throws IOException {
     Connection conn = TestUtils.connect();
     try {
       conn.stubsLoader = stubs;
@@ -31,13 +31,13 @@ public class StreamTest {
   }
 
   @Test(timeout = 30000)
-  public void testStreamIsRegisteredWithoutStubs() throws IOException, RPCException {
+  public void testStreamIsRegisteredWithoutStubs() throws IOException {
     // A class loader with none of the generated stubs
     assertEventStreamIsRegistered(new ClassLoader(null) {});
   }
 
   @Test(timeout = 30000)
-  public void testStreamIsRegisteredWhenStubsDoNotLink() throws IOException, RPCException {
+  public void testStreamIsRegisteredWhenStubsDoNotLink() throws IOException {
     // A class loader whose classes fail to link
     assertEventStreamIsRegistered(new ClassLoader(null) {
       @Override

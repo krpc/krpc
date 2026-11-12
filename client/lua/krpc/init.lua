@@ -6,12 +6,18 @@ local protobuf = require 'krpc.protobuf'
 local Types = require 'krpc.types'
 local encoder = require 'krpc.encoder'
 local decoder = require 'krpc.decoder'
+local errors = require 'krpc.error'
 
 local krpc = {}
 
 -- Exposed here so that krpc.limits.SINT32_MAX, the name a generated default value is
 -- documented under, resolves for anyone who has required the package
 krpc.limits = limits
+
+-- The error classes, such as krpc.ConnectionError
+for name, cls in pairs(errors) do
+  krpc[name] = cls
+end
 
 local DEFAULT_ADDRESS = '127.0.0.1'
 local DEFAULT_PORT = 50000
@@ -38,8 +44,8 @@ local function default_path()
   -- Lua can only read the environment, and a path without a user name in it would be shared
   -- between accounts
   if user == nil or user == '' then
-    error('Could not work out which user this is, so there is no default socket path to ' ..
-          'connect to; pass path instead')
+    error(errors.ConnectionError('Could not work out which user this is, so there is no ' ..
+          'default socket path to connect to; pass path instead'), 0)
   end
   return temporary .. separator .. 'krpc-' .. user .. '.sock'
 end
@@ -53,10 +59,10 @@ local function handshake(transport, name, handshake_timeout)
   local ok, data = pcall(transport.receive_message_data, transport, handshake_timeout)
   if not ok then
     if tostring(data):find('timeout', 1, true) then
-      error('Failed to connect: the server did not answer the connection request within ' ..
-            handshake_timeout .. ' seconds', 0)
+      error(errors.ConnectionError('Failed to connect: the server did not answer the ' ..
+            'connection request within ' .. handshake_timeout .. ' seconds'), 0)
     end
-    error(data, 0)
+    error(errors.ConnectionError('Failed to connect', data), 0)
   end
   local message = decoder.decode_message(data, 'Message')
   local disconnect = message.disconnect
@@ -67,10 +73,11 @@ local function handshake(transport, name, handshake_timeout)
     if disconnect.message ~= '' then
       text = text .. ': ' .. disconnect.message
     end
-    error(text, 0)
+    error(errors.ConnectionError(text, nil, nil, reason), 0)
   end
   if message.connection_response == nil then
-    error('Failed to connect: expected a response to the connection request', 0)
+    error(errors.ConnectionError(
+      'Failed to connect: expected a response to the connection request'), 0)
   end
   return message.connection_response
 end
@@ -86,10 +93,20 @@ local function connect_using(transport, name, handshake_timeout)
     handshake_timeout = nil
   end
 
-  transport:connect()
+  local opened, failure = pcall(transport.connect, transport)
+  if not opened then
+    -- A local socket path too long is the caller's error, and passes through
+    if type(failure) == 'string' and failure:find('^bad argument') then
+      error(failure, 0)
+    end
+    error(errors.ConnectionError('Failed to connect to the server', failure), 0)
+  end
   local ok, response = pcall(handshake, transport, name, handshake_timeout)
   if not ok then
     transport:close()
+    if not errors.RemoteError:class_of(response) then
+      response = errors.ConnectionError('Failed to connect', response)
+    end
     error(response, 0)
   end
   if response.status ~= protobuf.enum('ConnectionResponse.Status', 'OK') then
@@ -100,12 +117,13 @@ local function connect_using(transport, name, handshake_timeout)
     if response.message ~= '' then
       text = text .. ': ' .. response.message
     end
-    error(text, 0)
+    error(errors.ConnectionError(text, nil, status), 0)
   end
   if response.protocol_version ~= PROTOCOL_VERSION then
     transport:close()
-    error('Failed to connect: the server does not support protocol version ' .. PROTOCOL_VERSION ..
-          '. Use a client from the same kRPC release as the server.', 0)
+    error(errors.ConnectionError('Failed to connect: the server does not support protocol ' ..
+          'version ' .. PROTOCOL_VERSION .. '. Use a client from the same kRPC release as the ' ..
+          'server.'), 0)
   end
 
   -- The session has started, so a client that fails to set up tells the server it is closing
@@ -118,6 +136,10 @@ local function connect_using(transport, name, handshake_timeout)
       transport:half_close_and_close()
     end)
     transport:close()
+    if not errors.RemoteError:class_of(connection) then
+      connection = errors.ConnectionError("The server's service definitions are malformed",
+                                          connection)
+    end
     error(connection, 0)
   end
   return connection

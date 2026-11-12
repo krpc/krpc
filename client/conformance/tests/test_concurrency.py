@@ -11,7 +11,7 @@ import time
 import pytest
 import testee_pb2 as pb
 from driver import profile, section, should, timing, values
-from driver.errors import is_removed_error
+from driver.errors import assert_interrupt_error, is_removed_error
 from driver.framing import encode_sint32
 from driver.helpers import counter, name, raised, round_trip, watched
 from driver.scripted import ScriptedServer, definitions, is_call
@@ -310,6 +310,32 @@ def test_held_stream_ending_before_value(client, server, scripted_server):
         client.close()
 
 
+@profile("streams", "conditions", "concurrency")
+def test_held_read_before_value(client, server, scripted_server):
+    """A read of a stream with no value blocks until the first value arrives, on a thread
+    holding the stream's condition too. The read waits on the condition, which lets it go
+    while it waits."""
+
+    def script(scripted: ScriptedServer) -> None:
+        scripted.accept()
+        scripted.serve()
+
+    scripted = scripted_server(script)
+    scripted.services = definitions(server, "KRPC", "TestService")
+    client.connect(scripted.endpoint())
+    try:
+        stream = counter(client, "scripted")
+        reading = client.start(
+            "reader", condition=stream.handle, get=pb.Get(stream=stream.handle)
+        )
+        time.sleep(SETTLE)
+        assert not reading.done()
+        scripted.send_update([(1, encode_sint32(1))])
+        assert reading.result() == 1
+    finally:
+        client.close()
+
+
 @profile("streams", "conditions")
 def test_wait_for_unread_value(connected, control, request):
     """A wait returns only for a value newer than the last one the thread read,
@@ -492,7 +518,7 @@ section("Removing and Closing")
 @profile("streams", "conditions")
 def test_remove_while_holding(connected, request):
     """A thread holding the condition of a stream removes the stream, while updates for
-    the stream arrive. A wait by that thread then raises the error for a removed
+    the stream arrive. A wait by that thread then raises the stream error for a removed
     stream."""
     stream = counter(connected, name(request))
     with connected.holding(stream.handle):
@@ -507,7 +533,7 @@ def test_remove_while_holding(connected, request):
 @profile("events", "conditions")
 def test_remove_event_while_holding(connected):
     """A thread holding the condition of an event removes the event, while the event
-    fires. A wait by that thread then raises the error for a removed stream, at once."""
+    fires. A wait by that thread then raises the stream error, at once."""
     event = connected.event(
         "TestService", "OnTimer", values.uint32(10), values.uint32(1000)
     )
@@ -654,12 +680,12 @@ def wait_on_event(connected, control, request):
 )
 def test_interrupted_wait(connected, control, request, wait_on):
     """Interrupting a thread that waits on a stream or an event, such as with
-    ``Thread.interrupt`` in Java, ends the wait with an error. The stream or event runs
-    on."""
+    ``Thread.interrupt`` in Java, ends the wait with the language's error for an interrupted
+    thread. The stream or event runs on."""
     waiting, runs_on = wait_on(connected, control, request)
     time.sleep(SETTLE)
     connected.interrupt("waiter")
-    waiting.error()
+    assert_interrupt_error(connected, waiting.error())
     assert runs_on()
 
 
@@ -851,7 +877,7 @@ def test_call_from_a_callback(connected, request):
 @profile("streams", "callbacks")
 def test_remove_stream_from_callback(connected):
     """A callback removes the stream it is called for. The remove returns, and a read of
-    the stream then raises the error for a removed stream."""
+    the stream then raises the stream error."""
     # The first value arrives after ten of the server's updates, so the first call of the
     # callback runs on the thread of the client that runs callbacks
     stream = connected.add_stream(

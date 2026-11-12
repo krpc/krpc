@@ -102,13 +102,15 @@ TEST(test_socket, test_read_interrupted) {
 // Each opener fails on an endpoint with no server, and leaves the connection with no transport
 TEST(test_socket, test_open_no_server) {
   krpc_connection_t connection = {&krpc_transport_socket, 1};
-  ASSERT_EQ(KRPC_ERROR_IO, krpc_open_tcp(&connection, "127.0.0.1", 1));
+  ASSERT_EQ(KRPC_ERROR_CONNECTION, krpc_open_tcp(&connection, "127.0.0.1", 1));
   ASSERT_EQ(nullptr, connection.transport);
   connection.transport = &krpc_transport_socket;
-  ASSERT_EQ(KRPC_ERROR_IO, krpc_open_localsocket(&connection, "/nonexistent/krpc-cnano-test.sock"));
+  ASSERT_EQ(KRPC_ERROR_CONNECTION,
+            krpc_open_localsocket(&connection, "/nonexistent/krpc-cnano-test.sock"));
   ASSERT_EQ(nullptr, connection.transport);
   connection.transport = &krpc_transport_socket;
-  ASSERT_EQ(KRPC_ERROR_IO, krpc_open_serial(&connection, "/nonexistent/krpc-cnano-test-port"));
+  ASSERT_EQ(KRPC_ERROR_CONNECTION,
+            krpc_open_serial(&connection, "/nonexistent/krpc-cnano-test-port"));
   ASSERT_EQ(nullptr, connection.transport);
 }
 

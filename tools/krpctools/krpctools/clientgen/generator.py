@@ -160,6 +160,11 @@ class Generator(Generic[LanguageT]):
         """A reference to the target of a cref, as the generated documentation links to it"""
         raise NotImplementedError
 
+    def mapped_type(self, target):
+        """The mapped type of the exception a cref refers to, or an empty string"""
+        exceptions = self._definitions.services[target.service].get("exceptions", {})
+        return exceptions[target.type].get("mapped_type", "")
+
     def parse_deprecation_reason(self, reason):
         """Flatten a deprecation reason to plain text, mapping cref markup to
         language-specific names."""
@@ -303,6 +308,7 @@ class Generator(Generic[LanguageT]):
 
         for name, exception in self._get_defs("exceptions"):
             context["exceptions"][name] = {
+                "id": exception["id"],
                 "documentation": self.parse_documentation(exception["documentation"]),
                 "deprecated": exception.get("deprecated", False),
                 "deprecated_reason": self.parse_deprecation_reason(
@@ -310,6 +316,9 @@ class Generator(Generic[LanguageT]):
                 ),
                 "native": self.language.native_exception(
                     exception.get("mapped_type", "")
+                ),
+                "alias": self.language.exception_alias(
+                    self._service, name, exception.get("mapped_type", "")
                 ),
             }
 

@@ -377,7 +377,7 @@ def test_stream_error(connected, functions, control, request):
     )
     assert wait_until(lambda: ended(failing))
     error = raised(failing.get)
-    assert error.kind == pb.Error.RPC
+    assert error.kind == pb.Error.SERVER
     assert "Failed by the test" in error.message
     control.conformance_service.set_value(name(request, "other"), 1)
     assert wait_until(lambda: other.get() == 1)
@@ -386,7 +386,7 @@ def test_stream_error(connected, functions, control, request):
 @profile("functions", "streams")
 def test_two_streams_of_one_function(connected, functions, control, request):
     """Each stream added for one function is a separate stream. Removing one leaves the
-    other, and reading the removed one raises the error for a removed stream."""
+    other, and reading the removed one raises the stream error."""
     function = functions.value(name(request))
     first = connected.add_function_stream(function, "sint32")
     second = connected.add_function_stream(function, "sint32")
@@ -637,7 +637,7 @@ def test_run_error(connected, functions, control, request):
     error = raised(
         lambda: connected.run_function(functions.value(name(request)), "sint32")
     )
-    assert error.kind == pb.Error.RPC, error
+    assert error.kind == pb.Error.SERVER, error
     assert "Failed by the test" in error.message
 
 

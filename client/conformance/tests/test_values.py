@@ -226,8 +226,8 @@ SLOTS = [
 
 
 def assert_value_error(client, error):
-    """The error is the encoding or argument error."""
-    assert_error_kind(client, error, pb.Error.ENCODING, pb.Error.ARGUMENT)
+    """The error is the argument error."""
+    assert_error_kind(client, error, pb.Error.ARGUMENT)
 
 
 section("Scalars")
@@ -298,7 +298,7 @@ def assert_malformed_result(client, procedure, *arguments):
     """Check that a call raises the encoding error, and that the next call succeeds."""
     with pytest.raises(TesteeError) as info:
         client.invoke("TestService", procedure, *arguments)
-    # A client without error types reports only an RPC error
+    # A client without error types reports only a server error
     if error_types(client):
         assert info.value.error.kind == pb.Error.ENCODING, info.value.error
     assert client.invoke("TestService", "Int32ToString", values.sint32(1)) == ""
@@ -416,14 +416,14 @@ def test_undeclared_flags_result(connected):
 @profile("dynamic")
 def test_undeclared_flags_value(client, server, scripted_server):
     """A flags enumeration value holding a bit the enumeration does not declare raises
-    the encoding or argument error, before the request is sent."""
+    the argument error, before the request is sent."""
     refused_before_sending(client, server, scripted_server, "FlagsEcho", flags_value(9))
 
 
 @profile("dynamic")
 def test_combined_enum_value(client, server, scripted_server):
     """A combination of the values of an enumeration that is not a flags enumeration
-    raises the encoding or argument error, before the request is sent."""
+    raises the argument error, before the request is sent."""
     refused_before_sending(
         client, server, scripted_server, "EnumToString", enum_value(3)
     )
@@ -817,8 +817,8 @@ def test_null_flag(client, server, scripted_server, kind):
 
 def refused_before_sending(client, server, scripted_server, procedure, *arguments):
     """Invoke a procedure on a script that records each request, and check the invocation
-    raises the encoding or argument error and sends nothing. The next call is the only
-    request the script receives."""
+    raises the argument error and sends nothing. The next call is the only request the
+    script receives."""
     requests = []
 
     def result(request):
@@ -856,8 +856,8 @@ def test_null_for_non_nullable(client, server, scripted_server, typ):
 @pytest.mark.parametrize("slot", SLOTS)
 def test_null_in_non_nullable_slot(client, server, scripted_server, slot):
     """A null in a collection or structure, at a position that cannot hold null, raises
-    the encoding or argument error, before the request is sent. Set elements and
-    dictionary keys never hold null."""
+    the argument error, before the request is sent. Set elements and dictionary keys never
+    hold null."""
     procedure, *arguments = not_nullable_slots()[slot]
     refused_before_sending(client, server, scripted_server, procedure, *arguments)
 
@@ -952,9 +952,8 @@ WRONG_TYPES = {
 @pytest.mark.parametrize("position", list(WRONG_TYPES))
 def test_wrong_type(client, server, scripted_server, position):
     """A value of the wrong type for its parameter, or for an item of a collection,
-    raises the encoding or argument error, before the request is sent. A string that
-    holds a number is not converted to the number, and a bool is not converted to a
-    number."""
+    raises the argument error, before the request is sent. A string that holds a number
+    is not converted to the number, and a bool is not converted to a number."""
     procedure, *arguments = WRONG_TYPES[position]
     refused_before_sending(client, server, scripted_server, procedure, *arguments)
 
@@ -1024,8 +1023,8 @@ WRONG_COLLECTIONS = {
 @profile("dynamic")
 @pytest.mark.parametrize("case", list(WRONG_COLLECTIONS))
 def test_wrong_collection(client, server, scripted_server, case):
-    """A string, bytes or a dictionary passed for a list, set or tuple raises the
-    encoding or argument error, before the request is sent."""
+    """A string, bytes or a dictionary passed for a list, set or tuple raises the argument
+    error, before the request is sent."""
     procedure, value = WRONG_COLLECTIONS[case]
     refused_before_sending(client, server, scripted_server, procedure, value)
 
@@ -1102,7 +1101,7 @@ def add_struct_field(service: KRPC.Service) -> None:
 def test_differing_structure_definition(client, server, scripted_server):
     """Where the server's definition of a structure differs from the generated code, a value
     made from the generated code does not equal the client's value of the structure. Passing
-    it as an argument raises the encoding or argument error."""
+    it as an argument raises the argument error."""
     with_test_service(client, server, scripted_server, add_struct_field)
     try:
         assert not client.declared("TestService", "TestStruct")

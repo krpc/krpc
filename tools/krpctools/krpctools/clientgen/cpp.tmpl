@@ -89,10 +89,14 @@ class {% if service_deprecated %}[[deprecated{% if service_deprecated_reason %}(
 
 {% if exception.documentation %}{{ exception.documentation | indent(width=2) }}
 {% endif %}
-  class {% if exception.deprecated %}[[deprecated{% if exception.deprecated_reason %}("{{ exception.deprecated_reason | string_literal }}"){% endif %}]] {% endif %}{{ exception_name }} : public {{ exception.native or '::krpc::RPCError' }} {
+  {% if exception.alias %}
+  using {{ exception_name }}{% if exception.deprecated %} [[deprecated{% if exception.deprecated_reason %}("{{ exception.deprecated_reason | string_literal }}"){% endif %}]]{% endif %} = {{ exception.alias }};
+  {% else %}
+  class {% if exception.deprecated %}[[deprecated{% if exception.deprecated_reason %}("{{ exception.deprecated_reason | string_literal }}"){% endif %}]] {% endif %}{{ exception_name }} : public ::krpc::ServerError {
    public:
-    inline explicit {{ exception_name }}(const std::string& msg) : {{ exception.native or '::krpc::RPCError' }}(msg) {}
+    inline explicit {{ exception_name }}(const std::string& msg) : ::krpc::ServerError(msg) {}
   };
+  {% endif %}
   {% endfor %}
   {% endif %}
   {% for enum_name,enm in enumerations.items() %}

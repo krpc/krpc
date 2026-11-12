@@ -97,7 +97,7 @@ class StreamManager {
     }
   }
 
-  StreamImpl addStream(Type returnType, ProcedureCall call) throws RPCException {
+  StreamImpl addStream(Type returnType, ProcedureCall call) {
     long id = InternalProcedures.addStream(connection, call);
     return getStream(returnType, id);
   }
@@ -143,7 +143,7 @@ class StreamManager {
     return stream;
   }
 
-  void removeStream(StreamImpl stream) throws RPCException {
+  void removeStream(StreamImpl stream) {
     long id = stream.getId();
     synchronized (updateLock) {
       if (streams.get(id) != stream) {
@@ -413,9 +413,14 @@ class StreamManager {
     }
   }
 
+  /** The connection error a stream ends with when the connection closes or fails. */
   private static Exception closedError(Exception cause) {
-    return new StreamException(
-        "Connection closed", cause == null ? new ConnectionException("Connection closed") : cause);
+    if (cause instanceof ConnectionException) {
+      return cause;
+    }
+    return cause == null
+        ? new ConnectionException("Connection closed")
+        : new ConnectionException("Connection closed: " + cause.getMessage(), cause);
   }
 
   // Marks the dispatcher thread

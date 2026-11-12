@@ -77,7 +77,7 @@ namespace KRPC.Client.Test
             var testService = Connection.TestService ();
             var obj = testService.CreateTestObject ("null");
             Assert.IsTrue (Evaluate (() => obj.EchoNullableObject (null) == null));
-            Assert.Throws<FunctionCompilationException> (
+            Assert.Throws<CompilationException> (
                 () => Evaluate (() => testService.NotNullableObject (null)));
         }
 
@@ -209,19 +209,19 @@ namespace KRPC.Client.Test
             Assert.AreEqual ("2 and 3", Evaluate (
                 () => string.Format (
                     CultureInfo.InvariantCulture, "{0} and {1}", obj.IntProperty, obj.IntProperty + 1)));
-            var exn = Assert.Throws<FunctionCompilationException> (
+            var exn = Assert.Throws<CompilationException> (
                 () => Evaluate (() => $"v={obj.IntProperty:F2}"));
             StringAssert.Contains ("format specifiers are not supported", exn.Message);
-            exn = Assert.Throws<FunctionCompilationException> (
+            exn = Assert.Throws<CompilationException> (
                 () => Evaluate (() => string.Format (
                     CultureInfo.InvariantCulture, "a}b{0}", obj.IntProperty)));
             StringAssert.Contains ("must be doubled", exn.Message);
-            exn = Assert.Throws<FunctionCompilationException> (
+            exn = Assert.Throws<CompilationException> (
                 () => Evaluate (() => string.Format (
                     CultureInfo.InvariantCulture, "{0} {1}", obj.IntProperty)));
             StringAssert.Contains ("format item {1} is out of range", exn.Message);
             // An array of integers is one argument, as C# binds it, and not the arguments
-            Assert.Throws<FunctionCompilationException> (
+            Assert.Throws<CompilationException> (
                 () => Evaluate (() => string.Format (
                     CultureInfo.InvariantCulture, "{0}", new [] { obj.IntProperty, 2 })));
         }
@@ -330,7 +330,7 @@ namespace KRPC.Client.Test
                 () => checked (-obj.IntProperty),
                 () => checked ((int)(obj.IntProperty * 2L))
             }) {
-                var exn = Assert.Throws<FunctionCompilationException> (() => Evaluate (function));
+                var exn = Assert.Throws<CompilationException> (() => Evaluate (function));
                 StringAssert.Contains ("checked arithmetic is not supported", exn.Message);
             }
             long widened = 0;
@@ -446,10 +446,10 @@ namespace KRPC.Client.Test
             CollectionAssert.AreEqual (new [] { 1, 2, 3 }, lazyStream.Get ());
             lazyStream.Remove ();
             // An ordered sequence is not decoded as a list
-            var exn = Assert.Throws<FunctionCompilationException> (
+            var exn = Assert.Throws<CompilationException> (
                 () => Connection.Run (() => objs.OrderBy (o => o.IntProperty)));
             StringAssert.Contains ("ToList", exn.Message);
-            Assert.Throws<FunctionCompilationException> (
+            Assert.Throws<CompilationException> (
                 () => Connection.AddStream (() => objs.OrderBy (o => o.IntProperty)));
             CollectionAssert.AreEqual (objs, Connection.Run (
                 () => objs.OrderBy (o => o.IntProperty).ToList ()));
@@ -609,7 +609,7 @@ namespace KRPC.Client.Test
         public void TestUndecodableResultThrowsBeforeRunning ()
         {
             var testService = Connection.TestService ();
-            Assert.Throws<FunctionCompilationException> (
+            Assert.Throws<CompilationException> (
                 () => Connection.Run (
                     () => new [] { testService.Counter ("CSharpCompiler.Undecodable", 1) }));
             Assert.AreEqual (1, testService.Counter ("CSharpCompiler.Undecodable", 1));
@@ -642,7 +642,7 @@ namespace KRPC.Client.Test
         {
             var obj = Connection.TestService ().CreateTestObject ("builderror");
             var krpc = KRPC.Client.Services.KRPC.ExtensionMethods.KRPC (Connection);
-            Assert.Throws<FunctionCompilationException> (
+            Assert.Throws<CompilationException> (
                 () => Connection.Run (
                     () => obj.IntProperty + (int)krpc.GameScene));
         }
@@ -805,7 +805,7 @@ namespace KRPC.Client.Test
                 () => lazy.Value + testService.StringProperty
             };
             foreach (var expression in rejected)
-                Assert.Throws<FunctionCompilationException> (
+                Assert.Throws<CompilationException> (
                     () => Connection.Compile (expression), expression.ToString ());
             // A lambda, a method group of the base library and a value with no methods of
             // its own are evaluated on the client
@@ -858,7 +858,7 @@ namespace KRPC.Client.Test
             Assert.AreEqual ("axb", Connection.Run (
                 () => testService.StringProperty.Trim (noCharacters)));
 #pragma warning disable CA1305
-            Assert.Throws<FunctionCompilationException> (
+            Assert.Throws<CompilationException> (
                 () => Connection.Compile (() => string.Format (none, testService.StringProperty)));
 #pragma warning restore CA1305
         }
@@ -899,16 +899,16 @@ namespace KRPC.Client.Test
             var testService = Connection.TestService ();
             Func<string> property = () => testService.StringProperty;
             // A remote call the method or delegate makes would run once, when compiling
-            Assert.Throws<FunctionCompilationException> (
+            Assert.Throws<CompilationException> (
                 () => Connection.Compile (() => property () + testService.StringProperty));
-            Assert.Throws<FunctionCompilationException> (
+            Assert.Throws<CompilationException> (
                 () => Connection.Compile (() => PropertyOf (testService) + testService.StringProperty));
             var value = new ClientValue (testService) { Limit = 3 };
-            Assert.Throws<FunctionCompilationException> (
+            Assert.Throws<CompilationException> (
                 () => Connection.Compile (() => value.Remote + testService.StringProperty));
-            Assert.Throws<FunctionCompilationException> (
+            Assert.Throws<CompilationException> (
                 () => Connection.Compile (() => (value + 1) + testService.StringProperty.Length));
-            Assert.Throws<FunctionCompilationException> (
+            Assert.Throws<CompilationException> (
                 () => Connection.Compile (() => (string)value + testService.StringProperty));
             // An auto-property is read on the client
             var obj = testService.CreateTestObject ("clientvalue");
@@ -921,13 +921,13 @@ namespace KRPC.Client.Test
         {
             var testService = Connection.TestService ();
             var limit = 3;
-            Assert.Throws<FunctionCompilationException> (
+            Assert.Throws<CompilationException> (
                 () => Connection.AddEvent (() => limit > 1));
-            Assert.Throws<FunctionCompilationException> (
+            Assert.Throws<CompilationException> (
                 () => Connection.AddStream (() => limit + 1));
             testService.StringProperty = "stream";
             var stream = Connection.AddStream (() => testService.StringProperty);
-            var exn = Assert.Throws<FunctionCompilationException> (
+            var exn = Assert.Throws<CompilationException> (
                 () => Connection.AddEvent (() => stream.Get () == "stream"));
             StringAssert.Contains ("Stream", exn.Message);
             stream.Remove ();
@@ -966,7 +966,7 @@ namespace KRPC.Client.Test
 #if NET
             Assert.AreEqual (3.0, Evaluate (() => Math.Clamp (obj.IntProperty / 1.0, 0.0, 3.0)));
             // Directed rounding, which no StdLib procedure performs
-            Assert.Throws<FunctionCompilationException> (
+            Assert.Throws<CompilationException> (
                 () => Connection.Compile (
                     () => Math.Round (obj.IntProperty / 2.0, MidpointRounding.ToPositiveInfinity)));
 #endif
@@ -983,10 +983,10 @@ namespace KRPC.Client.Test
             Connection.Run (
                 () => Console.WriteLine (FormattableString.Invariant ($"value = {obj.IntProperty}")));
             Connection.Run (() => Console.WriteLine ());
-            var exn = Assert.Throws<FunctionCompilationException> (
+            var exn = Assert.Throws<CompilationException> (
                 () => Connection.Compile (() => Console.WriteLine (obj.IntProperty)));
             StringAssert.Contains ("culture", exn.Message);
-            exn = Assert.Throws<FunctionCompilationException> (
+            exn = Assert.Throws<CompilationException> (
                 () => Connection.Compile (() => Console.WriteLine (new [] { 'a' })));
             StringAssert.Contains ("character array", exn.Message);
         }
@@ -1330,7 +1330,7 @@ namespace KRPC.Client.Test
         public void TestClientSideActionIsRejected ()
         {
             sideEffects = 0;
-            var exn = Assert.Throws<FunctionCompilationException> (
+            var exn = Assert.Throws<CompilationException> (
                 () => Connection.Run ((Expression<Action>)(() => SideEffect ())));
             StringAssert.Contains ("makes no remote procedure call", exn.Message);
             Assert.AreEqual (0, sideEffects);
@@ -1418,10 +1418,10 @@ namespace KRPC.Client.Test
         {
             var testService = Connection.TestService ();
             var value = new TestStruct (1, "order", TestEnum.ValueA, new List<int> ());
-            var exn = Assert.Throws<FunctionCompilationException> (
+            var exn = Assert.Throws<CompilationException> (
                 () => Connection.Compile (() => testService.StructEcho (value) < value));
             StringAssert.Contains ("structures cannot be ordered", exn.Message);
-            exn = Assert.Throws<FunctionCompilationException> (
+            exn = Assert.Throws<CompilationException> (
                 () => Connection.Compile (() => testService.StructEcho (value) >= value));
             StringAssert.Contains ("structures cannot be ordered", exn.Message);
         }
@@ -1446,16 +1446,16 @@ namespace KRPC.Client.Test
             var testService = Connection.TestService ();
             // There is no character type in the algebra, so indexing a string in C#,
             // which produces a char, has no equivalent
-            var exn = Assert.Throws<FunctionCompilationException> (
+            var exn = Assert.Throws<CompilationException> (
                 () => Connection.Compile (() => testService.StringProperty [0]));
             StringAssert.Contains ("a string cannot be indexed", exn.Message);
-            exn = Assert.Throws<FunctionCompilationException> (
+            exn = Assert.Throws<CompilationException> (
                 () => Connection.Compile (() => testService.StringProperty.PadLeft (5)));
             StringAssert.Contains ("'PadLeft' has no server side equivalent", exn.Message);
-            exn = Assert.Throws<FunctionCompilationException> (
+            exn = Assert.Throws<CompilationException> (
                 () => Connection.Compile (() => Math.Truncate (testService.Counter ("Truncate", 1) * 1.5)));
             StringAssert.Contains ("Math.Truncate has no server side equivalent", exn.Message);
-            exn = Assert.Throws<FunctionCompilationException> (
+            exn = Assert.Throws<CompilationException> (
                 () => Connection.Compile (() => testService.IncrementList (new List<int> { 1 }).Any ()));
             StringAssert.Contains ("unsupported overload of the collection operation 'Any'", exn.Message);
         }
@@ -1537,15 +1537,15 @@ namespace KRPC.Client.Test
         public void TestIndexedOverloadsAndJoinOfNonStrings ()
         {
             var testService = Connection.TestService ();
-            var exn = Assert.Throws<FunctionCompilationException> (
+            var exn = Assert.Throws<CompilationException> (
                 () => Connection.Compile (
                     () => testService.IncrementList (new List<int> { 1 }).Select ((x, i) => x + i).ToList ()));
             StringAssert.Contains ("taking an element's index", exn.Message);
-            exn = Assert.Throws<FunctionCompilationException> (
+            exn = Assert.Throws<CompilationException> (
                 () => Connection.Compile (
                     () => testService.IncrementList (new List<int> { 1 }).Where ((x, i) => i > 0).ToList ()));
             StringAssert.Contains ("taking an element's index", exn.Message);
-            exn = Assert.Throws<FunctionCompilationException> (
+            exn = Assert.Throws<CompilationException> (
                 () => Connection.Compile (
                     () => string.Join (",", testService.IncrementList (new List<int> { 1, 2 }))));
             StringAssert.Contains ("Select", exn.Message);
@@ -1709,7 +1709,7 @@ namespace KRPC.Client.Test
                     .Select (x => x.ToString (CultureInfo.InvariantCulture)))));
             Assert.AreEqual ("abcde", Evaluate (
                 () => string.Concat (new [] { "a", "b", "c", "d", testService.StringProperty })));
-            Assert.Throws<FunctionCompilationException> (
+            Assert.Throws<CompilationException> (
                 () => Connection.Compile (
                     () => string.Concat (testService.IncrementList (new List<int> { 1 }))));
         }
@@ -1722,9 +1722,9 @@ namespace KRPC.Client.Test
             var captured = new List<int> { 1 };
             CollectionAssert.AreEquivalent (
                 new [] { 2, 3 }, Evaluate (() => new HashSet<int> { obj.IntProperty, 3, obj.IntProperty }));
-            Assert.Throws<FunctionCompilationException> (
+            Assert.Throws<CompilationException> (
                 () => Connection.Compile (() => new List<int> (captured) { obj.IntProperty }));
-            Assert.Throws<FunctionCompilationException> (
+            Assert.Throws<CompilationException> (
                 () => Connection.Compile (() => new SortedSet<int> { obj.IntProperty }));
         }
 
@@ -1768,24 +1768,24 @@ namespace KRPC.Client.Test
         {
             var testService = Connection.TestService ();
             var obj = testService.CreateTestObject ("culture");
-            var exn = Assert.Throws<FunctionCompilationException> (
+            var exn = Assert.Throws<CompilationException> (
                 () => Connection.Compile (() => $"{obj.IntProperty}"));
             StringAssert.Contains ("culture", exn.Message);
-            Assert.Throws<FunctionCompilationException> (
+            Assert.Throws<CompilationException> (
                 () => Connection.Compile (() => "n=" + obj.IntProperty));
 #pragma warning disable CA1304, CA1305, CA1311
-            Assert.Throws<FunctionCompilationException> (
+            Assert.Throws<CompilationException> (
                 () => Connection.Compile (() => obj.IntProperty.ToString ()));
-            Assert.Throws<FunctionCompilationException> (
+            Assert.Throws<CompilationException> (
                 () => Connection.Compile (() => testService.StringProperty.ToUpper ()));
 #pragma warning restore CA1304, CA1305, CA1311
-            Assert.Throws<FunctionCompilationException> (
+            Assert.Throws<CompilationException> (
                 () => Connection.Compile (() => testService.StringProperty.IndexOf ("a")));
-            Assert.Throws<FunctionCompilationException> (
+            Assert.Throws<CompilationException> (
                 () => Connection.Compile (
                     () => testService.StringProperty.StartsWith ("a", StringComparison.CurrentCulture)));
             var values = new List<int> { 8, 9, 99 };
-            Assert.Throws<FunctionCompilationException> (
+            Assert.Throws<CompilationException> (
                 () => Connection.Compile (
                     () => testService.IncrementList (values).Select (x => testService.Int32ToString (x))
                         .OrderBy (x => x).ToList ()));
@@ -1801,7 +1801,7 @@ namespace KRPC.Client.Test
         public void TestTuplesOfMoreThanSevenValues ()
         {
             var obj = Connection.TestService ().CreateTestObject ("bigtuple");
-            Assert.Throws<FunctionCompilationException> (
+            Assert.Throws<CompilationException> (
                 () => Connection.Compile (
                     () => Tuple.Create (obj.IntProperty, 2, 3, 4, 5, 6, 7, 8)));
         }

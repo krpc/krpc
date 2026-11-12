@@ -194,9 +194,9 @@ class TestServerSideFunctions(TestCase):
 
     def test_a_procedure_unavailable_in_the_scene_is_an_unnamed_error(self):
         sc = self.sc
-        with self.assertRaises(krpc.error.RPCError) as caught:
+        with self.assertRaises(krpc.error.ServerError) as caught:
             self.conn.run(lambda: sc.editor.delta_v_altitude)
-        self.assertIs(krpc.error.RPCError, type(caught.exception))
+        self.assertIs(krpc.error.ServerError, type(caught.exception))
 
         def caught_by_a_catch_all() -> float:
             try:

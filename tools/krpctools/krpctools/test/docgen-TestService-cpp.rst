@@ -1544,6 +1544,8 @@
 
 
 
+   A subclass of :class:`krpc::ServerError`.
+
 
 
 .. namespace:: krpc::services::TestService
@@ -1552,3 +1554,5 @@
    .. warning:: Deprecated. Use :class:`CustomException` instead.
 
    Deprecated exception documentation string.
+
+   A subclass of :class:`krpc::ServerError`.

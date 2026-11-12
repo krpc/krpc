@@ -427,7 +427,7 @@ namespace KRPC.Client
             if (ReferenceEquals (expression, null))
                 throw new ArgumentNullException (nameof (expression));
             if (streamed && expression.Parameters.Count != 0)
-                throw new FunctionCompilationException (
+                throw new CompilationException (
                     "A function that is streamed, or checked for an event, cannot take parameters");
             var compiler = new FunctionCompiler (connection, typeCache);
             var functionParameters = new List<ServerExpression> ();
@@ -463,10 +463,10 @@ namespace KRPC.Client
                     serverExpression = ServerExpression.Lambda (connection, functionParameters, serverExpression);
                 return serverExpression;
             } catch (Exception exception) when (
-                exception is RPCException || exception is ArgumentException ||
+                exception is ServerException || exception is ArgumentException ||
                 exception is InvalidOperationException) {
                 // An error building a node on the server
-                throw new FunctionCompilationException (
+                throw new CompilationException (
                     "Cannot compile expression: " + exception.Message, exception);
             }
         }
@@ -1193,7 +1193,7 @@ namespace KRPC.Client
             return Result.FromExpression (StringOf (node.Object, instance));
         }
 
-        static FunctionCompilationException CultureError (Expression node)
+        static CompilationException CultureError (Expression node)
         {
             return Error (node, "formatting a number depends on the current culture. Call " +
                           "ToString (CultureInfo.InvariantCulture), or format an interpolated " +
@@ -1707,7 +1707,7 @@ namespace KRPC.Client
             ServerExpression right;
             try {
                 right = ToExpression (CompileNode (node.Right), node.Right.Type);
-            } catch (FunctionCompilationException exn) when (IsAClientSideError (exn)) {
+            } catch (CompilationException exn) when (IsAClientSideError (exn)) {
                 // The error is raised only when the right operand is evaluated
                 var decided = ServerExpression.ConstantBool (connection, orElse);
                 var error = ClientSideError (exn);
@@ -1984,7 +1984,7 @@ namespace KRPC.Client
         }
 
         // Server arithmetic wraps on overflow, so an overflow check cannot be kept
-        static FunctionCompilationException CheckedError (Expression node)
+        static CompilationException CheckedError (Expression node)
         {
             return Error (node, "checked arithmetic is not supported on the server, " +
                           "where integer arithmetic wraps on overflow");
@@ -2065,7 +2065,7 @@ namespace KRPC.Client
         {
             try {
                 return CompileNode (node);
-            } catch (FunctionCompilationException exn) when (IsAClientSideError (exn)) {
+            } catch (CompilationException exn) when (IsAClientSideError (exn)) {
                 return Result.FromExpression (ClientSideError (exn));
             }
         }
@@ -2074,7 +2074,7 @@ namespace KRPC.Client
         /// Whether an exception is an error evaluating a client side sub-expression, which
         /// carries the exception the evaluation raised.
         /// </summary>
-        static bool IsAClientSideError (FunctionCompilationException exn)
+        static bool IsAClientSideError (CompilationException exn)
         {
             return exn.InnerException != null;
         }
@@ -2083,7 +2083,7 @@ namespace KRPC.Client
         /// A throw of the error a client side node raised, for the server to raise when the
         /// node is evaluated.
         /// </summary>
-        ServerExpression ClientSideError (FunctionCompilationException exn)
+        ServerExpression ClientSideError (CompilationException exn)
         {
             var cause = exn.InnerException.InnerException ?? exn.InnerException;
             return ServerExpression.Throw (
@@ -2269,7 +2269,7 @@ namespace KRPC.Client
             } catch (Exception exception) {
                 var message = exception.InnerException != null
                     ? exception.InnerException.Message : exception.Message;
-                throw new FunctionCompilationException (
+                throw new CompilationException (
                     "Cannot compile expression: error evaluating client side sub-expression: " + message,
                     exception);
             }
@@ -2288,7 +2288,7 @@ namespace KRPC.Client
             var value = result.Value;
             if (value == null) {
                 if (type == null)
-                    throw new FunctionCompilationException (
+                    throw new CompilationException (
                         "Cannot compile expression: cannot determine the type of a null value");
                 return ServerExpression.ConstantNull (
                     connection, RemoteType (Nullable.GetUnderlyingType (type) ?? type, null));
@@ -2378,7 +2378,7 @@ namespace KRPC.Client
                 return ServerExpression.CreateStruct (
                     connection, RemoteType (type, null), fields);
             }
-            throw new FunctionCompilationException (
+            throw new CompilationException (
                 "Cannot compile expression: cannot use a value of type " + type.Name + " in an expression");
         }
 
@@ -2681,10 +2681,10 @@ namespace KRPC.Client
             return true;
         }
 
-        static FunctionCompilationException Error (Expression node, string message)
+        static CompilationException Error (Expression node, string message)
         {
             var location = node == null ? string.Empty : " in '" + node + "'";
-            return new FunctionCompilationException (
+            return new CompilationException (
                 "Cannot compile expression: " + message + location);
         }
     }

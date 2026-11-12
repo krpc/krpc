@@ -862,6 +862,13 @@ typedef enum {
   KRPC_TESTSERVICE_TESTFLAGS_VALUEAB = 3
 } krpc_TestService_TestFlags_t;
 
+#define KRPC_EXCEPTION_TESTSERVICE_CUSTOMEXCEPTION 857051661u, 3140445924u
+
+/**
+ * Deprecated exception documentation string.
+ */
+#define KRPC_EXCEPTION_TESTSERVICE_DEPRECATEDEXCEPTION 857051661u, 2666844656u
+
 static inline krpc_error_t krpc_TestService_AddMultipleValues(krpc_connection_t connection, char * * returnValue, float x, int32_t y, int64_t z);
 
 /**
@@ -1711,10 +1718,10 @@ static inline krpc_error_t krpc_TestService_ThrowArgumentOutOfRangeException(krp
 static inline krpc_error_t krpc_TestService_ThrowArgumentOutOfRangeException_call(krpc_schema_ProcedureCall * procedureCall, int32_t foo);
 
 /**
- * Throws a TestService.CustomException.
+ * Throws a #KRPC_EXCEPTION_TESTSERVICE_CUSTOMEXCEPTION.
  *
  * Links to each kind of member: TestService, krpc_TestService_TestClass_t,
- * krpc_TestService_TestEnum_t, krpc_TestService_TestStruct_t, KRPC.InvalidOperationException,
+ * krpc_TestService_TestEnum_t, krpc_TestService_TestStruct_t, #KRPC_EXCEPTION_KRPC_INVALIDOPERATIONEXCEPTION,
  * krpc_TestService_FloatToString(), krpc_TestService_StringProperty(),
  * krpc_TestService_set_StringPropertyPrivateGet(), krpc_TestService_TestClass_FloatToString(),
  * krpc_TestService_TestClass_StaticMethod(), krpc_TestService_TestClass_IntProperty(),
@@ -2208,7 +2215,7 @@ static inline krpc_error_t krpc_decode_TestService_DeprecatedStruct(
   message.items.arg = &state;
   KRPC_RETURN_ON_ERROR(krpc_decode_message_Tuple(stream, &message));
   if (state.pos < 2)
-    KRPC_RETURN_ERROR(DECODING_FAILED, "too few fields for a TestService_DeprecatedStruct");
+    KRPC_FAIL(ENCODING, "Too few fields for a TestService_DeprecatedStruct");
   return KRPC_OK;
 }
 
@@ -2303,7 +2310,7 @@ static inline krpc_error_t krpc_decode_TestService_PartlyDeprecatedStruct(
   message.items.arg = &state;
   KRPC_RETURN_ON_ERROR(krpc_decode_message_Tuple(stream, &message));
   if (state.pos < 2)
-    KRPC_RETURN_ERROR(DECODING_FAILED, "too few fields for a TestService_PartlyDeprecatedStruct");
+    KRPC_FAIL(ENCODING, "Too few fields for a TestService_PartlyDeprecatedStruct");
   return KRPC_OK;
 }
 
@@ -2386,7 +2393,7 @@ static inline krpc_error_t krpc_decode_TestService_TestFlagsStruct(
   message.items.arg = &state;
   KRPC_RETURN_ON_ERROR(krpc_decode_message_Tuple(stream, &message));
   if (state.pos < 1)
-    KRPC_RETURN_ERROR(DECODING_FAILED, "too few fields for a TestService_TestFlagsStruct");
+    KRPC_FAIL(ENCODING, "Too few fields for a TestService_TestFlagsStruct");
   return KRPC_OK;
 }
 
@@ -2610,7 +2617,7 @@ static inline krpc_error_t krpc_decode_TestService_TestNestedNullableStruct(
   message.items.arg = &state;
   KRPC_RETURN_ON_ERROR(krpc_decode_message_Tuple(stream, &message));
   if (state.pos < 2)
-    KRPC_RETURN_ERROR(DECODING_FAILED, "too few fields for a TestService_TestNestedNullableStruct");
+    KRPC_FAIL(ENCODING, "Too few fields for a TestService_TestNestedNullableStruct");
   return KRPC_OK;
 }
 
@@ -2810,7 +2817,7 @@ static inline krpc_error_t krpc_decode_TestService_TestStruct(
   message.items.arg = &state;
   KRPC_RETURN_ON_ERROR(krpc_decode_message_Tuple(stream, &message));
   if (state.pos < 4)
-    KRPC_RETURN_ERROR(DECODING_FAILED, "too few fields for a TestService_TestStruct");
+    KRPC_FAIL(ENCODING, "Too few fields for a TestService_TestStruct");
   return KRPC_OK;
 }
 
@@ -2917,7 +2924,7 @@ static inline krpc_error_t krpc_decode_TestService_TestNestedStruct(
   message.items.arg = &state;
   KRPC_RETURN_ON_ERROR(krpc_decode_message_Tuple(stream, &message));
   if (state.pos < 3)
-    KRPC_RETURN_ERROR(DECODING_FAILED, "too few fields for a TestService_TestNestedStruct");
+    KRPC_FAIL(ENCODING, "Too few fields for a TestService_TestNestedStruct");
   return KRPC_OK;
 }
 
@@ -3192,7 +3199,7 @@ static inline krpc_error_t krpc_decode_TestService_TestNullableStruct(
   message.items.arg = &state;
   KRPC_RETURN_ON_ERROR(krpc_decode_message_Tuple(stream, &message));
   if (state.pos < 5)
-    KRPC_RETURN_ERROR(DECODING_FAILED, "too few fields for a TestService_TestNullableStruct");
+    KRPC_FAIL(ENCODING, "Too few fields for a TestService_TestNullableStruct");
   return KRPC_OK;
 }
 

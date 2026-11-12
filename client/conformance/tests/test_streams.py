@@ -153,7 +153,7 @@ def assert_exception(connected, control, error, exception):
     the description."""
     message = EXCEPTIONS[exception].message
     if exception == "CustomException":
-        assert error.kind == pb.Error.RPC
+        assert error.kind == pb.Error.SERVER
         if error_types(connected):
             assert (error.service, error.name) == ("TestService", "CustomException")
     else:
@@ -649,7 +649,7 @@ section("Removing Streams")
 @profile("streams")
 def test_remove(connected, request):
     """Removing a stream through its handle ends it at once, for every copy of the
-    handle. Reading it raises the error for a removed stream."""
+    handle. Reading it raises the stream error."""
     stream = watched(connected, name(request))
     copy = stream.copy()
     assert stream.get() == 0
@@ -895,7 +895,7 @@ def test_two_waiters(connected, control, request):
 @pytest.mark.parametrize("end", ["remove", "close", "connection-failure"])
 def test_wake_waiter(connected, control, request, end):
     """A wait on a stream ends when the stream is removed, the connection closes or the
-    connection fails. The wait raises the error for a removed stream, or the
+    connection fails. The wait raises the stream error, or the
     connection error, with the reason for a failure."""
     stream = watched(connected, name(request))
     stream.get()
@@ -1196,7 +1196,7 @@ section("End Callbacks")
 def test_end_callback(connected, control, request, end):
     """An end callback is called once when the stream ends: by a remove, an error, or a
     close or failure of the connection. The callback receives the error a read of the
-    stream then raises: the error for a removed stream, the server's error, or the
+    stream then raises: the stream error, the server's error, or the
     connection error."""
     stream = watched(connected, name(request))
     stream.get()

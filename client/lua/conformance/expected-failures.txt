@@ -1,52 +1,4 @@
 # The conformance tests the Lua client fails, one per line, with the reason as a comment
-test_connection.py::test_handshake_refused[DENIED]  # The status is reported only in the message
-test_connection.py::test_handshake_refused[MALFORMED_MESSAGE]  # As above
-test_connection.py::test_handshake_refused[TIMEOUT]  # As above
-test_connection.py::test_handshake_refused[WRONG_PROTOCOL_VERSION]  # As above
-test_errors.py::test_message_prefix[ArgumentException]  # An RPC error message starts with the client's source position
-test_errors.py::test_message_prefix[ArgumentNullException]  # As above
-test_errors.py::test_message_prefix[ArgumentOutOfRangeException]  # As above
-test_errors.py::test_message_prefix[CustomException]  # As above
-test_errors.py::test_message_prefix[DivideByZeroException]  # As above
-test_errors.py::test_message_prefix[IndexOutOfRangeException]  # As above
-test_errors.py::test_message_prefix[InvalidOperationException]  # As above
-test_errors.py::test_message_prefix[KeyNotFoundException]  # As above
-test_errors.py::test_message_prefix[NotSupportedException]  # As above
-test_errors.py::test_message_prefix[NullReferenceException]  # As above
-test_errors.py::test_message_prefix[OverflowException]  # As above
-test_errors.py::test_message_prefix[TimeoutException]  # As above
-test_errors.py::test_message[ArgumentException]  # As test_message_prefix
-test_errors.py::test_message[ArgumentNullException]  # As above
-test_errors.py::test_message[ArgumentOutOfRangeException]  # As above
-test_errors.py::test_message[CustomException]  # As above
-test_errors.py::test_message[DivideByZeroException]  # As above
-test_errors.py::test_message[IndexOutOfRangeException]  # As above
-test_errors.py::test_message[InvalidOperationException]  # As above
-test_errors.py::test_message[KeyNotFoundException]  # As above
-test_errors.py::test_message[NotSupportedException]  # As above
-test_errors.py::test_message[NullReferenceException]  # As above
-test_errors.py::test_message[OverflowException]  # As above
-test_errors.py::test_message[TimeoutException]  # As above
-test_errors.py::test_whole_message[ArgumentException]  # As test_message_prefix
-test_errors.py::test_whole_message[ArgumentNullException]  # As above
-test_errors.py::test_whole_message[ArgumentOutOfRangeException]  # As above
-test_errors.py::test_whole_message[CustomException]  # As above
-test_errors.py::test_whole_message[DivideByZeroException]  # As above
-test_errors.py::test_whole_message[IndexOutOfRangeException]  # As above
-test_errors.py::test_whole_message[InvalidOperationException]  # As above
-test_errors.py::test_whole_message[KeyNotFoundException]  # As above
-test_errors.py::test_whole_message[NotSupportedException]  # As above
-test_errors.py::test_whole_message[NullReferenceException]  # As above
-test_errors.py::test_whole_message[OverflowException]  # As above
-test_errors.py::test_whole_message[TimeoutException]  # As above
-test_errors.py::test_description[astral]  # As test_message_prefix
-test_errors.py::test_description[empty]  # As above
-test_errors.py::test_description[long]  # As above
-test_errors.py::test_description[multi-line]  # As above
-test_errors.py::test_description[non-ascii]  # As above
-test_errors.py::test_setter_error  # As test_message_prefix
-test_errors.py::test_request_error  # As test_message_prefix
-test_errors.py::test_exception_name  # RPC errors carry only a message
 test_calls.py::test_default_values[uint64-extremes]  # A uint64 above the sint64 range reads as negative
 test_values.py::test_integers[uint64]  # As test_default_values[uint64-extremes]
 test_objects.py::test_sorting  # An object has no order
@@ -59,17 +11,11 @@ test_values.py::test_undeclared_flags_result  # As test_undeclared_enum_value
 test_values.py::test_combined_enum_value  # As test_undeclared_enum_value
 test_calls.py::test_too_many_arguments[procedure]  # Arguments past the last parameter are dropped
 test_calls.py::test_too_many_arguments[method]  # As test_too_many_arguments[procedure]
-test_objects.py::test_unknown_object_id[zero-argument]  # As test_errors.py::test_message_prefix
-test_objects.py::test_unknown_object_id[zero-target]  # As test_errors.py::test_message_prefix
-test_objects.py::test_unknown_object_id[never-issued-argument]  # As test_errors.py::test_message_prefix
-test_objects.py::test_unknown_object_id[never-issued-target]  # As test_errors.py::test_message_prefix
 test_codec.py::test_integers[uint64]  # As test_default_values[uint64-extremes]
 test_codec.py::test_too_few_items[tuple]  # A short wire tuple decodes short
 test_codec.py::test_malformed_data[list(nullable sint32)]  # A presence bool with no value, a presence bool other than 0 or 1, or data after a null, decodes
 test_codec.py::test_extra_items[tuple]  # A tuple with extra items fails to decode
 test_codec.py::test_invalid_utf8  # A string that is not valid UTF-8 decodes
-test_connection.py::test_handshake_disconnect[known]  # The disconnect reason is only in the message
-test_connection.py::test_lost[disconnect]  # As test_handshake_disconnect
 test_connection.py::test_stall  # No stall timeout
 test_connection.py::test_handshake_timeout_values[zero]  # A zero, negative or NaN timeout raises no argument error
 test_connection.py::test_handshake_timeout_values[negative]  # As test_handshake_timeout_values[zero]
@@ -103,3 +49,4 @@ test_values.py::test_null_result_with_a_value  # A result with is_null set reads
 test_functions.py::test_argument_types[uint64-max]  # As test_default_values[uint64-extremes]
 test_functions.py::test_run_argument_errors[out-of-range]  # As test_values.py::test_out_of_range[sint32-above]
 test_functions.py::test_run_argument_errors[out-of-range-list-item]  # As test_values.py::test_out_of_range[sint32-above]
+test_calls.py::test_malformed_definitions[structure-twice]  # The client does not check for a structure defined twice, so the connect succeeds

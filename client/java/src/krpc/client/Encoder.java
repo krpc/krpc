@@ -36,7 +36,7 @@ public class Encoder {
   static ByteString encodeItem(Object value, KRPC.Type type) {
     if (!type.getNullable()) {
       if (value == null) {
-        throw new EncodingException("Failed to encode a null at a position that cannot hold one");
+        throw new IllegalArgumentException("A null at a position that cannot hold one");
       }
       return encodeValue(value, type);
     }

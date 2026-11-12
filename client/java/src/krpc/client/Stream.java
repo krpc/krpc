@@ -1,5 +1,6 @@
 package krpc.client;
 
+import java.util.concurrent.CancellationException;
 import java.util.function.Consumer;
 import krpc.schema.KRPC.ProcedureCall;
 import krpc.schema.KRPC.Type;
@@ -21,7 +22,7 @@ public class Stream<T> implements Comparable<Stream<T>>, AutoCloseable {
     this.stream = connection.streamManager.getStream(returnType, id);
   }
 
-  Stream(Connection connection, Type returnType, ProcedureCall call) throws RPCException {
+  Stream(Connection connection, Type returnType, ProcedureCall call) {
     this.connection = connection;
     this.stream = connection.streamManager.addStream(returnType, call);
   }
@@ -55,14 +56,14 @@ public class Stream<T> implements Comparable<Stream<T>>, AutoCloseable {
   /**
    * The rate of the stream, in Hertz. Zero if the rate is unlimted.
    */
-  public float getRate() throws RPCException {
+  public float getRate() {
     return stream.getRate();
   }
 
   /**
    * Set the rate of the stream, in Hertz. Zero if the rate is unlimted.
    */
-  public void setRate(float rate) throws RPCException {
+  public void setRate(float rate) {
     stream.setRate(rate);
   }
 
@@ -71,7 +72,7 @@ public class Stream<T> implements Comparable<Stream<T>>, AutoCloseable {
    * yet. Throws the exception that ended the stream, if it has ended.
    */
   @SuppressWarnings("unchecked")
-  public T get() throws RPCException, StreamException {
+  public T get() {
     return (T) stream.waitForValue();
   }
 
@@ -86,7 +87,7 @@ public class Stream<T> implements Comparable<Stream<T>>, AutoCloseable {
    * Wait until the next stream update. Throws the exception that ended the stream, if it ends
    * before or during the wait.
    */
-  public void waitForUpdate() throws RPCException, StreamException {
+  public void waitForUpdate() {
     waitForUpdateUntil(deadline(Double.POSITIVE_INFINITY));
   }
 
@@ -95,12 +96,12 @@ public class Stream<T> implements Comparable<Stream<T>>, AutoCloseable {
    * updated, and false on a timeout. Throws the exception that ended the stream, if it ends
    * before or during the wait. Throws IllegalArgumentException if the timeout is negative or NaN.
    */
-  public boolean waitForUpdateWithTimeout(double timeout) throws RPCException, StreamException {
+  public boolean waitForUpdateWithTimeout(double timeout) {
     return waitForUpdateUntil(deadline(timeout));
   }
 
   /** A deadline of zero waits indefinitely. */
-  private boolean waitForUpdateUntil(long deadline) throws RPCException, StreamException {
+  private boolean waitForUpdateUntil(long deadline) {
     stream.throwIfEnded();
     // An ending that arrived while this thread held the condition is read as an update
     boolean pendingEnding = stream.isEnded();
@@ -139,7 +140,7 @@ public class Stream<T> implements Comparable<Stream<T>>, AutoCloseable {
    * Waits on a condition the caller holds, until notified or the deadline passes. Returns false
    * if the deadline had passed on entry. A deadline of zero waits indefinitely.
    */
-  static boolean waitOn(Object condition, long deadline) throws StreamException {
+  static boolean waitOn(Object condition, long deadline) {
     try {
       if (deadline == 0) {
         condition.wait();
@@ -153,7 +154,9 @@ public class Stream<T> implements Comparable<Stream<T>>, AutoCloseable {
       return true;
     } catch (InterruptedException exn) {
       Thread.currentThread().interrupt();
-      throw new StreamException("wait was interrupted", exn);
+      CancellationException cancelled = new CancellationException("Wait was interrupted");
+      cancelled.initCause(exn);
+      throw cancelled;
     }
   }
 
@@ -196,7 +199,7 @@ public class Stream<T> implements Comparable<Stream<T>>, AutoCloseable {
    * Remove the stream from the server. Each call to addStream creates its own stream, so this
    * leaves other streams for the same call running.
    */
-  public void remove() throws RPCException {
+  public void remove() {
     stream.remove();
   }
 
@@ -204,7 +207,7 @@ public class Stream<T> implements Comparable<Stream<T>>, AutoCloseable {
    * Remove the stream from the server, as remove() does, at the end of a try-with-resources block.
    */
   @Override
-  public void close() throws RPCException {
+  public void close() {
     remove();
   }
 }

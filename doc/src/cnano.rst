@@ -151,9 +151,12 @@ compiler's ``-D`` argument.
   * ``KRPC_ERROR_CHECK_FN`` calls :var:`krpc_error_handler` when an error occurs. Set it to a
     pointer to a function that takes a single parameter of type :type:`krpc_error_t`.
   * ``KRPC_PRINT_ERRORS_TO_STDERR`` prints a message describing each error to stderr.
-  * ``KRPC_ERROR_MESSAGES`` stores the message of each error from the server, for
+  * ``KRPC_ERROR_CODES_ONLY`` keeps only the code of each error. By default the library also
+    keeps the details of the last error, for :func:`krpc_get_error_info`, in 16 bytes of RAM on
+    AVR.
+  * ``KRPC_ERROR_MESSAGES`` also keeps the message of the last error, for
     :func:`krpc_get_error_message`. It costs ``KRPC_ERROR_MESSAGE_LENGTH`` bytes of static
-    storage.
+    storage, and the flash of each message.
   * ``KRPC_ERROR_MESSAGE_LENGTH`` is the size of the buffer for that message, 256 bytes by
     default.
   * ``PB_NO_ERRMSG`` disables the error messages of the nanopb library, which kRPC uses to encode
@@ -296,21 +299,32 @@ Handling Errors
 ---------------
 
 Each function returns an error code, which is :macro:`KRPC_OK` on success. The following checks
-the error from loading a save that does not exist:
+for the exception the server throws when a save does not exist:
 
 .. literalinclude:: /scripts/cnano/Errors.c
 
-:func:`krpc_get_error` describes an error code. The code depends on the error:
+The code is the kind of error, and :func:`krpc_get_error` names it:
 
-* A procedure that fails on the server returns :macro:`KRPC_ERROR_RPC_FAILED`. With
-  ``KRPC_ERROR_MESSAGES`` defined, :func:`krpc_get_error_message` returns the server's message,
-  which names the exception, such as ``KRPC.ArgumentException``.
-* A connection that fails to open returns :macro:`KRPC_ERROR_IO`.
-* A server that denies the connection, or does not support the client's protocol version, makes
-  :func:`krpc_connect` return :macro:`KRPC_ERROR_CONNECTION_REFUSED`.
-* A failed read or write returns :macro:`KRPC_ERROR_IO` or :macro:`KRPC_ERROR_EOF`.
-* A call made after :func:`krpc_disconnect`, after a failed write, or after the server sends a
-  disconnect, returns :macro:`KRPC_ERROR_CONNECTION_FAILED`.
+* :macro:`KRPC_ERROR_CONNECTION`: connecting failed, or the connection failed or ended. Each call
+  after it fails the same way.
+* :macro:`KRPC_ERROR_CONNECTION_REFUSED`: the server denied the connection, or does not support
+  the client's protocol version.
+* :macro:`KRPC_ERROR_SERVER`: the procedure failed on the server.
+* :macro:`KRPC_ERROR_ENCODING`: an argument or a result failed to encode or decode.
+* :macro:`KRPC_ERROR_ARGUMENT`: the library rejected an argument before sending anything, such
+  as a null string.
+* :macro:`KRPC_ERROR_NO_MEMORY`: an allocation failed.
+* :macro:`KRPC_ERROR_BUFFER_TOO_SMALL`: bytes did not fit in the buffer you passed.
+
+:func:`krpc_get_error_info` returns the details of the last error. A server error carries the
+ids of its service and exception. :macro:`KRPC_IS_EXCEPTION` compares them with the
+``KRPC_EXCEPTION_`` macro of an exception, such as
+:macro:`KRPC_EXCEPTION_KRPC_ARGUMENTEXCEPTION`. A refused connection carries the server's status,
+and a connection the server ended carries its reason.
+
+With ``KRPC_ERROR_MESSAGES`` defined, :func:`krpc_get_error_message` returns the message of the
+last error. A server error's message names the exception, as in
+``KRPC.ArgumentException: Failed to load missing``.
 
 The :ref:`compilation options <cnano-client-compilation-options>` can instead exit, fail an
 assertion or call a handler on each error from a procedure. The functions that open a connection,
@@ -371,7 +385,8 @@ Two objects for the same thing in the game compare equal with ``==``. :macro:`KR
 null object.
 
 Once the thing an object identifies is destroyed, such as a part that explodes, each call through
-it fails with ``KRPC.ObjectDestroyedException``, and returns :macro:`KRPC_ERROR_RPC_FAILED`.
+it fails with :macro:`KRPC_EXCEPTION_KRPC_OBJECTDESTROYEDEXCEPTION`, and returns
+:macro:`KRPC_ERROR_SERVER`.
 
 An object for a vessel or a part keeps working when you load a save, quickload or revert, and
 then reads the loaded game. Other objects depend on what they identify. A maneuver node, for
@@ -468,7 +483,7 @@ Client API Reference
    1 stop bit, waits for the port to be ready, then opens a connection over it with
    :func:`krpc_open_stream`.
 
-   Returns :macro:`KRPC_ERROR_IO` if the port fails to open.
+   Returns :macro:`KRPC_ERROR_CONNECTION` if the port fails to open.
 
 .. function:: krpc_error_t krpc_open_stream(krpc_connection_t * connection, Stream * stream)
 
@@ -488,8 +503,8 @@ Client API Reference
    *connection*. The address is a host name or an IP address, and each endpoint it resolves to is
    tried in turn. Windows, Linux and macOS only.
 
-   Returns :macro:`KRPC_ERROR_IO` if the address does not resolve or no endpoint accepts the
-   connection.
+   Returns :macro:`KRPC_ERROR_CONNECTION` if the address does not resolve or no endpoint accepts
+   the connection.
 
 .. function:: krpc_error_t krpc_open_localsocket(krpc_connection_t * connection, const char * path)
 
@@ -498,7 +513,8 @@ Client API Reference
    Windows SDK with ``afunix.h``, 10.0.17134 or later. With an older SDK the library leaves it
    out, and a call to it fails to compile.
 
-   Returns :macro:`KRPC_ERROR_IO` if the path is too long or the connection fails.
+   Returns :macro:`KRPC_ERROR_ARGUMENT` if the path is too long, and
+   :macro:`KRPC_ERROR_CONNECTION` if the connection fails.
 
 .. type:: krpc_connection_t
 
@@ -511,14 +527,19 @@ Client API Reference
    A transport, as the functions that carry a connection's bytes. A structure with the fields:
 
    * ``krpc_error_t (*read)(uintptr_t handle, uint8_t * buf, size_t count)`` reads exactly *count*
-     bytes into *buf*. It returns :macro:`KRPC_ERROR_EOF` once the connection has ended.
+     bytes into *buf*. It returns :macro:`KRPC_ERROR_EOF` once the connection has ended, and
+     :macro:`KRPC_ERROR_IO` if the read fails.
    * ``krpc_error_t (*write)(uintptr_t handle, const uint8_t * buf, size_t count)`` writes all
-     *count* bytes from *buf*.
+     *count* bytes from *buf*. It returns :macro:`KRPC_ERROR_IO` if the write fails.
    * ``krpc_error_t (*close)(uintptr_t handle)`` closes the connection. ``NULL`` for a transport
      with nothing to close.
    * ``bool resumable`` is whether the link outlives a session, as a serial line does. A client
      that resets can then find part of a message from its earlier session on the link, and
-     :func:`krpc_connect` leaves the connection open after such a failure.
+     :func:`krpc_connect` leaves the connection open after a failed handshake.
+
+   Before a function returns :macro:`KRPC_ERROR_IO` or :macro:`KRPC_ERROR_EOF`, it can give the
+   failure's message with :func:`krpc_set_error_cause`. The call that failed returns
+   :macro:`KRPC_ERROR_CONNECTION`, with the transport's code as the cause.
 
 .. var:: const krpc_transport_t krpc_transport_serial
 
@@ -541,19 +562,21 @@ Client API Reference
    :param connection: The connection.
    :param name: A name for the connection, shown in the server window in the game.
 
-   Returns :macro:`KRPC_ERROR_IO` for a connection whose open failed. Returns
-   :macro:`KRPC_ERROR_CONNECTION_REFUSED`, and closes the connection, if the server denies it or
-   does not support the client's protocol version. Over TCP/IP, a local socket, or any transport
-   with ``resumable`` false, any other failure closes the connection too.
+   Returns :macro:`KRPC_ERROR_CONNECTION_REFUSED`, and closes the connection, if the server
+   denies it or does not support the client's protocol version. Returns
+   :macro:`KRPC_ERROR_CONNECTION` if the connection is not open or the handshake fails. The last
+   error holds the server's status and the reason of a disconnect. Over TCP/IP, a local socket,
+   or any transport with ``resumable`` false, a failed handshake closes the connection too.
 
    On a resumable transport, such as a serial port, part of a message from an earlier session can
-   garble the connection request or its response. This then returns
-   :macro:`KRPC_ERROR_CONNECTION_FAILED` and leaves the port open. Wait more than 3 seconds, so
-   that the server drops the partial message, then call this again.
+   garble the connection request or its response. This returns :macro:`KRPC_ERROR_CONNECTION` and
+   leaves the port open. Wait more than 3 seconds, so that the server drops the partial message,
+   then call this again.
 
 .. function:: krpc_error_t krpc_disconnect(krpc_connection_t connection)
 
-   Tells the server the session is ending, then closes the connection.
+   Tells the server the session is ending, then closes the connection. Returns
+   :macro:`KRPC_ERROR_CONNECTION` if the connection is not open or fails to close.
 
 .. function:: krpc_error_t krpc_close(krpc_connection_t connection)
 
@@ -567,59 +590,95 @@ Client API Reference
 
               The function completed successfully.
 
-   .. macro:: KRPC_ERROR_IO
+   .. macro:: KRPC_ERROR_CONNECTION
 
-              Opening, reading from or writing to the connection failed.
-
-   .. macro:: KRPC_ERROR_EOF
-
-              The connection ended while reading from it. On Arduino, no byte arrived within the
-              serial timeout.
-
-   .. macro:: KRPC_ERROR_CONNECTION_FAILED
-
-              The session failed to start, or has ended, or the server sent a message that failed
-              to decode or was not expected.
-
-   .. macro:: KRPC_ERROR_NO_RESULTS
-
-              The response from the server did not hold a single result.
-
-   .. macro:: KRPC_ERROR_RPC_FAILED
-
-              The procedure failed on the server.
-
-   .. macro:: KRPC_ERROR_ENCODING_FAILED
-
-              A message failed to encode or to send.
-
-   .. macro:: KRPC_ERROR_DECODING_FAILED
-
-              The return value from the server failed to decode.
-
-   .. macro:: KRPC_ERROR_BUFFER_TOO_SMALL
-
-              A value did not fit in the buffer given to hold it.
+              Connecting failed, or the connection failed or ended.
 
    .. macro:: KRPC_ERROR_CONNECTION_REFUSED
 
               The server denied the connection, or does not support the client's protocol
               version.
 
+   .. macro:: KRPC_ERROR_SERVER
+
+              The procedure failed on the server.
+
+   .. macro:: KRPC_ERROR_ENCODING
+
+              An argument or a result failed to encode or decode.
+
+   .. macro:: KRPC_ERROR_ARGUMENT
+
+              The library rejected an argument before sending anything.
+
+   .. macro:: KRPC_ERROR_NO_MEMORY
+
+              An allocation failed.
+
+   .. macro:: KRPC_ERROR_BUFFER_TOO_SMALL
+
+              A value did not fit in the buffer given to hold it.
+
+   .. macro:: KRPC_ERROR_IO
+
+              A transport's read or write failed. The call that failed returns
+              :macro:`KRPC_ERROR_CONNECTION`.
+
+   .. macro:: KRPC_ERROR_EOF
+
+              A transport's connection ended. On Arduino, no byte arrived within the serial
+              timeout. The call that failed returns :macro:`KRPC_ERROR_CONNECTION`.
+
 .. function:: const char * krpc_get_error(krpc_error_t error)
 
-   A short description of an error code, such as ``rpc failed``. Returns an empty string for
-   :macro:`KRPC_OK`.
+   The name of an error code, such as ``server error``.
+
+.. type:: krpc_error_info_t
+
+   The details of the last error. A structure with the fields:
+
+   * ``krpc_error_t code``, the code the failing function returned.
+   * ``krpc_error_t cause``, :macro:`KRPC_ERROR_IO` or :macro:`KRPC_ERROR_EOF` for the
+     transport's failure behind a connection error, else -1.
+   * ``uint32_t service`` and ``uint32_t exception``, the ids of a server error's exception, else
+     0. A server error with no exception has 0 for both.
+   * ``int16_t status``, the status of a ``ConnectionResponse`` other than ``OK``, else -1.
+   * ``int16_t reason``, the ``Disconnect`` reason of a connection the server ended, else -1.
+
+   A status or reason the protocol does not define keeps its number.
+
+.. function:: const krpc_error_info_t * krpc_get_error_info(void)
+
+   The details of the last error. Each failure fills them in, and a success leaves them as they
+   were. Not available when the library is built with ``KRPC_ERROR_CODES_ONLY`` defined.
+
+.. macro:: KRPC_IS_EXCEPTION(exception)
+
+   Whether the last error is the server exception given by its ``KRPC_EXCEPTION_`` macro, such as
+   ``KRPC_IS_EXCEPTION(KRPC_EXCEPTION_KRPC_ARGUMENTEXCEPTION)``. Not available when the library is
+   built with ``KRPC_ERROR_CODES_ONLY`` defined.
+
+.. function:: bool krpc_is_exception(uint32_t service, uint32_t exception)
+
+   Whether the last error is the server exception with the given service and exception ids.
 
 .. function:: const char * krpc_get_error_message(void)
 
-   The message of the most recent error from the server, or an empty string if there has not been
-   one. It names the exception and gives its description, as in
+   The message of the last error, or an empty string if there has not been one. It is a sentence
+   saying what failed, then the message of its cause after a colon, as in
+   ``Connection failed: Connection reset by peer``. A server error names the
+   exception and gives its description, as in
    ``SpaceCenter.InvalidOperationException: Vessel does not exist``. The server stack trace
-   follows when the server is configured to send one. The message is truncated to fit a buffer of
+   follows when the server is configured to send one. The message is cut to fit a buffer of
    ``KRPC_ERROR_MESSAGE_LENGTH`` bytes.
 
    Only available when the library is built with ``KRPC_ERROR_MESSAGES`` defined.
+
+.. function:: void krpc_set_error_cause(const char * message)
+
+   Gives the message of a transport's failure, before its function returns
+   :macro:`KRPC_ERROR_IO` or :macro:`KRPC_ERROR_EOF`. The library puts it after its own message.
+   Does nothing unless the library is built with ``KRPC_ERROR_MESSAGES`` defined.
 
 .. var:: void (*krpc_error_handler)(krpc_error_t)
 

@@ -11,6 +11,7 @@ from krpc.types import (
 
 from ..lang.csharp import CsharpLanguage
 from ..utils import as_type
+from . import crefs
 from .docparser import render_markup, warn_markup
 from .generator import Generator
 
@@ -54,6 +55,13 @@ class CsharpGenerator(Generator[CsharpLanguage]):
         return content
 
     def format_cref(self, target):
+        # An exception with no class of its own is referred to by the type it is thrown as
+        if target.kind == crefs.EXCEPTION:
+            typ = self.language.exception_type(
+                target.service, target.type, self.mapped_type(target)
+            )
+            if typ is not None:
+                return typ
         # Without a prefix, so that the compiler resolves and checks it. A member of the
         # service is a member of its Service class.
         name = "global::KRPC.Client.Services." + target.service + "."

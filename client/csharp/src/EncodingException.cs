@@ -4,10 +4,10 @@ using System.Runtime.Serialization;
 namespace KRPC.Client
 {
     /// <summary>
-    /// Thrown when the server returns null for a value that cannot be null.
+    /// Thrown for a value of the right type that fails to encode, or a value that fails to decode.
     /// </summary>
     [Serializable]
-    public class EncodingException : Exception
+    public class EncodingException : RemoteException
     {
         /// <summary>
         /// Construct an EncodingException with no message.

@@ -39,7 +39,8 @@ extern "C" {
 /* A transport, as the functions that carry bytes over it. Each takes the handle of the
    connection it was opened with. */
 typedef struct {
-  /* Read exactly count bytes. Returns KRPC_ERROR_EOF once the peer has gone. */
+  /* Read exactly count bytes. Returns KRPC_ERROR_EOF once the peer has gone, and KRPC_ERROR_IO
+     when the read fails. Before either, krpc_set_error_cause gives the failure's message. */
   krpc_error_t (*read)(uintptr_t handle, uint8_t* buf, size_t count);
   /* Write all count bytes */
   krpc_error_t (*write)(uintptr_t handle, const uint8_t* buf, size_t count);
@@ -56,8 +57,9 @@ typedef struct {
   uintptr_t handle;
 } krpc_connection_t;
 
-/* Each krpc_open_* function writes the connection it opens. A failed open writes one with no
-   transport, which every call reports as KRPC_ERROR_IO. */
+/* Each krpc_open_* function writes the connection it opens. A failed open returns
+   KRPC_ERROR_CONNECTION, or KRPC_ERROR_ARGUMENT for an argument it rejects, and writes a
+   connection with no transport, which every call reports as an error. */
 
 /* Read count bytes of data from the connection into buf */
 krpc_error_t krpc_read(krpc_connection_t connection, uint8_t* buf, size_t count);
@@ -67,6 +69,9 @@ krpc_error_t krpc_write(krpc_connection_t connection, const uint8_t* buf, size_t
 krpc_error_t krpc_close(krpc_connection_t connection);
 
 #if defined(KRPC_PLATFORM_POSIX) || defined(KRPC_PLATFORM_WINDOWS)
+
+/* Give the system's message for the last error, errno or GetLastError, as the cause */
+void krpc_set_system_error_cause(void);
 
 /* A serial port, whose handle is a file descriptor, or a Windows HANDLE */
 extern const krpc_transport_t krpc_transport_serial;

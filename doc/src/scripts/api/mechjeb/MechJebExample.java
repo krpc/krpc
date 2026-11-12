@@ -1,7 +1,5 @@
 import krpc.client.Connection;
 import krpc.client.Event;
-import krpc.client.RPCException;
-import krpc.client.StreamException;
 import krpc.client.services.KRPC.Expression;
 import krpc.client.services.MechJeb;
 import krpc.client.services.MechJeb.AscentAutopilot;
@@ -9,10 +7,8 @@ import krpc.client.services.SpaceCenter;
 import krpc.client.services.SpaceCenter.Vessel;
 import krpc.schema.KRPC.ProcedureCall;
 
-import java.io.IOException;
-
 public class MechJebExample {
-    public static void main(String[] args) throws IOException, RPCException, StreamException {
+    public static void main(String[] args) {
         Connection connection = Connection.newInstance("MechJeb Example");
         Vessel vessel = SpaceCenter.newInstance(connection).getActiveVessel();
         AscentAutopilot ascent = MechJeb.newInstance(connection).getAscentAutopilot();

@@ -18,7 +18,7 @@ end
 function Transport:connect()
   local result, err = self:_open()
   if result == nil then
-    error('Socket error: ' .. err)
+    error('Socket error: ' .. err, 0)
   end
 end
 

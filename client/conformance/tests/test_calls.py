@@ -7,7 +7,11 @@ import time
 import pytest
 import testee_pb2 as pb
 from driver import profile, raw, section, should, values
-from driver.errors import assert_argument_error
+from driver.errors import (
+    assert_argument_error,
+    assert_error_kind,
+    assert_interrupt_error,
+)
 from driver.framing import encode_sint32, encode_size
 from driver.helpers import create
 from driver.scripted import ScriptedServer, definitions, is_call, serve_definitions
@@ -809,6 +813,27 @@ def test_undefined_type(client, server, scripted_server, case):
 
 
 @profile("definitions")
+@pytest.mark.parametrize("case", ["list-element-types", "structure-twice"])
+def test_malformed_definitions(client, server, scripted_server, case):
+    """Service definitions the client cannot build its services from, such as a list type
+    with two element types or a structure defined twice, make the connect raise the
+    connection error."""
+    service = KRPC.Service(name="Later")
+    sint32 = KRPC.Type(code=KRPC.Type.SINT32)
+    if case == "list-element-types":
+        service.procedures.add(
+            name="Broken",
+            return_type=KRPC.Type(code=KRPC.Type.LIST, types=[sint32] * 2),
+        )
+    else:
+        service.structs.add(name="Thing").fields.add(name="Value", type=sint32)
+        service.structs.add(name="Thing").fields.add(name="Other", type=sint32)
+    with pytest.raises(TesteeError) as info:
+        with_definitions(client, server, scripted_server, service)
+    assert_error_kind(client, info.value.error, pb.Error.CONNECTION)
+
+
+@profile("definitions")
 @pytest.mark.parametrize(
     "case", ["defined-before", "defined-after", "in-a-list", "same-service", "flags"]
 )
@@ -1102,8 +1127,8 @@ def test_match_by_id(client, server, scripted_server):
 @should
 @profile("concurrency")
 def test_abandoned_id(client, server, scripted_server):
-    """A call interrupted while waiting abandons its id. The client discards the
-    response to that id."""
+    """A call interrupted while waiting abandons its id, and raises the language's error for
+    an interrupted thread. The client discards the response to that id."""
     held = []
     scripted = scripted_server(held_calls(server, 2, list, held))
     client.connect(scripted.endpoint())
@@ -1111,7 +1136,7 @@ def test_abandoned_id(client, server, scripted_server):
         abandoned = client.start("abandoned", invoke=to_string(1))
         assert wait_until(lambda: len(held) == 1)
         client.interrupt("abandoned")
-        abandoned.error()
+        assert_interrupt_error(client, abandoned.error())
         # The response to the abandoned call arrives first
         assert client.invoke("TestService", "Int32ToString", values.sint32(2)) == "2"
     finally:

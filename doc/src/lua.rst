@@ -107,14 +107,17 @@ error from loading a save that does not exist, using ``pcall``:
 
 .. literalinclude:: /scripts/lua/Errors.lua
 
-The error is a string describing the failure:
+The error is an object, which ``tostring`` and ``..`` turn into its message. Its class says what
+failed, and ``krpc.RemoteError:class_of(err)`` matches every error of the client's own:
 
-* A procedure that fails on the server raises an error whose message starts with the server's
-  exception, as in ``KRPC.ArgumentException: Failed to load missing``.
-* A failed connection attempt raises an error. When the server refuses the connection, the message
-  names the status it gave, such as ``DENIED``. When the server ends the connection, the message
-  names the reason, such as ``SERVER_STOPPED``.
-* A call made once the connection has closed or failed raises an error.
+* A procedure that fails on the server raises a :class:`krpc.ServerError`. Its ``service`` and
+  ``name`` fields name the server's exception, such as ``KRPC`` and ``ArgumentException``.
+* A failed connection attempt raises a :class:`krpc.ConnectionError`. When the server refuses the
+  connection, its ``status`` field names the status it gave, such as ``DENIED``. When the server
+  ends the connection, its ``reason`` field names the reason, such as ``SERVER_STOPPED``.
+* A call made once the connection has closed or failed raises a :class:`krpc.ConnectionError`.
+* A value that fails to decode raises a :class:`krpc.EncodingError`.
+* An argument the client rejects raises a string.
 
 .. _lua-client-values:
 
@@ -311,6 +314,49 @@ Client API Reference
 
    Raises an error as :func:`~krpc.connect` does, if ``socket.unix`` is not available, and if no
    ``path`` is given and the default path cannot be found.
+
+.. class:: RemoteError
+
+   The base of every error the client raises of its own, a ``pl.class`` class.
+   ``RemoteError:class_of(err)`` checks whether a value is one.
+
+   .. attribute:: message
+
+      What failed, followed by the message of the cause, if there is one.
+
+   .. attribute:: cause
+
+      The error that caused this one, or ``nil``.
+
+.. class:: ConnectionError
+
+   Raised when connecting fails, and by each call once the connection has closed or failed. A
+   subclass of :class:`krpc.RemoteError`.
+
+   .. attribute:: status
+
+      The status the server refused the connection with, such as ``'DENIED'``, or ``nil``.
+
+   .. attribute:: reason
+
+      The reason the server gave for ending the connection, such as ``'SERVER_STOPPED'``, or
+      ``nil``.
+
+.. class:: ServerError
+
+   Raised for an error from the server. A subclass of :class:`krpc.RemoteError`.
+
+   .. attribute:: service
+
+      The service of the server's exception, such as ``'KRPC'``, or ``nil``.
+
+   .. attribute:: name
+
+      The name of the server's exception, such as ``'ArgumentException'``, or ``nil``.
+
+.. class:: EncodingError
+
+   Raised for a value that fails to decode. A subclass of :class:`krpc.RemoteError`.
 
 .. function:: get_object_id(obj): number
 

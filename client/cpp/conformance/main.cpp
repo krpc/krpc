@@ -235,7 +235,8 @@ void add_native_type(const std::exception& exn, const char* name, Error* error) 
 Error to_error(const std::exception& exn) {
   Error error;
   error.set_message(exn.what());
-  add_native_type<krpc::RPCError>(exn, "krpc::RPCError", &error);
+  add_native_type<krpc::RemoteError>(exn, "krpc::RemoteError", &error);
+  add_native_type<krpc::ServerError>(exn, "krpc::ServerError", &error);
   add_native_type<krpc::ConnectionError>(exn, "krpc::ConnectionError", &error);
   add_native_type<krpc::StreamError>(exn, "krpc::StreamError", &error);
   add_native_type<krpc::EncodingError>(exn, "krpc::EncodingError", &error);
@@ -268,12 +269,11 @@ Error to_error(const std::exception& exn) {
     error.set_kind(Error::STREAM);
   } else if (dynamic_cast<const krpc::EncodingError*>(&exn) != nullptr) {
     error.set_kind(Error::ENCODING);
-  } else if (dynamic_cast<const std::invalid_argument*>(&exn) != nullptr &&
-             dynamic_cast<const krpc::RPCError*>(&exn) == nullptr) {
-    // An argument the client rejects before it makes the call
+  } else if (dynamic_cast<const std::invalid_argument*>(&exn) != nullptr) {
+    // An argument the client rejects, or a server exception thrown as the argument error
     error.set_kind(Error::ARGUMENT);
   } else {
-    error.set_kind(Error::RPC);
+    error.set_kind(Error::SERVER);
     if (!name_error_krpc(exn, &error)) name_error_test_service(exn, &error);
   }
   return error;

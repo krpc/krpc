@@ -85,7 +85,15 @@ class DispatchGenerator(Generator):
             "service_name": self._service,
             "members": members,
             "structs": self._structs,
-            "exceptions": [name for name, _ in sorted(self._get_defs("exceptions"))],
+            # An exception whose name is an alias has no type of its own to name an error by
+            "exceptions": [
+                name
+                for name, exception in sorted(self._get_defs("exceptions"))
+                if self.language.exception_alias(
+                    self._service, name, exception.get("mapped_type", "")
+                )
+                is None
+            ],
             "includes": self.includes(),
         }
 

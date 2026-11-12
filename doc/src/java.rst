@@ -139,12 +139,14 @@ The exception you catch depends on the error:
   catches :type:`~java.lang.IllegalArgumentException`, as a missing save is a
   :type:`~krpc.client.services.KRPC.ArgumentException` on the server.
 * An error particular to a service throws a class of that service, such as
-  :type:`~krpc.client.services.KRPC.ObjectDestroyedException`.
-* An error the client has no class for throws :type:`~krpc.client.RPCException`.
+  :type:`~krpc.client.services.KRPC.ObjectDestroyedException`, derived from
+  :type:`~krpc.client.ServerException`.
+* An error the client has no class for throws :type:`~krpc.client.ServerException`.
+* A call made once the connection has closed or failed throws
+  :type:`~krpc.client.ConnectionException`.
 
-The standard Java exceptions are unchecked. The exception classes of the services derive from
-:type:`~krpc.client.RPCException`, which is checked. Every remote procedure declares
-``throws RPCException``, and connecting declares ``throws IOException``.
+Every exception is unchecked. Every exception of the client's own derives
+:type:`~krpc.client.RemoteException`, and a standard Java exception does not.
 
 .. _java-client-values:
 
@@ -328,9 +330,9 @@ destroyed:
 
 The exception is the one the procedure threw, or one of the following:
 
-* :type:`~krpc.client.services.KRPC.StreamRemovedException` when the server removes the stream,
-  such as for an :std:ref:`event <java-client-events>` that has finished.
-* :type:`~krpc.client.StreamException` when you remove the stream from the client.
+* :type:`~krpc.client.StreamException` when you or the server remove the stream, such as for an
+  :std:ref:`event <java-client-events>` that has finished.
+* :type:`~krpc.client.ConnectionException` when the connection closes or fails.
 
 An exception for an object that is not loaded, or for a procedure not available in the current game
 scene, does not end the stream. It pauses the stream's updates, and the stream keeps its last value.
@@ -458,8 +460,8 @@ Streams and events can also be used from any thread:
   ``synchronized`` block.
 
 A wait on a stream or an event that another thread removes throws a
-:type:`~krpc.client.StreamException`. Interrupting a waiting thread also ends its wait with a
-:type:`~krpc.client.StreamException`, and the stream or event runs on.
+:type:`~krpc.client.StreamException`. Interrupting a waiting thread ends its wait with a
+:type:`~java.util.concurrent.CancellationException`, and the stream or event runs on.
 
 Deprecated Members
 ------------------
@@ -564,8 +566,8 @@ Client API Reference
       with arguments *args*, and returns a :type:`Stream`. Each call creates a new stream. Stream
       a property by passing the name of its getter.
 
-      Throws an :type:`RPCException` if the object has no method of that name taking the
-      arguments.
+      Throws an :type:`~java.lang.IllegalArgumentException` if the object has no method of that
+      name taking the arguments.
 
    .. method:: <T> Stream<T> addStream(Class<?> clazz, String method, Object... args)
 
@@ -575,8 +577,8 @@ Client API Reference
       on this connection, so the arguments of a static method leave out its connection. Each call
       creates a new stream.
 
-      Throws an :type:`RPCException` if the class has no method of that name taking the
-      arguments.
+      Throws an :type:`~java.lang.IllegalArgumentException` if the class has no method of that
+      name taking the arguments.
 
       .. note::
 
@@ -624,7 +626,8 @@ Client API Reference
       :meth:`~Connection.addStream`, into a procedure call message. The message is for a server
       side function built with the expression API. See :std:ref:`server-side-functions-api`.
 
-      Throws an :type:`RPCException` if there is no method of that name taking the arguments.
+      Throws an :type:`~java.lang.IllegalArgumentException` if there is no method of that name
+      taking the arguments.
 
 .. type:: class Stream<T>
 
@@ -638,7 +641,7 @@ Client API Reference
 
       Returns the most recent value of the stream, waiting for the first value if none has arrived
       yet. Throws the exception that ended the stream, if it has ended, and a
-      :type:`StreamException` if the thread is interrupted.
+      :type:`~java.util.concurrent.CancellationException` if the thread is interrupted.
 
    .. method:: Object getCondition()
 
@@ -651,8 +654,9 @@ Client API Reference
       method.
 
       Throws the exception that ended the stream, if it ends before or during the wait, and a
-      :type:`StreamException` if the thread is interrupted. A thread holding the condition sees an
-      ending as an update: the wait returns, and later reads and waits throw the exception.
+      :type:`~java.util.concurrent.CancellationException` if the thread is interrupted. A thread
+      holding the condition sees an ending as an update: the wait returns, and later reads and waits
+      throw the exception.
 
    .. method:: boolean waitForUpdateWithTimeout(double timeout)
 
@@ -663,9 +667,9 @@ Client API Reference
       The timeout is in seconds, and ``Double.POSITIVE_INFINITY`` waits indefinitely. Throws an
       :type:`~java.lang.IllegalArgumentException` for a negative or NaN timeout. Throws the
       exception that ended the stream, if it ends before or during the wait, and a
-      :type:`StreamException` if the thread is interrupted. A thread holding the condition sees an
-      ending as an update: the wait returns ``true``, and later reads and waits throw the
-      exception.
+      :type:`~java.util.concurrent.CancellationException` if the thread is interrupted. A thread
+      holding the condition sees an ending as an update: the wait returns ``true``, and later reads
+      and waits throw the exception.
 
    .. method:: float getRate()
    .. method:: void setRate(float rate)
@@ -713,7 +717,7 @@ Client API Reference
       previous wait on this event object. Hold :meth:`getCondition()` when calling this method.
 
       Throws the exception that ended the event, if it ends before or during the wait, and a
-      :type:`StreamException` if the thread is interrupted.
+      :type:`~java.util.concurrent.CancellationException` if the thread is interrupted.
 
    .. method:: boolean waitForWithTimeout(double timeout)
 
@@ -724,7 +728,7 @@ Client API Reference
       The timeout is in seconds, and ``Double.POSITIVE_INFINITY`` waits indefinitely. Throws an
       :type:`~java.lang.IllegalArgumentException` for a negative or NaN timeout. Throws the
       exception that ended the event, if it ends before or during the wait, and a
-      :type:`StreamException` if the thread is interrupted.
+      :type:`~java.util.concurrent.CancellationException` if the thread is interrupted.
 
    .. method:: Object getCondition()
 
@@ -773,9 +777,13 @@ Client API Reference
       :meth:`~krpc.client.services.KRPC.Expression.constantObject(Connection, long)`. Throws an
       :type:`~java.lang.IllegalArgumentException` if the object is ``null``.
 
-.. type:: class ConnectionException extends java.io.IOException
+.. type:: class RemoteException extends RuntimeException
 
-   Thrown when connecting fails.
+   The base of every exception the client throws of its own.
+
+.. type:: class ConnectionException extends RemoteException
+
+   Thrown when connecting fails, and by each call once the connection has closed or failed.
 
    .. method:: ConnectionResponse.Status getStatus()
 
@@ -786,17 +794,16 @@ Client API Reference
       The reason the server gave for ending the connection, such as ``SERVER_STOPPED``, or
       ``null``.
 
-.. type:: class RPCException extends Exception
+.. type:: class ServerException extends RemoteException
 
-   Thrown for an error from the server that the client has no exception class for. The base class
-   of the exception classes of the services.
+   Thrown for an error from the server with no Java exception type. The base class of the
+   exception classes of the services.
 
-.. type:: class StreamException extends Exception
+.. type:: class StreamException extends RemoteException
 
-   Thrown by a stream or event that you removed, when a stream cannot be created, and when a wait
-   is interrupted.
+   Thrown by a stream or event that you or the server removed, or that cannot be created.
 
-.. type:: class EncodingException extends RuntimeException
+.. type:: class EncodingException extends RemoteException
 
    Thrown when a value cannot be encoded or decoded.
 
