@@ -19,7 +19,7 @@ namespace KRPC.KerbalEngineerRedux
     /// stage or a change in its parts. Other changes, such as shutting down an engine, show in
     /// the next result.
     /// </remarks>
-    [KRPCService (GameScene = GameScene.All)]
+    [KRPCService (Id = 15, GameScene = GameScene.All)]
     public static class KerbalEngineerRedux
     {
         const double degreesToRadians = Math.PI / 180;
