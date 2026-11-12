@@ -18,13 +18,16 @@ namespace KRPC.Test
             readonly Mock<IServer<Request,Response>> messageServer = new Mock<IServer<Request,Response>> ();
             bool running;
 
-            public TestServer ()
+            public TestServer (bool failsToStart = false)
             {
                 messageServer.SetupGet (x => x.Running).Returns (() => running);
-                messageServer.Setup (x => x.Start ()).Callback (() => {
-                    running = true;
-                    messageServer.Raise (x => x.OnStarted += null, EventArgs.Empty);
-                });
+                if (failsToStart)
+                    messageServer.Setup (x => x.Start ()).Throws (new ServerException ("address in use"));
+                else
+                    messageServer.Setup (x => x.Start ()).Callback (() => {
+                        running = true;
+                        messageServer.Raise (x => x.OnStarted += null, EventArgs.Empty);
+                    });
                 messageServer.Setup (x => x.Stop ()).Callback (() => {
                     running = false;
                     messageServer.Raise (x => x.OnStopped += null, EventArgs.Empty);
@@ -35,6 +38,31 @@ namespace KRPC.Test
             }
 
             public KRPC.Server.Server Server { get; private set; }
+        }
+
+        [Test]
+        public void StartAllStartsTheServersAfterOneThatFails ()
+        {
+            var core = Core.Instance;
+            var first = new TestServer ().Server;
+            var failing = new TestServer (true).Server;
+            var last = new TestServer ().Server;
+            failing.Name = "Failing";
+            core.Add (first);
+            core.Add (failing);
+            core.Add (last);
+            try {
+                var exn = Assert.Throws<ServerException> (core.StartAll);
+                Assert.AreEqual ("Failed to start server 'Failing': address in use", exn.Message);
+                Assert.IsTrue (first.Running);
+                Assert.IsFalse (failing.Running);
+                Assert.IsTrue (last.Running);
+            } finally {
+                core.StopAll ();
+                core.Remove (first.Id);
+                core.Remove (failing.Id);
+                core.Remove (last.Id);
+            }
         }
 
         [Test]
