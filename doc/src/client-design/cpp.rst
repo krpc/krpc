@@ -114,12 +114,18 @@ Mapping the Spec to C++
      - C++
    * - Closing a connection
      - ``Connection::close()``, or the last release
+   * - Remote error
+     - ``krpc::RemoteError``, a ``std::runtime_error``
    * - Connection error
      - ``krpc::ConnectionError``
    * - Stream error
-     - ``krpc::StreamError``
+     - ``krpc::StreamError``, also for ``KRPC.StreamRemovedException``, whose generated name is an
+       alias of it
    * - Server error with no mapped type
-     - ``krpc::RPCError``
+     - ``krpc::ServerError``, the base of each exception class a service declares
+   * - Server exception with a mapped type
+     - The standard exception itself. The generated name is a ``using`` alias of it, so the
+       server's message tells apart the exceptions that share a type
    * - Nullable value
      - ``std::optional``, checked by the compiler where a parameter is not nullable
    * - Null object

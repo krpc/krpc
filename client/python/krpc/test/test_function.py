@@ -3,7 +3,6 @@ from typing import Any
 from unittest import mock
 
 import krpc.functioncompiler
-from krpc.error import StreamError
 from krpc.test.servertestcase import ServerTestCase
 
 
@@ -185,15 +184,15 @@ class TestFunction(ServerTestCase, unittest.TestCase):
             "krpc.connection._type_message", side_effect=AssertionError("introspected")
         ):
             for add in (self.conn.add_stream, self.conn.add_event):
-                with self.assertRaisesRegex(StreamError, "takes parameters"):
+                with self.assertRaisesRegex(ValueError, "takes parameters"):
                     add(function)
 
     def test_stream_of_a_function_with_arguments_rejected(self) -> None:
         expr = self.conn.krpc.Expression.constant_int(1)
         for function in (expr, lambda: 1):
-            with self.assertRaisesRegex(StreamError, "without arguments"):
+            with self.assertRaisesRegex(ValueError, "without arguments"):
                 self.conn.add_stream(function, 1)
-            with self.assertRaisesRegex(StreamError, "without arguments"):
+            with self.assertRaisesRegex(ValueError, "without arguments"):
                 self.conn.add_stream(function, value=1)
 
 

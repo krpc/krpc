@@ -4,6 +4,7 @@ from typing import Any, NamedTuple
 import krpc.schema.KRPC_pb2 as KRPC
 from krpc.declarations import Lookup, connection_lookup, register, registered
 from krpc.definitions import register_all
+from krpc.error import ServerError
 from krpc.service import create_service, service_definitions
 from krpc.types import RemoteEnum, Types
 
@@ -28,7 +29,7 @@ class Thing(NamedTuple):
     value: int
 
 
-class Failure(RuntimeError):
+class Failure(ServerError):
     pass
 
 
@@ -130,7 +131,7 @@ class TestServiceDefinitions(unittest.TestCase):
                 [generated_service({"Slow": 0, "Fast": 1}, ["Value"])]
             )
             self.assertIsNot(Narrower, connection.Generated.Failure)
-            self.assertIs(RuntimeError, connection.Generated.Failure.__base__)
+            self.assertIs(ServerError, connection.Generated.Failure.__base__)
         finally:
             register("Generated", Failure)
 

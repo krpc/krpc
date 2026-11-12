@@ -220,13 +220,19 @@ the error from loading a save that does not exist:
 
 The exception you catch depends on the error:
 
-* A standard error, such as an invalid argument, throws a subclass of the matching standard
-  exception. The example catches ``std::invalid_argument``, as a missing save throws
-  :class:`~krpc::services::KRPC::ArgumentException`.
+* A standard error, such as an invalid argument, throws the matching standard exception. The
+  example catches ``std::invalid_argument``, as a missing save throws
+  :class:`~krpc::services::KRPC::ArgumentException`, an alias of it. The standard exceptions share
+  bases, so a ``catch`` of ``InvalidOperationException``, an alias of ``std::logic_error``, also
+  catches the argument and index exceptions.
 * An error particular to a service throws a class of that service, such as
-  :class:`~krpc::services::KRPC::ObjectDestroyedException`.
-* An error the client has no class for throws :class:`~krpc::RPCError`.
+  :class:`~krpc::services::KRPC::ObjectDestroyedException`, derived from
+  :class:`~krpc::ServerError`.
+* An error the client has no class for throws :class:`~krpc::ServerError`.
 * A call made once the connection has failed throws :class:`~krpc::ConnectionError`.
+
+Every error of the client's own derives :class:`~krpc::RemoteError`. A standard exception does
+not.
 
 .. _cpp-client-values:
 
@@ -400,9 +406,8 @@ that ended it. The following streams the temperature of a part until the part is
 
 The exception is the one the procedure threw, or one of the following:
 
-* :class:`~krpc::services::KRPC::StreamRemovedException` when the server removes the stream, such as
-  for an :ref:`event <cpp-client-events>` that has finished.
-* :class:`~krpc::StreamError` when you remove the stream from the client.
+* :class:`~krpc::StreamError` when you or the server remove the stream, such as for an
+  :ref:`event <cpp-client-events>` that has finished.
 * :class:`~krpc::ConnectionError` when the connection closes or fails.
 
 An exception for an object that is not loaded, or for a procedure not available in the current
@@ -891,10 +896,14 @@ Client API Reference
 
       Whether the event object refers to an event.
 
+.. class:: RemoteError
+
+   The base of every error the client throws of its own. A subclass of ``std::runtime_error``.
+
 .. class:: ConnectionError
 
    Thrown when connecting fails, by each call once the connection has failed, and by each call
-   on a client that is not connected. A subclass of ``std::runtime_error``.
+   on a client that is not connected. A subclass of :class:`RemoteError`.
 
    .. function:: const std::string& status() const
 
@@ -905,20 +914,19 @@ Client API Reference
       The reason the server gave for ending the connection, such as ``"SERVER_STOPPED"``, or
       empty.
 
-.. class:: RPCError
+.. class:: ServerError
 
-   Thrown for an error from the server that the client has no exception class for. A subclass of
-   ``std::runtime_error``, and the base class of each service exception with no standard
-   equivalent.
+   Thrown for an error from the server with no standard exception, and the base class of each
+   service exception with no standard equivalent. A subclass of :class:`RemoteError`.
 
 .. class:: StreamError
 
-   Thrown by a stream or event that you removed, and when a stream cannot be created. A subclass
-   of ``std::runtime_error``.
+   Thrown by a stream or event that you or the server removed, and when a stream cannot be
+   created. A subclass of :class:`RemoteError`.
 
 .. class:: EncodingError
 
-   Thrown when a value cannot be encoded or decoded. A subclass of ``std::runtime_error``.
+   Thrown when a value cannot be encoded or decoded. A subclass of :class:`RemoteError`.
 
 .. class:: RecursiveMutex
 

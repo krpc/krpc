@@ -33,7 +33,7 @@ class ExceptionThrowers {
  public:
   void add(const std::string& service, const std::string& name,
            const std::function<void(std::string)>& thrower);
-  /** Throw an error as the exception type registered for it, or as an RPCError. */
+  /** Throw an error as the exception type registered for it, or as a ServerError. */
   void throw_exception(const schema::Error& error) const;
 
  private:

@@ -311,6 +311,9 @@ class Generator(Generic[LanguageT]):
                 "native": self.language.native_exception(
                     exception.get("mapped_type", "")
                 ),
+                "alias": self.language.exception_alias(
+                    self._service, name, exception.get("mapped_type", "")
+                ),
             }
 
         for name, procedure in self._get_defs("procedures"):

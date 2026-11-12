@@ -14,7 +14,7 @@ from krpc.declarations import connection_lookup
 from krpc.decoder import Decoder
 from krpc.definitions import register_all
 from krpc.encoder import Encoder
-from krpc.error import RPCError, StreamError
+from krpc.error import ConnectionError, ServerError
 from krpc.event import Event
 from krpc.functioncompiler import (
     NO_VALUE,
@@ -183,11 +183,21 @@ class Connection:
         for service_info in services:
             inherit_deprecation(service_info)
             definitions.extend(service_definitions(service_info, lookup))
-        register_all(self._types, definitions)
+        try:
+            register_all(self._types, definitions)
+        except RuntimeError as exn:
+            raise ConnectionError(
+                "The server's service definitions are malformed: %s" % exn
+            ) from exn
         self._deprecated_services: dict[str, tuple[str, object]] = {}
         for service_info in services:
             name = snake_case(service_info.name)
-            service = create_service(self, service_info)
+            try:
+                service = create_service(self, service_info)
+            except (RuntimeError, ValueError) as exn:
+                raise ConnectionError(
+                    "The server's service definitions are malformed: %s" % exn
+                ) from exn
             message = deprecation_warning(
                 service_info, service_info.name, service_info.name
             )
@@ -230,7 +240,7 @@ class Connection:
         function may also be a Python function or lambda taking no arguments,
         compiled with compile on every call. A call or function with no value
         runs on each update for its effects, and the stream's value is None.
-        Raises a StreamError for arguments to a function, and for a compiled
+        Raises ValueError for arguments to a function, and for a compiled
         function that takes parameters. Raises TypeError for any other value."""
         if self._is_remote_procedure(func):
             return_type = self._get_return_type(func, *args, **kwargs)
@@ -238,7 +248,7 @@ class Connection:
             return krpc.stream.Stream.from_call(self, return_type, call)
         self._check_function(func, "a remote procedure, ")
         if args or kwargs:
-            raise StreamError("A server side function is streamed without arguments")
+            raise ValueError("A server side function is streamed without arguments")
         # Checked before the return type is looked up, which can make remote calls
         if not callable(func):
             self._check_no_parameters(func)
@@ -331,10 +341,10 @@ class Connection:
     def add_event(self, function: Callable[..., object] | Expression) -> Event:
         """Create an event from a server side function that evaluates to a
         boolean value. The function may also be a Python function or lambda
-        taking no arguments, compiled with compile on every call. Raises a
-        StreamError for a compiled function that takes parameters. Raises
-        ValueError for a function that does not evaluate to a boolean value, and
-        TypeError for a value that is not a function."""
+        taking no arguments, compiled with compile on every call. Raises
+        ValueError for a compiled function that takes parameters, and for a
+        function that does not evaluate to a boolean value, and TypeError for a
+        value that is not a function."""
         self._check_function(function)
         if callable(function):
             function, _, _ = compile_function_with_type(self, function, streamed=True)
@@ -352,12 +362,12 @@ class Connection:
         )
 
     def _check_no_parameters(self, function: Expression) -> None:
-        """Raises a StreamError if a function compiled by compile takes
+        """Raises ValueError if a function compiled by compile takes
         parameters, as a stream or an event runs its function with no
         arguments."""
         parameters = self._function_parameters.get(function._object_id)
         if parameters is not None and parameters.ptypes:
-            raise StreamError(
+            raise ValueError(
                 "A function that takes parameters cannot be streamed or used as "
                 "an event"
             )
@@ -641,11 +651,11 @@ class Connection:
                 isinstance(exception_type, type)
                 and issubclass(exception_type, Exception)
             ):
-                return RPCError(
+                return ServerError(
                     "%s.%s: %s" % (error.service, type_name, self._error_message(error))
                 )
             return exception_type(self._error_message(error))
-        return RPCError(self._error_message(error))
+        return ServerError(self._error_message(error))
 
     @staticmethod
     def _error_message(error: KRPC.Error) -> str:

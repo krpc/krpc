@@ -399,7 +399,7 @@ struct function_streams {
  * stream. A Stream<void> runs a function with no value for its effects. Throws
  * std::invalid_argument if the template type does not describe the function's value,
  * ConnectionError if the client is not connected to a server, and services::KRPC::ArgumentException
- * if the function has parameters. Reading a null value throws std::runtime_error unless the
+ * if the function has parameters. Reading a null value throws EncodingError unless the
  * template type is a std::optional. In a callback, that error is written to stderr and the callback
  * does not run.
  */
@@ -437,7 +437,7 @@ inline Event add_event(const services::KRPC::Expression& function) {
  * for its effects when the template type is void. The arguments are passed to the function's
  * parameters, with std::nullopt or nullptr for a null. Throws std::invalid_argument if the
  * template type does not describe the function's value, the number of arguments differs from the
- * number of parameters, or an argument does not match its parameter, and std::runtime_error for a
+ * number of parameters, or an argument does not match its parameter, and EncodingError for a
  * null value unless the template type is a std::optional. The server checks the class of an object
  * argument, and a null for a parameter that is not nullable, and throws
  * services::KRPC::ArgumentException for a mismatch.
@@ -452,7 +452,7 @@ inline T run(const services::KRPC::Expression& function, const Args&... args) {
     T result{};
     if (!data) {
       if constexpr (!function_stream_detail::is_optional<T>::value)
-        throw std::runtime_error(
+        throw EncodingError(
             "The function produced a null value; use a std::optional for the result");
     } else {
       // Unqualified, so that argument dependent lookup finds the overload for a type a

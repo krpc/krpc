@@ -1,6 +1,7 @@
 from __future__ import annotations
 from typing import Tuple, Set, Dict, List, NamedTuple, Optional, TYPE_CHECKING
 import krpc.connection
+import krpc.error
 import krpc.limits
 from krpc.declarations import DeclaredClass, DeclaredObject, declaration_error as _declaration, register as _register
 from krpc.event import Event
@@ -97,13 +98,19 @@ deprecate_attribute({{ struct_name }}, "{{ field.name }}", {{ deprecation_messag
 {% endfor %}
 {% endfor %}
 {% for exception_name, exception in exceptions.items() %}
-{{ deprecated_decorator(exception) }}class {{exception_name}}({{ exception.native or 'RuntimeError' }}):
+{% if exception.alias %}
+{{exception_name}} = {{ exception.alias }}
+
+
+{% else %}
+{{ deprecated_decorator(exception) }}class {{exception_name}}({{ exception.native or 'krpc.error.ServerError' }}):
 {% if exception.documentation %}{{ exception.documentation | indent(width=4) }}
 {% else %}
     pass
 {% endif %}
 
 
+{% endif %}
 {% endfor %}
 {% for class_name, class in classes.items() %}
 {{ deprecated_decorator(class) }}class {{class_name}}(DeclaredObject, metaclass=DeclaredClass):
@@ -166,7 +173,10 @@ class {{ service_name }}(metaclass=DeclaredClass):
 
 _register(
     "{{ service_name }}",
-{% for name in enumerations.keys() | list + structs.keys() | list + exceptions.keys() | list %}
+{% for name in enumerations.keys() | list + structs.keys() | list %}
+    {{ name }},
+{% endfor %}
+{% for name, exception in exceptions.items() if not exception.alias %}
     {{ name }},
 {% endfor %}
 )

@@ -126,6 +126,11 @@ class Language:
         for, or None if there is none"""
         return None
 
+    def exception_alias(self, service: str, name: str, mapped_type: str) -> str | None:
+        """The type an exception's generated name is an alias of, or None for an exception
+        that gets a class of its own"""
+        return None
+
     def parse_special_value(self, value, typ):
         """The language's source for value, if it is a special value the language names,
         otherwise None."""

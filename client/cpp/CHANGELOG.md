@@ -25,8 +25,9 @@
   that do not match (#1185)
 - Throw `EncodingError` when decoding a tuple of the wrong length, which crashed (#1194)
 - Exceptions
-  - **Breaking:** Derive the `KRPC` exceptions with a standard equivalent from it, e.g.
-    `ArgumentException` from `std::invalid_argument`, in place of `RPCError` (#1172)
+  - **Breaking:** Throw a server exception with a standard equivalent as the standard
+    exception, in place of `RPCError`. Its generated name is an alias of it, e.g.
+    `KRPC::ArgumentException` of `std::invalid_argument` (#1172)
   - **Breaking:** Add the server stack trace to an exception's message (#1172)
 
 ## [v0.7.0]

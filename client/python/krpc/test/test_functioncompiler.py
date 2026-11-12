@@ -8,7 +8,7 @@ import unittest
 from collections.abc import Callable
 from typing import Any, cast
 
-from krpc.error import FunctionCompilationError
+from krpc.error import CompilationError
 from krpc.test.servertestcase import ServerTestCase
 
 # A global that a function also assigns as a local
@@ -52,11 +52,11 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
                 SHADOWED = i  # noqa: F841
             return -1
 
-        with self.assertRaises(FunctionCompilationError) as cm:
+        with self.assertRaises(CompilationError) as cm:
             self.conn.compile(shadows_a_global)
         self.assertIn("'SHADOWED' is read before it is assigned", str(cm.exception))
         with self.assertRaisesRegex(
-            FunctionCompilationError, r"'y' is read before it is assigned \(line \d+\)$"
+            CompilationError, r"'y' is read before it is assigned \(line \d+\)$"
         ):
             self.conn.compile(lambda: obj.int_property + y + (y := 1))  # noqa: F821  # pyright: ignore[reportUnboundVariable]
 
@@ -88,7 +88,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
 
         for func in (branch, loop, guarded):
             with self.assertRaisesRegex(
-                FunctionCompilationError,
+                CompilationError,
                 "'value' is read before it is assigned on every path",
             ):
                 self.conn.compile(func)
@@ -160,7 +160,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             (called_too_early_through_another, "outer"),
         ):
             with self.assertRaisesRegex(
-                FunctionCompilationError,
+                CompilationError,
                 "local function '%s' reads the local variable 'offset', which is "
                 "not assigned on every path to this call" % name,
             ):
@@ -173,7 +173,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             return obj.int_property + later
 
         with self.assertRaisesRegex(
-            FunctionCompilationError,
+            CompilationError,
             r"captured variable 'later' is not assigned .*\(line \d+\)$",
         ):
             self.conn.compile(reads_later)
@@ -270,7 +270,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
     def test_lambda_taking_arguments(self) -> None:
         for func in (lambda x: x, lambda *args: args, lambda **kwargs: kwargs):
             with self.assertRaisesRegex(
-                FunctionCompilationError, "a lambda with parameters cannot be compiled"
+                CompilationError, "a lambda with parameters cannot be compiled"
             ):
                 self.conn.compile(func)
 
@@ -286,15 +286,15 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             lambda: obj.int_property > 0 and values < 1,  # pyright: ignore[reportOperatorIssue]
             lambda: obj.int_property if obj.int_property > 0 else 1 // 0,
         ):
-            with self.assertRaisesRegex(FunctionCompilationError, r"\(line \d+\)$"):
+            with self.assertRaisesRegex(CompilationError, r"\(line \d+\)$"):
                 self.conn.compile(func)
 
     def test_ternary_branches_must_agree(self) -> None:
         obj = self.conn.test_service.create_test_object("ternary2")
         other = obj.extension_method_returning_class_from_other_service()  # pyright: ignore[reportAttributeAccessIssue]
-        with self.assertRaises(FunctionCompilationError):
+        with self.assertRaises(CompilationError):
             self.conn.compile(lambda: obj if obj.int_property == 1 else other)
-        with self.assertRaises(FunctionCompilationError):
+        with self.assertRaises(CompilationError):
             self.conn.compile(lambda: [obj] if obj.int_property == 1 else [other])
 
     def test_boolean_operators(self) -> None:
@@ -420,7 +420,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         linecache.cache["<deep>"] = (len(source), None, [source], "<deep>")
         namespace = {}
         exec(compile(source, "<deep>", "exec"), namespace)
-        with self.assertRaisesRegex(FunctionCompilationError, "too deeply nested"):
+        with self.assertRaisesRegex(CompilationError, "too deeply nested"):
             self.conn.compile(namespace["make"](obj))
 
     def test_lambda_continued_on_the_next_line(self) -> None:
@@ -549,7 +549,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
                 lambda: sorted([o.int_property for o in objs], key=lambda x: -x)
             ),
         )
-        with self.assertRaisesRegex(FunctionCompilationError, "'reverse'"):
+        with self.assertRaisesRegex(CompilationError, "'reverse'"):
             self.conn.compile(
                 lambda: sorted([o.int_property for o in objs], reverse=True)
             )
@@ -570,17 +570,17 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
 
     def test_client_side_function_is_rejected(self) -> None:
         limit = 3
-        with self.assertRaises(FunctionCompilationError):
+        with self.assertRaises(CompilationError):
             self.conn.add_event(lambda: limit > 1)
-        with self.assertRaises(FunctionCompilationError):
+        with self.assertRaises(CompilationError):
             self.conn.add_stream(lambda: limit + 1)
         self.assertEqual(4, self.conn.run(lambda: limit + 1))
         service = self.conn.test_service
         service.string_property = "stream"
         with self.conn.add_stream(getattr, service, "string_property") as stream:
-            with self.assertRaisesRegex(FunctionCompilationError, "stream"):
+            with self.assertRaisesRegex(CompilationError, "stream"):
                 self.conn.add_event(lambda: stream() == "stream")
-            with self.assertRaisesRegex(FunctionCompilationError, "stream"):
+            with self.assertRaisesRegex(CompilationError, "stream"):
                 self.conn.run(lambda: stream() + service.string_property)
 
     def test_client_side_function_making_a_remote_call_is_rejected(self) -> None:
@@ -600,7 +600,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             lambda: holder.value + service.counter("Compiler.other"),
         ):
             with self.assertRaisesRegex(
-                FunctionCompilationError,
+                CompilationError,
                 r"makes a remote procedure call.* \(line \d+\)$",
             ):
                 self.conn.compile(func)
@@ -702,7 +702,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
 
         self.assertEqual(16, self.conn.run(first_square_over_ten))
         with self.assertRaisesRegex(
-            FunctionCompilationError, "must end with a return.*while True loop"
+            CompilationError, "must end with a return.*while True loop"
         ):
             self.conn.compile(breaks)
 
@@ -724,11 +724,11 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             return x
 
         with self.assertRaisesRegex(
-            FunctionCompilationError, "annotate it, for example x: float = 0"
+            CompilationError, "annotate it, for example x: float = 0"
         ):
             self.conn.compile(inferred)
         for function in (annotated, parameter):
-            with self.assertRaises(FunctionCompilationError) as cm:
+            with self.assertRaises(CompilationError) as cm:
                 self.conn.compile(function)
             self.assertIn("no implicit conversion", str(cm.exception))
             self.assertNotIn("annotate it", str(cm.exception))
@@ -849,7 +849,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             values.append(3.5)  # pyright: ignore[reportArgumentType]
             return values
 
-        with self.assertRaises(FunctionCompilationError):
+        with self.assertRaises(CompilationError):
             self.conn.compile(truncated)
 
     def test_empty_collection_is_not_a_missing_result(self) -> None:
@@ -871,7 +871,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         obj.object_property = obj
         self.assertFalse(self.conn.run(lambda: obj.object_property is None))
         self.assertTrue(self.conn.run(lambda: None is not obj.object_property))
-        with self.assertRaises(FunctionCompilationError):
+        with self.assertRaises(CompilationError):
             self.conn.compile(lambda: obj.object_property is obj)
 
     def test_value_type_is_never_none(self) -> None:
@@ -960,15 +960,13 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             ("a", 2.0), self.conn.run(lambda: (obj.int_property, "a", 2.0)[-2:])
         )
         self.assertEqual((5,), self.conn.run(lambda: (obj.int_property, "a")[:1]))
-        with self.assertRaisesRegex(
-            FunctionCompilationError, r"cannot be empty \(line \d+\)$"
-        ):
+        with self.assertRaisesRegex(CompilationError, r"cannot be empty \(line \d+\)$"):
             self.conn.compile(lambda: (obj.int_property, "a")[2:])
 
     def test_empty_collection_of_another_kind(self) -> None:
         obj = self.conn.test_service.create_test_object("emptykind")
         with self.assertRaisesRegex(
-            FunctionCompilationError,
+            CompilationError,
             r"an empty list cannot be given a set type; use set\(\) \(line \d+\)$",
         ):
             self.conn.compile(lambda: [] == {obj.int_property})
@@ -1016,7 +1014,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             ),
         ):
             with self.assertRaisesRegex(
-                FunctionCompilationError, message + r".* \(line \d+\)$"
+                CompilationError, message + r".* \(line \d+\)$"
             ):
                 self.conn.compile(func)
         self.assertEqual(3, self.conn.run(lambda: always_equal() + obj.int_property))
@@ -1033,7 +1031,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             ),
         ):
             with self.assertRaisesRegex(
-                FunctionCompilationError, message + r".* \(line \d+\)$"
+                CompilationError, message + r".* \(line \d+\)$"
             ):
                 self.conn.compile(func)
 
@@ -1298,7 +1296,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
 
         for function in (number, string):
             with self.assertRaisesRegex(
-                FunctionCompilationError, "annotated with a type that cannot be None"
+                CompilationError, "annotated with a type that cannot be None"
             ):
                 self.conn.compile(function)
         self.assertIsNone(self.conn.run(optional, 1))
@@ -1444,7 +1442,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         uint = self.conn.test_service.uint32_special_defaults
         self.assertEqual(-6, self.conn.run(lambda: ~uint(5)[0]))
         ulong = self.conn.test_service.uint64_special_defaults
-        with self.assertRaisesRegex(FunctionCompilationError, "cannot invert"):
+        with self.assertRaisesRegex(CompilationError, "cannot invert"):
             self.conn.compile(lambda: ~ulong(5)[0])
         big = 2**40
         self.assertEqual(big + 8, self.conn.run(lambda: obj.int_property & 8 | big))
@@ -1495,17 +1493,17 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         service = self.conn.test_service
         flags_value = service.flags_echo(service.TestFlags.value_a)
         enum = service.TestEnum
-        with self.assertRaisesRegex(FunctionCompilationError, "is not a flags"):
+        with self.assertRaisesRegex(CompilationError, "is not a flags"):
             self.conn.compile(lambda: service.enum_echo(enum.value_a) | enum.value_b)  # pyright: ignore[reportOperatorIssue]
-        with self.assertRaisesRegex(FunctionCompilationError, "is not a flags"):
+        with self.assertRaisesRegex(CompilationError, "is not a flags"):
             self.conn.compile(lambda: ~service.enum_echo(enum.value_a))  # pyright: ignore[reportOperatorIssue]
-        with self.assertRaisesRegex(FunctionCompilationError, "cannot combine"):
+        with self.assertRaisesRegex(CompilationError, "cannot combine"):
             self.conn.compile(
                 lambda: (
                     service.flags_echo(flags_value) | service.enum_echo(enum.value_a)  # pyright: ignore[reportOperatorIssue]
                 )
             )
-        with self.assertRaisesRegex(FunctionCompilationError, "one flags enumeration"):
+        with self.assertRaisesRegex(CompilationError, "one flags enumeration"):
             self.conn.compile(lambda: service.flags_echo(flags_value) | 1)  # pyright: ignore[reportOperatorIssue]
 
     def test_shift_operators(self) -> None:
@@ -1634,9 +1632,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             lambda: round(obj.int_property == 1),
             lambda: abs(obj.int_property == 1),
         ):
-            with self.assertRaisesRegex(
-                FunctionCompilationError, "only supported on a number"
-            ):
+            with self.assertRaisesRegex(CompilationError, "only supported on a number"):
                 self.conn.compile(function)
 
     def test_argument_type_is_not_narrowed(self) -> None:
@@ -1650,7 +1646,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         def truncated() -> None:
             obj.int_property = 2.5  # pyright: ignore[reportAttributeAccessIssue]
 
-        with self.assertRaises(FunctionCompilationError):
+        with self.assertRaises(CompilationError):
             self.conn.compile(truncated)
 
         test_service = self.conn.test_service
@@ -1663,7 +1659,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
 
         for func in (computed_argument, computed_property):
             with self.assertRaisesRegex(
-                FunctionCompilationError, "no implicit conversion from double to int"
+                CompilationError, "no implicit conversion from double to int"
             ):
                 self.conn.compile(func)
 
@@ -1807,7 +1803,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         self.assertEqual(
             3.0, self.conn.run(lambda: math.dist((obj.int_property,), (0,)))
         )
-        with self.assertRaisesRegex(FunctionCompilationError, "same number"):
+        with self.assertRaisesRegex(CompilationError, "same number"):
             self.conn.compile(lambda: math.dist((obj.int_property, 0), (0, 4, 1)))
         is_nan = self.conn.run(lambda: math.isnan(obj.int_property / 2))
         self.assertIs(False, is_nan)
@@ -1820,9 +1816,9 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
 
     def test_math_call_with_too_many_arguments(self) -> None:
         obj = self.conn.test_service.create_test_object("matharity")
-        with self.assertRaises(FunctionCompilationError):
+        with self.assertRaises(CompilationError):
             self.conn.compile(lambda: math.sqrt(obj.int_property, 2))  # pyright: ignore[reportCallIssue]
-        with self.assertRaises(FunctionCompilationError):
+        with self.assertRaises(CompilationError):
             self.conn.compile(lambda: math.hypot(obj.int_property, 2, 2))
 
     def test_print(self) -> None:
@@ -1844,15 +1840,15 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
 
     def test_print_errors(self) -> None:
         obj = self.conn.test_service.create_test_object("printerrors")
-        with self.assertRaisesRegex(FunctionCompilationError, "keyword argument 'end'"):
+        with self.assertRaisesRegex(CompilationError, "keyword argument 'end'"):
             self.conn.compile(lambda: print(obj.int_property, end=""))
-        with self.assertRaisesRegex(FunctionCompilationError, "must be a constant"):
+        with self.assertRaisesRegex(CompilationError, "must be a constant"):
             self.conn.compile(
                 lambda: print(
                     obj.int_property, sep=self.conn.test_service.string_property
                 )
             )
-        with self.assertRaisesRegex(FunctionCompilationError, "converted to a string"):
+        with self.assertRaisesRegex(CompilationError, "converted to a string"):
             self.conn.compile(lambda: print(obj.object_property))
 
     def test_stdlib_service(self) -> None:
@@ -1871,7 +1867,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         std_lib = self.conn.std_lib
         for add in (self.conn.add_stream, self.conn.add_event):
             with self.assertRaisesRegex(
-                FunctionCompilationError, "makes no remote procedure call"
+                CompilationError, "makes no remote procedure call"
             ):
                 add(lambda: std_lib.pi * 2 > 6)
 
@@ -1912,7 +1908,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             lambda: [o.int_property for o in objs][ulong(10)[0] :],
             lambda: [o.int_property for o in objs][1.5:],  # pyright: ignore[reportArgumentType, reportCallIssue]
         ):
-            with self.assertRaisesRegex(FunctionCompilationError, "bound of a slice"):
+            with self.assertRaisesRegex(CompilationError, "bound of a slice"):
                 self.conn.compile(func)
 
     def test_dict_comprehension(self) -> None:
@@ -2049,7 +2045,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             return pick()
 
         with self.assertRaisesRegex(
-            FunctionCompilationError, "local function 'pick' is defined in a nested"
+            CompilationError, "local function 'pick' is defined in a nested"
         ):
             self.conn.compile(after)
 
@@ -2065,7 +2061,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             return pick()
 
         with self.assertRaisesRegex(
-            FunctionCompilationError, "local function 'pick' is defined in a nested"
+            CompilationError, "local function 'pick' is defined in a nested"
         ):
             self.conn.compile(redefined)
 
@@ -2113,7 +2109,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
 
             return double(obj.int_property / 2)  # pyright: ignore[reportArgumentType]
 
-        with self.assertRaises(FunctionCompilationError):
+        with self.assertRaises(CompilationError):
             self.conn.compile(narrowed)
 
         def mistyped():
@@ -2122,7 +2118,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
 
             return double("two")  # pyright: ignore[reportArgumentType]
 
-        with self.assertRaises(FunctionCompilationError):
+        with self.assertRaises(CompilationError):
             self.conn.compile(mistyped)
 
     def test_function_with_parameters(self) -> None:
@@ -2198,7 +2194,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             (list_from_a_set, "default value of parameter 'x'"),
             (reassigned, r"an empty list cannot be given a set type; use set\(\)"),
         ):
-            with self.assertRaisesRegex(FunctionCompilationError, message):
+            with self.assertRaisesRegex(CompilationError, message):
                 self.conn.compile(func)
 
     def test_function_with_parameters_rejected(self) -> None:
@@ -2237,16 +2233,14 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             (too_large_default, "default value of parameter 'x'"),
             (short_tuple_default, "default value of parameter 'x'"),
         ):
-            with self.assertRaisesRegex(FunctionCompilationError, message):
+            with self.assertRaisesRegex(CompilationError, message):
                 self.conn.compile(func)
 
         def streamed(x: int) -> bool:
             return obj.int_property > x
 
         for add in (self.conn.add_stream, self.conn.add_event):
-            with self.assertRaisesRegex(
-                FunctionCompilationError, "cannot take parameters"
-            ):
+            with self.assertRaisesRegex(CompilationError, "cannot take parameters"):
                 add(streamed)
 
     def test_str_of_a_value_with_no_server_text(self) -> None:
@@ -2261,7 +2255,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             lambda: f"{service.enum_echo(enum.value_b)}",
         ]
         for function in rejected:
-            with self.assertRaises(FunctionCompilationError):
+            with self.assertRaises(CompilationError):
                 self.conn.compile(function)
         self.assertEqual("1", self.conn.run(lambda: str(objs[0].int_property)))
 
@@ -2274,7 +2268,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
                 lambda: obj.int_property > 1 and service.echo_test_object(None) is None
             )
         )
-        with self.assertRaisesRegex(FunctionCompilationError, "does not take None"):
+        with self.assertRaisesRegex(CompilationError, "does not take None"):
             self.conn.compile(
                 lambda: obj.int_property > 1 and service.not_nullable_object(None)  # pyright: ignore[reportArgumentType]
             )
@@ -2383,7 +2377,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             return None  # pyright: ignore[reportReturnType]
 
         for function in (bare_return, not_optional):
-            with self.assertRaises(FunctionCompilationError):
+            with self.assertRaises(CompilationError):
                 self.conn.compile(function)
 
     def test_none_takes_the_type_of_other_values(self) -> None:
@@ -2407,7 +2401,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             lambda: {None: obj.int_property},
             lambda: [None],
         ):
-            with self.assertRaises(FunctionCompilationError):
+            with self.assertRaises(CompilationError):
                 self.conn.compile(function)
 
     def test_captured_collection_with_none(self) -> None:
@@ -2450,7 +2444,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             lambda: nones if obj.int_property else nones,
             lambda: obj.int_property in with_none,
         ):
-            with self.assertRaises(FunctionCompilationError):
+            with self.assertRaises(CompilationError):
                 self.conn.compile(function)
 
     def test_misused_local_function_is_named(self) -> None:
@@ -2473,9 +2467,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             (assigned, "local function 'g' can only be called"),
             (keyword, "'g' takes positional arguments only"),
         ):
-            with self.assertRaisesRegex(
-                FunctionCompilationError, message + r" \(line \d+\)$"
-            ):
+            with self.assertRaisesRegex(CompilationError, message + r" \(line \d+\)$"):
                 self.conn.compile(func)
 
     def test_cast_and_comparison_of_unrelated_types_name_the_line(self) -> None:
@@ -2495,7 +2487,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             ),
         ):
             with self.assertRaisesRegex(
-                FunctionCompilationError, message + r".* \(line \d+\)$"
+                CompilationError, message + r".* \(line \d+\)$"
             ):
                 self.conn.compile(func)
         # A cast converts the numbers in a collection
@@ -2549,7 +2541,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         self.assertEqual(objs[2], self.conn.run(longest))
         self.assertEqual("value=zzz", self.conn.run(annotated))
         self.assertIsNone(self.conn.run(later_none))
-        with self.assertRaisesRegex(FunctionCompilationError, "variable 'value'"):
+        with self.assertRaisesRegex(CompilationError, "variable 'value'"):
             self.conn.compile(never_typed)
 
     def test_equality_of_values_of_different_types(self) -> None:
@@ -2565,11 +2557,11 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             lambda: obj.int_property in (5, "a"),
         ):
             with self.assertRaisesRegex(
-                FunctionCompilationError, "cannot compare a value of type"
+                CompilationError, "cannot compare a value of type"
             ):
                 self.conn.compile(func)
         with self.assertRaisesRegex(
-            FunctionCompilationError, "no implicit conversion from double to int"
+            CompilationError, "no implicit conversion from double to int"
         ):
             self.conn.compile(lambda: {5: "a"}[obj.int_property * 1.0])  # pyright: ignore[reportArgumentType]
         # Numbers of different types widen to a common type
@@ -2649,14 +2641,14 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             lambda: max([service.string_property, "b"]),
         ]
         for function in rejected:
-            with self.assertRaises(FunctionCompilationError):
+            with self.assertRaises(CompilationError):
                 self.conn.compile(function)
         self.assertTrue(
             self.conn.run(lambda: (obj.int_property > 1) & (obj.int_property < 5))
         )
 
     def test_unsupported_constructs(self) -> None:
-        with self.assertRaises(FunctionCompilationError):
+        with self.assertRaises(CompilationError):
             self.conn.compile(lambda x: x + 1)
 
         def unannotated():
@@ -2664,11 +2656,11 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             result.append(1)
             return result
 
-        with self.assertRaises(FunctionCompilationError):
+        with self.assertRaises(CompilationError):
             self.conn.compile(unannotated)
 
         obj = self.conn.test_service.create_test_object("unsupported")
-        with self.assertRaises(FunctionCompilationError):
+        with self.assertRaises(CompilationError):
             self.conn.compile(lambda: f"{obj.int_property:.2f}")
 
     def test_argument_unpacking_and_unary_plus(self) -> None:
@@ -2676,11 +2668,11 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         obj = service.create_test_object("unpacking")
         keywords = {"value": 1}
         arguments = [1]
-        with self.assertRaisesRegex(FunctionCompilationError, r"\*\*kwargs"):
+        with self.assertRaisesRegex(CompilationError, r"\*\*kwargs"):
             self.conn.compile(lambda: service.int32_to_string(**keywords))
-        with self.assertRaisesRegex(FunctionCompilationError, r"\*args"):
+        with self.assertRaisesRegex(CompilationError, r"\*args"):
             self.conn.compile(lambda: service.int32_to_string(*arguments))
-        with self.assertRaisesRegex(FunctionCompilationError, "needs numbers"):
+        with self.assertRaisesRegex(CompilationError, "needs numbers"):
             self.conn.compile(lambda: +(obj.int_property > 0))
         self.assertEqual(1, self.conn.run(lambda: +True + obj.int_property))
         nullable = service.echo_nullable_int
@@ -2692,7 +2684,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         service = self.conn.test_service
         obj = service.create_test_object("nocall")
         for func in (lambda: obj.get_value, lambda: service.float_to_string):
-            with self.assertRaisesRegex(FunctionCompilationError, "needs a call"):
+            with self.assertRaisesRegex(CompilationError, "needs a call"):
                 self.conn.compile(func)
 
     def test_raw_python_errors_are_compile_errors(self) -> None:
@@ -2710,15 +2702,15 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             lambda: "a" in missing,  # pyright: ignore[reportOperatorIssue]
             lambda: [obj.int_property][1:2, 0],  # pyright: ignore[reportArgumentType, reportCallIssue]
         ):
-            with self.assertRaises(FunctionCompilationError):
+            with self.assertRaises(CompilationError):
                 self.conn.compile(func)
-        with self.assertRaisesRegex(FunctionCompilationError, "only a lambda or a def"):
+        with self.assertRaisesRegex(CompilationError, "only a lambda or a def"):
             self.conn.compile(functools.partial(lambda x: x, 1))
 
     def test_remote_call_missing_an_argument(self) -> None:
         service = self.conn.test_service
         with self.assertRaisesRegex(
-            FunctionCompilationError, r"missing the argument 'value' \(line \d+\)"
+            CompilationError, r"missing the argument 'value' \(line \d+\)"
         ):
             self.conn.compile(lambda: service.float_to_string())  # noqa: PLW0108  # pyright: ignore[reportCallIssue]
 
@@ -2731,14 +2723,14 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
 
             return fact(obj.int_property)
 
-        with self.assertRaisesRegex(FunctionCompilationError, "recursion"):
+        with self.assertRaisesRegex(CompilationError, "recursion"):
             self.conn.compile(factorial)
 
     def test_empty_collection_error_names_the_line(self) -> None:
         obj = self.conn.test_service.create_test_object("emptyerror")
         empty: list = []
         with self.assertRaisesRegex(
-            FunctionCompilationError,
+            CompilationError,
             r"^Cannot compile expression: cannot determine the type of an empty "
             r"collection.*cast\(List\[int\], \[\]\) \(line \d+\)$",
         ):
@@ -2812,7 +2804,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
                 "an empty list cannot be given a set type; use set()",
             ),
         ):
-            with self.assertRaises(FunctionCompilationError) as cm:
+            with self.assertRaises(CompilationError) as cm:
                 self.conn.compile(func)
             self.assertIn(message, str(cm.exception))
 
@@ -2825,7 +2817,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             return result
 
         with self.assertRaisesRegex(
-            FunctionCompilationError,
+            CompilationError,
             r"^Cannot compile expression: .*annotate.*\(line \d+\)$",
         ):
             self.conn.compile(unannotated)
@@ -2837,7 +2829,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             calls.append(1)
             return 1
 
-        with self.assertRaises(FunctionCompilationError):
+        with self.assertRaises(CompilationError):
             self.conn.compile(logged)
         self.assertEqual([], calls)
 
@@ -2884,9 +2876,9 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
 
         self.assertEqual(4, self.conn.run(empty))
 
-        with self.assertRaises(FunctionCompilationError):
+        with self.assertRaises(CompilationError):
             self.conn.compile(lambda: range(0, 4, obj.int_property))
-        with self.assertRaises(FunctionCompilationError):
+        with self.assertRaises(CompilationError):
             self.conn.compile(lambda: range(0, obj.int_property, 0))
 
     def test_enumerate(self) -> None:
@@ -2911,7 +2903,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             [22, 42],
             self.conn.run(lambda: [x + y for x, y in zip(values, values)]),
         )
-        with self.assertRaises(FunctionCompilationError):
+        with self.assertRaises(CompilationError):
             self.conn.compile(lambda: zip(values, values, values))
 
     def test_dictionary_iteration(self) -> None:
@@ -2973,7 +2965,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             one, two, three = obj.int_property, 1  # pyright: ignore[reportAssignmentType]
             return one + two + three
 
-        with self.assertRaises(FunctionCompilationError):
+        with self.assertRaises(CompilationError):
             self.conn.compile(mismatched)
 
     def test_truthiness(self) -> None:
@@ -3025,12 +3017,12 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             1,
             self.conn.run(lambda: 1 if service.counter_struct("truth") else 2),
         )
-        with self.assertRaises(FunctionCompilationError):
+        with self.assertRaises(CompilationError):
             self.conn.compile(lambda: obj.int_property or "none")
 
     def test_unknown_member(self) -> None:
         obj = self.conn.test_service.create_test_object("unknown")
-        with self.assertRaises(FunctionCompilationError):
+        with self.assertRaises(CompilationError):
             self.conn.compile(lambda: obj.no_such_member)  # pyright: ignore[reportAttributeAccessIssue]
 
     def test_struct_field(self) -> None:
@@ -3111,11 +3103,11 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         enum = self.conn.test_service.TestEnum
         echo = self.conn.test_service.struct_echo
         struct = test_struct(1, "x", enum.value_a, [2])
-        with self.assertRaises(FunctionCompilationError):
+        with self.assertRaises(CompilationError):
             self.conn.compile(lambda: echo(struct).no_such_field)  # pyright: ignore[reportAttributeAccessIssue]
-        with self.assertRaises(FunctionCompilationError):
+        with self.assertRaises(CompilationError):
             self.conn.compile(lambda: echo(test_struct(1, "x")))  # pyright: ignore[reportCallIssue]
-        with self.assertRaises(FunctionCompilationError):
+        with self.assertRaises(CompilationError):
             self.conn.compile(
                 lambda: echo(test_struct(1, "x", enum.value_a, [2], no_such_field=1))  # pyright: ignore[reportCallIssue]
             )
@@ -3243,7 +3235,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             except Exception:
                 obj.int_property = 0
 
-        with self.assertRaises(FunctionCompilationError):
+        with self.assertRaises(CompilationError):
             self.conn.compile(no_handler_value)
 
     def test_function_ending_in_raise(self) -> None:
@@ -3453,7 +3445,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
                 return "wrong"
             return "not reached"
 
-        with self.assertRaises(FunctionCompilationError) as cm:
+        with self.assertRaises(CompilationError) as cm:
             self.conn.compile(guarded)
         self.assertIn("not an exception type the server defines", str(cm.exception))
 
@@ -3533,7 +3525,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
 
         for func, message in ((returns, "return"), (breaks, "break")):
             with self.assertRaisesRegex(
-                FunctionCompilationError,
+                CompilationError,
                 message + r" cannot leave a finally clause \(line \d+\)$",
             ):
                 self.conn.compile(func)
@@ -3548,7 +3540,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             return values
 
         with self.assertRaisesRegex(
-            FunctionCompilationError,
+            CompilationError,
             r"an index must be an int, not a value of type double \(line \d+\)$",
         ):
             self.conn.compile(assigned)
@@ -3561,7 +3553,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             raise len("x")  # pyright: ignore[reportGeneralTypeIssues]
 
         for func in (bare, not_an_exception):
-            with self.assertRaises(FunctionCompilationError):
+            with self.assertRaises(CompilationError):
                 self.conn.compile(func)
 
     def test_min_max_by_key(self) -> None:
@@ -3606,7 +3598,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             ),
         ):
             with self.assertRaisesRegex(
-                FunctionCompilationError, message + r".* \(line \d+\)$"
+                CompilationError, message + r".* \(line \d+\)$"
             ):
                 self.conn.compile(func)
 
@@ -3682,12 +3674,12 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             (lambda: obj.int_property + unknown, "cannot resolve the name 'unknown'"),  # noqa: F821  # pyright: ignore[reportUndefinedVariable]
         ):
             with self.assertRaisesRegex(
-                FunctionCompilationError, message + r".* \(line \d+\)$"
+                CompilationError, message + r".* \(line \d+\)$"
             ):
                 self.conn.compile(func)
         captured = tuple(range(8))
         with self.assertRaisesRegex(
-            FunctionCompilationError, "a tuple can hold at most 7 values"
+            CompilationError, "a tuple can hold at most 7 values"
         ):
             self.conn.compile(lambda: (obj.int_property, captured))
 
@@ -3839,7 +3831,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             values = {o.int_property for o in objs}
             return values.discard(1)
 
-        with self.assertRaises(FunctionCompilationError):
+        with self.assertRaises(CompilationError):
             self.conn.compile(discard_value)
 
     def test_negative_index_on_write(self) -> None:
@@ -3919,7 +3911,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             values = [o.int_property for o in objs]
             del values
 
-        with self.assertRaises(FunctionCompilationError):
+        with self.assertRaises(CompilationError):
             self.conn.compile(whole_name)
 
     def test_write_to_a_captured_collection_rejected(self) -> None:
@@ -3946,7 +3938,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             (augment, "cannot assign to an element of a client side value"),
             (delete, "cannot delete an element of a client side value"),
         ):
-            with self.assertRaises(FunctionCompilationError) as cm:
+            with self.assertRaises(CompilationError) as cm:
                 self.conn.compile(func)
             self.assertIn(message, str(cm.exception))
 
@@ -4045,7 +4037,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
                 time.sleep(0.01)
             self.assertGreater(stream(), first + 1)
         # A StdLib call gives the same value on every update
-        with self.assertRaises(FunctionCompilationError) as cm:
+        with self.assertRaises(CompilationError) as cm:
             self.conn.add_stream(lambda: math.sqrt(len(range(4))))
         self.assertIn("same on every update", str(cm.exception))
 
@@ -4055,7 +4047,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         def assigns() -> int:  # pyright: ignore[reportReturnType]
             obj.int_property = 5
 
-        with self.assertRaisesRegex(FunctionCompilationError, "returns no value"):
+        with self.assertRaisesRegex(CompilationError, "returns no value"):
             self.conn.compile(assigns)
 
     def test_loop_over_a_variable_assigned_none(self) -> None:
@@ -4144,7 +4136,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             ),
             (in_a_local_function, "nonlocal is supported only in the function"),
         ):
-            with self.assertRaises(FunctionCompilationError) as cm:
+            with self.assertRaises(CompilationError) as cm:
                 self.conn.compile(func)
             self.assertIn(message, str(cm.exception))
 
@@ -4175,7 +4167,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             return history
 
         with self.assertRaisesRegex(
-            FunctionCompilationError, r"empty when the function is compiled.*cast"
+            CompilationError, r"empty when the function is compiled.*cast"
         ):
             self.conn.compile(untyped)
 
@@ -4196,7 +4188,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             (cast_in_a_block, "must be a statement of the function's body"),
         ):
             with self.assertRaisesRegex(
-                FunctionCompilationError,
+                CompilationError,
                 r"cast of state variable 'total' %s.* \(line \d+\)$" % message,
             ):
                 self.conn.compile(func)
@@ -4221,7 +4213,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             count = 1.5
             return count
 
-        with self.assertRaises(FunctionCompilationError):
+        with self.assertRaises(CompilationError):
             self.conn.compile(truncated)
 
         def divided():
@@ -4229,7 +4221,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             count = count / 2
             return count
 
-        with self.assertRaises(FunctionCompilationError):
+        with self.assertRaises(CompilationError):
             self.conn.compile(divided)
 
     def test_variable_type_cannot_be_reannotated(self) -> None:
@@ -4238,7 +4230,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             count: float = 2
             return count
 
-        with self.assertRaises(FunctionCompilationError):
+        with self.assertRaises(CompilationError):
             self.conn.compile(reannotated)
 
     def test_client_side_call_runs_once(self) -> None:
@@ -4313,7 +4305,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             values = [1, 2]
             return values
 
-        with self.assertRaises(FunctionCompilationError):
+        with self.assertRaises(CompilationError):
             self.conn.compile(mismatched)
 
     def test_except_value_error_catches_every_argument_exception(self) -> None:
@@ -4455,7 +4447,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
                 )
             ),
         )
-        with self.assertRaises(FunctionCompilationError):
+        with self.assertRaises(CompilationError):
             self.conn.compile(
                 lambda: self.conn.test_service.throw_argument_out_of_range_exception(
                     5000000000
@@ -4465,7 +4457,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             -4294967295,
             self.evaluate(lambda: -self.conn.test_service.uint32_special_defaults()[0]),
         )
-        with self.assertRaises(FunctionCompilationError):
+        with self.assertRaises(CompilationError):
             self.conn.compile(
                 lambda: -self.conn.test_service.uint64_special_defaults()[0]
             )
@@ -4489,9 +4481,9 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             4,
             self.evaluate(lambda: min(test_service.uint64_special_defaults(10)[0], 4)),
         )
-        with self.assertRaisesRegex(FunctionCompilationError, "out of range"):
+        with self.assertRaisesRegex(CompilationError, "out of range"):
             self.conn.compile(lambda: test_service.uint64_special_defaults(10)[0] + -1)
-        with self.assertRaisesRegex(FunctionCompilationError, "no common type"):
+        with self.assertRaisesRegex(CompilationError, "no common type"):
             self.conn.compile(
                 lambda: test_service.uint64_special_defaults(10)[0] // obj.int_property
             )
@@ -4510,7 +4502,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             lambda: ulong(10)[0] in [obj.int_property],
         ):
             with self.assertRaisesRegex(
-                FunctionCompilationError,
+                CompilationError,
                 r"(no common type|cannot compare).* \(line \d+\)$",
             ):
                 self.conn.compile(func)
@@ -4598,7 +4590,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
 
     def test_invert_a_bool(self) -> None:
         obj = self.conn.test_service.create_test_object("invert")
-        with self.assertRaises(FunctionCompilationError):
+        with self.assertRaises(CompilationError):
             self.conn.compile(lambda: ~(obj.int_property > 0))
 
     def test_index_from_the_end(self) -> None:
@@ -4609,7 +4601,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         self.assertEqual(2, self.conn.run(lambda: values[-3]))
         self.assertEqual("d", self.evaluate(lambda: obj.get_value()[-1]))
         self.assertEqual("a", self.evaluate(lambda: (obj.int_property, "a")[-1]))
-        with self.assertRaises(FunctionCompilationError):
+        with self.assertRaises(CompilationError):
             self.conn.compile(lambda: (obj.int_property, "a")[2])  # noqa: PLE0643  # pyright: ignore[reportGeneralTypeIssues]
 
     def test_string_slice_is_clamped(self) -> None:

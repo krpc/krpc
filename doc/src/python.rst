@@ -104,14 +104,18 @@ the error from loading a save that does not exist:
 
 The exception you catch depends on the error:
 
-* A standard error, such as an invalid argument, raises a subclass of the matching Python
-  exception. The example catches ``ValueError``, as a missing save raises
+* A standard error, such as an invalid argument, raises a class whose only base is the matching
+  Python exception. The example catches ``ValueError``, as a missing save raises
   ``conn.krpc.ArgumentException``.
 * An error particular to a service raises a class of that service, such as
-  ``conn.krpc.ObjectDestroyedException``.
-* An error the client has no class for raises :class:`krpc.error.RPCError`.
+  ``conn.krpc.ObjectDestroyedException``, derived from :class:`krpc.error.ServerError`.
+* An error the client has no class for raises :class:`krpc.error.ServerError`.
 * A call made once the connection has closed or failed raises
   :class:`krpc.error.ConnectionError`.
+* An argument the client rejects before sending the call raises ``ValueError`` or ``TypeError``.
+
+Every error of the client's own derives :class:`krpc.error.RemoteError`. A standard error, such as
+``conn.krpc.ArgumentException``, does not.
 
 .. _python-client-values:
 
@@ -278,9 +282,8 @@ that ended it. The following streams the temperature of a part until the part is
 
 The exception is the one the procedure raised, or one of the following:
 
-* ``conn.krpc.StreamRemovedException`` when the server removes the stream, such as for an
+* :class:`krpc.error.StreamError` when you or the server remove the stream, such as for an
   :ref:`event <python-client-events>` that has finished.
-* :class:`krpc.error.StreamError` when you remove the stream from the client.
 * :class:`krpc.error.ConnectionError` when the connection closes or fails.
 
 An exception for an object that is not loaded, or for a procedure not available in the current
@@ -450,7 +453,7 @@ or becomes a constant:
   there is a compile error if it makes a remote procedure call, as the call would run only once,
   when compiling. To use a value read once, read it before the function and capture the variable.
 
-The compiler raises :class:`krpc.error.FunctionCompilationError` for code that would run only once,
+The compiler raises :class:`krpc.error.CompilationError` for code that would run only once,
 when compiling, where you would expect it to run on every evaluation:
 
 * Reading a stream inside a function, as the stream would be read once.
@@ -660,7 +663,7 @@ collection operations:
 Unsupported Constructs
 ^^^^^^^^^^^^^^^^^^^^^^
 
-A construct with no server side equivalent raises :class:`krpc.error.FunctionCompilationError`
+A construct with no server side equivalent raises :class:`krpc.error.CompilationError`
 naming it. Examples are a format specifier, ``str.format``, and a call to a client side function
 with server side arguments.
 
@@ -704,8 +707,8 @@ its arguments to them, with defaults and keyword arguments as in Python:
 
 Only a ``def`` takes parameters. An event or a function stream runs its function with no arguments.
 Passing :meth:`~krpc.Connection.add_event` or :meth:`~krpc.Connection.add_stream` a ``def``
-with parameters raises :class:`krpc.error.FunctionCompilationError`, and a compiled function with
-parameters raises ``StreamError``.
+with parameters raises :class:`krpc.error.CompilationError`, and a compiled function with
+parameters raises ``ValueError``.
 
 .. _python-type-checking:
 
@@ -882,8 +885,8 @@ Client API Reference
       A call or function with no value runs on each update for its effects, and the stream's
       value is ``None``.
 
-      Raises :class:`krpc.error.StreamError` for arguments passed with a server side function,
-      and for a compiled function with parameters. Raises ``TypeError`` for any other value.
+      Raises ``ValueError`` for arguments passed with a server side function, and for a compiled
+      function with parameters. Raises ``TypeError`` for any other value.
 
    .. method:: stream(func, *args, **kwargs)
 
@@ -926,15 +929,15 @@ Client API Reference
       returns a :class:`krpc.event.Event`. The function can also be a Python function or lambda
       that takes no arguments, which is compiled with :meth:`compile` on every call.
 
-      Raises ``StreamError`` for a compiled function with parameters. A function that does not
-      evaluate to a boolean value raises ``ValueError``, and a value that is not a function
-      raises ``TypeError``.
+      Raises ``ValueError`` for a compiled function with parameters, and for a function that
+      does not evaluate to a boolean value. A value that is not a function raises
+      ``TypeError``.
 
    .. method:: compile(func)
 
       Compiles a Python function or lambda into a server side function, a ``KRPC.Expression``
       object. A ``def`` can take parameters, each with a type annotation. Can be used as a
-      decorator. Raises :class:`krpc.error.FunctionCompilationError` for a construct with no
+      decorator. Raises :class:`krpc.error.CompilationError` for a construct with no
       server side equivalent. See :ref:`python-client-compiling-functions`. Given a
       ``KRPC.Expression`` object built with the expression API, compiles it on the server and
       returns it.
@@ -1044,10 +1047,15 @@ Client API Reference
 
       The stream the event is made from.
 
+.. class:: krpc.error.RemoteError
+
+   The base of every error the client raises of its own. A subclass of ``RuntimeError``.
+
 .. class:: krpc.error.ConnectionError
 
    Raised when connecting fails, and by each call once the connection has closed or failed. A
-   subclass of ``RuntimeError``.
+   subclass of :class:`krpc.error.RemoteError`. It shadows the builtin ``ConnectionError``, and
+   ``except OSError`` does not catch it.
 
    .. attribute:: status
 
@@ -1058,24 +1066,26 @@ Client API Reference
       The reason the server gave for ending the connection, such as ``"SERVER_STOPPED"``, or
       ``None``.
 
-.. class:: krpc.error.RPCError
+.. class:: krpc.error.ServerError
 
-   Raised for an error from the server that the client has no exception class for. A subclass
-   of ``RuntimeError``.
+   Raised for an error from the server with no builtin type, and the base of the exception
+   classes the services declare. A subclass of :class:`krpc.error.RemoteError`.
 
 .. class:: krpc.error.StreamError
 
-   Raised by a stream or event that you removed, and when a stream cannot be created. A
-   subclass of ``RuntimeError``.
+   Raised by a stream or event that you or the server removed, and when a stream cannot be
+   created. A subclass of :class:`krpc.error.RemoteError`.
 
 .. class:: krpc.error.EncodingError
 
-   Raised when a value cannot be encoded or decoded. A subclass of ``RuntimeError``.
+   Raised for a value of the right type that cannot be encoded, and for a value that cannot be
+   decoded. A subclass of :class:`krpc.error.RemoteError`.
 
-.. class:: krpc.error.FunctionCompilationError
+.. class:: krpc.error.CompilationError
 
    Raised when a Python function cannot be compiled into a server side function. The error
-   message names the unsupported construct. See :ref:`python-client-compiling-functions`.
+   message names the unsupported construct. See :ref:`python-client-compiling-functions`. A
+   subclass of :class:`krpc.error.RemoteError`.
 
 Numeric Limits
 ^^^^^^^^^^^^^^

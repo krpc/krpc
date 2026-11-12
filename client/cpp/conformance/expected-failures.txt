@@ -1,7 +1,4 @@
 # The conformance tests the C++ client fails, one per line, with the reason as a comment
-test_errors.py::test_mapped_exceptions[NotSupportedException]  # The client has no remote error type
-test_errors.py::test_mapped_exceptions[NullReferenceException]  # As above
-test_errors.py::test_mapped_exceptions[TimeoutException]  # As above
 test_calls.py::test_class_extension_members  # The testee dispatch covers KRPC and TestService only
 test_streams.py::test_members[extension-member]  # The testee dispatch covers KRPC and TestService only
 test_streams.py::test_undecodable_value  # A stream value is decoded when it is read, so a read after a value that fails to decode raises
@@ -19,20 +16,8 @@ test_codec.py::test_object  # An object with the id 0 is the null object
 test_codec.py::test_malformed_data[list(nullable sint32)]  # A presence bool other than 0 or 1, or data after a null, decodes
 test_values.py::test_null_result_with_a_value  # A result with is_null set reads as null, whatever its value
 test_objects.py::test_object_id_range[zero]  # As test_codec.py::test_object
-test_functions.py::test_null_for_non_nullable_type[double]  # Raises std::runtime_error, not the encoding error
-test_functions.py::test_stream_null_for_non_nullable_type[double]  # As test_null_for_non_nullable_type[double]
-test_functions.py::test_null_for_non_nullable_type[TestClass]  # As test_null_for_non_nullable_type[double]
-test_functions.py::test_stream_null_for_non_nullable_type[TestClass]  # As test_null_for_non_nullable_type[TestClass]
 test_concurrency.py::test_wait_holding_another @skip  # The dispatcher thread waits for the condition held, so the update of the stream waited on is never announced
 test_concurrency.py::test_held_stream_ending_before_value  # A read on the thread holding the condition raises "Stream has no value", as the ending is announced only once the condition is free
 test_concurrency.py::test_held_stream_ending @flaky  # Fails now and then, seen only on CI: a read on the thread that takes the condition raises "Stream has no value"
 test_concurrency.py::test_value_read_before_wake @flaky  # Fails now and then, seen only on CI: the read made while the update is paused returns the earlier value
 test_concurrency.py::test_wake_update_waiter[connection-failure] @flaky  # Fails now and then, seen only on CI: the waiting thread is not woken within the reply timeout
-test_connection.py::test_localsocket_path_too_long  # A path too long raises the connection error, not the argument error
-test_errors.py::test_remote_error[connection]  # The client has no remote error type
-test_errors.py::test_remote_error[encoding]  # The client has no remote error type
-test_errors.py::test_remote_error[server]  # The client has no remote error type
-test_errors.py::test_remote_error[stream]  # The client has no remote error type
-test_events.py::test_end_callback[server]  # A stream or event the server removes raises KRPC.StreamRemovedException, not the stream error
-test_events.py::test_ended_without_firing  # A stream or event the server removes raises KRPC.StreamRemovedException, not the stream error
-test_events.py::test_server_end  # A stream or event the server removes raises KRPC.StreamRemovedException, not the stream error

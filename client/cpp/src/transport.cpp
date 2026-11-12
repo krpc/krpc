@@ -9,6 +9,7 @@
 #include <asio/error_code.hpp>
 #include <asio/local/stream_protocol.hpp>
 #include <asio/steady_timer.hpp>
+#include <asio/system_error.hpp>
 #include <asio/write.hpp>
 #include <climits>
 #include <cstdint>
@@ -16,6 +17,7 @@
 #include <memory>
 #include <new>
 #include <ostream>
+#include <stdexcept>
 #include <string>
 #include <utility>
 
@@ -115,10 +117,17 @@ void TCPIPTransport::connect() {
 LocalTransport::LocalTransport(const std::string& path) : path(path) {}
 
 void LocalTransport::connect() {
+  // A path too long for the socket address is the only error building the endpoint throws
+  asio::local::stream_protocol::endpoint endpoint;
+  try {
+    endpoint = asio::local::stream_protocol::endpoint(path);
+  } catch (const asio::system_error& exn) {
+    throw std::invalid_argument("The local socket path is too long: " + std::string(exn.what()));
+  }
   // The generic endpoint copies the address in as raw bytes, which the analyzer cannot follow, so
   // it takes the address family it later reads back to be uninitialized.
   // NOLINTNEXTLINE(clang-analyzer-core.uninitialized.UndefReturn)
-  connect_generic(socket, asio::local::stream_protocol::endpoint(path));
+  connect_generic(socket, endpoint);
 }
 
 void Transport::close() {

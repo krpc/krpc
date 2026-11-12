@@ -876,7 +876,7 @@ def to_error(exn: Exception) -> pb.Error:
         error.kind = pb.Error.CONNECTION
         error.status = exn.status or ""
         error.reason = exn.reason or ""
-    elif isinstance(exn, krpc.error.RPCError):
+    elif isinstance(exn, krpc.error.ServerError):
         error.kind = pb.Error.SERVER
     elif isinstance(exn, krpc.error.StreamError):
         error.kind = pb.Error.STREAM

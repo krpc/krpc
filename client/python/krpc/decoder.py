@@ -94,6 +94,16 @@ def _enum_value(enum_type: type, value: int) -> object:
         raise EncodingError(str(exn)) from exn
 
 
+# The errors that decoding data that is not a value of its type raises from inside the
+# decoders and protobuf
+_MALFORMED = (
+    IndexError,
+    struct.error,
+    UnicodeDecodeError,
+    google.protobuf.message.DecodeError,
+)
+
+
 class Decoder:
     """Routines for decoding messages and values from
     the protocol buffer serialization format"""
@@ -104,11 +114,21 @@ class Decoder:
     def decode(
         cls, connection: Connection | None, data: bytes, typ: TypeBase
     ) -> object:
-        """Given a python type, and serialized data, decode the value.
+        """Given a python type, and serialized data, decode the value. Raises EncodingError
+        for data that is not a value of the type.
 
         This decodes a value at a slot, where a null is carried by the is_null flag of the
         message around it. A value at a position inside another value carries its own
         presence bool, which _item_decoder reads."""
+        try:
+            return cls._decode(connection, data, typ)
+        except _MALFORMED as exn:
+            raise EncodingError("Failed to decode %s: %s" % (typ, exn)) from exn
+
+    @classmethod
+    def _decode(
+        cls, connection: Connection | None, data: bytes, typ: TypeBase
+    ) -> object:
         # The value types come first, as most results are one, and this is on the hot path
         # of every remote procedure call
         if isinstance(typ, ValueType):
@@ -146,6 +166,12 @@ class Decoder:
             return set(decode_item(item) for item in msg.items)
         if isinstance(typ, TupleType):
             msg = cast(KRPC.Tuple, cls.decode_message(data, KRPC.Tuple))
+            if len(msg.items) < len(typ.value_types):
+                raise EncodingError(
+                    "Tuple has wrong number of elements. "
+                    + "Expected at least %d, got %d."
+                    % (len(typ.value_types), len(msg.items))
+                )
             return tuple(cls._decode_items(connection, msg.items, typ.value_types))
         if isinstance(typ, StructType):
             # A structure is encoded as the values of its fields in order, which is the
@@ -326,12 +352,13 @@ class _ValueDecoder:
 
     @classmethod
     def decode_string(cls, data: bytes) -> str:
-        size, position = _decode_varint(data)
-        return data[position : position + size].decode("utf-8")
+        return cls.decode_bytes(data).decode("utf-8")
 
     @classmethod
     def decode_bytes(cls, data: bytes) -> bytes:
         size, position = _decode_varint(data)
+        if position + size > len(data):
+            raise EncodingError("The length runs past the end of the data")
         return data[position : position + size]
 
 

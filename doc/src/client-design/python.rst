@@ -165,12 +165,17 @@ Mapping the Spec to Python
      - Python
    * - Closing a connection
      - ``Connection.close()``, or the end of a ``with`` block
-   * - Connection, stream, encoding error
-     - ``ConnectionError``, ``StreamError``, ``EncodingError`` in ``krpc.error``
+   * - Remote error, and the connection, stream and encoding errors
+     - ``RemoteError``, a ``RuntimeError``, and ``ConnectionError``, ``StreamError``,
+       ``EncodingError`` deriving it, in ``krpc.error``. ``ConnectionError`` shadows the builtin,
+       so every client has one name for it. A program meets it only through ``krpc``
    * - Server error with no mapped type
-     - ``krpc.error.RPCError``
+     - ``krpc.error.ServerError``, the base of each exception class a service declares
    * - Server exception with a mapped type
-     - A class on the service, deriving from the builtin in ``types.NATIVE_EXCEPTIONS``
+     - A class on the service, whose only base is the builtin in ``types.NATIVE_EXCEPTIONS``.
+       The function compiler finds the server exception from the class, so each keeps its own
+   * - Argument error
+     - ``ValueError``, or ``TypeError`` for a value of the wrong type
    * - Null object, nullable value
      - ``None``
    * - Member names

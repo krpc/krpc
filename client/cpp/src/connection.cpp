@@ -117,6 +117,8 @@ Connection::Connection(const std::string& name, const std::shared_ptr<Transport>
     transport->connect();
   } catch (const ConnectionError&) {
     throw;
+  } catch (const std::invalid_argument&) {
+    throw;
   } catch (const std::exception& exn) {
     std::throw_with_nested(
         ConnectionError(std::string("Failed to connect to the server: ") + exn.what()));
@@ -313,7 +315,7 @@ void detail::ExceptionThrowers::throw_exception(const schema::Error& error) cons
       // The type is unknown here if the generated header for its service was never
       // instantiated in this translation unit, so nothing registered a thrower for it.
       // Report the error itself, named by its type on the server.
-      throw RPCError(error.service() + "." + error.exception() + ": " + message);
+      throw ServerError(error.service() + "." + error.exception() + ": " + message);
     }
     // Copy the thrower and release the lock before calling it: it throws, and it must not
     // be holding this lock while the exception propagates out through the caller.
@@ -321,7 +323,7 @@ void detail::ExceptionThrowers::throw_exception(const schema::Error& error) cons
     guard.unlock();
     fn(message);
   } else {
-    throw RPCError(message);
+    throw ServerError(message);
   }
 }
 

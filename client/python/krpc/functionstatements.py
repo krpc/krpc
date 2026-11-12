@@ -20,7 +20,7 @@ from typing import (
 import krpc.schema.KRPC_pb2 as KRPC
 from krpc.declarations import is_class_type
 from krpc.definiteassignment import DefiniteAssignment
-from krpc.error import FunctionCompilationError
+from krpc.error import CompilationError
 from krpc.expressionutils import (
     Result as _Result,
 )
@@ -489,7 +489,7 @@ class _StatementCompiler:
             )
             if statements:
                 raise self._compiler._error(statements[-1], message)
-            raise FunctionCompilationError("Cannot compile expression: " + message)
+            raise CompilationError("Cannot compile expression: " + message)
         return compiled
 
     def _return_annotation_ptype(self, returns: ast.expr | None) -> KRPC.Type | None:
@@ -500,7 +500,7 @@ class _StatementCompiler:
             return None
         try:
             return annotation_ptype(self._compiler, returns)
-        except FunctionCompilationError:
+        except CompilationError:
             return None
 
     def _compile_statement(

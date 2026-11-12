@@ -1,6 +1,7 @@
 from __future__ import annotations
 from typing import Tuple, Set, Dict, List, NamedTuple, Optional, TYPE_CHECKING
 import krpc.connection
+import krpc.error
 import krpc.limits
 from krpc.declarations import DeclaredClass, DeclaredObject, declaration_error as _declaration, register as _register
 from krpc.event import Event
@@ -279,7 +280,7 @@ class DivideByZeroException(ZeroDivisionError):
     """
 
 
-class Error(RuntimeError):
+class Error(krpc.error.ServerError):
     """
     A general error, described by its message.
     """
@@ -316,7 +317,7 @@ class NullReferenceException(TypeError):
     """
 
 
-class ObjectDestroyedException(RuntimeError):
+class ObjectDestroyedException(krpc.error.ServerError):
     """
     The game object that a service object refers to no longer exists,
     so the object cannot be used. For example, the part it represents
@@ -327,7 +328,7 @@ class ObjectDestroyedException(RuntimeError):
     """
 
 
-class ObjectNotLoadedException(RuntimeError):
+class ObjectNotLoadedException(krpc.error.ServerError):
     """
     The game object that a service object refers to exists, but is not loaded.
     For example, the game is loading, or the vessel carrying the part is unloaded.
@@ -342,10 +343,7 @@ class OverflowException(OverflowError):
     """
 
 
-class StreamRemovedException(RuntimeError):
-    """
-    A stream was removed by the server, e.g. an event that has finished.
-    """
+StreamRemovedException = krpc.error.StreamError
 
 
 class TimeoutException(TimeoutError):
@@ -354,7 +352,7 @@ class TimeoutException(TimeoutError):
     """
 
 
-class UnsupportedSceneException(RuntimeError):
+class UnsupportedSceneException(krpc.error.ServerError):
     """
     The procedure is not available in the current game scene.
     """
@@ -2428,7 +2426,6 @@ _register(
     ObjectDestroyedException,
     ObjectNotLoadedException,
     OverflowException,
-    StreamRemovedException,
     TimeoutException,
     UnsupportedSceneException,
 )

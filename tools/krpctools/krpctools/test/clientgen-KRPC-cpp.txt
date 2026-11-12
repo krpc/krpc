@@ -50,82 +50,61 @@ class KRPC : public ::krpc::RemoteService {
    * A method was invoked where at least one of the passed arguments does not
    * meet the parameter specification of the method.
    */
-  class ArgumentException : public std::invalid_argument {
-   public:
-    inline explicit ArgumentException(const std::string& msg) : std::invalid_argument(msg) {}
-  };
+  using ArgumentException = std::invalid_argument;
 
   /**
    * A null reference was passed to a method that does not accept it as a valid argument.
    */
-  class ArgumentNullException : public std::invalid_argument {
-   public:
-    inline explicit ArgumentNullException(const std::string& msg) : std::invalid_argument(msg) {}
-  };
+  using ArgumentNullException = std::invalid_argument;
 
   /**
    * The value of an argument is outside the allowable range of values as defined by the invoked method.
    */
-  class ArgumentOutOfRangeException : public std::out_of_range {
-   public:
-    inline explicit ArgumentOutOfRangeException(const std::string& msg) : std::out_of_range(msg) {}
-  };
+  using ArgumentOutOfRangeException = std::out_of_range;
 
   /**
    * An integer was divided by zero.
    */
-  class DivideByZeroException : public std::domain_error {
-   public:
-    inline explicit DivideByZeroException(const std::string& msg) : std::domain_error(msg) {}
-  };
+  using DivideByZeroException = std::domain_error;
 
   /**
    * A general error, described by its message.
    */
-  class Error : public ::krpc::RPCError {
+  class Error : public ::krpc::ServerError {
    public:
-    inline explicit Error(const std::string& msg) : ::krpc::RPCError(msg) {}
+    inline explicit Error(const std::string& msg) : ::krpc::ServerError(msg) {}
   };
 
   /**
    * An index was outside the bounds of a collection, string or array.
    */
-  class IndexOutOfRangeException : public std::out_of_range {
-   public:
-    inline explicit IndexOutOfRangeException(const std::string& msg) : std::out_of_range(msg) {}
-  };
+  using IndexOutOfRangeException = std::out_of_range;
 
   /**
    * A method call was made to a method that is invalid
    * given the current state of the object.
    */
-  class InvalidOperationException : public std::logic_error {
-   public:
-    inline explicit InvalidOperationException(const std::string& msg) : std::logic_error(msg) {}
-  };
+  using InvalidOperationException = std::logic_error;
 
   /**
    * A key was not found in a dictionary.
    */
-  class KeyNotFoundException : public std::out_of_range {
-   public:
-    inline explicit KeyNotFoundException(const std::string& msg) : std::out_of_range(msg) {}
-  };
+  using KeyNotFoundException = std::out_of_range;
 
   /**
    * A method was invoked that is not supported.
    */
-  class NotSupportedException : public ::krpc::RPCError {
+  class NotSupportedException : public ::krpc::ServerError {
    public:
-    inline explicit NotSupportedException(const std::string& msg) : ::krpc::RPCError(msg) {}
+    inline explicit NotSupportedException(const std::string& msg) : ::krpc::ServerError(msg) {}
   };
 
   /**
    * A value was null where its type does not allow one.
    */
-  class NullReferenceException : public ::krpc::RPCError {
+  class NullReferenceException : public ::krpc::ServerError {
    public:
-    inline explicit NullReferenceException(const std::string& msg) : ::krpc::RPCError(msg) {}
+    inline explicit NullReferenceException(const std::string& msg) : ::krpc::ServerError(msg) {}
   };
 
   /**
@@ -136,9 +115,9 @@ class KRPC : public ::krpc::RemoteService {
    * See krpc::services::KRPC::ObjectNotLoadedException for a game object that exists but is not
    * loaded.
    */
-  class ObjectDestroyedException : public ::krpc::RPCError {
+  class ObjectDestroyedException : public ::krpc::ServerError {
    public:
-    inline explicit ObjectDestroyedException(const std::string& msg) : ::krpc::RPCError(msg) {}
+    inline explicit ObjectDestroyedException(const std::string& msg) : ::krpc::ServerError(msg) {}
   };
 
   /**
@@ -147,41 +126,35 @@ class KRPC : public ::krpc::RemoteService {
    *
    * See krpc::services::KRPC::ObjectDestroyedException for a game object that no longer exists.
    */
-  class ObjectNotLoadedException : public ::krpc::RPCError {
+  class ObjectNotLoadedException : public ::krpc::ServerError {
    public:
-    inline explicit ObjectNotLoadedException(const std::string& msg) : ::krpc::RPCError(msg) {}
+    inline explicit ObjectNotLoadedException(const std::string& msg) : ::krpc::ServerError(msg) {}
   };
 
   /**
    * An arithmetic or conversion operation overflowed.
    */
-  class OverflowException : public std::overflow_error {
-   public:
-    inline explicit OverflowException(const std::string& msg) : std::overflow_error(msg) {}
-  };
+  using OverflowException = std::overflow_error;
 
   /**
    * A stream was removed by the server, e.g. an event that has finished.
    */
-  class StreamRemovedException : public ::krpc::RPCError {
-   public:
-    inline explicit StreamRemovedException(const std::string& msg) : ::krpc::RPCError(msg) {}
-  };
+  using StreamRemovedException = ::krpc::StreamError;
 
   /**
    * An operation did not complete in the time allotted to it.
    */
-  class TimeoutException : public ::krpc::RPCError {
+  class TimeoutException : public ::krpc::ServerError {
    public:
-    inline explicit TimeoutException(const std::string& msg) : ::krpc::RPCError(msg) {}
+    inline explicit TimeoutException(const std::string& msg) : ::krpc::ServerError(msg) {}
   };
 
   /**
    * The procedure is not available in the current game scene.
    */
-  class UnsupportedSceneException : public ::krpc::RPCError {
+  class UnsupportedSceneException : public ::krpc::ServerError {
    public:
-    inline explicit UnsupportedSceneException(const std::string& msg) : ::krpc::RPCError(msg) {}
+    inline explicit UnsupportedSceneException(const std::string& msg) : ::krpc::ServerError(msg) {}
   };
 
   /**

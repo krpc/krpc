@@ -51,9 +51,9 @@ class TestService : public ::krpc::RemoteService {
   struct TestNestedStruct;
   struct TestNullableStruct;
 
-  class CustomException : public ::krpc::RPCError {
+  class CustomException : public ::krpc::ServerError {
    public:
-    inline explicit CustomException(const std::string& msg) : ::krpc::RPCError(msg) {}
+    inline explicit CustomException(const std::string& msg) : ::krpc::ServerError(msg) {}
   };
 
   /**
@@ -61,9 +61,9 @@ class TestService : public ::krpc::RemoteService {
    *
    * \deprecated Use CustomException instead.
    */
-  class [[deprecated("Use CustomException instead.")]] DeprecatedException : public ::krpc::RPCError {
+  class [[deprecated("Use CustomException instead.")]] DeprecatedException : public ::krpc::ServerError {
    public:
-    inline explicit DeprecatedException(const std::string& msg) : ::krpc::RPCError(msg) {}
+    inline explicit DeprecatedException(const std::string& msg) : ::krpc::ServerError(msg) {}
   };
 
   /**
