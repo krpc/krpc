@@ -12,18 +12,18 @@
 namespace krpc_conformance {
 
 struct CodecEntry {
-  std::function<std::string(krpc::Client&, const Value&)> encode;
-  std::function<Value(krpc::Client&, const std::string&)> decode;
+  std::function<std::string(krpc::Connection&, const Value&)> encode;
+  std::function<Value(krpc::Connection&, const std::string&)> decode;
 };
 
 template <typename Tag>
 CodecEntry codec_entry() {
-  return {[](krpc::Client& client, const Value& value) {
-            return krpc::encoder::encode(Tag::arg(client, value));
+  return {[](krpc::Connection& connection, const Value& value) {
+            return krpc::encoder::encode(Tag::arg(connection, value));
           },
-          [](krpc::Client& client, const std::string& data) {
+          [](krpc::Connection& connection, const std::string& data) {
             typename Tag::type value{};
-            krpc::decoder::decode(value, data, &client);
+            krpc::decoder::decode(value, data, &connection);
             return Tag::result(value);
           }};
 }

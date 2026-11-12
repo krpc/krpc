@@ -84,13 +84,10 @@ namespace KRPC.Client.Services.KRPC
     /// <summary>
     /// KRPC service.
     /// </summary>
-    public class Service
+    public class Service : global::KRPC.Client.RemoteService
     {
-        global::KRPC.Client.IConnection connection;
-
-        internal Service (global::KRPC.Client.IConnection serverConnection)
+        internal Service (global::KRPC.Client.IConnection serverConnection) : base (serverConnection)
         {
-            connection = serverConnection;
             AddExceptionTypes (serverConnection);
         }
 
@@ -121,7 +118,7 @@ namespace KRPC.Client.Services.KRPC
         public byte[] GetClientID ()
         {
             var _result = connection.Invoke ("KRPC", "GetClientID");
-            return (byte[])global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec6, connection);
+            return (byte[])global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec6, connection);
         }
 
         /// <summary>
@@ -132,7 +129,7 @@ namespace KRPC.Client.Services.KRPC
         public string GetClientName ()
         {
             var _result = connection.Invoke ("KRPC", "GetClientName");
-            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec8, connection);
+            return (string)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec8, connection);
         }
 
         /// <summary>
@@ -143,7 +140,7 @@ namespace KRPC.Client.Services.KRPC
         public global::KRPC.Schema.KRPC.Services GetServices ()
         {
             var _result = connection.Invoke ("KRPC", "GetServices");
-            return (global::KRPC.Schema.KRPC.Services)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec18, connection);
+            return (global::KRPC.Schema.KRPC.Services)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec18, connection);
         }
 
         /// <summary>
@@ -153,7 +150,7 @@ namespace KRPC.Client.Services.KRPC
         public global::KRPC.Client.Services.KRPC.ServerStatus GetStatus ()
         {
             var _result = connection.Invoke ("KRPC", "GetStatus");
-            return (global::KRPC.Client.Services.KRPC.ServerStatus)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec19, connection);
+            return (global::KRPC.Client.Services.KRPC.ServerStatus)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec19, connection);
         }
 
         /// <summary>
@@ -220,7 +217,7 @@ namespace KRPC.Client.Services.KRPC
         public global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.ClientInfo> Clients {
             get {
                 var _result = connection.Invoke ("KRPC", "get_Clients");
-                return (global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.ClientInfo>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec20, connection);
+                return (global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.ClientInfo>)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec20, connection);
             }
         }
 
@@ -240,7 +237,7 @@ namespace KRPC.Client.Services.KRPC
         public global::KRPC.Client.Services.KRPC.GameScene GameScene {
             get {
                 var _result = connection.Invoke ("KRPC", "get_GameScene");
-                return (global::KRPC.Client.Services.KRPC.GameScene)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec17, connection);
+                return (global::KRPC.Client.Services.KRPC.GameScene)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec17, connection);
             }
             set {
                 var _args = new ByteString[] {
@@ -260,7 +257,7 @@ namespace KRPC.Client.Services.KRPC
         public uint GameStateLoads {
             get {
                 var _result = connection.Invoke ("KRPC", "get_GameStateLoads");
-                return (uint)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec13, connection);
+                return (uint)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec13, connection);
             }
         }
 
@@ -271,7 +268,7 @@ namespace KRPC.Client.Services.KRPC
         public bool Paused {
             get {
                 var _result = connection.Invoke ("KRPC", "get_Paused");
-                return (bool)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec5, connection);
+                return (bool)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec5, connection);
             }
             set {
                 var _args = new ByteString[] {
@@ -1747,7 +1744,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (arg1, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Add", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -1770,7 +1767,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (func, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Aggregate", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -1795,7 +1792,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (func, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_AggregateWithSeed", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -1815,7 +1812,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (predicate, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_All", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -1837,7 +1834,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (arg1, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_And", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -1857,7 +1854,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (predicate, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Any", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -1879,7 +1876,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Append", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -1902,7 +1899,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Assign", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -1923,7 +1920,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (arg, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Average", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -1940,7 +1937,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (statements, TypeSpecs.Spec1)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Block", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -1963,7 +1960,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (statements, TypeSpecs.Spec1)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_BlockWithVariables", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -1976,7 +1973,7 @@ namespace KRPC.Client.Services.KRPC
             if (connection == null)
                 throw new ArgumentNullException (nameof (connection));
             var _result = connection.Invoke ("KRPC", "Expression_static_Break");
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2002,7 +1999,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (valueFunc, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_BuildDictionary", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2025,7 +2022,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (call, TypeSpecs.Spec2)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Call", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2049,7 +2046,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (args, TypeSpecs.Spec3)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_CallWithArguments", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2071,7 +2068,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (type, TypeSpecs.Spec4)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Cast", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2088,7 +2085,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (collection, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Clear", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2111,7 +2108,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (arg2, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Concat", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2135,7 +2132,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (ifFalse, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Conditional", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2154,7 +2151,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (arg1, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_ConditionalAnd", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2173,7 +2170,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (arg1, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_ConditionalOr", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2190,7 +2187,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec5)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_ConstantBool", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2207,7 +2204,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec6)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_ConstantBytes", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2224,7 +2221,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec7)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_ConstantDouble", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2245,7 +2242,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec9)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_ConstantEnum", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2262,7 +2259,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec10)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_ConstantFloat", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2279,7 +2276,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec9)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_ConstantInt", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2296,7 +2293,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec11)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_ConstantLong", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2316,7 +2313,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (type, TypeSpecs.Spec4)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_ConstantNull", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2336,7 +2333,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec12)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_ConstantObject", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2353,7 +2350,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec8)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_ConstantString", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2370,7 +2367,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec13)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_ConstantUInt", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2387,7 +2384,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec12)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_ConstantULong", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2407,7 +2404,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Contains", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2427,7 +2424,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (key, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_ContainsKey", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2440,7 +2437,7 @@ namespace KRPC.Client.Services.KRPC
             if (connection == null)
                 throw new ArgumentNullException (nameof (connection));
             var _result = connection.Invoke ("KRPC", "Expression_static_Continue");
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2463,7 +2460,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (arg, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_ConvertToString", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2481,7 +2478,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (arg, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Count", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2506,7 +2503,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (values, TypeSpecs.Spec1)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_CreateDictionary", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2527,7 +2524,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (valueType, TypeSpecs.Spec4)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_CreateEmptyDictionary", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2545,7 +2542,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (valueType, TypeSpecs.Spec4)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_CreateEmptyList", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2564,7 +2561,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (valueType, TypeSpecs.Spec4)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_CreateEmptySet", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2583,7 +2580,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (values, TypeSpecs.Spec1)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_CreateList", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2605,7 +2602,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (values, TypeSpecs.Spec14)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_CreateSet", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2627,7 +2624,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (fieldValues, TypeSpecs.Spec1)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_CreateStruct", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2646,7 +2643,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (elements, TypeSpecs.Spec1)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_CreateTuple", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2668,7 +2665,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (dictionary, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_DictionaryKeys", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2686,7 +2683,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (dictionary, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_DictionaryValues", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2708,7 +2705,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (arg, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Distinct", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2727,7 +2724,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (arg1, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Divide", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2750,7 +2747,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (index, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_ElementAt", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2773,7 +2770,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (arg1, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Equal", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2797,7 +2794,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (arg2, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Except", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2819,7 +2816,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (arg1, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_ExclusiveOr", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2840,7 +2837,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (arg, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_First", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2866,7 +2863,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (body, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_ForEach", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2891,7 +2888,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (index, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Get", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2912,7 +2909,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (name, TypeSpecs.Spec8)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_GetField", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2931,7 +2928,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (arg1, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_GreaterThan", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2950,7 +2947,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (arg1, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_GreaterThanOrEqual", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2970,7 +2967,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (key, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_GroupBy", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -2992,7 +2989,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (body, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_IfThen", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3016,7 +3013,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (elseBody, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_IfThenElse", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3039,7 +3036,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (arg2, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Intersect", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3059,7 +3056,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (args, TypeSpecs.Spec15)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Invoke", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3076,7 +3073,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_IsNull", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3101,7 +3098,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (body, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Lambda", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3122,7 +3119,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (arg, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Last", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3145,7 +3142,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (arg1, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_LeftShift", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3164,7 +3161,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (arg1, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_LessThan", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3183,7 +3180,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (arg1, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_LessThanOrEqual", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3204,7 +3201,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (arg, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Max", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3227,7 +3224,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (key, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_MaxBy", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3248,7 +3245,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (arg, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Min", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3271,7 +3268,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (key, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_MinBy", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3291,7 +3288,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (arg1, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Modulo", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3310,7 +3307,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (arg1, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Multiply", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3327,7 +3324,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (arg, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Negate", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3347,7 +3344,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (arg, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Not", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3370,7 +3367,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (arg1, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_NotEqual", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3392,7 +3389,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (arg1, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Or", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3415,7 +3412,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (key, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_OrderBy", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3439,7 +3436,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (type, TypeSpecs.Spec4)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Parameter", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3459,7 +3456,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (arg1, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Power", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3483,7 +3480,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Remove", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3505,7 +3502,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (index, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_RemoveAt", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3522,7 +3519,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Return", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3535,7 +3532,7 @@ namespace KRPC.Client.Services.KRPC
             if (connection == null)
                 throw new ArgumentNullException (nameof (connection));
             var _result = connection.Invoke ("KRPC", "Expression_static_ReturnNothing");
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3556,7 +3553,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (arg, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Reverse", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3579,7 +3576,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (arg1, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_RightShift", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3602,7 +3599,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (func, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Select", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3627,7 +3624,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (func, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_SelectMany", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3652,7 +3649,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Set", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3675,7 +3672,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (count, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Skip", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3700,7 +3697,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (initialValue, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_StateVariable", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3721,7 +3718,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (args, TypeSpecs.Spec1)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_StringConcat", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3741,7 +3738,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_StringContains", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3761,7 +3758,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_StringEndsWith", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3784,7 +3781,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (index, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_StringGet", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3804,7 +3801,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_StringIndexOf", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3824,7 +3821,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (values, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_StringJoin", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3842,7 +3839,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (arg, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_StringLength", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3867,7 +3864,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (newValue, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_StringReplace", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3887,7 +3884,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (separator, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_StringSplit", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3907,7 +3904,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_StringStartsWith", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3932,7 +3929,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (length, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_StringSubstring", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3950,7 +3947,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (arg, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_StringToLower", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3968,7 +3965,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (arg, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_StringToUpper", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -3986,7 +3983,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (arg, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_StringTrim", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -4004,7 +4001,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (arg, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_StringTrimEnd", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -4022,7 +4019,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (arg, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_StringTrimStart", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -4041,7 +4038,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (arg1, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Subtract", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -4059,7 +4056,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (arg, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Sum", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -4082,7 +4079,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (count, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Take", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -4109,7 +4106,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (message, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Throw", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -4127,7 +4124,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (arg, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_ToList", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -4148,7 +4145,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (arg, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_ToSet", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -4177,7 +4174,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (handler, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_TryCatch", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -4198,7 +4195,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (handler, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_TryCatchAll", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -4221,7 +4218,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (finalizer, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_TryFinally", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -4244,7 +4241,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (arg2, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Union", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -4264,7 +4261,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (type, TypeSpecs.Spec4)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Variable", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -4287,7 +4284,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (func, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Where", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -4309,7 +4306,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (body, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_While", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -4335,7 +4332,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (func, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_Zip", _args);
-            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
+            return (global::KRPC.Client.Services.KRPC.Expression)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec0, connection);
         }
 
         /// <summary>
@@ -6025,7 +6022,7 @@ namespace KRPC.Client.Services.KRPC
                     global::KRPC.Client.Encoder.Encode (this, TypeSpecs.Spec0)
                 };
                 var _result = connection.Invoke ("KRPC", "Expression_get_HasReturnType", _args);
-                return (bool)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec5, connection);
+                return (bool)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec5, connection);
             }
         }
 
@@ -6042,7 +6039,7 @@ namespace KRPC.Client.Services.KRPC
                     global::KRPC.Client.Encoder.Encode (this, TypeSpecs.Spec0)
                 };
                 var _result = connection.Invoke ("KRPC", "Expression_get_ParameterTypes", _args);
-                return (global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.Type>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec16, connection);
+                return (global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.Type>)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec16, connection);
             }
         }
 
@@ -6062,7 +6059,7 @@ namespace KRPC.Client.Services.KRPC
                     global::KRPC.Client.Encoder.Encode (this, TypeSpecs.Spec0)
                 };
                 var _result = connection.Invoke ("KRPC", "Expression_get_ReturnType", _args);
-                return (global::KRPC.Client.Services.KRPC.Type)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
+                return (global::KRPC.Client.Services.KRPC.Type)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
             }
         }
     }
@@ -6089,7 +6086,7 @@ namespace KRPC.Client.Services.KRPC
             if (connection == null)
                 throw new ArgumentNullException (nameof (connection));
             var _result = connection.Invoke ("KRPC", "Type_static_Bool");
-            return (global::KRPC.Client.Services.KRPC.Type)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
+            return (global::KRPC.Client.Services.KRPC.Type)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
         }
 
         /// <summary>
@@ -6102,7 +6099,7 @@ namespace KRPC.Client.Services.KRPC
             if (connection == null)
                 throw new ArgumentNullException (nameof (connection));
             var _result = connection.Invoke ("KRPC", "Type_static_Bytes");
-            return (global::KRPC.Client.Services.KRPC.Type)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
+            return (global::KRPC.Client.Services.KRPC.Type)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
         }
 
         /// <summary>
@@ -6121,7 +6118,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (name, TypeSpecs.Spec8)
             };
             var _result = connection.Invoke ("KRPC", "Type_static_ClassType", _args);
-            return (global::KRPC.Client.Services.KRPC.Type)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
+            return (global::KRPC.Client.Services.KRPC.Type)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
         }
 
         /// <summary>
@@ -6141,7 +6138,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (valueType, TypeSpecs.Spec4)
             };
             var _result = connection.Invoke ("KRPC", "Type_static_DictionaryType", _args);
-            return (global::KRPC.Client.Services.KRPC.Type)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
+            return (global::KRPC.Client.Services.KRPC.Type)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
         }
 
         /// <summary>
@@ -6154,7 +6151,7 @@ namespace KRPC.Client.Services.KRPC
             if (connection == null)
                 throw new ArgumentNullException (nameof (connection));
             var _result = connection.Invoke ("KRPC", "Type_static_Double");
-            return (global::KRPC.Client.Services.KRPC.Type)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
+            return (global::KRPC.Client.Services.KRPC.Type)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
         }
 
         /// <summary>
@@ -6173,7 +6170,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (name, TypeSpecs.Spec8)
             };
             var _result = connection.Invoke ("KRPC", "Type_static_EnumerationType", _args);
-            return (global::KRPC.Client.Services.KRPC.Type)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
+            return (global::KRPC.Client.Services.KRPC.Type)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
         }
 
         /// <summary>
@@ -6186,7 +6183,7 @@ namespace KRPC.Client.Services.KRPC
             if (connection == null)
                 throw new ArgumentNullException (nameof (connection));
             var _result = connection.Invoke ("KRPC", "Type_static_Float");
-            return (global::KRPC.Client.Services.KRPC.Type)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
+            return (global::KRPC.Client.Services.KRPC.Type)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
         }
 
         /// <summary>
@@ -6199,7 +6196,7 @@ namespace KRPC.Client.Services.KRPC
             if (connection == null)
                 throw new ArgumentNullException (nameof (connection));
             var _result = connection.Invoke ("KRPC", "Type_static_Int");
-            return (global::KRPC.Client.Services.KRPC.Type)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
+            return (global::KRPC.Client.Services.KRPC.Type)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
         }
 
         /// <summary>
@@ -6216,7 +6213,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (valueType, TypeSpecs.Spec4)
             };
             var _result = connection.Invoke ("KRPC", "Type_static_ListType", _args);
-            return (global::KRPC.Client.Services.KRPC.Type)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
+            return (global::KRPC.Client.Services.KRPC.Type)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
         }
 
         /// <summary>
@@ -6229,7 +6226,7 @@ namespace KRPC.Client.Services.KRPC
             if (connection == null)
                 throw new ArgumentNullException (nameof (connection));
             var _result = connection.Invoke ("KRPC", "Type_static_Long");
-            return (global::KRPC.Client.Services.KRPC.Type)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
+            return (global::KRPC.Client.Services.KRPC.Type)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
         }
 
         /// <summary>
@@ -6246,7 +6243,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (valueType, TypeSpecs.Spec4)
             };
             var _result = connection.Invoke ("KRPC", "Type_static_NullableType", _args);
-            return (global::KRPC.Client.Services.KRPC.Type)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
+            return (global::KRPC.Client.Services.KRPC.Type)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
         }
 
         /// <summary>
@@ -6263,7 +6260,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (valueType, TypeSpecs.Spec4)
             };
             var _result = connection.Invoke ("KRPC", "Type_static_SetType", _args);
-            return (global::KRPC.Client.Services.KRPC.Type)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
+            return (global::KRPC.Client.Services.KRPC.Type)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
         }
 
         /// <summary>
@@ -6276,7 +6273,7 @@ namespace KRPC.Client.Services.KRPC
             if (connection == null)
                 throw new ArgumentNullException (nameof (connection));
             var _result = connection.Invoke ("KRPC", "Type_static_String");
-            return (global::KRPC.Client.Services.KRPC.Type)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
+            return (global::KRPC.Client.Services.KRPC.Type)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
         }
 
         /// <summary>
@@ -6295,7 +6292,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (name, TypeSpecs.Spec8)
             };
             var _result = connection.Invoke ("KRPC", "Type_static_StructType", _args);
-            return (global::KRPC.Client.Services.KRPC.Type)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
+            return (global::KRPC.Client.Services.KRPC.Type)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
         }
 
         /// <summary>
@@ -6312,7 +6309,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (valueTypes, TypeSpecs.Spec16)
             };
             var _result = connection.Invoke ("KRPC", "Type_static_TupleType", _args);
-            return (global::KRPC.Client.Services.KRPC.Type)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
+            return (global::KRPC.Client.Services.KRPC.Type)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
         }
 
         /// <summary>
@@ -6325,7 +6322,7 @@ namespace KRPC.Client.Services.KRPC
             if (connection == null)
                 throw new ArgumentNullException (nameof (connection));
             var _result = connection.Invoke ("KRPC", "Type_static_UInt");
-            return (global::KRPC.Client.Services.KRPC.Type)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
+            return (global::KRPC.Client.Services.KRPC.Type)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
         }
 
         /// <summary>
@@ -6338,7 +6335,7 @@ namespace KRPC.Client.Services.KRPC
             if (connection == null)
                 throw new ArgumentNullException (nameof (connection));
             var _result = connection.Invoke ("KRPC", "Type_static_ULong");
-            return (global::KRPC.Client.Services.KRPC.Type)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
+            return (global::KRPC.Client.Services.KRPC.Type)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
         }
 
         /// <summary>
@@ -6542,7 +6539,7 @@ namespace KRPC.Client.Services.KRPC
                     global::KRPC.Client.Encoder.Encode (this, TypeSpecs.Spec4)
                 };
                 var _result = connection.Invoke ("KRPC", "Type_get_Code", _args);
-                return (global::KRPC.Client.Services.KRPC.TypeCode)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec21, connection);
+                return (global::KRPC.Client.Services.KRPC.TypeCode)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec21, connection);
             }
         }
 
@@ -6556,7 +6553,7 @@ namespace KRPC.Client.Services.KRPC
                     global::KRPC.Client.Encoder.Encode (this, TypeSpecs.Spec4)
                 };
                 var _result = connection.Invoke ("KRPC", "Type_get_Name", _args);
-                return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec8, connection);
+                return (string)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec8, connection);
             }
         }
 
@@ -6574,7 +6571,7 @@ namespace KRPC.Client.Services.KRPC
                     global::KRPC.Client.Encoder.Encode (this, TypeSpecs.Spec4)
                 };
                 var _result = connection.Invoke ("KRPC", "Type_get_Nullable", _args);
-                return (bool)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec5, connection);
+                return (bool)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec5, connection);
             }
         }
 
@@ -6588,7 +6585,7 @@ namespace KRPC.Client.Services.KRPC
                     global::KRPC.Client.Encoder.Encode (this, TypeSpecs.Spec4)
                 };
                 var _result = connection.Invoke ("KRPC", "Type_get_Service", _args);
-                return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec8, connection);
+                return (string)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec8, connection);
             }
         }
 
@@ -6606,7 +6603,7 @@ namespace KRPC.Client.Services.KRPC
                     global::KRPC.Client.Encoder.Encode (this, TypeSpecs.Spec4)
                 };
                 var _result = connection.Invoke ("KRPC", "Type_get_Types", _args);
-                return (global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.Type>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec16, connection);
+                return (global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.Type>)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec16, connection);
             }
         }
     }

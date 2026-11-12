@@ -12,7 +12,7 @@ from krpc.session import _report, on_dispatcher_thread
 from krpc.types import TypeBase
 
 if TYPE_CHECKING:
-    from krpc.client import Client
+    from krpc.connection import Connection
 
 
 def _invoke_callback(fn: Callable[..., None], *args: object) -> None:
@@ -95,7 +95,7 @@ class StreamImpl:
         self, manager: StreamManager, stream_id: int, return_type: TypeBase | None
     ) -> None:
         self._manager = manager
-        self._client = manager.client
+        self._connection = manager.connection
         self._stream_id = stream_id
         self._return_type = return_type
         self._update_lock = manager.update_lock
@@ -145,7 +145,7 @@ class StreamImpl:
         self._rate = value
         # The server has no stream for the id once it ends
         if not self.ended:
-            self._client._internal.set_stream_rate(self._stream_id, value)
+            self._connection._internal.set_stream_rate(self._stream_id, value)
 
     @property
     def ended(self) -> bool:
@@ -471,10 +471,10 @@ class StreamManager:
 
     def __init__(
         self,
-        client: Client,
+        connection: Connection,
         dispatch: Callable[[Callable[[], object]], None],
     ) -> None:
-        self._client = client
+        self._connection = connection
         self._dispatch = dispatch
         self._update_lock = threading.RLock()
         self._condition = _WakingCondition()
@@ -489,8 +489,8 @@ class StreamManager:
         self._registered: weakref.WeakSet[StreamImpl] = weakref.WeakSet()
 
     @property
-    def client(self) -> Client:
-        return self._client
+    def connection(self) -> Connection:
+        return self._connection
 
     @property
     def update_lock(self) -> threading.RLock:
@@ -516,7 +516,7 @@ class StreamManager:
             self._registered.add(stream)
 
     def add_stream(self, return_type: TypeBase, call: KRPC.ProcedureCall) -> StreamImpl:
-        stream_id = self._client._internal.add_stream(call)
+        stream_id = self._connection._internal.add_stream(call)
         return self.get_stream(return_type, stream_id)
 
     def get_stream(self, return_type: TypeBase, stream_id: int) -> StreamImpl:
@@ -562,7 +562,7 @@ class StreamManager:
         callbacks = stream.end(ending)
         deferred = _call_end_callbacks(callbacks, ending)
         try:
-            self._client._internal.remove_stream(stream_id)
+            self._connection._internal.remove_stream(stream_id)
         finally:
             if deferred is not None:
                 raise deferred
@@ -682,14 +682,14 @@ class StreamManager:
         ended = True
         undecodable = False
         if result.result.HasField("error"):
-            value = self._client._build_error(result.result.error)
+            value = self._connection._build_error(result.result.error)
         else:
             try:
                 if result.result.is_null:
                     value = None
                 else:
                     value = Decoder.decode(
-                        self._client, result.result.value, stream.return_type
+                        self._connection, result.result.value, stream.return_type
                     )
             except Exception:
                 value = None

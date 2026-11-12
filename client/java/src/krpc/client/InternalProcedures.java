@@ -64,7 +64,7 @@ final class InternalProcedures {
     if (result.getIsNull()) {
       return null;
     }
-    return (byte[]) Encoder.decode(result.getValue(), BYTES, connection);
+    return (byte[]) Decoder.decode(result.getValue(), BYTES, connection);
   }
 
   static Event addEvent(Connection connection, Expression function) throws RPCException {
@@ -78,6 +78,6 @@ final class InternalProcedures {
     if (result.getIsNull()) {
       throw new EncodingException("A null result for a value that cannot be null");
     }
-    return Encoder.decode(result.getValue(), type, connection);
+    return Decoder.decode(result.getValue(), type, connection);
   }
 }

@@ -14,12 +14,12 @@
 #include <utility>
 #include <vector>
 
-#include "krpc/client.hpp"
 #include "krpc/condition.hpp"
+#include "krpc/connection.hpp"
 
 namespace krpc {
 
-class Client;
+class Connection;
 class StreamManager;
 
 /** A value that failed to decode for a callback. */
@@ -32,7 +32,8 @@ class CallbackDecodeError : public std::runtime_error {
     and then the update lock. */
 class StreamImpl {
  public:
-  StreamImpl(const Client& client, uint64_t id, std::shared_ptr<std::recursive_mutex> update_lock,
+  StreamImpl(const Connection& connection, uint64_t id,
+             std::shared_ptr<std::recursive_mutex> update_lock,
              std::weak_ptr<StreamManager> manager = std::weak_ptr<StreamManager>());
   ~StreamImpl() = default;
   StreamImpl(const StreamImpl&) = delete;
@@ -43,11 +44,11 @@ class StreamImpl {
       release of this pointer's last copy stops the stream's callbacks and removes it from the
       server, whatever is queued. */
   static std::shared_ptr<StreamImpl> handle(const std::shared_ptr<StreamImpl>& stream);
-  /** Set the client of a stream the reader registered, as its first handle claims it. */
-  void claim(const Client& claiming_client);
+  /** Set the connection of a stream the reader registered, as its first handle claims it. */
+  void claim(const Connection& claiming_connection);
   /** Whether the last handle is gone. */
   bool is_released() const;
-  Client* get_client();
+  Connection* get_connection();
   uint64_t get_id() const;
   float rate() const;
   void set_rate(float value);
@@ -131,7 +132,7 @@ class StreamImpl {
   Condition& get_condition();
   RecursiveMutex& get_condition_mutex();
   /** Destroy the value callbacks, once the stream has ended, as they can hold the stream and
-      with it the client. */
+      with it the connection. */
   void drop_callbacks();
   /** The callbacks, read under the update lock. */
   Callbacks get_callbacks() const;
@@ -166,7 +167,7 @@ class StreamImpl {
 
  private:
   /** Take a callback's lock on the dispatcher thread. Returns false, without the lock, once the
-      value is queued for the adding thread or the client is closing. */
+      value is queued for the adding thread or the connection is closing. */
   bool enter_on_update_thread(CallbackEntry* callback, uint64_t version, const std::string& data,
                               bool is_null);
   /** Call a callback, on the adding thread, with the values the dispatcher thread queued during
@@ -186,8 +187,8 @@ class StreamImpl {
   /** Stop the callbacks and remove the stream from the server, as its last handle is gone, unless
       a new handle has been made. */
   void release();
-  // Declared first, so that it is released last. It can be the last copy of the client.
-  Client client;
+  // Declared first, so that it is released last. It can be the last copy of the connection.
+  Connection connection;
   uint64_t id;
   std::shared_ptr<std::recursive_mutex> update_lock;
   std::weak_ptr<StreamManager> manager;

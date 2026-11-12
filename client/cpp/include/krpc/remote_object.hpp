@@ -1,0 +1,93 @@
+#pragma once
+
+#include <cstdint>
+#include <ostream>
+#include <stdexcept>
+#include <string>
+
+#include "krpc/connection.hpp"
+
+namespace krpc {
+
+template <typename T>
+class RemoteObject {
+ public:
+  explicit RemoteObject(const std::string& name);
+  RemoteObject(const Connection& connection, const std::string& name, uint64_t id);
+  template <typename U>
+  friend std::ostream& operator<<(std::ostream&, const RemoteObject<U>&);
+  template <typename U>
+  friend bool operator==(const RemoteObject<U>&, const RemoteObject<U>&);
+  template <typename U>
+  friend bool operator<(const RemoteObject<U>&, const RemoteObject<U>&);
+  // Public because the encoder and decoder need them. Granting access with 'friend' would
+  // introduce a circular dependency between this header and theirs. Mutable as a connection is
+  // a handle, which a const object calls through.
+  mutable Connection _connection;
+  uint64_t _id;
+
+ private:
+  std::string _name;
+};
+
+template <typename T>
+bool operator==(const RemoteObject<T>&, const RemoteObject<T>&);
+template <typename T>
+std::ostream& operator<<(std::ostream& stream, const RemoteObject<T>& object);
+
+// The identifier of a remote object on the server, e.g. to pass to
+// Expression::constant_object. Throws std::invalid_argument for a null object, whose id is 0.
+template <typename T>
+uint64_t get_object_id(const RemoteObject<T>& object);
+
+template <typename T>
+inline RemoteObject<T>::RemoteObject(const std::string& name) : _id(0), _name(name) {}
+
+template <typename T>
+inline RemoteObject<T>::RemoteObject(const Connection& connection, const std::string& name,
+                                     uint64_t id)
+    : _connection(connection), _id(id), _name(name) {}
+
+template <typename T>
+inline uint64_t get_object_id(const RemoteObject<T>& object) {
+  if (object._id == 0) throw std::invalid_argument("The object is null");
+  return object._id;
+}
+
+template <typename T>
+inline std::ostream& operator<<(std::ostream& stream, const RemoteObject<T>& object) {
+  stream << object._name << "<" << object._id << ">";
+  return stream;
+}
+
+template <typename T>
+inline bool operator==(const RemoteObject<T>& lhs, const RemoteObject<T>& rhs) {
+  return lhs._id == rhs._id;
+}
+
+template <typename T>
+inline bool operator!=(const RemoteObject<T>& lhs, const RemoteObject<T>& rhs) {
+  return !operator==(lhs, rhs);
+}
+
+template <typename T>
+inline bool operator<(const RemoteObject<T>& lhs, const RemoteObject<T>& rhs) {
+  return lhs._id < rhs._id;
+}
+
+template <typename T>
+inline bool operator>(const RemoteObject<T>& lhs, const RemoteObject<T>& rhs) {
+  return operator<(rhs, lhs);
+}
+
+template <typename T>
+inline bool operator<=(const RemoteObject<T>& lhs, const RemoteObject<T>& rhs) {
+  return !operator>(lhs, rhs);
+}
+
+template <typename T>
+inline bool operator>=(const RemoteObject<T>& lhs, const RemoteObject<T>& rhs) {
+  return !operator<(lhs, rhs);
+}
+
+}  // namespace krpc

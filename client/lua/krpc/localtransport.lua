@@ -1,12 +1,12 @@
 local class = require 'pl.class'
-local Connection = require 'krpc.connection'
+local Transport = require 'krpc.transport'
 
--- A connection to a server on the same machine, over a unix domain socket. Only
--- opening the socket differs from a TCP connection, so that is all this replaces.
-local LocalConnection = class(Connection)
+-- A transport to a server on the same machine, over a unix domain socket
+local LocalTransport = class(Transport)
 
-function LocalConnection:_init(path)
-  self:super(path, 0)
+function LocalTransport:_init(path)
+  self:super()
+  self._path = path
 end
 
 -- luasocket carries its unix domain sockets in the socket.unix module, which it builds
@@ -21,9 +21,9 @@ local function unix_socket()
   return unix()
 end
 
-function LocalConnection:_open()
+function LocalTransport:_open()
   self._socket = unix_socket()
-  return self._socket:connect(self._address)
+  return self._socket:connect(self._path)
 end
 
-return LocalConnection
+return LocalTransport

@@ -55,7 +55,7 @@ size_t read_varint(const std::string& data, uint64_t* value, const char* what) {
 
 }  // namespace
 
-void decode(double& value, const std::string& data, Client* client) {
+void decode(double& value, const std::string& data, Connection* connection) {
   if (data.size() < LITTLE_ENDIAN_64_LENGTH) throw EncodingError("Failed to decode double");
   uint64_t value2 = 0;
   (void)google::protobuf::io::CodedInputStream::ReadLittleEndian64FromArray(
@@ -63,7 +63,7 @@ void decode(double& value, const std::string& data, Client* client) {
   value = google::protobuf::internal::WireFormatLite::DecodeDouble(value2);
 }
 
-void decode(float& value, const std::string& data, Client* client) {
+void decode(float& value, const std::string& data, Connection* connection) {
   if (data.size() < LITTLE_ENDIAN_32_LENGTH) throw EncodingError("Failed to decode float");
   uint32_t value2 = 0;
   (void)google::protobuf::io::CodedInputStream::ReadLittleEndian32FromArray(
@@ -71,49 +71,50 @@ void decode(float& value, const std::string& data, Client* client) {
   value = google::protobuf::internal::WireFormatLite::DecodeFloat(value2);
 }
 
-void decode(int32_t& value, const std::string& data, Client* client) {
+void decode(int32_t& value, const std::string& data, Connection* connection) {
   uint64_t zigZagValue = 0;
   read_varint(data, &zigZagValue, "sint32");
   value = google::protobuf::internal::WireFormatLite::ZigZagDecode32(
       static_cast<uint32_t>(zigZagValue));
 }
 
-void decode(int64_t& value, const std::string& data, Client* client) {
+void decode(int64_t& value, const std::string& data, Connection* connection) {
   uint64_t zigZagValue = 0;
   read_varint(data, &zigZagValue, "sint64");
   value = google::protobuf::internal::WireFormatLite::ZigZagDecode64(zigZagValue);
 }
 
-void decode(uint32_t& value, const std::string& data, Client* client) {
+void decode(uint32_t& value, const std::string& data, Connection* connection) {
   uint64_t value2 = 0;
   read_varint(data, &value2, "uint32");
   value = static_cast<uint32_t>(value2);
 }
 
-void decode(uint64_t& value, const std::string& data, Client* client) {
+void decode(uint64_t& value, const std::string& data, Connection* connection) {
   read_varint(data, &value, "uint64");
 }
 
-void decode(bool& value, const std::string& data, Client* client) {
+void decode(bool& value, const std::string& data, Connection* connection) {
   uint64_t value2 = 0;
   read_varint(data, &value2, "bool");
   value = (value2 != 0);
 }
 
-void decode(std::string& value, const std::string& data, Client* client) {
+void decode(std::string& value, const std::string& data, Connection* connection) {
   uint64_t length = 0;
   size_t header_length = read_varint(data, &length, "string (length)");
   if (data.size() - header_length < length) throw EncodingError("Failed to decode string");
   value.assign(data, header_length, length);
 }
 
-void decode(Event& event, const std::string& data, Client* client) {
+void decode(Event& event, const std::string& data, Connection* connection) {
   uint64_t stream_id = 0;
-  decode(stream_id, data, client);
-  event = Event(*client, stream_id);
+  decode(stream_id, data, connection);
+  event = Event(*connection, stream_id);
 }
 
-void decode(google::protobuf::MessageLite& message, const std::string& data, Client* client) {
+void decode(google::protobuf::MessageLite& message, const std::string& data,
+            Connection* connection) {
   if (!message.ParseFromString(data)) throw EncodingError("Failed to decode message");
 }
 

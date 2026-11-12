@@ -5,7 +5,7 @@
 #include <krpc/services/space_center.hpp>
 
 int main() {
-  krpc::Client conn = krpc::connect("SCANsat Example");
+  krpc::Connection conn = krpc::connect("SCANsat Example");
   krpc::services::SpaceCenter sc(conn);
   krpc::services::ScanSat scansat(conn);
   auto vessel = sc.active_vessel().value();

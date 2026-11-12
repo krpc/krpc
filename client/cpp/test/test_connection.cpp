@@ -15,16 +15,16 @@
 #include <vector>
 
 #include "gtest/gtest.h"
-#include "krpc/client.hpp"
 #include "krpc/connection.hpp"
 #include "krpc/error.hpp"
 #include "krpc/stream.hpp"
+#include "krpc/transport.hpp"
 #include "server_test.hpp"
 #include "services/test_service.hpp"
 
-// A client can be declared before it connects, and moved into a container
-static_assert(std::is_default_constructible_v<krpc::Client>);
-static_assert(std::is_move_constructible_v<krpc::Client>);
+// A connection can be declared before it connects, and moved into a container
+static_assert(std::is_default_constructible_v<krpc::Connection>);
+static_assert(std::is_move_constructible_v<krpc::Connection>);
 
 // The C++ type of a parameter carries whether it can hold null, so a null at a parameter
 // that is not nullable is rejected by the compiler rather than by the server
@@ -34,79 +34,79 @@ static_assert(!std::is_invocable_v<decltype(&krpc::services::TestService::not_nu
                                    krpc::services::TestService&, std::nullopt_t>);
 
 // Services, objects, streams and events hold the connection open
-class test_client : public server_test {
+class test_connection : public server_test {
  protected:
-  // Expires once the client's state, and with it the connection, is released
-  static std::weak_ptr<int> track(krpc::Client& client) {
+  // Expires once the connection's state is released
+  static std::weak_ptr<int> track(krpc::Connection& connection) {
     auto sentinel = std::make_shared<int>(0);
-    client.add_exception_thrower("TestService", "Sentinel", [sentinel](const std::string&) {});
+    connection.add_exception_thrower("TestService", "Sentinel", [sentinel](const std::string&) {});
     return sentinel;
   }
 };
 
-TEST_F(test_client, test_an_object_outliving_its_client_keeps_working) {
+TEST_F(test_connection, test_an_object_outliving_its_connection_keeps_working) {
   auto object = [this]() {
-    auto client = connect_client();
-    krpc::services::TestService service(*client);
+    auto connection = connect_client();
+    krpc::services::TestService service(*connection);
     return service.create_test_object("jeb");
   }();
   ASSERT_EQ("value=jeb", object.get_value());
 }
 
-TEST_F(test_client, test_a_service_outliving_its_client_keeps_working) {
+TEST_F(test_connection, test_a_service_outliving_its_connection_keeps_working) {
   auto service = [this]() {
-    auto client = connect_client();
-    return krpc::services::TestService(*client);
+    auto connection = connect_client();
+    return krpc::services::TestService(*connection);
   }();
   ASSERT_EQ("value=jeb", service.create_test_object("jeb").get_value());
 }
 
-TEST_F(test_client, test_an_object_from_a_stream_outliving_its_client_keeps_working) {
+TEST_F(test_connection, test_an_object_from_a_stream_outliving_its_connection_keeps_working) {
   std::optional<krpc::services::TestService::TestClass> object;
   {
-    auto client = connect_client();
-    krpc::services::TestService service(*client);
+    auto connection = connect_client();
+    krpc::services::TestService service(*connection);
     auto stream = service.create_test_object_stream("jeb");
     object = stream();
   }
   ASSERT_EQ("value=jeb", object->get_value());
 }
 
-TEST_F(test_client, test_an_object_from_a_client_in_a_vector_that_grows) {
-  std::vector<krpc::Client> clients;
-  clients.push_back(*connect_client());
-  krpc::services::TestService service(clients.front());
+TEST_F(test_connection, test_an_object_from_a_connection_in_a_vector_that_grows) {
+  std::vector<krpc::Connection> connections;
+  connections.push_back(*connect_client());
+  krpc::services::TestService service(connections.front());
   auto object = service.create_test_object("jeb");
-  clients.resize(clients.capacity() + 1);
+  connections.resize(connections.capacity() + 1);
   ASSERT_EQ("value=jeb", object.get_value());
 }
 
-TEST_F(test_client, test_a_default_constructed_object_throws) {
+TEST_F(test_connection, test_a_default_constructed_object_throws) {
   krpc::services::TestService::TestClass object;
   ASSERT_THROW(object.get_value(), krpc::ConnectionError);
 }
 
-TEST_F(test_client, test_a_service_constructed_from_a_temporary_client_holds_it) {
-  krpc::services::TestService service(krpc::Client("", "localhost", get_port()));
+TEST_F(test_connection, test_a_service_constructed_from_a_temporary_connection_holds_it) {
+  krpc::services::TestService service(krpc::Connection("", "localhost", get_port()));
   ASSERT_EQ("value=jeb", service.create_test_object("jeb").get_value());
 }
 
-TEST_F(test_client, test_an_object_constructed_from_a_client_and_an_id_uses_them) {
-  auto client = connect_client();
-  krpc::services::TestService service(*client);
+TEST_F(test_connection, test_an_object_constructed_from_a_connection_and_an_id_uses_them) {
+  auto connection = connect_client();
+  krpc::services::TestService service(*connection);
   auto object = service.create_test_object("jeb");
-  krpc::services::TestService::TestClass same(*client, krpc::get_object_id(object));
+  krpc::services::TestService::TestClass same(*connection, krpc::get_object_id(object));
   ASSERT_EQ("value=jeb", same.get_value());
 }
 
-TEST_F(test_client, test_the_last_release_closes_the_connection) {
-  auto client = connect_client();
-  auto released = track(*client);
-  krpc::services::TestService service(*client);
+TEST_F(test_connection, test_the_last_release_closes_the_connection) {
+  auto connection = connect_client();
+  auto released = track(*connection);
+  krpc::services::TestService service(*connection);
   auto object = service.create_test_object("jeb");
   auto stream = service.create_test_object_stream("jeb");
   stream();
-  client.reset();
+  connection.reset();
   ASSERT_FALSE(released.expired());
   stream = krpc::Stream<krpc::services::TestService::TestClass>();
   service = krpc::services::TestService(*connect_client());
@@ -115,78 +115,80 @@ TEST_F(test_client, test_the_last_release_closes_the_connection) {
   ASSERT_TRUE(eventually([&released] { return released.expired(); }));
 }
 
-TEST_F(test_client, test_close_ends_every_handle) {
-  auto client = connect_client();
-  krpc::services::TestService service(*client);
+TEST_F(test_connection, test_close_ends_every_handle) {
+  auto connection = connect_client();
+  krpc::services::TestService service(*connection);
   auto object = service.create_test_object("jeb");
-  krpc::Client copy = *client;
-  client->close();
-  client->close();
+  krpc::Connection copy = *connection;
+  connection->close();
+  connection->close();
   copy.close();
   ASSERT_THROW(object.get_value(), krpc::ConnectionError);
   ASSERT_THROW(service.create_test_object("jeb"), krpc::ConnectionError);
 }
 
 // A stream callback holding an object is released with the stream
-TEST_F(test_client, test_a_stream_callback_holding_an_object_does_not_keep_the_connection) {
-  auto client = connect_client();
-  auto released = track(*client);
-  krpc::services::TestService service(*client);
+TEST_F(test_connection, test_a_stream_callback_holding_an_object_does_not_keep_the_connection) {
+  auto connection = connect_client();
+  auto released = track(*connection);
+  krpc::services::TestService service(*connection);
   auto object = service.create_test_object("jeb");
   {
-    auto stream = service.counter_stream("test_client.stream_callback_object");
+    auto stream = service.counter_stream("test_connection.stream_callback_object");
     stream.add_callback([object](int) { (void)object; });
     stream();
   }
   object = krpc::services::TestService::TestClass();
   service = krpc::services::TestService(*connect_client());
-  client.reset();
+  connection.reset();
   ASSERT_TRUE(eventually([&released] { return released.expired(); }));
 }
 
 // An update callback lives in the stream manager, so an object it holds forms a cycle
-TEST_F(test_client, test_an_update_callback_holding_an_object_keeps_the_connection_until_close) {
-  auto client = connect_client();
-  auto released = track(*client);
-  krpc::services::TestService service(*client);
+TEST_F(test_connection,
+       test_an_update_callback_holding_an_object_keeps_the_connection_until_close) {
+  auto connection = connect_client();
+  auto released = track(*connection);
+  krpc::services::TestService service(*connection);
   auto object = service.create_test_object("jeb");
-  client->add_stream_update_callback([object]() { (void)object; });
-  krpc::Client closer = *client;
-  client.reset();
+  connection->add_stream_update_callback([object]() { (void)object; });
+  krpc::Connection closer = *connection;
+  connection.reset();
   service = krpc::services::TestService(*connect_client());
   object = krpc::services::TestService::TestClass();
-  // Only the callback and closer hold the client
+  // Only the callback and closer hold the connection
   closer.close();
-  closer = krpc::Client();
+  closer = krpc::Connection();
   ASSERT_TRUE(eventually([&released] { return released.expired(); }));
 }
 
 // A stream callback holding its own stream is a cycle, which close breaks
-TEST_F(test_client, test_a_stream_callback_holding_its_stream_keeps_the_connection_until_close) {
-  auto client = connect_client();
-  auto released = track(*client);
+TEST_F(test_connection,
+       test_a_stream_callback_holding_its_stream_keeps_the_connection_until_close) {
+  auto connection = connect_client();
+  auto released = track(*connection);
   {
-    krpc::services::TestService service(*client);
+    krpc::services::TestService service(*connection);
     auto stream = std::make_shared<krpc::Stream<int>>(
-        service.counter_stream("test_client.callback_holds_stream"));
+        service.counter_stream("test_connection.callback_holds_stream"));
     stream->add_callback([stream](int) { (void)stream; });
     (*stream)();
   }
-  krpc::Client closer = *client;
-  client.reset();
+  krpc::Connection closer = *connection;
+  connection.reset();
   closer.close();
-  closer = krpc::Client();
+  closer = krpc::Connection();
   ASSERT_TRUE(eventually([&released] { return released.expired(); }));
 }
 
 // Work queued behind a slow callback holds the stream, so the callback outlives the handle by one
 // run at most
-TEST_F(test_client, test_a_slow_callback_does_not_keep_the_connection) {
-  auto client = connect_client();
-  auto released = track(*client);
+TEST_F(test_connection, test_a_slow_callback_does_not_keep_the_connection) {
+  auto connection = connect_client();
+  auto released = track(*connection);
   auto calls = std::make_shared<std::atomic<int>>(0);
   auto stream = std::make_unique<krpc::Stream<int>>(
-      krpc::services::TestService(*client).counter_stream("test_client.slow_callback"));
+      krpc::services::TestService(*connection).counter_stream("test_connection.slow_callback"));
   stream->add_callback([calls](int) {
     (*calls)++;
     std::this_thread::sleep_for(std::chrono::milliseconds(50));
@@ -195,93 +197,93 @@ TEST_F(test_client, test_a_slow_callback_does_not_keep_the_connection) {
   std::this_thread::sleep_for(std::chrono::milliseconds(500));
   ASSERT_GT(calls->load(), 0);
   stream.reset();
-  client.reset();
+  connection.reset();
   int before = calls->load();
   ASSERT_TRUE(eventually([&released] { return released.expired(); }));
   ASSERT_LE(calls->load(), before + 1);
 }
 
 // A stream that has ended runs no more callbacks, so it destroys them
-TEST_F(test_client, test_a_callback_that_removes_its_stream_does_not_keep_the_connection) {
-  auto client = connect_client();
-  auto released = track(*client);
+TEST_F(test_connection, test_a_callback_that_removes_its_stream_does_not_keep_the_connection) {
+  auto connection = connect_client();
+  auto released = track(*connection);
   std::promise<void> ran;
   std::atomic_flag once = ATOMIC_FLAG_INIT;
   {
     auto stream = std::make_shared<krpc::Stream<int>>(
-        krpc::services::TestService(*client).counter_stream("test_client.removes_itself"));
+        krpc::services::TestService(*connection).counter_stream("test_connection.removes_itself"));
     stream->add_callback([stream, &ran, &once](int) {
       stream->remove();
       if (!once.test_and_set()) ran.set_value();
     });
   }
   ASSERT_EQ(std::future_status::ready, ran.get_future().wait_for(std::chrono::seconds(10)));
-  client.reset();
+  connection.reset();
   ASSERT_TRUE(eventually([&released] { return released.expired(); }));
 }
 
-TEST_F(test_client, test_a_callback_of_a_stream_the_server_ends_does_not_keep_the_connection) {
-  auto client = connect_client();
-  auto released = track(*client);
+TEST_F(test_connection, test_a_callback_of_a_stream_the_server_ends_does_not_keep_the_connection) {
+  auto connection = connect_client();
+  auto released = track(*connection);
   std::promise<void> ended;
   {
     auto stream = std::make_shared<krpc::Stream<int>>(
-        krpc::services::TestService(*client).throw_invalid_operation_exception_stream());
+        krpc::services::TestService(*connection).throw_invalid_operation_exception_stream());
     stream->add_callback([stream](int) {});
     stream->add_end_callback([&ended](const std::exception_ptr&) { ended.set_value(); });
   }
   ASSERT_EQ(std::future_status::ready, ended.get_future().wait_for(std::chrono::seconds(10)));
-  client.reset();
+  connection.reset();
   ASSERT_TRUE(eventually([&released] { return released.expired(); }));
 }
 
 // A connection failure ends the streams, so it destroys their callbacks and the update callbacks
-TEST_F(test_client, test_a_callback_does_not_keep_a_failed_connection) {
-  auto connection = std::make_shared<krpc::Connection>("localhost", get_port());
-  auto client = std::make_unique<krpc::Client>("C++ClientTest", connection);
-  auto released = track(*client);
+TEST_F(test_connection, test_a_callback_does_not_keep_a_failed_connection) {
+  auto transport = std::make_shared<krpc::TCPIPTransport>("localhost", get_port());
+  auto connection = std::make_unique<krpc::Connection>("C++ClientTest", transport);
+  auto released = track(*connection);
   std::promise<void> ended;
   {
-    krpc::services::TestService service(*client);
+    krpc::services::TestService service(*connection);
     auto object = service.create_test_object("jeb");
-    client->add_stream_update_callback([object] { (void)object; });
+    connection->add_stream_update_callback([object] { (void)object; });
     auto stream = std::make_shared<krpc::Stream<int>>(
-        service.counter_stream("test_client.failed_connection"));
+        service.counter_stream("test_connection.failed_connection"));
     stream->add_callback([stream](int) { (void)stream; });
     stream->add_end_callback([&ended](const std::exception_ptr&) { ended.set_value(); });
   }
-  connection->shutdown_both();
+  transport->shutdown_both();
   ASSERT_EQ(std::future_status::ready, ended.get_future().wait_for(std::chrono::seconds(10)));
-  client.reset();
+  connection.reset();
   ASSERT_TRUE(eventually([&released] { return released.expired(); }));
 }
 
 // A callback that lands after the close has no later close to break its cycle
-TEST_F(test_client, test_a_callback_added_after_close_does_not_keep_the_connection) {
-  auto client = connect_client();
-  auto released = track(*client);
-  krpc::services::TestService service(*client);
+TEST_F(test_connection, test_a_callback_added_after_close_does_not_keep_the_connection) {
+  auto connection = connect_client();
+  auto released = track(*connection);
+  krpc::services::TestService service(*connection);
   auto object = service.create_test_object("jeb");
   auto stream =
-      std::make_shared<krpc::Stream<int>>(service.counter_stream("test_client.after_close"));
-  client->close();
-  client->add_stream_update_callback([object] { (void)object; });
+      std::make_shared<krpc::Stream<int>>(service.counter_stream("test_connection.after_close"));
+  connection->close();
+  connection->add_stream_update_callback([object] { (void)object; });
   stream->add_callback([stream](int) { (void)stream; });
-  client.reset();
+  connection.reset();
   service = krpc::services::TestService(*connect_client());
   object = krpc::services::TestService::TestClass();
   stream.reset();
   ASSERT_TRUE(eventually([&released] { return released.expired(); }));
 }
 
-TEST_F(test_client, test_the_last_release_on_the_dispatcher_thread) {
-  auto client = connect_client();
-  auto released = track(*client);
-  krpc::services::TestService service(*client);
+TEST_F(test_connection, test_the_last_release_on_the_dispatcher_thread) {
+  auto connection = connect_client();
+  auto released = track(*connection);
+  krpc::services::TestService service(*connection);
   auto object =
       std::make_shared<krpc::services::TestService::TestClass>(service.create_test_object("jeb"));
   auto stream = std::make_shared<krpc::Stream<int>>(
-      service.counter_stream("test_client.release_on_dispatcher"));
+      service.counter_stream("test_connection.release_on_dispatcher"));
   std::promise<void> ran;
   std::atomic_flag once = ATOMIC_FLAG_INIT;
   auto holder = std::make_shared<std::shared_ptr<krpc::Stream<int>>>(stream);
@@ -293,24 +295,24 @@ TEST_F(test_client, test_the_last_release_on_the_dispatcher_thread) {
     ran.set_value();
   });
   service = krpc::services::TestService(*connect_client());
-  client.reset();
+  connection.reset();
   object.reset();
   stream.reset();
   ASSERT_EQ(std::future_status::ready, ran.get_future().wait_for(std::chrono::seconds(10)));
   ASSERT_TRUE(eventually([&released] { return released.expired(); }));
 }
 
-// The handle holds the last copy of the client while the reader and dispatcher threads run
-TEST_F(test_client, test_the_last_release_races_with_updates) {
+// The handle holds the last copy of the connection while the reader and dispatcher threads run
+TEST_F(test_connection, test_the_last_release_races_with_updates) {
   for (int i = 0; i < 100; i++) {
-    auto client = connect_client();
-    auto released = track(*client);
-    krpc::services::TestService service(*client);
-    auto stream = service.counter_stream("test_client.release_race");
+    auto connection = connect_client();
+    auto released = track(*connection);
+    krpc::services::TestService service(*connection);
+    auto stream = service.counter_stream("test_connection.release_race");
     stream.add_callback([](int) {});
     stream();
     service = krpc::services::TestService(*connect_client());
-    client.reset();
+    connection.reset();
     auto other =
         std::thread([stream = std::move(stream)]() mutable { stream = krpc::Stream<int>(); });
     other.join();

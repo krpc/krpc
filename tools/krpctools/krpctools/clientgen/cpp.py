@@ -148,23 +148,23 @@ class CppGenerator(Generator[CppLanguage]):
         for info in deprecatable:
             self.add_deprecated_doxygen(info)
 
-        # A static method takes the client first, and its bound form takes no client
+        # A static method takes the connection first, and its bound form takes no connection
         for class_info in context["classes"].values():
             for info in class_info["static_methods"].values():
                 info["bound_documentation"] = info.get("documentation", "")
-                self.add_client_param_doxygen(info)
+                self.add_connection_param_doxygen(info)
 
         return context
 
     @staticmethod
-    def add_client_param_doxygen(info):
-        """Document the client a static method takes ahead of its parameters, where its
+    def add_connection_param_doxygen(info):
+        """Document the connection a static method takes ahead of its parameters, where its
         documentation documents any parameters"""
         lines = info.get("documentation", "").split("\n")
         params = [i for i, line in enumerate(lines) if line.startswith(" * @param ")]
         if not params:
             return
-        lines.insert(params[0], " * @param client A client object.")
+        lines.insert(params[0], " * @param connection A connection object.")
         info["documentation"] = "\n".join(lines)
 
     @staticmethod

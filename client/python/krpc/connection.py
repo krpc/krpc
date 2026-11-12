@@ -1,211 +1,655 @@
 from __future__ import annotations
 
-import math
-import select
-import socket
-import time
-
-import google.protobuf.message
+import reprlib
+import threading
+import warnings
+from collections.abc import Callable, Iterable
+from types import TracebackType
+from typing import TYPE_CHECKING, Any, TypeGuard, TypeVar, cast
 
 import krpc.schema.KRPC_pb2 as KRPC
-from krpc import winsock
+import krpc.stream
+from krpc import limits
+from krpc.declarations import connection_lookup
 from krpc.decoder import Decoder
-from krpc.encoder import Encoder, encode_request_message
+from krpc.definitions import register_all
+from krpc.encoder import Encoder
+from krpc.error import RPCError, StreamError
+from krpc.event import Event
+from krpc.functioncompiler import (
+    NO_VALUE,
+    Parameters,
+    compile_function_with_type,
+)
+from krpc.internalprocedures import InternalProcedures
+from krpc.service import (
+    create_service,
+    deprecation_warning,
+    inherit_deprecation,
+    service_definitions,
+)
+from krpc.session import DEFAULT_STALL_TIMEOUT, Session
+from krpc.stream import Stream
+from krpc.streammanager import StreamManager
+from krpc.transport import Transport
+from krpc.types import (
+    DefaultArgument,
+    EnumerationValueError,
+    EventType,
+    StreamType,
+    TypeBase,
+    Types,
+    clear_type_ids,
+    warn_deprecated,
+)
+from krpc.utils import snake_case
 
-# Size of a socket read. Reads are made a block at a time and buffered, so that a message
-# costs one read and not one per byte of its size prefix plus one for its body.
-_READ_SIZE = 8192
+_ConnectionT = TypeVar("_ConnectionT", bound="Connection")
 
 
-# The longest wait poll and select accept, in seconds. A longer one waits indefinitely.
-_MAXIMUM_WAIT = (2**31 - 1) / 1000
+def _type_message(remote_type: RemoteType) -> KRPC.Type:
+    """The protocol buffer type message describing a KRPC.Type object."""
+    typ = KRPC.Type()
+    typ.code = cast(KRPC.Type.TypeCode, remote_type.code.value)
+    service = remote_type.service
+    if service:
+        typ.service = service
+        typ.name = remote_type.name
+    typ.types.extend([_type_message(t) for t in remote_type.types])
+    typ.nullable = remote_type.nullable
+    return typ
 
 
-class ReadTimeout(TimeoutError):
-    """No data arrived from the server within a timeout the client set. Told apart from a
-    TimeoutError the socket raises, such as a TCP retransmission timeout."""
+# Shortens a large argument value in an error
+_ARGUMENT_REPR = reprlib.Repr()
+_ARGUMENT_REPR.maxother = 80
+
+# The smallest and largest value of each integer type
+_INTEGER_RANGES = {
+    KRPC.Type.SINT32: (limits.SINT32_MIN, limits.SINT32_MAX),
+    KRPC.Type.SINT64: (limits.SINT64_MIN, limits.SINT64_MAX),
+    KRPC.Type.UINT32: (0, limits.UINT32_MAX),
+    KRPC.Type.UINT64: (0, limits.UINT64_MAX),
+}
 
 
-# The longest size prefix, which holds a 32-bit size
-_MAXIMUM_PREFIX_LENGTH = 5
+def _check_argument(value: object, ptype: KRPC.Type) -> None:
+    """Raises ValueError for a value the encoder would write without an error,
+    but which the type cannot hold: an integer out of its range, or a None at a
+    position that is not nullable."""
+    if value is None:
+        if not ptype.nullable:
+            raise ValueError("null value")
+        return
+    bounds = _INTEGER_RANGES.get(ptype.code)
+    if bounds is not None and isinstance(value, int):
+        if not bounds[0] <= value <= bounds[1]:
+            raise ValueError("integer out of range")
+    elif ptype.code in (KRPC.Type.LIST, KRPC.Type.SET):
+        for element in cast(Iterable[object], value):
+            _check_argument(element, ptype.types[0])
+    elif ptype.code == KRPC.Type.TUPLE:
+        for element, element_ptype in zip(cast(Iterable[object], value), ptype.types):
+            _check_argument(element, element_ptype)
+    elif ptype.code == KRPC.Type.DICTIONARY:
+        for key, element in cast(dict, value).items():
+            _check_argument(key, ptype.types[0])
+            _check_argument(element, ptype.types[1])
 
 
-class MalformedSize(Exception):
-    """A size prefix from the server that has not ended within five bytes, or whose value
-    has more than 32 bits."""
-
-
-def _readable(sock: socket.socket, timeout: float | None) -> bool:
-    """Whether the socket has data to read, or has closed, within the timeout. poll takes a
-    socket of any number, where select takes one below FD_SETSIZE. Windows has no poll."""
-    if timeout is not None and timeout > _MAXIMUM_WAIT:
-        timeout = None
-    if not hasattr(select, "poll"):
-        try:
-            return bool(select.select([sock], [], [], timeout)[0])
-        except ValueError as exn:
-            raise OSError("Connection closed") from exn
-    poller = select.poll()
-    try:
-        poller.register(sock, select.POLLIN)
-    except ValueError as exn:
-        raise OSError("Connection closed") from exn
-    return bool(poller.poll(None if timeout is None else math.ceil(timeout * 1000)))
+if TYPE_CHECKING:
+    from krpc.expressionutils import Metadata
+    from krpc.services.krpc import KRPC as _KRPCService
+    from krpc.services.krpc import Expression
+    from krpc.services.krpc import Type as RemoteType
 
 
 class Connection:
-    def __init__(self, address: str, port: int, timeout: float | None = None) -> None:
-        self._address = address
-        self._port = port
-        self._timeout = timeout
-        self._socket: socket.socket = None  # pyright: ignore[reportAttributeAccessIssue]
-        # Data read from the socket that has not been consumed yet
-        self._buffer = bytearray()
-        # When a read last received a byte
-        self._progress = time.perf_counter()
+    """
+    A kRPC client, through which all Remote Procedure Calls are made.
+    Services provided by the server that the client connects
+    to are automatically added. RPCs can be made using
+    client.ServiceName.ProcedureName(parameter)
+    """
 
-    def connect(self) -> None:
-        self._socket = self._open()
+    # A connection type a generated module declares adds its service, and any other service is Any
+    # to type checkers
+    def __getattr__(self, name: str) -> Any:
+        """A deprecated service, which is kept out of the client's attributes so that reading it
+        reaches here and warns"""
+        deprecated = self.__dict__.get("_deprecated_services", {})
+        if name not in deprecated:
+            raise AttributeError(
+                "%r object has no attribute %r" % (type(self).__name__, name)
+            )
+        message, service = deprecated[name]
+        warn_deprecated(message)
+        return service
 
-    def _open(self) -> socket.socket:
-        """Open a socket to the server. Everything above this is transport agnostic,
-        so a different transport only has to replace this."""
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        # A network that drops a connection attempt instead of refusing it leaves the
-        # client waiting, so bound the wait where one was asked for.
-        sock.settimeout(self._timeout)
-        sock.connect((self._address, self._port))
-        # Whatever bound was put on connecting, sending and receiving block
-        sock.settimeout(None)
-        # A message is sent as soon as it is written, so waiting for more data to
-        # coalesce with can only add latency
-        sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
-        return sock
+    def __dir__(self) -> list[str]:
+        return [*super().__dir__(), *self.__dict__.get("_deprecated_services", {})]
+
+    @property
+    def _krpc(self) -> _KRPCService:
+        """The KRPC service, which every server has, typed for the client's own calls to it"""
+        return self.krpc
+
+    def __init__(
+        self,
+        transport: Transport,
+        stall_timeout: float | None = DEFAULT_STALL_TIMEOUT,
+    ) -> None:
+        self._types = Types()
+        self._internal = InternalProcedures(self)
+        self._transport = transport
+        self._session = Session(
+            transport, self._internal.remove_stream_request, stall_timeout
+        )
+        self._stream_manager = StreamManager(self, self._session.dispatch)
+        self._session.start(self._stream_manager)
+        # The type a server side function returns, and the types of its
+        # parameters, by expression object identifier, so that each is
+        # introspected over the wire only once
+        self._expression_return_types: dict[int, KRPC.Type | None] = {}
+        self._expression_parameter_types: dict[int, list[KRPC.Type]] = {}
+        # The parameters of a function compiled by compile, which bind a call's
+        # arguments to them
+        self._function_parameters: dict[int, Parameters] = {}
+        # The service definitions the function compiler reads, built on the first
+        # compile, and the objects naming a type by their type message. Both cost
+        # round trips to build, and every function compiled for this connection
+        # shares them
+        self._expression_metadata: Metadata | None = None
+        self._expression_remote_types: dict[bytes, RemoteType] = {}
+        try:
+            self._load_services()
+        except BaseException:
+            self.close()
+            raise
+
+    def _load_services(self) -> None:
+        services = clear_type_ids(
+            cast(
+                KRPC.Services,
+                self._invoke("KRPC", "GetServices", [], [], self._types.services_type),
+            )
+        ).services
+        # Register the types of every service before creating any of them: a service's
+        # procedures are built from types that any service may define, and a default value
+        # cannot be decoded before the definition of the enumeration it belongs to has been
+        # registered
+        definitions = []
+        lookup = connection_lookup(type(self))
+        for service_info in services:
+            inherit_deprecation(service_info)
+            definitions.extend(service_definitions(service_info, lookup))
+        register_all(self._types, definitions)
+        self._deprecated_services: dict[str, tuple[str, object]] = {}
+        for service_info in services:
+            name = snake_case(service_info.name)
+            service = create_service(self, service_info)
+            message = deprecation_warning(
+                service_info, service_info.name, service_info.name
+            )
+            if message:
+                self._deprecated_services[name] = (message, service)
+            else:
+                setattr(self, name, service)
 
     def close(self) -> None:
-        """Close the socket. A thread blocked reading it returns."""
-        if self._socket is not None:
-            try:
-                self._socket.shutdown(socket.SHUT_RDWR)
-            except OSError:
-                pass
-            self._socket.close()
+        # The dispatcher thread stops trying to take a condition the caller can hold
+        self._stream_manager.request_close()
+        self._session.close()
+        # Streams end before the join, so a thread waiting on one is woken
+        deferred = self._stream_manager.notify_closed(cause=self._session.failure_cause)
+        # Callbacks run on the dispatcher thread, so a client closed from one does not
+        # join it. A callback can also wait for a condition the caller holds, so the
+        # dispatcher thread then ends once the caller releases it.
+        self._session.join(not self._stream_manager.holds_a_condition())
+        # An exception from an end callback is raised once the client has closed
+        if deferred is not None:
+            raise deferred
 
-    def half_close(self) -> None:
-        """Close the write side of the socket, leaving the read side open."""
-        self._socket.shutdown(socket.SHUT_WR)
+    def __enter__(self: _ConnectionT) -> _ConnectionT:
+        return self
 
-    def __del__(self) -> None:
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_value: BaseException | None,
+        exc_tb: TracebackType | None,
+    ) -> None:
         self.close()
 
-    def send_request(self, request: KRPC.Request) -> None:
-        """Send a Message holding a request"""
-        self._socket.sendall(encode_request_message(request))
+    def add_stream(
+        self, func: Callable[..., object] | Expression, *args: object, **kwargs: object
+    ) -> Stream:
+        """Add a stream to the server. Given a remote procedure and its arguments,
+        the stream repeats that call. Given a server side function, a
+        KRPC.Expression object, the stream evaluates it on each update. The
+        function may also be a Python function or lambda taking no arguments,
+        compiled with compile on every call. A call or function with no value
+        runs on each update for its effects, and the stream's value is None.
+        Raises a StreamError for arguments to a function, and for a compiled
+        function that takes parameters. Raises TypeError for any other value."""
+        if self._is_remote_procedure(func):
+            return_type = self._get_return_type(func, *args, **kwargs)
+            call = self.get_call(func, *args, **kwargs)
+            return krpc.stream.Stream.from_call(self, return_type, call)
+        self._check_function(func, "a remote procedure, ")
+        if args or kwargs:
+            raise StreamError("A server side function is streamed without arguments")
+        # Checked before the return type is looked up, which can make remote calls
+        if not callable(func):
+            self._check_no_parameters(func)
+        function, return_type, _ = self._function_and_type(func, streamed=True)
+        stream_id = self._internal.add_function_stream(function)
+        typ = (
+            self._types.no_value_type
+            if return_type is None
+            else self._types.as_type(return_type)
+        )
+        return krpc.stream.Stream.from_stream_id(self, stream_id, typ)
 
-    def send_message(self, message: google.protobuf.message.Message) -> None:
-        """Send a protobuf message"""
-        self.send(Encoder.encode_message_with_size(message))
+    @staticmethod
+    def _is_remote_procedure(func: object) -> TypeGuard[Callable[..., object]]:
+        """Whether a callable is a remote procedure, or getattr or setattr naming
+        a property of a service or an object."""
+        if func in (getattr, setattr):
+            return True
+        owner: object = getattr(func, "__self__", None)
+        name: object = getattr(func, "__name__", None)
+        return (
+            owner is not None
+            and isinstance(name, str)
+            and hasattr(owner, "_build_call__" + name)
+        )
 
-    def receive_message_data(
-        self, timeout: float | None = None, stall_timeout: float | None = None
-    ) -> bytes:
-        """Receive the encoded body of a length prefixed message. Raises ReadTimeout
-        if no whole message arrives within the timeout, or if a message that has
-        started to arrive receives no new byte within the stall timeout. Raises
-        MalformedSize for a size prefix over five bytes or 32 bits."""
+    def stream(
+        self, func: Callable[..., object] | Expression, *args: object, **kwargs: object
+    ) -> Stream:
+        """Deprecated. Use add_stream in a with statement."""
+        warnings.warn(
+            "Connection.stream is deprecated: use add_stream in a with statement",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return self.add_stream(func, *args, **kwargs)
 
-        # Read until the buffer holds the size prefix and the whole message it
-        # describes, then take the message out in one go. An incomplete prefix
-        # runs off the end of the buffer, which is an IndexError
-        deadline = None if timeout is None else time.perf_counter() + timeout
-        buffer = self._buffer
-        while True:
-            if len(buffer) >= _MAXIMUM_PREFIX_LENGTH and all(
-                x & 0x80 for x in buffer[:_MAXIMUM_PREFIX_LENGTH]
-            ):
-                raise MalformedSize("The size of a message has more than five bytes")
-            try:
-                size, prefix_length = Decoder.decode_size_prefix(buffer)
-                if size > 0xFFFFFFFF:
-                    raise MalformedSize("The size of a message has more than 32 bits")
-                end = prefix_length + size
-                if len(buffer) >= end:
-                    break
-            except IndexError:
-                pass
-            # The stall clock runs from the last byte received, which an earlier call
-            # may have read
-            wait = None
-            if buffer and stall_timeout is not None:
-                wait = self.stall_remaining(stall_timeout)
-            if deadline is not None:
-                remaining = max(0.0, deadline - time.perf_counter())
-                wait = remaining if wait is None else min(wait, remaining)
-            self._fill(wait)
-        data = bytes(buffer[prefix_length:end])
-        del buffer[:end]
-        return data
+    def compile(self, func: Callable[..., object] | Expression) -> Expression:
+        """Compile a Python function or lambda into a server side function, a
+        KRPC.Expression object. Each run makes the function's remote procedure
+        calls again, and uses its other values as they were when it was
+        compiled. A def can take parameters, each with a type annotation, and
+        the run method passes its arguments to them. Compiling takes a round
+        trip per node, so compile a function once to use it repeatedly. Can be
+        used as a decorator. Given a KRPC.Expression object built with the
+        expression API, compiles it on the server and returns it."""
+        if self._internal.is_expression(func):
+            self._internal.compile_function(func)
+            return func
+        function, return_type, parameters = compile_function_with_type(self, func)
+        self._internal.compile_function(function)
+        self._function_parameters[function._object_id] = parameters
+        # A type the compiler tracked need not be introspected on the first run
+        if return_type is NO_VALUE:
+            self._expression_return_types[function._object_id] = None
+        elif return_type is not None:
+            self._expression_return_types[function._object_id] = return_type
+        return function
 
-    def send(self, data: bytes) -> None:
-        """Send data to the connection.
-        Blocks until all data has been sent."""
-        assert data
-        self._socket.sendall(data)
+    def _function_and_type(
+        self, function: Callable[..., object] | Expression, streamed: bool = False
+    ) -> tuple[Expression, KRPC.Type | None, Parameters | None]:
+        """The server side function for a KRPC.Expression object or a Python
+        function, the type of the values it evaluates to, and its parameters.
+        The compiler tracks the type of a Python function, so the server is
+        asked only for a type the compiler does not know. A function built with
+        the expression API has no parameters to bind arguments with."""
+        # A Python function is compiled again on each call, as a cached function
+        # would keep the values it captured when it was first compiled
+        if callable(function):
+            function, return_type, parameters = compile_function_with_type(
+                self, function, streamed
+            )
+            if return_type is NO_VALUE:
+                return function, None, parameters
+            if return_type is not None:
+                return function, return_type, parameters
+            # A function compiled for one use is not looked up again
+            return (
+                function,
+                self._expression_return_type(function, cache=False),
+                parameters,
+            )
+        return (
+            function,
+            self._expression_return_type(function),
+            self._function_parameters.get(function._object_id),
+        )
 
-    def _fill(self, timeout: float | None = None) -> None:
-        """Read a block from the socket into the buffer. Blocks until at least one
-        byte has been read, or raises ReadTimeout once the timeout passes."""
-        if timeout is not None and not _readable(self._socket, timeout):
-            raise ReadTimeout("Timed out waiting for data from the server")
-        data = self._socket.recv(_READ_SIZE)
-        if not data:
-            raise OSError("Connection closed")
-        self._buffer += data
-        self._progress = time.perf_counter()
+    def add_event(self, function: Callable[..., object] | Expression) -> Event:
+        """Create an event from a server side function that evaluates to a
+        boolean value. The function may also be a Python function or lambda
+        taking no arguments, compiled with compile on every call. Raises a
+        StreamError for a compiled function that takes parameters. Raises
+        ValueError for a function that does not evaluate to a boolean value, and
+        TypeError for a value that is not a function."""
+        self._check_function(function)
+        if callable(function):
+            function, _, _ = compile_function_with_type(self, function, streamed=True)
+        self._check_no_parameters(function)
+        return self._internal.add_event(function)
 
-    def has_message(self) -> bool:
-        """Whether the buffer holds a whole message."""
-        buffer = self._buffer
-        if not buffer:
-            return False
+    def _check_function(self, function: object, procedure: str = "") -> None:
+        """Raises TypeError for a value that is neither a Python function nor
+        a KRPC.Expression object."""
+        if callable(function) or self._internal.is_expression(function):
+            return
+        raise TypeError(
+            "expected %sa KRPC.Expression object, or a Python function or lambda, "
+            "got a value of type %s" % (procedure, type(function).__name__)
+        )
+
+    def _check_no_parameters(self, function: Expression) -> None:
+        """Raises a StreamError if a function compiled by compile takes
+        parameters, as a stream or an event runs its function with no
+        arguments."""
+        parameters = self._function_parameters.get(function._object_id)
+        if parameters is not None and parameters.ptypes:
+            raise StreamError(
+                "A function that takes parameters cannot be streamed or used as "
+                "an event"
+            )
+
+    def run(
+        self,
+        function: Callable[..., object] | Expression,
+        *args: object,
+        **kwargs: object,
+    ) -> Any:
+        """Run a function on the server, within a single physics tick, and
+        return the value it produces. The value is None when the function has
+        no result or its result is null. The function may be given as a
+        KRPC.Expression object, or as a Python function or lambda, which is
+        compiled using compile on every call. The arguments are passed to the
+        function's parameters. A function built with the expression API takes
+        positional arguments only. Raises TypeError for a value that is not a
+        function, and for an argument its parameter cannot take."""
+        self._check_function(function)
+        function, return_type, parameters = self._function_and_type(function)
+        if parameters is not None:
+            values = parameters.bind(args, kwargs)
+            parameter_types = parameters.ptypes
+        elif kwargs:
+            raise TypeError(
+                "a function built with the expression API takes positional "
+                "arguments only"
+            )
+        else:
+            values = list(args)
+            parameter_types = self._parameter_types(function)
+        arguments = self._encode_arguments(parameter_types, values)
+        data = self._internal.run_function(function, arguments)
+        # A null value has no data
+        if data is None or return_type is None:
+            return None
+        return Decoder.decode(self, data, self._types.as_type(return_type))
+
+    def _expression_return_type(
+        self, expression: Expression, cache: bool = True
+    ) -> KRPC.Type | None:
+        """Build the protocol buffer type message describing the type of the
+        values a server side function evaluates to, by introspecting its
+        return type on the server. None for an expression with no value."""
+        object_id = expression._object_id
+        if object_id in self._expression_return_types:
+            return self._expression_return_types[object_id]
+        return_type = (
+            _type_message(expression.return_type)
+            if expression.has_return_type
+            else None
+        )
+        if cache:
+            self._expression_return_types[object_id] = return_type
+        return return_type
+
+    def _parameter_types(self, expression: Expression) -> list[KRPC.Type]:
+        """The protocol buffer type messages describing the types of a server
+        side function's parameters, introspected on the server."""
+        object_id = expression._object_id
+        if object_id not in self._expression_parameter_types:
+            self._expression_parameter_types[object_id] = [
+                _type_message(typ) for typ in expression.parameter_types
+            ]
+        return self._expression_parameter_types[object_id]
+
+    def _encode_arguments(
+        self, parameter_types: list[KRPC.Type], args: list[object]
+    ) -> list[bytes | None]:
+        """Encode the arguments of a call to a server side function, one per
+        parameter. A None is sent as a null argument."""
+        if len(args) != len(parameter_types):
+            raise TypeError(
+                "the function takes %d argument%s, got %d"
+                % (
+                    len(parameter_types),
+                    "" if len(parameter_types) == 1 else "s",
+                    len(args),
+                )
+            )
+        return [
+            self._encode_argument(position, arg, typ)
+            for position, (arg, typ) in enumerate(zip(args, parameter_types), 1)
+        ]
+
+    def _encode_argument(
+        self, position: int, value: object, ptype: KRPC.Type
+    ) -> bytes | None:
+        """Encode an argument of a call to a server side function, coerced to
+        the type of its parameter as the arguments of a remote procedure call
+        are. Raises TypeError naming the argument's position for a value the
+        parameter cannot take. A None is sent as a null argument, which the
+        server checks."""
+        if value is None:
+            return None
+        typ = self._types.as_type(ptype)
         try:
-            size, prefix_length = Decoder.decode_size_prefix(buffer)
-        except IndexError:
-            return False
-        return len(buffer) >= prefix_length + size
+            value = self._types.coerce_to(value, typ)
+            _check_argument(value, ptype)
+            return Encoder.encode(value, typ)
+        except Exception as exc:
+            raise TypeError(
+                "run() argument %d must be a %s, got %s"
+                % (position, typ, _ARGUMENT_REPR.repr(value))
+            ) from exc
 
-    def has_buffered(self) -> bool:
-        """Whether the buffer holds part of a message."""
-        return bool(self._buffer)
+    @property
+    def stream_update_condition(self) -> threading.Condition:
+        """Condition variable that is notified when
+        a stream update message has finished being processed."""
+        return self._stream_manager.update_condition
 
-    def stall_remaining(self, stall_timeout: float) -> float:
-        """Seconds left before a partial message in the buffer stalls."""
-        return max(0.0, stall_timeout - (time.perf_counter() - self._progress))
+    def wait_for_stream_update(self, timeout: float | None = None) -> None:
+        """Wait until the next stream update message or a timeout occurs.
+        The condition variable must be locked before calling this method.
 
-    def wait_readable(self, timeout: float | None = None) -> bool:
-        """Wait until the socket has data to read, or the connection has closed. Returns
-        False if neither happens within the timeout."""
-        return _readable(self._socket, timeout)
+        When timeout is not None, it should be a floating point number
+        specifying the timeout in seconds for the operation."""
+        self._stream_manager.wait_for_update(timeout)
 
-    def discard(self, timeout: float) -> None:
-        """Read and discard what arrives within the timeout. Raises OSError once the
-        server has closed the connection, and ReadTimeout if nothing arrives."""
-        self._buffer.clear()
-        self._fill(timeout)
-        self._buffer.clear()
+    def add_stream_update_callback(self, callback: Callable[[], None]) -> None:
+        """Add a callback that is invoked whenever
+        a stream update message has finished being processed."""
+        self._stream_manager.add_update_callback(callback)
 
+    def remove_stream_update_callback(self, callback: Callable[[], None]) -> None:
+        """Remove a stream update callback."""
+        self._stream_manager.remove_update_callback(callback)
 
-class LocalConnection(Connection):
-    """A connection to a server on the same machine, over a unix domain socket."""
+    @staticmethod
+    def get_call(
+        func: Callable,
+        *args: object,
+        **kwargs: object,
+    ) -> KRPC.ProcedureCall:
+        """Convert a remote procedure call to a KRPC.ProcedureCall message. Pass
+        getattr or setattr as the procedure for a property, then the object, the
+        property's name and, for setattr, the value."""
+        if func == getattr:
+            name = cast(str, args[1])
+            builder = getattr(args[0], "_build_call__" + name)
+            used = getattr(getattr(type(args[0]), name, None), "fget", None)
+            args = tuple()
+            kwargs = {}
+        elif func == setattr:
+            name = cast(str, args[1])
+            builder = getattr(args[0], "_build_call_set__" + name)
+            used = getattr(getattr(type(args[0]), name, None), "fset", None)
+            args = (args[2],)
+            kwargs = {}
+        else:
+            builder = getattr(
+                func.__self__,  # pyright: ignore[reportFunctionMemberAccess]
+                "_build_call__" + func.__name__,
+            )
+            used = func
+        deprecation = getattr(used, "_deprecation", None)
+        if deprecation:
+            warn_deprecated(deprecation)
+        return cast(KRPC.ProcedureCall, builder(*args, **kwargs))
 
-    def __init__(self, path: str) -> None:
-        super().__init__(path, 0)
+    def _get_return_type(
+        self,
+        func: Callable,
+        *args: object,
+        **kwargs: object,
+    ) -> TypeBase:
+        """Get the return type for a remote procedure call"""
+        if func == getattr:
+            name = cast(str, args[1])
+            return_type_fn = getattr(args[0], "_return_type__" + name)
+        elif func == setattr:
+            return self._types.no_value_type
+        else:
+            return_type_fn = getattr(
+                func.__self__,  # pyright: ignore[reportFunctionMemberAccess]
+                "_return_type__" + func.__name__,
+            )
+        return_type = cast("TypeBase | None", return_type_fn())
+        return self._types.no_value_type if return_type is None else return_type
 
-    def _open(self) -> socket.socket:
-        # Windows has the address family but the socket module does not expose it, so there
-        # the socket is opened by calling winsock directly.
-        if not hasattr(socket, "AF_UNIX"):
-            return winsock.connect(self._address)
-        sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-        sock.connect(self._address)
-        return sock
+    def _invoke(
+        self,
+        service: str,
+        procedure: str,
+        args: Iterable[object],
+        param_types: Iterable[TypeBase],
+        return_type: TypeBase | None,
+    ) -> object:
+        """Execute an RPC"""
+
+        # Build the request. A request carries exactly one call, so the call is filled in
+        # where it belongs
+        args = list(args)
+        request = KRPC.Request()
+        self._encode_call(request.calls.add(), service, procedure, args, param_types)
+
+        # Send the request, and wait for its response. The reader registers a stream
+        # or an event the call adds before it reads the stream's first update
+        adds_stream = isinstance(return_type, (StreamType, EventType))
+        response = self._session.call(request, adds_stream)
+
+        # Check for an error response
+        if response.HasField("error"):
+            raise self._build_error(response.error)
+
+        # Check for an error in the procedure results
+        result = response.results[0]
+        if result.HasField("error"):
+            raise self._build_error(result.error)
+
+        # Decode the response and return the (optional) result
+        if return_type is None or result.is_null:
+            return None
+        return Decoder.decode(self, result.value, return_type)
+
+    def _build_call(
+        self,
+        service: str,
+        procedure: str,
+        args: Iterable[object],
+        param_types: Iterable[TypeBase],
+        return_type: TypeBase | None,
+    ) -> KRPC.ProcedureCall:
+        """Build a KRPC.ProcedureCall object"""
+
+        call = KRPC.ProcedureCall()
+        self._encode_call(call, service, procedure, args, param_types)
+        return call
+
+    def _encode_call(
+        self,
+        call: KRPC.ProcedureCall,
+        service: str,
+        procedure: str,
+        args: Iterable[object],
+        param_types: Iterable[TypeBase],
+    ) -> None:
+        """Fill in a KRPC.ProcedureCall message with a call and its arguments"""
+
+        call.service = service
+        call.procedure = procedure
+        arguments = call.arguments
+
+        for i, (value, typ) in enumerate(zip(args, param_types)):
+            if isinstance(value, DefaultArgument):
+                continue
+            if value is None:
+                # A null argument is signaled out-of-band; the value field is left unset
+                arguments.add(position=i, is_null=True)
+                continue
+            if not isinstance(value, typ.python_type):
+                try:
+                    value = self._types.coerce_to(value, typ)
+                except EnumerationValueError as exc:
+                    raise TypeError(
+                        "%s.%s() argument %d: %s" % (service, procedure, i, exc)
+                    ) from exc
+                except ValueError as exc:
+                    raise TypeError(
+                        "%s.%s() argument %d must be a %s, got a %s"
+                        % (service, procedure, i, typ.python_type, type(value))
+                    ) from exc
+            arguments.add(position=i, value=Encoder.encode(value, typ))
+
+    def _build_error(self, error: KRPC.Error) -> Exception:
+        """Build an exception from an error message that
+        can be thrown to the calling code"""
+        # TODO: modify the stack trace of the thrown exception so it looks like
+        #       it came from the local call
+        if error.service and error.exception:
+            service_name = snake_case(error.service)
+            type_name = error.exception
+            # The service is missing if this client does not know it, and the member is an
+            # exception class only for an exception the service declares. Report the error
+            # itself, named by its type on the server, so that the failure to build an
+            # exception for it does not hide it.
+            service = getattr(self, service_name, None)
+            exception_type = getattr(service, type_name, None)
+            if not (
+                isinstance(exception_type, type)
+                and issubclass(exception_type, Exception)
+            ):
+                return RPCError(
+                    "%s.%s: %s" % (error.service, type_name, self._error_message(error))
+                )
+            return exception_type(self._error_message(error))
+        return RPCError(self._error_message(error))
+
+    @staticmethod
+    def _error_message(error: KRPC.Error) -> str:
+        msg = error.description
+        if error.stack_trace:
+            msg += "\nServer stack trace:\n" + error.stack_trace
+        return msg

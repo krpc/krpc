@@ -19,7 +19,7 @@
 
 namespace krpc {
 
-class Connection;
+class Transport;
 class StreamManager;
 
 /** The messages of one connection.
@@ -43,7 +43,7 @@ class Session {
   enum class Adds : uint8_t { nothing, stream };
 
   /** A stall timeout of zero waits indefinitely. */
-  Session(std::shared_ptr<Connection> connection,
+  Session(std::shared_ptr<Transport> transport,
           std::function<schema::Request(uint64_t)> remove_stream_request,
           std::chrono::milliseconds stall_timeout = default_stall_timeout);
   ~Session();
@@ -51,7 +51,7 @@ class Session {
   Session& operator=(const Session&) = delete;
 
   /** Start the threads. The dispatcher thread holds keep_alive until it exits, as a callback
-      can still be running once the last client is released. */
+      can still be running once the last connection is released. */
   void start(StreamManager* manager, std::shared_ptr<void> keep_alive);
   /** Queue work for the dispatcher thread. */
   void dispatch(std::function<void()> work);
@@ -113,7 +113,7 @@ class Session {
   std::exception_ptr protocol_error(schema::Disconnect::Reason reason, const std::string& text);
   void disconnect(schema::Disconnect::Reason reason, const std::string& text);
 
-  std::shared_ptr<Connection> connection;
+  std::shared_ptr<Transport> transport;
   std::function<schema::Request(uint64_t)> remove_stream_request;
   std::chrono::milliseconds stall_timeout;
   StreamManager* manager = nullptr;
@@ -149,7 +149,7 @@ class Session {
   std::deque<std::function<void()>> queue;
   bool queue_stopped = false;
   // Work dispatched once the queue has stopped, destroyed by the join or with the session. It can
-  // hold the last copy of a callback, and so of the client.
+  // hold the last copy of a callback, and so of the connection.
   std::vector<std::function<void()>> discarded;
   std::thread reader;
   std::thread dispatcher;

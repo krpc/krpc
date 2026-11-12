@@ -11,7 +11,7 @@
 #include <thread>
 #include <utility>
 
-#include "krpc/client.hpp"
+#include "krpc/connection.hpp"
 #include "krpc/error.hpp"
 #include "krpc/internal_procedures.hpp"
 #include "krpc/race_point.hpp"
@@ -26,10 +26,10 @@ bool is_firing(const std::string& data, bool is_null) { return !is_null && data 
 
 }  // namespace
 
-StreamImpl::StreamImpl(const Client& client, uint64_t id,
+StreamImpl::StreamImpl(const Connection& connection, uint64_t id,
                        std::shared_ptr<std::recursive_mutex> update_lock,
                        std::weak_ptr<StreamManager> manager)
-    : client(client),
+    : connection(connection),
       id(id),
       update_lock(std::move(update_lock)),
       manager(std::move(manager)),
@@ -76,9 +76,9 @@ bool StreamImpl::is_released() const {
   return released;
 }
 
-void StreamImpl::claim(const Client& claiming_client) { client = claiming_client; }
+void StreamImpl::claim(const Connection& claiming_connection) { connection = claiming_connection; }
 
-Client* StreamImpl::get_client() { return &client; }
+Connection* StreamImpl::get_connection() { return &connection; }
 
 uint64_t StreamImpl::get_id() const { return id; }
 
@@ -87,7 +87,7 @@ float StreamImpl::rate() const { return _rate; }
 void StreamImpl::set_rate(float value) {
   _rate = value;
   if (has_ended()) return;
-  internal_procedures::set_stream_rate(&client, id, value);
+  internal_procedures::set_stream_rate(&connection, id, value);
 }
 
 std::string StreamImpl::get_data(bool* is_null) {
@@ -392,7 +392,8 @@ void StreamImpl::replay(const std::shared_ptr<CallbackEntry>& callback, uint64_t
   if (replaying == fired) replaying = 0;
 }
 
-// The callback is destroyed once the lock is released, as it can hold the last copy of the client
+// The callback is destroyed once the lock is released, as it can hold the last copy of the
+// connection
 void StreamImpl::remove_callback(int tag) {
   std::shared_ptr<CallbackEntry> removed;
   std::lock_guard<std::recursive_mutex> guard(*update_lock);
@@ -402,7 +403,7 @@ void StreamImpl::remove_callback(int tag) {
   callbacks.erase(it);
 }
 
-// Destroyed once the lock is released, as a callback can hold the last copy of the client
+// Destroyed once the lock is released, as a callback can hold the last copy of the connection
 void StreamImpl::drop_callbacks() {
   std::map<int, std::shared_ptr<CallbackEntry>> dropped;
   std::lock_guard<std::recursive_mutex> guard(*update_lock);

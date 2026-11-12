@@ -1,17 +1,10 @@
 package krpc.client;
 
-import com.google.protobuf.CodedOutputStream;
 import com.google.protobuf.InvalidProtocolBufferException;
-import com.google.protobuf.WireFormat;
 import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.net.SocketTimeoutException;
-import java.nio.ByteBuffer;
-import java.nio.channels.ClosedChannelException;
 import java.nio.channels.ClosedSelectorException;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.nio.channels.SocketChannel;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,10 +25,8 @@ import krpc.schema.KRPC;
  * can take over at once. The reader never runs user code, and takes no lock user code can hold.
  *
  * <p>The dispatcher thread runs callbacks, wakes stream waiters, and makes the writes the reader
- * needs, in the order the reader queues them.
- *
- * <p>The channel is non-blocking once the session starts. The reader waits for data with one
- * selector, the reader thread with another, and a write that fills the send buffer with a third.
+ * needs, in the order the reader queues them. The transport is non-blocking once the session
+ * starts.
  */
 class Session {
   // A partial message's limit without a new byte, none if zero
@@ -69,13 +60,9 @@ class Session {
     }
   }
 
-  final SocketChannel channel;
-  private final MessageReader reader;
+  private final Transport transport;
   private final LongFunction<KRPC.Request> removeStreamRequest;
   private StreamManager manager;
-  private Selector readSelector;
-  private Selector idleSelector;
-  private Selector writeSelector;
   // Held for the whole of a write
   private final ReentrantLock writeLock = new ReentrantLock();
   // Guards the ids, the pending calls, the error, and which thread is reading. Notified when a
@@ -99,11 +86,10 @@ class Session {
   private final Thread readerThread;
   private final Thread dispatcherThread;
 
-  Session(SocketChannel channel, MessageReader reader,
-          LongFunction<KRPC.Request> removeStreamRequest, Duration stallTimeout) {
+  Session(Transport transport, LongFunction<KRPC.Request> removeStreamRequest,
+          Duration stallTimeout) {
     this.stallTimeout = stallTimeout;
-    this.channel = channel;
-    this.reader = reader;
+    this.transport = transport;
     this.removeStreamRequest = removeStreamRequest;
     readerThread = new Thread(this::runReader, "krpc-reader");
     readerThread.setDaemon(true);
@@ -113,13 +99,7 @@ class Session {
 
   void start(StreamManager streamManager) throws IOException {
     manager = streamManager;
-    channel.configureBlocking(false);
-    readSelector = Selector.open();
-    idleSelector = Selector.open();
-    writeSelector = Selector.open();
-    channel.register(readSelector, SelectionKey.OP_READ);
-    channel.register(idleSelector, SelectionKey.OP_READ);
-    channel.register(writeSelector, SelectionKey.OP_WRITE);
+    transport.startNonBlocking();
     readerThread.start();
     dispatcherThread.start();
   }
@@ -256,7 +236,7 @@ class Session {
             pending.remove(response.getId());
             slot.response = response;
             slot.done = true;
-            if (returning && !reader.hasMessage()) {
+            if (returning && !transport.hasMessage()) {
               reading = false;
               returned();
               return true;
@@ -283,7 +263,7 @@ class Session {
    * Throws Ended once the connection has ended.
    */
   private void handleBuffered() throws Ended, InterruptedIOException {
-    while (reader.hasMessage()) {
+    while (transport.hasMessage()) {
       // A failed connection has no pending calls to match responses to
       synchronized (stateLock) {
         if (error != null) {
@@ -347,61 +327,13 @@ class Session {
 
   /** Write a call's request. A failed write fails the connection. */
   private void writeRequest(KRPC.Request request) {
-    // The Message is written around the request, which saves building one
-    int size = request.getSerializedSize();
-    int messageSize = 1 + CodedOutputStream.computeUInt32SizeNoTag(size) + size;
-    byte[] data = new byte[CodedOutputStream.computeUInt32SizeNoTag(messageSize) + messageSize];
+    writeLock.lock();
     try {
-      CodedOutputStream output = CodedOutputStream.newInstance(data);
-      output.writeUInt32NoTag(messageSize);
-      output.writeTag(KRPC.Message.REQUEST_FIELD_NUMBER, WireFormat.WIRETYPE_LENGTH_DELIMITED);
-      output.writeUInt32NoTag(size);
-      request.writeTo(output);
-      writeLock.lock();
-      try {
-        write(ByteBuffer.wrap(data));
-      } finally {
-        writeLock.unlock();
-      }
+      transport.send(request);
     } catch (IOException exn) {
       end(new ConnectionException("Connection failed: " + exn.getMessage(), exn));
-    }
-  }
-
-  private void write(KRPC.Message message) throws IOException {
-    int size = message.getSerializedSize();
-    byte[] data = new byte[CodedOutputStream.computeUInt32SizeNoTag(size) + size];
-    CodedOutputStream output = CodedOutputStream.newInstance(data);
-    output.writeUInt32NoTag(size);
-    message.writeTo(output);
-    write(ByteBuffer.wrap(data));
-  }
-
-  /**
-   * Write all of a buffer, waiting for room in the send buffer. Called with the write lock held.
-   * An interrupt is held back until the write ends, as a message cut short breaks the framing.
-   */
-  private void write(ByteBuffer data) throws IOException {
-    WriteFault.reach();
-    boolean interrupted = false;
-    try {
-      while (true) {
-        channel.write(data);
-        if (!data.hasRemaining()) {
-          return;
-        }
-        writeSelector.select(MessageReader.IGNORE_KEY, MessageReader.MAXIMUM_WAIT_MILLISECONDS);
-        // Cleared, as the selector returns at once while the thread is interrupted
-        if (Thread.interrupted()) {
-          interrupted = true;
-        }
-      }
-    } catch (ClosedSelectorException exn) {
-      throw new ClosedChannelException();
     } finally {
-      if (interrupted) {
-        Thread.currentThread().interrupt();
-      }
+      writeLock.unlock();
     }
   }
 
@@ -449,10 +381,10 @@ class Session {
     }
     if (locked) {
       try {
-        write(KRPC.Message.newBuilder()
+        transport.send(KRPC.Message.newBuilder()
               .setDisconnect(KRPC.Disconnect.newBuilder().setReason(KRPC.Disconnect.Reason.CLOSED))
               .build());
-        channel.shutdownOutput();
+        transport.shutdownOutput();
       } catch (IOException exn) {
         // The connection can already have failed
       } finally {
@@ -483,9 +415,9 @@ class Session {
       }
     }
     if (drain) {
-      drain(deadline);
+      transport.discard(deadline);
     }
-    closeChannel();
+    transport.close();
     fail(new ConnectionException("Connection closed"));
     synchronized (stateLock) {
       if (drain) {
@@ -493,26 +425,6 @@ class Session {
       }
       ended = true;
       stateLock.notifyAll();
-    }
-  }
-
-  /** Discard what arrives until the server closes the connection, or until the deadline. */
-  private void drain(long deadline) {
-    ByteBuffer discard = ByteBuffer.allocate(4096);
-    try {
-      while (true) {
-        long remaining = deadline - System.currentTimeMillis();
-        if (remaining <= 0) {
-          return;
-        }
-        readSelector.select(MessageReader.IGNORE_KEY, remaining);
-        discard.clear();
-        if (channel.read(discard) < 0) {
-          return;
-        }
-      }
-    } catch (IOException | ClosedSelectorException exn) {
-      // The connection has failed already
     }
   }
 
@@ -529,25 +441,6 @@ class Session {
       }
     } catch (InterruptedException exn) {
       current.interrupt();
-    }
-  }
-
-  private void closeChannel() {
-    try {
-      channel.close();
-    } catch (IOException exn) {
-      // The channel is closed or failed already
-    }
-    for (Selector selector : new Selector[] {readSelector, idleSelector, writeSelector}) {
-      if (selector == null) {
-        continue;
-      }
-      try {
-        selector.wakeup();
-        selector.close();
-      } catch (IOException exn) {
-        // The selector is closed already
-      }
     }
   }
 
@@ -590,7 +483,7 @@ class Session {
       dispatch(() -> manager.notifyClosed(endingCause));
       queue.add(STOP);
     }
-    closeChannel();
+    transport.close();
     synchronized (stateLock) {
       stateLock.notifyAll();
     }
@@ -616,9 +509,7 @@ class Session {
       // most part of a message, as the reader handles the whole ones before it stops reading.
       boolean readable = true;
       try {
-        readable = idleSelector.select(
-            MessageReader.IGNORE_KEY, MessageReader.MAXIMUM_WAIT_MILLISECONDS) > 0
-            || !channel.isOpen();
+        readable = transport.waitReadable();
       } catch (IOException | ClosedSelectorException exn) {
         // The connection has closed
       }
@@ -633,7 +524,7 @@ class Session {
       }
       try {
         // A wait that finds no data reads only to time a partial message
-        if (!readable && (stallTimeout.isZero() || !reader.hasBuffered())) {
+        if (!readable && (stallTimeout.isZero() || !transport.hasBuffered())) {
           stopReading();
           continue;
         }
@@ -708,7 +599,7 @@ class Session {
   private byte[] receiveData() throws Ended, InterruptedIOException {
     ConnectionException cause;
     try {
-      return reader.read(readSelector, stallTimeout);
+      return transport.readNonBlocking(stallTimeout);
     } catch (InterruptedIOException exn) {
       if (exn instanceof SocketTimeoutException) {
         cause = protocolError(
@@ -798,7 +689,7 @@ class Session {
       return null;
     }
     try {
-      return Encoder.decodeUint64(result.getValue());
+      return Decoder.decodeUint64(result.getValue());
     } catch (IOException exn) {
       // The call has succeeded, and its caller decodes the value
       return null;
@@ -823,10 +714,10 @@ class Session {
         return;
       }
       try {
-        write(KRPC.Message.newBuilder()
+        transport.send(KRPC.Message.newBuilder()
               .setDisconnect(KRPC.Disconnect.newBuilder().setReason(reason).setMessage(text))
               .build());
-        channel.shutdownOutput();
+        transport.shutdownOutput();
       } finally {
         writeLock.unlock();
       }
@@ -859,7 +750,7 @@ class Session {
         Thread.currentThread().interrupt();
       }
     }
-    drain(System.currentTimeMillis() + CLOSE_TIMEOUT_MILLISECONDS);
+    transport.discard(System.currentTimeMillis() + CLOSE_TIMEOUT_MILLISECONDS);
     return failure;
   }
 }

@@ -8,8 +8,7 @@ import tempfile
 from collections.abc import Callable
 from typing import TYPE_CHECKING, Concatenate, Generic, ParamSpec, TypeVar, cast
 
-from krpc.client import Client
-from krpc.connection import Connection, LocalConnection, MalformedSize, ReadTimeout
+from krpc.connection import Connection
 from krpc.decoder import Decoder
 from krpc.encoder import Encoder
 from krpc.error import ConnectionError
@@ -19,11 +18,18 @@ from krpc.schema.KRPC_pb2 import (
     Message,
 )
 from krpc.session import DEFAULT_STALL_TIMEOUT, disconnect_reason_name
-from krpc.types import ClassBase
+from krpc.transport import (
+    LocalTransport,
+    MalformedSize,
+    ReadTimeout,
+    TCPIPTransport,
+    Transport,
+)
+from krpc.types import RemoteObject
 from krpc.version import __version__
 
 if TYPE_CHECKING:
-    from krpc.ksp import KSPClient
+    from krpc.ksp import KSPConnection
 
 DEFAULT_ADDRESS = "127.0.0.1"
 DEFAULT_PORT = 50000
@@ -48,14 +54,14 @@ def _default_path() -> str:
 
 
 def _connect_tcpip(
-    client_type: type[Client],
+    connection_type: type[Connection],
     name: str | None = None,
     address: str = DEFAULT_ADDRESS,
     port: int = DEFAULT_PORT,
     timeout: float | None = None,
     handshake_timeout: float | None = DEFAULT_HANDSHAKE_TIMEOUT,
     stall_timeout: float | None = DEFAULT_STALL_TIMEOUT,
-) -> Client:
+) -> Connection:
     """
     Connect to a kRPC server on the specified IP address and port number.
     Optionally give the kRPC server the supplied name to identify the client.
@@ -68,17 +74,17 @@ def _connect_tcpip(
     """
 
     _check_timeouts(handshake_timeout, stall_timeout)
-    connection = Connection(address, port, timeout)
-    return _connect(client_type, name, connection, handshake_timeout, stall_timeout)
+    transport = TCPIPTransport(address, port, timeout)
+    return _connect(connection_type, name, transport, handshake_timeout, stall_timeout)
 
 
 def _connect_local(
-    client_type: type[Client],
+    connection_type: type[Connection],
     name: str | None = None,
     path: str = DEFAULT_PATH,
     handshake_timeout: float | None = DEFAULT_HANDSHAKE_TIMEOUT,
     stall_timeout: float | None = DEFAULT_STALL_TIMEOUT,
-) -> Client:
+) -> Connection:
     """
     Connect to a kRPC server on the same machine, over a unix domain socket named by
     the given path; an empty path stands for the one the server uses by default.
@@ -89,36 +95,36 @@ def _connect_local(
     """
 
     _check_timeouts(handshake_timeout, stall_timeout)
-    connection = LocalConnection(path or _default_path())
-    return _connect(client_type, name, connection, handshake_timeout, stall_timeout)
+    transport = LocalTransport(path or _default_path())
+    return _connect(connection_type, name, transport, handshake_timeout, stall_timeout)
 
 
-_ClientT = TypeVar("_ClientT", bound=Client)
-_OtherClientT = TypeVar("_OtherClientT", bound=Client)
+_ConnectionT = TypeVar("_ConnectionT", bound=Connection)
+_OtherConnectionT = TypeVar("_OtherConnectionT", bound=Connection)
 _P = ParamSpec("_P")
 
 
-def _default_client_type() -> type[Client]:
-    """The client type of a connect function that is not indexed. The KSP services' modules are
+def _default_connection_type() -> type[Connection]:
+    """The connection type of a connect function that is not indexed. The KSP services' modules are
     imported on the first connect, so that importing krpc imports no generated module."""
-    from krpc.ksp import KSPClient
+    from krpc.ksp import KSPConnection
 
-    return KSPClient
+    return KSPConnection
 
 
-class _Connector(Generic[_P, _ClientT]):
-    """A connect function. Indexed with a subclass of Client, such as the client type a
+class _Connector(Generic[_P, _ConnectionT]):
+    """A connect function. Indexed with a subclass of Connection, such as the connection type a
     generated module declares for its service, it connects with a client of that type. Not
-    indexed, it connects with a KSPClient."""
+    indexed, it connects with a KSPConnection."""
 
     def __init__(
         self,
         name: str,
-        connect: Callable[Concatenate[type[Client], _P], Client],
-        client_type: type[_ClientT] | None,
+        connect: Callable[Concatenate[type[Connection], _P], Connection],
+        connection_type: type[_ConnectionT] | None,
     ) -> None:
         self._connect = connect
-        self._client_type = client_type
+        self._connection_type = connection_type
         # The name, documentation and signature of the connect function, without its client
         # type parameter, for help() and inspect
         self.__name__ = self.__qualname__ = name
@@ -129,28 +135,28 @@ class _Connector(Generic[_P, _ClientT]):
             parameters=list(signature.parameters.values())[1:]
         )
 
-    def __call__(self, *args: _P.args, **kwargs: _P.kwargs) -> _ClientT:
-        client_type = self._client_type or _default_client_type()
-        return cast(_ClientT, self._connect(client_type, *args, **kwargs))
+    def __call__(self, *args: _P.args, **kwargs: _P.kwargs) -> _ConnectionT:
+        connection_type = self._connection_type or _default_connection_type()
+        return cast(_ConnectionT, self._connect(connection_type, *args, **kwargs))
 
     def __getitem__(
-        self, client_type: type[_OtherClientT]
-    ) -> _Connector[_P, _OtherClientT]:
-        return _Connector(self.__name__, self._connect, client_type)
+        self, connection_type: type[_OtherConnectionT]
+    ) -> _Connector[_P, _OtherConnectionT]:
+        return _Connector(self.__name__, self._connect, connection_type)
 
     def __repr__(self) -> str:
         return "<connect function %s.%s>" % (self.__module__, self.__name__)
 
 
 if TYPE_CHECKING:
-    connect = _Connector("connect", _connect_tcpip, KSPClient)
-    connect_local = _Connector("connect_local", _connect_local, KSPClient)
+    connect = _Connector("connect", _connect_tcpip, KSPConnection)
+    connect_local = _Connector("connect_local", _connect_local, KSPConnection)
 else:
     connect = _Connector("connect", _connect_tcpip, None)
     connect_local = _Connector("connect_local", _connect_local, None)
 
 
-def get_object_id(obj: ClassBase) -> int:
+def get_object_id(obj: RemoteObject) -> int:
     """
     The identifier of a remote object on the server, e.g. to pass to
     Expression.constant_object. Raises ValueError if the object is None.
@@ -173,25 +179,25 @@ def _check_timeouts(
 
 
 def _connect(
-    client_type: type[Client],
+    connection_type: type[Connection],
     name: str | None,
-    connection: Connection,
+    transport: Transport,
     handshake_timeout: float | None,
     stall_timeout: float | None,
-) -> Client:
-    """Perform the connection handshake over an already built connection. The
+) -> Connection:
+    """Perform the connection handshake over an already built transport. The
     handshake is the same whatever carries it."""
     try:
-        connection.connect()
+        transport.connect()
     except OSError as exn:
         raise ConnectionError("Failed to connect to the server: %s" % exn) from exn
     try:
-        response = _handshake(name, connection, handshake_timeout)
+        response = _handshake(name, transport, handshake_timeout)
     except BaseException:
-        connection.close()
+        transport.close()
         raise
     if response.status != ConnectionResponse.OK:
-        connection.close()
+        transport.close()
         try:
             status = ConnectionResponse.Status.Name(response.status)
         except ValueError:
@@ -201,21 +207,21 @@ def _connect(
             message += ": " + response.message
         raise ConnectionError(message, status=status)
     if response.protocol_version != PROTOCOL_VERSION:
-        connection.close()
+        transport.close()
         raise ConnectionError(
             f"The server does not support protocol version {PROTOCOL_VERSION}. Use a "
             "client from the same kRPC release as the server."
         )
     try:
-        return client_type(connection, stall_timeout)
+        return connection_type(transport, stall_timeout)
     except BaseException:
-        connection.close()
+        transport.close()
         raise
 
 
 def _handshake(
     name: str | None,
-    connection: Connection,
+    transport: Transport,
     timeout: float | None,
 ) -> ConnectionResponse:
     """Send the connection request, and read the server's response to it."""
@@ -223,11 +229,11 @@ def _handshake(
     request.protocol_version = PROTOCOL_VERSION
     if name is not None:
         request.client_name = name
-    connection.send_message(Message(connection_request=request))
     # The handshake timeout covers the whole response, and the stall timeout applies
     # from the next message
     try:
-        data = connection.receive_message_data(timeout)
+        transport.send_message(Message(connection_request=request))
+        data = transport.receive_message_data(timeout)
     except ReadTimeout as exn:
         raise ConnectionError(
             "The server did not answer the connection request within %g seconds"

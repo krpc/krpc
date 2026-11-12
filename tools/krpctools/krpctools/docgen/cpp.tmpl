@@ -1,6 +1,6 @@
 {% macro service(x) %}{{ mark_documented(x) }}
 .. namespace:: krpc::services
-.. class:: {{ x.name }} : public krpc::Service
+.. class:: {{ x.name }} : public krpc::RemoteService
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 
@@ -10,7 +10,7 @@
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
 
 {% endif %}
-   .. function:: {{ x.name }}(krpc::Client& client)
+   .. function:: {{ x.name }}(krpc::Connection& connection)
 
       Construct an instance of this service.
 
@@ -112,7 +112,7 @@
 {% endmacro %}
 
 {% macro class_static_method(x) %}{{ mark_documented(x) }}
-.. function:: static {{ domain.return_type(x.return_type) }} {{ domain.method_name(x.name) }}(Client& connection{% if x.parameters | length > 0 %}, {% endif %}{{ parameters(x.parameters) }})
+.. function:: static {{ domain.return_type(x.return_type) }} {{ domain.method_name(x.name) }}(krpc::Connection& connection{% if x.parameters | length > 0 %}, {% endif %}{{ parameters(x.parameters) }})
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 

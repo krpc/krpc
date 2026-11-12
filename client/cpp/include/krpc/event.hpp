@@ -11,12 +11,12 @@
 
 namespace krpc {
 
-class Client;
+class Connection;
 
 class Event {
  public:
   Event();
-  Event(Client& client, uint64_t stream_id);
+  Event(Connection& connection, uint64_t stream_id);
   /** Condition variable that is notified when the event occurs. Every copy of the event object
       shares it. */
   Condition& get_condition() const;

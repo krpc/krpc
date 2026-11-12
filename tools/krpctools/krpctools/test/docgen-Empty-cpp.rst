@@ -5,10 +5,10 @@
 
 
 .. namespace:: krpc::services
-.. class:: EmptyService : public krpc::Service
+.. class:: EmptyService : public krpc::RemoteService
 
 
 
-   .. function:: EmptyService(krpc::Client& client)
+   .. function:: EmptyService(krpc::Connection& connection)
 
       Construct an instance of this service.

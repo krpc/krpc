@@ -283,7 +283,7 @@ namespace KRPC.Client
                     value = connection.GetException (result.Error);
                 else {
                     value = result.IsNull || stream.ReturnType == Stream.NoValue
-                        ? null : Encoder.Decode (result.Value, stream.ReturnType, connection);
+                        ? null : Decoder.Decode (result.Value, stream.ReturnType, connection);
                     ended = false;
                 }
             } catch (System.Exception) {

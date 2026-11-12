@@ -3,10 +3,12 @@ package krpc.client.services;
 import com.google.protobuf.ByteString;
 
 import krpc.client.Connection;
+import krpc.client.Decoder;
 import krpc.client.Encoder;
 import krpc.client.RemoteEnum;
 import krpc.client.RemoteFlags;
 import krpc.client.RemoteObject;
+import krpc.client.RemoteService;
 import krpc.client.RemoteStruct;
 import krpc.client.RPCInfo;
 import krpc.client.RPCException;
@@ -16,16 +18,14 @@ import krpc.client.Types;
 // exception types), so suppress the deprecation warnings within this class.
 @SuppressWarnings("deprecation")
 @Deprecated
-public class DeprecatedService {
+public class DeprecatedService extends RemoteService {
 
     public static DeprecatedService newInstance(Connection connection) {
         return new DeprecatedService(connection);
     }
 
-    private Connection connection;
-
     private DeprecatedService(Connection connection) {
-        this.connection = connection;
+        super(connection);
         addExceptionTypes(connection);
     }
 
@@ -61,7 +61,7 @@ public class DeprecatedService {
     @RPCInfo(service = "DeprecatedService", procedure = "Procedure", types = _Types.class)
     public String procedure() throws RPCException {
         krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("DeprecatedService", "Procedure");
-        return (String) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
+        return (String) Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
     }
 
     /**
@@ -74,7 +74,7 @@ public class DeprecatedService {
     @RPCInfo(service = "DeprecatedService", procedure = "StructProcedure", types = _Types.class)
     public krpc.client.services.DeprecatedService.ServiceStruct structProcedure() throws RPCException {
         krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("DeprecatedService", "StructProcedure");
-        return (krpc.client.services.DeprecatedService.ServiceStruct) Encoder.decode(_data.getValue(), krpc.client.Types.createStruct("DeprecatedService", "ServiceStruct"), this.connection);
+        return (krpc.client.services.DeprecatedService.ServiceStruct) Decoder.decode(_data.getValue(), krpc.client.Types.createStruct("DeprecatedService", "ServiceStruct"), this.connection);
     }
 
     /**
@@ -87,7 +87,7 @@ public class DeprecatedService {
     @RPCInfo(service = "DeprecatedService", procedure = "get_Property", types = _Types.class)
     public String getProperty() throws RPCException {
         krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("DeprecatedService", "get_Property");
-        return (String) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
+        return (String) Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
     }
 
     /**
@@ -242,7 +242,7 @@ public class DeprecatedService {
         public static String staticMethod(Connection connection) throws RPCException
         {
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("DeprecatedService", "ReasonedClass_static_StaticMethod");
-            return (String) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), connection);
+            return (String) Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), connection);
         }
 
         /**
@@ -309,7 +309,7 @@ public class DeprecatedService {
                 Encoder.encode(this, krpc.client.Types.createClass("DeprecatedService", "ServiceClass"))
             };
             krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("DeprecatedService", "ServiceClass_Method", _args);
-            return (String) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
+            return (String) Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
         }
 
         /**
@@ -323,7 +323,7 @@ public class DeprecatedService {
         public static String staticMethod(Connection connection) throws RPCException
         {
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("DeprecatedService", "ServiceClass_static_StaticMethod");
-            return (String) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), connection);
+            return (String) Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), connection);
         }
 
         /**

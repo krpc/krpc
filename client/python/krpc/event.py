@@ -10,15 +10,17 @@ from krpc.stream import Stream, wait_deadline
 if TYPE_CHECKING:
     from types import TracebackType
 
-    from krpc.client import Client
+    from krpc.connection import Connection
 
 
 class Event:
     """An event. Leaving a with statement on the event removes it."""
 
-    def __init__(self, client: Client, stream_id: int) -> None:
-        self._stream = Stream.from_stream_id(client, stream_id, client._types.bool_type)
-        self._client = client
+    def __init__(self, connection: Connection, stream_id: int) -> None:
+        self._stream = Stream.from_stream_id(
+            connection, stream_id, connection._types.bool_type
+        )
+        self._connection = connection
         self._seen = 0
 
     @property

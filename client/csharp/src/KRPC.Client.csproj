@@ -30,6 +30,8 @@
     <Compile Include="Connection.cs" />
     <Compile Include="ConnectionException.cs" />
     <Compile Include="Encoder.cs" />
+    <Compile Include="Decoder.cs" />
+    <Compile Include="Single32.cs" />
     <Compile Include="EncodingException.cs" />
     <Compile Include="Event.cs" />
     <Compile Include="ExpressionUtils.cs" />
@@ -37,10 +39,13 @@
     <Compile Include="FunctionCompiler.cs" />
     <Compile Include="IConnection.cs" />
     <Compile Include="InternalProcedures.cs" />
-    <Compile Include="MessageReader.cs" />
+    <Compile Include="Transport.cs" />
+    <Compile Include="TCPIPTransport.cs" />
+    <Compile Include="LocalTransport.cs" />
     <Compile Include="ProcedureSpecs.cs" />
     <Compile Include="RPCException.cs" />
     <Compile Include="RemoteObject.cs" />
+    <Compile Include="RemoteService.cs" />
     <Compile Include="Stream.cs" />
     <Compile Include="Session.cs" />
     <Compile Include="StreamImpl.cs" />

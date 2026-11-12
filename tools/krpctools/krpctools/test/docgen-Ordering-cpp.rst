@@ -5,11 +5,11 @@
 
 
 .. namespace:: krpc::services
-.. class:: ServiceA : public krpc::Service
+.. class:: ServiceA : public krpc::RemoteService
 
    A service whose procedures use another service's enumeration.
 
-   .. function:: ServiceA(krpc::Client& client)
+   .. function:: ServiceA(krpc::Connection& connection)
 
       Construct an instance of this service.
 

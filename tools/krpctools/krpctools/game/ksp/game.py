@@ -386,7 +386,7 @@ class KSP(game.Game):
 
     # The running game
 
-    def client_type(self):
-        from krpc.ksp import KSPClient
+    def connection_type(self):
+        from krpc.ksp import KSPConnection
 
-        return KSPClient
+        return KSPConnection

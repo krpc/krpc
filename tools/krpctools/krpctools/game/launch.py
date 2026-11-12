@@ -26,7 +26,7 @@ def connect(game, use_cached=True):
     False."""
     if game.connection is not None and use_cached:
         return game.connection
-    connection = krpc.connect[game.client_type()](
+    connection = krpc.connect[game.connection_type()](
         name=game.client_name, address=game.address
     )
     if use_cached:

@@ -15,8 +15,8 @@
 #include <krpc/error.hpp>
 #include <krpc/event.hpp>
 #include <krpc/hash.hpp>
-#include <krpc/object.hpp>
-#include <krpc/service.hpp>
+#include <krpc/remote_object.hpp>
+#include <krpc/remote_service.hpp>
 #include <krpc/stream.hpp>
 
 #include <ServiceB>
@@ -34,9 +34,9 @@
 namespace krpc {
 namespace services {
 
-class ServiceA : public Service {
+class ServiceA : public ::krpc::RemoteService {
  public:
-  explicit ServiceA(const Client& client);
+  explicit ServiceA(const ::krpc::Connection& connection);
 
   /**
    * Defaults to a member of another service's enumeration.
@@ -61,50 +61,50 @@ class ServiceA : public Service {
 
 namespace services {
 
-inline ServiceA::ServiceA(const Client& client):
-  Service(client) {
+inline ServiceA::ServiceA(const ::krpc::Connection& connection):
+  RemoteService(connection) {
 }
 
 inline void ServiceA::frob(ServiceB::Mode mode = ServiceB::Mode::fast) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(mode));
-  this->_client.invoke("ServiceA", "Frob", _args, ::krpc::Client::Returns::value);
+  this->_connection.invoke("ServiceA", "Frob", _args, ::krpc::Connection::Returns::value);
 }
 
 inline void ServiceA::frob_all(std::vector<ServiceB::Mode> modes = std::vector<ServiceB::Mode>{ServiceB::Mode::fast}) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(modes));
-  this->_client.invoke("ServiceA", "FrobAll", _args, ::krpc::Client::Returns::value);
+  this->_connection.invoke("ServiceA", "FrobAll", _args, ::krpc::Connection::Returns::value);
 }
 
 inline ::krpc::Stream<void> ServiceA::frob_stream(ServiceB::Mode mode = ServiceB::Mode::fast) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(mode));
-  return ::krpc::Stream<void>(this->_client, this->_client.build_call("ServiceA", "Frob", _args));
+  return ::krpc::Stream<void>(this->_connection, this->_connection.build_call("ServiceA", "Frob", _args));
 }
 
 inline ::krpc::Stream<void> ServiceA::frob_all_stream(std::vector<ServiceB::Mode> modes = std::vector<ServiceB::Mode>{ServiceB::Mode::fast}) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(modes));
-  return ::krpc::Stream<void>(this->_client, this->_client.build_call("ServiceA", "FrobAll", _args));
+  return ::krpc::Stream<void>(this->_connection, this->_connection.build_call("ServiceA", "FrobAll", _args));
 }
 
 inline ::krpc::schema::ProcedureCall ServiceA::frob_call(ServiceB::Mode mode = ServiceB::Mode::fast) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(mode));
-  return this->_client.build_call("ServiceA", "Frob", _args);
+  return this->_connection.build_call("ServiceA", "Frob", _args);
 }
 
 inline ::krpc::schema::ProcedureCall ServiceA::frob_all_call(std::vector<ServiceB::Mode> modes = std::vector<ServiceB::Mode>{ServiceB::Mode::fast}) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(modes));
-  return this->_client.build_call("ServiceA", "FrobAll", _args);
+  return this->_connection.build_call("ServiceA", "FrobAll", _args);
 }
 }  // namespace services
 

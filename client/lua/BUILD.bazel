@@ -116,7 +116,7 @@ lua_binary(
 lua_test(
     name = "luatest",
     size = "small",
-    main = "krpc/test/test_client.lua",
+    main = "krpc/test/test_connection.lua",
     tags = ["requires-network"],
     deps = lua_deps,
 )

@@ -8,9 +8,9 @@ from collections.abc import Callable, Mapping
 from typing import TYPE_CHECKING, NoReturn
 
 import krpc.schema.KRPC_pb2 as KRPC
-from krpc.connection import Connection, MalformedSize, ReadTimeout
 from krpc.decoder import decode_response_message, decode_stream_id
 from krpc.error import ConnectionError
+from krpc.transport import MalformedSize, ReadTimeout, Transport
 
 if TYPE_CHECKING:
     from krpc.streammanager import StreamManager
@@ -87,11 +87,11 @@ class Session:
 
     def __init__(
         self,
-        connection: Connection,
+        transport: Transport,
         remove_stream_request: Callable[[int], KRPC.Request],
         stall_timeout: float | None = DEFAULT_STALL_TIMEOUT,
     ) -> None:
-        self._connection = connection
+        self._transport = transport
         self._remove_stream_request = remove_stream_request
         # None waits forever
         self._stall_timeout = stall_timeout
@@ -216,12 +216,12 @@ class Session:
         response is handled here, which is the common case. If returning and no whole
         message is buffered, the call stops reading and stops waiting in the same hold
         of the lock."""
-        connection = self._connection
+        transport = self._transport
         pending = self._pending
         try:
             while not slot.done:
                 try:
-                    data = connection.receive_message_data(None, self._stall_timeout)
+                    data = transport.receive_message_data(None, self._stall_timeout)
                 except (OSError, MalformedSize) as exn:
                     self._receive_failed(exn)
                 try:
@@ -238,7 +238,7 @@ class Session:
                         slot.response = response
                         slot.done = True
                         # A buffered message is handled before the role is released
-                        if returning and not connection.has_message():
+                        if returning and not transport.has_message():
                             self._returned(slot)
                             return
                         continue
@@ -254,9 +254,9 @@ class Session:
         """Handle every whole message in the connection's buffer, before releasing the
         reader role. The reader thread then waits only on the socket, which holds the
         rest of any partial message. Raises _Ended once the connection has ended."""
-        connection = self._connection
-        while self._error is None and connection.has_message():
-            self._handle(self._parse(connection.receive_message_data()))
+        transport = self._transport
+        while self._error is None and transport.has_message():
+            self._handle(self._parse(transport.receive_message_data()))
 
     def _await(self, slot: _Slot) -> None:
         """Wait for a call's response, reading the socket once no other thread is. The
@@ -310,7 +310,7 @@ class Session:
         """Write a request. A failed write ends the connection, as a failed read does."""
         try:
             with self._write_lock:
-                self._connection.send_request(request)
+                self._transport.send_request(request)
         except OSError as exn:
             self._end(self._failure(exn))
 
@@ -327,12 +327,12 @@ class Session:
             self._fail_locked(ConnectionError("Connection closed"))
         if not failed and self._write_lock.acquire(timeout=CLOSE_TIMEOUT):
             try:
-                self._connection.send_message(
+                self._transport.send_message(
                     KRPC.Message(
                         disconnect=KRPC.Disconnect(reason=KRPC.Disconnect.CLOSED)
                     )
                 )
-                self._connection.half_close()
+                self._transport.half_close()
             except OSError:
                 pass
             finally:
@@ -355,7 +355,7 @@ class Session:
                 self._reading = True
         if drain:
             self._drain(deadline)
-        self._connection.close()
+        self._transport.close()
         self._fail(ConnectionError("Connection closed"))
         with self._lock:
             if drain:
@@ -372,7 +372,7 @@ class Session:
                 remaining = deadline - time.perf_counter()
                 if remaining <= 0:
                     return
-                self._connection.discard(remaining)
+                self._transport.discard(remaining)
         except (OSError, TimeoutError):
             pass
 
@@ -425,7 +425,7 @@ class Session:
                 )
             )
             self._queue.put(None)
-        self._connection.close()
+        self._transport.close()
         with self._lock:
             self._idle.notify_all()
 
@@ -444,10 +444,10 @@ class Session:
                     return
             # Wait for data without being the reader, so a call can take over. The wait is
             # bounded by the stall clock, so a partial message left in the buffer is timed.
-            connection = self._connection
+            transport = self._transport
             timeout = self._stall_timeout
-            if timeout is not None and connection.has_buffered():
-                timeout = connection.stall_remaining(timeout)
+            if timeout is not None and transport.has_buffered():
+                timeout = transport.stall_remaining(timeout)
             self._wait_readable(timeout)
             with self._lock:
                 if self._ended:
@@ -457,7 +457,7 @@ class Session:
                 self._reading = True
             try:
                 # A call can read the data between the wait and taking the role
-                if connection.has_buffered() or self._wait_readable(0):
+                if transport.has_buffered() or self._wait_readable(0):
                     self._read_one()
             except _Ended:
                 return
@@ -466,7 +466,7 @@ class Session:
 
     def _wait_readable(self, timeout: float | None) -> bool:
         try:
-            return self._connection.wait_readable(timeout)
+            return self._transport.wait_readable(timeout)
         except OSError:
             # The read reports the failure
             return True
@@ -485,7 +485,7 @@ class Session:
         """Read the bytes of one message. Raises _Ended once the connection has
         ended."""
         try:
-            return self._connection.receive_message_data(None, self._stall_timeout)
+            return self._transport.receive_message_data(None, self._stall_timeout)
         except (OSError, MalformedSize) as exn:
             self._receive_failed(exn)
 
@@ -631,12 +631,12 @@ class Session:
         def disconnect() -> None:
             try:
                 with self._write_lock:
-                    self._connection.send_message(
+                    self._transport.send_message(
                         KRPC.Message(
                             disconnect=KRPC.Disconnect(reason=reason, message=text)  # pyright: ignore[reportArgumentType]
                         )
                     )
-                    self._connection.half_close()
+                    self._transport.half_close()
             except OSError:
                 pass
             finally:

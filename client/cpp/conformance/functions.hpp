@@ -86,14 +86,14 @@ bool with_type(const std::string& type, F&& f);
 /** Runs a function with no arguments, with one or two arguments of a type the testee knows, or
     with sint32 value and arguments of the basic types. */
 template <typename Tag>
-Value run(krpc::Client& client, const Expression& function, const RunFunction& command) {
+Value run(krpc::Connection& connection, const Expression& function, const RunFunction& command) {
   const auto& args = command.arguments();
   if (args.empty()) return run_with<Tag>(function);
   if (args.size() == 1 && command.argument_types_size() == 1) {
     std::optional<Value> result;
     auto known = with_type(command.argument_types(0), [&](auto arg) {
       using Arg = decltype(arg);
-      result = run_with<Tag>(function, Arg::arg(client, args.Get(0)));
+      result = run_with<Tag>(function, Arg::arg(connection, args.Get(0)));
     });
     if (known) return *result;
   }
@@ -102,8 +102,8 @@ Value run(krpc::Client& client, const Expression& function, const RunFunction& c
     std::optional<Value> result;
     auto known = with_type(command.argument_types(0), [&](auto arg) {
       using Arg = decltype(arg);
-      result =
-          run_with<Tag>(function, Arg::arg(client, args.Get(0)), Arg::arg(client, args.Get(1)));
+      result = run_with<Tag>(function, Arg::arg(connection, args.Get(0)),
+                             Arg::arg(connection, args.Get(1)));
     });
     if (known) return *result;
   }

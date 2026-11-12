@@ -15,8 +15,8 @@
 #include <krpc/error.hpp>
 #include <krpc/event.hpp>
 #include <krpc/hash.hpp>
-#include <krpc/object.hpp>
-#include <krpc/service.hpp>
+#include <krpc/remote_object.hpp>
+#include <krpc/remote_service.hpp>
 #include <krpc/stream.hpp>
 
 // Generated code uses the deprecated declarations it makes, such as a stream of a deprecated
@@ -32,17 +32,17 @@
 namespace krpc {
 namespace services {
 
-class EmptyService : public Service {
+class EmptyService : public ::krpc::RemoteService {
  public:
-  explicit EmptyService(const Client& client);
+  explicit EmptyService(const ::krpc::Connection& connection);
 };
 
 }  // namespace services
 
 namespace services {
 
-inline EmptyService::EmptyService(const Client& client):
-  Service(client) {
+inline EmptyService::EmptyService(const ::krpc::Connection& connection):
+  RemoteService(connection) {
 }
 }  // namespace services
 

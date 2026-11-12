@@ -40,8 +40,8 @@ Over TCP/IP
 ^^^^^^^^^^^
 
 Select "Protobuf over TCP/IP" as the server's protocol. :func:`~krpc.connect` connects to it, and
-returns a :class:`~krpc.Client`. You make every call through this object. The following connects to
-a server with the default settings, address ``127.0.0.1`` and port 50000, and prints its version:
+returns a :class:`~krpc.Connection`. You make every call through this object. The following connects
+to a server with the default settings, address ``127.0.0.1`` and port 50000, and prints its version:
 
 .. literalinclude:: /scripts/lua/Connecting1.lua
 
@@ -57,8 +57,8 @@ Over a Local Socket
 ^^^^^^^^^^^^^^^^^^^
 
 Select "Protobuf over local socket" as the server's protocol. :func:`~krpc.connect_local` connects
-to it, and returns a :class:`~krpc.Client` as :func:`~krpc.connect` does. The following connects to
-a server with the default settings, at the default socket path for your platform, and prints its
+to it, and returns a :class:`~krpc.Connection` as :func:`~krpc.connect` does. The following connects
+to a server with the default settings, at the default socket path for your platform, and prints its
 version:
 
 .. literalinclude:: /scripts/lua/ConnectingLocal.lua
@@ -77,7 +77,7 @@ it is faster.
 Closing the Connection
 ^^^^^^^^^^^^^^^^^^^^^^
 
-:meth:`~krpc.Client.close` closes a connection:
+:meth:`~krpc.Connection.close` closes a connection:
 
 .. literalinclude:: /scripts/lua/Connecting3.lua
 
@@ -231,7 +231,7 @@ altitude and speed together:
 
 .. literalinclude:: /scripts/lua/RunFunction.lua
 
-:meth:`~krpc.Client.get_call` returns the call a procedure makes, as a message for
+:meth:`~krpc.Connection.get_call` returns the call a procedure makes, as a message for
 :meth:`~KRPC.Expression.call` to embed in the function. A property is read through its getter,
 such as ``flight.get_speed``, with the object as the first argument.
 :ref:`server-side-functions-api` in the :ref:`server side functions guide
@@ -240,7 +240,7 @@ such as ``flight.get_speed``, with the object as the first argument.
 Running a Function
 ^^^^^^^^^^^^^^^^^^
 
-:meth:`~krpc.Client.run` runs a function once, and returns its value. The server runs the whole
+:meth:`~krpc.Connection.run` runs a function once, and returns its value. The server runs the whole
 function within one physics tick, so every value it reads comes from the same moment in the game.
 In the example, the altitude and the speed are consistent with each other, which two separate calls
 cannot guarantee.
@@ -250,7 +250,7 @@ first run, then passes it an argument:
 
 .. literalinclude:: /scripts/lua/RunFunctionArguments.lua
 
-:meth:`~krpc.Client.compile` makes the first run as fast as later ones.
+:meth:`~krpc.Connection.compile` makes the first run as fast as later ones.
 
 Streams and Events
 ------------------
@@ -280,9 +280,9 @@ Client API Reference
 
 .. module:: krpc
 
-.. function:: connect(name?: string, address?: string, port?: number, handshake_timeout?: number | false): krpc.Client
+.. function:: connect(name?: string, address?: string, port?: number, handshake_timeout?: number | false): krpc.Connection
 
-   Connects to a kRPC server, and returns a :class:`~krpc.Client`.
+   Connects to a kRPC server, and returns a :class:`~krpc.Connection`.
 
    :param name: A name for the connection, shown in the server window in the game. Defaults to
                 ``''``.
@@ -296,10 +296,10 @@ Client API Reference
    Raises an error if the connection fails or the server refuses it, and for a timeout that is not
    positive.
 
-.. function:: connect_local(name?: string, path?: string, handshake_timeout?: number | false): krpc.Client
+.. function:: connect_local(name?: string, path?: string, handshake_timeout?: number | false): krpc.Connection
 
    Connects to a kRPC server on the same machine over a local socket, and returns a
-   :class:`~krpc.Client`. The server must use the local socket protocol.
+   :class:`~krpc.Connection`. The server must use the local socket protocol.
 
    This needs luasocket's ``socket.unix`` module, which luasocket builds on Linux and macOS.
 
@@ -320,7 +320,7 @@ Client API Reference
 
    :param obj: The remote object.
 
-.. class:: Client
+.. class:: Connection
 
    A connection to the server, with a field for each of the server's services. Obtain one by
    calling :func:`~krpc.connect` or :func:`~krpc.connect_local`.

@@ -193,7 +193,7 @@ namespace KRPC.Client.Conformance
         public static Value Decode (IConnection connection, Decode command)
         {
             var entry = Find (command.Type);
-            return entry.Result (Encoder.Decode (command.Data, entry.Spec, connection));
+            return entry.Result (Decoder.Decode (command.Data, entry.Spec, connection));
         }
     }
 }

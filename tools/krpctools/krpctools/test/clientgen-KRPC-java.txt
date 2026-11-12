@@ -3,10 +3,12 @@ package krpc.client.services;
 import com.google.protobuf.ByteString;
 
 import krpc.client.Connection;
+import krpc.client.Decoder;
 import krpc.client.Encoder;
 import krpc.client.RemoteEnum;
 import krpc.client.RemoteFlags;
 import krpc.client.RemoteObject;
+import krpc.client.RemoteService;
 import krpc.client.RemoteStruct;
 import krpc.client.RPCInfo;
 import krpc.client.RPCException;
@@ -15,16 +17,14 @@ import krpc.client.Types;
 // Generated code references its own deprecated members (e.g. when registering
 // exception types), so suppress the deprecation warnings within this class.
 @SuppressWarnings("deprecation")
-public class KRPC {
+public class KRPC extends RemoteService {
 
     public static KRPC newInstance(Connection connection) {
         return new KRPC(connection);
     }
 
-    private Connection connection;
-
     private KRPC(Connection connection) {
-        this.connection = connection;
+        super(connection);
         addExceptionTypes(connection);
     }
 
@@ -304,7 +304,7 @@ public class KRPC {
     @RPCInfo(service = "KRPC", procedure = "GetClientID", types = _Types.class)
     public byte[] getClientID() throws RPCException {
         krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("KRPC", "GetClientID");
-        return (byte[]) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BYTES), this.connection);
+        return (byte[]) Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BYTES), this.connection);
     }
 
     /**
@@ -315,7 +315,7 @@ public class KRPC {
     @RPCInfo(service = "KRPC", procedure = "GetClientName", types = _Types.class)
     public String getClientName() throws RPCException {
         krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("KRPC", "GetClientName");
-        return (String) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
+        return (String) Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
     }
 
     /**
@@ -326,7 +326,7 @@ public class KRPC {
     @RPCInfo(service = "KRPC", procedure = "GetServices", types = _Types.class)
     public krpc.schema.KRPC.Services getServices() throws RPCException {
         krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("KRPC", "GetServices");
-        return (krpc.schema.KRPC.Services) Encoder.decode(_data.getValue(), krpc.client.Types.createMessage(krpc.schema.KRPC.Type.TypeCode.SERVICES), this.connection);
+        return (krpc.schema.KRPC.Services) Decoder.decode(_data.getValue(), krpc.client.Types.createMessage(krpc.schema.KRPC.Type.TypeCode.SERVICES), this.connection);
     }
 
     /**
@@ -336,7 +336,7 @@ public class KRPC {
     @RPCInfo(service = "KRPC", procedure = "GetStatus", types = _Types.class)
     public krpc.client.services.KRPC.ServerStatus getStatus() throws RPCException {
         krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("KRPC", "GetStatus");
-        return (krpc.client.services.KRPC.ServerStatus) Encoder.decode(_data.getValue(), krpc.client.Types.createStruct("KRPC", "ServerStatus"), this.connection);
+        return (krpc.client.services.KRPC.ServerStatus) Decoder.decode(_data.getValue(), krpc.client.Types.createStruct("KRPC", "ServerStatus"), this.connection);
     }
 
     /**
@@ -401,7 +401,7 @@ public class KRPC {
     @RPCInfo(service = "KRPC", procedure = "get_Clients", types = _Types.class)
     public java.util.List<krpc.client.services.KRPC.ClientInfo> getClients() throws RPCException {
         krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("KRPC", "get_Clients");
-        return (java.util.List<krpc.client.services.KRPC.ClientInfo>) Encoder.decode(_data.getValue(), krpc.client.Types.createList(krpc.client.Types.createStruct("KRPC", "ClientInfo")), this.connection);
+        return (java.util.List<krpc.client.services.KRPC.ClientInfo>) Decoder.decode(_data.getValue(), krpc.client.Types.createList(krpc.client.Types.createStruct("KRPC", "ClientInfo")), this.connection);
     }
 
     /**
@@ -420,7 +420,7 @@ public class KRPC {
     @RPCInfo(service = "KRPC", procedure = "get_GameScene", types = _Types.class)
     public krpc.client.services.KRPC.GameScene getGameScene() throws RPCException {
         krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("KRPC", "get_GameScene");
-        return (krpc.client.services.KRPC.GameScene) Encoder.decode(_data.getValue(), krpc.client.Types.createEnumeration("KRPC", "GameScene"), this.connection);
+        return (krpc.client.services.KRPC.GameScene) Decoder.decode(_data.getValue(), krpc.client.Types.createEnumeration("KRPC", "GameScene"), this.connection);
     }
 
     /**
@@ -453,7 +453,7 @@ public class KRPC {
     @RPCInfo(service = "KRPC", procedure = "get_GameStateLoads", types = _Types.class)
     public int getGameStateLoads() throws RPCException {
         krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("KRPC", "get_GameStateLoads");
-        return (int) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32), this.connection);
+        return (int) Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32), this.connection);
     }
 
     /**
@@ -463,7 +463,7 @@ public class KRPC {
     @RPCInfo(service = "KRPC", procedure = "get_Paused", types = _Types.class)
     public boolean getPaused() throws RPCException {
         krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("KRPC", "get_Paused");
-        return (boolean) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL), this.connection);
+        return (boolean) Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL), this.connection);
     }
 
     /**
@@ -1430,7 +1430,7 @@ public class KRPC {
                 Encoder.encode(this, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("KRPC", "Expression_get_HasReturnType", _args);
-            return (boolean) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL), this.connection);
+            return (boolean) Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL), this.connection);
         }
 
         /**
@@ -1446,7 +1446,7 @@ public class KRPC {
                 Encoder.encode(this, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("KRPC", "Expression_get_ParameterTypes", _args);
-            return (java.util.List<krpc.client.services.KRPC.Type>) Encoder.decode(_data.getValue(), krpc.client.Types.createList(krpc.client.Types.createClass("KRPC", "Type")), this.connection);
+            return (java.util.List<krpc.client.services.KRPC.Type>) Decoder.decode(_data.getValue(), krpc.client.Types.createList(krpc.client.Types.createClass("KRPC", "Type")), this.connection);
         }
 
         /**
@@ -1465,7 +1465,7 @@ public class KRPC {
                 Encoder.encode(this, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("KRPC", "Expression_get_ReturnType", _args);
-            return (krpc.client.services.KRPC.Type) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Type"), this.connection);
+            return (krpc.client.services.KRPC.Type) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Type"), this.connection);
         }
 
         /**
@@ -1482,7 +1482,7 @@ public class KRPC {
                 Encoder.encode(arg1, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Add", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -1502,7 +1502,7 @@ public class KRPC {
                 Encoder.encode(func, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Aggregate", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -1524,7 +1524,7 @@ public class KRPC {
                 Encoder.encode(func, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_AggregateWithSeed", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -1542,7 +1542,7 @@ public class KRPC {
                 Encoder.encode(predicate, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_All", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -1561,7 +1561,7 @@ public class KRPC {
                 Encoder.encode(arg1, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_And", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -1579,7 +1579,7 @@ public class KRPC {
                 Encoder.encode(predicate, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Any", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -1598,7 +1598,7 @@ public class KRPC {
                 Encoder.encode(value, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Append", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -1618,7 +1618,7 @@ public class KRPC {
                 Encoder.encode(value, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Assign", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -1636,7 +1636,7 @@ public class KRPC {
                 Encoder.encode(arg, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Average", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -1651,7 +1651,7 @@ public class KRPC {
                 Encoder.encode(statements, krpc.client.Types.createList(krpc.client.Types.createClass("KRPC", "Expression")))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Block", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -1671,7 +1671,7 @@ public class KRPC {
                 Encoder.encode(statements, krpc.client.Types.createList(krpc.client.Types.createClass("KRPC", "Expression")))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_BlockWithVariables", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -1682,7 +1682,7 @@ public class KRPC {
         public static krpc.client.services.KRPC.Expression break_(Connection connection) throws RPCException
         {
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Break");
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -1705,7 +1705,7 @@ public class KRPC {
                 Encoder.encode(valueFunc, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_BuildDictionary", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -1725,7 +1725,7 @@ public class KRPC {
                 Encoder.encode(call, krpc.client.Types.createMessage(krpc.schema.KRPC.Type.TypeCode.PROCEDURE_CALL))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Call", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -1746,7 +1746,7 @@ public class KRPC {
                 Encoder.encode(args, krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createClass("KRPC", "Expression")))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_CallWithArguments", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -1765,7 +1765,7 @@ public class KRPC {
                 Encoder.encode(type, krpc.client.Types.createClass("KRPC", "Type"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Cast", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -1780,7 +1780,7 @@ public class KRPC {
                 Encoder.encode(collection, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Clear", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -1800,7 +1800,7 @@ public class KRPC {
                 Encoder.encode(arg2, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Concat", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -1821,7 +1821,7 @@ public class KRPC {
                 Encoder.encode(ifFalse, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Conditional", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -1838,7 +1838,7 @@ public class KRPC {
                 Encoder.encode(arg1, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_ConditionalAnd", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -1855,7 +1855,7 @@ public class KRPC {
                 Encoder.encode(arg1, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_ConditionalOr", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -1870,7 +1870,7 @@ public class KRPC {
                 Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_ConstantBool", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -1885,7 +1885,7 @@ public class KRPC {
                 Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BYTES))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_ConstantBytes", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -1900,7 +1900,7 @@ public class KRPC {
                 Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.DOUBLE))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_ConstantDouble", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -1919,7 +1919,7 @@ public class KRPC {
                 Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_ConstantEnum", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -1934,7 +1934,7 @@ public class KRPC {
                 Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_ConstantFloat", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -1949,7 +1949,7 @@ public class KRPC {
                 Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_ConstantInt", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -1964,7 +1964,7 @@ public class KRPC {
                 Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT64))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_ConstantLong", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -1981,7 +1981,7 @@ public class KRPC {
                 Encoder.encode(type, krpc.client.Types.createClass("KRPC", "Type"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_ConstantNull", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -1998,7 +1998,7 @@ public class KRPC {
                 Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT64))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_ConstantObject", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2013,7 +2013,7 @@ public class KRPC {
                 Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_ConstantString", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2028,7 +2028,7 @@ public class KRPC {
                 Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_ConstantUInt", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2043,7 +2043,7 @@ public class KRPC {
                 Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT64))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_ConstantULong", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2061,7 +2061,7 @@ public class KRPC {
                 Encoder.encode(value, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Contains", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2079,7 +2079,7 @@ public class KRPC {
                 Encoder.encode(key, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_ContainsKey", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2090,7 +2090,7 @@ public class KRPC {
         public static krpc.client.services.KRPC.Expression continue_(Connection connection) throws RPCException
         {
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Continue");
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2110,7 +2110,7 @@ public class KRPC {
                 Encoder.encode(arg, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_ConvertToString", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2126,7 +2126,7 @@ public class KRPC {
                 Encoder.encode(arg, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Count", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2148,7 +2148,7 @@ public class KRPC {
                 Encoder.encode(values, krpc.client.Types.createList(krpc.client.Types.createClass("KRPC", "Expression")))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_CreateDictionary", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2167,7 +2167,7 @@ public class KRPC {
                 Encoder.encode(valueType, krpc.client.Types.createClass("KRPC", "Type"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_CreateEmptyDictionary", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2183,7 +2183,7 @@ public class KRPC {
                 Encoder.encode(valueType, krpc.client.Types.createClass("KRPC", "Type"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_CreateEmptyList", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2200,7 +2200,7 @@ public class KRPC {
                 Encoder.encode(valueType, krpc.client.Types.createClass("KRPC", "Type"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_CreateEmptySet", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2217,7 +2217,7 @@ public class KRPC {
                 Encoder.encode(values, krpc.client.Types.createList(krpc.client.Types.createClass("KRPC", "Expression")))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_CreateList", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2236,7 +2236,7 @@ public class KRPC {
                 Encoder.encode(values, krpc.client.Types.createSet(krpc.client.Types.createClass("KRPC", "Expression")))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_CreateSet", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2256,7 +2256,7 @@ public class KRPC {
                 Encoder.encode(fieldValues, krpc.client.Types.createList(krpc.client.Types.createClass("KRPC", "Expression")))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_CreateStruct", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2273,7 +2273,7 @@ public class KRPC {
                 Encoder.encode(elements, krpc.client.Types.createList(krpc.client.Types.createClass("KRPC", "Expression")))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_CreateTuple", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2292,7 +2292,7 @@ public class KRPC {
                 Encoder.encode(dictionary, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_DictionaryKeys", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2308,7 +2308,7 @@ public class KRPC {
                 Encoder.encode(dictionary, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_DictionaryValues", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2327,7 +2327,7 @@ public class KRPC {
                 Encoder.encode(arg, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Distinct", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2344,7 +2344,7 @@ public class KRPC {
                 Encoder.encode(arg1, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Divide", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2364,7 +2364,7 @@ public class KRPC {
                 Encoder.encode(index, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_ElementAt", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2384,7 +2384,7 @@ public class KRPC {
                 Encoder.encode(arg1, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Equal", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2405,7 +2405,7 @@ public class KRPC {
                 Encoder.encode(arg2, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Except", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2424,7 +2424,7 @@ public class KRPC {
                 Encoder.encode(arg1, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_ExclusiveOr", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2442,7 +2442,7 @@ public class KRPC {
                 Encoder.encode(arg, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_First", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2465,7 +2465,7 @@ public class KRPC {
                 Encoder.encode(body, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_ForEach", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2487,7 +2487,7 @@ public class KRPC {
                 Encoder.encode(index, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Get", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2506,7 +2506,7 @@ public class KRPC {
                 Encoder.encode(name, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_GetField", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2523,7 +2523,7 @@ public class KRPC {
                 Encoder.encode(arg1, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_GreaterThan", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2540,7 +2540,7 @@ public class KRPC {
                 Encoder.encode(arg1, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_GreaterThanOrEqual", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2558,7 +2558,7 @@ public class KRPC {
                 Encoder.encode(key, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_GroupBy", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2577,7 +2577,7 @@ public class KRPC {
                 Encoder.encode(body, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_IfThen", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2598,7 +2598,7 @@ public class KRPC {
                 Encoder.encode(elseBody, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_IfThenElse", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2618,7 +2618,7 @@ public class KRPC {
                 Encoder.encode(arg2, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Intersect", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2636,7 +2636,7 @@ public class KRPC {
                 Encoder.encode(args, krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createClass("KRPC", "Expression")))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Invoke", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2651,7 +2651,7 @@ public class KRPC {
                 Encoder.encode(value, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_IsNull", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2673,7 +2673,7 @@ public class KRPC {
                 Encoder.encode(body, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Lambda", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2691,7 +2691,7 @@ public class KRPC {
                 Encoder.encode(arg, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Last", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2711,7 +2711,7 @@ public class KRPC {
                 Encoder.encode(arg1, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_LeftShift", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2728,7 +2728,7 @@ public class KRPC {
                 Encoder.encode(arg1, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_LessThan", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2745,7 +2745,7 @@ public class KRPC {
                 Encoder.encode(arg1, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_LessThanOrEqual", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2763,7 +2763,7 @@ public class KRPC {
                 Encoder.encode(arg, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Max", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2783,7 +2783,7 @@ public class KRPC {
                 Encoder.encode(key, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_MaxBy", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2801,7 +2801,7 @@ public class KRPC {
                 Encoder.encode(arg, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Min", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2821,7 +2821,7 @@ public class KRPC {
                 Encoder.encode(key, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_MinBy", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2839,7 +2839,7 @@ public class KRPC {
                 Encoder.encode(arg1, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Modulo", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2856,7 +2856,7 @@ public class KRPC {
                 Encoder.encode(arg1, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Multiply", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2871,7 +2871,7 @@ public class KRPC {
                 Encoder.encode(arg, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Negate", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2888,7 +2888,7 @@ public class KRPC {
                 Encoder.encode(arg, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Not", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2908,7 +2908,7 @@ public class KRPC {
                 Encoder.encode(arg1, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_NotEqual", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2927,7 +2927,7 @@ public class KRPC {
                 Encoder.encode(arg1, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Or", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2947,7 +2947,7 @@ public class KRPC {
                 Encoder.encode(key, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_OrderBy", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2968,7 +2968,7 @@ public class KRPC {
                 Encoder.encode(type, krpc.client.Types.createClass("KRPC", "Type"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Parameter", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -2986,7 +2986,7 @@ public class KRPC {
                 Encoder.encode(arg1, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Power", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -3007,7 +3007,7 @@ public class KRPC {
                 Encoder.encode(value, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Remove", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -3026,7 +3026,7 @@ public class KRPC {
                 Encoder.encode(index, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_RemoveAt", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -3037,7 +3037,7 @@ public class KRPC {
         public static krpc.client.services.KRPC.Expression returnNothing(Connection connection) throws RPCException
         {
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_ReturnNothing");
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -3052,7 +3052,7 @@ public class KRPC {
                 Encoder.encode(value, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Return", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -3070,7 +3070,7 @@ public class KRPC {
                 Encoder.encode(arg, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Reverse", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -3090,7 +3090,7 @@ public class KRPC {
                 Encoder.encode(arg1, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_RightShift", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -3110,7 +3110,7 @@ public class KRPC {
                 Encoder.encode(func, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Select", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -3132,7 +3132,7 @@ public class KRPC {
                 Encoder.encode(func, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_SelectMany", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -3154,7 +3154,7 @@ public class KRPC {
                 Encoder.encode(value, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Set", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -3174,7 +3174,7 @@ public class KRPC {
                 Encoder.encode(count, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Skip", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -3196,7 +3196,7 @@ public class KRPC {
                 Encoder.encode(initialValue, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_StateVariable", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -3214,7 +3214,7 @@ public class KRPC {
                 Encoder.encode(args, krpc.client.Types.createList(krpc.client.Types.createClass("KRPC", "Expression")))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_StringConcat", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -3232,7 +3232,7 @@ public class KRPC {
                 Encoder.encode(value, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_StringContains", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -3250,7 +3250,7 @@ public class KRPC {
                 Encoder.encode(value, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_StringEndsWith", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -3270,7 +3270,7 @@ public class KRPC {
                 Encoder.encode(index, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_StringGet", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -3288,7 +3288,7 @@ public class KRPC {
                 Encoder.encode(value, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_StringIndexOf", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -3306,7 +3306,7 @@ public class KRPC {
                 Encoder.encode(values, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_StringJoin", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -3322,7 +3322,7 @@ public class KRPC {
                 Encoder.encode(arg, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_StringLength", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -3344,7 +3344,7 @@ public class KRPC {
                 Encoder.encode(newValue, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_StringReplace", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -3362,7 +3362,7 @@ public class KRPC {
                 Encoder.encode(separator, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_StringSplit", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -3380,7 +3380,7 @@ public class KRPC {
                 Encoder.encode(value, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_StringStartsWith", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -3402,7 +3402,7 @@ public class KRPC {
                 Encoder.encode(length, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_StringSubstring", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -3418,7 +3418,7 @@ public class KRPC {
                 Encoder.encode(arg, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_StringToLower", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -3434,7 +3434,7 @@ public class KRPC {
                 Encoder.encode(arg, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_StringToUpper", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -3450,7 +3450,7 @@ public class KRPC {
                 Encoder.encode(arg, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_StringTrim", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -3466,7 +3466,7 @@ public class KRPC {
                 Encoder.encode(arg, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_StringTrimEnd", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -3482,7 +3482,7 @@ public class KRPC {
                 Encoder.encode(arg, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_StringTrimStart", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -3499,7 +3499,7 @@ public class KRPC {
                 Encoder.encode(arg1, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Subtract", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -3515,7 +3515,7 @@ public class KRPC {
                 Encoder.encode(arg, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Sum", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -3535,7 +3535,7 @@ public class KRPC {
                 Encoder.encode(count, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Take", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -3559,7 +3559,7 @@ public class KRPC {
                 Encoder.encode(message, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Throw", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -3575,7 +3575,7 @@ public class KRPC {
                 Encoder.encode(arg, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_ToList", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -3593,7 +3593,7 @@ public class KRPC {
                 Encoder.encode(arg, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_ToSet", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -3619,7 +3619,7 @@ public class KRPC {
                 Encoder.encode(handler, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_TryCatch", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -3638,7 +3638,7 @@ public class KRPC {
                 Encoder.encode(handler, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_TryCatchAll", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -3658,7 +3658,7 @@ public class KRPC {
                 Encoder.encode(finalizer, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_TryFinally", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -3678,7 +3678,7 @@ public class KRPC {
                 Encoder.encode(arg2, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Union", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -3696,7 +3696,7 @@ public class KRPC {
                 Encoder.encode(type, krpc.client.Types.createClass("KRPC", "Type"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Variable", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -3716,7 +3716,7 @@ public class KRPC {
                 Encoder.encode(func, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Where", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -3735,7 +3735,7 @@ public class KRPC {
                 Encoder.encode(body, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_While", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -3758,7 +3758,7 @@ public class KRPC {
                 Encoder.encode(func, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_Zip", _args);
-            return (krpc.client.services.KRPC.Expression) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
         /**
@@ -5391,7 +5391,7 @@ public class KRPC {
                 Encoder.encode(this, krpc.client.Types.createClass("KRPC", "Type"))
             };
             krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("KRPC", "Type_get_Code", _args);
-            return (krpc.client.services.KRPC.TypeCode) Encoder.decode(_data.getValue(), krpc.client.Types.createEnumeration("KRPC", "TypeCode"), this.connection);
+            return (krpc.client.services.KRPC.TypeCode) Decoder.decode(_data.getValue(), krpc.client.Types.createEnumeration("KRPC", "TypeCode"), this.connection);
         }
 
         /**
@@ -5405,7 +5405,7 @@ public class KRPC {
                 Encoder.encode(this, krpc.client.Types.createClass("KRPC", "Type"))
             };
             krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("KRPC", "Type_get_Name", _args);
-            return (String) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
+            return (String) Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
         }
 
         /**
@@ -5422,7 +5422,7 @@ public class KRPC {
                 Encoder.encode(this, krpc.client.Types.createClass("KRPC", "Type"))
             };
             krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("KRPC", "Type_get_Nullable", _args);
-            return (boolean) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL), this.connection);
+            return (boolean) Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL), this.connection);
         }
 
         /**
@@ -5436,7 +5436,7 @@ public class KRPC {
                 Encoder.encode(this, krpc.client.Types.createClass("KRPC", "Type"))
             };
             krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("KRPC", "Type_get_Service", _args);
-            return (String) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
+            return (String) Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
         }
 
         /**
@@ -5453,7 +5453,7 @@ public class KRPC {
                 Encoder.encode(this, krpc.client.Types.createClass("KRPC", "Type"))
             };
             krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("KRPC", "Type_get_Types", _args);
-            return (java.util.List<krpc.client.services.KRPC.Type>) Encoder.decode(_data.getValue(), krpc.client.Types.createList(krpc.client.Types.createClass("KRPC", "Type")), this.connection);
+            return (java.util.List<krpc.client.services.KRPC.Type>) Decoder.decode(_data.getValue(), krpc.client.Types.createList(krpc.client.Types.createClass("KRPC", "Type")), this.connection);
         }
 
         /**
@@ -5464,7 +5464,7 @@ public class KRPC {
         public static krpc.client.services.KRPC.Type bool(Connection connection) throws RPCException
         {
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Type_static_Bool");
-            return (krpc.client.services.KRPC.Type) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Type"), connection);
+            return (krpc.client.services.KRPC.Type) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Type"), connection);
         }
 
         /**
@@ -5475,7 +5475,7 @@ public class KRPC {
         public static krpc.client.services.KRPC.Type bytes(Connection connection) throws RPCException
         {
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Type_static_Bytes");
-            return (krpc.client.services.KRPC.Type) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Type"), connection);
+            return (krpc.client.services.KRPC.Type) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Type"), connection);
         }
 
         /**
@@ -5492,7 +5492,7 @@ public class KRPC {
                 Encoder.encode(name, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Type_static_ClassType", _args);
-            return (krpc.client.services.KRPC.Type) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Type"), connection);
+            return (krpc.client.services.KRPC.Type) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Type"), connection);
         }
 
         /**
@@ -5510,7 +5510,7 @@ public class KRPC {
                 Encoder.encode(valueType, krpc.client.Types.createClass("KRPC", "Type"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Type_static_DictionaryType", _args);
-            return (krpc.client.services.KRPC.Type) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Type"), connection);
+            return (krpc.client.services.KRPC.Type) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Type"), connection);
         }
 
         /**
@@ -5521,7 +5521,7 @@ public class KRPC {
         public static krpc.client.services.KRPC.Type double_(Connection connection) throws RPCException
         {
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Type_static_Double");
-            return (krpc.client.services.KRPC.Type) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Type"), connection);
+            return (krpc.client.services.KRPC.Type) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Type"), connection);
         }
 
         /**
@@ -5538,7 +5538,7 @@ public class KRPC {
                 Encoder.encode(name, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Type_static_EnumerationType", _args);
-            return (krpc.client.services.KRPC.Type) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Type"), connection);
+            return (krpc.client.services.KRPC.Type) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Type"), connection);
         }
 
         /**
@@ -5549,7 +5549,7 @@ public class KRPC {
         public static krpc.client.services.KRPC.Type float_(Connection connection) throws RPCException
         {
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Type_static_Float");
-            return (krpc.client.services.KRPC.Type) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Type"), connection);
+            return (krpc.client.services.KRPC.Type) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Type"), connection);
         }
 
         /**
@@ -5560,7 +5560,7 @@ public class KRPC {
         public static krpc.client.services.KRPC.Type int_(Connection connection) throws RPCException
         {
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Type_static_Int");
-            return (krpc.client.services.KRPC.Type) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Type"), connection);
+            return (krpc.client.services.KRPC.Type) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Type"), connection);
         }
 
         /**
@@ -5575,7 +5575,7 @@ public class KRPC {
                 Encoder.encode(valueType, krpc.client.Types.createClass("KRPC", "Type"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Type_static_ListType", _args);
-            return (krpc.client.services.KRPC.Type) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Type"), connection);
+            return (krpc.client.services.KRPC.Type) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Type"), connection);
         }
 
         /**
@@ -5586,7 +5586,7 @@ public class KRPC {
         public static krpc.client.services.KRPC.Type long_(Connection connection) throws RPCException
         {
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Type_static_Long");
-            return (krpc.client.services.KRPC.Type) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Type"), connection);
+            return (krpc.client.services.KRPC.Type) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Type"), connection);
         }
 
         /**
@@ -5601,7 +5601,7 @@ public class KRPC {
                 Encoder.encode(valueType, krpc.client.Types.createClass("KRPC", "Type"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Type_static_NullableType", _args);
-            return (krpc.client.services.KRPC.Type) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Type"), connection);
+            return (krpc.client.services.KRPC.Type) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Type"), connection);
         }
 
         /**
@@ -5616,7 +5616,7 @@ public class KRPC {
                 Encoder.encode(valueType, krpc.client.Types.createClass("KRPC", "Type"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Type_static_SetType", _args);
-            return (krpc.client.services.KRPC.Type) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Type"), connection);
+            return (krpc.client.services.KRPC.Type) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Type"), connection);
         }
 
         /**
@@ -5627,7 +5627,7 @@ public class KRPC {
         public static krpc.client.services.KRPC.Type string(Connection connection) throws RPCException
         {
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Type_static_String");
-            return (krpc.client.services.KRPC.Type) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Type"), connection);
+            return (krpc.client.services.KRPC.Type) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Type"), connection);
         }
 
         /**
@@ -5644,7 +5644,7 @@ public class KRPC {
                 Encoder.encode(name, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Type_static_StructType", _args);
-            return (krpc.client.services.KRPC.Type) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Type"), connection);
+            return (krpc.client.services.KRPC.Type) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Type"), connection);
         }
 
         /**
@@ -5659,7 +5659,7 @@ public class KRPC {
                 Encoder.encode(valueTypes, krpc.client.Types.createList(krpc.client.Types.createClass("KRPC", "Type")))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Type_static_TupleType", _args);
-            return (krpc.client.services.KRPC.Type) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Type"), connection);
+            return (krpc.client.services.KRPC.Type) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Type"), connection);
         }
 
         /**
@@ -5670,7 +5670,7 @@ public class KRPC {
         public static krpc.client.services.KRPC.Type uInt(Connection connection) throws RPCException
         {
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Type_static_UInt");
-            return (krpc.client.services.KRPC.Type) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Type"), connection);
+            return (krpc.client.services.KRPC.Type) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Type"), connection);
         }
 
         /**
@@ -5681,7 +5681,7 @@ public class KRPC {
         public static krpc.client.services.KRPC.Type uLong(Connection connection) throws RPCException
         {
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Type_static_ULong");
-            return (krpc.client.services.KRPC.Type) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Type"), connection);
+            return (krpc.client.services.KRPC.Type) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Type"), connection);
         }
 
         /**

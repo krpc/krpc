@@ -26,13 +26,13 @@ from google.protobuf.message import Message
 import krpc
 import krpc.error
 from krpc.attributes import Attributes
-from krpc.client import Client
 from krpc.connection import Connection
 from krpc.decoder import Decoder
 from krpc.encoder import Encoder
 from krpc.event import Event
-from krpc.service import ServiceBase
-from krpc.types import ClassBase, TypeBase
+from krpc.service import RemoteService
+from krpc.transport import Transport
+from krpc.types import RemoteObject, TypeBase
 from krpc.utils import snake_case
 
 PROFILES = [
@@ -136,11 +136,11 @@ class Testee:
         self._output = output
         self._lock = threading.Lock()
         # The connections, by the driver's name for each
-        self._conns: dict[str, Client] = {}
+        self._conns: dict[str, Connection] = {}
         # The name of the connection the command a thread is running is for
         self._local = threading.local()
         self._next_handle = 1
-        self._objects: dict[int, ClassBase] = {}
+        self._objects: dict[int, RemoteObject] = {}
         self._streams: dict[int, Any] = {}
         # The function streams of a type named without "nullable"
         self._not_nullable: set[int] = set()
@@ -443,7 +443,7 @@ class Testee:
         with self._lock:
             self._conns[name] = conn
 
-    def _connection(self) -> Client:
+    def _connection(self) -> Connection:
         name = getattr(self._local, "connection", "")
         with self._lock:
             if name not in self._conns:
@@ -458,14 +458,14 @@ class Testee:
         if case != "fail_write":
             raise RuntimeError("The client has no race points")
         message = command.fail_write.message
-        writes = (Connection.send_request, Connection.send_message)
+        writes = (Transport.send_request, Transport.send_message)
 
         def fail(*_: object) -> None:
-            Connection.send_request, Connection.send_message = writes
+            Transport.send_request, Transport.send_message = writes
             raise OSError(message)
 
-        Connection.send_request = fail  # pyright: ignore[reportAttributeAccessIssue]
-        Connection.send_message = fail  # pyright: ignore[reportAttributeAccessIssue]
+        Transport.send_request = fail  # pyright: ignore[reportAttributeAccessIssue]
+        Transport.send_message = fail  # pyright: ignore[reportAttributeAccessIssue]
 
     def _resolve(self, command: pb.Invoke) -> tuple[Callable[..., Any], list[Any]]:
         """The callable for a procedure, and the arguments to call it with. Getters and
@@ -778,7 +778,7 @@ class Testee:
         elif isinstance(value, Event):
             # Events share the table of streams, as both end and are removed alike
             result.event = self._add_handle(self._streams, value)
-        elif isinstance(value, ClassBase):
+        elif isinstance(value, RemoteObject):
             result.object.handle = self._add_handle(self._objects, value)
             result.object.id = krpc.get_object_id(value)
         elif isinstance(value, enum.Enum):
@@ -835,7 +835,7 @@ def declared_type(service: str, name: str) -> Any:
 
 def is_service(value: object) -> bool:
     """Whether a value is a service, which the client builds from the server's definitions."""
-    return isinstance(value, ServiceBase)
+    return isinstance(value, RemoteService)
 
 
 class Unsupported(Exception):

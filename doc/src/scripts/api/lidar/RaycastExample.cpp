@@ -7,7 +7,7 @@
 static const double pi = 3.1415926535897;
 
 int main() {
-  krpc::Client conn = krpc::connect("Raycast Example");
+  krpc::Connection conn = krpc::connect("Raycast Example");
   krpc::services::SpaceCenter sc(conn);
   auto part = sc.active_vessel().value().parts().root();
   auto frame = part.reference_frame();

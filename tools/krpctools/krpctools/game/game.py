@@ -205,10 +205,10 @@ class Game:
         """Whether the running game has the mod loaded. The default for Mod.present."""
         return None
 
-    def client_type(self):
-        """The client type the tests connect with, which names the modules of the game's
+    def connection_type(self):
+        """The connection type the tests connect with, which names the modules of the game's
         services."""
-        return krpc.Client
+        return krpc.Connection
 
     def connect(self, use_cached=True):
         """A connection to the running game's server."""

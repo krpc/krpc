@@ -1,11 +1,11 @@
 from __future__ import annotations
 from typing import Tuple, Set, Dict, List, NamedTuple, Optional, TYPE_CHECKING
-import krpc.client
+import krpc.connection
 import krpc.limits
 from krpc.declarations import DeclaredClass, DeclaredObject, declaration_error as _declaration, register as _register
 from krpc.event import Event
 from krpc.schema import KRPC_pb2
-from krpc.types import DocEnum, DocFlag, deprecate_attribute, deprecated
+from krpc.types import RemoteEnum, RemoteFlags, deprecate_attribute, deprecated
 {% for dependency in dependencies %}
 import {{ dependency.module }} as {{ dependency.alias }}
 {% endfor %}
@@ -60,7 +60,7 @@ self{% for x in parameters %}, {{x.name}}: {{ x.type.spec }}{%if 'default_value'
 "{{ name }} is deprecated{% if member.deprecated_reason %}: {{ member.deprecated_reason | string_literal }}{% endif %}"{% endmacro %}
 
 {% for enum_name, enumeration in enumerations.items() %}
-{{ deprecated_decorator(enumeration) }}class {{enum_name}}({% if enumeration.flags %}DocFlag{% else %}DocEnum{% endif %}):
+{{ deprecated_decorator(enumeration) }}class {{enum_name}}({% if enumeration.flags %}RemoteFlags{% else %}RemoteEnum{% endif %}):
 {% if enumeration.documentation %}{{ enumeration.documentation | indent(width=4) }}
 {% endif %}
     {% for enum_value in enumeration['values'] %}
@@ -153,10 +153,10 @@ class {{ service_name }}(metaclass=DeclaredClass):
 
 {{ properties_of(properties, '"' + service_name + '", None') -}}
 {{ methods_of(procedures, '"' + service_name + '", None') -}}
-{{ "\n" }}class {{ service_name }}Client(krpc.client.Client):
+{{ "\n" }}class {{ service_name }}Connection(krpc.connection.Connection):
     """
-    A client with the {{ service_name }} service, as ``krpc.connect[{{ service_name }}Client]()``
-    connects. Combine it with the client types of other services in a subclass of them all.
+    A connection with the {{ service_name }} service, as ``krpc.connect[{{ service_name }}Connection]()``
+    connects. Combine it with the connection types of other services in a subclass of them all.
     """
 
     _declares_service = "{{ service_name }}"

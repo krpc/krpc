@@ -12,7 +12,6 @@
 #include <utility>
 #include <vector>
 
-#include "krpc/client.hpp"
 #include "krpc/connection.hpp"
 #include "krpc/encoder.hpp"
 #include "krpc/error.hpp"
@@ -21,6 +20,7 @@
 #include "krpc/race_point.hpp"
 #include "krpc/session.hpp"
 #include "krpc/stream_impl.hpp"
+#include "krpc/transport.hpp"
 
 namespace krpc {
 
@@ -51,7 +51,7 @@ std::exception_ptr closed_error(const std::exception_ptr& cause) {
 }  // namespace
 
 StreamManager::StreamManager(std::shared_ptr<detail::ExceptionThrowers> throwers,
-                             const std::shared_ptr<Connection>& connection,
+                             const std::shared_ptr<Transport>& transport,
                              std::chrono::milliseconds stall_timeout)
     : throwers(std::move(throwers)),
       update_lock(new std::recursive_mutex),
@@ -61,21 +61,21 @@ StreamManager::StreamManager(std::shared_ptr<detail::ExceptionThrowers> throwers
       closed(false),
       close_requested(false) {
   session = std::make_unique<Session>(
-      connection,
+      transport,
       [](uint64_t id) {
-        return Client::build_request("KRPC", "RemoveStream", {encoder::encode(id)});
+        return Connection::build_request("KRPC", "RemoveStream", {encoder::encode(id)});
       },
       stall_timeout);
 }
 
 std::shared_ptr<StreamManager> StreamManager::create(
     std::shared_ptr<detail::ExceptionThrowers> throwers,
-    const std::shared_ptr<Connection>& connection, std::chrono::milliseconds stall_timeout) {
+    const std::shared_ptr<Transport>& transport, std::chrono::milliseconds stall_timeout) {
   std::shared_ptr<StreamManager> manager(
-      new StreamManager(std::move(throwers), connection, stall_timeout));
+      new StreamManager(std::move(throwers), transport, stall_timeout));
   manager->self = manager;
   manager->session->start(manager.get(), manager);
-  // The client state's pointer, whose release closes the manager
+  // The connection state's pointer, whose release closes the manager
   return std::shared_ptr<StreamManager>(manager.get(), [manager](StreamManager*) mutable {
     manager->close();
     manager.reset();
@@ -94,7 +94,7 @@ void StreamManager::close() {
   } catch (const std::exception& exn) {
     std::cerr << "kRPC: failed to end the streams: " << exn.what() << "\n";
   }
-  // Callbacks run on the dispatcher thread, so a client closed from one does not join it. A
+  // Callbacks run on the dispatcher thread, so a connection closed from one does not join it. A
   // callback can also wait for a condition the caller holds, so the dispatcher thread then ends
   // once the caller releases it.
   session->join(!holds_a_condition());
@@ -105,8 +105,8 @@ void StreamManager::register_stream(uint64_t id) {
   if (closed) return;
   auto it = streams.find(id);
   if (it != streams.end() && !it->second.expired()) return;
-  // Holds no client until a handle claims it, as the manager keeps it alive until then
-  auto stream = std::make_shared<StreamImpl>(Client(), id, update_lock, self);
+  // Holds no connection until a handle claims it, as the manager keeps it alive until then
+  auto stream = std::make_shared<StreamImpl>(Connection(), id, update_lock, self);
   streams[id] = stream;
   unclaimed[id] = stream;
   open_streams = true;
@@ -122,7 +122,7 @@ bool StreamManager::is_registered(uint64_t id) {
   return it != streams.end() && !it->second.expired();
 }
 
-std::shared_ptr<StreamImpl> StreamManager::get_stream(const Client& client, uint64_t id) {
+std::shared_ptr<StreamImpl> StreamManager::get_stream(const Connection& connection, uint64_t id) {
   std::lock_guard<std::recursive_mutex> guard(*update_lock);
   auto it = streams.find(id);
   if (it != streams.end()) {
@@ -131,14 +131,14 @@ std::shared_ptr<StreamImpl> StreamManager::get_stream(const Client& client, uint
       // The first handle claims a stream the reader registered. One the server has already
       // ended leaves the registry with it.
       if (unclaimed.erase(id) > 0) {
-        existing->claim(client);
+        existing->claim(connection);
         if (existing->has_ended()) streams.erase(it);
       }
       open_streams = !streams.empty();
       return StreamImpl::handle(existing);
     }
   }
-  auto stream = std::make_shared<StreamImpl>(client, id, update_lock, self);
+  auto stream = std::make_shared<StreamImpl>(connection, id, update_lock, self);
   if (closed) {
     stream->set_ending(closed_error(nullptr));
     return StreamImpl::handle(stream);
@@ -196,7 +196,7 @@ void StreamManager::remove_stream(StreamImpl* stream) {
   auto ending = std::make_exception_ptr(StreamError("Stream does not exist"));
   call_end_callbacks(stream->end(ending), ending);
   stream->drop_callbacks();
-  internal_procedures::remove_stream(stream->get_client(), id);
+  internal_procedures::remove_stream(stream->get_connection(), id);
 }
 
 Condition& StreamManager::get_update_condition() { return condition; }
@@ -249,8 +249,8 @@ bool StreamManager::holds_a_condition() {
 void StreamManager::notify_closed(const std::exception_ptr& cause) {
   std::vector<std::pair<StreamImpl::EndCallbacks, std::exception_ptr>> endings;
   std::vector<std::shared_ptr<StreamImpl>> to_wake;
-  // A callback can hold an object, and so the client's state, which holds this manager. Dropped
-  // with no lock held, as a callback can hold the last copy of the client.
+  // A callback can hold an object, and so the connection's state, which holds this manager.
+  // Dropped with no lock held, as a callback can hold the last copy of the connection.
   Callbacks dropped;
   {
     std::lock_guard<std::recursive_mutex> guard(*update_lock);
@@ -323,7 +323,7 @@ void StreamManager::apply(const std::vector<Change>& changes, const Callbacks& u
   notify_update(true);
   detail::reach_race_point(RacePoint::update_callbacks, -1);
   for (const auto& callback : update_callbacks) {
-    // Update callbacks have no stream ending to stop them once the client closes
+    // Update callbacks have no stream ending to stop them once the connection closes
     if (closed) break;
     try {
       callback.second();
@@ -373,7 +373,7 @@ void StreamManager::update(const schema::StreamUpdate& message) {
     update_callbacks = callbacks;
   }
   // Moved, so the reader thread keeps no copy of a callback, which can hold the last copy of the
-  // client
+  // connection
   session->dispatch(
       [this, changes = std::move(changes), update_callbacks = std::move(update_callbacks)]() {
         apply(changes, update_callbacks);

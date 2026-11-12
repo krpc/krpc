@@ -1,127 +1,157 @@
 #pragma once
 
 #include <chrono>
-#include <cstddef>
-#include <stdexcept>
+#include <cstdint>
+#include <functional>
+#include <map>
+#include <memory>
+#include <mutex>
 #include <string>
+#include <string_view>
 #include <utility>
 #include <vector>
 
-#ifndef ASIO_STANDALONE
-#define ASIO_STANDALONE
-#endif
-#include <asio/generic/stream_protocol.hpp>
-#include <asio/io_context.hpp>
-#include <asio/ip/tcp.hpp>
-
-namespace google {
-namespace protobuf {
-class MessageLite;
-}
-}  // namespace google
+#include "krpc/condition.hpp"
+#include "krpc/encoder.hpp"
+#include "krpc/krpc.pb.hpp"
 
 namespace krpc {
 
+class Transport;
+class StreamManager;
+class StreamImpl;
+namespace function_stream_detail {
+struct function_type_cache;
+}  // namespace function_stream_detail
+
+namespace detail {
+
+/** The exception types services register, keyed by service and name. Shared by a connection's
+    state and its stream manager. Services register their throwers as they are constructed, on
+    any thread, while errors are thrown on the calling threads and the reader. */
+class ExceptionThrowers {
+ public:
+  void add(const std::string& service, const std::string& name,
+           const std::function<void(std::string)>& thrower);
+  /** Throw an error as the exception type registered for it, or as an RPCError. */
+  void throw_exception(const schema::Error& error) const;
+
+ private:
+  mutable std::mutex lock;
+  std::map<std::pair<std::string, std::string>, std::function<void(std::string)>> throwers;
+};
+
+}  // namespace detail
+
+/** A connection to the server. Every copy shares the connection, as does every service, object,
+    stream and event made from one. The connection closes on close(), or when the last of them is
+    destroyed. A default-constructed connection is not connected. */
 class Connection {
  public:
-  Connection(const std::string& address, unsigned int port,
-             std::chrono::milliseconds timeout = std::chrono::milliseconds::zero());
-  virtual ~Connection() = default;
-  /** Open the connection to the server. */
-  virtual void connect();
-  /** Close the connection. Sending or receiving on it afterwards reports the failure. */
+  Connection() = default;
+  Connection(const std::string& name, const std::string& address, unsigned int port = 50000,
+             std::chrono::milliseconds timeout = std::chrono::milliseconds::zero(),
+             std::chrono::milliseconds handshake_timeout = std::chrono::seconds(5),
+             std::chrono::milliseconds stall_timeout = std::chrono::seconds(30));
+  /** Perform the connection handshake over the given transport, which has been built but not
+      yet opened. The handshake is the same whatever carries it. Gives up after
+      handshake_timeout of waiting for the server to accept the connection, or waits
+      indefinitely if it is zero. Fails the connection when a message from the server receives
+      no new byte for stall_timeout once it has started to arrive, or never if it is zero. */
+  Connection(const std::string& name, const std::shared_ptr<Transport>& transport,
+             std::chrono::milliseconds handshake_timeout = std::chrono::seconds(5),
+             std::chrono::milliseconds stall_timeout = std::chrono::seconds(30));
+
+  /** Invoke the calls of a request, and return the result of the first. The first call fetches
+      the server's list of services, to find the procedures that return a new stream or event.
+      A failed fetch is not retried. */
+  schema::ProcedureResult invoke(const schema::Request& request);
+  /** Invoke a call, as invoke(const schema::Request&) does. */
+  schema::ProcedureResult invoke(const schema::ProcedureCall& call);
+  /** Invoke a procedure, as invoke(const schema::Request&) does. */
+  schema::ProcedureResult invoke(
+      std::string_view service, std::string_view procedure,
+      const std::vector<encoder::Value>& args = std::vector<encoder::Value>());
+
+  /** The kind of value a procedure returns: the id of a new stream, which for an event is the id
+      of its stream, or any other value. */
+  enum class Returns : uint8_t { value, stream };
+  /** Invoke a procedure that returns what returns says, as generated stubs do. A new stream or
+      event is registered with the stream manager. */
+  schema::ProcedureResult invoke(std::string_view service, std::string_view procedure,
+                                 const std::vector<encoder::Value>& args, Returns returns);
+
+  /** Close the connection. Calls in progress and later calls through any copy, service or object
+      throw ConnectionError, and streams and events end. Does nothing if already closed or not
+      connected. */
   void close();
-  /** Close the write side of the connection, leaving the read side open. */
-  void shutdown_send();
-  /** Close both sides of the connection, which wakes a thread blocked reading it. */
-  void shutdown_both();
-  /** Send data to the connection. Blocks until all data has been sent. */
-  void send(const char* data, size_t length);
-  void send(const std::string& data);
-  /** Receive data from the connection for a message. Blocks until a message has been received. */
-  std::string receive_message();
-  /** Receive a message from the connection and parse it. Blocks until a message has been
-      received. Parses it out of the read buffer, so nothing is copied on the way. */
-  void receive_message(google::protobuf::MessageLite& message);
-  /** Receive a message from the connection and parse it. Throws a TimeoutError if no whole
-      message arrives within the timeout, or if a message that has started to arrive receives
-      no new byte within the stall timeout. A zero timeout waits indefinitely. */
-  void receive_message(google::protobuf::MessageLite& message, std::chrono::milliseconds timeout,
-                       std::chrono::milliseconds stall_timeout);
-  /** Receive the bytes of a message, which stay valid until the next read. Throws a TimeoutError
-      as receive_message does. */
-  std::pair<const char*, size_t> receive_message_data(std::chrono::milliseconds timeout,
-                                                      std::chrono::milliseconds stall_timeout) {
-    return buffered_message(timeout, stall_timeout);
-  }
-  /** Read and discard what arrives within the timeout. Returns false once the server has
-      closed the connection, or if nothing arrives. */
-  bool discard(std::chrono::milliseconds timeout);
-  /** Whether bytes have been read that are not consumed yet. */
-  bool buffered() const { return available() > 0; }
-  /** Whether a whole message has been read and not consumed yet. */
-  bool message_buffered() const;
-  /** Wait until data has arrived, or the connection has closed. Returns false if neither happens
-      within the timeout. A zero timeout waits indefinitely. */
-  bool wait_readable(std::chrono::milliseconds timeout);
-  /** Whether data has arrived, or the connection has closed, without waiting. */
-  bool readable() { return poll(0); }
 
- protected:
-  asio::io_context io_context;
-  // A protocol agnostic socket, so that the same connection can carry either a TCP
-  // or a unix domain socket and everything above it is unchanged
-  asio::generic::stream_protocol::socket socket;
+  static schema::Request build_request(
+      std::string_view service, std::string_view procedure,
+      const std::vector<encoder::Value>& args = std::vector<encoder::Value>());
+  static schema::ProcedureCall build_call(
+      std::string_view service, std::string_view procedure,
+      const std::vector<encoder::Value>& args = std::vector<encoder::Value>());
+  void add_exception_thrower(const std::string& service, const std::string& name,
+                             const std::function<void(std::string)>& thrower);
 
  private:
-  /** How much is read from the socket at a time. */
-  static const size_t READ_SIZE = 8192;
+  friend class StreamManager;
+  friend class StreamImpl;
+  friend struct function_stream_detail::function_type_cache;
+  struct State;
+  /** Send a request, whose first call returns what returns says, or whose calls are looked up
+      in the server's list of services if returns is null. */
+  schema::ProcedureResult send_request(schema::Request request, const Returns* returns = nullptr);
+  using ReturnsByProcedure = std::map<std::pair<std::string, std::string>, Returns>;
+  Returns lookup_returns(const std::string& service, const std::string& procedure);
+  ReturnsByProcedure list_returns();
+  static void add_arguments(schema::ProcedureCall* call, const std::vector<encoder::Value>& args);
+  StreamManager& streams() const;
 
-  /** Wait for the buffer to hold a whole message, consume it, and return where it starts and
-      how long it is. Valid until the next read. */
-  std::pair<const char*, size_t> buffered_message(
-      std::chrono::milliseconds timeout = std::chrono::milliseconds::zero(),
-      std::chrono::milliseconds stall_timeout = std::chrono::milliseconds::zero());
-  /** Read a block from the socket into the buffer. Blocks until at least one byte arrives. */
-  void fill();
-  /** Read a block from the socket into the buffer, waiting no longer than the timeout.
-      Returns false if nothing arrived in time. */
-  bool fill(std::chrono::milliseconds timeout);
-  /** How much has been read but not consumed yet. */
-  size_t available() const { return filled - consumed; }
-  /** Poll the socket for data, for up to the given milliseconds, or indefinitely if -1. */
-  bool poll(int milliseconds);
+  /** The return type of a server side function, if stored. A code of NONE is no value. */
+  bool get_function_return_type(uint64_t id, schema::Type* type) const;
+  /** Store the return type of a server side function. */
+  void set_function_return_type(uint64_t id, const schema::Type& type) const;
+  /** The parameter types of a server side function, if stored. */
+  bool get_function_parameter_types(uint64_t id, std::vector<schema::Type>* types) const;
+  /** Store the parameter types of a server side function. */
+  void set_function_parameter_types(uint64_t id, const std::vector<schema::Type>& types) const;
 
-  const std::string address;
-  const unsigned int port;
-  // The time to wait for the connection to be made. Zero waits indefinitely.
-  const std::chrono::milliseconds timeout;
-  asio::ip::tcp::resolver resolver;
-  // Data read from the socket, how much of it there is and how much has been consumed. Reads
-  // are made a block at a time, so that a message costs one read and not one per byte of its
-  // size prefix plus one for its body.
-  std::vector<char> buffer;
-  size_t filled = 0;
-  size_t consumed = 0;
-  // When a read last received a byte
-  std::chrono::steady_clock::time_point progress = std::chrono::steady_clock::now();
-};
-
-/** Thrown when a read from the server times out. */
-class TimeoutError : public std::runtime_error {
  public:
-  inline explicit TimeoutError(const std::string& msg) : std::runtime_error(msg) {}
-};
+  /** Throw a ConnectionError if the client is not connected to a server. */
+  void check_connected() const;
+  std::shared_ptr<StreamImpl> add_stream(const schema::ProcedureCall& call);
+  std::shared_ptr<StreamImpl> get_stream(uint64_t id);
 
-/** A connection to a server on the same machine, over a unix domain socket. Only opening
-    the socket differs from a TCP connection, so that is all this replaces. */
-class LocalConnection : public Connection {
- public:
-  explicit LocalConnection(const std::string& path);
-  void connect() override;
+  /**
+   * Condition variable that is notified when a stream update
+   * message has finished being processed.
+   */
+  Condition& get_stream_update_condition() const;
+  /** Lock on the condition's mutex, which is re-entrant. Every copy of the connection shares the
+      lock, so it is used by one thread. */
+  std::unique_lock<RecursiveMutex>& get_stream_update_condition_lock() const;
+  /** Lock the condition's mutex */
+  void acquire_stream_update();
+  /** Unlock the condition's mutex */
+  void release_stream_update();
+  /** Wait until the next stream update message. If timeout >= 0, the
+      operation times out after that many seconds. */
+  void wait_for_stream_update(double timeout = -1);
+  typedef std::function<void()> Callback;
+  /**
+   * Add a callback that is invoked whenever a stream update message has
+   * finished being processed.
+   * Returns an integer tag for the callback which uniquely identifies it,
+   * and allows it to be removed using remove_stream_update_callback()
+   */
+  int add_stream_update_callback(const Callback& callback);
+  /** Remove a callback, based on its tag */
+  void remove_stream_update_callback(int tag);
 
  private:
-  const std::string path;
+  std::shared_ptr<State> state;
 };
 
 }  // namespace krpc

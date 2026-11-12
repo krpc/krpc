@@ -13,7 +13,7 @@ from krpc.service import _member_name
 from krpc.types import clear_type_ids
 
 if TYPE_CHECKING:
-    from krpc.client import Client
+    from krpc.connection import Connection
     from krpc.services.krpc import Expression
     from krpc.services.krpc import Type as RemoteType
 
@@ -80,7 +80,7 @@ class Metadata:
     class and pythonic member name. Built from the service definitions
     reported by the server."""
 
-    def __init__(self, client: Client):
+    def __init__(self, connection: Connection):
         # (service, class name or None, Python member name, kind) -> procedure
         # where kind is 'getter', 'setter', 'method' or 'static'
         self.members: dict[
@@ -96,7 +96,7 @@ class Metadata:
         self.mapped_types: dict[tuple[str, str], str] = {}
         # (service, procedure name) -> procedure
         self.procedures: dict[tuple[str, str], KRPC.Procedure] = {}
-        for service in clear_type_ids(client._krpc.get_services()).services:
+        for service in clear_type_ids(connection._krpc.get_services()).services:
             for exception in service.exceptions:
                 self.exceptions.append((service.name, exception.name))
                 if exception.mapped_type:

@@ -16,8 +16,8 @@ local Types = require 'krpc.types'
 local encoder = require 'krpc.encoder'
 local decoder = require 'krpc.decoder'
 local protobuf = require 'krpc.protobuf'
-local Connection = require 'krpc.connection'
-local LocalConnection = require 'krpc.localconnection'
+local TCPIPTransport = require 'krpc.tcpiptransport'
+local LocalTransport = require 'krpc.localtransport'
 
 local to_snake_case = Service.to_snake_case
 
@@ -120,9 +120,9 @@ local function to_value(value)
     next_handle = next_handle + 1
     objects[handle] = value
     return { object = { handle = handle, id = value._object_id } }
-  elseif Types.Enum:class_of(value) then
+  elseif Types.RemoteEnum:class_of(value) then
     return { enum = { value = value.value } }
-  elseif Types.StructBase:class_of(value) then
+  elseif Types.RemoteStruct:class_of(value) then
     local fields = {}
     for i, name in ipairs(value._field_names) do
       fields[i] = to_value(value[name])
@@ -430,10 +430,10 @@ local function dispatch(command)
     return {}
   elseif case == 'fail_write' then
     local message = command.fail_write.message
-    -- Replaces each connection class's send for one write, which fails as a failed socket
+    -- Replaces each transport class's send for one write, which fails as a failed socket
     -- write does. A subclass holds a copy of its base's methods, so each class gets one.
-    local classes = { Connection, LocalConnection }
-    local sends = { Connection.send, LocalConnection.send }
+    local classes = { TCPIPTransport, LocalTransport }
+    local sends = { TCPIPTransport.send, LocalTransport.send }
     local function fail()
       for i, class in ipairs(classes) do
         class.send = sends[i]

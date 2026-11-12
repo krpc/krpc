@@ -16,8 +16,8 @@
 
 namespace krpc {
 
-class Client;
 class Connection;
+class Transport;
 namespace schema {
 class Error;
 class ProcedureCall;
@@ -28,21 +28,21 @@ class StreamUpdate;
 class StreamManager {
  public:
   /** Create a manager and start the connection's reader and dispatcher threads, once the
-      handshake has been made on the connection. A client's state holds the pointer returned,
+      handshake has been made on the connection. A connection's state holds the pointer returned,
       and releasing it closes the connection. */
   static std::shared_ptr<StreamManager> create(std::shared_ptr<detail::ExceptionThrowers> throwers,
-                                               const std::shared_ptr<Connection>& connection,
+                                               const std::shared_ptr<Transport>& transport,
                                                std::chrono::milliseconds stall_timeout);
   ~StreamManager();
   StreamManager(const StreamManager&) = delete;
   StreamManager& operator=(const StreamManager&) = delete;
   Session& get_session() { return *session; }
-  /** The stream with an id, for a handle made through a client. The stream holds the client, so
-      a handle keeps the connection open. */
-  std::shared_ptr<StreamImpl> get_stream(const Client& client, uint64_t id);
+  /** The stream with an id, for a handle made through a connection. The stream holds the
+      connection, so a handle keeps the connection open. */
+  std::shared_ptr<StreamImpl> get_stream(const Connection& connection, uint64_t id);
   /** Close the connection and end every stream. Does nothing if already closed. */
   void close();
-  /** Register a stream the server has added for this client. Called by the reader, before it
+  /** Register a stream the server has added for this connection. Called by the reader, before it
       reads the stream's first update. */
   void register_stream(uint64_t id);
   /** Whether any stream is open. Read without the update lock, by the session deciding
@@ -69,7 +69,7 @@ class StreamManager {
   typedef std::map<int, Callback> Callbacks;
   int add_update_callback(const Callback& callback);
   void remove_update_callback(int tag);
-  /** Note that the client is closing the connection. The dispatcher thread then stops trying
+  /** Note that the connection is closing. The dispatcher thread then stops trying
       to take a stream's condition, and the closing thread wakes the stream's waiters. */
   void request_close();
   bool is_close_requested() const;
@@ -87,7 +87,7 @@ class StreamManager {
 
  private:
   StreamManager(std::shared_ptr<detail::ExceptionThrowers> throwers,
-                const std::shared_ptr<Connection>& connection,
+                const std::shared_ptr<Transport>& transport,
                 std::chrono::milliseconds stall_timeout);
   /** A change for the dispatcher to apply to a stream: a new value, or an ending. */
   struct Change {
@@ -106,7 +106,7 @@ class StreamManager {
   /** Wake the threads waiting for a stream update. */
   void notify_update(bool on_dispatcher);
   /** Lock a stream's condition, or the update condition, on the dispatcher thread. Returns
-      false, without it, once the client is closing, as the closing thread can hold it while it
+      false, without it, once the connection is closing, as the closing thread can hold it while it
       joins the dispatcher thread. */
   bool lock(RecursiveMutex* mutex);
   /** The exception an error is thrown as. */

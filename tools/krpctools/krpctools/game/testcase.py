@@ -12,7 +12,7 @@ from . import game
 from .assertions import AssertionsMixin
 
 if TYPE_CHECKING:
-    import krpc.client
+    import krpc
 
 
 class TestCase(AssertionsMixin):
@@ -48,7 +48,7 @@ class TestCase(AssertionsMixin):
         return game.current()
 
     @classmethod
-    def connect(cls, use_cached=True) -> "krpc.client.Client":
+    def connect(cls, use_cached=True) -> "krpc.Connection":
         return cls.game().connect(use_cached)
 
     @classmethod

@@ -8,12 +8,12 @@ import sys
 from collections.abc import Callable
 from typing import TYPE_CHECKING, Any
 
-from krpc.types import ClassBase
+from krpc.types import RemoteObject
 from krpc.utils import snake_case
 
 # The base of a declared class, which gives type checkers the members every remote object has
 if TYPE_CHECKING:
-    DeclaredObject = ClassBase
+    DeclaredObject = RemoteObject
 else:
     DeclaredObject = object
 
@@ -70,7 +70,7 @@ def is_class_type(value: object) -> bool:
     of one"""
     if not isinstance(value, type):
         return False
-    if issubclass(value, ClassBase):
+    if issubclass(value, RemoteObject):
         return True
     return isinstance(value, DeclaredClass) and value._class_name is not None
 
@@ -98,12 +98,12 @@ def registered(service_name: str, name: str) -> type | None:
 Lookup = Callable[[str, str], "type | None"]
 
 
-def client_lookup(client_type: type) -> Lookup:
-    """The lookup for a client of the given type. A service whose client type is a base of it
-    takes its classes from that client type's module, where the first base in the MRO wins.
+def connection_lookup(connection_type: type) -> Lookup:
+    """The lookup for a connection of the given type. A service whose connection type is a base of it
+    takes its classes from that connection type's module, where the first base in the MRO wins.
     Any other service takes them from the registry."""
     modules: dict[str, dict[str, Any]] = {}
-    for cls in reversed(client_type.__mro__):
+    for cls in reversed(connection_type.__mro__):
         service_name = vars(cls).get("_declares_service")
         module = sys.modules.get(cls.__module__)
         # A module loaded outside sys.modules is found only through the registry

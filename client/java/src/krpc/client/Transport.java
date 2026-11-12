@@ -1,30 +1,45 @@
 package krpc.client;
 
+import com.google.protobuf.CodedOutputStream;
 import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.WireFormat;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.net.SocketTimeoutException;
 import java.nio.ByteBuffer;
+import java.nio.channels.ClosedChannelException;
+import java.nio.channels.ClosedSelectorException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.function.Consumer;
+import krpc.schema.KRPC;
 
-/** Reads length prefixed messages from a socket channel. */
-class MessageReader {
+/**
+ * The socket channel to the server, and the length prefixed messages sent and received over it.
+ * Each subclass opens the channel over one protocol.
+ *
+ * <p>The channel blocks until {@link #startNonBlocking} makes it non-blocking. It then waits for
+ * data to read with one selector, the reader thread with another, and a write that fills the send
+ * buffer with a third.
+ */
+abstract class Transport {
   // A length prefix is a varint, and one that does not end within five bytes cannot be the
   // uint32 it is meant to be
   private static final int MAXIMUM_PREFIX_LENGTH = 5;
   // The longest wait for data before checking the channel is still open, as a channel closed
   // without closing its selector does not wake the selector
-  static final long MAXIMUM_WAIT_MILLISECONDS = 1000;
+  private static final long MAXIMUM_WAIT_MILLISECONDS = 1000;
   // A selector with one channel needs nothing from the key that is ready
-  static final Consumer<SelectionKey> IGNORE_KEY = key -> { };
+  private static final Consumer<SelectionKey> IGNORE_KEY = key -> { };
 
   private final SocketChannel channel;
+  private Selector readSelector;
+  private Selector idleSelector;
+  private Selector writeSelector;
   // The bytes read and not yet handed out are those from start to the buffer's position
   private ByteBuffer buffer = ByteBuffer.allocate(64 * 1024);
   private int start = 0;
@@ -32,8 +47,124 @@ class MessageReader {
   private long lastProgress = System.nanoTime();
   private boolean partial = false;
 
-  MessageReader(SocketChannel channel) {
+  protected Transport(SocketChannel channel) {
     this.channel = channel;
+  }
+
+  /** Make the channel non-blocking, and open the selectors that wait on it. */
+  void startNonBlocking() throws IOException {
+    channel.configureBlocking(false);
+    readSelector = Selector.open();
+    idleSelector = Selector.open();
+    writeSelector = Selector.open();
+    channel.register(readSelector, SelectionKey.OP_READ);
+    channel.register(idleSelector, SelectionKey.OP_READ);
+    channel.register(writeSelector, SelectionKey.OP_WRITE);
+  }
+
+  /** Write a message. */
+  void send(KRPC.Message message) throws IOException {
+    int size = message.getSerializedSize();
+    byte[] data = new byte[CodedOutputStream.computeUInt32SizeNoTag(size) + size];
+    CodedOutputStream output = CodedOutputStream.newInstance(data);
+    output.writeUInt32NoTag(size);
+    message.writeTo(output);
+    write(ByteBuffer.wrap(data));
+  }
+
+  /** Write a message holding the request. */
+  void send(KRPC.Request request) throws IOException {
+    // The Message is written around the request, which saves building one
+    int size = request.getSerializedSize();
+    int messageSize = 1 + CodedOutputStream.computeUInt32SizeNoTag(size) + size;
+    byte[] data = new byte[CodedOutputStream.computeUInt32SizeNoTag(messageSize) + messageSize];
+    CodedOutputStream output = CodedOutputStream.newInstance(data);
+    output.writeUInt32NoTag(messageSize);
+    output.writeTag(KRPC.Message.REQUEST_FIELD_NUMBER, WireFormat.WIRETYPE_LENGTH_DELIMITED);
+    output.writeUInt32NoTag(size);
+    request.writeTo(output);
+    write(ByteBuffer.wrap(data));
+  }
+
+  /**
+   * Write all of a buffer, waiting for room in the send buffer. An interrupt is held back until
+   * the write ends, as a message cut short breaks the framing.
+   */
+  private void write(ByteBuffer data) throws IOException {
+    WriteFault.reach();
+    boolean interrupted = false;
+    try {
+      while (true) {
+        channel.write(data);
+        if (!data.hasRemaining()) {
+          return;
+        }
+        writeSelector.select(IGNORE_KEY, MAXIMUM_WAIT_MILLISECONDS);
+        // Cleared, as the selector returns at once while the thread is interrupted
+        if (Thread.interrupted()) {
+          interrupted = true;
+        }
+      }
+    } catch (ClosedSelectorException exn) {
+      throw new ClosedChannelException();
+    } finally {
+      if (interrupted) {
+        Thread.currentThread().interrupt();
+      }
+    }
+  }
+
+  /** Close the write side, leaving the read side open. */
+  void shutdownOutput() throws IOException {
+    channel.shutdownOutput();
+  }
+
+  /** Close the channel and its selectors, which wakes a thread waiting on them. */
+  void close() {
+    try {
+      channel.close();
+    } catch (IOException exn) {
+      // The channel is closed or failed already
+    }
+    for (Selector selector : new Selector[] {readSelector, idleSelector, writeSelector}) {
+      if (selector == null) {
+        continue;
+      }
+      try {
+        selector.wakeup();
+        selector.close();
+      } catch (IOException exn) {
+        // The selector is closed already
+      }
+    }
+  }
+
+  /**
+   * Wait a while for data, without reading it. Returns whether data has arrived or the channel
+   * has closed.
+   */
+  boolean waitReadable() throws IOException {
+    return idleSelector.select(IGNORE_KEY, MAXIMUM_WAIT_MILLISECONDS) > 0 || !channel.isOpen();
+  }
+
+  /** Discard what arrives until the server closes the channel, or until the deadline. */
+  void discard(long deadline) {
+    ByteBuffer discard = ByteBuffer.allocate(4096);
+    try {
+      while (true) {
+        long remaining = deadline - System.currentTimeMillis();
+        if (remaining <= 0) {
+          return;
+        }
+        readSelector.select(IGNORE_KEY, remaining);
+        discard.clear();
+        if (channel.read(discard) < 0) {
+          return;
+        }
+      }
+    } catch (IOException | ClosedSelectorException exn) {
+      // The connection has failed already
+    }
   }
 
   /** Read the next message, blocking until it has arrived in full. */
@@ -77,12 +208,11 @@ class MessageReader {
   }
 
   /**
-   * Read the next message from a channel in non-blocking mode, waiting for data with a selector
-   * the channel is registered with for reading. Throws a SocketTimeoutException if a message that
-   * has started to arrive receives no new byte within the stall timeout, unless it is zero, and an
-   * InterruptedIOException if the thread is interrupted while waiting.
+   * Read the next message once the channel is non-blocking. Throws a SocketTimeoutException if a
+   * message that has started to arrive receives no new byte within the stall timeout, unless it is
+   * zero, and an InterruptedIOException if the thread is interrupted while waiting.
    */
-  byte[] read(Selector selector, Duration stallTimeout) throws IOException {
+  byte[] readNonBlocking(Duration stallTimeout) throws IOException {
     long stall = stallTimeout.toNanos();
     while (true) {
       byte[] message = take();
@@ -103,7 +233,7 @@ class MessageReader {
         }
         timeout = Math.min(timeout, Math.max(1, remaining / 1000000));
       }
-      selector.select(IGNORE_KEY, timeout);
+      readSelector.select(IGNORE_KEY, timeout);
       if (Thread.currentThread().isInterrupted()) {
         throw new InterruptedIOException("Interrupted while waiting for data from the server");
       }

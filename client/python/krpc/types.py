@@ -18,7 +18,7 @@ import krpc.schema.KRPC_pb2 as KRPC
 if TYPE_CHECKING:
     from typing_extensions import deprecated as deprecated
 
-    from krpc.client import Client
+    from krpc.connection import Connection
 else:
 
     def deprecated(message, /, *, category=None, stacklevel=1):
@@ -384,7 +384,7 @@ class Types:
         # converts by its number, as a value inside a collection is sent by its number too
         if (
             isinstance(typ, EnumerationType)
-            and isinstance(value, (DocEnum, DocFlag))
+            and isinstance(value, (RemoteEnum, RemoteFlags))
             and _enum_names(type(value)) == (typ._service_name, typ._enum_name)
         ):
             try:
@@ -395,13 +395,13 @@ class Types:
                     % (value, value.value, typ._service_name, typ._enum_name)
                 ) from exn
         # Coerce identical class types from different client connections
-        if isinstance(typ, ClassType) and isinstance(value, ClassBase):
+        if isinstance(typ, ClassType) and isinstance(value, RemoteObject):
             value_type = type(value)
             if (
                 typ.python_type._service_name == value_type._service_name  # pyright: ignore[reportAttributeAccessIssue]
                 and typ.python_type._class_name == value_type._class_name  # pyright: ignore[reportAttributeAccessIssue]
             ):
-                return typ.python_type(value._client, value._object_id)
+                return typ.python_type(value._connection, value._object_id)
         # Collection types
         try:
             # Coerce tuples to lists
@@ -777,36 +777,38 @@ class DynamicType:
         return getattr(cls, name)
 
 
-class ClassBase(DynamicType):
+class RemoteObject(DynamicType):
     """Base class for service-defined class types"""
 
-    def __init__(self, client: Client, object_id: int) -> None:
-        self._client = client
+    def __init__(self, connection: Connection, object_id: int) -> None:
+        self._connection = connection
         self._object_id = object_id
 
     def __eq__(self, other: object) -> bool:
-        return isinstance(other, ClassBase) and self._object_id == other._object_id
+        return isinstance(other, RemoteObject) and self._object_id == other._object_id
 
     def __ne__(self, other: object) -> bool:
-        return not isinstance(other, ClassBase) or self._object_id != other._object_id
+        return (
+            not isinstance(other, RemoteObject) or self._object_id != other._object_id
+        )
 
     def __lt__(self, other: object) -> bool:
-        if not isinstance(other, ClassBase):
+        if not isinstance(other, RemoteObject):
             raise NotImplementedError
         return self._object_id < other._object_id
 
     def __le__(self, other: object) -> bool:
-        if not isinstance(other, ClassBase):
+        if not isinstance(other, RemoteObject):
             raise NotImplementedError
         return self._object_id <= other._object_id
 
     def __gt__(self, other: object) -> bool:
-        if not isinstance(other, ClassBase):
+        if not isinstance(other, RemoteObject):
             raise NotImplementedError
         return self._object_id > other._object_id
 
     def __ge__(self, other: object) -> bool:
-        if not isinstance(other, ClassBase):
+        if not isinstance(other, RemoteObject):
             raise NotImplementedError
         return self._object_id >= other._object_id
 
@@ -814,7 +816,7 @@ class ClassBase(DynamicType):
         return hash(self._object_id)
 
 
-class DynamicClassBase(ClassBase):
+class DynamicRemoteObject(RemoteObject):
     # Set on each class created for a service
     _service_name: str
     _class_name: str
@@ -830,7 +832,7 @@ class DynamicClassBase(ClassBase):
 def _create_class_type(service_name: str, class_name: str, doc: str | None) -> type:
     return type(
         str(class_name),
-        (DynamicClassBase,),
+        (DynamicRemoteObject,),
         {"_service_name": service_name, "_class_name": class_name, "__doc__": doc},
     )
 
@@ -842,7 +844,7 @@ def _create_enum_type(
     doc: str | None,
     flags: bool = False,
 ) -> type[Enum]:
-    base = DocFlag if flags else DocEnum
+    base = RemoteFlags if flags else RemoteEnum
     typ = base(
         enum_name,
         dict((name, x["value"]) for name, x in values.items()),
@@ -951,7 +953,7 @@ class DeprecatedDefinition:
         raise AttributeError("%s cannot be set" % self._name)
 
 
-_DocEnumT = TypeVar("_DocEnumT", bound="DocEnum")
+_RemoteEnumT = TypeVar("_RemoteEnumT", bound="RemoteEnum")
 
 
 def _enum_names(cls: type) -> tuple[object, object] | None:
@@ -963,10 +965,12 @@ def _enum_names(cls: type) -> tuple[object, object] | None:
     return service_name, getattr(cls, "_class_name", None)
 
 
-class DocEnum(Enum):
+class RemoteEnum(Enum):
     """The base of a service's enumerations."""
 
-    def __new__(cls: type[_DocEnumT], value: int, doc: str | None = None) -> _DocEnumT:
+    def __new__(
+        cls: type[_RemoteEnumT], value: int, doc: str | None = None
+    ) -> _RemoteEnumT:
         self = object.__new__(cls)
         self._value_ = value
         if doc is not None:
@@ -974,14 +978,16 @@ class DocEnum(Enum):
         return self
 
 
-_DocFlagT = TypeVar("_DocFlagT", bound="DocFlag")
+_RemoteFlagsT = TypeVar("_RemoteFlagsT", bound="RemoteFlags")
 
 
-class DocFlag(Flag):
+class RemoteFlags(Flag):
     """The base of a service's flags enumerations, whose values combine with ``|``. A
     combination of values is a value too, and ``in`` tests whether it holds one."""
 
-    def __new__(cls: type[_DocFlagT], value: int, doc: str | None = None) -> _DocFlagT:
+    def __new__(
+        cls: type[_RemoteFlagsT], value: int, doc: str | None = None
+    ) -> _RemoteFlagsT:
         self = object.__new__(cls)
         self._value_ = value
         if doc is not None:

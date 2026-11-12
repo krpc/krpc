@@ -61,7 +61,7 @@ namespace KRPC.Client
             var result = connection.Invoke ("KRPC", "RunFunction", args);
             if (result.IsNull)
                 return null;
-            return (byte[])Encoder.Decode (result.Value, bytesSpec, connection);
+            return (byte[])Decoder.Decode (result.Value, bytesSpec, connection);
         }
 
         internal static Event AddEvent (Connection connection, Services.KRPC.Expression function)
@@ -76,7 +76,7 @@ namespace KRPC.Client
         {
             if (result.IsNull)
                 throw new EncodingException ("A null result for a value that cannot be null");
-            return Encoder.Decode (result.Value, spec, connection);
+            return Decoder.Decode (result.Value, spec, connection);
         }
     }
 }

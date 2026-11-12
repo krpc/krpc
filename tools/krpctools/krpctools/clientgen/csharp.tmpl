@@ -19,7 +19,7 @@ var _args = new ByteString[] {
 if (_result.IsNull)
     return null;
 {% endif %}
-return ({{type}})global::KRPC.Client.Encoder.Decode (_result.Value, {{spec}}, connection);
+return ({{type}})global::KRPC.Client.Decoder.Decode (_result.Value, {{spec}}, connection);
 {% endmacro %}
 {% macro sig_parameters(parameters) %}
 {% for x in parameters %}{{x.type}} {{x.name}}{% if 'default_value' in x %} = {{x.default_value}}{%- endif %}{% if not loop.last %}, {% endif %}{% endfor %}
@@ -101,26 +101,14 @@ namespace KRPC.Client.Services.{{ service_name }}
     /// {{ service_name }} service.
     /// </summary>
 {% if service_deprecated %}    [global::System.Obsolete{% if service_deprecated_reason %} ("{{ service_deprecated_reason | string_literal }}"){% endif %}]
-{% endif %}    public class Service
+{% endif %}    public class Service : global::KRPC.Client.RemoteService
     {
-        {% if procedures.items() | length > 0 or properties.items() | length > 0 %}
-        global::KRPC.Client.IConnection connection;
-
-        internal Service (global::KRPC.Client.IConnection serverConnection)
-        {
-            connection = serverConnection;
-            {% if exceptions.items() | length > 0 %}
-            AddExceptionTypes (serverConnection);
-            {% endif %}
-        }
-        {% else %}
-        internal Service (global::KRPC.Client.IConnection serverConnection)
+        internal Service (global::KRPC.Client.IConnection serverConnection) : base (serverConnection)
         {
             {% if exceptions.items() | length > 0 %}
             AddExceptionTypes (serverConnection);
             {% endif %}
         }
-        {% endif %}
         {% if exceptions.items() | length > 0 %}
 
         internal static void AddExceptionTypes (global::KRPC.Client.IConnection serverConnection)

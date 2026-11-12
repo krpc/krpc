@@ -3,8 +3,8 @@
 #include <chrono>
 #include <functional>
 #include <krpc.hpp>
-#include <krpc/connection.hpp>
 #include <krpc/services/krpc.hpp>
+#include <krpc/transport.hpp>
 #include <memory>
 #include <string>
 #include <thread>
@@ -15,26 +15,26 @@ class server_test : public ::testing::Test {
  public:
   server_test();
   /** Connect to the server the harness started, on the port it passes. */
-  krpc::Client connect(const std::string& name = "C++ClientTest");
+  krpc::Connection connect(const std::string& name = "C++ClientTest");
   /** A client of the test's own, which the test can destroy. */
-  std::unique_ptr<krpc::Client> connect_client();
+  std::unique_ptr<krpc::Connection> connect_client();
   /** Whether condition becomes true within ten seconds. */
   static bool eventually(const std::function<bool()>& condition);
   int get_port() const;
-  krpc::Client conn;
+  krpc::Connection conn;
   krpc::services::KRPC krpc;
   krpc::services::TestService test_service;
 };
 
 inline server_test::server_test() : conn(connect()), krpc(conn), test_service(conn) {}
 
-inline krpc::Client server_test::connect(const std::string& name) {
+inline krpc::Connection server_test::connect(const std::string& name) {
   return krpc::connect(name, "localhost", get_port());
 }
 
-inline std::unique_ptr<krpc::Client> server_test::connect_client() {
-  auto connection = std::make_shared<krpc::Connection>("localhost", get_port());
-  return std::make_unique<krpc::Client>("C++ClientTest", connection);
+inline std::unique_ptr<krpc::Connection> server_test::connect_client() {
+  auto transport = std::make_shared<krpc::TCPIPTransport>("localhost", get_port());
+  return std::make_unique<krpc::Connection>("C++ClientTest", transport);
 }
 
 inline bool server_test::eventually(const std::function<bool()>& condition) {

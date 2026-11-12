@@ -23,7 +23,7 @@ and stay valid objects after it closes:
 References
 ^^^^^^^^^^
 
-The connection holds its ``Session`` and ``StreamManager``.
+The connection holds its ``Session`` and ``StreamManager``. The ``Session`` holds the ``Transport``.
 
 The objects the program keeps also hold the connection. A ``Service`` or ``RemoteObject`` holds the
 ``Connection``. A ``Stream`` or ``Event`` holds its ``StreamImpl``, which holds the ``Connection``

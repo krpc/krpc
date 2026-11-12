@@ -109,22 +109,22 @@ class TestClientGenDispatch(unittest.TestCase):
     def test_cpp(self):
         content = generate("cpp", CppDispatchGenerator, "TestService")
         self.assertIn(
-            "return String::result(::krpc::services::TestService(client)"
+            "return String::result(::krpc::services::TestService(connection)"
             ".float_to_string(a0));",
             content,
         )
         self.assertIn(
             "auto a0 = Optional<Object<::krpc::services::TestService::TestClass>>"
-            "::arg(client, args.Get(0));",
+            "::arg(connection, args.Get(0));",
             content,
         )
         self.assertIn(
-            "return result_stream(::krpc::services::TestService(client)"
+            "return result_stream(::krpc::services::TestService(connection)"
             ".counter_stream(a0, a1),",
             content,
         )
         self.assertIn(
-            "return ::krpc::services::TestService(client).counter_call(a0, a1);",
+            "return ::krpc::services::TestService(connection).counter_call(a0, a1);",
             content,
         )
         self.assertIn("struct TestService_TestStruct {", content)

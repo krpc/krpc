@@ -5,7 +5,7 @@
 #include "services/deprecated_service.hpp"
 #include "services/test_service.hpp"
 
-using krpc::Client;
+using krpc::Connection;
 using krpc::services::DeprecatedService;                                    // setup
 using krpc::services::TestService;
 
@@ -13,18 +13,18 @@ using PartlyDeprecatedEnum = TestService::PartlyDeprecatedEnum;             // s
 
 // Naming a deprecated type warns as well, so the type of these members is a parameter
 template <typename C>
-void inherited_static_method(Client& client) {
-  C::inherited_static_method(client);                                       // use: TestService.DeprecatedClass.InheritedStaticMethod
+void inherited_static_method(Connection& connection) {
+  C::inherited_static_method(connection);                                       // use: TestService.DeprecatedClass.InheritedStaticMethod
 }
 
 template <typename C>
-void reasoned_static_method(Client& client) {
-  C::static_method(client);                                                 // use: DeprecatedService.ReasonedClass.StaticMethod
+void reasoned_static_method(Connection& connection) {
+  C::static_method(connection);                                                 // use: DeprecatedService.ReasonedClass.StaticMethod
 }
 
 template <typename C>
-void service_static_method(Client& client) {
-  C::static_method(client);                                                 // use: DeprecatedService.ServiceClass.StaticMethod
+void service_static_method(Connection& connection) {
+  C::static_method(connection);                                                 // use: DeprecatedService.ServiceClass.StaticMethod
 }
 
 template <typename E>
@@ -37,7 +37,7 @@ void service_enum_value() {
   (void)E::value;                                                           // use: DeprecatedService.ServiceEnum.Value
 }
 
-void uses(Client& client,                                                   // setup
+void uses(Connection& connection,                                                   // setup
           TestService& test_service,                                        // setup
           DeprecatedService& deprecated_service,                            // setup
           TestService::DeprecatedStruct& deprecated_struct,                 // setup
@@ -50,7 +50,7 @@ void uses(Client& client,                                                   // s
   (void)sizeof(TestService::DeprecatedClass);                               // use: TestService.DeprecatedClass
   deprecated_class.deprecated_method();                                     // use: TestService.DeprecatedClass.DeprecatedMethod
   deprecated_class.inherited_method();                                      // use: TestService.DeprecatedClass.InheritedMethod
-  inherited_static_method<TestService::DeprecatedClass>(client);            // setup
+  inherited_static_method<TestService::DeprecatedClass>(connection);            // setup
   deprecated_class.inherited_property();                                    // use: TestService.DeprecatedClass.InheritedProperty
   (void)sizeof(TestService::DeprecatedEnum);                                // use: TestService.DeprecatedEnum
   deprecated_enum_value<TestService::DeprecatedEnum>();                     // setup
@@ -71,8 +71,8 @@ void uses(Client& client,                                                   // s
   deprecated_service.procedure();                                           // use: DeprecatedService.Procedure
   deprecated_service.property();                                            // use: DeprecatedService.Property
   (void)sizeof(DeprecatedService::ServiceClass);                            // use: DeprecatedService.ServiceClass
-  service_static_method<DeprecatedService::ServiceClass>(client);           // setup
-  reasoned_static_method<DeprecatedService::ReasonedClass>(client);         // setup
+  service_static_method<DeprecatedService::ServiceClass>(connection);           // setup
+  reasoned_static_method<DeprecatedService::ReasonedClass>(connection);         // setup
   (void)sizeof(DeprecatedService::ServiceEnum);                             // use: DeprecatedService.ServiceEnum
   service_enum_value<DeprecatedService::ServiceEnum>();                     // setup
   (void)sizeof(DeprecatedService::ServiceStruct);                           // use: DeprecatedService.ServiceStruct

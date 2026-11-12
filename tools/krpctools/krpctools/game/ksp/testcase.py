@@ -12,7 +12,7 @@ from typing import TYPE_CHECKING, cast
 from .. import testcase
 
 if TYPE_CHECKING:
-    from krpc.ksp import KSPClient as Connection
+    from krpc.ksp import KSPConnection as Connection
 
     from .game import KSP
 

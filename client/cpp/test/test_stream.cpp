@@ -10,7 +10,7 @@
 #include <type_traits>
 
 #include "gtest/gtest.h"
-#include "krpc/client.hpp"
+#include "krpc/connection.hpp"
 #include "krpc/error.hpp"
 #include "krpc/services/krpc.hpp"
 #include "krpc/stream.hpp"
@@ -32,9 +32,9 @@ TEST_F(test_stream, test_a_default_constructed_stream_is_false_until_assigned) {
 
 // Streams keep working through a copy of the client once the client that connected is gone
 TEST_F(test_stream, test_a_copy_of_the_client_keeps_its_streams_once_the_original_is_destroyed) {
-  auto client = connect_client();
-  auto copy = std::make_unique<krpc::Client>(*client);
-  client.reset();
+  auto connection = connect_client();
+  auto copy = std::make_unique<krpc::Connection>(*connection);
+  connection.reset();
   krpc::services::TestService service(*copy);
   auto x = service.counter_stream("test_stream.test_a_copy_of_the_client_keeps_its_streams");
   auto value = x();
@@ -90,13 +90,13 @@ static bool returns(F fn) {
 TEST_F(test_stream, test_the_stream_manager_is_freed_after_a_close_under_the_update_condition) {
   auto sentinel = std::make_shared<int>(0);
   std::weak_ptr<int> manager_alive = sentinel;
-  std::shared_ptr<krpc::Client> client = connect_client();
+  std::shared_ptr<krpc::Connection> connection = connect_client();
   // Kept by every copy of the client, including the stream manager's own
-  client->add_exception_thrower("TestService", "Sentinel", [sentinel](const std::string&) {});
+  connection->add_exception_thrower("TestService", "Sentinel", [sentinel](const std::string&) {});
   sentinel.reset();
-  ASSERT_TRUE(returns([client = std::move(client)]() mutable {
-    client->get_stream_update_condition_lock().lock();
-    client.reset();
+  ASSERT_TRUE(returns([connection = std::move(connection)]() mutable {
+    connection->get_stream_update_condition_lock().lock();
+    connection.reset();
   }));
   ASSERT_TRUE(eventually([&manager_alive] { return manager_alive.expired(); }));
 }

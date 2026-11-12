@@ -141,9 +141,9 @@ Over TCP/IP
 ^^^^^^^^^^^
 
 Select "Protobuf over TCP/IP" as the server's protocol. :func:`~krpc::connect` connects to it, and
-returns a :class:`~krpc::Client`. You make every call through this object. The following connects
-to a server with the default settings, address ``127.0.0.1`` and port 50000, and prints its
-version:
+returns a :class:`~krpc::Connection`. You make every call through this object. The following
+connects to a server with the default settings, address ``127.0.0.1`` and port 50000, and prints
+its version:
 
 .. literalinclude:: /scripts/cpp/Connecting1.cpp
 
@@ -159,9 +159,9 @@ Over a Local Socket
 ^^^^^^^^^^^^^^^^^^^
 
 Select "Protobuf over local socket" as the server's protocol. :func:`~krpc::connect_local`
-connects to it, and returns a :class:`~krpc::Client` as :func:`~krpc::connect` does. The following
-connects to a server with the default settings, at the default socket path for your platform, and
-prints its version:
+connects to it, and returns a :class:`~krpc::Connection` as :func:`~krpc::connect` does. The
+following connects to a server with the default settings, at the default socket path for your
+platform, and prints its version:
 
 .. literalinclude:: /scripts/cpp/ConnectingLocal.cpp
 
@@ -174,8 +174,9 @@ it is faster.
 Closing the Connection
 ^^^^^^^^^^^^^^^^^^^^^^
 
-A :class:`~krpc::Client` can be copied, and every copy shares the connection. So does each service,
-object, stream and event you make from it. Call :func:`~krpc::Client::close` to close the connection:
+A :class:`~krpc::Connection` can be copied, and every copy shares the connection. So does each
+service, object, stream and event you make from it. Call :func:`~krpc::Connection::close` to close
+the connection:
 
 .. literalinclude:: /scripts/cpp/Connecting3.cpp
 
@@ -186,12 +187,13 @@ from a function keeps the connection open.
 .. note::
 
    A callback that holds its own stream or event keeps the connection open until the stream ends. An
-   update callback that holds an object keeps it open until you call :func:`~krpc::Client::close`.
+   update callback that holds an object keeps it open until you call
+   :func:`~krpc::Connection::close`.
 
 .. note::
 
    Destroying the last copy of a stream or event stops new runs of its callbacks, but a run in
-   progress carries on. Call :func:`~krpc::Client::close` to wait for it.
+   progress carries on. Call :func:`~krpc::Connection::close` to wait for it.
 
 Calling Remote Procedures
 -------------------------
@@ -567,9 +569,9 @@ Client API Reference
 
 .. namespace:: krpc
 
-.. function:: Client connect(const std::string& name = "", const std::string& address = "127.0.0.1", unsigned int port = 50000, std::chrono::milliseconds timeout = std::chrono::milliseconds::zero(), std::chrono::milliseconds handshake_timeout = std::chrono::seconds(5), std::chrono::milliseconds stall_timeout = std::chrono::seconds(30))
+.. function:: Connection connect(const std::string& name = "", const std::string& address = "127.0.0.1", unsigned int port = 50000, std::chrono::milliseconds timeout = std::chrono::milliseconds::zero(), std::chrono::milliseconds handshake_timeout = std::chrono::seconds(5), std::chrono::milliseconds stall_timeout = std::chrono::seconds(30))
 
-   Connects to a kRPC server, and returns a :class:`~krpc::Client`.
+   Connects to a kRPC server, and returns a :class:`~krpc::Connection`.
 
    :parameters:
 
@@ -591,10 +593,10 @@ Client API Reference
    Throws :class:`~krpc::ConnectionError` if the connection fails or the server refuses it, and
    ``std::invalid_argument`` for a negative handshake or stall timeout.
 
-.. function:: Client connect_local(const std::string& name = "", const std::string& path = "", std::chrono::milliseconds handshake_timeout = std::chrono::seconds(5), std::chrono::milliseconds stall_timeout = std::chrono::seconds(30))
+.. function:: Connection connect_local(const std::string& name = "", const std::string& path = "", std::chrono::milliseconds handshake_timeout = std::chrono::seconds(5), std::chrono::milliseconds stall_timeout = std::chrono::seconds(30))
 
    Connects to a kRPC server on the same machine over a local socket, and returns a
-   :class:`~krpc::Client`. The server must use the local socket protocol.
+   :class:`~krpc::Connection`. The server must use the local socket protocol.
 
    Local sockets are available on Linux, macOS, and Windows 10 1803 and Windows Server 2019 or
    later.
@@ -612,14 +614,14 @@ Client API Reference
    Throws :class:`~krpc::ConnectionError` and ``std::invalid_argument`` as :func:`~krpc::connect`
    does.
 
-.. class:: Client
+.. class:: Connection
 
    A connection to the server. Obtain one by calling :func:`~krpc::connect`. A service is
    constructed with a reference to it, such as ``krpc::services::SpaceCenter sc(conn)``.
 
-   Client objects are copy constructible and assignable, and every copy shares the connection.
+   Connection objects are copy constructible and assignable, and every copy shares the connection.
    The connection closes on :func:`close`, or when the last copy, and every service, object, stream
-   and event made from one, is destroyed. A default-constructed client is not
+   and event made from one, is destroyed. A default-constructed connection is not
    connected. Its calls and its stream update members throw :class:`~krpc::ConnectionError`.
 
    .. function:: void close()
@@ -666,13 +668,13 @@ Client API Reference
       Removes a stream update callback, given the tag :func:`add_stream_update_callback`
       returned.
 
-.. class:: template <typename T> Object
+.. class:: template <typename T> RemoteObject
 
    The base class of remote objects. Two objects compare equal with ``==`` when they identify
    the same thing in the game. ``<`` and the other comparisons order objects by their
    identifiers, and ``<<`` writes an object's class name and identifier to a stream.
 
-.. function:: template <typename T> uint64_t get_object_id(const Object<T>& object)
+.. function:: template <typename T> uint64_t get_object_id(const RemoteObject<T>& object)
 
    The identifier of a remote object on the server, e.g. to pass to
    :func:`~krpc::services::KRPC::Expression::constant_object`. Throws ``std::invalid_argument`` for
