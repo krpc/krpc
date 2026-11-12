@@ -1332,6 +1332,8 @@ Service documentation string.
 
 
 
+   Raised as a :class:`krpc.ServerError` whose ``service`` and ``name`` are ``'TestService'`` and ``'CustomException'``.
+
 
 
 .. class:: DeprecatedException
@@ -1339,3 +1341,5 @@ Service documentation string.
    .. warning:: Deprecated. Use :class:`TestService.CustomException` instead.
 
    Deprecated exception documentation string.
+
+   Raised as a :class:`krpc.ServerError` whose ``service`` and ``name`` are ``'TestService'`` and ``'DeprecatedException'``.

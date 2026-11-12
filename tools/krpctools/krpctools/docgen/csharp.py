@@ -45,6 +45,17 @@ class CsharpDomain(Domain[CsharpLanguage]):
     codeext = "cs"
     language = CsharpLanguage()
 
+    def raised_as(self, exception):
+        typ = self.language.exception_type(
+            exception.service_name, exception.name, exception.mapped_type
+        )
+        if typ is not None:
+            return (
+                "The client throws :type:`%s` for this exception, and has no class for it."
+                % (typ.removeprefix("global::"))
+            )
+        return "A subclass of :type:`KRPC.Client.ServerException`."
+
     def currentmodule(self, name):
         super().currentmodule(name)
         return ".. namespace:: KRPC.Client.Services.%s" % name

@@ -39,6 +39,17 @@ class PythonDomain(Domain[PythonLanguage]):
     codeext = "py"
     language = PythonLanguage()
 
+    def raised_as(self, exception):
+        alias = self.language.exception_alias(
+            exception.service_name, exception.name, exception.mapped_type
+        )
+        if alias is not None:
+            return "An alias of :class:`%s`." % alias
+        native = self.language.native_exception(exception.mapped_type)
+        if native is not None:
+            return "A subclass of the builtin ``%s`` alone." % native
+        return "A subclass of :class:`krpc.error.ServerError`."
+
     def currentmodule(self, name):
         super().currentmodule(name)
         return ".. currentmodule:: %s" % name

@@ -1711,6 +1711,8 @@ Service documentation string.
 
 
 
+   A subclass of :class:`krpc.error.ServerError`.
+
 
 
 .. class:: DeprecatedException
@@ -1718,3 +1720,5 @@ Service documentation string.
    .. warning:: Deprecated. Use :class:`CustomException` instead.
 
    Deprecated exception documentation string.
+
+   A subclass of :class:`krpc.error.ServerError`.

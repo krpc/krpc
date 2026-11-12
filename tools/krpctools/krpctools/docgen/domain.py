@@ -62,6 +62,10 @@ class Domain(Generic[LanguageT]):
     def see(self, obj):
         raise NotImplementedError
 
+    def raised_as(self, exception) -> str | None:
+        """A sentence saying what the client raises for an exception, or None"""
+        return None
+
     @staticmethod
     def paramref(name):
         return "*%s*" % name

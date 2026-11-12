@@ -26,6 +26,12 @@ class LuaDomain(Domain[LuaLanguage]):
     codeext = "lua"
     language = LuaLanguage()
 
+    def raised_as(self, exception):
+        return (
+            "Raised as a :class:`krpc.ServerError` whose ``service`` and ``name`` are ``'%s'`` "
+            "and ``'%s'``." % (exception.service_name, exception.name)
+        )
+
     def currentmodule(self, name):
         super().currentmodule(name)
         return ".. currentmodule:: %s" % name

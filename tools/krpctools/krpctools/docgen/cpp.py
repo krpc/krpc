@@ -40,6 +40,16 @@ class CppDomain(Domain[CppLanguage]):
     codeext = "cpp"
     language = CppLanguage()
 
+    def raised_as(self, exception):
+        alias = self.language.exception_alias(
+            exception.service_name, exception.name, exception.mapped_type
+        )
+        if alias == "::krpc::StreamError":
+            return "An alias of :class:`krpc::StreamError`."
+        if alias is not None:
+            return "An alias of ``%s``." % alias
+        return "A subclass of :class:`krpc::ServerError`."
+
     def currentmodule(self, name):
         super().currentmodule(name)
         return ".. namespace:: krpc::services::%s" % name

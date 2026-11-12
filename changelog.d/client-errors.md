@@ -77,3 +77,4 @@
 - Generate C++ mapped exceptions as aliases of the standard exceptions, and derive the other
   exceptions from `ServerError` or `ServerException` (#1333)
 - Generate no class for a mapped exception in C# and Java stubs (#1333)
+- Say in the reference docs what each client raises for each exception of a service (#1333)
