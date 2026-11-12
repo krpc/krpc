@@ -104,6 +104,7 @@ changeloggen(
         "//service/MechJeb:CHANGELOG.md",
         "//service/KerbalEngineerRedux:CHANGELOG.md",
         "//service/ScanSat:CHANGELOG.md",
+        "//service/RasterPropMonitor:CHANGELOG.md",
         "//service/Debug:CHANGELOG.md",
         "//client/cnano:CHANGELOG.md",
         "//client/csharp:CHANGELOG.md",
@@ -210,6 +211,7 @@ defs = [
     "//service/MechJeb:ServiceDefinitions",
     "//service/KerbalEngineerRedux:ServiceDefinitions",
     "//service/ScanSat:ServiceDefinitions",
+    "//service/RasterPropMonitor:ServiceDefinitions",
     "//service/Debug:ServiceDefinitions",
 ]
 

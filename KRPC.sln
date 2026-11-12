@@ -29,6 +29,7 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRPC.KerbalEngineerRedux", "service\KerbalEngineerRedux\src\KRPC.KerbalEngineerRedux.csproj", "{B805F432-3ED2-4CB0-ABDE-7634850CD83B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRPC.ScanSat", "service\ScanSat\src\KRPC.ScanSat.csproj", "{DC23C2F1-3922-4382-9500-AC03EEDAA3E1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRPC.RasterPropMonitor", "service\RasterPropMonitor\src\KRPC.RasterPropMonitor.csproj", "{10A866FA-6210-46D6-A919-98B579D8ECB4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRPC.Debug", "service\Debug\src\KRPC.Debug.csproj", "{7E772428-6FFF-43D3-B051-2863F2378FC8}"
 EndProject
@@ -134,6 +135,10 @@ Global
 		{DC23C2F1-3922-4382-9500-AC03EEDAA3E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DC23C2F1-3922-4382-9500-AC03EEDAA3E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DC23C2F1-3922-4382-9500-AC03EEDAA3E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10A866FA-6210-46D6-A919-98B579D8ECB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10A866FA-6210-46D6-A919-98B579D8ECB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10A866FA-6210-46D6-A919-98B579D8ECB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10A866FA-6210-46D6-A919-98B579D8ECB4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7E772428-6FFF-43D3-B051-2863F2378FC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7E772428-6FFF-43D3-B051-2863F2378FC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E772428-6FFF-43D3-B051-2863F2378FC8}.Release|Any CPU.ActiveCfg = Release|Any CPU

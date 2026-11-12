@@ -143,6 +143,7 @@ pkg_zip(
         "//service/MechJeb",
         "//service/KerbalEngineerRedux",
         "//service/ScanSat",
+        "//service/RasterPropMonitor",
         # Module Manager
         "@module_manager//file",
         # Schema
@@ -204,6 +205,9 @@ pkg_zip(
         "service/ScanSat/KRPC.ScanSat/net472/": "GameData/kRPC/",
         "service/ScanSat/": "GameData/kRPC/",
         "service/ScanSat/CHANGELOG.md": "GameData/kRPC/CHANGELOG.ScanSat.md",
+        "service/RasterPropMonitor/KRPC.RasterPropMonitor/net472/": "GameData/kRPC/",
+        "service/RasterPropMonitor/": "GameData/kRPC/",
+        "service/RasterPropMonitor/CHANGELOG.md": "GameData/kRPC/CHANGELOG.RasterPropMonitor.md",
         # Module Manager
         "../+http_file+module_manager/file/ModuleManager.4.2.3.dll": "GameData/ModuleManager.4.2.3.dll",
         # Schema
@@ -253,6 +257,7 @@ py_test(
         "//service/KerbalEngineerRedux:csproj-srcs",
         "//service/LiDAR:csproj-srcs",
         "//service/MechJeb:csproj-srcs",
+        "//service/RasterPropMonitor:csproj-srcs",
         "//service/RemoteTech:csproj-srcs",
         "//service/ScanSat:csproj-srcs",
         "//service/SpaceCenter:csproj-srcs",
@@ -292,6 +297,7 @@ test_suite(
         "//service/KerbalAlarmClock:test",
         "//service/KerbalEngineerRedux:test",
         "//service/MechJeb:test",
+        "//service/RasterPropMonitor:test",
         "//service/RemoteTech:test",
         "//service/ScanSat:test",
         "//service/SpaceCenter:test",
@@ -322,6 +328,7 @@ filegroup(
         "//service/KerbalEngineerRedux",
         "//service/LiDAR",
         "//service/MechJeb",
+        "//service/RasterPropMonitor",
         "//service/RemoteTech",
         "//service/ScanSat",
         "//service/SpaceCenter",

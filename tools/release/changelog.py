@@ -43,6 +43,7 @@ COMPONENTS = {
     "service/MechJeb": "MechJeb service",
     "service/KerbalEngineerRedux": "Kerbal Engineer Redux service",
     "service/ScanSat": "SCANsat service",
+    "service/RasterPropMonitor": "Raster Prop Monitor service",
     "service/Debug": "Debug service",
     "client/cnano": "C-nano client",
     "client/csharp": "C# client",

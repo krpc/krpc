@@ -1,0 +1,41 @@
+.. default-domain:: {{ domain.sphinxname }}
+.. highlight:: {{ domain.highlight }}
+{{ domain.currentmodule('RasterPropMonitor') }}
+
+Raster Prop Monitor API
+=======================
+
+Provides functionality to interact with the `Raster Prop Monitor
+<https://github.com/FirstPersonKSP/RasterPropMonitor>`_ mod.
+
+.. toctree::
+   :includehidden:
+   :maxdepth: 1
+
+   raster-prop-monitor/raster-prop-monitor
+   raster-prop-monitor/computer
+   raster-prop-monitor/monitor
+   raster-prop-monitor/display
+   raster-prop-monitor/external-camera
+
+Example
+-------
+
+kRPC adds a page named ``krpc`` to every Raster Prop Monitor screen. The page shows the screen's
+{{ see('T:RasterPropMonitor.Display') }}, which a script draws on.
+{% if domain.name in ('lua', 'cnano') %}
+The following example draws a page on the first screen in the active vessel's IVA, showing
+whether SAS is on, and makes the screen's NAV button show it:
+{% else %}
+The following example draws a page on the first screen in the active vessel's IVA, showing
+whether SAS is on. The screen's ENTER button toggles SAS, and its NAV button shows the page:
+{% endif %}
+
+.. literalinclude:: /scripts/api/raster-prop-monitor/RasterPropMonitorExample.{{ domain.codeext }}
+
+The page text names Raster Prop Monitor's ``SAS`` variable, and the format gives ``ON`` for 1 and
+``OFF`` for 0. Raster Prop Monitor updates the page as SAS changes, however it is switched. On the
+screens of the Mk1 Lander Can, NAV is ``buttonR1``.
+{% if domain.name in ('lua', 'cnano') %}
+This client has no events, so the example does not answer the ENTER button.
+{% endif %}

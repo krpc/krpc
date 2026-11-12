@@ -279,6 +279,20 @@ class ScanSat(_ServiceMod):
     service = "scan_sat"
 
 
+class RasterPropMonitor(_ServiceMod):
+    """The full package, whose patches give the stock pods RPM IVAs. Its patches need
+    ModuleManager, which kRPC installs."""
+
+    name = "RasterPropMonitor"
+    source = _GITHUB + (
+        "FirstPersonKSP/RasterPropMonitor/releases/download/1.1.0.1/"
+        "RasterPropMonitor-1.1.0.1.zip"
+    )
+    sha256 = "a1f3b414e11afa9fef7f132c7ddaa45e2fe84f35fa5db93dbcc65b2fade8c897"
+    folders = ("JSI",)
+    service = "raster_prop_monitor"
+
+
 class RealChute(_PartMod):
     """Wrapped by the SpaceCenter Parachute class. Its part modules do not register without
     ClickThroughBlocker and ToolbarControl."""
@@ -542,6 +556,7 @@ MODS = [
     MechJeb,
     KerbalEngineerRedux,
     ScanSat,
+    RasterPropMonitor,
     RealChute,
     DMagic,
     AGExt,

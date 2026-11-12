@@ -1,0 +1,11 @@
+.. default-domain:: {{ domain.sphinxname }}
+.. highlight:: {{ domain.highlight }}
+{{ domain.currentmodule('RasterPropMonitor') }}
+{% import domain.macros as macros with context %}
+
+Computer
+========
+
+{{ macros.class(services['RasterPropMonitor'].classes['Computer']) }}
+
+{{ macros.enumeration(services['RasterPropMonitor'].enumerations['VariableType']) }}

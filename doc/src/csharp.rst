@@ -1039,4 +1039,5 @@ API Reference
    csharp/api/mechjeb
    csharp/api/kerbal-engineer-redux
    csharp/api/scansat
+   csharp/api/raster-prop-monitor
    csharp/api/debug
