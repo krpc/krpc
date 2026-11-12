@@ -9,8 +9,10 @@ import os
 import select
 import shutil
 import socket
+import struct
 import tempfile
 import threading
+import time
 from collections.abc import Callable, Iterable
 
 import serverprocess
@@ -33,6 +35,10 @@ JOIN_TIMEOUT = 10
 
 # The time the test waits for the client to make a call
 CALL_TIMEOUT = 10
+
+# The time a serial line waits for the client to read what the server wrote, before it closes.
+# A client that stops reading costs a test this long.
+DRAIN_TIMEOUT = 1
 
 
 def definitions(server: Endpoint, *names: str) -> bytes:
@@ -162,6 +168,36 @@ class SerialLine:
     def fileno(self) -> int:
         return self._fd
 
+    def _drain(self) -> None:
+        """Wait until the client's end holds no unread bytes, or socat stops as the client
+        closed. Stopping socat hangs the client's end up, which discards its unread bytes."""
+        # The serial line needs socat, so runs only on POSIX, where these modules exist
+        import fcntl  # noqa: PLC0415
+        import termios  # noqa: PLC0415
+
+        if self._fd < 0:
+            return
+        try:
+            termios.tcdrain(self._fd)
+            client = os.open(
+                self.client_port, os.O_RDONLY | os.O_NOCTTY | os.O_NONBLOCK
+            )
+        except (OSError, termios.error):
+            # The line is closed, or socat has stopped
+            return
+        try:
+            deadline = time.monotonic() + DRAIN_TIMEOUT
+            empty = 0
+            # Two empty polls in a row, as socat may hold bytes it has read but not written
+            while (
+                empty < 2 and self._socat.poll() is None and time.monotonic() < deadline
+            ):
+                waiting = fcntl.ioctl(client, termios.FIONREAD, struct.pack("i", 0))
+                empty = empty + 1 if struct.unpack("i", waiting)[0] == 0 else 0
+                time.sleep(0.01)
+        finally:
+            os.close(client)
+
     def recv(self, size: int) -> bytes:
         try:
             return os.read(self._fd, size)
@@ -177,10 +213,14 @@ class SerialLine:
             view = view[os.write(self._fd, view) :]
 
     def shutdown(self, how: int) -> None:
-        """Stop socat, which wakes a read."""
+        """Stop socat, once the client has read what the server wrote. Stopping it wakes a
+        read."""
+        self._drain()
         serverprocess.stop(self._socat)
 
-    def close(self) -> None:
+    def close(self, drain: bool = True) -> None:
+        if drain:
+            self._drain()
         serverprocess.stop(self._socat)
         with self._close_lock:
             fd, self._fd = self._fd, -1
@@ -300,10 +340,10 @@ class ScriptedServer:
                 # Not listening, as the script accepted
                 pass
             self._listener.close()
+        if self._line is not None:
+            self._line.close(drain=False)
         if self._socket is not None:
             self._socket.close()
-        if self._line is not None:
-            self._line.close()
         self._thread.join(JOIN_TIMEOUT)
         if self.path and os.path.exists(self.path):
             os.remove(self.path)
