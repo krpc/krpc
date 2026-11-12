@@ -113,17 +113,29 @@ class TestMods(unittest.TestCase):
         if version:
             self.assertIn(version, [v["version"] for v in MODS[name]["versions"]])
 
-    def test_service_mods_known(self):
+    def test_reported_mods_known(self):
         for service in SERVICES:
-            with self.subTest(service=service["name"]):
-                for name in service["mods"]:
-                    self.assertIn(name, MODS)
-
-    def test_service_mods_have_assembly(self):
-        for service in SERVICES:
-            for name in service["mods"]:
+            for name in service["mods"] + service["supports"]:
                 with self.subTest(service=service["name"], mod=name):
+                    self.assertIn(name, MODS)
                     self.assertIsNotNone(MODS[name]["assembly"])
+
+    def test_assembly_sha256(self):
+        for mod in MODS.values():
+            for version in mod["versions"]:
+                with self.subTest(mod=mod["name"], version=version["version"]):
+                    if mod["assembly"] is None:
+                        self.assertIsNone(version["assembly_sha256"])
+                    else:
+                        self.assertRegex(version["assembly_sha256"], "^[0-9a-f]{64}$")
+
+    def test_one_service_reports_each_mod(self):
+        names = [
+            name
+            for service in SERVICES
+            for name in service["mods"] + service["supports"]
+        ]
+        self.assertEqual(len(names), len(set(names)))
 
     def test_requires_known(self):
         for mod in MODS.values():
@@ -144,16 +156,6 @@ class TestMods(unittest.TestCase):
                         self.assert_resolves(
                             "%s==%s" % (version["archive"], version["version"])
                         )
-
-    def test_assembly_version_check(self):
-        for mod in MODS.values():
-            present = mod["present"]
-            if present is None or present["kind"] != "assembly_version":
-                continue
-            with self.subTest(mod=mod["name"]):
-                self.assertIsNotNone(mod["assembly"])
-                for version in mod["versions"]:
-                    self.assertIsNotNone(version["assembly_version"])
 
 
 if __name__ == "__main__":

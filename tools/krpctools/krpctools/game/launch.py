@@ -43,13 +43,29 @@ def _try_connect(game):
 
 
 def loaded_mods(game, conn, required=()):
-    """The ids of the game's mods the running game has loaded. A required mod whose
-    presence cannot be told counts as loaded."""
+    """The ids of the game's mods the running game has loaded.
+
+    Each mod is asked once whether it is loaded, through its first version. A loaded mod
+    counts at the version whose files are installed, with the required versions tried first,
+    or as "<name> (another version)" when no version's are. A required mod whose presence
+    cannot be told counts as loaded.
+    """
+    versions = {}
+    for mod in game.mods.values():
+        versions.setdefault(mod.name, []).append(mod)
     loaded = set()
-    for mod_id, mod in game.mods.items():
-        present = mod.present(game, conn)
-        if present or (present is None and mod_id in required):
-            loaded.add(mod_id)
+    for mods in versions.values():
+        present = mods[0].present(game, conn)
+        if present is None:
+            loaded.update(mod.id for mod in mods if mod.id in required)
+        elif present:
+            ordered = sorted(mods, key=lambda mod: mod.id not in required)
+            installed = next(
+                (mod for mod in ordered if mod.installed(game) is not False), None
+            )
+            loaded.add(
+                installed.id if installed else "%s (another version)" % mods[0].name
+            )
     return loaded
 
 

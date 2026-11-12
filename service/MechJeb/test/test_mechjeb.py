@@ -29,12 +29,12 @@ class MechJebTestCase(TestCase):
         vessel = cls.sc.active_vessel
         assert vessel is not None
         cls.vessel = vessel
-        cls.wait_until(lambda: cls.mj.api_ready)
+        cls.wait_until(lambda: cls.mj.ready)
 
 
 class TestMechJeb(MechJebTestCase):
-    def test_api_ready(self):
-        self.assertTrue(self.mj.api_ready)
+    def test_ready(self):
+        self.assertTrue(self.mj.ready)
 
     def settings(self):
         """Each settable member, as (object, attribute, value to set)."""
@@ -360,7 +360,7 @@ class TestMechJebInOrbit(MechJebTestCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.set_circular_orbit("Kerbin", 100000)
-        cls.wait_until(lambda: cls.mj.api_ready)
+        cls.wait_until(lambda: cls.mj.ready)
         # Activate the engine, for the node executor
         cls.vessel.control.activate_next_stage()
         cls.planner = cls.mj.maneuver_planner
@@ -466,7 +466,7 @@ class TestMechJebEllipticalOrbit(MechJebTestCase):
         cls.set_orbit(
             "Kerbin", semi_major_axis, 50000 / semi_major_axis, 5, 0, 0, 0, cls.sc.ut
         )
-        cls.wait_until(lambda: cls.mj.api_ready)
+        cls.wait_until(lambda: cls.mj.ready)
         cls.planner = cls.mj.maneuver_planner
 
     def tearDown(self):

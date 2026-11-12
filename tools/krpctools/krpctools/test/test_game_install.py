@@ -12,7 +12,7 @@ from unittest import mock
 
 from krpctools.game import game, install, launch
 from krpctools.game.ksp import KSP
-from krpctools.game.ksp.game import copy_file, copy_folder
+from krpctools.game.ksp.game import copy_file, copy_folder, source_digest
 
 # A clean no-mod GameData: the stock game, kRPC, the ModuleManager assembly and its
 # runtime-generated cache files.
@@ -219,6 +219,109 @@ class TestCopyFolder(TempDirTestCase):
             f.writestr("GameData/Other/Other.dll", "other")
         with self.assertRaises(RuntimeError):
             copy_folder(archive, "Mod", os.path.join(self.dir, "out"))
+
+
+class TestDigests(TempDirTestCase):
+    def setUp(self):
+        super().setUp()
+        self.archive = os.path.join(self.dir, "Mod.zip")
+        with zipfile.ZipFile(self.archive, "w") as f:
+            f.writestr("Mod-1.0/GameData/Mod/Plugins/Mod.dll", "release")
+        self.ksp = KSP(directory=self.dir)
+        self.mod = mock.Mock(folders=("Mod",))
+
+    def test_digest_from_archive(self):
+        self.assertEqual(
+            hashlib.sha256(b"release").hexdigest(),
+            source_digest(self.archive, ("Mod",), "Mod.dll"),
+        )
+
+    def test_digest_from_directory(self):
+        self.write("build/GameData/Mod/Mod.dll", "build")
+        self.assertEqual(
+            hashlib.sha256(b"build").hexdigest(),
+            source_digest(os.path.join(self.dir, "build"), ("Mod",), "Mod.dll"),
+        )
+
+    def test_source_without_the_file(self):
+        self.assertIsNone(source_digest(self.archive, ("Mod",), "Missing.dll"))
+
+    def test_installed_digest(self):
+        self.write("GameData/Mod/Plugins/Mod.dll", "release")
+        self.assertEqual(
+            hashlib.sha256(b"release").hexdigest(),
+            self.ksp.installed_digest(self.mod, "Mod.dll"),
+        )
+
+    def test_installed_digest_of_missing_file(self):
+        self.write("GameData/Mod/Other.dll", "release")
+        self.assertIsNone(self.ksp.installed_digest(self.mod, "Mod.dll"))
+
+    def test_installed_without_a_local_install(self):
+        with mock.patch.dict(os.environ, {"KSP_DIR": ""}):
+            ksp = KSP()
+            self.assertFalse(ksp.has_install())
+            self.assertIsNone(ksp.mod("FAR").installed(ksp))
+
+
+class _Version(game.Mod):
+    """A version of a mod whose presence and installed files a test sets."""
+
+    def __init__(self, name, version, loaded, installed):
+        super().__init__()
+        self.name = name
+        self.version = version
+        self.loaded = loaded
+        self.files_installed = installed
+        self.asked = 0
+
+    def present(self, game, conn):
+        self.asked += 1
+        return self.loaded
+
+    def installed(self, game):
+        return self.files_installed
+
+
+class TestLoadedMods(unittest.TestCase):
+    def game(self, *mods):
+        the_game = game.Game()
+        the_game.mods = {mod.id: mod for mod in mods}
+        return the_game
+
+    def test_installed_version(self):
+        new = _Version("Mod", "2", True, False)
+        old = _Version("Mod", "1", True, True)
+        self.assertEqual({"Mod==1"}, launch.loaded_mods(self.game(new, old), None))
+
+    def test_mod_asked_once(self):
+        new = _Version("Mod", "2", True, True)
+        old = _Version("Mod", "1", True, False)
+        launch.loaded_mods(self.game(new, old), None)
+        self.assertEqual((1, 0), (new.asked, old.asked))
+
+    def test_required_version_tried_first(self):
+        new = _Version("Mod", "2", True, None)
+        old = _Version("Mod", "1", True, None)
+        self.assertEqual(
+            {"Mod==1"}, launch.loaded_mods(self.game(new, old), None, {"Mod==1"})
+        )
+
+    def test_unpinned_version(self):
+        mod = _Version("Mod", "1", True, False)
+        self.assertEqual(
+            {"Mod (another version)"}, launch.loaded_mods(self.game(mod), None)
+        )
+
+    def test_mod_not_loaded(self):
+        mod = _Version("Mod", "1", False, True)
+        self.assertEqual(set(), launch.loaded_mods(self.game(mod), None))
+
+    def test_untold_presence_counts_when_required(self):
+        mod = _Version("Mod", "1", None, None)
+        the_game = self.game(mod)
+        self.assertEqual(set(), launch.loaded_mods(the_game, None))
+        self.assertEqual({"Mod==1"}, launch.loaded_mods(the_game, None, {"Mod==1"}))
 
 
 class TestCopyFile(TempDirTestCase):

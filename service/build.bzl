@@ -6,7 +6,7 @@ load("//tools/build:csharp.bzl", "csharp_library")
 load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
 load("//tools/build/ksp:build.bzl", "ksp_unity_libs")
 load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
-load(":registry.bzl", "CORE_SERVICES", "SERVICES")
+load(":registry.bzl", "CORE_SERVICES", "MODS", "SERVICES")
 
 # Default dependencies for service assemblies
 service_deps = [
@@ -22,20 +22,56 @@ def _service_info_impl(ctx):
         "    static class ServiceInfo",
         "    {",
         "        public const uint Id = %d;" % ctx.attr.id,
-        "    }",
-        "}",
     ]
+    if ctx.attr.mods:
+        content += ["", "        public static class Mods", "        {"]
+        for name, assembly in ctx.attr.mods.items():
+            content += [
+                "            public static class %s" % name,
+                "            {",
+                "                public const string Name = \"%s\";" % name,
+                "                public const string Assembly = \"%s\";" % assembly,
+                "            }",
+            ]
+        content.append("        }")
+    content += ["    }", "}"]
     ctx.actions.write(output = ctx.outputs.out, content = "\n".join(content) + "\n")
 
-service_info = rule(
-    doc = "Generates the ServiceInfo.cs of a service, holding its id from the registry.",
+_service_info = rule(
     implementation = _service_info_impl,
     attrs = {
         "id": attr.int(mandatory = True),
+        "mods": attr.string_dict(),
         "namespace": attr.string(mandatory = True),
     },
     outputs = {"out": "%{name}.cs"},
 )
+
+def service_info(name, service, namespace):
+    """Generates the ServiceInfo.cs of a service, from its entry in the registry.
+
+    The class holds the service's id, and the name and assembly of each mod it wraps or supports.
+
+    Args:
+      name: The target's name.
+      service: The service's entry in SERVICES.
+      namespace: The namespace of the ServiceInfo class.
+    """
+    _service_info(
+        name = name,
+        id = service.id,
+        mods = {
+            mod: _mod(mod).assembly
+            for mod in service.mods + service.supports
+        },
+        namespace = namespace,
+    )
+
+def _mod(name):
+    for mod in MODS:
+        if mod.name == name:
+            return mod
+    fail("No mod %s in MODS in //service:registry.bzl" % name)
 
 def _entry(field, value):
     for service in SERVICES:
@@ -148,8 +184,8 @@ def ksp_service(
 
     service_info(
         name = "ServiceInfo",
-        id = service.id,
         namespace = assembly,
+        service = service,
     )
 
     csharp_library(

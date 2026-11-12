@@ -32,8 +32,8 @@ csharp_assembly_info(
 
 service_info(
     name = "ServiceInfo",
-    id = service.id,
     namespace = "KRPC.LiDAR",
+    service = service,
 )
 
 srcs = [

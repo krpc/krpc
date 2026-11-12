@@ -60,8 +60,14 @@ class Mod:
         game.remove_mod(self)
 
     def present(self, game, conn):
-        """Whether the running game has the mod loaded, or None when that cannot be told."""
+        """Whether the running game has the mod loaded, at any version, or None when that
+        cannot be told."""
         return game.mod_present(self, conn)
+
+    def installed(self, game):
+        """Whether the mod's files in the install are this version, or None when that cannot
+        be told."""
+        return None
 
     def __repr__(self):
         return "%s(%r, %r)" % (type(self).__name__, self.id, self.source)
@@ -131,6 +137,12 @@ class Game:
             raise RuntimeError("%s install not found at %s" % (self.title(), directory))
         # The launch runs the game from here, so a relative path would resolve twice
         return os.path.abspath(directory)
+
+    def has_install(self):
+        """Whether an install directory is given and exists. A game on another machine has
+        none here."""
+        directory = self.directory or os.environ.get(self.directory_variable)
+        return bool(directory) and os.path.isdir(directory)
 
     def title(self):
         """The game's name in messages."""

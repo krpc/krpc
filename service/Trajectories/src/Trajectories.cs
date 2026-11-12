@@ -24,7 +24,7 @@ namespace KRPC.Trajectories
         /// <summary>
         /// Whether Trajectories is available.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.All)]
         public static bool Available
         {
             get

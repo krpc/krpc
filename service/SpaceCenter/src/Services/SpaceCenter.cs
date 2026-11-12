@@ -21,7 +21,7 @@ namespace KRPC.SpaceCenter.Services
     /// the active vessel, managing its resources, planning maneuver nodes and auto-piloting.
     /// </summary>
     [KRPCService (Id = ServiceInfo.Id)]
-    public static class SpaceCenter
+    public static partial class SpaceCenter
     {
         /// <summary>
         /// The current mode the game is in.
@@ -1154,30 +1154,6 @@ namespace KRPC.SpaceCenter.Services
                 return null;
             var part = hitInfo.collider.gameObject.GetComponentInParent<global::Part>();
             return part == null ? null : new Parts.Part (part);
-        }
-
-        /// <summary>
-        /// Whether Ferram Aerospace Research is installed.
-        /// </summary>
-        [KRPCProperty]
-        public static bool FARAvailable {
-            get { return ExternalAPI.FAR.IsAvailable; }
-        }
-
-        /// <summary>
-        /// Whether RealAntennas is installed.
-        /// </summary>
-        [KRPCProperty]
-        public static bool RealAntennasAvailable {
-            get { return ExternalAPI.RealAntennas.IsAvailable; }
-        }
-
-        /// <summary>
-        /// Whether RealFuels is installed.
-        /// </summary>
-        [KRPCProperty]
-        public static bool RealFuelsAvailable {
-            get { return ExternalAPI.RealFuels.IsAvailable; }
         }
 
         /// <summary>

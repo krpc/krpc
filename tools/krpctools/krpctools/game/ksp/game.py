@@ -1,6 +1,7 @@
 """Kerbal Space Program: installing into GameData, launching, and the TestingTools add-on."""
 
 import glob
+import hashlib
 import os
 import shutil
 import subprocess
@@ -124,6 +125,43 @@ def copy_folder(source, folder, dst):
             shutil.copytree(candidate, dst)
             return
     raise RuntimeError("%s has no GameData/%s" % (source, folder))
+
+
+def _digest(data):
+    return hashlib.sha256(data).hexdigest()
+
+
+def _directory_digest(directory, name):
+    """The SHA-256 of the first file of the given name under directory, or None."""
+    for root, _, filenames in sorted(os.walk(directory)):
+        if name in filenames:
+            with open(os.path.join(root, name), "rb") as f:
+                return _digest(f.read())
+    return None
+
+
+def source_digest(source, folders, name):
+    """The SHA-256 of the file of the given name in one of the GameData folders of source, a zip
+    archive or a directory, or None."""
+    if zipfile.is_zipfile(source):
+        with zipfile.ZipFile(source) as archive:
+            for folder in folders:
+                for member, path in _folder_members(archive, folder):
+                    if path.split("/")[-1] == name:
+                        return _digest(archive.read(member))
+        return None
+    for folder in folders:
+        candidates = [
+            os.path.join(source, "GameData", folder),
+            os.path.join(source, folder),
+        ]
+        if os.path.basename(os.path.normpath(source)) == folder:
+            candidates.append(source)
+        for candidate in candidates:
+            digest = _directory_digest(candidate, name)
+            if digest is not None:
+                return digest
+    return None
 
 
 class Mod(game.Mod):
@@ -264,6 +302,14 @@ class KSP(game.Game):
             path = os.path.join(self.gamedata(), name)
             if os.path.exists(path):
                 os.remove(path)
+
+    def installed_digest(self, mod, name):
+        """The SHA-256 of the file of the given name in the mod's GameData folders, or None."""
+        for folder in mod.folders:
+            digest = _directory_digest(os.path.join(self.gamedata(), folder), name)
+            if digest is not None:
+                return digest
+        return None
 
     def validate_install(self, mods):
         """Fail if GameData holds anything beyond the stock game, kRPC, ModuleManager and

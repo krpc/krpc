@@ -124,10 +124,18 @@ namespace KRPC.MechJeb
         }
 
         /// <summary>
+        /// Whether MechJeb is installed.
+        /// </summary>
+        [KRPCProperty (GameScene = GameScene.All)]
+        public static bool Available {
+            get { return Loaded; }
+        }
+
+        /// <summary>
         /// Whether MechJeb is installed and the active vessel has MechJeb.
         /// </summary>
         [KRPCProperty]
-        public static bool APIReady {
+        public static bool Ready {
             get { return MasterMechJeb != null; }
         }
 

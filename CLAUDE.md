@@ -89,6 +89,9 @@ the tests: a test's docstring is the requirement's text, its markers the level a
    `ksp_service` call, from `//service:build.bzl`. The build, clientgen and the docs read their
    service lists and ids from the registry. `//service:registry-test` lists the hand-written
    files to update.
+ * **A mod service has `Available`**, for every game scene, and SpaceCenter `<Mod>Available` for
+   each mod in its `supports`. The in-game tests check a test's mods through them, and tell the
+   installed version by the SHA-256 of `<assembly>.dll`, `assembly_sha256` in the registry.
  * **New C# target → load `csharp_library`/`csharp_binary`/`csharp_nunit_test` from `//tools/build:csharp.bzl`**,
    not `@rules_dotnet`. The wrappers run the culture analyzers (`tools/build/dotnet/analyzers.globalconfig`);
    only the doc examples use the plain rules.
@@ -151,6 +154,8 @@ bazel run //tools/game:test-ksp -- -k test_camera_mode                          
    the first version listed, and `name==version` another, as in `"KSPCommunityPartModules==0.4.0"`.
    Downloads are cached in `~/.cache/krpctools`. `--mod NAME=PATH` installs a local build in
    place of the pin.
+ * A pin bump updates the version's `sha256` and `assembly_sha256`. Installing the mod fails when
+   `assembly_sha256` does not match the archive's `<assembly>.dll`.
  * Install reconciles GameData to **exactly** the requested set (plus kRPC) — required-but-missing and
    installed-but-unneeded are both wrong.
  * Pytest groups tests by mod set; game restarts at most once per set.
