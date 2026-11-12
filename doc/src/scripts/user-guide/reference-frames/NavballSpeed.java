@@ -1,14 +1,11 @@
 import krpc.client.Connection;
-import krpc.client.RPCException;
 import krpc.client.services.SpaceCenter;
 import krpc.client.services.SpaceCenter.ReferenceFrame;
 import krpc.client.services.SpaceCenter.Vessel;
 
-import java.io.IOException;
 
 public class NavballSpeed {
-    public static void main(String[] args)
-        throws IOException, RPCException, InterruptedException {
+    public static void main(String[] args) throws InterruptedException {
         Connection connection = Connection.newInstance("Navball speed");
         SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
         Vessel vessel = spaceCenter.getActiveVessel();

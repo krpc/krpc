@@ -1,12 +1,10 @@
 import krpc.client.Connection;
-import krpc.client.RPCException;
 import krpc.client.services.SpaceCenter;
 import krpc.client.services.SpaceCenter.MapFilterType;
 
-import java.io.IOException;
 
 public class Flags {
-  public static void main(String[] args) throws IOException, RPCException {
+  public static void main(String[] args) {
     try (Connection connection = Connection.newInstance()) {
       SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
 

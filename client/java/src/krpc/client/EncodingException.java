@@ -1,7 +1,7 @@
 package krpc.client;
 
-/** Thrown when failing to encode or decode a message. */
-public class EncodingException extends RuntimeException {
+/** Thrown for a value of the right type that fails to encode, or a value that fails to decode. */
+public class EncodingException extends RemoteException {
   private static final long serialVersionUID = 16427533217488326L;
 
   /** Creates a new EncodingException with the given message. */
@@ -10,7 +10,7 @@ public class EncodingException extends RuntimeException {
   }
 
   /** Creates a new EncodingException with the given message and cause. */
-  public EncodingException(String message, Exception innerException) {
+  public EncodingException(String message, Throwable innerException) {
     super(message, innerException);
   }
 }

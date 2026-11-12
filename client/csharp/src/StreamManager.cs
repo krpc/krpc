@@ -159,7 +159,7 @@ namespace KRPC.Client
                     return;
                 streams.Remove (stream.Id);
             }
-            var ending = new StreamRemovedException ("Stream has been removed");
+            var ending = new StreamException ("Stream has been removed");
             // Ended first, so a value that arrives during the call is dropped
             var endCallbacks = stream.End (ending);
             foreach (var callback in endCallbacks)

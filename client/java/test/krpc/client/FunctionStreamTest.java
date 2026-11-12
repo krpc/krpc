@@ -33,13 +33,13 @@ public class FunctionStreamTest {
   }
 
   /** A function that returns its one parameter, of the given type. */
-  private Expression identity(Type type) throws RPCException {
+  private Expression identity(Type type) {
     Expression x = Expression.parameter(connection, "x", type);
     return Expression.lambda(connection, Arrays.asList(x), x);
   }
 
   @Test
-  public void testNumberArgumentWidensAsJavaWidensIt() throws RPCException {
+  public void testNumberArgumentWidensAsJavaWidensIt() {
     Expression toDouble = identity(Type.double_(connection));
     assertEquals(2.0, (double) connection.run(toDouble, 2), 0);
     assertEquals(2.0, (double) connection.run(toDouble, (short) 2), 0);
@@ -47,7 +47,7 @@ public class FunctionStreamTest {
   }
 
   @Test
-  public void testNumberArgumentOfAnotherClassDoesNotConvert() throws RPCException {
+  public void testNumberArgumentOfAnotherClassDoesNotConvert() {
     Expression toDouble = identity(Type.double_(connection));
     IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
         () -> connection.run(toDouble, new BigDecimal("1e400")));
@@ -61,8 +61,7 @@ public class FunctionStreamTest {
   }
 
   @Test
-  public void testNarrowerSignedArgumentConvertsToUnsignedParameterIfNotNegative()
-      throws RPCException {
+  public void testNarrowerSignedArgumentConvertsToUnsignedParameterIfNotNegative() {
     Expression toUnsignedLong = identity(Type.uLong(connection));
     assertEquals(5L, (long) connection.run(toUnsignedLong, 5));
     IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
@@ -77,7 +76,7 @@ public class FunctionStreamTest {
   }
 
   @Test
-  public void testUnsignedParameterTakesItsOwnJavaTypeBitForBit() throws RPCException {
+  public void testUnsignedParameterTakesItsOwnJavaTypeBitForBit() {
     // The maximum of each unsigned type reads back as -1
     Expression toUnsignedLong = identity(Type.uLong(connection));
     long maxLong = connection.run(toUnsignedLong, -1L);
@@ -90,7 +89,7 @@ public class FunctionStreamTest {
   }
 
   @Test
-  public void testCollectionItemDoesNotWiden() throws RPCException {
+  public void testCollectionItemDoesNotWiden() {
     Expression doubles = Expression.parameter(
         connection, "l", Type.listType(connection, Type.double_(connection)));
     Expression count = Expression.lambda(

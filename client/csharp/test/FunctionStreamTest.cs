@@ -44,13 +44,13 @@ namespace KRPC.Client.Test
             var testService = Connection.TestService ();
             var effect = Connection.Compile (
                 () => testService.ResetInvalidOperationExceptionLater ());
-            var exn = Assert.Throws<System.InvalidOperationException> (
+            var exn = Assert.Throws<System.ArgumentException> (
                 () => Connection.Run<int> (effect));
             StringAssert.Contains ("without a type parameter", exn.Message);
-            exn = Assert.Throws<System.InvalidOperationException> (() => Connection.AddStream<int> (effect));
+            exn = Assert.Throws<System.ArgumentException> (() => Connection.AddStream<int> (effect));
             StringAssert.Contains ("without a type parameter", exn.Message);
             var value = Connection.Compile (() => testService.FloatToString (1));
-            exn = Assert.Throws<System.InvalidOperationException> (() => Connection.AddStream (value));
+            exn = Assert.Throws<System.ArgumentException> (() => Connection.AddStream (value));
             StringAssert.Contains ("with a type parameter", exn.Message);
         }
 
@@ -121,7 +121,7 @@ namespace KRPC.Client.Test
             // The lambda is rejected before it is streamed as the call
             var obj = Connection.TestService ().CreateTestObject ("streamedparameter");
             System.Linq.Expressions.Expression<System.Func<int, int>> single = x => obj.IntProperty;
-            Assert.Throws<FunctionCompilationException> (
+            Assert.Throws<CompilationException> (
                 () => Connection.AddStream<int> ((System.Linq.Expressions.LambdaExpression)single));
         }
     }

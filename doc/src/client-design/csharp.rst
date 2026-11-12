@@ -18,7 +18,7 @@ and stay valid objects after it closes:
        met = connection.AddStream (() => vessel.MET);
    }
    met.Get ();     // Throws ConnectionException
-   _ = vessel.MET; // Throws ObjectDisposedException
+   _ = vessel.MET; // Throws ConnectionException
 
 References
 ^^^^^^^^^^
@@ -113,10 +113,15 @@ Mapping the Spec to C#
      - C#
    * - Closing a connection
      - ``Connection.Dispose``, or a ``using`` block
-   * - Connection error
-     - ``ConnectionException``
+   * - Remote error
+     - ``RemoteException``, an ``Exception``
+   * - Connection, stream, encoding error
+     - ``ConnectionException``, ``StreamException``, ``EncodingException``
    * - Server error with no mapped type
-     - ``RPCException``
+     - ``ServerException``, the base of each exception class a service declares
+   * - Server exception with a mapped type
+     - The .NET exception itself, from the table in ``lang/csharp.py`` in ``krpctools``. The stubs
+       generate no class for it, and register a function that creates it
    * - Nullable value
      - ``T?`` for a value type, and a reference type holds null. A generated ``TypeSpec`` names the position
    * - Holding a condition

@@ -134,6 +134,12 @@ class JavaLanguage(Language):
     def native_exception(self, mapped_type: str) -> str | None:
         return self.native_exceptions.get(mapped_type)
 
+    def exception_alias(self, service: str, name: str, mapped_type: str) -> str | None:
+        # The server removes a stream with this exception, thrown as the client's own
+        if (service, name) == ("KRPC", "StreamRemovedException"):
+            return "krpc.client.StreamException"
+        return self.native_exception(mapped_type)
+
     def parse_name(self, name):
         return super().parse_name(lower_camel_case(name))
 

@@ -274,7 +274,7 @@ namespace KRPC.Client
         void CheckDisposed ()
         {
             if (disposed)
-                throw new ObjectDisposedException (GetType ().Name);
+                throw new ConnectionException ("Connection closed");
         }
 
         /// <summary>
@@ -292,7 +292,7 @@ namespace KRPC.Client
             if (ReferenceEquals (expression, null))
                 throw new ArgumentNullException (nameof (expression));
             if (expression.Parameters.Count > 0)
-                throw new FunctionCompilationException (
+                throw new CompilationException (
                     "A function that is streamed, or checked for an event, cannot take parameters");
             if (!typeof (TResult).IsAssignableFrom (expression.ReturnType))
                 throw new ArgumentException (
@@ -729,7 +729,7 @@ namespace KRPC.Client
             if (ReferenceEquals (function, null))
                 throw new ArgumentNullException (nameof (function));
             if (FunctionReturnType (function) != null)
-                throw new InvalidOperationException (
+                throw new ArgumentException (
                     "The function evaluates to a value. Call AddStream with a type parameter.");
             var streamId = InternalProcedures.AddFunctionStream (this, function);
             return new Stream (this, streamId);
@@ -753,7 +753,7 @@ namespace KRPC.Client
             var resultType = typeof (TResult);
             if (resultType.IsGenericType &&
                 resultType.GetGenericTypeDefinition () == typeof (System.Linq.IOrderedEnumerable<>))
-                throw new FunctionCompilationException (
+                throw new CompilationException (
                     "The function evaluates to an ordered sequence, which is sent as a list. " +
                     "Call ToList() to evaluate to the list.");
             var type = FunctionCompiler.ResultBody (expression).Type;
@@ -763,7 +763,7 @@ namespace KRPC.Client
             try {
                 Decoder.BuildDecoders (spec);
             } catch (ArgumentException exception) {
-                throw new FunctionCompilationException (
+                throw new CompilationException (
                     "The function evaluates to a " + type + ", which cannot be received from " +
                     "the server", exception);
             }
@@ -815,12 +815,12 @@ namespace KRPC.Client
         {
             var type = FunctionReturnType (function);
             if (type == null)
-                throw new InvalidOperationException (
+                throw new ArgumentException (
                     "The function does not evaluate to a value. Call " + (streamed ? "AddStream" : "Run") +
                     " without a type parameter.");
             var decoded = FunctionCompiler.DecodedType (typeof (TResult), type);
             if (decoded == null)
-                throw new InvalidOperationException (
+                throw new ArgumentException (
                     "The function evaluates to a value that " + typeof (TResult) + " cannot hold");
             return TypeSpec.FromDescribed (decoded, type);
         }
@@ -1089,17 +1089,17 @@ namespace KRPC.Client
         }
 
         // Read by the reader while a service registers its exception types
-        readonly ConcurrentDictionary<string, System.Type> exceptionTypes =
-            new ConcurrentDictionary<string, System.Type> ();
+        readonly ConcurrentDictionary<string, Func<string, System.Exception>> exceptionTypes =
+            new ConcurrentDictionary<string, Func<string, System.Exception>> ();
 
         /// <summary>
-        /// Add an exception type to the client.
+        /// Add the function that creates the exception for a server exception, from its message.
         /// Should only be called by generated client stubs.
         /// </summary>
-        public void AddExceptionType (string service, string name, System.Type exnType)
+        public void AddExceptionType (string service, string name, Func<string, System.Exception> create)
         {
             CheckDisposed ();
-            exceptionTypes [service + "." + name] = exnType;
+            exceptionTypes [service + "." + name] = create;
         }
 
         internal System.Exception GetException (Error error)
@@ -1109,38 +1109,16 @@ namespace KRPC.Client
                 message += "\nServer stack trace:\n" + error.StackTrace;
             if (error.Service.Length > 0 && error.Exception.Length > 0) {
                 var key = error.Service + "." + error.Exception;
-                if (key == "KRPC.InvalidOperationException")
-                    return new InvalidOperationException (message);
-                if (key == "KRPC.ArgumentException")
-                    return new ArgumentException (message);
-                if (key == "KRPC.ArgumentNullException")
-                    return new ArgumentNullException (string.Empty, message);
-                if (key == "KRPC.ArgumentOutOfRangeException")
-                    return new ArgumentOutOfRangeException (string.Empty, message);
-                if (key == "KRPC.NullReferenceException")
-                    return new NullReferenceException (message);
-                if (key == "KRPC.KeyNotFoundException")
-                    return new KeyNotFoundException (message);
-                if (key == "KRPC.IndexOutOfRangeException")
-                    return new IndexOutOfRangeException (message);
-                if (key == "KRPC.DivideByZeroException")
-                    return new DivideByZeroException (message);
-                if (key == "KRPC.NotSupportedException")
-                    return new NotSupportedException (message);
-                if (key == "KRPC.TimeoutException")
-                    return new TimeoutException (message);
-                if (key == "KRPC.OverflowException")
-                    return new OverflowException (message);
-                System.Type exnType;
-                if (!exceptionTypes.TryGetValue (key, out exnType)) {
+                Func<string, System.Exception> create;
+                if (!exceptionTypes.TryGetValue (key, out create)) {
                     // The type is unknown here if the service it belongs to was never
                     // registered. Report the error itself, named by its type on the server, so
                     // that the failure to build an exception for it does not hide it.
-                    return new RPCException (key + ": " + message);
+                    return new ServerException (key + ": " + message);
                 }
-                return (System.Exception)Activator.CreateInstance (exnType, new [] { message });
+                return create (message);
             }
-            return new RPCException (message);
+            return new ServerException (message);
         }
     }
 }

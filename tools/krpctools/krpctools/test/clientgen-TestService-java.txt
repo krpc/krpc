@@ -11,7 +11,6 @@ import krpc.client.RemoteObject;
 import krpc.client.RemoteService;
 import krpc.client.RemoteStruct;
 import krpc.client.RPCInfo;
-import krpc.client.RPCException;
 import krpc.client.Types;
 
 // Generated code references its own deprecated members (e.g. when registering
@@ -28,7 +27,7 @@ public class TestService extends RemoteService {
         addExceptionTypes(connection);
     }
 
-    public static class CustomException extends krpc.client.RPCException {
+    public static class CustomException extends krpc.client.ServerException {
         private static final long serialVersionUID = 653216682626171239L;
 
         public CustomException(String message) {
@@ -46,7 +45,7 @@ public class TestService extends RemoteService {
      * @deprecated Use CustomException instead.
      */
     @Deprecated
-    public static class DeprecatedException extends krpc.client.RPCException {
+    public static class DeprecatedException extends krpc.client.ServerException {
         private static final long serialVersionUID = 483570852596919585L;
 
         public DeprecatedException(String message) {
@@ -65,7 +64,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "AddMultipleValues", types = _Types.class)
-    public String addMultipleValues(float x, int y, long z) throws RPCException {
+    public String addMultipleValues(float x, int y, long z) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(x, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT)),
             Encoder.encode(y, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)),
@@ -77,7 +76,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "AddToObjectDictionary", types = _Types.class)
-    public java.util.Map<String,krpc.client.services.TestService.TestClass> addToObjectDictionary(java.util.Map<String,krpc.client.services.TestService.TestClass> d, String key) throws RPCException {
+    public java.util.Map<String,krpc.client.services.TestService.TestClass> addToObjectDictionary(java.util.Map<String,krpc.client.services.TestService.TestClass> d, String key) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(d, krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createClass("TestService", "TestClass"))),
             Encoder.encode(key, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
@@ -88,7 +87,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "AddToObjectList", types = _Types.class)
-    public java.util.List<krpc.client.services.TestService.TestClass> addToObjectList(java.util.List<krpc.client.services.TestService.TestClass> l, String value) throws RPCException {
+    public java.util.List<krpc.client.services.TestService.TestClass> addToObjectList(java.util.List<krpc.client.services.TestService.TestClass> l, String value) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(l, krpc.client.Types.createList(krpc.client.Types.createClass("TestService", "TestClass"))),
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
@@ -99,7 +98,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "AddToObjectSet", types = _Types.class)
-    public java.util.Set<krpc.client.services.TestService.TestClass> addToObjectSet(java.util.Set<krpc.client.services.TestService.TestClass> h, String value) throws RPCException {
+    public java.util.Set<krpc.client.services.TestService.TestClass> addToObjectSet(java.util.Set<krpc.client.services.TestService.TestClass> h, String value) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(h, krpc.client.Types.createSet(krpc.client.Types.createClass("TestService", "TestClass"))),
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
@@ -110,7 +109,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "BlockingProcedure", types = _Types.class)
-    public int blockingProcedure(int n, int sum) throws RPCException {
+    public int blockingProcedure(int n, int sum) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(n, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)),
             Encoder.encode(sum, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))
@@ -121,7 +120,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "BoolToString", types = _Types.class)
-    public String boolToString(boolean value) throws RPCException {
+    public String boolToString(boolean value) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL))
         };
@@ -131,7 +130,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "BytesDefault", types = _Types.class)
-    public byte[] bytesDefault(byte[] x) throws RPCException {
+    public byte[] bytesDefault(byte[] x) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(x, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BYTES))
         };
@@ -141,7 +140,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "BytesToHexString", types = _Types.class)
-    public String bytesToHexString(byte[] value) throws RPCException {
+    public String bytesToHexString(byte[] value) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BYTES))
         };
@@ -151,7 +150,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "Counter", types = _Types.class)
-    public int counter(String id, int divisor) throws RPCException {
+    public int counter(String id, int divisor) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(id, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)),
             Encoder.encode(divisor, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))
@@ -166,7 +165,7 @@ public class TestService extends RemoteService {
      */
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "CounterStruct", types = _Types.class)
-    public krpc.client.services.TestService.TestStruct counterStruct(String id) throws RPCException {
+    public krpc.client.services.TestService.TestStruct counterStruct(String id) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(id, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
         };
@@ -182,14 +181,14 @@ public class TestService extends RemoteService {
     @Deprecated
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "CreateDeprecatedClass", types = _Types.class)
-    public krpc.client.services.TestService.DeprecatedClass createDeprecatedClass() throws RPCException {
+    public krpc.client.services.TestService.DeprecatedClass createDeprecatedClass() {
         krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "CreateDeprecatedClass");
         return (krpc.client.services.TestService.DeprecatedClass) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("TestService", "DeprecatedClass"), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "CreateTestObject", types = _Types.class)
-    public krpc.client.services.TestService.TestClass createTestObject(String value) throws RPCException {
+    public krpc.client.services.TestService.TestClass createTestObject(String value) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
         };
@@ -205,7 +204,7 @@ public class TestService extends RemoteService {
     @Deprecated
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "DeprecatedProcedure", types = _Types.class)
-    public String deprecatedProcedure(float value) throws RPCException {
+    public String deprecatedProcedure(float value) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT))
         };
@@ -219,7 +218,7 @@ public class TestService extends RemoteService {
     @Deprecated
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "DeprecatedProcedureNoMessage", types = _Types.class)
-    public String deprecatedProcedureNoMessage(float value) throws RPCException {
+    public String deprecatedProcedureNoMessage(float value) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT))
         };
@@ -235,14 +234,14 @@ public class TestService extends RemoteService {
     @Deprecated
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "DeprecatedStructProcedure", types = _Types.class)
-    public krpc.client.services.TestService.DeprecatedStruct deprecatedStructProcedure() throws RPCException {
+    public krpc.client.services.TestService.DeprecatedStruct deprecatedStructProcedure() {
         krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "DeprecatedStructProcedure");
         return (krpc.client.services.TestService.DeprecatedStruct) Decoder.decode(_data.getValue(), krpc.client.Types.createStruct("TestService", "DeprecatedStruct"), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "DictionaryDefault", types = _Types.class)
-    public java.util.Map<Integer,Boolean> dictionaryDefault(java.util.Map<Integer,Boolean> x) throws RPCException {
+    public java.util.Map<Integer,Boolean> dictionaryDefault(java.util.Map<Integer,Boolean> x) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(x, krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL)))
         };
@@ -255,7 +254,7 @@ public class TestService extends RemoteService {
      */
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "DoubleSpecialDefaults", types = _Types.class)
-    public java.util.List<Double> doubleSpecialDefaults(double nan, double infinity, double negativeInfinity, double maximum, double lowest) throws RPCException {
+    public java.util.List<Double> doubleSpecialDefaults(double nan, double infinity, double negativeInfinity, double maximum, double lowest) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(nan, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.DOUBLE)),
             Encoder.encode(infinity, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.DOUBLE)),
@@ -269,7 +268,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "DoubleToString", types = _Types.class)
-    public String doubleToString(double value) throws RPCException {
+    public String doubleToString(double value) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.DOUBLE))
         };
@@ -282,7 +281,7 @@ public class TestService extends RemoteService {
      */
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "DumpExpressionTree", types = _Types.class)
-    public String dumpExpressionTree(krpc.client.services.KRPC.Expression expression) throws RPCException {
+    public String dumpExpressionTree(krpc.client.services.KRPC.Expression expression) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(expression, krpc.client.Types.createClass("KRPC", "Expression"))
         };
@@ -292,7 +291,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "EchoDictionaryOfNullableObjects", types = _Types.class)
-    public java.util.Map<String,krpc.client.services.TestService.TestClass> echoDictionaryOfNullableObjects(java.util.Map<String,krpc.client.services.TestService.TestClass> d) throws RPCException {
+    public java.util.Map<String,krpc.client.services.TestService.TestClass> echoDictionaryOfNullableObjects(java.util.Map<String,krpc.client.services.TestService.TestClass> d) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(d, krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.nullable(krpc.client.Types.createClass("TestService", "TestClass"))))
         };
@@ -302,7 +301,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "EchoListOfNullableInts", types = _Types.class)
-    public java.util.List<Integer> echoListOfNullableInts(java.util.List<Integer> l) throws RPCException {
+    public java.util.List<Integer> echoListOfNullableInts(java.util.List<Integer> l) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(l, krpc.client.Types.createList(krpc.client.Types.nullable(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))))
         };
@@ -312,7 +311,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "EchoListOfNullableObjects", types = _Types.class)
-    public java.util.List<krpc.client.services.TestService.TestClass> echoListOfNullableObjects(java.util.List<krpc.client.services.TestService.TestClass> l) throws RPCException {
+    public java.util.List<krpc.client.services.TestService.TestClass> echoListOfNullableObjects(java.util.List<krpc.client.services.TestService.TestClass> l) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(l, krpc.client.Types.createList(krpc.client.Types.nullable(krpc.client.Types.createClass("TestService", "TestClass"))))
         };
@@ -322,7 +321,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "EchoNestedListOfNullableObjects", types = _Types.class)
-    public java.util.List<java.util.List<krpc.client.services.TestService.TestClass>> echoNestedListOfNullableObjects(java.util.List<java.util.List<krpc.client.services.TestService.TestClass>> l) throws RPCException {
+    public java.util.List<java.util.List<krpc.client.services.TestService.TestClass>> echoNestedListOfNullableObjects(java.util.List<java.util.List<krpc.client.services.TestService.TestClass>> l) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(l, krpc.client.Types.createList(krpc.client.Types.createList(krpc.client.Types.nullable(krpc.client.Types.createClass("TestService", "TestClass")))))
         };
@@ -332,7 +331,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "EchoNestedNullableStruct", types = _Types.class)
-    public krpc.client.services.TestService.TestNestedNullableStruct echoNestedNullableStruct(krpc.client.services.TestService.TestNestedNullableStruct value) throws RPCException {
+    public krpc.client.services.TestService.TestNestedNullableStruct echoNestedNullableStruct(krpc.client.services.TestService.TestNestedNullableStruct value) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createStruct("TestService", "TestNestedNullableStruct"))
         };
@@ -342,7 +341,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "EchoNullableBool", types = _Types.class)
-    public Boolean echoNullableBool(Boolean value) throws RPCException {
+    public Boolean echoNullableBool(Boolean value) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL))
         };
@@ -355,7 +354,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "EchoNullableBytes", types = _Types.class)
-    public byte[] echoNullableBytes(byte[] value) throws RPCException {
+    public byte[] echoNullableBytes(byte[] value) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BYTES))
         };
@@ -368,7 +367,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "EchoNullableDictionary", types = _Types.class)
-    public java.util.Map<String,Integer> echoNullableDictionary(java.util.Map<String,Integer> d) throws RPCException {
+    public java.util.Map<String,Integer> echoNullableDictionary(java.util.Map<String,Integer> d) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(d, krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)))
         };
@@ -381,7 +380,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "EchoNullableDouble", types = _Types.class)
-    public Double echoNullableDouble(Double value) throws RPCException {
+    public Double echoNullableDouble(Double value) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.DOUBLE))
         };
@@ -394,7 +393,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "EchoNullableEnum", types = _Types.class)
-    public krpc.client.services.TestService.TestEnum echoNullableEnum(krpc.client.services.TestService.TestEnum x) throws RPCException {
+    public krpc.client.services.TestService.TestEnum echoNullableEnum(krpc.client.services.TestService.TestEnum x) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(x, krpc.client.Types.createEnumeration("TestService", "TestEnum"))
         };
@@ -407,7 +406,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "EchoNullableFlags", types = _Types.class)
-    public krpc.client.services.TestService.TestFlags echoNullableFlags(krpc.client.services.TestService.TestFlags x) throws RPCException {
+    public krpc.client.services.TestService.TestFlags echoNullableFlags(krpc.client.services.TestService.TestFlags x) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(x, krpc.client.Types.createEnumeration("TestService", "TestFlags"))
         };
@@ -420,7 +419,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "EchoNullableFloat", types = _Types.class)
-    public Float echoNullableFloat(Float value) throws RPCException {
+    public Float echoNullableFloat(Float value) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT))
         };
@@ -438,7 +437,7 @@ public class TestService extends RemoteService {
      */
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "EchoNullableInt", types = _Types.class)
-    public Integer echoNullableInt(Integer value) throws RPCException {
+    public Integer echoNullableInt(Integer value) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))
         };
@@ -451,7 +450,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "EchoNullableList", types = _Types.class)
-    public java.util.List<Integer> echoNullableList(java.util.List<Integer> l) throws RPCException {
+    public java.util.List<Integer> echoNullableList(java.util.List<Integer> l) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(l, krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)))
         };
@@ -464,7 +463,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "EchoNullableLong", types = _Types.class)
-    public Long echoNullableLong(Long value) throws RPCException {
+    public Long echoNullableLong(Long value) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT64))
         };
@@ -477,7 +476,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "EchoNullableSet", types = _Types.class)
-    public java.util.Set<Integer> echoNullableSet(java.util.Set<Integer> h) throws RPCException {
+    public java.util.Set<Integer> echoNullableSet(java.util.Set<Integer> h) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(h, krpc.client.Types.createSet(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)))
         };
@@ -490,7 +489,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "EchoNullableString", types = _Types.class)
-    public String echoNullableString(String value) throws RPCException {
+    public String echoNullableString(String value) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
         };
@@ -503,7 +502,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "EchoNullableTuple", types = _Types.class)
-    public org.javatuples.Pair<Integer,Long> echoNullableTuple(org.javatuples.Pair<Integer,Long> t) throws RPCException {
+    public org.javatuples.Pair<Integer,Long> echoNullableTuple(org.javatuples.Pair<Integer,Long> t) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(t, krpc.client.Types.createTuple(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT64)))
         };
@@ -516,7 +515,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "EchoNullableUInt", types = _Types.class)
-    public Integer echoNullableUInt(Integer value) throws RPCException {
+    public Integer echoNullableUInt(Integer value) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32))
         };
@@ -529,7 +528,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "EchoNullableULong", types = _Types.class)
-    public Long echoNullableULong(Long value) throws RPCException {
+    public Long echoNullableULong(Long value) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT64))
         };
@@ -542,7 +541,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "EchoStringSet", types = _Types.class)
-    public java.util.Set<String> echoStringSet(java.util.Set<String> h) throws RPCException {
+    public java.util.Set<String> echoStringSet(java.util.Set<String> h) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(h, krpc.client.Types.createSet(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)))
         };
@@ -552,7 +551,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "EchoTestObject", types = _Types.class)
-    public krpc.client.services.TestService.TestClass echoTestObject(krpc.client.services.TestService.TestClass value) throws RPCException {
+    public krpc.client.services.TestService.TestClass echoTestObject(krpc.client.services.TestService.TestClass value) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createClass("TestService", "TestClass"))
         };
@@ -565,7 +564,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "EchoTupleWithANullableObject", types = _Types.class)
-    public org.javatuples.Pair<Integer,krpc.client.services.TestService.TestClass> echoTupleWithANullableObject(org.javatuples.Pair<Integer,krpc.client.services.TestService.TestClass> t) throws RPCException {
+    public org.javatuples.Pair<Integer,krpc.client.services.TestService.TestClass> echoTupleWithANullableObject(org.javatuples.Pair<Integer,krpc.client.services.TestService.TestClass> t) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(t, krpc.client.Types.createTuple(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),krpc.client.Types.nullable(krpc.client.Types.createClass("TestService", "TestClass"))))
         };
@@ -575,7 +574,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "EmptyListDefault", types = _Types.class)
-    public java.util.List<String> emptyListDefault(java.util.List<String> x) throws RPCException {
+    public java.util.List<String> emptyListDefault(java.util.List<String> x) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(x, krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)))
         };
@@ -585,7 +584,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "EnumDefault", types = _Types.class)
-    public krpc.client.services.TestService.TestEnum enumDefault(krpc.client.services.TestService.TestEnum x) throws RPCException {
+    public krpc.client.services.TestService.TestEnum enumDefault(krpc.client.services.TestService.TestEnum x) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(x, krpc.client.Types.createEnumeration("TestService", "TestEnum"))
         };
@@ -595,7 +594,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "EnumEcho", types = _Types.class)
-    public krpc.client.services.TestService.TestEnum enumEcho(krpc.client.services.TestService.TestEnum x) throws RPCException {
+    public krpc.client.services.TestService.TestEnum enumEcho(krpc.client.services.TestService.TestEnum x) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(x, krpc.client.Types.createEnumeration("TestService", "TestEnum"))
         };
@@ -605,7 +604,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "EnumListDefault", types = _Types.class)
-    public java.util.List<krpc.client.services.TestService.TestEnum> enumListDefault(java.util.List<krpc.client.services.TestService.TestEnum> x) throws RPCException {
+    public java.util.List<krpc.client.services.TestService.TestEnum> enumListDefault(java.util.List<krpc.client.services.TestService.TestEnum> x) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(x, krpc.client.Types.createList(krpc.client.Types.createEnumeration("TestService", "TestEnum")))
         };
@@ -615,7 +614,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "EnumToString", types = _Types.class)
-    public String enumToString(krpc.client.services.TestService.TestEnum x) throws RPCException {
+    public String enumToString(krpc.client.services.TestService.TestEnum x) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(x, krpc.client.Types.createEnumeration("TestService", "TestEnum"))
         };
@@ -625,7 +624,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "FlagsDefault", types = _Types.class)
-    public krpc.client.services.TestService.TestFlags flagsDefault(krpc.client.services.TestService.TestFlags x) throws RPCException {
+    public krpc.client.services.TestService.TestFlags flagsDefault(krpc.client.services.TestService.TestFlags x) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(x, krpc.client.Types.createEnumeration("TestService", "TestFlags"))
         };
@@ -635,7 +634,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "FlagsEcho", types = _Types.class)
-    public krpc.client.services.TestService.TestFlags flagsEcho(krpc.client.services.TestService.TestFlags x) throws RPCException {
+    public krpc.client.services.TestService.TestFlags flagsEcho(krpc.client.services.TestService.TestFlags x) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(x, krpc.client.Types.createEnumeration("TestService", "TestFlags"))
         };
@@ -645,7 +644,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "FlagsListEcho", types = _Types.class)
-    public java.util.List<krpc.client.services.TestService.TestFlags> flagsListEcho(java.util.List<krpc.client.services.TestService.TestFlags> x) throws RPCException {
+    public java.util.List<krpc.client.services.TestService.TestFlags> flagsListEcho(java.util.List<krpc.client.services.TestService.TestFlags> x) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(x, krpc.client.Types.createList(krpc.client.Types.createEnumeration("TestService", "TestFlags")))
         };
@@ -655,7 +654,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "FlagsStructEcho", types = _Types.class)
-    public krpc.client.services.TestService.TestFlagsStruct flagsStructEcho(krpc.client.services.TestService.TestFlagsStruct x) throws RPCException {
+    public krpc.client.services.TestService.TestFlagsStruct flagsStructEcho(krpc.client.services.TestService.TestFlagsStruct x) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(x, krpc.client.Types.createStruct("TestService", "TestFlagsStruct"))
         };
@@ -665,7 +664,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "FlagsToInt", types = _Types.class)
-    public int flagsToInt(krpc.client.services.TestService.TestFlags x) throws RPCException {
+    public int flagsToInt(krpc.client.services.TestService.TestFlags x) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(x, krpc.client.Types.createEnumeration("TestService", "TestFlags"))
         };
@@ -679,7 +678,7 @@ public class TestService extends RemoteService {
      */
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "FloatSpecialDefaults", types = _Types.class)
-    public java.util.List<Float> floatSpecialDefaults(float nan, float infinity, float negativeInfinity, float maximum, float lowest, float fraction) throws RPCException {
+    public java.util.List<Float> floatSpecialDefaults(float nan, float infinity, float negativeInfinity, float maximum, float lowest, float fraction) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(nan, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT)),
             Encoder.encode(infinity, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT)),
@@ -697,7 +696,7 @@ public class TestService extends RemoteService {
      */
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "FloatToString", types = _Types.class)
-    public String floatToString(float value) throws RPCException {
+    public String floatToString(float value) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT))
         };
@@ -707,7 +706,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "HexStringToBytes", types = _Types.class)
-    public byte[] hexStringToBytes(String value) throws RPCException {
+    public byte[] hexStringToBytes(String value) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
         };
@@ -717,7 +716,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "IncrementDictionary", types = _Types.class)
-    public java.util.Map<String,Integer> incrementDictionary(java.util.Map<String,Integer> d) throws RPCException {
+    public java.util.Map<String,Integer> incrementDictionary(java.util.Map<String,Integer> d) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(d, krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)))
         };
@@ -727,7 +726,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "IncrementList", types = _Types.class)
-    public java.util.List<Integer> incrementList(java.util.List<Integer> l) throws RPCException {
+    public java.util.List<Integer> incrementList(java.util.List<Integer> l) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(l, krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)))
         };
@@ -737,7 +736,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "IncrementListOfStructs", types = _Types.class)
-    public java.util.List<krpc.client.services.TestService.TestStruct> incrementListOfStructs(java.util.List<krpc.client.services.TestService.TestStruct> l) throws RPCException {
+    public java.util.List<krpc.client.services.TestService.TestStruct> incrementListOfStructs(java.util.List<krpc.client.services.TestService.TestStruct> l) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(l, krpc.client.Types.createList(krpc.client.Types.createStruct("TestService", "TestStruct")))
         };
@@ -747,7 +746,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "IncrementNestedCollection", types = _Types.class)
-    public java.util.Map<String,java.util.List<Integer>> incrementNestedCollection(java.util.Map<String,java.util.List<Integer>> d) throws RPCException {
+    public java.util.Map<String,java.util.List<Integer>> incrementNestedCollection(java.util.Map<String,java.util.List<Integer>> d) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(d, krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))))
         };
@@ -757,7 +756,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "IncrementSet", types = _Types.class)
-    public java.util.Set<Integer> incrementSet(java.util.Set<Integer> h) throws RPCException {
+    public java.util.Set<Integer> incrementSet(java.util.Set<Integer> h) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(h, krpc.client.Types.createSet(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)))
         };
@@ -767,7 +766,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "IncrementTuple", types = _Types.class)
-    public org.javatuples.Pair<Integer,Long> incrementTuple(org.javatuples.Pair<Integer,Long> t) throws RPCException {
+    public org.javatuples.Pair<Integer,Long> incrementTuple(org.javatuples.Pair<Integer,Long> t) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(t, krpc.client.Types.createTuple(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT64)))
         };
@@ -780,7 +779,7 @@ public class TestService extends RemoteService {
      */
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "Int32SpecialDefaults", types = _Types.class)
-    public java.util.List<Integer> int32SpecialDefaults(int maximum, int minimum) throws RPCException {
+    public java.util.List<Integer> int32SpecialDefaults(int maximum, int minimum) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(maximum, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)),
             Encoder.encode(minimum, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))
@@ -791,7 +790,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "Int32ToString", types = _Types.class)
-    public String int32ToString(int value) throws RPCException {
+    public String int32ToString(int value) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))
         };
@@ -804,7 +803,7 @@ public class TestService extends RemoteService {
      */
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "Int64SpecialDefaults", types = _Types.class)
-    public java.util.List<Long> int64SpecialDefaults(long maximum, long minimum) throws RPCException {
+    public java.util.List<Long> int64SpecialDefaults(long maximum, long minimum) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(maximum, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT64)),
             Encoder.encode(minimum, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT64))
@@ -815,7 +814,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "Int64ToString", types = _Types.class)
-    public String int64ToString(long value) throws RPCException {
+    public String int64ToString(long value) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT64))
         };
@@ -825,7 +824,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "IntToFlags", types = _Types.class)
-    public krpc.client.services.TestService.TestFlags intToFlags(int x) throws RPCException {
+    public krpc.client.services.TestService.TestFlags intToFlags(int x) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(x, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))
         };
@@ -846,7 +845,7 @@ public class TestService extends RemoteService {
      */
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "JoinWithAtSign", types = _Types.class)
-    public String joinWithAtSign(String firstValue, String from) throws RPCException {
+    public String joinWithAtSign(String firstValue, String from) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(firstValue, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)),
             Encoder.encode(from, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
@@ -857,7 +856,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "ListDefault", types = _Types.class)
-    public java.util.List<Integer> listDefault(java.util.List<Integer> x) throws RPCException {
+    public java.util.List<Integer> listDefault(java.util.List<Integer> x) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(x, krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)))
         };
@@ -867,7 +866,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "NestedStructEcho", types = _Types.class)
-    public krpc.client.services.TestService.TestNestedStruct nestedStructEcho(krpc.client.services.TestService.TestNestedStruct x) throws RPCException {
+    public krpc.client.services.TestService.TestNestedStruct nestedStructEcho(krpc.client.services.TestService.TestNestedStruct x) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(x, krpc.client.Types.createStruct("TestService", "TestNestedStruct"))
         };
@@ -877,7 +876,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "NotNullableObject", types = _Types.class)
-    public krpc.client.services.TestService.TestClass notNullableObject(krpc.client.services.TestService.TestClass value) throws RPCException {
+    public krpc.client.services.TestService.TestClass notNullableObject(krpc.client.services.TestService.TestClass value) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createClass("TestService", "TestClass"))
         };
@@ -887,7 +886,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "NullDefault", types = _Types.class)
-    public String nullDefault(krpc.client.services.TestService.TestClass obj) throws RPCException {
+    public String nullDefault(krpc.client.services.TestService.TestClass obj) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(obj, krpc.client.Types.createClass("TestService", "TestClass"))
         };
@@ -897,7 +896,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "NullableStructEcho", types = _Types.class)
-    public krpc.client.services.TestService.TestNullableStruct nullableStructEcho(krpc.client.services.TestService.TestNullableStruct x) throws RPCException {
+    public krpc.client.services.TestService.TestNullableStruct nullableStructEcho(krpc.client.services.TestService.TestNullableStruct x) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(x, krpc.client.Types.createStruct("TestService", "TestNullableStruct"))
         };
@@ -907,7 +906,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "OnTimer", types = _Types.class)
-    public krpc.client.Event onTimer(int milliseconds, int repeats) throws RPCException {
+    public krpc.client.Event onTimer(int milliseconds, int repeats) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(milliseconds, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32)),
             Encoder.encode(repeats, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32))
@@ -918,7 +917,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "OptionalArguments", types = _Types.class)
-    public String optionalArguments(String x, String y, String z, krpc.client.services.TestService.TestClass obj) throws RPCException {
+    public String optionalArguments(String x, String y, String z, krpc.client.services.TestService.TestClass obj) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(x, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)),
             Encoder.encode(y, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)),
@@ -934,14 +933,14 @@ public class TestService extends RemoteService {
      */
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "PartlyDeprecatedStructProcedure", types = _Types.class)
-    public krpc.client.services.TestService.PartlyDeprecatedStruct partlyDeprecatedStructProcedure() throws RPCException {
+    public krpc.client.services.TestService.PartlyDeprecatedStruct partlyDeprecatedStructProcedure() {
         krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "PartlyDeprecatedStructProcedure");
         return (krpc.client.services.TestService.PartlyDeprecatedStruct) Decoder.decode(_data.getValue(), krpc.client.Types.createStruct("TestService", "PartlyDeprecatedStruct"), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "RemoveEventAfter", types = _Types.class)
-    public krpc.client.Event removeEventAfter(int milliseconds) throws RPCException {
+    public krpc.client.Event removeEventAfter(int milliseconds) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(milliseconds, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32))
         };
@@ -951,7 +950,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "RemoveTestObject", types = _Types.class)
-    public void removeTestObject(krpc.client.services.TestService.TestClass value) throws RPCException {
+    public void removeTestObject(krpc.client.services.TestService.TestClass value) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createClass("TestService", "TestClass"))
         };
@@ -960,26 +959,26 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "ResetCustomExceptionLater", types = _Types.class)
-    public void resetCustomExceptionLater() throws RPCException {
+    public void resetCustomExceptionLater() {
         this.connection.invoke("TestService", "ResetCustomExceptionLater");
     }
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "ResetInvalidOperationExceptionLater", types = _Types.class)
-    public void resetInvalidOperationExceptionLater() throws RPCException {
+    public void resetInvalidOperationExceptionLater() {
         this.connection.invoke("TestService", "ResetInvalidOperationExceptionLater");
     }
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "ReturnNullWhenNotAllowed", types = _Types.class)
-    public krpc.client.services.TestService.TestClass returnNullWhenNotAllowed() throws RPCException {
+    public krpc.client.services.TestService.TestClass returnNullWhenNotAllowed() {
         krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "ReturnNullWhenNotAllowed");
         return (krpc.client.services.TestService.TestClass) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("TestService", "TestClass"), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "ScalarDefault", types = _Types.class)
-    public int scalarDefault(int x) throws RPCException {
+    public int scalarDefault(int x) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(x, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))
         };
@@ -989,7 +988,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "SetDefault", types = _Types.class)
-    public java.util.Set<Integer> setDefault(java.util.Set<Integer> x) throws RPCException {
+    public java.util.Set<Integer> setDefault(java.util.Set<Integer> x) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(x, krpc.client.Types.createSet(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)))
         };
@@ -999,7 +998,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "StringDefault", types = _Types.class)
-    public String stringDefault(String x) throws RPCException {
+    public String stringDefault(String x) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(x, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
         };
@@ -1009,7 +1008,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "StringToBool", types = _Types.class)
-    public boolean stringToBool(String value) throws RPCException {
+    public boolean stringToBool(String value) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
         };
@@ -1019,7 +1018,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "StringToDouble", types = _Types.class)
-    public double stringToDouble(String value) throws RPCException {
+    public double stringToDouble(String value) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
         };
@@ -1029,7 +1028,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "StringToEnum", types = _Types.class)
-    public krpc.client.services.TestService.TestEnum stringToEnum(String value) throws RPCException {
+    public krpc.client.services.TestService.TestEnum stringToEnum(String value) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
         };
@@ -1039,7 +1038,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "StringToFloat", types = _Types.class)
-    public float stringToFloat(String value) throws RPCException {
+    public float stringToFloat(String value) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
         };
@@ -1049,7 +1048,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "StringToInt32", types = _Types.class)
-    public int stringToInt32(String value) throws RPCException {
+    public int stringToInt32(String value) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
         };
@@ -1059,7 +1058,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "StringToInt64", types = _Types.class)
-    public long stringToInt64(String value) throws RPCException {
+    public long stringToInt64(String value) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
         };
@@ -1069,7 +1068,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "StringToUInt32", types = _Types.class)
-    public int stringToUInt32(String value) throws RPCException {
+    public int stringToUInt32(String value) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
         };
@@ -1079,7 +1078,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "StringToUInt64", types = _Types.class)
-    public long stringToUInt64(String value) throws RPCException {
+    public long stringToUInt64(String value) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
         };
@@ -1089,7 +1088,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "StructDefault", types = _Types.class)
-    public krpc.client.services.TestService.TestStruct structDefault(krpc.client.services.TestService.TestStruct x) throws RPCException {
+    public krpc.client.services.TestService.TestStruct structDefault(krpc.client.services.TestService.TestStruct x) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(x, krpc.client.Types.createStruct("TestService", "TestStruct"))
         };
@@ -1099,7 +1098,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "StructEcho", types = _Types.class)
-    public krpc.client.services.TestService.TestStruct structEcho(krpc.client.services.TestService.TestStruct x) throws RPCException {
+    public krpc.client.services.TestService.TestStruct structEcho(krpc.client.services.TestService.TestStruct x) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(x, krpc.client.Types.createStruct("TestService", "TestStruct"))
         };
@@ -1109,7 +1108,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "StructEchoNullable", types = _Types.class)
-    public krpc.client.services.TestService.TestStruct structEchoNullable(krpc.client.services.TestService.TestStruct x) throws RPCException {
+    public krpc.client.services.TestService.TestStruct structEchoNullable(krpc.client.services.TestService.TestStruct x) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(x, krpc.client.Types.createStruct("TestService", "TestStruct"))
         };
@@ -1122,7 +1121,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "SwapObjectTuple", types = _Types.class)
-    public org.javatuples.Pair<krpc.client.services.TestService.TestClass,krpc.client.services.TestService.TestClass> swapObjectTuple(org.javatuples.Pair<krpc.client.services.TestService.TestClass,krpc.client.services.TestService.TestClass> t) throws RPCException {
+    public org.javatuples.Pair<krpc.client.services.TestService.TestClass,krpc.client.services.TestService.TestClass> swapObjectTuple(org.javatuples.Pair<krpc.client.services.TestService.TestClass,krpc.client.services.TestService.TestClass> t) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(t, krpc.client.Types.createTuple(krpc.client.Types.createClass("TestService", "TestClass"),krpc.client.Types.createClass("TestService", "TestClass")))
         };
@@ -1132,14 +1131,14 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "ThrowArgumentException", types = _Types.class)
-    public int throwArgumentException() throws RPCException {
+    public int throwArgumentException() {
         krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "ThrowArgumentException");
         return (int) Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "ThrowArgumentNullException", types = _Types.class)
-    public int throwArgumentNullException(String foo) throws RPCException {
+    public int throwArgumentNullException(String foo) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(foo, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
         };
@@ -1149,7 +1148,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "ThrowArgumentOutOfRangeException", types = _Types.class)
-    public int throwArgumentOutOfRangeException(int foo) throws RPCException {
+    public int throwArgumentOutOfRangeException(int foo) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(foo, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))
         };
@@ -1161,7 +1160,7 @@ public class TestService extends RemoteService {
      * Throws a {@link TestService.CustomException}.
      *
      * Links to each kind of member: {@link TestService}, {@link TestService.TestClass},
-     * {@link TestService.TestEnum}, {@link TestService.TestStruct}, {@link KRPC.InvalidOperationException},
+     * {@link TestService.TestEnum}, {@link TestService.TestStruct}, {@link java.lang.IllegalStateException},
      * {@link TestService#floatToString}, {@link TestService#getStringProperty()},
      * {@link TestService#setStringPropertyPrivateGet}, {@link TestService.TestClass#floatToString},
      * {@link TestService.TestClass#staticMethod}, {@link TestService.TestClass#getIntProperty()},
@@ -1170,28 +1169,28 @@ public class TestService extends RemoteService {
      */
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "ThrowCustomException", types = _Types.class)
-    public int throwCustomException() throws RPCException {
+    public int throwCustomException() {
         krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "ThrowCustomException");
         return (int) Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "ThrowCustomExceptionLater", types = _Types.class)
-    public int throwCustomExceptionLater() throws RPCException {
+    public int throwCustomExceptionLater() {
         krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "ThrowCustomExceptionLater");
         return (int) Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "ThrowInvalidOperationException", types = _Types.class)
-    public int throwInvalidOperationException() throws RPCException {
+    public int throwInvalidOperationException() {
         krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "ThrowInvalidOperationException");
         return (int) Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "ThrowInvalidOperationExceptionLater", types = _Types.class)
-    public int throwInvalidOperationExceptionLater() throws RPCException {
+    public int throwInvalidOperationExceptionLater() {
         krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "ThrowInvalidOperationExceptionLater");
         return (int) Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
     }
@@ -1202,7 +1201,7 @@ public class TestService extends RemoteService {
      */
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "ThrowMappedException", types = _Types.class)
-    public int throwMappedException(String name) throws RPCException {
+    public int throwMappedException(String name) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(name, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
         };
@@ -1212,7 +1211,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "TupleDefault", types = _Types.class)
-    public org.javatuples.Pair<Integer,Boolean> tupleDefault(org.javatuples.Pair<Integer,Boolean> x) throws RPCException {
+    public org.javatuples.Pair<Integer,Boolean> tupleDefault(org.javatuples.Pair<Integer,Boolean> x) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(x, krpc.client.Types.createTuple(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL)))
         };
@@ -1222,7 +1221,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "UInt32ToString", types = _Types.class)
-    public String uInt32ToString(int value) throws RPCException {
+    public String uInt32ToString(int value) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32))
         };
@@ -1232,7 +1231,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "UInt64ToString", types = _Types.class)
-    public String uInt64ToString(long value) throws RPCException {
+    public String uInt64ToString(long value) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT64))
         };
@@ -1245,7 +1244,7 @@ public class TestService extends RemoteService {
      */
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "Uint32SpecialDefaults", types = _Types.class)
-    public java.util.List<Integer> uint32SpecialDefaults(int maximum) throws RPCException {
+    public java.util.List<Integer> uint32SpecialDefaults(int maximum) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(maximum, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32))
         };
@@ -1258,7 +1257,7 @@ public class TestService extends RemoteService {
      */
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "Uint64SpecialDefaults", types = _Types.class)
-    public java.util.List<Long> uint64SpecialDefaults(long maximum) throws RPCException {
+    public java.util.List<Long> uint64SpecialDefaults(long maximum) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(maximum, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT64))
         };
@@ -1274,7 +1273,7 @@ public class TestService extends RemoteService {
     @Deprecated
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "get_DeprecatedProperty", types = _Types.class)
-    public String getDeprecatedProperty() throws RPCException {
+    public String getDeprecatedProperty() {
         krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "get_DeprecatedProperty");
         return (String) Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
     }
@@ -1287,7 +1286,7 @@ public class TestService extends RemoteService {
     @Deprecated
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "set_DeprecatedProperty", types = _Types.class)
-    public void setDeprecatedProperty(String value) throws RPCException {
+    public void setDeprecatedProperty(String value) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
         };
@@ -1296,7 +1295,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "get_NullableObject", types = _Types.class)
-    public krpc.client.services.TestService.TestClass getNullableObject() throws RPCException {
+    public krpc.client.services.TestService.TestClass getNullableObject() {
         krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "get_NullableObject");
         if (_data.getIsNull()) {
           return null;
@@ -1306,7 +1305,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "set_NullableObject", types = _Types.class)
-    public void setNullableObject(krpc.client.services.TestService.TestClass value) throws RPCException {
+    public void setNullableObject(krpc.client.services.TestService.TestClass value) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createClass("TestService", "TestClass"))
         };
@@ -1319,7 +1318,7 @@ public class TestService extends RemoteService {
      */
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "get_ObjectProperty", types = _Types.class)
-    public krpc.client.services.TestService.TestClass getObjectProperty() throws RPCException {
+    public krpc.client.services.TestService.TestClass getObjectProperty() {
         krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "get_ObjectProperty");
         if (_data.getIsNull()) {
           return null;
@@ -1332,7 +1331,7 @@ public class TestService extends RemoteService {
      */
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "set_ObjectProperty", types = _Types.class)
-    public void setObjectProperty(krpc.client.services.TestService.TestClass value) throws RPCException {
+    public void setObjectProperty(krpc.client.services.TestService.TestClass value) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createClass("TestService", "TestClass"))
         };
@@ -1344,7 +1343,7 @@ public class TestService extends RemoteService {
      */
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "get_StringProperty", types = _Types.class)
-    public String getStringProperty() throws RPCException {
+    public String getStringProperty() {
         krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "get_StringProperty");
         return (String) Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
     }
@@ -1354,7 +1353,7 @@ public class TestService extends RemoteService {
      */
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "set_StringProperty", types = _Types.class)
-    public void setStringProperty(String value) throws RPCException {
+    public void setStringProperty(String value) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
         };
@@ -1363,7 +1362,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "set_StringPropertyPrivateGet", types = _Types.class)
-    public void setStringPropertyPrivateGet(String value) throws RPCException {
+    public void setStringPropertyPrivateGet(String value) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
         };
@@ -1372,7 +1371,7 @@ public class TestService extends RemoteService {
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "get_StringPropertyPrivateSet", types = _Types.class)
-    public String getStringPropertyPrivateSet() throws RPCException {
+    public String getStringPropertyPrivateSet() {
         krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "get_StringPropertyPrivateSet");
         return (String) Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
     }
@@ -2248,7 +2247,7 @@ public class TestService extends RemoteService {
         @Deprecated
         @SuppressWarnings({ "unchecked" })
         @RPCInfo(service = "TestService", procedure = "DeprecatedClass_DeprecatedMethod", types = _Types.class)
-        public String deprecatedMethod() throws RPCException
+        public String deprecatedMethod()
         {
             ByteString[] _args = new ByteString[] {
                 Encoder.encode(this, krpc.client.Types.createClass("TestService", "DeprecatedClass"))
@@ -2265,7 +2264,7 @@ public class TestService extends RemoteService {
         @Deprecated
         @SuppressWarnings({ "unchecked" })
         @RPCInfo(service = "TestService", procedure = "DeprecatedClass_InheritedMethod", types = _Types.class)
-        public String inheritedMethod() throws RPCException
+        public String inheritedMethod()
         {
             ByteString[] _args = new ByteString[] {
                 Encoder.encode(this, krpc.client.Types.createClass("TestService", "DeprecatedClass"))
@@ -2282,7 +2281,7 @@ public class TestService extends RemoteService {
         @Deprecated
         @SuppressWarnings({ "unchecked" })
         @RPCInfo(service = "TestService", procedure = "DeprecatedClass_get_InheritedProperty", types = _Types.class)
-        public String getInheritedProperty() throws RPCException
+        public String getInheritedProperty()
         {
             ByteString[] _args = new ByteString[] {
                 Encoder.encode(this, krpc.client.Types.createClass("TestService", "DeprecatedClass"))
@@ -2299,7 +2298,7 @@ public class TestService extends RemoteService {
         @Deprecated
         @SuppressWarnings({ "unchecked" })
         @RPCInfo(service = "TestService", procedure = "DeprecatedClass_set_InheritedProperty", types = _Types.class)
-        public void setInheritedProperty(String value) throws RPCException
+        public void setInheritedProperty(String value)
         {
             ByteString[] _args = new ByteString[] {
                 Encoder.encode(this, krpc.client.Types.createClass("TestService", "DeprecatedClass")),
@@ -2316,7 +2315,7 @@ public class TestService extends RemoteService {
         @Deprecated
         @SuppressWarnings({ "unchecked" })
         @RPCInfo(service = "TestService", procedure = "DeprecatedClass_static_InheritedStaticMethod", types = _Types.class)
-        public static String inheritedStaticMethod(Connection connection) throws RPCException
+        public static String inheritedStaticMethod(Connection connection)
         {
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("TestService", "DeprecatedClass_static_InheritedStaticMethod");
             return (String) Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), connection);
@@ -2351,7 +2350,7 @@ public class TestService extends RemoteService {
              */
             @Deprecated
             @RPCInfo(service = "TestService", procedure = "DeprecatedClass_static_InheritedStaticMethod", types = _Types.class)
-            public String inheritedStaticMethod() throws RPCException
+            public String inheritedStaticMethod()
             {
                 return krpc.client.services.TestService.DeprecatedClass.inheritedStaticMethod(connection);
             }
@@ -2371,7 +2370,7 @@ public class TestService extends RemoteService {
 
         @SuppressWarnings({ "unchecked" })
         @RPCInfo(service = "TestService", procedure = "TestClass_EchoNullableObject", types = _Types.class)
-        public krpc.client.services.TestService.TestClass echoNullableObject(krpc.client.services.TestService.TestClass value) throws RPCException
+        public krpc.client.services.TestService.TestClass echoNullableObject(krpc.client.services.TestService.TestClass value)
         {
             ByteString[] _args = new ByteString[] {
                 Encoder.encode(this, krpc.client.Types.createClass("TestService", "TestClass")),
@@ -2386,7 +2385,7 @@ public class TestService extends RemoteService {
 
         @SuppressWarnings({ "unchecked" })
         @RPCInfo(service = "TestService", procedure = "TestClass_FloatToString", types = _Types.class)
-        public String floatToString(float x) throws RPCException
+        public String floatToString(float x)
         {
             ByteString[] _args = new ByteString[] {
                 Encoder.encode(this, krpc.client.Types.createClass("TestService", "TestClass")),
@@ -2401,7 +2400,7 @@ public class TestService extends RemoteService {
          */
         @SuppressWarnings({ "unchecked" })
         @RPCInfo(service = "TestService", procedure = "TestClass_GetValue", types = _Types.class)
-        public String getValue() throws RPCException
+        public String getValue()
         {
             ByteString[] _args = new ByteString[] {
                 Encoder.encode(this, krpc.client.Types.createClass("TestService", "TestClass"))
@@ -2412,7 +2411,7 @@ public class TestService extends RemoteService {
 
         @SuppressWarnings({ "unchecked" })
         @RPCInfo(service = "TestService", procedure = "TestClass_ObjectToString", types = _Types.class)
-        public String objectToString(krpc.client.services.TestService.TestClass other) throws RPCException
+        public String objectToString(krpc.client.services.TestService.TestClass other)
         {
             ByteString[] _args = new ByteString[] {
                 Encoder.encode(this, krpc.client.Types.createClass("TestService", "TestClass")),
@@ -2424,7 +2423,7 @@ public class TestService extends RemoteService {
 
         @SuppressWarnings({ "unchecked" })
         @RPCInfo(service = "TestService", procedure = "TestClass_OptionalArguments", types = _Types.class)
-        public String optionalArguments(String x, String y, String z, krpc.client.services.TestService.TestClass obj) throws RPCException
+        public String optionalArguments(String x, String y, String z, krpc.client.services.TestService.TestClass obj)
         {
             ByteString[] _args = new ByteString[] {
                 Encoder.encode(this, krpc.client.Types.createClass("TestService", "TestClass")),
@@ -2442,7 +2441,7 @@ public class TestService extends RemoteService {
          */
         @SuppressWarnings({ "unchecked" })
         @RPCInfo(service = "TestService", procedure = "TestClass_get_IntProperty", types = _Types.class)
-        public int getIntProperty() throws RPCException
+        public int getIntProperty()
         {
             ByteString[] _args = new ByteString[] {
                 Encoder.encode(this, krpc.client.Types.createClass("TestService", "TestClass"))
@@ -2456,7 +2455,7 @@ public class TestService extends RemoteService {
          */
         @SuppressWarnings({ "unchecked" })
         @RPCInfo(service = "TestService", procedure = "TestClass_set_IntProperty", types = _Types.class)
-        public void setIntProperty(int value) throws RPCException
+        public void setIntProperty(int value)
         {
             ByteString[] _args = new ByteString[] {
                 Encoder.encode(this, krpc.client.Types.createClass("TestService", "TestClass")),
@@ -2471,7 +2470,7 @@ public class TestService extends RemoteService {
          */
         @SuppressWarnings({ "unchecked" })
         @RPCInfo(service = "TestService", procedure = "TestClass_get_ObjectProperty", types = _Types.class)
-        public krpc.client.services.TestService.TestClass getObjectProperty() throws RPCException
+        public krpc.client.services.TestService.TestClass getObjectProperty()
         {
             ByteString[] _args = new ByteString[] {
                 Encoder.encode(this, krpc.client.Types.createClass("TestService", "TestClass"))
@@ -2488,7 +2487,7 @@ public class TestService extends RemoteService {
          */
         @SuppressWarnings({ "unchecked" })
         @RPCInfo(service = "TestService", procedure = "TestClass_set_ObjectProperty", types = _Types.class)
-        public void setObjectProperty(krpc.client.services.TestService.TestClass value) throws RPCException
+        public void setObjectProperty(krpc.client.services.TestService.TestClass value)
         {
             ByteString[] _args = new ByteString[] {
                 Encoder.encode(this, krpc.client.Types.createClass("TestService", "TestClass")),
@@ -2499,7 +2498,7 @@ public class TestService extends RemoteService {
 
         @SuppressWarnings({ "unchecked" })
         @RPCInfo(service = "TestService", procedure = "TestClass_set_StringPropertyPrivateGet", types = _Types.class)
-        public void setStringPropertyPrivateGet(String value) throws RPCException
+        public void setStringPropertyPrivateGet(String value)
         {
             ByteString[] _args = new ByteString[] {
                 Encoder.encode(this, krpc.client.Types.createClass("TestService", "TestClass")),
@@ -2510,7 +2509,7 @@ public class TestService extends RemoteService {
 
         @SuppressWarnings({ "unchecked" })
         @RPCInfo(service = "TestService", procedure = "TestClass_get_StringPropertyPrivateSet", types = _Types.class)
-        public String getStringPropertyPrivateSet() throws RPCException
+        public String getStringPropertyPrivateSet()
         {
             ByteString[] _args = new ByteString[] {
                 Encoder.encode(this, krpc.client.Types.createClass("TestService", "TestClass"))
@@ -2527,7 +2526,7 @@ public class TestService extends RemoteService {
          */
         @SuppressWarnings({ "unchecked" })
         @RPCInfo(service = "TestService", procedure = "TestClass_static_StaticMethod", types = _Types.class)
-        public static String staticMethod(Connection connection, String a, String b) throws RPCException
+        public static String staticMethod(Connection connection, String a, String b)
         {
             ByteString[] _args = new ByteString[] {
                 Encoder.encode(a, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)),
@@ -2539,7 +2538,7 @@ public class TestService extends RemoteService {
 
         @SuppressWarnings({ "unchecked" })
         @RPCInfo(service = "TestService", procedure = "TestClass_static_StaticNullableObject", types = _Types.class)
-        public static krpc.client.services.TestService.TestClass staticNullableObject(Connection connection, krpc.client.services.TestService.TestClass value) throws RPCException
+        public static krpc.client.services.TestService.TestClass staticNullableObject(Connection connection, krpc.client.services.TestService.TestClass value)
         {
             ByteString[] _args = new ByteString[] {
                 Encoder.encode(value, krpc.client.Types.createClass("TestService", "TestClass"))
@@ -2553,7 +2552,7 @@ public class TestService extends RemoteService {
 
         @SuppressWarnings({ "unchecked" })
         @RPCInfo(service = "TestService", procedure = "TestClass_static_StaticOptionalArguments", types = _Types.class)
-        public static String staticOptionalArguments(Connection connection, String x, String y, String z, krpc.client.services.TestService.TestClass obj) throws RPCException
+        public static String staticOptionalArguments(Connection connection, String x, String y, String z, krpc.client.services.TestService.TestClass obj)
         {
             ByteString[] _args = new ByteString[] {
                 Encoder.encode(x, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)),
@@ -2594,19 +2593,19 @@ public class TestService extends RemoteService {
              * @return The strings joined.
              */
             @RPCInfo(service = "TestService", procedure = "TestClass_static_StaticMethod", types = _Types.class)
-            public String staticMethod(String a, String b) throws RPCException
+            public String staticMethod(String a, String b)
             {
                 return krpc.client.services.TestService.TestClass.staticMethod(connection, a, b);
             }
 
             @RPCInfo(service = "TestService", procedure = "TestClass_static_StaticNullableObject", types = _Types.class)
-            public krpc.client.services.TestService.TestClass staticNullableObject(krpc.client.services.TestService.TestClass value) throws RPCException
+            public krpc.client.services.TestService.TestClass staticNullableObject(krpc.client.services.TestService.TestClass value)
             {
                 return krpc.client.services.TestService.TestClass.staticNullableObject(connection, value);
             }
 
             @RPCInfo(service = "TestService", procedure = "TestClass_static_StaticOptionalArguments", types = _Types.class)
-            public String staticOptionalArguments(String x, String y, String z, krpc.client.services.TestService.TestClass obj) throws RPCException
+            public String staticOptionalArguments(String x, String y, String z, krpc.client.services.TestService.TestClass obj)
             {
                 return krpc.client.services.TestService.TestClass.staticOptionalArguments(connection, x, y, z, obj);
             }

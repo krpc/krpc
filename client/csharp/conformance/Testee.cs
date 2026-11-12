@@ -578,7 +578,7 @@ namespace KRPC.Client.Conformance
             if (cause != null)
                 error.Cause = cause.GetType ().FullName + ": " + cause.Message;
             var connectionException = exn as ConnectionException;
-            var rpcException = exn as RPCException;
+            var serverException = exn as ServerException;
             if (exn is UnsupportedException) {
                 error.Kind = Error.Types.Kind.Unsupported;
             } else if (connectionException != null) {
@@ -589,6 +589,8 @@ namespace KRPC.Client.Conformance
                 if (connectionException.Reason.HasValue)
                     error.Reason = EnumName (
                         Disconnect.Descriptor.EnumTypes [0], (int)connectionException.Reason.Value);
+            } else if (exn is StreamException) {
+                error.Kind = Error.Types.Kind.Stream;
             } else if (exn is EncodingException) {
                 error.Kind = Error.Types.Kind.Encoding;
             } else if (exn is ThreadInterruptedException) {
@@ -603,7 +605,7 @@ namespace KRPC.Client.Conformance
                 // after its service
                 const string prefix = "KRPC.Client.Services.";
                 var ns = exn.GetType ().Namespace ?? string.Empty;
-                if (rpcException != null && ns.StartsWith (prefix, StringComparison.Ordinal)) {
+                if (serverException != null && ns.StartsWith (prefix, StringComparison.Ordinal)) {
                     error.Service = ns.Substring (prefix.Length);
                     error.Name = exn.GetType ().Name;
                 }

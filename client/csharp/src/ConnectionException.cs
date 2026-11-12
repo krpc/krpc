@@ -7,24 +7,24 @@ namespace KRPC.Client
     /// Thrown when an error occurs connecting to a server, or when the connection fails or ends.
     /// </summary>
     [Serializable]
-    public class ConnectionException : Exception
+    public class ConnectionException : RemoteException
     {
         /// <summary>
-        /// Construct an RPCException with no message.
+        /// Construct a ConnectionException with no message.
         /// </summary>
         public ConnectionException ()
         {
         }
 
         /// <summary>
-        /// Construct an RPCException with the given message.
+        /// Construct a ConnectionException with the given message.
         /// </summary>
         public ConnectionException (string message) : base (message)
         {
         }
 
         /// <summary>
-        /// Construct an RPCException with the given message and inner exception.
+        /// Construct a ConnectionException with the given message and inner exception.
         /// </summary>
         public ConnectionException (string message, Exception inner) : base (message, inner)
         {
@@ -44,7 +44,7 @@ namespace KRPC.Client
 
 #if !NET
         /// <summary>
-        /// Construct an RPCException with the given serialization info and streaming context.
+        /// Construct a ConnectionException with the given serialization info and streaming context.
         /// </summary>
         protected ConnectionException (SerializationInfo info, StreamingContext context) : base (info, context)
         {

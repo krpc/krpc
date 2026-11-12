@@ -15,6 +15,29 @@ from krpc.types import (
 
 from .language import Language, float32_literal
 
+# The .NET exception each mapped type is thrown as
+_NATIVE_EXCEPTIONS = {
+    "System.InvalidOperationException": "global::System.InvalidOperationException",
+    "System.ArgumentException": "global::System.ArgumentException",
+    "System.ArgumentNullException": "global::System.ArgumentNullException",
+    "System.ArgumentOutOfRangeException": "global::System.ArgumentOutOfRangeException",
+    "System.NullReferenceException": "global::System.NullReferenceException",
+    "System.Collections.Generic.KeyNotFoundException": (
+        "global::System.Collections.Generic.KeyNotFoundException"
+    ),
+    "System.IndexOutOfRangeException": "global::System.IndexOutOfRangeException",
+    "System.DivideByZeroException": "global::System.DivideByZeroException",
+    "System.NotSupportedException": "global::System.NotSupportedException",
+    "System.TimeoutException": "global::System.TimeoutException",
+    "System.OverflowException": "global::System.OverflowException",
+}
+
+# The exceptions whose constructors take the parameter name before the message
+_PARAMETER_NAME_FIRST = {
+    "global::System.ArgumentNullException",
+    "global::System.ArgumentOutOfRangeException",
+}
+
 
 class CsharpLanguage(Language):
     keywords = set(
@@ -131,6 +154,21 @@ class CsharpLanguage(Language):
         (Type.UINT32, "max"): "uint.MaxValue",
         (Type.UINT64, "max"): "ulong.MaxValue",
     }
+
+    def exception_type(self, service: str, name: str, mapped_type: str) -> str | None:
+        """The type an exception with no class of its own is thrown as, or None"""
+        # The server removes a stream with this exception, thrown as the client's own
+        if (service, name) == ("KRPC", "StreamRemovedException"):
+            return "global::KRPC.Client.StreamException"
+        return _NATIVE_EXCEPTIONS.get(mapped_type)
+
+    def exception_alias(self, service: str, name: str, mapped_type: str) -> str | None:
+        typ = self.exception_type(service, name, mapped_type)
+        if typ is None:
+            return None
+        if typ in _PARAMETER_NAME_FIRST:
+            return "new %s (string.Empty, message)" % typ
+        return "new %s (message)" % typ
 
     def parse_type(self, typ):
         return self._parse_type(typ)

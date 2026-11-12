@@ -35,7 +35,7 @@
     <Compile Include="EncodingException.cs" />
     <Compile Include="Event.cs" />
     <Compile Include="ExpressionUtils.cs" />
-    <Compile Include="FunctionCompilationException.cs" />
+    <Compile Include="CompilationException.cs" />
     <Compile Include="FunctionCompiler.cs" />
     <Compile Include="IConnection.cs" />
     <Compile Include="InternalProcedures.cs" />
@@ -43,7 +43,9 @@
     <Compile Include="TCPIPTransport.cs" />
     <Compile Include="LocalTransport.cs" />
     <Compile Include="ProcedureSpecs.cs" />
-    <Compile Include="RPCException.cs" />
+    <Compile Include="RemoteException.cs" />
+    <Compile Include="ServerException.cs" />
+    <Compile Include="StreamException.cs" />
     <Compile Include="RemoteObject.cs" />
     <Compile Include="RemoteService.cs" />
     <Compile Include="Stream.cs" />

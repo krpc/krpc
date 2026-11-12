@@ -1,7 +1,6 @@
 package krpc.client;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * Abstract base class for objects that can be serialized and sent via kRPC
@@ -27,7 +26,10 @@ public abstract class RemoteObject implements Serializable, Comparable<RemoteObj
    * @return The identifier, e.g. to pass to KRPC.Expression.constantObject.
    */
   public static long getObjectId(RemoteObject obj) {
-    return Objects.requireNonNull(obj, "obj").id;
+    if (obj == null) {
+      throw new IllegalArgumentException("The object is null");
+    }
+    return obj.id;
   }
 
   @Override

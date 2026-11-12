@@ -18,7 +18,13 @@ namespace KRPC.Client
         {
             if (ReferenceEquals (spec, null))
                 throw new ArgumentNullException (nameof (spec));
-            return DecoderFor (spec) (value, client);
+            var decode = DecoderFor (spec);
+            try {
+                return decode (value, client);
+            } catch (Exception exn) when (exn is ArgumentException || exn is System.IO.IOException) {
+                // Data that is not a value of the type, which protobuf reports as an IOException
+                throw new EncodingException ("Failed to decode " + spec.Type + ": " + exn.Message, exn);
+            }
         }
 
         /// <summary>

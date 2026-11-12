@@ -1,15 +1,13 @@
 import krpc.client.Connection;
-import krpc.client.RPCException;
 import krpc.client.services.SpaceCenter;
 import krpc.client.services.SpaceCenter.AutoPilot;
 import krpc.client.services.SpaceCenter.Vessel;
 
 import org.javatuples.Triplet;
 
-import java.io.IOException;
 
 public class SurfacePrograde {
-    public static void main(String[] args) throws IOException, RPCException {
+    public static void main(String[] args) {
         Connection connection = Connection.newInstance("Surface prograde");
         SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
         Vessel vessel = spaceCenter.getActiveVessel();

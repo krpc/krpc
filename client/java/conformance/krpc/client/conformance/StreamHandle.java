@@ -2,7 +2,6 @@ package krpc.client.conformance;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
-import krpc.client.RPCException;
 import krpc.client.Stream;
 import krpc.conformance.Testee.Value;
 
@@ -54,7 +53,7 @@ final class StreamHandle implements AutoCloseable {
   }
 
   @Override
-  public void close() throws RPCException {
+  public void close() {
     stream.close();
   }
 

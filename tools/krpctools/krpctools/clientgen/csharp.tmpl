@@ -113,8 +113,8 @@ namespace KRPC.Client.Services.{{ service_name }}
 
         internal static void AddExceptionTypes (global::KRPC.Client.IConnection serverConnection)
         {
-            {% for exception_name in exceptions.keys() %}
-            serverConnection.AddExceptionType ("{{ service_name }}", "{{ exception_name }}", typeof ({{ exception_name }}));
+            {% for exception_name,exception in exceptions.items() %}
+            serverConnection.AddExceptionType ("{{ service_name }}", "{{ exception_name }}", message => {{ exception.alias or 'new ' + exception_name + ' (message)' }});
             {% endfor %}
         }
         {% endif %}
@@ -304,14 +304,14 @@ namespace KRPC.Client.Services.{{ service_name }}
         }
     }
     {% endfor %}
-    {% for exception_name,exception in exceptions.items() %}
+    {% for exception_name,exception in exceptions.items() if not exception.alias %}
 
 {% if exception.documentation %}{{ exception.documentation | indent(width=4) }}
 {% endif %}
     [Serializable]
 {% if exception.deprecated %}    [global::System.Obsolete{% if exception.deprecated_reason %} ("{{ exception.deprecated_reason | string_literal }}"){% endif %}]
 {% endif %}
-    public class {{ exception_name }} : global::KRPC.Client.RPCException
+    public class {{ exception_name }} : global::KRPC.Client.ServerException
     {
         /// <summary>
         /// Construct an {{ exception_name }} with no message.

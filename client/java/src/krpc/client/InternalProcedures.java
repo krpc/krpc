@@ -21,18 +21,18 @@ final class InternalProcedures {
 
   private InternalProcedures() {}
 
-  static long addStream(Connection connection, ProcedureCall call) throws RPCException {
+  static long addStream(Connection connection, ProcedureCall call) {
     ProcedureResult result =
         connection.invokeKrpc("AddStream", true, Encoder.encode(call, PROCEDURE_CALL));
     return (long) decodeNonNull(result, UINT64, connection);
   }
 
-  static void setStreamRate(Connection connection, long id, float rate) throws RPCException {
+  static void setStreamRate(Connection connection, long id, float rate) {
     connection.invokeKrpc(
         "SetStreamRate", false, Encoder.encode(id, UINT64), Encoder.encode(rate, FLOAT));
   }
 
-  static void removeStream(Connection connection, long id) throws RPCException {
+  static void removeStream(Connection connection, long id) {
     connection.invokeKrpc("RemoveStream", false, Encoder.encode(id, UINT64));
   }
 
@@ -43,20 +43,18 @@ final class InternalProcedures {
         .build();
   }
 
-  static long addFunctionStream(Connection connection, Expression function)
-      throws RPCException {
+  static long addFunctionStream(Connection connection, Expression function) {
     ProcedureResult result =
         connection.invokeKrpc("AddFunctionStream", true, Encoder.encode(function, EXPRESSION));
     return (long) decodeNonNull(result, UINT64, connection);
   }
 
-  static void compileFunction(Connection connection, Expression function) throws RPCException {
+  static void compileFunction(Connection connection, Expression function) {
     connection.invokeKrpc("CompileFunction", false, Encoder.encode(function, EXPRESSION));
   }
 
   /** Run a server side function. Returns null for a null value. */
-  static byte[] runFunction(Connection connection, Expression function, List<byte[]> arguments)
-      throws RPCException {
+  static byte[] runFunction(Connection connection, Expression function, List<byte[]> arguments) {
     ByteString[] args = new ByteString[] {
       Encoder.encode(function, EXPRESSION), Encoder.encode(arguments, ARGUMENTS)
     };
@@ -67,7 +65,7 @@ final class InternalProcedures {
     return (byte[]) Decoder.decode(result.getValue(), BYTES, connection);
   }
 
-  static Event addEvent(Connection connection, Expression function) throws RPCException {
+  static Event addEvent(Connection connection, Expression function) {
     ProcedureResult result =
         connection.invokeKrpc("AddEvent", true, Encoder.encode(function, EXPRESSION));
     return (Event) decodeNonNull(result, EVENT, connection);

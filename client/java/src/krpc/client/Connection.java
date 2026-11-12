@@ -61,7 +61,7 @@ public class Connection implements AutoCloseable {
    *
    * @return A connection to the kRPC server.
    */
-  public static Connection newInstance() throws IOException {
+  public static Connection newInstance() {
     return newInstance(EMPTY_NAME, DEFAULT_ADDRESS, DEFAULT_PORT);
   }
 
@@ -73,7 +73,7 @@ public class Connection implements AutoCloseable {
    *            The name of the client.
    * @return A connection to the kRPC server.
    */
-  public static Connection newInstance(String name) throws IOException {
+  public static Connection newInstance(String name) {
     return newInstance(name, DEFAULT_ADDRESS, DEFAULT_PORT);
   }
 
@@ -88,8 +88,7 @@ public class Connection implements AutoCloseable {
    *
    * @return A connection to the kRPC server.
    */
-  public static Connection newInstance(String name, InetAddress address)
-      throws IOException {
+  public static Connection newInstance(String name, InetAddress address) {
     return newInstance(name, address, DEFAULT_PORT);
   }
 
@@ -106,8 +105,7 @@ public class Connection implements AutoCloseable {
    *
    * @return A connection to the kRPC server.
    */
-  public static Connection newInstance(String name, InetAddress address, int port)
-      throws IOException {
+  public static Connection newInstance(String name, InetAddress address, int port) {
     return newInstance(name, address, port, DEFAULT_TIMEOUT);
   }
 
@@ -128,8 +126,7 @@ public class Connection implements AutoCloseable {
    * @return A connection to the kRPC server.
    */
   public static Connection newInstance(
-      String name, InetAddress address, int port, Duration timeout)
-      throws IOException {
+      String name, InetAddress address, int port, Duration timeout) {
     return newInstance(name, address, port, timeout, DEFAULT_HANDSHAKE_TIMEOUT);
   }
 
@@ -154,8 +151,7 @@ public class Connection implements AutoCloseable {
    */
   public static Connection newInstance(
       String name, InetAddress address, int port, Duration timeout,
-      Duration handshakeTimeout)
-      throws IOException {
+      Duration handshakeTimeout) {
     return newInstance(name, address, port, timeout, handshakeTimeout, DEFAULT_STALL_TIMEOUT);
   }
 
@@ -184,8 +180,7 @@ public class Connection implements AutoCloseable {
    */
   public static Connection newInstance(
       String name, InetAddress address, int port, Duration timeout,
-      Duration handshakeTimeout, Duration stallTimeout)
-      throws IOException {
+      Duration handshakeTimeout, Duration stallTimeout) {
     checkTimeouts(handshakeTimeout, stallTimeout);
     return new Connection(name, open(address, port, timeout), handshakeTimeout, stallTimeout);
   }
@@ -202,8 +197,7 @@ public class Connection implements AutoCloseable {
    *
    * @return A connection to the kRPC server.
    */
-  public static Connection newInstance(String name, String address)
-      throws IOException {
+  public static Connection newInstance(String name, String address) {
     return newInstance(name, resolve(address));
   }
 
@@ -221,8 +215,7 @@ public class Connection implements AutoCloseable {
    *
    * @return A connection to the kRPC server.
    */
-  public static Connection newInstance(String name, String address, int port)
-      throws IOException {
+  public static Connection newInstance(String name, String address, int port) {
     return newInstance(name, resolve(address), port);
   }
 
@@ -244,8 +237,7 @@ public class Connection implements AutoCloseable {
    * @return A connection to the kRPC server.
    */
   public static Connection newInstance(
-      String name, String address, int port, Duration timeout)
-      throws IOException {
+      String name, String address, int port, Duration timeout) {
     return newInstance(name, resolve(address), port, timeout);
   }
 
@@ -270,8 +262,7 @@ public class Connection implements AutoCloseable {
    * @return A connection to the kRPC server.
    */
   public static Connection newInstance(
-      String name, String address, int port, Duration timeout, Duration handshakeTimeout)
-      throws IOException {
+      String name, String address, int port, Duration timeout, Duration handshakeTimeout) {
     return newInstance(name, resolve(address), port, timeout, handshakeTimeout);
   }
 
@@ -300,8 +291,7 @@ public class Connection implements AutoCloseable {
    */
   public static Connection newInstance(
       String name, String address, int port, Duration timeout, Duration handshakeTimeout,
-      Duration stallTimeout)
-      throws IOException {
+      Duration stallTimeout) {
     return newInstance(
         name, resolve(address), port, timeout, handshakeTimeout, stallTimeout);
   }
@@ -312,7 +302,7 @@ public class Connection implements AutoCloseable {
    *
    * @return A connection to the kRPC server.
    */
-  public static Connection newLocalInstance() throws IOException {
+  public static Connection newLocalInstance() {
     return newLocalInstance(EMPTY_NAME);
   }
 
@@ -325,7 +315,7 @@ public class Connection implements AutoCloseable {
    *
    * @return A connection to the kRPC server.
    */
-  public static Connection newLocalInstance(String name) throws IOException {
+  public static Connection newLocalInstance(String name) {
     return newLocalInstance(name, defaultPath());
   }
 
@@ -341,7 +331,7 @@ public class Connection implements AutoCloseable {
    *
    * @return A connection to the kRPC server.
    */
-  public static Connection newLocalInstance(String name, String path) throws IOException {
+  public static Connection newLocalInstance(String name, String path) {
     return newLocalInstance(name, path, DEFAULT_HANDSHAKE_TIMEOUT);
   }
 
@@ -361,7 +351,7 @@ public class Connection implements AutoCloseable {
    * @return A connection to the kRPC server.
    */
   public static Connection newLocalInstance(
-      String name, String path, Duration handshakeTimeout) throws IOException {
+      String name, String path, Duration handshakeTimeout) {
     return newLocalInstance(name, path, handshakeTimeout, DEFAULT_STALL_TIMEOUT);
   }
 
@@ -383,14 +373,13 @@ public class Connection implements AutoCloseable {
    * @return A connection to the kRPC server.
    */
   public static Connection newLocalInstance(
-      String name, String path, Duration handshakeTimeout, Duration stallTimeout)
-      throws IOException {
+      String name, String path, Duration handshakeTimeout, Duration stallTimeout) {
     checkTimeouts(handshakeTimeout, stallTimeout);
     return new Connection(name, openLocal(path), handshakeTimeout, stallTimeout);
   }
 
   /** The address of a host name or a textual IP address. */
-  private static InetAddress resolve(String address) throws ConnectionException {
+  private static InetAddress resolve(String address) {
     try {
       return InetAddress.getByName(address);
     } catch (UnknownHostException exn) {
@@ -408,8 +397,7 @@ public class Connection implements AutoCloseable {
     }
   }
 
-  private static Transport open(InetAddress address, int port, Duration timeout)
-      throws IOException {
+  private static Transport open(InetAddress address, int port, Duration timeout) {
     try {
       return new TCPIPTransport(address, port, timeout);
     } catch (IOException exn) {
@@ -417,7 +405,7 @@ public class Connection implements AutoCloseable {
     }
   }
 
-  private static Transport openLocal(String path) throws IOException {
+  private static Transport openLocal(String path) {
     try {
       return new LocalTransport(path);
     } catch (IOException exn) {
@@ -445,25 +433,29 @@ public class Connection implements AutoCloseable {
    * whatever carries it.
    */
   private Connection(
-      String name, Transport transport, Duration handshakeTimeout, Duration stallTimeout)
-      throws IOException {
+      String name, Transport transport, Duration handshakeTimeout, Duration stallTimeout) {
     try {
       handshake(name, transport, handshakeTimeout);
-    } catch (IOException | RuntimeException exn) {
+    } catch (RuntimeException exn) {
       transport.close();
       throw exn;
     }
     session = new Session(
         transport, id -> InternalProcedures.removeStreamRequest(this, id), stallTimeout);
     streamManager = new StreamManager(this, session);
-    session.start(streamManager);
+    try {
+      session.start(streamManager);
+    } catch (IOException exn) {
+      transport.close();
+      throw new ConnectionException("Connection failed: " + exn.getMessage(), exn);
+    }
     // Register the KRPC exception types, which a procedure of any service can throw
     krpc.client.services.KRPC.newInstance(this);
   }
 
   /** Sends the connection request, and checks the server's response to it. */
   private static void handshake(
-      String name, Transport transport, Duration timeout) throws IOException {
+      String name, Transport transport, Duration timeout) {
     KRPC.Message message;
     try {
       transport.send(KRPC.Message.newBuilder()
@@ -513,7 +505,7 @@ public class Connection implements AutoCloseable {
 
   /** Close the connection. Sends the server a disconnect first. */
   @Override
-  public void close() throws IOException {
+  public void close() {
     // The dispatcher thread stops trying to take a callback's lock this thread can hold
     streamManager.requestClose();
     session.close();
@@ -533,12 +525,11 @@ public class Connection implements AutoCloseable {
    * Invoke a remote procedure call. Should not be called directly. This
    * interface is for generated service code.
    */
-  public KRPC.ProcedureResult invoke(String service, String procedure, ByteString... arguments)
-      throws RPCException {
+  public KRPC.ProcedureResult invoke(String service, String procedure, ByteString... arguments) {
     return invoke(buildCall(service, procedure, arguments));
   }
 
-  private KRPC.ProcedureResult invoke(KRPC.ProcedureCall call) throws RPCException {
+  private KRPC.ProcedureResult invoke(KRPC.ProcedureCall call) {
     return getCheckedResult(invokeInternal(call));
   }
 
@@ -546,12 +537,11 @@ public class Connection implements AutoCloseable {
    * Invoke an internal procedure of the KRPC service. It has no generated stub to look up, so the
    * caller gives whether it adds a stream.
    */
-  KRPC.ProcedureResult invokeKrpc(String procedure, boolean addsStream, ByteString... arguments)
-      throws RPCException {
+  KRPC.ProcedureResult invokeKrpc(String procedure, boolean addsStream, ByteString... arguments) {
     return getCheckedResult(invokeInternal(buildCall("KRPC", procedure, arguments), addsStream));
   }
 
-  private KRPC.ProcedureResult getCheckedResult(KRPC.Response response) throws RPCException {
+  private KRPC.ProcedureResult getCheckedResult(KRPC.Response response) {
     KRPC.Error error = getErrorFromResponse(response);
     if (error != null) {
       throwException(error);
@@ -559,34 +549,23 @@ public class Connection implements AutoCloseable {
     return getResultFromResponse(response);
   }
 
-  KRPC.Response invokeInternal(KRPC.ProcedureCall call) throws RPCException {
+  KRPC.Response invokeInternal(KRPC.ProcedureCall call) {
     // The reader registers a stream or an event the call adds before it reads the stream's
     // first update
-    KRPC.Type.TypeCode code;
-    try {
-      code = getReturnTypeCode(call.getService(), call.getProcedure());
-    } catch (IOException exn) {
-      throw new RPCException("Failed to invoke call", exn);
-    }
+    KRPC.Type.TypeCode code = getReturnTypeCode(call.getService(), call.getProcedure());
     boolean addsStream = code == KRPC.Type.TypeCode.STREAM || code == KRPC.Type.TypeCode.EVENT;
     return invokeInternal(call, addsStream);
   }
 
-  private KRPC.Response invokeInternal(KRPC.ProcedureCall call, boolean addsStream)
-      throws RPCException {
-    try {
-      return session.call(KRPC.Request.newBuilder().addCalls(call), addsStream);
-    } catch (IOException exn) {
-      throw new RPCException("Failed to invoke call", exn);
-    }
+  private KRPC.Response invokeInternal(KRPC.ProcedureCall call, boolean addsStream) {
+    return session.call(KRPC.Request.newBuilder().addCalls(call), addsStream);
   }
 
   /**
    * The return type code of a procedure, looked up in its service's generated stubs, or in the
    * server's list of services if the stubs are not loaded. NONE if the procedure returns nothing.
    */
-  private KRPC.Type.TypeCode getReturnTypeCode(String service, String procedure)
-      throws IOException {
+  private KRPC.Type.TypeCode getReturnTypeCode(String service, String procedure) {
     synchronized (returnTypeCodes) {
       KRPC.Type.TypeCode code = findReturnTypeCode(service, procedure);
       if (code != null) {
@@ -644,13 +623,17 @@ public class Connection implements AutoCloseable {
   }
 
   /** The services the server lists, or null if the call fails. */
-  private KRPC.Services listServices() throws IOException {
+  private KRPC.Services listServices() {
     KRPC.Response response =
         session.call(KRPC.Request.newBuilder().addCalls(buildCall("KRPC", "GetServices")), false);
     if (getErrorFromResponse(response) != null) {
       return null;
     }
-    return KRPC.Services.parseFrom(getResultFromResponse(response).getValue());
+    try {
+      return KRPC.Services.parseFrom(getResultFromResponse(response).getValue());
+    } catch (InvalidProtocolBufferException exn) {
+      throw new EncodingException("Failed to decode the services: " + exn.getMessage(), exn);
+    }
   }
 
   /**
@@ -719,19 +702,12 @@ public class Connection implements AutoCloseable {
     exceptionTypes.put(service + "." + name, exnType);
   }
 
-  void throwException(KRPC.Error error) throws RPCException {
-    Exception exn = buildException(error);
-    if (exn instanceof RuntimeException) {
-      throw (RuntimeException) exn;
-    }
-    throw (RPCException) exn;
+  void throwException(KRPC.Error error) {
+    throw buildException(error);
   }
 
-  /**
-   * Builds the exception for an error from the server. Returns an RPCException or a
-   * RuntimeException.
-   */
-  Exception buildException(KRPC.Error error) {
+  /** Builds the exception for an error from the server. */
+  RuntimeException buildException(KRPC.Error error) {
     String message = error.getDescription();
     if (!error.getStackTrace().isEmpty()) {
       message += "\nServer stack trace:\n" + error.getStackTrace();
@@ -752,20 +728,20 @@ public class Connection implements AutoCloseable {
         // and has no usable constructor if it was not generated as an exception type. Report
         // the error itself, named by its type on the server, so that the failure to build an
         // exception for it does not hide it.
-        return new RPCException(key + ": " + message);
+        return new ServerException(key + ": " + message);
       }
       try {
         ctor.setAccessible(true);
-        return (Exception) ctor.newInstance(message);
+        return (RuntimeException) ctor.newInstance(message);
       } catch (IllegalAccessException exn) {
-        return new RPCException("Failed to throw server exception");
+        return new ServerException("Failed to throw server exception");
       } catch (InstantiationException exn) {
-        return new RPCException("Failed to throw server exception");
+        return new ServerException("Failed to throw server exception");
       } catch (InvocationTargetException exn) {
-        return new RPCException("Failed to throw server exception");
+        return new ServerException("Failed to throw server exception");
       }
     }
-    return new RPCException(message);
+    return new ServerException(message);
   }
 
   /**
@@ -783,8 +759,7 @@ public class Connection implements AutoCloseable {
    *
    * @return A stream object.
    */
-  public <T> Stream<T> addStream(Class<?> clazz, String method, Object... args)
-      throws StreamException, RPCException {
+  public <T> Stream<T> addStream(Class<?> clazz, String method, Object... args) {
     MethodMatch match = getMethodByName(clazz, true, method, args);
     KRPC.ProcedureCall call = getCall(match.method, null, match.args);
     return new Stream<T>(this, streamedType(match.method), call);
@@ -803,8 +778,7 @@ public class Connection implements AutoCloseable {
    *
    * @return A stream object.
    */
-  public <T> Stream<T> addStream(RemoteObject instance, String method, Object... args)
-      throws StreamException, RPCException {
+  public <T> Stream<T> addStream(RemoteObject instance, String method, Object... args) {
     MethodMatch match = getMethodByName(instance.getClass(), false, method, args);
     return new Stream<T>(
         this, streamedType(match.method), getCall(match.method, instance, match.args));
@@ -823,8 +797,7 @@ public class Connection implements AutoCloseable {
    *
    * @return A stream object.
    */
-  public <T> Stream<T> addStream(krpc.client.services.KRPC.Expression function)
-      throws StreamException, RPCException {
+  public <T> Stream<T> addStream(krpc.client.services.KRPC.Expression function) {
     KRPC.Type returnType = expressionReturnType(function);
     long streamId = InternalProcedures.addFunctionStream(this, function);
     return new Stream<T>(this, returnType == null ? Stream.NO_VALUE : returnType, streamId);
@@ -840,7 +813,7 @@ public class Connection implements AutoCloseable {
    * @return The function.
    */
   public krpc.client.services.KRPC.Expression compile(
-      krpc.client.services.KRPC.Expression function) throws RPCException {
+      krpc.client.services.KRPC.Expression function) {
     InternalProcedures.compileFunction(this, function);
     return function;
   }
@@ -866,8 +839,7 @@ public class Connection implements AutoCloseable {
    * @return The value of the function.
    */
   @SuppressWarnings("unchecked")
-  public <T> T run(krpc.client.services.KRPC.Expression function, Object... args)
-      throws RPCException {
+  public <T> T run(krpc.client.services.KRPC.Expression function, Object... args) {
     byte[] data = InternalProcedures.runFunction(this, function, encodeArguments(function, args));
     // The stub returns null for a null value
     if (data == null) {
@@ -890,7 +862,7 @@ public class Connection implements AutoCloseable {
    *
    * @return An event object.
    */
-  public Event addEvent(krpc.client.services.KRPC.Expression function) throws RPCException {
+  public Event addEvent(krpc.client.services.KRPC.Expression function) {
     return InternalProcedures.addEvent(this, function);
   }
 
@@ -900,7 +872,7 @@ public class Connection implements AutoCloseable {
    * number of arguments differs from the number of parameters, or an argument fails to encode.
    */
   private List<byte[]> encodeArguments(
-      krpc.client.services.KRPC.Expression function, Object[] args) throws RPCException {
+      krpc.client.services.KRPC.Expression function, Object[] args) {
     if (args == null) {
       args = new Object[] {null};
     }
@@ -976,8 +948,8 @@ public class Connection implements AutoCloseable {
   private final Map<Long, List<KRPC.Type>> expressionParameterTypes =
       new HashMap<Long, List<KRPC.Type>>();
 
-  private List<KRPC.Type> expressionParameterTypes(krpc.client.services.KRPC.Expression expression)
-      throws RPCException {
+  private List<KRPC.Type> expressionParameterTypes(
+      krpc.client.services.KRPC.Expression expression) {
     long expressionId = RemoteObject.getObjectId(expression);
     synchronized (expressionParameterTypes) {
       if (expressionParameterTypes.containsKey(expressionId)) {
@@ -998,8 +970,7 @@ public class Connection implements AutoCloseable {
   /** The return types of server side functions, by object identifier, null for no value. */
   private final Map<Long, KRPC.Type> expressionReturnTypes = new HashMap<Long, KRPC.Type>();
 
-  private KRPC.Type expressionReturnType(krpc.client.services.KRPC.Expression expression)
-      throws RPCException {
+  private KRPC.Type expressionReturnType(krpc.client.services.KRPC.Expression expression) {
     long expressionId = RemoteObject.getObjectId(expression);
     synchronized (expressionReturnTypes) {
       if (expressionReturnTypes.containsKey(expressionId)) {
@@ -1020,7 +991,7 @@ public class Connection implements AutoCloseable {
    * a server side function evaluates to, by introspecting its return type
    * on the server.
    */
-  private KRPC.Type buildType(krpc.client.services.KRPC.Type remoteType) throws RPCException {
+  private KRPC.Type buildType(krpc.client.services.KRPC.Type remoteType) {
     KRPC.Type.Builder builder = KRPC.Type.newBuilder();
     builder.setCode(KRPC.Type.TypeCode.forNumber(remoteType.getCode().getValue()));
     String service = remoteType.getService();
@@ -1049,8 +1020,7 @@ public class Connection implements AutoCloseable {
    *
    * @return A procedure call message.
    */
-  public KRPC.ProcedureCall getCall(Class<?> clazz, String method, Object... args)
-      throws RPCException {
+  public KRPC.ProcedureCall getCall(Class<?> clazz, String method, Object... args) {
     MethodMatch match = getMethodByName(clazz, true, method, args);
     return getCall(match.method, null, match.args);
   }
@@ -1067,28 +1037,26 @@ public class Connection implements AutoCloseable {
    *
    * @return A procedure call message.
    */
-  public KRPC.ProcedureCall getCall(RemoteObject instance, String method, Object... args)
-      throws RPCException {
+  public KRPC.ProcedureCall getCall(RemoteObject instance, String method, Object... args) {
     MethodMatch match = getMethodByName(instance.getClass(), false, method, args);
     return getCall(match.method, instance, match.args);
   }
 
-  private KRPC.ProcedureCall getCall(Method method, Object instance, Object... args)
-      throws RPCException {
+  private KRPC.ProcedureCall getCall(Method method, Object instance, Object... args) {
     KRPC.Type[] parameterTypes;
     RPCInfo info = method.getAnnotation(RPCInfo.class);
     if (info == null) {
-      throw new RPCException("Method is not a remote procedure call");
+      throw new IllegalArgumentException("Method is not a remote procedure call");
     }
     try {
       Method getParameterTypes = info.types().getMethod("getParameterTypes", String.class);
       parameterTypes = (KRPC.Type[]) getParameterTypes.invoke(null, info.procedure());
     } catch (NoSuchMethodException exn) {
-      throw new RPCException("Failed to get procedure call message", exn);
+      throw new IllegalStateException("Failed to get procedure call message", exn);
     } catch (IllegalAccessException exn) {
-      throw new RPCException("Failed to get procedure call message", exn);
+      throw new IllegalStateException("Failed to get procedure call message", exn);
     } catch (InvocationTargetException exn) {
-      throw new RPCException("Failed to get procedure call message", exn);
+      throw new IllegalStateException("Failed to get procedure call message", exn);
     }
 
     if (instance != null) {
@@ -1100,7 +1068,7 @@ public class Connection implements AutoCloseable {
     }
 
     if (args.length != parameterTypes.length) {
-      throw new RPCException("Incorrect number of arguments to remote procedure call");
+      throw new IllegalArgumentException("Incorrect number of arguments to remote procedure call");
     }
     ByteString[] encodedArgs = new ByteString[args.length];
     for (int i = 0; i < args.length; i++) {
@@ -1116,27 +1084,26 @@ public class Connection implements AutoCloseable {
   }
 
   /** The type of a stream's values, for a stream of a call to a remote procedure. */
-  private KRPC.Type streamedType(Method method) throws RPCException {
+  private KRPC.Type streamedType(Method method) {
     KRPC.Type returnType = getReturnType(method);
     return returnType == null ? Stream.NO_VALUE : returnType;
   }
 
-  private KRPC.Type getReturnType(Method method)
-      throws RPCException {
+  private KRPC.Type getReturnType(Method method) {
     KRPC.Type returnType;
     RPCInfo info = method.getAnnotation(RPCInfo.class);
     if (info == null) {
-      throw new RPCException("Method is not a remote procedure call");
+      throw new IllegalArgumentException("Method is not a remote procedure call");
     }
     try {
       Method getReturnType = info.types().getMethod("getReturnType", String.class);
       return (KRPC.Type) getReturnType.invoke(null, info.procedure());
     } catch (NoSuchMethodException exn) {
-      throw new RPCException("Failed to get procedure call message", exn);
+      throw new IllegalStateException("Failed to get procedure call message", exn);
     } catch (IllegalAccessException exn) {
-      throw new RPCException("Failed to get procedure call message", exn);
+      throw new IllegalStateException("Failed to get procedure call message", exn);
     } catch (InvocationTargetException exn) {
-      throw new RPCException("Failed to get procedure call message", exn);
+      throw new IllegalStateException("Failed to get procedure call message", exn);
     }
   }
 
@@ -1155,7 +1122,7 @@ public class Connection implements AutoCloseable {
   // the connection first, which the arguments leave out. The deprecated form passes a connection
   // there, which the call drops, as the call runs on this connection.
   private MethodMatch getMethodByName(
-      Class<?> clazz, boolean onClass, String methodName, Object... args) throws RPCException {
+      Class<?> clazz, boolean onClass, String methodName, Object... args) {
     Method[] methods = clazz.getMethods();
     for (Method method : methods) {
       if (!method.getName().equals(methodName)) {
@@ -1189,7 +1156,7 @@ public class Connection implements AutoCloseable {
       }
       params += args[i] == null ? "null" : args[i].getClass().toString();
     }
-    throw new RPCException(
+    throw new IllegalArgumentException(
       "Method " + clazz.getName() + "." + methodName + "(" + params + ") not found.");
   }
 

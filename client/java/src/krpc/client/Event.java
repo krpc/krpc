@@ -55,7 +55,7 @@ public class Event implements Comparable<Event>, AutoCloseable {
    * wait on this event object. Throws the exception that ended the event, if it ends before or
    * during the wait.
    */
-  public void waitFor() throws RPCException, StreamException {
+  public void waitFor() {
     waitForUntil(Stream.deadline(Double.POSITIVE_INFINITY));
   }
 
@@ -65,12 +65,12 @@ public class Event implements Comparable<Event>, AutoCloseable {
    * and false on a timeout. Throws the exception that ended the event, if it ends before or
    * during the wait. Throws IllegalArgumentException if the timeout is negative or NaN.
    */
-  public boolean waitForWithTimeout(double timeout) throws RPCException, StreamException {
+  public boolean waitForWithTimeout(double timeout) {
     return waitForUntil(Stream.deadline(timeout));
   }
 
   /** A deadline of zero waits indefinitely. */
-  private boolean waitForUntil(long deadline) throws RPCException, StreamException {
+  private boolean waitForUntil(long deadline) {
     StreamImpl impl = stream.stream;
     // A remove or a close discards an unseen firing
     if (impl.isEndedByClient()) {
@@ -137,7 +137,7 @@ public class Event implements Comparable<Event>, AutoCloseable {
   /**
    * Remove the event from the server.
    */
-  public void remove() throws RPCException {
+  public void remove() {
     stream.remove();
   }
 
@@ -145,7 +145,7 @@ public class Event implements Comparable<Event>, AutoCloseable {
    * Remove the event from the server, as remove() does, at the end of a try-with-resources block.
    */
   @Override
-  public void close() throws RPCException {
+  public void close() {
     remove();
   }
 }

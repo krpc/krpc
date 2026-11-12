@@ -11,7 +11,6 @@ import krpc.client.RemoteObject;
 import krpc.client.RemoteService;
 import krpc.client.RemoteStruct;
 import krpc.client.RPCInfo;
-import krpc.client.RPCException;
 import krpc.client.Types;
 
 // Generated code references its own deprecated members (e.g. when registering
@@ -35,7 +34,7 @@ public class ServiceA extends RemoteService {
      */
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "ServiceA", procedure = "Frob", types = _Types.class)
-    public void frob(krpc.client.services.ServiceB.Mode mode) throws RPCException {
+    public void frob(krpc.client.services.ServiceB.Mode mode) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(mode, krpc.client.Types.createEnumeration("ServiceB", "Mode"))
         };
@@ -47,7 +46,7 @@ public class ServiceA extends RemoteService {
      */
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "ServiceA", procedure = "FrobAll", types = _Types.class)
-    public void frobAll(java.util.List<krpc.client.services.ServiceB.Mode> modes) throws RPCException {
+    public void frobAll(java.util.List<krpc.client.services.ServiceB.Mode> modes) {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(modes, krpc.client.Types.createList(krpc.client.Types.createEnumeration("ServiceB", "Mode")))
         };

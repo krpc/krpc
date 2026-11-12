@@ -1,7 +1,5 @@
-import java.io.IOException;
 import java.util.Arrays;
 import krpc.client.Connection;
-import krpc.client.RPCException;
 import krpc.client.services.KRPC.Expression;
 import krpc.client.services.SpaceCenter;
 import krpc.client.services.SpaceCenter.Flight;
@@ -10,7 +8,7 @@ import krpc.schema.KRPC.ProcedureCall;
 import org.javatuples.Pair;
 
 public class RunFunction {
-  public static void main(String[] args) throws IOException, RPCException {
+  public static void main(String[] args) {
     try (Connection connection = Connection.newInstance()) {
       Vessel vessel = SpaceCenter.newInstance(connection).getActiveVessel();
       Flight flight = vessel.flight(vessel.getOrbit().getBody().getReferenceFrame());

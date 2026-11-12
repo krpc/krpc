@@ -93,22 +93,22 @@ namespace KRPC.Client.Services.KRPC
 
         internal static void AddExceptionTypes (global::KRPC.Client.IConnection serverConnection)
         {
-            serverConnection.AddExceptionType ("KRPC", "ArgumentException", typeof (ArgumentException));
-            serverConnection.AddExceptionType ("KRPC", "ArgumentNullException", typeof (ArgumentNullException));
-            serverConnection.AddExceptionType ("KRPC", "ArgumentOutOfRangeException", typeof (ArgumentOutOfRangeException));
-            serverConnection.AddExceptionType ("KRPC", "DivideByZeroException", typeof (DivideByZeroException));
-            serverConnection.AddExceptionType ("KRPC", "Error", typeof (Error));
-            serverConnection.AddExceptionType ("KRPC", "IndexOutOfRangeException", typeof (IndexOutOfRangeException));
-            serverConnection.AddExceptionType ("KRPC", "InvalidOperationException", typeof (InvalidOperationException));
-            serverConnection.AddExceptionType ("KRPC", "KeyNotFoundException", typeof (KeyNotFoundException));
-            serverConnection.AddExceptionType ("KRPC", "NotSupportedException", typeof (NotSupportedException));
-            serverConnection.AddExceptionType ("KRPC", "NullReferenceException", typeof (NullReferenceException));
-            serverConnection.AddExceptionType ("KRPC", "ObjectDestroyedException", typeof (ObjectDestroyedException));
-            serverConnection.AddExceptionType ("KRPC", "ObjectNotLoadedException", typeof (ObjectNotLoadedException));
-            serverConnection.AddExceptionType ("KRPC", "OverflowException", typeof (OverflowException));
-            serverConnection.AddExceptionType ("KRPC", "StreamRemovedException", typeof (StreamRemovedException));
-            serverConnection.AddExceptionType ("KRPC", "TimeoutException", typeof (TimeoutException));
-            serverConnection.AddExceptionType ("KRPC", "UnsupportedSceneException", typeof (UnsupportedSceneException));
+            serverConnection.AddExceptionType ("KRPC", "ArgumentException", message => new global::System.ArgumentException (message));
+            serverConnection.AddExceptionType ("KRPC", "ArgumentNullException", message => new global::System.ArgumentNullException (string.Empty, message));
+            serverConnection.AddExceptionType ("KRPC", "ArgumentOutOfRangeException", message => new global::System.ArgumentOutOfRangeException (string.Empty, message));
+            serverConnection.AddExceptionType ("KRPC", "DivideByZeroException", message => new global::System.DivideByZeroException (message));
+            serverConnection.AddExceptionType ("KRPC", "Error", message => new Error (message));
+            serverConnection.AddExceptionType ("KRPC", "IndexOutOfRangeException", message => new global::System.IndexOutOfRangeException (message));
+            serverConnection.AddExceptionType ("KRPC", "InvalidOperationException", message => new global::System.InvalidOperationException (message));
+            serverConnection.AddExceptionType ("KRPC", "KeyNotFoundException", message => new global::System.Collections.Generic.KeyNotFoundException (message));
+            serverConnection.AddExceptionType ("KRPC", "NotSupportedException", message => new global::System.NotSupportedException (message));
+            serverConnection.AddExceptionType ("KRPC", "NullReferenceException", message => new global::System.NullReferenceException (message));
+            serverConnection.AddExceptionType ("KRPC", "ObjectDestroyedException", message => new ObjectDestroyedException (message));
+            serverConnection.AddExceptionType ("KRPC", "ObjectNotLoadedException", message => new ObjectNotLoadedException (message));
+            serverConnection.AddExceptionType ("KRPC", "OverflowException", message => new global::System.OverflowException (message));
+            serverConnection.AddExceptionType ("KRPC", "StreamRemovedException", message => new global::KRPC.Client.StreamException (message));
+            serverConnection.AddExceptionType ("KRPC", "TimeoutException", message => new global::System.TimeoutException (message));
+            serverConnection.AddExceptionType ("KRPC", "UnsupportedSceneException", message => new UnsupportedSceneException (message));
         }
 
         /// <summary>
@@ -1110,159 +1110,10 @@ namespace KRPC.Client.Services.KRPC
     }
 
     /// <summary>
-    /// A method was invoked where at least one of the passed arguments does not
-    /// meet the parameter specification of the method.
-    /// </summary>
-    [Serializable]
-    public class ArgumentException : global::KRPC.Client.RPCException
-    {
-        /// <summary>
-        /// Construct an ArgumentException with no message.
-        /// </summary>
-        public ArgumentException ()
-        {
-        }
-
-        /// <summary>
-        /// Construct an ArgumentException with the given message.
-        /// </summary>
-        public ArgumentException (string message) : base (message)
-        {
-        }
-
-        /// <summary>
-        /// Construct an ArgumentException with the given message and inner exception.
-        /// </summary>
-        public ArgumentException (string message, Exception inner) : base (message, inner)
-        {
-        }
-
-#if !NET
-        /// <summary>
-        /// Construct an ArgumentException with the given serialization info and streaming context.
-        /// </summary>
-        protected ArgumentException (SerializationInfo info, StreamingContext context) : base (info, context)
-        {
-        }
-#endif
-    }
-
-    /// <summary>
-    /// A null reference was passed to a method that does not accept it as a valid argument.
-    /// </summary>
-    [Serializable]
-    public class ArgumentNullException : global::KRPC.Client.RPCException
-    {
-        /// <summary>
-        /// Construct an ArgumentNullException with no message.
-        /// </summary>
-        public ArgumentNullException ()
-        {
-        }
-
-        /// <summary>
-        /// Construct an ArgumentNullException with the given message.
-        /// </summary>
-        public ArgumentNullException (string message) : base (message)
-        {
-        }
-
-        /// <summary>
-        /// Construct an ArgumentNullException with the given message and inner exception.
-        /// </summary>
-        public ArgumentNullException (string message, Exception inner) : base (message, inner)
-        {
-        }
-
-#if !NET
-        /// <summary>
-        /// Construct an ArgumentNullException with the given serialization info and streaming context.
-        /// </summary>
-        protected ArgumentNullException (SerializationInfo info, StreamingContext context) : base (info, context)
-        {
-        }
-#endif
-    }
-
-    /// <summary>
-    /// The value of an argument is outside the allowable range of values as defined by the invoked method.
-    /// </summary>
-    [Serializable]
-    public class ArgumentOutOfRangeException : global::KRPC.Client.RPCException
-    {
-        /// <summary>
-        /// Construct an ArgumentOutOfRangeException with no message.
-        /// </summary>
-        public ArgumentOutOfRangeException ()
-        {
-        }
-
-        /// <summary>
-        /// Construct an ArgumentOutOfRangeException with the given message.
-        /// </summary>
-        public ArgumentOutOfRangeException (string message) : base (message)
-        {
-        }
-
-        /// <summary>
-        /// Construct an ArgumentOutOfRangeException with the given message and inner exception.
-        /// </summary>
-        public ArgumentOutOfRangeException (string message, Exception inner) : base (message, inner)
-        {
-        }
-
-#if !NET
-        /// <summary>
-        /// Construct an ArgumentOutOfRangeException with the given serialization info and streaming context.
-        /// </summary>
-        protected ArgumentOutOfRangeException (SerializationInfo info, StreamingContext context) : base (info, context)
-        {
-        }
-#endif
-    }
-
-    /// <summary>
-    /// An integer was divided by zero.
-    /// </summary>
-    [Serializable]
-    public class DivideByZeroException : global::KRPC.Client.RPCException
-    {
-        /// <summary>
-        /// Construct an DivideByZeroException with no message.
-        /// </summary>
-        public DivideByZeroException ()
-        {
-        }
-
-        /// <summary>
-        /// Construct an DivideByZeroException with the given message.
-        /// </summary>
-        public DivideByZeroException (string message) : base (message)
-        {
-        }
-
-        /// <summary>
-        /// Construct an DivideByZeroException with the given message and inner exception.
-        /// </summary>
-        public DivideByZeroException (string message, Exception inner) : base (message, inner)
-        {
-        }
-
-#if !NET
-        /// <summary>
-        /// Construct an DivideByZeroException with the given serialization info and streaming context.
-        /// </summary>
-        protected DivideByZeroException (SerializationInfo info, StreamingContext context) : base (info, context)
-        {
-        }
-#endif
-    }
-
-    /// <summary>
     /// A general error, described by its message.
     /// </summary>
     [Serializable]
-    public class Error : global::KRPC.Client.RPCException
+    public class Error : global::KRPC.Client.ServerException
     {
         /// <summary>
         /// Construct an Error with no message.
@@ -1296,192 +1147,6 @@ namespace KRPC.Client.Services.KRPC
     }
 
     /// <summary>
-    /// An index was outside the bounds of a collection, string or array.
-    /// </summary>
-    [Serializable]
-    public class IndexOutOfRangeException : global::KRPC.Client.RPCException
-    {
-        /// <summary>
-        /// Construct an IndexOutOfRangeException with no message.
-        /// </summary>
-        public IndexOutOfRangeException ()
-        {
-        }
-
-        /// <summary>
-        /// Construct an IndexOutOfRangeException with the given message.
-        /// </summary>
-        public IndexOutOfRangeException (string message) : base (message)
-        {
-        }
-
-        /// <summary>
-        /// Construct an IndexOutOfRangeException with the given message and inner exception.
-        /// </summary>
-        public IndexOutOfRangeException (string message, Exception inner) : base (message, inner)
-        {
-        }
-
-#if !NET
-        /// <summary>
-        /// Construct an IndexOutOfRangeException with the given serialization info and streaming context.
-        /// </summary>
-        protected IndexOutOfRangeException (SerializationInfo info, StreamingContext context) : base (info, context)
-        {
-        }
-#endif
-    }
-
-    /// <summary>
-    /// A method call was made to a method that is invalid
-    /// given the current state of the object.
-    /// </summary>
-    [Serializable]
-    public class InvalidOperationException : global::KRPC.Client.RPCException
-    {
-        /// <summary>
-        /// Construct an InvalidOperationException with no message.
-        /// </summary>
-        public InvalidOperationException ()
-        {
-        }
-
-        /// <summary>
-        /// Construct an InvalidOperationException with the given message.
-        /// </summary>
-        public InvalidOperationException (string message) : base (message)
-        {
-        }
-
-        /// <summary>
-        /// Construct an InvalidOperationException with the given message and inner exception.
-        /// </summary>
-        public InvalidOperationException (string message, Exception inner) : base (message, inner)
-        {
-        }
-
-#if !NET
-        /// <summary>
-        /// Construct an InvalidOperationException with the given serialization info and streaming context.
-        /// </summary>
-        protected InvalidOperationException (SerializationInfo info, StreamingContext context) : base (info, context)
-        {
-        }
-#endif
-    }
-
-    /// <summary>
-    /// A key was not found in a dictionary.
-    /// </summary>
-    [Serializable]
-    public class KeyNotFoundException : global::KRPC.Client.RPCException
-    {
-        /// <summary>
-        /// Construct an KeyNotFoundException with no message.
-        /// </summary>
-        public KeyNotFoundException ()
-        {
-        }
-
-        /// <summary>
-        /// Construct an KeyNotFoundException with the given message.
-        /// </summary>
-        public KeyNotFoundException (string message) : base (message)
-        {
-        }
-
-        /// <summary>
-        /// Construct an KeyNotFoundException with the given message and inner exception.
-        /// </summary>
-        public KeyNotFoundException (string message, Exception inner) : base (message, inner)
-        {
-        }
-
-#if !NET
-        /// <summary>
-        /// Construct an KeyNotFoundException with the given serialization info and streaming context.
-        /// </summary>
-        protected KeyNotFoundException (SerializationInfo info, StreamingContext context) : base (info, context)
-        {
-        }
-#endif
-    }
-
-    /// <summary>
-    /// A method was invoked that is not supported.
-    /// </summary>
-    [Serializable]
-    public class NotSupportedException : global::KRPC.Client.RPCException
-    {
-        /// <summary>
-        /// Construct an NotSupportedException with no message.
-        /// </summary>
-        public NotSupportedException ()
-        {
-        }
-
-        /// <summary>
-        /// Construct an NotSupportedException with the given message.
-        /// </summary>
-        public NotSupportedException (string message) : base (message)
-        {
-        }
-
-        /// <summary>
-        /// Construct an NotSupportedException with the given message and inner exception.
-        /// </summary>
-        public NotSupportedException (string message, Exception inner) : base (message, inner)
-        {
-        }
-
-#if !NET
-        /// <summary>
-        /// Construct an NotSupportedException with the given serialization info and streaming context.
-        /// </summary>
-        protected NotSupportedException (SerializationInfo info, StreamingContext context) : base (info, context)
-        {
-        }
-#endif
-    }
-
-    /// <summary>
-    /// A value was null where its type does not allow one.
-    /// </summary>
-    [Serializable]
-    public class NullReferenceException : global::KRPC.Client.RPCException
-    {
-        /// <summary>
-        /// Construct an NullReferenceException with no message.
-        /// </summary>
-        public NullReferenceException ()
-        {
-        }
-
-        /// <summary>
-        /// Construct an NullReferenceException with the given message.
-        /// </summary>
-        public NullReferenceException (string message) : base (message)
-        {
-        }
-
-        /// <summary>
-        /// Construct an NullReferenceException with the given message and inner exception.
-        /// </summary>
-        public NullReferenceException (string message, Exception inner) : base (message, inner)
-        {
-        }
-
-#if !NET
-        /// <summary>
-        /// Construct an NullReferenceException with the given serialization info and streaming context.
-        /// </summary>
-        protected NullReferenceException (SerializationInfo info, StreamingContext context) : base (info, context)
-        {
-        }
-#endif
-    }
-
-    /// <summary>
     /// The game object that a service object refers to no longer exists,
     /// so the object cannot be used. For example, the part it represents
     /// was destroyed, or the vessel it belongs to was recovered.
@@ -1491,7 +1156,7 @@ namespace KRPC.Client.Services.KRPC
     /// loaded.
     /// </remarks>
     [Serializable]
-    public class ObjectDestroyedException : global::KRPC.Client.RPCException
+    public class ObjectDestroyedException : global::KRPC.Client.ServerException
     {
         /// <summary>
         /// Construct an ObjectDestroyedException with no message.
@@ -1532,7 +1197,7 @@ namespace KRPC.Client.Services.KRPC
     /// See <see cref="global::KRPC.Client.Services.KRPC.ObjectDestroyedException" /> for a game object that no longer exists.
     /// </remarks>
     [Serializable]
-    public class ObjectNotLoadedException : global::KRPC.Client.RPCException
+    public class ObjectNotLoadedException : global::KRPC.Client.ServerException
     {
         /// <summary>
         /// Construct an ObjectNotLoadedException with no message.
@@ -1566,121 +1231,10 @@ namespace KRPC.Client.Services.KRPC
     }
 
     /// <summary>
-    /// An arithmetic or conversion operation overflowed.
-    /// </summary>
-    [Serializable]
-    public class OverflowException : global::KRPC.Client.RPCException
-    {
-        /// <summary>
-        /// Construct an OverflowException with no message.
-        /// </summary>
-        public OverflowException ()
-        {
-        }
-
-        /// <summary>
-        /// Construct an OverflowException with the given message.
-        /// </summary>
-        public OverflowException (string message) : base (message)
-        {
-        }
-
-        /// <summary>
-        /// Construct an OverflowException with the given message and inner exception.
-        /// </summary>
-        public OverflowException (string message, Exception inner) : base (message, inner)
-        {
-        }
-
-#if !NET
-        /// <summary>
-        /// Construct an OverflowException with the given serialization info and streaming context.
-        /// </summary>
-        protected OverflowException (SerializationInfo info, StreamingContext context) : base (info, context)
-        {
-        }
-#endif
-    }
-
-    /// <summary>
-    /// A stream was removed by the server, e.g. an event that has finished.
-    /// </summary>
-    [Serializable]
-    public class StreamRemovedException : global::KRPC.Client.RPCException
-    {
-        /// <summary>
-        /// Construct an StreamRemovedException with no message.
-        /// </summary>
-        public StreamRemovedException ()
-        {
-        }
-
-        /// <summary>
-        /// Construct an StreamRemovedException with the given message.
-        /// </summary>
-        public StreamRemovedException (string message) : base (message)
-        {
-        }
-
-        /// <summary>
-        /// Construct an StreamRemovedException with the given message and inner exception.
-        /// </summary>
-        public StreamRemovedException (string message, Exception inner) : base (message, inner)
-        {
-        }
-
-#if !NET
-        /// <summary>
-        /// Construct an StreamRemovedException with the given serialization info and streaming context.
-        /// </summary>
-        protected StreamRemovedException (SerializationInfo info, StreamingContext context) : base (info, context)
-        {
-        }
-#endif
-    }
-
-    /// <summary>
-    /// An operation did not complete in the time allotted to it.
-    /// </summary>
-    [Serializable]
-    public class TimeoutException : global::KRPC.Client.RPCException
-    {
-        /// <summary>
-        /// Construct an TimeoutException with no message.
-        /// </summary>
-        public TimeoutException ()
-        {
-        }
-
-        /// <summary>
-        /// Construct an TimeoutException with the given message.
-        /// </summary>
-        public TimeoutException (string message) : base (message)
-        {
-        }
-
-        /// <summary>
-        /// Construct an TimeoutException with the given message and inner exception.
-        /// </summary>
-        public TimeoutException (string message, Exception inner) : base (message, inner)
-        {
-        }
-
-#if !NET
-        /// <summary>
-        /// Construct an TimeoutException with the given serialization info and streaming context.
-        /// </summary>
-        protected TimeoutException (SerializationInfo info, StreamingContext context) : base (info, context)
-        {
-        }
-#endif
-    }
-
-    /// <summary>
     /// The procedure is not available in the current game scene.
     /// </summary>
     [Serializable]
-    public class UnsupportedSceneException : global::KRPC.Client.RPCException
+    public class UnsupportedSceneException : global::KRPC.Client.ServerException
     {
         /// <summary>
         /// Construct an UnsupportedSceneException with no message.

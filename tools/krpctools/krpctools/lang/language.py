@@ -127,8 +127,9 @@ class Language:
         return None
 
     def exception_alias(self, service: str, name: str, mapped_type: str) -> str | None:
-        """The type an exception's generated name is an alias of, or None for an exception
-        that gets a class of its own"""
+        """The native form of an exception that gets no class of its own, or None for one that
+        does: the type its generated name is an alias of, or in a language with no type
+        aliases, the expression that creates it from message"""
         return None
 
     def parse_special_value(self, value, typ):

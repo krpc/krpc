@@ -14,8 +14,8 @@ import krpc.client.Connection;
 import krpc.client.ConnectionException;
 import krpc.client.EncodingException;
 import krpc.client.Event;
-import krpc.client.RPCException;
 import krpc.client.RemoteObject;
+import krpc.client.ServerException;
 import krpc.client.StreamException;
 import krpc.client.services.TestService;
 import krpc.conformance.Testee.AddCallback;
@@ -606,7 +606,7 @@ final class Testee {
       error.setKind(Error.Kind.SERVER);
       // A generated exception type is nested in the class of its service
       Class<?> outer = exn.getClass().getEnclosingClass();
-      if (exn instanceof RPCException && outer != null
+      if (exn instanceof ServerException && outer != null
           && outer.getPackageName().equals("krpc.client.services")) {
         error.setService(outer.getSimpleName());
         error.setName(exn.getClass().getSimpleName());

@@ -111,13 +111,13 @@ namespace KRPC.Client
                 ThrowIfEnded ();
                 if (Monitor.IsEntered (condition)) {
                     if (!announced)
-                        throw new System.InvalidOperationException ("Stream has no value");
+                        throw new StreamException ("Stream has no value");
                     seen.Value = AnnouncedVersion;
                     return announcedValue;
                 }
                 lock (updateLock) {
                     if (!updated)
-                        throw new System.InvalidOperationException ("Stream has no value");
+                        throw new StreamException ("Stream has no value");
                     seen.Value = Version;
                     return _value;
                 }

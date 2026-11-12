@@ -24,8 +24,8 @@ namespace KRPC.Client
         global::KRPC.Schema.KRPC.ProcedureResult Invoke (string service, string procedure, IList<ByteString> arguments, global::KRPC.Schema.KRPC.Type.Types.TypeCode returnCode);
 
         /// <summary>
-        /// Add an exception type
+        /// Add the function that creates the exception for a server exception, from its message
         /// </summary>
-        void AddExceptionType (string service, string name, Type exnType);
+        void AddExceptionType (string service, string name, Func<string, Exception> create);
     }
 }
