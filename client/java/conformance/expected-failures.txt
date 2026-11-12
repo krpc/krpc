@@ -61,8 +61,6 @@ test_events.py::test_drop_last_handle  # As test_streams.py::test_drop_last_hand
 test_streams.py::test_connection_failure_cause[lost]  # As test_streams.py::test_wake_waiter[close]
 test_streams.py::test_connection_failure_cause[malformed-message]  # As test_streams.py::test_wake_waiter[close]
 test_connection.py::test_failed_write  # As test_call_after_end[close]
-test_connection.py::test_handshake_lost  # The EOFException of the closed socket escapes the handshake unwrapped
-test_connection.py::test_handshake_failed_write  # The write's IOException escapes the handshake unwrapped
 test_concurrency.py::test_close_from_an_end_callback[remove] @flaky  # As test_connection.py::test_call_after_end[close], for a remove that loses the race with the close
 test_streams.py::test_close_after_failure  # As test_streams.py::test_wake_waiter[close]
 test_connection.py::test_size_over_32_bits  # As test_malformed_size

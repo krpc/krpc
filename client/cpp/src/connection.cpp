@@ -41,9 +41,9 @@ void handshake(Transport* transport, const std::string& name, std::chrono::milli
   schema::Message request;
   request.mutable_connection_request()->set_client_name(name);
   request.mutable_connection_request()->set_protocol_version(PROTOCOL_VERSION);
-  transport->send(encoder::encode_message_with_size(request));
   schema::Message message;
   try {
+    transport->send(encoder::encode_message_with_size(request));
     // The stall timeout applies from the next message
     transport->receive_message(message, timeout, std::chrono::milliseconds::zero());
   } catch (const TimeoutError&) {

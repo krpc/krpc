@@ -229,10 +229,10 @@ def _handshake(
     request.protocol_version = PROTOCOL_VERSION
     if name is not None:
         request.client_name = name
-    transport.send_message(Message(connection_request=request))
     # The handshake timeout covers the whole response, and the stall timeout applies
     # from the next message
     try:
+        transport.send_message(Message(connection_request=request))
         data = transport.receive_message_data(timeout)
     except ReadTimeout as exn:
         raise ConnectionError(

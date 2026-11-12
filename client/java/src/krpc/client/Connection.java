@@ -464,13 +464,13 @@ public class Connection implements AutoCloseable {
   /** Sends the connection request, and checks the server's response to it. */
   private static void handshake(
       String name, Transport transport, Duration timeout) throws IOException {
-    transport.send(KRPC.Message.newBuilder()
-        .setConnectionRequest(KRPC.ConnectionRequest.newBuilder()
-            .setClientName(name)
-            .setProtocolVersion(PROTOCOL_VERSION))
-        .build());
     KRPC.Message message;
     try {
+      transport.send(KRPC.Message.newBuilder()
+          .setConnectionRequest(KRPC.ConnectionRequest.newBuilder()
+              .setClientName(name)
+              .setProtocolVersion(PROTOCOL_VERSION))
+          .build());
       message = KRPC.Message.parseFrom(transport.read(timeout));
     } catch (SocketTimeoutException exn) {
       throw new ConnectionException(
@@ -479,6 +479,8 @@ public class Connection implements AutoCloseable {
     } catch (InvalidProtocolBufferException exn) {
       throw new ConnectionException(
           "Failed to parse the server's response to the connection request", exn);
+    } catch (IOException exn) {
+      throw new ConnectionException("Connection failed: " + exn.getMessage(), exn);
     }
     if (message.hasDisconnect()) {
       KRPC.Disconnect disconnect = message.getDisconnect();

@@ -169,11 +169,11 @@ namespace KRPC.Client
         /// </summary>
         static void Handshake (string name, Transport transport, TimeSpan timeout)
         {
-            transport.Send (new Message {
-                ConnectionRequest = new ConnectionRequest { ClientName = name ?? string.Empty, ProtocolVersion = PROTOCOL_VERSION }
-            });
             Message message;
             try {
+                transport.Send (new Message {
+                    ConnectionRequest = new ConnectionRequest { ClientName = name ?? string.Empty, ProtocolVersion = PROTOCOL_VERSION }
+                });
                 // The stall timeout applies from the next message
                 transport.Read (timeout, Timeout.InfiniteTimeSpan);
                 message = Message.Parser.ParseFrom (transport.Buffer, transport.Offset, transport.Size);
