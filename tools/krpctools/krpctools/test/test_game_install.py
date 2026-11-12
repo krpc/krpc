@@ -106,13 +106,42 @@ class TestRequirements(unittest.TestCase):
     def test_dependencies_follow_the_mod(self):
         ksp = KSP()
         self.assertEqual(
-            ["RealChute", "ToolbarControl", "ClickThroughBlocker", "Harmony"],
+            [
+                "RealChute==1.4.9.5",
+                "ToolbarControl==0.1.9.14",
+                "ClickThroughBlocker==2.1.10.23",
+                "Harmony==2.2.1.0",
+            ],
             install.requirements(ksp, ["RealChute"]),
         )
 
     def test_shared_dependency_listed_once(self):
-        names = install.requirements(KSP(), ["FAR", "KerbalAlarmClock"])
-        self.assertEqual(1, names.count("Harmony"))
+        ids = install.requirements(KSP(), ["FAR", "KerbalAlarmClock"])
+        self.assertEqual(1, ids.count("Harmony==2.2.1.0"))
+
+    def test_name_requests_the_first_version(self):
+        self.assertEqual(
+            ["KSPCommunityPartModules==0.5.1", "Harmony==2.2.1.0"],
+            install.requirements(KSP(), ["KSPCommunityPartModules"]),
+        )
+
+    def test_version_request(self):
+        self.assertEqual(
+            "KSPCommunityPartModules==0.4.0",
+            install.requirements(KSP(), ["KSPCommunityPartModules==0.4.0"])[0],
+        )
+
+    def test_two_versions_of_a_mod_raise(self):
+        with self.assertRaises(ValueError):
+            install.requirements(
+                KSP(), ["KSPCommunityPartModules", "KSPCommunityPartModules==0.4.0"]
+            )
+
+    def test_shared_archive(self):
+        ksp = KSP()
+        self.assertEqual(
+            ksp.mod("FAR").source, ksp.mod("ModularFlightIntegrator").source
+        )
 
     def test_unknown_mod_raises(self):
         with self.assertRaises(ValueError):
@@ -121,31 +150,28 @@ class TestRequirements(unittest.TestCase):
     def test_every_dependency_is_known(self):
         ksp = KSP()
         for mod in ksp.mods.values():
-            for name in mod.requires:
-                self.assertIn(name, ksp.mods)
+            for request in mod.requires:
+                ksp.mod(request)
+
+
+KAC = "KerbalAlarmClock==3.14.2.7"
+TOOLBAR_CONTROL = "ToolbarControl==0.1.9.14"
 
 
 class TestLoadedModsMatch(unittest.TestCase):
     def test_required_mods_match(self):
-        self.assertTrue(launch._matches(KSP(), {"FAR"}, {"FAR"}))
+        far = "FAR==0.16.1.2"
+        self.assertTrue(launch._matches(KSP(), {far}, {far}))
 
     def test_loaded_dependency_matches(self):
-        self.assertTrue(
-            launch._matches(
-                KSP(), {"KerbalAlarmClock"}, {"KerbalAlarmClock", "ToolbarControl"}
-            )
-        )
+        self.assertTrue(launch._matches(KSP(), {KAC}, {KAC, TOOLBAR_CONTROL}))
 
     def test_missing_mod_does_not_match(self):
-        self.assertFalse(
-            launch._matches(KSP(), {"KerbalAlarmClock"}, {"ToolbarControl"})
-        )
+        self.assertFalse(launch._matches(KSP(), {KAC}, {TOOLBAR_CONTROL}))
 
     def test_unrequired_mod_does_not_match(self):
         self.assertFalse(
-            launch._matches(
-                KSP(), {"ToolbarControl"}, {"KerbalAlarmClock", "ToolbarControl"}
-            )
+            launch._matches(KSP(), {TOOLBAR_CONTROL}, {KAC, TOOLBAR_CONTROL})
         )
 
 
@@ -279,18 +305,27 @@ class TestGame(unittest.TestCase):
         self.assertEqual("b", ksp.directory)
         self.assertIsNone(ksp.krpc)
         self.assertFalse(ksp.auto_launch)
-        self.assertEqual("FAR.zip", ksp.mods["FAR"].source)
-        self.assertIsNone(ksp.mods["FAR"].sha256)
-        self.assertEqual(("FerramAerospaceResearch",), ksp.mods["FAR"].folders)
+        self.assertEqual("FAR.zip", ksp.mod("FAR").source)
+        self.assertIsNone(ksp.mod("FAR").sha256)
+        self.assertEqual(("FerramAerospaceResearch",), ksp.mod("FAR").folders)
 
     def test_unknown_mod_source_raises(self):
         with self.assertRaises(ValueError):
             game.apply(KSP(), {"mod_sources": {"NoSuchMod": "x.zip"}})
 
     def test_suite_mod_replaces_the_game_mod(self):
-        far = KSP().mods["FAR"]
-        mod = type(far)("local/FAR.zip")
-        self.assertIs(mod, KSP(mods=[mod]).mods["FAR"])
+        mod = KSP().mod("FAR").with_source("local/FAR.zip")
+        self.assertIs(mod, KSP(mods=[mod]).mod("FAR"))
+
+    def test_suite_mod_with_no_version_replaces_every_version(self):
+        mod = game.Mod("local/KSPCommunityPartModules.zip")
+        mod.name = "KSPCommunityPartModules"
+        ksp = KSP(mods=[mod])
+        self.assertIs(mod, ksp.mod("KSPCommunityPartModules"))
+        self.assertEqual(
+            ["KSPCommunityPartModules"],
+            [key for key in ksp.mods if key.startswith("KSPCommunityPartModules")],
+        )
 
 
 class TestPackage(unittest.TestCase):

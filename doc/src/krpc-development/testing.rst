@@ -113,7 +113,7 @@ The tests leave a game they did not start unchanged, so it must already have the
 terminal. Pass ``-- --help`` to list its other options, which load a save, switch vessel or launch
 a craft.
 
-The third-party mods the tests install are pinned in ``tools/krpctools/krpctools/game/ksp/mods/``.
+The third-party mods the tests install are pinned in ``service/registry.bzl``.
 To test against a local build of one, pass ``--mod NAME=PATH`` to either command.
 
 .. note::

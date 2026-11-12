@@ -64,7 +64,7 @@ class TestPartsTagNoMods(PartsTagUnavailableTest, TestCase):
 
 
 class TestPartsTagOldCommunityPartModules(PartsTagUnavailableTest, TestCase):
-    mods = ["KSPCommunityPartModules-0.4"]
+    mods = ["KSPCommunityPartModules==0.4.0"]
 
 
 class TestPartsTagCommunityPartModules(PartsTagAvailableTest, TestCase):
@@ -77,7 +77,7 @@ class TestPartsTagCommunityPartModulesLegacyCraft(PartsTagAvailableTest, TestCas
 
 
 class TestPartsTagKOSOldCommunityPartModules(PartsTagAvailableTest, TestCase):
-    mods = ["KSPCommunityPartModules-0.4", "kOS"]
+    mods = ["KSPCommunityPartModules==0.4.0", "kOS"]
     craft = "PartsTagLegacy"
     module = "KOSNameTag"
 

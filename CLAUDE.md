@@ -147,7 +147,8 @@ bazel run //tools/game:test-ksp -- -k test_camera_mode                          
 ### Mods
 
  * Declared per test class: `mods = ["RemoteTech"]`.
- * Supported names, with their pinned archives: `tools/krpctools/krpctools/game/ksp/mods/`.
+ * Supported names, with their pinned archives: `MODS` in `service/registry.bzl`. A name gets
+   the first version listed, and `name==version` another, as in `"KSPCommunityPartModules==0.4.0"`.
    Downloads are cached in `~/.cache/krpctools`. `--mod NAME=PATH` installs a local build in
    place of the pin.
  * Install reconciles GameData to **exactly** the requested set (plus kRPC) — required-but-missing and

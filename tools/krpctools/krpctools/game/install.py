@@ -120,41 +120,45 @@ def fetch(source, sha256=None):
 
 
 def requirements(game, mods):
-    """The names of the given mods and every mod they require, each listed once."""
-    names = []
+    """The ids of the requested mods and of every mod they require, each listed once."""
+    ids = []
+    names = {}
 
-    def add(name):
-        if name in names:
+    def add(request):
+        mod = game.mod(request)
+        if mod.id in ids:
             return
-        if name not in game.mods:
+        if names.setdefault(mod.name, mod.id) != mod.id:
             raise ValueError(
-                "Unknown mod(s): %s (known: %s)" % (name, ", ".join(sorted(game.mods)))
+                "Two versions of %s requested: %s and %s"
+                % (mod.name, names[mod.name], mod.id)
             )
-        names.append(name)
-        for required in game.mods[name].requires:
+        ids.append(mod.id)
+        for required in mod.requires:
             add(required)
 
-    for name in mods:
-        add(name)
-    return names
+    for request in mods:
+        add(request)
+    return ids
 
 
 def install(game, mods=()):
     """Install kRPC, the game's test add-on and exactly the given mods and those they
     require. The other mods the game knows are removed."""
-    names = requirements(game, mods)
+    ids = requirements(game, mods)
     game.install_krpc(fetch(*game.krpc_source()))
     game.install_addon()
     if game.install_mods:
-        for name, mod in game.mods.items():
-            if name not in names:
+        for mod_id, mod in game.mods.items():
+            if mod_id not in ids:
                 mod.remove(game)
-        for name in names:
-            mod = game.mods[name]
+        for mod_id in ids:
+            mod = game.mods[mod_id]
             if mod.source is None:
                 raise RuntimeError(
-                    "No source for mod %s. Give one with --mod %s=PATH." % (name, name)
+                    "No source for mod %s. Give one with --mod %s=PATH."
+                    % (mod_id, mod.name)
                 )
             mod.install(game, fetch(mod.source, mod.sha256))
     if game.check_install:
-        game.validate_install(names)
+        game.validate_install(ids)

@@ -43,28 +43,19 @@ def _try_connect(game):
 
 
 def loaded_mods(game, conn, required=()):
-    """The names of the game's mods the running game has loaded. A required mod whose
+    """The ids of the game's mods the running game has loaded. A required mod whose
     presence cannot be told counts as loaded."""
     loaded = set()
-    for name, mod in game.mods.items():
+    for mod_id, mod in game.mods.items():
         present = mod.present(game, conn)
-        if present or (present is None and name in required):
-            loaded.add(name)
+        if present or (present is None and mod_id in required):
+            loaded.add(mod_id)
     return loaded
 
 
 def _matches(game, required, installed):
     """Whether the loaded mods are the required ones, plus any of the mods they require."""
     return required <= installed <= set(install.requirements(game, required))
-
-
-def _validate(game, required):
-    unknown = set(required) - set(game.mods)
-    if unknown:
-        raise ValueError(
-            "Unknown mod(s) in `mods`: %s (known: %s)"
-            % (", ".join(sorted(unknown)), ", ".join(sorted(game.mods)))
-        )
 
 
 def launch(game, mods, args=None):
@@ -175,8 +166,7 @@ def ensure(game, mods=()):
       otherwise.
     - No server: launch the game with the required mods, unless auto-launch is off.
     """
-    required = set(mods)
-    _validate(game, required)
+    required = {game.mod(request).id for request in mods}
     if frozenset(required) in game.unsatisfiable:
         raise RuntimeError(_unsatisfiable_message(game, required))
     conn = _try_connect(game)

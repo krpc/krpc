@@ -52,8 +52,9 @@ def _parser(the_game):
         "--mods",
         default="",
         metavar="MOD,...",
-        help="comma-separated mods to install: %s (default: none)"
-        % ", ".join(sorted(the_game.mods)),
+        help="comma-separated mods to install, each a name or name==version: %s "
+        "(default: none)"
+        % ", ".join(sorted({mod.name for mod in the_game.mods.values()})),
     )
     commands = parser.add_subparsers(dest="command", required=True)
     commands.add_parser(

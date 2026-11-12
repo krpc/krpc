@@ -140,14 +140,8 @@ class Mod(game.Mod):
     # The files the mod installs at the top of GameData
     files = ()
 
-    # The directory of config overlays, one subdirectory per folder. The supported mods keep
-    # theirs beside their definitions.
+    # The directory of config overlays, one subdirectory per folder, or None
     overlays = None
-
-    def __init__(self, source=None, sha256=None):
-        super().__init__(source, sha256)
-        if self.overlays is None:
-            self.overlays = _resource("mods")
 
 
 class KSP(game.Game):
@@ -164,9 +158,9 @@ class KSP(game.Game):
         return "KSP"
 
     def default_mods(self):
-        from .mods import MODS
+        from .registry import mods
 
-        return [mod() for mod in MODS]
+        return mods()
 
     # Locations
 
@@ -254,8 +248,8 @@ class KSP(game.Game):
             # Mod archives ship no settings, so some mods open a first-run window that
             # blocks an unattended launch. An overlay marks those already dismissed, or adds
             # a part for the tests.
-            overlay = os.path.join(mod.overlays, folder)
-            if os.path.isdir(overlay):
+            overlay = mod.overlays and os.path.join(mod.overlays, folder)
+            if overlay and os.path.isdir(overlay):
                 shutil.copytree(overlay, dst, dirs_exist_ok=True)
             normalize_permissions(dst)
         for name in mod.files:
@@ -278,8 +272,8 @@ class KSP(game.Game):
         would then wait for a server that never comes up."""
         allowed = set(_BASELINE_GAMEDATA)
         for name in mods:
-            allowed.update(self.mods[name].folders)
-            allowed.update(self.mods[name].files)
+            allowed.update(self.mod(name).folders)
+            allowed.update(self.mod(name).files)
         gamedata = self.gamedata()
         unexpected = [
             entry

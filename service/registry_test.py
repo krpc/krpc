@@ -1,4 +1,4 @@
-"""Checks the hand-written lists of services against the registry, service/registry.bzl.
+"""Checks the registry, service/registry.bzl, and the hand-written lists of services against it.
 
 The builds outside Bazel need the .csproj files and KRPC.sln as written. GitHub renders the root
 CHANGELOG.md, and the changelog-hints workflow reads COMPONENTS in tools/release/changelog.py
@@ -15,6 +15,7 @@ import changelog
 
 REGISTRY = json.loads(Path("service/registry.json").read_text(encoding="utf-8"))
 SERVICES = REGISTRY["services"]
+MODS = {mod["name"]: mod for mod in REGISTRY["mods"]}
 CORE_SERVICES = {"KRPC", "StdLib"}
 BY_NAME = {service["name"]: service for service in SERVICES}
 
@@ -102,6 +103,57 @@ class TestRegistry(unittest.TestCase):
             for service in SERVICES
         ]
         self.assertEqual(expected, components)
+
+
+class TestMods(unittest.TestCase):
+    def assert_resolves(self, request):
+        """Check that a request, name or name==version, names a version in MODS."""
+        name, _, version = request.partition("==")
+        self.assertIn(name, MODS)
+        if version:
+            self.assertIn(version, [v["version"] for v in MODS[name]["versions"]])
+
+    def test_service_mods_known(self):
+        for service in SERVICES:
+            with self.subTest(service=service["name"]):
+                for name in service["mods"]:
+                    self.assertIn(name, MODS)
+
+    def test_service_mods_have_assembly(self):
+        for service in SERVICES:
+            for name in service["mods"]:
+                with self.subTest(service=service["name"], mod=name):
+                    self.assertIsNotNone(MODS[name]["assembly"])
+
+    def test_requires_known(self):
+        for mod in MODS.values():
+            for version in mod["versions"]:
+                with self.subTest(mod=mod["name"], version=version["version"]):
+                    for request in version["requires"]:
+                        self.assert_resolves(request)
+
+    def test_version_has_one_archive(self):
+        for mod in MODS.values():
+            for version in mod["versions"]:
+                with self.subTest(mod=mod["name"], version=version["version"]):
+                    if version["archive"] is None:
+                        self.assertIsNotNone(version["url"])
+                        self.assertIsNotNone(version["sha256"])
+                    else:
+                        self.assertIsNone(version["url"])
+                        self.assert_resolves(
+                            "%s==%s" % (version["archive"], version["version"])
+                        )
+
+    def test_assembly_version_check(self):
+        for mod in MODS.values():
+            present = mod["present"]
+            if present is None or present["kind"] != "assembly_version":
+                continue
+            with self.subTest(mod=mod["name"]):
+                self.assertIsNotNone(mod["assembly"])
+                for version in mod["versions"]:
+                    self.assertIsNotNone(version["assembly_version"])
 
 
 if __name__ == "__main__":
