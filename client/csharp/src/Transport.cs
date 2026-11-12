@@ -2,11 +2,14 @@ using System;
 using System.IO;
 using System.Net.Sockets;
 using System.Threading;
+using Google.Protobuf;
+using KRPC.Schema.KRPC;
 
 namespace KRPC.Client
 {
     /// <summary>
-    /// Reads length prefixed messages from a stream, a block at a time.
+    /// The socket to the server, and the length prefixed messages sent and received over it.
+    /// Each derived class opens the socket over one protocol.
     /// </summary>
     /// <remarks>
     /// The server puts the length of a message in front of it as a varint. Taken straight from
@@ -17,7 +20,7 @@ namespace KRPC.Client
     /// already in hand when the next is asked for. A message is parsed where it lies, so nothing
     /// is copied out of the buffer on the way.
     /// </remarks>
-    sealed class MessageReader
+    abstract class Transport
     {
         // Big enough that anything a server sends arrives in one read.
         const int InitialSize = 1024 * 1024;
@@ -29,8 +32,9 @@ namespace KRPC.Client
         // uint32 it is meant to be.
         const int MaximumPrefixLength = 5;
 
-        readonly System.IO.Stream stream;
         readonly Socket socket;
+        readonly NetworkStream stream;
+        readonly CodedOutputStream output;
         byte[] buffer = new byte [InitialSize];
 
         // The bytes read but not yet handed out, as the half open range [start, end) of the
@@ -38,10 +42,92 @@ namespace KRPC.Client
         int start;
         int end;
 
-        public MessageReader (System.IO.Stream messageStream, Socket pollSocket = null)
+        protected Transport (Socket connectedSocket)
         {
-            stream = messageStream;
-            socket = pollSocket;
+            socket = connectedSocket;
+            stream = new NetworkStream (socket);
+            output = new CodedOutputStream (stream, true);
+        }
+
+        /// <summary>
+        /// Write a message.
+        /// </summary>
+        public void Send (Message message)
+        {
+            WriteFault.Reach ();
+            output.WriteLength (message.CalculateSize ());
+            message.WriteTo (output);
+            output.Flush ();
+        }
+
+        /// <summary>
+        /// Write a message holding the request.
+        /// </summary>
+        public void Send (Request request)
+        {
+            WriteFault.Reach ();
+            // The Message is written around the request, which saves building one
+            var size = request.CalculateSize ();
+            output.WriteLength (1 + CodedOutputStream.ComputeLengthSize (size) + size);
+            output.WriteTag (Message.RequestFieldNumber, WireFormat.WireType.LengthDelimited);
+            output.WriteLength (size);
+            request.WriteTo (output);
+            output.Flush ();
+        }
+
+        /// <summary>
+        /// Close the write side, leaving the read side open.
+        /// </summary>
+        public void ShutdownSend ()
+        {
+            socket.Shutdown (SocketShutdown.Send);
+        }
+
+        /// <summary>
+        /// Close both sides, which wakes a thread blocked reading.
+        /// </summary>
+        public void Close ()
+        {
+            try {
+                socket.Shutdown (SocketShutdown.Both);
+            } catch (System.Exception) {
+            }
+            socket.Close ();
+        }
+
+        /// <summary>
+        /// Whether the socket has data to read, or has closed, within the wait. True if the
+        /// poll fails, so that the read reports the failure.
+        /// </summary>
+        public bool Readable (TimeSpan wait)
+        {
+            try {
+                var microseconds = wait == Timeout.InfiniteTimeSpan ? -1 :
+                    (int)Math.Min (wait.TotalMilliseconds * 1000, int.MaxValue);
+                return socket.Poll (microseconds, SelectMode.SelectRead);
+            } catch (System.Exception) {
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Discard what arrives until the server closes the socket, or until the deadline.
+        /// </summary>
+        public void Discard (DateTime deadline)
+        {
+            var discard = new byte [4096];
+            try {
+                while (true) {
+                    var remaining = deadline - DateTime.UtcNow;
+                    if (remaining <= TimeSpan.Zero)
+                        return;
+                    if (!socket.Poll ((int)(remaining.TotalMilliseconds * 1000), SelectMode.SelectRead))
+                        return;
+                    if (socket.Receive (discard) == 0)
+                        return;
+                }
+            } catch (System.Exception) {
+            }
         }
 
         /// <summary>
@@ -93,7 +179,7 @@ namespace KRPC.Client
         /// <summary>
         /// Read the next message. Throws a TimeoutException if no whole message arrives within
         /// the timeout, or if a message that has started to arrive receives no new byte within
-        /// the stall timeout. The timeouts need the socket the reader was given.
+        /// the stall timeout.
         /// </summary>
         public void Read (TimeSpan timeout, TimeSpan stallTimeout)
         {
@@ -169,8 +255,6 @@ namespace KRPC.Client
         /// </summary>
         void WaitForData ()
         {
-            if (socket == null)
-                return;
             // The stall clock runs from the last byte received, which an earlier read may have
             // taken
             var wait = Timeout.InfiniteTimeSpan;

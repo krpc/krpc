@@ -1,7 +1,6 @@
 package krpc.client;
 
 import com.google.protobuf.ByteString;
-import com.google.protobuf.CodedOutputStream;
 import com.google.protobuf.InvalidProtocolBufferException;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -9,12 +8,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.SocketTimeoutException;
-import java.net.UnixDomainSocketAddress;
 import java.net.UnknownHostException;
-import java.nio.channels.Channels;
-import java.nio.channels.SocketChannel;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -413,37 +408,18 @@ public class Connection implements AutoCloseable {
     }
   }
 
-  private static SocketChannel open(InetAddress address, int port, Duration timeout)
+  private static Transport open(InetAddress address, int port, Duration timeout)
       throws IOException {
     try {
-      return openChannel(address, port, timeout);
-    } catch (ConnectionException exn) {
-      throw exn;
+      return new TCPIPTransport(address, port, timeout);
     } catch (IOException exn) {
       throw new ConnectionException("Failed to connect to the server: " + exn.getMessage(), exn);
     }
   }
 
-  private static SocketChannel openChannel(InetAddress address, int port, Duration timeout)
-      throws IOException {
-    if (timeout.isZero()) {
-      return SocketChannel.open(new InetSocketAddress(address, port));
-    }
-    // A network that drops a connection attempt instead of refusing it leaves the client
-    // waiting, so bound the wait where one was asked for.
-    SocketChannel channel = SocketChannel.open();
+  private static Transport openLocal(String path) throws IOException {
     try {
-      channel.socket().connect(new InetSocketAddress(address, port), (int) timeout.toMillis());
-    } catch (IOException exn) {
-      channel.close();
-      throw exn;
-    }
-    return channel;
-  }
-
-  private static SocketChannel openLocal(String path) throws IOException {
-    try {
-      return SocketChannel.open(UnixDomainSocketAddress.of(path));
+      return new LocalTransport(path);
     } catch (IOException exn) {
       throw new ConnectionException("Failed to connect to the server: " + exn.getMessage(), exn);
     }
@@ -465,21 +441,20 @@ public class Connection implements AutoCloseable {
   }
 
   /**
-   * Perform the connection handshake over an already opened socket. The handshake is the same
+   * Perform the connection handshake over an already opened transport. The handshake is the same
    * whatever carries it.
    */
   private Connection(
-      String name, SocketChannel channel, Duration handshakeTimeout, Duration stallTimeout)
+      String name, Transport transport, Duration handshakeTimeout, Duration stallTimeout)
       throws IOException {
-    MessageReader reader = new MessageReader(channel);
     try {
-      handshake(name, channel, reader, handshakeTimeout);
+      handshake(name, transport, handshakeTimeout);
     } catch (IOException | RuntimeException exn) {
-      channel.close();
+      transport.close();
       throw exn;
     }
     session = new Session(
-        channel, reader, id -> InternalProcedures.removeStreamRequest(this, id), stallTimeout);
+        transport, id -> InternalProcedures.removeStreamRequest(this, id), stallTimeout);
     streamManager = new StreamManager(this, session);
     session.start(streamManager);
     // Register the KRPC exception types, which a procedure of any service can throw
@@ -488,19 +463,15 @@ public class Connection implements AutoCloseable {
 
   /** Sends the connection request, and checks the server's response to it. */
   private static void handshake(
-      String name, SocketChannel channel, MessageReader reader, Duration timeout)
-      throws IOException {
-    WriteFault.reach();
-    CodedOutputStream output = CodedOutputStream.newInstance(Channels.newOutputStream(channel));
-    output.writeMessageNoTag(KRPC.Message.newBuilder()
+      String name, Transport transport, Duration timeout) throws IOException {
+    transport.send(KRPC.Message.newBuilder()
         .setConnectionRequest(KRPC.ConnectionRequest.newBuilder()
             .setClientName(name)
             .setProtocolVersion(PROTOCOL_VERSION))
         .build());
-    output.flush();
     KRPC.Message message;
     try {
-      message = KRPC.Message.parseFrom(reader.read(timeout));
+      message = KRPC.Message.parseFrom(transport.read(timeout));
     } catch (SocketTimeoutException exn) {
       throw new ConnectionException(
           "The server did not answer the connection request within "

@@ -37,7 +37,9 @@
     <Compile Include="FunctionCompiler.cs" />
     <Compile Include="IConnection.cs" />
     <Compile Include="InternalProcedures.cs" />
-    <Compile Include="MessageReader.cs" />
+    <Compile Include="Transport.cs" />
+    <Compile Include="TCPIPTransport.cs" />
+    <Compile Include="LocalTransport.cs" />
     <Compile Include="ProcedureSpecs.cs" />
     <Compile Include="RPCException.cs" />
     <Compile Include="RemoteObject.cs" />

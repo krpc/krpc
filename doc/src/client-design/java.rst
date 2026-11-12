@@ -22,7 +22,8 @@ events each hold the connection strongly, and none of them owns it:
 References
 ^^^^^^^^^^
 
-The connection holds its ``Session`` and ``StreamManager``, which also hold each other.
+The connection holds its ``Session`` and ``StreamManager``, which also hold each other. The
+``Session`` holds the ``Transport``.
 
 The objects the program keeps also hold the connection. A ``Service``, ``RemoteObject`` or
 ``Stream`` holds the ``Connection``. An ``Event`` holds its ``Stream``, and a ``Stream`` holds its

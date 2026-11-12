@@ -109,48 +109,24 @@ namespace KRPC.Client
                 throw new ArgumentOutOfRangeException (name, timeout.Value, "The timeout must be positive or infinite");
         }
 
-        static Socket Connect (IPAddress address, int port, TimeSpan timeout,
-                               TimeSpan? handshakeTimeout, TimeSpan? stallTimeout)
+        static Transport Connect (IPAddress address, int port, TimeSpan timeout,
+                                  TimeSpan? handshakeTimeout, TimeSpan? stallTimeout)
         {
             CheckTimeouts (handshakeTimeout, stallTimeout);
             try {
-                return Connect (address, port, timeout);
+                return new TCPIPTransport (address, port, timeout);
             } catch (SocketException exn) {
                 throw new ConnectionException ("Failed to connect to the server: " + exn.Message, exn);
             }
         }
 
-        static Socket Connect (IPAddress address, int port, TimeSpan timeout)
+        static Transport ConnectToPath (string path)
         {
-            var socket = new Socket (address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-            if (timeout == TimeSpan.Zero) {
-                socket.Connect (address, port);
-            } else {
-                // A network that drops a connection attempt instead of refusing it leaves the
-                // client waiting, so bound the wait where one was asked for.
-                var pending = socket.BeginConnect (address, port, null, null);
-                if (!pending.AsyncWaitHandle.WaitOne (timeout)) {
-                    socket.Close ();
-                    throw new SocketException ((int)SocketError.TimedOut);
-                }
-                socket.EndConnect (pending);
-            }
-            // A message is sent as soon as it is written, so waiting for more data to coalesce
-            // with can only add latency
-            socket.NoDelay = true;
-            return socket;
-        }
-
-        static Socket ConnectToPath (string path)
-        {
-            var socket = new Socket (AddressFamily.Unix, SocketType.Stream, ProtocolType.Unspecified);
             try {
-                socket.Connect (new UnixEndPoint (path));
+                return new LocalTransport (path);
             } catch (SocketException exn) {
-                socket.Close ();
                 throw new ConnectionException ("Failed to connect to the server: " + exn.Message, exn);
             }
-            return socket;
         }
 
         /// <summary>
@@ -170,21 +146,19 @@ namespace KRPC.Client
         }
 
         /// <summary>
-        /// Perform the connection handshake over an already opened socket. The handshake is the
-        /// same whatever carries it.
+        /// Perform the connection handshake over an already opened transport. The handshake is
+        /// the same whatever carries it.
         /// </summary>
-        Connection (string name, Socket socket, TimeSpan? handshakeTimeout, TimeSpan? stallTimeout)
+        Connection (string name, Transport transport, TimeSpan? handshakeTimeout, TimeSpan? stallTimeout)
         {
-            var stream = new NetworkStream (socket);
-            var reader = new MessageReader (stream, socket);
             var stall = stallTimeout ?? Session.DefaultStallTimeout;
             try {
-                Handshake (name, stream, reader, handshakeTimeout ?? DefaultHandshakeTimeout);
+                Handshake (name, transport, handshakeTimeout ?? DefaultHandshakeTimeout);
             } catch (System.Exception) {
-                socket.Close ();
+                transport.Close ();
                 throw;
             }
-            session = new Session (socket, stream, reader, RemoveStreamRequest, stall);
+            session = new Session (transport, RemoveStreamRequest, stall);
             StreamManager = new StreamManager (this, session.Dispatch);
             session.Start (StreamManager);
             Services.KRPC.Service.AddExceptionTypes (this);
@@ -193,21 +167,16 @@ namespace KRPC.Client
         /// <summary>
         /// Send the connection request, and check the server's response to it.
         /// </summary>
-        static void Handshake (string name, NetworkStream stream, MessageReader reader, TimeSpan timeout)
+        static void Handshake (string name, Transport transport, TimeSpan timeout)
         {
-            var output = new CodedOutputStream (stream, true);
-            var request = new Message {
+            transport.Send (new Message {
                 ConnectionRequest = new ConnectionRequest { ClientName = name ?? string.Empty, ProtocolVersion = PROTOCOL_VERSION }
-            };
-            WriteFault.Reach ();
-            output.WriteLength (request.CalculateSize ());
-            request.WriteTo (output);
-            output.Flush ();
+            });
             Message message;
             try {
                 // The stall timeout applies from the next message
-                reader.Read (timeout, Timeout.InfiniteTimeSpan);
-                message = Message.Parser.ParseFrom (reader.Buffer, reader.Offset, reader.Size);
+                transport.Read (timeout, Timeout.InfiniteTimeSpan);
+                message = Message.Parser.ParseFrom (transport.Buffer, transport.Offset, transport.Size);
             } catch (TimeoutException exn) {
                 throw new ConnectionException (
                     "The server did not answer the connection request within " +

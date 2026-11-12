@@ -42,10 +42,7 @@ namespace KRPC.Client
         {
         }
 
-        readonly Socket socket;
-        readonly NetworkStream networkStream;
-        readonly CodedOutputStream output;
-        readonly MessageReader reader;
+        readonly Transport transport;
         readonly Func<ulong, Request> removeStreamRequest;
         StreamManager manager;
         // Held for the whole of a write
@@ -76,14 +73,10 @@ namespace KRPC.Client
         [ThreadStatic]
         static bool deferredInterrupt;
 
-        public Session (Socket connectedSocket, NetworkStream stream, MessageReader messageReader,
-                        Func<ulong, Request> removeStream, TimeSpan stall)
+        public Session (Transport openTransport, Func<ulong, Request> removeStream, TimeSpan stall)
         {
             stallTimeout = stall;
-            socket = connectedSocket;
-            networkStream = stream;
-            output = new CodedOutputStream (networkStream, true);
-            reader = messageReader;
+            transport = openTransport;
             removeStreamRequest = removeStream;
             readerThread = new Thread (RunReader) { IsBackground = true, Name = "krpc-reader" };
             dispatcherThread = new Thread (RunDispatcher) { IsBackground = true, Name = "krpc-dispatcher" };
@@ -101,10 +94,6 @@ namespace KRPC.Client
         /// </summary>
         public bool OnDispatcherThread {
             get { return Thread.CurrentThread == dispatcherThread; }
-        }
-
-        internal Socket Socket {
-            get { return socket; }
         }
 
         /// <summary>
@@ -292,7 +281,7 @@ namespace KRPC.Client
                             pending.Remove (response.Id);
                             slot.Response = response;
                             slot.Done = true;
-                            if (returning && !reader.HasMessage) {
+                            if (returning && !transport.HasMessage) {
                                 reading = false;
                                 Returned ();
                                 return true;
@@ -317,7 +306,7 @@ namespace KRPC.Client
         /// </summary>
         void HandleBuffered ()
         {
-            while (reader.HasMessage) {
+            while (transport.HasMessage) {
                 // A failed connection has no pending calls to match responses to
                 Enter (stateLock);
                 try {
@@ -396,27 +385,11 @@ namespace KRPC.Client
         void WriteRequest (Request request)
         {
             try {
-                lock (writeLock) {
-                    WriteFault.Reach ();
-                    // The Message is written around the request, which saves building one
-                    var size = request.CalculateSize ();
-                    output.WriteLength (1 + CodedOutputStream.ComputeLengthSize (size) + size);
-                    output.WriteTag (Message.RequestFieldNumber, WireFormat.WireType.LengthDelimited);
-                    output.WriteLength (size);
-                    request.WriteTo (output);
-                    output.Flush ();
-                }
+                lock (writeLock)
+                    transport.Send (request);
             } catch (System.Exception exn) when (exn is IOException || exn is SocketException || exn is ObjectDisposedException) {
                 End (Failure (exn));
             }
-        }
-
-        void Write (Message message)
-        {
-            WriteFault.Reach ();
-            output.WriteLength (message.CalculateSize ());
-            message.WriteTo (output);
-            output.Flush ();
         }
 
         /// <summary>
@@ -437,8 +410,8 @@ namespace KRPC.Client
             }
             if (!failed && Monitor.TryEnter (writeLock, CloseTimeout)) {
                 try {
-                    Write (new Message { Disconnect = new Disconnect { Reason = Disconnect.Types.Reason.Closed } });
-                    socket.Shutdown (SocketShutdown.Send);
+                    transport.Send (new Message { Disconnect = new Disconnect { Reason = Disconnect.Types.Reason.Closed } });
+                    transport.ShutdownSend ();
                 } catch (System.Exception) {
                     // The connection can already have failed
                 } finally {
@@ -466,34 +439,14 @@ namespace KRPC.Client
                     reading = true;
             }
             if (drain)
-                Drain (deadline);
-            CloseSocket ();
+                transport.Discard (deadline);
+            transport.Close ();
             Fail (new ConnectionException ("Connection closed"));
             lock (stateLock) {
                 if (drain)
                     reading = false;
                 ended = true;
                 Monitor.PulseAll (stateLock);
-            }
-        }
-
-        /// <summary>
-        /// Discard what arrives until the server closes the connection, or until the deadline.
-        /// </summary>
-        void Drain (DateTime deadline)
-        {
-            var discard = new byte [4096];
-            try {
-                while (true) {
-                    var remaining = deadline - DateTime.UtcNow;
-                    if (remaining <= TimeSpan.Zero)
-                        return;
-                    if (!socket.Poll ((int)(remaining.TotalMilliseconds * 1000), SelectMode.SelectRead))
-                        return;
-                    if (socket.Receive (discard) == 0)
-                        return;
-                }
-            } catch (System.Exception) {
             }
         }
 
@@ -507,15 +460,6 @@ namespace KRPC.Client
                 readerThread.Join ();
             if (joinDispatcher && Thread.CurrentThread != dispatcherThread)
                 dispatcherThread.Join ();
-        }
-
-        void CloseSocket ()
-        {
-            try {
-                socket.Shutdown (SocketShutdown.Both);
-            } catch (System.Exception) {
-            }
-            socket.Close ();
         }
 
         /// <summary>
@@ -588,7 +532,7 @@ namespace KRPC.Client
                 Dispatch (() => manager.NotifyClosed (endingCause));
                 StopDispatcher ();
             }
-            CloseSocket ();
+            transport.Close ();
             Enter (stateLock);
             try {
                 Monitor.PulseAll (stateLock);
@@ -615,9 +559,9 @@ namespace KRPC.Client
                 // it stops reading. The wait is bounded by the stall clock, so that part is
                 // timed.
                 var wait = stallTimeout;
-                if (wait != Timeout.InfiniteTimeSpan && reader.HasBuffered)
-                    wait = reader.StallRemaining (wait);
-                var readable = Readable (wait);
+                if (wait != Timeout.InfiniteTimeSpan && transport.HasBuffered)
+                    wait = transport.StallRemaining (wait);
+                var readable = transport.Readable (wait);
                 lock (stateLock) {
                     if (ended)
                         return;
@@ -627,7 +571,7 @@ namespace KRPC.Client
                 }
                 try {
                     // A call can read the data between the wait and taking the role
-                    if (!reader.HasBuffered && !(readable && Readable (TimeSpan.Zero)))
+                    if (!transport.HasBuffered && !(readable && transport.Readable (TimeSpan.Zero)))
                         continue;
                     var message = Receive ();
                     if (message.ContentCase == Message.ContentOneofCase.Response)
@@ -644,21 +588,6 @@ namespace KRPC.Client
         }
 
         /// <summary>
-        /// Whether the socket has data to read, or has closed, within the wait. True if the
-        /// poll fails, so that the read reports the failure.
-        /// </summary>
-        bool Readable (TimeSpan wait)
-        {
-            try {
-                var microseconds = wait == Timeout.InfiniteTimeSpan ? -1 :
-                    (int)Math.Min (wait.TotalMilliseconds * 1000, int.MaxValue);
-                return socket.Poll (microseconds, SelectMode.SelectRead);
-            } catch (System.Exception) {
-                return true;
-            }
-        }
-
-        /// <summary>
         /// Read one message. Throws EndedException once the connection has ended.
         /// </summary>
         Message Receive ()
@@ -668,14 +597,14 @@ namespace KRPC.Client
         }
 
         /// <summary>
-        /// Read the bytes of one message into the reader's buffer. Throws EndedException once
+        /// Read the bytes of one message into the transport's buffer. Throws EndedException once
         /// the connection has ended.
         /// </summary>
         void Read ()
         {
             System.Exception cause;
             try {
-                reader.Read (Timeout.InfiniteTimeSpan, stallTimeout);
+                transport.Read (Timeout.InfiniteTimeSpan, stallTimeout);
                 return;
             } catch (TimeoutException) {
                 cause = ProtocolError (
@@ -710,7 +639,7 @@ namespace KRPC.Client
         Message Parse ()
         {
             try {
-                return Message.Parser.ParseFrom (reader.Buffer, reader.Offset, reader.Size);
+                return Message.Parser.ParseFrom (transport.Buffer, transport.Offset, transport.Size);
             } catch (InvalidProtocolBufferException exn) {
                 throw End (ProtocolError (
                     Disconnect.Types.Reason.MalformedMessage,
@@ -727,9 +656,9 @@ namespace KRPC.Client
             Read ();
             // A Message holding a response is the tag of field 2, then the response's size and
             // bytes, so the response is parsed where it lies
-            var buffer = reader.Buffer;
-            var offset = reader.Offset;
-            var size = reader.Size;
+            var buffer = transport.Buffer;
+            var offset = transport.Offset;
+            var size = transport.Size;
             if (size >= 2 && buffer [offset] == 0x12 && buffer [offset + 1] < 0x80 && buffer [offset + 1] == size - 2) {
                 try {
                     return Response.Parser.ParseFrom (buffer, offset + 2, size - 2);
@@ -854,8 +783,8 @@ namespace KRPC.Client
             Action disconnect = () => {
                 try {
                     lock (writeLock) {
-                        Write (new Message { Disconnect = new Disconnect { Reason = reason, Message = text } });
-                        socket.Shutdown (SocketShutdown.Send);
+                        transport.Send (new Message { Disconnect = new Disconnect { Reason = reason, Message = text } });
+                        transport.ShutdownSend ();
                     }
                 } catch (System.Exception) {
                 } finally {
@@ -873,7 +802,7 @@ namespace KRPC.Client
                     deferredInterrupt = true;
                 }
             }
-            Drain (DateTime.UtcNow + CloseTimeout);
+            transport.Discard (DateTime.UtcNow + CloseTimeout);
             return failure;
         }
     }

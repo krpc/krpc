@@ -76,9 +76,10 @@ These clients divide their work into the same parts, with a class for each:
    * - Entry point
      - The object the program makes calls through
      - ``Connection``
-   * - Framing
-     - Splits the bytes on the socket into messages, each prefixed with its length
-     - ``Transport`` in C++ and Python, ``MessageReader`` in C# and Java
+   * - Transport
+     - Owns the socket, and sends and receives the messages on it, each prefixed with its length
+     - ``Transport``, with ``TCPIPTransport`` and ``LocalTransport`` deriving from it to open the
+       socket
    * - Session
      - Matches responses to calls, chooses the thread that reads, and owns the threads and the close
      - ``Session``
