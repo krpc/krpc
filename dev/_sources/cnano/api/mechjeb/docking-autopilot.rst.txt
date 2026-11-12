@@ -10,6 +10,10 @@ DockingAutopilot
 
    The docking autopilot, which docks with the target docking port.
 
+   .. macro:: KRPC_CLASS_MECHJEB_DOCKINGAUTOPILOT
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_MechJeb_DockingAutopilot_Enabled(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_DockingAutopilot_t instance)
    .. function:: krpc_error_t krpc_MechJeb_DockingAutopilot_set_Enabled(krpc_connection_t connection, krpc_MechJeb_DockingAutopilot_t instance, bool value)
 

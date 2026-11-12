@@ -17,6 +17,10 @@ Flight
 
       To get orbital information, such as the apoapsis or inclination, see :type:`krpc_SpaceCenter_Orbit_t`.
 
+   .. macro:: KRPC_CLASS_SPACECENTER_FLIGHT
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_SpaceCenter_Flight_GForce(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Flight_t instance)
 
       The current G force acting on the vessel in :math:`\mathrm{g}`.
@@ -740,11 +744,24 @@ Flight
 
    A force and a torque that act together.
 
+   .. macro:: KRPC_STRUCT_SPACECENTER_WRENCH
+
+      The service and structure ids of the structure, for :func:`krpc_KRPC_Type_StructTypeById`.
+
 
    .. member:: krpc_tuple_double_double_double_t force
 
       The force, in Newtons.
 
+      .. macro:: KRPC_FIELD_SPACECENTER_WRENCH_FORCE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: krpc_tuple_double_double_double_t torque
 
       The torque, in :math:`\mathrm{N \cdot m}`.
+
+      .. macro:: KRPC_FIELD_SPACECENTER_WRENCH_TORQUE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.

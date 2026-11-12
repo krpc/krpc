@@ -11,6 +11,10 @@ Camera
    Controls the game's camera.
    Obtained by calling :func:`krpc_SpaceCenter_Camera`.
 
+   .. macro:: KRPC_CLASS_SPACECENTER_CAMERA
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_SpaceCenter_Camera_Mode(krpc_connection_t connection, krpc_SpaceCenter_CameraMode_t * returnValue, krpc_SpaceCenter_Camera_t instance)
    .. function:: krpc_error_t krpc_SpaceCenter_Camera_set_Mode(krpc_connection_t connection, krpc_SpaceCenter_Camera_t instance, krpc_SpaceCenter_CameraMode_t value)
 
@@ -165,6 +169,11 @@ Camera
 .. type:: krpc_SpaceCenter_CameraMode_t
 
    See :func:`krpc_SpaceCenter_Camera_Mode`.
+
+   .. macro:: KRPC_ENUMERATION_SPACECENTER_CAMERAMODE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_SPACECENTER_CAMERAMODE_AUTOMATIC

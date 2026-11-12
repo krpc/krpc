@@ -2179,18 +2179,31 @@ written at the Info level, so a server log level of Warning or Error hides it.</
 <dd><p>A rotation as an axis and an angle.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>See <a class="reference internal" href="#c.krpc_StdLib_QuaternionToAxisAngle" title="krpc_StdLib_QuaternionToAxisAngle"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_StdLib_QuaternionToAxisAngle()</span></code></a>.</p>
+<p>See <a class="reference internal" href="#c.krpc_StdLib_QuaternionToAxisAngle" title="krpc_StdLib_QuaternionToAxisAngle"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_StdLib_QuaternionToAxisAngle()</span></code></a>.   .. macro:: KRPC_STRUCT_STDLIB_AXISANGLE</p>
+<p>The service and structure ids of the structure, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_StructTypeById()</span></code>.</p>
 </div>
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_StdLib_AxisAngle_t.axis">
 <span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">axis</span></span></span><a class="headerlink" href="#c.krpc_StdLib_AxisAngle_t.axis" title="Link to this definition">#</a><br /></dt>
 <dd><p>The axis of the rotation, as a unit vector, or zero for no rotation.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_StdLib_AxisAngle_t.axis.KRPC_FIELD_STDLIB_AXISANGLE_AXIS">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_STDLIB_AXISANGLE_AXIS</span></span></span><a class="headerlink" href="#c.krpc_StdLib_AxisAngle_t.axis.KRPC_FIELD_STDLIB_AXISANGLE_AXIS" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_StdLib_AxisAngle_t.angle">
 <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">angle</span></span></span><a class="headerlink" href="#c.krpc_StdLib_AxisAngle_t.angle" title="Link to this definition">#</a><br /></dt>
 <dd><p>The angle of the rotation, in radians between 0 and <span class="math notranslate nohighlight">\(\pi\)</span>.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_StdLib_AxisAngle_t.angle.KRPC_FIELD_STDLIB_AXISANGLE_ANGLE">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_STDLIB_AXISANGLE_ANGLE</span></span></span><a class="headerlink" href="#c.krpc_StdLib_AxisAngle_t.angle.KRPC_FIELD_STDLIB_AXISANGLE_ANGLE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 </dd></dl>
@@ -2199,22 +2212,46 @@ written at the Info level, so a server log level of Warning or Error hides it.</
 <dt class="sig sig-object c" id="c.krpc_StdLib_ColorRGB_t">
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_StdLib_ColorRGB_t</span></span></span><a class="headerlink" href="#c.krpc_StdLib_ColorRGB_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>A color, as red, green and blue components between 0 and 1.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_StdLib_ColorRGB_t.KRPC_STRUCT_STDLIB_COLORRGB">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_STRUCT_STDLIB_COLORRGB</span></span></span><a class="headerlink" href="#c.krpc_StdLib_ColorRGB_t.KRPC_STRUCT_STDLIB_COLORRGB" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and structure ids of the structure, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_StructTypeById()</span></code>.</p>
+</dd></dl>
+
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_StdLib_ColorRGB_t.r">
 <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">r</span></span></span><a class="headerlink" href="#c.krpc_StdLib_ColorRGB_t.r" title="Link to this definition">#</a><br /></dt>
 <dd><p>The red component.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_StdLib_ColorRGB_t.r.KRPC_FIELD_STDLIB_COLORRGB_R">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_STDLIB_COLORRGB_R</span></span></span><a class="headerlink" href="#c.krpc_StdLib_ColorRGB_t.r.KRPC_FIELD_STDLIB_COLORRGB_R" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_StdLib_ColorRGB_t.g">
 <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">g</span></span></span><a class="headerlink" href="#c.krpc_StdLib_ColorRGB_t.g" title="Link to this definition">#</a><br /></dt>
 <dd><p>The green component.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_StdLib_ColorRGB_t.g.KRPC_FIELD_STDLIB_COLORRGB_G">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_STDLIB_COLORRGB_G</span></span></span><a class="headerlink" href="#c.krpc_StdLib_ColorRGB_t.g.KRPC_FIELD_STDLIB_COLORRGB_G" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_StdLib_ColorRGB_t.b">
 <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">b</span></span></span><a class="headerlink" href="#c.krpc_StdLib_ColorRGB_t.b" title="Link to this definition">#</a><br /></dt>
 <dd><p>The blue component.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_StdLib_ColorRGB_t.b.KRPC_FIELD_STDLIB_COLORRGB_B">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_STDLIB_COLORRGB_B</span></span></span><a class="headerlink" href="#c.krpc_StdLib_ColorRGB_t.b.KRPC_FIELD_STDLIB_COLORRGB_B" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 </dd></dl>
@@ -2225,30 +2262,55 @@ written at the Info level, so a server log level of Warning or Error hides it.</
 <dd><p>A color, as red, green, blue and alpha components between 0 and 1.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>An alpha of 0 is fully transparent and 1 is fully opaque.</p>
+<p>An alpha of 0 is fully transparent and 1 is fully opaque.   .. macro:: KRPC_STRUCT_STDLIB_COLORRGBA</p>
+<p>The service and structure ids of the structure, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_StructTypeById()</span></code>.</p>
 </div>
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_StdLib_ColorRGBA_t.r">
 <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">r</span></span></span><a class="headerlink" href="#c.krpc_StdLib_ColorRGBA_t.r" title="Link to this definition">#</a><br /></dt>
 <dd><p>The red component.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_StdLib_ColorRGBA_t.r.KRPC_FIELD_STDLIB_COLORRGBA_R">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_STDLIB_COLORRGBA_R</span></span></span><a class="headerlink" href="#c.krpc_StdLib_ColorRGBA_t.r.KRPC_FIELD_STDLIB_COLORRGBA_R" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_StdLib_ColorRGBA_t.g">
 <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">g</span></span></span><a class="headerlink" href="#c.krpc_StdLib_ColorRGBA_t.g" title="Link to this definition">#</a><br /></dt>
 <dd><p>The green component.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_StdLib_ColorRGBA_t.g.KRPC_FIELD_STDLIB_COLORRGBA_G">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_STDLIB_COLORRGBA_G</span></span></span><a class="headerlink" href="#c.krpc_StdLib_ColorRGBA_t.g.KRPC_FIELD_STDLIB_COLORRGBA_G" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_StdLib_ColorRGBA_t.b">
 <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">b</span></span></span><a class="headerlink" href="#c.krpc_StdLib_ColorRGBA_t.b" title="Link to this definition">#</a><br /></dt>
 <dd><p>The blue component.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_StdLib_ColorRGBA_t.b.KRPC_FIELD_STDLIB_COLORRGBA_B">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_STDLIB_COLORRGBA_B</span></span></span><a class="headerlink" href="#c.krpc_StdLib_ColorRGBA_t.b.KRPC_FIELD_STDLIB_COLORRGBA_B" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_StdLib_ColorRGBA_t.a">
 <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">a</span></span></span><a class="headerlink" href="#c.krpc_StdLib_ColorRGBA_t.a" title="Link to this definition">#</a><br /></dt>
 <dd><p>The alpha component.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_StdLib_ColorRGBA_t.a.KRPC_FIELD_STDLIB_COLORRGBA_A">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_STDLIB_COLORRGBA_A</span></span></span><a class="headerlink" href="#c.krpc_StdLib_ColorRGBA_t.a.KRPC_FIELD_STDLIB_COLORRGBA_A" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 </dd></dl>

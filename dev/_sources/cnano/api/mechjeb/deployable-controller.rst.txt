@@ -10,6 +10,10 @@ DeployableController
 
    The controller of one kind of deployable part, such as antennas or solar panels.
 
+   .. macro:: KRPC_CLASS_MECHJEB_DEPLOYABLECONTROLLER
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_MechJeb_DeployableController_AllRetracted(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_DeployableController_t instance)
 
       Whether all the parts are retracted.

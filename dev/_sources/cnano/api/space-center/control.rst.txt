@@ -35,6 +35,10 @@ Control
       :func:`krpc_SpaceCenter_Control_GrabLadder` and :func:`krpc_SpaceCenter_Control_ReleaseLadder` for the ladders it
       passes on the way.
 
+   .. macro:: KRPC_CLASS_SPACECENTER_CONTROL
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_SpaceCenter_Control_Source(krpc_connection_t connection, krpc_SpaceCenter_ControlSource_t * returnValue, krpc_SpaceCenter_Control_t instance)
 
       The source of the vessels control, for example by a kerbal or a probe core.
@@ -702,10 +706,19 @@ Control
    An action, belonging to a part module, that is assigned to an action group.
    Obtained by calling :func:`krpc_SpaceCenter_Control_GetActionGroupActions`.
 
+   .. macro:: KRPC_STRUCT_SPACECENTER_ACTIONGROUPACTION
+
+      The service and structure ids of the structure, for :func:`krpc_KRPC_Type_StructTypeById`.
+
 
    .. member:: krpc_SpaceCenter_Part_t part
 
       The part that the action acts on.
+
+      .. macro:: KRPC_FIELD_SPACECENTER_ACTIONGROUPACTION_PART
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: krpc_nullable_object_t module
 
@@ -714,19 +727,39 @@ Control
       Extended Action Groups is installed, as it can assign actions defined
       directly on a part, rather than on one of its modules, to an action group.
 
+      .. macro:: KRPC_FIELD_SPACECENTER_ACTIONGROUPACTION_MODULE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: char * name
 
       The human-readable name of the action, as shown in the action group editor.
 
+      .. macro:: KRPC_FIELD_SPACECENTER_ACTIONGROUPACTION_NAME
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: char * id
 
       The non-localized identifier for the action.
+
+      .. macro:: KRPC_FIELD_SPACECENTER_ACTIONGROUPACTION_ID
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
 
 .. type:: krpc_SpaceCenter_ControlState_t
 
    The control state of a vessel.
    See :func:`krpc_SpaceCenter_Control_State`.
+
+   .. macro:: KRPC_ENUMERATION_SPACECENTER_CONTROLSTATE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_SPACECENTER_CONTROLSTATE_FULL
@@ -750,6 +783,11 @@ Control
    The control source of a vessel.
    See :func:`krpc_SpaceCenter_Control_Source`.
 
+   .. macro:: KRPC_ENUMERATION_SPACECENTER_CONTROLSOURCE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
 
    .. macro:: KRPC_SPACECENTER_CONTROLSOURCE_KERBAL
 
@@ -770,6 +808,11 @@ Control
 .. type:: krpc_SpaceCenter_SASMode_t
 
    The behavior of the SAS auto-pilot. See :func:`krpc_SpaceCenter_AutoPilot_SASMode`.
+
+   .. macro:: KRPC_ENUMERATION_SPACECENTER_SASMODE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_SPACECENTER_SASMODE_STABILITYASSIST
@@ -828,6 +871,11 @@ Control
    The mode of the speed reported in the navball.
    See :func:`krpc_SpaceCenter_Control_SpeedMode`.
 
+   .. macro:: KRPC_ENUMERATION_SPACECENTER_SPEEDMODE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
 
    .. macro:: KRPC_SPACECENTER_SPEEDMODE_ORBIT
 
@@ -848,6 +896,11 @@ Control
 .. type:: krpc_SpaceCenter_ControlInputMode_t
 
    See :func:`krpc_SpaceCenter_Control_InputMode`.
+
+   .. macro:: KRPC_ENUMERATION_SPACECENTER_CONTROLINPUTMODE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_SPACECENTER_CONTROLINPUTMODE_ADDITIVE

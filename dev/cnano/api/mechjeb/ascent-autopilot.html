@@ -1406,6 +1406,12 @@
 <p>See the <a class="reference external" href="https://github.com/MuMech/MechJeb2/wiki/Ascent-Guidance">MechJeb wiki</a>
 for how to set up this autopilot.</p>
 </div>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_MechJeb_AscentAutopilot_t.KRPC_CLASS_MECHJEB_ASCENTAUTOPILOT">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_CLASS_MECHJEB_ASCENTAUTOPILOT</span></span></span><a class="headerlink" href="#c.krpc_MechJeb_AscentAutopilot_t.KRPC_CLASS_MECHJEB_ASCENTAUTOPILOT" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and class ids of the class, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_ClassTypeById()</span></code>.</p>
+</dd></dl>
+
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_MechJeb_AscentAutopilot_t.krpc_MechJeb_AscentAutopilot_Enabled">
 <a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_MechJeb_AscentAutopilot_Enabled</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_MechJeb_AscentAutopilot_t" title="krpc_MechJeb_AscentAutopilot_t"><span class="n"><span class="pre">krpc_MechJeb_AscentAutopilot_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_MechJeb_AscentAutopilot_t.krpc_MechJeb_AscentAutopilot_Enabled" title="Link to this definition">#</a><br /></dt>
@@ -1850,6 +1856,13 @@ the ascent path is PVG.</p>
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_MechJeb_AscentLaunchMode_t</span></span></span><a class="headerlink" href="#c.krpc_MechJeb_AscentLaunchMode_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>The launch mode of the ascent autopilot. See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_MechJeb_AscentAutopilot_LaunchMode()</span></code>.</p>
 <dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_MechJeb_AscentLaunchMode_t.KRPC_ENUMERATION_MECHJEB_ASCENTLAUNCHMODE">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ENUMERATION_MECHJEB_ASCENTLAUNCHMODE</span></span></span><a class="headerlink" href="#c.krpc_MechJeb_AscentLaunchMode_t.KRPC_ENUMERATION_MECHJEB_ASCENTLAUNCHMODE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and enumeration ids of the enumeration, for
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_EnumerationTypeById()</span></code> and <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_ConstantEnumById()</span></code>.</p>
+</dd></dl>
+
+<dl class="c macro">
 <dt class="sig sig-object c" id="c.krpc_MechJeb_AscentLaunchMode_t.KRPC_MECHJEB_ASCENTLAUNCHMODE_NORMAL">
 <span class="sig-name descname"><span class="n"><span class="pre">KRPC_MECHJEB_ASCENTLAUNCHMODE_NORMAL</span></span></span><a class="headerlink" href="#c.krpc_MechJeb_AscentLaunchMode_t.KRPC_MECHJEB_ASCENTLAUNCHMODE_NORMAL" title="Link to this definition">#</a><br /></dt>
 <dd><p>The autopilot is not performing a timed launch.</p>
@@ -1881,6 +1894,12 @@ the ascent path is PVG.</p>
 <dt class="sig sig-object c" id="c.krpc_MechJeb_AscentClassic_t">
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_MechJeb_AscentClassic_t</span></span></span><a class="headerlink" href="#c.krpc_MechJeb_AscentClassic_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>The classic ascent profile.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_MechJeb_AscentClassic_t.KRPC_CLASS_MECHJEB_ASCENTCLASSIC">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_CLASS_MECHJEB_ASCENTCLASSIC</span></span></span><a class="headerlink" href="#c.krpc_MechJeb_AscentClassic_t.KRPC_CLASS_MECHJEB_ASCENTCLASSIC" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and class ids of the class, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_ClassTypeById()</span></code>.</p>
+</dd></dl>
+
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_MechJeb_AscentClassic_t.krpc_MechJeb_AscentClassic_AutoPath">
 <a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_MechJeb_AscentClassic_AutoPath</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_MechJeb_AscentClassic_t" title="krpc_MechJeb_AscentClassic_t"><span class="n"><span class="pre">krpc_MechJeb_AscentClassic_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_MechJeb_AscentClassic_t.krpc_MechJeb_AscentClassic_AutoPath" title="Link to this definition">#</a><br /></dt>
@@ -2060,6 +2079,12 @@ atmosphere.</p>
 <dt class="sig sig-object c" id="c.krpc_MechJeb_AscentPVG_t">
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_MechJeb_AscentPVG_t</span></span></span><a class="headerlink" href="#c.krpc_MechJeb_AscentPVG_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>The Primer Vector Guidance (RSS/RO) profile.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_MechJeb_AscentPVG_t.KRPC_CLASS_MECHJEB_ASCENTPVG">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_CLASS_MECHJEB_ASCENTPVG</span></span></span><a class="headerlink" href="#c.krpc_MechJeb_AscentPVG_t.KRPC_CLASS_MECHJEB_ASCENTPVG" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and class ids of the class, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_ClassTypeById()</span></code>.</p>
+</dd></dl>
+
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_MechJeb_AscentPVG_t.krpc_MechJeb_AscentPVG_AttachAltFlag">
 <a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_MechJeb_AscentPVG_AttachAltFlag</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_MechJeb_AscentPVG_t" title="krpc_MechJeb_AscentPVG_t"><span class="n"><span class="pre">krpc_MechJeb_AscentPVG_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_MechJeb_AscentPVG_t.krpc_MechJeb_AscentPVG_AttachAltFlag" title="Link to this definition">#</a><br /></dt>

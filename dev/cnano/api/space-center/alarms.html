@@ -1401,6 +1401,12 @@
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_AlarmManager_t</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_AlarmManager_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Alarm manager.
 Obtained by calling <a class="reference internal" href="space-center.html#c.krpc_SpaceCenter_AlarmManager" title="krpc_SpaceCenter_AlarmManager"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AlarmManager()</span></code></a>.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_AlarmManager_t.KRPC_CLASS_SPACECENTER_ALARMMANAGER">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_CLASS_SPACECENTER_ALARMMANAGER</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_AlarmManager_t.KRPC_CLASS_SPACECENTER_ALARMMANAGER" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and class ids of the class, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_ClassTypeById()</span></code>.</p>
+</dd></dl>
+
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_AlarmManager_t.krpc_SpaceCenter_AlarmManager_Alarms">
 <a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_AlarmManager_Alarms</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_list_object_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_AlarmManager_t" title="krpc_SpaceCenter_AlarmManager_t"><span class="n"><span class="pre">krpc_SpaceCenter_AlarmManager_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_AlarmManager_t.krpc_SpaceCenter_AlarmManager_Alarms" title="Link to this definition">#</a><br /></dt>
@@ -1562,6 +1568,12 @@ properties on the returned alarm can still be used to inspect or adjust it.</p>
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Alarm_t">
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Alarm_t</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_Alarm_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>An alarm. Can be accessed using <a class="reference internal" href="space-center.html#c.krpc_SpaceCenter_AlarmManager" title="krpc_SpaceCenter_AlarmManager"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AlarmManager()</span></code></a>.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Alarm_t.KRPC_CLASS_SPACECENTER_ALARM">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_CLASS_SPACECENTER_ALARM</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_Alarm_t.KRPC_CLASS_SPACECENTER_ALARM" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and class ids of the class, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_ClassTypeById()</span></code>.</p>
+</dd></dl>
+
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Alarm_t.krpc_SpaceCenter_Alarm_ID">
 <a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Alarm_ID</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Alarm_t" title="krpc_SpaceCenter_Alarm_t"><span class="n"><span class="pre">krpc_SpaceCenter_Alarm_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Alarm_t.krpc_SpaceCenter_Alarm_ID" title="Link to this definition">#</a><br /></dt>
@@ -1762,6 +1774,13 @@ the triggered message.</p>
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_AlarmType_t</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_AlarmType_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>The type of an alarm. See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Alarm_Type()</span></code>.</p>
 <dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_AlarmType_t.KRPC_ENUMERATION_SPACECENTER_ALARMTYPE">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ENUMERATION_SPACECENTER_ALARMTYPE</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_AlarmType_t.KRPC_ENUMERATION_SPACECENTER_ALARMTYPE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and enumeration ids of the enumeration, for
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_EnumerationTypeById()</span></code> and <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_ConstantEnumById()</span></code>.</p>
+</dd></dl>
+
+<dl class="c macro">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_AlarmType_t.KRPC_SPACECENTER_ALARMTYPE_RAW">
 <span class="sig-name descname"><span class="n"><span class="pre">KRPC_SPACECENTER_ALARMTYPE_RAW</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_AlarmType_t.KRPC_SPACECENTER_ALARMTYPE_RAW" title="Link to this definition">#</a><br /></dt>
 <dd><p>An alarm for a specific date/time or a specific period in the future.</p>
@@ -1813,6 +1832,13 @@ introduced by a mod.</p>
 <dd><p>The warp action taken when an alarm fires.
 See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Alarm_WarpAction()</span></code>.</p>
 <dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_AlarmWarpAction_t.KRPC_ENUMERATION_SPACECENTER_ALARMWARPACTION">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ENUMERATION_SPACECENTER_ALARMWARPACTION</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_AlarmWarpAction_t.KRPC_ENUMERATION_SPACECENTER_ALARMWARPACTION" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and enumeration ids of the enumeration, for
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_EnumerationTypeById()</span></code> and <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_ConstantEnumById()</span></code>.</p>
+</dd></dl>
+
+<dl class="c macro">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_AlarmWarpAction_t.KRPC_SPACECENTER_ALARMWARPACTION_NOCHANGE">
 <span class="sig-name descname"><span class="n"><span class="pre">KRPC_SPACECENTER_ALARMWARPACTION_NOCHANGE</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_AlarmWarpAction_t.KRPC_SPACECENTER_ALARMWARPACTION_NOCHANGE" title="Link to this definition">#</a><br /></dt>
 <dd><p>Do not change time warp when the alarm fires.</p>
@@ -1837,6 +1863,13 @@ See <code class="xref c c-func docutils literal notranslate"><span class="pre">k
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_AlarmMessageAction_t</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_AlarmMessageAction_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>The on-screen message action taken when an alarm fires.
 See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Alarm_MessageAction()</span></code>.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_AlarmMessageAction_t.KRPC_ENUMERATION_SPACECENTER_ALARMMESSAGEACTION">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ENUMERATION_SPACECENTER_ALARMMESSAGEACTION</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_AlarmMessageAction_t.KRPC_ENUMERATION_SPACECENTER_ALARMMESSAGEACTION" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and enumeration ids of the enumeration, for
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_EnumerationTypeById()</span></code> and <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_ConstantEnumById()</span></code>.</p>
+</dd></dl>
+
 <dl class="c macro">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_AlarmMessageAction_t.KRPC_SPACECENTER_ALARMMESSAGEACTION_NOMESSAGE">
 <span class="sig-name descname"><span class="n"><span class="pre">KRPC_SPACECENTER_ALARMMESSAGEACTION_NOMESSAGE</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_AlarmMessageAction_t.KRPC_SPACECENTER_ALARMMESSAGEACTION_NOMESSAGE" title="Link to this definition">#</a><br /></dt>

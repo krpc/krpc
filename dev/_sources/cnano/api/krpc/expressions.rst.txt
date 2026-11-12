@@ -18,6 +18,10 @@ assembled and run.
 
       Numeric operands of differing types are converted to a common type.
 
+   .. macro:: KRPC_CLASS_KRPC_EXPRESSION
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_KRPC_Expression_ReturnType(krpc_connection_t connection, krpc_KRPC_Type_t * returnValue, krpc_KRPC_Expression_t instance)
 
       The type of the value the expression evaluates to. Throws an exception if the
@@ -150,6 +154,18 @@ assembled and run.
 
        * **service** -- The name of the service the enumeration is defined in.
        * **name** -- The name of the enumeration.
+       * **value** -- The value of the member of the enumeration.
+
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_ConstantEnumById(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, uint32_t serviceId, uint32_t enumerationId, int32_t value)
+
+      A constant value of an enumeration a service defines, named by ids.
+
+      :Parameters:
+
+       * **serviceId** -- The id of the service the enumeration is defined in.
+       * **enumerationId** -- The id of the enumeration.
        * **value** -- The value of the member of the enumeration.
 
    
@@ -791,6 +807,23 @@ assembled and run.
          ``Error`` raise :macro:`KRPC_EXCEPTION_KRPC_ERROR`. Throws an exception if the service does not
          declare it.
 
+   .. function:: krpc_error_t krpc_KRPC_Expression_ThrowById(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, uint32_t serviceId, uint32_t exceptionId, krpc_KRPC_Expression_t message)
+
+      A throw statement, which raises the exception with the given ids.
+
+      :Parameters:
+
+       * **serviceId** -- The id of the service the exception is defined in.
+       * **exceptionId** -- The id of the exception.
+       * **message** -- The message of the exception.
+
+   
+
+      .. note::
+
+         Raises the exception as :func:`krpc_KRPC_Expression_Throw` does. Throws an exception if the
+         service does not declare it.
+
    .. function:: krpc_error_t krpc_KRPC_Expression_TryCatch(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t body, const char * service, const char * name, krpc_KRPC_Expression_t message, krpc_KRPC_Expression_t handler)
 
       A try-catch statement that handles the named exception.
@@ -809,6 +842,25 @@ assembled and run.
 
          Only an exception a service declares can be named, and :func:`krpc_KRPC_Expression_TryCatchAll`
          handles any exception. Throws an exception if the service does not declare it.
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_TryCatchById(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t body, uint32_t serviceId, uint32_t exceptionId, krpc_KRPC_Expression_t message, krpc_KRPC_Expression_t handler)
+
+      A try-catch statement that handles the exception with the given ids.
+
+      :Parameters:
+
+       * **body** -- The statement to evaluate.
+       * **serviceId** -- The id of the service the exception is defined in.
+       * **exceptionId** -- The id of the exception.
+       * **message** -- A string variable assigned the exception's message, or null.
+       * **handler** -- The statement evaluated when the exception is caught.
+
+   
+
+      .. note::
+
+         Handles the exception as :func:`krpc_KRPC_Expression_TryCatch` does. Throws an exception if the
+         service does not declare it.
 
    .. function:: krpc_error_t krpc_KRPC_Expression_TryCatchAll(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t body, krpc_KRPC_Expression_t message, krpc_KRPC_Expression_t handler)
 
@@ -1119,6 +1171,23 @@ assembled and run.
 
       :returns: The value of the field.
    
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_GetFieldByIndex(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg, int32_t index)
+
+      The value of a field of a structure, named by its position. Throws an exception if
+      the value is not a structure, or the index is out of range.
+
+      :Parameters:
+
+       * **arg** -- The structure.
+       * **index** -- The position of the field to access.
+
+      :returns: The value of the field.
+   
+
+      .. note::
+
+         The fields are numbered from 0, in the order the structure defines them.
 
    .. function:: krpc_error_t krpc_KRPC_Expression_ConvertToString(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg)
 
@@ -1795,6 +1864,10 @@ assembled and run.
 
    The type of a value a procedure takes or returns.
 
+   .. macro:: KRPC_CLASS_KRPC_TYPE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_KRPC_Type_Double(krpc_connection_t connection, krpc_KRPC_Type_t * returnValue)
 
       A double precision floating point number type.
@@ -1888,6 +1961,39 @@ assembled and run.
 
        * **service** -- The name of the service the structure is defined in.
        * **name** -- The name of the structure.
+
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Type_ClassTypeById(krpc_connection_t connection, krpc_KRPC_Type_t * returnValue, uint32_t serviceId, uint32_t classId)
+
+      The type of a class defined by a service, named by ids.
+
+      :Parameters:
+
+       * **serviceId** -- The id of the service the class is defined in.
+       * **classId** -- The id of the class.
+
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Type_EnumerationTypeById(krpc_connection_t connection, krpc_KRPC_Type_t * returnValue, uint32_t serviceId, uint32_t enumerationId)
+
+      The type of an enumeration defined by a service, named by ids.
+
+      :Parameters:
+
+       * **serviceId** -- The id of the service the enumeration is defined in.
+       * **enumerationId** -- The id of the enumeration.
+
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Type_StructTypeById(krpc_connection_t connection, krpc_KRPC_Type_t * returnValue, uint32_t serviceId, uint32_t structId)
+
+      The type of a structure defined by a service, named by ids.
+
+      :Parameters:
+
+       * **serviceId** -- The id of the service the structure is defined in.
+       * **structId** -- The id of the structure.
 
    
 
@@ -1988,6 +2094,11 @@ assembled and run.
 .. type:: krpc_KRPC_TypeCode_t
 
    The kind of a type, with the values of the communication protocol's type codes.
+
+   .. macro:: KRPC_ENUMERATION_KRPC_TYPECODE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_KRPC_TYPECODE_DOUBLE

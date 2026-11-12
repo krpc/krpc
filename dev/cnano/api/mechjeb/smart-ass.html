@@ -1400,6 +1400,12 @@
 <dt class="sig sig-object c" id="c.krpc_MechJeb_SmartASS_t">
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_MechJeb_SmartASS_t</span></span></span><a class="headerlink" href="#c.krpc_MechJeb_SmartASS_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>The Smart A.S.S. window, which points the vessel in a chosen direction.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_MechJeb_SmartASS_t.KRPC_CLASS_MECHJEB_SMARTASS">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_CLASS_MECHJEB_SMARTASS</span></span></span><a class="headerlink" href="#c.krpc_MechJeb_SmartASS_t.KRPC_CLASS_MECHJEB_SMARTASS" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and class ids of the class, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_ClassTypeById()</span></code>.</p>
+</dd></dl>
+
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_MechJeb_SmartASS_t.krpc_MechJeb_SmartASS_InterfaceMode">
 <a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_MechJeb_SmartASS_InterfaceMode</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_MechJeb_SmartASSInterfaceMode_t" title="krpc_MechJeb_SmartASSInterfaceMode_t"><span class="n"><span class="pre">krpc_MechJeb_SmartASSInterfaceMode_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_MechJeb_SmartASS_t" title="krpc_MechJeb_SmartASS_t"><span class="n"><span class="pre">krpc_MechJeb_SmartASS_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_MechJeb_SmartASS_t.krpc_MechJeb_SmartASS_InterfaceMode" title="Link to this definition">#</a><br /></dt>
@@ -1677,6 +1683,13 @@ MechJeb uses a reference this enumeration lacks.</p>
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_MechJeb_SmartASSInterfaceMode_t</span></span></span><a class="headerlink" href="#c.krpc_MechJeb_SmartASSInterfaceMode_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>The mode of the Smart A.S.S. window. See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_MechJeb_SmartASS_InterfaceMode()</span></code>.</p>
 <dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_MechJeb_SmartASSInterfaceMode_t.KRPC_ENUMERATION_MECHJEB_SMARTASSINTERFACEMODE">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ENUMERATION_MECHJEB_SMARTASSINTERFACEMODE</span></span></span><a class="headerlink" href="#c.krpc_MechJeb_SmartASSInterfaceMode_t.KRPC_ENUMERATION_MECHJEB_SMARTASSINTERFACEMODE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and enumeration ids of the enumeration, for
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_EnumerationTypeById()</span></code> and <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_ConstantEnumById()</span></code>.</p>
+</dd></dl>
+
+<dl class="c macro">
 <dt class="sig sig-object c" id="c.krpc_MechJeb_SmartASSInterfaceMode_t.KRPC_MECHJEB_SMARTASSINTERFACEMODE_ORBITAL">
 <span class="sig-name descname"><span class="n"><span class="pre">KRPC_MECHJEB_SMARTASSINTERFACEMODE_ORBITAL</span></span></span><a class="headerlink" href="#c.krpc_MechJeb_SmartASSInterfaceMode_t.KRPC_MECHJEB_SMARTASSINTERFACEMODE_ORBITAL" title="Link to this definition">#</a><br /></dt>
 <dd><p>The orbital modes.</p>
@@ -1712,6 +1725,13 @@ MechJeb uses a reference this enumeration lacks.</p>
 <dt class="sig sig-object c" id="c.krpc_MechJeb_SmartASSAutopilotMode_t">
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_MechJeb_SmartASSAutopilotMode_t</span></span></span><a class="headerlink" href="#c.krpc_MechJeb_SmartASSAutopilotMode_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>The autopilot mode of Smart A.S.S. See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_MechJeb_SmartASS_AutopilotMode()</span></code>.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_MechJeb_SmartASSAutopilotMode_t.KRPC_ENUMERATION_MECHJEB_SMARTASSAUTOPILOTMODE">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ENUMERATION_MECHJEB_SMARTASSAUTOPILOTMODE</span></span></span><a class="headerlink" href="#c.krpc_MechJeb_SmartASSAutopilotMode_t.KRPC_ENUMERATION_MECHJEB_SMARTASSAUTOPILOTMODE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and enumeration ids of the enumeration, for
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_EnumerationTypeById()</span></code> and <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_ConstantEnumById()</span></code>.</p>
+</dd></dl>
+
 <dl class="c macro">
 <dt class="sig sig-object c" id="c.krpc_MechJeb_SmartASSAutopilotMode_t.KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_OFF">
 <span class="sig-name descname"><span class="n"><span class="pre">KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_OFF</span></span></span><a class="headerlink" href="#c.krpc_MechJeb_SmartASSAutopilotMode_t.KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_OFF" title="Link to this definition">#</a><br /></dt>
@@ -1861,6 +1881,13 @@ and toward it.</p>
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_MechJeb_AttitudeReference_t</span></span></span><a class="headerlink" href="#c.krpc_MechJeb_AttitudeReference_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>A reference frame of Smart A.S.S. See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_MechJeb_SmartASS_AdvancedReference()</span></code>.</p>
 <dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_MechJeb_AttitudeReference_t.KRPC_ENUMERATION_MECHJEB_ATTITUDEREFERENCE">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ENUMERATION_MECHJEB_ATTITUDEREFERENCE</span></span></span><a class="headerlink" href="#c.krpc_MechJeb_AttitudeReference_t.KRPC_ENUMERATION_MECHJEB_ATTITUDEREFERENCE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and enumeration ids of the enumeration, for
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_EnumerationTypeById()</span></code> and <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_ConstantEnumById()</span></code>.</p>
+</dd></dl>
+
+<dl class="c macro">
 <dt class="sig sig-object c" id="c.krpc_MechJeb_AttitudeReference_t.KRPC_MECHJEB_ATTITUDEREFERENCE_INERTIAL">
 <span class="sig-name descname"><span class="n"><span class="pre">KRPC_MECHJEB_ATTITUDEREFERENCE_INERTIAL</span></span></span><a class="headerlink" href="#c.krpc_MechJeb_AttitudeReference_t.KRPC_MECHJEB_ATTITUDEREFERENCE_INERTIAL" title="Link to this definition">#</a><br /></dt>
 <dd><p>The world coordinate system.</p>
@@ -1933,6 +1960,13 @@ out of that orbit.</p>
 <dt class="sig sig-object c" id="c.krpc_MechJeb_Direction_t">
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_MechJeb_Direction_t</span></span></span><a class="headerlink" href="#c.krpc_MechJeb_Direction_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>A direction of Smart A.S.S. See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_MechJeb_SmartASS_AdvancedDirection()</span></code>.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_MechJeb_Direction_t.KRPC_ENUMERATION_MECHJEB_DIRECTION">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ENUMERATION_MECHJEB_DIRECTION</span></span></span><a class="headerlink" href="#c.krpc_MechJeb_Direction_t.KRPC_ENUMERATION_MECHJEB_DIRECTION" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and enumeration ids of the enumeration, for
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_EnumerationTypeById()</span></code> and <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_ConstantEnumById()</span></code>.</p>
+</dd></dl>
+
 <dl class="c macro">
 <dt class="sig sig-object c" id="c.krpc_MechJeb_Direction_t.KRPC_MECHJEB_DIRECTION_FORWARD">
 <span class="sig-name descname"><span class="n"><span class="pre">KRPC_MECHJEB_DIRECTION_FORWARD</span></span></span><a class="headerlink" href="#c.krpc_MechJeb_Direction_t.KRPC_MECHJEB_DIRECTION_FORWARD" title="Link to this definition">#</a><br /></dt>

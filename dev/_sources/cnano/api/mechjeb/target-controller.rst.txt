@@ -15,6 +15,10 @@ TargetController
       Positions and directions are in world space, the coordinate system of the game's
       physics.
 
+   .. macro:: KRPC_CLASS_MECHJEB_TARGETCONTROLLER
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_MechJeb_TargetController_CanAlign(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_TargetController_t instance)
 
       Whether the vessel can align with the target, which it can with a docking port.

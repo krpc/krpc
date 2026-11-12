@@ -13,6 +13,10 @@ Servo
    :func:`krpc_InfernalRobotics_ServoGroup_ServoWithName`
    or :func:`krpc_InfernalRobotics_ServoWithName`.
 
+   .. macro:: KRPC_CLASS_INFERNALROBOTICS_SERVO
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_InfernalRobotics_Servo_Name(krpc_connection_t connection, char * * returnValue, krpc_InfernalRobotics_Servo_t instance)
    .. function:: krpc_error_t krpc_InfernalRobotics_Servo_set_Name(krpc_connection_t connection, krpc_InfernalRobotics_Servo_t instance, const char * value)
 
@@ -321,6 +325,11 @@ Servo
 .. type:: krpc_InfernalRobotics_ServoMode_t
 
    The mode a servo is operating in. See :func:`krpc_InfernalRobotics_Servo_Mode`.
+
+   .. macro:: KRPC_ENUMERATION_INFERNALROBOTICS_SERVOMODE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_INFERNALROBOTICS_SERVOMODE_SERVO

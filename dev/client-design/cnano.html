@@ -579,6 +579,10 @@ those bytes as they are.</p></li>
 <li><p><strong>That code has its own file</strong>, <code class="docutils literal notranslate"><span class="pre">src/procedure_call.c</span></code>, so a static link without functions
 leaves it out.</p></li>
 <li><p><strong>There are no function streams or events</strong>, as the client has no streams.</p></li>
+<li><p><strong>A function names definitions by ids.</strong> The names would go in flash. The stubs define
+<code class="docutils literal notranslate"><span class="pre">KRPC_CLASS_</span></code>, <code class="docutils literal notranslate"><span class="pre">KRPC_ENUMERATION_</span></code> and <code class="docutils literal notranslate"><span class="pre">KRPC_STRUCT_</span></code> macros as the pair of ids, as for
+exceptions, which the <code class="docutils literal notranslate"><span class="pre">ById</span></code> procedures take. <code class="docutils literal notranslate"><span class="pre">GetFieldByIndex</span></code> names a field by its
+position, which a <code class="docutils literal notranslate"><span class="pre">KRPC_FIELD_</span></code> macro holds, so a program never writes the number.</p></li>
 </ul>
 </section>
 <section id="errors">

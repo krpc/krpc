@@ -17,6 +17,10 @@ Monitor
       the IVA overlay is on. Reading another monitor's text or image updates it, in any camera
       mode.
 
+   .. macro:: KRPC_CLASS_RASTERPROPMONITOR_MONITOR
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_RasterPropMonitor_Monitor_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_RasterPropMonitor_Monitor_t instance)
 
       The part the monitor is in.
@@ -221,6 +225,11 @@ Monitor
 .. type:: krpc_RasterPropMonitor_ImageFormat_t
 
    The file format of an image.
+
+   .. macro:: KRPC_ENUMERATION_RASTERPROPMONITOR_IMAGEFORMAT
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_RASTERPROPMONITOR_IMAGEFORMAT_PNG

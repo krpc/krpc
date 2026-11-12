@@ -12,6 +12,10 @@ Vessel
    orbital and flight data, manipulating control inputs and managing resources.
    Created using :func:`krpc_SpaceCenter_ActiveVessel` or :func:`krpc_SpaceCenter_Vessels`.
 
+   .. macro:: KRPC_CLASS_SPACECENTER_VESSEL
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Name(krpc_connection_t connection, char * * returnValue, krpc_SpaceCenter_Vessel_t instance)
    .. function:: krpc_error_t krpc_SpaceCenter_Vessel_set_Name(krpc_connection_t connection, krpc_SpaceCenter_Vessel_t instance, const char * value)
 
@@ -874,34 +878,67 @@ Vessel
    The largest value of a quantity, such as a torque or a force, in the positive and the
    negative direction of each of three axes.
 
+   .. macro:: KRPC_STRUCT_SPACECENTER_AXISRANGE
+
+      The service and structure ids of the structure, for :func:`krpc_KRPC_Type_StructTypeById`.
+
 
    .. member:: krpc_tuple_double_double_double_t positive
 
       The value in the positive direction of each axis.
 
+      .. macro:: KRPC_FIELD_SPACECENTER_AXISRANGE_POSITIVE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: krpc_tuple_double_double_double_t negative
 
       The value in the negative direction of each axis, which is zero or less.
+
+      .. macro:: KRPC_FIELD_SPACECENTER_AXISRANGE_NEGATIVE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
 
 .. type:: krpc_SpaceCenter_BoundingBox_t
 
    An axis-aligned bounding box, as the positions of its minimum and maximum vertices.
 
+   .. macro:: KRPC_STRUCT_SPACECENTER_BOUNDINGBOX
+
+      The service and structure ids of the structure, for :func:`krpc_KRPC_Type_StructTypeById`.
+
 
    .. member:: krpc_tuple_double_double_double_t min
 
       The position of the minimum vertex of the box.
 
+      .. macro:: KRPC_FIELD_SPACECENTER_BOUNDINGBOX_MIN
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: krpc_tuple_double_double_double_t max
 
       The position of the maximum vertex of the box.
+
+      .. macro:: KRPC_FIELD_SPACECENTER_BOUNDINGBOX_MAX
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
 
 .. type:: krpc_SpaceCenter_VesselType_t
 
    The type of a vessel.
    See :func:`krpc_SpaceCenter_Vessel_Type`.
+
+   .. macro:: KRPC_ENUMERATION_SPACECENTER_VESSELTYPE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_SPACECENTER_VESSELTYPE_BASE
@@ -995,6 +1032,11 @@ Vessel
    The situation a vessel is in.
    See :func:`krpc_SpaceCenter_Vessel_Situation`.
 
+   .. macro:: KRPC_ENUMERATION_SPACECENTER_VESSELSITUATION
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
 
    .. macro:: KRPC_SPACECENTER_VESSELSITUATION_DOCKED
 
@@ -1040,6 +1082,10 @@ Vessel
 .. type:: krpc_SpaceCenter_CrewMember_t
 
    Represents crew in a vessel. Can be obtained using :func:`krpc_SpaceCenter_Vessel_Crew`.
+
+   .. macro:: KRPC_CLASS_SPACECENTER_CREWMEMBER
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_Name(krpc_connection_t connection, char * * returnValue, krpc_SpaceCenter_CrewMember_t instance)
    .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_set_Name(krpc_connection_t connection, krpc_SpaceCenter_CrewMember_t instance, const char * value)
@@ -1159,24 +1205,48 @@ Vessel
 
    .. note::
 
-      See :func:`krpc_SpaceCenter_CrewMember_CareerLog`.
+      See :func:`krpc_SpaceCenter_CrewMember_CareerLog`.   .. macro:: KRPC_STRUCT_SPACECENTER_FLIGHTLOGENTRY
+
+      The service and structure ids of the structure, for :func:`krpc_KRPC_Type_StructTypeById`.
+
+
    .. member:: int32_t flight
 
       The flight identifier of the entry.
+
+      .. macro:: KRPC_FIELD_SPACECENTER_FLIGHTLOGENTRY_FLIGHT
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: char * type
 
       The type of the entry, e.g. ``Orbit`` or ``Land``.
 
+      .. macro:: KRPC_FIELD_SPACECENTER_FLIGHTLOGENTRY_TYPE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: char * target
 
       The name of the body the entry is for.
+
+      .. macro:: KRPC_FIELD_SPACECENTER_FLIGHTLOGENTRY_TARGET
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
 
 .. type:: krpc_SpaceCenter_CrewMemberType_t
 
    The type of a crew member.
    See :func:`krpc_SpaceCenter_CrewMember_Type`.
+
+   .. macro:: KRPC_ENUMERATION_SPACECENTER_CREWMEMBERTYPE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_SPACECENTER_CREWMEMBERTYPE_APPLICANT
@@ -1205,6 +1275,11 @@ Vessel
    A crew member's gender.
    See :func:`krpc_SpaceCenter_CrewMember_Gender`.
 
+   .. macro:: KRPC_ENUMERATION_SPACECENTER_CREWMEMBERGENDER
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
 
    .. macro:: KRPC_SPACECENTER_CREWMEMBERGENDER_MALE
 
@@ -1221,6 +1296,11 @@ Vessel
 
    A crew member's roster status.
    See :func:`krpc_SpaceCenter_CrewMember_RosterStatus`.
+
+   .. macro:: KRPC_ENUMERATION_SPACECENTER_ROSTERSTATUS
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_SPACECENTER_ROSTERSTATUS_AVAILABLE
@@ -1248,6 +1328,11 @@ Vessel
 
    A crew member's suit type.
    See :func:`krpc_SpaceCenter_CrewMember_SuitType`.
+
+   .. macro:: KRPC_ENUMERATION_SPACECENTER_SUITTYPE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_SPACECENTER_SUITTYPE_DEFAULT

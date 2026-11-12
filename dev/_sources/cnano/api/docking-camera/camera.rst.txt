@@ -10,6 +10,10 @@ Camera
 
    A camera from Docking Camera (KURS), on an onboard camera part or a docking port.
 
+   .. macro:: KRPC_CLASS_DOCKINGCAMERA_CAMERA
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_DockingCamera_Camera_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_DockingCamera_Camera_t instance)
 
       Get the part containing this camera.
@@ -41,6 +45,11 @@ Camera
 .. type:: krpc_DockingCamera_ImageFormat_t
 
    The file format of an image.
+
+   .. macro:: KRPC_ENUMERATION_DOCKINGCAMERA_IMAGEFORMAT
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_DOCKINGCAMERA_IMAGEFORMAT_PNG

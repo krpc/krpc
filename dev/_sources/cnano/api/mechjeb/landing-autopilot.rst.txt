@@ -10,6 +10,10 @@ LandingAutopilot
 
    The landing autopilot, which lands at a target or wherever the vessel comes down.
 
+   .. macro:: KRPC_CLASS_MECHJEB_LANDINGAUTOPILOT
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_MechJeb_LandingAutopilot_Enabled(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_LandingAutopilot_t instance)
    .. function:: krpc_error_t krpc_MechJeb_LandingAutopilot_set_Enabled(krpc_connection_t connection, krpc_MechJeb_LandingAutopilot_t instance, bool value)
 

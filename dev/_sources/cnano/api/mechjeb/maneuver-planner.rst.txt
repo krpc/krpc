@@ -14,6 +14,10 @@ ManeuverPlanner
 
       MechJeb shares the operations, and most of their settings, between vessels.
 
+   .. macro:: KRPC_CLASS_MECHJEB_MANEUVERPLANNER
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_MechJeb_ManeuverPlanner_OperationApoapsis(krpc_connection_t connection, krpc_MechJeb_OperationApoapsis_t * returnValue, krpc_MechJeb_ManeuverPlanner_t instance)
 
       The operation that changes the apoapsis.
@@ -130,6 +134,10 @@ TimeSelector
 
    The time of a maneuver.
 
+   .. macro:: KRPC_CLASS_MECHJEB_TIMESELECTOR
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_MechJeb_TimeSelector_CircularizeAltitude(krpc_connection_t connection, double * returnValue, krpc_MechJeb_TimeSelector_t instance)
    .. function:: krpc_error_t krpc_MechJeb_TimeSelector_set_CircularizeAltitude(krpc_connection_t connection, krpc_MechJeb_TimeSelector_t instance, double value)
 
@@ -167,6 +175,11 @@ TimeSelector
 .. type:: krpc_MechJeb_TimeReference_t
 
    The time reference of a maneuver. See :func:`krpc_MechJeb_TimeSelector_TimeReference`.
+
+   .. macro:: KRPC_ENUMERATION_MECHJEB_TIMEREFERENCE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_MECHJEB_TIMEREFERENCE_ALTITUDE
@@ -251,6 +264,10 @@ OperationApoapsis
 
    Change the apoapsis.
 
+   .. macro:: KRPC_CLASS_MECHJEB_OPERATIONAPOAPSIS
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_MechJeb_OperationApoapsis_ErrorMessage(krpc_connection_t connection, char * * returnValue, krpc_MechJeb_OperationApoapsis_t instance)
 
       The warning from the last call to ``MakeNodes``, or an empty string.
@@ -308,6 +325,10 @@ OperationCircularize
 
       To raise the periapsis to the apoapsis, set the time to :macro:`KRPC_MECHJEB_TIMEREFERENCE_APOAPSIS`, and to lower the apoapsis to the periapsis, set it to :macro:`KRPC_MECHJEB_TIMEREFERENCE_PERIAPSIS`. These are the cheapest.
 
+   .. macro:: KRPC_CLASS_MECHJEB_OPERATIONCIRCULARIZE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_MechJeb_OperationCircularize_ErrorMessage(krpc_connection_t connection, char * * returnValue, krpc_MechJeb_OperationCircularize_t instance)
 
       The warning from the last call to ``MakeNodes``, or an empty string.
@@ -353,6 +374,10 @@ OperationCourseCorrection
 .. type:: krpc_MechJeb_OperationCourseCorrection_t
 
    Fine tune the closest approach to the target.
+
+   .. macro:: KRPC_CLASS_MECHJEB_OPERATIONCOURSECORRECTION
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_MechJeb_OperationCourseCorrection_CourseCorrectFinalPeA(krpc_connection_t connection, double * returnValue, krpc_MechJeb_OperationCourseCorrection_t instance)
    .. function:: krpc_error_t krpc_MechJeb_OperationCourseCorrection_set_CourseCorrectFinalPeA(krpc_connection_t connection, krpc_MechJeb_OperationCourseCorrection_t instance, double value)
@@ -407,6 +432,10 @@ OperationEllipticize
 .. type:: krpc_MechJeb_OperationEllipticize_t
 
    Change both the periapsis and the apoapsis.
+
+   .. macro:: KRPC_CLASS_MECHJEB_OPERATIONELLIPTICIZE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_MechJeb_OperationEllipticize_ErrorMessage(krpc_connection_t connection, char * * returnValue, krpc_MechJeb_OperationEllipticize_t instance)
 
@@ -468,6 +497,10 @@ OperationInclination
 
    Change the inclination.
 
+   .. macro:: KRPC_CLASS_MECHJEB_OPERATIONINCLINATION
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_MechJeb_OperationInclination_ErrorMessage(krpc_connection_t connection, char * * returnValue, krpc_MechJeb_OperationInclination_t instance)
 
       The warning from the last call to ``MakeNodes``, or an empty string.
@@ -521,6 +554,10 @@ OperationInterplanetaryTransfer
 
    Transfer to another planet.
 
+   .. macro:: KRPC_CLASS_MECHJEB_OPERATIONINTERPLANETARYTRANSFER
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_MechJeb_OperationInterplanetaryTransfer_ErrorMessage(krpc_connection_t connection, char * * returnValue, krpc_MechJeb_OperationInterplanetaryTransfer_t instance)
 
       The warning from the last call to ``MakeNodes``, or an empty string.
@@ -568,6 +605,10 @@ OperationKillRelVel
 
    Match velocities with the target.
 
+   .. macro:: KRPC_CLASS_MECHJEB_OPERATIONKILLRELVEL
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_MechJeb_OperationKillRelVel_ErrorMessage(krpc_connection_t connection, char * * returnValue, krpc_MechJeb_OperationKillRelVel_t instance)
 
       The warning from the last call to ``MakeNodes``, or an empty string.
@@ -613,6 +654,10 @@ OperationLambert
 .. type:: krpc_MechJeb_OperationLambert_t
 
    Intercept the target at a chosen time.
+
+   .. macro:: KRPC_CLASS_MECHJEB_OPERATIONLAMBERT
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_MechJeb_OperationLambert_ErrorMessage(krpc_connection_t connection, char * * returnValue, krpc_MechJeb_OperationLambert_t instance)
 
@@ -666,6 +711,10 @@ OperationLan
 .. type:: krpc_MechJeb_OperationLan_t
 
    Change the longitude of the ascending node.
+
+   .. macro:: KRPC_CLASS_MECHJEB_OPERATIONLAN
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_MechJeb_OperationLan_ErrorMessage(krpc_connection_t connection, char * * returnValue, krpc_MechJeb_OperationLan_t instance)
 
@@ -726,6 +775,10 @@ OperationLongitude
 
    Change the surface longitude of the apsis.
 
+   .. macro:: KRPC_CLASS_MECHJEB_OPERATIONLONGITUDE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_MechJeb_OperationLongitude_ErrorMessage(krpc_connection_t connection, char * * returnValue, krpc_MechJeb_OperationLongitude_t instance)
 
       The warning from the last call to ``MakeNodes``, or an empty string.
@@ -785,6 +838,10 @@ OperationMoonReturn
 
    Return from a moon to the body it orbits.
 
+   .. macro:: KRPC_CLASS_MECHJEB_OPERATIONMOONRETURN
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_MechJeb_OperationMoonReturn_ErrorMessage(krpc_connection_t connection, char * * returnValue, krpc_MechJeb_OperationMoonReturn_t instance)
 
       The warning from the last call to ``MakeNodes``, or an empty string.
@@ -831,6 +888,10 @@ OperationPeriapsis
 .. type:: krpc_MechJeb_OperationPeriapsis_t
 
    Change the periapsis.
+
+   .. macro:: KRPC_CLASS_MECHJEB_OPERATIONPERIAPSIS
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_MechJeb_OperationPeriapsis_ErrorMessage(krpc_connection_t connection, char * * returnValue, krpc_MechJeb_OperationPeriapsis_t instance)
 
@@ -885,6 +946,10 @@ OperationPlane
 
    Match planes with the target.
 
+   .. macro:: KRPC_CLASS_MECHJEB_OPERATIONPLANE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_MechJeb_OperationPlane_ErrorMessage(krpc_connection_t connection, char * * returnValue, krpc_MechJeb_OperationPlane_t instance)
 
       The warning from the last call to ``MakeNodes``, or an empty string.
@@ -936,6 +1001,10 @@ OperationResonantOrbit
       Start from an orbit in the plane of the constellation. To deploy satellites, set the
       denominator to their number. A numerator one less than the denominator is the cheapest,
       though not the fastest. The two numbers must have no common factor.
+
+   .. macro:: KRPC_CLASS_MECHJEB_OPERATIONRESONANTORBIT
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_MechJeb_OperationResonantOrbit_ErrorMessage(krpc_connection_t connection, char * * returnValue, krpc_MechJeb_OperationResonantOrbit_t instance)
 
@@ -997,6 +1066,10 @@ OperationSemiMajor
 
    Change the semi-major axis.
 
+   .. macro:: KRPC_CLASS_MECHJEB_OPERATIONSEMIMAJOR
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_MechJeb_OperationSemiMajor_ErrorMessage(krpc_connection_t connection, char * * returnValue, krpc_MechJeb_OperationSemiMajor_t instance)
 
       The warning from the last call to ``MakeNodes``, or an empty string.
@@ -1055,6 +1128,10 @@ OperationTransfer
 
       Despite the name, the transfer is often uni-impulsive. It happens at the selected time,
       or at the optimum time.
+
+   .. macro:: KRPC_CLASS_MECHJEB_OPERATIONTRANSFER
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_MechJeb_OperationTransfer_ErrorMessage(krpc_connection_t connection, char * * returnValue, krpc_MechJeb_OperationTransfer_t instance)
 

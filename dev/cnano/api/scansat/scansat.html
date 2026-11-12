@@ -1665,6 +1665,13 @@ abundances. A setting of SCANsat.</p>
 <p>The values may be combined.   A flags enumeration. <a class="reference internal" href="../../../cnano.html#cnano-client-flags"><span class="std std-ref">Flags Enumerations</span></a> shows how to combine its values.</p>
 </div>
 <dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_ScanSat_ScanType_t.KRPC_ENUMERATION_SCANSAT_SCANTYPE">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ENUMERATION_SCANSAT_SCANTYPE</span></span></span><a class="headerlink" href="#c.krpc_ScanSat_ScanType_t.KRPC_ENUMERATION_SCANSAT_SCANTYPE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and enumeration ids of the enumeration, for
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_EnumerationTypeById()</span></code> and <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_ConstantEnumById()</span></code>.</p>
+</dd></dl>
+
+<dl class="c macro">
 <dt class="sig sig-object c" id="c.krpc_ScanSat_ScanType_t.KRPC_SCANSAT_SCANTYPE_NONE">
 <span class="sig-name descname"><span class="n"><span class="pre">KRPC_SCANSAT_SCANTYPE_NONE</span></span></span><a class="headerlink" href="#c.krpc_ScanSat_ScanType_t.KRPC_SCANSAT_SCANTYPE_NONE" title="Link to this definition">#</a><br /></dt>
 <dd><p>No scan types.</p>
@@ -1760,22 +1767,46 @@ abundances. A setting of SCANsat.</p>
 <dt class="sig sig-object c" id="c.krpc_ScanSat_Anomaly_t">
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_ScanSat_Anomaly_t</span></span></span><a class="headerlink" href="#c.krpc_ScanSat_Anomaly_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>An anomaly found by either anomaly scan. See <a class="reference internal" href="#c.krpc_ScanSat_Anomalies" title="krpc_ScanSat_Anomalies"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_ScanSat_Anomalies()</span></code></a>.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_ScanSat_Anomaly_t.KRPC_STRUCT_SCANSAT_ANOMALY">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_STRUCT_SCANSAT_ANOMALY</span></span></span><a class="headerlink" href="#c.krpc_ScanSat_Anomaly_t.KRPC_STRUCT_SCANSAT_ANOMALY" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and structure ids of the structure, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_StructTypeById()</span></code>.</p>
+</dd></dl>
+
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_ScanSat_Anomaly_t.name">
 <span class="n"><span class="pre">krpc_nullable_string_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">name</span></span></span><a class="headerlink" href="#c.krpc_ScanSat_Anomaly_t.name" title="Link to this definition">#</a><br /></dt>
 <dd><p>The name of the anomaly, or <code class="docutils literal notranslate"><span class="pre">nullptr</span></code> until the anomaly detail scan covers it.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_ScanSat_Anomaly_t.name.KRPC_FIELD_SCANSAT_ANOMALY_NAME">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_SCANSAT_ANOMALY_NAME</span></span></span><a class="headerlink" href="#c.krpc_ScanSat_Anomaly_t.name.KRPC_FIELD_SCANSAT_ANOMALY_NAME" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_ScanSat_Anomaly_t.latitude">
 <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">latitude</span></span></span><a class="headerlink" href="#c.krpc_ScanSat_Anomaly_t.latitude" title="Link to this definition">#</a><br /></dt>
 <dd><p>The latitude of the anomaly, in degrees.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_ScanSat_Anomaly_t.latitude.KRPC_FIELD_SCANSAT_ANOMALY_LATITUDE">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_SCANSAT_ANOMALY_LATITUDE</span></span></span><a class="headerlink" href="#c.krpc_ScanSat_Anomaly_t.latitude.KRPC_FIELD_SCANSAT_ANOMALY_LATITUDE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_ScanSat_Anomaly_t.longitude">
 <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">longitude</span></span></span><a class="headerlink" href="#c.krpc_ScanSat_Anomaly_t.longitude" title="Link to this definition">#</a><br /></dt>
 <dd><p>The longitude of the anomaly, in degrees.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_ScanSat_Anomaly_t.longitude.KRPC_FIELD_SCANSAT_ANOMALY_LONGITUDE">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_SCANSAT_ANOMALY_LONGITUDE</span></span></span><a class="headerlink" href="#c.krpc_ScanSat_Anomaly_t.longitude.KRPC_FIELD_SCANSAT_ANOMALY_LONGITUDE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 </dd></dl>

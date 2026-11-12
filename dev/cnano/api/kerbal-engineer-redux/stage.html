@@ -1401,88 +1401,178 @@
 <dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t">
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KerbalEngineerRedux_Stage_t</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>A stage of the vessel, from the simulation of Kerbal Engineer Redux.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.KRPC_STRUCT_KERBALENGINEERREDUX_STAGE">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_STRUCT_KERBALENGINEERREDUX_STAGE</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.KRPC_STRUCT_KERBALENGINEERREDUX_STAGE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and structure ids of the structure, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_StructTypeById()</span></code>.</p>
+</dd></dl>
+
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.number">
 <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">number</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.number" title="Link to this definition">#</a><br /></dt>
 <dd><p>The stage number.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.number.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_NUMBER">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KERBALENGINEERREDUX_STAGE_NUMBER</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.number.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_NUMBER" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.delta_v">
 <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">delta_v</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.delta_v" title="Link to this definition">#</a><br /></dt>
 <dd><p>The delta-v of the stage, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.delta_v.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_DELTAV">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KERBALENGINEERREDUX_STAGE_DELTAV</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.delta_v.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_DELTAV" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.total_delta_v">
 <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">total_delta_v</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.total_delta_v" title="Link to this definition">#</a><br /></dt>
 <dd><p>The delta-v of the stage and the stages after it, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.total_delta_v.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_TOTALDELTAV">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KERBALENGINEERREDUX_STAGE_TOTALDELTAV</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.total_delta_v.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_TOTALDELTAV" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.specific_impulse">
 <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">specific_impulse</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.specific_impulse" title="Link to this definition">#</a><br /></dt>
 <dd><p>The specific impulse of the stage, in seconds.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.specific_impulse.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_SPECIFICIMPULSE">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KERBALENGINEERREDUX_STAGE_SPECIFICIMPULSE</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.specific_impulse.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_SPECIFICIMPULSE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.thrust">
 <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">thrust</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.thrust" title="Link to this definition">#</a><br /></dt>
 <dd><p>The thrust of the stage at the current throttle, in Newtons.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.thrust.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_THRUST">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KERBALENGINEERREDUX_STAGE_THRUST</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.thrust.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_THRUST" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.available_thrust">
 <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">available_thrust</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.available_thrust" title="Link to this definition">#</a><br /></dt>
 <dd><p>The thrust of the stage at full throttle, in Newtons.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.available_thrust.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_AVAILABLETHRUST">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KERBALENGINEERREDUX_STAGE_AVAILABLETHRUST</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.available_thrust.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_AVAILABLETHRUST" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.twr">
 <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">twr</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.twr" title="Link to this definition">#</a><br /></dt>
 <dd><p>The thrust-to-weight ratio at the start of the stage, at the current throttle.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.twr.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_TWR">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KERBALENGINEERREDUX_STAGE_TWR</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.twr.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_TWR" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.available_twr">
 <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">available_twr</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.available_twr" title="Link to this definition">#</a><br /></dt>
 <dd><p>The thrust-to-weight ratio at the start of the stage, at full throttle.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.available_twr.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_AVAILABLETWR">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KERBALENGINEERREDUX_STAGE_AVAILABLETWR</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.available_twr.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_AVAILABLETWR" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.max_twr">
 <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">max_twr</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.max_twr" title="Link to this definition">#</a><br /></dt>
 <dd><p>The highest thrust-to-weight ratio during the stage, at full throttle.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.max_twr.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_MAXTWR">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KERBALENGINEERREDUX_STAGE_MAXTWR</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.max_twr.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_MAXTWR" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.start_mass">
 <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">start_mass</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.start_mass" title="Link to this definition">#</a><br /></dt>
 <dd><p>The mass of the vessel at the start of the stage, in kilograms.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.start_mass.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_STARTMASS">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KERBALENGINEERREDUX_STAGE_STARTMASS</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.start_mass.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_STARTMASS" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.mass_lost">
 <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mass_lost</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.mass_lost" title="Link to this definition">#</a><br /></dt>
 <dd><p>The mass the vessel loses over the stage, in kilograms.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.mass_lost.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_MASSLOST">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KERBALENGINEERREDUX_STAGE_MASSLOST</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.mass_lost.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_MASSLOST" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.resource_mass">
 <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">resource_mass</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.resource_mass" title="Link to this definition">#</a><br /></dt>
 <dd><p>The mass of the resources the stage burns, in kilograms.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.resource_mass.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_RESOURCEMASS">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KERBALENGINEERREDUX_STAGE_RESOURCEMASS</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.resource_mass.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_RESOURCEMASS" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.burn_time">
 <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">burn_time</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.burn_time" title="Link to this definition">#</a><br /></dt>
 <dd><p>The burn time of the stage at full throttle, in seconds.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.burn_time.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_BURNTIME">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KERBALENGINEERREDUX_STAGE_BURNTIME</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.burn_time.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_BURNTIME" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.total_burn_time">
 <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">total_burn_time</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.total_burn_time" title="Link to this definition">#</a><br /></dt>
 <dd><p>The burn time of the stage and the stages after it, in seconds.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.total_burn_time.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_TOTALBURNTIME">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KERBALENGINEERREDUX_STAGE_TOTALBURNTIME</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.total_burn_time.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_TOTALBURNTIME" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="c member">
@@ -1490,78 +1580,156 @@
 <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">available_thrust_torque</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.available_thrust_torque" title="Link to this definition">#</a><br /></dt>
 <dd><p>The torque from the thrust at full throttle about the center of mass at the start
 of the stage, in <span class="math notranslate nohighlight">\(\mathrm{N \cdot m}\)</span>.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.available_thrust_torque.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_AVAILABLETHRUSTTORQUE">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KERBALENGINEERREDUX_STAGE_AVAILABLETHRUSTTORQUE</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.available_thrust_torque.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_AVAILABLETHRUSTTORQUE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.thrust_offset_angle">
 <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">thrust_offset_angle</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.thrust_offset_angle" title="Link to this definition">#</a><br /></dt>
 <dd><p>The angle between the thrust and the direction to the center of mass, in degrees.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.thrust_offset_angle.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_THRUSTOFFSETANGLE">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KERBALENGINEERREDUX_STAGE_THRUSTOFFSETANGLE</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.thrust_offset_angle.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_THRUSTOFFSETANGLE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.rcs_specific_impulse">
 <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rcs_specific_impulse</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.rcs_specific_impulse" title="Link to this definition">#</a><br /></dt>
 <dd><p>The specific impulse of the RCS thrusters, in seconds.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.rcs_specific_impulse.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_RCSSPECIFICIMPULSE">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KERBALENGINEERREDUX_STAGE_RCSSPECIFICIMPULSE</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.rcs_specific_impulse.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_RCSSPECIFICIMPULSE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.rcs_thrust">
 <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rcs_thrust</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.rcs_thrust" title="Link to this definition">#</a><br /></dt>
 <dd><p>The thrust of the RCS thrusters, in Newtons.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.rcs_thrust.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_RCSTHRUST">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KERBALENGINEERREDUX_STAGE_RCSTHRUST</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.rcs_thrust.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_RCSTHRUST" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.rcs_start_delta_v">
 <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rcs_start_delta_v</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.rcs_start_delta_v" title="Link to this definition">#</a><br /></dt>
 <dd><p>The RCS delta-v at the start of the stage, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.rcs_start_delta_v.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_RCSSTARTDELTAV">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KERBALENGINEERREDUX_STAGE_RCSSTARTDELTAV</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.rcs_start_delta_v.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_RCSSTARTDELTAV" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.rcs_end_delta_v">
 <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rcs_end_delta_v</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.rcs_end_delta_v" title="Link to this definition">#</a><br /></dt>
 <dd><p>The RCS delta-v at the end of the stage, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.rcs_end_delta_v.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_RCSENDDELTAV">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KERBALENGINEERREDUX_STAGE_RCSENDDELTAV</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.rcs_end_delta_v.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_RCSENDDELTAV" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.rcs_start_twr">
 <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rcs_start_twr</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.rcs_start_twr" title="Link to this definition">#</a><br /></dt>
 <dd><p>The RCS thrust-to-weight ratio at the start of the stage.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.rcs_start_twr.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_RCSSTARTTWR">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KERBALENGINEERREDUX_STAGE_RCSSTARTTWR</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.rcs_start_twr.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_RCSSTARTTWR" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.rcs_end_twr">
 <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rcs_end_twr</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.rcs_end_twr" title="Link to this definition">#</a><br /></dt>
 <dd><p>The RCS thrust-to-weight ratio at the end of the stage.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.rcs_end_twr.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_RCSENDTWR">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KERBALENGINEERREDUX_STAGE_RCSENDTWR</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.rcs_end_twr.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_RCSENDTWR" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.rcs_burn_time">
 <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rcs_burn_time</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.rcs_burn_time" title="Link to this definition">#</a><br /></dt>
 <dd><p>The burn time of the RCS thrusters, in seconds.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.rcs_burn_time.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_RCSBURNTIME">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KERBALENGINEERREDUX_STAGE_RCSBURNTIME</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.rcs_burn_time.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_RCSBURNTIME" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.start_cost">
 <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">start_cost</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.start_cost" title="Link to this definition">#</a><br /></dt>
 <dd><p>The cost of the vessel at the start of the stage.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.start_cost.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_STARTCOST">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KERBALENGINEERREDUX_STAGE_STARTCOST</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.start_cost.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_STARTCOST" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.cost_lost">
 <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cost_lost</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.cost_lost" title="Link to this definition">#</a><br /></dt>
 <dd><p>The cost the vessel loses over the stage.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.cost_lost.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_COSTLOST">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KERBALENGINEERREDUX_STAGE_COSTLOST</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.cost_lost.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_COSTLOST" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.start_part_count">
 <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">start_part_count</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.start_part_count" title="Link to this definition">#</a><br /></dt>
 <dd><p>The number of parts at the start of the stage.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.start_part_count.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_STARTPARTCOUNT">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KERBALENGINEERREDUX_STAGE_STARTPARTCOUNT</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.start_part_count.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_STARTPARTCOUNT" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.dropped_part_count">
 <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dropped_part_count</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.dropped_part_count" title="Link to this definition">#</a><br /></dt>
 <dd><p>The number of parts the stage drops.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KerbalEngineerRedux_Stage_t.dropped_part_count.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_DROPPEDPARTCOUNT">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KERBALENGINEERREDUX_STAGE_DROPPEDPARTCOUNT</span></span></span><a class="headerlink" href="#c.krpc_KerbalEngineerRedux_Stage_t.dropped_part_count.KRPC_FIELD_KERBALENGINEERREDUX_STAGE_DROPPEDPARTCOUNT" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 </dd></dl>

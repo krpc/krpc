@@ -1407,6 +1407,12 @@ assembled and run.</p>
 <p class="admonition-title">Note</p>
 <p>Numeric operands of differing types are converted to a common type.</p>
 </div>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KRPC_Expression_t.KRPC_CLASS_KRPC_EXPRESSION">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_CLASS_KRPC_EXPRESSION</span></span></span><a class="headerlink" href="#c.krpc_KRPC_Expression_t.KRPC_CLASS_KRPC_EXPRESSION" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and class ids of the class, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_ClassTypeById()</span></code>.</p>
+</dd></dl>
+
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_ReturnType">
 <a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KRPC_Expression_ReturnType</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_KRPC_Type_t" title="krpc_KRPC_Type_t"><span class="n"><span class="pre">krpc_KRPC_Type_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KRPC_Expression_t" title="krpc_KRPC_Expression_t"><span class="n"><span class="pre">krpc_KRPC_Expression_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_ReturnType" title="Link to this definition">#</a><br /></dt>
@@ -1567,6 +1573,21 @@ collection and no value both encode to an empty sequence of bytes.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>service</strong> – The name of the service the enumeration is defined in.</p></li>
 <li><p><strong>name</strong> – The name of the enumeration.</p></li>
+<li><p><strong>value</strong> – The value of the member of the enumeration.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_ConstantEnumById">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KRPC_Expression_ConstantEnumById</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_KRPC_Expression_t" title="krpc_KRPC_Expression_t"><span class="n"><span class="pre">krpc_KRPC_Expression_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">serviceId</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">enumerationId</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_ConstantEnumById" title="Link to this definition">#</a><br /></dt>
+<dd><p>A constant value of an enumeration a service defines, named by ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>serviceId</strong> – The id of the service the enumeration is defined in.</p></li>
+<li><p><strong>enumerationId</strong> – The id of the enumeration.</p></li>
 <li><p><strong>value</strong> – The value of the member of the enumeration.</p></li>
 </ul>
 </dd>
@@ -2354,6 +2375,26 @@ declare it.</p>
 </dd></dl>
 
 <dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_ThrowById">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KRPC_Expression_ThrowById</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_KRPC_Expression_t" title="krpc_KRPC_Expression_t"><span class="n"><span class="pre">krpc_KRPC_Expression_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">serviceId</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">exceptionId</span></span>, <a class="reference internal" href="#c.krpc_KRPC_Expression_t" title="krpc_KRPC_Expression_t"><span class="n"><span class="pre">krpc_KRPC_Expression_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">message</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_ThrowById" title="Link to this definition">#</a><br /></dt>
+<dd><p>A throw statement, which raises the exception with the given ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>serviceId</strong> – The id of the service the exception is defined in.</p></li>
+<li><p><strong>exceptionId</strong> – The id of the exception.</p></li>
+<li><p><strong>message</strong> – The message of the exception.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Raises the exception as <a class="reference internal" href="#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Throw" title="krpc_KRPC_Expression_Throw"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_Throw()</span></code></a> does. Throws an exception if the
+service does not declare it.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_TryCatch">
 <a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KRPC_Expression_TryCatch</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_KRPC_Expression_t" title="krpc_KRPC_Expression_t"><span class="n"><span class="pre">krpc_KRPC_Expression_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KRPC_Expression_t" title="krpc_KRPC_Expression_t"><span class="n"><span class="pre">krpc_KRPC_Expression_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">body</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">service</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">name</span></span>, <a class="reference internal" href="#c.krpc_KRPC_Expression_t" title="krpc_KRPC_Expression_t"><span class="n"><span class="pre">krpc_KRPC_Expression_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">message</span></span>, <a class="reference internal" href="#c.krpc_KRPC_Expression_t" title="krpc_KRPC_Expression_t"><span class="n"><span class="pre">krpc_KRPC_Expression_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">handler</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_TryCatch" title="Link to this definition">#</a><br /></dt>
 <dd><p>A try-catch statement that handles the named exception.</p>
@@ -2372,6 +2413,28 @@ declare it.</p>
 <p class="admonition-title">Note</p>
 <p>Only an exception a service declares can be named, and <a class="reference internal" href="#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_TryCatchAll" title="krpc_KRPC_Expression_TryCatchAll"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_TryCatchAll()</span></code></a>
 handles any exception. Throws an exception if the service does not declare it.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_TryCatchById">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KRPC_Expression_TryCatchById</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_KRPC_Expression_t" title="krpc_KRPC_Expression_t"><span class="n"><span class="pre">krpc_KRPC_Expression_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KRPC_Expression_t" title="krpc_KRPC_Expression_t"><span class="n"><span class="pre">krpc_KRPC_Expression_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">body</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">serviceId</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">exceptionId</span></span>, <a class="reference internal" href="#c.krpc_KRPC_Expression_t" title="krpc_KRPC_Expression_t"><span class="n"><span class="pre">krpc_KRPC_Expression_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">message</span></span>, <a class="reference internal" href="#c.krpc_KRPC_Expression_t" title="krpc_KRPC_Expression_t"><span class="n"><span class="pre">krpc_KRPC_Expression_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">handler</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_TryCatchById" title="Link to this definition">#</a><br /></dt>
+<dd><p>A try-catch statement that handles the exception with the given ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> – The statement to evaluate.</p></li>
+<li><p><strong>serviceId</strong> – The id of the service the exception is defined in.</p></li>
+<li><p><strong>exceptionId</strong> – The id of the exception.</p></li>
+<li><p><strong>message</strong> – A string variable assigned the exception’s message, or null.</p></li>
+<li><p><strong>handler</strong> – The statement evaluated when the exception is caught.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Handles the exception as <a class="reference internal" href="#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_TryCatch" title="krpc_KRPC_Expression_TryCatch"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_TryCatch()</span></code></a> does. Throws an exception if the
+service does not declare it.</p>
 </div>
 </dd></dl>
 
@@ -2781,6 +2844,28 @@ structure, or has no field of the given name.</p>
 <dd class="field-even"><p>The value of the field.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_GetFieldByIndex">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_KRPC_Expression_t" title="krpc_KRPC_Expression_t"><span class="n"><span class="pre">krpc_KRPC_Expression_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KRPC_Expression_t" title="krpc_KRPC_Expression_t"><span class="n"><span class="pre">krpc_KRPC_Expression_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">arg</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n"><span class="pre">index</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_GetFieldByIndex" title="Link to this definition">#</a><br /></dt>
+<dd><p>The value of a field of a structure, named by its position. Throws an exception if
+the value is not a structure, or the index is out of range.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arg</strong> – The structure.</p></li>
+<li><p><strong>index</strong> – The position of the field to access.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The value of the field.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The fields are numbered from 0, in the order the structure defines them.</p>
+</div>
 </dd></dl>
 
 <dl class="c function">
@@ -3693,6 +3778,12 @@ evaluated, and <a class="reference internal" href="#c.krpc_KRPC_Expression_t.krp
 <dt class="sig sig-object c" id="c.krpc_KRPC_Type_t">
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KRPC_Type_t</span></span></span><a class="headerlink" href="#c.krpc_KRPC_Type_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>The type of a value a procedure takes or returns.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KRPC_Type_t.KRPC_CLASS_KRPC_TYPE">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_CLASS_KRPC_TYPE</span></span></span><a class="headerlink" href="#c.krpc_KRPC_Type_t.KRPC_CLASS_KRPC_TYPE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and class ids of the class, for <a class="reference internal" href="#c.krpc_KRPC_Type_t.krpc_KRPC_Type_ClassTypeById" title="krpc_KRPC_Type_ClassTypeById"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_ClassTypeById()</span></code></a>.</p>
+</dd></dl>
+
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_KRPC_Type_t.krpc_KRPC_Type_Double">
 <a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KRPC_Type_Double</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_KRPC_Type_t" title="krpc_KRPC_Type_t"><span class="n"><span class="pre">krpc_KRPC_Type_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KRPC_Type_t.krpc_KRPC_Type_Double" title="Link to this definition">#</a><br /></dt>
@@ -3784,6 +3875,48 @@ evaluated, and <a class="reference internal" href="#c.krpc_KRPC_Expression_t.krp
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>service</strong> – The name of the service the structure is defined in.</p></li>
 <li><p><strong>name</strong> – The name of the structure.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KRPC_Type_t.krpc_KRPC_Type_ClassTypeById">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KRPC_Type_ClassTypeById</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_KRPC_Type_t" title="krpc_KRPC_Type_t"><span class="n"><span class="pre">krpc_KRPC_Type_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">serviceId</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">classId</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KRPC_Type_t.krpc_KRPC_Type_ClassTypeById" title="Link to this definition">#</a><br /></dt>
+<dd><p>The type of a class defined by a service, named by ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>serviceId</strong> – The id of the service the class is defined in.</p></li>
+<li><p><strong>classId</strong> – The id of the class.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KRPC_Type_t.krpc_KRPC_Type_EnumerationTypeById">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KRPC_Type_EnumerationTypeById</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_KRPC_Type_t" title="krpc_KRPC_Type_t"><span class="n"><span class="pre">krpc_KRPC_Type_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">serviceId</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">enumerationId</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KRPC_Type_t.krpc_KRPC_Type_EnumerationTypeById" title="Link to this definition">#</a><br /></dt>
+<dd><p>The type of an enumeration defined by a service, named by ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>serviceId</strong> – The id of the service the enumeration is defined in.</p></li>
+<li><p><strong>enumerationId</strong> – The id of the enumeration.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KRPC_Type_t.krpc_KRPC_Type_StructTypeById">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KRPC_Type_StructTypeById</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_KRPC_Type_t" title="krpc_KRPC_Type_t"><span class="n"><span class="pre">krpc_KRPC_Type_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">serviceId</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">structId</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KRPC_Type_t.krpc_KRPC_Type_StructTypeById" title="Link to this definition">#</a><br /></dt>
+<dd><p>The type of a structure defined by a service, named by ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>serviceId</strong> – The id of the service the structure is defined in.</p></li>
+<li><p><strong>structId</strong> – The id of the structure.</p></li>
 </ul>
 </dd>
 </dl>
@@ -3902,6 +4035,13 @@ is never null.</p>
 <dt class="sig sig-object c" id="c.krpc_KRPC_TypeCode_t">
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KRPC_TypeCode_t</span></span></span><a class="headerlink" href="#c.krpc_KRPC_TypeCode_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>The kind of a type, with the values of the communication protocol’s type codes.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KRPC_TypeCode_t.KRPC_ENUMERATION_KRPC_TYPECODE">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ENUMERATION_KRPC_TYPECODE</span></span></span><a class="headerlink" href="#c.krpc_KRPC_TypeCode_t.KRPC_ENUMERATION_KRPC_TYPECODE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and enumeration ids of the enumeration, for
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_EnumerationTypeById()</span></code> and <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_ConstantEnumById()</span></code>.</p>
+</dd></dl>
+
 <dl class="c macro">
 <dt class="sig sig-object c" id="c.krpc_KRPC_TypeCode_t.KRPC_KRPC_TYPECODE_DOUBLE">
 <span class="sig-name descname"><span class="n"><span class="pre">KRPC_KRPC_TYPECODE_DOUBLE</span></span></span><a class="headerlink" href="#c.krpc_KRPC_TypeCode_t.KRPC_KRPC_TYPECODE_DOUBLE" title="Link to this definition">#</a><br /></dt>

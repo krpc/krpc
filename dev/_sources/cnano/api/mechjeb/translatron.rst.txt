@@ -10,6 +10,10 @@ Translatron
 
    The Translatron window, which holds a speed.
 
+   .. macro:: KRPC_CLASS_MECHJEB_TRANSLATRON
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_MechJeb_Translatron_Mode(krpc_connection_t connection, krpc_MechJeb_TranslatronMode_t * returnValue, krpc_MechJeb_Translatron_t instance)
    .. function:: krpc_error_t krpc_MechJeb_Translatron_set_Mode(krpc_connection_t connection, krpc_MechJeb_Translatron_t instance, krpc_MechJeb_TranslatronMode_t value)
 
@@ -45,6 +49,11 @@ Translatron
 .. type:: krpc_MechJeb_TranslatronMode_t
 
    The mode of Translatron. See :func:`krpc_MechJeb_Translatron_Mode`.
+
+   .. macro:: KRPC_ENUMERATION_MECHJEB_TRANSLATRONMODE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_MECHJEB_TRANSLATRONMODE_OFF

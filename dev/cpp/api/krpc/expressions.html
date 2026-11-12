@@ -1574,6 +1574,21 @@ collection and no value both encode to an empty sequence of bytes.</p>
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC10Expression19constant_enum_by_idERN4krpc10ConnectionE8uint32_t8uint32_t7int32_t">
+<span id="_CPPv3N4krpc8services4KRPC10Expression19constant_enum_by_idERN4krpc10ConnectionE8uint32_t8uint32_t7int32_t"></span><span id="_CPPv2N4krpc8services4KRPC10Expression19constant_enum_by_idERN4krpc10ConnectionE8uint32_t8uint32_t7int32_t"></span><span id="krpc::services::KRPC::Expression::constant_enum_by_id__krpc::ConnectionR.uint32_t.uint32_t.int32_t"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4krpc8services4KRPC10ExpressionE" title="krpc::services::KRPC::Expression"><span class="n"><span class="pre">Expression</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">constant_enum_by_id</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../../../cpp.html#_CPPv4N4krpc10ConnectionE" title="krpc::Connection"><span class="n"><span class="pre">Connection</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">connection</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">service_id</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">enumeration_id</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC10Expression19constant_enum_by_idERN4krpc10ConnectionE8uint32_t8uint32_t7int32_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>A constant value of an enumeration a service defines, named by ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>service_id</strong> – The id of the service the enumeration is defined in.</p></li>
+<li><p><strong>enumeration_id</strong> – The id of the enumeration.</p></li>
+<li><p><strong>value</strong> – The value of the member of the enumeration.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC10Expression13constant_nullERN4krpc10ConnectionE4Type">
 <span id="_CPPv3N4krpc8services4KRPC10Expression13constant_nullERN4krpc10ConnectionE4Type"></span><span id="_CPPv2N4krpc8services4KRPC10Expression13constant_nullERN4krpc10ConnectionE4Type"></span><span id="krpc::services::KRPC::Expression::constant_null__krpc::ConnectionR.Type"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4krpc8services4KRPC10ExpressionE" title="krpc::services::KRPC::Expression"><span class="n"><span class="pre">Expression</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">constant_null</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../../../cpp.html#_CPPv4N4krpc10ConnectionE" title="krpc::Connection"><span class="n"><span class="pre">Connection</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">connection</span></span>, <a class="reference internal" href="#_CPPv4N4krpc8services4KRPC4TypeE" title="krpc::services::KRPC::Type"><span class="n"><span class="pre">Type</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">type</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC10Expression13constant_nullERN4krpc10ConnectionE4Type" title="Link to this definition">#</a><br /></dt>
 <dd><p>A null constant of the given type.</p>
@@ -2354,6 +2369,26 @@ declare it.</p>
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC10Expression11throw_by_idERN4krpc10ConnectionE8uint32_t8uint32_t10Expression">
+<span id="_CPPv3N4krpc8services4KRPC10Expression11throw_by_idERN4krpc10ConnectionE8uint32_t8uint32_t10Expression"></span><span id="_CPPv2N4krpc8services4KRPC10Expression11throw_by_idERN4krpc10ConnectionE8uint32_t8uint32_t10Expression"></span><span id="krpc::services::KRPC::Expression::throw_by_id__krpc::ConnectionR.uint32_t.uint32_t.Expression"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4krpc8services4KRPC10ExpressionE" title="krpc::services::KRPC::Expression"><span class="n"><span class="pre">Expression</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">throw_by_id</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../../../cpp.html#_CPPv4N4krpc10ConnectionE" title="krpc::Connection"><span class="n"><span class="pre">Connection</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">connection</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">service_id</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">exception_id</span></span>, <a class="reference internal" href="#_CPPv4N4krpc8services4KRPC10ExpressionE" title="krpc::services::KRPC::Expression"><span class="n"><span class="pre">Expression</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">message</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC10Expression11throw_by_idERN4krpc10ConnectionE8uint32_t8uint32_t10Expression" title="Link to this definition">#</a><br /></dt>
+<dd><p>A throw statement, which raises the exception with the given ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>service_id</strong> – The id of the service the exception is defined in.</p></li>
+<li><p><strong>exception_id</strong> – The id of the exception.</p></li>
+<li><p><strong>message</strong> – The message of the exception.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Raises the exception as <a class="reference internal" href="#_CPPv4N4krpc8services4KRPC10Expression6throw_ERN4krpc10ConnectionENSt6stringENSt6stringE10Expression" title="krpc::services::KRPC::Expression::throw_"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Expression::throw_()</span></code></a> does. Throws an exception if the
+service does not declare it.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC10Expression9try_catchERN4krpc10ConnectionE10ExpressionNSt6stringENSt6stringENSt8optionalI10ExpressionEE10Expression">
 <span id="_CPPv3N4krpc8services4KRPC10Expression9try_catchERN4krpc10ConnectionE10ExpressionNSt6stringENSt6stringENSt8optionalI10ExpressionEE10Expression"></span><span id="_CPPv2N4krpc8services4KRPC10Expression9try_catchERN4krpc10ConnectionE10ExpressionNSt6stringENSt6stringENSt8optionalI10ExpressionEE10Expression"></span><span id="krpc::services::KRPC::Expression::try_catch__krpc::ConnectionR.Expression.ss.ss.std::optional:Expression:.Expression"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4krpc8services4KRPC10ExpressionE" title="krpc::services::KRPC::Expression"><span class="n"><span class="pre">Expression</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">try_catch</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../../../cpp.html#_CPPv4N4krpc10ConnectionE" title="krpc::Connection"><span class="n"><span class="pre">Connection</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">connection</span></span>, <a class="reference internal" href="#_CPPv4N4krpc8services4KRPC10ExpressionE" title="krpc::services::KRPC::Expression"><span class="n"><span class="pre">Expression</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">body</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">service</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">name</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">optional</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N4krpc8services4KRPC10ExpressionE" title="krpc::services::KRPC::Expression"><span class="n"><span class="pre">Expression</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">message</span></span>, <a class="reference internal" href="#_CPPv4N4krpc8services4KRPC10ExpressionE" title="krpc::services::KRPC::Expression"><span class="n"><span class="pre">Expression</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">handler</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC10Expression9try_catchERN4krpc10ConnectionE10ExpressionNSt6stringENSt6stringENSt8optionalI10ExpressionEE10Expression" title="Link to this definition">#</a><br /></dt>
 <dd><p>A try-catch statement that handles the named exception.</p>
@@ -2372,6 +2407,28 @@ declare it.</p>
 <p class="admonition-title">Note</p>
 <p>Only an exception a service declares can be named, and <a class="reference internal" href="#_CPPv4N4krpc8services4KRPC10Expression13try_catch_allERN4krpc10ConnectionE10ExpressionNSt8optionalI10ExpressionEE10Expression" title="krpc::services::KRPC::Expression::try_catch_all"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Expression::try_catch_all()</span></code></a>
 handles any exception. Throws an exception if the service does not declare it.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC10Expression15try_catch_by_idERN4krpc10ConnectionE10Expression8uint32_t8uint32_tNSt8optionalI10ExpressionEE10Expression">
+<span id="_CPPv3N4krpc8services4KRPC10Expression15try_catch_by_idERN4krpc10ConnectionE10Expression8uint32_t8uint32_tNSt8optionalI10ExpressionEE10Expression"></span><span id="_CPPv2N4krpc8services4KRPC10Expression15try_catch_by_idERN4krpc10ConnectionE10Expression8uint32_t8uint32_tNSt8optionalI10ExpressionEE10Expression"></span><span id="krpc::services::KRPC::Expression::try_catch_by_id__krpc::ConnectionR.Expression.uint32_t.uint32_t.std::optional:Expression:.Expression"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4krpc8services4KRPC10ExpressionE" title="krpc::services::KRPC::Expression"><span class="n"><span class="pre">Expression</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">try_catch_by_id</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../../../cpp.html#_CPPv4N4krpc10ConnectionE" title="krpc::Connection"><span class="n"><span class="pre">Connection</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">connection</span></span>, <a class="reference internal" href="#_CPPv4N4krpc8services4KRPC10ExpressionE" title="krpc::services::KRPC::Expression"><span class="n"><span class="pre">Expression</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">body</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">service_id</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">exception_id</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">optional</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N4krpc8services4KRPC10ExpressionE" title="krpc::services::KRPC::Expression"><span class="n"><span class="pre">Expression</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">message</span></span>, <a class="reference internal" href="#_CPPv4N4krpc8services4KRPC10ExpressionE" title="krpc::services::KRPC::Expression"><span class="n"><span class="pre">Expression</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">handler</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC10Expression15try_catch_by_idERN4krpc10ConnectionE10Expression8uint32_t8uint32_tNSt8optionalI10ExpressionEE10Expression" title="Link to this definition">#</a><br /></dt>
+<dd><p>A try-catch statement that handles the exception with the given ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> – The statement to evaluate.</p></li>
+<li><p><strong>service_id</strong> – The id of the service the exception is defined in.</p></li>
+<li><p><strong>exception_id</strong> – The id of the exception.</p></li>
+<li><p><strong>message</strong> – A string variable assigned the exception’s message, or null.</p></li>
+<li><p><strong>handler</strong> – The statement evaluated when the exception is caught.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Handles the exception as <a class="reference internal" href="#_CPPv4N4krpc8services4KRPC10Expression9try_catchERN4krpc10ConnectionE10ExpressionNSt6stringENSt6stringENSt8optionalI10ExpressionEE10Expression" title="krpc::services::KRPC::Expression::try_catch"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Expression::try_catch()</span></code></a> does. Throws an exception if the
+service does not declare it.</p>
 </div>
 </dd></dl>
 
@@ -2781,6 +2838,28 @@ structure, or has no field of the given name.</p>
 <dd class="field-even"><p>The value of the field.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC10Expression18get_field_by_indexERN4krpc10ConnectionE10Expression7int32_t">
+<span id="_CPPv3N4krpc8services4KRPC10Expression18get_field_by_indexERN4krpc10ConnectionE10Expression7int32_t"></span><span id="_CPPv2N4krpc8services4KRPC10Expression18get_field_by_indexERN4krpc10ConnectionE10Expression7int32_t"></span><span id="krpc::services::KRPC::Expression::get_field_by_index__krpc::ConnectionR.Expression.int32_t"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4krpc8services4KRPC10ExpressionE" title="krpc::services::KRPC::Expression"><span class="n"><span class="pre">Expression</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_field_by_index</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../../../cpp.html#_CPPv4N4krpc10ConnectionE" title="krpc::Connection"><span class="n"><span class="pre">Connection</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">connection</span></span>, <a class="reference internal" href="#_CPPv4N4krpc8services4KRPC10ExpressionE" title="krpc::services::KRPC::Expression"><span class="n"><span class="pre">Expression</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">arg</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">index</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC10Expression18get_field_by_indexERN4krpc10ConnectionE10Expression7int32_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>The value of a field of a structure, named by its position. Throws an exception if
+the value is not a structure, or the index is out of range.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arg</strong> – The structure.</p></li>
+<li><p><strong>index</strong> – The position of the field to access.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The value of the field.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The fields are numbered from 0, in the order the structure defines them.</p>
+</div>
 </dd></dl>
 
 <dl class="cpp function">
@@ -3784,6 +3863,48 @@ evaluated, and <a class="reference internal" href="#_CPPv4N4krpc8services4KRPC10
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>service</strong> – The name of the service the structure is defined in.</p></li>
 <li><p><strong>name</strong> – The name of the structure.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC4Type16class_type_by_idERN4krpc10ConnectionE8uint32_t8uint32_t">
+<span id="_CPPv3N4krpc8services4KRPC4Type16class_type_by_idERN4krpc10ConnectionE8uint32_t8uint32_t"></span><span id="_CPPv2N4krpc8services4KRPC4Type16class_type_by_idERN4krpc10ConnectionE8uint32_t8uint32_t"></span><span id="krpc::services::KRPC::Type::class_type_by_id__krpc::ConnectionR.uint32_t.uint32_t"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4krpc8services4KRPC4TypeE" title="krpc::services::KRPC::Type"><span class="n"><span class="pre">Type</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">class_type_by_id</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../../../cpp.html#_CPPv4N4krpc10ConnectionE" title="krpc::Connection"><span class="n"><span class="pre">Connection</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">connection</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">service_id</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">class_id</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC4Type16class_type_by_idERN4krpc10ConnectionE8uint32_t8uint32_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>The type of a class defined by a service, named by ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>service_id</strong> – The id of the service the class is defined in.</p></li>
+<li><p><strong>class_id</strong> – The id of the class.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC4Type22enumeration_type_by_idERN4krpc10ConnectionE8uint32_t8uint32_t">
+<span id="_CPPv3N4krpc8services4KRPC4Type22enumeration_type_by_idERN4krpc10ConnectionE8uint32_t8uint32_t"></span><span id="_CPPv2N4krpc8services4KRPC4Type22enumeration_type_by_idERN4krpc10ConnectionE8uint32_t8uint32_t"></span><span id="krpc::services::KRPC::Type::enumeration_type_by_id__krpc::ConnectionR.uint32_t.uint32_t"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4krpc8services4KRPC4TypeE" title="krpc::services::KRPC::Type"><span class="n"><span class="pre">Type</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">enumeration_type_by_id</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../../../cpp.html#_CPPv4N4krpc10ConnectionE" title="krpc::Connection"><span class="n"><span class="pre">Connection</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">connection</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">service_id</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">enumeration_id</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC4Type22enumeration_type_by_idERN4krpc10ConnectionE8uint32_t8uint32_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>The type of an enumeration defined by a service, named by ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>service_id</strong> – The id of the service the enumeration is defined in.</p></li>
+<li><p><strong>enumeration_id</strong> – The id of the enumeration.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC4Type17struct_type_by_idERN4krpc10ConnectionE8uint32_t8uint32_t">
+<span id="_CPPv3N4krpc8services4KRPC4Type17struct_type_by_idERN4krpc10ConnectionE8uint32_t8uint32_t"></span><span id="_CPPv2N4krpc8services4KRPC4Type17struct_type_by_idERN4krpc10ConnectionE8uint32_t8uint32_t"></span><span id="krpc::services::KRPC::Type::struct_type_by_id__krpc::ConnectionR.uint32_t.uint32_t"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4krpc8services4KRPC4TypeE" title="krpc::services::KRPC::Type"><span class="n"><span class="pre">Type</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">struct_type_by_id</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../../../cpp.html#_CPPv4N4krpc10ConnectionE" title="krpc::Connection"><span class="n"><span class="pre">Connection</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">connection</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">service_id</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">struct_id</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC4Type17struct_type_by_idERN4krpc10ConnectionE8uint32_t8uint32_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>The type of a structure defined by a service, named by ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>service_id</strong> – The id of the service the structure is defined in.</p></li>
+<li><p><strong>struct_id</strong> – The id of the structure.</p></li>
 </ul>
 </dd>
 </dl>

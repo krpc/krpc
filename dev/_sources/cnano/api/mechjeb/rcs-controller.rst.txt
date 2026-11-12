@@ -10,6 +10,10 @@ RCSController
 
    The RCS controller.
 
+   .. macro:: KRPC_CLASS_MECHJEB_RCSCONTROLLER
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_MechJeb_RCSController_RCSForRotation(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_RCSController_t instance)
    .. function:: krpc_error_t krpc_MechJeb_RCSController_set_RCSForRotation(krpc_connection_t connection, krpc_MechJeb_RCSController_t instance, bool value)
 

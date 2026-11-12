@@ -1610,6 +1610,24 @@ collection and no value both encode to an empty sequence of bytes.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="KRPC.Expression.constant_enum_by_id">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">constant_enum_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">service_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enumeration_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#KRPC.Expression.constant_enum_by_id" title="Link to this definition">#</a></dt>
+<dd><p>A constant value of an enumeration a service defines, named by ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>service_id</strong> (<em>int</em>) – The id of the service the enumeration is defined in.</p></li>
+<li><p><strong>enumeration_id</strong> (<em>int</em>) – The id of the enumeration.</p></li>
+<li><p><strong>value</strong> (<em>int</em>) – The value of the member of the enumeration.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#KRPC.Expression" title="KRPC.Expression"><code class="xref py py-class docutils literal notranslate"><span class="pre">Expression</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="KRPC.Expression.constant_null">
 <span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">constant_null</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#KRPC.Expression.constant_null" title="Link to this definition">#</a></dt>
 <dd><p>A null constant of the given type.</p>
@@ -2521,6 +2539,29 @@ declare it.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="KRPC.Expression.throw_by_id">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">throw_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">service_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exception_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#KRPC.Expression.throw_by_id" title="Link to this definition">#</a></dt>
+<dd><p>A throw statement, which raises the exception with the given ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>service_id</strong> (<em>int</em>) – The id of the service the exception is defined in.</p></li>
+<li><p><strong>exception_id</strong> (<em>int</em>) – The id of the exception.</p></li>
+<li><p><strong>message</strong> (<a class="reference internal" href="#KRPC.Expression" title="KRPC.Expression"><em>Expression</em></a>) – The message of the exception.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#KRPC.Expression" title="KRPC.Expression"><code class="xref py py-class docutils literal notranslate"><span class="pre">Expression</span></code></a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Raises the exception as <a class="reference internal" href="#KRPC.Expression.throw" title="KRPC.Expression.throw"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Expression.throw()</span></code></a> does. Throws an exception if the
+service does not declare it.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="KRPC.Expression.try_catch">
 <span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">try_catch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">body</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">service</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handler</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#KRPC.Expression.try_catch" title="Link to this definition">#</a></dt>
 <dd><p>A try-catch statement that handles the named exception.</p>
@@ -2542,6 +2583,31 @@ declare it.</p>
 <p class="admonition-title">Note</p>
 <p>Only an exception a service declares can be named, and <a class="reference internal" href="#KRPC.Expression.try_catch_all" title="KRPC.Expression.try_catch_all"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Expression.try_catch_all()</span></code></a>
 handles any exception. Throws an exception if the service does not declare it.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="KRPC.Expression.try_catch_by_id">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">try_catch_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">body</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">service_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exception_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handler</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#KRPC.Expression.try_catch_by_id" title="Link to this definition">#</a></dt>
+<dd><p>A try-catch statement that handles the exception with the given ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> (<a class="reference internal" href="#KRPC.Expression" title="KRPC.Expression"><em>Expression</em></a>) – The statement to evaluate.</p></li>
+<li><p><strong>service_id</strong> (<em>int</em>) – The id of the service the exception is defined in.</p></li>
+<li><p><strong>exception_id</strong> (<em>int</em>) – The id of the exception.</p></li>
+<li><p><strong>message</strong> (<a class="reference internal" href="#KRPC.Expression" title="KRPC.Expression"><em>Expression</em></a><em> or </em><em>None</em>) – A string variable assigned the exception’s message, or null.</p></li>
+<li><p><strong>handler</strong> (<a class="reference internal" href="#KRPC.Expression" title="KRPC.Expression"><em>Expression</em></a>) – The statement evaluated when the exception is caught.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#KRPC.Expression" title="KRPC.Expression"><code class="xref py py-class docutils literal notranslate"><span class="pre">Expression</span></code></a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Handles the exception as <a class="reference internal" href="#KRPC.Expression.try_catch" title="KRPC.Expression.try_catch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Expression.try_catch()</span></code></a> does. Throws an exception if the
+service does not declare it.</p>
 </div>
 </dd></dl>
 
@@ -2997,6 +3063,31 @@ structure, or has no field of the given name.</p>
 <dd class="field-odd"><p><a class="reference internal" href="#KRPC.Expression" title="KRPC.Expression"><code class="xref py py-class docutils literal notranslate"><span class="pre">Expression</span></code></a></p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="KRPC.Expression.get_field_by_index">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">get_field_by_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#KRPC.Expression.get_field_by_index" title="Link to this definition">#</a></dt>
+<dd><p>The value of a field of a structure, named by its position. Throws an exception if
+the value is not a structure, or the index is out of range.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arg</strong> (<a class="reference internal" href="#KRPC.Expression" title="KRPC.Expression"><em>Expression</em></a>) – The structure.</p></li>
+<li><p><strong>index</strong> (<em>int</em>) – The position of the field to access.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The value of the field.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#KRPC.Expression" title="KRPC.Expression"><code class="xref py py-class docutils literal notranslate"><span class="pre">Expression</span></code></a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The fields are numbered from 0, in the order the structure defines them.</p>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -4158,6 +4249,57 @@ evaluated, and <a class="reference internal" href="#KRPC.Expression.to_list" tit
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>service</strong> (<em>str</em>) – The name of the service the structure is defined in.</p></li>
 <li><p><strong>name</strong> (<em>str</em>) – The name of the structure.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#KRPC.Type" title="KRPC.Type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Type</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="KRPC.Type.class_type_by_id">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">class_type_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">service_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">class_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#KRPC.Type.class_type_by_id" title="Link to this definition">#</a></dt>
+<dd><p>The type of a class defined by a service, named by ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>service_id</strong> (<em>int</em>) – The id of the service the class is defined in.</p></li>
+<li><p><strong>class_id</strong> (<em>int</em>) – The id of the class.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#KRPC.Type" title="KRPC.Type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Type</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="KRPC.Type.enumeration_type_by_id">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">enumeration_type_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">service_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enumeration_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#KRPC.Type.enumeration_type_by_id" title="Link to this definition">#</a></dt>
+<dd><p>The type of an enumeration defined by a service, named by ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>service_id</strong> (<em>int</em>) – The id of the service the enumeration is defined in.</p></li>
+<li><p><strong>enumeration_id</strong> (<em>int</em>) – The id of the enumeration.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#KRPC.Type" title="KRPC.Type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Type</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="KRPC.Type.struct_type_by_id">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">struct_type_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">service_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">struct_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#KRPC.Type.struct_type_by_id" title="Link to this definition">#</a></dt>
+<dd><p>The type of a structure defined by a service, named by ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>service_id</strong> (<em>int</em>) – The id of the service the structure is defined in.</p></li>
+<li><p><strong>struct_id</strong> (<em>int</em>) – The id of the structure.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>

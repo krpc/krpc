@@ -13,6 +13,10 @@ Editor
    Provides access to the vehicle assembly building and space plane hangar.
    Obtained by calling :func:`krpc_SpaceCenter_Editor`.
 
+   .. macro:: KRPC_CLASS_SPACECENTER_EDITOR
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_SpaceCenter_Editor_Facility(krpc_connection_t connection, krpc_SpaceCenter_EditorFacility_t * returnValue, krpc_SpaceCenter_Editor_t instance)
 
       The editor that is currently open.
@@ -135,6 +139,11 @@ Editor
    The situation the game's own delta-v readout shows figures for.
    See :func:`krpc_SpaceCenter_Editor_DeltaVSituation`.
 
+   .. macro:: KRPC_ENUMERATION_SPACECENTER_DELTAVSITUATION
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
 
    .. macro:: KRPC_SPACECENTER_DELTAVSITUATION_SEALEVEL
 
@@ -156,6 +165,10 @@ Editor
 
    The vessel that is being constructed in the editor.
    Obtained by calling :func:`krpc_SpaceCenter_Editor_Vessel`.
+
+   .. macro:: KRPC_CLASS_SPACECENTER_EDITORVESSEL
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_Name(krpc_connection_t connection, char * * returnValue, krpc_SpaceCenter_EditorVessel_t instance)
    .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_set_Name(krpc_connection_t connection, krpc_SpaceCenter_EditorVessel_t instance, const char * value)
@@ -445,6 +458,10 @@ Editor
       The simulated attitude is set by :func:`krpc_SpaceCenter_SimulatedFlight_SurfaceReferenceFrame`, and belongs to
       this object. The vessel is read from the editor on each call, so the object follows
       every edit.
+
+   .. macro:: KRPC_CLASS_SPACECENTER_SIMULATEDFLIGHT
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_SpaceCenter_SimulatedFlight_SurfaceReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * returnValue, krpc_SpaceCenter_SimulatedFlight_t instance)
    .. function:: krpc_error_t krpc_SpaceCenter_SimulatedFlight_set_SurfaceReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_SimulatedFlight_t instance, krpc_SpaceCenter_ReferenceFrame_t value)

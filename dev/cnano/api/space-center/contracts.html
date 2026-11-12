@@ -1401,6 +1401,12 @@
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ContractManager_t</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ContractManager_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Contracts manager.
 Obtained by calling <a class="reference internal" href="space-center.html#c.krpc_SpaceCenter_ContractManager" title="krpc_SpaceCenter_ContractManager"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ContractManager()</span></code></a>.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ContractManager_t.KRPC_CLASS_SPACECENTER_CONTRACTMANAGER">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_CLASS_SPACECENTER_CONTRACTMANAGER</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ContractManager_t.KRPC_CLASS_SPACECENTER_CONTRACTMANAGER" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and class ids of the class, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_ClassTypeById()</span></code>.</p>
+</dd></dl>
+
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_ContractManager_t.krpc_SpaceCenter_ContractManager_Types">
 <a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ContractManager_Types</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_set_string_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_ContractManager_t" title="krpc_SpaceCenter_ContractManager_t"><span class="n"><span class="pre">krpc_SpaceCenter_ContractManager_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_ContractManager_t.krpc_SpaceCenter_ContractManager_Types" title="Link to this definition">#</a><br /></dt>
@@ -1443,6 +1449,12 @@ Obtained by calling <a class="reference internal" href="space-center.html#c.krpc
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Contract_t">
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Contract_t</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_Contract_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>A contract. Can be accessed using <a class="reference internal" href="space-center.html#c.krpc_SpaceCenter_ContractManager" title="krpc_SpaceCenter_ContractManager"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ContractManager()</span></code></a>.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Contract_t.KRPC_CLASS_SPACECENTER_CONTRACT">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_CLASS_SPACECENTER_CONTRACT</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_Contract_t.KRPC_CLASS_SPACECENTER_CONTRACT" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and class ids of the class, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_ClassTypeById()</span></code>.</p>
+</dd></dl>
+
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Contract_t.krpc_SpaceCenter_Contract_Type">
 <a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Contract_Type</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Contract_t" title="krpc_SpaceCenter_Contract_t"><span class="n"><span class="pre">krpc_SpaceCenter_Contract_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Contract_t.krpc_SpaceCenter_Contract_Type" title="Link to this definition">#</a><br /></dt>
@@ -1622,6 +1634,13 @@ Zero if the contract has not finished or KSP did not record a finish time.</p>
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ContractState_t</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ContractState_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>The state of a contract. See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Contract_State()</span></code>.</p>
 <dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ContractState_t.KRPC_ENUMERATION_SPACECENTER_CONTRACTSTATE">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ENUMERATION_SPACECENTER_CONTRACTSTATE</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ContractState_t.KRPC_ENUMERATION_SPACECENTER_CONTRACTSTATE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and enumeration ids of the enumeration, for
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_EnumerationTypeById()</span></code> and <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_ConstantEnumById()</span></code>.</p>
+</dd></dl>
+
+<dl class="c macro">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_ContractState_t.KRPC_SPACECENTER_CONTRACTSTATE_ACTIVE">
 <span class="sig-name descname"><span class="n"><span class="pre">KRPC_SPACECENTER_CONTRACTSTATE_ACTIVE</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ContractState_t.KRPC_SPACECENTER_CONTRACTSTATE_ACTIVE" title="Link to this definition">#</a><br /></dt>
 <dd><p>The contract is active.</p>
@@ -1687,6 +1706,12 @@ Zero if the contract has not finished or KSP did not record a finish time.</p>
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_ContractParameter_t">
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ContractParameter_t</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ContractParameter_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>A contract parameter. See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Contract_Parameters()</span></code>.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ContractParameter_t.KRPC_CLASS_SPACECENTER_CONTRACTPARAMETER">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_CLASS_SPACECENTER_CONTRACTPARAMETER</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ContractParameter_t.KRPC_CLASS_SPACECENTER_CONTRACTPARAMETER" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and class ids of the class, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_ClassTypeById()</span></code>.</p>
+</dd></dl>
+
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_ContractParameter_t.krpc_SpaceCenter_ContractParameter_Title">
 <a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ContractParameter_Title</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_ContractParameter_t" title="krpc_SpaceCenter_ContractParameter_t"><span class="n"><span class="pre">krpc_SpaceCenter_ContractParameter_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_ContractParameter_t.krpc_SpaceCenter_ContractParameter_Title" title="Link to this definition">#</a><br /></dt>

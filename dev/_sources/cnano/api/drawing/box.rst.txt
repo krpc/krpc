@@ -10,6 +10,10 @@ Box
 
    The edges of a box. Created using :func:`krpc_Drawing_AddBox`.
 
+   .. macro:: KRPC_CLASS_DRAWING_BOX
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_Drawing_Box_Center(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_Drawing_Box_t instance)
    .. function:: krpc_error_t krpc_Drawing_Box_set_Center(krpc_connection_t connection, krpc_Drawing_Box_t instance, const krpc_tuple_double_double_double_t * value)
 

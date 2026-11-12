@@ -11,6 +11,10 @@ Rect Transform
    A Unity engine Rect Transform for a UI object.
    See the `Unity manual <https://docs.unity3d.com/Manual/class-RectTransform.html>`_ for more details.
 
+   .. macro:: KRPC_CLASS_UI_RECTTRANSFORM
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_UI_RectTransform_Position(krpc_connection_t connection, krpc_tuple_double_double_t * returnValue, krpc_UI_RectTransform_t instance)
    .. function:: krpc_error_t krpc_UI_RectTransform_set_Position(krpc_connection_t connection, krpc_UI_RectTransform_t instance, const krpc_tuple_double_double_t * value)
 

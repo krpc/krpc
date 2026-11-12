@@ -10,6 +10,11 @@ Map
 
    The type of a map. See :func:`krpc_ScanSat_Map`.
 
+   .. macro:: KRPC_ENUMERATION_SCANSAT_MAPTYPE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
 
    .. macro:: KRPC_SCANSAT_MAPTYPE_ALTIMETRY
 
@@ -37,6 +42,11 @@ Map
 
    The projection of a map. See :func:`krpc_ScanSat_Map`.
 
+   .. macro:: KRPC_ENUMERATION_SCANSAT_MAPPROJECTION
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
 
    .. macro:: KRPC_SCANSAT_MAPPROJECTION_RECTANGULAR
 
@@ -58,6 +68,11 @@ Map
 .. type:: krpc_ScanSat_ImageFormat_t
 
    The file format of an image.
+
+   .. macro:: KRPC_ENUMERATION_SCANSAT_IMAGEFORMAT
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_SCANSAT_IMAGEFORMAT_PNG

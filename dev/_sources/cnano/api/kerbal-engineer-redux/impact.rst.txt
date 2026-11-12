@@ -10,27 +10,60 @@ Impact
 
    The point where the vessel's orbit meets the terrain.
 
+   .. macro:: KRPC_STRUCT_KERBALENGINEERREDUX_IMPACT
+
+      The service and structure ids of the structure, for :func:`krpc_KRPC_Type_StructTypeById`.
+
 
    .. member:: double ut
 
       The universal time of impact, in seconds.
 
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_IMPACT_UT
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: double time_to
 
       The time until impact, in seconds.
+
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_IMPACT_TIMETO
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: double latitude
 
       The latitude of the impact site, in degrees.
 
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_IMPACT_LATITUDE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: double longitude
 
       The longitude of the impact site, in degrees.
+
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_IMPACT_LONGITUDE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: double elevation
 
       The elevation of the terrain at the impact site above sea level, in meters.
 
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_IMPACT_ELEVATION
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: char * biome
 
       The biome of the impact site.
+
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_IMPACT_BIOME
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.

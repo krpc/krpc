@@ -15,6 +15,10 @@ Image
       An image is kept across scene changes, until it is removed or the client that
       created it disconnects.
 
+   .. macro:: KRPC_CLASS_DRAWING_IMAGE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_Drawing_Image_Width(krpc_connection_t connection, int32_t * returnValue, krpc_Drawing_Image_t instance)
 
       The width of the image, in pixels.

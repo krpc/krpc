@@ -18,6 +18,10 @@ Toggle Group
       grouped independently of how they are laid out. A column of radio buttons in a grid
       of them is one group, even though each row is laid out separately.
 
+   .. macro:: KRPC_CLASS_UI_TOGGLEGROUP
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_UI_ToggleGroup_RectTransform(krpc_connection_t connection, krpc_UI_RectTransform_t * returnValue, krpc_UI_ToggleGroup_t instance)
 
       The rect transform for the UI object.

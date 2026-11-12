@@ -1407,6 +1407,12 @@ Created by calling <code class="xref c c-func docutils literal notranslate"><spa
 <p>If a client engages the auto-pilot and then closes its connection to the server,
 the auto-pilot will be disengaged. Its configuration and target are left unchanged.</p>
 </div>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_AutoPilot_t.KRPC_CLASS_SPACECENTER_AUTOPILOT">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_CLASS_SPACECENTER_AUTOPILOT</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_AutoPilot_t.KRPC_CLASS_SPACECENTER_AUTOPILOT" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and class ids of the class, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_ClassTypeById()</span></code>.</p>
+</dd></dl>
+
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_SAS">
 <a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_AutoPilot_SAS</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t" title="krpc_SpaceCenter_AutoPilot_t"><span class="n"><span class="pre">krpc_SpaceCenter_AutoPilot_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_SAS" title="Link to this definition">#</a><br /></dt>
@@ -2670,6 +2676,13 @@ not been enabled or no ticks have occurred.</p>
 <dd><p>When the auto-pilot’s control loop runs within a server update, relative to the calls
 the update executes. See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_UpdateMode()</span></code>.</p>
 <dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_AutoPilotUpdateMode_t.KRPC_ENUMERATION_SPACECENTER_AUTOPILOTUPDATEMODE">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ENUMERATION_SPACECENTER_AUTOPILOTUPDATEMODE</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_AutoPilotUpdateMode_t.KRPC_ENUMERATION_SPACECENTER_AUTOPILOTUPDATEMODE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and enumeration ids of the enumeration, for
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_EnumerationTypeById()</span></code> and <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_ConstantEnumById()</span></code>.</p>
+</dd></dl>
+
+<dl class="c macro">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_AutoPilotUpdateMode_t.KRPC_SPACECENTER_AUTOPILOTUPDATEMODE_AFTERCALLS">
 <span class="sig-name descname"><span class="n"><span class="pre">KRPC_SPACECENTER_AUTOPILOTUPDATEMODE_AFTERCALLS</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_AutoPilotUpdateMode_t.KRPC_SPACECENTER_AUTOPILOTUPDATEMODE_AFTERCALLS" title="Link to this definition">#</a><br /></dt>
 <dd><p>The default. The control loop runs once the update has executed the calls it
@@ -2699,6 +2712,13 @@ program chooses where among its own calls it runs.</p>
 removes a structural oscillation (wobble) from the measured angular velocity before the
 control loops consume it.
 See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_PitchYawRateFilterMode()</span></code> and <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_RollRateFilterMode()</span></code>.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_RateFilterMode_t.KRPC_ENUMERATION_SPACECENTER_RATEFILTERMODE">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ENUMERATION_SPACECENTER_RATEFILTERMODE</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_RateFilterMode_t.KRPC_ENUMERATION_SPACECENTER_RATEFILTERMODE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and enumeration ids of the enumeration, for
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_EnumerationTypeById()</span></code> and <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_ConstantEnumById()</span></code>.</p>
+</dd></dl>
+
 <dl class="c macro">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_RateFilterMode_t.KRPC_SPACECENTER_RATEFILTERMODE_AUTOMATIC">
 <span class="sig-name descname"><span class="n"><span class="pre">KRPC_SPACECENTER_RATEFILTERMODE_AUTOMATIC</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_RateFilterMode_t.KRPC_SPACECENTER_RATEFILTERMODE_AUTOMATIC" title="Link to this definition">#</a><br /></dt>
@@ -2738,6 +2758,13 @@ is known in advance.</p>
 (<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_OscillationBandwidthFloorMode()</span></code>,
 <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_OscillationFeedforwardMode()</span></code>,
 <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_OscillationOutputFilterMode()</span></code>).</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_MitigationMode_t.KRPC_ENUMERATION_SPACECENTER_MITIGATIONMODE">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ENUMERATION_SPACECENTER_MITIGATIONMODE</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_MitigationMode_t.KRPC_ENUMERATION_SPACECENTER_MITIGATIONMODE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and enumeration ids of the enumeration, for
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_EnumerationTypeById()</span></code> and <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_ConstantEnumById()</span></code>.</p>
+</dd></dl>
+
 <dl class="c macro">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_MitigationMode_t.KRPC_SPACECENTER_MITIGATIONMODE_AUTOMATIC">
 <span class="sig-name descname"><span class="n"><span class="pre">KRPC_SPACECENTER_MITIGATIONMODE_AUTOMATIC</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_MitigationMode_t.KRPC_SPACECENTER_MITIGATIONMODE_AUTOMATIC" title="Link to this definition">#</a><br /></dt>

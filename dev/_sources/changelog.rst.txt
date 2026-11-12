@@ -89,6 +89,7 @@ Core
 * :breaking:`Breaking` Reject a class, enumeration, structure or exception with the name of its service, ignoring case (:issue:`1325`)
 * Start the remaining servers when one fails to start (:issue:`1330`)
 * Add ``KRPC.Expression.Match`` and ``KRPC.Expression.Switch`` statements to server side functions (:issue:`1334`)
+* Add variants of the server side function procedures that take ids in place of names, such as ``KRPC.Type.ClassTypeById`` and ``KRPC.Expression.GetFieldByIndex`` (:issue:`1336`)
 
 
 Server
@@ -239,6 +240,8 @@ C-nano client
   * :breaking:`Breaking` Give a message for every error under ``KRPC_ERROR_MESSAGES``, with the message of its cause, which a transport gives with the new ``krpc_set_error_cause`` (:issue:`1333`)
   * :breaking:`Breaking` Return ``KRPC_ERROR_ARGUMENT`` for a null string argument, a null argument to a ``krpc_open_`` function, and a local socket path that is too long (:issue:`1333`)
 
+* Add a ``KRPC_CLASS_``, ``KRPC_ENUMERATION_`` or ``KRPC_STRUCT_`` macro for each type of a service, with its ids for server side functions (:issue:`1336`)
+* Add a ``KRPC_FIELD_`` macro for each field of a structure, with its position for ``krpc_KRPC_Expression_GetFieldByIndex`` (:issue:`1336`)
 
 
 C# client
@@ -570,6 +573,7 @@ krpctools
 * Generate no class for a mapped exception in C# and Java stubs (:issue:`1333`)
 * Say in the reference docs what each client raises for each exception of a service (:issue:`1333`)
 * Generate a ``KRPC_EXCEPTION_`` macro of the ids of each exception in C-nano stubs (:issue:`1333`)
+* Generate the C-nano ``KRPC_CLASS_``, ``KRPC_ENUMERATION_``, ``KRPC_STRUCT_`` and ``KRPC_FIELD_`` macros (:issue:`1336`)
 
 
 v0.7.0

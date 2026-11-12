@@ -16,6 +16,10 @@ AutoPilot
       If a client engages the auto-pilot and then closes its connection to the server,
       the auto-pilot will be disengaged. Its configuration and target are left unchanged.
 
+   .. macro:: KRPC_CLASS_SPACECENTER_AUTOPILOT
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_SAS(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_AutoPilot_t instance)
    .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_set_SAS(krpc_connection_t connection, krpc_SpaceCenter_AutoPilot_t instance, bool value)
 
@@ -821,6 +825,11 @@ AutoPilot
    When the auto-pilot's control loop runs within a server update, relative to the calls
    the update executes. See :func:`krpc_SpaceCenter_AutoPilot_UpdateMode`.
 
+   .. macro:: KRPC_ENUMERATION_SPACECENTER_AUTOPILOTUPDATEMODE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
 
    .. macro:: KRPC_SPACECENTER_AUTOPILOTUPDATEMODE_AFTERCALLS
 
@@ -848,6 +857,11 @@ AutoPilot
    removes a structural oscillation (wobble) from the measured angular velocity before the
    control loops consume it.
    See :func:`krpc_SpaceCenter_AutoPilot_PitchYawRateFilterMode` and :func:`krpc_SpaceCenter_AutoPilot_RollRateFilterMode`.
+
+   .. macro:: KRPC_ENUMERATION_SPACECENTER_RATEFILTERMODE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_SPACECENTER_RATEFILTERMODE_AUTOMATIC
@@ -884,6 +898,11 @@ AutoPilot
    (:func:`krpc_SpaceCenter_AutoPilot_OscillationBandwidthFloorMode`,
    :func:`krpc_SpaceCenter_AutoPilot_OscillationFeedforwardMode`,
    :func:`krpc_SpaceCenter_AutoPilot_OscillationOutputFilterMode`).
+
+   .. macro:: KRPC_ENUMERATION_SPACECENTER_MITIGATIONMODE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_SPACECENTER_MITIGATIONMODE_AUTOMATIC

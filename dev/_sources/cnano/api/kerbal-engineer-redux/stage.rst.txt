@@ -10,112 +10,250 @@ Stage
 
    A stage of the vessel, from the simulation of Kerbal Engineer Redux.
 
+   .. macro:: KRPC_STRUCT_KERBALENGINEERREDUX_STAGE
+
+      The service and structure ids of the structure, for :func:`krpc_KRPC_Type_StructTypeById`.
+
 
    .. member:: int32_t number
 
       The stage number.
 
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_STAGE_NUMBER
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: double delta_v
 
       The delta-v of the stage, in :math:`\mathrm{m/s}`.
+
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_STAGE_DELTAV
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: double total_delta_v
 
       The delta-v of the stage and the stages after it, in :math:`\mathrm{m/s}`.
 
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_STAGE_TOTALDELTAV
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: double specific_impulse
 
       The specific impulse of the stage, in seconds.
+
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_STAGE_SPECIFICIMPULSE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: double thrust
 
       The thrust of the stage at the current throttle, in Newtons.
 
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_STAGE_THRUST
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: double available_thrust
 
       The thrust of the stage at full throttle, in Newtons.
+
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_STAGE_AVAILABLETHRUST
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: double twr
 
       The thrust-to-weight ratio at the start of the stage, at the current throttle.
 
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_STAGE_TWR
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: double available_twr
 
       The thrust-to-weight ratio at the start of the stage, at full throttle.
+
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_STAGE_AVAILABLETWR
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: double max_twr
 
       The highest thrust-to-weight ratio during the stage, at full throttle.
 
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_STAGE_MAXTWR
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: double start_mass
 
       The mass of the vessel at the start of the stage, in kilograms.
+
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_STAGE_STARTMASS
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: double mass_lost
 
       The mass the vessel loses over the stage, in kilograms.
 
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_STAGE_MASSLOST
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: double resource_mass
 
       The mass of the resources the stage burns, in kilograms.
+
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_STAGE_RESOURCEMASS
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: double burn_time
 
       The burn time of the stage at full throttle, in seconds.
 
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_STAGE_BURNTIME
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: double total_burn_time
 
       The burn time of the stage and the stages after it, in seconds.
+
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_STAGE_TOTALBURNTIME
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: double available_thrust_torque
 
       The torque from the thrust at full throttle about the center of mass at the start
       of the stage, in :math:`\mathrm{N \cdot m}`.
 
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_STAGE_AVAILABLETHRUSTTORQUE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: double thrust_offset_angle
 
       The angle between the thrust and the direction to the center of mass, in degrees.
+
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_STAGE_THRUSTOFFSETANGLE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: double rcs_specific_impulse
 
       The specific impulse of the RCS thrusters, in seconds.
 
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_STAGE_RCSSPECIFICIMPULSE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: double rcs_thrust
 
       The thrust of the RCS thrusters, in Newtons.
+
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_STAGE_RCSTHRUST
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: double rcs_start_delta_v
 
       The RCS delta-v at the start of the stage, in :math:`\mathrm{m/s}`.
 
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_STAGE_RCSSTARTDELTAV
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: double rcs_end_delta_v
 
       The RCS delta-v at the end of the stage, in :math:`\mathrm{m/s}`.
+
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_STAGE_RCSENDDELTAV
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: double rcs_start_twr
 
       The RCS thrust-to-weight ratio at the start of the stage.
 
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_STAGE_RCSSTARTTWR
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: double rcs_end_twr
 
       The RCS thrust-to-weight ratio at the end of the stage.
+
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_STAGE_RCSENDTWR
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: double rcs_burn_time
 
       The burn time of the RCS thrusters, in seconds.
 
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_STAGE_RCSBURNTIME
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: double start_cost
 
       The cost of the vessel at the start of the stage.
+
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_STAGE_STARTCOST
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: double cost_lost
 
       The cost the vessel loses over the stage.
 
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_STAGE_COSTLOST
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: int32_t start_part_count
 
       The number of parts at the start of the stage.
 
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_STAGE_STARTPARTCOUNT
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: int32_t dropped_part_count
 
       The number of parts the stage drops.
+
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_STAGE_DROPPEDPARTCOUNT
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.

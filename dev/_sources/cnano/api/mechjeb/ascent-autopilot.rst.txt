@@ -15,6 +15,10 @@ AscentAutopilot
       See the `MechJeb wiki <https://github.com/MuMech/MechJeb2/wiki/Ascent-Guidance>`_
       for how to set up this autopilot.
 
+   .. macro:: KRPC_CLASS_MECHJEB_ASCENTAUTOPILOT
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_MechJeb_AscentAutopilot_Enabled(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_AscentAutopilot_t instance)
    .. function:: krpc_error_t krpc_MechJeb_AscentAutopilot_set_Enabled(krpc_connection_t connection, krpc_MechJeb_AscentAutopilot_t instance, bool value)
 
@@ -252,6 +256,11 @@ AscentAutopilot
 
    The launch mode of the ascent autopilot. See :func:`krpc_MechJeb_AscentAutopilot_LaunchMode`.
 
+   .. macro:: KRPC_ENUMERATION_MECHJEB_ASCENTLAUNCHMODE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
 
    .. macro:: KRPC_MECHJEB_ASCENTLAUNCHMODE_NORMAL
 
@@ -281,6 +290,10 @@ AscentClassic
 .. type:: krpc_MechJeb_AscentClassic_t
 
    The classic ascent profile.
+
+   .. macro:: KRPC_CLASS_MECHJEB_ASCENTCLASSIC
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_MechJeb_AscentClassic_AutoPath(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_AscentClassic_t instance)
    .. function:: krpc_error_t krpc_MechJeb_AscentClassic_set_AutoPath(krpc_connection_t connection, krpc_MechJeb_AscentClassic_t instance, bool value)
@@ -376,6 +389,10 @@ AscentPVG
 .. type:: krpc_MechJeb_AscentPVG_t
 
    The Primer Vector Guidance (RSS/RO) profile.
+
+   .. macro:: KRPC_CLASS_MECHJEB_ASCENTPVG
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_MechJeb_AscentPVG_AttachAltFlag(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_AscentPVG_t instance)
    .. function:: krpc_error_t krpc_MechJeb_AscentPVG_set_AttachAltFlag(krpc_connection_t connection, krpc_MechJeb_AscentPVG_t instance, bool value)

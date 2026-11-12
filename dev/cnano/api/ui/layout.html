@@ -1402,6 +1402,12 @@
 <dd><p>Arranges the elements of a panel automatically, so that they do not have to be
 positioned one by one. See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_UI_Panel_AddHorizontalLayout()</span></code>,
 <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_UI_Panel_AddVerticalLayout()</span></code> and <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_UI_Panel_AddGridLayout()</span></code>.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_UI_Layout_t.KRPC_CLASS_UI_LAYOUT">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_CLASS_UI_LAYOUT</span></span></span><a class="headerlink" href="#c.krpc_UI_Layout_t.KRPC_CLASS_UI_LAYOUT" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and class ids of the class, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_ClassTypeById()</span></code>.</p>
+</dd></dl>
+
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_UI_Layout_t.krpc_UI_Layout_Spacing">
 <a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_Layout_Spacing</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_UI_Layout_t" title="krpc_UI_Layout_t"><span class="n"><span class="pre">krpc_UI_Layout_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_Layout_t.krpc_UI_Layout_Spacing" title="Link to this definition">#</a><br /></dt>
@@ -1491,30 +1497,55 @@ the constraint is <code class="xref c c-macro docutils literal notranslate"><spa
 <dd><p>The gap left inside each edge of a layout, in whole pixels.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_UI_Layout_Padding()</span></code>.</p>
+<p>See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_UI_Layout_Padding()</span></code>.   .. macro:: KRPC_STRUCT_UI_PADDING</p>
+<p>The service and structure ids of the structure, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_StructTypeById()</span></code>.</p>
 </div>
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_UI_Padding_t.left">
 <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">left</span></span></span><a class="headerlink" href="#c.krpc_UI_Padding_t.left" title="Link to this definition">#</a><br /></dt>
 <dd><p>The gap inside the left edge.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_UI_Padding_t.left.KRPC_FIELD_UI_PADDING_LEFT">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_UI_PADDING_LEFT</span></span></span><a class="headerlink" href="#c.krpc_UI_Padding_t.left.KRPC_FIELD_UI_PADDING_LEFT" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_UI_Padding_t.right">
 <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">right</span></span></span><a class="headerlink" href="#c.krpc_UI_Padding_t.right" title="Link to this definition">#</a><br /></dt>
 <dd><p>The gap inside the right edge.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_UI_Padding_t.right.KRPC_FIELD_UI_PADDING_RIGHT">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_UI_PADDING_RIGHT</span></span></span><a class="headerlink" href="#c.krpc_UI_Padding_t.right.KRPC_FIELD_UI_PADDING_RIGHT" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_UI_Padding_t.top">
 <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">top</span></span></span><a class="headerlink" href="#c.krpc_UI_Padding_t.top" title="Link to this definition">#</a><br /></dt>
 <dd><p>The gap inside the top edge.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_UI_Padding_t.top.KRPC_FIELD_UI_PADDING_TOP">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_UI_PADDING_TOP</span></span></span><a class="headerlink" href="#c.krpc_UI_Padding_t.top.KRPC_FIELD_UI_PADDING_TOP" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_UI_Padding_t.bottom">
 <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bottom</span></span></span><a class="headerlink" href="#c.krpc_UI_Padding_t.bottom" title="Link to this definition">#</a><br /></dt>
 <dd><p>The gap inside the bottom edge.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_UI_Padding_t.bottom.KRPC_FIELD_UI_PADDING_BOTTOM">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_UI_PADDING_BOTTOM</span></span></span><a class="headerlink" href="#c.krpc_UI_Padding_t.bottom.KRPC_FIELD_UI_PADDING_BOTTOM" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 </dd></dl>
@@ -1523,6 +1554,13 @@ the constraint is <code class="xref c c-macro docutils literal notranslate"><spa
 <dt class="sig sig-object c" id="c.krpc_UI_GridConstraint_t">
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_GridConstraint_t</span></span></span><a class="headerlink" href="#c.krpc_UI_GridConstraint_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>What fixes the shape of a grid layout.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_UI_GridConstraint_t.KRPC_ENUMERATION_UI_GRIDCONSTRAINT">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ENUMERATION_UI_GRIDCONSTRAINT</span></span></span><a class="headerlink" href="#c.krpc_UI_GridConstraint_t.KRPC_ENUMERATION_UI_GRIDCONSTRAINT" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and enumeration ids of the enumeration, for
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_EnumerationTypeById()</span></code> and <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_ConstantEnumById()</span></code>.</p>
+</dd></dl>
+
 <dl class="c macro">
 <dt class="sig sig-object c" id="c.krpc_UI_GridConstraint_t.KRPC_UI_GRIDCONSTRAINT_FLEXIBLE">
 <span class="sig-name descname"><span class="n"><span class="pre">KRPC_UI_GRIDCONSTRAINT_FLEXIBLE</span></span></span><a class="headerlink" href="#c.krpc_UI_GridConstraint_t.KRPC_UI_GRIDCONSTRAINT_FLEXIBLE" title="Link to this definition">#</a><br /></dt>

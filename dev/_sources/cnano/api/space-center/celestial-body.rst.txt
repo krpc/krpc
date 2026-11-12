@@ -11,6 +11,10 @@ CelestialBody
    Represents a celestial body (such as a planet or moon).
    See :func:`krpc_SpaceCenter_Bodies`.
 
+   .. macro:: KRPC_CLASS_SPACECENTER_CELESTIALBODY
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_Name(krpc_connection_t connection, char * * returnValue, krpc_SpaceCenter_CelestialBody_t instance)
 
       The name of the body.

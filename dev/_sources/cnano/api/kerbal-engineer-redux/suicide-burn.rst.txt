@@ -11,27 +11,60 @@ Suicide Burn
    The latest burn at full thrust, against the surface velocity, that stops the vessel at
    the terrain.
 
+   .. macro:: KRPC_STRUCT_KERBALENGINEERREDUX_SUICIDEBURN
+
+      The service and structure ids of the structure, for :func:`krpc_KRPC_Type_StructTypeById`.
+
 
    .. member:: double ut
 
       The universal time at which the burn starts, in seconds.
 
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_SUICIDEBURN_UT
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: double time_to
 
       The time until the burn starts, in seconds.
+
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_SUICIDEBURN_TIMETO
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: double altitude
 
       The altitude above sea level at which the burn starts, in meters.
 
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_SUICIDEBURN_ALTITUDE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: double delta_v
 
       The delta-v of the burn, in :math:`\mathrm{m/s}`.
+
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_SUICIDEBURN_DELTAV
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: double distance
 
       The distance along the orbit to the start of the burn, in meters.
 
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_SUICIDEBURN_DISTANCE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: double duration
 
       The duration of the burn, in seconds.
+
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_SUICIDEBURN_DURATION
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.

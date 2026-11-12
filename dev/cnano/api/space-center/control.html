@@ -1424,6 +1424,12 @@ A kerbal is also sent out and brought back in from here: with
 <a class="reference internal" href="#c.krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_GrabLadder" title="krpc_SpaceCenter_Control_GrabLadder"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Control_GrabLadder()</span></code></a> and <a class="reference internal" href="#c.krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_ReleaseLadder" title="krpc_SpaceCenter_Control_ReleaseLadder"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Control_ReleaseLadder()</span></code></a> for the ladders it
 passes on the way.</p>
 </div>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Control_t.KRPC_CLASS_SPACECENTER_CONTROL">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_CLASS_SPACECENTER_CONTROL</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_Control_t.KRPC_CLASS_SPACECENTER_CONTROL" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and class ids of the class, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_ClassTypeById()</span></code>.</p>
+</dd></dl>
+
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_Source">
 <a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Control_Source</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_ControlSource_t" title="krpc_SpaceCenter_ControlSource_t"><span class="n"><span class="pre">krpc_SpaceCenter_ControlSource_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Control_t" title="krpc_SpaceCenter_Control_t"><span class="n"><span class="pre">krpc_SpaceCenter_Control_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_Source" title="Link to this definition">#</a><br /></dt>
@@ -2521,10 +2527,22 @@ does. Does nothing if it is not holding one.</p>
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ActionGroupAction_t</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ActionGroupAction_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>An action, belonging to a part module, that is assigned to an action group.
 Obtained by calling <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Control_GetActionGroupActions()</span></code>.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ActionGroupAction_t.KRPC_STRUCT_SPACECENTER_ACTIONGROUPACTION">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_STRUCT_SPACECENTER_ACTIONGROUPACTION</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ActionGroupAction_t.KRPC_STRUCT_SPACECENTER_ACTIONGROUPACTION" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and structure ids of the structure, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_StructTypeById()</span></code>.</p>
+</dd></dl>
+
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_ActionGroupAction_t.part">
 <a class="reference internal" href="parts.html#c.krpc_SpaceCenter_Part_t" title="krpc_SpaceCenter_Part_t"><span class="n"><span class="pre">krpc_SpaceCenter_Part_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">part</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ActionGroupAction_t.part" title="Link to this definition">#</a><br /></dt>
 <dd><p>The part that the action acts on.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ActionGroupAction_t.part.KRPC_FIELD_SPACECENTER_ACTIONGROUPACTION_PART">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_SPACECENTER_ACTIONGROUPACTION_PART</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ActionGroupAction_t.part.KRPC_FIELD_SPACECENTER_ACTIONGROUPACTION_PART" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="c member">
@@ -2534,18 +2552,36 @@ Obtained by calling <code class="xref c c-func docutils literal notranslate"><sp
 part-level action that is not associated with a module. This only occurs when
 Extended Action Groups is installed, as it can assign actions defined
 directly on a part, rather than on one of its modules, to an action group.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ActionGroupAction_t.module.KRPC_FIELD_SPACECENTER_ACTIONGROUPACTION_MODULE">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_SPACECENTER_ACTIONGROUPACTION_MODULE</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ActionGroupAction_t.module.KRPC_FIELD_SPACECENTER_ACTIONGROUPACTION_MODULE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_ActionGroupAction_t.name">
 <span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">name</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ActionGroupAction_t.name" title="Link to this definition">#</a><br /></dt>
 <dd><p>The human-readable name of the action, as shown in the action group editor.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ActionGroupAction_t.name.KRPC_FIELD_SPACECENTER_ACTIONGROUPACTION_NAME">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_SPACECENTER_ACTIONGROUPACTION_NAME</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ActionGroupAction_t.name.KRPC_FIELD_SPACECENTER_ACTIONGROUPACTION_NAME" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_ActionGroupAction_t.id">
 <span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">id</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ActionGroupAction_t.id" title="Link to this definition">#</a><br /></dt>
 <dd><p>The non-localized identifier for the action.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ActionGroupAction_t.id.KRPC_FIELD_SPACECENTER_ACTIONGROUPACTION_ID">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_SPACECENTER_ACTIONGROUPACTION_ID</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ActionGroupAction_t.id.KRPC_FIELD_SPACECENTER_ACTIONGROUPACTION_ID" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 </dd></dl>
@@ -2555,6 +2591,13 @@ directly on a part, rather than on one of its modules, to an action group.</p>
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ControlState_t</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ControlState_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>The control state of a vessel.
 See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Control_State()</span></code>.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ControlState_t.KRPC_ENUMERATION_SPACECENTER_CONTROLSTATE">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ENUMERATION_SPACECENTER_CONTROLSTATE</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ControlState_t.KRPC_ENUMERATION_SPACECENTER_CONTROLSTATE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and enumeration ids of the enumeration, for
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_EnumerationTypeById()</span></code> and <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_ConstantEnumById()</span></code>.</p>
+</dd></dl>
+
 <dl class="c macro">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_ControlState_t.KRPC_SPACECENTER_CONTROLSTATE_FULL">
 <span class="sig-name descname"><span class="n"><span class="pre">KRPC_SPACECENTER_CONTROLSTATE_FULL</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ControlState_t.KRPC_SPACECENTER_CONTROLSTATE_FULL" title="Link to this definition">#</a><br /></dt>
@@ -2581,6 +2624,13 @@ See <code class="xref c c-func docutils literal notranslate"><span class="pre">k
 <dd><p>The control source of a vessel.
 See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Control_Source()</span></code>.</p>
 <dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ControlSource_t.KRPC_ENUMERATION_SPACECENTER_CONTROLSOURCE">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ENUMERATION_SPACECENTER_CONTROLSOURCE</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ControlSource_t.KRPC_ENUMERATION_SPACECENTER_CONTROLSOURCE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and enumeration ids of the enumeration, for
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_EnumerationTypeById()</span></code> and <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_ConstantEnumById()</span></code>.</p>
+</dd></dl>
+
+<dl class="c macro">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_ControlSource_t.KRPC_SPACECENTER_CONTROLSOURCE_KERBAL">
 <span class="sig-name descname"><span class="n"><span class="pre">KRPC_SPACECENTER_CONTROLSOURCE_KERBAL</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ControlSource_t.KRPC_SPACECENTER_CONTROLSOURCE_KERBAL" title="Link to this definition">#</a><br /></dt>
 <dd><p>Vessel is controlled by a Kerbal.</p>
@@ -2604,6 +2654,13 @@ See <code class="xref c c-func docutils literal notranslate"><span class="pre">k
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_SASMode_t">
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_SASMode_t</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_SASMode_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>The behavior of the SAS auto-pilot. See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_SASMode()</span></code>.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_SASMode_t.KRPC_ENUMERATION_SPACECENTER_SASMODE">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ENUMERATION_SPACECENTER_SASMODE</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_SASMode_t.KRPC_ENUMERATION_SPACECENTER_SASMODE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and enumeration ids of the enumeration, for
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_EnumerationTypeById()</span></code> and <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_ConstantEnumById()</span></code>.</p>
+</dd></dl>
+
 <dl class="c macro">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_SASMode_t.KRPC_SPACECENTER_SASMODE_STABILITYASSIST">
 <span class="sig-name descname"><span class="n"><span class="pre">KRPC_SPACECENTER_SASMODE_STABILITYASSIST</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_SASMode_t.KRPC_SPACECENTER_SASMODE_STABILITYASSIST" title="Link to this definition">#</a><br /></dt>
@@ -2672,6 +2729,13 @@ See <code class="xref c c-func docutils literal notranslate"><span class="pre">k
 <dd><p>The mode of the speed reported in the navball.
 See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Control_SpeedMode()</span></code>.</p>
 <dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_SpeedMode_t.KRPC_ENUMERATION_SPACECENTER_SPEEDMODE">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ENUMERATION_SPACECENTER_SPEEDMODE</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_SpeedMode_t.KRPC_ENUMERATION_SPACECENTER_SPEEDMODE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and enumeration ids of the enumeration, for
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_EnumerationTypeById()</span></code> and <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_ConstantEnumById()</span></code>.</p>
+</dd></dl>
+
+<dl class="c macro">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_SpeedMode_t.KRPC_SPACECENTER_SPEEDMODE_ORBIT">
 <span class="sig-name descname"><span class="n"><span class="pre">KRPC_SPACECENTER_SPEEDMODE_ORBIT</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_SpeedMode_t.KRPC_SPACECENTER_SPEEDMODE_ORBIT" title="Link to this definition">#</a><br /></dt>
 <dd><p>Speed is relative to the vessel’s orbit.</p>
@@ -2695,6 +2759,13 @@ See <code class="xref c c-func docutils literal notranslate"><span class="pre">k
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_ControlInputMode_t">
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ControlInputMode_t</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ControlInputMode_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Control_InputMode()</span></code>.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ControlInputMode_t.KRPC_ENUMERATION_SPACECENTER_CONTROLINPUTMODE">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ENUMERATION_SPACECENTER_CONTROLINPUTMODE</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ControlInputMode_t.KRPC_ENUMERATION_SPACECENTER_CONTROLINPUTMODE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and enumeration ids of the enumeration, for
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_EnumerationTypeById()</span></code> and <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_ConstantEnumById()</span></code>.</p>
+</dd></dl>
+
 <dl class="c macro">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_ControlInputMode_t.KRPC_SPACECENTER_CONTROLINPUTMODE_ADDITIVE">
 <span class="sig-name descname"><span class="n"><span class="pre">KRPC_SPACECENTER_CONTROLINPUTMODE_ADDITIVE</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ControlInputMode_t.KRPC_SPACECENTER_CONTROLINPUTMODE_ADDITIVE" title="Link to this definition">#</a><br /></dt>

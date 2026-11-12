@@ -10,6 +10,10 @@ OrbitPath
 
    The path of an orbit. Created using :func:`krpc_Drawing_AddOrbit`.
 
+   .. macro:: KRPC_CLASS_DRAWING_ORBITPATH
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_Drawing_OrbitPath_Orbit(krpc_connection_t connection, krpc_SpaceCenter_Orbit_t * returnValue, krpc_Drawing_OrbitPath_t instance)
    .. function:: krpc_error_t krpc_Drawing_OrbitPath_set_Orbit(krpc_connection_t connection, krpc_Drawing_OrbitPath_t instance, krpc_SpaceCenter_Orbit_t value)
 

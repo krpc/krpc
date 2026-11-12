@@ -1571,6 +1571,21 @@ collection and no value both encode to an empty sequence of bytes.</p>
 </dd></dl>
 
 <dl class="lua staticmethod">
+<dt class="sig sig-object lua" id="lua-KRPC.Expression.constant_enum_by_id">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">constant_enum_by_id</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">service_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">enumeration_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-KRPC.Expression" title="KRPC.Expression"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KRPC.Expression</span></code></a><a class="headerlink" href="#lua-KRPC.Expression.constant_enum_by_id" title="Link to this definition">#</a><br /></dt>
+<dd><p>A constant value of an enumeration a service defines, named by ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>service_id</strong> – The id of the service the enumeration is defined in.</p></li>
+<li><p><strong>enumeration_id</strong> – The id of the enumeration.</p></li>
+<li><p><strong>value</strong> – The value of the member of the enumeration.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua staticmethod">
 <dt class="sig sig-object lua" id="lua-KRPC.Expression.constant_null">
 <span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">constant_null</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-KRPC.Type" title="KRPC.Type"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KRPC.Type</span></code></a><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-KRPC.Expression" title="KRPC.Expression"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KRPC.Expression</span></code></a><a class="headerlink" href="#lua-KRPC.Expression.constant_null" title="Link to this definition">#</a></dt>
 <dd><p>A null constant of the given type.</p>
@@ -2335,6 +2350,26 @@ declare it.</p>
 </dd></dl>
 
 <dl class="lua staticmethod">
+<dt class="sig sig-object lua" id="lua-KRPC.Expression.throw_by_id">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">throw_by_id</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">service_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">exception_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-KRPC.Expression" title="KRPC.Expression"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KRPC.Expression</span></code></a><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-KRPC.Expression" title="KRPC.Expression"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KRPC.Expression</span></code></a><a class="headerlink" href="#lua-KRPC.Expression.throw_by_id" title="Link to this definition">#</a><br /></dt>
+<dd><p>A throw statement, which raises the exception with the given ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>service_id</strong> – The id of the service the exception is defined in.</p></li>
+<li><p><strong>exception_id</strong> – The id of the exception.</p></li>
+<li><p><strong>message</strong> – The message of the exception.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Raises the exception as <a class="reference internal" href="#lua-KRPC.Expression.throw" title="KRPC.Expression.throw"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">KRPC.Expression.throw()</span></code></a> does. Throws an exception if the
+service does not declare it.</p>
+</div>
+</dd></dl>
+
+<dl class="lua staticmethod">
 <dt class="sig sig-object lua" id="lua-KRPC.Expression.try_catch">
 <span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">try_catch</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-KRPC.Expression" title="KRPC.Expression"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KRPC.Expression</span></code></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">service</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-KRPC.Expression" title="KRPC.Expression"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KRPC.Expression</span></code></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../../lua.html#lua-krpc.Types.none" title="krpc.Types.none"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Types.none</span></code></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">handler</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-KRPC.Expression" title="KRPC.Expression"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KRPC.Expression</span></code></a><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-KRPC.Expression" title="KRPC.Expression"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KRPC.Expression</span></code></a><a class="headerlink" href="#lua-KRPC.Expression.try_catch" title="Link to this definition">#</a><br /></dt>
 <dd><p>A try-catch statement that handles the named exception.</p>
@@ -2353,6 +2388,28 @@ declare it.</p>
 <p class="admonition-title">Note</p>
 <p>Only an exception a service declares can be named, and <a class="reference internal" href="#lua-KRPC.Expression.try_catch_all" title="KRPC.Expression.try_catch_all"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">KRPC.Expression.try_catch_all()</span></code></a>
 handles any exception. Throws an exception if the service does not declare it.</p>
+</div>
+</dd></dl>
+
+<dl class="lua staticmethod">
+<dt class="sig sig-object lua" id="lua-KRPC.Expression.try_catch_by_id">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">try_catch_by_id</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-KRPC.Expression" title="KRPC.Expression"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KRPC.Expression</span></code></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">service_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">exception_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-KRPC.Expression" title="KRPC.Expression"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KRPC.Expression</span></code></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../../lua.html#lua-krpc.Types.none" title="krpc.Types.none"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Types.none</span></code></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">handler</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-KRPC.Expression" title="KRPC.Expression"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KRPC.Expression</span></code></a><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-KRPC.Expression" title="KRPC.Expression"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KRPC.Expression</span></code></a><a class="headerlink" href="#lua-KRPC.Expression.try_catch_by_id" title="Link to this definition">#</a><br /></dt>
+<dd><p>A try-catch statement that handles the exception with the given ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> – The statement to evaluate.</p></li>
+<li><p><strong>service_id</strong> – The id of the service the exception is defined in.</p></li>
+<li><p><strong>exception_id</strong> – The id of the exception.</p></li>
+<li><p><strong>message</strong> – A string variable assigned the exception’s message, or null.</p></li>
+<li><p><strong>handler</strong> – The statement evaluated when the exception is caught.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Handles the exception as <a class="reference internal" href="#lua-KRPC.Expression.try_catch" title="KRPC.Expression.try_catch"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">KRPC.Expression.try_catch()</span></code></a> does. Throws an exception if the
+service does not declare it.</p>
 </div>
 </dd></dl>
 
@@ -2742,6 +2799,28 @@ structure, or has no field of the given name.</p>
 <dd class="field-even"><p>The value of the field.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="lua staticmethod">
+<dt class="sig sig-object lua" id="lua-KRPC.Expression.get_field_by_index">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">get_field_by_index</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">arg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-KRPC.Expression" title="KRPC.Expression"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KRPC.Expression</span></code></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-KRPC.Expression" title="KRPC.Expression"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KRPC.Expression</span></code></a><a class="headerlink" href="#lua-KRPC.Expression.get_field_by_index" title="Link to this definition">#</a></dt>
+<dd><p>The value of a field of a structure, named by its position. Throws an exception if
+the value is not a structure, or the index is out of range.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arg</strong> – The structure.</p></li>
+<li><p><strong>index</strong> – The position of the field to access.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The value of the field.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The fields are numbered from 0, in the order the structure defines them.</p>
+</div>
 </dd></dl>
 
 <dl class="lua staticmethod">
@@ -3711,6 +3790,48 @@ evaluated, and <a class="reference internal" href="#lua-KRPC.Expression.to_list"
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>service</strong> – The name of the service the structure is defined in.</p></li>
 <li><p><strong>name</strong> – The name of the structure.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua staticmethod">
+<dt class="sig sig-object lua" id="lua-KRPC.Type.class_type_by_id">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">class_type_by_id</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">service_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">class_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-KRPC.Type" title="KRPC.Type"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KRPC.Type</span></code></a><a class="headerlink" href="#lua-KRPC.Type.class_type_by_id" title="Link to this definition">#</a></dt>
+<dd><p>The type of a class defined by a service, named by ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>service_id</strong> – The id of the service the class is defined in.</p></li>
+<li><p><strong>class_id</strong> – The id of the class.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua staticmethod">
+<dt class="sig sig-object lua" id="lua-KRPC.Type.enumeration_type_by_id">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">enumeration_type_by_id</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">service_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">enumeration_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-KRPC.Type" title="KRPC.Type"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KRPC.Type</span></code></a><a class="headerlink" href="#lua-KRPC.Type.enumeration_type_by_id" title="Link to this definition">#</a></dt>
+<dd><p>The type of an enumeration defined by a service, named by ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>service_id</strong> – The id of the service the enumeration is defined in.</p></li>
+<li><p><strong>enumeration_id</strong> – The id of the enumeration.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua staticmethod">
+<dt class="sig sig-object lua" id="lua-KRPC.Type.struct_type_by_id">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">struct_type_by_id</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">service_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">struct_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-KRPC.Type" title="KRPC.Type"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KRPC.Type</span></code></a><a class="headerlink" href="#lua-KRPC.Type.struct_type_by_id" title="Link to this definition">#</a></dt>
+<dd><p>The type of a structure defined by a service, named by ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>service_id</strong> – The id of the service the structure is defined in.</p></li>
+<li><p><strong>struct_id</strong> – The id of the structure.</p></li>
 </ul>
 </dd>
 </dl>

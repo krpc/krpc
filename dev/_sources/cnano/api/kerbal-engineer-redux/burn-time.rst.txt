@@ -10,11 +10,24 @@ Burn Time
 
    The time to burn a delta-v at full thrust, staging as each stage runs dry.
 
+   .. macro:: KRPC_STRUCT_KERBALENGINEERREDUX_BURNTIME
+
+      The service and structure ids of the structure, for :func:`krpc_KRPC_Type_StructTypeById`.
+
 
    .. member:: double duration
 
       The duration of the burn, in seconds.
 
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_BURNTIME_DURATION
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: double half_duration
 
       The time to burn half the delta-v, in seconds.
+
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_BURNTIME_HALFDURATION
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.

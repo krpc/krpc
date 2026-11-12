@@ -13,6 +13,10 @@ Resources
    :func:`krpc_SpaceCenter_Stage_Resources`, :func:`krpc_SpaceCenter_EditorVessel_Resources`
    or :func:`krpc_SpaceCenter_Part_Resources`.
 
+   .. macro:: KRPC_CLASS_SPACECENTER_RESOURCES
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_SpaceCenter_Resources_All(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_SpaceCenter_Resources_t instance)
 
       All the individual resources that can be stored.
@@ -105,6 +109,10 @@ Resources
    An individual resource stored within a part.
    Created using methods in the :type:`krpc_SpaceCenter_Resources_t` class.
 
+   .. macro:: KRPC_CLASS_SPACECENTER_RESOURCE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_SpaceCenter_Resource_Name(krpc_connection_t connection, char * * returnValue, krpc_SpaceCenter_Resource_t instance)
 
       The name of the resource.
@@ -153,6 +161,10 @@ Resources
 .. type:: krpc_SpaceCenter_ResourceTransfer_t
 
    Transfer resources between parts.
+
+   .. macro:: KRPC_CLASS_SPACECENTER_RESOURCETRANSFER
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_SpaceCenter_ResourceTransfer_Start(krpc_connection_t connection, krpc_SpaceCenter_ResourceTransfer_t * returnValue, krpc_SpaceCenter_Part_t fromPart, krpc_SpaceCenter_Part_t toPart, const char * resource, float maxAmount)
 
@@ -221,6 +233,11 @@ Resources
 .. type:: krpc_SpaceCenter_ResourceFlowMode_t
 
    The way in which a resource flows between parts. See :func:`krpc_SpaceCenter_Resources_FlowMode`.
+
+   .. macro:: KRPC_ENUMERATION_SPACECENTER_RESOURCEFLOWMODE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_SPACECENTER_RESOURCEFLOWMODE_VESSEL

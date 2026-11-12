@@ -12,6 +12,10 @@ Computer
    Obtained by calling :func:`krpc_RasterPropMonitor_Computer` or
    :func:`krpc_RasterPropMonitor_Computers`.
 
+   .. macro:: KRPC_CLASS_RASTERPROPMONITOR_COMPUTER
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_RasterPropMonitor_Computer_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_RasterPropMonitor_Computer_t instance)
 
       The part the computer is on.
@@ -114,6 +118,11 @@ Computer
 .. type:: krpc_RasterPropMonitor_VariableType_t
 
    The type of a Raster Prop Monitor variable. See :func:`krpc_RasterPropMonitor_Computer_VariableType`.
+
+   .. macro:: KRPC_ENUMERATION_RASTERPROPMONITOR_VARIABLETYPE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_RASTERPROPMONITOR_VARIABLETYPE_NUMBER

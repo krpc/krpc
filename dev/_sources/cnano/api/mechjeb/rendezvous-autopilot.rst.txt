@@ -10,6 +10,10 @@ RendezvousAutopilot
 
    The rendezvous autopilot, which brings the vessel close to the target vessel.
 
+   .. macro:: KRPC_CLASS_MECHJEB_RENDEZVOUSAUTOPILOT
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_MechJeb_RendezvousAutopilot_Enabled(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_RendezvousAutopilot_t instance)
    .. function:: krpc_error_t krpc_MechJeb_RendezvousAutopilot_set_Enabled(krpc_connection_t connection, krpc_MechJeb_RendezvousAutopilot_t instance, bool value)
 

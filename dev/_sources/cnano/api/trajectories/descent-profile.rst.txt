@@ -15,6 +15,10 @@ DescentProfile
       Each node covers a band of altitude, as a percentage of the height of the atmosphere.
       A body without an atmosphere uses :func:`krpc_Trajectories_DescentProfile_FinalApproach` throughout.
 
+   .. macro:: KRPC_CLASS_TRAJECTORIES_DESCENTPROFILE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_Trajectories_DescentProfile_Entry(krpc_connection_t connection, krpc_Trajectories_DescentProfileNode_t * returnValue, krpc_Trajectories_DescentProfile_t instance)
 
       The node for atmospheric entry, from 50% to 100% of the height of the atmosphere.

@@ -11,6 +11,10 @@ Communications
    Used to interact with CommNet for a given vessel.
    Obtained by calling :func:`krpc_SpaceCenter_Vessel_Comms`.
 
+   .. macro:: KRPC_CLASS_SPACECENTER_COMMS
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_SpaceCenter_Comms_CanCommunicate(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Comms_t instance)
 
       Whether the vessel can communicate with KSC.
@@ -57,6 +61,10 @@ Communications
 .. type:: krpc_SpaceCenter_CommLink_t
 
    Represents a communication link between two nodes in the network.
+
+   .. macro:: KRPC_CLASS_SPACECENTER_COMMLINK
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_SpaceCenter_CommLink_Type(krpc_connection_t connection, krpc_SpaceCenter_CommLinkType_t * returnValue, krpc_SpaceCenter_CommLink_t instance)
 
@@ -131,6 +139,11 @@ Communications
    The type of a communication link.
    See :func:`krpc_SpaceCenter_CommLink_Type`.
 
+   .. macro:: KRPC_ENUMERATION_SPACECENTER_COMMLINKTYPE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
 
    .. macro:: KRPC_SPACECENTER_COMMLINKTYPE_HOME
 
@@ -152,23 +165,51 @@ Communications
 
    Represents a communication node in the network. For example, a vessel or the KSC.
 
+   .. macro:: KRPC_STRUCT_SPACECENTER_COMMNODE
+
+      The service and structure ids of the structure, for :func:`krpc_KRPC_Type_StructTypeById`.
+
 
    .. member:: char * name
 
       Name of the communication node.
 
+      .. macro:: KRPC_FIELD_SPACECENTER_COMMNODE_NAME
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: bool is_home
 
       Whether the communication node is on Kerbin.
+
+      .. macro:: KRPC_FIELD_SPACECENTER_COMMNODE_ISHOME
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: bool is_control_point
 
       Whether the communication node is a control point, for example a manned vessel.
 
+      .. macro:: KRPC_FIELD_SPACECENTER_COMMNODE_ISCONTROLPOINT
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: bool is_vessel
 
       Whether the communication node is a vessel.
 
+      .. macro:: KRPC_FIELD_SPACECENTER_COMMNODE_ISVESSEL
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: krpc_nullable_object_t vessel
 
       The vessel for this communication node, or null if the node is not a vessel.
+
+      .. macro:: KRPC_FIELD_SPACECENTER_COMMNODE_VESSEL
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.

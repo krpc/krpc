@@ -11,6 +11,10 @@ Scanner
    A SCANsat scanner on a part. Obtained by calling :func:`krpc_ScanSat_Scanner` or
    :func:`krpc_ScanSat_Scanners`.
 
+   .. macro:: KRPC_CLASS_SCANSAT_SCANNER
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_ScanSat_Scanner_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_ScanSat_Scanner_t instance)
 
       The part containing this scanner.
@@ -80,6 +84,11 @@ Scanner
 .. type:: krpc_ScanSat_ScannerState_t
 
    The state of a scanner. See :func:`krpc_ScanSat_Scanner_State`.
+
+   .. macro:: KRPC_ENUMERATION_SCANSAT_SCANNERSTATE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_SCANSAT_SCANNERSTATE_OFF

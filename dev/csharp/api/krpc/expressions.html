@@ -1619,6 +1619,24 @@ collection and no value both encode to an empty sequence of bytes.</p>
 </dd></dl>
 
 <dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.KRPC.Expression.ConstantEnumById">
+<span id="function-KRPC.Client.Services.KRPC.Expression.ConstantEnumById(IConnection,uint,uint,int)"></span><span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="class: KRPC.Client.Services.KRPC.Expression"><span class="pre">Expression</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">ConstantEnumById</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference internal" href="../../../csharp.html#class-KRPC.Client.IConnection" title="class: KRPC.Client.IConnection"><span class="pre">IConnection</span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a><span class="w"> </span><span class="n"><span class="pre">serviceId</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a><span class="w"> </span><span class="n"><span class="pre">enumerationId</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Int32" title="type: msdn ~&gt; System.Int32"><span class="pre">int</span></a><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.KRPC.Expression.ConstantEnumById" title="Link to this definition">#</a></dt>
+<dd><p>A constant value of an enumeration a service defines, named by ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>serviceId</strong> – The id of the service the enumeration is defined in.</p></li>
+<li><p><strong>enumerationId</strong> – The id of the enumeration.</p></li>
+<li><p><strong>value</strong> – The value of the member of the enumeration.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs function">
 <dt class="sig sig-object cs" id="function-KRPC.Client.Services.KRPC.Expression.ConstantNull">
 <span id="function-KRPC.Client.Services.KRPC.Expression.ConstantNull(IConnection,Type)"></span><span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="class: KRPC.Client.Services.KRPC.Expression"><span class="pre">Expression</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">ConstantNull</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference internal" href="../../../csharp.html#class-KRPC.Client.IConnection" title="class: KRPC.Client.IConnection"><span class="pre">IConnection</span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Type" title="class: KRPC.Client.Services.KRPC.Type"><span class="pre">Type</span></a><span class="w"> </span><span class="n"><span class="pre">type</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.KRPC.Expression.ConstantNull" title="Link to this definition">#</a></dt>
 <dd><p>A null constant of the given type.</p>
@@ -2546,6 +2564,29 @@ declare it.</p>
 </dd></dl>
 
 <dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.KRPC.Expression.ThrowById">
+<span id="function-KRPC.Client.Services.KRPC.Expression.ThrowById(IConnection,uint,uint,Expression)"></span><span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="class: KRPC.Client.Services.KRPC.Expression"><span class="pre">Expression</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">ThrowById</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference internal" href="../../../csharp.html#class-KRPC.Client.IConnection" title="class: KRPC.Client.IConnection"><span class="pre">IConnection</span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a><span class="w"> </span><span class="n"><span class="pre">serviceId</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a><span class="w"> </span><span class="n"><span class="pre">exceptionId</span></span>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="class: KRPC.Client.Services.KRPC.Expression"><span class="pre">Expression</span></a><span class="w"> </span><span class="n"><span class="pre">message</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.KRPC.Expression.ThrowById" title="Link to this definition">#</a></dt>
+<dd><p>A throw statement, which raises the exception with the given ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>serviceId</strong> – The id of the service the exception is defined in.</p></li>
+<li><p><strong>exceptionId</strong> – The id of the exception.</p></li>
+<li><p><strong>message</strong> – The message of the exception.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Raises the exception as <a class="reference internal" href="#function-KRPC.Client.Services.KRPC.Expression.Throw" title="function: KRPC.Client.Services.KRPC.Expression.Throw"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Expression.Throw</span></code></a> does. Throws an exception if the
+service does not declare it.</p>
+</div>
+</dd></dl>
+
+<dl class="cs function">
 <dt class="sig sig-object cs" id="function-KRPC.Client.Services.KRPC.Expression.TryCatch">
 <span id="function-KRPC.Client.Services.KRPC.Expression.TryCatch(IConnection,Expression,string,string,Expression,Expression)"></span><span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="class: KRPC.Client.Services.KRPC.Expression"><span class="pre">Expression</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">TryCatch</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference internal" href="../../../csharp.html#class-KRPC.Client.IConnection" title="class: KRPC.Client.IConnection"><span class="pre">IConnection</span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="class: KRPC.Client.Services.KRPC.Expression"><span class="pre">Expression</span></a><span class="w"> </span><span class="n"><span class="pre">body</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="n"><span class="pre">service</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="n"><span class="pre">name</span></span>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="class: KRPC.Client.Services.KRPC.Expression"><span class="pre">Expression</span></a><span class="w"> </span><span class="n"><span class="pre">message</span></span>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="class: KRPC.Client.Services.KRPC.Expression"><span class="pre">Expression</span></a><span class="w"> </span><span class="n"><span class="pre">handler</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.KRPC.Expression.TryCatch" title="Link to this definition">#</a></dt>
 <dd><p>A try-catch statement that handles the named exception.</p>
@@ -2567,6 +2608,31 @@ declare it.</p>
 <p class="admonition-title">Note</p>
 <p>Only an exception a service declares can be named, and <a class="reference internal" href="#function-KRPC.Client.Services.KRPC.Expression.TryCatchAll" title="function: KRPC.Client.Services.KRPC.Expression.TryCatchAll"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Expression.TryCatchAll</span></code></a>
 handles any exception. Throws an exception if the service does not declare it.</p>
+</div>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.KRPC.Expression.TryCatchById">
+<span id="function-KRPC.Client.Services.KRPC.Expression.TryCatchById(IConnection,Expression,uint,uint,Expression,Expression)"></span><span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="class: KRPC.Client.Services.KRPC.Expression"><span class="pre">Expression</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">TryCatchById</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference internal" href="../../../csharp.html#class-KRPC.Client.IConnection" title="class: KRPC.Client.IConnection"><span class="pre">IConnection</span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="class: KRPC.Client.Services.KRPC.Expression"><span class="pre">Expression</span></a><span class="w"> </span><span class="n"><span class="pre">body</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a><span class="w"> </span><span class="n"><span class="pre">serviceId</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a><span class="w"> </span><span class="n"><span class="pre">exceptionId</span></span>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="class: KRPC.Client.Services.KRPC.Expression"><span class="pre">Expression</span></a><span class="w"> </span><span class="n"><span class="pre">message</span></span>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="class: KRPC.Client.Services.KRPC.Expression"><span class="pre">Expression</span></a><span class="w"> </span><span class="n"><span class="pre">handler</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.KRPC.Expression.TryCatchById" title="Link to this definition">#</a></dt>
+<dd><p>A try-catch statement that handles the exception with the given ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> – The statement to evaluate.</p></li>
+<li><p><strong>serviceId</strong> – The id of the service the exception is defined in.</p></li>
+<li><p><strong>exceptionId</strong> – The id of the exception.</p></li>
+<li><p><strong>message</strong> – A string variable assigned the exception’s message, or null.</p></li>
+<li><p><strong>handler</strong> – The statement evaluated when the exception is caught.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Handles the exception as <a class="reference internal" href="#function-KRPC.Client.Services.KRPC.Expression.TryCatch" title="function: KRPC.Client.Services.KRPC.Expression.TryCatch"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Expression.TryCatch</span></code></a> does. Throws an exception if the
+service does not declare it.</p>
 </div>
 </dd></dl>
 
@@ -3042,6 +3108,31 @@ structure, or has no field of the given name.</p>
 <dd class="field-odd"><p>All</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.KRPC.Expression.GetFieldByIndex">
+<span id="function-KRPC.Client.Services.KRPC.Expression.GetFieldByIndex(IConnection,Expression,int)"></span><span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="class: KRPC.Client.Services.KRPC.Expression"><span class="pre">Expression</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">GetFieldByIndex</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference internal" href="../../../csharp.html#class-KRPC.Client.IConnection" title="class: KRPC.Client.IConnection"><span class="pre">IConnection</span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="class: KRPC.Client.Services.KRPC.Expression"><span class="pre">Expression</span></a><span class="w"> </span><span class="n"><span class="pre">arg</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Int32" title="type: msdn ~&gt; System.Int32"><span class="pre">int</span></a><span class="w"> </span><span class="n"><span class="pre">index</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.KRPC.Expression.GetFieldByIndex" title="Link to this definition">#</a></dt>
+<dd><p>The value of a field of a structure, named by its position. Throws an exception if
+the value is not a structure, or the index is out of range.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arg</strong> – The structure.</p></li>
+<li><p><strong>index</strong> – The position of the field to access.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The value of the field.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The fields are numbered from 0, in the order the structure defines them.</p>
+</div>
 </dd></dl>
 
 <dl class="cs function">
@@ -4237,6 +4328,57 @@ evaluated, and <a class="reference internal" href="#function-KRPC.Client.Service
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>service</strong> – The name of the service the structure is defined in.</p></li>
 <li><p><strong>name</strong> – The name of the structure.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.KRPC.Type.ClassTypeById">
+<span id="function-KRPC.Client.Services.KRPC.Type.ClassTypeById(IConnection,uint,uint)"></span><span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Type" title="class: KRPC.Client.Services.KRPC.Type"><span class="pre">Type</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">ClassTypeById</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference internal" href="../../../csharp.html#class-KRPC.Client.IConnection" title="class: KRPC.Client.IConnection"><span class="pre">IConnection</span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a><span class="w"> </span><span class="n"><span class="pre">serviceId</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a><span class="w"> </span><span class="n"><span class="pre">classId</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.KRPC.Type.ClassTypeById" title="Link to this definition">#</a></dt>
+<dd><p>The type of a class defined by a service, named by ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>serviceId</strong> – The id of the service the class is defined in.</p></li>
+<li><p><strong>classId</strong> – The id of the class.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.KRPC.Type.EnumerationTypeById">
+<span id="function-KRPC.Client.Services.KRPC.Type.EnumerationTypeById(IConnection,uint,uint)"></span><span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Type" title="class: KRPC.Client.Services.KRPC.Type"><span class="pre">Type</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">EnumerationTypeById</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference internal" href="../../../csharp.html#class-KRPC.Client.IConnection" title="class: KRPC.Client.IConnection"><span class="pre">IConnection</span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a><span class="w"> </span><span class="n"><span class="pre">serviceId</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a><span class="w"> </span><span class="n"><span class="pre">enumerationId</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.KRPC.Type.EnumerationTypeById" title="Link to this definition">#</a></dt>
+<dd><p>The type of an enumeration defined by a service, named by ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>serviceId</strong> – The id of the service the enumeration is defined in.</p></li>
+<li><p><strong>enumerationId</strong> – The id of the enumeration.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.KRPC.Type.StructTypeById">
+<span id="function-KRPC.Client.Services.KRPC.Type.StructTypeById(IConnection,uint,uint)"></span><span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Type" title="class: KRPC.Client.Services.KRPC.Type"><span class="pre">Type</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">StructTypeById</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference internal" href="../../../csharp.html#class-KRPC.Client.IConnection" title="class: KRPC.Client.IConnection"><span class="pre">IConnection</span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a><span class="w"> </span><span class="n"><span class="pre">serviceId</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a><span class="w"> </span><span class="n"><span class="pre">structId</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.KRPC.Type.StructTypeById" title="Link to this definition">#</a></dt>
+<dd><p>The type of a structure defined by a service, named by ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>serviceId</strong> – The id of the service the structure is defined in.</p></li>
+<li><p><strong>structId</strong> – The id of the structure.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>

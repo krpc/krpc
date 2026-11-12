@@ -773,6 +773,11 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    The game mode.
    Returned by :type:`krpc_SpaceCenter_GameMode_t`
 
+   .. macro:: KRPC_ENUMERATION_SPACECENTER_GAMEMODE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
 
    .. macro:: KRPC_SPACECENTER_GAMEMODE_SANDBOX
 
@@ -820,6 +825,11 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    The mode of the altitude reported on the altimeter.
    See :func:`krpc_SpaceCenter_AltimeterMode`.
 
+   .. macro:: KRPC_ENUMERATION_SPACECENTER_ALTIMETERMODE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
 
    .. macro:: KRPC_SPACECENTER_ALTIMETERMODE_DEFAULT
 
@@ -841,6 +851,11 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
    The time warp mode.
    Returned by :type:`krpc_SpaceCenter_WarpMode_t`
+
+   .. macro:: KRPC_ENUMERATION_SPACECENTER_WARPMODE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_SPACECENTER_WARPMODE_RAILS
@@ -866,6 +881,11 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    .. note::
 
       The values may be combined.   A flags enumeration. :std:ref:`cnano-client-flags` shows how to combine its values.
+
+   .. macro:: KRPC_ENUMERATION_SPACECENTER_MAPFILTERTYPE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_SPACECENTER_MAPFILTERTYPE_ALL
@@ -959,24 +979,48 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    A place where craft can be launched from.
    More of these can be added with mods like Kerbal Konstructs.
 
+   .. macro:: KRPC_STRUCT_SPACECENTER_LAUNCHSITE
+
+      The service and structure ids of the structure, for :func:`krpc_KRPC_Type_StructTypeById`.
+
 
    .. member:: char * name
 
       The name of the launch site.
 
+      .. macro:: KRPC_FIELD_SPACECENTER_LAUNCHSITE_NAME
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: krpc_SpaceCenter_CelestialBody_t body
 
       The celestial body the launch site is on.
 
+      .. macro:: KRPC_FIELD_SPACECENTER_LAUNCHSITE_BODY
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: krpc_SpaceCenter_EditorFacility_t editor_facility
 
       Which editor is normally used for this launch site.
+
+      .. macro:: KRPC_FIELD_SPACECENTER_LAUNCHSITE_EDITORFACILITY
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
 
 .. type:: krpc_SpaceCenter_EditorFacility_t
 
    Editor facility.
    See :member:`krpc_SpaceCenter_LaunchSite_t.editor_facility`.
+
+   .. macro:: KRPC_ENUMERATION_SPACECENTER_EDITORFACILITY
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_SPACECENTER_EDITORFACILITY_VAB

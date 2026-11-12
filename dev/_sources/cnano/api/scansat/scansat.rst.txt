@@ -283,6 +283,11 @@ This service provides the scan data, scanners and maps of
 
       The values may be combined.   A flags enumeration. :std:ref:`cnano-client-flags` shows how to combine its values.
 
+   .. macro:: KRPC_ENUMERATION_SCANSAT_SCANTYPE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
 
    .. macro:: KRPC_SCANSAT_SCANTYPE_NONE
 
@@ -365,15 +370,33 @@ This service provides the scan data, scanners and maps of
 
    An anomaly found by either anomaly scan. See :func:`krpc_ScanSat_Anomalies`.
 
+   .. macro:: KRPC_STRUCT_SCANSAT_ANOMALY
+
+      The service and structure ids of the structure, for :func:`krpc_KRPC_Type_StructTypeById`.
+
 
    .. member:: krpc_nullable_string_t name
 
       The name of the anomaly, or ``nullptr`` until the anomaly detail scan covers it.
 
+      .. macro:: KRPC_FIELD_SCANSAT_ANOMALY_NAME
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: double latitude
 
       The latitude of the anomaly, in degrees.
 
+      .. macro:: KRPC_FIELD_SCANSAT_ANOMALY_LATITUDE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: double longitude
 
       The longitude of the anomaly, in degrees.
+
+      .. macro:: KRPC_FIELD_SCANSAT_ANOMALY_LONGITUDE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.

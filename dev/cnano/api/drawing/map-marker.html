@@ -1401,6 +1401,12 @@
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_Drawing_MapMarker_t</span></span></span><a class="headerlink" href="#c.krpc_Drawing_MapMarker_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>A marker drawn in the map view, with one of the game’s own map icons. Created using
 <a class="reference internal" href="drawing.html#c.krpc_Drawing_AddMapMarker" title="krpc_Drawing_AddMapMarker"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_Drawing_AddMapMarker()</span></code></a>.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_Drawing_MapMarker_t.KRPC_CLASS_DRAWING_MAPMARKER">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_CLASS_DRAWING_MAPMARKER</span></span></span><a class="headerlink" href="#c.krpc_Drawing_MapMarker_t.KRPC_CLASS_DRAWING_MAPMARKER" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and class ids of the class, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_ClassTypeById()</span></code>.</p>
+</dd></dl>
+
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_Drawing_MapMarker_t.krpc_Drawing_MapMarker_Position">
 <a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_Drawing_MapMarker_Position</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_Drawing_MapMarker_t" title="krpc_Drawing_MapMarker_t"><span class="n"><span class="pre">krpc_Drawing_MapMarker_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_Drawing_MapMarker_t.krpc_Drawing_MapMarker_Position" title="Link to this definition">#</a><br /></dt>
@@ -1531,6 +1537,13 @@ icon.</p>
 <dt class="sig sig-object c" id="c.krpc_Drawing_MapMarkerIcon_t">
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_Drawing_MapMarkerIcon_t</span></span></span><a class="headerlink" href="#c.krpc_Drawing_MapMarkerIcon_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>The icon a <a class="reference internal" href="#c.krpc_Drawing_MapMarker_t" title="krpc_Drawing_MapMarker_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_Drawing_MapMarker_t</span></code></a> is drawn with, from the game’s own map icons.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_Drawing_MapMarkerIcon_t.KRPC_ENUMERATION_DRAWING_MAPMARKERICON">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ENUMERATION_DRAWING_MAPMARKERICON</span></span></span><a class="headerlink" href="#c.krpc_Drawing_MapMarkerIcon_t.KRPC_ENUMERATION_DRAWING_MAPMARKERICON" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and enumeration ids of the enumeration, for
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_EnumerationTypeById()</span></code> and <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_ConstantEnumById()</span></code>.</p>
+</dd></dl>
+
 <dl class="c macro">
 <dt class="sig sig-object c" id="c.krpc_Drawing_MapMarkerIcon_t.KRPC_DRAWING_MAPMARKERICON_GENERIC">
 <span class="sig-name descname"><span class="n"><span class="pre">KRPC_DRAWING_MAPMARKERICON_GENERIC</span></span></span><a class="headerlink" href="#c.krpc_Drawing_MapMarkerIcon_t.KRPC_DRAWING_MAPMARKERICON_GENERIC" title="Link to this definition">#</a><br /></dt>

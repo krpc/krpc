@@ -2086,6 +2086,14 @@ first run, then passes it an argument:</p>
 </pre></div>
 </div>
 <p><a class="reference internal" href="#c.krpc_compile_function" title="krpc_compile_function"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_compile_function()</span></code></a> makes the first run as fast as later ones.</p>
+<p>A server side function names a class, an enumeration, a structure or an exception by its ids.
+Each has a macro holding the pair, such as <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_CLASS_SPACECENTER_ENGINE</span></code>, which the
+<code class="docutils literal notranslate"><span class="pre">ById</span></code> procedures take:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">krpc_KRPC_Type_ClassTypeById</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">engine_type</span><span class="p">,</span><span class="w"> </span><span class="n">KRPC_CLASS_SPACECENTER_ENGINE</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code> reads a field by its position in the structure.
+Each field has a macro holding its position, such as <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_FIELD_SPACECENTER_COMMNODE_NAME</span></code>.</p>
 </section>
 <section id="streams-and-events">
 <h2>Streams and Events<a class="headerlink" href="#streams-and-events" title="Link to this heading">#</a></h2>

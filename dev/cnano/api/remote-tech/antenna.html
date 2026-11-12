@@ -1400,6 +1400,12 @@
 <dt class="sig sig-object c" id="c.krpc_RemoteTech_Antenna_t">
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_RemoteTech_Antenna_t</span></span></span><a class="headerlink" href="#c.krpc_RemoteTech_Antenna_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>A RemoteTech antenna. Obtained by calling <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_RemoteTech_Comms_Antennas()</span></code> or <a class="reference internal" href="remote-tech.html#c.krpc_RemoteTech_Antenna" title="krpc_RemoteTech_Antenna"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_RemoteTech_Antenna()</span></code></a>.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_RemoteTech_Antenna_t.KRPC_CLASS_REMOTETECH_ANTENNA">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_CLASS_REMOTETECH_ANTENNA</span></span></span><a class="headerlink" href="#c.krpc_RemoteTech_Antenna_t.KRPC_CLASS_REMOTETECH_ANTENNA" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and class ids of the class, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_ClassTypeById()</span></code>.</p>
+</dd></dl>
+
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_RemoteTech_Antenna_t.krpc_RemoteTech_Antenna_Part">
 <a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_RemoteTech_Antenna_Part</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="../space-center/parts.html#c.krpc_SpaceCenter_Part_t" title="krpc_SpaceCenter_Part_t"><span class="n"><span class="pre">krpc_SpaceCenter_Part_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_RemoteTech_Antenna_t" title="krpc_RemoteTech_Antenna_t"><span class="n"><span class="pre">krpc_RemoteTech_Antenna_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_RemoteTech_Antenna_t.krpc_RemoteTech_Antenna_Part" title="Link to this definition">#</a><br /></dt>
@@ -1466,6 +1472,13 @@ To set the target to a celestial body, ground station or vessel see <a class="re
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_RemoteTech_Target_t</span></span></span><a class="headerlink" href="#c.krpc_RemoteTech_Target_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>The type of object an antenna is targetting.
 See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_RemoteTech_Antenna_Target()</span></code>.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_RemoteTech_Target_t.KRPC_ENUMERATION_REMOTETECH_TARGET">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ENUMERATION_REMOTETECH_TARGET</span></span></span><a class="headerlink" href="#c.krpc_RemoteTech_Target_t.KRPC_ENUMERATION_REMOTETECH_TARGET" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and enumeration ids of the enumeration, for
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_EnumerationTypeById()</span></code> and <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_ConstantEnumById()</span></code>.</p>
+</dd></dl>
+
 <dl class="c macro">
 <dt class="sig sig-object c" id="c.krpc_RemoteTech_Target_t.KRPC_REMOTETECH_TARGET_ACTIVEVESSEL">
 <span class="sig-name descname"><span class="n"><span class="pre">KRPC_REMOTETECH_TARGET_ACTIVEVESSEL</span></span></span><a class="headerlink" href="#c.krpc_RemoteTech_Target_t.KRPC_REMOTETECH_TARGET_ACTIVEVESSEL" title="Link to this definition">#</a><br /></dt>

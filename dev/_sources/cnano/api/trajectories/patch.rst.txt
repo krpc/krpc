@@ -15,6 +15,10 @@ Patch
       Trajectories computes the trajectory again as the vessel flies, and the patch reads
       the latest one. Throws an exception if the trajectory has fewer patches.
 
+   .. macro:: KRPC_CLASS_TRAJECTORIES_PATCH
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_Trajectories_Patch_Position(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, bool * returnValueIsNull, krpc_Trajectories_Patch_t instance, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
       The position of the impact, or ``nullptr`` without one.

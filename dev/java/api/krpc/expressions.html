@@ -1574,6 +1574,21 @@ collection and no value both encode to an empty sequence of bytes.</p>
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KRPC.Expression.constantEnumById(Connection, int, int, int)">
+<span class="pre">static</span> <a class="reference internal" href="#krpc.client.services.KRPC.Expression" title="krpc.client.services.KRPC.Expression"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">constantEnumById</span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../java.html#krpc.client.Connection" title="krpc.client.Connection"><span class="pre">Connection</span></a><em> <span class="pre">connection</span></em>, <span class="pre">int</span><em> <span class="pre">serviceId</span></em>, <span class="pre">int</span><em> <span class="pre">enumerationId</span></em>, <span class="pre">int</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KRPC.Expression.constantEnumById(Connection, int, int, int)" title="Link to this definition">#</a></dt>
+<dd><p>A constant value of an enumeration a service defines, named by ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>serviceId</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">int</span></code></span>) – The id of the service the enumeration is defined in.</p></li>
+<li><p><strong>enumerationId</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">int</span></code></span>) – The id of the enumeration.</p></li>
+<li><p><strong>value</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">int</span></code></span>) – The value of the member of the enumeration.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KRPC.Expression.constantNull(Connection, Type)">
 <span class="pre">static</span> <a class="reference internal" href="#krpc.client.services.KRPC.Expression" title="krpc.client.services.KRPC.Expression"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">constantNull</span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../java.html#krpc.client.Connection" title="krpc.client.Connection"><span class="pre">Connection</span></a><em> <span class="pre">connection</span></em>, <a class="reference internal" href="#krpc.client.services.KRPC.Type" title="krpc.client.services.KRPC.Type"><span class="pre">Type</span></a><em> <span class="pre">type</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KRPC.Expression.constantNull(Connection, Type)" title="Link to this definition">#</a></dt>
 <dd><p>A null constant of the given type.</p>
@@ -2354,6 +2369,26 @@ declare it.</p>
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KRPC.Expression.throwById(Connection, int, int, Expression)">
+<span class="pre">static</span> <a class="reference internal" href="#krpc.client.services.KRPC.Expression" title="krpc.client.services.KRPC.Expression"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">throwById</span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../java.html#krpc.client.Connection" title="krpc.client.Connection"><span class="pre">Connection</span></a><em> <span class="pre">connection</span></em>, <span class="pre">int</span><em> <span class="pre">serviceId</span></em>, <span class="pre">int</span><em> <span class="pre">exceptionId</span></em>, <a class="reference internal" href="#krpc.client.services.KRPC.Expression" title="krpc.client.services.KRPC.Expression"><span class="pre">Expression</span></a><em> <span class="pre">message</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KRPC.Expression.throwById(Connection, int, int, Expression)" title="Link to this definition">#</a></dt>
+<dd><p>A throw statement, which raises the exception with the given ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>serviceId</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">int</span></code></span>) – The id of the service the exception is defined in.</p></li>
+<li><p><strong>exceptionId</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">int</span></code></span>) – The id of the exception.</p></li>
+<li><p><strong>message</strong> (<span><a class="reference internal" href="#krpc.client.services.KRPC.Expression" title="krpc.client.services.KRPC.Expression"><code class="xref java java-type docutils literal notranslate"><span class="pre">Expression</span></code></a></span>) – The message of the exception.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Raises the exception as <a class="reference internal" href="#krpc.client.services.KRPC.Expression.throw_(Connection, String, String, Expression)" title="krpc.client.services.KRPC.Expression.throw_(Connection, String, String, Expression)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Expression.throw_(String,</span> <span class="pre">String,</span> <span class="pre">Expression)</span></code></a> does. Throws an exception if the
+service does not declare it.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KRPC.Expression.tryCatch(Connection, Expression, String, String, Expression, Expression)">
 <span class="pre">static</span> <a class="reference internal" href="#krpc.client.services.KRPC.Expression" title="krpc.client.services.KRPC.Expression"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">tryCatch</span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../java.html#krpc.client.Connection" title="krpc.client.Connection"><span class="pre">Connection</span></a><em> <span class="pre">connection</span></em>, <a class="reference internal" href="#krpc.client.services.KRPC.Expression" title="krpc.client.services.KRPC.Expression"><span class="pre">Expression</span></a><em> <span class="pre">body</span></em>, <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">service</span></em>, <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">name</span></em>, <a class="reference internal" href="#krpc.client.services.KRPC.Expression" title="krpc.client.services.KRPC.Expression"><span class="pre">Expression</span></a><em> <span class="pre">message</span></em>, <a class="reference internal" href="#krpc.client.services.KRPC.Expression" title="krpc.client.services.KRPC.Expression"><span class="pre">Expression</span></a><em> <span class="pre">handler</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KRPC.Expression.tryCatch(Connection, Expression, String, String, Expression, Expression)" title="Link to this definition">#</a></dt>
 <dd><p>A try-catch statement that handles the named exception.</p>
@@ -2372,6 +2407,28 @@ declare it.</p>
 <p class="admonition-title">Note</p>
 <p>Only an exception a service declares can be named, and <a class="reference internal" href="#krpc.client.services.KRPC.Expression.tryCatchAll(Connection, Expression, Expression, Expression)" title="krpc.client.services.KRPC.Expression.tryCatchAll(Connection, Expression, Expression, Expression)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Expression.tryCatchAll(Expression,</span> <span class="pre">Expression,</span> <span class="pre">Expression)</span></code></a>
 handles any exception. Throws an exception if the service does not declare it.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KRPC.Expression.tryCatchById(Connection, Expression, int, int, Expression, Expression)">
+<span class="pre">static</span> <a class="reference internal" href="#krpc.client.services.KRPC.Expression" title="krpc.client.services.KRPC.Expression"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">tryCatchById</span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../java.html#krpc.client.Connection" title="krpc.client.Connection"><span class="pre">Connection</span></a><em> <span class="pre">connection</span></em>, <a class="reference internal" href="#krpc.client.services.KRPC.Expression" title="krpc.client.services.KRPC.Expression"><span class="pre">Expression</span></a><em> <span class="pre">body</span></em>, <span class="pre">int</span><em> <span class="pre">serviceId</span></em>, <span class="pre">int</span><em> <span class="pre">exceptionId</span></em>, <a class="reference internal" href="#krpc.client.services.KRPC.Expression" title="krpc.client.services.KRPC.Expression"><span class="pre">Expression</span></a><em> <span class="pre">message</span></em>, <a class="reference internal" href="#krpc.client.services.KRPC.Expression" title="krpc.client.services.KRPC.Expression"><span class="pre">Expression</span></a><em> <span class="pre">handler</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KRPC.Expression.tryCatchById(Connection, Expression, int, int, Expression, Expression)" title="Link to this definition">#</a></dt>
+<dd><p>A try-catch statement that handles the exception with the given ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> (<span><a class="reference internal" href="#krpc.client.services.KRPC.Expression" title="krpc.client.services.KRPC.Expression"><code class="xref java java-type docutils literal notranslate"><span class="pre">Expression</span></code></a></span>) – The statement to evaluate.</p></li>
+<li><p><strong>serviceId</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">int</span></code></span>) – The id of the service the exception is defined in.</p></li>
+<li><p><strong>exceptionId</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">int</span></code></span>) – The id of the exception.</p></li>
+<li><p><strong>message</strong> (<span><a class="reference internal" href="#krpc.client.services.KRPC.Expression" title="krpc.client.services.KRPC.Expression"><code class="xref java java-type docutils literal notranslate"><span class="pre">Expression</span></code></a></span>) – A string variable assigned the exception’s message, or null.</p></li>
+<li><p><strong>handler</strong> (<span><a class="reference internal" href="#krpc.client.services.KRPC.Expression" title="krpc.client.services.KRPC.Expression"><code class="xref java java-type docutils literal notranslate"><span class="pre">Expression</span></code></a></span>) – The statement evaluated when the exception is caught.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Handles the exception as <a class="reference internal" href="#krpc.client.services.KRPC.Expression.tryCatch(Connection, Expression, String, String, Expression, Expression)" title="krpc.client.services.KRPC.Expression.tryCatch(Connection, Expression, String, String, Expression, Expression)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Expression.tryCatch(Expression,</span> <span class="pre">String,</span> <span class="pre">String,</span> <span class="pre">Expression,</span> <span class="pre">Expression)</span></code></a> does. Throws an exception if the
+service does not declare it.</p>
 </div>
 </dd></dl>
 
@@ -2781,6 +2838,28 @@ structure, or has no field of the given name.</p>
 <dd class="field-even"><p>The value of the field.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KRPC.Expression.getFieldByIndex(Connection, Expression, int)">
+<span class="pre">static</span> <a class="reference internal" href="#krpc.client.services.KRPC.Expression" title="krpc.client.services.KRPC.Expression"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">getFieldByIndex</span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../java.html#krpc.client.Connection" title="krpc.client.Connection"><span class="pre">Connection</span></a><em> <span class="pre">connection</span></em>, <a class="reference internal" href="#krpc.client.services.KRPC.Expression" title="krpc.client.services.KRPC.Expression"><span class="pre">Expression</span></a><em> <span class="pre">arg</span></em>, <span class="pre">int</span><em> <span class="pre">index</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KRPC.Expression.getFieldByIndex(Connection, Expression, int)" title="Link to this definition">#</a></dt>
+<dd><p>The value of a field of a structure, named by its position. Throws an exception if
+the value is not a structure, or the index is out of range.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arg</strong> (<span><a class="reference internal" href="#krpc.client.services.KRPC.Expression" title="krpc.client.services.KRPC.Expression"><code class="xref java java-type docutils literal notranslate"><span class="pre">Expression</span></code></a></span>) – The structure.</p></li>
+<li><p><strong>index</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">int</span></code></span>) – The position of the field to access.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The value of the field.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The fields are numbered from 0, in the order the structure defines them.</p>
+</div>
 </dd></dl>
 
 <dl class="java method">
@@ -3784,6 +3863,48 @@ evaluated, and <a class="reference internal" href="#krpc.client.services.KRPC.Ex
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>service</strong> (<span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>) – The name of the service the structure is defined in.</p></li>
 <li><p><strong>name</strong> (<span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>) – The name of the structure.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KRPC.Type.classTypeById(Connection, int, int)">
+<span class="pre">static</span> <a class="reference internal" href="#krpc.client.services.KRPC.Type" title="krpc.client.services.KRPC.Type"><span class="pre">Type</span></a> <span class="sig-name descname"><span class="pre">classTypeById</span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../java.html#krpc.client.Connection" title="krpc.client.Connection"><span class="pre">Connection</span></a><em> <span class="pre">connection</span></em>, <span class="pre">int</span><em> <span class="pre">serviceId</span></em>, <span class="pre">int</span><em> <span class="pre">classId</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KRPC.Type.classTypeById(Connection, int, int)" title="Link to this definition">#</a></dt>
+<dd><p>The type of a class defined by a service, named by ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>serviceId</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">int</span></code></span>) – The id of the service the class is defined in.</p></li>
+<li><p><strong>classId</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">int</span></code></span>) – The id of the class.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KRPC.Type.enumerationTypeById(Connection, int, int)">
+<span class="pre">static</span> <a class="reference internal" href="#krpc.client.services.KRPC.Type" title="krpc.client.services.KRPC.Type"><span class="pre">Type</span></a> <span class="sig-name descname"><span class="pre">enumerationTypeById</span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../java.html#krpc.client.Connection" title="krpc.client.Connection"><span class="pre">Connection</span></a><em> <span class="pre">connection</span></em>, <span class="pre">int</span><em> <span class="pre">serviceId</span></em>, <span class="pre">int</span><em> <span class="pre">enumerationId</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KRPC.Type.enumerationTypeById(Connection, int, int)" title="Link to this definition">#</a></dt>
+<dd><p>The type of an enumeration defined by a service, named by ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>serviceId</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">int</span></code></span>) – The id of the service the enumeration is defined in.</p></li>
+<li><p><strong>enumerationId</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">int</span></code></span>) – The id of the enumeration.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KRPC.Type.structTypeById(Connection, int, int)">
+<span class="pre">static</span> <a class="reference internal" href="#krpc.client.services.KRPC.Type" title="krpc.client.services.KRPC.Type"><span class="pre">Type</span></a> <span class="sig-name descname"><span class="pre">structTypeById</span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../java.html#krpc.client.Connection" title="krpc.client.Connection"><span class="pre">Connection</span></a><em> <span class="pre">connection</span></em>, <span class="pre">int</span><em> <span class="pre">serviceId</span></em>, <span class="pre">int</span><em> <span class="pre">structId</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KRPC.Type.structTypeById(Connection, int, int)" title="Link to this definition">#</a></dt>
+<dd><p>The type of a structure defined by a service, named by ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>serviceId</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">int</span></code></span>) – The id of the service the structure is defined in.</p></li>
+<li><p><strong>structId</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">int</span></code></span>) – The id of the structure.</p></li>
 </ul>
 </dd>
 </dl>

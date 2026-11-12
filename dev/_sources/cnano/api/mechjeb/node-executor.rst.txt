@@ -10,6 +10,10 @@ NodeExecutor
 
    The maneuver node executor.
 
+   .. macro:: KRPC_CLASS_MECHJEB_NODEEXECUTOR
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_MechJeb_NodeExecutor_Enabled(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_NodeExecutor_t instance)
 
       Whether the executor is running.

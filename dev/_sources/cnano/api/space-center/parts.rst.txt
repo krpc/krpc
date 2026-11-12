@@ -23,6 +23,10 @@ Parts
    Instances of this class are used to interact with the parts of a vessel.
    An instance can be obtained by calling :func:`krpc_SpaceCenter_Vessel_Parts`.
 
+   .. macro:: KRPC_CLASS_SPACECENTER_PARTS
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_SpaceCenter_Parts_All(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_SpaceCenter_Parts_t instance)
 
       A list of all of the vessels parts.
@@ -290,6 +294,10 @@ Part
 
    Represents an individual part. Vessels are made up of multiple parts.
    Instances of this class can be obtained by several methods in :type:`krpc_SpaceCenter_Parts_t`.
+
+   .. macro:: KRPC_CLASS_SPACECENTER_PART
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Part_Name(krpc_connection_t connection, char * * returnValue, krpc_SpaceCenter_Part_t instance)
 
@@ -1255,6 +1263,11 @@ Part
 
    The state of an auto-strut. :func:`krpc_SpaceCenter_Part_AutoStrutMode`
 
+   .. macro:: KRPC_ENUMERATION_SPACECENTER_AUTOSTRUTMODE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
 
    .. macro:: KRPC_SPACECENTER_AUTOSTRUTMODE_OFF
 
@@ -1295,6 +1308,10 @@ Part
 .. type:: krpc_SpaceCenter_Force_t
 
    Obtained by calling ``Debug.AddForce``.
+
+   .. macro:: KRPC_CLASS_SPACECENTER_FORCE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Force_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_SpaceCenter_Force_t instance)
 
@@ -1354,6 +1371,10 @@ Module
    For example, an engine has a "ModuleEngines" part module that contains all the
    functionality of an engine.
 
+   .. macro:: KRPC_CLASS_SPACECENTER_MODULE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_SpaceCenter_Module_Name(krpc_connection_t connection, char * * returnValue, krpc_SpaceCenter_Module_t instance)
 
       Name of the PartModule. For example, "ModuleEngines".
@@ -1408,6 +1429,10 @@ Module
    .. note::
 
       Setting a field runs the callbacks that the right-click menu of the part runs.
+
+   .. macro:: KRPC_CLASS_SPACECENTER_PARTFIELD
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_SpaceCenter_PartField_Module(krpc_connection_t connection, krpc_SpaceCenter_Module_t * returnValue, krpc_SpaceCenter_PartField_t instance)
 
@@ -1522,6 +1547,11 @@ Module
 
    The type of a part module field. See :func:`krpc_SpaceCenter_PartField_Type`.
 
+   .. macro:: KRPC_ENUMERATION_SPACECENTER_FIELDTYPE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
 
    .. macro:: KRPC_SPACECENTER_FIELDTYPE_BOOLEAN
 
@@ -1559,6 +1589,10 @@ Module
 
    An event of a part module. Events are the clickable buttons visible in the right-click menu
    of the part. Obtained by calling :func:`krpc_SpaceCenter_Module_EventList`.
+
+   .. macro:: KRPC_CLASS_SPACECENTER_PARTEVENT
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_SpaceCenter_PartEvent_Module(krpc_connection_t connection, krpc_SpaceCenter_Module_t * returnValue, krpc_SpaceCenter_PartEvent_t instance)
 
@@ -1606,6 +1640,10 @@ Module
    An action of a part module. These are the part actions that can be assigned to action groups
    in the in-game editor. Obtained by calling :func:`krpc_SpaceCenter_Module_ActionList`.
 
+   .. macro:: KRPC_CLASS_SPACECENTER_PARTACTION
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_SpaceCenter_PartAction_Module(krpc_connection_t connection, krpc_SpaceCenter_Module_t * returnValue, krpc_SpaceCenter_PartAction_t instance)
 
       The part module that contains this action.
@@ -1644,6 +1682,10 @@ Config Node
    name, a set of named values and a set of child nodes. This is used to access the
    static configuration of a part or part module, for example via
    :func:`krpc_SpaceCenter_Part_Config` and :func:`krpc_SpaceCenter_Module_Config`.
+
+   .. macro:: KRPC_CLASS_SPACECENTER_CONFIGNODE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_SpaceCenter_ConfigNode_Name(krpc_connection_t connection, char * * returnValue, krpc_SpaceCenter_ConfigNode_t instance)
 
@@ -1752,6 +1794,10 @@ Antenna
 .. type:: krpc_SpaceCenter_Antenna_t
 
    An antenna. Obtained by calling :func:`krpc_SpaceCenter_Part_Antenna`.
+
+   .. macro:: KRPC_CLASS_SPACECENTER_ANTENNA
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Antenna_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_SpaceCenter_Antenna_t instance)
 
@@ -2169,6 +2215,11 @@ Antenna
 
    The kind of target a RealAntennas antenna points at. See :func:`krpc_SpaceCenter_Antenna_TargetMode`.
 
+   .. macro:: KRPC_ENUMERATION_SPACECENTER_ANTENNATARGETMODE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
 
    .. macro:: KRPC_SPACECENTER_ANTENNATARGETMODE_NONE
 
@@ -2211,6 +2262,10 @@ Cargo Bay
 
    A cargo bay. Obtained by calling :func:`krpc_SpaceCenter_Part_CargoBay`.
 
+   .. macro:: KRPC_CLASS_SPACECENTER_CARGOBAY
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_SpaceCenter_CargoBay_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_SpaceCenter_CargoBay_t instance)
 
       The part object for this cargo bay.
@@ -2249,6 +2304,10 @@ Control Surface
 .. type:: krpc_SpaceCenter_ControlSurface_t
 
    An aerodynamic control surface. Obtained by calling :func:`krpc_SpaceCenter_Part_ControlSurface`.
+
+   .. macro:: KRPC_CLASS_SPACECENTER_CONTROLSURFACE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_SpaceCenter_ControlSurface_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_SpaceCenter_ControlSurface_t instance)
 
@@ -2390,6 +2449,10 @@ Decoupler
 
    A decoupler. Obtained by calling :func:`krpc_SpaceCenter_Part_Decoupler`
 
+   .. macro:: KRPC_CLASS_SPACECENTER_DECOUPLER
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_SpaceCenter_Decoupler_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_SpaceCenter_Decoupler_t instance)
 
       The part object for this decoupler.
@@ -2458,6 +2521,11 @@ resource harvesters, solar panels and wheels.
    :func:`krpc_SpaceCenter_ResourceHarvester_State`, :func:`krpc_SpaceCenter_SolarPanel_State`,
    :func:`krpc_SpaceCenter_Wheel_State`
 
+   .. macro:: KRPC_ENUMERATION_SPACECENTER_DEPLOYABLESTATE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
 
    .. macro:: KRPC_SPACECENTER_DEPLOYABLESTATE_DEPLOYED
 
@@ -2495,6 +2563,10 @@ Docking Port
 .. type:: krpc_SpaceCenter_DockingPort_t
 
    A docking port. Obtained by calling :func:`krpc_SpaceCenter_Part_DockingPort`
+
+   .. macro:: KRPC_CLASS_SPACECENTER_DOCKINGPORT
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_SpaceCenter_DockingPort_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_SpaceCenter_DockingPort_t instance)
 
@@ -2656,6 +2728,11 @@ Docking Port
 
    The state of a docking port. See :func:`krpc_SpaceCenter_DockingPort_State`.
 
+   .. macro:: KRPC_ENUMERATION_SPACECENTER_DOCKINGPORTSTATE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
 
    .. macro:: KRPC_SPACECENTER_DOCKINGPORTSTATE_READY
 
@@ -2705,6 +2782,10 @@ Engine
    .. note::
 
       For RCS thrusters :func:`krpc_SpaceCenter_Part_RCS`.
+
+   .. macro:: KRPC_CLASS_SPACECENTER_ENGINE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_SpaceCenter_Engine_t instance)
 
@@ -3151,6 +3232,10 @@ Engine
 
    A propellant for an engine. Obtains by calling :func:`krpc_SpaceCenter_Engine_Propellants`.
 
+   .. macro:: KRPC_CLASS_SPACECENTER_PROPELLANT
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_SpaceCenter_Propellant_Name(krpc_connection_t connection, char * * returnValue, krpc_SpaceCenter_Propellant_t instance)
 
       The name of the propellant.
@@ -3227,6 +3312,10 @@ Experiment
    .. note::
 
       Includes the experiments of DMagic's DMModuleScienceAnimateGeneric.
+
+   .. macro:: KRPC_CLASS_SPACECENTER_EXPERIMENT
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Experiment_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_SpaceCenter_Experiment_t instance)
 
@@ -3330,32 +3419,65 @@ Experiment
 
    Obtained by calling :func:`krpc_SpaceCenter_Experiment_Data`.
 
+   .. macro:: KRPC_STRUCT_SPACECENTER_SCIENCEDATA
+
+      The service and structure ids of the structure, for :func:`krpc_KRPC_Type_StructTypeById`.
+
 
    .. member:: float data_amount
 
       Data amount.
 
+      .. macro:: KRPC_FIELD_SPACECENTER_SCIENCEDATA_DATAAMOUNT
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: float science_value
 
       Science value.
 
+      .. macro:: KRPC_FIELD_SPACECENTER_SCIENCEDATA_SCIENCEVALUE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: float transmit_value
 
       Transmit value.
+
+      .. macro:: KRPC_FIELD_SPACECENTER_SCIENCEDATA_TRANSMITVALUE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
 
 .. type:: krpc_SpaceCenter_ScienceSubject_t
 
    Obtained by calling :func:`krpc_SpaceCenter_Experiment_ScienceSubject`.
 
+   .. macro:: KRPC_STRUCT_SPACECENTER_SCIENCESUBJECT
+
+      The service and structure ids of the structure, for :func:`krpc_KRPC_Type_StructTypeById`.
+
 
    .. member:: char * id
 
       The identifier of the subject, e.g. ``crewReport@KerbinSrfLandedLaunchPad``.
 
+      .. macro:: KRPC_FIELD_SPACECENTER_SCIENCESUBJECT_ID
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: char * title
 
       The title of the subject, as shown in the science archives.
+
+      .. macro:: KRPC_FIELD_SPACECENTER_SCIENCESUBJECT_TITLE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: bool is_complete
 
@@ -3366,27 +3488,57 @@ Experiment
       has produced data, and how valuable it is, use :func:`krpc_SpaceCenter_Experiment_HasData` and
       :member:`krpc_SpaceCenter_ScienceData_t.transmit_value`.
 
+      .. macro:: KRPC_FIELD_SPACECENTER_SCIENCESUBJECT_ISCOMPLETE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: float science
 
       Amount of science already earned from this subject, not updated until after
       transmission/recovery.
 
+      .. macro:: KRPC_FIELD_SPACECENTER_SCIENCESUBJECT_SCIENCE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: float science_cap
 
       Total science allowable for this subject.
+
+      .. macro:: KRPC_FIELD_SPACECENTER_SCIENCESUBJECT_SCIENCECAP
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: float data_scale
 
       Multiply science value by this to determine data amount in mits.
 
+      .. macro:: KRPC_FIELD_SPACECENTER_SCIENCESUBJECT_DATASCALE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: float subject_value
 
       Multiplier for specific Celestial Body/Experiment Situation combination.
+
+      .. macro:: KRPC_FIELD_SPACECENTER_SCIENCESUBJECT_SUBJECTVALUE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: float scientific_value
 
       Diminishing value multiplier for decreasing the science value returned from repeated
       experiments.
+
+      .. macro:: KRPC_FIELD_SPACECENTER_SCIENCESUBJECT_SCIENTIFICVALUE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
 
 Fairing
@@ -3400,6 +3552,10 @@ Fairing
    .. note::
 
       Includes the fairings of ProceduralFairings.
+
+   .. macro:: KRPC_CLASS_SPACECENTER_FAIRING
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Fairing_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_SpaceCenter_Fairing_t instance)
 
@@ -3429,6 +3585,10 @@ Intake
 .. type:: krpc_SpaceCenter_Intake_t
 
    An air intake. Obtained by calling :func:`krpc_SpaceCenter_Part_Intake`.
+
+   .. macro:: KRPC_CLASS_SPACECENTER_INTAKE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Intake_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_SpaceCenter_Intake_t instance)
 
@@ -3470,6 +3630,10 @@ Leg
 .. type:: krpc_SpaceCenter_Leg_t
 
    A landing leg. Obtained by calling :func:`krpc_SpaceCenter_Part_Leg`.
+
+   .. macro:: KRPC_CLASS_SPACECENTER_LEG
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Leg_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_SpaceCenter_Leg_t instance)
 
@@ -3518,6 +3682,10 @@ Launch Clamp
 
    A launch clamp. Obtained by calling :func:`krpc_SpaceCenter_Part_LaunchClamp`.
 
+   .. macro:: KRPC_CLASS_SPACECENTER_LAUNCHCLAMP
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_SpaceCenter_LaunchClamp_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_SpaceCenter_LaunchClamp_t instance)
 
       The part object for this launch clamp.
@@ -3540,6 +3708,10 @@ Light
 .. type:: krpc_SpaceCenter_Light_t
 
    A light. Obtained by calling :func:`krpc_SpaceCenter_Part_Light`.
+
+   .. macro:: KRPC_CLASS_SPACECENTER_LIGHT
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Light_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_SpaceCenter_Light_t instance)
 
@@ -3594,6 +3766,10 @@ Parachute
    .. note::
 
       Includes the parachutes of RealChute.
+
+   .. macro:: KRPC_CLASS_SPACECENTER_PARACHUTE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Parachute_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_SpaceCenter_Parachute_t instance)
 
@@ -3674,6 +3850,11 @@ Parachute
 
    The state of a parachute. See :func:`krpc_SpaceCenter_Parachute_State`.
 
+   .. macro:: KRPC_ENUMERATION_SPACECENTER_PARACHUTESTATE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
 
    .. macro:: KRPC_SPACECENTER_PARACHUTESTATE_STOWED
 
@@ -3706,6 +3887,11 @@ Parachute
 
    The safety state of deploying a parachute. See :func:`krpc_SpaceCenter_Parachute_SafeState`.
 
+   .. macro:: KRPC_ENUMERATION_SPACECENTER_PARACHUTESAFESTATE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
 
    .. macro:: KRPC_SPACECENTER_PARACHUTESAFESTATE_SAFE
 
@@ -3736,6 +3922,10 @@ Radiator
 .. type:: krpc_SpaceCenter_Radiator_t
 
    A radiator. Obtained by calling :func:`krpc_SpaceCenter_Part_Radiator`.
+
+   .. macro:: KRPC_CLASS_SPACECENTER_RADIATOR
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Radiator_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_SpaceCenter_Radiator_t instance)
 
@@ -3777,6 +3967,10 @@ Resource Converter
 .. type:: krpc_SpaceCenter_ResourceConverter_t
 
    A resource converter. Obtained by calling :func:`krpc_SpaceCenter_Part_ResourceConverter`.
+
+   .. macro:: KRPC_CLASS_SPACECENTER_RESOURCECONVERTER
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_SpaceCenter_ResourceConverter_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_SpaceCenter_ResourceConverter_t instance)
 
@@ -3895,6 +4089,11 @@ Resource Converter
 
    The state of a resource converter. See :func:`krpc_SpaceCenter_ResourceConverter_State`.
 
+   .. macro:: KRPC_ENUMERATION_SPACECENTER_RESOURCECONVERTERSTATE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
 
    .. macro:: KRPC_SPACECENTER_RESOURCECONVERTERSTATE_RUNNING
 
@@ -3935,6 +4134,10 @@ Resource Harvester
 .. type:: krpc_SpaceCenter_ResourceHarvester_t
 
    A resource harvester (drill). Obtained by calling :func:`krpc_SpaceCenter_Part_ResourceHarvester`.
+
+   .. macro:: KRPC_CLASS_SPACECENTER_RESOURCEHARVESTER
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_SpaceCenter_ResourceHarvester_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_SpaceCenter_ResourceHarvester_t instance)
 
@@ -4012,6 +4215,10 @@ Reaction Wheel
 
    A reaction wheel. Obtained by calling :func:`krpc_SpaceCenter_Part_ReactionWheel`.
 
+   .. macro:: KRPC_CLASS_SPACECENTER_REACTIONWHEEL
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_SpaceCenter_ReactionWheel_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_SpaceCenter_ReactionWheel_t instance)
 
       The part object for this reaction wheel.
@@ -4065,6 +4272,10 @@ Resource Drain
 .. type:: krpc_SpaceCenter_ResourceDrain_t
 
    A resource drain. Obtained by calling :func:`krpc_SpaceCenter_Part_ResourceDrain`.
+
+   .. macro:: KRPC_CLASS_SPACECENTER_RESOURCEDRAIN
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_SpaceCenter_ResourceDrain_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_SpaceCenter_ResourceDrain_t instance)
 
@@ -4146,6 +4357,11 @@ Resource Drain
    Resource drain mode.
    See :func:`krpc_SpaceCenter_ResourceDrain_DrainMode`.
 
+   .. macro:: KRPC_ENUMERATION_SPACECENTER_DRAINMODE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
 
    .. macro:: KRPC_SPACECENTER_DRAINMODE_PART
 
@@ -4165,6 +4381,10 @@ Robotic Controller
 .. type:: krpc_SpaceCenter_RoboticController_t
 
    A robotic controller. Obtained by calling :func:`krpc_SpaceCenter_Part_RoboticController`.
+
+   .. macro:: KRPC_CLASS_SPACECENTER_ROBOTICCONTROLLER
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticController_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_SpaceCenter_RoboticController_t instance)
 
@@ -4281,14 +4501,28 @@ Robotic Controller
 
    .. note::
 
-      See :func:`krpc_SpaceCenter_RoboticController_Axes`.
+      See :func:`krpc_SpaceCenter_RoboticController_Axes`.   .. macro:: KRPC_STRUCT_SPACECENTER_ROBOTICAXIS
+
+      The service and structure ids of the structure, for :func:`krpc_KRPC_Type_StructTypeById`.
+
+
    .. member:: krpc_SpaceCenter_Module_t module
 
       The part module the axis belongs to.
 
+      .. macro:: KRPC_FIELD_SPACECENTER_ROBOTICAXIS_MODULE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: char * field_name
 
       The name of the field the axis controls.
+
+      .. macro:: KRPC_FIELD_SPACECENTER_ROBOTICAXIS_FIELDNAME
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
 
 Robotic Hinge
@@ -4298,6 +4532,10 @@ Robotic Hinge
 .. type:: krpc_SpaceCenter_RoboticHinge_t
 
    A robotic hinge. Obtained by calling :func:`krpc_SpaceCenter_Part_RoboticHinge`.
+
+   .. macro:: KRPC_CLASS_SPACECENTER_ROBOTICHINGE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticHinge_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_SpaceCenter_RoboticHinge_t instance)
 
@@ -4383,6 +4621,10 @@ Robotic Piston
 
    A robotic piston part. Obtained by calling :func:`krpc_SpaceCenter_Part_RoboticPiston`.
 
+   .. macro:: KRPC_CLASS_SPACECENTER_ROBOTICPISTON
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticPiston_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_SpaceCenter_RoboticPiston_t instance)
 
       The part object for this robotic piston.
@@ -4466,6 +4708,10 @@ Robotic Rotation
 .. type:: krpc_SpaceCenter_RoboticRotation_t
 
    A robotic rotation servo. Obtained by calling :func:`krpc_SpaceCenter_Part_RoboticRotation`.
+
+   .. macro:: KRPC_CLASS_SPACECENTER_ROBOTICROTATION
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotation_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_SpaceCenter_RoboticRotation_t instance)
 
@@ -4559,6 +4805,10 @@ Robotic Rotor
 
    A robotic rotor. Obtained by calling :func:`krpc_SpaceCenter_Part_RoboticRotor`.
 
+   .. macro:: KRPC_CLASS_SPACECENTER_ROBOTICROTOR
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotor_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_SpaceCenter_RoboticRotor_t instance)
 
       The part object for this robotic rotor.
@@ -4635,6 +4885,10 @@ RCS
 .. type:: krpc_SpaceCenter_RCS_t
 
    An RCS block or thruster. Obtained by calling :func:`krpc_SpaceCenter_Part_RCS`.
+
+   .. macro:: KRPC_CLASS_SPACECENTER_RCS
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_SpaceCenter_RCS_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_SpaceCenter_RCS_t instance)
 
@@ -4881,6 +5135,10 @@ Sensor
 
    A sensor, such as a thermometer. Obtained by calling :func:`krpc_SpaceCenter_Part_Sensor`.
 
+   .. macro:: KRPC_CLASS_SPACECENTER_SENSOR
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_SpaceCenter_Sensor_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_SpaceCenter_Sensor_t instance)
 
       The part object for this sensor.
@@ -4925,6 +5183,10 @@ Solar Panel
    .. note::
 
       Includes the curved solar panels of Near Future Solar.
+
+   .. macro:: KRPC_CLASS_SPACECENTER_SOLARPANEL
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_SpaceCenter_SolarPanel_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_SpaceCenter_SolarPanel_t instance)
 
@@ -4981,6 +5243,10 @@ Thruster
       Engines can consist of multiple thrusters.
       For example, the S3 KS-25x4 "Mammoth" has four rocket nozzels, and so consists of
       four thrusters.
+
+   .. macro:: KRPC_CLASS_SPACECENTER_THRUSTER
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Thruster_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_SpaceCenter_Thruster_t instance)
 
@@ -5099,6 +5365,10 @@ Wheel
    A wheel. Includes landing gear and rover wheels.
    Obtained by calling :func:`krpc_SpaceCenter_Part_Wheel`.
    Can be used to control the motors, steering and deployment of wheels, among other things.
+
+   .. macro:: KRPC_CLASS_SPACECENTER_WHEEL
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Wheel_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_SpaceCenter_Wheel_t instance)
 
@@ -5332,6 +5602,11 @@ Wheel
 .. type:: krpc_SpaceCenter_MotorState_t
 
    The state of the motor on a powered wheel. See :func:`krpc_SpaceCenter_Wheel_MotorState`.
+
+   .. macro:: KRPC_ENUMERATION_SPACECENTER_MOTORSTATE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_SPACECENTER_MOTORSTATE_IDLE

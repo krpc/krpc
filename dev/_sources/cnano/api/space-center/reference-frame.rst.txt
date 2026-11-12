@@ -21,6 +21,10 @@ ReferenceFrame
       Apart from being created and removed, a reference frame is only used as a
       parameter to other functions.
 
+   .. macro:: KRPC_CLASS_SPACECENTER_REFERENCEFRAME
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_SpaceCenter_ReferenceFrame_CreateRelative(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * returnValue, krpc_SpaceCenter_ReferenceFrame_t referenceFrame, const krpc_tuple_double_double_double_t * position, const krpc_tuple_double_double_double_double_t * rotation, const krpc_tuple_double_double_double_t * velocity, const krpc_tuple_double_double_double_t * angularVelocity)
 
       Create a relative reference frame. This is a custom reference frame

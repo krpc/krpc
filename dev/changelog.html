@@ -568,6 +568,7 @@
 <li><p><span class="changelog-marker breaking">Breaking</span> Reject a class, enumeration, structure or exception with the name of its service, ignoring case (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1325">#1325</a>)</p></li>
 <li><p>Start the remaining servers when one fails to start (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1330">#1330</a>)</p></li>
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">KRPC.Expression.Match</span></code> and <code class="docutils literal notranslate"><span class="pre">KRPC.Expression.Switch</span></code> statements to server side functions (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1334">#1334</a>)</p></li>
+<li><p>Add variants of the server side function procedures that take ids in place of names, such as <code class="docutils literal notranslate"><span class="pre">KRPC.Type.ClassTypeById</span></code> and <code class="docutils literal notranslate"><span class="pre">KRPC.Expression.GetFieldByIndex</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1336">#1336</a>)</p></li>
 </ul>
 </section>
 <section id="server">
@@ -722,6 +723,8 @@
 <li><p><span class="changelog-marker breaking">Breaking</span> Return <code class="docutils literal notranslate"><span class="pre">KRPC_ERROR_ARGUMENT</span></code> for a null string argument, a null argument to a <code class="docutils literal notranslate"><span class="pre">krpc_open_</span></code> function, and a local socket path that is too long (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1333">#1333</a>)</p></li>
 </ul>
 </li>
+<li><p>Add a <code class="docutils literal notranslate"><span class="pre">KRPC_CLASS_</span></code>, <code class="docutils literal notranslate"><span class="pre">KRPC_ENUMERATION_</span></code> or <code class="docutils literal notranslate"><span class="pre">KRPC_STRUCT_</span></code> macro for each type of a service, with its ids for server side functions (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1336">#1336</a>)</p></li>
+<li><p>Add a <code class="docutils literal notranslate"><span class="pre">KRPC_FIELD_</span></code> macro for each field of a structure, with its position for <code class="docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1336">#1336</a>)</p></li>
 </ul>
 </section>
 <section id="c-client">
@@ -1074,6 +1077,7 @@
 <li><p>Generate no class for a mapped exception in C# and Java stubs (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1333">#1333</a>)</p></li>
 <li><p>Say in the reference docs what each client raises for each exception of a service (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1333">#1333</a>)</p></li>
 <li><p>Generate a <code class="docutils literal notranslate"><span class="pre">KRPC_EXCEPTION_</span></code> macro of the ids of each exception in C-nano stubs (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1333">#1333</a>)</p></li>
+<li><p>Generate the C-nano <code class="docutils literal notranslate"><span class="pre">KRPC_CLASS_</span></code>, <code class="docutils literal notranslate"><span class="pre">KRPC_ENUMERATION_</span></code>, <code class="docutils literal notranslate"><span class="pre">KRPC_STRUCT_</span></code> and <code class="docutils literal notranslate"><span class="pre">KRPC_FIELD_</span></code> macros (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1336">#1336</a>)</p></li>
 </ul>
 </section>
 </section>

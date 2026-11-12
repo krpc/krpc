@@ -169,6 +169,11 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
    The game scene. See :func:`krpc_KRPC_GameScene`.
 
+   .. macro:: KRPC_ENUMERATION_KRPC_GAMESCENE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
 
    .. macro:: KRPC_KRPC_GAMESCENE_SPACECENTER
 
@@ -231,22 +236,46 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
    .. note::
 
-      See :func:`krpc_KRPC_Clients`.
+      See :func:`krpc_KRPC_Clients`.   .. macro:: KRPC_STRUCT_KRPC_CLIENTINFO
+
+      The service and structure ids of the structure, for :func:`krpc_KRPC_Type_StructTypeById`.
+
+
    .. member:: krpc_bytes_t id
 
       The identifier of the client.
+
+      .. macro:: KRPC_FIELD_KRPC_CLIENTINFO_ID
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: char * name
 
       The name of the client, or an empty string if it has no name.
 
+      .. macro:: KRPC_FIELD_KRPC_CLIENTINFO_NAME
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: char * address
 
       The address of the client.
 
+      .. macro:: KRPC_FIELD_KRPC_CLIENTINFO_ADDRESS
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: uint32_t protocol_version
 
       The protocol version of the client's connection.
+
+      .. macro:: KRPC_FIELD_KRPC_CLIENTINFO_PROTOCOLVERSION
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
 
 .. type:: krpc_KRPC_ServerStatus_t
@@ -255,22 +284,46 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
    .. note::
 
-      See :func:`krpc_KRPC_GetStatus`.
+      See :func:`krpc_KRPC_GetStatus`.   .. macro:: KRPC_STRUCT_KRPC_SERVERSTATUS
+
+      The service and structure ids of the structure, for :func:`krpc_KRPC_Type_StructTypeById`.
+
+
    .. member:: char * version
 
       The version of the server, or ``unknown``.
+
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATUS_VERSION
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: uint32_t protocol_version
 
       The protocol version of the connection.
 
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATUS_PROTOCOLVERSION
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: krpc_KRPC_ServerSettings_t settings
 
       The settings of the server.
 
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATUS_SETTINGS
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: krpc_KRPC_ServerStatistics_t statistics
 
       The performance statistics of the server.
+
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATUS_STATISTICS
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
 
 .. type:: krpc_KRPC_ServerSettings_t
@@ -279,30 +332,64 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
    .. note::
 
-      See :member:`krpc_KRPC_ServerStatus_t.settings`.
+      See :member:`krpc_KRPC_ServerStatus_t.settings`.   .. macro:: KRPC_STRUCT_KRPC_SERVERSETTINGS
+
+      The service and structure ids of the structure, for :func:`krpc_KRPC_Type_StructTypeById`.
+
+
    .. member:: bool one_rpc_per_update
 
       Whether the server executes one call per update.
+
+      .. macro:: KRPC_FIELD_KRPC_SERVERSETTINGS_ONERPCPERUPDATE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: uint32_t max_time_per_update
 
       The current maximum time spent executing calls per update, in microseconds.
 
+      .. macro:: KRPC_FIELD_KRPC_SERVERSETTINGS_MAXTIMEPERUPDATE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: bool adaptive_rate_control
 
       Whether the server adjusts :member:`krpc_KRPC_ServerSettings_t.max_time_per_update` to hold the frame rate.
+
+      .. macro:: KRPC_FIELD_KRPC_SERVERSETTINGS_ADAPTIVERATECONTROL
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: bool blocking_recv
 
       Whether the server waits for the next call in an update.
 
+      .. macro:: KRPC_FIELD_KRPC_SERVERSETTINGS_BLOCKINGRECV
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: uint32_t recv_timeout
 
       The time the server waits for the next call, in microseconds.
 
+      .. macro:: KRPC_FIELD_KRPC_SERVERSETTINGS_RECVTIMEOUT
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: uint32_t tick_hold_timeout
 
       The longest time a client may hold the game on one physics tick, in microseconds.
+
+      .. macro:: KRPC_FIELD_KRPC_SERVERSETTINGS_TICKHOLDTIMEOUT
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
 
 .. type:: krpc_KRPC_ServerStatistics_t
@@ -311,67 +398,146 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
    .. note::
 
-      See :member:`krpc_KRPC_ServerStatus_t.statistics`.
+      See :member:`krpc_KRPC_ServerStatus_t.statistics`.   .. macro:: KRPC_STRUCT_KRPC_SERVERSTATISTICS
+
+      The service and structure ids of the structure, for :func:`krpc_KRPC_Type_StructTypeById`.
+
+
    .. member:: uint64_t bytes_read
 
       The number of bytes received from clients.
+
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATISTICS_BYTESREAD
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: uint64_t bytes_written
 
       The number of bytes sent to clients.
 
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATISTICS_BYTESWRITTEN
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: float bytes_read_rate
 
       The rate bytes are received from clients, in bytes per second.
+
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATISTICS_BYTESREADRATE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: float bytes_written_rate
 
       The rate bytes are sent to clients, in bytes per second.
 
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATISTICS_BYTESWRITTENRATE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: uint64_t rpcs_executed
 
       The number of calls executed.
+
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATISTICS_RPCSEXECUTED
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: float rpc_rate
 
       The number of calls executed per second.
 
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATISTICS_RPCRATE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: float time_per_rpc_update
 
       The time spent receiving and executing calls per update, in seconds.
+
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATISTICS_TIMEPERRPCUPDATE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: float poll_time_per_rpc_update
 
       The time spent receiving calls per update, in seconds.
 
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATISTICS_POLLTIMEPERRPCUPDATE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: float exec_time_per_rpc_update
 
       The time spent executing calls per update, in seconds.
+
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATISTICS_EXECTIMEPERRPCUPDATE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: uint32_t deferred_calls
 
       The number of calls left for the next update, because the update ran out of time
       or the call yielded.
 
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATISTICS_DEFERREDCALLS
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: uint32_t streams
 
       The number of open streams, events included.
+
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATISTICS_STREAMS
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: uint64_t stream_evaluations
 
       The number of stream evaluations, one per stream per update.
 
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATISTICS_STREAMEVALUATIONS
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: float stream_evaluation_rate
 
       The number of stream evaluations per second.
+
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATISTICS_STREAMEVALUATIONRATE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: uint64_t stream_updates_sent
 
       The number of stream updates sent to clients.
 
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATISTICS_STREAMUPDATESSENT
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: float time_per_stream_update
 
       The time spent updating streams per update, in seconds.
+
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATISTICS_TIMEPERSTREAMUPDATE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
 
 .. macro:: KRPC_EXCEPTION_KRPC_INVALIDOPERATIONEXCEPTION

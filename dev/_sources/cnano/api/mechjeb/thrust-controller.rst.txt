@@ -10,6 +10,10 @@ ThrustController
 
    The thrust controller, which limits the throttle.
 
+   .. macro:: KRPC_CLASS_MECHJEB_THRUSTCONTROLLER
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_MechJeb_ThrustController_DifferentialThrottle(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_ThrustController_t instance)
    .. function:: krpc_error_t krpc_MechJeb_ThrustController_set_DifferentialThrottle(krpc_connection_t connection, krpc_MechJeb_ThrustController_t instance, bool value)
 
@@ -169,6 +173,11 @@ ThrustController
 
    The result of the differential throttle. See
    :func:`krpc_MechJeb_ThrustController_DifferentialThrottleStatus`.
+
+   .. macro:: KRPC_ENUMERATION_MECHJEB_DIFFERENTIALTHROTTLESTATUS
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_MECHJEB_DIFFERENTIALTHROTTLESTATUS_ALLENGINESOFF

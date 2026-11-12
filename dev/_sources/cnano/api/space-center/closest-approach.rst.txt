@@ -25,6 +25,10 @@ Closest Approach
       that period is the current one, so the object reports the approach as now, at
       the present separation, until the orbits bring another one within range.
 
+   .. macro:: KRPC_CLASS_SPACECENTER_CLOSESTAPPROACH
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_SpaceCenter_ClosestApproach_UT(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_ClosestApproach_t instance)
 
       The universal time of the closest approach, in seconds.

@@ -17,6 +17,10 @@ Display
       optional Module Manager patch adds such a page, named ``krpc``, to every monitor.
       The content is kept while KSP builds the IVA again, but not saved with the game.
 
+   .. macro:: KRPC_CLASS_RASTERPROPMONITOR_DISPLAY
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_RasterPropMonitor_Display_Name(krpc_connection_t connection, char * * returnValue, bool * returnValueIsNull, krpc_RasterPropMonitor_Display_t instance)
 
       The name of the display, or ``nullptr`` for a monitor's own display.

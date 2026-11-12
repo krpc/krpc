@@ -13,6 +13,10 @@ Alarm
    :func:`krpc_KerbalAlarmClock_AlarmWithName` or
    :func:`krpc_KerbalAlarmClock_AlarmsWithType`.
 
+   .. macro:: KRPC_CLASS_KERBALALARMCLOCK_ALARM
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_KerbalAlarmClock_Alarm_Action(krpc_connection_t connection, krpc_KerbalAlarmClock_AlarmAction_t * returnValue, krpc_KerbalAlarmClock_Alarm_t instance)
    .. function:: krpc_error_t krpc_KerbalAlarmClock_Alarm_set_Action(krpc_connection_t connection, krpc_KerbalAlarmClock_Alarm_t instance, krpc_KerbalAlarmClock_AlarmAction_t value)
 

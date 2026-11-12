@@ -1401,6 +1401,12 @@
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_ScanSat_Scanner_t</span></span></span><a class="headerlink" href="#c.krpc_ScanSat_Scanner_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>A SCANsat scanner on a part. Obtained by calling <a class="reference internal" href="scansat.html#c.krpc_ScanSat_Scanner" title="krpc_ScanSat_Scanner"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_ScanSat_Scanner()</span></code></a> or
 <a class="reference internal" href="scansat.html#c.krpc_ScanSat_Scanners" title="krpc_ScanSat_Scanners"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_ScanSat_Scanners()</span></code></a>.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_ScanSat_Scanner_t.KRPC_CLASS_SCANSAT_SCANNER">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_CLASS_SCANSAT_SCANNER</span></span></span><a class="headerlink" href="#c.krpc_ScanSat_Scanner_t.KRPC_CLASS_SCANSAT_SCANNER" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and class ids of the class, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_ClassTypeById()</span></code>.</p>
+</dd></dl>
+
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_ScanSat_Scanner_t.krpc_ScanSat_Scanner_Part">
 <a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_ScanSat_Scanner_Part</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="../space-center/parts.html#c.krpc_SpaceCenter_Part_t" title="krpc_SpaceCenter_Part_t"><span class="n"><span class="pre">krpc_SpaceCenter_Part_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_ScanSat_Scanner_t" title="krpc_ScanSat_Scanner_t"><span class="n"><span class="pre">krpc_ScanSat_Scanner_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_ScanSat_Scanner_t.krpc_ScanSat_Scanner_Part" title="Link to this definition">#</a><br /></dt>
@@ -1518,6 +1524,13 @@ is on.</p>
 <dt class="sig sig-object c" id="c.krpc_ScanSat_ScannerState_t">
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_ScanSat_ScannerState_t</span></span></span><a class="headerlink" href="#c.krpc_ScanSat_ScannerState_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>The state of a scanner. See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_ScanSat_Scanner_State()</span></code>.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_ScanSat_ScannerState_t.KRPC_ENUMERATION_SCANSAT_SCANNERSTATE">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ENUMERATION_SCANSAT_SCANNERSTATE</span></span></span><a class="headerlink" href="#c.krpc_ScanSat_ScannerState_t.KRPC_ENUMERATION_SCANSAT_SCANNERSTATE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and enumeration ids of the enumeration, for
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_EnumerationTypeById()</span></code> and <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_ConstantEnumById()</span></code>.</p>
+</dd></dl>
+
 <dl class="c macro">
 <dt class="sig sig-object c" id="c.krpc_ScanSat_ScannerState_t.KRPC_SCANSAT_SCANNERSTATE_OFF">
 <span class="sig-name descname"><span class="n"><span class="pre">KRPC_SCANSAT_SCANNERSTATE_OFF</span></span></span><a class="headerlink" href="#c.krpc_ScanSat_ScannerState_t.KRPC_SCANSAT_SCANNERSTATE_OFF" title="Link to this definition">#</a><br /></dt>

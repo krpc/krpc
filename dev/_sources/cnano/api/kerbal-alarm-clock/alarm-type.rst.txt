@@ -10,6 +10,11 @@ AlarmType
 
    The type of an alarm.
 
+   .. macro:: KRPC_ENUMERATION_KERBALALARMCLOCK_ALARMTYPE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
 
    .. macro:: KRPC_KERBALALARMCLOCK_ALARMTYPE_RAW
 

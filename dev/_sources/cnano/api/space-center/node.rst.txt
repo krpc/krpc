@@ -10,6 +10,10 @@ Node
 
    Represents a maneuver node. Can be created using :func:`krpc_SpaceCenter_Control_AddNode`.
 
+   .. macro:: KRPC_CLASS_SPACECENTER_NODE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_SpaceCenter_Node_Prograde(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_Node_t instance)
    .. function:: krpc_error_t krpc_SpaceCenter_Node_set_Prograde(krpc_connection_t connection, krpc_SpaceCenter_Node_t instance, double value)
 

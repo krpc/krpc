@@ -10,6 +10,10 @@ SmartASS
 
    The Smart A.S.S. window, which points the vessel in a chosen direction.
 
+   .. macro:: KRPC_CLASS_MECHJEB_SMARTASS
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_MechJeb_SmartASS_InterfaceMode(krpc_connection_t connection, krpc_MechJeb_SmartASSInterfaceMode_t * returnValue, krpc_MechJeb_SmartASS_t instance)
    .. function:: krpc_error_t krpc_MechJeb_SmartASS_set_InterfaceMode(krpc_connection_t connection, krpc_MechJeb_SmartASS_t instance, krpc_MechJeb_SmartASSInterfaceMode_t value)
 
@@ -172,6 +176,11 @@ SmartASS
 
    The mode of the Smart A.S.S. window. See :func:`krpc_MechJeb_SmartASS_InterfaceMode`.
 
+   .. macro:: KRPC_ENUMERATION_MECHJEB_SMARTASSINTERFACEMODE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
 
    .. macro:: KRPC_MECHJEB_SMARTASSINTERFACEMODE_ORBITAL
 
@@ -202,6 +211,11 @@ SmartASS
 .. type:: krpc_MechJeb_SmartASSAutopilotMode_t
 
    The autopilot mode of Smart A.S.S. See :func:`krpc_MechJeb_SmartASS_AutopilotMode`.
+
+   .. macro:: KRPC_ENUMERATION_MECHJEB_SMARTASSAUTOPILOTMODE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_MECHJEB_SMARTASSAUTOPILOTMODE_OFF
@@ -328,6 +342,11 @@ SmartASS
 
    A reference frame of Smart A.S.S. See :func:`krpc_MechJeb_SmartASS_AdvancedReference`.
 
+   .. macro:: KRPC_ENUMERATION_MECHJEB_ATTITUDEREFERENCE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
 
    .. macro:: KRPC_MECHJEB_ATTITUDEREFERENCE_INERTIAL
 
@@ -389,6 +408,11 @@ SmartASS
 .. type:: krpc_MechJeb_Direction_t
 
    A direction of Smart A.S.S. See :func:`krpc_MechJeb_SmartASS_AdvancedDirection`.
+
+   .. macro:: KRPC_ENUMERATION_MECHJEB_DIRECTION
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_MECHJEB_DIRECTION_FORWARD

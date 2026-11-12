@@ -1402,6 +1402,12 @@
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Editor_t</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_Editor_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Provides access to the vehicle assembly building and space plane hangar.
 Obtained by calling <a class="reference internal" href="space-center.html#c.krpc_SpaceCenter_Editor" title="krpc_SpaceCenter_Editor"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Editor()</span></code></a>.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Editor_t.KRPC_CLASS_SPACECENTER_EDITOR">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_CLASS_SPACECENTER_EDITOR</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_Editor_t.KRPC_CLASS_SPACECENTER_EDITOR" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and class ids of the class, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_ClassTypeById()</span></code>.</p>
+</dd></dl>
+
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Editor_t.krpc_SpaceCenter_Editor_Facility">
 <a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Editor_Facility</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="space-center.html#c.krpc_SpaceCenter_EditorFacility_t" title="krpc_SpaceCenter_EditorFacility_t"><span class="n"><span class="pre">krpc_SpaceCenter_EditorFacility_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Editor_t" title="krpc_SpaceCenter_Editor_t"><span class="n"><span class="pre">krpc_SpaceCenter_Editor_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Editor_t.krpc_SpaceCenter_Editor_Facility" title="Link to this definition">#</a><br /></dt>
@@ -1569,6 +1575,13 @@ app.</p>
 <dd><p>The situation the game’s own delta-v readout shows figures for.
 See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Editor_DeltaVSituation()</span></code>.</p>
 <dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_DeltaVSituation_t.KRPC_ENUMERATION_SPACECENTER_DELTAVSITUATION">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ENUMERATION_SPACECENTER_DELTAVSITUATION</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_DeltaVSituation_t.KRPC_ENUMERATION_SPACECENTER_DELTAVSITUATION" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and enumeration ids of the enumeration, for
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_EnumerationTypeById()</span></code> and <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_ConstantEnumById()</span></code>.</p>
+</dd></dl>
+
+<dl class="c macro">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_DeltaVSituation_t.KRPC_SPACECENTER_DELTAVSITUATION_SEALEVEL">
 <span class="sig-name descname"><span class="n"><span class="pre">KRPC_SPACECENTER_DELTAVSITUATION_SEALEVEL</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_DeltaVSituation_t.KRPC_SPACECENTER_DELTAVSITUATION_SEALEVEL" title="Link to this definition">#</a><br /></dt>
 <dd><p>At sea level on the selected body.</p>
@@ -1593,6 +1606,12 @@ See <code class="xref c c-func docutils literal notranslate"><span class="pre">k
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_t</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_EditorVessel_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>The vessel that is being constructed in the editor.
 Obtained by calling <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Editor_Vessel()</span></code>.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_EditorVessel_t.KRPC_CLASS_SPACECENTER_EDITORVESSEL">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_CLASS_SPACECENTER_EDITORVESSEL</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_EditorVessel_t.KRPC_CLASS_SPACECENTER_EDITORVESSEL" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and class ids of the class, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_ClassTypeById()</span></code>.</p>
+</dd></dl>
+
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_Name">
 <a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_Name</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_EditorVessel_t" title="krpc_SpaceCenter_EditorVessel_t"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_Name" title="Link to this definition">#</a><br /></dt>
@@ -2039,6 +2058,12 @@ Obtained by calling <code class="xref c c-func docutils literal notranslate"><sp
 this object. The vessel is read from the editor on each call, so the object follows
 every edit.</p>
 </div>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_SimulatedFlight_t.KRPC_CLASS_SPACECENTER_SIMULATEDFLIGHT">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_CLASS_SPACECENTER_SIMULATEDFLIGHT</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_SimulatedFlight_t.KRPC_CLASS_SPACECENTER_SIMULATEDFLIGHT" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and class ids of the class, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_ClassTypeById()</span></code>.</p>
+</dd></dl>
+
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_SimulatedFlight_t.krpc_SpaceCenter_SimulatedFlight_SurfaceReferenceFrame">
 <a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_SimulatedFlight_SurfaceReferenceFrame</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_SimulatedFlight_t" title="krpc_SpaceCenter_SimulatedFlight_t"><span class="n"><span class="pre">krpc_SpaceCenter_SimulatedFlight_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_SimulatedFlight_t.krpc_SpaceCenter_SimulatedFlight_SurfaceReferenceFrame" title="Link to this definition">#</a><br /></dt>

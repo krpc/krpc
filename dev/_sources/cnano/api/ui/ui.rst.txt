@@ -79,6 +79,11 @@ Provides functionality for drawing and interacting with in-game user interface e
 
    Message position.
 
+   .. macro:: KRPC_ENUMERATION_UI_MESSAGEPOSITION
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
 
    .. macro:: KRPC_UI_MESSAGEPOSITION_TOPLEFT
 

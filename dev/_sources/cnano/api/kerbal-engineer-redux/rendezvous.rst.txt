@@ -13,31 +13,69 @@ Rendezvous
    .. note::
 
       When the vessel and target orbit different bodies, these are for the orbits of the bodies
-      that share a parent.
+      that share a parent.   .. macro:: KRPC_STRUCT_KERBALENGINEERREDUX_RENDEZVOUS
+
+      The service and structure ids of the structure, for :func:`krpc_KRPC_Type_StructTypeById`.
+
+
    .. member:: double phase_angle
 
       The angle from the vessel to the target, around the vessel's orbit, in radians.
+
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_RENDEZVOUS_PHASEANGLE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: double intercept_angle
 
       The phase angle at which to start a Hohmann transfer to the target, in radians.
 
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_RENDEZVOUS_INTERCEPTANGLE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: double time_to_intercept_angle
 
       The time until the phase angle equals the intercept angle, in seconds.
+
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_RENDEZVOUS_TIMETOINTERCEPTANGLE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: double angle_to_ascending_node
 
       The angle to the ascending node with the target's orbit, in radians.
 
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_RENDEZVOUS_ANGLETOASCENDINGNODE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: double angle_to_descending_node
 
       The angle to the descending node with the target's orbit, in radians.
+
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_RENDEZVOUS_ANGLETODESCENDINGNODE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: double time_to_ascending_node
 
       The time until the ascending node with the target's orbit, in seconds.
 
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_RENDEZVOUS_TIMETOASCENDINGNODE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: double time_to_descending_node
 
       The time until the descending node with the target's orbit, in seconds.
+
+      .. macro:: KRPC_FIELD_KERBALENGINEERREDUX_RENDEZVOUS_TIMETODESCENDINGNODE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.

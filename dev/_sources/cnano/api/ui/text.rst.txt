@@ -11,6 +11,10 @@ Text
    A text label.
    Added to a :type:`krpc_UI_Canvas_t` or a :type:`krpc_UI_Panel_t`.
 
+   .. macro:: KRPC_CLASS_UI_TEXT
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_UI_Text_RectTransform(krpc_connection_t connection, krpc_UI_RectTransform_t * returnValue, krpc_UI_Text_t instance)
 
       The rect transform for the UI object.
@@ -124,6 +128,11 @@ Text
 
    Font style.
 
+   .. macro:: KRPC_ENUMERATION_UI_FONTSTYLE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
 
    .. macro:: KRPC_UI_FONTSTYLE_NORMAL
 
@@ -150,6 +159,11 @@ Text
 
    Text alignment.
 
+   .. macro:: KRPC_ENUMERATION_UI_TEXTALIGNMENT
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
 
    .. macro:: KRPC_UI_TEXTALIGNMENT_LEFT
 
@@ -170,6 +184,11 @@ Text
 .. type:: krpc_UI_TextAnchor_t
 
    Text alignment.
+
+   .. macro:: KRPC_ENUMERATION_UI_TEXTANCHOR
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_UI_TEXTANCHOR_LOWERCENTER

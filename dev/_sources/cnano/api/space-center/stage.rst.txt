@@ -22,6 +22,10 @@ Stage
       apply. Thrust is reported in newtons and masses in kilograms (stock values
       are converted from kilonewtons and tonnes).
 
+   .. macro:: KRPC_CLASS_SPACECENTER_STAGE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_SpaceCenter_Stage_Number(krpc_connection_t connection, int32_t * returnValue, krpc_SpaceCenter_Stage_t instance)
 
       The stage number (activation stage for burn stages, decouple stage otherwise).

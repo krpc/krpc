@@ -10,6 +10,10 @@ StagingController
 
    The staging controller, which stages when a stage runs out of fuel.
 
+   .. macro:: KRPC_CLASS_MECHJEB_STAGINGCONTROLLER
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_MechJeb_StagingController_Enabled(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_StagingController_t instance)
    .. function:: krpc_error_t krpc_MechJeb_StagingController_set_Enabled(krpc_connection_t connection, krpc_MechJeb_StagingController_t instance, bool value)
 

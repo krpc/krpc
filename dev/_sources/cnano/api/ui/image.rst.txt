@@ -11,6 +11,10 @@ Image
    A picture, or a plain colored rectangle.
    Added to a :type:`krpc_UI_Canvas_t` or a :type:`krpc_UI_Panel_t`.
 
+   .. macro:: KRPC_CLASS_UI_IMAGE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_UI_Image_RectTransform(krpc_connection_t connection, krpc_UI_RectTransform_t * returnValue, krpc_UI_Image_t instance)
 
       The rect transform for the UI object.

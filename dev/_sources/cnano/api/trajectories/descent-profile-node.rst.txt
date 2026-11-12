@@ -10,6 +10,10 @@ DescentProfileNode
 
    A node of the descent profile.
 
+   .. macro:: KRPC_CLASS_TRAJECTORIES_DESCENTPROFILENODE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_Trajectories_DescentProfileNode_Angle(krpc_connection_t connection, double * returnValue, krpc_Trajectories_DescentProfileNode_t instance)
    .. function:: krpc_error_t krpc_Trajectories_DescentProfileNode_set_Angle(krpc_connection_t connection, krpc_Trajectories_DescentProfileNode_t instance, double value)
 
@@ -29,6 +33,11 @@ DescentProfileNode
 .. type:: krpc_Trajectories_DescentProfileMode_t
 
    The reference for the angle of a descent profile node.
+
+   .. macro:: KRPC_ENUMERATION_TRAJECTORIES_DESCENTPROFILEMODE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_TRAJECTORIES_DESCENTPROFILEMODE_ANGLEOFATTACK

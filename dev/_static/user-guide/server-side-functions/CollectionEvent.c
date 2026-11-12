@@ -18,7 +18,8 @@ int main() {
 
   // A function taking an engine, returning true if it is out of fuel
   krpc_KRPC_Type_t engine_type;
-  krpc_KRPC_Type_ClassType(conn, &engine_type, "SpaceCenter", "Engine");
+  krpc_KRPC_Type_ClassTypeById(conn, &engine_type,
+                               KRPC_CLASS_SPACECENTER_ENGINE);
   krpc_KRPC_Expression_t engine;
   krpc_KRPC_Expression_Parameter(conn, &engine, "engine", engine_type);
 
