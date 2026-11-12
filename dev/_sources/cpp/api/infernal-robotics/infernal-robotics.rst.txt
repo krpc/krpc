@@ -7,11 +7,11 @@ InfernalRobotics
 
 
 .. namespace:: krpc::services
-.. class:: InfernalRobotics : public krpc::Service
+.. class:: InfernalRobotics : public krpc::RemoteService
 
    Provides functionality to interact with Infernal Robotics Next.
 
-   .. function:: InfernalRobotics(krpc::Client& client)
+   .. function:: InfernalRobotics(krpc::Connection& connection)
 
       Construct an instance of this service.
 

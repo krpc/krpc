@@ -622,11 +622,12 @@ thread</strong>.</p>
 <tbody>
 <tr class="row-even"><td><p>Entry point</p></td>
 <td><p>The object the program makes calls through</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">Client</span></code> in C++ and Python, <code class="docutils literal notranslate"><span class="pre">Connection</span></code> in C# and Java</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Connection</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><p>Framing</p></td>
-<td><p>Splits the bytes on the socket into messages, each prefixed with its length</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">Connection</span></code> in C++ and Python, <code class="docutils literal notranslate"><span class="pre">MessageReader</span></code> in C# and Java</p></td>
+<tr class="row-odd"><td><p>Transport</p></td>
+<td><p>Owns the socket, and sends and receives the messages on it, each prefixed with its length</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Transport</span></code>, with <code class="docutils literal notranslate"><span class="pre">TCPIPTransport</span></code> and <code class="docutils literal notranslate"><span class="pre">LocalTransport</span></code> deriving from it to open the
+socket</p></td>
 </tr>
 <tr class="row-even"><td><p>Session</p></td>
 <td><p>Matches responses to calls, chooses the thread that reads, and owns the threads and the close</p></td>
@@ -859,6 +860,13 @@ at every node. The <code class="docutils literal notranslate"><span class="pre">
 or a Java <code class="docutils literal notranslate"><span class="pre">addStream</span></code> takes them as it takes a service’s methods. A C++ <code class="docutils literal notranslate"><span class="pre">Bound</span></code> is a shorthand
 for the calls that build large expression trees. It has no <code class="docutils literal notranslate"><span class="pre">_stream</span></code> or <code class="docutils literal notranslate"><span class="pre">_call</span></code> forms, which
 stay on the static method.</p>
+</section>
+<section id="names">
+<h2>Names<a class="headerlink" href="#names" title="Link to this heading">#</a></h2>
+<p>The base class of each kind of generated type is named <code class="docutils literal notranslate"><span class="pre">Remote&lt;Kind&gt;</span></code>: <code class="docutils literal notranslate"><span class="pre">RemoteObject</span></code>,
+<code class="docutils literal notranslate"><span class="pre">RemoteEnum</span></code>, <code class="docutils literal notranslate"><span class="pre">RemoteFlags</span></code>, <code class="docutils literal notranslate"><span class="pre">RemoteStruct</span></code> and <code class="docutils literal notranslate"><span class="pre">RemoteService</span></code>. A client keeps its
+language’s own form where it has one, such as an enum and a struct in C++ and C#, and a
+<code class="docutils literal notranslate"><span class="pre">NamedTuple</span></code> for a Python structure.</p>
 <div class="toctree-wrapper compound">
 </div>
 </section>
@@ -976,6 +984,7 @@ program still warns.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#single-threaded-clients">Single-Threaded Clients</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stream-and-call-forms">Stream and Call Forms</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#static-methods">Static Methods</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#names">Names</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deprecation">Deprecation</a></li>
 </ul>
   </nav></div>

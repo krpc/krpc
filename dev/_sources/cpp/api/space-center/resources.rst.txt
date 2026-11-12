@@ -65,7 +65,7 @@ Resources
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. function:: static float density(Client& connection, std::string name)
+   .. function:: static float density(krpc::Connection& connection, std::string name)
 
       Returns the density of a resource, in :math:`\mathrm{kg/l}`.
 
@@ -75,7 +75,7 @@ Resources
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. function:: static ResourceFlowMode flow_mode(Client& connection, std::string name)
+   .. function:: static ResourceFlowMode flow_mode(krpc::Connection& connection, std::string name)
 
       Returns the flow mode of a resource.
 
@@ -154,7 +154,7 @@ Resources
 
    Transfer resources between parts.
 
-   .. function:: static ResourceTransfer start(Client& connection, Part from_part, Part to_part, std::string resource, float max_amount)
+   .. function:: static ResourceTransfer start(krpc::Connection& connection, Part from_part, Part to_part, std::string resource, float max_amount)
 
       Start transferring a resource transfer between a pair of parts. The transfer will move
       at most *max_amount* units of the resource, depending on how much of

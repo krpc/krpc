@@ -7,7 +7,7 @@ Drawing
 
 
 .. namespace:: krpc::services
-.. class:: Drawing : public krpc::Service
+.. class:: Drawing : public krpc::RemoteService
 
    Provides functionality for drawing objects in the flight scene, the map view, the editor
    and the tracking station.
@@ -17,7 +17,7 @@ Drawing
       For drawing and interacting with the user interface, see the UI service.
       Objects drawn by a client are removed when that client disconnects.
 
-   .. function:: Drawing(krpc::Client& client)
+   .. function:: Drawing(krpc::Connection& connection)
 
       Construct an instance of this service.
 

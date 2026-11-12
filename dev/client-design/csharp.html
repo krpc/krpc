@@ -563,7 +563,7 @@ and stay valid objects after it closes:</p>
 </div>
 <section id="references">
 <h3>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h3>
-<p>The connection holds its <code class="docutils literal notranslate"><span class="pre">Session</span></code> and <code class="docutils literal notranslate"><span class="pre">StreamManager</span></code>.</p>
+<p>The connection holds its <code class="docutils literal notranslate"><span class="pre">Session</span></code> and <code class="docutils literal notranslate"><span class="pre">StreamManager</span></code>. The <code class="docutils literal notranslate"><span class="pre">Session</span></code> holds the <code class="docutils literal notranslate"><span class="pre">Transport</span></code>.</p>
 <p>The objects the program keeps also hold the connection. A <code class="docutils literal notranslate"><span class="pre">Service</span></code> or <code class="docutils literal notranslate"><span class="pre">RemoteObject</span></code> holds the
 <code class="docutils literal notranslate"><span class="pre">Connection</span></code>. A <code class="docutils literal notranslate"><span class="pre">Stream</span></code> or <code class="docutils literal notranslate"><span class="pre">Event</span></code> holds its <code class="docutils literal notranslate"><span class="pre">StreamImpl</span></code>, which holds the <code class="docutils literal notranslate"><span class="pre">Connection</span></code>
 and its callbacks.</p>

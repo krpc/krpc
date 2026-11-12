@@ -7,7 +7,7 @@ MechJeb
 
 
 .. namespace:: krpc::services
-.. class:: MechJeb : public krpc::Service
+.. class:: MechJeb : public krpc::RemoteService
 
    This service provides functionality to interact with MechJeb 2.
 
@@ -16,7 +16,7 @@ MechJeb
       The objects act on the MechJeb of the active vessel, and stay valid after the active
       vessel changes.
 
-   .. function:: MechJeb(krpc::Client& client)
+   .. function:: MechJeb(krpc::Connection& connection)
 
       Construct an instance of this service.
 

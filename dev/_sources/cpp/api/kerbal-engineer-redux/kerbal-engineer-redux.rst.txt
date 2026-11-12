@@ -7,7 +7,7 @@ KerbalEngineerRedux
 
 
 .. namespace:: krpc::services
-.. class:: KerbalEngineerRedux : public krpc::Service
+.. class:: KerbalEngineerRedux : public krpc::RemoteService
 
    This service provides the flight readouts of
    `Kerbal Engineer Redux <https://forum.kerbalspaceprogram.com/topic/17833-kerbal-engineer-redux/>`_.
@@ -19,7 +19,7 @@ KerbalEngineerRedux
       stage or a change in its parts. Other changes, such as shutting down an engine, show in
       the next result.
 
-   .. function:: KerbalEngineerRedux(krpc::Client& client)
+   .. function:: KerbalEngineerRedux(krpc::Connection& connection)
 
       Construct an instance of this service.
 

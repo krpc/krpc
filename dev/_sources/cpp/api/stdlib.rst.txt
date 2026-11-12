@@ -7,7 +7,7 @@ Standard Library
 
 
 .. namespace:: krpc::services
-.. class:: StdLib : public krpc::Service
+.. class:: StdLib : public krpc::RemoteService
 
    A standard library of mathematics and printing for server side functions, and of the
    colors other services use.
@@ -18,7 +18,7 @@ Standard Library
       in the order x, y, z, w the SpaceCenter service uses. Angles are in radians unless
       stated otherwise.
 
-   .. function:: StdLib(krpc::Client& client)
+   .. function:: StdLib(krpc::Connection& connection)
 
       Construct an instance of this service.
 

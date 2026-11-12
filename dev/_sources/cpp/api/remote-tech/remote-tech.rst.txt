@@ -7,11 +7,11 @@ RemoteTech
 
 
 .. namespace:: krpc::services
-.. class:: RemoteTech : public krpc::Service
+.. class:: RemoteTech : public krpc::RemoteService
 
    Provides functionality to interact with RemoteTech.
 
-   .. function:: RemoteTech(krpc::Client& client)
+   .. function:: RemoteTech(krpc::Connection& connection)
 
       Construct an instance of this service.
 

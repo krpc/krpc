@@ -7,11 +7,11 @@ KerbalAlarmClock
 
 
 .. namespace:: krpc::services
-.. class:: KerbalAlarmClock : public krpc::Service
+.. class:: KerbalAlarmClock : public krpc::RemoteService
 
    Provides functionality to interact with Kerbal Alarm Clock.
 
-   .. function:: KerbalAlarmClock(krpc::Client& client)
+   .. function:: KerbalAlarmClock(krpc::Connection& connection)
 
       Construct an instance of this service.
 

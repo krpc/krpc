@@ -8,7 +8,7 @@
 #include <thread>
 
 int main() {
-  krpc::Client conn = krpc::connect("Launch into orbit");
+  krpc::Connection conn = krpc::connect("Launch into orbit");
   krpc::services::SpaceCenter space_center(conn);
   auto vessel = space_center.active_vessel().value();
 

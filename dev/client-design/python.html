@@ -551,7 +551,7 @@
 the <a class="reference internal" href="../python.html"><span class="doc">Python guide</span></a>. Paths are relative to <code class="docutils literal notranslate"><span class="pre">client/python/</span></code>.</p>
 <section id="ownership">
 <h2>Ownership<a class="headerlink" href="#ownership" title="Link to this heading">#</a></h2>
-<p>Services, objects and streams hold the <code class="docutils literal notranslate"><span class="pre">Client</span></code> strongly. Letting go of them closes nothing:</p>
+<p>Services, objects and streams hold the <code class="docutils literal notranslate"><span class="pre">Connection</span></code> strongly. Letting go of them closes nothing:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">active_vessel</span><span class="p">():</span>
     <span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
@@ -560,13 +560,13 @@ the <a class="reference internal" href="../python.html"><span class="doc">Python
 </div>
 <section id="references">
 <h3>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h3>
-<p>The client holds its <code class="docutils literal notranslate"><span class="pre">Connection</span></code>, <code class="docutils literal notranslate"><span class="pre">Session</span></code>, <code class="docutils literal notranslate"><span class="pre">StreamManager</span></code>, <code class="docutils literal notranslate"><span class="pre">Types</span></code> registry and
+<p>The client holds its <code class="docutils literal notranslate"><span class="pre">Transport</span></code>, <code class="docutils literal notranslate"><span class="pre">Session</span></code>, <code class="docutils literal notranslate"><span class="pre">StreamManager</span></code>, <code class="docutils literal notranslate"><span class="pre">Types</span></code> registry and
 services.</p>
 <p>The objects the program keeps also hold the client. A <code class="docutils literal notranslate"><span class="pre">Service</span></code>, <code class="docutils literal notranslate"><span class="pre">Object</span></code> or <code class="docutils literal notranslate"><span class="pre">StreamImpl</span></code>
-holds the <code class="docutils literal notranslate"><span class="pre">Client</span></code>, and a <code class="docutils literal notranslate"><span class="pre">Stream</span></code> holds its <code class="docutils literal notranslate"><span class="pre">StreamImpl</span></code>.</p>
-<p>The threads keep the client alive. The reader and dispatcher threads hold the <code class="docutils literal notranslate"><span class="pre">Session</span></code>, which
-holds the <code class="docutils literal notranslate"><span class="pre">StreamManager</span></code>, which holds the <code class="docutils literal notranslate"><span class="pre">Client</span></code>. An unclosed client is therefore never
-collected. The threads end on a close or a connection failure.</p>
+holds the <code class="docutils literal notranslate"><span class="pre">Connection</span></code>, and a <code class="docutils literal notranslate"><span class="pre">Stream</span></code> holds its <code class="docutils literal notranslate"><span class="pre">StreamImpl</span></code>.</p>
+<p>The threads keep the connection alive. The reader and dispatcher threads hold the <code class="docutils literal notranslate"><span class="pre">Session</span></code>, which
+holds the <code class="docutils literal notranslate"><span class="pre">StreamManager</span></code>, which holds the <code class="docutils literal notranslate"><span class="pre">Connection</span></code>. An unclosed connection is therefore
+never collected. The threads end on a close or a connection failure.</p>
 <p>The stream manager holds each open <code class="docutils literal notranslate"><span class="pre">StreamImpl</span></code> strongly, so a stream outlives its handles and its
 callbacks keep running. It holds every registered <code class="docutils literal notranslate"><span class="pre">StreamImpl</span></code> weakly, which keeps nothing alive.
 Each <code class="docutils literal notranslate"><span class="pre">StreamImpl</span></code> also holds the <code class="docutils literal notranslate"><span class="pre">StreamManager</span></code>.</p>
@@ -581,8 +581,8 @@ socket fails, or at process exit. Process exit sends no <code class="docutils li
 closes the socket.</p></li>
 <li><p>After <code class="docutils literal notranslate"><span class="pre">close()</span></code>, the client and its objects stay valid. Calls raise <code class="docutils literal notranslate"><span class="pre">ConnectionError</span></code>, and
 streams and events end. A second <code class="docutils literal notranslate"><span class="pre">close()</span></code> has no further effect.</p></li>
-<li><p>Lifetime is explicit. <code class="docutils literal notranslate"><span class="pre">Client</span></code>, objects, <code class="docutils literal notranslate"><span class="pre">Stream</span></code> and <code class="docutils literal notranslate"><span class="pre">Event</span></code> have no finalizer. An object
-is an id and a client, and sends no release to the server.</p></li>
+<li><p>Lifetime is explicit. <code class="docutils literal notranslate"><span class="pre">Connection</span></code>, objects, <code class="docutils literal notranslate"><span class="pre">Stream</span></code> and <code class="docutils literal notranslate"><span class="pre">Event</span></code> have no finalizer. An
+object is an id and a client, and sends no release to the server.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">Stream</span></code> and <code class="docutils literal notranslate"><span class="pre">Event</span></code> are handles to one <code class="docutils literal notranslate"><span class="pre">StreamImpl</span></code>, which runs until a <code class="docutils literal notranslate"><span class="pre">remove()</span></code>
 through any handle, a server ending or the close. Both are context managers, whose exit calls
 <code class="docutils literal notranslate"><span class="pre">remove()</span></code>. An exception from <code class="docutils literal notranslate"><span class="pre">remove()</span></code> is dropped when the block raised one.</p></li>
@@ -627,8 +627,8 @@ import. A later registration replaces an earlier one.</p></li>
 on its names and values, a structure on its field names in order, an exception on its name and
 the builtin it derives from. These classes hold no client, so every client shares them. A
 generated class is never changed to fit a server, as every client shares it.</p></li>
-<li><p>The client type picks the module of each service it declares, from the <code class="docutils literal notranslate"><span class="pre">&lt;Service&gt;Client</span></code> bases
-in its MRO, and the first wins. Any other service takes the registered classes. A module
+<li><p>The connection type picks the module of each service it declares, from the <code class="docutils literal notranslate"><span class="pre">&lt;Service&gt;Connection</span></code>
+bases in its MRO, and the first wins. Any other service takes the registered classes. A module
 generated for a newer server then applies only to the connections typed with it.</p></li>
 <li><p>Otherwise the client builds its own class. A value of the module’s enumeration converts to the
 built one by its number, as the other clients send it, since a client and a server of different
@@ -638,18 +638,18 @@ catches a server error.</p></li>
 <li><p>A built class does not derive from its declaration, which would show members a server lacks.
 <code class="docutils literal notranslate"><span class="pre">DeclaredClass</span></code>, the metaclass of a declaration, compares the service and class names for
 <code class="docutils literal notranslate"><span class="pre">isinstance</span></code> and <code class="docutils literal notranslate"><span class="pre">issubclass</span></code>.</p></li>
-<li><p>Python has no declaration merging, so a module cannot add its service to <code class="docutils literal notranslate"><span class="pre">Client</span></code>. It declares
-<code class="docutils literal notranslate"><span class="pre">&lt;Service&gt;Client</span></code>, a subclass of <code class="docutils literal notranslate"><span class="pre">Client</span></code> with the service as an attribute. A program combines
-them, and <code class="docutils literal notranslate"><span class="pre">connect[T]</span></code> builds the client as <code class="docutils literal notranslate"><span class="pre">T</span></code>. <code class="docutils literal notranslate"><span class="pre">krpc.ksp.KSPClient</span></code> combines the core
-and KSP services.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Client</span></code> declares no service, only a <code class="docutils literal notranslate"><span class="pre">__getattr__</span></code> returning <code class="docutils literal notranslate"><span class="pre">Any</span></code> for type checkers. The
-core services, <code class="docutils literal notranslate"><span class="pre">KRPC</span></code> and <code class="docutils literal notranslate"><span class="pre">StdLib</span></code>, have client types like the others, so a module generated
-for a newer server replaces them the same way. A program with a client type that lacks a service
-then type checks, and a misspelled service is not reported.</p></li>
-<li><p>The client’s own calls to <code class="docutils literal notranslate"><span class="pre">KRPC</span></code> go through <code class="docutils literal notranslate"><span class="pre">Client._krpc</span></code>, a property typed with the shipped
-declaration.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">connect</span></code> with no client type connects with <code class="docutils literal notranslate"><span class="pre">KSPClient</span></code>, so a program written for KSP type
-checks with no client type. It imports <code class="docutils literal notranslate"><span class="pre">krpc.ksp</span></code> on the first connect, which keeps
+<li><p>Python has no declaration merging, so a module cannot add its service to <code class="docutils literal notranslate"><span class="pre">Connection</span></code>. It
+declares <code class="docutils literal notranslate"><span class="pre">&lt;Service&gt;Connection</span></code>, a subclass of <code class="docutils literal notranslate"><span class="pre">Connection</span></code> with the service as an attribute. A
+program combines them, and <code class="docutils literal notranslate"><span class="pre">connect[T]</span></code> builds the connection as <code class="docutils literal notranslate"><span class="pre">T</span></code>.
+<code class="docutils literal notranslate"><span class="pre">krpc.ksp.KSPConnection</span></code> combines the core and KSP services.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Connection</span></code> declares no service, only a <code class="docutils literal notranslate"><span class="pre">__getattr__</span></code> returning <code class="docutils literal notranslate"><span class="pre">Any</span></code> for type checkers.
+The core services, <code class="docutils literal notranslate"><span class="pre">KRPC</span></code> and <code class="docutils literal notranslate"><span class="pre">StdLib</span></code>, have connection types like the others, so a module
+generated for a newer server replaces them the same way. A program with a connection type that
+lacks a service then type checks, and a misspelled service is not reported.</p></li>
+<li><p>The client’s own calls to <code class="docutils literal notranslate"><span class="pre">KRPC</span></code> go through <code class="docutils literal notranslate"><span class="pre">Connection._krpc</span></code>, a property typed with the
+shipped declaration.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">connect</span></code> with no connection type connects with <code class="docutils literal notranslate"><span class="pre">KSPConnection</span></code>, so a program written for KSP
+type checks with no connection type. It imports <code class="docutils literal notranslate"><span class="pre">krpc.ksp</span></code> on the first connect, which keeps
 <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">krpc</span></code> free of generated modules.</p></li>
 </ul>
 </section>
@@ -680,8 +680,9 @@ would keep the values it first captured.</p>
 </section>
 <section id="transports">
 <h2>Transports<a class="headerlink" href="#transports" title="Link to this heading">#</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">Connection</span></code> is TCP/IP, and <code class="docutils literal notranslate"><span class="pre">LocalConnection</span></code> is a unix domain socket. They differ only in
-<code class="docutils literal notranslate"><span class="pre">_open</span></code>, and there are no WebSockets or serial transports. Windows CPython has no
+<p><code class="docutils literal notranslate"><span class="pre">Transport</span></code> holds the socket and the message framing. <code class="docutils literal notranslate"><span class="pre">TCPIPTransport</span></code> and
+<code class="docutils literal notranslate"><span class="pre">LocalTransport</span></code>, a unix domain socket, derive from it and differ only in <code class="docutils literal notranslate"><span class="pre">_open</span></code>. There are no
+WebSockets or serial transports. Windows CPython has no
 <code class="docutils literal notranslate"><span class="pre">socket.AF_UNIX</span></code>, so <code class="docutils literal notranslate"><span class="pre">krpc/winsock.py</span></code> opens that socket through Winsock directly.</p>
 <p><code class="docutils literal notranslate"><span class="pre">timeout</span></code> bounds a TCP/IP connect only. <code class="docutils literal notranslate"><span class="pre">handshake_timeout</span></code> covers the whole handshake response.
 <code class="docutils literal notranslate"><span class="pre">stall_timeout</span></code> runs from the last byte received, while a message is part way through arriving.</p>
@@ -696,7 +697,7 @@ would keep the values it first captured.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>Closing a connection</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">Client.close()</span></code>, or the end of a <code class="docutils literal notranslate"><span class="pre">with</span></code> block</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Connection.close()</span></code>, or the end of a <code class="docutils literal notranslate"><span class="pre">with</span></code> block</p></td>
 </tr>
 <tr class="row-odd"><td><p>Connection, stream, encoding error</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">ConnectionError</span></code>, <code class="docutils literal notranslate"><span class="pre">StreamError</span></code>, <code class="docutils literal notranslate"><span class="pre">EncodingError</span></code> in <code class="docutils literal notranslate"><span class="pre">krpc.error</span></code></p></td>
@@ -720,7 +721,7 @@ would keep the values it first captured.</p>
 <td><p>Unsupported, as only the main thread can be interrupted, by <code class="docutils literal notranslate"><span class="pre">KeyboardInterrupt</span></code></p></td>
 </tr>
 <tr class="row-even"><td><p>Flags enumeration</p></td>
-<td><p>A <code class="docutils literal notranslate"><span class="pre">DocFlag</span></code>, an <code class="docutils literal notranslate"><span class="pre">enum.Flag</span></code>. A <code class="docutils literal notranslate"><span class="pre">Flag</span></code> reads a negative number as a complement, so the decoder rejects one</p></td>
+<td><p>A <code class="docutils literal notranslate"><span class="pre">RemoteFlags</span></code>, an <code class="docutils literal notranslate"><span class="pre">enum.Flag</span></code>. A <code class="docutils literal notranslate"><span class="pre">Flag</span></code> reads a negative number as a complement, so the decoder rejects one</p></td>
 </tr>
 </tbody>
 </table>

@@ -59,7 +59,7 @@ server window in the game:
 
       .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cpp
          :language: cpp
-         :start-at: krpc::Client conn = krpc::connect("Sub-orbital flight");
+         :start-at: krpc::Connection conn = krpc::connect("Sub-orbital flight");
          :end-at: krpc::services::SpaceCenter space_center(conn);
 
    .. group-tab:: C

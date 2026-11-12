@@ -39,7 +39,7 @@ DescentProfile
 
       :Game Scenes: Flight
 
-   .. function:: static void save(Client& connection)
+   .. function:: static void save(krpc::Connection& connection)
 
       Saves the descent profile to the active vessel.
 
@@ -51,7 +51,7 @@ DescentProfile
 
          A change to a node applies without saving. Saving keeps it in the saved game.
 
-   .. function:: static void reset(Client& connection, double aoa = 180.0)
+   .. function:: static void reset(krpc::Connection& connection, double aoa = 180.0)
 
       Sets every node to an angle of attack, and saves the descent profile.
 

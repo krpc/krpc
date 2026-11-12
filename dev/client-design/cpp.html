@@ -551,8 +551,8 @@
 the <a class="reference internal" href="../cpp.html"><span class="doc">C++ guide</span></a>. Paths are relative to <code class="docutils literal notranslate"><span class="pre">client/cpp/</span></code>.</p>
 <section id="ownership">
 <h2>Ownership<a class="headerlink" href="#ownership" title="Link to this heading">#</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">krpc::Client</span></code> is a handle to one shared state. Copies, services, objects, streams and events each
-hold the client, so each keeps the connection open:</p>
+<p><code class="docutils literal notranslate"><span class="pre">krpc::Connection</span></code> is a handle to one shared state. Copies, services, objects, streams and events
+each hold the connection, so each keeps it open:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">SpaceCenter</span><span class="o">::</span><span class="n">Vessel</span><span class="w"> </span><span class="nf">active_vessel</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="o">::</span><span class="n">connect</span><span class="p">();</span>
 <span class="w">  </span><span class="n">SpaceCenter</span><span class="w"> </span><span class="n">sc</span><span class="p">(</span><span class="n">conn</span><span class="p">);</span>
@@ -563,13 +563,13 @@ hold the client, so each keeps the connection open:</p>
 </div>
 <section id="references">
 <h3>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h3>
-<p>The client state holds the <code class="docutils literal notranslate"><span class="pre">StreamManager</span></code>, which holds the <code class="docutils literal notranslate"><span class="pre">Session</span></code>.</p>
-<p>The program keeps the connection open through what it holds. A <code class="docutils literal notranslate"><span class="pre">Client</span></code>, <code class="docutils literal notranslate"><span class="pre">Service</span></code> or <code class="docutils literal notranslate"><span class="pre">Object</span></code>
-holds the <code class="docutils literal notranslate"><span class="pre">Client::State</span></code>. A <code class="docutils literal notranslate"><span class="pre">Stream</span></code> or <code class="docutils literal notranslate"><span class="pre">Event</span></code> holds its <code class="docutils literal notranslate"><span class="pre">StreamImpl</span></code>, which holds the
-<code class="docutils literal notranslate"><span class="pre">Client::State</span></code>.</p>
+<p>The connection state holds the <code class="docutils literal notranslate"><span class="pre">StreamManager</span></code>, which holds the <code class="docutils literal notranslate"><span class="pre">Session</span></code>.</p>
+<p>The program keeps the connection open through what it holds. A <code class="docutils literal notranslate"><span class="pre">Connection</span></code>, <code class="docutils literal notranslate"><span class="pre">RemoteService</span></code>
+or <code class="docutils literal notranslate"><span class="pre">RemoteObject</span></code> holds the <code class="docutils literal notranslate"><span class="pre">Connection::State</span></code>. A <code class="docutils literal notranslate"><span class="pre">Stream</span></code> or <code class="docutils literal notranslate"><span class="pre">Event</span></code> holds its
+<code class="docutils literal notranslate"><span class="pre">StreamImpl</span></code>, which holds the <code class="docutils literal notranslate"><span class="pre">Connection::State</span></code>.</p>
 <p>These references are strong. With a non-owning pointer, a returned object would dangle when its
-client is destroyed, moved or reallocated. A weak handle would need a non-owning <code class="docutils literal notranslate"><span class="pre">Client</span></code> for each
-call, which can dangle or be copied out by a caller.</p>
+connection is destroyed, moved or reallocated. A weak handle would need a non-owning <code class="docutils literal notranslate"><span class="pre">Connection</span></code>
+for each call, which can dangle or be copied out by a caller.</p>
 <p>Reader and dispatcher work holds a <code class="docutils literal notranslate"><span class="pre">StreamImpl</span></code>, so the reader never runs the last release. Work
 left in the session is released by the close.</p>
 <p>The handles of a stream share one pointer to its <code class="docutils literal notranslate"><span class="pre">StreamImpl</span></code>, apart from the pointers this work
@@ -591,15 +591,15 @@ thread has run the queue down.</p></li>
 streams and events end. A second <code class="docutils literal notranslate"><span class="pre">close()</span></code> does nothing.</p></li>
 </ul>
 </section>
-<section id="client-handles">
-<h3>Client Handles<a class="headerlink" href="#client-handles" title="Link to this heading">#</a></h3>
+<section id="connection-handles">
+<h3>Connection Handles<a class="headerlink" href="#connection-handles" title="Link to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Moves are the defaults. A moved-from client is empty, and its holders are unaffected.</p></li>
-<li><p>An empty client is not connected, and its calls throw <code class="docutils literal notranslate"><span class="pre">ConnectionError</span></code>. A default-constructed
-object holds an empty client.</p></li>
-<li><p>Service and object constructors take <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">Client&amp;</span></code>, as they copy the client. Stream and event
-constructors and static methods take <code class="docutils literal notranslate"><span class="pre">Client&amp;</span></code>, as they call through it. Decoders take
-<code class="docutils literal notranslate"><span class="pre">Client*</span></code>, where null means no client.</p></li>
+<li><p>Moves are the defaults. A moved-from connection is empty, and its holders are unaffected.</p></li>
+<li><p>An empty connection is not connected, and its calls throw <code class="docutils literal notranslate"><span class="pre">ConnectionError</span></code>. A
+default-constructed object holds an empty connection.</p></li>
+<li><p>Service and object constructors take <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">Connection&amp;</span></code>, as they copy the connection. Stream
+and event constructors and static methods take <code class="docutils literal notranslate"><span class="pre">Connection&amp;</span></code>, as they call through it. Decoders
+take <code class="docutils literal notranslate"><span class="pre">Connection*</span></code>, where null means no connection.</p></li>
 </ul>
 </section>
 <section id="callback-cycles">
@@ -655,7 +655,7 @@ waiting on it, once its mutex is free.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>Closing a connection</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">Client::close()</span></code>, or the last release</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Connection::close()</span></code>, or the last release</p></td>
 </tr>
 <tr class="row-odd"><td><p>Connection error</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">krpc::ConnectionError</span></code></p></td>
@@ -740,7 +740,7 @@ declares it. <code class="docutils literal notranslate"><span class="pre">~</spa
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ownership">Ownership</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lifetime">Lifetime</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#client-handles">Client Handles</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#connection-handles">Connection Handles</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#callback-cycles">Callback Cycles</a></li>
 </ul>
 </li>

@@ -109,7 +109,7 @@ For Python, run the following:
 
 ``krpc-clientgen --reference-dir=/path/to/ksp/KSP_Data/Managed -o launch_control.py python LaunchControl LaunchControl.dll``
 
-Import ``LaunchControlClient`` from `launch_control.py`, and connect with it as in
+Import ``LaunchControlConnection`` from `launch_control.py`, and connect with it as in
 :ref:`python-other-mods`. If the service uses types from a service that does not ship with the
 client, pass ``--include`` with the module of that service, e.g. ``--include=Other=other_mod.other``.
 

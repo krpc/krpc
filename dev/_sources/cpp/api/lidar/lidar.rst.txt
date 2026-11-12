@@ -7,13 +7,13 @@ LIDAR
 
 
 .. namespace:: krpc::services
-.. class:: LIDAR : public krpc::Service
+.. class:: LIDAR : public krpc::RemoteService
 
    .. warning:: Deprecated. Use :func:`SpaceCenter::raycast_distance` instead.
 
    Provides functionality to interact with the LiDAR mod.
 
-   .. function:: LIDAR(krpc::Client& client)
+   .. function:: LIDAR(krpc::Connection& connection)
 
       Construct an instance of this service.
 

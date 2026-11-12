@@ -8,8 +8,8 @@ the :doc:`C++ guide </cpp>`. Paths are relative to ``client/cpp/``.
 Ownership
 ---------
 
-``krpc::Client`` is a handle to one shared state. Copies, services, objects, streams and events each
-hold the client, so each keeps the connection open:
+``krpc::Connection`` is a handle to one shared state. Copies, services, objects, streams and events
+each hold the connection, so each keeps it open:
 
 .. code-block:: cpp
 
@@ -23,15 +23,15 @@ hold the client, so each keeps the connection open:
 References
 ^^^^^^^^^^
 
-The client state holds the ``StreamManager``, which holds the ``Session``.
+The connection state holds the ``StreamManager``, which holds the ``Session``.
 
-The program keeps the connection open through what it holds. A ``Client``, ``Service`` or ``Object``
-holds the ``Client::State``. A ``Stream`` or ``Event`` holds its ``StreamImpl``, which holds the
-``Client::State``.
+The program keeps the connection open through what it holds. A ``Connection``, ``RemoteService``
+or ``RemoteObject`` holds the ``Connection::State``. A ``Stream`` or ``Event`` holds its
+``StreamImpl``, which holds the ``Connection::State``.
 
 These references are strong. With a non-owning pointer, a returned object would dangle when its
-client is destroyed, moved or reallocated. A weak handle would need a non-owning ``Client`` for each
-call, which can dangle or be copied out by a caller.
+connection is destroyed, moved or reallocated. A weak handle would need a non-owning ``Connection``
+for each call, which can dangle or be copied out by a caller.
 
 Reader and dispatcher work holds a ``StreamImpl``, so the reader never runs the last release. Work
 left in the session is released by the close.
@@ -55,15 +55,15 @@ Lifetime
 * After ``close()``, the state stays valid. Calls through any holder throw ``ConnectionError``, and
   streams and events end. A second ``close()`` does nothing.
 
-Client Handles
-^^^^^^^^^^^^^^
+Connection Handles
+^^^^^^^^^^^^^^^^^^
 
-* Moves are the defaults. A moved-from client is empty, and its holders are unaffected.
-* An empty client is not connected, and its calls throw ``ConnectionError``. A default-constructed
-  object holds an empty client.
-* Service and object constructors take ``const Client&``, as they copy the client. Stream and event
-  constructors and static methods take ``Client&``, as they call through it. Decoders take
-  ``Client*``, where null means no client.
+* Moves are the defaults. A moved-from connection is empty, and its holders are unaffected.
+* An empty connection is not connected, and its calls throw ``ConnectionError``. A
+  default-constructed object holds an empty connection.
+* Service and object constructors take ``const Connection&``, as they copy the connection. Stream
+  and event constructors and static methods take ``Connection&``, as they call through it. Decoders
+  take ``Connection*``, where null means no connection.
 
 Callback Cycles
 ^^^^^^^^^^^^^^^
@@ -113,7 +113,7 @@ Mapping the Spec to C++
    * - Spec
      - C++
    * - Closing a connection
-     - ``Client::close()``, or the last release
+     - ``Connection::close()``, or the last release
    * - Connection error
      - ``krpc::ConnectionError``
    * - Stream error

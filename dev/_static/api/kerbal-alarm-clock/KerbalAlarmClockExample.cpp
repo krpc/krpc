@@ -6,7 +6,7 @@
 using KerbalAlarmClock = krpc::services::KerbalAlarmClock;
 
 int main() {
-  krpc::Client conn = krpc::connect("Kerbal Alarm Clock Example");
+  krpc::Connection conn = krpc::connect("Kerbal Alarm Clock Example");
   krpc::services::SpaceCenter sc(conn);
   KerbalAlarmClock kac(conn);
 

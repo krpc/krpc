@@ -7,11 +7,11 @@ KRPC
 
 
 .. namespace:: krpc::services
-.. class:: KRPC : public krpc::Service
+.. class:: KRPC : public krpc::RemoteService
 
    Main kRPC service, used by clients to interact with basic server functionality.
 
-   .. function:: KRPC(krpc::Client& client)
+   .. function:: KRPC(krpc::Connection& connection)
 
       Construct an instance of this service.
 

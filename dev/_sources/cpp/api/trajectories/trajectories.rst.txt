@@ -7,7 +7,7 @@ Trajectories
 
 
 .. namespace:: krpc::services
-.. class:: Trajectories : public krpc::Service
+.. class:: Trajectories : public krpc::RemoteService
 
    Provides functionality to interact with Trajectories.
 
@@ -15,7 +15,7 @@ Trajectories
 
       Trajectories predicts the trajectory of the active vessel only.
 
-   .. function:: Trajectories(krpc::Client& client)
+   .. function:: Trajectories(krpc::Connection& connection)
 
       Construct an instance of this service.
 

@@ -75,10 +75,11 @@ These clients divide their work into the same parts, with a class for each:
      - Class
    * - Entry point
      - The object the program makes calls through
-     - ``Client`` in C++ and Python, ``Connection`` in C# and Java
-   * - Framing
-     - Splits the bytes on the socket into messages, each prefixed with its length
-     - ``Connection`` in C++ and Python, ``MessageReader`` in C# and Java
+     - ``Connection``
+   * - Transport
+     - Owns the socket, and sends and receives the messages on it, each prefixed with its length
+     - ``Transport``, with ``TCPIPTransport`` and ``LocalTransport`` deriving from it to open the
+       socket
    * - Session
      - Matches responses to calls, chooses the thread that reads, and owns the threads and the close
      - ``Session``
@@ -291,6 +292,14 @@ at every node. The ``Bound`` methods carry the RPC attribute of the static metho
 or a Java ``addStream`` takes them as it takes a service's methods. A C++ ``Bound`` is a shorthand
 for the calls that build large expression trees. It has no ``_stream`` or ``_call`` forms, which
 stay on the static method.
+
+Names
+-----
+
+The base class of each kind of generated type is named ``Remote<Kind>``: ``RemoteObject``,
+``RemoteEnum``, ``RemoteFlags``, ``RemoteStruct`` and ``RemoteService``. A client keeps its
+language's own form where it has one, such as an enum and a struct in C++ and C#, and a
+``NamedTuple`` for a Python structure.
 
 .. toctree::
    :hidden:

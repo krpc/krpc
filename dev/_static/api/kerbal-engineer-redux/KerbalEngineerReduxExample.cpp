@@ -5,7 +5,7 @@
 #include <krpc/services/space_center.hpp>
 
 int main() {
-  krpc::Client conn = krpc::connect("Kerbal Engineer Redux Example");
+  krpc::Connection conn = krpc::connect("Kerbal Engineer Redux Example");
   krpc::services::SpaceCenter sc(conn);
   krpc::services::KerbalEngineerRedux ker(conn);
   auto vessel = sc.active_vessel().value();

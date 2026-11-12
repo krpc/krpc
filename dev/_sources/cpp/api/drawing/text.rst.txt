@@ -66,7 +66,7 @@ Text
 
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
-   .. function:: static std::vector<std::string> available_fonts(Client& connection)
+   .. function:: static std::vector<std::string> available_fonts(krpc::Connection& connection)
 
       A list of all available fonts.
 

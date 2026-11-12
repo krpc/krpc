@@ -762,7 +762,7 @@
         <li><a href="python.html#krpc.stream.Stream.add_end_callback">(krpc.stream.Stream method)</a>
 </li>
       </ul></li>
-      <li><a href="python.html#krpc.client.Client.add_event">add_event() (krpc.client.Client method)</a>
+      <li><a href="python.html#krpc.Connection.add_event">add_event() (krpc.Connection method)</a>
 </li>
       <li><a href="lua/api/space-center/parts.html#lua-SpaceCenter.Part.add_force">add_force (method in SpaceCenter.Part)</a>
 
@@ -904,9 +904,9 @@
 </li>
       <li><a href="python/api/drawing/drawing.html#Drawing.add_sphere">add_sphere() (in module Drawing)</a>
 </li>
-      <li><a href="python.html#krpc.client.Client.add_stream">add_stream() (krpc.client.Client method)</a>
+      <li><a href="python.html#krpc.Connection.add_stream">add_stream() (krpc.Connection method)</a>
 </li>
-      <li><a href="python.html#krpc.client.Client.add_stream_update_callback">add_stream_update_callback() (krpc.client.Client method)</a>
+      <li><a href="python.html#krpc.Connection.add_stream_update_callback">add_stream_update_callback() (krpc.Connection method)</a>
 </li>
       <li><a href="lua/api/ui/canvas.html#lua-UI.Canvas.add_text">add_text (method in UI.Canvas)</a>
 
@@ -3471,8 +3471,6 @@
         <li><a href="python/api/ui/button.html#UI.Button.clicked">(Button attribute)</a>
 </li>
       </ul></li>
-      <li><a href="lua.html#lua-krpc.Client">Client (class in krpc)</a>
-</li>
       <li><a href="lua/api/krpc/krpc.html#lua-KRPC.ClientInfo">ClientInfo (class in KRPC)</a>, <a href="python/api/krpc/krpc.html#KRPC.ClientInfo">[1]</a>
 
       <ul>
@@ -3487,12 +3485,12 @@
         <li><a href="python/api/krpc/krpc.html#KRPC.clients">(in module KRPC)</a>
 </li>
       </ul></li>
-      <li><a href="lua.html#lua-krpc.Client.close">close (method in krpc.Client)</a>
+      <li><a href="lua.html#lua-krpc.Connection.close">close (method in krpc.Connection)</a>
 </li>
       <li><a href="java.html#krpc.client.Connection.close()">close() (Java method)</a>, <a href="java.html#krpc.client.Event.close()">[1]</a>, <a href="java.html#krpc.client.Stream.close()">[2]</a>
 
       <ul>
-        <li><a href="python.html#krpc.client.Client.close">(krpc.client.Client method)</a>
+        <li><a href="python.html#krpc.Connection.close">(krpc.Connection method)</a>
 </li>
       </ul></li>
       <li><a href="lua/api/drawing/map-marker.html#lua-Drawing.MapMarkerIcon.close_approach">close_approach (data in Drawing.MapMarkerIcon)</a>
@@ -3735,9 +3733,9 @@
 </li>
       <li><a href="java/api/remote-tech/remote-tech.html#krpc.client.services.RemoteTech.RemoteTech.comms(SpaceCenter.Vessel)">comms(SpaceCenter.Vessel) (Java method)</a>
 </li>
-      <li><a href="lua.html#lua-krpc.Client.compile">compile (method in krpc.Client)</a>
+      <li><a href="lua.html#lua-krpc.Connection.compile">compile (method in krpc.Connection)</a>
 </li>
-      <li><a href="python.html#krpc.client.Client.compile">compile() (krpc.client.Client method)</a>
+      <li><a href="python.html#krpc.Connection.compile">compile() (krpc.Connection method)</a>
 </li>
       <li><a href="java.html#krpc.client.Connection.compile(KRPC.Expression)">compile(KRPC.Expression) (Java method)</a>
 </li>
@@ -3769,10 +3767,10 @@
 </li>
       <li><a href="lua/api/krpc/expressions.html#lua-KRPC.Expression.concat">concat (staticmethod in KRPC.Expression)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/api/krpc/expressions.html#KRPC.Expression.concat">concat() (Expression static method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.concat(Connection, Expression, Expression)">concat(Connection, Expression, Expression) (Java method)</a>
 </li>
       <li><a href="python.html#krpc.event.Event.condition">condition (krpc.event.Event attribute)</a>
@@ -3825,8 +3823,12 @@
 </li>
       <li><a href="lua.html#lua-krpc.connect_local">connect_local (function in krpc)</a>
 </li>
-      <li><a href="java.html#krpc.client.Connection">Connection (Java class)</a>
+      <li><a href="lua.html#lua-krpc.Connection">Connection (class in krpc)</a>
+
+      <ul>
+        <li><a href="java.html#krpc.client.Connection">(Java class)</a>
 </li>
+      </ul></li>
       <li><a href="java.html#krpc.client.ConnectionException">ConnectionException (Java class)</a>
 </li>
       <li><a href="lua/api/krpc/expressions.html#lua-KRPC.Expression.constant_bool">constant_bool (staticmethod in KRPC.Expression)</a>
@@ -6812,9 +6814,9 @@
 </li>
       <li><a href="python/api/space-center/control.html#SpaceCenter.Control.get_action_group_actions">get_action_group_actions() (Control method)</a>
 </li>
-      <li><a href="lua.html#lua-krpc.Client.get_call">get_call (method in krpc.Client)</a>
+      <li><a href="lua.html#lua-krpc.Connection.get_call">get_call (method in krpc.Connection)</a>
 </li>
-      <li><a href="python.html#krpc.client.Client.get_call">get_call() (krpc.client.Client method)</a>
+      <li><a href="python.html#krpc.Connection.get_call">get_call() (krpc.Connection method)</a>
 </li>
       <li><a href="lua/api/krpc/krpc.html#lua-KRPC.get_client_id">get_client_id (staticmethod in KRPC)</a>
 </li>
@@ -10460,19 +10462,17 @@
         <li><a href="python/api/krpc/krpc.html#module-KRPC">module</a>
 </li>
       </ul></li>
-      <li><a href="lua.html#lua-krpc.Client.krpc">krpc (attribute in krpc.Client)</a>
+      <li><a href="lua.html#lua-krpc.Connection.krpc">krpc (attribute in krpc.Connection)</a>
 </li>
       <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.KRPC">KRPC (Java class)</a>
 </li>
-      <li><a href="python.html#krpc.client.Client.krpc">krpc (krpc.client.Client attribute)</a>
+      <li><a href="python.html#krpc.Connection.krpc">krpc (krpc.Connection attribute)</a>
 </li>
       <li><a href="lua/api/krpc/krpc.html#lua-KRPC">KRPC (module)</a>
 </li>
       <li><a href="lua.html#lua-krpc">krpc (module)</a>
 </li>
       <li><a href="java.html#package-krpc.client">krpc.client (package)</a>
-</li>
-      <li><a href="python.html#krpc.client.Client">krpc.client.Client (built-in class)</a>
 </li>
       <li><a href="csharp.html#class-KRPC.Client.Connection">KRPC.Client.Connection (C# class)</a>
 </li>
@@ -16842,6 +16842,8 @@
         <li><a href="python.html#krpc.connect_local">built-in function</a>
 </li>
       </ul></li>
+      <li><a href="python.html#krpc.Connection">krpc.Connection (built-in class)</a>
+</li>
       <li><a href="python.html#krpc.error.ConnectionError">krpc.error.ConnectionError (built-in class)</a>
 </li>
       <li><a href="python.html#krpc.error.EncodingError">krpc.error.EncodingError (built-in class)</a>
@@ -16925,24 +16927,6 @@
 </li>
       <li><a href="cpp.html#_CPPv4I0EN4krpc10add_streamE6StreamI1TERKN8services4KRPC10ExpressionE">krpc::add_stream (C++ function)</a>
 </li>
-      <li><a href="cpp.html#_CPPv4N4krpc6ClientE">krpc::Client (C++ class)</a>
-</li>
-      <li><a href="cpp.html#_CPPv4N4krpc6Client21acquire_stream_updateEv">krpc::Client::acquire_stream_update (C++ function)</a>
-</li>
-      <li><a href="cpp.html#_CPPv4N4krpc6Client26add_stream_update_callbackERKNSt8functionIFvvEEE">krpc::Client::add_stream_update_callback (C++ function)</a>
-</li>
-      <li><a href="cpp.html#_CPPv4N4krpc6Client5closeEv">krpc::Client::close (C++ function)</a>
-</li>
-      <li><a href="cpp.html#_CPPv4NK4krpc6Client27get_stream_update_conditionEv">krpc::Client::get_stream_update_condition (C++ function)</a>
-</li>
-      <li><a href="cpp.html#_CPPv4NK4krpc6Client32get_stream_update_condition_lockEv">krpc::Client::get_stream_update_condition_lock (C++ function)</a>
-</li>
-      <li><a href="cpp.html#_CPPv4N4krpc6Client21release_stream_updateEv">krpc::Client::release_stream_update (C++ function)</a>
-</li>
-      <li><a href="cpp.html#_CPPv4N4krpc6Client29remove_stream_update_callbackEi">krpc::Client::remove_stream_update_callback (C++ function)</a>
-</li>
-      <li><a href="cpp.html#_CPPv4N4krpc6Client22wait_for_stream_updateEd">krpc::Client::wait_for_stream_update (C++ function)</a>
-</li>
       <li><a href="cpp.html#_CPPv4N4krpc7compileERKN8services4KRPC10ExpressionE">krpc::compile (C++ function)</a>
 </li>
       <li><a href="cpp.html#_CPPv4N4krpc9ConditionE">krpc::Condition (C++ class)</a>
@@ -16960,6 +16944,24 @@
       <li><a href="cpp.html#_CPPv4N4krpc7connectERKNSt6stringERKNSt6stringEjNSt6chrono12millisecondsENSt6chrono12millisecondsENSt6chrono12millisecondsE">krpc::connect (C++ function)</a>
 </li>
       <li><a href="cpp.html#_CPPv4N4krpc13connect_localERKNSt6stringERKNSt6stringENSt6chrono12millisecondsENSt6chrono12millisecondsE">krpc::connect_local (C++ function)</a>
+</li>
+      <li><a href="cpp.html#_CPPv4N4krpc10ConnectionE">krpc::Connection (C++ class)</a>
+</li>
+      <li><a href="cpp.html#_CPPv4N4krpc10Connection21acquire_stream_updateEv">krpc::Connection::acquire_stream_update (C++ function)</a>
+</li>
+      <li><a href="cpp.html#_CPPv4N4krpc10Connection26add_stream_update_callbackERKNSt8functionIFvvEEE">krpc::Connection::add_stream_update_callback (C++ function)</a>
+</li>
+      <li><a href="cpp.html#_CPPv4N4krpc10Connection5closeEv">krpc::Connection::close (C++ function)</a>
+</li>
+      <li><a href="cpp.html#_CPPv4NK4krpc10Connection27get_stream_update_conditionEv">krpc::Connection::get_stream_update_condition (C++ function)</a>
+</li>
+      <li><a href="cpp.html#_CPPv4NK4krpc10Connection32get_stream_update_condition_lockEv">krpc::Connection::get_stream_update_condition_lock (C++ function)</a>
+</li>
+      <li><a href="cpp.html#_CPPv4N4krpc10Connection21release_stream_updateEv">krpc::Connection::release_stream_update (C++ function)</a>
+</li>
+      <li><a href="cpp.html#_CPPv4N4krpc10Connection29remove_stream_update_callbackEi">krpc::Connection::remove_stream_update_callback (C++ function)</a>
+</li>
+      <li><a href="cpp.html#_CPPv4N4krpc10Connection22wait_for_stream_updateEd">krpc::Connection::wait_for_stream_update (C++ function)</a>
 </li>
       <li><a href="cpp.html#_CPPv4N4krpc15ConnectionErrorE">krpc::ConnectionError (C++ class)</a>
 </li>
@@ -16999,17 +17001,17 @@
 </li>
       <li><a href="cpp.html#_CPPv4N4krpc5Event4waitEd">krpc::Event::wait (C++ function)</a>
 </li>
-      <li><a href="cpp.html#_CPPv4I0EN4krpc13get_object_idE8uint64_tRK6ObjectI1TE">krpc::get_object_id (C++ function)</a>
+      <li><a href="cpp.html#_CPPv4I0EN4krpc13get_object_idE8uint64_tRK12RemoteObjectI1TE">krpc::get_object_id (C++ function)</a>
 </li>
       <li><a href="cpp.html#_CPPv4N4krpc4hashE">krpc::hash (C++ class)</a>
 </li>
       <li><a href="cpp.html#_CPPv4I0EN4krpc10hash_valueENSt6size_tERK1T">krpc::hash_value (C++ function)</a>
 </li>
-      <li><a href="cpp.html#_CPPv4I0EN4krpc6ObjectE">krpc::Object (C++ class)</a>
-</li>
       <li><a href="cpp.html#_CPPv4N4krpc14RecursiveMutexE">krpc::RecursiveMutex (C++ class)</a>
 </li>
       <li><a href="cpp.html#_CPPv4NK4krpc14RecursiveMutex19held_by_this_threadEv">krpc::RecursiveMutex::held_by_this_thread (C++ function)</a>
+</li>
+      <li><a href="cpp.html#_CPPv4I0EN4krpc12RemoteObjectE">krpc::RemoteObject (C++ class)</a>
 </li>
       <li><a href="cpp.html#_CPPv4N4krpc8RPCErrorE">krpc::RPCError (C++ class)</a>
 </li>
@@ -17025,7 +17027,7 @@
 </li>
       <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug14biomes_visibleEv">krpc::services::Debug::biomes_visible (C++ function)</a>
 </li>
-      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug5DebugERN4krpc6ClientE">krpc::services::Debug::Debug (C++ function)</a>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug5DebugERN4krpc10ConnectionE">krpc::services::Debug::Debug (C++ function)</a>
 </li>
       <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug18fill_all_resourcesENSt8optionalIN11SpaceCenter6VesselEEE">krpc::services::Debug::fill_all_resources (C++ function)</a>
 </li>
@@ -17129,7 +17131,7 @@
 </li>
       <li><a href="cpp/api/docking-camera/camera.html#_CPPv4N4krpc8services13DockingCamera6Camera4partEv">krpc::services::DockingCamera::Camera::part (C++ function)</a>
 </li>
-      <li><a href="cpp/api/docking-camera/docking-camera.html#_CPPv4N4krpc8services13DockingCamera13DockingCameraERN4krpc6ClientE">krpc::services::DockingCamera::DockingCamera (C++ function)</a>
+      <li><a href="cpp/api/docking-camera/docking-camera.html#_CPPv4N4krpc8services13DockingCamera13DockingCameraERN4krpc10ConnectionE">krpc::services::DockingCamera::DockingCamera (C++ function)</a>
 </li>
       <li><a href="cpp/api/docking-camera/camera.html#_CPPv4N4krpc8services13DockingCamera11ImageFormatE">krpc::services::DockingCamera::ImageFormat (C++ enum)</a>
 </li>
@@ -17337,7 +17339,7 @@
 </li>
       <li><a href="cpp/api/drawing/drawing.html#_CPPv4N4krpc8services7Drawing5clearEb">krpc::services::Drawing::clear (C++ function)</a>
 </li>
-      <li><a href="cpp/api/drawing/drawing.html#_CPPv4N4krpc8services7Drawing7DrawingERN4krpc6ClientE">krpc::services::Drawing::Drawing (C++ function)</a>
+      <li><a href="cpp/api/drawing/drawing.html#_CPPv4N4krpc8services7Drawing7DrawingERN4krpc10ConnectionE">krpc::services::Drawing::Drawing (C++ function)</a>
 </li>
       <li><a href="cpp/api/drawing/image.html#_CPPv4N4krpc8services7Drawing5ImageE">krpc::services::Drawing::Image (C++ class)</a>
 </li>
@@ -17495,7 +17497,7 @@
 </li>
       <li><a href="cpp/api/drawing/navball-marker.html#_CPPv4N4krpc8services7Drawing13NavballMarkerE">krpc::services::Drawing::NavballMarker (C++ class)</a>
 </li>
-      <li><a href="cpp/api/drawing/navball-marker.html#_CPPv4N4krpc8services7Drawing13NavballMarker15available_iconsER6Client">krpc::services::Drawing::NavballMarker::available_icons (C++ function)</a>
+      <li><a href="cpp/api/drawing/navball-marker.html#_CPPv4N4krpc8services7Drawing13NavballMarker15available_iconsERN4krpc10ConnectionE">krpc::services::Drawing::NavballMarker::available_icons (C++ function)</a>
 </li>
       <li><a href="cpp/api/drawing/navball-marker.html#_CPPv4N4krpc8services7Drawing13NavballMarker5colorEv">krpc::services::Drawing::NavballMarker::color (C++ function)</a>
 </li>
@@ -17753,7 +17755,7 @@
 </li>
       <li><a href="cpp/api/drawing/text.html#_CPPv4N4krpc8services7Drawing4Text6anchorEv">krpc::services::Drawing::Text::anchor (C++ function)</a>
 </li>
-      <li><a href="cpp/api/drawing/text.html#_CPPv4N4krpc8services7Drawing4Text15available_fontsER6Client">krpc::services::Drawing::Text::available_fonts (C++ function)</a>
+      <li><a href="cpp/api/drawing/text.html#_CPPv4N4krpc8services7Drawing4Text15available_fontsERN4krpc10ConnectionE">krpc::services::Drawing::Text::available_fonts (C++ function)</a>
 </li>
       <li><a href="cpp/api/drawing/text.html#_CPPv4N4krpc8services7Drawing4Text14character_sizeEv">krpc::services::Drawing::Text::character_size (C++ function)</a>
 </li>
@@ -17817,7 +17819,7 @@
 </li>
       <li><a href="cpp/api/infernal-robotics/infernal-robotics.html#_CPPv4N4krpc8services16InfernalRobotics9availableEv">krpc::services::InfernalRobotics::available (C++ function)</a>
 </li>
-      <li><a href="cpp/api/infernal-robotics/infernal-robotics.html#_CPPv4N4krpc8services16InfernalRobotics16InfernalRoboticsERN4krpc6ClientE">krpc::services::InfernalRobotics::InfernalRobotics (C++ function)</a>
+      <li><a href="cpp/api/infernal-robotics/infernal-robotics.html#_CPPv4N4krpc8services16InfernalRobotics16InfernalRoboticsERN4krpc10ConnectionE">krpc::services::InfernalRobotics::InfernalRobotics (C++ function)</a>
 </li>
       <li><a href="cpp/api/infernal-robotics/infernal-robotics.html#_CPPv4N4krpc8services16InfernalRobotics5readyEv">krpc::services::InfernalRobotics::ready (C++ function)</a>
 </li>
@@ -18141,7 +18143,7 @@
 </li>
       <li><a href="cpp/api/kerbal-alarm-clock/kerbal-alarm-clock.html#_CPPv4N4krpc8services16KerbalAlarmClock12create_alarmE9AlarmTypeNSt6stringEd">krpc::services::KerbalAlarmClock::create_alarm (C++ function)</a>
 </li>
-      <li><a href="cpp/api/kerbal-alarm-clock/kerbal-alarm-clock.html#_CPPv4N4krpc8services16KerbalAlarmClock16KerbalAlarmClockERN4krpc6ClientE">krpc::services::KerbalAlarmClock::KerbalAlarmClock (C++ function)</a>
+      <li><a href="cpp/api/kerbal-alarm-clock/kerbal-alarm-clock.html#_CPPv4N4krpc8services16KerbalAlarmClock16KerbalAlarmClockERN4krpc10ConnectionE">krpc::services::KerbalAlarmClock::KerbalAlarmClock (C++ function)</a>
 </li>
       <li><a href="cpp/api/kerbal-engineer-redux/kerbal-engineer-redux.html#_CPPv4N4krpc8services19KerbalEngineerReduxE">krpc::services::KerbalEngineerRedux (C++ class)</a>
 </li>
@@ -18173,7 +18175,7 @@
 </li>
       <li><a href="cpp/api/kerbal-engineer-redux/impact.html#_CPPv4N4krpc8services19KerbalEngineerRedux6Impact2utE">krpc::services::KerbalEngineerRedux::Impact::ut (C++ member)</a>
 </li>
-      <li><a href="cpp/api/kerbal-engineer-redux/kerbal-engineer-redux.html#_CPPv4N4krpc8services19KerbalEngineerRedux19KerbalEngineerReduxERN4krpc6ClientE">krpc::services::KerbalEngineerRedux::KerbalEngineerRedux (C++ function)</a>
+      <li><a href="cpp/api/kerbal-engineer-redux/kerbal-engineer-redux.html#_CPPv4N4krpc8services19KerbalEngineerRedux19KerbalEngineerReduxERN4krpc10ConnectionE">krpc::services::KerbalEngineerRedux::KerbalEngineerRedux (C++ function)</a>
 </li>
       <li><a href="cpp/api/kerbal-engineer-redux/kerbal-engineer-redux.html#_CPPv4N4krpc8services19KerbalEngineerRedux10rendezvousEN11SpaceCenter6VesselE">krpc::services::KerbalEngineerRedux::rendezvous (C++ function)</a>
 </li>
@@ -18293,261 +18295,261 @@
 </li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10ExpressionE">krpc::services::KRPC::Expression (C++ class)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression3addER6Client10Expression10Expression">krpc::services::KRPC::Expression::add (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression3addERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::add (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression9aggregateER6Client10Expression10Expression">krpc::services::KRPC::Expression::aggregate (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression9aggregateERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::aggregate (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression19aggregate_with_seedER6Client10Expression10Expression10Expression">krpc::services::KRPC::Expression::aggregate_with_seed (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression19aggregate_with_seedERN4krpc10ConnectionE10Expression10Expression10Expression">krpc::services::KRPC::Expression::aggregate_with_seed (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression3allER6Client10Expression10Expression">krpc::services::KRPC::Expression::all (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression3allERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::all (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression4and_ER6Client10Expression10Expression">krpc::services::KRPC::Expression::and_ (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression4and_ERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::and_ (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression3anyER6Client10Expression10Expression">krpc::services::KRPC::Expression::any (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression3anyERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::any (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6appendER6Client10Expression10Expression">krpc::services::KRPC::Expression::append (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6appendERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::append (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6assignER6Client10Expression10Expression">krpc::services::KRPC::Expression::assign (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6assignERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::assign (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression7averageER6Client10Expression">krpc::services::KRPC::Expression::average (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression7averageERN4krpc10ConnectionE10Expression">krpc::services::KRPC::Expression::average (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression5blockER6ClientNSt6vectorI10ExpressionEE">krpc::services::KRPC::Expression::block (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression5blockERN4krpc10ConnectionENSt6vectorI10ExpressionEE">krpc::services::KRPC::Expression::block (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression20block_with_variablesER6ClientNSt6vectorI10ExpressionEENSt6vectorI10ExpressionEE">krpc::services::KRPC::Expression::block_with_variables (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression20block_with_variablesERN4krpc10ConnectionENSt6vectorI10ExpressionEENSt6vectorI10ExpressionEE">krpc::services::KRPC::Expression::block_with_variables (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6break_ER6Client">krpc::services::KRPC::Expression::break_ (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6break_ERN4krpc10ConnectionE">krpc::services::KRPC::Expression::break_ (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression16build_dictionaryER6Client10Expression10Expression10Expression">krpc::services::KRPC::Expression::build_dictionary (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression16build_dictionaryERN4krpc10ConnectionE10Expression10Expression10Expression">krpc::services::KRPC::Expression::build_dictionary (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression4callER6ClientN4krpc6schema13ProcedureCallE">krpc::services::KRPC::Expression::call (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression4callERN4krpc10ConnectionEN4krpc6schema13ProcedureCallE">krpc::services::KRPC::Expression::call (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression19call_with_argumentsER6ClientN4krpc6schema13ProcedureCallENSt3mapI7int32_t10ExpressionEE">krpc::services::KRPC::Expression::call_with_arguments (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression19call_with_argumentsERN4krpc10ConnectionEN4krpc6schema13ProcedureCallENSt3mapI7int32_t10ExpressionEE">krpc::services::KRPC::Expression::call_with_arguments (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression4castER6Client10Expression4Type">krpc::services::KRPC::Expression::cast (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression4castERN4krpc10ConnectionE10Expression4Type">krpc::services::KRPC::Expression::cast (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression5clearER6Client10Expression">krpc::services::KRPC::Expression::clear (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression5clearERN4krpc10ConnectionE10Expression">krpc::services::KRPC::Expression::clear (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6concatER6Client10Expression10Expression">krpc::services::KRPC::Expression::concat (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6concatERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::concat (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression11conditionalER6Client10Expression10Expression10Expression">krpc::services::KRPC::Expression::conditional (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression11conditionalERN4krpc10ConnectionE10Expression10Expression10Expression">krpc::services::KRPC::Expression::conditional (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression15conditional_andER6Client10Expression10Expression">krpc::services::KRPC::Expression::conditional_and (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression15conditional_andERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::conditional_and (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression14conditional_orER6Client10Expression10Expression">krpc::services::KRPC::Expression::conditional_or (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression14conditional_orERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::conditional_or (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression13constant_boolER6Clientb">krpc::services::KRPC::Expression::constant_bool (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression13constant_boolERN4krpc10ConnectionEb">krpc::services::KRPC::Expression::constant_bool (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression14constant_bytesER6ClientNSt6stringE">krpc::services::KRPC::Expression::constant_bytes (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression14constant_bytesERN4krpc10ConnectionENSt6stringE">krpc::services::KRPC::Expression::constant_bytes (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression15constant_doubleER6Clientd">krpc::services::KRPC::Expression::constant_double (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression15constant_doubleERN4krpc10ConnectionEd">krpc::services::KRPC::Expression::constant_double (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression13constant_enumER6ClientNSt6stringENSt6stringE7int32_t">krpc::services::KRPC::Expression::constant_enum (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression13constant_enumERN4krpc10ConnectionENSt6stringENSt6stringE7int32_t">krpc::services::KRPC::Expression::constant_enum (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression14constant_floatER6Clientf">krpc::services::KRPC::Expression::constant_float (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression14constant_floatERN4krpc10ConnectionEf">krpc::services::KRPC::Expression::constant_float (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression12constant_intER6Client7int32_t">krpc::services::KRPC::Expression::constant_int (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression12constant_intERN4krpc10ConnectionE7int32_t">krpc::services::KRPC::Expression::constant_int (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression13constant_longER6Client7int64_t">krpc::services::KRPC::Expression::constant_long (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression13constant_longERN4krpc10ConnectionE7int64_t">krpc::services::KRPC::Expression::constant_long (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression13constant_nullER6Client4Type">krpc::services::KRPC::Expression::constant_null (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression13constant_nullERN4krpc10ConnectionE4Type">krpc::services::KRPC::Expression::constant_null (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression15constant_objectER6Client8uint64_t">krpc::services::KRPC::Expression::constant_object (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression15constant_objectERN4krpc10ConnectionE8uint64_t">krpc::services::KRPC::Expression::constant_object (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression15constant_stringER6ClientNSt6stringE">krpc::services::KRPC::Expression::constant_string (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression15constant_stringERN4krpc10ConnectionENSt6stringE">krpc::services::KRPC::Expression::constant_string (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression14constant_u_intER6Client8uint32_t">krpc::services::KRPC::Expression::constant_u_int (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression14constant_u_intERN4krpc10ConnectionE8uint32_t">krpc::services::KRPC::Expression::constant_u_int (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression15constant_u_longER6Client8uint64_t">krpc::services::KRPC::Expression::constant_u_long (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression15constant_u_longERN4krpc10ConnectionE8uint64_t">krpc::services::KRPC::Expression::constant_u_long (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression8containsER6Client10Expression10Expression">krpc::services::KRPC::Expression::contains (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression8containsERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::contains (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression12contains_keyER6Client10Expression10Expression">krpc::services::KRPC::Expression::contains_key (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression12contains_keyERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::contains_key (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression9continue_ER6Client">krpc::services::KRPC::Expression::continue_ (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression9continue_ERN4krpc10ConnectionE">krpc::services::KRPC::Expression::continue_ (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression17convert_to_stringER6Client10Expression">krpc::services::KRPC::Expression::convert_to_string (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression17convert_to_stringERN4krpc10ConnectionE10Expression">krpc::services::KRPC::Expression::convert_to_string (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression5countER6Client10Expression">krpc::services::KRPC::Expression::count (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression5countERN4krpc10ConnectionE10Expression">krpc::services::KRPC::Expression::count (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression17create_dictionaryER6ClientNSt6vectorI10ExpressionEENSt6vectorI10ExpressionEE">krpc::services::KRPC::Expression::create_dictionary (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression17create_dictionaryERN4krpc10ConnectionENSt6vectorI10ExpressionEENSt6vectorI10ExpressionEE">krpc::services::KRPC::Expression::create_dictionary (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression23create_empty_dictionaryER6Client4Type4Type">krpc::services::KRPC::Expression::create_empty_dictionary (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression23create_empty_dictionaryERN4krpc10ConnectionE4Type4Type">krpc::services::KRPC::Expression::create_empty_dictionary (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression17create_empty_listER6Client4Type">krpc::services::KRPC::Expression::create_empty_list (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression17create_empty_listERN4krpc10ConnectionE4Type">krpc::services::KRPC::Expression::create_empty_list (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression16create_empty_setER6Client4Type">krpc::services::KRPC::Expression::create_empty_set (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression16create_empty_setERN4krpc10ConnectionE4Type">krpc::services::KRPC::Expression::create_empty_set (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression11create_listER6ClientNSt6vectorI10ExpressionEE">krpc::services::KRPC::Expression::create_list (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression11create_listERN4krpc10ConnectionENSt6vectorI10ExpressionEE">krpc::services::KRPC::Expression::create_list (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression10create_setER6ClientNSt3setI10ExpressionEE">krpc::services::KRPC::Expression::create_set (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression10create_setERN4krpc10ConnectionENSt3setI10ExpressionEE">krpc::services::KRPC::Expression::create_set (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression13create_structER6Client4TypeNSt6vectorI10ExpressionEE">krpc::services::KRPC::Expression::create_struct (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression13create_structERN4krpc10ConnectionE4TypeNSt6vectorI10ExpressionEE">krpc::services::KRPC::Expression::create_struct (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression12create_tupleER6ClientNSt6vectorI10ExpressionEE">krpc::services::KRPC::Expression::create_tuple (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression12create_tupleERN4krpc10ConnectionENSt6vectorI10ExpressionEE">krpc::services::KRPC::Expression::create_tuple (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression15dictionary_keysER6Client10Expression">krpc::services::KRPC::Expression::dictionary_keys (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression15dictionary_keysERN4krpc10ConnectionE10Expression">krpc::services::KRPC::Expression::dictionary_keys (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression17dictionary_valuesER6Client10Expression">krpc::services::KRPC::Expression::dictionary_values (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression17dictionary_valuesERN4krpc10ConnectionE10Expression">krpc::services::KRPC::Expression::dictionary_values (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression8distinctER6Client10Expression">krpc::services::KRPC::Expression::distinct (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression8distinctERN4krpc10ConnectionE10Expression">krpc::services::KRPC::Expression::distinct (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6divideER6Client10Expression10Expression">krpc::services::KRPC::Expression::divide (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6divideERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::divide (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression10element_atER6Client10Expression10Expression">krpc::services::KRPC::Expression::element_at (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression10element_atERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::element_at (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression5equalER6Client10Expression10Expression">krpc::services::KRPC::Expression::equal (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression5equalERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::equal (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6exceptER6Client10Expression10Expression">krpc::services::KRPC::Expression::except (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6exceptERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::except (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression12exclusive_orER6Client10Expression10Expression">krpc::services::KRPC::Expression::exclusive_or (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression12exclusive_orERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::exclusive_or (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression5firstER6Client10Expression">krpc::services::KRPC::Expression::first (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression5firstERN4krpc10ConnectionE10Expression">krpc::services::KRPC::Expression::first (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression8for_eachER6Client10Expression10Expression10Expression">krpc::services::KRPC::Expression::for_each (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression8for_eachERN4krpc10ConnectionE10Expression10Expression10Expression">krpc::services::KRPC::Expression::for_each (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression3getER6Client10Expression10Expression">krpc::services::KRPC::Expression::get (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression3getERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::get (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression9get_fieldER6Client10ExpressionNSt6stringE">krpc::services::KRPC::Expression::get_field (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression9get_fieldERN4krpc10ConnectionE10ExpressionNSt6stringE">krpc::services::KRPC::Expression::get_field (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression12greater_thanER6Client10Expression10Expression">krpc::services::KRPC::Expression::greater_than (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression12greater_thanERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::greater_than (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression21greater_than_or_equalER6Client10Expression10Expression">krpc::services::KRPC::Expression::greater_than_or_equal (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression21greater_than_or_equalERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::greater_than_or_equal (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression8group_byER6Client10Expression10Expression">krpc::services::KRPC::Expression::group_by (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression8group_byERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::group_by (C++ function)</a>
 </li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression15has_return_typeEv">krpc::services::KRPC::Expression::has_return_type (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression7if_thenER6Client10Expression10Expression">krpc::services::KRPC::Expression::if_then (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression7if_thenERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::if_then (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression12if_then_elseER6Client10Expression10Expression10Expression">krpc::services::KRPC::Expression::if_then_else (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression12if_then_elseERN4krpc10ConnectionE10Expression10Expression10Expression">krpc::services::KRPC::Expression::if_then_else (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression9intersectER6Client10Expression10Expression">krpc::services::KRPC::Expression::intersect (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression9intersectERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::intersect (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6invokeER6Client10ExpressionNSt3mapINSt6stringE10ExpressionEE">krpc::services::KRPC::Expression::invoke (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6invokeERN4krpc10ConnectionE10ExpressionNSt3mapINSt6stringE10ExpressionEE">krpc::services::KRPC::Expression::invoke (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression7is_nullER6Client10Expression">krpc::services::KRPC::Expression::is_null (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression7is_nullERN4krpc10ConnectionE10Expression">krpc::services::KRPC::Expression::is_null (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6lambdaER6ClientNSt6vectorI10ExpressionEE10Expression">krpc::services::KRPC::Expression::lambda (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6lambdaERN4krpc10ConnectionENSt6vectorI10ExpressionEE10Expression">krpc::services::KRPC::Expression::lambda (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression4lastER6Client10Expression">krpc::services::KRPC::Expression::last (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression4lastERN4krpc10ConnectionE10Expression">krpc::services::KRPC::Expression::last (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression10left_shiftER6Client10Expression10Expression">krpc::services::KRPC::Expression::left_shift (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression10left_shiftERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::left_shift (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression9less_thanER6Client10Expression10Expression">krpc::services::KRPC::Expression::less_than (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression9less_thanERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::less_than (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression18less_than_or_equalER6Client10Expression10Expression">krpc::services::KRPC::Expression::less_than_or_equal (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression18less_than_or_equalERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::less_than_or_equal (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression3maxER6Client10Expression">krpc::services::KRPC::Expression::max (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression3maxERN4krpc10ConnectionE10Expression">krpc::services::KRPC::Expression::max (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6max_byER6Client10Expression10Expression">krpc::services::KRPC::Expression::max_by (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6max_byERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::max_by (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression3minER6Client10Expression">krpc::services::KRPC::Expression::min (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression3minERN4krpc10ConnectionE10Expression">krpc::services::KRPC::Expression::min (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6min_byER6Client10Expression10Expression">krpc::services::KRPC::Expression::min_by (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6min_byERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::min_by (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6moduloER6Client10Expression10Expression">krpc::services::KRPC::Expression::modulo (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6moduloERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::modulo (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression8multiplyER6Client10Expression10Expression">krpc::services::KRPC::Expression::multiply (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression8multiplyERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::multiply (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6negateER6Client10Expression">krpc::services::KRPC::Expression::negate (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6negateERN4krpc10ConnectionE10Expression">krpc::services::KRPC::Expression::negate (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression4not_ER6Client10Expression">krpc::services::KRPC::Expression::not_ (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression4not_ERN4krpc10ConnectionE10Expression">krpc::services::KRPC::Expression::not_ (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression9not_equalER6Client10Expression10Expression">krpc::services::KRPC::Expression::not_equal (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression9not_equalERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::not_equal (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression3or_ER6Client10Expression10Expression">krpc::services::KRPC::Expression::or_ (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression3or_ERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::or_ (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression8order_byER6Client10Expression10Expression">krpc::services::KRPC::Expression::order_by (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression8order_byERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::order_by (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression9parameterER6ClientNSt6stringE4Type">krpc::services::KRPC::Expression::parameter (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression9parameterERN4krpc10ConnectionENSt6stringE4Type">krpc::services::KRPC::Expression::parameter (C++ function)</a>
 </li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression15parameter_typesEv">krpc::services::KRPC::Expression::parameter_types (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression5powerER6Client10Expression10Expression">krpc::services::KRPC::Expression::power (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression5powerERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::power (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6removeER6Client10Expression10Expression">krpc::services::KRPC::Expression::remove (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6removeERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::remove (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression9remove_atER6Client10Expression10Expression">krpc::services::KRPC::Expression::remove_at (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression9remove_atERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::remove_at (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression7return_ER6Client10Expression">krpc::services::KRPC::Expression::return_ (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression7return_ERN4krpc10ConnectionE10Expression">krpc::services::KRPC::Expression::return_ (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression14return_nothingER6Client">krpc::services::KRPC::Expression::return_nothing (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression14return_nothingERN4krpc10ConnectionE">krpc::services::KRPC::Expression::return_nothing (C++ function)</a>
 </li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression11return_typeEv">krpc::services::KRPC::Expression::return_type (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression7reverseER6Client10Expression">krpc::services::KRPC::Expression::reverse (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression7reverseERN4krpc10ConnectionE10Expression">krpc::services::KRPC::Expression::reverse (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression11right_shiftER6Client10Expression10Expression">krpc::services::KRPC::Expression::right_shift (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression11right_shiftERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::right_shift (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6selectER6Client10Expression10Expression">krpc::services::KRPC::Expression::select (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6selectERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::select (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression11select_manyER6Client10Expression10Expression">krpc::services::KRPC::Expression::select_many (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression11select_manyERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::select_many (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression3setER6Client10Expression10Expression10Expression">krpc::services::KRPC::Expression::set (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression3setERN4krpc10ConnectionE10Expression10Expression10Expression">krpc::services::KRPC::Expression::set (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression4skipER6Client10Expression10Expression">krpc::services::KRPC::Expression::skip (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression4skipERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::skip (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression14state_variableER6ClientNSt6stringE10Expression">krpc::services::KRPC::Expression::state_variable (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression14state_variableERN4krpc10ConnectionENSt6stringE10Expression">krpc::services::KRPC::Expression::state_variable (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression13string_concatER6ClientNSt6vectorI10ExpressionEE">krpc::services::KRPC::Expression::string_concat (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression13string_concatERN4krpc10ConnectionENSt6vectorI10ExpressionEE">krpc::services::KRPC::Expression::string_concat (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression15string_containsER6Client10Expression10Expression">krpc::services::KRPC::Expression::string_contains (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression15string_containsERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::string_contains (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression16string_ends_withER6Client10Expression10Expression">krpc::services::KRPC::Expression::string_ends_with (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression16string_ends_withERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::string_ends_with (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression10string_getER6Client10Expression10Expression">krpc::services::KRPC::Expression::string_get (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression10string_getERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::string_get (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression15string_index_ofER6Client10Expression10Expression">krpc::services::KRPC::Expression::string_index_of (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression15string_index_ofERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::string_index_of (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression11string_joinER6Client10Expression10Expression">krpc::services::KRPC::Expression::string_join (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression11string_joinERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::string_join (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression13string_lengthER6Client10Expression">krpc::services::KRPC::Expression::string_length (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression13string_lengthERN4krpc10ConnectionE10Expression">krpc::services::KRPC::Expression::string_length (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression14string_replaceER6Client10Expression10Expression10Expression">krpc::services::KRPC::Expression::string_replace (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression14string_replaceERN4krpc10ConnectionE10Expression10Expression10Expression">krpc::services::KRPC::Expression::string_replace (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression12string_splitER6Client10Expression10Expression">krpc::services::KRPC::Expression::string_split (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression12string_splitERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::string_split (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression18string_starts_withER6Client10Expression10Expression">krpc::services::KRPC::Expression::string_starts_with (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression18string_starts_withERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::string_starts_with (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression16string_substringER6Client10Expression10Expression10Expression">krpc::services::KRPC::Expression::string_substring (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression16string_substringERN4krpc10ConnectionE10Expression10Expression10Expression">krpc::services::KRPC::Expression::string_substring (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression15string_to_lowerER6Client10Expression">krpc::services::KRPC::Expression::string_to_lower (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression15string_to_lowerERN4krpc10ConnectionE10Expression">krpc::services::KRPC::Expression::string_to_lower (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression15string_to_upperER6Client10Expression">krpc::services::KRPC::Expression::string_to_upper (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression15string_to_upperERN4krpc10ConnectionE10Expression">krpc::services::KRPC::Expression::string_to_upper (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression11string_trimER6Client10Expression">krpc::services::KRPC::Expression::string_trim (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression11string_trimERN4krpc10ConnectionE10Expression">krpc::services::KRPC::Expression::string_trim (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression15string_trim_endER6Client10Expression">krpc::services::KRPC::Expression::string_trim_end (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression15string_trim_endERN4krpc10ConnectionE10Expression">krpc::services::KRPC::Expression::string_trim_end (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression17string_trim_startER6Client10Expression">krpc::services::KRPC::Expression::string_trim_start (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression17string_trim_startERN4krpc10ConnectionE10Expression">krpc::services::KRPC::Expression::string_trim_start (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression8subtractER6Client10Expression10Expression">krpc::services::KRPC::Expression::subtract (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression8subtractERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::subtract (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression3sumER6Client10Expression">krpc::services::KRPC::Expression::sum (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression3sumERN4krpc10ConnectionE10Expression">krpc::services::KRPC::Expression::sum (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression4takeER6Client10Expression10Expression">krpc::services::KRPC::Expression::take (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression4takeERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::take (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6throw_ER6ClientNSt6stringENSt6stringE10Expression">krpc::services::KRPC::Expression::throw_ (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6throw_ERN4krpc10ConnectionENSt6stringENSt6stringE10Expression">krpc::services::KRPC::Expression::throw_ (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression7to_listER6Client10Expression">krpc::services::KRPC::Expression::to_list (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression7to_listERN4krpc10ConnectionE10Expression">krpc::services::KRPC::Expression::to_list (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6to_setER6Client10Expression">krpc::services::KRPC::Expression::to_set (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6to_setERN4krpc10ConnectionE10Expression">krpc::services::KRPC::Expression::to_set (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression9try_catchER6Client10ExpressionNSt6stringENSt6stringENSt8optionalI10ExpressionEE10Expression">krpc::services::KRPC::Expression::try_catch (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression9try_catchERN4krpc10ConnectionE10ExpressionNSt6stringENSt6stringENSt8optionalI10ExpressionEE10Expression">krpc::services::KRPC::Expression::try_catch (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression13try_catch_allER6Client10ExpressionNSt8optionalI10ExpressionEE10Expression">krpc::services::KRPC::Expression::try_catch_all (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression13try_catch_allERN4krpc10ConnectionE10ExpressionNSt8optionalI10ExpressionEE10Expression">krpc::services::KRPC::Expression::try_catch_all (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression11try_finallyER6Client10Expression10Expression">krpc::services::KRPC::Expression::try_finally (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression11try_finallyERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::try_finally (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6union_ER6Client10Expression10Expression">krpc::services::KRPC::Expression::union_ (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6union_ERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::union_ (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression8variableER6ClientNSt6stringE4Type">krpc::services::KRPC::Expression::variable (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression8variableERN4krpc10ConnectionENSt6stringE4Type">krpc::services::KRPC::Expression::variable (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression5whereER6Client10Expression10Expression">krpc::services::KRPC::Expression::where (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression5whereERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::where (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6while_ER6Client10Expression10Expression">krpc::services::KRPC::Expression::while_ (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6while_ERN4krpc10ConnectionE10Expression10Expression">krpc::services::KRPC::Expression::while_ (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression3zipER6Client10Expression10Expression10Expression">krpc::services::KRPC::Expression::zip (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression3zipERN4krpc10ConnectionE10Expression10Expression10Expression">krpc::services::KRPC::Expression::zip (C++ function)</a>
 </li>
       <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC10game_sceneEv">krpc::services::KRPC::game_scene (C++ function)</a>
 </li>
@@ -18591,7 +18593,7 @@
 </li>
       <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC20KeyNotFoundExceptionE">krpc::services::KRPC::KeyNotFoundException (C++ class)</a>
 </li>
-      <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC4KRPCERN4krpc6ClientE">krpc::services::KRPC::KRPC (C++ function)</a>
+      <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC4KRPCERN4krpc10ConnectionE">krpc::services::KRPC::KRPC (C++ function)</a>
 </li>
       <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC9next_tickEv">krpc::services::KRPC::next_tick (C++ function)</a>
 </li>
@@ -18675,49 +18677,49 @@
 </li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4TypeE">krpc::services::KRPC::Type (C++ class)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type5bool_ER6Client">krpc::services::KRPC::Type::bool_ (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type5bool_ERN4krpc10ConnectionE">krpc::services::KRPC::Type::bool_ (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type5bytesER6Client">krpc::services::KRPC::Type::bytes (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type5bytesERN4krpc10ConnectionE">krpc::services::KRPC::Type::bytes (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type10class_typeER6ClientNSt6stringENSt6stringE">krpc::services::KRPC::Type::class_type (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type10class_typeERN4krpc10ConnectionENSt6stringENSt6stringE">krpc::services::KRPC::Type::class_type (C++ function)</a>
 </li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type4codeEv">krpc::services::KRPC::Type::code (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type15dictionary_typeER6Client4Type4Type">krpc::services::KRPC::Type::dictionary_type (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type15dictionary_typeERN4krpc10ConnectionE4Type4Type">krpc::services::KRPC::Type::dictionary_type (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type7double_ER6Client">krpc::services::KRPC::Type::double_ (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type7double_ERN4krpc10ConnectionE">krpc::services::KRPC::Type::double_ (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type16enumeration_typeER6ClientNSt6stringENSt6stringE">krpc::services::KRPC::Type::enumeration_type (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type16enumeration_typeERN4krpc10ConnectionENSt6stringENSt6stringE">krpc::services::KRPC::Type::enumeration_type (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type6float_ER6Client">krpc::services::KRPC::Type::float_ (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type6float_ERN4krpc10ConnectionE">krpc::services::KRPC::Type::float_ (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type4int_ER6Client">krpc::services::KRPC::Type::int_ (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type4int_ERN4krpc10ConnectionE">krpc::services::KRPC::Type::int_ (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type9list_typeER6Client4Type">krpc::services::KRPC::Type::list_type (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type9list_typeERN4krpc10ConnectionE4Type">krpc::services::KRPC::Type::list_type (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type5long_ER6Client">krpc::services::KRPC::Type::long_ (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type5long_ERN4krpc10ConnectionE">krpc::services::KRPC::Type::long_ (C++ function)</a>
 </li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type4nameEv">krpc::services::KRPC::Type::name (C++ function)</a>
 </li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type8nullableEv">krpc::services::KRPC::Type::nullable (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type13nullable_typeER6Client4Type">krpc::services::KRPC::Type::nullable_type (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type13nullable_typeERN4krpc10ConnectionE4Type">krpc::services::KRPC::Type::nullable_type (C++ function)</a>
 </li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type7serviceEv">krpc::services::KRPC::Type::service (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type8set_typeER6Client4Type">krpc::services::KRPC::Type::set_type (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type8set_typeERN4krpc10ConnectionE4Type">krpc::services::KRPC::Type::set_type (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type6stringER6Client">krpc::services::KRPC::Type::string (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type6stringERN4krpc10ConnectionE">krpc::services::KRPC::Type::string (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type11struct_typeER6ClientNSt6stringENSt6stringE">krpc::services::KRPC::Type::struct_type (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type11struct_typeERN4krpc10ConnectionENSt6stringENSt6stringE">krpc::services::KRPC::Type::struct_type (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type10tuple_typeER6ClientNSt6vectorI4TypeEE">krpc::services::KRPC::Type::tuple_type (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type10tuple_typeERN4krpc10ConnectionENSt6vectorI4TypeEE">krpc::services::KRPC::Type::tuple_type (C++ function)</a>
 </li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type5typesEv">krpc::services::KRPC::Type::types (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type5u_intER6Client">krpc::services::KRPC::Type::u_int (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type5u_intERN4krpc10ConnectionE">krpc::services::KRPC::Type::u_int (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type6u_longER6Client">krpc::services::KRPC::Type::u_long (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type6u_longERN4krpc10ConnectionE">krpc::services::KRPC::Type::u_long (C++ function)</a>
 </li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC8TypeCodeE">krpc::services::KRPC::TypeCode (C++ enum)</a>
 </li>
@@ -18767,7 +18769,7 @@
 </li>
       <li><a href="cpp/api/lidar/laser.html#_CPPv4N4krpc8services5LIDAR5Laser4partEv">krpc::services::LIDAR::Laser::part (C++ function)</a>
 </li>
-      <li><a href="cpp/api/lidar/lidar.html#_CPPv4N4krpc8services5LIDAR5LIDARERN4krpc6ClientE">krpc::services::LIDAR::LIDAR (C++ function)</a>
+      <li><a href="cpp/api/lidar/lidar.html#_CPPv4N4krpc8services5LIDAR5LIDARERN4krpc10ConnectionE">krpc::services::LIDAR::LIDAR (C++ function)</a>
 </li>
       <li><a href="cpp/api/mechjeb/mechjeb.html#_CPPv4N4krpc8services7MechJebE">krpc::services::MechJeb (C++ class)</a>
 </li>
@@ -19259,7 +19261,7 @@
 </li>
       <li><a href="cpp/api/mechjeb/maneuver-planner.html#_CPPv4N4krpc8services7MechJeb15ManeuverPlanner18operation_transferEv">krpc::services::MechJeb::ManeuverPlanner::operation_transfer (C++ function)</a>
 </li>
-      <li><a href="cpp/api/mechjeb/mechjeb.html#_CPPv4N4krpc8services7MechJeb7MechJebERN4krpc6ClientE">krpc::services::MechJeb::MechJeb (C++ function)</a>
+      <li><a href="cpp/api/mechjeb/mechjeb.html#_CPPv4N4krpc8services7MechJeb7MechJebERN4krpc10ConnectionE">krpc::services::MechJeb::MechJeb (C++ function)</a>
 </li>
       <li><a href="cpp/api/mechjeb/mechjeb.html#_CPPv4N4krpc8services7MechJeb18MJServiceExceptionE">krpc::services::MechJeb::MJServiceException (C++ class)</a>
 </li>
@@ -19959,7 +19961,7 @@
 </li>
       <li><a href="cpp/api/remote-tech/remote-tech.html#_CPPv4N4krpc8services10RemoteTech15ground_stationsEv">krpc::services::RemoteTech::ground_stations (C++ function)</a>
 </li>
-      <li><a href="cpp/api/remote-tech/remote-tech.html#_CPPv4N4krpc8services10RemoteTech10RemoteTechERN4krpc6ClientE">krpc::services::RemoteTech::RemoteTech (C++ function)</a>
+      <li><a href="cpp/api/remote-tech/remote-tech.html#_CPPv4N4krpc8services10RemoteTech10RemoteTechERN4krpc10ConnectionE">krpc::services::RemoteTech::RemoteTech (C++ function)</a>
 </li>
       <li><a href="cpp/api/remote-tech/antenna.html#_CPPv4N4krpc8services10RemoteTech6TargetE">krpc::services::RemoteTech::Target (C++ enum)</a>
 </li>
@@ -20073,7 +20075,7 @@
 </li>
       <li><a href="cpp/api/scansat/scanner.html#_CPPv4N4krpc8services7ScanSat12ScannerState12out_of_rangeE">krpc::services::ScanSat::ScannerState::out_of_range (C++ enumerator)</a>
 </li>
-      <li><a href="cpp/api/scansat/scansat.html#_CPPv4N4krpc8services7ScanSat7ScanSatERN4krpc6ClientE">krpc::services::ScanSat::ScanSat (C++ function)</a>
+      <li><a href="cpp/api/scansat/scansat.html#_CPPv4N4krpc8services7ScanSat7ScanSatERN4krpc10ConnectionE">krpc::services::ScanSat::ScanSat (C++ function)</a>
 </li>
       <li><a href="cpp/api/scansat/scansat.html#_CPPv4N4krpc8services7ScanSat8ScanTypeE">krpc::services::ScanSat::ScanType (C++ enum)</a>
 </li>
@@ -20189,19 +20191,19 @@
 </li>
       <li><a href="cpp/api/space-center/alarms.html#_CPPv4N4krpc8services11SpaceCenter12AlarmManagerE">krpc::services::SpaceCenter::AlarmManager (C++ class)</a>
 </li>
-      <li><a href="cpp/api/space-center/alarms.html#_CPPv4N4krpc8services11SpaceCenter12AlarmManager9add_alarmER6ClientdNSt6stringENSt6stringE">krpc::services::SpaceCenter::AlarmManager::add_alarm (C++ function)</a>
+      <li><a href="cpp/api/space-center/alarms.html#_CPPv4N4krpc8services11SpaceCenter12AlarmManager9add_alarmERN4krpc10ConnectionEdNSt6stringENSt6stringE">krpc::services::SpaceCenter::AlarmManager::add_alarm (C++ function)</a>
 </li>
-      <li><a href="cpp/api/space-center/alarms.html#_CPPv4N4krpc8services11SpaceCenter12AlarmManager18add_apoapsis_alarmER6Client6VesseldNSt6stringENSt6stringE">krpc::services::SpaceCenter::AlarmManager::add_apoapsis_alarm (C++ function)</a>
+      <li><a href="cpp/api/space-center/alarms.html#_CPPv4N4krpc8services11SpaceCenter12AlarmManager18add_apoapsis_alarmERN4krpc10ConnectionE6VesseldNSt6stringENSt6stringE">krpc::services::SpaceCenter::AlarmManager::add_apoapsis_alarm (C++ function)</a>
 </li>
-      <li><a href="cpp/api/space-center/alarms.html#_CPPv4N4krpc8services11SpaceCenter12AlarmManager23add_maneuver_node_alarmER6Client6Vessel4NodedbNSt6stringENSt6stringE">krpc::services::SpaceCenter::AlarmManager::add_maneuver_node_alarm (C++ function)</a>
+      <li><a href="cpp/api/space-center/alarms.html#_CPPv4N4krpc8services11SpaceCenter12AlarmManager23add_maneuver_node_alarmERN4krpc10ConnectionE6Vessel4NodedbNSt6stringENSt6stringE">krpc::services::SpaceCenter::AlarmManager::add_maneuver_node_alarm (C++ function)</a>
 </li>
-      <li><a href="cpp/api/space-center/alarms.html#_CPPv4N4krpc8services11SpaceCenter12AlarmManager19add_periapsis_alarmER6Client6VesseldNSt6stringENSt6stringE">krpc::services::SpaceCenter::AlarmManager::add_periapsis_alarm (C++ function)</a>
+      <li><a href="cpp/api/space-center/alarms.html#_CPPv4N4krpc8services11SpaceCenter12AlarmManager19add_periapsis_alarmERN4krpc10ConnectionE6VesseldNSt6stringENSt6stringE">krpc::services::SpaceCenter::AlarmManager::add_periapsis_alarm (C++ function)</a>
 </li>
-      <li><a href="cpp/api/space-center/alarms.html#_CPPv4N4krpc8services11SpaceCenter12AlarmManager13add_soi_alarmER6Client6VesseldNSt6stringENSt6stringE">krpc::services::SpaceCenter::AlarmManager::add_soi_alarm (C++ function)</a>
+      <li><a href="cpp/api/space-center/alarms.html#_CPPv4N4krpc8services11SpaceCenter12AlarmManager13add_soi_alarmERN4krpc10ConnectionE6VesseldNSt6stringENSt6stringE">krpc::services::SpaceCenter::AlarmManager::add_soi_alarm (C++ function)</a>
 </li>
-      <li><a href="cpp/api/space-center/alarms.html#_CPPv4N4krpc8services11SpaceCenter12AlarmManager25add_transfer_window_alarmER6Client6Vessel13CelestialBodyNSt6stringENSt6stringE">krpc::services::SpaceCenter::AlarmManager::add_transfer_window_alarm (C++ function)</a>
+      <li><a href="cpp/api/space-center/alarms.html#_CPPv4N4krpc8services11SpaceCenter12AlarmManager25add_transfer_window_alarmERN4krpc10ConnectionE6Vessel13CelestialBodyNSt6stringENSt6stringE">krpc::services::SpaceCenter::AlarmManager::add_transfer_window_alarm (C++ function)</a>
 </li>
-      <li><a href="cpp/api/space-center/alarms.html#_CPPv4N4krpc8services11SpaceCenter12AlarmManager16add_vessel_alarmER6Clientd6VesselNSt6stringENSt6stringE">krpc::services::SpaceCenter::AlarmManager::add_vessel_alarm (C++ function)</a>
+      <li><a href="cpp/api/space-center/alarms.html#_CPPv4N4krpc8services11SpaceCenter12AlarmManager16add_vessel_alarmERN4krpc10ConnectionEd6VesselNSt6stringENSt6stringE">krpc::services::SpaceCenter::AlarmManager::add_vessel_alarm (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/alarms.html#_CPPv4N4krpc8services11SpaceCenter12AlarmManager15alarm_with_nameENSt6stringE">krpc::services::SpaceCenter::AlarmManager::alarm_with_name (C++ function)</a>
 </li>
@@ -22121,9 +22123,9 @@
 </li>
       <li><a href="cpp/api/space-center/orbit.html#_CPPv4N4krpc8services11SpaceCenter5Orbit18closest_approachesE5Orbit7int32_t">krpc::services::SpaceCenter::Orbit::closest_approaches (C++ function)</a>
 </li>
-      <li><a href="cpp/api/space-center/orbit.html#_CPPv4N4krpc8services11SpaceCenter5Orbit28create_from_orbital_elementsER6Client13CelestialBodyddddddd">krpc::services::SpaceCenter::Orbit::create_from_orbital_elements (C++ function)</a>
+      <li><a href="cpp/api/space-center/orbit.html#_CPPv4N4krpc8services11SpaceCenter5Orbit28create_from_orbital_elementsERN4krpc10ConnectionE13CelestialBodyddddddd">krpc::services::SpaceCenter::Orbit::create_from_orbital_elements (C++ function)</a>
 </li>
-      <li><a href="cpp/api/space-center/orbit.html#_CPPv4N4krpc8services11SpaceCenter5Orbit33create_from_position_and_velocityER6Client13CelestialBodyNSt5tupleIdddEENSt5tupleIdddEEdNSt8optionalI14ReferenceFrameEE">krpc::services::SpaceCenter::Orbit::create_from_position_and_velocity (C++ function)</a>
+      <li><a href="cpp/api/space-center/orbit.html#_CPPv4N4krpc8services11SpaceCenter5Orbit33create_from_position_and_velocityERN4krpc10ConnectionE13CelestialBodyNSt5tupleIdddEENSt5tupleIdddEEdNSt8optionalI14ReferenceFrameEE">krpc::services::SpaceCenter::Orbit::create_from_position_and_velocity (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/orbit.html#_CPPv4N4krpc8services11SpaceCenter5Orbit17eccentric_anomalyEv">krpc::services::SpaceCenter::Orbit::eccentric_anomaly (C++ function)</a>
 </li>
@@ -22177,9 +22179,9 @@
 </li>
       <li><a href="cpp/api/space-center/orbit.html#_CPPv4N4krpc8services11SpaceCenter5Orbit15reference_frameEv">krpc::services::SpaceCenter::Orbit::reference_frame (C++ function)</a>
 </li>
-      <li><a href="cpp/api/space-center/orbit.html#_CPPv4N4krpc8services11SpaceCenter5Orbit25reference_plane_directionER6Client14ReferenceFrame">krpc::services::SpaceCenter::Orbit::reference_plane_direction (C++ function)</a>
+      <li><a href="cpp/api/space-center/orbit.html#_CPPv4N4krpc8services11SpaceCenter5Orbit25reference_plane_directionERN4krpc10ConnectionE14ReferenceFrame">krpc::services::SpaceCenter::Orbit::reference_plane_direction (C++ function)</a>
 </li>
-      <li><a href="cpp/api/space-center/orbit.html#_CPPv4N4krpc8services11SpaceCenter5Orbit22reference_plane_normalER6Client14ReferenceFrame">krpc::services::SpaceCenter::Orbit::reference_plane_normal (C++ function)</a>
+      <li><a href="cpp/api/space-center/orbit.html#_CPPv4N4krpc8services11SpaceCenter5Orbit22reference_plane_normalERN4krpc10ConnectionE14ReferenceFrame">krpc::services::SpaceCenter::Orbit::reference_plane_normal (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/orbit.html#_CPPv4N4krpc8services11SpaceCenter5Orbit20relative_inclinationE5Orbit">krpc::services::SpaceCenter::Orbit::relative_inclination (C++ function)</a>
 </li>
@@ -22791,9 +22793,9 @@
 </li>
       <li><a href="cpp/api/space-center/reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE">krpc::services::SpaceCenter::ReferenceFrame (C++ class)</a>
 </li>
-      <li><a href="cpp/api/space-center/reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrame13create_hybridER6Client14ReferenceFrameNSt8optionalI14ReferenceFrameEENSt8optionalI14ReferenceFrameEENSt8optionalI14ReferenceFrameEE">krpc::services::SpaceCenter::ReferenceFrame::create_hybrid (C++ function)</a>
+      <li><a href="cpp/api/space-center/reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrame13create_hybridERN4krpc10ConnectionE14ReferenceFrameNSt8optionalI14ReferenceFrameEENSt8optionalI14ReferenceFrameEENSt8optionalI14ReferenceFrameEE">krpc::services::SpaceCenter::ReferenceFrame::create_hybrid (C++ function)</a>
 </li>
-      <li><a href="cpp/api/space-center/reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrame15create_relativeER6Client14ReferenceFrameNSt5tupleIdddEENSt5tupleIddddEENSt5tupleIdddEENSt5tupleIdddEE">krpc::services::SpaceCenter::ReferenceFrame::create_relative (C++ function)</a>
+      <li><a href="cpp/api/space-center/reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrame15create_relativeERN4krpc10ConnectionE14ReferenceFrameNSt5tupleIdddEENSt5tupleIddddEENSt5tupleIdddEENSt5tupleIdddEE">krpc::services::SpaceCenter::ReferenceFrame::create_relative (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrame6removeEv">krpc::services::SpaceCenter::ReferenceFrame::remove (C++ function)</a>
 </li>
@@ -22923,11 +22925,11 @@
 </li>
       <li><a href="cpp/api/space-center/resources.html#_CPPv4N4krpc8services11SpaceCenter9Resources6amountENSt6stringE">krpc::services::SpaceCenter::Resources::amount (C++ function)</a>
 </li>
-      <li><a href="cpp/api/space-center/resources.html#_CPPv4N4krpc8services11SpaceCenter9Resources7densityER6ClientNSt6stringE">krpc::services::SpaceCenter::Resources::density (C++ function)</a>
+      <li><a href="cpp/api/space-center/resources.html#_CPPv4N4krpc8services11SpaceCenter9Resources7densityERN4krpc10ConnectionENSt6stringE">krpc::services::SpaceCenter::Resources::density (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/resources.html#_CPPv4N4krpc8services11SpaceCenter9Resources7enabledEv">krpc::services::SpaceCenter::Resources::enabled (C++ function)</a>
 </li>
-      <li><a href="cpp/api/space-center/resources.html#_CPPv4N4krpc8services11SpaceCenter9Resources9flow_modeER6ClientNSt6stringE">krpc::services::SpaceCenter::Resources::flow_mode (C++ function)</a>
+      <li><a href="cpp/api/space-center/resources.html#_CPPv4N4krpc8services11SpaceCenter9Resources9flow_modeERN4krpc10ConnectionENSt6stringE">krpc::services::SpaceCenter::Resources::flow_mode (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/resources.html#_CPPv4N4krpc8services11SpaceCenter9Resources12has_resourceENSt6stringE">krpc::services::SpaceCenter::Resources::has_resource (C++ function)</a>
 </li>
@@ -22949,7 +22951,7 @@
 </li>
       <li><a href="cpp/api/space-center/resources.html#_CPPv4N4krpc8services11SpaceCenter16ResourceTransfer6removeEv">krpc::services::SpaceCenter::ResourceTransfer::remove (C++ function)</a>
 </li>
-      <li><a href="cpp/api/space-center/resources.html#_CPPv4N4krpc8services11SpaceCenter16ResourceTransfer5startER6Client4Part4PartNSt6stringEf">krpc::services::SpaceCenter::ResourceTransfer::start (C++ function)</a>
+      <li><a href="cpp/api/space-center/resources.html#_CPPv4N4krpc8services11SpaceCenter16ResourceTransfer5startERN4krpc10ConnectionE4Part4PartNSt6stringEf">krpc::services::SpaceCenter::ResourceTransfer::start (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/space-center.html#_CPPv4N4krpc8services11SpaceCenter16revert_to_launchEv">krpc::services::SpaceCenter::revert_to_launch (C++ function)</a>
 </li>
@@ -23279,7 +23281,7 @@
 </li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter10SolarPanel12sun_exposureEv">krpc::services::SpaceCenter::SolarPanel::sun_exposure (C++ function)</a>
 </li>
-      <li><a href="cpp/api/space-center/space-center.html#_CPPv4N4krpc8services11SpaceCenter11SpaceCenterERN4krpc6ClientE">krpc::services::SpaceCenter::SpaceCenter (C++ function)</a>
+      <li><a href="cpp/api/space-center/space-center.html#_CPPv4N4krpc8services11SpaceCenter11SpaceCenterERN4krpc10ConnectionE">krpc::services::SpaceCenter::SpaceCenter (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/control.html#_CPPv4N4krpc8services11SpaceCenter9SpeedModeE">krpc::services::SpaceCenter::SpeedMode (C++ enum)</a>
 </li>
@@ -23895,7 +23897,7 @@
 </li>
       <li><a href="cpp/api/stdlib.html#_CPPv4N4krpc8services6StdLib4sqrtEd">krpc::services::StdLib::sqrt (C++ function)</a>
 </li>
-      <li><a href="cpp/api/stdlib.html#_CPPv4N4krpc8services6StdLib6StdLibERN4krpc6ClientE">krpc::services::StdLib::StdLib (C++ function)</a>
+      <li><a href="cpp/api/stdlib.html#_CPPv4N4krpc8services6StdLib6StdLibERN4krpc10ConnectionE">krpc::services::StdLib::StdLib (C++ function)</a>
 </li>
       <li><a href="cpp/api/stdlib.html#_CPPv4N4krpc8services6StdLib3tanEd">krpc::services::StdLib::tan (C++ function)</a>
 </li>
@@ -23941,9 +23943,9 @@
 </li>
       <li><a href="cpp/api/trajectories/descent-profile.html#_CPPv4N4krpc8services12Trajectories14DescentProfile12low_altitudeEv">krpc::services::Trajectories::DescentProfile::low_altitude (C++ function)</a>
 </li>
-      <li><a href="cpp/api/trajectories/descent-profile.html#_CPPv4N4krpc8services12Trajectories14DescentProfile5resetER6Clientd">krpc::services::Trajectories::DescentProfile::reset (C++ function)</a>
+      <li><a href="cpp/api/trajectories/descent-profile.html#_CPPv4N4krpc8services12Trajectories14DescentProfile5resetERN4krpc10ConnectionEd">krpc::services::Trajectories::DescentProfile::reset (C++ function)</a>
 </li>
-      <li><a href="cpp/api/trajectories/descent-profile.html#_CPPv4N4krpc8services12Trajectories14DescentProfile4saveER6Client">krpc::services::Trajectories::DescentProfile::save (C++ function)</a>
+      <li><a href="cpp/api/trajectories/descent-profile.html#_CPPv4N4krpc8services12Trajectories14DescentProfile4saveERN4krpc10ConnectionE">krpc::services::Trajectories::DescentProfile::save (C++ function)</a>
 </li>
       <li><a href="cpp/api/trajectories/descent-profile-node.html#_CPPv4N4krpc8services12Trajectories18DescentProfileModeE">krpc::services::Trajectories::DescentProfileMode (C++ enum)</a>
 </li>
@@ -23997,7 +23999,7 @@
 </li>
       <li><a href="cpp/api/trajectories/trajectories.html#_CPPv4N4krpc8services12Trajectories15target_positionEN11SpaceCenter14ReferenceFrameE">krpc::services::Trajectories::target_position (C++ function)</a>
 </li>
-      <li><a href="cpp/api/trajectories/trajectories.html#_CPPv4N4krpc8services12Trajectories12TrajectoriesERN4krpc6ClientE">krpc::services::Trajectories::Trajectories (C++ function)</a>
+      <li><a href="cpp/api/trajectories/trajectories.html#_CPPv4N4krpc8services12Trajectories12TrajectoriesERN4krpc10ConnectionE">krpc::services::Trajectories::Trajectories (C++ function)</a>
 </li>
       <li><a href="cpp/api/trajectories/trajectories.html#_CPPv4N4krpc8services12Trajectories17update_trajectoryEv">krpc::services::Trajectories::update_trajectory (C++ function)</a>
 </li>
@@ -24595,7 +24597,7 @@
 </li>
       <li><a href="cpp/api/ui/toggle-group.html#_CPPv4N4krpc8services2UI11ToggleGroup7visibleEv">krpc::services::UI::ToggleGroup::visible (C++ function)</a>
 </li>
-      <li><a href="cpp/api/ui/ui.html#_CPPv4N4krpc8services2UI2UIERN4krpc6ClientE">krpc::services::UI::UI (C++ function)</a>
+      <li><a href="cpp/api/ui/ui.html#_CPPv4N4krpc8services2UI2UIERN4krpc10ConnectionE">krpc::services::UI::UI (C++ function)</a>
 </li>
       <li><a href="cpp.html#_CPPv4I0EN4krpc6StreamE">krpc::Stream (C++ class)</a>
 </li>
@@ -36986,7 +36988,7 @@
 </li>
       <li><a href="python/api/infernal-robotics/servo.html#InfernalRobotics.Servo.remove_preset_at">remove_preset_at() (Servo method)</a>
 </li>
-      <li><a href="python.html#krpc.client.Client.remove_stream_update_callback">remove_stream_update_callback() (krpc.client.Client method)</a>
+      <li><a href="python.html#krpc.Connection.remove_stream_update_callback">remove_stream_update_callback() (krpc.Connection method)</a>
 </li>
       <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.removeAt(Connection, Expression, Expression)">removeAt(Connection, Expression, Expression) (Java method)</a>
 </li>
@@ -37800,7 +37802,7 @@
         <li><a href="python/api/krpc/krpc.html#KRPC.ServerStatistics.rpcs_executed">(ServerStatistics attribute)</a>
 </li>
       </ul></li>
-      <li><a href="lua.html#lua-krpc.Client.run">run (method in krpc.Client)</a>
+      <li><a href="lua.html#lua-krpc.Connection.run">run (method in krpc.Connection)</a>
 
       <ul>
         <li><a href="lua/api/space-center/parts.html#lua-SpaceCenter.Experiment.run">(method in SpaceCenter.Experiment)</a>
@@ -37811,7 +37813,7 @@
       <ul>
         <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Experiment.run()">(Java method)</a>
 </li>
-        <li><a href="python.html#krpc.client.Client.run">(krpc.client.Client method)</a>
+        <li><a href="python.html#krpc.Connection.run">(krpc.Connection method)</a>
 </li>
       </ul></li>
       <li><a href="java.html#krpc.client.Connection.run(KRPC.Expression, Object)">run(KRPC.Expression, Object) (Java method)</a>
@@ -40471,7 +40473,7 @@
 </li>
       <li><a href="python.html#krpc.event.Event.stream">stream (krpc.event.Event attribute)</a>
 </li>
-      <li><a href="python.html#krpc.client.Client.stream">stream() (krpc.client.Client method)</a>
+      <li><a href="python.html#krpc.Connection.stream">stream() (krpc.Connection method)</a>
 </li>
       <li><a href="lua/api/krpc/krpc.html#lua-KRPC.ServerStatistics.stream_evaluation_rate">stream_evaluation_rate (attribute in KRPC.ServerStatistics)</a>
 
@@ -40485,7 +40487,7 @@
         <li><a href="python/api/krpc/krpc.html#KRPC.ServerStatistics.stream_evaluations">(ServerStatistics attribute)</a>
 </li>
       </ul></li>
-      <li><a href="python.html#krpc.client.Client.stream_update_condition">stream_update_condition (krpc.client.Client attribute)</a>
+      <li><a href="python.html#krpc.Connection.stream_update_condition">stream_update_condition (krpc.Connection attribute)</a>
 </li>
       <li><a href="lua/api/krpc/krpc.html#lua-KRPC.ServerStatistics.stream_updates_sent">stream_updates_sent (attribute in KRPC.ServerStatistics)</a>
 
@@ -42989,7 +42991,7 @@
         <li><a href="python/api/mechjeb/maneuver-planner.html#MechJeb.OperationInterplanetaryTransfer.wait_for_phase_angle">(OperationInterplanetaryTransfer attribute)</a>
 </li>
       </ul></li>
-      <li><a href="python.html#krpc.client.Client.wait_for_stream_update">wait_for_stream_update() (krpc.client.Client method)</a>
+      <li><a href="python.html#krpc.Connection.wait_for_stream_update">wait_for_stream_update() (krpc.Connection method)</a>
 </li>
       <li><a href="java.html#krpc.client.Event.waitFor()">waitFor() (Java method)</a>
 </li>

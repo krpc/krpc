@@ -6,7 +6,7 @@
 #include <thread>
 
 int main() {
-  krpc::Client conn = krpc::connect("Landing Site");
+  krpc::Connection conn = krpc::connect("Landing Site");
   krpc::services::SpaceCenter space_center(conn);
   krpc::services::Drawing drawing(conn);
   auto vessel = space_center.active_vessel().value();

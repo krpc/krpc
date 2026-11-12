@@ -7,7 +7,7 @@ ScanSat
 
 
 .. namespace:: krpc::services
-.. class:: ScanSat : public krpc::Service
+.. class:: ScanSat : public krpc::RemoteService
 
    This service provides the scan data, scanners and maps of
    `SCANsat <https://github.com/KSPModStewards/SCANsat>`_.
@@ -17,7 +17,7 @@ ScanSat
       The readouts at a position return ``NULL`` where the scans they need have not
       covered it, as the maps of the mod show nothing there.
 
-   .. function:: ScanSat(krpc::Client& client)
+   .. function:: ScanSat(krpc::Connection& connection)
 
       Construct an instance of this service.
 

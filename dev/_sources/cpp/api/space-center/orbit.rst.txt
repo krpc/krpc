@@ -12,7 +12,7 @@ Orbit
    :func:`Vessel::orbit`, or a celestial body, obtained by calling
    :func:`CelestialBody::orbit`.
 
-   .. function:: static Orbit create_from_position_and_velocity(Client& connection, CelestialBody body, std::tuple<double, double, double> position, std::tuple<double, double, double> velocity, double ut, std::optional<ReferenceFrame> reference_frame = std::optional<ReferenceFrame>())
+   .. function:: static Orbit create_from_position_and_velocity(krpc::Connection& connection, CelestialBody body, std::tuple<double, double, double> position, std::tuple<double, double, double> velocity, double ut, std::optional<ReferenceFrame> reference_frame = std::optional<ReferenceFrame>())
 
       Create the orbit that passes through a given position at a given velocity.
       The orbit coasts freely under the gravity of the body being orbited, so it
@@ -48,7 +48,7 @@ Orbit
          that created it disconnects. Remove each one created by a script that creates
          them repeatedly, for example once per update.
 
-   .. function:: static Orbit create_from_orbital_elements(Client& connection, CelestialBody body, double semi_major_axis, double eccentricity, double inclination, double longitude_of_ascending_node, double argument_of_periapsis, double mean_anomaly_at_epoch, double epoch)
+   .. function:: static Orbit create_from_orbital_elements(krpc::Connection& connection, CelestialBody body, double semi_major_axis, double eccentricity, double inclination, double longitude_of_ascending_node, double argument_of_periapsis, double mean_anomaly_at_epoch, double epoch)
 
       Create the orbit with the given
       `orbital elements <https://en.wikipedia.org/wiki/Orbital_elements>`_
@@ -592,7 +592,7 @@ Orbit
 
    
 
-   .. function:: static std::tuple<double, double, double> reference_plane_normal(Client& connection, ReferenceFrame reference_frame)
+   .. function:: static std::tuple<double, double, double> reference_plane_normal(krpc::Connection& connection, ReferenceFrame reference_frame)
 
       The direction that is normal to the orbits reference plane,
       in the given reference frame.
@@ -605,7 +605,7 @@ Orbit
       :returns: The direction as a unit vector.
    
 
-   .. function:: static std::tuple<double, double, double> reference_plane_direction(Client& connection, ReferenceFrame reference_frame)
+   .. function:: static std::tuple<double, double, double> reference_plane_direction(krpc::Connection& connection, ReferenceFrame reference_frame)
 
       The direction from which the orbits longitude of ascending node is measured,
       in the given reference frame.

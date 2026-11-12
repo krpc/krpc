@@ -1369,7 +1369,7 @@ connection in game. The connection fails after 5 seconds by default. Pass
 <section id="over-tcp-ip">
 <h3>Over TCP/IP<a class="headerlink" href="#over-tcp-ip" title="Link to this heading">#</a></h3>
 <p>Select “Protobuf over TCP/IP” as the server’s protocol. <a class="reference internal" href="#krpc.connect" title="krpc.connect"><code class="xref py py-func docutils literal notranslate"><span class="pre">connect()</span></code></a> connects to it, and
-returns a <a class="reference internal" href="#krpc.client.Client" title="krpc.client.Client"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.client.Client</span></code></a>. You make every call through this object. The following
+returns a <a class="reference internal" href="#krpc.Connection" title="krpc.Connection"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.Connection</span></code></a>. You make every call through this object. The following
 connects to a server with the default settings, address <code class="docutils literal notranslate"><span class="pre">127.0.0.1</span></code> and port 50000, and prints
 its version:</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
@@ -1392,7 +1392,7 @@ in the game:</p>
 <section id="over-a-local-socket">
 <h3>Over a Local Socket<a class="headerlink" href="#over-a-local-socket" title="Link to this heading">#</a></h3>
 <p>Select “Protobuf over local socket” as the server’s protocol. <a class="reference internal" href="#krpc.connect_local" title="krpc.connect_local"><code class="xref py py-func docutils literal notranslate"><span class="pre">connect_local()</span></code></a> connects
-to it, and returns a <a class="reference internal" href="#krpc.client.Client" title="krpc.client.Client"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.client.Client</span></code></a> as <a class="reference internal" href="#krpc.connect" title="krpc.connect"><code class="xref py py-func docutils literal notranslate"><span class="pre">connect()</span></code></a> does. The following
+to it, and returns a <a class="reference internal" href="#krpc.Connection" title="krpc.Connection"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.Connection</span></code></a> as <a class="reference internal" href="#krpc.connect" title="krpc.connect"><code class="xref py py-func docutils literal notranslate"><span class="pre">connect()</span></code></a> does. The following
 connects to a server with the default settings, at the default socket path for your platform, and
 prints its version:</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
@@ -1415,7 +1415,7 @@ it is faster.</p>
     <span class="nb">print</span><span class="p">(</span><span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">get_status</span><span class="p">()</span><span class="o">.</span><span class="n">version</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><a class="reference internal" href="#krpc.client.Client.close" title="krpc.client.Client.close"><code class="xref py py-meth docutils literal notranslate"><span class="pre">close()</span></code></a> closes a connection explicitly. A connection you do not close stays
+<p><a class="reference internal" href="#krpc.Connection.close" title="krpc.Connection.close"><code class="xref py py-meth docutils literal notranslate"><span class="pre">close()</span></code></a> closes a connection explicitly. A connection you do not close stays
 open until your program exits, even when your program no longer holds it.</p>
 </section>
 </section>
@@ -1565,7 +1565,7 @@ detail.</p>
 <h2>Calling Methods<a class="headerlink" href="#calling-methods" title="Link to this heading">#</a></h2>
 <p>You call a method on an object of its class. A <em>static</em> method needs no object, and you call it on
 the class itself. Reach the class through the connection’s service. Pass the method to
-<a class="reference internal" href="#krpc.client.Client.add_stream" title="krpc.client.Client.add_stream"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_stream()</span></code></a> to stream it:</p>
+<a class="reference internal" href="#krpc.Connection.add_stream" title="krpc.Connection.add_stream"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_stream()</span></code></a> to stream it:</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
 
 <span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
@@ -1613,7 +1613,7 @@ The server runs the call repeatedly, and sends your program the result each time
     <span class="nb">print</span><span class="p">(</span><span class="n">position</span><span class="p">())</span>
 </pre></div>
 </div>
-<p><a class="reference internal" href="#krpc.client.Client.add_stream" title="krpc.client.Client.add_stream"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_stream()</span></code></a> creates the stream from the method and its arguments, and
+<p><a class="reference internal" href="#krpc.Connection.add_stream" title="krpc.Connection.add_stream"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_stream()</span></code></a> creates the stream from the method and its arguments, and
 returns a <a class="reference internal" href="#krpc.stream.Stream" title="krpc.stream.Stream"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.stream.Stream</span></code></a>. Calling it returns the stream’s latest value.</p>
 <p>A property is streamed with <code class="docutils literal notranslate"><span class="pre">getattr</span></code> and the property’s name:</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
@@ -1626,7 +1626,7 @@ returns a <a class="reference internal" href="#krpc.stream.Stream" title="krpc.s
     <span class="nb">print</span><span class="p">(</span><span class="n">altitude</span><span class="p">())</span>
 </pre></div>
 </div>
-<p>Each call to <a class="reference internal" href="#krpc.client.Client.add_stream" title="krpc.client.Client.add_stream"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_stream()</span></code></a> creates another stream. A stream of a
+<p>Each call to <a class="reference internal" href="#krpc.Connection.add_stream" title="krpc.Connection.add_stream"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_stream()</span></code></a> creates another stream. A stream of a
 procedure with no return value, or of a property setter passed with <code class="docutils literal notranslate"><span class="pre">setattr</span></code>, runs the call on
 each update for its effects. Its value is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
 <p>A stream runs until you remove it with <a class="reference internal" href="#krpc.stream.Stream.remove" title="krpc.stream.Stream.remove"><code class="xref py py-meth docutils literal notranslate"><span class="pre">remove()</span></code></a>, or the connection
@@ -1800,14 +1800,14 @@ vessel’s altitude and speed together:</p>
 side functions guide</span></a> shows how to build larger functions.</p>
 <section id="running-a-function">
 <h3>Running a Function<a class="headerlink" href="#running-a-function" title="Link to this heading">#</a></h3>
-<p><a class="reference internal" href="#krpc.client.Client.run" title="krpc.client.Client.run"><code class="xref py py-meth docutils literal notranslate"><span class="pre">run()</span></code></a> runs a function once, and returns its value. The server runs the
+<p><a class="reference internal" href="#krpc.Connection.run" title="krpc.Connection.run"><code class="xref py py-meth docutils literal notranslate"><span class="pre">run()</span></code></a> runs a function once, and returns its value. The server runs the
 whole function within one physics tick, so every value it reads comes from the same moment in the
 game. In the example, the altitude and the speed are consistent with each other, which two
 separate calls cannot guarantee.</p>
 </section>
 <section id="streaming-a-function">
 <h3>Streaming a Function<a class="headerlink" href="#streaming-a-function" title="Link to this heading">#</a></h3>
-<p>Pass a function to <a class="reference internal" href="#krpc.client.Client.add_stream" title="krpc.client.Client.add_stream"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_stream()</span></code></a> to stream its value. The server
+<p>Pass a function to <a class="reference internal" href="#krpc.Connection.add_stream" title="krpc.Connection.add_stream"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_stream()</span></code></a> to stream its value. The server
 evaluates the function on each update, within one physics tick. The following streams the
 vessel’s altitude in kilometers:</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
@@ -1863,7 +1863,7 @@ until the vessel’s altitude exceeds 1000 meters:</p>
     <span class="nb">print</span><span class="p">(</span><span class="s2">"Altitude reached 1000m"</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><a class="reference internal" href="#krpc.client.Client.add_event" title="krpc.client.Client.add_event"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_event()</span></code></a> creates the event, and <a class="reference internal" href="#krpc.event.Event.wait" title="krpc.event.Event.wait"><code class="xref py py-meth docutils literal notranslate"><span class="pre">wait()</span></code></a> waits
+<p><a class="reference internal" href="#krpc.Connection.add_event" title="krpc.Connection.add_event"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_event()</span></code></a> creates the event, and <a class="reference internal" href="#krpc.event.Event.wait" title="krpc.event.Event.wait"><code class="xref py py-meth docutils literal notranslate"><span class="pre">wait()</span></code></a> waits
 for it to fire. The server checks the condition every physics tick, so the event catches a
 condition that holds for only a moment, which a loop of calls can miss.</p>
 <p>The event fires again each time the condition becomes true after being false. Call
@@ -1988,8 +1988,8 @@ use the <code class="docutils literal notranslate"><span class="pre">warnings</s
 <section id="writing-server-side-functions">
 <span id="python-client-compiling-functions"></span><h2>Writing Server Side Functions<a class="headerlink" href="#writing-server-side-functions" title="Link to this heading">#</a></h2>
 <p>The client includes a compiler, which converts a Python function or lambda into a server side
-function automatically when you pass it to <a class="reference internal" href="#krpc.client.Client.run" title="krpc.client.Client.run"><code class="xref py py-meth docutils literal notranslate"><span class="pre">run()</span></code></a>,
-<a class="reference internal" href="#krpc.client.Client.add_stream" title="krpc.client.Client.add_stream"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_stream()</span></code></a> or <a class="reference internal" href="#krpc.client.Client.add_event" title="krpc.client.Client.add_event"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_event()</span></code></a>. This section
+function automatically when you pass it to <a class="reference internal" href="#krpc.Connection.run" title="krpc.Connection.run"><code class="xref py py-meth docutils literal notranslate"><span class="pre">run()</span></code></a>,
+<a class="reference internal" href="#krpc.Connection.add_stream" title="krpc.Connection.add_stream"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_stream()</span></code></a> or <a class="reference internal" href="#krpc.Connection.add_event" title="krpc.Connection.add_event"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_event()</span></code></a>. This section
 describes what a function can contain, and how to compile one ahead of time.</p>
 <section id="remote-calls-and-constants">
 <h3>Remote Calls and Constants<a class="headerlink" href="#remote-calls-and-constants" title="Link to this heading">#</a></h3>
@@ -2015,10 +2015,10 @@ when compiling, where you would expect it to run on every evaluation:</p>
 <li><p>Reading a stream inside a function, as the stream would be read once.</p></li>
 <li><p>A call to a client side function written as a statement, such as <code class="docutils literal notranslate"><span class="pre">time.sleep(1)</span></code>. The
 builtins under <a class="reference internal" href="#python-client-builtins"><span class="std std-ref">Builtin Functions and Methods</span></a>, such as <code class="docutils literal notranslate"><span class="pre">print</span></code>, run on the server instead.</p></li>
-<li><p>A Python function passed to <a class="reference internal" href="#krpc.client.Client.add_event" title="krpc.client.Client.add_event"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_event()</span></code></a> or
-<a class="reference internal" href="#krpc.client.Client.add_stream" title="krpc.client.Client.add_stream"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_stream()</span></code></a> that makes no remote procedure call and uses no state
+<li><p>A Python function passed to <a class="reference internal" href="#krpc.Connection.add_event" title="krpc.Connection.add_event"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_event()</span></code></a> or
+<a class="reference internal" href="#krpc.Connection.add_stream" title="krpc.Connection.add_stream"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_stream()</span></code></a> that makes no remote procedure call and uses no state
 variable, as its value is the same on every update. A function compiled with
-<a class="reference internal" href="#krpc.client.Client.compile" title="krpc.client.Client.compile"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compile()</span></code></a> first is not checked.</p></li>
+<a class="reference internal" href="#krpc.Connection.compile" title="krpc.Connection.compile"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compile()</span></code></a> first is not checked.</p></li>
 </ul>
 </section>
 <section id="operators">
@@ -2260,9 +2260,9 @@ with server side arguments.</p>
 </section>
 <section id="compiling-ahead-of-time">
 <h3>Compiling Ahead of Time<a class="headerlink" href="#compiling-ahead-of-time" title="Link to this heading">#</a></h3>
-<p>Pass a Python function or lambda to <a class="reference internal" href="#krpc.client.Client.compile" title="krpc.client.Client.compile"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compile()</span></code></a> to compile it into a server
-side function. <a class="reference internal" href="#krpc.client.Client.add_event" title="krpc.client.Client.add_event"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_event()</span></code></a>, <a class="reference internal" href="#krpc.client.Client.add_stream" title="krpc.client.Client.add_stream"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_stream()</span></code></a> and
-<a class="reference internal" href="#krpc.client.Client.run" title="krpc.client.Client.run"><code class="xref py py-meth docutils literal notranslate"><span class="pre">run()</span></code></a> take the result, and run it without compiling it again. The
+<p>Pass a Python function or lambda to <a class="reference internal" href="#krpc.Connection.compile" title="krpc.Connection.compile"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compile()</span></code></a> to compile it into a server
+side function. <a class="reference internal" href="#krpc.Connection.add_event" title="krpc.Connection.add_event"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_event()</span></code></a>, <a class="reference internal" href="#krpc.Connection.add_stream" title="krpc.Connection.add_stream"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_stream()</span></code></a> and
+<a class="reference internal" href="#krpc.Connection.run" title="krpc.Connection.run"><code class="xref py py-meth docutils literal notranslate"><span class="pre">run()</span></code></a> take the result, and run it without compiling it again. The
 following compiles a function once, and runs it every second:</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 
@@ -2283,14 +2283,14 @@ following compiles a function once, and runs it every second:</p>
     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Given a Python function or lambda, <a class="reference internal" href="#krpc.client.Client.add_event" title="krpc.client.Client.add_event"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_event()</span></code></a>,
-<a class="reference internal" href="#krpc.client.Client.add_stream" title="krpc.client.Client.add_stream"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_stream()</span></code></a> and <a class="reference internal" href="#krpc.client.Client.run" title="krpc.client.Client.run"><code class="xref py py-meth docutils literal notranslate"><span class="pre">run()</span></code></a> compile it again on every
+<p>Given a Python function or lambda, <a class="reference internal" href="#krpc.Connection.add_event" title="krpc.Connection.add_event"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_event()</span></code></a>,
+<a class="reference internal" href="#krpc.Connection.add_stream" title="krpc.Connection.add_stream"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_stream()</span></code></a> and <a class="reference internal" href="#krpc.Connection.run" title="krpc.Connection.run"><code class="xref py py-meth docutils literal notranslate"><span class="pre">run()</span></code></a> compile it again on every
 call, so its captured variables take their current values. A compiled function keeps the values from
 when it was compiled. Compiling makes a remote procedure call per node.</p>
-<p>To use a function repeatedly, compile it once with <a class="reference internal" href="#krpc.client.Client.compile" title="krpc.client.Client.compile"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compile()</span></code></a> and pass the
-result. <a class="reference internal" href="#krpc.client.Client.compile" title="krpc.client.Client.compile"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compile()</span></code></a> also compiles the function on the server, so its first
+<p>To use a function repeatedly, compile it once with <a class="reference internal" href="#krpc.Connection.compile" title="krpc.Connection.compile"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compile()</span></code></a> and pass the
+result. <a class="reference internal" href="#krpc.Connection.compile" title="krpc.Connection.compile"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compile()</span></code></a> also compiles the function on the server, so its first
 run is as fast as later ones.</p>
-<p><a class="reference internal" href="#krpc.client.Client.compile" title="krpc.client.Client.compile"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compile()</span></code></a> also works as a decorator, which replaces the function with
+<p><a class="reference internal" href="#krpc.Connection.compile" title="krpc.Connection.compile"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compile()</span></code></a> also works as a decorator, which replaces the function with
 its compiled form:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@conn</span><span class="o">.</span><span class="n">compile</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">altitude_km</span><span class="p">():</span>
@@ -2303,7 +2303,7 @@ its compiled form:</p>
 </section>
 <section id="parameters">
 <h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">#</a></h3>
-<p>A <code class="docutils literal notranslate"><span class="pre">def</span></code> can take parameters, each with a type annotation. <a class="reference internal" href="#krpc.client.Client.run" title="krpc.client.Client.run"><code class="xref py py-meth docutils literal notranslate"><span class="pre">run()</span></code></a> passes
+<p>A <code class="docutils literal notranslate"><span class="pre">def</span></code> can take parameters, each with a type annotation. <a class="reference internal" href="#krpc.Connection.run" title="krpc.Connection.run"><code class="xref py py-meth docutils literal notranslate"><span class="pre">run()</span></code></a> passes
 its arguments to them, with defaults and keyword arguments as in Python:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@conn</span><span class="o">.</span><span class="n">compile</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">altitude_above</span><span class="p">(</span><span class="n">height</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
@@ -2315,14 +2315,14 @@ its arguments to them, with defaults and keyword arguments as in Python:</p>
 </pre></div>
 </div>
 <p>Only a <code class="docutils literal notranslate"><span class="pre">def</span></code> takes parameters. An event or a function stream runs its function with no arguments.
-Passing <a class="reference internal" href="#krpc.client.Client.add_event" title="krpc.client.Client.add_event"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_event()</span></code></a> or <a class="reference internal" href="#krpc.client.Client.add_stream" title="krpc.client.Client.add_stream"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_stream()</span></code></a> a <code class="docutils literal notranslate"><span class="pre">def</span></code>
+Passing <a class="reference internal" href="#krpc.Connection.add_event" title="krpc.Connection.add_event"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_event()</span></code></a> or <a class="reference internal" href="#krpc.Connection.add_stream" title="krpc.Connection.add_stream"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_stream()</span></code></a> a <code class="docutils literal notranslate"><span class="pre">def</span></code>
 with parameters raises <a class="reference internal" href="#krpc.error.FunctionCompilationError" title="krpc.error.FunctionCompilationError"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.error.FunctionCompilationError</span></code></a>, and a compiled function with
 parameters raises <code class="docutils literal notranslate"><span class="pre">StreamError</span></code>.</p>
 </section>
 </section>
 <section id="type-checking">
 <span id="python-type-checking"></span><h2>Type Checking<a class="headerlink" href="#type-checking" title="Link to this heading">#</a></h2>
-<p><a class="reference internal" href="#krpc.connect" title="krpc.connect"><code class="xref py py-func docutils literal notranslate"><span class="pre">krpc.connect()</span></code></a> returns a <code class="docutils literal notranslate"><span class="pre">krpc.ksp.KSPClient</span></code>, which declares every service the client
+<p><a class="reference internal" href="#krpc.connect" title="krpc.connect"><code class="xref py py-func docutils literal notranslate"><span class="pre">krpc.connect()</span></code></a> returns a <code class="docutils literal notranslate"><span class="pre">krpc.ksp.KSPConnection</span></code>, which declares every service the client
 ships with for Kerbal Space Program, including <code class="docutils literal notranslate"><span class="pre">krpc</span></code>. A type checker then knows the type of each
 member:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
@@ -2332,14 +2332,14 @@ member:</p>
 </pre></div>
 </div>
 <p>The client builds each service from the definitions the server sends when you connect, so it has
-the procedures of that server. <code class="docutils literal notranslate"><span class="pre">krpc.connect[T](...)</span></code> connects with the client type <code class="docutils literal notranslate"><span class="pre">T</span></code> in
-place of <code class="docutils literal notranslate"><span class="pre">KSPClient</span></code>.</p>
-<p>Each service’s module, such as <code class="docutils literal notranslate"><span class="pre">krpc.ksp.spacecenter</span></code>, declares a client type with only that
-service, such as <code class="docutils literal notranslate"><span class="pre">SpaceCenterClient</span></code>. A function can take the client type of the services it
-uses:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">krpc.ksp.spacecenter</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpaceCenterClient</span>
+the procedures of that server. <code class="docutils literal notranslate"><span class="pre">krpc.connect[T](...)</span></code> connects with the connection type <code class="docutils literal notranslate"><span class="pre">T</span></code> in
+place of <code class="docutils literal notranslate"><span class="pre">KSPConnection</span></code>.</p>
+<p>Each service’s module, such as <code class="docutils literal notranslate"><span class="pre">krpc.ksp.spacecenter</span></code>, declares a connection type with only that
+service, such as <code class="docutils literal notranslate"><span class="pre">SpaceCenterConnection</span></code>. A function can take the connection type of the services
+it uses:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">krpc.ksp.spacecenter</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpaceCenterConnection</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">stage</span><span class="p">(</span><span class="n">conn</span><span class="p">:</span> <span class="n">SpaceCenterClient</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">stage</span><span class="p">(</span><span class="n">conn</span><span class="p">:</span> <span class="n">SpaceCenterConnection</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
     <span class="k">if</span> <span class="n">vessel</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">activate_next_stage</span><span class="p">()</span>
@@ -2365,28 +2365,28 @@ is sent by its number.</p>
 module for the service with <a class="reference internal" href="extending/clientgen.html#service-api-clientgen"><span class="std std-ref">krpc-clientgen</span></a>, and combine its client
 type with the others you use:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">krpc.ksp</span><span class="w"> </span><span class="kn">import</span> <span class="n">KSPClient</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">mymod_services</span><span class="w"> </span><span class="kn">import</span> <span class="n">MyModClient</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">krpc.ksp</span><span class="w"> </span><span class="kn">import</span> <span class="n">KSPConnection</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mymod_services</span><span class="w"> </span><span class="kn">import</span> <span class="n">MyModConnection</span>
 
-<span class="k">class</span><span class="w"> </span><span class="nc">Connection</span><span class="p">(</span><span class="n">KSPClient</span><span class="p">,</span> <span class="n">MyModClient</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MyConnection</span><span class="p">(</span><span class="n">KSPConnection</span><span class="p">,</span> <span class="n">MyModConnection</span><span class="p">):</span>
     <span class="k">pass</span>
 
-<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">[</span><span class="n">Connection</span><span class="p">]()</span>
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">[</span><span class="n">MyConnection</span><span class="p">]()</span>
 <span class="n">conn</span><span class="o">.</span><span class="n">my_mod</span><span class="o">.</span><span class="n">get_mode</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>A module generated for a newer server replaces the shipped module of the same service. Combine its
-client type with those of the other services you use, as it cannot combine with <code class="docutils literal notranslate"><span class="pre">KSPClient</span></code>,
-which has the shipped one:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">krpc.ksp.spacecenter</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpaceCenterClient</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">newer_services.ui</span><span class="w"> </span><span class="kn">import</span> <span class="n">UIClient</span>
+connection type with those of the other services you use, as it cannot combine with
+<code class="docutils literal notranslate"><span class="pre">KSPConnection</span></code>, which has the shipped one:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">krpc.ksp.spacecenter</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpaceCenterConnection</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">newer_services.ui</span><span class="w"> </span><span class="kn">import</span> <span class="n">UIConnection</span>
 
-<span class="k">class</span><span class="w"> </span><span class="nc">Connection</span><span class="p">(</span><span class="n">UIClient</span><span class="p">,</span> <span class="n">SpaceCenterClient</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MyConnection</span><span class="p">(</span><span class="n">UIConnection</span><span class="p">,</span> <span class="n">SpaceCenterConnection</span><span class="p">):</span>
     <span class="k">pass</span>
 </pre></div>
 </div>
-<p>A client uses the enumerations, structures and exceptions of the modules its client type names,
-where the server’s definitions match them. For a service its client type does not name, it uses
+<p>A client uses the enumerations, structures and exceptions of the modules its connection type names,
+where the server’s definitions match them. For a service its connection type does not name, it uses
 those of the module imported last.</p>
 </section>
 </section>
@@ -2395,8 +2395,8 @@ those of the module imported last.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="krpc.connect">
 <span class="sig-prename descclassname"><span class="pre">krpc.</span></span><span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">address</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'127.0.0.1'</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50000</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">handshake_timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">stall_timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.connect" title="Link to this definition">#</a></dt>
-<dd><p>Connects to a kRPC server, and returns a <code class="docutils literal notranslate"><span class="pre">krpc.ksp.KSPClient</span></code>. <code class="docutils literal notranslate"><span class="pre">krpc.connect[T](...)</span></code>
-returns a client of the client type <code class="docutils literal notranslate"><span class="pre">T</span></code>, as in <a class="reference internal" href="#python-type-checking"><span class="std std-ref">Type Checking</span></a>.</p>
+<dd><p>Connects to a kRPC server, and returns a <code class="docutils literal notranslate"><span class="pre">krpc.ksp.KSPConnection</span></code>. <code class="docutils literal notranslate"><span class="pre">krpc.connect[T](...)</span></code>
+returns a connection of the connection type <code class="docutils literal notranslate"><span class="pre">T</span></code>, as in <a class="reference internal" href="#python-type-checking"><span class="std std-ref">Type Checking</span></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -2424,8 +2424,8 @@ and <code class="docutils literal notranslate"><span class="pre">ValueError</spa
 <dt class="sig sig-object py" id="krpc.connect_local">
 <span class="sig-prename descclassname"><span class="pre">krpc.</span></span><span class="sig-name descname"><span class="pre">connect_local</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">handshake_timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">stall_timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.connect_local" title="Link to this definition">#</a></dt>
 <dd><p>Connects to a kRPC server on the same machine over a local socket, and returns a
-<code class="docutils literal notranslate"><span class="pre">krpc.ksp.KSPClient</span></code>. The server must use the local socket protocol.
-<code class="docutils literal notranslate"><span class="pre">krpc.connect_local[T](...)</span></code> returns a client of type <code class="docutils literal notranslate"><span class="pre">T</span></code>, as for <a class="reference internal" href="#krpc.connect" title="krpc.connect"><code class="xref py py-func docutils literal notranslate"><span class="pre">krpc.connect()</span></code></a>.</p>
+<code class="docutils literal notranslate"><span class="pre">krpc.ksp.KSPConnection</span></code>. The server must use the local socket protocol.
+<code class="docutils literal notranslate"><span class="pre">krpc.connect_local[T](...)</span></code> returns a connection of type <code class="docutils literal notranslate"><span class="pre">T</span></code>, as for <a class="reference internal" href="#krpc.connect" title="krpc.connect"><code class="xref py py-func docutils literal notranslate"><span class="pre">krpc.connect()</span></code></a>.</p>
 <p>A script that makes many calls in quick succession completes more of them per physics update
 than over TCP/IP. A script that makes a call and then waits runs at the game’s update rate
 either way.</p>
@@ -2461,20 +2461,20 @@ Defaults to the path the server uses unless it was configured with another.</p><
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="krpc.client.Client">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">krpc.client.</span></span><span class="sig-name descname"><span class="pre">Client</span></span><a class="headerlink" href="#krpc.client.Client" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="krpc.Connection">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">krpc.</span></span><span class="sig-name descname"><span class="pre">Connection</span></span><a class="headerlink" href="#krpc.Connection" title="Link to this definition">#</a></dt>
 <dd><p>A connection to the server, with an attribute for each of the server’s services. Obtain one
 by calling <a class="reference internal" href="#krpc.connect" title="krpc.connect"><code class="xref py py-func docutils literal notranslate"><span class="pre">krpc.connect()</span></code></a>. It can be used in a <code class="docutils literal notranslate"><span class="pre">with</span></code> statement, which closes it at the
 end of the block.</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="krpc.client.Client.close">
-<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Client.close" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="krpc.Connection.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.Connection.close" title="Link to this definition">#</a></dt>
 <dd><p>Closes the connection. Closing a connection that is already closed does nothing.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="krpc.client.Client.krpc">
-<span class="sig-name descname"><span class="pre">krpc</span></span><a class="headerlink" href="#krpc.client.Client.krpc" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="krpc.Connection.krpc">
+<span class="sig-name descname"><span class="pre">krpc</span></span><a class="headerlink" href="#krpc.Connection.krpc" title="Link to this definition">#</a></dt>
 <dd><p>The <a class="reference internal" href="python/api/krpc/krpc.html#module-KRPC" title="KRPC"><code class="xref py py-mod docutils literal notranslate"><span class="pre">KRPC</span></code></a> service, providing the server’s basic functionality. The client uses some
 of its procedures itself, such as to add and remove streams, and your program does not need
 to call those. Each of the server’s other services is an attribute too, such as
@@ -2482,15 +2482,15 @@ to call those. Each of the server’s other services is an attribute too, such a
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="krpc.client.Client.add_stream">
-<span class="sig-name descname"><span class="pre">add_stream</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Client.add_stream" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="krpc.Connection.add_stream">
+<span class="sig-name descname"><span class="pre">add_stream</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.Connection.add_stream" title="Link to this definition">#</a></dt>
 <dd><p>Creates a stream for the remote procedure <em>func</em> called with arguments <em>args</em> and <em>kwargs</em>,
 and returns a <a class="reference internal" href="#krpc.stream.Stream" title="krpc.stream.Stream"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.stream.Stream</span></code></a>. Each call creates a new stream. Stream a property
 by passing <code class="docutils literal notranslate"><span class="pre">getattr</span></code> as <em>func</em>, then the object and the property’s name. Stream a
 property setter by passing <code class="docutils literal notranslate"><span class="pre">setattr</span></code>, then the object, the property’s name and the value.</p>
 <p><em>func</em> can also be a server side function, which the stream evaluates on each update. It
 is a <code class="docutils literal notranslate"><span class="pre">KRPC.Expression</span></code> object, or a Python function or lambda that is compiled with
-<a class="reference internal" href="#krpc.client.Client.compile" title="krpc.client.Client.compile"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compile()</span></code></a> on every call. A server side function takes no arguments.</p>
+<a class="reference internal" href="#krpc.Connection.compile" title="krpc.Connection.compile"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compile()</span></code></a> on every call. A server side function takes no arguments.</p>
 <p>A call or function with no value runs on each update for its effects, and the stream’s
 value is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
 <p>Raises <a class="reference internal" href="#krpc.error.StreamError" title="krpc.error.StreamError"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.error.StreamError</span></code></a> for arguments passed with a server side function,
@@ -2498,65 +2498,65 @@ and for a compiled function with parameters. Raises <code class="docutils litera
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="krpc.client.Client.stream">
-<span class="sig-name descname"><span class="pre">stream</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Client.stream" title="Link to this definition">#</a></dt>
-<dd><p>Deprecated. Use <a class="reference internal" href="#krpc.client.Client.add_stream" title="krpc.client.Client.add_stream"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_stream()</span></code></a> in a <code class="docutils literal notranslate"><span class="pre">with</span></code> statement.</p>
+<dt class="sig sig-object py" id="krpc.Connection.stream">
+<span class="sig-name descname"><span class="pre">stream</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.Connection.stream" title="Link to this definition">#</a></dt>
+<dd><p>Deprecated. Use <a class="reference internal" href="#krpc.Connection.add_stream" title="krpc.Connection.add_stream"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_stream()</span></code></a> in a <code class="docutils literal notranslate"><span class="pre">with</span></code> statement.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="krpc.client.Client.stream_update_condition">
-<span class="sig-name descname"><span class="pre">stream_update_condition</span></span><a class="headerlink" href="#krpc.client.Client.stream_update_condition" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="krpc.Connection.stream_update_condition">
+<span class="sig-name descname"><span class="pre">stream_update_condition</span></span><a class="headerlink" href="#krpc.Connection.stream_update_condition" title="Link to this definition">#</a></dt>
 <dd><p>A condition variable, of type <code class="docutils literal notranslate"><span class="pre">threading.Condition</span></code>, notified after each stream update
 message is processed.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="krpc.client.Client.wait_for_stream_update">
-<span class="sig-name descname"><span class="pre">wait_for_stream_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Client.wait_for_stream_update" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="krpc.Connection.wait_for_stream_update">
+<span class="sig-name descname"><span class="pre">wait_for_stream_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.Connection.wait_for_stream_update" title="Link to this definition">#</a></dt>
 <dd><p>Blocks until the next stream update message is processed, or the timeout elapses. The
 timeout is in seconds, and <code class="docutils literal notranslate"><span class="pre">None</span></code> waits indefinitely. Hold
-<a class="reference internal" href="#krpc.client.Client.stream_update_condition" title="krpc.client.Client.stream_update_condition"><code class="xref py py-attr docutils literal notranslate"><span class="pre">stream_update_condition</span></code></a> when calling this method.</p>
+<a class="reference internal" href="#krpc.Connection.stream_update_condition" title="krpc.Connection.stream_update_condition"><code class="xref py py-attr docutils literal notranslate"><span class="pre">stream_update_condition</span></code></a> when calling this method.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="krpc.client.Client.add_stream_update_callback">
-<span class="sig-name descname"><span class="pre">add_stream_update_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Client.add_stream_update_callback" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="krpc.Connection.add_stream_update_callback">
+<span class="sig-name descname"><span class="pre">add_stream_update_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.Connection.add_stream_update_callback" title="Link to this definition">#</a></dt>
 <dd><p>Adds a callback, with no arguments, called after each stream update message is processed.
 It runs on the connection’s callback thread, as the callbacks of a stream do.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="krpc.client.Client.remove_stream_update_callback">
-<span class="sig-name descname"><span class="pre">remove_stream_update_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Client.remove_stream_update_callback" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="krpc.Connection.remove_stream_update_callback">
+<span class="sig-name descname"><span class="pre">remove_stream_update_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.Connection.remove_stream_update_callback" title="Link to this definition">#</a></dt>
 <dd><p>Removes a stream update callback.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="krpc.client.Client.run">
-<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">function</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Client.run" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="krpc.Connection.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">function</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.Connection.run" title="Link to this definition">#</a></dt>
 <dd><p>Runs a function on the server, within a single physics tick, and returns the value it
 produces. The value is <code class="docutils literal notranslate"><span class="pre">None</span></code> when the function has no result or its result is null.
 The function is a <code class="docutils literal notranslate"><span class="pre">KRPC.Expression</span></code> object, or a Python function or lambda, which is
-compiled with <a class="reference internal" href="#krpc.client.Client.compile" title="krpc.client.Client.compile"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compile()</span></code></a> on every call. The arguments are passed to the function’s
+compiled with <a class="reference internal" href="#krpc.Connection.compile" title="krpc.Connection.compile"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compile()</span></code></a> on every call. The arguments are passed to the function’s
 parameters. A function built with the expression API takes positional arguments only.</p>
 <p>Raises <code class="docutils literal notranslate"><span class="pre">TypeError</span></code> for a value that is not a function, and for an argument its parameter
 cannot take, naming the argument’s position.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="krpc.client.Client.add_event">
-<span class="sig-name descname"><span class="pre">add_event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">function</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Client.add_event" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="krpc.Connection.add_event">
+<span class="sig-name descname"><span class="pre">add_event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">function</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.Connection.add_event" title="Link to this definition">#</a></dt>
 <dd><p>Creates an event from a server side function that evaluates to a boolean value, and
 returns a <a class="reference internal" href="#krpc.event.Event" title="krpc.event.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.event.Event</span></code></a>. The function can also be a Python function or lambda
-that takes no arguments, which is compiled with <a class="reference internal" href="#krpc.client.Client.compile" title="krpc.client.Client.compile"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compile()</span></code></a> on every call.</p>
+that takes no arguments, which is compiled with <a class="reference internal" href="#krpc.Connection.compile" title="krpc.Connection.compile"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compile()</span></code></a> on every call.</p>
 <p>Raises <code class="docutils literal notranslate"><span class="pre">StreamError</span></code> for a compiled function with parameters. A function that does not
 evaluate to a boolean value raises <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>, and a value that is not a function
 raises <code class="docutils literal notranslate"><span class="pre">TypeError</span></code>.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="krpc.client.Client.compile">
-<span class="sig-name descname"><span class="pre">compile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Client.compile" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="krpc.Connection.compile">
+<span class="sig-name descname"><span class="pre">compile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.Connection.compile" title="Link to this definition">#</a></dt>
 <dd><p>Compiles a Python function or lambda into a server side function, a <code class="docutils literal notranslate"><span class="pre">KRPC.Expression</span></code>
 object. A <code class="docutils literal notranslate"><span class="pre">def</span></code> can take parameters, each with a type annotation. Can be used as a
 decorator. Raises <a class="reference internal" href="#krpc.error.FunctionCompilationError" title="krpc.error.FunctionCompilationError"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.error.FunctionCompilationError</span></code></a> for a construct with no
@@ -2566,12 +2566,12 @@ returns it.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="krpc.client.Client.get_call">
-<span class="sig-name descname"><span class="pre">get_call</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Client.get_call" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="krpc.Connection.get_call">
+<span class="sig-name descname"><span class="pre">get_call</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.Connection.get_call" title="Link to this definition">#</a></dt>
 <dd><p>Converts a call to the remote procedure <em>func</em> with arguments <em>args</em> and <em>kwargs</em> into a
 <code class="docutils literal notranslate"><span class="pre">KRPC.ProcedureCall</span></code> message, for use in a server side function built with the
 expression API. See <a class="reference internal" href="user-guide/server-side-functions.html#server-side-functions-api"><span class="std std-ref">The Expression API</span></a>. Pass <code class="docutils literal notranslate"><span class="pre">getattr</span></code> or <code class="docutils literal notranslate"><span class="pre">setattr</span></code> as
-<em>func</em> for a property, as with <a class="reference internal" href="#krpc.client.Client.add_stream" title="krpc.client.Client.add_stream"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_stream()</span></code></a>.</p>
+<em>func</em> for a property, as with <a class="reference internal" href="#krpc.Connection.add_stream" title="krpc.Connection.add_stream"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_stream()</span></code></a>.</p>
 </dd></dl>
 
 </dd></dl>

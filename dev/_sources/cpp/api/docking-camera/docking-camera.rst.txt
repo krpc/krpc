@@ -7,11 +7,11 @@ DockingCamera
 
 
 .. namespace:: krpc::services
-.. class:: DockingCamera : public krpc::Service
+.. class:: DockingCamera : public krpc::RemoteService
 
    Provides functionality to interact with Docking Camera (KURS).
 
-   .. function:: DockingCamera(krpc::Client& client)
+   .. function:: DockingCamera(krpc::Connection& connection)
 
       Construct an instance of this service.
 
