@@ -2,6 +2,7 @@ import os
 import time
 import unittest
 
+from krpc.services.stdlib import ImageFormat
 from krpctools.game.images import assert_jpeg, assert_png, png
 from krpctools.game.ksp import TestCase
 
@@ -434,10 +435,10 @@ class TestMonitorIVA(MonitorTestCase):
 
     def test_image_jpeg(self):
         self.show("home")
-        assert_jpeg(self.monitor.image(self.rpm.ImageFormat.jpeg), (640, 640))
+        assert_jpeg(self.monitor.image(ImageFormat.jpeg), (640, 640))
         for quality in (0, 101):
             with self.assertRaises(ValueError):
-                self.monitor.image(self.rpm.ImageFormat.jpeg, quality)
+                self.monitor.image(ImageFormat.jpeg, quality)
         # PNG ignores the quality
         assert_png(self.monitor.image(quality=0))
 
@@ -590,17 +591,17 @@ class TestExternalCamera(RasterPropMonitorTestCase):
                 self.cameras[0].image(width, height)
 
     def test_image_jpeg(self):
-        jpeg = self.rpm.ImageFormat.jpeg
+        jpeg = ImageFormat.jpeg
         assert_jpeg(self.cameras[0].image(320, 240, jpeg), (320, 240))
 
     def test_image_quality(self):
         camera = self.cameras[0]
-        jpeg = self.rpm.ImageFormat.jpeg
+        jpeg = ImageFormat.jpeg
         small, large = (camera.image(320, 240, jpeg, quality) for quality in (10, 95))
         self.assertLess(len(small), len(large))
 
     def test_image_quality_range(self):
-        jpeg = self.rpm.ImageFormat.jpeg
+        jpeg = ImageFormat.jpeg
         for quality in (0, 101):
             with self.assertRaises(ValueError):
                 self.cameras[0].image(10, 10, jpeg, quality)
@@ -610,7 +611,7 @@ class TestExternalCamera(RasterPropMonitorTestCase):
     def test_image_stream(self):
         # A stream at a rate is a video of the camera
         frames = []
-        jpeg = self.rpm.ImageFormat.jpeg
+        jpeg = ImageFormat.jpeg
         stream = self.conn.add_stream(self.cameras[0].image, 160, 120, jpeg)
         stream.rate = 10
         stream.add_callback(frames.append)

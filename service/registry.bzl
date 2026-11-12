@@ -120,7 +120,7 @@ SERVICES = [
         title = "DockingCamera",
         description = "DockingCamera API for kRPC",
         doc = "docking-camera",
-        deps = ["SpaceCenter"],
+        deps = ["SpaceCenter", "StdLib"],
         mods = ["DockingCamera"],
     ),
     service(
@@ -156,7 +156,7 @@ SERVICES = [
         title = "SCANsat",
         description = "SCANsat API for kRPC",
         doc = "scansat",
-        deps = ["SpaceCenter"],
+        deps = ["SpaceCenter", "StdLib"],
         mods = ["SCANsat"],
     ),
     service(

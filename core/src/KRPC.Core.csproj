@@ -201,6 +201,7 @@
     <Compile Include="Service\StdLib\ColorRGB.cs" />
     <Compile Include="Service\StdLib\ColorRGBA.cs" />
     <Compile Include="Service\StdLib\DecimalRounding.cs" />
+    <Compile Include="Service\StdLib\ImageFormat.cs" />
     <Compile Include="Service\StdLib\StdLib.cs" />
     <Compile Include="Service\Stream.cs" />
     <Compile Include="Service\StreamContinuation.cs" />

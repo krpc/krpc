@@ -1,6 +1,7 @@
 import functools
 import unittest
 
+from krpc.services.stdlib import ImageFormat
 from krpctools.game.images import assert_jpeg, assert_png
 from krpctools.game.ksp import TestCase
 
@@ -77,9 +78,9 @@ class TestDockingCamera(TestCase):
                     message="the camera to switch on",
                 )
                 assert_png(image, (256, 256))
-                assert_jpeg(camera.image(self.dc.ImageFormat.jpeg))
+                assert_jpeg(camera.image(ImageFormat.jpeg))
                 with self.assertRaises(ValueError):
-                    camera.image(self.dc.ImageFormat.jpeg, 0)
+                    camera.image(ImageFormat.jpeg, 0)
                 # PNG ignores the quality
                 assert_png(camera.image(quality=0))
                 self.set_enabled(enabled, False)

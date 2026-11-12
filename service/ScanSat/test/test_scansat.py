@@ -1,6 +1,7 @@
 import math
 import unittest
 
+from krpc.services.stdlib import ImageFormat
 from krpctools.game.images import assert_jpeg, assert_png, png_size
 from krpctools.game.ksp import TestCase
 
@@ -211,7 +212,7 @@ class TestScanSat(TestCase):
         image = self.scansat.map(
             self.kerbin,
             self.scansat.MapType.altimetry,
-            format=self.scansat.ImageFormat.jpeg,
+            format=ImageFormat.jpeg,
             quality=50,
         )
         assert_jpeg(image)
@@ -246,7 +247,7 @@ class TestScanSat(TestCase):
             self.scansat.map(
                 self.kerbin,
                 self.scansat.MapType.altimetry,
-                format=self.scansat.ImageFormat.jpeg,
+                format=ImageFormat.jpeg,
                 quality=0,
             )
 

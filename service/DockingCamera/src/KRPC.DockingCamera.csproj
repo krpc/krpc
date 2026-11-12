@@ -46,6 +46,5 @@
     <Compile Include="API.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="DockingCamera.cs" />
-    <Compile Include="ImageFormat.cs" />
   </ItemGroup>
 </Project>

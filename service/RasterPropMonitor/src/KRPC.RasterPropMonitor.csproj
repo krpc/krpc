@@ -49,7 +49,6 @@
     <Compile Include="Display.cs" />
     <Compile Include="DisplayState.cs" />
     <Compile Include="ExternalCamera.cs" />
-    <Compile Include="ImageFormat.cs" />
     <Compile Include="KRPCDisplay.cs" />
     <Compile Include="Monitor.cs" />
     <Compile Include="RasterPropMonitor.cs" />

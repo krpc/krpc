@@ -58,6 +58,7 @@
     <Compile Include="Utils\ConfigurationStorageNode.cs" />
     <Compile Include="Utils\GameSceneSwitcher.cs" />
     <Compile Include="Utils\GameScenesExtensions.cs" />
+    <Compile Include="Utils\ImageEncoder.cs" />
     <Compile Include="Utils\LoadOnceAddon.cs" />
     <Compile Include="Utils\ModAssembly.cs" />
     <Compile Include="Utils\RectExtensions.cs" />

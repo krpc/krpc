@@ -1,34 +1,27 @@
 using System;
-using KRPC.Service.Attributes;
+using KRPC.Service.StdLib;
 using UnityEngine;
 
-namespace KRPC.RasterPropMonitor
+namespace KRPC.Utils
 {
     /// <summary>
-    /// The file format of an image.
+    /// Encodes a texture as an image file.
     /// </summary>
-    [Serializable]
-    [KRPCEnum (Service = "RasterPropMonitor")]
-    public enum ImageFormat
+    public static class ImageEncoder
     {
         /// <summary>
-        /// PNG, which is lossless.
+        /// Check the quality of an image in the given format. Throws an exception for a JPEG
+        /// quality outside 1 to 100.
         /// </summary>
-        PNG,
-        /// <summary>
-        /// JPEG, which is lossy, and smaller and faster to encode than PNG.
-        /// </summary>
-        JPEG
-    }
-
-    static class ImageEncoder
-    {
         public static void CheckQuality (ImageFormat format, int quality)
         {
             if (format == ImageFormat.JPEG && (quality < 1 || quality > 100))
                 throw new ArgumentException ("The quality is not between 1 and 100");
         }
 
+        /// <summary>
+        /// The texture encoded in the given format. The quality applies to JPEG only.
+        /// </summary>
         public static byte[] Encode (Texture2D image, ImageFormat format, int quality)
         {
             switch (format) {
