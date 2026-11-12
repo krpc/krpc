@@ -2196,9 +2196,49 @@ A <a class="reference internal" href="#lua-KRPC.Expression.break" title="KRPC.Ex
 </dd></dl>
 
 <dl class="lua staticmethod">
+<dt class="sig sig-object lua" id="lua-KRPC.Expression.match">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">match</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-KRPC.Expression" title="KRPC.Expression"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KRPC.Expression</span></code></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">cases</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">List</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">bodies</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">List</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-KRPC.Expression" title="KRPC.Expression"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KRPC.Expression</span></code></a><a class="headerlink" href="#lua-KRPC.Expression.match" title="Link to this definition">#</a></dt>
+<dd><p>A match statement, which evaluates the first matching case.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> – The value to match.</p></li>
+<li><p><strong>cases</strong> – The test values of each case.</p></li>
+<li><p><strong>bodies</strong> – The statement of each case.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Test values compare as for <a class="reference internal" href="#lua-KRPC.Expression.equal" title="KRPC.Expression.equal"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">KRPC.Expression.equal()</span></code></a>, and a case with none is the default.
+A <a class="reference internal" href="#lua-KRPC.Expression.break" title="KRPC.Expression.break"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">KRPC.Expression.break()</span></code></a> in a body ends the enclosing loop.</p>
+</div>
+</dd></dl>
+
+<dl class="lua staticmethod">
+<dt class="sig sig-object lua" id="lua-KRPC.Expression.switch">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">switch</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-KRPC.Expression" title="KRPC.Expression"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KRPC.Expression</span></code></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">cases</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">List</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">bodies</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">List</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-KRPC.Expression" title="KRPC.Expression"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KRPC.Expression</span></code></a><a class="headerlink" href="#lua-KRPC.Expression.switch" title="Link to this definition">#</a></dt>
+<dd><p>A switch statement, which evaluates from the first matching case on.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> – The value to match.</p></li>
+<li><p><strong>cases</strong> – The test values of each case.</p></li>
+<li><p><strong>bodies</strong> – The statement of each case.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Test values compare as for <a class="reference internal" href="#lua-KRPC.Expression.equal" title="KRPC.Expression.equal"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">KRPC.Expression.equal()</span></code></a>, and a case with none is the default.
+A <a class="reference internal" href="#lua-KRPC.Expression.break" title="KRPC.Expression.break"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">KRPC.Expression.break()</span></code></a> in a body ends the switch.</p>
+</div>
+</dd></dl>
+
+<dl class="lua staticmethod">
 <dt class="sig sig-object lua" id="lua-KRPC.Expression.break">
 <span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">break</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-KRPC.Expression" title="KRPC.Expression"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KRPC.Expression</span></code></a><a class="headerlink" href="#lua-KRPC.Expression.break" title="Link to this definition">#</a></dt>
-<dd><p>A break statement, which ends the enclosing loop.</p>
+<dd><p>A break statement, which ends the enclosing loop or <a class="reference internal" href="#lua-KRPC.Expression.switch" title="KRPC.Expression.switch"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">KRPC.Expression.switch()</span></code></a>.</p>
 </dd></dl>
 
 <dl class="lua staticmethod">

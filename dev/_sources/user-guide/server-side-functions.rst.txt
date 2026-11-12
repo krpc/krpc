@@ -1042,6 +1042,52 @@ The other statements, such as assignments, if statements, loops and early return
 factory method. A call to a procedure without a return value is a statement, run for its
 effects.
 
+Match and Switch Statements
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This loop adds 10 to a total for the values 1 and 2, and 1 for any other value. It returns 21:
+
+.. tabs::
+
+   .. group-tab:: Python
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/SwitchStatement.py
+
+   .. group-tab:: C#
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/SwitchStatement.cs
+
+   .. group-tab:: C++
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/SwitchStatement.cpp
+
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/SwitchStatement.c
+         :language: c
+
+   .. group-tab:: Java
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/SwitchStatement.java
+
+   .. group-tab:: Lua
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/SwitchStatement.lua
+
+:meth:`Expression.match` takes the value, the test values of each case and the body of each
+case. It runs the body of the first case with a test value equal to the value, as
+:meth:`Expression.equal` compares them. The test values are evaluated in order, up to the first
+match. A case with no test values is the default. A :meth:`Expression.break_` in a body ends the
+enclosing loop, as in Python's ``match``.
+
+:meth:`Expression.switch` takes the same arguments, and behaves as ``switch`` in C, C++, Java and
+JavaScript. It runs the bodies from the matching case on, and a :meth:`Expression.break_` in a
+body ends the switch.
+
+A ``switch`` in C, C++, C# or Java becomes a :meth:`Expression.switch` with its breaks kept. When
+each case ends in a break, as in the example, it can also become a :meth:`Expression.match` with
+the breaks dropped.
+
 Object Constants
 ^^^^^^^^^^^^^^^^
 

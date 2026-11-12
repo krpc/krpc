@@ -507,9 +507,35 @@ assembled and run.
          :meth:`KRPC.Expression.block_with_variables`, or a parameter of an enclosing :meth:`KRPC.Expression.lambda`.
          A :meth:`KRPC.Expression.break` or :meth:`KRPC.Expression.continue` in the body applies to this loop.
 
+   .. staticmethod:: match(value: KRPC.Expression, cases: List, bodies: List): KRPC.Expression
+
+      A match statement, which evaluates the first matching case.
+
+      :param value: The value to match.
+      :param cases: The test values of each case.
+      :param bodies: The statement of each case.
+
+      .. note::
+
+         Test values compare as for :meth:`KRPC.Expression.equal`, and a case with none is the default.
+         A :meth:`KRPC.Expression.break` in a body ends the enclosing loop.
+
+   .. staticmethod:: switch(value: KRPC.Expression, cases: List, bodies: List): KRPC.Expression
+
+      A switch statement, which evaluates from the first matching case on.
+
+      :param value: The value to match.
+      :param cases: The test values of each case.
+      :param bodies: The statement of each case.
+
+      .. note::
+
+         Test values compare as for :meth:`KRPC.Expression.equal`, and a case with none is the default.
+         A :meth:`KRPC.Expression.break` in a body ends the switch.
+
    .. staticmethod:: break(): KRPC.Expression
 
-      A break statement, which ends the enclosing loop.
+      A break statement, which ends the enclosing loop or :meth:`KRPC.Expression.switch`.
 
    .. staticmethod:: continue(): KRPC.Expression
 

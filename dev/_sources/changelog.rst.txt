@@ -88,6 +88,7 @@ Core
 * :breaking:`Breaking` Reject two services with the same name, ignoring case (:issue:`1325`)
 * :breaking:`Breaking` Reject a class, enumeration, structure or exception with the name of its service, ignoring case (:issue:`1325`)
 * Start the remaining servers when one fails to start (:issue:`1330`)
+* Add ``KRPC.Expression.Match`` and ``KRPC.Expression.Switch`` statements to server side functions (:issue:`1334`)
 
 
 Server
