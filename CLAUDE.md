@@ -85,6 +85,7 @@ the tests: a test's docstring is the requirement's text, its markers the level a
 ### C# sources
 
  * **New C# file → add `<Compile Include="…" />` to the project's `.csproj`.** `//:csproj-test` catches misses.
+ * **New service → its `BUILD.bazel` is one `ksp_service` call**, from `//service:build.bzl`.
  * **New C# target → load `csharp_library`/`csharp_binary`/`csharp_nunit_test` from `//tools/build:csharp.bzl`**,
    not `@rules_dotnet`. The wrappers run the culture analyzers (`tools/build/dotnet/analyzers.globalconfig`);
    only the doc examples use the plain rules.
